@@ -1,0 +1,914 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PrimeSetu — Shoper9 Based UI</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+:root {
+  --navy:#0D1B3E; --navy2:#162248; --navy3:#1E2F5C;
+  --saffron:#F4840A; --gold:#F9B942; --cream:#FAF7F2;
+  --white:#FFFFFF; --muted:#8A8FA8; --border:#E8E4DC;
+  --green:#27AE60; --red:#E74C3C; --blue:#2980B9;
+  --sw: 252px;
+}
+body { font-family:'DM Sans',sans-serif; background:var(--cream); color:var(--navy); display:flex; min-height:100vh; overflow-x:hidden; font-size:13px; }
+
+/* SIDEBAR */
+.sidebar { width:var(--sw); background:var(--navy); min-height:100vh; position:fixed; left:0; top:0; display:flex; flex-direction:column; z-index:100; overflow-y:auto; }
+.sb-logo { padding:22px 20px 18px; border-bottom:1px solid rgba(255,255,255,0.07); display:flex; align-items:center; gap:10px; }
+.sb-logo svg { flex-shrink:0; }
+.sb-wordmark { font-family:'Playfair Display',serif; font-size:20px; font-weight:900; color:#fff; letter-spacing:-0.5px; }
+.sb-wordmark span { color:var(--gold); }
+.sb-tagline { font-size:9px; letter-spacing:2px; text-transform:uppercase; color:rgba(255,255,255,0.3); margin-top:2px; }
+.sb-sec { font-size:9px; font-weight:600; letter-spacing:3px; text-transform:uppercase; color:rgba(255,255,255,0.25); padding:18px 20px 6px; }
+.nav { display:flex; align-items:center; gap:10px; padding:9px 20px; cursor:pointer; transition:all .18s; border-left:3px solid transparent; color:rgba(255,255,255,0.5); font-size:12.5px; font-weight:400; }
+.nav:hover { background:rgba(255,255,255,0.05); color:rgba(255,255,255,0.85); border-left-color:rgba(249,185,66,0.3); }
+.nav.active { background:rgba(244,132,10,0.14); color:#fff; border-left-color:var(--saffron); font-weight:500; }
+.nav .ico { font-size:15px; width:20px; text-align:center; flex-shrink:0; }
+.nav .badge { margin-left:auto; background:var(--saffron); color:#fff; font-size:9px; font-weight:700; border-radius:10px; padding:2px 7px; }
+.nav .badge.warn { background:#E74C3C; }
+.sb-bottom { margin-top:auto; border-top:1px solid rgba(255,255,255,0.07); padding:14px 20px; display:flex; align-items:center; gap:10px; cursor:pointer; }
+.av { width:32px; height:32px; background:linear-gradient(135deg,var(--saffron),var(--gold)); border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:12px; font-weight:700; color:#fff; flex-shrink:0; }
+.av-name { font-size:12px; font-weight:500; color:#fff; }
+.av-role { font-size:10px; color:rgba(255,255,255,0.38); }
+
+/* MAIN */
+.main { margin-left:var(--sw); flex:1; display:flex; flex-direction:column; }
+.topbar { background:var(--white); border-bottom:1px solid var(--border); padding:0 28px; height:58px; display:flex; align-items:center; gap:12px; position:sticky; top:0; z-index:50; }
+.tb-title { font-family:'Playfair Display',serif; font-size:18px; font-weight:700; }
+.tb-sub { font-size:11px; color:var(--muted); margin-left:3px; }
+.tb-space { flex:1; }
+.search { display:flex; align-items:center; gap:8px; background:var(--cream); border:1px solid var(--border); border-radius:8px; padding:7px 12px; font-size:12px; color:var(--muted); width:210px; }
+.tb-icon { width:34px; height:34px; border-radius:8px; background:var(--cream); border:1px solid var(--border); display:flex; align-items:center; justify-content:center; cursor:pointer; position:relative; font-size:14px; transition:all .2s; }
+.tb-icon:hover { background:var(--navy); }
+.ndot { position:absolute; top:6px; right:6px; width:6px; height:6px; background:var(--saffron); border-radius:50%; border:1.5px solid white; }
+.dpill { background:var(--navy); color:var(--gold); font-size:10px; font-weight:500; padding:5px 12px; border-radius:20px; letter-spacing:.3px; }
+
+/* SCREEN TABS */
+.stabs { display:flex; gap:0; background:var(--white); border-bottom:1px solid var(--border); padding:0 28px; overflow-x:auto; }
+.stab { padding:12px 16px; font-size:12px; font-weight:500; color:var(--muted); cursor:pointer; border-bottom:2px solid transparent; transition:all .18s; white-space:nowrap; }
+.stab.active { color:var(--saffron); border-bottom-color:var(--saffron); }
+.stab:hover:not(.active) { color:var(--navy); }
+
+/* CONTENT */
+.content { padding:24px 28px; flex:1; animation:fadeUp .4s ease both; }
+@keyframes fadeUp { from{opacity:0;transform:translateY(12px)} to{opacity:1;transform:translateY(0)} }
+.screen { display:none; }
+.screen.active { display:block; }
+
+/* KPI GRID */
+.kgrid { display:grid; gap:14px; margin-bottom:20px; }
+.kgrid-4 { grid-template-columns:repeat(4,1fr); }
+.kgrid-3 { grid-template-columns:repeat(3,1fr); }
+.kgrid-2 { grid-template-columns:repeat(2,1fr); }
+
+.kcard { background:var(--white); border-radius:14px; padding:18px 18px 14px; border:1px solid var(--border); position:relative; overflow:hidden; transition:transform .18s,box-shadow .18s; cursor:pointer; }
+.kcard:hover { transform:translateY(-2px); box-shadow:0 6px 24px rgba(13,27,62,.09); }
+.kcard::before { content:''; position:absolute; top:0; left:0; right:0; height:3px; border-radius:14px 14px 0 0; }
+.kcard.c-saffron::before { background:var(--saffron); }
+.kcard.c-gold::before   { background:var(--gold); }
+.kcard.c-green::before  { background:var(--green); }
+.kcard.c-blue::before   { background:var(--blue); }
+.kcard.c-red::before    { background:var(--red); }
+.kcard.c-navy::before   { background:var(--navy); }
+
+.kh { display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:12px; }
+.klabel { font-size:10px; font-weight:600; letter-spacing:1.5px; text-transform:uppercase; color:var(--muted); }
+.kico { width:32px; height:32px; border-radius:8px; display:flex; align-items:center; justify-content:center; font-size:15px; }
+.kico.c-saffron { background:rgba(244,132,10,.1); }
+.kico.c-gold    { background:rgba(249,185,66,.1); }
+.kico.c-green   { background:rgba(39,174,96,.1); }
+.kico.c-blue    { background:rgba(41,128,185,.1); }
+.kico.c-red     { background:rgba(231,76,60,.1); }
+.kico.c-navy    { background:rgba(13,27,62,.08); }
+
+.kval { font-family:'Playfair Display',serif; font-size:26px; font-weight:700; line-height:1; margin-bottom:6px; }
+.kft  { display:flex; align-items:center; gap:5px; font-size:11px; }
+.chup   { color:var(--green); font-weight:600; }
+.chdown { color:var(--red); font-weight:600; }
+.chmute { color:var(--muted); }
+
+/* PANEL */
+.panel { background:var(--white); border-radius:14px; border:1px solid var(--border); overflow:hidden; margin-bottom:16px; }
+.ph { padding:14px 20px 12px; display:flex; align-items:center; justify-content:space-between; border-bottom:1px solid var(--border); }
+.ptitle { font-family:'Playfair Display',serif; font-size:14px; font-weight:700; }
+.pact { font-size:11px; color:var(--saffron); font-weight:500; cursor:pointer; }
+.pb { padding:16px 20px; }
+
+/* TABLE */
+.tbl { width:100%; border-collapse:collapse; }
+.tbl th { font-size:9.5px; font-weight:600; letter-spacing:1.5px; text-transform:uppercase; color:var(--muted); text-align:left; padding:0 0 10px; border-bottom:1px solid var(--border); }
+.tbl td { padding:10px 0; font-size:12.5px; border-bottom:1px solid var(--border); vertical-align:middle; }
+.tbl tr:last-child td { border-bottom:none; }
+.tbl td:last-child, .tbl th:last-child { text-align:right; }
+
+/* BADGES */
+.badge { font-size:9.5px; font-weight:600; padding:2px 8px; border-radius:20px; display:inline-block; }
+.b-ok       { background:rgba(39,174,96,.1);  color:var(--green); }
+.b-low      { background:rgba(244,132,10,.1); color:var(--saffron); }
+.b-crit     { background:rgba(231,76,60,.1);  color:var(--red); }
+.b-paid     { background:rgba(39,174,96,.1);  color:var(--green); }
+.b-pend     { background:rgba(249,185,66,.15);color:#B8860B; }
+.b-over     { background:rgba(231,76,60,.1);  color:var(--red); }
+.b-open     { background:rgba(41,128,185,.1); color:var(--blue); }
+.b-draft    { background:rgba(138,143,168,.1);color:var(--muted); }
+.b-rec      { background:rgba(39,174,96,.1);  color:var(--green); }
+
+/* GRID LAYOUTS */
+.grid2 { display:grid; grid-template-columns:1fr 1fr; gap:16px; }
+.grid3 { display:grid; grid-template-columns:1fr 1fr 340px; gap:16px; }
+.grid-1-2 { display:grid; grid-template-columns:1fr 2fr; gap:16px; }
+
+/* PROGRESS */
+.prow { margin-bottom:12px; }
+.prow:last-child { margin-bottom:0; }
+.plrow { display:flex; justify-content:space-between; margin-bottom:5px; }
+.pname { font-size:12px; font-weight:500; }
+.pval  { font-size:11px; color:var(--muted); }
+.pbg   { height:5px; background:var(--border); border-radius:10px; overflow:hidden; }
+.pfill { height:100%; border-radius:10px; }
+
+/* ACTIVITY */
+.act-list { display:flex; flex-direction:column; }
+.act-item { display:flex; gap:10px; padding:10px 0; border-bottom:1px solid var(--border); align-items:flex-start; }
+.act-item:last-child { border-bottom:none; }
+.act-dot { width:28px; height:28px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:12px; flex-shrink:0; margin-top:1px; }
+.act-title { font-size:12.5px; font-weight:500; line-height:1.3; }
+.act-time  { font-size:10.5px; color:var(--muted); margin-top:2px; }
+
+/* QUICK ACTIONS */
+.qa-grid { display:grid; grid-template-columns:1fr 1fr; gap:10px; padding:16px 20px; }
+.qa-btn { background:var(--cream); border:1px solid var(--border); border-radius:10px; padding:14px 12px; display:flex; flex-direction:column; align-items:center; gap:7px; cursor:pointer; transition:all .18s; text-align:center; }
+.qa-btn:hover { background:var(--navy); border-color:var(--navy); transform:translateY(-2px); box-shadow:0 4px 16px rgba(13,27,62,.15); }
+.qa-btn:hover .qa-lbl { color:#fff; }
+.qa-btn:hover .qa-ico-w { background:rgba(255,255,255,.12); }
+.qa-ico-w { width:38px; height:38px; background:#fff; border-radius:9px; display:flex; align-items:center; justify-content:center; font-size:18px; box-shadow:0 2px 6px rgba(0,0,0,.05); transition:background .18s; }
+.qa-lbl { font-size:11px; font-weight:500; color:var(--navy); transition:color .18s; }
+
+/* CHART BARS */
+.chart-area { height:130px; display:flex; align-items:flex-end; gap:6px; padding-bottom:2px; }
+.bgroup { flex:1; display:flex; flex-direction:column; align-items:center; gap:4px; height:100%; justify-content:flex-end; }
+.bwrap { width:100%; display:flex; gap:2px; align-items:flex-end; height:110px; }
+.bar { flex:1; border-radius:3px 3px 0 0; transition:opacity .2s; cursor:pointer; }
+.bar:hover { opacity:.7; }
+.bar.rev { background:var(--navy); }
+.bar.exp { background:var(--gold); }
+.bar.profit { background:var(--green); }
+.blabel { font-size:8.5px; color:var(--muted); font-weight:500; }
+.clegend { display:flex; gap:14px; margin-top:10px; }
+.ldot { display:flex; align-items:center; gap:5px; font-size:10.5px; color:var(--muted); }
+.ld { width:8px; height:8px; border-radius:2px; }
+
+/* TABS WIDGET */
+.tabs { display:flex; gap:3px; background:var(--cream); border-radius:8px; padding:3px; }
+.tab { padding:5px 12px; border-radius:6px; font-size:11.5px; font-weight:500; color:var(--muted); cursor:pointer; transition:all .18s; }
+.tab.active { background:#fff; color:var(--navy); box-shadow:0 1px 3px rgba(0,0,0,.07); }
+
+/* FORM ELEMENTS */
+.form-row { display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-bottom:12px; }
+.form-row-3 { grid-template-columns:1fr 1fr 1fr; }
+.fgroup { display:flex; flex-direction:column; gap:5px; }
+.flabel { font-size:10px; font-weight:600; letter-spacing:1px; text-transform:uppercase; color:var(--muted); }
+.finput { background:var(--cream); border:1px solid var(--border); border-radius:8px; padding:9px 12px; font-size:12.5px; font-family:'DM Sans',sans-serif; color:var(--navy); outline:none; transition:border-color .18s; }
+.finput:focus { border-color:var(--saffron); background:#fff; }
+.fselect { background:var(--cream); border:1px solid var(--border); border-radius:8px; padding:9px 12px; font-size:12.5px; font-family:'DM Sans',sans-serif; color:var(--navy); outline:none; cursor:pointer; }
+.btn-primary { background:var(--saffron); color:#fff; border:none; border-radius:8px; padding:9px 20px; font-size:12.5px; font-weight:600; font-family:'DM Sans',sans-serif; cursor:pointer; transition:all .18s; }
+.btn-primary:hover { background:#D9720A; }
+.btn-sec { background:var(--cream); color:var(--navy); border:1px solid var(--border); border-radius:8px; padding:9px 20px; font-size:12.5px; font-weight:500; font-family:'DM Sans',sans-serif; cursor:pointer; }
+
+/* SCHEME TAG */
+.scheme-tag { display:inline-flex; align-items:center; gap:5px; background:rgba(249,185,66,.15); color:#B8860B; font-size:10px; font-weight:600; padding:2px 8px; border-radius:12px; }
+
+/* TILL STATUS */
+.till-grid { display:grid; grid-template-columns:repeat(4,1fr); gap:10px; }
+.till-card { border:1px solid var(--border); border-radius:10px; padding:14px; text-align:center; }
+.till-num  { font-family:'Playfair Display',serif; font-size:22px; font-weight:700; }
+.till-name { font-size:11px; color:var(--muted); margin-bottom:8px; }
+.till-stat { font-size:10px; font-weight:600; padding:3px 10px; border-radius:20px; display:inline-block; }
+.ts-open   { background:rgba(39,174,96,.1);  color:var(--green); }
+.ts-lock   { background:rgba(249,185,66,.15);color:#B8860B; }
+.ts-close  { background:rgba(231,76,60,.1);  color:var(--red); }
+.ts-idle   { background:rgba(138,143,168,.1);color:var(--muted); }
+.till-ops  { display:flex; gap:4px; justify-content:center; margin-top:10px; }
+.till-op   { font-size:9.5px; padding:3px 8px; border-radius:5px; cursor:pointer; border:1px solid var(--border); background:var(--cream); color:var(--navy); transition:all .15s; }
+.till-op:hover { background:var(--navy); color:#fff; border-color:var(--navy); }
+
+/* ALERTS */
+.alert-item { display:flex; gap:10px; padding:10px 14px; margin-bottom:8px; border-radius:10px; border:1px solid; align-items:flex-start; }
+.alert-item:last-child { margin-bottom:0; }
+.al-fatal { background:rgba(231,76,60,.05); border-color:rgba(231,76,60,.2); }
+.al-warn  { background:rgba(244,132,10,.05); border-color:rgba(244,132,10,.2); }
+.al-info  { background:rgba(41,128,185,.05); border-color:rgba(41,128,185,.2); }
+.al-icon  { font-size:16px; flex-shrink:0; margin-top:1px; }
+.al-title { font-size:12.5px; font-weight:500; }
+.al-desc  { font-size:11px; color:var(--muted); margin-top:2px; }
+.al-time  { margin-left:auto; font-size:10px; color:var(--muted); flex-shrink:0; }
+
+/* PRICE TABLE */
+.price-row { display:grid; grid-template-columns:2fr 1fr 1fr 1fr 80px; gap:0; }
+.price-hdr { font-size:9.5px; font-weight:600; letter-spacing:1.5px; text-transform:uppercase; color:var(--muted); padding:0 0 10px; border-bottom:1px solid var(--border); }
+.price-cell { padding:10px 0; font-size:12.5px; border-bottom:1px solid var(--border); display:flex; align-items:center; }
+
+/* TOGGLE */
+.toggle { width:36px; height:20px; border-radius:20px; background:var(--border); position:relative; cursor:pointer; transition:background .2s; flex-shrink:0; }
+.toggle.on { background:var(--green); }
+.toggle::after { content:''; position:absolute; top:2px; left:2px; width:16px; height:16px; border-radius:50%; background:#fff; transition:transform .2s; box-shadow:0 1px 3px rgba(0,0,0,.2); }
+.toggle.on::after { transform:translateX(16px); }
+
+/* GTIN AREA */
+.gtin-box { background:var(--navy); border-radius:12px; padding:16px 20px; display:flex; align-items:center; justify-content:space-between; }
+.gtin-left { display:flex; flex-direction:column; gap:4px; }
+.gtin-label { font-size:9px; letter-spacing:2px; text-transform:uppercase; color:rgba(255,255,255,0.4); }
+.gtin-val { font-family:'Playfair Display',serif; font-size:20px; font-weight:700; color:var(--gold); letter-spacing:2px; }
+.gtin-sub { font-size:10px; color:rgba(255,255,255,0.4); }
+
+/* MIS REPORT CARDS */
+.mis-card { background:var(--white); border:1px solid var(--border); border-radius:12px; padding:16px; cursor:pointer; transition:all .18s; }
+.mis-card:hover { border-color:var(--saffron); box-shadow:0 4px 16px rgba(244,132,10,.1); }
+.mis-ico  { font-size:22px; margin-bottom:10px; }
+.mis-name { font-size:13px; font-weight:600; color:var(--navy); margin-bottom:4px; }
+.mis-desc { font-size:11px; color:var(--muted); }
+.mis-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:12px; }
+
+</style>
+</head>
+<body>
+
+<!-- SIDEBAR -->
+<aside class="sidebar">
+  <div class="sb-logo">
+    <svg width="30" height="30" viewBox="0 0 64 64" fill="none">
+      <path d="M8 44 Q32 14 56 44" stroke="#F9B942" stroke-width="5.5" stroke-linecap="round" fill="none"/>
+      <line x1="20" y1="30" x2="20" y2="44" stroke="rgba(255,255,255,0.65)" stroke-width="3" stroke-linecap="round"/>
+      <line x1="32" y1="22" x2="32" y2="44" stroke="rgba(255,255,255,0.65)" stroke-width="3" stroke-linecap="round"/>
+      <line x1="44" y1="30" x2="44" y2="44" stroke="rgba(255,255,255,0.65)" stroke-width="3" stroke-linecap="round"/>
+      <line x1="6" y1="44" x2="58" y2="44" stroke="white" stroke-width="4" stroke-linecap="round"/>
+      <circle cx="32" cy="10" r="4" fill="#F4840A"/>
+    </svg>
+    <div>
+      <div class="sb-wordmark">Prime<span>Setu</span></div>
+      <div class="sb-tagline">Retail Enterprise</div>
+    </div>
+  </div>
+
+  <div class="sb-sec">POS Operations</div>
+  <div class="nav active" onclick="go('dashboard')"><span class="ico">⊞</span> Dashboard</div>
+  <div class="nav" onclick="go('billing')"><span class="ico">🧾</span> Billing / Till <span class="badge">3</span></div>
+  <div class="nav" onclick="go('till')"><span class="ico">🖥️</span> Till Management</div>
+  <div class="nav" onclick="go('schemes')"><span class="ico">🎁</span> Schemes & Promos</div>
+  <div class="nav" onclick="go('price')"><span class="ico">💲</span> Price Management</div>
+
+  <div class="sb-sec">Warehouse & Stock</div>
+  <div class="nav" onclick="go('inventory')"><span class="ico">📦</span> Inventory <span class="badge warn">5</span></div>
+  <div class="nav" onclick="go('catalogue')"><span class="ico">📋</span> Catalogue Mgmt</div>
+  <div class="nav" onclick="go('purchase')"><span class="ico">🛒</span> Purchase Orders</div>
+  <div class="nav" onclick="go('dispatch')"><span class="ico">🚚</span> Dispatch / GRN</div>
+  <div class="nav" onclick="go('returns')"><span class="ico">↩️</span> Returns</div>
+  <div class="nav" onclick="go('gtin')"><span class="ico">🔖</span> GTIN / GS1</div>
+
+  <div class="sb-sec">Finance & Accounts</div>
+  <div class="nav" onclick="go('accounting')"><span class="ico">💰</span> Accounting</div>
+  <div class="nav" onclick="go('invoices')"><span class="ico">📄</span> Invoices <span class="badge">7</span></div>
+  <div class="nav" onclick="go('salesorders')"><span class="ico">📝</span> Sales Orders</div>
+  <div class="nav" onclick="go('advanceslip')"><span class="ico">🎫</span> Advance Slips</div>
+
+  <div class="sb-sec">Head Office</div>
+  <div class="nav" onclick="go('ho')"><span class="ico">🏢</span> HO Dashboard</div>
+  <div class="nav" onclick="go('alerts')"><span class="ico">🔔</span> Alerts Mgmt <span class="badge warn">4</span></div>
+  <div class="nav" onclick="go('salesperson')"><span class="ico">👤</span> Salesperson Mgmt</div>
+  <div class="nav" onclick="go('mis')"><span class="ico">📊</span> MIS Reports</div>
+
+  <div class="sb-bottom">
+    <div class="av">RK</div>
+    <div>
+      <div class="av-name">Raj Kumar</div>
+      <div class="av-role">Store Manager · Mumbai</div>
+    </div>
+  </div>
+</aside>
+
+<!-- MAIN -->
+<div class="main">
+  <div class="topbar">
+    <div>
+      <span class="tb-title" id="pgtitle">Dashboard</span>
+      <span class="tb-sub" id="pgsub">— Overview</span>
+    </div>
+    <div class="tb-space"></div>
+    <div class="search"><span>🔍</span> Search SKU, invoice, party…</div>
+    <div class="tb-icon">🔔<div class="ndot"></div></div>
+    <div class="tb-icon">⚙️</div>
+    <div class="dpill">23 Apr 2026</div>
+  </div>
+
+  <!-- SCREEN TABS generated by JS -->
+  <div class="stabs" id="screentabs"></div>
+
+  <!-- ═══ DASHBOARD ═══ -->
+  <div class="content screen active" id="s-dashboard">
+    <div class="kgrid kgrid-4">
+      <div class="kcard c-saffron">
+        <div class="kh"><div class="klabel">Today Revenue</div><div class="kico c-saffron">💰</div></div>
+        <div class="kval" id="stat-revenue">₹2.14L</div>
+        <div class="kft"><span class="chup">▲ 14.2%</span><span class="chmute">vs yesterday</span></div>
+      </div>
+      <div class="kcard c-gold">
+        <div class="kh"><div class="klabel">Active SKUs</div><div class="kico c-gold">📦</div></div>
+        <div class="kval" id="stat-skus">6,482</div>
+        <div class="kft"><span class="chup">▲ 38</span><span class="chmute">added today</span></div>
+      </div>
+      <div class="kcard c-green">
+        <div class="kh"><div class="klabel">Bills Today</div><div class="kico c-green">🧾</div></div>
+        <div class="kval" id="stat-bills">284</div>
+        <div class="kft"><span class="chup">▲ 9.3%</span><span class="chmute">vs avg</span></div>
+      </div>
+      <div class="kcard c-red">
+        <div class="kh"><div class="klabel">Low Stock Alerts</div><div class="kico c-red">⚠️</div></div>
+        <div class="kval" id="stat-lowstock">17</div>
+        <div class="kft"><span class="chdown">▲ 3</span><span class="chmute">since morning</span></div>
+      </div>
+    </div>
+
+    <div class="grid3">
+      <!-- Revenue Chart -->
+      <div class="panel">
+        <div class="ph"><div class="ptitle">Revenue vs Expense</div>
+          <div class="tabs"><div class="tab active">Week</div><div class="tab">Month</div><div class="tab">Year</div></div>
+        </div>
+        <div class="pb">
+          <div class="chart-area">
+            <div class="bgroup"><div class="bwrap"><div class="bar rev" style="height:62%"></div><div class="bar exp" style="height:42%"></div></div><div class="blabel">Mon</div></div>
+            <div class="bgroup"><div class="bwrap"><div class="bar rev" style="height:78%"></div><div class="bar exp" style="height:55%"></div></div><div class="blabel">Tue</div></div>
+            <div class="bgroup"><div class="bwrap"><div class="bar rev" style="height:55%"></div><div class="bar exp" style="height:40%"></div></div><div class="blabel">Wed</div></div>
+            <div class="bgroup"><div class="bwrap"><div class="bar rev" style="height:92%"></div><div class="bar exp" style="height:52%"></div></div><div class="blabel">Thu</div></div>
+            <div class="bgroup"><div class="bwrap"><div class="bar rev" style="height:72%"></div><div class="bar exp" style="height:58%"></div></div><div class="blabel">Fri</div></div>
+            <div class="bgroup"><div class="bwrap"><div class="bar rev" style="height:98%"></div><div class="bar exp" style="height:50%"></div></div><div class="blabel">Sat</div></div>
+            <div class="bgroup"><div class="bwrap"><div class="bar rev" style="height:68%"></div><div class="bar exp" style="height:36%"></div></div><div class="blabel">Sun</div></div>
+          </div>
+          <div class="clegend">
+            <div class="ldot"><div class="ld" style="background:var(--navy)"></div>Revenue</div>
+            <div class="ldot"><div class="ld" style="background:var(--gold)"></div>Expense</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Stock Alerts -->
+      <div class="panel">
+        <div class="ph"><div class="ptitle">Stock Alerts</div><div class="pact" onclick="go('inventory')">View All →</div></div>
+        <div class="pb" style="padding-top:8px;">
+          <table class="tbl">
+            <thead><tr><th>Product</th><th>SKU</th><th>Qty</th><th style="text-align:left">Status</th></tr></thead>
+            <tbody>
+              <tr><td><b>Parle-G 100g</b></td><td style="color:var(--muted)">SKU-0112</td><td style="font-weight:600">4</td><td style="text-align:left"><span class="badge b-crit">Critical</span></td></tr>
+              <tr><td><b>Tata Salt 1kg</b></td><td style="color:var(--muted)">SKU-0234</td><td style="font-weight:600">12</td><td style="text-align:left"><span class="badge b-low">Low</span></td></tr>
+              <tr><td><b>Maggi Noodles</b></td><td style="color:var(--muted)">SKU-0556</td><td style="font-weight:600">3</td><td style="text-align:left"><span class="badge b-crit">Critical</span></td></tr>
+              <tr><td><b>Amul Butter</b></td><td style="color:var(--muted)">SKU-0389</td><td style="font-weight:600">9</td><td style="text-align:left"><span class="badge b-low">Low</span></td></tr>
+              <tr><td><b>Fortune Oil 5L</b></td><td style="color:var(--muted)">SKU-0445</td><td style="font-weight:600">88</td><td style="text-align:left"><span class="badge b-ok">OK</span></td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Activity -->
+      <div class="panel">
+        <div class="ph"><div class="ptitle">Live Activity</div><div class="pact">Clear</div></div>
+        <div class="pb" style="padding-top:4px;">
+          <div class="act-list">
+            <div class="act-item"><div class="act-dot" style="background:rgba(39,174,96,.1)">📥</div><div><div class="act-title">GRN received — 200 units Maggi</div><div class="act-time">2 min · Warehouse A</div></div></div>
+            <div class="act-item"><div class="act-dot" style="background:rgba(244,132,10,.1)">🧾</div><div><div class="act-title">Bill #B-10842 — ₹2,450 · Till 2</div><div class="act-time">8 min · Cashier Priya</div></div></div>
+            <div class="act-item"><div class="act-dot" style="background:rgba(41,128,185,.1)">🚚</div><div><div class="act-title">Dispatch — Order #ORD-884 sent</div><div class="act-time">32 min · Dispatch</div></div></div>
+            <div class="act-item"><div class="act-dot" style="background:rgba(231,76,60,.1)">⚠️</div><div><div class="act-title">FATAL: Cash limit reached · Till 1</div><div class="act-time">45 min · System</div></div></div>
+            <div class="act-item"><div class="act-dot" style="background:rgba(249,185,66,.1)">🎁</div><div><div class="act-title">Promo activated — Buy 2 Get 1 Biscuits</div><div class="act-time">1 hr · HO Broadcast</div></div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="grid2">
+      <div class="panel">
+        <div class="ph"><div class="ptitle">Recent Invoices</div><div class="pact" onclick="go('invoices')">View All →</div></div>
+        <div class="pb" style="padding-top:8px;">
+          <table class="tbl">
+            <thead><tr><th>Invoice</th><th>Party</th><th>Amount</th><th>Status</th></tr></thead>
+            <tbody>
+              <tr><td style="color:var(--saffron);font-weight:600">#INV-1042</td><td>Sharma Traders</td><td style="font-weight:600">₹32,450</td><td><span class="badge b-pend">Pending</span></td></tr>
+              <tr><td style="color:var(--saffron);font-weight:600">#INV-1041</td><td>Verma Stores</td><td style="font-weight:600">₹84,000</td><td><span class="badge b-paid">Paid</span></td></tr>
+              <tr><td style="color:var(--saffron);font-weight:600">#INV-1039</td><td>Delhi Mart</td><td style="font-weight:600">₹21,200</td><td><span class="badge b-over">Overdue</span></td></tr>
+              <tr><td style="color:var(--saffron);font-weight:600">#INV-1038</td><td>Gupta Brothers</td><td style="font-weight:600">₹55,800</td><td><span class="badge b-paid">Paid</span></td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+      <div class="panel">
+        <div class="ph"><div class="ptitle">Quick Actions</div></div>
+        <div class="qa-grid">
+          <div class="qa-btn"><div class="qa-ico-w">🧾</div><div class="qa-lbl">New Bill</div></div>
+          <div class="qa-btn"><div class="qa-ico-w">➕</div><div class="qa-lbl">Add Stock</div></div>
+          <div class="qa-btn"><div class="qa-ico-w">🎁</div><div class="qa-lbl">Apply Promo</div></div>
+          <div class="qa-btn"><div class="qa-ico-w">🛒</div><div class="qa-lbl">Purchase Order</div></div>
+          <div class="qa-btn"><div class="qa-ico-w">💸</div><div class="qa-lbl">Cash Payout</div></div>
+          <div class="qa-btn"><div class="qa-ico-w">📊</div><div class="qa-lbl">MIS Report</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══ BILLING ═══ -->
+  <div class="content screen" id="s-billing">
+    <div class="kgrid kgrid-4" style="margin-bottom:20px;">
+      <div class="kcard c-saffron"><div class="kh"><div class="klabel">Bills Today</div><div class="kico c-saffron">🧾</div></div><div class="kval">284</div><div class="kft"><span class="chup">▲ 9.3%</span></div></div>
+      <div class="kcard c-green"><div class="kh"><div class="klabel">Cash Collected</div><div class="kico c-green">💵</div></div><div class="kval">₹1.84L</div><div class="kft"><span class="chup">▲ 12%</span></div></div>
+      <div class="kcard c-blue"><div class="kh"><div class="klabel">Advance Slips</div><div class="kico c-blue">🎫</div></div><div class="kval">18</div><div class="kft"><span class="chmute">active</span></div></div>
+      <div class="kcard c-gold"><div class="kh"><div class="klabel">Cancelled Bills</div><div class="kico c-gold">❌</div></div><div class="kval">3</div><div class="kft"><span class="chmute">today</span></div></div>
+    </div>
+
+    <!-- New Bill Form -->
+    <div class="panel">
+      <div class="ph"><div class="ptitle">New Bill — POS Counter</div><div style="display:flex;gap:8px;"><button class="btn-sec">Save Draft</button><button class="btn-primary">Generate Bill</button></div></div>
+      <div class="pb">
+        <div class="form-row form-row-3">
+          <div class="fgroup"><div class="flabel">Bill Number</div><input class="finput" value="B-10843" readonly></div>
+          <div class="fgroup"><div class="flabel">Bill Date</div><input class="finput" type="date" value="2026-04-23"></div>
+          <div class="fgroup"><div class="flabel">Till / Counter</div><select class="fselect"><option>Till 1 — Entrance</option><option selected>Till 2 — Main</option><option>Till 3 — Express</option></select></div>
+        </div>
+        <div class="form-row">
+          <div class="fgroup"><div class="flabel">Customer Name</div><input class="finput" placeholder="Walk-in / Customer name"></div>
+          <div class="fgroup"><div class="flabel">Mobile Number</div><input class="finput" placeholder="+91 9XXXXXXXXX"></div>
+        </div>
+        <div style="margin-top:4px;">
+          <div class="flabel" style="margin-bottom:8px;">Add Items</div>
+          <table class="tbl">
+            <thead><tr><th style="text-align:left">Product / SKU</th><th>Barcode</th><th>MRP</th><th>Qty</th><th>Discount</th><th>Scheme</th><th>Amount</th></tr></thead>
+            <tbody>
+              <tr>
+                <td><b>Parle-G 100g</b><br><span style="font-size:10px;color:var(--muted)">SKU-0112</span></td>
+                <td style="text-align:right">8901496100106</td>
+                <td style="text-align:right">₹10.00</td>
+                <td style="text-align:right"><input class="finput" value="12" style="width:50px;text-align:center;padding:5px 6px;"></td>
+                <td style="text-align:right">5%</td>
+                <td style="text-align:right"><span class="scheme-tag">🎁 Buy 10 Get 2</span></td>
+                <td style="text-align:right;font-weight:600">₹114.00</td>
+              </tr>
+              <tr>
+                <td><b>Tata Salt 1kg</b><br><span style="font-size:10px;color:var(--muted)">SKU-0234</span></td>
+                <td style="text-align:right">8901725111473</td>
+                <td style="text-align:right">₹28.00</td>
+                <td style="text-align:right"><input class="finput" value="3" style="width:50px;text-align:center;padding:5px 6px;"></td>
+                <td style="text-align:right">—</td>
+                <td style="text-align:right">—</td>
+                <td style="text-align:right;font-weight:600">₹84.00</td>
+              </tr>
+              <tr>
+                <td><b>Amul Butter 500g</b><br><span style="font-size:10px;color:var(--muted)">SKU-0389</span></td>
+                <td style="text-align:right">8901063151468</td>
+                <td style="text-align:right">₹265.00</td>
+                <td style="text-align:right"><input class="finput" value="2" style="width:50px;text-align:center;padding:5px 6px;"></td>
+                <td style="text-align:right">—</td>
+                <td style="text-align:right">—</td>
+                <td style="text-align:right;font-weight:600">₹530.00</td>
+              </tr>
+            </tbody>
+          </table>
+          <div style="display:flex;justify-content:flex-end;margin-top:14px;">
+            <div style="min-width:220px;">
+              <div style="display:flex;justify-content:space-between;padding:6px 0;border-bottom:1px solid var(--border);font-size:12.5px;"><span>Subtotal</span><span>₹728.00</span></div>
+              <div style="display:flex;justify-content:space-between;padding:6px 0;border-bottom:1px solid var(--border);font-size:12.5px;color:var(--green)"><span>Scheme Discount</span><span>−₹20.00</span></div>
+              <div style="display:flex;justify-content:space-between;padding:6px 0;border-bottom:1px solid var(--border);font-size:12.5px;"><span>GST (5%)</span><span>₹35.40</span></div>
+              <div style="display:flex;justify-content:space-between;padding:8px 0;font-size:15px;font-weight:700;color:var(--saffron)"><span>Total</span><span>₹743.40</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══ TILL MANAGEMENT ═══ -->
+  <div class="content screen" id="s-till">
+    <div class="kgrid kgrid-4" style="margin-bottom:20px;">
+      <div class="kcard c-green"><div class="kh"><div class="klabel">Open Tills</div><div class="kico c-green">🟢</div></div><div class="kval">3</div></div>
+      <div class="kcard c-gold"><div class="kh"><div class="klabel">Locked Tills</div><div class="kico c-gold">🔒</div></div><div class="kval">1</div></div>
+      <div class="kcard c-red"><div class="kh"><div class="klabel">Closed Tills</div><div class="kico c-red">🔴</div></div><div class="kval">2</div></div>
+      <div class="kcard c-navy"><div class="kh"><div class="klabel">Cash Lifts Due</div><div class="kico c-navy">💸</div></div><div class="kval">1</div></div>
+    </div>
+    <div class="panel">
+      <div class="ph"><div class="ptitle">Till Status Board</div><div class="pact">+ Add Till</div></div>
+      <div class="pb">
+        <div class="till-grid">
+          <div class="till-card"><div class="till-name">Till 1 — Entrance</div><div class="till-num">T1</div><div style="margin:8px 0;"><span class="till-stat ts-open">Open</span></div><div style="font-size:11px;color:var(--muted);margin-bottom:4px;">Cashier: Priya S.</div><div style="font-size:11px;font-weight:600;color:var(--saffron);">₹28,400 collected</div><div style="font-size:10px;color:var(--red);margin-top:3px;">⚠️ Cash limit reached</div><div class="till-ops"><div class="till-op">Lock</div><div class="till-op">Cash Lift</div><div class="till-op">Close</div></div></div>
+          <div class="till-card"><div class="till-name">Till 2 — Main Counter</div><div class="till-num">T2</div><div style="margin:8px 0;"><span class="till-stat ts-open">Open</span></div><div style="font-size:11px;color:var(--muted);margin-bottom:4px;">Cashier: Rahul M.</div><div style="font-size:11px;font-weight:600;color:var(--saffron);">₹42,800 collected</div><div class="till-ops"><div class="till-op">Lock</div><div class="till-op">Cash Lift</div><div class="till-op">Close</div></div></div>
+          <div class="till-card"><div class="till-name">Till 3 — Express</div><div class="till-num">T3</div><div style="margin:8px 0;"><span class="till-stat ts-lock">Locked</span></div><div style="font-size:11px;color:var(--muted);margin-bottom:4px;">Locked by: Manager</div><div style="font-size:11px;font-weight:600;color:var(--muted)">₹18,200 collected</div><div class="till-ops"><div class="till-op">Unlock</div><div class="till-op">Close</div></div></div>
+          <div class="till-card"><div class="till-name">Till 4 — Back Office</div><div class="till-num">T4</div><div style="margin:8px 0;"><span class="till-stat ts-open">Open</span></div><div style="font-size:11px;color:var(--muted);margin-bottom:4px;">Cashier: Sneha P.</div><div style="font-size:11px;font-weight:600;color:var(--saffron);">₹11,600 collected</div><div class="till-ops"><div class="till-op">Lock</div><div class="till-op">Close</div></div></div>
+          <div class="till-card"><div class="till-name">Till 5 — Backup</div><div class="till-num">T5</div><div style="margin:8px 0;"><span class="till-stat ts-close">Closed</span></div><div style="font-size:11px;color:var(--muted);margin-bottom:10px;">Not active today</div><div class="till-ops"><div class="till-op">Open</div></div></div>
+          <div class="till-card"><div class="till-name">Till 6 — Self Checkout</div><div class="till-num">T6</div><div style="margin:8px 0;"><span class="till-stat ts-idle">Idle</span></div><div style="font-size:11px;color:var(--muted);margin-bottom:10px;">No cashier assigned</div><div class="till-ops"><div class="till-op">Assign</div><div class="till-op">Open</div></div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══ SCHEMES & PROMOS ═══ -->
+  <div class="content screen" id="s-schemes">
+    <div class="kgrid kgrid-3" style="margin-bottom:20px;">
+      <div class="kcard c-gold"><div class="kh"><div class="klabel">Active Schemes</div><div class="kico c-gold">🎁</div></div><div class="kval">8</div><div class="kft"><span class="chmute">running now</span></div></div>
+      <div class="kcard c-green"><div class="kh"><div class="klabel">Bills with Promo</div><div class="kico c-green">✅</div></div><div class="kval">142</div><div class="kft"><span class="chup">▲ 22%</span><span class="chmute">applied today</span></div></div>
+      <div class="kcard c-saffron"><div class="kh"><div class="klabel">Discount Given</div><div class="kico c-saffron">💸</div></div><div class="kval">₹4,320</div><div class="kft"><span class="chmute">today</span></div></div>
+    </div>
+    <div class="panel">
+      <div class="ph"><div class="ptitle">Active Schemes & Promotions</div><div class="pact">+ New Scheme</div></div>
+      <div class="pb" style="padding-top:8px;">
+        <table class="tbl">
+          <thead><tr><th>Scheme Name</th><th>Type</th><th>Products</th><th>Valid Till</th><th>Auto Apply</th><th>Status</th></tr></thead>
+          <tbody>
+            <tr>
+              <td><b>Buy 10 Get 2 — Parle</b></td>
+              <td><span class="badge b-open">Qty Bonus</span></td>
+              <td>Parle-G 100g</td>
+              <td style="color:var(--muted)">30 Apr 2026</td>
+              <td><div class="toggle on" onclick="this.classList.toggle('on')"></div></td>
+              <td><span class="badge b-ok">Active</span></td>
+            </tr>
+            <tr>
+              <td><b>Weekend 15% Off — Dairy</b></td>
+              <td><span class="badge" style="background:rgba(41,128,185,.1);color:var(--blue)">% Discount</span></td>
+              <td>All Dairy Items</td>
+              <td style="color:var(--muted)">Sat–Sun only</td>
+              <td><div class="toggle on" onclick="this.classList.toggle('on')"></div></td>
+              <td><span class="badge b-ok">Active</span></td>
+            </tr>
+            <tr>
+              <td><b>Combo — Oil + Salt ₹50 Off</b></td>
+              <td><span class="badge" style="background:rgba(249,185,66,.15);color:#B8860B">Multi-item</span></td>
+              <td>Fortune Oil + Tata Salt</td>
+              <td style="color:var(--muted)">15 May 2026</td>
+              <td><div class="toggle" onclick="this.classList.toggle('on')"></div></td>
+              <td><span class="badge b-pend">Inactive</span></td>
+            </tr>
+            <tr>
+              <td><b>Clearance — Noodles 20% Off</b></td>
+              <td><span class="badge" style="background:rgba(41,128,185,.1);color:var(--blue)">% Discount</span></td>
+              <td>Maggi, Yippee, Top Ramen</td>
+              <td style="color:var(--muted)">25 Apr 2026</td>
+              <td><div class="toggle on" onclick="this.classList.toggle('on')"></div></td>
+              <td><span class="badge b-ok">Active</span></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══ PRICE MANAGEMENT ═══ -->
+  <div class="content screen" id="s-price">
+    <div class="panel" style="margin-bottom:16px;">
+      <div class="ph"><div class="ptitle">Price Lists — Multiple Price Levels</div><div class="pact">+ Add Price Level</div></div>
+      <div class="pb" style="padding-top:8px;">
+        <div style="display:flex;gap:8px;margin-bottom:16px;">
+          <button class="btn-primary" style="font-size:11px;padding:6px 14px;">MRP (Default)</button>
+          <button class="btn-sec" style="font-size:11px;padding:6px 14px;">Wholesale</button>
+          <button class="btn-sec" style="font-size:11px;padding:6px 14px;">Staff Price</button>
+          <button class="btn-sec" style="font-size:11px;padding:6px 14px;">Scheme Price</button>
+        </div>
+        <table class="tbl">
+          <thead><tr>
+            <th style="text-align:left">Product</th>
+            <th>MRP</th><th>Wholesale</th><th>Staff</th><th>Scheme</th><th>Active</th>
+          </tr></thead>
+          <tbody>
+            <tr>
+              <td><b>Parle-G 100g</b><div style="font-size:10px;color:var(--muted)">SKU-0112 · GTIN-8901496100106</div></td>
+              <td style="text-align:right;font-weight:600">₹10.00</td>
+              <td style="text-align:right">₹8.50</td>
+              <td style="text-align:right">₹7.00</td>
+              <td style="text-align:right;color:var(--green)">₹8.00</td>
+              <td style="text-align:right"><div class="toggle on" onclick="this.classList.toggle('on')"></div></td>
+            </tr>
+            <tr>
+              <td><b>Tata Salt 1kg</b><div style="font-size:10px;color:var(--muted)">SKU-0234 · GTIN-8901725111473</div></td>
+              <td style="text-align:right;font-weight:600">₹28.00</td>
+              <td style="text-align:right">₹24.00</td>
+              <td style="text-align:right">₹22.00</td>
+              <td style="text-align:right;color:var(--green)">₹24.00</td>
+              <td style="text-align:right"><div class="toggle on" onclick="this.classList.toggle('on')"></div></td>
+            </tr>
+            <tr>
+              <td><b>Fortune Oil 5L</b><div style="font-size:10px;color:var(--muted)">SKU-0445 · GTIN-8901499010401</div></td>
+              <td style="text-align:right;font-weight:600">₹840.00</td>
+              <td style="text-align:right">₹780.00</td>
+              <td style="text-align:right">₹740.00</td>
+              <td style="text-align:right;color:var(--muted)">—</td>
+              <td style="text-align:right"><div class="toggle on" onclick="this.classList.toggle('on')"></div></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══ INVENTORY ═══ -->
+  <div class="content screen" id="s-inventory">
+    <div class="kgrid kgrid-4" style="margin-bottom:20px;">
+      <div class="kcard c-navy"><div class="kh"><div class="klabel">Total SKUs</div><div class="kico c-navy">📦</div></div><div class="kval">6,482</div><div class="kft"><span class="chmute">active items</span></div></div>
+      <div class="kcard c-red"><div class="kh"><div class="klabel">Critical Stock</div><div class="kico c-red">🚨</div></div><div class="kval">5</div><div class="kft"><span class="chdown">Reorder now</span></div></div>
+      <div class="kcard c-gold"><div class="kh"><div class="klabel">Low Stock</div><div class="kico c-gold">⚠️</div></div><div class="kval">12</div><div class="kft"><span class="chmute">items</span></div></div>
+      <div class="kcard c-green"><div class="kh"><div class="klabel">Warehouse Fill</div><div class="kico c-green">🏭</div></div><div class="kval">74%</div><div class="kft"><span class="chup">Healthy</span></div></div>
+    </div>
+    <div class="grid2">
+      <div class="panel">
+        <div class="ph"><div class="ptitle">Category-wise Stock Levels</div></div>
+        <div class="pb">
+          <div class="prow"><div class="plrow"><span class="pname">Grocery & Staples</span><span class="pval">82% · 1,840 SKUs</span></div><div class="pbg"><div class="pfill" style="width:82%;background:var(--navy)"></div></div></div>
+          <div class="prow"><div class="plrow"><span class="pname">Dairy Products</span><span class="pval">45% · 320 SKUs</span></div><div class="pbg"><div class="pfill" style="width:45%;background:var(--saffron)"></div></div></div>
+          <div class="prow"><div class="plrow"><span class="pname">Beverages</span><span class="pval">67% · 980 SKUs</span></div><div class="pbg"><div class="pfill" style="width:67%;background:var(--green)"></div></div></div>
+          <div class="prow"><div class="plrow"><span class="pname">Personal Care</span><span class="pval">29% · 420 SKUs</span></div><div class="pbg"><div class="pfill" style="width:29%;background:var(--red)"></div></div></div>
+          <div class="prow"><div class="plrow"><span class="pname">Household Items</span><span class="pval">91% · 760 SKUs</span></div><div class="pbg"><div class="pfill" style="width:91%;background:var(--blue)"></div></div></div>
+        </div>
+      </div>
+      <div class="panel">
+        <div class="ph"><div class="ptitle">Generate Purchase Order</div><div class="pact">Auto-Generate →</div></div>
+        <div class="pb">
+          <div class="form-row"><div class="fgroup"><div class="flabel">Location</div><select class="fselect"><option>POS — Mumbai Store</option><option>HO — Head Office</option><option>Distributor</option></select></div><div class="fgroup"><div class="flabel">Supplier</div><select class="fselect"><option>Select Supplier</option><option>Hindustan Unilever</option><option>ITC Limited</option><option>Nestle India</option></select></div></div>
+          <div class="form-row"><div class="fgroup"><div class="flabel">PO Date</div><input class="finput" type="date" value="2026-04-23"></div><div class="fgroup"><div class="flabel">Expected Delivery</div><input class="finput" type="date" value="2026-04-28"></div></div>
+          <div style="display:flex;gap:8px;margin-top:4px;"><button class="btn-primary">Create PO</button><button class="btn-sec">Import XML</button></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══ CATALOGUE ═══ -->
+  <div class="content screen" id="s-catalogue">
+    <div class="panel">
+      <div class="ph"><div class="ptitle">Catalogue Management</div><div style="display:flex;gap:8px;"><button class="btn-sec" style="font-size:11px;padding:6px 14px;">Import CSV</button><button class="btn-primary" style="font-size:11px;padding:6px 14px;">+ Add Product</button></div></div>
+      <div class="pb">
+        <div class="form-row form-row-3">
+          <div class="fgroup"><div class="flabel">Product Name</div><input class="finput" placeholder="e.g. Parle-G 100g"></div>
+          <div class="fgroup"><div class="flabel">SKU Code</div><input class="finput" placeholder="Auto-generate / Manual"></div>
+          <div class="fgroup"><div class="flabel">Barcode / EAN</div><input class="finput" placeholder="8901496100106"></div>
+        </div>
+        <div class="form-row form-row-3">
+          <div class="fgroup"><div class="flabel">Category</div><select class="fselect"><option>Grocery</option><option>Dairy</option><option>Beverages</option><option>Personal Care</option></select></div>
+          <div class="fgroup"><div class="flabel">Brand</div><input class="finput" placeholder="e.g. Parle"></div>
+          <div class="fgroup"><div class="flabel">HSN Code</div><input class="finput" placeholder="1905"></div>
+        </div>
+        <div class="form-row form-row-3">
+          <div class="fgroup"><div class="flabel">MRP (₹)</div><input class="finput" placeholder="0.00"></div>
+          <div class="fgroup"><div class="flabel">GST Rate</div><select class="fselect"><option>0%</option><option>5%</option><option selected>12%</option><option>18%</option><option>28%</option></select></div>
+          <div class="fgroup"><div class="flabel">Unit of Measure</div><select class="fselect"><option>Pcs</option><option>Kg</option><option>Litre</option><option>Pack</option></select></div>
+        </div>
+        <div style="display:flex;gap:8px;"><button class="btn-primary">Save Product</button><button class="btn-sec">Save & Add Another</button></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══ GTIN / GS1 ═══ -->
+  <div class="content screen" id="s-gtin">
+    <div class="kgrid kgrid-3" style="margin-bottom:20px;">
+      <div class="kcard c-navy"><div class="kh"><div class="klabel">GTIN Registered</div><div class="kico c-navy">🔖</div></div><div class="kval">4,280</div><div class="kft"><span class="chmute">of 6,482 SKUs</span></div></div>
+      <div class="kcard c-saffron"><div class="kh"><div class="klabel">Pending GTIN</div><div class="kico c-saffron">⏳</div></div><div class="kval">2,202</div><div class="kft"><span class="chdown">assign required</span></div></div>
+      <div class="kcard c-green"><div class="kh"><div class="klabel">GS1 Compliant</div><div class="kico c-green">✅</div></div><div class="kval">100%</div><div class="kft"><span class="chmute">of registered</span></div></div>
+    </div>
+    <div class="panel" style="margin-bottom:16px;">
+      <div class="ph"><div class="ptitle">GTIN Number Generator — GS1 Standard</div></div>
+      <div class="pb">
+        <div class="gtin-box" style="margin-bottom:16px;">
+          <div class="gtin-left">
+            <div class="gtin-label">Company GS1 Prefix</div>
+            <div class="gtin-val">890 1496 XXXXX C</div>
+            <div class="gtin-sub">Indian GS1 · 13-digit EAN Barcode</div>
+          </div>
+          <div style="text-align:right;">
+            <div style="font-size:10px;letter-spacing:1px;color:rgba(255,255,255,.4);margin-bottom:4px;">ASSIGNED TO</div>
+            <div style="color:#fff;font-weight:600;font-size:13px;">PrimeSetu Retail Pvt. Ltd.</div>
+            <div style="color:rgba(255,255,255,.4);font-size:10px;">Mumbai, Maharashtra</div>
+          </div>
+        </div>
+        <div class="form-row form-row-3">
+          <div class="fgroup"><div class="flabel">Product SKU</div><input class="finput" placeholder="Select or type SKU"></div>
+          <div class="fgroup"><div class="flabel">GTIN Pattern</div><select class="fselect"><option>13-digit EAN (Default)</option><option>12-digit UPC</option><option>14-digit GTIN</option></select></div>
+          <div class="fgroup"><div class="flabel">Check Digit</div><input class="finput" placeholder="Auto-calculated" readonly></div>
+        </div>
+        <div style="display:flex;gap:8px;"><button class="btn-primary">Generate GTIN</button><button class="btn-sec">Bulk Generate</button></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══ ALERTS ═══ -->
+  <div class="content screen" id="s-alerts">
+    <div class="kgrid kgrid-4" style="margin-bottom:20px;">
+      <div class="kcard c-red"><div class="kh"><div class="klabel">Fatal Alerts</div><div class="kico c-red">🚨</div></div><div class="kval">2</div></div>
+      <div class="kcard c-gold"><div class="kh"><div class="klabel">Warnings</div><div class="kico c-gold">⚠️</div></div><div class="kval">8</div></div>
+      <div class="kcard c-blue"><div class="kh"><div class="klabel">Information</div><div class="kico c-blue">ℹ️</div></div><div class="kval">14</div></div>
+      <div class="kcard c-green"><div class="kh"><div class="klabel">Resolved Today</div><div class="kico c-green">✅</div></div><div class="kval">6</div></div>
+    </div>
+    <div class="panel">
+      <div class="ph"><div class="ptitle">Alerts Centre — All Showrooms</div>
+        <div class="tabs"><div class="tab active">All</div><div class="tab">Fatal</div><div class="tab">Warnings</div><div class="tab">Info</div></div>
+      </div>
+      <div class="pb">
+        <div class="alert-item al-fatal"><div class="al-icon">🚨</div><div style="flex:1"><div class="al-title">FATAL: Cash Limit Exceeded — Till 1</div><div class="al-desc">Till 1 has exceeded the configured cash limit of ₹25,000. Initiate cash lift immediately.</div></div><div class="al-time">5 min ago</div></div>
+        <div class="alert-item al-fatal"><div class="al-icon">🚨</div><div style="flex:1"><div class="al-title">FATAL: Stock Out — Maggi Noodles (SKU-0556)</div><div class="al-desc">Remaining qty: 2. POS sales may fail. Raise emergency PO immediately.</div></div><div class="al-time">22 min ago</div></div>
+        <div class="alert-item al-warn"><div class="al-icon">⚠️</div><div style="flex:1"><div class="al-title">WARNING: Low Stock — Parle-G 100g (SKU-0112)</div><div class="al-desc">Stock has fallen below reorder level (10 units). Current qty: 4.</div></div><div class="al-time">45 min ago</div></div>
+        <div class="alert-item al-warn"><div class="al-icon">⚠️</div><div style="flex:1"><div class="al-title">WARNING: Overdue Invoice — Delhi Mart #INV-1039</div><div class="al-desc">Invoice of ₹21,200 was due on 22 Apr 2026. Payment not received.</div></div><div class="al-time">2 hrs ago</div></div>
+        <div class="alert-item al-info"><div class="al-icon">ℹ️</div><div style="flex:1"><div class="al-title">INFO: Price Revision — HO Broadcast</div><div class="al-desc">HO has revised prices for 48 dairy SKUs. Effective from 24 Apr 2026. Please sync catalogues.</div></div><div class="al-time">3 hrs ago</div></div>
+        <div class="alert-item al-info"><div class="al-icon">ℹ️</div><div style="flex:1"><div class="al-title">INFO: New Scheme Activated — Weekend Dairy 15%</div><div class="al-desc">Broadcast from HO. Auto-applied on all Dairy bills from Sat–Sun.</div></div><div class="al-time">4 hrs ago</div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══ HO DASHBOARD ═══ -->
+  <div class="content screen" id="s-ho">
+    <div class="kgrid kgrid-4" style="margin-bottom:20px;">
+      <div class="kcard c-saffron"><div class="kh"><div class="klabel">Total Stores</div><div class="kico c-saffron">🏪</div></div><div class="kval">12</div><div class="kft"><span class="chup">▲ 1 new</span></div></div>
+      <div class="kcard c-navy"><div class="kh"><div class="klabel">Network Revenue</div><div class="kico c-navy">📈</div></div><div class="kval">₹48.2L</div><div class="kft"><span class="chup">▲ 16.4%</span></div></div>
+      <div class="kcard c-green"><div class="kh"><div class="klabel">Centralized POs</div><div class="kico c-green">🛒</div></div><div class="kval">24</div><div class="kft"><span class="chmute">this month</span></div></div>
+      <div class="kcard c-gold"><div class="kh"><div class="klabel">Salespersons</div><div class="kico c-gold">👥</div></div><div class="kval">38</div><div class="kft"><span class="chmute">active</span></div></div>
+    </div>
+    <div class="grid2">
+      <div class="panel">
+        <div class="ph"><div class="ptitle">Store-wise Performance</div></div>
+        <div class="pb" style="padding-top:8px;">
+          <table class="tbl">
+            <thead><tr><th>Store</th><th>Revenue</th><th>Bills</th><th>Status</th></tr></thead>
+            <tbody>
+              <tr><td><b>Mumbai — Andheri</b></td><td style="text-align:right;font-weight:600">₹8.4L</td><td style="text-align:right">284</td><td><span class="badge b-ok">Online</span></td></tr>
+              <tr><td><b>Mumbai — Bandra</b></td><td style="text-align:right;font-weight:600">₹6.2L</td><td style="text-align:right">198</td><td><span class="badge b-ok">Online</span></td></tr>
+              <tr><td><b>Pune — Wakad</b></td><td style="text-align:right;font-weight:600">₹4.8L</td><td style="text-align:right">162</td><td><span class="badge b-ok">Online</span></td></tr>
+              <tr><td><b>Nagpur — Sitabuldi</b></td><td style="text-align:right;font-weight:600">₹3.1L</td><td style="text-align:right">104</td><td><span class="badge b-pend">Syncing</span></td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+      <div class="panel">
+        <div class="ph"><div class="ptitle">Salesperson Performance</div><div class="pact" onclick="go('salesperson')">Full View →</div></div>
+        <div class="pb" style="padding-top:8px;">
+          <table class="tbl">
+            <thead><tr><th>Name</th><th>Store</th><th>Bills</th><th>Revenue</th></tr></thead>
+            <tbody>
+              <tr><td><b>Priya S.</b></td><td>Andheri</td><td style="text-align:right">84</td><td style="text-align:right;font-weight:600;color:var(--saffron)">₹2.1L</td></tr>
+              <tr><td><b>Rahul M.</b></td><td>Bandra</td><td style="text-align:right">72</td><td style="text-align:right;font-weight:600;color:var(--saffron)">₹1.8L</td></tr>
+              <tr><td><b>Sneha P.</b></td><td>Andheri</td><td style="text-align:right">68</td><td style="text-align:right;font-weight:600;color:var(--saffron)">₹1.6L</td></tr>
+              <tr><td><b>Arjun K.</b></td><td>Wakad</td><td style="text-align:right">54</td><td style="text-align:right;font-weight:600;color:var(--saffron)">₹1.4L</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══ MIS REPORTS ═══ -->
+  <div class="content screen" id="s-mis">
+    <div class="panel">
+      <div class="ph"><div class="ptitle">MIS Reports — Shoper9 Standard</div>
+        <div style="display:flex;gap:8px;align-items:center;">
+          <select class="fselect" style="font-size:11px;padding:5px 10px;">
+            <option>Today</option><option>This Week</option><option selected>This Month</option><option>Custom Range</option>
+          </select>
+          <button class="btn-primary" style="font-size:11px;padding:6px 14px;">Export</button>
+        </div>
+      </div>
+      <div class="pb">
+        <div class="mis-grid">
+          <div class="mis-card"><div class="mis-ico">📈</div><div class="mis-name">Sales Summary Report</div><div class="mis-desc">Day/week/month-wise sales with bill count, avg bill value & returns</div></div>
+          <div class="mis-card"><div class="mis-ico">📦</div><div class="mis-name">Inventory Status Report</div><div class="mis-desc">Current stock levels, reorder points, dead stock, ageing analysis</div></div>
+          <div class="mis-card"><div class="mis-ico">💸</div><div class="mis-name">P&L Statement</div><div class="mis-desc">Revenue, COGS, gross profit, operating expenses, net profit</div></div>
+          <div class="mis-card"><div class="mis-ico">🎁</div><div class="mis-name">Scheme Utilization Report</div><div class="mis-desc">Which promos are being used, discount amounts, bill impact</div></div>
+          <div class="mis-card"><div class="mis-ico">🖥️</div><div class="mis-name">Till-wise Collection Report</div><div class="mis-desc">Cash, card, UPI collections per till with opening/closing balance</div></div>
+          <div class="mis-card"><div class="mis-ico">👤</div><div class="mis-name">Salesperson Performance</div><div class="mis-desc">Bills, revenue, returns, schemes applied per salesperson</div></div>
+          <div class="mis-card"><div class="mis-ico">🏪</div><div class="mis-name">Store Comparison Report</div><div class="mis-desc">Multi-store revenue, stock levels, indent comparison from HO</div></div>
+          <div class="mis-card"><div class="mis-ico">🛒</div><div class="mis-name">Purchase Order Report</div><div class="mis-desc">POs raised, received, pending. Supplier-wise GRN analysis</div></div>
+          <div class="mis-card"><div class="mis-ico">📄</div><div class="mis-name">Debtor / Creditor Report</div><div class="mis-desc">Outstanding invoices, overdue parties, payment follow-up list</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══ ACCOUNTING (reused) ═══ -->
+  <div class="content screen" id="s-accounting">
+    <div class="kgrid kgrid-4" style="margin-bottom:20px;">
+      <div class="kcard c-saffron"><div class="kh"><div class="klabel">Monthly Revenue</div><div class="kico c-saffron">📈</div></div><div class="kval">₹24.6L</div><div class="kft"><span class="chup">▲ 18.2%</span></div></div>
+      <div class="kcard c-gold"><div class="kh"><div class="klabel">Total Expenses</div><div class="kico c-gold">📉</div></div><div class="kval">₹14.1L</div><div class="kft"><span class="chdown">▼ 4.5%</span></div></div>
+      <div class="kcard c-green"><div class="kh"><div class="klabel">Net Profit</div><div class="kico c-green">💹</div></div><div class="kval">₹10.5L</div><div class="kft"><span class="chup">42.6% margin</span></div></div>
+      <div class="kcard c-blue"><div class="kh"><div class="klabel">Receivables</div><div class="kico c-blue">🏦</div></div><div class="kval">₹3.2L</div><div class="kft"><span class="chmute">outstanding</span></div></div>
+    </div>
+    <div class="grid2">
+      <div class="panel"><div class="ph"><div class="ptitle">Expense Breakdown</div></div><div class="pb">
+        <div class="prow"><div class="plrow"><span class="pname">Cost of Goods</span><span class="pval">₹9.4L (66%)</span></div><div class="pbg"><div class="pfill" style="width:66%;background:var(--navy)"></div></div></div>
+        <div class="prow"><div class="plrow"><span class="pname">Staff Salaries</span><span class="pval">₹2.8L (20%)</span></div><div class="pbg"><div class="pfill" style="width:20%;background:var(--saffron)"></div></div></div>
+        <div class="prow"><div class="plrow"><span class="pname">Rent & Utilities</span><span class="pval">₹1.2L (9%)</span></div><div class="pbg"><div class="pfill" style="width:9%;background:var(--blue)"></div></div></div>
+        <div class="prow"><div class="plrow"><span class="pname">Logistics</span><span class="pval">₹0.7L (5%)</span></div><div class="pbg"><div class="pfill" style="width:5%;background:var(--green)"></div></div></div>
+      </div></div>
+      <div class="panel"><div class="ph"><div class="ptitle">Quick Actions</div></div>
+        <div class="qa-grid">
+          <div class="qa-btn"><div class="qa-ico-w">📝</div><div class="qa-lbl">Journal Entry</div></div>
+          <div class="qa-btn"><div class="qa-ico-w">💸</div><div class="qa-lbl">Record Payment</div></div>
+          <div class="qa-btn"><div class="qa-ico-w">📊</div><div class="qa-lbl">P&L Report</div></div>
+          <div class="qa-btn"><div class="qa-ico-w">🏦</div><div class="qa-lbl">Bank Reconcile</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Placeholder screens for remaining nav items -->
+  <div class="content screen" id="s-invoices"><div class="panel"><div class="ph"><div class="ptitle">Invoices</div><button class="btn-primary" style="font-size:11px;padding:6px 14px;">+ New Invoice</button></div><div class="pb"><p style="color:var(--muted)">Invoice management screen — full list, filters & creation.</p></div></div></div>
+  <div class="content screen" id="s-purchase"><div class="panel"><div class="ph"><div class="ptitle">Purchase Orders</div></div><div class="pb"><p style="color:var(--muted)">Generate & track POs for HO, Distributor, and POS locations.</p></div></div></div>
+  <div class="content screen" id="s-dispatch"><div class="panel"><div class="ph"><div class="ptitle">Dispatch & GRN</div></div><div class="pb"><p style="color:var(--muted)">Track goods receipt notes, dispatch orders, and logistics.</p></div></div></div>
+  <div class="content screen" id="s-returns"><div class="panel"><div class="ph"><div class="ptitle">Returns Management</div></div><div class="pb"><p style="color:var(--muted)">Process customer returns, supplier returns, credit notes.</p></div></div></div>
+  <div class="content screen" id="s-salesorders"><div class="panel"><div class="ph"><div class="ptitle">Sales Orders</div></div><div class="pb"><p style="color:var(--muted)">Manage and link service/sales orders to billing module.</p></div></div></div>
+  <div class="content screen" id="s-advanceslip"><div class="panel"><div class="ph"><div class="ptitle">Advance Slips</div></div><div class="pb"><p style="color:var(--muted)">Manage advance payments, link expected transactions to billing.</p></div></div></div>
+  <div class="content screen" id="s-salesperson"><div class="panel"><div class="ph"><div class="ptitle">Salesperson Management</div></div><div class="pb"><p style="color:var(--muted)">Centralized performance tracking across all showrooms.</p></div></div></div>
+</div>
+
+<script>
+const screens = {
+  dashboard:   ['Dashboard','— Overview'],
+  billing:     ['Billing','— POS Counter'],
+  till:        ['Till Management','— Counter Control'],
+  schemes:     ['Schemes & Promos','— Discount Engine'],
+  price:       ['Price Management','— Multi-level Pricing'],
+  inventory:   ['Inventory','— Stock Control'],
+  catalogue:   ['Catalogue Mgmt','— Product Master'],
+  purchase:    ['Purchase Orders','— Procurement'],
+  dispatch:    ['Dispatch / GRN','— Logistics'],
+  returns:     ['Returns','— Reverse Logistics'],
+  gtin:        ['GTIN / GS1','— Barcode Standards'],
+  accounting:  ['Accounting','— Finance'],
+  invoices:    ['Invoices','— Billing Records'],
+  salesorders: ['Sales Orders','— Order Management'],
+  advanceslip: ['Advance Slips','— Pre-payments'],
+  ho:          ['HO Dashboard','— Head Office View'],
+  alerts:      ['Alerts Centre','— Notifications'],
+  salesperson: ['Salesperson Mgmt','— Performance'],
+  mis:         ['MIS Reports','— Analytics'],
+};
+
+function go(name) {
+  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+  document.querySelectorAll('.nav').forEach(n => n.classList.remove('active'));
+  document.querySelectorAll('.stab').forEach(t => t.classList.remove('active'));
+
+  const el = document.getElementById('s-' + name);
+  if (el) el.classList.add('active');
+
+  const tab = document.getElementById('t-' + name);
+  if (tab) tab.classList.add('active');
+
+  if (screens[name]) {
+    document.getElementById('pgtitle').textContent = screens[name][0];
+    document.getElementById('pgsub').textContent = screens[name][1];
+  }
+
+  // highlight sidebar
+  document.querySelectorAll('.nav').forEach(n => {
+    if (n.getAttribute('onclick') === `go('${name}')`) n.classList.add('active');
+  });
+
+  // Data Refresh
+  if (name === 'dashboard') refreshDashboard();
+  if (name === 'inventory') refreshInventory();
+}
+
+async function refreshDashboard() {
+  try {
+    const res = await fetch('/api/v1/dashboard/stats');
+    const data = await res.json();
+    document.getElementById('stat-revenue').textContent = `₹${(data.today_revenue/100000).toFixed(2)}L`;
+    document.getElementById('stat-skus').textContent = data.active_skus.toLocaleString();
+    document.getElementById('stat-bills').textContent = data.bills_today;
+    document.getElementById('stat-lowstock').textContent = data.low_stock_alerts;
+  } catch (err) { console.warn("PrimeSetu API offline"); }
+}
+
+async function refreshInventory() {
+  // To be implemented: Dynamic inventory table refresh
+  console.log("Refreshing inventory...");
+}
+
+// Initialize on load
+window.onload = () => {
+  refreshDashboard();
+};
+
+// Build screen tabs (main ones only)
+const mainTabs = ['dashboard','billing','till','schemes','price','inventory','catalogue','purchase','accounting','invoices','ho','alerts','mis'];
+const tabLabels = { dashboard:'Overview', billing:'Billing', till:'Till Mgmt', schemes:'Schemes', price:'Pricing', inventory:'Inventory', catalogue:'Catalogue', purchase:'Purchase', accounting:'Accounts', invoices:'Invoices', ho:'Head Office', alerts:'Alerts', mis:'MIS' };
+const tabsEl = document.getElementById('screentabs');
+mainTabs.forEach(k => {
+  const d = document.createElement('div');
+  d.className = 'stab' + (k === 'dashboard' ? ' active' : '');
+  d.id = 't-' + k;
+  d.textContent = tabLabels[k];
+  d.onclick = () => go(k);
+  tabsEl.appendChild(d);
+});
+
+// Tab widget
+document.querySelectorAll('.tabs .tab').forEach(t => {
+  t.addEventListener('click', function() {
+    this.closest('.tabs').querySelectorAll('.tab').forEach(x => x.classList.remove('active'));
+    this.classList.add('active');
+  });
+});
+</script>
+</body>
+</html>

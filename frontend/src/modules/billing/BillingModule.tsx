@@ -22,6 +22,7 @@ import SuspendedBillsBrowser from './SuspendedBillsBrowser'
 import ThermalReceipt from './ThermalReceipt'
 import ReturnsDrawer from './ReturnsDrawer'
 import { useHotkeys } from 'react-hotkeys-hook'
+import { offlineService } from '@/api/offline'
 
 interface CartItem {
   id: string; code: string; name: string; brand: string; category: string
@@ -52,9 +53,47 @@ export default function BillingModule() {
   const [billToPrint, setBillToPrint] = useState<any>(null)
   const [billPrefix] = useState('B')
   const [currentTime, setCurrentTime] = useState(now())
+  const [isOnline, setIsOnline] = useState(navigator.onLine)
+  const [offlineCount, setOfflineCount] = useState(0)
   const searchRef = useRef<HTMLInputElement>(null)
 
   useEffect(() => { const t = setInterval(() => setCurrentTime(now()), 30000); return () => clearInterval(t) }, [])
+  
+  useEffect(() => {
+    const handleOnline = () => setIsOnline(true)
+    const handleOffline = () => setIsOnline(false)
+    window.addEventListener('online', handleOnline)
+    window.addEventListener('offline', handleOffline)
+    
+    // Check for existing offline data
+    offlineService.getQueueCount().then(setOfflineCount)
+
+    return () => {
+      window.removeEventListener('online', handleOnline)
+      window.removeEventListener('offline', handleOffline)
+    }
+  }, [])
+
+  // Background Sync Logic
+  useEffect(() => {
+    if (isOnline && offlineCount > 0) {
+      const sync = async () => {
+        const queue = await offlineService.getQueue()
+        for (const item of queue) {
+          try {
+            await api.billing.finalize(item.data)
+            await offlineService.clearItem(item.id)
+            setOfflineCount(prev => prev - 1)
+          } catch (err) {
+            console.error('[PrimeSetu] Sync Fail:', err)
+            break; // Stop if still failing
+          }
+        }
+      }
+      sync()
+    }
+  }, [isOnline, offlineCount])
+
   useEffect(() => {
     if (q.length < 3) return
     const t = setTimeout(async () => {
@@ -95,18 +134,33 @@ export default function BillingModule() {
   const handleFinalize = async () => {
     if (!cart.length || processing) return
     setProcessing(true)
+    const billData = {
+      customer_mobile: customerMobile,
+      type: 'Sales',
+      items: cart.map(i => ({ product_id: i.id, qty: i.qty, unit_price: i.mrp, discount_per: i.discount_per, tax_per: i.tax_rate })),
+      payments: payLines.filter(p => p.amount > 0)
+    }
+
     try {
-      const result = await api.billing.finalize({
-        customer_mobile: customerMobile,
-        type: 'Sales',
-        items: cart.map(i => ({ product_id: i.id, qty: i.qty, unit_price: i.mrp, discount_per: i.discount_per, tax_per: i.tax_rate })),
-        payments: payLines.filter(p => p.amount > 0)
-      })
+      if (!isOnline) throw new Error('OFFLINE')
+      
+      const result = await api.billing.finalize(billData)
       setLastBill(result); setBillToPrint(result)
       setCart([]); setCustomerMobile(''); setSalesperson('')
       setPayLines([{ mode: 'CASH', amount: 0 }]); setShowSettle(false)
       setTimeout(() => setLastBill(null), 6000)
-    } catch (err) { console.error('[PrimeSetu] Finalize:', err) }
+    } catch (err) { 
+      console.warn('[PrimeSetu] Network Failure. Entering Isolation Protocol.')
+      // Queue transaction offline
+      await offlineService.queueTransaction(billData)
+      setOfflineCount(prev => prev + 1)
+      
+      // Still allow "Success" UI for cashier flow continuity
+      const mockResult = { status: 'queued', bill_number: 'OFFLINE-'+Date.now(), total: net_payable }
+      setLastBill(mockResult); setBillToPrint(mockResult)
+      setCart([]); setCustomerMobile(''); setSalesperson('')
+      setPayLines([{ mode: 'CASH', amount: 0 }]); setShowSettle(false)
+    }
     finally { setProcessing(false) }
   }
 
@@ -215,7 +269,22 @@ export default function BillingModule() {
       {/* ─── Shoper9 Toolbar ─── */}
       <div className="flex items-center gap-1 bg-[#1a2340] px-3 py-2 shrink-0">
         {/* Logo */}
-        <div className="flex items-center gap-2 pr-4 mr-2 border-r border-white/10">
+          <div className="flex items-center gap-4">
+            {!isOnline && (
+              <div className="flex items-center gap-2 px-3 py-1 bg-rose-500 text-white rounded-full text-[10px] font-black animate-pulse">
+                <AlertTriangle className="w-3 h-3" /> TERMINAL ISOLATED
+              </div>
+            )}
+            {offlineCount > 0 && (
+              <div className="flex items-center gap-2 px-3 py-1 bg-amber-500 text-white rounded-full text-[10px] font-black">
+                <Clock className="w-3 h-3" /> {offlineCount} PENDING SYNC
+              </div>
+            )}
+            <div className="flex items-center gap-2 px-3 py-1 bg-white/10 rounded-full border border-white/10 text-[10px] font-bold">
+              <Zap className="w-3 h-3 text-amber-400" /> V2.0.4-SOVEREIGN
+            </div>
+          </div>
+          <div className="flex items-center gap-2 pr-4 mr-2 border-r border-white/10">
           <div className="w-7 h-7 bg-amber-400 rounded-lg flex items-center justify-center">
             <Zap className="w-4 h-4 text-navy fill-navy" />
           </div>

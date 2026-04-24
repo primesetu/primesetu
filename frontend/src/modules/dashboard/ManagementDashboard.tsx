@@ -134,8 +134,8 @@ export default function ManagementDashboard() {
               <option>30-Day Sovereign Audit</option>
             </select>
           </div>
-          <div className="h-[320px] w-full min-w-0">
-            <ResponsiveContainer width="100%" height="100%" minWidth={0}>
+          <div className="h-[350px] w-full min-w-0" style={{ minHeight: '350px' }}>
+            <ResponsiveContainer width="100%" height="100%" minWidth={0} minHeight={350}>
               <LineChart data={salesData}>
                 <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#eee" />
                 <XAxis dataKey="day" axisLine={false} tickLine={false} tick={{ fontSize: 11, fontWeight: 900, fill: '#A8A196' }} />

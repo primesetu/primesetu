@@ -16,7 +16,7 @@ import {
   BookOpen, Tag, Users, Truck, BarChart3, TrendingUp, FileText,
   Settings, Globe, Lock, ChevronDown, Zap, Search, HelpCircle,
   CreditCard, Boxes, ClipboardList, Receipt, UserSquare2,
-  Percent, Building2, AlertTriangle, Database, Command
+  Percent, Building2, AlertTriangle, Database, Command, Trophy
 } from 'lucide-react'
 import { useStore } from '@/hooks/useStore'
 import { supabase } from '@/lib/supabase'
@@ -81,8 +81,9 @@ const MENU: MenuGroup[] = [
       { id: 'registry',   label: 'Item Master',       icon: Package,      shortcut: 'F2', tallyKey: 'I', roles: ['OWNER','MANAGER'], hot: true },
       { id: 'customers',  label: 'Customer Registry', icon: Users,        tallyKey: 'C', roles: ['OWNER','MANAGER'] },
       { id: 'vendors',    label: 'Vendor Network',    icon: Truck,        tallyKey: 'V', roles: ['OWNER','MANAGER'] },
-      { id: 'personnel',  label: 'Sales Personnel',   icon: UserSquare2,  tallyKey: 'P', roles: ['OWNER','MANAGER'] },
-      { id: 'schemes',    label: 'Sales Promotions',  icon: Percent,      tallyKey: 'M', roles: ['OWNER','MANAGER'] },
+      {id: 'personnel',  label: 'Sales Personnel',   icon: UserSquare2,  tallyKey: 'P', roles: ['OWNER','MANAGER'] },
+      {id: 'loyalty',    label: 'Loyalty Programs',  icon: Trophy,       tallyKey: 'L', roles: ['OWNER','MANAGER'] },
+      {id: 'schemes',    label: 'Sales Promotions',  icon: Percent,      tallyKey: 'M', roles: ['OWNER','MANAGER'] },
     ]
   },
   {

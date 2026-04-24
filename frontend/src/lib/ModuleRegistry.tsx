@@ -17,10 +17,15 @@ import {
   Globe, 
   RotateCcw, 
   ShoppingBag,
-  Lock
+  Lock,
+  Truck,
+  UserSquare2,
+  Construction,
+  Trophy
 } from 'lucide-react'
 
 // Module Lazy/Dynamic Imports (Simplified for now)
+import ComingSoon from '../components/ComingSoon'
 import ManagementDashboard from '../modules/dashboard/ManagementDashboard'
 import BillingModule from '../modules/billing/BillingModule'
 import MasterRegistry from '../modules/catalogue/MasterRegistry'
@@ -36,6 +41,9 @@ import CustomerMaster from '../modules/catalogue/CustomerMaster'
 import BarcodeStudio from '../modules/inventory/BarcodeStudio'
 import SchemesModule from '../modules/schemes/SchemesModule'
 import DailySalesBook from '../modules/analytics/DailySalesBook'
+import VendorMaster from '../modules/catalogue/VendorMaster'
+import PersonnelMaster from '../modules/catalogue/PersonnelMaster'
+import LoyaltyModule from '../modules/catalogue/LoyaltyModule'
 
 export interface ModuleDefinition {
   id: string
@@ -155,6 +163,30 @@ export const MODULE_REGISTRY: ModuleDefinition[] = [
     showInSidebar: false,
   },
   {
+    id: 'vendors',
+    label: 'Vendor Network',
+    icon: Truck,
+    component: <VendorMaster />,
+    roles: ['OWNER', 'MANAGER'],
+    showInSidebar: false,
+  },
+  {
+    id: 'personnel',
+    label: 'Sales Personnel',
+    icon: UserSquare2,
+    component: <PersonnelMaster />,
+    roles: ['OWNER', 'MANAGER'],
+    showInSidebar: false,
+  },
+  {
+    id: 'loyalty',
+    label: 'Loyalty Programs',
+    icon: Trophy,
+    component: <LoyaltyModule />,
+    roles: ['OWNER', 'MANAGER'],
+    showInSidebar: false,
+  },
+  {
     id: 'barcode',
     label: 'Barcode & Labels',
     icon: Package,
@@ -176,6 +208,46 @@ export const MODULE_REGISTRY: ModuleDefinition[] = [
     icon: BarChart3,
     component: <DailySalesBook />,
     roles: ['OWNER', 'MANAGER'],
+    showInSidebar: false,
+  },
+  {
+    id: 'stockrep',
+    label: 'Stock Reports',
+    icon: BarChart3,
+    component: <ComingSoon moduleName="Stock Reports" />,
+    roles: ['OWNER', 'MANAGER'],
+    showInSidebar: false,
+  },
+  {
+    id: 'taxrep',
+    label: 'Tax Register',
+    icon: BarChart3,
+    component: <ComingSoon moduleName="Tax Register" />,
+    roles: ['OWNER'],
+    showInSidebar: false,
+  },
+  {
+    id: 'alerts',
+    label: 'Chain Store Intel',
+    icon: Globe,
+    component: <ComingSoon moduleName="Chain Store Intel" />,
+    roles: ['OWNER'],
+    showInSidebar: false,
+  },
+  {
+    id: 'security',
+    label: 'Security & Users',
+    icon: Settings,
+    component: <ComingSoon moduleName="Security & Users" />,
+    roles: ['OWNER'],
+    showInSidebar: false,
+  },
+  {
+    id: 'housekeep',
+    label: 'Housekeeping',
+    icon: Settings,
+    component: <ComingSoon moduleName="Housekeeping" />,
+    roles: ['OWNER'],
     showInSidebar: false,
   }
 ]

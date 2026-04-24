@@ -10,7 +10,7 @@
  * ============================================================ */
 import { useState } from 'react'
 import { motion } from 'framer-motion'
-import { Users, Search, Plus, Save, X, Phone, User, MapPin, Hash, Star } from 'lucide-react'
+import { Users, Search, Plus, Save, X, Phone, User, MapPin, Hash, Star, Trophy, ShieldCheck, Award } from 'lucide-react'
 
 export default function CustomerMaster() {
   const [customers, setCustomers] = useState([
@@ -80,7 +80,12 @@ export default function CustomerMaster() {
                 </div>
                 <div className="font-mono text-gray-500">{c.phone}</div>
                 <div className="font-mono text-gray-400">{c.gst || '-'}</div>
-                <div className="text-right font-black text-amber-500">{c.loyalty}</div>
+                <div className="text-right flex items-center justify-end gap-2">
+                  <span className="font-black text-amber-500">{c.loyalty}</span>
+                  {c.loyalty > 1000 ? <ShieldCheck className="w-3.5 h-3.5 text-cyan-500" /> : 
+                   c.loyalty > 500 ? <Trophy className="w-3.5 h-3.5 text-amber-500" /> : 
+                   <Award className="w-3.5 h-3.5 text-slate-400" />}
+                </div>
               </div>
             ))}
           </div>

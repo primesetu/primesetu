@@ -1,0 +1,330 @@
+<s9qsqlblk>
+<s9qScriptid>S9Q_013_1_0037</s9qScriptID>
+<s9qtitle>Updating Zero or balnk or some specific value to transaction records field if the field value is Null </s9qtitle>
+<s9qpgmtype>L</s9qpgmtype>
+<s9qenvironment>P</s9qenvironment>
+<s9qRunMultiple>0</s9qRunMultiple>
+<s9qQryType>DML</s9qQryType>
+<s9qScript>
+
+Update stktrndtls set NField5=0 where TRNTYPE IN (2100,1600,1300) AND Nfield5 is null
+-GO-
+Update stktrndtls set Taxcomp1 = docenttax where (Taxcomp1 is null OR Taxcomp1 = 0) and docenttax <> 0 AND TRNTYPE IN (2100,1600,1300) 
+-GO-
+Update stktrndtls set Taxcomp1 = 0 where Taxcomp1 is null and docenttax = 0 AND TRNTYPE IN (2100,1600,1300)
+-GO-
+Update stktrndtls set stdtaxcomp1per = 0 where stdtaxcomp1per is null AND TRNTYPE IN (2100,1600,1300)
+-GO-
+Update stktrndtls set stdtaxcomp1per= 0 where taxcomp1 = 0 and stdtaxcomp1per <> 0 AND TRNTYPE IN (2100,1600,1300)
+-GO-
+UPDATE saletrnhdr set custcd = ''  where custcd is null AND SALETRNTYPE IN (2100,1600,1300)
+-GO-
+update StkTrnDtls Set TaxRevisionId = 0 Where TaxRevisionId is null  AND TRNTYPE IN (2100,1600,1300)
+-GO-
+Update StkTrnHdr Set PromoRemarks= '' Where  TrnType In(2100,1300,1600) and  PromoRemarks is NULL
+-GO-
+Update StkTrnHdr Set PromoDefType = 0,PromoIssueTrnType = 0,PromoIssueTrnCtrlNo = 0,PromoFwdLinkType = 0,PromoFwdLinkCtrlNo = 0,PromoBillLevelOfferVal = 0,PromoItemLevelOfferVal = 0 Where  TrnType In(2100,1300,1600) and  PromoDefType is NULL
+-GO-
+Update StkTrnHdr Set LinkEtTrnType = 0,LinkEtTrnCtrlNo= 0,LinkPOVendor= 0  Where  TrnType In(2100,1300,1600) and  LinkEtTrnType is NULL
+-GO-
+Update StkTrnDtls Set PromoRemarks = '' Where  TrnType In(2100,1300,1600) and  PromoRemarks  is NULL
+-GO-
+Update StkTrnDtls Set PromoItemLevelOfferVal= 0 Where  TrnType In(2100,1300,1600) and  PromoItemLevelOfferVal is NULL
+-GO-
+Update StkTrnDtls Set PromoItemlLevelDiscDtls = ''  Where  TrnType In(2100,1300,1600) and  PromoItemlLevelDiscDtls is NULL
+-GO-
+Update StkTrnDtls Set PromoFlgItemLevel = 0 Where  TrnType In(2100,1300,1600) and  PromoFlgItemLevel is NULL
+-GO-
+Update StkTrnDtls Set PromoFlgBillLevel = 0 Where  TrnType In(2100,1300,1600) and  PromoFlgBillLevel is NULL
+-GO-
+Update StkTrnDtls Set PromoSetSrlNo = 0 Where  TrnType In(2100,1300,1600) and  PromoSetSrlNo is NULL
+-GO-
+Update StkTrnDtls Set ItemTaxFlag = ItemMaster.IsRPTaxInclusive from ItemMaster Where TrnType in(2100,1300,1600) and ItemTaxFlag is null and StkTrnDtls.stockNo = ItemMaster.StockNo 
+-GO-
+Update StkTrnDtls Set PromoType = 1,PromoDefType = 1,PromoItemGroup = 1 Where DocEntDiscId <>'' and TrnType in(2100,1300,1600) and (PromoType is null or PromoType=0) 
+-GO-
+Update ExpectedTrnHdr Set BillLvlDiscCode = '',BillLvlDiscPer = 0,BillLvlDiscAmt = 0,BillLvlDiscComp = 0  Where BillLvlDiscCode Is NULL
+-GO-
+Update ExpectedTrnHdr Set GenDiscReason = '' Where GenDiscReason Is NULL
+-GO-
+Update ExpectedTrnHdr Set BillLvlRemarks = '' Where BillLvlRemarks Is NULL
+-GO-
+Update ExpectedTrnHdr Set ModeOfTrans = '' Where ModeOfTrans Is NULL
+-GO-
+Update ExpectedTrnHdr Set TransCd = '' Where TransCd Is NULL
+-GO-
+Update ExpectedTrnHdr Set TransDocDate = '12:00:00 AM' Where TransDocDate Is NULL
+-GO-
+Update ExpectedTrnHdr Set DocTime = '12:00:00 AM' Where DocTime Is NULL
+-GO-
+Update ExpectedTrnHdr Set TotDocValue = 0 where TotDocValue is NULL
+-GO-
+Update ExpectedTrnHdr Set TotDocTax = 0 where TotDocTax is NULL
+-GO-
+Update ExpectedTrnHdr Set TotDocAddons = 0 where TotDocAddons is NULL
+-GO-
+Update ExpectedTrnHdr Set TotDocDedns = 0 where TotDocDedns is NULL
+-GO-
+Update ExpectedTrnHdr Set EnteredSizewise = 0 where EnteredSizewise is NULL
+-GO-
+Update ExpectedTrnHdr Set TaxComp1 = 0 where TaxComp1 is NULL
+-GO-
+Update ExpectedTrnHdr Set TaxComp2 = 0 where TaxComp2 is NULL
+-GO-
+Update ExpectedTrnHdr Set TaxComp3 = 0 where TaxComp3 is NULL
+-GO-
+Update ExpectedTrnHdr Set TaxComp4 = 0 where TaxComp4 is NULL
+-GO-
+Update ExpectedTrnHdr Set TaxComp5 = 0 where TaxComp5 is NULL
+-GO-
+Update ExpectedTrnHdr Set BillPassInd = 0 where BillPassInd is NULL
+-GO-
+Update ExpectedTrnHdr Set TotalLineItems = 0 where TotalLineItems is NULL
+-GO-
+Update ExpectedTrnHdr Set TotDocED = 0 where TotDocED is NULL
+-GO-
+Update ExpectedTrnHdr Set LinkEtTrnType = 0,LinkEtTrnCtrlNo = 0,LinkPOVendor = '' where LinkEtTrnType is NULL	
+-GO-
+Update ExpectedTrnDtls Set LinkEtTrntype = 0,LinkEtTrnCtrlno = 0,LinkEtDocSubSrlno = 0 where LinkEtTrntype is NULL
+-GO-
+Update ExpectedTrnDtls Set DocRsnCd ='' where DocRsnCd is NULL
+-GO-
+Update ExpectedTrnDtls Set DocDt = '12:00:00 AM' where DocDt is NULL
+-GO-
+Update ExpectedTrnDtls Set LocnId = '' where LocnId is NULL
+-GO-
+Update ExpectedTrnDtls Set OrdDocType = 0,OrdDocNoPrefix ='',OrdDocNo = 0,OrdEntSrlNo = 0,OrdEntSubSrlNo = 0 where OrdDocType is NULL
+-GO-
+Update ExpectedTrnDtls Set StkUpdtRate = 0 where StkUpdtRate is NULL
+-GO-
+Update ExpectedTrnDtls Set DocEntValAftDisc = 0  where DocEntValAftDisc is NULL
+-GO-
+Update ExpectedTrnDtls Set DocEntTax = 0 where DocEntTax is NULL
+-GO-
+Update ExpectedTrnDtls Set DocEntDedns = 0 where DocEntDedns is NULL
+-GO-
+Update ExpectedTrnDtls Set DocEntNetValue = 0 where DocEntNetValue is NULL
+-GO-
+Update ExpectedTrnDtls Set PhysQtyReturned = 0 where	PhysQtyReturned is NULL
+-GO-
+Update ExpectedTrnDtls Set DocEntDisc = 0 where DocEntDisc is NULL
+-GO-
+Update ExpectedTrnDtls Set ItemTaxType = '' where ItemTaxType is NULL
+-GO-
+Update ExpectedTrnDtls Set CustTaxType = '' where CustTaxType is NULL
+-GO-
+Update ExpectedTrnDtls Set SrcTaxType = '' where SrcTaxType is NULL
+-GO-
+Update ExpectedTrnDtls Set RetnReasonCd = '' where RetnReasonCd is NULL
+-GO-
+Update ExpectedTrnDtls Set BackRefDocEntSrlNo = 0 where BackRefDocEntSrlNo is NULL
+-GO-
+Update ExpectedTrnDtls Set BillPassInd = 0 where BillPassInd is NULL
+-GO-
+Update ExpectedTrnDtls Set ItemwiseDiscReason = '' where ItemwiseDiscReason is NULL
+-GO-
+Update ExpectedTrnDtls Set ItemMRPBillTm = 0 where ItemMRPBillTm is NULL
+-GO-
+Update ExpectedTrnDtls Set ItemLvlPriceFacId = '' where ItemLvlPriceFacId is NULL
+-GO-
+Update ExpectedTrnDtls Set DocEntPriceFactor = 0 where DocEntPriceFactor is NULL
+-GO-
+Update ExpectedTrnDtls Set MerchId = '' where MerchId is NULL
+-GO-
+Update ExpectedTrnRcpts Set PayModeType = 0 where PayModeType is NULL
+-GO-
+Update ExpectedTrnRcpts Set PayModeCode = '' where PayModeCode is NULL
+-GO-
+Update ExpectedTrnRcpts Set PaidUnits = 0 where PaidUnits is NULL
+-GO-
+Update ExpectedTrnRcpts Set AppliedConvRate = 0 where AppliedConvRate	is NULL
+-GO-
+Update ExpectedTrnRcpts Set LocCurrNetAmt = 0 where	LocCurrNetAmt is NULL
+-GO-
+Update ExpectedTrnRcpts Set StartCpnNo = 0,EndCpnNo = 0 where StartCpnNo is NULL
+-GO-
+Update ExpectedTrnRcpts Set Prefix = '' where	Prefix is NULL
+-GO-
+Update ExpectedTrnRcpts Set TenderRefElement1 = '' where TenderRefElement1 is NULL
+-GO-
+Update ExpectedTrnRcpts Set TenderRefElement2 = '' where TenderRefElement2 is NULL
+-GO-
+Update ExpectedTrnRcpts Set TenderRefElement3 = '' where TenderRefElement3 is NULL
+-GO-
+Update ExpectedTrnRcpts Set TenderRefElement4 = '' where TenderRefElement4 is NULL
+-GO-
+Update ExpectedTrnRcpts Set TenderRefElement5 = '' where TenderRefElement5 is NULL
+-GO-
+Update ExpectedTrnRcpts Set TenderRefElement6 = '' where TenderRefElement6 is NULL
+-GO-
+Update ExpectedTrnRcpts Set TenderRefElement7 = '' where TenderRefElement7 is NULL
+-GO-
+Update ExpectedTrnRcpts Set TenderRefElement8 = '' where TenderRefElement8 is NULL
+-GO-
+Update ExpectedTrnRcpts Set TenderRefElement9 = '' where TenderRefElement9 is NULL
+-GO-
+Update ExpectedTrnRcpts Set TenderRefElement10 = '' where TenderRefElement10 is NULL
+-GO-
+Update ExpectedTrnRcpts Set SubmissionOnline = 0  where SubmissionOnline is NULL
+-GO-
+Update ExpectedTrnRcpts Set AgencyCode = '',AgencyCommison = 0 where AgencyCode	is NULL
+-GO-
+Update ExpectedTrnRcpts Set CrNoteTotalAmount = 0  where CrNoteTotalAmount is NULL
+-GO-
+Update ExpectedTrnRcpts Set CrnoteAmtinBilling = 0  where CrnoteAmtinBilling is NULL
+-GO-
+Update ExpectedTrnRcpts Set TrnStatus =  0  where TrnStatus is NULL
+-GO-
+Update ExpectedTrnRcpts Set [Description] = '' where [Description] is NULL
+-GO-
+Update ExpectedTrnRcpts Set LocalCurrency = 0 where LocalCurrency is NULL
+-GO-
+</s9qScript>
+</s9qsqlblk>
+
+
+
+
+<s9qsqlblk>
+<s9qScriptid>S9Q_013_1_0038</s9qScriptID>
+<s9qtitle>Updating of shoper db verison to the null updated field </s9qtitle>
+<s9qpgmtype>L</s9qpgmtype>
+<s9qenvironment>P</s9qenvironment>
+<s9qQryType>DML</s9qQryType>
+<s9qRunMultiple>0</s9qRunMultiple>
+<s9qScript>
+
+Update StkTrnHdr Set SHOPERDBVER = '720'  Where SHOPERDBVER not in ('720','730') and TrnType in(2100,1300,1600)
+-GO-
+Update PosCashTrn Set SHOPERDBVER = '720'  Where SHOPERDBVER not in ('730','720') 
+-GO-
+Update ExpectedTrnHdr Set SHOPERDBVER = '720' where SHOPERDBVER not in ('720','730')
+-GO-
+Update ExpectedTrnRcpts Set SHOPERDBVER = '720' where SHOPERDBVER not in ('730','720')
+-GO-
+</s9qScript>
+</s9qsqlblk>
+
+
+
+
+<s9qsqlblk>
+<s9qScriptid>S9Q_013_1_0039</s9qScriptID>
+<s9qtitle>Swaping of doc remarks field value to promobill level disc dtls and actual Doc remarks field will be update from ACCdocno field </s9qtitle>
+<s9qpgmtype>L</s9qpgmtype>
+<s9qenvironment>P</s9qenvironment>
+<s9qRunMultiple>0</s9qRunMultiple>
+<s9qQryType>DML</s9qQryType>
+<s9qScript>
+Update StkTrnHdr Set PromoBillLevelDiscDtls=DocRemarks
+Where TrnType in(2100,1300,1600) and (PromoBillLevelDiscDtls is null or PromoBillLevelDiscDtls='') 
+and DocRemarks is Not NULL  and SHOPERDBVER = '720'
+-GO-
+Update StkTrnHdr Set DocRemarks =''
+Where TrnType in(2100,1300,1600) and SHOPERDBVER = '720'
+-GO-
+Update StkTrnHdr Set DocRemarks = AccDocNo
+Where AccDocNo IS NOT NULL and DocRemarks ='' and TrnType in(2100,1300,1600) and SHOPERDBVER = '720'
+-GO-
+
+</s9qScript>
+</s9qsqlblk>
+
+
+
+<s9qsqlblk>
+<s9qScriptid>S9Q_013_1_0040</s9qScriptID>
+<s9qtitle>Updating the Discount Id to Promocode field 
+</s9qtitle>
+<s9qpgmtype>L</s9qpgmtype>
+<s9qenvironment>P</s9qenvironment>
+<s9qRunMultiple>0</s9qRunMultiple>
+<s9qQryType>DML</s9qQryType>
+<s9qScript>
+
+Update StkTrnHdr Set PromoCode = BilllvlDiscId
+Where TrnType in(2100,1300,1600) and (promocode ='' or promocode  is null) and SHOPERDBVER = '720'
+-GO-
+
+Update StkTrnHdr Set PromoSlabSrlno = 1,PromoType = 1
+Where BilllvlDiscId <>'' and TrnType in (2100,1300,1600) and SHOPERDBVER = '720'
+-GO-
+
+Update StkTrnDtls Set PromoCode = DocEntDiscId  
+Where TrnType in(2100,1300,1600) and PromoCode <> DocEntDiscId
+-GO-
+
+</s9qScript>
+</s9qsqlblk>
+
+
+
+
+<s9qsqlblk>
+<s9qScriptid>S9Q_013_1_0041</s9qScriptID>
+<s9qtitle>Updating other imp field values like isinventory,is service,gen dic reason,product/service indicator</s9qtitle>
+<s9qpgmtype>L</s9qpgmtype>
+<s9qenvironment>P</s9qenvironment>
+<s9qRunMultiple>0</s9qRunMultiple>.
+<s9qQryType>DML</s9qQryType>
+<s9qScript>
+
+Update stktrndtls set 
+SField5=(case when itemmaster.isservice=1 then '2' when itemmaster.isservice=0 then '1' end) 
+from itemmaster where trntype in (2100,1300,1600) and (stktrndtls.SField5< 1 or stktrndtls.SField5 is null) and
+itemmaster.stockno=stktrndtls.stockno  
+-GO-
+Update StkTrnDtls Set ProdServInd = SField5  
+Where TrnType in(2100,1300,1600) and  ProdServInd <> SField5
+-GO-
+Update stktrndtls set 
+BField2= itemmaster.IsInventoryItem 
+from itemmaster where trntype in (2100,1300,1600) and 
+stktrndtls.BField2<> itemmaster.IsInventoryItem
+and   itemmaster.stockno=stktrndtls.stockno  
+-GO-
+
+Update StkTrnHdr Set GenDiscReason=SaleTrnHdr.GenDiscReason,ProdServInd=SaleTrnHdr.ProdServInd from SaleTrnHdr	
+Where StkTrnHdr.TrnType in(2100,1300,1600) 
+and (StkTrnHdr.GenDiscReason<>SaleTrnHdr.GenDiscReason or StkTrnHdr.ProdServInd<>SaleTrnHdr.ProdServInd)
+and SaleTrnHdr.SaleTrnType=StkTrnHdr.TrnType and SaleTrnHdr.SaleTrnCtrlNo=StkTrnHdr.TrnCtrlNo
+-GO-
+</s9qScript>
+</s9qsqlblk>
+
+
+
+<s9qsqlblk>
+<s9qScriptid>S9Q_013_1_0042</s9qScriptID>
+<s9qtitle>Calulcating Disc percentage and updating same to disc rate field , if the field is null </s9qtitle>
+<s9qpgmtype>L</s9qpgmtype>
+<s9qenvironment>P</s9qenvironment>
+<s9qQryType>DML</s9qQryType>
+<s9qScript>
+
+Update StkTrnDtls Set DiscRate = ((100*DocEntTotDisc)/DocEntValue) Where DiscRate is null and DocEntTotDisc > 0 AND TRNTYPE IN (2100,1600,1300)
+-GO-
+Update StkTrnDtls Set DiscRate = 0 Where DiscRate is null AND TRNTYPE IN (2100,1600,1300)
+-GO-
+
+</s9qScript>
+</s9qsqlblk>
+
+
+
+
+<s9qsqlblk>
+<s9qScriptid>S9Q_013_1_0043</s9qScriptID>
+<s9qtitle>Updating the sum of all  Item level Discount amount to the header table </s9qtitle>
+<s9qpgmtype>L</s9qpgmtype>
+<s9qenvironment>P</s9qenvironment>
+<s9qQryType>DML</s9qQryType>
+<s9qScript>
+Update StkTrnHdr Set PromoItemLevelDiscVal= a.value from 
+(select trntype,trnctrlno,sum(StkTrnDtls.DocEntDisc) as value from StkTrnDtls Where TrnType in(2100,1300,1600) 
+group by trntype,trnctrlno) as a where 
+PromoItemLevelDiscVal<> a.value and
+StkTrnHdr.TrnType=a.TrnType and StkTrnHdr.TrnCtrlNo=a.TrnCtrlNo 
+-GO-
+</s9qScript>
+</s9qsqlblk>

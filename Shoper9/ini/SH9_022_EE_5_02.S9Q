@@ -1,0 +1,10 @@
+<s9qsqlblk>
+  <s9qScriptid>S9Q_022_5_0003</s9qScriptid> 
+  <s9qtitle>Add POS agent to Startup</s9qtitle>
+  <s9qpgmtype>L</s9qpgmtype>
+  <s9qversion>*</s9qversion>
+  <s9qenvironment>M</s9qenvironment>
+  <s9qRunMultiple>1</s9qRunMultiple>
+  <s9qQryType>EXE</s9qQryType>
+  <s9qScript><APPATH>\SR344400.exe</s9qScript>
+</s9qsqlblk>

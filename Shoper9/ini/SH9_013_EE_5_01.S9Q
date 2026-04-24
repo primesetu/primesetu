@@ -1,0 +1,342 @@
+<S9QSQLBLK>
+<S9QSCRIPTID>S9Q_013_5_0001</S9QSCRIPTID>
+<S9QTITLE>Procedure to update the HO company code for Synch process</S9QTITLE>
+<S9QPGMTYPE>L</S9QPGMTYPE>
+<S9QPGMTYPE>I</S9QPGMTYPE>
+<S9QVERSION>*</S9QVERSION>
+<S9QENVIRONMENT>P</S9QENVIRONMENT>
+<S9QRUNMULTIPLE>1</S9QRUNMULTIPLE>
+<S9QSEVERITY>3</S9QSEVERITY>
+<S9QQRYTYPE>DML</S9QQRYTYPE>
+<S9QSENDFEEDBACK>1</S9QSENDFEEDBACK>
+<S9QSCRIPT>
+
+declare @hocompcd as varchar(15)
+declare @poscompcd as varchar(3)
+declare @intloc as int
+declare @cntstkhdr as int
+declare @cntposcashtrn as int
+declare @cntfranchiseetrans as int
+declare @cndexpectedtrndr as int
+declare @cntdownloadparams as int
+declare @cntchk as int
+declare @syscnt as int 
+declare @hocompnm as varchar(255)
+declare @filetypedownho as char(100)
+declare @filetypedownpos as char(100)
+declare @lastackdt as datetime
+declare @fileid as varchar(25)
+
+declare @flagmail as char(1)
+declare @flagftp as char(1)
+declare @flagdcopy as char(1)
+declare @flagonline as char(1)
+
+declare @mailid as varchar(100)
+declare @mailsubho as varchar(255)
+declare @mailsubpos as varchar(255)
+declare @mailacksubho as varchar(255)
+declare @mailmsgho as varchar(255)
+declare @mailmsgpos as varchar(255)
+declare @mailmsgackho as varchar(255)
+declare @mailresyncsubho as varchar(255)
+declare @mailresyncmsgho as varchar(255)
+
+declare @ftpserver as varchar(255)
+declare @ftpip as varchar(255)
+declare @ftpuid as varchar(255)
+declare @ftpupwd as varchar(255)
+declare @ftpupfolder as varchar(255)
+declare @ftpdownfolder as varchar(255)
+declare @ftpretrytime as int
+declare @ftpretryinterval as int
+declare @ftppassive as int
+
+declare @onlineserver as varchar(255)
+declare @splitsize as varchar(255)
+
+
+set @intloc=0
+set @cntstkhdr =0
+set @cntposcashtrn =0
+set @cntfranchiseetrans =0
+set @cndexpectedtrndr =0
+set @cntdownloadparams =0
+set @cntchk=0
+set @syscnt =0
+
+set @hocompnm=''
+set @filetypedownho=''
+set @filetypedownpos=''
+
+set @flagmail='N'
+set @flagftp='N'
+set @flagdcopy='N'
+set @flagonline='N'
+
+set @mailid =''
+set @mailsubho =''
+set @mailsubpos =''
+set @mailacksubho =''
+set @mailmsgho =''
+set @mailmsgpos =''
+set @mailmsgackho =''
+set @mailresyncsubho =''
+set @mailresyncmsgho =''
+
+set @ftpserver =''
+set @ftpip =''
+set @ftpuid =''
+set @ftpupwd =''
+set @ftpupfolder =''
+set @ftpdownfolder =''
+set @ftpretrytime =0
+set @ftpretryinterval =0
+set @ftppassive =0
+
+set @onlineserver =''
+set @splitsize =''
+
+set @lastackdt='1999-01-01'
+set @fileid=''
+
+--getting head office company code from parameter
+select @hocompcd=left(txt,charindex('.zip',isnull(txt,''),1)-1) from dbo.sysparam where paramcode ='FFileTypeDownPOS'
+--select @hocompcd
+select @poscompcd=isnull(txt,'') from dbo.sysparam where paramcode='companycode'
+--select @poscompcd
+select @intloc=charindex(@poscompcd,@hocompcd,1)
+if @intloc=0
+	begin
+		set @hocompcd='HHH'
+	end
+else
+	begin
+		select @hocompcd=left(@hocompcd,charindex(@poscompcd,@hocompcd,1)-1) 
+	end
+--select @hocompcd
+--validating whether fresh installation by checking shoper 9 transaction count
+if @hocompcd='HHH'
+	begin
+		select @cntstkhdr=isnull(count(docdt),0) from dbo.stktrnhdr where shoperdbver >=730
+		select @cntposcashtrn=isnull(count(docdt),0) from dbo.poscashtrn where shoperdbver >=730
+		select @cntfranchiseetrans=isnull(count(trndate),0) from dbo.franchiseetrans where shoperdbver >=730
+		select @cndexpectedtrndr=isnull(count(createddt),0) from dbo.expectedtrnhdr where shoperdbver >=730
+		select @cntdownloadparams=isnull(count(dayenddate),0) from dbo.downloadparams where shoperdbver >=730
+		if (@cntstkhdr=0 and @cntposcashtrn=0 and @cntfranchiseetrans=0 and @cndexpectedtrndr=0 and @cntdownloadparams=0)
+		begin
+			set @hocompcd='HHHH'
+		end
+	end
+--	select @hocompcd
+--inserting to genlookup if not default Head office company code
+if (not @hocompcd='HHHH') and (not @hocompcd='')
+	begin
+		--validating already any records got inserted in genlookup recid 18000
+		set @cntchk=0
+		select @cntchk=isnull(count(code),0) from dbo.genlookup where recid=18000 and code=@hocompcd	
+		--inserting to genlookup table
+		if @cntchk=0 
+		begin
+			Insert Into dbo.Genlookup (Recid,Code,Descr,[Number]) select '18000' as recid,@hocompcd as code,@hocompcd as descr,(Select intg from dbo.sysparam where paramcode = 'RunnodataExtract') as [number]
+		end
+		--validating in agentactivity table if any records available
+		set @cntchk=0
+		select @cntchk=isnull(count(hocompcd),0) from dbo.agentactivity where hocompcd=@hocompcd
+		if @cntchk=0
+		begin
+			select @syscnt=isnull(intg,0) from dbo.sysparam where paramcode='vasyscounter'
+			insert into dbo.agentactivity (actvindex,task_id,actvexe,pgmdesc,pgmopt,actvflag,actvrank,vactr,hocompcd) select actvindex,task_id,actvexe,pgmdesc,pgmopt,actvflag,actvrank,@syscnt,@hocompcd from dbo.agentactivity where hocompcd='HHHH'
+		end
+		--getting head office company name and frameing filetypes
+		select @hocompnm=isnull(txt,'') from dbo.sysparam where paramcode='hocompname'
+		if @hocompnm=''
+			begin
+				set @hocompnm=@hocompcd
+			end
+		set @filetypedownho='HHHSCCC???????.zip,HHHRCCC???????.zip'
+		set @filetypedownpos='HHHCCC??????.zip,HHH?CCC???????.ACK,?CCC??????.REQ'
+		select @filetypedownho=replace(@filetypedownho,'HHH',@hocompcd)
+		select @filetypedownpos=replace(@filetypedownpos,'HHH',@hocompcd)
+		select @filetypedownho=replace(@filetypedownho,'CCC',@poscompcd)
+		select @filetypedownpos=replace(@filetypedownpos,'CCC',@poscompcd)
+--		select @hocompnm
+--		select @filetypedownho
+--		select @filetypedownpos
+		--getting configured mode of communication
+		set @cntchk=0
+		select @cntchk=boolean from dbo.sysparam where paramcode ='SendFFThruMail'
+		if @cntchk=0
+			begin
+				set @flagmail='N'
+			end
+		else
+			begin
+				set @flagmail='Y'
+			end
+		set @cntchk=0
+		select @cntchk=boolean from dbo.sysparam where paramcode ='SendFFThruFTP'
+		if @cntchk=0
+			begin
+				set @flagftp='N'
+			end
+		else
+			begin
+				set @flagftp='Y'
+			end
+		set @cntchk=0
+		select @cntchk=boolean from dbo.sysparam where paramcode ='SendFFThruDCopy'
+		if @cntchk=0
+			begin
+				set @flagdcopy='N'
+			end
+		else
+			begin
+				set @flagdcopy='Y'
+			end
+		set @cntchk=0
+		select @cntchk=boolean from dbo.sysparam where paramcode ='SendFFThruOnLine'
+		if @cntchk=0
+			begin
+				set @flagonline='N'
+			end
+		else
+			begin
+				set @flagonline='Y'
+			end
+--		select @flagmail
+--		select @flagftp
+--		select @flagdcopy
+--		select @flagonline
+		--getting mail mode communication details
+		if @flagmail='Y' and @flagftp='N' and @flagdcopy='N' and @flagonline='N'
+		begin
+			set @mailid =''
+			select @mailid=isnull(txt,'') from dbo.sysparam where paramcode='FFileEmailId'
+			set @mailsubho =''
+			select @mailsubho=isnull(txt,'') from dbo.sysparam where paramcode='FFileMailSubjectHO'
+			set @mailsubpos =''
+			select @mailsubpos=isnull(txt,'') from dbo.sysparam where paramcode='FFileMailSubjectPOS'
+			set @mailacksubho =''
+			select @mailacksubho=isnull(txt,'') from dbo.sysparam where paramcode='FFileMailAckSubjectHO'
+			set @mailmsgho =''
+			select @mailmsgho=isnull(txt,'') from dbo.sysparam where paramcode='FFileMessagePOS'
+			set @mailmsgpos =''
+			select @mailmsgpos=isnull(txt,'') from dbo.sysparam where paramcode='FFileMessageHO'
+			set @mailmsgackho =''
+			select @mailmsgackho=isnull(txt,'') from dbo.sysparam where paramcode='FFileMessageAckHO'
+			set @mailresyncsubho =''
+			select @mailresyncsubho=isnull(txt,'') from dbo.sysparam where paramcode='FFileMailResyncSubjectHO'
+			set @mailresyncmsgho =''
+			select @mailresyncmsgho=isnull(txt,'') from dbo.sysparam where paramcode='FFileMessageResyncHO'
+			set @syscnt=0
+			select @syscnt=isnull(intg,0) from dbo.sysparam where paramcode='vasyscounter'
+			insert into dbo.datasyncconfig (hocompcd,hocompnm,islowerversion,isbasesystem,shrmcd,modesrlno,modetype,moderank,modedtl,mail_sub_from_shrm,mail_msg_from_shrm,mail_sub_to_shrm,mail_msg_to_shrm,mail_resync_sub_to_shrm,mail_resync_msg_to_shrm,mail_ack_sub_to_shrm,mail_ack_msg_to_shrm,filetype_downho,filetype_downpos,modeactive,modecrtdt,vauid,vactr,vatermid,vacompcode) 
+			select @hocompcd,@hocompnm,'N','N','<<ALL>>',1,'MAIL',1,@mailid,@mailsubho,@mailmsgho,@mailsubpos,@mailmsgpos,@mailresyncsubho,@mailresyncmsgho,@mailacksubho,@mailmsgackho,@filetypedownho,@filetypedownpos,'Y',getdate(),'SUPER',@syscnt,'.',@poscompcd
+		end
+		--getting FTP mode communication details
+		if @flagmail='N' and @flagftp='Y' and @flagdcopy='N' and @flagonline='N'
+		begin
+			set @ftpserver =''
+			select @ftpserver=isnull(txt,'') from dbo.sysparam where paramcode='FFileFTPServer'
+			set @ftpip =''
+			select @ftpip=isnull(txt,'') from dbo.sysparam where paramcode='FFileFTPIP'
+			if (not @ftpserver='') and (not @ftpip='')
+			begin
+				set @ftpip=@ftpserver
+			end
+			if (@ftpserver='') and (not @ftpip='')
+			begin
+				set @ftpserver=@ftpip
+			end
+			set @ftpuid =''
+			select @ftpuid=isnull(txt,'') from dbo.sysparam where paramcode='FFileFTPUID'
+			set @ftpupwd =''
+			select @ftpupwd=isnull(txt,'') from dbo.sysparam where paramcode='FFileFTPUPwd'
+			set @ftpupfolder =''
+			select @ftpupfolder =isnull(txt,'') from dbo.sysparam where paramcode='FFileFTPUpFolder'
+			set @ftpdownfolder =''
+			select @ftpdownfolder=isnull(txt,'') from dbo.sysparam where paramcode='FFileFTPDownFolder'
+			set @ftpretrytime =0
+			select @ftpretrytime=isnull(intg,0) from dbo.sysparam where paramcode='Fileuploaddownloadretrytimes'
+			set @ftpretryinterval =0
+			select @ftpretryinterval=isnull(intg,0) from dbo.sysparam where paramcode='Fileuploaddownloadretryinterval'
+			set @ftppassive =0
+			select @ftppassive =isnull(boolean,0) from dbo.sysparam where paramcode='FFileFTPPASSIVEMODE'
+			set @syscnt=0
+			select @syscnt=isnull(intg,0) from dbo.sysparam where paramcode='vasyscounter'
+			insert into dbo.datasyncconfig (hocompcd,hocompnm,islowerversion,isbasesystem,shrmcd,modesrlno,modetype,modedtl,modeunm,modepwd,modeup,modedown,moderank,upload_download_retry_times,upload_download_retry_interval,ftp_is_passive,filetype_downho,filetype_downpos,modeactive,modecrtdt,vauid,vactr,vatermid,vacompcode)
+			select @hocompcd,@hocompnm,'N','N','<<ALL>>',1,'FTP',@ftpserver,@ftpuid,@ftpupwd,@ftpupfolder,@ftpdownfolder,1,@ftpretrytime,@ftpretryinterval,@ftppassive,@filetypedownho,@filetypedownpos,'Y',getdate(),'SUPER',@syscnt,'.',@poscompcd
+		end
+		--getting DCOPY mode communication details
+		if @flagmail='N' and @flagftp='N' and @flagdcopy='Y' and @flagonline='N'
+		begin
+			set @ftpupfolder =''
+			select @ftpupfolder =isnull(txt,'') from dbo.sysparam where paramcode='FFileDCopyUpFolder'
+			set @ftpdownfolder =''
+			select @ftpdownfolder=isnull(txt,'') from dbo.sysparam where paramcode='FFileDCopyDownFolder'
+			set @syscnt=0
+			select @syscnt=isnull(intg,0) from dbo.sysparam where paramcode='vasyscounter'
+			--for direct copy the upload and download folder has to be configured in POS level
+			if (not @ftpupfolder='') and (not @ftpdownfolder='')
+				begin
+					insert into dbo.datasyncconfig (hocompcd,hocompnm,islowerversion,isbasesystem,shrmcd,modesrlno,modetype,modeup,modedown,moderank,filetype_downho,filetype_downpos,modeactive,modecrtdt,vauid,vactr,vatermid,vacompcode) select @hocompcd,@hocompnm,'N','N','<<ALL>>',1,'DCOPY',@ftpupfolder,@ftpdownfolder,1,@filetypedownho,@filetypedownpos,'Y',getdate(),'SUPER',@syscnt,'.',@poscompcd
+				end
+			else
+				begin
+					insert into dbo.datasyncconfig (hocompcd,hocompnm,islowerversion,isbasesystem,shrmcd,modesrlno,modetype,moderank,filetype_downho,filetype_downpos,modeactive,modecrtdt,vauid,vactr,vatermid,vacompcode) select @hocompcd,@hocompnm,'N','N','<<ALL>>',1,'DCOPY','','',1,'Y',getdate(),'SUPER',@syscnt,'.',@poscompcd
+				end
+		end
+		--getting online mode communication details
+		if @flagmail='N' and @flagftp='N' and @flagdcopy='N' and @flagonline='Y'
+		begin
+			set @onlineserver =''
+			select @onlineserver=isnull(txt,'') from dbo.sysparam where paramcode='FFileOnLineServer'
+			set @splitsize =''
+			select @splitsize=isnull(intg,0) from dbo.sysparam where paramcode='Extractzipsplitsize'
+			set @ftpretrytime =0
+			select @ftpretrytime=isnull(intg,0) from dbo.sysparam where paramcode='Fileuploaddownloadretrytimes'
+			set @ftpretryinterval =0
+			select @ftpretryinterval=isnull(intg,0) from dbo.sysparam where paramcode='Fileuploaddownloadretryinterval'
+			set @syscnt=0
+			select @syscnt=isnull(intg,0) from dbo.sysparam where paramcode='vasyscounter'
+			insert into dbo.datasyncconfig (hocompcd,hocompnm,islowerversion,isbasesystem,shrmcd,modesrlno,modetype,modedtl,moderank,modeactive,upload_download_retry_times,upload_download_retry_interval,extract_file_split_size,filetype_downho,filetype_downpos,modecrtdt,vauid,vactr,vatermid,vacompcode) select @hocompcd,@hocompnm,'N','N','<<ALL>>',1,'ONLINE',@onlineserver,1,'Y',@ftpretrytime,@ftpretryinterval,@splitsize,@filetypedownho,@filetypedownpos,getdate(),'SUPER',@syscnt,'.',@poscompcd
+		end
+		--populating relevant HO company code to new coloum hocompcd
+		update dbo.[LOGAGENTACTIVITY] set HOcompcd=@hocompcd where hocompcd is NULL
+		update dbo.[LOGDATAEXTRACTDETAIL] set HOcompcd=@hocompcd where hocompcd is NULL
+		update dbo.[LogDataExtractsummary] set HOcompcd=@hocompcd where hocompcd is NULL
+		update dbo.[LogDataSync] set HOcompcd= @hocompcd where hocompcd is  NULL
+		update dbo.[POSActivityLogHdr] set HOcompcd=@hocompcd where hocompcd is NULL
+		update dbo.[POSActivityLogDtls] set HOcompcd=@hocompcd where hocompcd is NULL
+		update dbo.[ActualScheduleTask] Set ShowRoomCode =  @hocompcd 
+		select top 1 @fileid=fileid,@lastackdt=ack_dt from dbo.logdatasync where ack_dt <>'' order by ack_dt desc		
+--		select @fileid
+--		select @lastackdt
+		if not @fileid=''
+		begin
+--			select Left(Right(@fileid, 10), 6)
+			update dbo.logdataextractsummary set ack_dt=@lastackdt,remarks ='Automatic updation while populating from sysparam' where left(right(fileid,10),6) <=Left(Right(@fileid, 10), 6) and ( ack_dt is NULL or ack_dt = '') and hocompcd=@hocompcd
+		end
+	end
+-GO-
+Update dbo.Agentactivity Set Vactr = (select intg from dbo.sysparam where paramcode = 'VaSysCounter') 
+-GO-
+Update dbo.sysparam set Txt='VersionDtls' where paramcode='AdlTablesToSync' and isnull(Txt,'') not like '%VersionDtls%' and len(isnull(Txt,''))=0
+-GO-
+Update dbo.sysparam set Txt=Txt + '#'+ 'VersionDtls' where paramcode='AdlTablesToSync' and Txt not like '%VersionDtls%'
+-GO-
+UPDATE dbo.SYSPARAM SET Txt=Txt + '#'+ 'VersionwiseTblsScript' where paramcode='AdlTablesToSync' and Txt not like '%VersionwiseTblsScript%' 
+-GO-
+UPDATE [dbo].SYSPARAM SET Txt=Txt + '#'+ 'SalesTaxRevision' where paramcode='AdlTablesToSync' and Txt not like '%SalesTaxRevision%' 
+-GO-
+UPDATE [dbo].SYSPARAM SET Txt=Txt + '#'+ 'SalesTaxRevisionHistory' where paramcode='AdlTablesToSync' and Txt not like '%SalesTaxRevisionHistory%' 
+-GO-
+Update dbo.SYSPARAM Set Vactr = (select intg from dbo.sysparam where paramcode = 'VaSysCounter') where paramcode='AdlTablesToSync' 
+-GO-
+Delete from ExportSysparam
+-GO-
+Delete from ExportGenlookup
+-GO-
+</S9QSCRIPT>
+</S9QSQLBLK>

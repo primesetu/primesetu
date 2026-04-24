@@ -1,0 +1,32 @@
+<s9qsqlblk>
+  <s9qScriptid>SH9_0222_EE_0_1001</s9qScriptid>
+  <s9qtitle>Parameter script</s9qtitle>
+  <s9qpgmtype>I</s9qpgmtype>
+  <s9qpgmtype>L</s9qpgmtype>
+  <s9qversion>*</s9qversion>
+  <s9qenvironment>P</s9qenvironment>
+  <s9qRunMultiple>1</s9qRunMultiple>
+  <s9qQryType>DML</s9qQryType>
+  <s9qScript>
+insert into SysParam (Id,Descr,ParamCode,Intg,Opt) values ('SR1-0922-0000485','Disable Loading of Items from Bill in Sales Return with Reference','DisableLoadItemOptioninsalesreturnWR',0,'I')
+-GO-
+insert into SysParamExtd (Id,ParamCode,Fixed,Changed,Category,CatDescr,DispOrder,VAUid,VActr,VATermId,VACompCode) values('SR1-0922-0000485','DisableLoadItemOptioninsalesreturnWR','Variable',0,'11. Billing','This Gives Billing Parameters',79,'super',1,'.','.')
+-GO-
+</s9qScript>
+</s9qsqlblk>
+
+<s9qsqlblk>
+  <s9qScriptid>SH9_0222_EE_0_1000</s9qScriptid>
+  <s9qtitle>Common Script execution exe</s9qtitle>
+  <s9qpgmtype>I</s9qpgmtype>
+  <s9qpgmtype>L</s9qpgmtype>
+  <s9qversion>*</s9qversion>
+  <s9qenvironment>P</s9qenvironment>
+  <s9qRunMultiple>1</s9qRunMultiple>
+  <s9qQryType>EXE</s9qQryType>
+  <s9qScript><APPATH>\POS707ScriptExecRel222.exe</s9qScript>
+</s9qsqlblk>
+
+
+
+

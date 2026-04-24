@@ -1,0 +1,591 @@
+<S9QSQLBLK>
+<S9QSCRIPTID>S9Q_013_2_0001</S9QSCRIPTID>
+<S9QTITLE>Size Wise Entry Field Configuration</S9QTITLE>
+<S9QPGMTYPE>I</S9QPGMTYPE>
+<S9QPGMTYPE>L</S9QPGMTYPE>
+<S9QVERSION>*</S9QVERSION>
+<S9QENVIRONMENT>P</S9QENVIRONMENT>
+<S9QRUNMULTIPLE>0</S9QRUNMULTIPLE>
+<S9QSEVERITY>3</S9QSEVERITY>
+<S9QQRYTYPE>DML</S9QQRYTYPE>
+<S9QSENDFEEDBACK>1</S9QSENDFEEDBACK>
+<S9QSCRIPT>
+
+TRUNCATE TABLE dbo.SizeEntryFieldsConfig
+-GO-
+Insert into dbo.SizeEntryFieldsConfig (EntryType,TrnType,FieldSrlNo,FieldName,FieldCaption,FieldType,FieldWidth,FieldHidden,FieldLock,FieldFlag,FieldFormula,FieldDefaultValue) Values('GIR',1100,1,'Class1Cd','Product',1,6,2,0,0,'','A')
+-GO-
+Insert into dbo.SizeEntryFieldsConfig (EntryType,TrnType,FieldSrlNo,FieldName,FieldCaption,FieldType,FieldWidth,FieldHidden,FieldLock,FieldFlag,FieldFormula,FieldDefaultValue) Values('GIR',1100,10,'DocEntDisc','Discount Amount',2,6,1,0,1,'(H#*I#/100)','J')
+-GO-
+Insert into dbo.SizeEntryFieldsConfig (EntryType,TrnType,FieldSrlNo,FieldName,FieldCaption,FieldType,FieldWidth,FieldHidden,FieldLock,FieldFlag,FieldFormula,FieldDefaultValue) Values('GIR',1100,11,'TaxRate','Tax Rate',2,6,2,0,0,'L#*100/((H#+M#)-(O#+J#))','K')
+-GO-
+Insert into dbo.SizeEntryFieldsConfig (EntryType,TrnType,FieldSrlNo,FieldName,FieldCaption,FieldType,FieldWidth,FieldHidden,FieldLock,FieldFlag,FieldFormula,FieldDefaultValue) Values('GIR',1100,12,'DocEntTax','Tax Amount',2,6,2,0,1,'((H#+M#)-(O#+J#))*K#/100','L')
+-GO-
+Insert into dbo.SizeEntryFieldsConfig (EntryType,TrnType,FieldSrlNo,FieldName,FieldCaption,FieldType,FieldWidth,FieldHidden,FieldLock,FieldFlag,FieldFormula,FieldDefaultValue) Values('GIR',1100,13,'DocEntBefTaxAddons','Add-On B-Tax',2,6,1,0,1,'','M')
+-GO-
+Insert into dbo.SizeEntryFieldsConfig (EntryType,TrnType,FieldSrlNo,FieldName,FieldCaption,FieldType,FieldWidth,FieldHidden,FieldLock,FieldFlag,FieldFormula,FieldDefaultValue) Values('GIR',1100,14,'DocEntAftTaxAddons','Add-On A-Tax',2,6,1,0,1,'','N')
+-GO-
+Insert into dbo.SizeEntryFieldsConfig (EntryType,TrnType,FieldSrlNo,FieldName,FieldCaption,FieldType,FieldWidth,FieldHidden,FieldLock,FieldFlag,FieldFormula,FieldDefaultValue) Values('GIR',1100,15,'DocEntBefTaxDedns','Dedn B-Tax',2,6,1,0,1,'','O')
+-GO-
+Insert into dbo.SizeEntryFieldsConfig (EntryType,TrnType,FieldSrlNo,FieldName,FieldCaption,FieldType,FieldWidth,FieldHidden,FieldLock,FieldFlag,FieldFormula,FieldDefaultValue) Values('GIR',1100,16,'DocEntAftTaxDedns','Dedn A-Tax',2,6,1,0,1,'','P')
+-GO-
+Insert into dbo.SizeEntryFieldsConfig (EntryType,TrnType,FieldSrlNo,FieldName,FieldCaption,FieldType,FieldWidth,FieldHidden,FieldLock,FieldFlag,FieldFormula,FieldDefaultValue) Values('GIR',1100,17,'TotalValue','Total Value',1,6,2,1,1,'((H#+M#+N#+L#)-(J#+O#+P#))','Q')
+-GO-
+Insert into dbo.SizeEntryFieldsConfig (EntryType,TrnType,FieldSrlNo,FieldName,FieldCaption,FieldType,FieldWidth,FieldHidden,FieldLock,FieldFlag,FieldFormula,FieldDefaultValue) Values('GIR',1100,2,'Class2Cd','Brand',1,6,2,0,0,'','B')
+-GO-
+Insert into dbo.SizeEntryFieldsConfig (EntryType,TrnType,FieldSrlNo,FieldName,FieldCaption,FieldType,FieldWidth,FieldHidden,FieldLock,FieldFlag,FieldFormula,FieldDefaultValue) Values('GIR',1100,3,'SubClass1Cd','Style',1,10,2,0,0,'','C')
+-GO-
+Insert into dbo.SizeEntryFieldsConfig (EntryType,TrnType,FieldSrlNo,FieldName,FieldCaption,FieldType,FieldWidth,FieldHidden,FieldLock,FieldFlag,FieldFormula,FieldDefaultValue) Values('GIR',1100,4,'SubClass2Cd','Color',1,6,2,0,0,'','D')
+-GO-
+Insert into dbo.SizeEntryFieldsConfig (EntryType,TrnType,FieldSrlNo,FieldName,FieldCaption,FieldType,FieldWidth,FieldHidden,FieldLock,FieldFlag,FieldFormula,FieldDefaultValue) Values('GIR',1100,5,'CurrentCost','Cost Price',2,6,2,1,0,'CF','E')
+-GO-
+Insert into dbo.SizeEntryFieldsConfig (EntryType,TrnType,FieldSrlNo,FieldName,FieldCaption,FieldType,FieldWidth,FieldHidden,FieldLock,FieldFlag,FieldFormula,FieldDefaultValue) Values('GIR',1100,6,'Retail_Price','Selling Price',2,6,1,1,0,'DF','F')
+-GO-
+Insert into dbo.SizeEntryFieldsConfig (EntryType,TrnType,FieldSrlNo,FieldName,FieldCaption,FieldType,FieldWidth,FieldHidden,FieldLock,FieldFlag,FieldFormula,FieldDefaultValue) Values('GIR',1100,7,'QtyTot','Qty Total',1,6,2,1,1,'*','G')
+-GO-
+Insert into dbo.SizeEntryFieldsConfig (EntryType,TrnType,FieldSrlNo,FieldName,FieldCaption,FieldType,FieldWidth,FieldHidden,FieldLock,FieldFlag,FieldFormula,FieldDefaultValue) Values('GIR',1100,8,'Value','Value',1,6,2,1,1,'(E#*G#)','H')
+-GO-
+Insert into dbo.SizeEntryFieldsConfig (EntryType,TrnType,FieldSrlNo,FieldName,FieldCaption,FieldType,FieldWidth,FieldHidden,FieldLock,FieldFlag,FieldFormula,FieldDefaultValue) Values('GIR',1100,9,'DiscountRate','Discount Rate',2,6,1,0,0,'(J#*100/H#)','I')
+-GO-
+Insert into dbo.SizeEntryFieldsConfig (EntryType,TrnType,FieldSrlNo,FieldName,FieldCaption,FieldType,FieldWidth,FieldHidden,FieldLock,FieldFlag,FieldFormula,FieldDefaultValue) Values('GIR',1200,1,'Class1Cd','Product',1,6,2,0,0,'','A')
+-GO-
+Insert into dbo.SizeEntryFieldsConfig (EntryType,TrnType,FieldSrlNo,FieldName,FieldCaption,FieldType,FieldWidth,FieldHidden,FieldLock,FieldFlag,FieldFormula,FieldDefaultValue) Values('GIR',1200,10,'DocEntDisc','Discount Amount',2,6,1,0,1,'(H#*I#/100)','J')
+-GO-
+Insert into dbo.SizeEntryFieldsConfig (EntryType,TrnType,FieldSrlNo,FieldName,FieldCaption,FieldType,FieldWidth,FieldHidden,FieldLock,FieldFlag,FieldFormula,FieldDefaultValue) Values('GIR',1200,11,'TaxRate','Tax Rate',2,6,2,0,0,'L#*100/((H#+M#)-(O#+J#))','K')
+-GO-
+Insert into dbo.SizeEntryFieldsConfig (EntryType,TrnType,FieldSrlNo,FieldName,FieldCaption,FieldType,FieldWidth,FieldHidden,FieldLock,FieldFlag,FieldFormula,FieldDefaultValue) Values('GIR',1200,12,'DocEntTax','Tax Amount',2,6,2,0,1,'((H#+M#)-(O#+J#))*K#/100','L')
+-GO-
+Insert into dbo.SizeEntryFieldsConfig (EntryType,TrnType,FieldSrlNo,FieldName,FieldCaption,FieldType,FieldWidth,FieldHidden,FieldLock,FieldFlag,FieldFormula,FieldDefaultValue) Values('GIR',1200,13,'DocEntBefTaxAddons','Add-On B-Tax',2,6,1,0,1,'','M')
+-GO-
+Insert into dbo.SizeEntryFieldsConfig (EntryType,TrnType,FieldSrlNo,FieldName,FieldCaption,FieldType,FieldWidth,FieldHidden,FieldLock,FieldFlag,FieldFormula,FieldDefaultValue) Values('GIR',1200,14,'DocEntAftTaxAddons','Add-On A-Tax',2,6,1,0,1,'','N')
+-GO-
+Insert into dbo.SizeEntryFieldsConfig (EntryType,TrnType,FieldSrlNo,FieldName,FieldCaption,FieldType,FieldWidth,FieldHidden,FieldLock,FieldFlag,FieldFormula,FieldDefaultValue) Values('GIR',1200,15,'DocEntBefTaxDedns','Dedn B-Tax',2,6,1,0,1,'','O')
+-GO-
+Insert into dbo.SizeEntryFieldsConfig (EntryType,TrnType,FieldSrlNo,FieldName,FieldCaption,FieldType,FieldWidth,FieldHidden,FieldLock,FieldFlag,FieldFormula,FieldDefaultValue) Values('GIR',1200,16,'DocEntAftTaxDedns','Dedn A-Tax',2,6,1,0,1,'','P')
+-GO-
+Insert into dbo.SizeEntryFieldsConfig (EntryType,TrnType,FieldSrlNo,FieldName,FieldCaption,FieldType,FieldWidth,FieldHidden,FieldLock,FieldFlag,FieldFormula,FieldDefaultValue) Values('GIR',1200,17,'TotalValue','Total Value',1,6,2,1,1,'((H#+M#+N#+L#)-(J#+O#+P#))','Q')
+-GO-
+Insert into dbo.SizeEntryFieldsConfig (EntryType,TrnType,FieldSrlNo,FieldName,FieldCaption,FieldType,FieldWidth,FieldHidden,FieldLock,FieldFlag,FieldFormula,FieldDefaultValue) Values('GIR',1200,2,'Class2Cd','Brand',1,6,2,0,0,'','B')
+-GO-
+Insert into dbo.SizeEntryFieldsConfig (EntryType,TrnType,FieldSrlNo,FieldName,FieldCaption,FieldType,FieldWidth,FieldHidden,FieldLock,FieldFlag,FieldFormula,FieldDefaultValue) Values('GIR',1200,3,'SubClass1Cd','Style',1,10,2,0,0,'','C')
+-GO-
+Insert into dbo.SizeEntryFieldsConfig (EntryType,TrnType,FieldSrlNo,FieldName,FieldCaption,FieldType,FieldWidth,FieldHidden,FieldLock,FieldFlag,FieldFormula,FieldDefaultValue) Values('GIR',1200,4,'SubClass2Cd','Color',1,6,2,0,0,'','D')
+-GO-
+Insert into dbo.SizeEntryFieldsConfig (EntryType,TrnType,FieldSrlNo,FieldName,FieldCaption,FieldType,FieldWidth,FieldHidden,FieldLock,FieldFlag,FieldFormula,FieldDefaultValue) Values('GIR',1200,5,'CurrentCost','Cost Price',2,6,2,1,0,'CF','E')
+-GO-
+Insert into dbo.SizeEntryFieldsConfig (EntryType,TrnType,FieldSrlNo,FieldName,FieldCaption,FieldType,FieldWidth,FieldHidden,FieldLock,FieldFlag,FieldFormula,FieldDefaultValue) Values('GIR',1200,6,'Retail_Price','Selling Price',2,6,1,1,0,'DF','F')
+-GO-
+Insert into dbo.SizeEntryFieldsConfig (EntryType,TrnType,FieldSrlNo,FieldName,FieldCaption,FieldType,FieldWidth,FieldHidden,FieldLock,FieldFlag,FieldFormula,FieldDefaultValue) Values('GIR',1200,7,'QtyTot','Qty Total',1,6,2,1,1,'*','G')
+-GO-
+Insert into dbo.SizeEntryFieldsConfig (EntryType,TrnType,FieldSrlNo,FieldName,FieldCaption,FieldType,FieldWidth,FieldHidden,FieldLock,FieldFlag,FieldFormula,FieldDefaultValue) Values('GIR',1200,8,'Value','Value',1,6,2,1,1,'(E#*G#)','H')
+-GO-
+Insert into dbo.SizeEntryFieldsConfig (EntryType,TrnType,FieldSrlNo,FieldName,FieldCaption,FieldType,FieldWidth,FieldHidden,FieldLock,FieldFlag,FieldFormula,FieldDefaultValue) Values('GIR',1200,9,'DiscountRate','Discount Rate',2,6,1,0,0,'(J#*100/H#)','I')
+-GO-
+Insert into dbo.SizeEntryFieldsConfig (EntryType,TrnType,FieldSrlNo,FieldName,FieldCaption,FieldType,FieldWidth,FieldHidden,FieldLock,FieldFlag,FieldFormula,FieldDefaultValue) Values('GIR',1400,1,'Class1Cd','Product',1,6,2,0,0,'','A')
+-GO-
+Insert into dbo.SizeEntryFieldsConfig (EntryType,TrnType,FieldSrlNo,FieldName,FieldCaption,FieldType,FieldWidth,FieldHidden,FieldLock,FieldFlag,FieldFormula,FieldDefaultValue) Values('GIR',1400,10,'DocEntDisc','Discount Amount',2,6,1,0,1,'(H#*I#/100)','J')
+-GO-
+Insert into dbo.SizeEntryFieldsConfig (EntryType,TrnType,FieldSrlNo,FieldName,FieldCaption,FieldType,FieldWidth,FieldHidden,FieldLock,FieldFlag,FieldFormula,FieldDefaultValue) Values('GIR',1400,11,'TaxRate','Tax Rate',2,6,2,0,0,'L#*100/((H#+M#)-(O#+J#))','K')
+-GO-
+Insert into dbo.SizeEntryFieldsConfig (EntryType,TrnType,FieldSrlNo,FieldName,FieldCaption,FieldType,FieldWidth,FieldHidden,FieldLock,FieldFlag,FieldFormula,FieldDefaultValue) Values('GIR',1400,12,'DocEntTax','Tax Amount',2,6,2,0,1,'((H#+M#)-(O#+J#))*K#/100','L')
+-GO-
+Insert into dbo.SizeEntryFieldsConfig (EntryType,TrnType,FieldSrlNo,FieldName,FieldCaption,FieldType,FieldWidth,FieldHidden,FieldLock,FieldFlag,FieldFormula,FieldDefaultValue) Values('GIR',1400,13,'DocEntBefTaxAddons','Add-On B-Tax',2,6,1,0,1,'','M')
+-GO-
+Insert into dbo.SizeEntryFieldsConfig (EntryType,TrnType,FieldSrlNo,FieldName,FieldCaption,FieldType,FieldWidth,FieldHidden,FieldLock,FieldFlag,FieldFormula,FieldDefaultValue) Values('GIR',1400,14,'DocEntAftTaxAddons','Add-On A-Tax',2,6,1,0,1,'','N')
+-GO-
+Insert into dbo.SizeEntryFieldsConfig (EntryType,TrnType,FieldSrlNo,FieldName,FieldCaption,FieldType,FieldWidth,FieldHidden,FieldLock,FieldFlag,FieldFormula,FieldDefaultValue) Values('GIR',1400,15,'DocEntBefTaxDedns','Dedn B-Tax',2,6,1,0,1,'','O')
+-GO-
+Insert into dbo.SizeEntryFieldsConfig (EntryType,TrnType,FieldSrlNo,FieldName,FieldCaption,FieldType,FieldWidth,FieldHidden,FieldLock,FieldFlag,FieldFormula,FieldDefaultValue) Values('GIR',1400,16,'DocEntAftTaxDedns','Dedn A-Tax',2,6,1,0,1,'','P')
+-GO-
+Insert into dbo.SizeEntryFieldsConfig (EntryType,TrnType,FieldSrlNo,FieldName,FieldCaption,FieldType,FieldWidth,FieldHidden,FieldLock,FieldFlag,FieldFormula,FieldDefaultValue) Values('GIR',1400,17,'TotalValue','Total Value',1,6,2,1,1,'((H#+M#+N#+L#)-(J#+O#+P#))','Q')
+-GO-
+Insert into dbo.SizeEntryFieldsConfig (EntryType,TrnType,FieldSrlNo,FieldName,FieldCaption,FieldType,FieldWidth,FieldHidden,FieldLock,FieldFlag,FieldFormula,FieldDefaultValue) Values('GIR',1400,2,'Class2Cd','Brand',1,6,2,0,0,'','B')
+-GO-
+Insert into dbo.SizeEntryFieldsConfig (EntryType,TrnType,FieldSrlNo,FieldName,FieldCaption,FieldType,FieldWidth,FieldHidden,FieldLock,FieldFlag,FieldFormula,FieldDefaultValue) Values('GIR',1400,3,'SubClass1Cd','Style',1,10,2,0,0,'','C')
+-GO-
+Insert into dbo.SizeEntryFieldsConfig (EntryType,TrnType,FieldSrlNo,FieldName,FieldCaption,FieldType,FieldWidth,FieldHidden,FieldLock,FieldFlag,FieldFormula,FieldDefaultValue) Values('GIR',1400,4,'SubClass2Cd','Color',1,6,2,0,0,'','D')
+-GO-
+Insert into dbo.SizeEntryFieldsConfig (EntryType,TrnType,FieldSrlNo,FieldName,FieldCaption,FieldType,FieldWidth,FieldHidden,FieldLock,FieldFlag,FieldFormula,FieldDefaultValue) Values('GIR',1400,5,'CurrentCost','Cost Price',2,6,2,1,0,'CF','E')
+-GO-
+Insert into dbo.SizeEntryFieldsConfig (EntryType,TrnType,FieldSrlNo,FieldName,FieldCaption,FieldType,FieldWidth,FieldHidden,FieldLock,FieldFlag,FieldFormula,FieldDefaultValue) Values('GIR',1400,6,'Retail_Price','Selling Price',2,6,1,1,0,'DF','F')
+-GO-
+Insert into dbo.SizeEntryFieldsConfig (EntryType,TrnType,FieldSrlNo,FieldName,FieldCaption,FieldType,FieldWidth,FieldHidden,FieldLock,FieldFlag,FieldFormula,FieldDefaultValue) Values('GIR',1400,7,'QtyTot','Qty Total',1,6,2,1,1,'*','G')
+-GO-
+Insert into dbo.SizeEntryFieldsConfig (EntryType,TrnType,FieldSrlNo,FieldName,FieldCaption,FieldType,FieldWidth,FieldHidden,FieldLock,FieldFlag,FieldFormula,FieldDefaultValue) Values('GIR',1400,8,'Value','Value',1,6,2,1,1,'(E#*G#)','H')
+-GO-
+Insert into dbo.SizeEntryFieldsConfig (EntryType,TrnType,FieldSrlNo,FieldName,FieldCaption,FieldType,FieldWidth,FieldHidden,FieldLock,FieldFlag,FieldFormula,FieldDefaultValue) Values('GIR',1400,9,'DiscountRate','Discount Rate',2,6,1,0,0,'(J#*100/H#)','I')
+-GO-
+Insert into dbo.SizeEntryFieldsConfig (EntryType,TrnType,FieldSrlNo,FieldName,FieldCaption,FieldType,FieldWidth,FieldHidden,FieldLock,FieldFlag,FieldFormula,FieldDefaultValue) Values('GIR',1500,1,'Class1Cd','Product',1,6,2,0,0,'','A')
+-GO-
+Insert into dbo.SizeEntryFieldsConfig (EntryType,TrnType,FieldSrlNo,FieldName,FieldCaption,FieldType,FieldWidth,FieldHidden,FieldLock,FieldFlag,FieldFormula,FieldDefaultValue) Values('GIR',1500,10,'DocEntDisc','Discount Amount',2,6,1,0,1,'(H#*I#/100)','J')
+-GO-
+Insert into dbo.SizeEntryFieldsConfig (EntryType,TrnType,FieldSrlNo,FieldName,FieldCaption,FieldType,FieldWidth,FieldHidden,FieldLock,FieldFlag,FieldFormula,FieldDefaultValue) Values('GIR',1500,11,'TaxRate','Tax Rate',2,6,2,0,0,'L#*100/((H#+M#)-(O#+J#))','K')
+-GO-
+Insert into dbo.SizeEntryFieldsConfig (EntryType,TrnType,FieldSrlNo,FieldName,FieldCaption,FieldType,FieldWidth,FieldHidden,FieldLock,FieldFlag,FieldFormula,FieldDefaultValue) Values('GIR',1500,12,'DocEntTax','Tax Amount',2,6,2,0,1,'((H#+M#)-(O#+J#))*K#/100','L')
+-GO-
+Insert into dbo.SizeEntryFieldsConfig (EntryType,TrnType,FieldSrlNo,FieldName,FieldCaption,FieldType,FieldWidth,FieldHidden,FieldLock,FieldFlag,FieldFormula,FieldDefaultValue) Values('GIR',1500,13,'DocEntBefTaxAddons','Add-On B-Tax',2,6,1,0,1,'','M')
+-GO-
+Insert into dbo.SizeEntryFieldsConfig (EntryType,TrnType,FieldSrlNo,FieldName,FieldCaption,FieldType,FieldWidth,FieldHidden,FieldLock,FieldFlag,FieldFormula,FieldDefaultValue) Values('GIR',1500,14,'DocEntAftTaxAddons','Add-On A-Tax',2,6,1,0,1,'','N')
+-GO-
+Insert into dbo.SizeEntryFieldsConfig (EntryType,TrnType,FieldSrlNo,FieldName,FieldCaption,FieldType,FieldWidth,FieldHidden,FieldLock,FieldFlag,FieldFormula,FieldDefaultValue) Values('GIR',1500,15,'DocEntBefTaxDedns','Dedn B-Tax',2,6,1,0,1,'','O')
+-GO-
+Insert into dbo.SizeEntryFieldsConfig (EntryType,TrnType,FieldSrlNo,FieldName,FieldCaption,FieldType,FieldWidth,FieldHidden,FieldLock,FieldFlag,FieldFormula,FieldDefaultValue) Values('GIR',1500,16,'DocEntAftTaxDedns','Dedn A-Tax',2,6,1,0,1,'','P')
+-GO-
+Insert into dbo.SizeEntryFieldsConfig (EntryType,TrnType,FieldSrlNo,FieldName,FieldCaption,FieldType,FieldWidth,FieldHidden,FieldLock,FieldFlag,FieldFormula,FieldDefaultValue) Values('GIR',1500,17,'TotalValue','Total Value',1,6,2,1,1,'((H#+M#+N#+L#)-(J#+O#+P#))','Q')
+-GO-
+Insert into dbo.SizeEntryFieldsConfig (EntryType,TrnType,FieldSrlNo,FieldName,FieldCaption,FieldType,FieldWidth,FieldHidden,FieldLock,FieldFlag,FieldFormula,FieldDefaultValue) Values('GIR',1500,2,'Class2Cd','Brand',1,6,2,0,0,'','B')
+-GO-
+Insert into dbo.SizeEntryFieldsConfig (EntryType,TrnType,FieldSrlNo,FieldName,FieldCaption,FieldType,FieldWidth,FieldHidden,FieldLock,FieldFlag,FieldFormula,FieldDefaultValue) Values('GIR',1500,3,'SubClass1Cd','Style',1,10,2,0,0,'','C')
+-GO-
+Insert into dbo.SizeEntryFieldsConfig (EntryType,TrnType,FieldSrlNo,FieldName,FieldCaption,FieldType,FieldWidth,FieldHidden,FieldLock,FieldFlag,FieldFormula,FieldDefaultValue) Values('GIR',1500,4,'SubClass2Cd','Color',1,6,2,0,0,'','D')
+-GO-
+Insert into dbo.SizeEntryFieldsConfig (EntryType,TrnType,FieldSrlNo,FieldName,FieldCaption,FieldType,FieldWidth,FieldHidden,FieldLock,FieldFlag,FieldFormula,FieldDefaultValue) Values('GIR',1500,5,'CurrentCost','Cost Price',2,6,2,1,0,'CF','E')
+-GO-
+Insert into dbo.SizeEntryFieldsConfig (EntryType,TrnType,FieldSrlNo,FieldName,FieldCaption,FieldType,FieldWidth,FieldHidden,FieldLock,FieldFlag,FieldFormula,FieldDefaultValue) Values('GIR',1500,6,'Retail_Price','Selling Price',2,6,1,1,0,'DF','F')
+-GO-
+Insert into dbo.SizeEntryFieldsConfig (EntryType,TrnType,FieldSrlNo,FieldName,FieldCaption,FieldType,FieldWidth,FieldHidden,FieldLock,FieldFlag,FieldFormula,FieldDefaultValue) Values('GIR',1500,7,'QtyTot','Qty Total',1,6,2,1,1,'*','G')
+-GO-
+Insert into dbo.SizeEntryFieldsConfig (EntryType,TrnType,FieldSrlNo,FieldName,FieldCaption,FieldType,FieldWidth,FieldHidden,FieldLock,FieldFlag,FieldFormula,FieldDefaultValue) Values('GIR',1500,8,'Value','Value',1,6,2,1,1,'(E#*G#)','H')
+-GO-
+Insert into dbo.SizeEntryFieldsConfig (EntryType,TrnType,FieldSrlNo,FieldName,FieldCaption,FieldType,FieldWidth,FieldHidden,FieldLock,FieldFlag,FieldFormula,FieldDefaultValue) Values('GIR',1500,9,'DiscountRate','Discount Rate',2,6,1,0,0,'(J#*100/H#)','I')
+-GO-
+Insert into dbo.SizeEntryFieldsConfig (EntryType,TrnType,FieldSrlNo,FieldName,FieldCaption,FieldType,FieldWidth,FieldHidden,FieldLock,FieldFlag,FieldFormula,FieldDefaultValue) Values('GOR',2500,4,'SubClass2Cd','Color',1,8,2,0,0,'','D')
+-GO-
+Insert into dbo.SizeEntryFieldsConfig (EntryType,TrnType,FieldSrlNo,FieldName,FieldCaption,FieldType,FieldWidth,FieldHidden,FieldLock,FieldFlag,FieldFormula,FieldDefaultValue) Values('GOR',2500,2,'Class2Cd','Brand',1,8,2,0,0,'','B')
+-GO-
+Insert into dbo.SizeEntryFieldsConfig (EntryType,TrnType,FieldSrlNo,FieldName,FieldCaption,FieldType,FieldWidth,FieldHidden,FieldLock,FieldFlag,FieldFormula,FieldDefaultValue) Values('GOR',2500,1,'Class1Cd','Product',1,8,2,0,0,'','A')
+-GO-
+Insert into dbo.SizeEntryFieldsConfig (EntryType,TrnType,FieldSrlNo,FieldName,FieldCaption,FieldType,FieldWidth,FieldHidden,FieldLock,FieldFlag,FieldFormula,FieldDefaultValue) Values('GOR',2400,8,'Value','Value',1,6,2,1,1,'(F#*G#)','H')
+-GO-
+Insert into dbo.SizeEntryFieldsConfig (EntryType,TrnType,FieldSrlNo,FieldName,FieldCaption,FieldType,FieldWidth,FieldHidden,FieldLock,FieldFlag,FieldFormula,FieldDefaultValue) Values('GOR',2400,7,'QtyTot','Qty Total',1,6,2,1,1,'*','G')
+-GO-
+Insert into dbo.SizeEntryFieldsConfig (EntryType,TrnType,FieldSrlNo,FieldName,FieldCaption,FieldType,FieldWidth,FieldHidden,FieldLock,FieldFlag,FieldFormula,FieldDefaultValue) Values('GOR',2400,6,'Retail_Price','Selling Price',2,6,2,1,0,'CF','F')
+-GO-
+Insert into dbo.SizeEntryFieldsConfig (EntryType,TrnType,FieldSrlNo,FieldName,FieldCaption,FieldType,FieldWidth,FieldHidden,FieldLock,FieldFlag,FieldFormula,FieldDefaultValue) Values('GOR',2400,5,'CurrentCost','Cost Price',2,6,2,1,0,'DF','E')
+-GO-
+Insert into dbo.SizeEntryFieldsConfig (EntryType,TrnType,FieldSrlNo,FieldName,FieldCaption,FieldType,FieldWidth,FieldHidden,FieldLock,FieldFlag,FieldFormula,FieldDefaultValue) Values('GOR',2400,4,'SubClass2Cd','Color',1,8,2,0,0,'','D')
+-GO-
+Insert into dbo.SizeEntryFieldsConfig (EntryType,TrnType,FieldSrlNo,FieldName,FieldCaption,FieldType,FieldWidth,FieldHidden,FieldLock,FieldFlag,FieldFormula,FieldDefaultValue) Values('GOR',2400,1,'Class1Cd','Product',1,8,2,0,0,'','A')
+-GO-
+Insert into dbo.SizeEntryFieldsConfig (EntryType,TrnType,FieldSrlNo,FieldName,FieldCaption,FieldType,FieldWidth,FieldHidden,FieldLock,FieldFlag,FieldFormula,FieldDefaultValue) Values('GOR',2400,2,'Class2Cd','Brand',1,8,2,0,0,'','B')
+-GO-
+Insert into dbo.SizeEntryFieldsConfig (EntryType,TrnType,FieldSrlNo,FieldName,FieldCaption,FieldType,FieldWidth,FieldHidden,FieldLock,FieldFlag,FieldFormula,FieldDefaultValue) Values('GOR',2300,1,'Class1Cd','Product',1,8,2,0,0,'','A')
+-GO-
+Insert into dbo.SizeEntryFieldsConfig (EntryType,TrnType,FieldSrlNo,FieldName,FieldCaption,FieldType,FieldWidth,FieldHidden,FieldLock,FieldFlag,FieldFormula,FieldDefaultValue) Values('GOR',2500,5,'CurrentCost','Cost Price',2,6,2,1,0,'CF','E')
+-GO-
+Insert into dbo.SizeEntryFieldsConfig (EntryType,TrnType,FieldSrlNo,FieldName,FieldCaption,FieldType,FieldWidth,FieldHidden,FieldLock,FieldFlag,FieldFormula,FieldDefaultValue) Values('GOR',2300,8,'Value','Value',1,6,2,1,1,'(F#*G#)','H')
+-GO-
+Insert into dbo.SizeEntryFieldsConfig (EntryType,TrnType,FieldSrlNo,FieldName,FieldCaption,FieldType,FieldWidth,FieldHidden,FieldLock,FieldFlag,FieldFormula,FieldDefaultValue) Values('GOR',2300,7,'QtyTot','Qty Total',1,6,2,1,1,'*','G')
+-GO-
+Insert into dbo.SizeEntryFieldsConfig (EntryType,TrnType,FieldSrlNo,FieldName,FieldCaption,FieldType,FieldWidth,FieldHidden,FieldLock,FieldFlag,FieldFormula,FieldDefaultValue) Values('GOR',2300,6,'DocEntRate','DocEnt Rate',2,6,2,1,0,'CF','F')
+-GO-
+Insert into dbo.SizeEntryFieldsConfig (EntryType,TrnType,FieldSrlNo,FieldName,FieldCaption,FieldType,FieldWidth,FieldHidden,FieldLock,FieldFlag,FieldFormula,FieldDefaultValue) Values('GOR',2300,5,'CurrentCost','Cost Price',2,6,2,1,0,'DF','E')
+-GO-
+Insert into dbo.SizeEntryFieldsConfig (EntryType,TrnType,FieldSrlNo,FieldName,FieldCaption,FieldType,FieldWidth,FieldHidden,FieldLock,FieldFlag,FieldFormula,FieldDefaultValue) Values('GOR',2300,4,'SubClass2Cd','Color',1,8,2,0,0,'','D')
+-GO-
+Insert into dbo.SizeEntryFieldsConfig (EntryType,TrnType,FieldSrlNo,FieldName,FieldCaption,FieldType,FieldWidth,FieldHidden,FieldLock,FieldFlag,FieldFormula,FieldDefaultValue) Values('GOR',2300,3,'SubClass1Cd','Style',1,10,2,0,0,'','C')
+-GO-
+Insert into dbo.SizeEntryFieldsConfig (EntryType,TrnType,FieldSrlNo,FieldName,FieldCaption,FieldType,FieldWidth,FieldHidden,FieldLock,FieldFlag,FieldFormula,FieldDefaultValue) Values('GOR',2300,2,'Class2Cd','Brand',1,8,2,0,0,'','B')
+-GO-
+Insert into dbo.SizeEntryFieldsConfig (EntryType,TrnType,FieldSrlNo,FieldName,FieldCaption,FieldType,FieldWidth,FieldHidden,FieldLock,FieldFlag,FieldFormula,FieldDefaultValue) Values('GOR',2400,3,'SubClass1Cd','Style',1,10,2,0,0,'','C')
+-GO-
+Insert into dbo.SizeEntryFieldsConfig (EntryType,TrnType,FieldSrlNo,FieldName,FieldCaption,FieldType,FieldWidth,FieldHidden,FieldLock,FieldFlag,FieldFormula,FieldDefaultValue) Values('GOR',2200,6,'CurrentCost','Cost Price',2,6,2,1,0,'CF','F')
+-GO-
+Insert into dbo.SizeEntryFieldsConfig (EntryType,TrnType,FieldSrlNo,FieldName,FieldCaption,FieldType,FieldWidth,FieldHidden,FieldLock,FieldFlag,FieldFormula,FieldDefaultValue) Values('GOR',2200,8,'Value','Value',1,6,2,1,1,'(F#*G#)','H')
+-GO-
+Insert into dbo.SizeEntryFieldsConfig (EntryType,TrnType,FieldSrlNo,FieldName,FieldCaption,FieldType,FieldWidth,FieldHidden,FieldLock,FieldFlag,FieldFormula,FieldDefaultValue) Values('GOR',2500,8,'Value','Value',1,6,2,1,1,'(E#*G#)','H')
+-GO-
+Insert into dbo.SizeEntryFieldsConfig (EntryType,TrnType,FieldSrlNo,FieldName,FieldCaption,FieldType,FieldWidth,FieldHidden,FieldLock,FieldFlag,FieldFormula,FieldDefaultValue) Values('GOR',2500,3,'SubClass1Cd','Style',1,10,2,0,0,'','C')
+-GO-
+Insert into dbo.SizeEntryFieldsConfig (EntryType,TrnType,FieldSrlNo,FieldName,FieldCaption,FieldType,FieldWidth,FieldHidden,FieldLock,FieldFlag,FieldFormula,FieldDefaultValue) Values('GOR',2500,6,'Retail_Price','Selling Price',2,6,1,1,0,'DF','F')
+-GO-
+Insert into dbo.SizeEntryFieldsConfig (EntryType,TrnType,FieldSrlNo,FieldName,FieldCaption,FieldType,FieldWidth,FieldHidden,FieldLock,FieldFlag,FieldFormula,FieldDefaultValue) Values('GOR',2200,7,'QtyTot','Qty Total',1,6,2,1,1,'*','G')
+-GO-
+Insert into dbo.SizeEntryFieldsConfig (EntryType,TrnType,FieldSrlNo,FieldName,FieldCaption,FieldType,FieldWidth,FieldHidden,FieldLock,FieldFlag,FieldFormula,FieldDefaultValue) Values('GOR',2200,4,'SubClass2Cd','Color',1,8,2,0,0,'','D')
+-GO-
+Insert into dbo.SizeEntryFieldsConfig (EntryType,TrnType,FieldSrlNo,FieldName,FieldCaption,FieldType,FieldWidth,FieldHidden,FieldLock,FieldFlag,FieldFormula,FieldDefaultValue) Values('GOR',2500,7,'QtyTot','Qty Total',1,6,2,1,1,'*','G')
+-GO-
+Insert into dbo.SizeEntryFieldsConfig (EntryType,TrnType,FieldSrlNo,FieldName,FieldCaption,FieldType,FieldWidth,FieldHidden,FieldLock,FieldFlag,FieldFormula,FieldDefaultValue) Values('GOR',2200,1,'Class1Cd','Product',1,8,2,0,0,'','A')
+-GO-
+Insert into dbo.SizeEntryFieldsConfig (EntryType,TrnType,FieldSrlNo,FieldName,FieldCaption,FieldType,FieldWidth,FieldHidden,FieldLock,FieldFlag,FieldFormula,FieldDefaultValue) Values('GOR',2200,3,'SubClass1Cd','Style',1,10,2,0,0,'','C')
+-GO-
+Insert into dbo.SizeEntryFieldsConfig (EntryType,TrnType,FieldSrlNo,FieldName,FieldCaption,FieldType,FieldWidth,FieldHidden,FieldLock,FieldFlag,FieldFormula,FieldDefaultValue) Values('GOR',2200,2,'Class2Cd','Brand',1,8,2,0,0,'','B')
+-GO-
+Insert into dbo.SizeEntryFieldsConfig (EntryType,TrnType,FieldSrlNo,FieldName,FieldCaption,FieldType,FieldWidth,FieldHidden,FieldLock,FieldFlag,FieldFormula,FieldDefaultValue) Values('GOR',2200,5,'Retail_Price','Selling Price',2,6,2,1,0,'DF','E')
+-GO-
+Insert Into dbo.SizeEntryFieldsConfig (EntryType,TrnType,FieldSrlNo,Fieldname,FieldCaption,FieldType,FieldWidth,FieldHidden,FieldLock,FieldFlag,FieldFormula,FieldDefaultValue) values('GOR',2200,9,'DiscRate','Discount Rate',2,6,2,0,1,'','I')
+-GO-
+Insert Into dbo.SizeEntryFieldsConfig (EntryType,TrnType,FieldSrlNo,Fieldname,FieldCaption,FieldType,FieldWidth,FieldHidden,FieldLock,FieldFlag,FieldFormula,FieldDefaultValue) values('GOR',2200,10,'DocEntDisc','Discount Amount',2,6,2,0,1,'H#*(I#/100)','J')
+-GO-
+Insert Into dbo.SizeEntryFieldsConfig (EntryType,TrnType,FieldSrlNo,Fieldname,FieldCaption,FieldType,FieldWidth,FieldHidden,FieldLock,FieldFlag,FieldFormula,FieldDefaultValue) values('GOR',2200,11,'TaxRate','Tax Rate',2,6,2,0,1,'','K')
+-GO-
+Insert Into dbo.SizeEntryFieldsConfig (EntryType,TrnType,FieldSrlNo,Fieldname,FieldCaption,FieldType,FieldWidth,FieldHidden,FieldLock,FieldFlag,FieldFormula,FieldDefaultValue) values('GOR',2200,12,'DocEntTax','Tax Amount',2,6,2,0,1,'(H#-J#+M#-O#)*(K#/100)','L')
+-GO-
+Insert Into dbo.SizeEntryFieldsConfig (EntryType,TrnType,FieldSrlNo,Fieldname,FieldCaption,FieldType,FieldWidth,FieldHidden,FieldLock,FieldFlag,FieldFormula,FieldDefaultValue) values('GOR',2200,13,'DocEntBefTaxAddons','Add-On B-Tax',2,6,1,0,1,'','M')
+-GO-
+Insert Into dbo.SizeEntryFieldsConfig (EntryType,TrnType,FieldSrlNo,Fieldname,FieldCaption,FieldType,FieldWidth,FieldHidden,FieldLock,FieldFlag,FieldFormula,FieldDefaultValue) values('GOR',2200,14,'DocEntAftTaxAddons','Add-On A-Tax',2,6,1,0,1,'','N')
+-GO-
+Insert Into dbo.SizeEntryFieldsConfig (EntryType,TrnType,FieldSrlNo,Fieldname,FieldCaption,FieldType,FieldWidth,FieldHidden,FieldLock,FieldFlag,FieldFormula,FieldDefaultValue) values('GOR',2200,15,'DocEntBefTaxDedns','Dedn B-Tax',2,6,1,0,1,'','O')
+-GO-
+Insert Into dbo.SizeEntryFieldsConfig (EntryType,TrnType,FieldSrlNo,Fieldname,FieldCaption,FieldType,FieldWidth,FieldHidden,FieldLock,FieldFlag,FieldFormula,FieldDefaultValue) values('GOR',2200,16,'DocEntAftTaxDedns','Dedn A-Tax',2,6,1,0,1,'','P')
+-GO-
+Insert Into dbo.SizeEntryFieldsConfig (EntryType,TrnType,FieldSrlNo,Fieldname,FieldCaption,FieldType,FieldWidth,FieldHidden,FieldLock,FieldFlag,FieldFormula,FieldDefaultValue) values('GOR',2200,17,'TotalValue','Total Value',1,6,1,1,1,'H#-J#+L#+M#+N#-O#-P#','Q')
+-GO-
+Insert Into dbo.SizeEntryFieldsConfig (EntryType,TrnType,FieldSrlNo,Fieldname,FieldCaption,FieldType,FieldWidth,FieldHidden,FieldLock,FieldFlag,FieldFormula,FieldDefaultValue) values('GOR',2300,9,'DiscRate','Discount Rate',2,6,2,0,1,'','I')
+-GO-
+Insert Into dbo.SizeEntryFieldsConfig (EntryType,TrnType,FieldSrlNo,Fieldname,FieldCaption,FieldType,FieldWidth,FieldHidden,FieldLock,FieldFlag,FieldFormula,FieldDefaultValue) values('GOR',2300,10,'DocEntDisc','Discount Amount',2,6,2,1,1,'H#*(I#/100)','J')
+-GO-
+Insert Into dbo.SizeEntryFieldsConfig (EntryType,TrnType,FieldSrlNo,Fieldname,FieldCaption,FieldType,FieldWidth,FieldHidden,FieldLock,FieldFlag,FieldFormula,FieldDefaultValue) values('GOR',2300,11,'TaxRate','Tax Rate',2,6,2,0,1,'','K')
+-GO-
+Insert Into dbo.SizeEntryFieldsConfig (EntryType,TrnType,FieldSrlNo,Fieldname,FieldCaption,FieldType,FieldWidth,FieldHidden,FieldLock,FieldFlag,FieldFormula,FieldDefaultValue) values('GOR',2300,12,'DocEntTax','Tax Amount',2,6,2,1,1,'(H#-J#+M#-O#)*(K#/100)','L')
+-GO-
+Insert Into dbo.SizeEntryFieldsConfig (EntryType,TrnType,FieldSrlNo,Fieldname,FieldCaption,FieldType,FieldWidth,FieldHidden,FieldLock,FieldFlag,FieldFormula,FieldDefaultValue) values('GOR',2300,13,'DocEntBefTaxAddons','Add-On B-Tax',2,6,1,0,1,'','M')
+-GO-
+Insert Into dbo.SizeEntryFieldsConfig (EntryType,TrnType,FieldSrlNo,Fieldname,FieldCaption,FieldType,FieldWidth,FieldHidden,FieldLock,FieldFlag,FieldFormula,FieldDefaultValue) values('GOR',2300,14,'DocEntAftTaxAddons','Add-On A-Tax',2,6,1,0,1,'','N')
+-GO-
+Insert Into dbo.SizeEntryFieldsConfig (EntryType,TrnType,FieldSrlNo,Fieldname,FieldCaption,FieldType,FieldWidth,FieldHidden,FieldLock,FieldFlag,FieldFormula,FieldDefaultValue) values('GOR',2300,15,'DocEntBefTaxDedns','Dedn B-Tax',2,6,1,0,1,'','O')
+-GO-
+Insert Into dbo.SizeEntryFieldsConfig (EntryType,TrnType,FieldSrlNo,Fieldname,FieldCaption,FieldType,FieldWidth,FieldHidden,FieldLock,FieldFlag,FieldFormula,FieldDefaultValue) values('GOR',2300,16,'DocEntAftTaxDedns','Dedn A-Tax',2,6,1,0,1,'','P')
+-GO-
+Insert Into dbo.SizeEntryFieldsConfig (EntryType,TrnType,FieldSrlNo,Fieldname,FieldCaption,FieldType,FieldWidth,FieldHidden,FieldLock,FieldFlag,FieldFormula,FieldDefaultValue) values('GOR',2300,17,'TotalValue','Total Value',1,6,1,1,1,'H#-J#+L#+M#+N#-O#-P#','Q')
+-GO-
+Insert Into dbo.SizeEntryFieldsConfig (EntryType,TrnType,FieldSrlNo,Fieldname,FieldCaption,FieldType,FieldWidth,FieldHidden,FieldLock,FieldFlag,FieldFormula,FieldDefaultValue) values('GOR',2400,9,'DiscRate','Discount Rate',2,6,2,0,1,'','I')
+-GO-
+Insert Into dbo.SizeEntryFieldsConfig (EntryType,TrnType,FieldSrlNo,Fieldname,FieldCaption,FieldType,FieldWidth,FieldHidden,FieldLock,FieldFlag,FieldFormula,FieldDefaultValue) values('GOR',2400,10,'DocEntDisc','Discount Amount',2,6,2,0,1,'H#*(I#/100)','J')
+-GO-
+Insert Into dbo.SizeEntryFieldsConfig (EntryType,TrnType,FieldSrlNo,Fieldname,FieldCaption,FieldType,FieldWidth,FieldHidden,FieldLock,FieldFlag,FieldFormula,FieldDefaultValue) values('GOR',2400,11,'TaxRate','Tax Rate',2,6,2,0,1,'','K')
+-GO-
+Insert Into dbo.SizeEntryFieldsConfig (EntryType,TrnType,FieldSrlNo,Fieldname,FieldCaption,FieldType,FieldWidth,FieldHidden,FieldLock,FieldFlag,FieldFormula,FieldDefaultValue) values('GOR',2400,12,'DocEntTax','Tax Amount',2,6,2,0,1,'(H#-J#+M#-O#)*(K#/100)','L')
+-GO-
+Insert Into dbo.SizeEntryFieldsConfig (EntryType,TrnType,FieldSrlNo,Fieldname,FieldCaption,FieldType,FieldWidth,FieldHidden,FieldLock,FieldFlag,FieldFormula,FieldDefaultValue) values('GOR',2400,13,'DocEntBefTaxAddons','Add-On B-Tax',2,6,1,0,1,'','M')
+-GO-
+Insert Into dbo.SizeEntryFieldsConfig (EntryType,TrnType,FieldSrlNo,Fieldname,FieldCaption,FieldType,FieldWidth,FieldHidden,FieldLock,FieldFlag,FieldFormula,FieldDefaultValue) values('GOR',2400,14,'DocEntAftTaxAddons','Add-On A-Tax',2,6,1,0,1,'','N')
+-GO-
+Insert Into dbo.SizeEntryFieldsConfig (EntryType,TrnType,FieldSrlNo,Fieldname,FieldCaption,FieldType,FieldWidth,FieldHidden,FieldLock,FieldFlag,FieldFormula,FieldDefaultValue) values('GOR',2400,15,'DocEntBefTaxDedns','Dedn B-Tax',2,6,1,0,1,'','O')
+-GO-
+Insert Into dbo.SizeEntryFieldsConfig (EntryType,TrnType,FieldSrlNo,Fieldname,FieldCaption,FieldType,FieldWidth,FieldHidden,FieldLock,FieldFlag,FieldFormula,FieldDefaultValue) values('GOR',2400,16,'DocEntAftTaxDedns','Dedn A-Tax',2,6,1,0,1,'','P')
+-GO-
+Insert Into dbo.SizeEntryFieldsConfig (EntryType,TrnType,FieldSrlNo,Fieldname,FieldCaption,FieldType,FieldWidth,FieldHidden,FieldLock,FieldFlag,FieldFormula,FieldDefaultValue) values('GOR',2400,17,'TotalValue','Total Value',1,6,1,1,1,'H#-J#+L#+M#+N#-O#-P#','Q')
+-GO-
+Insert Into dbo.SizeEntryFieldsConfig (EntryType,TrnType,FieldSrlNo,Fieldname,FieldCaption,FieldType,FieldWidth,FieldHidden,FieldLock,FieldFlag,FieldFormula,FieldDefaultValue) values('GOR',2500,9,'DiscRate','Discount Rate',2,6,2,0,1,'','I')
+-GO-
+Insert Into dbo.SizeEntryFieldsConfig (EntryType,TrnType,FieldSrlNo,Fieldname,FieldCaption,FieldType,FieldWidth,FieldHidden,FieldLock,FieldFlag,FieldFormula,FieldDefaultValue) values('GOR',2500,10,'DocEntDisc','Discount Amount',2,6,2,0,1,'H#*(I#/100)','J')
+-GO-
+Insert Into dbo.SizeEntryFieldsConfig (EntryType,TrnType,FieldSrlNo,Fieldname,FieldCaption,FieldType,FieldWidth,FieldHidden,FieldLock,FieldFlag,FieldFormula,FieldDefaultValue) values('GOR',2500,11,'TaxRate','Tax Rate',2,6,2,0,1,'','K')
+-GO-
+Insert Into dbo.SizeEntryFieldsConfig (EntryType,TrnType,FieldSrlNo,Fieldname,FieldCaption,FieldType,FieldWidth,FieldHidden,FieldLock,FieldFlag,FieldFormula,FieldDefaultValue) values('GOR',2500,12,'DocEntTax','Tax Amount',2,6,2,0,1,'(H#-J#+M#-O#)*(K#/100)','L')
+-GO-
+Insert Into dbo.SizeEntryFieldsConfig (EntryType,TrnType,FieldSrlNo,Fieldname,FieldCaption,FieldType,FieldWidth,FieldHidden,FieldLock,FieldFlag,FieldFormula,FieldDefaultValue) values('GOR',2500,13,'DocEntBefTaxAddons','Add-On B-Tax',2,6,1,0,1,'','M')
+-GO-
+Insert Into dbo.SizeEntryFieldsConfig (EntryType,TrnType,FieldSrlNo,Fieldname,FieldCaption,FieldType,FieldWidth,FieldHidden,FieldLock,FieldFlag,FieldFormula,FieldDefaultValue) values('GOR',2500,14,'DocEntAftTaxAddons','Add-On A-Tax',2,6,1,0,1,'','N')
+-GO-
+Insert Into dbo.SizeEntryFieldsConfig (EntryType,TrnType,FieldSrlNo,Fieldname,FieldCaption,FieldType,FieldWidth,FieldHidden,FieldLock,FieldFlag,FieldFormula,FieldDefaultValue) values('GOR',2500,15,'DocEntBefTaxDedns','Dedn B-Tax',2,6,1,0,1,'','O')
+-GO-
+Insert Into dbo.SizeEntryFieldsConfig (EntryType,TrnType,FieldSrlNo,Fieldname,FieldCaption,FieldType,FieldWidth,FieldHidden,FieldLock,FieldFlag,FieldFormula,FieldDefaultValue) values('GOR',2500,16,'DocEntAftTaxDedns','Dedn A-Tax',2,6,1,0,1,'','P')
+-GO-
+Insert Into dbo.SizeEntryFieldsConfig (EntryType,TrnType,FieldSrlNo,Fieldname,FieldCaption,FieldType,FieldWidth,FieldHidden,FieldLock,FieldFlag,FieldFormula,FieldDefaultValue) values('GOR',2500,17,'TotalValue','Total Value',1,6,1,1,1,'H#-J#+L#+M#+N#-O#-P#','Q')
+-GO-
+Update dbo.SizeEntryFieldsConfig Set FieldFlag = 1  Where Trntype = 1400 and EntryType = 'GIR' and FieldName ='QtyTot'
+-GO-
+Update dbo.SizeEntryFieldsConfig Set FieldFlag = 1  Where Trntype = 1500 and EntryType = 'GIR' and FieldName ='QtyTot'
+-GO-
+</S9QSCRIPT>
+</S9QSQLBLK>
+
+
+<S9QSQLBLK>
+<S9QSCRIPTID>S9Q_013_2_0002</S9QSCRIPTID>
+<S9QTITLE>Exitsing Data correcting in the Purchase Order (Header and Detail) Transaction Table</S9QTITLE>
+<S9QPGMTYPE>L</S9QPGMTYPE>
+<S9QVERSION>*</S9QVERSION>
+<S9QENVIRONMENT>P</S9QENVIRONMENT>
+<S9QRUNMULTIPLE>0</S9QRUNMULTIPLE>
+<S9QSEVERITY>3</S9QSEVERITY>
+<S9QQRYTYPE>DML</S9QQRYTYPE>
+<S9QSENDFEEDBACK>1</S9QSENDFEEDBACK>
+<S9QSCRIPT>
+
+INSERT INTO dbo.GENLOOKUP SELECT 102,'PO+' + PONOPREFIX,'PO#Purchase Order',NULL,MAX(POCTRLNO+1),'super',(select intg from dbo.sysparam where paramcode = 'VaSysCounter'),'.',(select txt from dbo.sysparam where paramcode = 'CompanyCode') FROM dbo.PURCHORDHDR WHERE 'PO+' + PONOPREFIX NOT IN (SELECT CODE FROM dbo.GENLOOKUP WHERE RECID = 102) GROUP BY PONOPREFIX
+-GO-
+UPDATE dbo.PURCHORDHDR SET POVENDERTYPE = 'V',POVENDORID = SHOPERCOMP, Vactr = (select intg from dbo.sysparam where paramcode = 'VaSysCounter')  FROM dbo.VENDORS WHERE SUPPID = CODE AND POVENDORID IS NULL
+-GO-
+UPDATE dbo.PURCHORDHDR SET POBILLTOVENDORID = SOURCECOMPCD, Vactr = (select intg from dbo.sysparam where paramcode = 'VaSysCounter')  WHERE POBILLTOVENDORID IS NULL
+-GO-
+UPDATE dbo.PURCHORDHDR SET DOCREMARKS = '', Vactr = (select intg from dbo.sysparam where paramcode = 'VaSysCounter')  WHERE DOCREMARKS IS NULL
+-GO-
+UPDATE dbo.PURCHORDHDR SET POTYPE = 1,POSOURCE = 1, AddOnBeftaxHdrper = 0,AddOnAfttaxHdrper = 0,DeductBeftaxHdrper=0,DeductAfttaxHdrper=0,DiscountBeftaxHdrper=0,DiscountAfttaxHdrper=0, Vactr = (select intg from dbo.sysparam where paramcode = 'VaSysCounter')  WHERE POTYPE = 0 
+-GO-
+UPDATE dbo.PURCHORDHDR SET SOURCECOMPCD = TXT, Vactr = (select intg from dbo.sysparam where paramcode = 'VaSysCounter')  FROM dbo.SYSPARAM WHERE PARAMCODE = 'COMPANYCODE' AND SOURCECOMPCD IS NULL 
+-GO-
+UPDATE dbo.PURCHORDDTL SET SALESTAXPER =0, Vactr = (select intg from dbo.sysparam where paramcode = 'VaSysCounter')  WHERE SALESTAXPER IS NULL 
+-GO-
+UPDATE dbo.PURCHORDDTL SET DELIVERYLOCATION = SOURCECOMPCD, Vactr = (select intg from dbo.sysparam where paramcode = 'VaSysCounter')  Where DELIVERYLOCATION IS NULL
+-GO-
+UPDATE dbo.PURCHORDDTL SET DOCLINEGROSSVALUE = PURCHORDQTY * PURCHORDRATE, Vactr = (select intg from dbo.sysparam where paramcode = 'VaSysCounter')  WHERE DOCLINEGROSSVALUE IS NULL 
+-GO-
+UPDATE dbo.PURCHORDDTL SET DOCLINENETVALUE = PURCHORDQTY * PURCHORDRATE, Vactr = (select intg from dbo.sysparam where paramcode = 'VaSysCounter')  WHERE DOCLINENETVALUE IS NULL 
+-GO-
+UPDATE dbo.PURCHORDDTL SET POTYPE = 1,POAPPANLCOUNT = 0,POSOURCE = 1,POATTRIBUTELEVEL = '10000000000000000000000000000000000000', Vactr = (select intg from dbo.sysparam where paramcode = 'VaSysCounter')  WHERE POTYPE = 0 
+-GO-
+UPDATE dbo.PURCHORDDTL SET SOURCECOMPCD = TXT, Vactr = (select intg from dbo.sysparam where paramcode = 'VaSysCounter')  FROM dbo.SYSPARAM WHERE PARAMCODE = 'COMPANYCODE' AND SOURCECOMPCD IS NULL 
+-GO-
+
+</S9QSCRIPT>
+</S9QSQLBLK>
+
+
+<S9QSQLBLK>
+<S9QSCRIPTID>S9Q_013_2_0003</S9QSCRIPTID>
+<S9QTITLE>Exitsing Data Correcting in the PT File (Header and Detail) Transaction Tabl</S9QTITLE>
+<S9QPGMTYPE>L</S9QPGMTYPE>
+<S9QVERSION>*</S9QVERSION>
+<S9QENVIRONMENT>P</S9QENVIRONMENT>
+<S9QRUNMULTIPLE>0</S9QRUNMULTIPLE>
+<S9QSEVERITY>3</S9QSEVERITY>
+<S9QQRYTYPE>DML</S9QQRYTYPE>
+<S9QSENDFEEDBACK>1</S9QSENDFEEDBACK>
+<S9QSCRIPT>
+
+Update dbo.PTInvoiceHdr Set PgmFlag = 'SR324400', Vactr = (select intg from dbo.sysparam where paramcode = 'VaSysCounter')  where pgmflag = 'DC Import'
+-GO-
+Update dbo.PTInvoiceDtl Set PgmFlag = 'SR324400', Vactr = (select intg from dbo.sysparam where paramcode = 'VaSysCounter')  where pgmflag = 'DC Import'
+-GO-
+Update a Set a.Qty=0, Vactr = (select intg from dbo.sysparam where paramcode = 'VaSysCounter') From dbo.PtInvoiceDtl a, dbo.PtInvoiceHdr b Where a.TrnType = b.TrnType and a.SuppCode = b.SuppCode and a.BillNo = b.BillNo and a.BillDate = b.BillDate and b.PgmFlag <> 'SR127000' and a.pgmflag = 'SR127000'
+-GO-
+
+</S9QSCRIPT>
+</S9QSQLBLK>
+
+
+
+<S9QSQLBLK>
+<S9QSCRIPTID>S9Q_013_2_0004</S9QSCRIPTID>
+<S9QTITLE>Existing Data Correction in the Transaction Table (STD and STH) for Tally Interface and Rounding the Value</S9QTITLE>
+<S9QPGMTYPE>L</S9QPGMTYPE>
+<S9QVERSION>*</S9QVERSION>
+<S9QENVIRONMENT>P</S9QENVIRONMENT>
+<S9QRUNMULTIPLE>0</S9QRUNMULTIPLE>
+<S9QSEVERITY>3</S9QSEVERITY>
+<S9QQRYTYPE>DML</S9QQRYTYPE>
+<S9QSENDFEEDBACK>1</S9QSENDFEEDBACK>
+<S9QSCRIPT>
+Update dbo.StkTrnDtls Set DocEntTax = Round(DocEntTax,2), TaxComp1 = Round(DocEntTax,2), StkUpdtRate=Round(StkUpdtRate,2), StkUpdtValueIn=Round(StkUpdtValueIn,2),StkUpdtValueOut=Round(StkUpdtValueOut,2),DocEntAddons = round(isnull(DocEntAftTaxAddons,0) + isnull(DocEntBefTaxAddons,0),2), DocEntDedns = round(isnull(DocEntAftTaxDedns,0)+isnull(DocEntBefTaxDedns,0),2), DocEntTotDisc = round(isnull(DocEntTotDisc,0),2), DocEntBillDisc = round(isnull(DocEntBillDisc,0),2), DocEntDisc = round(isnull(DocEntDisc,0),2), DocEntAftTaxAddons = round(isnull(DocEntAftTaxAddons,0),2), DocEntBefTaxAddons = round(isnull(DocEntBefTaxAddons,0),2), DocEntAftTaxDedns = round(isnull(DocEntAftTaxDedns,0),2),DocEntBefTaxDedns = round(isnull(DocEntBefTaxDedns,0),2), DocEntValue = round(DocEntValue,2), DocEntNetValue = round(DocEntNetValue,2) From dbo.StkTrnHdr a, dbo.StkTrnDtls b Where a.TrnType = b.TrnType and a.ShoperDbVer = 730 and b.TrnType in (1100,1200,1400,1500,2200,2300,2400,2500)
+-GO-
+Select TrnType,TrnCtrlNo,0 as MaxRow, Round(sum(DocEntValue),2) as TotValue, Round(sum(isnull(DocEntTotDisc,0)),2) as DiscTot, Round(sum(isnull(DocEntTax,0)),2) as TaxAmt, Round(Sum(isnull(DocEntBefTaxAddons,0)),2) as AddOnBTax, Round(Sum(isnull(DocEntAftTaxAddons,0)),2) as AddOnATax, Round(sum(isnull(DocEntAddons,0)),2) as AddOnTot, Round(Sum(isnull(DocEntBefTaxDedns,0)),2) as DednBTax, Round(Sum(isnull(DocEntAftTaxDedns,0)),2) as DednATax, Round(sum(isnull(DocEntDedns,0)),2) as DednTot, Round(sum(isnull(DocEntNetValue,0)),2) as NetVal1, Round(sum(isnull(DocEntValue,0))- sum(isnull(DocEntTotDisc,0))+sum(isnull(DocEntTax,0))+sum(isnull(DocEntAddons,0))-sum(isnull(DocEntDedns,0)),2) as NetVal2, 0.00 as DifAdd, 0.00 as DifDed, 123 as DbVer Into TempTrans From dbo.StkTrnDtls Where TrnType in (1100,1200,1400,1500,2200,2300,2400,2500) Group by TrnType,TrnCtrlNo Having sum(isnull(DocEntNetValue,0)) <> round(sum(isnull(DocEntValue,0))-sum(isnull(DocEntTotDisc,0))+sum(isnull(DocEntTax,0))+sum(isnull(DocEntAddons,0))-sum(isnull(DocEntDedns,0)),2)
+-GO-
+Update TempTrans Set DbVer = ShoperDbVer From dbo.StkTrnHdr a, TempTrans b Where b.TrnType = a.TrnType and a.TrnCtrlNo = b.TrnCtrlNo 
+-GO-
+Delete From TempTrans Where DbVer <> 730
+-GO-
+Update TempTrans Set DifDed = round((NetVal2-NetVal1),2) Where NetVal2-NetVal1>0
+-GO-
+Update TempTrans Set DifAdd = Round((NetVal1-NetVal2),2) Where NetVal1-NetVal2>0
+-GO-
+Update TempTrans Set DednATax = DednATax+DifDed
+-GO-
+Update TempTrans Set AddOnATax = AddOnATax+DifAdd
+-GO-
+Update TempTrans Set MaxRow = (Select Max(EntSrlNo) From dbo.StkTrnDtls Where StkTrnDtls.TrnType = TempTrans.Trntype and StkTrnDtls.TrnCtrlNo = TempTrans.TrnCtrlNo)
+-GO-
+Update dbo.StkTrnDtls SET DocEntBefTaxDedns = Round(DocEntBefTaxDedns+(a.DednBTax-b.SumDednBTax),2) From (Select Trntype,TrnCtrlNo,MaxRow,DednBTax from TempTrans where DednBTax>0) a, (Select Trntype,TrnCtrlNo,SUM(DocEntBefTaxDedns) as SumDednBTax From dbo.StkTrnDtls Where TrnType In (1100,1200,1400,1500,2200,2300,2400,2500) Group by Trntype,TrnCtrlNo) b, dbo.StkTrnDtls as c  Where a.TrnType = b.Trntype and a.TrnCtrlNo = b.TrnCtrlNo and a.TrnType = c.Trntype and a.TrnCtrlNo = c.TrnCtrlNo and c.EntSrlNo = a.MaxRow
+-GO-
+Update dbo.StkTrnDtls SET DocEntAftTaxDedns = Round(DocEntAftTaxDedns+(a.DednATax-b.SumDednATax),2) From (Select Trntype,TrnCtrlNo,MaxRow,DednATax from TempTrans where DednATax>0) a, (Select Trntype,TrnCtrlNo,SUM(DocEntAftTaxDedns) as SumDednATax From dbo.StkTrnDtls Where TrnType In (1100,1200,1400,1500,2200,2300,2400,2500) Group by Trntype,TrnCtrlNo) b, dbo.StkTrnDtls as c Where a.TrnType = b.Trntype and a.TrnCtrlNo = b.TrnCtrlNo and a.TrnType = c.Trntype and a.TrnCtrlNo = c.TrnCtrlNo and c.EntSrlNo = a.MaxRow
+-GO-
+Update dbo.StkTrnDtls SET DocEntBefTaxAddons = Round(DocEntBefTaxAddons+(a.AddOnBTax-b.SumAddOnBTax),2) From (Select Trntype,TrnCtrlNo,MaxRow,AddOnBTax from TempTrans where AddOnBTax>0) a, (Select Trntype,TrnCtrlNo,SUM(DocEntBefTaxAddons) as SumAddOnBTax From dbo.StkTrnDtls Where TrnType In (1100,1200,1400,1500,2200,2300,2400,2500) Group by Trntype,TrnCtrlNo) b, dbo.StkTrnDtls as c Where a.TrnType = b.Trntype and a.TrnCtrlNo = b.TrnCtrlNo and a.TrnType = c.Trntype and a.TrnCtrlNo = c.TrnCtrlNo and c.EntSrlNo = a.MaxRow
+-GO-
+Update dbo.StkTrnDtls SET DocEntAftTaxAddons = Round(DocEntAftTaxAddons+(a.AddOnATax-b.SumAddOnATax),2) From (Select Trntype,TrnCtrlNo,MaxRow,AddOnATax from TempTrans where AddOnATax>0) a, (Select Trntype,TrnCtrlNo,SUM(DocEntAftTaxAddons) as SumAddOnATax From dbo.StkTrnDtls Where TrnType In (1100,1200,1400,1500,2200,2300,2400,2500) Group by Trntype,TrnCtrlNo) b, dbo.StkTrnDtls as c Where a.TrnType = b.Trntype and a.TrnCtrlNo = b.TrnCtrlNo and a.TrnType = c.Trntype and a.TrnCtrlNo = c.TrnCtrlNo and c.EntSrlNo = a.MaxRow
+-GO-
+Update dbo.StkTrnDtls Set DocEntAddons = Round(DocEntBefTaxAddons+DocEntAftTaxAddons,2), DocEntDedns = Round(DocEntBefTaxDedns+DocEntAftTaxDedns,2) From dbo.StkTrnDtls a, TempTrans b Where a.Trntype = b.Trntype and a.TrnCtrlNo = b.TrnCtrlNo 
+-GO-
+Update dbo.StkTrnDtls SET TaxComp1 = DocEntTax From dbo.StkTrnDtls a, TempTrans b Where a.Trntype = b.Trntype and a.TrnCtrlNo = b.TrnCtrlNo 
+-GO-
+Update dbo.StkTrnDtls SET DocEntNetValue = Round((DocEntValue+DocEntTax+DocEntAddons)-(DocEntDedns+DocEntTotDisc),2) From dbo.StkTrnDtls a, TempTrans b Where a.Trntype = b.Trntype and a.TrnCtrlNo = b.TrnCtrlNo 
+-GO-
+Update dbo.StkTrnHdr Set TotDocValue = Round(isnull(a.DocEntValue,0),2), TotDocDisc = Round(isnull(DocEntTotDisc,0),2), TotDocTax = Round(isnull(DocEntTax,0),2), TaxComp1 = Round(isnull(DocEntTax,0),2), TotDocAddons = Round(isnull(DocEntAddons,0),2), TotDocDedns = Round(isnull(DocEntDedns,0),2), TotDocEntBefTaxAddons = Round(isnull(DocEntBefTaxAddons,0),2), TotDocEntBefTaxDedns = Round(isnull(DocEntBefTaxDedns,0),2), TotDocEntAftTaxAddons = Round(isnull(DocEntAftTaxAddons,0),2), TotDocEntAftTaxDedns = Round(isnull(DocEntAftTaxDedns,0),2), NetDocValue = Round(isnull(DocEntNetValue,0),2) From (Select Trntype,TrnCtrlNo,Sum(DocEntValue) as DocEntValue, sum(DocEntTotDisc) as DocEntTotDisc, sum(DocEntTax) as DocEntTax, Sum(DocEntAddons) as DocEntAddons, sum(DocEntDedns) as DocEntDedns, sum(DocEntBefTaxAddons) as DocEntBefTaxAddons, sum(DocEntBefTaxDedns) as DocEntBefTaxDedns, sum(DocEntAftTaxAddons) as DocEntAftTaxAddons, sum(DocEntAftTaxDedns) as DocEntAftTaxDedns, sum(DocEntNetValue) as DocEntNetValue From dbo.StkTrnDtls Where TrnType in (1100,1200,1400,1500,2200,2300,2400,2500) Group by Trntype,TrnCtrlNo ) a, dbo.StkTrnHdr b Where a.TrnType = b.Trntype and a.TrnCtrlNo = b.TrnCtrlNo and b.TrnType In (1100,1200,1400,1500,2200,2300,2400,2500) and b.ShoperDbVer = 730
+-GO-
+drop table TempTrans
+-GO-
+
+</S9QSCRIPT>
+</S9QSQLBLK>
+
+
+<S9QSQLBLK>
+<S9QSCRIPTID>S9Q_013_2_0005</S9QSCRIPTID>
+<S9QTITLE>Existing Data Correcting in the Transaction Table (STD and STH) for Void Transaction of Goods Inward and Goods outwards</S9QTITLE>
+<S9QPGMTYPE>L</S9QPGMTYPE>
+<S9QVERSION>*</S9QVERSION>
+<S9QENVIRONMENT>P</S9QENVIRONMENT>
+<S9QRUNMULTIPLE>0</S9QRUNMULTIPLE>
+<S9QSEVERITY>3</S9QSEVERITY>
+<S9QQRYTYPE>DML</S9QQRYTYPE>
+<S9QSENDFEEDBACK>1</S9QSENDFEEDBACK>
+<S9QSCRIPT>
+
+update dbo.stktrndtls set Vactr = (select intg from dbo.sysparam where paramcode = 'VaSysCounter'),  Phyqtyout=Phyqtyin,PhyQtyin=0 where trntype=2710 and Phyqtyout=0 and phyqtyin > 0 
+-GO-
+update dbo.stktrndtls set Vactr = (select intg from dbo.sysparam where paramcode = 'VaSysCounter'),  StkUpdtValueOut=StkUpdtValuein,StkUpdtValuein=0 where Trntype = 2710 and StkupdtValueOut=0 and StkUpdtValuein > 0 
+-GO-
+update dbo.stktrndtls set Vactr = (select intg from dbo.sysparam where paramcode = 'VaSysCounter'),  Phyqtyout=Phyqtyin,PhyQtyin=0 where trntype=2720 and Phyqtyout=0 and phyqtyin > 0 
+-GO-
+update dbo.stktrndtls set Vactr = (select intg from dbo.sysparam where paramcode = 'VaSysCounter'),  StkUpdtValueOut=StkUpdtValuein,StkUpdtValuein=0 where Trntype = 2720 and StkupdtValueOut=0 and StkUpdtValuein > 0 
+-GO-
+update dbo.stktrndtls set Vactr = (select intg from dbo.sysparam where paramcode = 'VaSysCounter'),  Phyqtyout=Phyqtyin,PhyQtyin=0 where trntype=2730 and Phyqtyout=0 and phyqtyin > 0 
+-GO-
+update dbo.stktrndtls set Vactr = (select intg from dbo.sysparam where paramcode = 'VaSysCounter'),  StkUpdtValueOut=StkUpdtValuein,StkUpdtValuein=0 where Trntype = 2730 and StkupdtValueOut=0 and StkUpdtValuein > 0 
+-GO-
+update dbo.stktrndtls set Vactr = (select intg from dbo.sysparam where paramcode = 'VaSysCounter'),  Phyqtyout=Phyqtyin,PhyQtyin=0 where trntype=2740 and Phyqtyout=0 and phyqtyin > 0 
+-GO-
+update dbo.stktrndtls set Vactr = (select intg from dbo.sysparam where paramcode = 'VaSysCounter'),  StkUpdtValueOut=StkUpdtValuein,StkUpdtValuein=0 where Trntype = 2740 and StkupdtValueOut=0 and StkUpdtValuein > 0 
+-GO-
+update dbo.stktrndtls set Vactr = (select intg from dbo.sysparam where paramcode = 'VaSysCounter'),  Phyqtyin=Phyqtyout,Phyqtyout=0 where trntype=1710 and PhyqtyIn=0 and phyqtyOut > 0 
+-GO-
+update dbo.stktrndtls set Vactr = (select intg from dbo.sysparam where paramcode = 'VaSysCounter'),  StkUpdtValuein=StkUpdtValueOut,StkUpdtValueOut=0 where Trntype = 1710 and StkupdtValueIn=0 and StkUpdtValueOut > 0 
+-GO-
+update dbo.stktrndtls set Vactr = (select intg from dbo.sysparam where paramcode = 'VaSysCounter'),  Phyqtyin=Phyqtyout,Phyqtyout=0 where trntype=1720 and PhyqtyIn=0 and phyqtyOut > 0 
+-GO-
+update dbo.stktrndtls set Vactr = (select intg from dbo.sysparam where paramcode = 'VaSysCounter'),  StkUpdtValuein=StkUpdtValueOut,StkUpdtValueOut=0 where Trntype = 1720 and StkupdtValueIn=0 and StkUpdtValueOut > 0 
+-GO-
+update dbo.stktrndtls set Vactr = (select intg from dbo.sysparam where paramcode = 'VaSysCounter'),  Phyqtyin=Phyqtyout,Phyqtyout=0 where trntype=1730 and PhyqtyIn=0 and phyqtyOut > 0 
+-GO-
+update dbo.stktrndtls set Vactr = (select intg from dbo.sysparam where paramcode = 'VaSysCounter'),  StkUpdtValuein=StkUpdtValueOut,StkUpdtValueOut=0 where Trntype = 1730 and StkupdtValueIn=0 and StkUpdtValueOut > 0 
+-GO-
+update dbo.stktrndtls set Vactr = (select intg from dbo.sysparam where paramcode = 'VaSysCounter'),  Phyqtyin=Phyqtyout,Phyqtyout=0 where trntype=1740 and PhyqtyIn=0 and phyqtyOut > 0 
+-GO-
+update dbo.stktrndtls set Vactr = (select intg from dbo.sysparam where paramcode = 'VaSysCounter'),  StkUpdtValuein=StkUpdtValueOut,StkUpdtValueOut=0 where Trntype = 1740 and StkupdtValueIn=0 and StkUpdtValueOut > 0 
+-GO-
+
+</S9QSCRIPT>
+</S9QSQLBLK>
+
+
+<S9QSQLBLK>
+<S9QSCRIPTID>S9Q_013_2_0006</S9QSCRIPTID>
+<S9QTITLE>Existing Data Correcting in the Transaction Table (STD and STH) for updating the Tax components and Tally Interface</S9QTITLE>
+<S9QPGMTYPE>L</S9QPGMTYPE>
+<S9QVERSION>*</S9QVERSION>
+<S9QENVIRONMENT>P</S9QENVIRONMENT>
+<S9QRUNMULTIPLE>0</S9QRUNMULTIPLE>
+<S9QSEVERITY>3</S9QSEVERITY>
+<S9QQRYTYPE>DML</S9QQRYTYPE>
+<S9QSENDFEEDBACK>1</S9QSENDFEEDBACK>
+<S9QSCRIPT>
+
+Update dbo.StkTrnDtls Set SField4 = '36402', StdTaxComp1Per= Taxcomp1, Taxcomp1 = DocEntTax,VaCtr = (Select Intg From dbo.SysParam Where paramcode like 'VaSysCounter') Where TrnType in (2200,2300,2500) and DocEntTax>0 and StdTaxComp1Per = 0
+-GO-
+UPDATE dbo.STKTRNDTLS SET SRCTAXTYPE = 0, Vactr = (select intg from dbo.sysparam where paramcode = 'VaSysCounter')  WHERE SRCTAXTYPE = '-N..A-' and TrnType in (1100,1200,1400,1500,2200,2300,2400,2500)
+-GO-
+
+</S9QSCRIPT>
+</S9QSQLBLK>
+
+<S9QSQLBLK>
+<S9QSCRIPTID>S9Q_013_2_0007</S9QSCRIPTID>
+<S9QTITLE>Physical Stock Taking - Inserting the Reasons for Stock Taking</S9QTITLE>
+<S9QPGMTYPE>L</S9QPGMTYPE>
+<S9QPGMTYPE>I</S9QPGMTYPE>
+<S9QVERSION>*</S9QVERSION>
+<S9QENVIRONMENT>P</S9QENVIRONMENT>
+<S9QRUNMULTIPLE>0</S9QRUNMULTIPLE>
+<S9QSEVERITY>3</S9QSEVERITY>
+<S9QQRYTYPE>DML</S9QQRYTYPE>
+<S9QSENDFEEDBACK>1</S9QSENDFEEDBACK>
+<S9QSCRIPT>
+
+Delete from dbo.Genlookup where recid = 0 and code = '13100'
+-GO-
+Delete from dbo.Genlookup where recid = '13100'
+-GO-
+Delete from dbo.GenlookUpExtd where recid = '13100'
+-GO-
+Insert dbo.GenlookUp Select 0,'13100','Stock Take Mode','N',null,null,null,null,null
+-GO-
+Insert dbo.GenlookUp Select 13100,1,'Annual Stock Take','N',null,null,null,null,null
+-GO-
+Insert dbo.GenlookUp Select 13100,2,'Half Yearly Stock Take','N',null,null,null,null,null
+-GO-
+Insert dbo.GenlookUp Select 13100,3,'Quarterly Stock Take','N',null,null,null,null,null
+-GO-
+Insert dbo.GenlookUp Select 13100,4,'Monthly Stock Take','N',null,null,null,null,null
+-GO-
+Insert dbo.GenlookUpExtd Select 13100,'Stock Take Mode',0,'Variable',111,NULL,NULL,NULL,'11',NULL,NULL,'super',1,'.','123'
+-GO-
+
+</S9QSCRIPT>
+</S9QSQLBLK>
+
+
+<S9QSQLBLK>
+<S9QSCRIPTID>S9Q_013_2_0008</S9QSCRIPTID>
+<S9QTITLE>Existing Data Correcting in the Itemmaster, if Stock Taking commenced</S9QTITLE>
+<S9QPGMTYPE>L</S9QPGMTYPE>
+<S9QVERSION>*</S9QVERSION>
+<S9QENVIRONMENT>P</S9QENVIRONMENT>
+<S9QRUNMULTIPLE>0</S9QRUNMULTIPLE>
+<S9QSEVERITY>3</S9QSEVERITY>
+<S9QQRYTYPE>DML</S9QQRYTYPE>
+<S9QSENDFEEDBACK>1</S9QSENDFEEDBACK>
+<S9QSCRIPT>
+
+Update dbo.ItemMaster Set IsBillable=JwlCaratage ,NField1=1, FlgStockTake = 1, VaCtr = (select intg from dbo.sysparam where paramcode = 'VaSysCounter') Where NField1=2
+-GO-
+
+</S9QSCRIPT>
+</S9QSQLBLK>
+
+
+<S9QSQLBLK>
+<S9QSCRIPTID>S9Q_013_2_0009</S9QSCRIPTID>
+<S9QTITLE>Physical Stock Taking - Adding New Column PhyStockTakingItemBkUp</S9QTITLE>
+<S9QPGMTYPE>L</S9QPGMTYPE>
+<S9QPGMTYPE>I</S9QPGMTYPE>
+<S9QVERSION>*</S9QVERSION>
+<S9QENVIRONMENT>P</S9QENVIRONMENT>
+<S9QRUNMULTIPLE>0</S9QRUNMULTIPLE>
+<S9QSEVERITY>3</S9QSEVERITY>
+<S9QQRYTYPE>DDL</S9QQRYTYPE>
+<S9QSENDFEEDBACK>1</S9QSENDFEEDBACK>
+<S9QSCRIPT>
+
+Alter Table [dbo].PhyStockTakingItemBkUp Add StkTakeMode VARCHAR(64)
+-GO-
+
+</S9QSCRIPT>
+</S9QSQLBLK>
+
+<S9QSQLBLK>
+<S9QSCRIPTID>S9Q_013_2_0010</S9QSCRIPTID>
+<S9QTITLE>Physical Stock Taking - Adding Script Version Table</S9QTITLE>
+<S9QPGMTYPE>L</S9QPGMTYPE>
+<S9QPGMTYPE>I</S9QPGMTYPE>
+<S9QVERSION>*</S9QVERSION>
+<S9QENVIRONMENT>P</S9QENVIRONMENT>
+<S9QRUNMULTIPLE>0</S9QRUNMULTIPLE>
+<S9QSEVERITY>3</S9QSEVERITY>
+<S9QQRYTYPE>DML</S9QQRYTYPE>
+<S9QSENDFEEDBACK>1</S9QSENDFEEDBACK>
+<S9QSCRIPT>
+
+INSERT INTO [dbo].VersionwiseTblsScript(VerID,SrlNo,TblScript,VAUid,VActr,VATermId,VACompCode) VALUES (4,1,'Alter Table [dbo].PhyStockTakingItemBkUp Add StkTakeMode VARCHAR(64)','',1,'.','')
+-GO-
+INSERT INTO [dbo].VersionwiseTblsScript(VerID,SrlNo,TblScript,VAUid,VActr,VATermId,VACompCode) VALUES (4,2,'Drop Table [dbo].BAKPhyStockTakingItemBkUp','',1,'.','')
+-GO-
+INSERT INTO [dbo].VersionwiseTblsScript(VerID,SrlNo,TblScript,VAUid,VActr,VATermId,VACompCode) VALUES (4,3,'CREATE TABLE [dbo].[BAKPhyStockTakingItemBkUp] ([ScopeId] [int] NOT NULL ,[StockNo] [varchar] (50)   NOT NULL ,[BatchSrlNo] [varchar] (50)   NOT NULL ,[ItemDesc] [varchar] (75)   NULL , [CurrCost] [money] NULL ,[MRP] [money] NULL ,[SOH] [real] NULL ,[PhyStock] [real] NULL ,[DiffQty] [real] NULL ,[UpdtFlag] [int] NULL ,[PhyStkBatchNo] [varchar] (16)   NULL ,[PageNo] [int] NULL ,[RecDt] [datetime] NULL ,[RecTime] [datetime] NULL ,[LocId] [varchar] (50)   NULL ,[SC1Cd] [varchar] (50)   NULL ,[SC1Desc] [varchar] (256)   NULL ,[SC2Cd] [varchar] (50)   NULL ,[SC2Desc] [varchar] (256)   NULL ,[Cls1Cd] [varchar] (50)   NULL ,[Cls1Desc] [varchar] (256)   NULL ,[Cls2Cd] [varchar] (50)   NULL ,[Cls2Desc] [varchar] (256)   NULL ,[SubCls1Cd] [varchar] (50)   NULL ,[SubCls1Desc] [varchar] (50)   NULL ,[SubCls2Cd] [varchar] (50)   NULL ,[SubCls2Desc] [varchar] (50)   NULL ,[SizeCd] [varchar] (50)   NULL ,[UserId] [varchar] (100)   NULL ,[VAUid] [varchar] (32)   NULL ,[VActr] [int] NULL ,[VATermId] [varchar] (32)   NULL ,[VACompCode] [varchar] (16)   NULL ,[SHOPERDBVER] [Int] NULL ,[StkTakeMode] VARCHAR(64) NULL,[UpdFlag] [varchar] (1)   NULL ) ON [PRIMARY]','',1,'.','')
+-GO-
+Update [dbo].VersionwiseTblsScript Set Vactr = (select intg from dbo.sysparam where paramcode = 'VaSysCounter') where VerId=4
+-GO-
+
+</S9QSCRIPT>
+</S9QSQLBLK>
+
+<S9QSQLBLK>
+<S9QSCRIPTID>S9Q_013_2_0012</S9QSCRIPTID> 
+<S9QTITLE></S9QTITLE>
+<S9QPGMTYPE>L</S9QPGMTYPE>
+<S9QPGMTYPE>I</S9QPGMTYPE>
+<S9QVERSION>*</S9QVERSION>
+<S9QENVIRONMENT>P</S9QENVIRONMENT>
+<S9QRUNMULTIPLE>0</S9QRUNMULTIPLE>
+<S9QQRYTYPE>DLL</S9QQRYTYPE>
+	<S9QSCRIPT>BackTableCreation.clsBackTabCrt</S9QSCRIPT>		
+</S9QSQLBLK>

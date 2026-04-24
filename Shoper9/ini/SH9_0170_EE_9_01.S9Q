@@ -1,0 +1,2308 @@
+<s9qsqlblk>
+<s9qScriptID>S9Q_017_7_0002</s9qScriptID>
+<s9qtitle></s9qtitle>
+<s9qpgmtype>I</s9qpgmtype>
+<s9qpgmtype>L</s9qpgmtype>
+<s9qversion>*</s9qversion>
+<s9qenvironment>P</s9qenvironment>
+<s9qRunMultiple>1</s9qRunMultiple>
+<s9qQryType>DML</s9qQryType>
+<s9qScript>
+
+Insert Into GenLookUp(Recid,Code,Descr,Flag) Values(14300,'SR406500+PROGRAMSTART+1','shprfw03.ClsUserAuthorise',1)
+-GO-
+Insert Into GenLookUp(Recid,Code,Descr,Flag) Values(14300,'SR730000+PROGRAMSTART+1','shprfw03.ClsUserAuthorise',1)
+-GO-
+Insert Into GenLookUp(Recid,Code,Descr,Flag) Values(14300,'SR436900+PROGRAMSTART+1','shprfw03.ClsUserAuthorise',1)
+-GO-
+
+</s9qScript>		
+</s9qsqlblk>
+
+<s9qsqlblk>
+  <s9qScriptid>S9Q_017_1_0004</s9qScriptid> 
+  <s9qtitle></s9qtitle>
+  <s9qpgmtype>I</s9qpgmtype>
+  <s9qpgmtype>L</s9qpgmtype>
+  <s9qversion>*</s9qversion>
+  <s9qenvironment>P</s9qenvironment>
+  <s9qRunMultiple>0</s9qRunMultiple>
+  <s9qQryType>DDL</s9qQryType>
+  <s9qScript>
+
+update sysparam set txt='00010' where paramcode='InBillingTrnsConsideredForStockCheck'
+-GO-
+
+  </s9qScript>		
+</s9qsqlblk>
+
+<s9qsqlblk>
+  <s9qScriptid>	S9Q_0170_9_0001	</s9qScriptid>
+  <s9qtitle>All DDL Statements.</s9qtitle>
+  <s9qpgmtype>I</s9qpgmtype>
+  <s9qpgmtype>L</s9qpgmtype>
+  <s9qversion>*</s9qversion>
+  <s9qenvironment>H</s9qenvironment>
+  <s9qenvironment>P</s9qenvironment>
+  <s9qenvironment>R</s9qenvironment>
+  <s9qRunMultiple>1</s9qRunMultiple>
+  <s9qQryType>DDL</s9qQryType>
+  <s9qScript>
+
+Alter Table PromoMnHeader Add AndConditionFreeItem Int
+-GO-
+Alter Table PromoMnHeader Add NoOfAndCondsFreeItem Int
+-GO-
+Alter Table PromoMnHeader Add SalesPromoId Int
+-GO-
+Alter Table PromoMnHeader Add AddlItemFlag Int
+-GO-
+Alter Table PromoMnHeader Add AddlItemDiscType Int
+-GO-
+
+  </s9qScript>
+</s9qsqlblk>
+
+
+<s9qsqlblk>
+  <s9qScriptid>	S9Q_0170_9_0002	</s9qScriptid>
+  <s9qtitle>All DDL Statements.</s9qtitle>
+  <s9qpgmtype>I</s9qpgmtype>
+  <s9qpgmtype>L</s9qpgmtype>
+  <s9qversion>*</s9qversion>
+  <s9qenvironment>P</s9qenvironment>
+  <s9qenvironment>R</s9qenvironment>
+  <s9qRunMultiple>1</s9qRunMultiple>
+  <s9qQryType>DDL</s9qQryType>
+  <s9qScript>
+
+CREATE TABLE [TmpPriceMaster] (
+ [Stockno] [varchar] (32) NULL ,
+ [Class1Cd] [varchar] (16) NULL ,
+ [Class2Cd] [varchar] (16) NULL ,
+ [CLASS1DESC] [varchar] (50) NULL ,
+ [CLASS2DESC] [varchar] (50) NULL ,
+ [SUBCLASS1CD] [varchar] (16) NULL ,
+ [SUBCLASS2CD] [varchar] (16) NULL ,
+ [SUBCLASS1DESC] [varchar] (40) NULL ,
+ [SUBCLASS2DESC] [varchar] (50) NULL ,
+ [SIZECD] [varchar] (16) NULL ,
+ [RETAIL_PRICE] [money] NULL ,
+ [CURRENTCOST] [money] NULL ,
+ [ITEMDESC] [varchar] (60) NULL ,
+ [PRODTAXTYPE] [varchar] (16) NULL ,
+ [PRODTAXDESC] [varchar] (64) NULL ,
+ [SIZEGROUPID] [varchar] (16) NULL ,
+ [SIZEGROUPDESC] [varchar] (60) NULL ,
+ [SIZEGROUPSRLNO] [smallint] NULL ,
+ [ANALCODE1] [varchar] (16) NULL ,
+ [ANALDESC1] [varchar] (64) NULL ,
+ [ANALCODE2] [varchar] (16) NULL ,
+ [ANALDESC2] [varchar] (64) NULL ,
+ [ANALCODE3] [varchar] (16) NULL ,
+ [ANALDESC3] [varchar] (64) NULL ,
+ [ANALCODE4] [varchar] (16) NULL ,
+ [ANALDESC4] [varchar] (64) NULL ,
+ [ANALCODE5] [varchar] (16) NULL ,
+ [ANALDESC5] [varchar] (64) NULL ,
+ [VENDORCODE] [varchar] (32) NULL ,
+ [SUPERCLASS1] [varchar] (16) NULL ,
+ [SUPERCLASS2] [varchar] (16) NULL ,
+ [SUPERCLASS1DESC] [varchar] (50) NULL ,
+ [SUPERCLASS2DESC] [varchar] (50) NULL ,
+ [LEASTSALABLEQTY] [money] NULL ,
+ [DEALER_PRICE] [money] NULL ,
+ [LASTPURCHPRICE] [money] NULL ,
+ [ISRPTAXINCLUSIVE] [varchar] (2) NULL ,
+ [REGULARIND] [varchar] (2) NULL ,
+ [GRADECD] [varchar] (16) NULL ,
+ [BatchSrlNo] [varchar] (16) NULL ,
+ [IsInventoryItem] [varchar] (2) NULL ,
+ [ImagePresent] [varchar] (2) NULL ,
+ [SrcTaxType] [varchar] (16) NULL ,
+ [ExtDescPresent] [varchar] (2) NULL ,
+ [ReordLvl] [money] NULL ,
+ [EOQ] [money] NULL ,
+ [MinOrdQty] [money] NULL ,
+ [IsBillable] [varchar] (2) NULL ,
+ [IsService] [varchar] (2) NULL ,
+ [RtlMarkUp] [money] NULL ,
+ [DlrMarkUp] [money] NULL ,
+ [MfgDate] [datetime] NULL ,
+ [ExpDate] [datetime] NULL ,
+ [ShelfLife] [int] NULL ,
+ [CCStockNo] [varchar] (40) NULL ,
+ [FinalMRP] [money] NULL ,
+ [IsConsignmentItem] [varchar] (2) NULL ,
+ [ANALCODE6] [varchar] (16) NULL ,
+ [ANALDESC6] [varchar] (64) NULL ,
+ [ANALCODE7] [varchar] (16) NULL ,
+ [ANALDESC7] [varchar] (64) NULL ,
+ [ANALCODE8] [varchar] (16) NULL ,
+ [ANALDESC8] [varchar] (64) NULL ,
+ [ANALCODE9] [varchar] (16) NULL ,
+ [ANALDESC9] [varchar] (64) NULL ,
+ [ANALCODE10] [varchar] (16) NULL ,
+ [ANALDESC10] [varchar] (64) NULL ,
+ [ANALCODE11] [varchar] (16) NULL ,
+ [ANALDESC11] [varchar] (64) NULL ,
+ [ANALCODE12] [varchar] (16) NULL ,
+ [ANALDESC12] [varchar] (64) NULL ,
+ [ANALCODE13] [varchar] (16) NULL ,
+ [ANALDESC13] [varchar] (64) NULL ,
+ [ANALCODE14] [varchar] (16) NULL ,
+ [ANALDESC14] [varchar] (64) NULL ,
+ [ANALCODE15] [varchar] (16) NULL ,
+ [ANALDESC15] [varchar] (64) NULL ,
+ [ANALCODE16] [varchar] (16) NULL ,
+ [ANALDESC16] [varchar] (64) NULL ,
+ [ANALCODE17] [varchar] (16) NULL ,
+ [ANALDESC17] [varchar] (64) NULL ,
+ [ANALCODE18] [varchar] (16) NULL ,
+ [ANALDESC18] [varchar] (64) NULL ,
+ [ANALCODE19] [varchar] (16) NULL ,
+ [ANALDESC19] [varchar] (64) NULL ,
+ [ANALCODE20] [varchar] (16) NULL ,
+ [ANALDESC20] [varchar] (64) NULL ,
+ [ANALCODE21] [varchar] (16) NULL ,
+ [ANALDESC21] [varchar] (64) NULL ,
+ [ANALCODE22] [varchar] (16) NULL ,
+ [ANALDESC22] [varchar] (64) NULL ,
+ [ANALCODE23] [varchar] (16) NULL ,
+ [ANALDESC23] [varchar] (64) NULL ,
+ [ANALCODE24] [varchar] (16) NULL ,
+ [ANALDESC24] [varchar] (64) NULL ,
+ [ANALCODE25] [varchar] (16) NULL ,
+ [ANALDESC25] [varchar] (64) NULL ,
+ [ANALCODE26] [varchar] (16) NULL ,
+ [ANALDESC26] [varchar] (64) NULL ,
+ [ANALCODE27] [varchar] (16) NULL ,
+ [ANALDESC27] [varchar] (64) NULL ,
+ [ANALCODE28] [varchar] (16) NULL ,
+ [ANALDESC28] [varchar] (64) NULL ,
+ [ANALCODE29] [varchar] (16) NULL ,
+ [ANALDESC29] [varchar] (64) NULL ,
+ [ANALCODE30] [varchar] (16) NULL ,
+ [ANALDESC30] [varchar] (64) NULL ,
+ [ANALCODE31] [varchar] (16) NULL ,
+ [ANALDESC31] [varchar] (64) NULL ,
+ [ANALCODE32] [varchar] (16) NULL ,
+ [ANALDESC32] [varchar] (64) NULL 
+) ON [PRIMARY]
+
+-GO-
+Create table [IniLoadingErrorLog] (
+	[RunNumber] int, 
+	[RunDate] Datetime, 
+	ErrorItem varchar(64), 
+	ErrorRecords int, 
+	ErrorDesc varchar(255),
+	UploadType int,
+	UploadSource varchar(64),
+	UpdInsertParms varchar (64)) 
+-GO-
+CREATE TABLE [FileLoadingStatus] (
+	[file_name] [varchar] (32) NULL ,
+	[filepath] [varchar] (200) NULL ,
+	[dateinsert] [datetime] NULL ,
+	[RunNumber] Int
+) ON [PRIMARY]
+-GO-
+
+CREATE TABLE [Errole] (
+	[ErrFROM] [numeric](18, 0) NOT NULL ,
+	[ErrDES] [varchar] (255) NULL ,
+	[ErrACC] [varchar] (16) NULL 
+) ON [PRIMARY]
+-GO-
+
+
+  </s9qScript>
+</s9qsqlblk>
+
+
+<s9qsqlblk>
+  <s9qScriptid>	S9Q_0170_9_0003	</s9qScriptid>
+  <s9qtitle>All DDL Statements.</s9qtitle>
+  <s9qpgmtype>I</s9qpgmtype>
+  <s9qpgmtype>L</s9qpgmtype>
+  <s9qversion>*</s9qversion>
+  <s9qenvironment>P</s9qenvironment>
+  <s9qenvironment>R</s9qenvironment>
+  <s9qRunMultiple>1</s9qRunMultiple>
+  <s9qQryType>DML</s9qQryType>
+  <s9qScript>
+
+Insert into Genlookup (RecId,Code,Descr,Flag) values (14400,'SR537800+PRICEREVISIONUPDATED+1','AlertInterface.ClsPRUpdate','1')
+-GO-
+INSERT INTO [Errole] ([ErrFROM], [ErrDES], [ErrACC] ) VALUES ( 3707, 'Connectivity Failure. Contact Administrator/Vendor', 'OK' )
+-GO-
+INSERT INTO [Errole] ([ErrFROM], [ErrDES], [ErrACC] ) VALUES ( 3421, 'Conversion Error. Contact Administrator/Vendor cannot continue', 'OK' )
+-GO-
+INSERT INTO [Errole] ([ErrFROM], [ErrDES], [ErrACC] ) VALUES ( 3251, 'Internal Error.(operation not Supported) Contact Vendor', 'OK' )
+-GO-
+INSERT INTO [Errole] ([ErrFROM], [ErrDES], [ErrACC] ) VALUES ( 3219, 'Internal Error.(Operation not Supported in Context) Contact Vendor', 'OK' )
+-GO-
+INSERT INTO [Errole] ([ErrFROM], [ErrDES], [ErrACC] ) VALUES ( 3246, 'Internal Error.(cannot close Connection) Contact Vendor', 'OK' )
+-GO-
+INSERT INTO [Errole] ([ErrFROM], [ErrDES], [ErrACC] ) VALUES ( 3709, 'Connection no longer Valid. Contact Vendor', 'OK' )
+-GO-
+INSERT INTO [Errole] ([ErrFROM], [ErrDES], [ErrACC] ) VALUES ( 3265, 'cannot find object (Contact Administrator/Vendor)', 'OK' )
+-GO-
+INSERT INTO [Errole] ([ErrFROM], [ErrDES], [ErrACC] ) VALUES ( 3021, 'Internal Error  (No current Record). Contact Vendor', 'OK' )
+-GO-
+INSERT INTO [Errole] ([ErrFROM], [ErrDES], [ErrACC] ) VALUES ( 3715, 'Internal Error (invalid op. on a static object).Contact Vendor', 'OK' )
+-GO-
+INSERT INTO [Errole] ([ErrFROM], [ErrDES], [ErrACC] ) VALUES ( 3710, 'Internal Error (invalid op. on a static object).Contact Vendor', 'OK' )
+-GO-
+INSERT INTO [Errole] ([ErrFROM], [ErrDES], [ErrACC] ) VALUES ( 3704, 'Internal Error  (object not open). Contact Vendor', 'OK' )
+-GO-
+INSERT INTO [Errole] ([ErrFROM], [ErrDES], [ErrACC] ) VALUES ( 3367, 'Duplicate Object.cannot append.Internal Error.Contact Vendor', 'OK' )
+-GO-
+INSERT INTO [Errole] ([ErrFROM], [ErrDES], [ErrACC] ) VALUES ( 3705, 'Internal Error (op. Not allowed object open).Contact Vendor', 'OK' )
+-GO-
+INSERT INTO [Errole] ([ErrFROM], [ErrDES], [ErrACC] ) VALUES ( 3002, 'Error whole reading the file. Contact Adminstrator/Vendor', 'OK' )
+-GO-
+INSERT INTO [Errole] ([ErrFROM], [ErrDES], [ErrACC] ) VALUES ( 3706, 'cannot find provider . Contact Administrator / Vendor', 'OK' )
+-GO-
+INSERT INTO [Errole] ([ErrFROM], [ErrDES], [ErrACC] ) VALUES ( 3003, 'Error While opening the file.Contact Administrator/Vendor', 'OK' )
+-GO-
+INSERT INTO [Errole] ([ErrFROM], [ErrDES], [ErrACC] ) VALUES ( 3713, 'Still Connecting. No. OP.Allowed Contact Administrator/Vendor', 'OK' )
+-GO-
+INSERT INTO [Errole] ([ErrFROM], [ErrDES], [ErrACC] ) VALUES ( 3711, 'Invalid OP. Another command is being processed.Contact Administrator/Vendor', 'OK' )
+-GO-
+INSERT INTO [Errole] ([ErrFROM], [ErrDES], [ErrACC] ) VALUES ( 3716, 'Operation Unsafe for current security.Contact Administrator / Vendor', 'OK' )
+-GO-
+INSERT INTO [Errole] ([ErrFROM], [ErrDES], [ErrACC] ) VALUES ( 3004, 'Error writing tree', 'OK' )
+-GO-
+INSERT INTO [Errole] ([ErrFROM], [ErrDES], [ErrACC] ) VALUES ( 3, 'Internal Error', 'OK' )
+-GO-
+INSERT INTO [Errole] ([ErrFROM], [ErrDES], [ErrACC] ) VALUES ( 5, 'Internal Error', 'OK' )
+-GO-
+INSERT INTO [Errole] ([ErrFROM], [ErrDES], [ErrACC] ) VALUES ( 6, 'Internal Error', 'OK' )
+-GO-
+INSERT INTO [Errole] ([ErrFROM], [ErrDES], [ErrACC] ) VALUES ( 7, 'You have run out of memory', 'ARI' )
+-GO-
+INSERT INTO [Errole] ([ErrFROM], [ErrDES], [ErrACC] ) VALUES ( 9, 'Resource locked. Try later', 'OK' )
+-GO-
+INSERT INTO [Errole] ([ErrFROM], [ErrDES], [ErrACC] ) VALUES ( 11, 'Internal Error', 'OK' )
+-GO-
+INSERT INTO [Errole] ([ErrFROM], [ErrDES], [ErrACC] ) VALUES ( 13, 'Internal Error', 'OK' )
+-GO-
+INSERT INTO [Errole] ([ErrFROM], [ErrDES], [ErrACC] ) VALUES ( 14, 'Resource constrained', 'OK' )
+-GO-
+INSERT INTO [Errole] ([ErrFROM], [ErrDES], [ErrACC] ) VALUES ( 16, 'Internal Error', 'OK' )
+-GO-
+INSERT INTO [Errole] ([ErrFROM], [ErrDES], [ErrACC] ) VALUES ( 17, 'cannot perform this operation now. Try later', 'ARI' )
+-GO-
+INSERT INTO [Errole] ([ErrFROM], [ErrDES], [ErrACC] ) VALUES ( 18, 'Would you like to cancel this process', 'YNC' )
+-GO-
+INSERT INTO [Errole] ([ErrFROM], [ErrDES], [ErrACC] ) VALUES ( 20, 'Internal Error', 'OK' )
+-GO-
+INSERT INTO [Errole] ([ErrFROM], [ErrDES], [ErrACC] ) VALUES ( 28, 'You have run out of stack space', 'ARI' )
+-GO-
+INSERT INTO [Errole] ([ErrFROM], [ErrDES], [ErrACC] ) VALUES ( 35, 'Internal Error', 'OK' )
+-GO-
+INSERT INTO [Errole] ([ErrFROM], [ErrDES], [ErrACC] ) VALUES ( 47, 'Too many processes. Try later', 'ARI' )
+-GO-
+INSERT INTO [Errole] ([ErrFROM], [ErrDES], [ErrACC] ) VALUES ( 48, 'cannot load DLL', 'ARI' )
+-GO-
+INSERT INTO [Errole] ([ErrFROM], [ErrDES], [ErrACC] ) VALUES ( 49, 'cannot load DLL', 'ARI' )
+-GO-
+INSERT INTO [Errole] ([ErrFROM], [ErrDES], [ErrACC] ) VALUES ( 51, 'Internal Error. Try later', 'ARI' )
+-GO-
+INSERT INTO [Errole] ([ErrFROM], [ErrDES], [ErrACC] ) VALUES ( 52, 'File name conflict. Try later', 'ARI' )
+-GO-
+INSERT INTO [Errole] ([ErrFROM], [ErrDES], [ErrACC] ) VALUES ( 53, 'File does not exists', 'OK' )
+-GO-
+INSERT INTO [Errole] ([ErrFROM], [ErrDES], [ErrACC] ) VALUES ( 54, 'Mode conflict', 'OK' )
+-GO-
+INSERT INTO [Errole] ([ErrFROM], [ErrDES], [ErrACC] ) VALUES ( 55, 'File already open', 'ARI' )
+-GO-
+INSERT INTO [Errole] ([ErrFROM], [ErrDES], [ErrACC] ) VALUES ( 57, 'Device not responding', 'ARI' )
+-GO-
+INSERT INTO [Errole] ([ErrFROM], [ErrDES], [ErrACC] ) VALUES ( 58, 'Internal Error', 'OK' )
+-GO-
+INSERT INTO [Errole] ([ErrFROM], [ErrDES], [ErrACC] ) VALUES ( 59, 'Internal Error', 'OK' )
+-GO-
+INSERT INTO [Errole] ([ErrFROM], [ErrDES], [ErrACC] ) VALUES ( 61, 'Disk full. Delete some file and Try again', 'ARI' )
+-GO-
+INSERT INTO [Errole] ([ErrFROM], [ErrDES], [ErrACC] ) VALUES ( 62, 'Internal Error', 'OK' )
+-GO-
+INSERT INTO [Errole] ([ErrFROM], [ErrDES], [ErrACC] ) VALUES ( 63, 'Internal Error', 'OK' )
+-GO-
+INSERT INTO [Errole] ([ErrFROM], [ErrDES], [ErrACC] ) VALUES ( 67, 'File threshold reached. Try later', 'ARI' )
+-GO-
+INSERT INTO [Errole] ([ErrFROM], [ErrDES], [ErrACC] ) VALUES ( 68, 'Device is not attached or not switched on', 'ARI' )
+-GO-
+INSERT INTO [Errole] ([ErrFROM], [ErrDES], [ErrACC] ) VALUES ( 70, 'You have no permission to carry at this operation. Contact administrator', 'ARI' )
+-GO-
+INSERT INTO [Errole] ([ErrFROM], [ErrDES], [ErrACC] ) VALUES ( 71, 'Disk drive is bad or not ready', 'ARI' )
+-GO-
+INSERT INTO [Errole] ([ErrFROM], [ErrDES], [ErrACC] ) VALUES ( 74, 'cannot rename drive this way', 'ARI' )
+-GO-
+INSERT INTO [Errole] ([ErrFROM], [ErrDES], [ErrACC] ) VALUES ( 75, 'Path not found or File does not exists', 'ARI' )
+-GO-
+INSERT INTO [Errole] ([ErrFROM], [ErrDES], [ErrACC] ) VALUES ( 76, 'Path not found', 'ARI' )
+-GO-
+INSERT INTO [Errole] ([ErrFROM], [ErrDES], [ErrACC] ) VALUES ( 91, 'Internal Error', 'ARI' )
+-GO-
+INSERT INTO [Errole] ([ErrFROM], [ErrDES], [ErrACC] ) VALUES ( 92, 'Internal Error', 'OK' )
+-GO-
+INSERT INTO [Errole] ([ErrFROM], [ErrDES], [ErrACC] ) VALUES ( 93, 'Internal Error', 'OK' )
+-GO-
+INSERT INTO [Errole] ([ErrFROM], [ErrDES], [ErrACC] ) VALUES ( 94, 'Internal Error', 'OK' )
+-GO-
+INSERT INTO [Errole] ([ErrFROM], [ErrDES], [ErrACC] ) VALUES ( 97, 'Called Object not in scope', 'OK' )
+-GO-
+INSERT INTO [Errole] ([ErrFROM], [ErrDES], [ErrACC] ) VALUES ( 481, 'Internal Error', 'ARI' )
+-GO-
+INSERT INTO [Errole] ([ErrFROM], [ErrDES], [ErrACC] ) VALUES ( 482, 'Make sure that the printer is connected properly, is switched  on  and paper tray is empty', 'ARI' )
+-GO-
+INSERT INTO [Errole] ([ErrFROM], [ErrDES], [ErrACC] ) VALUES ( 483, 'Printer Error', 'ARI' )
+-GO-
+INSERT INTO [Errole] ([ErrFROM], [ErrDES], [ErrACC] ) VALUES ( 484, 'Problem getting printer information from the system. Make sure the printer is setup correctly', 'ARI' )
+-GO-
+INSERT INTO [Errole] ([ErrFROM], [ErrDES], [ErrACC] ) VALUES ( 485, 'Wrong Picture type. cannot laod', 'ARI' )
+-GO-
+INSERT INTO [Errole] ([ErrFROM], [ErrDES], [ErrACC] ) VALUES ( 486, 'Printer Error', 'ARI' )
+-GO-
+INSERT INTO [Errole] ([ErrFROM], [ErrDES], [ErrACC] ) VALUES ( 520, 'Printer Error', 'ARI' )
+-GO-
+INSERT INTO [Errole] ([ErrFROM], [ErrDES], [ErrACC] ) VALUES ( 521, 'Internal Error', 'ARI' )
+-GO-
+INSERT INTO [Errole] ([ErrFROM], [ErrDES], [ErrACC] ) VALUES ( 735, 'Internal Error', 'ARI' )
+-GO-
+INSERT INTO [Errole] ([ErrFROM], [ErrDES], [ErrACC] ) VALUES ( 744, 'Internal Error', 'OK' )
+-GO-
+INSERT INTO [Errole] ([ErrFROM], [ErrDES], [ErrACC] ) VALUES ( 746, 'Internal Error', 'OK' )
+-GO-
+INSERT INTO [Errole] ([ErrFROM], [ErrDES], [ErrACC] ) VALUES ( 31001, 'You have run out of memory', 'ARI' )
+-GO-
+INSERT INTO [Errole] ([ErrFROM], [ErrDES], [ErrACC] ) VALUES ( 432, 'Internal Error', 'OK' )
+-GO-
+INSERT INTO [Errole] ([ErrFROM], [ErrDES], [ErrACC] ) VALUES ( 438, 'Internal Error', 'OK' )
+-GO-
+INSERT INTO [Errole] ([ErrFROM], [ErrDES], [ErrACC] ) VALUES ( 440, 'Internal Automation Error', 'OK' )
+-GO-
+INSERT INTO [Errole] ([ErrFROM], [ErrDES], [ErrACC] ) VALUES ( 442, 'Connection to type library or object library for remote process has been lost', 'OK' )
+-GO-
+INSERT INTO [Errole] ([ErrFROM], [ErrDES], [ErrACC] ) VALUES ( 443, 'Automation object does not have a default value', 'OK' )
+-GO-
+INSERT INTO [Errole] ([ErrFROM], [ErrDES], [ErrACC] ) VALUES ( 445, 'Object does not support this action', 'OK' )
+-GO-
+INSERT INTO [Errole] ([ErrFROM], [ErrDES], [ErrACC] ) VALUES ( 446, 'object does not support named argument', 'OK' )
+-GO-
+INSERT INTO [Errole] ([ErrFROM], [ErrDES], [ErrACC] ) VALUES ( 447, 'object does not support current locale setting', 'OK' )
+-GO-
+INSERT INTO [Errole] ([ErrFROM], [ErrDES], [ErrACC] ) VALUES ( 448, 'Named argument not found', 'OK' )
+-GO-
+INSERT INTO [Errole] ([ErrFROM], [ErrDES], [ErrACC] ) VALUES ( 449, 'Internal Error', 'OK' )
+-GO-
+INSERT INTO [Errole] ([ErrFROM], [ErrDES], [ErrACC] ) VALUES ( 450, 'Internal Error', 'OK' )
+-GO-
+INSERT INTO [Errole] ([ErrFROM], [ErrDES], [ErrACC] ) VALUES ( 451, 'Internal Error', 'OK' )
+-GO-
+INSERT INTO [Errole] ([ErrFROM], [ErrDES], [ErrACC] ) VALUES ( 360, 'Internal Error', 'OK' )
+-GO-
+INSERT INTO [Errole] ([ErrFROM], [ErrDES], [ErrACC] ) VALUES ( 361, 'Internal Error', 'OK' )
+-GO-
+INSERT INTO [Errole] ([ErrFROM], [ErrDES], [ErrACC] ) VALUES ( 363, 'Internal Error', 'OK' )
+-GO-
+INSERT INTO [Errole] ([ErrFROM], [ErrDES], [ErrACC] ) VALUES ( 364, 'Internal Error', 'OK' )
+-GO-
+INSERT INTO [Errole] ([ErrFROM], [ErrDES], [ErrACC] ) VALUES ( 365, 'Internal Error', 'OK' )
+-GO-
+INSERT INTO [Errole] ([ErrFROM], [ErrDES], [ErrACC] ) VALUES ( 368, 'Internal Error', 'OK' )
+-GO-
+INSERT INTO [Errole] ([ErrFROM], [ErrDES], [ErrACC] ) VALUES ( 371, 'Internal Error', 'OK' )
+-GO-
+INSERT INTO [Errole] ([ErrFROM], [ErrDES], [ErrACC] ) VALUES ( 380, 'Internal Error', 'OK' )
+-GO-
+INSERT INTO [Errole] ([ErrFROM], [ErrDES], [ErrACC] ) VALUES ( 381, 'Internal Error', 'OK' )
+-GO-
+INSERT INTO [Errole] ([ErrFROM], [ErrDES], [ErrACC] ) VALUES ( 382, 'Internal Error', 'OK' )
+-GO-
+INSERT INTO [Errole] ([ErrFROM], [ErrDES], [ErrACC] ) VALUES ( 383, 'Internal Error', 'OK' )
+-GO-
+INSERT INTO [Errole] ([ErrFROM], [ErrDES], [ErrACC] ) VALUES ( 385, 'Internal Error', 'OK' )
+-GO-
+INSERT INTO [Errole] ([ErrFROM], [ErrDES], [ErrACC] ) VALUES ( 98, 'Internal Error', 'OK' )
+-GO-
+INSERT INTO [Errole] ([ErrFROM], [ErrDES], [ErrACC] ) VALUES ( 298, 'System Error', 'OK' )
+-GO-
+INSERT INTO [Errole] ([ErrFROM], [ErrDES], [ErrACC] ) VALUES ( 320, 'Internal Error', 'OK' )
+-GO-
+INSERT INTO [Errole] ([ErrFROM], [ErrDES], [ErrACC] ) VALUES ( 321, 'Internal Error', 'OK' )
+-GO-
+INSERT INTO [Errole] ([ErrFROM], [ErrDES], [ErrACC] ) VALUES ( 322, 'File creation error. You have no access to temporary device', 'OK' )
+-GO-
+INSERT INTO [Errole] ([ErrFROM], [ErrDES], [ErrACC] ) VALUES ( 325, 'Internal Error', 'OK' )
+-GO-
+INSERT INTO [Errole] ([ErrFROM], [ErrDES], [ErrACC] ) VALUES ( 327, 'Internal Error', 'OK' )
+-GO-
+INSERT INTO [Errole] ([ErrFROM], [ErrDES], [ErrACC] ) VALUES ( 328, 'Internal Error', 'OK' )
+-GO-
+INSERT INTO [Errole] ([ErrFROM], [ErrDES], [ErrACC] ) VALUES ( 335, 'Registry access denied', 'OK' )
+-GO-
+INSERT INTO [Errole] ([ErrFROM], [ErrDES], [ErrACC] ) VALUES ( 336, 'Please register the component before instantiation', 'OK' )
+-GO-
+INSERT INTO [Errole] ([ErrFROM], [ErrDES], [ErrACC] ) VALUES ( 337, 'Internal Error', 'OK' )
+-GO-
+INSERT INTO [Errole] ([ErrFROM], [ErrDES], [ErrACC] ) VALUES ( 338, 'Internal Error', 'OK' )
+-GO-
+INSERT INTO [Errole] ([ErrFROM], [ErrDES], [ErrACC] ) VALUES ( 387, 'Internal Error', 'OK' )
+-GO-
+INSERT INTO [Errole] ([ErrFROM], [ErrDES], [ErrACC] ) VALUES ( 393, 'Internal Error', 'OK' )
+-GO-
+INSERT INTO [Errole] ([ErrFROM], [ErrDES], [ErrACC] ) VALUES ( 394, 'Internal Error', 'OK' )
+-GO-
+INSERT INTO [Errole] ([ErrFROM], [ErrDES], [ErrACC] ) VALUES ( 400, 'Internal Error', 'OK' )
+-GO-
+INSERT INTO [Errole] ([ErrFROM], [ErrDES], [ErrACC] ) VALUES ( 402, 'Internal Error', 'OK' )
+-GO-
+INSERT INTO [Errole] ([ErrFROM], [ErrDES], [ErrACC] ) VALUES ( 419, 'Internal Error', 'OK' )
+-GO-
+INSERT INTO [Errole] ([ErrFROM], [ErrDES], [ErrACC] ) VALUES ( 422, 'Internal Error', 'OK' )
+-GO-
+INSERT INTO [Errole] ([ErrFROM], [ErrDES], [ErrACC] ) VALUES ( 423, 'Internal Error', 'OK' )
+-GO-
+INSERT INTO [Errole] ([ErrFROM], [ErrDES], [ErrACC] ) VALUES ( 424, 'Internal Error', 'OK' )
+-GO-
+INSERT INTO [Errole] ([ErrFROM], [ErrDES], [ErrACC] ) VALUES ( 425, 'Internal Error', 'OK' )
+-GO-
+INSERT INTO [Errole] ([ErrFROM], [ErrDES], [ErrACC] ) VALUES ( 429, 'Internal Error', 'OK' )
+-GO-
+INSERT INTO [Errole] ([ErrFROM], [ErrDES], [ErrACC] ) VALUES ( 430, 'Internal Error', 'OK' )
+-GO-
+INSERT INTO [Errole] ([ErrFROM], [ErrDES], [ErrACC] ) VALUES ( 452, 'Internal Error', 'OK' )
+-GO-
+INSERT INTO [Errole] ([ErrFROM], [ErrDES], [ErrACC] ) VALUES ( 453, 'Internal Error', 'OK' )
+-GO-
+INSERT INTO [Errole] ([ErrFROM], [ErrDES], [ErrACC] ) VALUES ( 454, 'Internal Error', 'OK' )
+-GO-
+INSERT INTO [Errole] ([ErrFROM], [ErrDES], [ErrACC] ) VALUES ( 455, 'Resource locked. Try later', 'ARI' )
+-GO-
+INSERT INTO [Errole] ([ErrFROM], [ErrDES], [ErrACC] ) VALUES ( 457, 'Internal Error', 'ARI' )
+-GO-
+INSERT INTO [Errole] ([ErrFROM], [ErrDES], [ErrACC] ) VALUES ( 458, 'Internal Error', 'ARI' )
+-GO-
+INSERT INTO [Errole] ([ErrFROM], [ErrDES], [ErrACC] ) VALUES ( 459, 'Internal Error', 'ARI' )
+-GO-
+INSERT INTO [Errole] ([ErrFROM], [ErrDES], [ErrACC] ) VALUES ( 460, 'Internal Error', 'ARI' )
+-GO-
+INSERT INTO [Errole] ([ErrFROM], [ErrDES], [ErrACC] ) VALUES ( 461, 'Internal Error', 'ARI' )
+-GO-
+INSERT INTO [Errole] ([ErrFROM], [ErrDES], [ErrACC] ) VALUES ( 462, 'Server not available', 'ARI' )
+-GO-
+INSERT INTO [Errole] ([ErrFROM], [ErrDES], [ErrACC] ) VALUES ( 463, 'Local registry entry is not found', 'OK' )
+-GO-
+INSERT INTO [Errole] ([ErrFROM], [ErrDES], [ErrACC] ) VALUES ( 480, 'Internal Error', 'OK' )
+-GO-
+INSERT INTO [Errole] ([ErrFROM], [ErrDES], [ErrACC] ) VALUES ( 31004, 'Internal Error', 'ARI' )
+-GO-
+INSERT INTO [Errole] ([ErrFROM], [ErrDES], [ErrACC] ) VALUES ( 31018, 'Internal Error', 'ARI' )
+-GO-
+INSERT INTO [Errole] ([ErrFROM], [ErrDES], [ErrACC] ) VALUES ( 31027, 'Internal Error', 'ARI' )
+-GO-
+INSERT INTO [Errole] ([ErrFROM], [ErrDES], [ErrACC] ) VALUES ( 31032, 'Internal Error', 'ARI' )
+-GO-
+INSERT INTO [Errole] ([ErrFROM], [ErrDES], [ErrACC] ) VALUES ( 31036, 'Error saving to file', 'ARI' )
+-GO-
+INSERT INTO [Errole] ([ErrFROM], [ErrDES], [ErrACC] ) VALUES ( 31037, 'Error loading from file', 'ARI' )
+-GO-
+INSERT INTO [Errole] ([ErrFROM], [ErrDES], [ErrACC] ) VALUES ( 3707, 'Connectivity Failure. Contact Administrator/Vendor', '' )
+-GO-
+INSERT INTO [Errole] ([ErrFROM], [ErrDES], [ErrACC] ) VALUES ( 3707, 'Connectivity Failure. Contact Administrator/Vendor', 'OK' )
+-GO-
+INSERT INTO [Errole] ([ErrFROM], [ErrDES], [ErrACC] ) VALUES ( 3707, 'Connectivity Failure. Contact Administrator/Vendor', 'OK' )
+-GO-
+
+  </s9qScript>
+</s9qsqlblk>
+
+<s9qsqlblk>
+  <s9qScriptid>	S9Q_0170_9_0004	</s9qScriptid>
+  <s9qtitle>All DDL Statements.</s9qtitle>
+  <s9qpgmtype>I</s9qpgmtype>
+  <s9qpgmtype>L</s9qpgmtype>
+  <s9qversion>*</s9qversion>
+  <s9qenvironment>H</s9qenvironment>
+  <s9qenvironment>P</s9qenvironment>
+  <s9qenvironment>R</s9qenvironment>
+  <s9qRunMultiple>1</s9qRunMultiple>
+  <s9qQryType>DML</s9qQryType>
+  <s9qScript>
+
+Insert Into Genlookup Values(9050,'13','Free Item','1',13,'SUPER',1,'.','.')
+-GO-
+Update PromoMnHeader Set AndConditionFreeItem = 0,NoOfAndCondsFreeItem = 0, SalesPromoId = UserId, AddlItemFlag = 0
+-GO-
+Update PromoMnHeader Set AndConditionFreeItem = 0 Where AndConditionFreeItem Is Null
+-GO-
+Update PromoMnHeader Set NoOfAndCondsFreeItem = 0 Where NoOfAndCondsFreeItem Is Null
+-GO-
+Update PromoMnHeader Set SalesPromoId = UserId Where (SalesPromoId Is Null or SalesPromoId = 0) and UserId Is Not Null
+-GO-
+Update PromoMnHeader Set AddlItemFlag = 0 Where AddlItemFlag Is Null
+-GO-
+
+  </s9qScript>
+</s9qsqlblk>
+
+
+
+
+<s9qsqlblk>
+  <s9qScriptid>	S9Q_0170_9_0005	</s9qScriptid>
+  <s9qtitle>All DDL Statements.</s9qtitle>
+  <s9qpgmtype>I</s9qpgmtype>
+  <s9qpgmtype>L</s9qpgmtype>
+  <s9qversion>*</s9qversion>
+  <s9qenvironment>P</s9qenvironment>
+  <s9qenvironment>R</s9qenvironment>
+  <s9qRunMultiple>1</s9qRunMultiple>
+  <s9qQryType>DML</s9qQryType>
+  <s9qScript>
+
+CREATE PROCEDURE DataLoadPriceMaster @returnValue INT OUTPUT,@LogRunNumber int = 0,   
+@insertflag int =1,@updateflag int =1,@updatepriceflag int = 1   
+as                                                
+Declare @updtctr as int                                                
+Declare @strexe as varchar(500)                                               
+Declare @AnalCount as int                    
+Declare @RunNumber as int                              
+Declare @RecCount As int                     
+declare @strClass1Cd as varchar(16)            
+declare @strClass2Cd as varchar(16)            
+declare @strClass1CdPrev as varchar(16)            
+declare @strClass2CdPrev as varchar(16)            
+declare @strSizeCd as varchar(16)            
+declare @SrlNo as int       
+declare @vaCtr as int       
+Begin transaction                                               
+         
+Select @vaCtr = Intg from Sysparam where paramcode = 'VaSysCounter'
+
+set @RunNumber = @LogRunNumber  
+if @LogRunNumber = 0   
+begin                  
+   select @RunNumber = isnull(Max(RunNumber),0)+ 1  From IniLoadingErrorLog  
+end  
+                    
+select @RecCount = Count(*) From TmpPriceMaster where CurrentCost is null or currentcost = 0                     
+if @RecCount > 0                      
+     BEGIN                     
+		 INSERT INTO IniLoadingErrorLog(RunNumber,RunDate,ErrorItem,ErrorRecords,ErrorDesc)                     
+		 SELECT @RunNumber,GETDATE(),StockNo,1,'Record Deleted - Currentcost is zero' FROM TMPPRICEMASTER                     
+		 WHERE CurrentCost is null or currentcost = 0                     
+		 IF (@@ERROR <> 0)                                     
+		 BEGIN                                     
+		  GOTO ErrorHandle                                     
+		 END                                     
+		                    
+		 DELETE FROM TMPPRICEMASTER WHERE CURRENTCOST IS NULL OR CURRENTCOST = 0                      
+		 IF (@@ERROR <> 0)                                     
+		 BEGIN                                     
+		  GOTO ErrorHandle                                     
+		 END                                     
+     END                     
+                    
+select @RecCount = Count(*) From TmpPriceMaster where Retail_Price is null or Retail_Price = 0                     
+if @RecCount > 0                     
+     BEGIN                     
+ INSERT INTO IniLoadingErrorLog(RunNumber,RunDate,ErrorItem,ErrorRecords,ErrorDesc)                     
+ SELECT @RunNumber,GETDATE(),StockNo,1,'Record Deleted - Retail Price is zero' FROM TMPPRICEMASTER                     
+ WHERE Retail_Price is null or Retail_Price = 0                     
+ IF (@@ERROR <> 0)                                     
+ BEGIN                                     
+  GOTO ErrorHandle                                     
+ END                                     
+                    
+ DELETE FROM TMPPRICEMASTER WHERE Retail_Price IS NULL OR Retail_Price = 0                      
+     IF (@@ERROR <> 0)                                     
+  BEGIN                                     
+   GOTO ErrorHandle                                     
+  END                                     
+     END                     
+Set @RecCount = 0                              
+SELECT @RecCount = count(*) FROM SYSPARAM WHERE PARAMCODE = 'AllowDealerPriceZeroPMImport' AND Boolean = 0                              
+if @RecCount > 0                              
+   begin                             
+   select @RecCount = Count(*) From TmpPriceMaster where Dealer_Price is null or Dealer_Price = 0                     
+   if @RecCount > 0                     
+      BEGIN                     
+   INSERT INTO IniLoadingErrorLog(RunNumber,RunDate,ErrorItem,ErrorRecords,ErrorDesc)                     
+   SELECT @RunNumber,GETDATE(),StockNo,1,'Record Deleted - Dealer Price is zero' FROM TMPPRICEMASTER                     
+   WHERE Dealer_Price is null or Dealer_Price = 0                     
+   IF (@@ERROR <> 0)                                     
+   BEGIN                                     
+    GOTO ErrorHandle                                     
+   END                                            
+   DELETE FROM TMPPRICEMASTER WHERE Dealer_Price IS NULL OR Dealer_Price = 0                      
+   IF (@@ERROR <> 0)                                     
+   BEGIN                                     
+    GOTO ErrorHandle                                     
+   END                                     
+      END                     
+   end                  
+                     
+select @RecCount = Count(*) From TmpPriceMaster where Dealer_Price > Retail_Price                    
+if @RecCount > 0                     
+     BEGIN                     
+  INSERT INTO IniLoadingErrorLog(RunNumber,RunDate,ErrorItem,ErrorRecords,ErrorDesc)                     
+  SELECT @RunNumber,GETDATE(),StockNo,1,'Record Deleted - Dealer Price > Retail Price' FROM TMPPRICEMASTER                     
+  WHERE Dealer_Price > Retail_Price                     
+  IF (@@ERROR <> 0)                                     
+  BEGIN                                     
+   GOTO ErrorHandle                                     
+         END                                     
+                    
+  DELETE FROM TMPPRICEMASTER WHERE Dealer_Price > Retail_Price                       
+  IF (@@ERROR <> 0)                                     
+  BEGIN                                     
+   GOTO ErrorHandle                                     
+  END                                     
+     END                     
+select @RecCount = Count(*) From TmpPriceMaster where ProdTaxtype is null or ProdTaxtype = ''               
+if @RecCount > 0                     
+  BEGIN                     
+     INSERT INTO IniLoadingErrorLog(RunNumber,RunDate,ErrorItem,ErrorRecords,ErrorDesc)                     
+     SELECT @RunNumber,GETDATE(),StockNo,1,'Record Deleted - Product Tax type is null' FROM TMPPRICEMASTER                     
+     WHERE ProdTaxtype is null or ProdTaxtype = ''                     
+     IF (@@ERROR <> 0)                                     
+       BEGIN                                     
+         GOTO ErrorHandle                                     
+       END                                     
+                    
+     DELETE FROM TMPPRICEMASTER WHERE ProdTaxtype is null or ProdTaxtype = ''                      
+     IF (@@ERROR <> 0)                                     
+     BEGIN                                     
+       GOTO ErrorHandle                                     
+     END                                     
+  END                     
+select @RecCount = Count(*) From TmpPriceMaster where SizeGroupId is null or SizeGroupId = ''               
+if @RecCount > 0                     
+  BEGIN                     
+     INSERT INTO IniLoadingErrorLog(RunNumber,RunDate,ErrorItem,ErrorRecords,ErrorDesc)                     
+     SELECT @RunNumber,GETDATE(),StockNo,1,'Record Deleted - Size Group id is null' FROM TMPPRICEMASTER                     
+     WHERE SizeGroupId is null or SizeGroupId = ''                     
+     IF (@@ERROR <> 0)                                     
+       BEGIN                                     
+         GOTO ErrorHandle                                     
+       END                                     
+                    
+     DELETE FROM TMPPRICEMASTER WHERE SizeGroupId is null or SizeGroupId = ''                      
+     IF (@@ERROR <> 0)                                     
+     BEGIN                                     
+       GOTO ErrorHandle                                     
+     END                                     
+  END                     
+                    
+UPDATE TmpPriceMaster SET REGULARIND = '0' WHERE REGULARIND  ='Y'                                                      
+IF (@@ERROR <> 0)                                     
+ BEGIN                                     
+ GOTO ErrorHandle                                     
+END                               
+UPDATE TmpPriceMaster SET REGULARIND = '1' WHERE REGULARIND  <> '0'                                                      
+IF (@@ERROR <> 0)                       
+ BEGIN                     
+ GOTO ErrorHandle                                     
+END                                     
+UPDATE TmpPriceMaster SET ISRPTAXINCLUSIVE ='1' where ISRPTAXINCLUSIVE is null                               
+IF (@@ERROR <> 0)                                     
+ BEGIN                                     
+ GOTO ErrorHandle                                     
+END                                                
+UPDATE TmpPriceMaster SET ISRPTAXINCLUSIVE ='1' where ISRPTAXINCLUSIVE ='Y'                   
+IF (@@ERROR <> 0)                                     
+BEGIN                                     
+ GOTO ErrorHandle                                     
+END                                                
+                             
+UPDATE TmpPriceMaster SET ISRPTAXINCLUSIVE ='0' where ISRPTAXINCLUSIVE <> '1'         
+IF (@@ERROR <> 0)                                     
+BEGIN                                     
+GOTO ErrorHandle                                     
+END                                                
+                             
+UPDATE TmpPriceMaster SET BATCHSRLNO = 0 WHERE BATCHSRLNO IS NULL                                                 
+IF (@@ERROR <> 0)                                     
+ BEGIN                                     
+ GOTO ErrorHandle                                     
+END                                     
+UPDATE TmpPriceMaster SET LEASTSALABLEQTY = 1 WHERE LEASTSALABLEQTY IS NULL OR LEASTSALABLEQTY = 0               
+IF (@@ERROR <> 0)                                     
+ BEGIN                                     
+ GOTO ErrorHandle                                     
+END                                     
+                    
+UPDATE TmpPriceMaster SET SizeGroupSrlno = 0 WHERE SizeGroupSrlno IS NULL                                                 
+IF (@@ERROR <> 0)                                     
+BEGIN                                     
+ GOTO ErrorHandle                                     
+END                                     
+UPDATE TmpPriceMaster SET Stockno = 'NA' Where Stockno is null or Stockno = ''                    
+IF (@@ERROR <> 0)                                     
+ BEGIN                                     
+ GOTO ErrorHandle                                     
+END                                     
+UPDATE TmpPriceMaster SET Class1cd = 'NA' Where Class1cd is null or Class1Cd = ''                                                 
+IF (@@ERROR <> 0)                                     
+ BEGIN                                     
+ GOTO ErrorHandle                                     
+END                                     
+UPDATE TmpPriceMaster SET Class2cd = 'NA' Where Class2cd is null or Class2Cd = ''                                               
+IF (@@ERROR <> 0)                                     
+ BEGIN                                     
+ GOTO ErrorHandle                                     
+END                                     
+UPDATE TmpPriceMaster SET SubClass1cd = 'NA' Where SubClass1cd is null or SubClass1Cd = ''                                                 
+IF (@@ERROR <> 0)                                     
+ BEGIN                                     
+ GOTO ErrorHandle                                     
+END                                     
+UPDATE TmpPriceMaster SET SubClass2CD = 'NA' Where SubClass2CD is null or SubClass2Cd = ''                                               
+IF (@@ERROR <> 0)                                     
+ BEGIN                                     
+ GOTO ErrorHandle                                     
+END                                     
+UPDATE TmpPriceMaster SET SizeCd = 'NA' Where Sizecd is null OR SizeCd = ''                                              
+IF (@@ERROR <> 0)                                     
+ BEGIN                                     
+ GOTO ErrorHandle                                     
+END                                     
+UPDATE TmpPriceMaster SET Class1Desc = Class1cd Where Class1Desc is null or Class1Desc = ''                                           
+IF (@@ERROR <> 0)                                     
+ BEGIN                                     
+ GOTO ErrorHandle                                     
+END                                     
+UPDATE TmpPriceMaster SET Class2Desc = Class2cd Where Class2Desc is null or Class2Desc =''                                               
+IF (@@ERROR <> 0)                                  
+ BEGIN                                     
+ GOTO ErrorHandle                                     
+END                                     
+UPDATE TmpPriceMaster SET SubClass1Desc = SubClass1cd Where SubClass1Desc is null or SubClass1Desc =''    
+IF (@@ERROR <> 0)                                     
+ BEGIN                                     
+ GOTO ErrorHandle                                     
+END                                     
+UPDATE TmpPriceMaster SET SubClass2Desc = SubClass2cd Where SubClass2Desc is null or SubClass2Desc =''    
+IF (@@ERROR <> 0)               
+ BEGIN                                     
+ GOTO ErrorHandle                                     
+END                                     
+UPDATE TmpPriceMaster SET SizeGroupDesc = SizeGroupId Where SizeGroupDesc is null or SizeGroupDesc =''    
+IF (@@ERROR <> 0)                                     
+ BEGIN                                     
+ GOTO ErrorHandle                                     
+END                                     
+UPDATE TmpPriceMaster SET ProdTaxDesc = ProdTaxtype Where ProdTaxDesc is null or ProdTaxDesc =''    
+IF (@@ERROR <> 0)                                     
+ BEGIN                                     
+ GOTO ErrorHandle                                     
+END                                     
+                             
+Set @AnalCount = 0                              
+SELECT @AnalCount = count(*) FROM SYSPARAM WHERE PARAMCODE = 'SuperClass1Present' AND BOOLEAN = 1                              
+if @AnalCount > 0                              
+   begin                             
+       UPDATE TmpPriceMaster SET SUPERCLASS1 = 'NA' WHERE SuperClass1 IS NULL OR SuperClass1 = ''                    
+       IF (@@ERROR <> 0)                                     
+       BEGIN                                     
+         GOTO ErrorHandle                                     
+       END                                     
+   end                              
+                             
+Set @AnalCount = 0                              
+SELECT @AnalCount = count(*) FROM SYSPARAM WHERE PARAMCODE = 'SuperClass2Present' AND BOOLEAN = 1                              
+if @AnalCount > 0                              
+   begin                             
+     UPDATE TmpPriceMaster SET SUPERCLASS2 = 'NA' WHERE SuperClass2 IS NULL OR SuperClass2 =''                    
+     IF (@@ERROR <> 0)                                     
+     BEGIN                                     
+        GOTO ErrorHandle                                     
+    END                                     
+   end                              
+                             
+UPDATE TmpPriceMaster SET SUPERCLASS1DESC = SUPERCLASS1 Where SUPERCLASS1DESC is null or SUPERCLASS1DESC =''                                                
+IF (@@ERROR <> 0)                                     
+ BEGIN                                     
+ GOTO ErrorHandle                                     
+END                                     
+UPDATE TmpPriceMaster SET SUPERCLASS2DESC = SUPERCLASS2 Where SUPERCLASS2DESC is null or SUPERCLASS2DESC = ''                                                
+IF (@@ERROR <> 0)                                     
+ BEGIN                                     
+ GOTO ErrorHandle                                     
+END                                
+    
+UPDATE TMPPRICEMASTER SET ISRPTAXINCLUSIVE = 1 WHERE ISRPTAXINCLUSIVE IS NULL                                      
+IF (@@ERROR <> 0)                                     
+ BEGIN                                     
+ GOTO ErrorHandle              
+END                                     
+UPDATE TMPPRICEMASTER SET IMAGEPRESENT = 0 WHERE IMAGEPRESENT IS NULL                                                       
+IF (@@ERROR <> 0)                                     
+ BEGIN                                     
+ GOTO ErrorHandle                                     
+END                                     
+UPDATE TMPPRICEMASTER SET ISINVENTORYITEM = 1 WHERE ISINVENTORYITEM IS NULL                                 
+IF (@@ERROR <> 0)                                     
+ BEGIN                                     
+ GOTO ErrorHandle                                     
+END                                     
+UPDATE TMPPRICEMASTER SET SRCTAXTYPE = 0 WHERE SRCTAXTYPE IS NULL or SRCTAXTYPE = ''    
+IF (@@ERROR <> 0)                                     
+ BEGIN                                     
+ GOTO ErrorHandle                                    
+END                                     
+UPDATE TMPPRICEMASTER SET EXTDESCPRESENT = 0 WHERE EXTDESCPRESENT IS NULL                                                       
+IF (@@ERROR <> 0)                                     
+ BEGIN                                     
+ GOTO ErrorHandle                                     
+END                                     
+UPDATE TMPPRICEMASTER SET EOQ = 0 WHERE EOQ IS NULL                                                       
+IF (@@ERROR <> 0)                                     
+ BEGIN                                     
+ GOTO ErrorHandle                                    
+END                                     
+UPDATE TMPPRICEMASTER SET MINORDQTY = 0 WHERE MINORDQTY IS NULL                                                       
+IF (@@ERROR <> 0)                                     
+ BEGIN                          
+ GOTO ErrorHandle                                     
+END                                     
+UPDATE TMPPRICEMASTER SET MINORDQTY = 0 WHERE MINORDQTY IS NULL                                        
+IF (@@ERROR <> 0)                                     
+ BEGIN                                     
+ GOTO ErrorHandle                                     
+END                                     
+UPDATE TMPPRICEMASTER SET ISBILLABLE = 1 WHERE ISBILLABLE IS NULL                                                       
+IF (@@ERROR <> 0)                                     
+ BEGIN                                     
+ GOTO ErrorHandle                                     
+END                                     
+UPDATE TMPPRICEMASTER SET ISSERVICE = 0 WHERE ISSERVICE IS NULL                                                       
+IF (@@ERROR <> 0)                  
+ BEGIN                                     
+ GOTO ErrorHandle                                     
+END                                     
+UPDATE TMPPRICEMASTER SET REGULARIND = 0 WHERE REGULARIND IS NULL                                                       
+IF (@@ERROR <> 0)                                     
+ BEGIN                                     
+ GOTO ErrorHandle                                     
+END                                     
+UPDATE TMPPRICEMASTER SET BATCHSRLNO = 0 WHERE BATCHSRLNO IS NULL                                                    
+IF (@@ERROR <> 0)                                     
+ BEGIN                                     
+ GOTO ErrorHandle                                     
+END                                     
+                                     
+UPDATE TmpPriceMaster SET Stockno = LTRIM(RTRIM(Stockno)), Class1Cd = LTRIM(RTRIM(LEFT(Class1Cd,16))), Class2Cd = LTRIM(RTRIM(LEFT(Class2Cd,16))),                                     
+ CLASS1DESC = LTRIM(RTRIM(CLASS1DESC)), CLASS2DESC = LTRIM(RTRIM(CLASS2DESC)), SUBCLASS1CD = LTRIM(RTRIM(LEFT(SUBCLASS1CD,16))),                                     
+ SUBCLASS2CD = LTRIM(RTRIM(LEFT(SUBCLASS2CD,16))), SUBCLASS1DESC = LTRIM(RTRIM(SUBCLASS1DESC)), SUBCLASS2DESC = LTRIM(RTRIM(LEFT(SUBCLASS2DESC,50))),                                     
+ SIZECD = LTRIM(RTRIM(LEFT(SIZECD,16))), ITEMDESC = LTRIM(RTRIM(ITEMDESC)), PRODTAXTYPE = LTRIM(RTRIM(LEFT(PRODTAXTYPE,16))),                                     
+ PRODTAXDESC = LTRIM(RTRIM(PRODTAXDESC)),SIZEGROUPID = LTRIM(RTRIM(SIZEGROUPID)), SIZEGROUPDESC = LTRIM(RTRIM(LEFT(SIZEGROUPDESC,30))),                                     
+ VENDORCODE = LTRIM(RTRIM(LEFT(VENDORCODE,16))),SUPERCLASS1 = LTRIM(RTRIM(left(SUPERCLASS1,16))),                                     
+ SUPERCLASS2 = LTRIM(RTRIM(left(SUPERCLASS2,16))),SUPERCLASS1DESC = LTRIM(RTRIM(SUPERCLASS1DESC)),                                     
+ SUPERCLASS2DESC = LTRIM(RTRIM(SUPERCLASS2DESC)),GRADECD = LTRIM(RTRIM(GRADECD)),BatchSrlNo = LTRIM(RTRIM(BatchSrlNo)),                                     
+ SrcTaxType = LTRIM(RTRIM(SrcTaxType)),CCStockNo = LTRIM(RTRIM(CCStockNo))                                     
+IF (@@ERROR <> 0)                                     
+ BEGIN                                     
+ GOTO ErrorHandle                                     
+END                                     
+                                               
+set @updtctr = 1                 
+WHILE @updtctr <= 32                                               
+BEGIN                                
+   Set @AnalCount = 0                              
+   SELECT @AnalCount = count(*) FROM SYSPARAM WHERE PARAMCODE = 'ItemAnaCd'+convert(varchar,@updtctr)+'Present' AND BOOLEAN = 1                              
+   if @AnalCount > 0                              
+  begin                             
+    set @strexe = 'UPDATE TmpPriceMaster SET ANALCODE' + CONVERT(VARCHAR,@updtctr)+' = '+CHAR(39)+'NA'+CHAR(39)+' WHERE ANALCODE' + CONVERT(VARCHAR,@updtctr) +' IS NULL OR ' + 'ANALCODE' + CONVERT(VARCHAR,@updtctr) + '=' +CHAR(39)+CHAR(39)               
+  
+    
+     
+    execute (@strexe)                               
+           IF (@@ERROR <> 0)                                     
+           BEGIN                                     
+         GOTO ErrorHandle                                     
+        END                                     
+ end                              
+   set @strexe = 'UPDATE TmpPriceMaster SET ANALCODE' + CONVERT(VARCHAR,@updtctr) + ' = LTRIM(RTRIM(ANALCODE' + CONVERT(VARCHAR,@updtctr) + '))'                                      
+   execute (@strexe)                                               
+ IF (@@ERROR <> 0)                                     
+  BEGIN                                     
+   GOTO ErrorHandle                                     
+ END                                     
+   set @strexe = 'UPDATE TmpPriceMaster SET ANALDESC' + CONVERT(VARCHAR,@updtctr) + ' = LTRIM(RTRIM(ANALDESC' + CONVERT(VARCHAR,@updtctr) + '))'                                               
+   execute (@strexe)                                               
+ IF (@@ERROR <> 0)                                     
+  BEGIN                                     
+   GOTO ErrorHandle                                     
+  END                                     
+   set @strexe = 'UPDATE TmpPriceMaster SET ANALDESC' + CONVERT(VARCHAR,@updtctr) + ' = ANALCODE' + CONVERT(VARCHAR,@updtctr) + ' Where ANALDESC' + CONVERT(VARCHAR,@updtctr) + ' is null'                                               
+   execute (@strexe)                                               
+ IF (@@ERROR <> 0)                                     
+  BEGIN                                     
+   GOTO ErrorHandle                                     
+  END                                     
+   set @strexe = 'UPDATE TmpPriceMaster SET ANALCODE' + CONVERT(VARCHAR,@updtctr) + ' = REPLACE(ANALCODE' + CONVERT(VARCHAR,@updtctr) + ',CHAR(39),' + CHAR(39) + CHAR(39)+ ')'                                               
+   execute (@strexe)                                               
+ IF (@@ERROR <> 0)                                     
+  BEGIN                                     
+                                     
+  GOTO ErrorHandle                                     
+ END                                     
+   set @strexe = 'UPDATE TmpPriceMaster SET ANALDESC' + CONVERT(VARCHAR,@updtctr) + ' = REPLACE(ANALDESC' + CONVERT(VARCHAR,@updtctr) + ',CHAR(39),' + CHAR(39) + CHAR(39)+ ')'                                               
+   execute (@strexe)                                               
+    IF (@@ERROR <> 0)                                     
+  BEGIN                                     
+                                     
+  GOTO ErrorHandle                                     
+ END                                           
+                                   
+ set @strexe = 'UPDATE TmpPriceMaster SET ANALDESC' + CONVERT(VARCHAR,@updtctr) + ' = REPLACE(ANALDESC' + CONVERT(VARCHAR,@updtctr) + ',CHAR(13),' + CHAR(39) + CHAR(39)+ ')'                                               
+   execute (@strexe)                                               
+    IF (@@ERROR <> 0)                                     
+  BEGIN                                     
+                                     
+  GOTO ErrorHandle                                     
+ END                                           
+                                       
+ set @strexe = 'UPDATE TmpPriceMaster SET ANALCODE' + CONVERT(VARCHAR,@updtctr) + ' = REPLACE(ANALCODE' + CONVERT(VARCHAR,@updtctr) + ',CHAR(13),' + CHAR(39) + CHAR(39)+ ')'                                      
+   execute (@strexe)                                               
+    IF (@@ERROR <> 0)                                     
+  BEGIN                                     
+                                     
+  GOTO ErrorHandle                                     
+ END                                           
+ set @strexe = 'UPDATE TmpPriceMaster SET ANALDESC' + CONVERT(VARCHAR,@updtctr) + ' = REPLACE(ANALDESC' + CONVERT(VARCHAR,@updtctr) + ',CHAR(10),' + CHAR(39) + CHAR(39)+ ')'                                               
+   execute (@strexe)                                               
+    IF (@@ERROR <> 0)                                     
+  BEGIN                                     
+                                     
+  GOTO ErrorHandle                                     
+ END                                           
+                                       
+ set @strexe = 'UPDATE TmpPriceMaster SET ANALCODE' + CONVERT(VARCHAR,@updtctr) + ' = REPLACE(ANALCODE' + CONVERT(VARCHAR,@updtctr) + ',CHAR(10),' + CHAR(39) + CHAR(39)+ ')'                                               
+   execute (@strexe)                                               
+    IF (@@ERROR <> 0)                                
+  BEGIN                                     
+                                     
+  GOTO ErrorHandle                                     
+ END                                  
+                                     
+   set @updtctr = @updtctr + 1                                        
+END                                               
+                                               
+UPDATE TMPPRICEMASTER SET STOCKNO =  REPLACE(STOCKNO,CHAR(39),''),CLASS1CD =  REPLACE(CLASS1CD,CHAR(39),''),                                                
+ CLASS2CD =  REPLACE(CLASS2CD,CHAR(39),''), SUBCLASS1CD =  REPLACE(SUBCLASS1CD,CHAR(39),''),                                                
+ SUBCLASS2CD =  REPLACE(SUBCLASS2CD,CHAR(39),''), CLASS1DESC =  REPLACE(CLASS1DESC,CHAR(39),''),                              
+ CLASS2DESC =  REPLACE(CLASS2DESC,CHAR(39),''), SUBCLASS1DESC =  REPLACE(SUBCLASS1DESC,CHAR(39),''),                                                
+ SUBCLASS2DESC =  REPLACE(SUBCLASS2DESC,CHAR(39),''), SIZECD =  REPLACE(SIZECD,CHAR(39),''),                                                
+ ITEMDESC =  REPLACE(ITEMDESC,CHAR(39),''), PRODTAXTYPE =  REPLACE(PRODTAXTYPE,CHAR(39),''),                                                
+ PRODTAXDESC =  REPLACE(PRODTAXDESC,CHAR(39),''), SIZEGROUPID =  REPLACE(SIZEGROUPID,CHAR(39),''),                                                
+ SIZEGROUPDESC =  REPLACE(SIZEGROUPDESC,CHAR(39),''), SUPERCLASS1 =  REPLACE(SUPERCLASS1,CHAR(39),''),                                                
+ SUPERCLASS2 =  REPLACE(SUPERCLASS2,CHAR(39),''), SUPERCLASS1DESC =  REPLACE(SUPERCLASS1DESC,CHAR(39),''),                                          
+ SUPERCLASS2DESC =  REPLACE(SUPERCLASS2DESC,CHAR(39),''),VENDORCODE =  REPLACE(VENDORCODE,CHAR(39),''),          
+ BatchSrlNo =  REPLACE(BatchSrlNo,CHAR(39),''), CCStockNo =  REPLACE(CCStockNo,CHAR(39),''),         
+ SrcTaxType =  REPLACE(SrcTaxType,CHAR(39),'')                                  
+IF (@@ERROR <> 0)                                     
+BEGIN                                     
+ GOTO ErrorHandle                                     
+END                                           
+                                     
+UPDATE TMPPRICEMASTER SET STOCKNO =  REPLACE(STOCKNO,CHAR(13),''),CLASS1CD =  REPLACE(CLASS1CD,CHAR(13),''),                                                
+ CLASS2CD =  REPLACE(CLASS2CD,CHAR(13),''), SUBCLASS1CD =  REPLACE(SUBCLASS1CD,CHAR(13),''),                                                
+ SUBCLASS2CD =  REPLACE(SUBCLASS2CD,CHAR(13),''), CLASS1DESC =  REPLACE(CLASS1DESC,CHAR(13),''),                                                
+ CLASS2DESC =  REPLACE(CLASS2DESC,CHAR(13),''), SUBCLASS1DESC =  REPLACE(SUBCLASS1DESC,CHAR(13),''),                                                
+ SUBCLASS2DESC =  REPLACE(SUBCLASS2DESC,CHAR(13),''),SIZECD =  REPLACE(SIZECD,CHAR(13),''),                                                
+ ITEMDESC =  REPLACE(ITEMDESC,CHAR(13),''),PRODTAXTYPE =  REPLACE(PRODTAXTYPE,CHAR(13),''),                                                
+ PRODTAXDESC =  REPLACE(PRODTAXDESC,CHAR(13),''), SIZEGROUPID =  REPLACE(SIZEGROUPID,CHAR(13),''),                                                
+ SIZEGROUPDESC =  REPLACE(SIZEGROUPDESC,CHAR(13),''), SUPERCLASS1 =  REPLACE(SUPERCLASS1,CHAR(13),''),                                                
+ SUPERCLASS2 =  REPLACE(SUPERCLASS2,CHAR(13),''), SUPERCLASS1DESC =  REPLACE(SUPERCLASS1DESC,CHAR(13),''),                                                
+ SUPERCLASS2DESC =  REPLACE(SUPERCLASS2DESC,CHAR(13),''), VENDORCODE =  REPLACE(VENDORCODE,CHAR(13),''),                                                
+ BatchSrlNo =  REPLACE(BatchSrlNo,CHAR(13),''), CCStockNo =  REPLACE(CCStockNo,CHAR(13),''),                                                
+ SrcTaxType =  REPLACE(SrcTaxType,CHAR(13),'')                                  
+IF (@@ERROR <> 0)                                     
+BEGIN                                     
+ GOTO ErrorHandle                                     
+END                                           
+                                     
+UPDATE TMPPRICEMASTER SET STOCKNO =  REPLACE(STOCKNO,CHAR(10),''),CLASS1CD =  REPLACE(CLASS1CD,CHAR(10),''),                                                
+CLASS2CD =  REPLACE(CLASS2CD,CHAR(10),''), SUBCLASS1CD =  REPLACE(SUBCLASS1CD,CHAR(10),''),                                                
+ SUBCLASS2CD =  REPLACE(SUBCLASS2CD,CHAR(10),''), CLASS1DESC =  REPLACE(CLASS1DESC,CHAR(10),''),                                                
+ CLASS2DESC =  REPLACE(CLASS2DESC,CHAR(10),''), SUBCLASS1DESC =  REPLACE(SUBCLASS1DESC,CHAR(10),''),                                                
+ SUBCLASS2DESC =  REPLACE(SUBCLASS2DESC,CHAR(10),''),SIZECD =  REPLACE(SIZECD,CHAR(10),''),                                                
+ ITEMDESC =  REPLACE(ITEMDESC,CHAR(10),''), PRODTAXTYPE =  REPLACE(PRODTAXTYPE,CHAR(10),''),                                            
+ PRODTAXDESC =  REPLACE(PRODTAXDESC,CHAR(10),''), SIZEGROUPID =  REPLACE(SIZEGROUPID,CHAR(10),''),                                                
+ SIZEGROUPDESC =  REPLACE(SIZEGROUPDESC,CHAR(10),''), SUPERCLASS1 =  REPLACE(SUPERCLASS1,CHAR(10),''),                                                
+ SUPERCLASS2 =  REPLACE(SUPERCLASS2,CHAR(10),''), SUPERCLASS1DESC =  REPLACE(SUPERCLASS1DESC,CHAR(10),''),                                                
+ SUPERCLASS2DESC =  REPLACE(SUPERCLASS2DESC,CHAR(10),''), VENDORCODE =  REPLACE(VENDORCODE,CHAR(10),''),                                                
+ BatchSrlNo =  REPLACE(BatchSrlNo,CHAR(10),''), CCStockNo =  REPLACE(CCStockNo,CHAR(10),''),                                                
+ SrcTaxType =  REPLACE(SrcTaxType,CHAR(10),'')                                                
+IF (@@ERROR <> 0)                                     
+BEGIN                                     
+ GOTO ErrorHandle                                     
+END                                           
+                               
+UPDATE TMPPRICEMASTER SET STOCKNO =  REPLACE(STOCKNO,CHAR(34),''),CLASS1CD =  REPLACE(CLASS1CD,CHAR(34),''),                                                
+ CLASS2CD =  REPLACE(CLASS2CD,CHAR(34),''), SUBCLASS1CD =  REPLACE(SUBCLASS1CD,CHAR(34),''),                                                
+ SUBCLASS2CD =  REPLACE(SUBCLASS2CD,CHAR(34),''), CLASS1DESC =  REPLACE(CLASS1DESC,CHAR(34),''),                                                
+ CLASS2DESC =  REPLACE(CLASS2DESC,CHAR(34),''), SUBCLASS1DESC =  REPLACE(SUBCLASS1DESC,CHAR(34),''),                                                
+ SUBCLASS2DESC =  REPLACE(SUBCLASS2DESC,CHAR(34),''),SIZECD =  REPLACE(SIZECD,CHAR(34),''),                                                
+ ITEMDESC =  REPLACE(ITEMDESC,CHAR(34),''), PRODTAXTYPE =  REPLACE(PRODTAXTYPE,CHAR(34),''),                                                
+ PRODTAXDESC =  REPLACE(PRODTAXDESC,CHAR(34),''), SIZEGROUPID =  REPLACE(SIZEGROUPID,CHAR(34),''),                                                
+ SIZEGROUPDESC =  REPLACE(SIZEGROUPDESC,CHAR(34),''), SUPERCLASS1 =  REPLACE(SUPERCLASS1,CHAR(34),''),                                                
+ SUPERCLASS2 =  REPLACE(SUPERCLASS2,CHAR(34),''), SUPERCLASS1DESC =  REPLACE(SUPERCLASS1DESC,CHAR(34),''),                                                
+ SUPERCLASS2DESC =  REPLACE(SUPERCLASS2DESC,CHAR(34),''), VENDORCODE =  REPLACE(VENDORCODE,CHAR(34),''),                                                
+ BatchSrlNo =  REPLACE(BatchSrlNo,CHAR(34),''), CCStockNo =  REPLACE(CCStockNo,CHAR(34),''),                                                
+ SrcTaxType =  REPLACE(SrcTaxType,CHAR(34),'')                                                
+IF (@@ERROR <> 0)                                     
+BEGIN                                     
+ GOTO ErrorHandle                                     
+END                                           
+                               
+UPDATE TMPPRICEMASTER SET STOCKNO =  REPLACE(STOCKNO,CHAR(44),''),CLASS1CD =  REPLACE(CLASS1CD,CHAR(44),''),                                                
+ CLASS2CD =  REPLACE(CLASS2CD,CHAR(44),''), SUBCLASS1CD =  REPLACE(SUBCLASS1CD,CHAR(44),''),                                                
+ SUBCLASS2CD =  REPLACE(SUBCLASS2CD,CHAR(44),''), CLASS1DESC =  REPLACE(CLASS1DESC,CHAR(44),''),                                                
+ CLASS2DESC =  REPLACE(CLASS2DESC,CHAR(44),''), SUBCLASS1DESC =  REPLACE(SUBCLASS1DESC,CHAR(44),''),                                    
+ SUBCLASS2DESC =  REPLACE(SUBCLASS2DESC,CHAR(44),''),SIZECD =  REPLACE(SIZECD,CHAR(44),''),                                                
+ ITEMDESC =  REPLACE(ITEMDESC,CHAR(44),''), PRODTAXTYPE =  REPLACE(PRODTAXTYPE,CHAR(44),''),                                                
+ PRODTAXDESC =  REPLACE(PRODTAXDESC,CHAR(44),''), SIZEGROUPID =  REPLACE(SIZEGROUPID,CHAR(44),''),                                                
+ SIZEGROUPDESC =  REPLACE(SIZEGROUPDESC,CHAR(44),''), SUPERCLASS1 =  REPLACE(SUPERCLASS1,CHAR(44),''),                                                
+ SUPERCLASS2 =  REPLACE(SUPERCLASS2,CHAR(44),''), SUPERCLASS1DESC =  REPLACE(SUPERCLASS1DESC,CHAR(44),''),                                                
+ SUPERCLASS2DESC =  REPLACE(SUPERCLASS2DESC,CHAR(44),''), VENDORCODE =  REPLACE(VENDORCODE,CHAR(44),''),                                                
+ BatchSrlNo =  REPLACE(BatchSrlNo,CHAR(44),''), CCStockNo =  REPLACE(CCStockNo,CHAR(44),''),                                    
+ SrcTaxType =  REPLACE(SrcTaxType,CHAR(44),'')                                                
+IF (@@ERROR <> 0)                                     
+BEGIN                                     
+ GOTO ErrorHandle                             
+END                                           
+                                                      
+UPDATE TMPPRICEMASTER SET STOCKNO =  REPLACE(STOCKNO,CHAR(59),''),CLASS1CD =  REPLACE(CLASS1CD,CHAR(59),''),                                                
+ CLASS2CD =  REPLACE(CLASS2CD,CHAR(59),''), SUBCLASS1CD =  REPLACE(SUBCLASS1CD,CHAR(59),''),                                                
+ SUBCLASS2CD =  REPLACE(SUBCLASS2CD,CHAR(59),''), CLASS1DESC =  REPLACE(CLASS1DESC,CHAR(59),''),                                                
+ CLASS2DESC =  REPLACE(CLASS2DESC,CHAR(59),''), SUBCLASS1DESC =  REPLACE(SUBCLASS1DESC,CHAR(59),''),                                                
+ SUBCLASS2DESC =  REPLACE(SUBCLASS2DESC,CHAR(59),''),SIZECD =  REPLACE(SIZECD,CHAR(59),''),                                                
+ ITEMDESC =  REPLACE(ITEMDESC,CHAR(59),''), PRODTAXTYPE =  REPLACE(PRODTAXTYPE,CHAR(59),''),                                                
+ PRODTAXDESC =  REPLACE(PRODTAXDESC,CHAR(59),''), SIZEGROUPID =  REPLACE(SIZEGROUPID,CHAR(59),''),                                                
+ SIZEGROUPDESC =  REPLACE(SIZEGROUPDESC,CHAR(59),''), SUPERCLASS1 =  REPLACE(SUPERCLASS1,CHAR(59),''),                                                
+ SUPERCLASS2 =  REPLACE(SUPERCLASS2,CHAR(59),''), SUPERCLASS1DESC =  REPLACE(SUPERCLASS1DESC,CHAR(59),''),                                                
+ SUPERCLASS2DESC =  REPLACE(SUPERCLASS2DESC,CHAR(59),''), VENDORCODE =  REPLACE(VENDORCODE,CHAR(59),''),                                                
+ BatchSrlNo =  REPLACE(BatchSrlNo,CHAR(59),''), CCStockNo =  REPLACE(CCStockNo,CHAR(59),''),                                                
+ SrcTaxType =  REPLACE(SrcTaxType,CHAR(59),'')                                                
+IF (@@ERROR <> 0)                                     
+BEGIN                                     
+ GOTO ErrorHandle                                     
+END                                           
+
+UPDATE CLASS12COMBO SET SizeGroup = t.SizeGroupId,                                                             
+PrefVendorId=t.VendorCode,ProdTaxType=t.ProdTaxType,SuperClass1=left(t.SuperClass1,16),                                                             
+SuperClass2=left(t.SuperClass2,16),VActr = @vaCtr
+From TmpPriceMaster as t inner join CLASS12COMBO as c                          
+on t.CLASS1CD = c.CLASS1CD and t.CLASS2CD = c.CLASS2CD                           
+IF (@@ERROR <> 0)                                     
+BEGIN                                     
+ GOTO ErrorHandle                                     
+END                                           
+         
+UPDATE SUBCLASS2CAT SET SubClass2Desc=t.SubClass2Desc,VActr = @vaCtr FROM TmpPriceMaster as t inner join SUBCLASS2CAT as sc2                          
+on t.Class1Cd =sc2.Class1Cd and t.Class2Cd =sc2.Class2Cd and t.SubClass2Cd=sc2.SUBCLASS2CD                           
+IF (@@ERROR <> 0)                           
+BEGIN                                     
+ GOTO ErrorHandle                                     
+END                                           
+         
+Set @RecCount = 0                              
+SELECT @RecCount = count(*) FROM SYSPARAM WHERE PARAMCODE = 'AllowSizeCatToBeUpdatedInBackendImport'                           
+if @RecCount = 0                              
+begin                             
+ UPDATE SIZECAT SET SizeGroupId = t.SizeGroupID,                         
+ SizeGroupSrlno=t.SizeGroupSrlno,VActr = @vaCtr FROM TmpPricemaster as t inner join SIZECAT as sz on                          
+ t.CLASS1CD = sz.CLASS1CD  and t.CLASS2CD = sz.CLASS2CD and t.SIZECD =sz.Sizecd                           
+        IF (@@ERROR <> 0)                                     
+        BEGIN                                     
+         GOTO ErrorHandle                                     
+        END                                     
+end                                  
+Set @RecCount = 0                              
+SELECT @RecCount = count(*) FROM SYSPARAM WHERE PARAMCODE = 'AllowSizeCatToBeUpdatedInBackendImport' and Boolean=1            
+if @RecCount > 0                          
+begin                             
+ UPDATE SIZECAT SET sizegroupid = t.SizeGroupID,
+ SizeGroupSrlno=t.SizeGroupSrlno,VActr = @vaCtr FROM TmpPricemaster as t inner join SIZECAT as sz on                          
+ t.CLASS1CD = sz.CLASS1CD  and t.CLASS2CD = sz.CLASS2CD and t.SIZECD =sz.Sizecd                           
+        IF (@@ERROR <> 0)                                     
+        BEGIN                                     
+         GOTO ErrorHandle                                     
+        END                                     
+end               
+UPDATE Genlookup Set Descr = Class1Desc,VActr = @vaCtr From TmpPriceMaster as t,Genlookup as gl Where gl.RecId = 1 and Code = t.Class1Cd                                                             
+IF (@@ERROR <> 0)                                     
+BEGIN                                     
+ GOTO ErrorHandle                                     
+END                                           
+                                     
+UPDATE Genlookup Set Descr = Class2Desc,VActr = @vaCtr From TmpPriceMaster as t,Genlookup as gl Where gl.RecId = 2 and Code = t.Class2Cd                                                             
+IF (@@ERROR <> 0)                                     
+BEGIN                                     
+ GOTO ErrorHandle                             
+END                                           
+                                     
+UPDATE Genlookup Set Descr = AnalDesc1,VActr = @vaCtr From TmpPriceMaster as t,Genlookup as gl Where gl.RecId = 65 and Code = t.AnalCode1                                                             
+IF (@@ERROR <> 0)                                     
+BEGIN                                     
+ GOTO ErrorHandle                                     
+END                                           
+                                     
+UPDATE Genlookup Set Descr = AnalDesc2,VActr = @vaCtr From TmpPriceMaster as t,Genlookup as gl Where gl.RecId = 66 and Code = t.AnalCode2                                                             
+IF (@@ERROR <> 0)                                     
+BEGIN                                     
+ GOTO ErrorHandle                                     
+END                                           
+                                     
+UPDATE Genlookup Set Descr = AnalDesc3,VActr = @vaCtr From TmpPriceMaster as t,Genlookup as gl Where gl.RecId = 67 and Code = t.AnalCode3                                                             
+IF (@@ERROR <> 0)                                     
+BEGIN                                     
+ GOTO ErrorHandle                                     
+END                                           
+                                     
+UPDATE Genlookup Set Descr = AnalDesc4,VActr = @vaCtr From TmpPriceMaster as t,Genlookup as gl Where gl.RecId = 68 and Code = t.AnalCode4                                                             
+IF (@@ERROR <> 0)                                     
+BEGIN                GOTO ErrorHandle                                     
+END                           
+UPDATE Genlookup Set Descr = AnalDesc5,VActr = @vaCtr From TmpPriceMaster as t,Genlookup as gl Where gl.RecId = 69 and Code = t.AnalCode5                                                             
+IF (@@ERROR <> 0)                                     
+BEGIN                                     
+ GOTO ErrorHandle                                     
+END                                        
+                                    
+UPDATE Genlookup Set Descr = SuperClass1Desc,VActr = @vaCtr From TmpPriceMaster as t,Genlookup as gl Where gl.RecId = 51 and Code = t.SuperClass1                                                              
+IF (@@ERROR <> 0)                                     
+BEGIN                                     
+ GOTO ErrorHandle                                     
+END                                           
+                                     
+UPDATE Genlookup Set Descr = SuperClass2Desc,VActr = @vaCtr From TmpPriceMaster as t,Genlookup as gl Where gl.RecId = 52 and Code = t.SuperClass2                                                          
+IF (@@ERROR <> 0)                                     
+BEGIN                                     
+ GOTO ErrorHandle                                     
+END       
+                                    
+UPDATE Genlookup Set Descr = SizeGroupDesc,VActr = @vaCtr From TmpPriceMaster as t,Genlookup as gl Where gl.RecId = 53 and Code = t.SizeGroupId                                      
+IF (@@ERROR <> 0)                                     
+BEGIN                                     
+ GOTO ErrorHandle                                     
+END                                           
+UPDATE Genlookup Set Descr = ProdTaxDesc,VActr = @vaCtr From TmpPriceMaster as t,Genlookup as gl Where gl.RecId = 54 and Code = t.ProdTaxType                                                              
+IF (@@ERROR <> 0)                                     
+BEGIN                                     
+ GOTO ErrorHandle                                     
+END                                           
+UPDATE Genlookup Set Descr = AnalDesc6,VActr = @vaCtr From TmpPriceMaster as t,Genlookup as gl Where gl.RecId = 7000 and Code = t.AnalCode6                                            
+IF (@@ERROR <> 0)                                     
+BEGIN                                     
+ GOTO ErrorHandle                                     
+END                                           
+UPDATE Genlookup Set Descr = AnalDesc7,VActr = @vaCtr From TmpPriceMaster as t,Genlookup as gl Where gl.RecId = 7001 and Code = t.AnalCode7                                                    
+IF (@@ERROR <> 0)                                  
+BEGIN                                     
+ GOTO ErrorHandle                                     
+END                                           
+UPDATE Genlookup Set Descr = AnalDesc8,VActr = @vaCtr From TmpPriceMaster as t,Genlookup as gl Where gl.RecId = 7002 and Code = t.AnalCode8                                                    
+IF (@@ERROR <> 0)                                     
+BEGIN                                     
+ GOTO ErrorHandle                                     
+END                                           
+UPDATE Genlookup Set Descr = AnalDesc9,VActr = @vaCtr From TmpPriceMaster as t,Genlookup as gl Where gl.RecId = 7003 and Code = t.AnalCode9                                                    
+IF (@@ERROR <> 0)                                     
+BEGIN                                     
+ GOTO ErrorHandle                                     
+END                                           
+UPDATE Genlookup Set Descr = AnalDesc10,VActr = @vaCtr From TmpPriceMaster as t,Genlookup as gl Where gl.RecId = 7004 and Code = t.AnalCode10                                                    
+IF (@@ERROR <> 0)                                     
+BEGIN                                     
+ GOTO ErrorHandle                                     
+END                                           
+UPDATE Genlookup Set Descr = AnalDesc11,VActr = @vaCtr From TmpPriceMaster as t,Genlookup as gl Where gl.RecId = 7005 and Code = t.AnalCode11                                                    
+IF (@@ERROR <> 0)                                     
+BEGIN                                     
+ GOTO ErrorHandle                                     
+END                                           
+UPDATE Genlookup Set Descr = AnalDesc12,VActr = @vaCtr From TmpPriceMaster as t,Genlookup as gl Where gl.RecId = 7006 and Code = t.AnalCode12                                   
+IF (@@ERROR <> 0)                                     
+BEGIN                                     
+ GOTO ErrorHandle                                     
+END                                           
+UPDATE Genlookup Set Descr = AnalDesc13,VActr = @vaCtr From TmpPriceMaster as t,Genlookup as gl Where gl.RecId = 7007 and Code = t.AnalCode13                      
+IF (@@ERROR <> 0)                                     
+BEGIN                                     
+ GOTO ErrorHandle                                     
+END                                           
+UPDATE Genlookup Set Descr = AnalDesc14,VActr = @vaCtr From TmpPriceMaster as t,Genlookup as gl Where gl.RecId = 7008 and Code = t.AnalCode14                                                    
+IF (@@ERROR <> 0)                                     
+BEGIN                                     
+ GOTO ErrorHandle                                     
+END                                           
+UPDATE Genlookup Set Descr = AnalDesc15,VActr = @vaCtr From TmpPriceMaster as t,Genlookup as gl Where gl.RecId = 7009 and Code = t.AnalCode15                                                    
+IF (@@ERROR <> 0)                                     
+BEGIN                         
+ GOTO ErrorHandle                                     
+END                                           
+UPDATE Genlookup Set Descr = AnalDesc16,VActr = @vaCtr From TmpPriceMaster as t,Genlookup as gl Where gl.RecId = 7010 and Code = t.AnalCode16                                                    
+IF (@@ERROR <> 0)                                     
+BEGIN                                  
+ GOTO ErrorHandle                                     
+END                                           
+UPDATE Genlookup Set Descr = AnalDesc17,VActr = @vaCtr From TmpPriceMaster as t,Genlookup as gl Where gl.RecId = 7011 and Code = t.AnalCode17                                                    
+IF (@@ERROR <> 0)                                     
+BEGIN                                     
+ GOTO ErrorHandle                                     
+END                                           
+UPDATE Genlookup Set Descr = AnalDesc18,VActr = @vaCtr From TmpPriceMaster as t,Genlookup as gl Where gl.RecId = 7012 and Code = t.AnalCode18                                                    
+IF (@@ERROR <> 0)                                     
+BEGIN                                     
+ GOTO ErrorHandle                                     
+END         
+UPDATE Genlookup Set Descr = AnalDesc19,VActr = @vaCtr From TmpPriceMaster as t,Genlookup as gl Where gl.RecId = 7013 and Code = t.AnalCode19                                                    
+IF (@@ERROR <> 0)                                     
+BEGIN                                     
+ GOTO ErrorHandle                                     
+END                                           
+UPDATE Genlookup Set Descr = AnalDesc20,VActr = @vaCtr From TmpPriceMaster as t,Genlookup as gl Where gl.RecId = 7014 and Code = t.AnalCode20                                                    
+IF (@@ERROR <> 0)                                     
+BEGIN                                     
+ GOTO ErrorHandle                                     
+END                                           
+UPDATE Genlookup Set Descr = AnalDesc21,VActr = @vaCtr From TmpPriceMaster as t,Genlookup as gl Where gl.RecId = 7015 and Code = t.AnalCode21                                                    
+IF (@@ERROR <> 0)                                     
+BEGIN                                     
+ GOTO ErrorHandle                                     
+END                                           
+UPDATE Genlookup Set Descr = AnalDesc22,VActr = @vaCtr From TmpPriceMaster as t,Genlookup as gl Where gl.RecId = 7016 and Code = t.AnalCode22                                                    
+IF (@@ERROR <> 0)                                     
+BEGIN                                     
+ GOTO ErrorHandle                                     
+END                                        
+UPDATE Genlookup Set Descr = AnalDesc23,VActr = @vaCtr From TmpPriceMaster as t,Genlookup as gl Where gl.RecId = 7017 and Code = t.AnalCode23                                                    
+IF (@@ERROR <> 0)                                     
+BEGIN                                     
+ GOTO ErrorHandle                                     
+END                                           
+UPDATE Genlookup Set Descr = AnalDesc24,VActr = @vaCtr From TmpPriceMaster as t,Genlookup as gl Where gl.RecId = 7018 and Code = t.AnalCode24                                                    
+IF (@@ERROR <> 0)                                     
+BEGIN                                     
+ GOTO ErrorHandle                           
+END                                           
+                                     
+UPDATE Genlookup Set Descr = AnalDesc25,VActr = @vaCtr From TmpPriceMaster as t,Genlookup as gl Where gl.RecId = 7019 and Code = t.AnalCode25                                                    
+IF (@@ERROR <> 0)                                     
+BEGIN                                     
+ GOTO ErrorHandle                      
+END                                           
+UPDATE Genlookup Set Descr = AnalDesc26,VActr = @vaCtr From TmpPriceMaster as t,Genlookup as gl Where gl.RecId = 7020 and Code = t.AnalCode26                                                    
+IF (@@ERROR <> 0)                                     
+BEGIN                                     
+ GOTO ErrorHandle                                   
+END                                           
+UPDATE Genlookup Set Descr = AnalDesc27,VActr = @vaCtr From TmpPriceMaster as t,Genlookup as gl Where gl.RecId = 7021 and Code = t.AnalCode27                                                    
+IF (@@ERROR <> 0)                                     
+BEGIN                                     
+ GOTO ErrorHandle                                     
+END                                           
+UPDATE Genlookup Set Descr = AnalDesc28,VActr = @vaCtr From TmpPriceMaster as t,Genlookup as gl Where gl.RecId = 7022 and Code = t.AnalCode28                                                    
+IF (@@ERROR <> 0)                                     
+BEGIN                                     
+ GOTO ErrorHandle                                     
+END                                           
+UPDATE Genlookup Set Descr = AnalDesc29,VActr = @vaCtr From TmpPriceMaster as t,Genlookup as gl Where gl.RecId = 7023 and Code = t.AnalCode29                                                    
+IF (@@ERROR <> 0)                                     
+BEGIN                                     
+ GOTO ErrorHandle                                     
+END                                           
+UPDATE Genlookup Set Descr = AnalDesc30,VActr = @vaCtr From TmpPriceMaster as t,Genlookup as gl Where gl.RecId = 7024 and Code = t.AnalCode30                                                    
+IF (@@ERROR <> 0)                                     
+BEGIN                                     
+ GOTO ErrorHandle                             
+END                                           
+UPDATE Genlookup Set Descr = AnalDesc31,VActr = @vaCtr From TmpPriceMaster as t,Genlookup as gl Where gl.RecId = 7025 and Code = t.AnalCode31                                                    
+IF (@@ERROR <> 0)                                     
+BEGIN                                     
+ GOTO ErrorHandle                                     
+END                                           
+UPDATE Genlookup Set Descr = AnalDesc32,VActr = @vaCtr From TmpPriceMaster as t,Genlookup as gl Where gl.RecId = 7026 and Code = t.AnalCode32                                                    
+IF (@@ERROR <> 0)                                     
+BEGIN                                     
+ GOTO ErrorHandle                                     
+END                                           
+         
+IF @insertflag = 1          
+Begin                                                              
+ insert into itemmaster(StockNo,BatchSrlNo,Class1Cd,Class2Cd,VaUid,DateInsert)                                                             
+ select Distinct StockNo,BatchSrlNo,'','','SUPER',GETDATE() From TmpPricemaster                                      
+ WHERE StockNo NOT IN (SELECT DISTINCT StockNo From ItemMaster)                                                
+ IF (@@ERROR <> 0)                                     
+ BEGIN                                     
+  GOTO ErrorHandle                                     
+ END                      
+End         
+         
+         
+if @insertflag = 1          
+Begin          
+ Update ITEMMASTER Set Class1Cd=t.Class1Cd,Class2Cd=t.Class2Cd,SubClass1Cd=t.SubClass1Cd,                                                             
+ SubClass2Cd=t.SubClass2Cd,SizeCd=t.SizeCd,Retail_Price=t.Retail_Price,LastPurchPrice=t.LastPurchPrice,Dealer_Price=t.Dealer_Price,currentcost= t.currentcost,          
+ Leastsalableqty=t.Leastsalableqty,ISRPTAXINCLUSIVE=T.ISRPTAXINCLUSIVE,REGULARIND=T.REGULARIND,GRADECD=T.GRADECD,                                     
+ ItemDesc=t.ItemDesc,ProdTaxType=t.ProdTaxType,AnalCode1=t.AnalCode1,AnalCode2=t.AnalCode2,AnalCode3=t.AnalCode3,AnalCode4=t.AnalCode4,                                              
+ AnalCode5=t.AnalCode5,AnalCode6=t.AnalCode6,AnalCode7=t.AnalCode7,AnalCode8=t.AnalCode8,AnalCode9=t.AnalCode9,                                                    
+ AnalCode10=t.AnalCode10,AnalCode11=t.AnalCode11,AnalCode12=t.AnalCode12,AnalCode13=t.AnalCode13,AnalCode14=t.AnalCode14,                                                    
+ AnalCode15=t.AnalCode15,AnalCode16=t.AnalCode16,AnalCode17=t.AnalCode17,AnalCode18=t.AnalCode18,AnalCode19=t.AnalCode19,                                                    
+ AnalCode20=t.AnalCode20,AnalCode21=t.AnalCode21,AnalCode22=t.AnalCode22,AnalCode23=t.AnalCode23,AnalCode24=t.AnalCode24,                                                    
+ AnalCode25=t.AnalCode25,AnalCode26=t.AnalCode26,AnalCode27=t.AnalCode27,AnalCode28=t.AnalCode28,AnalCode29=t.AnalCode29,                                                    
+ AnalCode30=t.AnalCode30,AnalCode31=t.AnalCode31,AnalCode32=t.AnalCode32,                                     
+ IMAGEPRESENT = t.IMAGEPRESENT,ISINVENTORYITEM = t.ISINVENTORYITEM,SRCTAXTYPE = t.SRCTAXTYPE,                                     
+ EXTDESCPRESENT = t.EXTDESCPRESENT,EOQ= t.EOQ,MINORDQTY = t.minordqty,ISBILLABLE = t.ISBILLABLE,                                     
+ ISSERVICE = t.ISSERVICE,BATCHSRLNO = t.BATCHSRLNO From TmpPriceMaster as t          
+ inner join ITEMMASTER as i on t.StockNo = i.StockNo and i.class1cd = ''         
+ IF (@@ERROR <> 0)                                     
+     BEGIN              
+     GOTO ErrorHandle                                     
+   END                                           
+End         
+         
+if @updatepriceflag = 1          
+ begin         
+ update itemmaster set currentcost= t.currentcost, Retail_Price=t.Retail_Price,
+	LastPurchPrice=t.LastPurchPrice,Dealer_Price=t.Dealer_Price,DateInsert = GetDate() 
+	From TmpPriceMaster as t inner join ITEMMASTER as i on t.StockNo = i.StockNo          
+ IF (@@ERROR <> 0)                                     
+ BEGIN                                     
+    GOTO ErrorHandle                                     
+ END                      
+end         
+         
+if @updateflag = 1          
+Begin          
+ Update ITEMMASTER Set DateInsert = GetDate(),VActr = @vaCtr From TmpPriceMaster as t inner join ITEMMASTER as i on          
+ t.StockNo = i.StockNo where (i.Class1Cd<>t.Class1Cd or i.Class2Cd <> t.Class2Cd or i.SubClass1Cd<>t.SubClass1Cd or         
+ i.SubClass2Cd<>t.SubClass2Cd or i.SizeCd<>t.SizeCd or i.Leastsalableqty<>t.Leastsalableqty or         
+ i.ISRPTAXINCLUSIVE<>T.ISRPTAXINCLUSIVE or i.REGULARIND<>T.REGULARIND or i.GRADECD<>T.GRADECD or         
+ i.ItemDesc<>t.ItemDesc or i.ProdTaxType<>t.ProdTaxType or i.AnalCode1<>t.AnalCode1 or i.AnalCode2<>t.AnalCode2 or i.AnalCode3<>t.AnalCode3 or i.AnalCode4<>t.AnalCode4 or         
+ i.AnalCode5<>t.AnalCode5 or i.AnalCode6<>t.AnalCode6 or i.AnalCode7<>t.AnalCode7 or i.AnalCode8<>t.AnalCode8 or i.AnalCode9<>t.AnalCode9 or          
+ i.AnalCode10<>t.AnalCode10 or i.AnalCode11<>t.AnalCode11 or i.AnalCode12<>t.AnalCode12 or i.AnalCode13<>t.AnalCode13 or i.AnalCode14<>t.AnalCode14 or         
+ i.AnalCode15<>t.AnalCode15 or i.AnalCode16<>t.AnalCode16 or i.AnalCode17<>t.AnalCode17 or i.AnalCode18<>t.AnalCode18 or i.AnalCode19<>t.AnalCode19 or         
+ i.AnalCode20<>t.AnalCode20 or i.AnalCode21<>t.AnalCode21 or i.AnalCode22<>t.AnalCode22 or i.AnalCode23<>t.AnalCode23 or i.AnalCode24<>t.AnalCode24 or         
+ i.AnalCode25<>t.AnalCode25 or i.AnalCode26<>t.AnalCode26 or i.AnalCode27<>t.AnalCode27 or i.AnalCode28<>t.AnalCode28 or i.AnalCode29<>t.AnalCode29 or         
+ i.AnalCode30<>t.AnalCode30 or i.AnalCode31<>t.AnalCode31 or i.AnalCode32<>t.AnalCode32 or         
+ i.IMAGEPRESENT <> t.IMAGEPRESENT or i.ISINVENTORYITEM <> t.ISINVENTORYITEM or i.SRCTAXTYPE <> t.SRCTAXTYPE or         
+ i.EXTDESCPRESENT <> t.EXTDESCPRESENT or i.EOQ<> t.EOQ or i.MINORDQTY <> t.minordqty or i.ISBILLABLE <> t.ISBILLABLE or         
+ i.ISSERVICE <> t.ISSERVICE or i.BATCHSRLNO <> t.BATCHSRLNO)         
+         
+ IF (@@ERROR <> 0)                                     
+ BEGIN              
+  GOTO ErrorHandle                                     
+ END                  
+End       
+         
+if @updateflag = 1          
+Begin          
+         
+ Update ITEMMASTER Set Class1Cd=t.Class1Cd,Class2Cd=t.Class2Cd,SubClass1Cd=t.SubClass1Cd,                                                             
+ SubClass2Cd=t.SubClass2Cd,SizeCd=t.SizeCd,Leastsalableqty=t.Leastsalableqty,                                                             
+ ISRPTAXINCLUSIVE=T.ISRPTAXINCLUSIVE,REGULARIND=T.REGULARIND,GRADECD=T.GRADECD,                                     
+ ItemDesc=t.ItemDesc,ProdTaxType=t.ProdTaxType,AnalCode1=t.AnalCode1,AnalCode2=t.AnalCode2,AnalCode3=t.AnalCode3,AnalCode4=t.AnalCode4,                                                    
+ AnalCode5=t.AnalCode5,AnalCode6=t.AnalCode6,AnalCode7=t.AnalCode7,AnalCode8=t.AnalCode8,AnalCode9=t.AnalCode9,                                                    
+ AnalCode10=t.AnalCode10,AnalCode11=t.AnalCode11,AnalCode12=t.AnalCode12,AnalCode13=t.AnalCode13,AnalCode14=t.AnalCode14,                                                    
+ AnalCode15=t.AnalCode15,AnalCode16=t.AnalCode16,AnalCode17=t.AnalCode17,AnalCode18=t.AnalCode18,AnalCode19=t.AnalCode19,                                                    
+ AnalCode20=t.AnalCode20,AnalCode21=t.AnalCode21,AnalCode22=t.AnalCode22,AnalCode23=t.AnalCode23,AnalCode24=t.AnalCode24,                                                    
+ AnalCode25=t.AnalCode25,AnalCode26=t.AnalCode26,AnalCode27=t.AnalCode27,AnalCode28=t.AnalCode28,AnalCode29=t.AnalCode29,                                                    
+ AnalCode30=t.AnalCode30,AnalCode31=t.AnalCode31,AnalCode32=t.AnalCode32,                                     
+ IMAGEPRESENT = t.IMAGEPRESENT,ISINVENTORYITEM = t.ISINVENTORYITEM,SRCTAXTYPE = t.SRCTAXTYPE,                                     
+ EXTDESCPRESENT = t.EXTDESCPRESENT,EOQ= t.EOQ,MINORDQTY = t.minordqty,ISBILLABLE = t.ISBILLABLE,                                     
+ ISSERVICE = t.ISSERVICE,BATCHSRLNO = t.BATCHSRLNO                                     
+ From TmpPriceMaster as t inner join ITEMMASTER as i on t.StockNo = i.StockNo                                     
+ IF (@@ERROR <> 0)                                     
+ BEGIN              
+  GOTO ErrorHandle                                     
+ END                                           
+                                   
+End         
+                                                             
+INSERT INTO CLASS12COMBO(Class1Cd,Class2Cd,VAUid,DateInsert)                                                             
+select Distinct Class1Cd,Class2Cd,'SUPER',GETDATE() From TmpPricemaster WHERE                                                              
+CLASS1CD+CLASS2CD NOT IN (SELECT DISTINCT CLASS1CD+CLASS2CD FROM class12combo)                                                             
+IF (@@ERROR <> 0)                                     
+BEGIN                                     
+ GOTO ErrorHandle                                     
+END                                           
+                      
+UPDATE CLASS12COMBO SET SizeGroup = t.SizeGroupId,PrefVendorId=t.VendorCode,
+ProdTaxType=t.ProdTaxType,SuperClass1=t.SuperClass1,SuperClass2=t.SuperClass2,VActr = @vaCtr
+From TmpPriceMaster as t inner join CLASS12COMBO as c                                                             
+on t.CLASS1CD = c.CLASS1CD and t.CLASS2CD = c.CLASS2CD 
+IF (@@ERROR <> 0)                                     
+BEGIN                                     
+ GOTO ErrorHandle                                     
+END                                           
+                                                           
+INSERT INTO SUBCLASS1CAT(Class1Cd,Class2Cd,SubClass1Cd,SubClass1Desc,VAUid,Lastupdateddate,Dateinsert)                                                             
+SELECT DISTINCT Class1Cd,Class2Cd,SubClass1Cd,'','SUPER',GETDATE(),GETDATE() FROM TmpPricemaster                                                             
+WHERE Class1Cd+Class2Cd+SubClass1Cd NOT IN (SELECT DISTINCT CLASS1CD+CLASS2CD+SUBCLASS1CD FROM SUBCLASS1CAT )                                                             
+IF (@@ERROR <> 0)                                     
+BEGIN                                     
+ GOTO ErrorHandle                                     
+END                                           
+                                                 
+UPDATE SUBCLASS1CAT Set SubClass1Desc=t.SubClass1Desc,ProdTaxType=t.ProdTaxType,                                                             
+AnalCode1=t.AnalCode1,AnalCode2=t.AnalCode2,AnalCode3=t.AnalCode3,AnalCode4=t.AnalCode4,                                                             
+AnalCode5=t.AnalCode5,AnalCode6=t.AnalCode6,AnalCode7=t.AnalCode7,AnalCode8=t.AnalCode8,AnalCode9=t.AnalCode9,                                                    
+AnalCode10=t.AnalCode10,AnalCode11=t.AnalCode11,AnalCode12=t.AnalCode12,AnalCode13=t.AnalCode13,AnalCode14=t.AnalCode14,                                                    
+AnalCode15=t.AnalCode15,AnalCode16=t.AnalCode16,AnalCode17=t.AnalCode17,AnalCode18=t.AnalCode18,AnalCode19=t.AnalCode19,                                     
+AnalCode20=t.AnalCode20,AnalCode21=t.AnalCode21,AnalCode22=t.AnalCode22,AnalCode23=t.AnalCode23,AnalCode24=t.AnalCode24,                                                    
+AnalCode25=t.AnalCode25,AnalCode26=t.AnalCode26,AnalCode27=t.AnalCode27,AnalCode28=t.AnalCode28,AnalCode29=t.AnalCode29,                                                    
+AnalCode30=t.AnalCode30,AnalCode31=t.AnalCode31,AnalCode32=t.AnalCode32,LastUpdatedDate=GetDate(),VActr = @vaCtr                          
+FROM TmpPriceMaster as t inner join SUBCLASS1CAT as sc1 on t.Class1Cd = sc1.Class1Cd and t.Class2Cd = sc1.Class2Cd                         
+and t.SubClass1Cd = sc1.SubClass1Cd                            
+IF (@@ERROR <> 0)                                     
+BEGIN                                     
+ GOTO ErrorHandle                                     
+END                                           
+                                                             
+UPDATE SUBCLASS1CAT Set SubClass1Desc=t.SubClass1Desc,ProdTaxType=t.ProdTaxType,                                                             
+AnalCode1=t.AnalCode1,AnalCode2=t.AnalCode2,AnalCode3=t.AnalCode3,AnalCode4=t.AnalCode4,                                                             
+AnalCode5=t.AnalCode5,VActr = @vaCtr FROM TmpPriceMaster as t inner join SUBCLASS1CAT as sc1 on                      
+t.Class1Cd = sc1.Class1Cd and t.Class2Cd = sc1.Class2Cd and t.SubClass1Cd = sc1.SubClass1Cd                           
+where sc1.SubClass1Desc = '' and sc1.AnalCode1 Is NULL and sc1.AnalCode2 Is NULL and                                                     
+sc1.AnalCode3 is NULL and sc1.AnalCode4 Is Null and sc1.AnalCode5 Is NULL                            
+IF (@@ERROR <> 0)                                     
+BEGIN                                     
+ GOTO ErrorHandle                                     
+END                                           
+                                                           
+INSERT INTO SUBCLASS2CAT(Class1Cd,Class2Cd,SubClass2Cd,SubClass2Desc,VAUid,DateInsert)                                                             
+SELECT DISTINCT Class1Cd,Class2Cd,SubClass2Cd,'','SUPER',GETDATE() FROM TmpPricemaster                                                              
+WHERE Class1Cd+Class2Cd+SubClass2Cd NOT IN (SELECT DISTINCT CLASS1CD+CLASS2CD+SUBCLASS2CD FROM SUBCLASS2CAT)                                                             
+IF (@@ERROR <> 0)                                     
+BEGIN                                     
+ GOTO ErrorHandle                                     
+END                                           
+                                                    
+UPDATE SUBCLASS2CAT SET SubClass2Desc=t.SubClass2Desc,VActr = @vaCtr FROM TmpPriceMaster as t inner join SUBCLASS2CAT as sc2                          
+on t.Class1Cd = sc2.CLASS1CD and t.Class2Cd= sc2.CLASS2CD and t.SubClass2Cd = sc2.SUBCLASS2CD where sc2.SubClass2Desc = ''                          
+IF (@@ERROR <> 0)                                     
+BEGIN                  
+ GOTO ErrorHandle                                     
+END                               
+                                  
+Select * into #TmpSizeCat from SizeCat where 1=2            
+IF (@@ERROR <> 0)                                     
+BEGIN                                     
+ GOTO ErrorHandle                                     
+END                                           
+INSERT INTO #TmpSizeCat (Class1Cd,Class2Cd,SizeCd,SizeGroupId,VAUid)                                                   
+select Distinct CLASS1CD,CLASS2CD,SIZECD,'','SUPER' FROM TmpPricemaster                                                             
+WHERE CLASS1CD+CLASS2CD+SIZECD NOT IN (SELECT DISTINCT CLASS1CD+CLASS2CD+Sizecd                           
+FROM Sizecat) order by class1cd,class2cd,sizecd                                                       
+IF (@@ERROR <> 0)                                     
+BEGIN                                     
+ GOTO ErrorHandle                                     
+END                                           
+                                   
+UPDATE #TmpSizeCat SET IsPivotalSize=0,SizeGroupId = IsNULL(t.SizeGroupId,0),                                                      
+SizeGroupSrlNo=t.SizeGroupSrlNo,IdealStockRatioQty = '0'                                              
+FROM TmpPricemaster as t inner join #TmpSizeCat as sz on t.CLASS1CD=sz.CLASS1CD and t.CLASS2CD = sz.CLASS2CD                         
+and t.SIZECD=sz.Sizecd where sz.SizeGroupId = ''                                                             
+IF (@@ERROR <> 0)                                     
+BEGIN                                     
+ GOTO ErrorHandle                                     
+END               
+Update #TmpSizeCat set SizeGroupSrlNo=0 from #TmpSizeCat as T,SizeCat as S where S.Class1Cd=T.Class1Cd             
+and S.Class2Cd=T.Class2Cd and S.SizeGroupSrlNo=T.SizeGroupSrlNo            
+IF (@@ERROR <> 0)                                     
+BEGIN                                     
+ GOTO ErrorHandle                                     
+END               
+INSERT INTO SIZECAT (Class1Cd,Class2Cd,SizeCd,SizeGroupId,SizeGroupSrlNo,IdealStockRatioQty,            
+VAUid)                                             
+select Class1Cd,Class2Cd,SizeCd,SizeGroupId,SizeGroupSrlNo,IdealStockRatioQty,            
+VAUid FROM #TmpSizeCat where SizeGroupSrlNo<>0                                                            
+order by class1cd,class2cd,sizecd                                                       
+IF (@@ERROR <> 0)                                     
+BEGIN                                     
+ GOTO ErrorHandle                                     
+END                                           
+Delete from #TmpSizeCat where SizeGroupSrlNo<>0            
+IF (@@ERROR <> 0)                                     
+BEGIN                                     
+ GOTO ErrorHandle                                     
+END                  
+Update #TmpSizeCat set SizeGroupSrlNo=0            
+IF (@@ERROR <> 0)                                     
+BEGIN                                     
+ GOTO ErrorHandle                                     
+END                  
+declare SizeGroupNum_cursor cursor for select Class1cd,Class2Cd,SizeCd from #TmpSizeCat where isnumeric(sizecd) =1 order by class1cd,class2cd,convert(numeric(10),sizecd)            
+declare SizeGroupAlp_cursor cursor for select Class1cd,Class2Cd,SizeCd from #TmpSizeCat where isnumeric(sizecd) <>1 order by class1cd,class2cd,Sizecd            
+set @SrlNo=0            
+set @strClass1CdPrev=''         
+set @strClass2CdPrev =''            
+open SizeGroupNum_cursor                    
+fetch next from SizeGroupNum_cursor into @strClass1Cd,@strClass2Cd,@strSizeCd            
+while @@fetch_Status=0                    
+begin                    
+             
+ if (@strClass1Cd<>@strClass1CdPrev or @strClass2Cd<>@strClass2CdPrev)            
+ begin            
+  Select @SrlNo=(select isnull(max(isnull(SizeGroupSrlNo,0)),0) from Sizecat where Class1cd= @strClass1Cd and Class2Cd= @strClass2Cd)            
+  IF (@@ERROR <> 0)                                     
+  BEGIN                                     
+   GOTO ErrorHandle                                     
+  END                  
+  set @strClass1CdPrev=@strClass1Cd            
+  set @strClass2CdPrev=@strClass2Cd            
+ end            
+ set @SrlNo=@SrlNo+1            
+ Update #TmpSizeCat set SizeGroupSrlNo=@SrlNo where Class1cd=@strClass1Cd and Class2Cd=@strClass2Cd and SizeCd=@strSizeCd            
+ IF (@@ERROR <> 0)                                     
+ BEGIN                                     
+  GOTO ErrorHandle                                     
+ END                   
+ fetch next from SizeGroupNum_cursor into @strClass1Cd,@strClass2Cd,@strSizeCd            
+end            
+close SizeGroupNum_cursor                    
+deallocate SizeGroupNum_cursor                 
+set @SrlNo=0            
+set @strClass1CdPrev=''            
+set @strClass2CdPrev =''            
+open SizeGroupAlp_cursor                    
+fetch next from SizeGroupAlp_cursor into @strClass1Cd,@strClass2Cd,@strSizeCd            
+while @@fetch_Status=0                    
+begin                    
+ if (@strClass1Cd<>@strClass1CdPrev or @strClass2Cd<>@strClass2CdPrev )            
+ begin            
+  Select @SrlNo=(select isnull(max(isnull(SizeGroupSrlNo,0)),0) from Sizecat where Class1cd= @strClass1Cd and Class2Cd= @strClass2Cd)            
+  IF (@@ERROR <> 0)                                     
+  BEGIN                                     
+   GOTO ErrorHandle                                     
+  END                  
+  set @strClass1CdPrev=@strClass1Cd            
+  set @strClass2CdPrev=@strClass2Cd            
+ end            
+ set @SrlNo=@SrlNo+1            
+ Update #TmpSizeCat set SizeGroupSrlNo=@SrlNo where Class1cd=@strClass1Cd and Class2Cd=@strClass2Cd and SizeCd=@strSizeCd            
+ IF (@@ERROR <> 0)                                     
+ BEGIN                                     
+  GOTO ErrorHandle                                     
+ END                  
+             
+ fetch next from SizeGroupAlp_cursor into @strClass1Cd,@strClass2Cd,@strSizeCd           
+end            
+close SizeGroupAlp_cursor                    
+deallocate SizeGroupAlp_cursor                 
+         
+INSERT INTO SIZECAT (Class1Cd,Class2Cd,SizeCd,SizeGroupId,IsPivotalSize,SizeGroupSrlNo,IdealStockRatioQty,            
+VAUid,VActr)                                                   
+select CLASS1CD,CLASS2CD,SIZECD,SizeGroupId,IsPivotalSize,SizeGroupSrlNo,IdealStockRatioQty,VAUid,@vaCtr
+ FROM #TmpSizeCat where SizeGroupSrlNo<>0                                                            
+order by class1cd,class2cd,sizecd                                                       
+IF (@@ERROR <> 0)                                     
+BEGIN                                     
+ GOTO ErrorHandle                                     
+END                                           
+                                                             
+INSERT INTO Genlookup(RecId,Code) SELECT DISTINCT 1,Class1Cd FROM TmpPricemaster                                                          
+WHERE Class1Cd NOT IN (SELECT DISTINCT Code FROM Genlookup Where Recid = 1) AND CLASS1CD IS NOT NULL                                                              
+IF (@@ERROR <> 0)                                     
+BEGIN                                   
+ GOTO ErrorHandle                                     
+END                                           
+                                  
+UPDATE Genlookup Set Descr = Class1Desc,VActr = @vaCtr From TmpPriceMaster as t,Genlookup as gl                          
+Where gl.RecId = 1 and Code = t.Class1Cd                                                             
+IF (@@ERROR <> 0)                                     
+BEGIN                                     
+ GOTO ErrorHandle                                     
+END                                           
+                                                             
+INSERT INTO Genlookup(RecId,Code) SELECT DISTINCT 2,Class2Cd FROM TmpPricemaster                                                      
+WHERE Class2Cd NOT IN (SELECT DISTINCT Code                                                            
+FROM Genlookup Where Recid = 2) AND CLASS2CD IS NOT NULL                                                              
+IF (@@ERROR <> 0)                                     
+BEGIN                                     
+ GOTO ErrorHandle                                     
+END                                           
+                                                      
+UPDATE Genlookup Set Descr = Class2Desc,VActr = @vaCtr From TmpPriceMaster as t,Genlookup as gl                                                              
+Where gl.RecId = 2 and Code = t.Class2Cd                                                             
+IF (@@ERROR <> 0)                                     
+BEGIN                                     
+ GOTO ErrorHandle                                     
+END                                           
+                                                      
+INSERT INTO Genlookup(RecId,Code) SELECT DISTINCT 65,AnalCode1 FROM TmpPricemaster                                                          
+WHERE AnalCode1 NOT IN                                  
+(SELECT DISTINCT Code FROM Genlookup Where Recid =65) AND ANALCODE1 IS NOT NULL                                               
+IF (@@ERROR <> 0)                                     
+BEGIN                                     
+ GOTO ErrorHandle                                     
+END                                           
+                                                
+UPDATE Genlookup Set Descr = AnalDesc1,VActr = @vaCtr From TmpPriceMaster as t,Genlookup as gl                                                             
+Where gl.RecId = 65 and Code = t.AnalCode1                                                             
+IF (@@ERROR <> 0)                                     
+BEGIN                             
+ GOTO ErrorHandle                                     
+END                                           
+                                                            
+INSERT INTO Genlookup(RecId,Code) SELECT DISTINCT 66,AnalCode2 FROM TmpPricemaster                                                          
+WHERE AnalCode2 NOT IN (SELECT DISTINCT Code                                                            
+FROM Genlookup Where Recid =66) AND ANALCODE2 IS NOT NULL                                                             
+IF (@@ERROR <> 0)                                     
+BEGIN                                     
+ GOTO ErrorHandle                                     
+END                                           
+                                     
+UPDATE Genlookup Set Descr = AnalDesc2,VActr = @vaCtr From TmpPriceMaster as t,Genlookup as gl                                                             
+Where gl.RecId = 66 and Code = t.AnalCode2                                                             
+IF (@@ERROR <> 0)                                     
+BEGIN                                     
+GOTO ErrorHandle                                     
+END                                           
+                                                             
+INSERT INTO Genlookup(RecId,Code) SELECT DISTINCT 67,AnalCode3 FROM TmpPricemaster                                                          
+WHERE AnalCode3 NOT IN (SELECT DISTINCT Code                           
+FROM Genlookup Where Recid = 67) AND ANALCODE3 IS NOT NULL                                                             
+IF (@@ERROR <> 0)                                     
+BEGIN                                     
+ GOTO ErrorHandle                                     
+END           
+                         
+UPDATE Genlookup Set Descr = AnalDesc3,VActr = @vaCtr From TmpPriceMaster as t,Genlookup as gl                                                             
+Where gl.RecId = 67 and Code = t.AnalCode3                                                             
+IF (@@ERROR <> 0)                                     
+BEGIN         GOTO ErrorHandle                                     
+END                                    
+                                                      
+INSERT INTO Genlookup(RecId,Code) SELECT DISTINCT 68,AnalCode4 FROM TmpPricemaster                                                          
+WHERE AnalCode4 NOT IN (SELECT DISTINCT Code                           
+FROM Genlookup Where Recid = 68) AND ANALCODE4 IS NOT NULL                                                             
+                           
+IF (@@ERROR <> 0)                                     
+BEGIN         GOTO ErrorHandle                                     
+END                                           
+                           
+                           
+UPDATE Genlookup Set Descr = AnalDesc4,VActr = @vaCtr From TmpPriceMaster as t,Genlookup as gl                                                             
+Where gl.RecId = 68 and Code = t.AnalCode4                                                             
+IF (@@ERROR <> 0)                                     
+BEGIN                                     
+ GOTO ErrorHandle             
+END                                 
+                                                             
+INSERT INTO Genlookup(RecId,Code) SELECT DISTINCT 69,AnalCode5 FROM TmpPricemaster                                                         
+WHERE AnalCode5 NOT IN (SELECT DISTINCT Code                           
+FROM Genlookup Where Recid = 69) AND ANALCODE5 IS NOT NULL                                                            
+IF (@@ERROR <> 0)                                     
+BEGIN                                     
+ GOTO ErrorHandle                                     
+END                                           
+                                     
+UPDATE Genlookup Set Descr = AnalDesc5,VActr = @vaCtr From TmpPriceMaster as t,Genlookup as gl                                                             
+Where gl.RecId = 69 and Code = t.AnalCode5                                                             
+IF (@@ERROR <> 0)                                 
+BEGIN                                     
+ GOTO ErrorHandle                                     
+END                                           
+                                                             
+INSERT INTO Genlookup(RecId,Code) SELECT DISTINCT 51,SuperClass1 FROM TmpPricemaster                                                          
+WHERE SuperClass1 NOT IN (SELECT DISTINCT                                                              
+Code FROM Genlookup Where Recid = 51) AND SuperClass1 IS NOT NULL                                                             
+IF (@@ERROR <> 0)                                     
+BEGIN                                     
+ GOTO ErrorHandle                                     
+END                                           
+                                     
+UPDATE Genlookup Set Descr = SuperClass1Desc,VActr = @vaCtr From TmpPriceMaster as t,Genlookup as gl                                                             
+Where gl.RecId = 51 and Code = t.SuperClass1                                                              
+IF (@@ERROR <> 0)                                     
+BEGIN                                     
+ GOTO ErrorHandle                                     
+END                                           
+                                                             
+INSERT INTO Genlookup(RecId,Code) SELECT DISTINCT 52,SuperClass2 FROM TmpPricemaster                                                          
+WHERE SuperClass2 NOT IN (SELECT DISTINCT Code FROM Genlookup Where Recid = 52) AND SuperClass2 IS NOT NULL                                                                 
+IF (@@ERROR <> 0)                                     
+BEGIN       
+ GOTO ErrorHandle                                     
+END                                           
+                                     
+UPDATE Genlookup Set Descr = SuperClass2Desc,VActr = @vaCtr From TmpPriceMaster as t,Genlookup as gl                             
+Where gl.RecId = 52 and Code = t.SuperClass2                                                             
+IF (@@ERROR <> 0)                                     
+BEGIN                                     
+ GOTO ErrorHandle                                     
+END                                           
+                                                             
+INSERT INTO Genlookup(RecId,Code) SELECT DISTINCT 54,ProdTaxType FROM TmpPricemaster                                                          
+WHERE ProdTaxType NOT IN (SELECT DISTINCT Code FROM Genlookup Where Recid = 54) AND ProdTaxType IS NOT NULL                                                               
+IF (@@ERROR <> 0)                  
+BEGIN                                     
+ GOTO ErrorHandle                                     
+END                                           
+                       
+UPDATE Genlookup Set Descr = ProdTaxDesc,VActr = @vaCtr From TmpPriceMaster as t,Genlookup as gl                          
+Where gl.RecId = 54 and Code = t.ProdTaxType                                                              
+IF (@@ERROR <> 0)                                     
+BEGIN                                     
+ GOTO ErrorHandle                                     
+END                                           
+                                                             
+INSERT INTO Genlookup(RecId,Code) SELECT DISTINCT 53,SizeGroupId FROM TmpPricemaster                                                          
+WHERE SizeGroupId NOT IN (SELECT DISTINCT Code FROM Genlookup Where Recid = 53) AND SizeGroupId IS NOT NULL                                                               
+IF (@@ERROR <> 0)                                     
+BEGIN                                     
+ GOTO ErrorHandle                                     
+END                                           
+                                     
+UPDATE Genlookup Set Descr = SizeGroupDesc,VActr = @vaCtr From TmpPriceMaster as t,Genlookup as gl             
+Where gl.RecId = 53 and Code = t.SizeGroupId                                                 
+IF (@@ERROR <> 0)                                     
+BEGIN                                     
+ GOTO ErrorHandle                                     
+END                  
+                                                 
+INSERT INTO Genlookup(RecId,Code) SELECT DISTINCT 7000,AnalCode6 FROM TmpPricemaster                                                         
+WHERE ((AnalCode6)) NOT IN (SELECT DISTINCT ((Code))                                                              
+FROM Genlookup Where Recid = 7000) AND ANALCODE6 IS NOT NULL                                                    
+IF (@@ERROR <> 0)                                     
+BEGIN                                     
+ GOTO ErrorHandle                                     
+END                                           
+                                     
+UPDATE Genlookup Set Descr = AnalDesc6,VActr = @vaCtr From TmpPriceMaster as t,Genlookup as gl                                                             
+Where gl.RecId = 7000 and Code = t.AnalCode6                                            
+IF (@@ERROR <> 0)                                     
+BEGIN                                     
+ GOTO ErrorHandle                                     
+END                                           
+                                                  
+INSERT INTO Genlookup(RecId,Code) SELECT DISTINCT 7001,AnalCode7 FROM TmpPricemaster                                                         
+WHERE ((AnalCode7)) NOT IN (SELECT DISTINCT ((Code))                                   
+FROM Genlookup Where Recid = 7001) AND ANALCODE7 IS NOT NULL                                                    
+IF (@@ERROR <> 0)                                     
+BEGIN                                     
+ GOTO ErrorHandle                                     
+END                                           
+                                     
+UPDATE Genlookup Set Descr = AnalDesc7,VActr = @vaCtr From TmpPriceMaster as t,Genlookup as gl                                                             
+Where gl.RecId = 7001 and Code = t.AnalCode7                                                    
+IF (@@ERROR <> 0)                                     
+BEGIN                                     
+ GOTO ErrorHandle                                     
+END                                           
+                                          
+INSERT INTO Genlookup(RecId,Code) SELECT DISTINCT 7002,AnalCode8 FROM TmpPricemaster                                                         
+WHERE ((AnalCode8)) NOT IN (SELECT DISTINCT ((Code))                                                              
+FROM Genlookup Where Recid = 7002) AND ANALCODE8 IS NOT NULL                                        
+IF (@@ERROR <> 0)                                     
+BEGIN                                     
+ GOTO ErrorHandle                                     
+END                                           
+                                     
+UPDATE Genlookup Set Descr = AnalDesc8,VActr = @vaCtr From TmpPriceMaster as t,Genlookup as gl                                                             
+Where gl.RecId = 7002 and Code = t.AnalCode8                                                    
+IF (@@ERROR <> 0)                                     
+BEGIN                                     
+ GOTO ErrorHandle                                     
+END                                           
+                                          
+INSERT INTO Genlookup(RecId,Code) SELECT DISTINCT 7003,AnalCode9 FROM TmpPricemaster                                                         
+WHERE ((AnalCode9)) NOT IN (SELECT DISTINCT ((Code))                                                              
+FROM Genlookup Where Recid = 7003) AND ANALCODE9 IS NOT NULL                
+IF (@@ERROR <> 0)                                     
+BEGIN                                     
+ GOTO ErrorHandle                                     
+END                                    
+                                     
+UPDATE Genlookup Set Descr = AnalDesc9,VActr = @vaCtr From TmpPriceMaster as t,Genlookup as gl                                                             
+Where gl.RecId = 7003 and Code = t.AnalCode9                                                    
+IF (@@ERROR <> 0)                                    
+BEGIN                                     
+ GOTO ErrorHandle                                     
+END                                           
+                                          
+INSERT INTO Genlookup(RecId,Code) SELECT DISTINCT 7004,AnalCode10 FROM TmpPricemaster                                                    
+WHERE ((AnalCode10)) NOT IN (SELECT DISTINCT ((Code))                                                    
+FROM Genlookup Where Recid = 7004) AND ANALCODE10 IS NOT NULL                                                    
+IF (@@ERROR <> 0)                                     
+BEGIN                                     
+ GOTO ErrorHandle                    
+END                                           
+                                     
+UPDATE Genlookup Set Descr = AnalDesc10,VActr = @vaCtr From TmpPriceMaster as t,Genlookup as gl                                                    
+Where gl.RecId = 7004 and Code = t.AnalCode10                                                    
+IF (@@ERROR <> 0)                                     
+BEGIN                                     
+ GOTO ErrorHandle                                     
+END                                           
+                                          
+INSERT INTO Genlookup(RecId,Code) SELECT DISTINCT 7005,AnalCode11 FROM TmpPricemaster                                                    
+WHERE ((AnalCode11)) NOT IN (SELECT DISTINCT ((Code))                                                    
+FROM Genlookup Where Recid = 7005) AND ANALCODE11 IS NOT NULL                                                    
+IF (@@ERROR <> 0)                                     
+BEGIN                                     
+ GOTO ErrorHandle                                     
+END                                           
+                                     
+UPDATE Genlookup Set Descr = AnalDesc11,VActr = @vaCtr From TmpPriceMaster as t,Genlookup as gl                                                    
+Where gl.RecId = 7005 and Code = t.AnalCode11                                                    
+IF (@@ERROR <> 0)                                     
+BEGIN                                     
+ GOTO ErrorHandle                                     
+END                                           
+                                          
+INSERT INTO Genlookup(RecId,Code) SELECT DISTINCT 7006,AnalCode12 FROM TmpPricemaster                                                    
+WHERE ((AnalCode12)) NOT IN (SELECT DISTINCT ((Code))                                                    
+FROM Genlookup Where Recid = 7006) AND ANALCODE12 IS NOT NULL                                                    
+IF (@@ERROR <> 0)            
+BEGIN                                     
+ GOTO ErrorHandle                                     
+END                                           
+                                     
+UPDATE Genlookup Set Descr = AnalDesc12,VActr = @vaCtr From TmpPriceMaster as t,Genlookup as gl                                                   
+Where gl.RecId = 7006 and Code = t.AnalCode12                                                    
+IF (@@ERROR <> 0)                                     
+BEGIN                                     
+ GOTO ErrorHandle                                     
+END                                           
+                                          
+INSERT INTO Genlookup(RecId,Code) SELECT DISTINCT 7007,AnalCode13 FROM TmpPricemaster                                                    
+WHERE ((AnalCode13)) NOT IN (SELECT DISTINCT ((Code))                                                    
+FROM Genlookup Where Recid = 7007) AND ANALCODE13 IS NOT NULL                       
+IF (@@ERROR <> 0)                                     
+BEGIN                                     
+ GOTO ErrorHandle                                     
+END                                           
+                                     
+UPDATE Genlookup Set Descr = AnalDesc13,VActr = @vaCtr From TmpPriceMaster as t,Genlookup as gl                                                    
+Where gl.RecId = 7007 and Code = t.AnalCode13                                                    
+IF (@@ERROR <> 0)                                     
+BEGIN                                     
+ GOTO ErrorHandle                                     
+END                                           
+                                                      
+INSERT INTO Genlookup(RecId,Code) SELECT DISTINCT 7008,AnalCode14 FROM TmpPricemaster                                                    
+WHERE ((AnalCode14)) NOT IN (SELECT DISTINCT ((Code))                                                    
+FROM Genlookup Where Recid = 7008) AND ANALCODE14 IS NOT NULL                                                    
+IF (@@ERROR <> 0)                                     
+BEGIN                                     
+ GOTO ErrorHandle                                     
+END                                           
+                                     
+UPDATE Genlookup Set Descr = AnalDesc14,VActr = @vaCtr From TmpPriceMaster as t,Genlookup as gl                            
+Where gl.RecId = 7008 and Code = t.AnalCode14                                                    
+IF (@@ERROR <> 0)                                     
+BEGIN                                     
+ GOTO ErrorHandle                                     
+END                                           
+                                          
+INSERT INTO Genlookup(RecId,Code) SELECT DISTINCT 7009,AnalCode15 FROM TmpPricemaster                                                    
+WHERE ((AnalCode15)) NOT IN (SELECT DISTINCT ((Code))                                                    
+FROM Genlookup Where Recid = 7009) AND ANALCODE15 IS NOT NULL                                               
+IF (@@ERROR <> 0)                                     
+BEGIN                                     
+ GOTO ErrorHandle                                     
+END                                           
+                                     
+UPDATE Genlookup Set Descr = AnalDesc15,VActr = @vaCtr From TmpPriceMaster as t,Genlookup as gl                                                    
+Where gl.RecId = 7009 and Code = t.AnalCode15                                                    
+IF (@@ERROR <> 0)                                     
+BEGIN                                     
+ GOTO ErrorHandle                                     
+END                                           
+                                          
+INSERT INTO Genlookup(RecId,Code) SELECT DISTINCT 7010,AnalCode16 FROM TmpPricemaster                                                    
+WHERE ((AnalCode16)) NOT IN (SELECT DISTINCT ((Code))                                                    
+FROM Genlookup Where Recid = 7010) AND ANALCODE16 IS NOT NULL                                                    
+IF (@@ERROR <> 0)                                     
+BEGIN                                     
+ GOTO ErrorHandle                                     
+END                                           
+                                     
+UPDATE Genlookup Set Descr = AnalDesc16,VActr = @vaCtr From TmpPriceMaster as t,Genlookup as gl                                                    
+Where gl.RecId = 7010 and Code = t.AnalCode16                                 
+IF (@@ERROR <> 0)                                     
+BEGIN                                     
+ GOTO ErrorHandle                                     
+END                                           
+                                          
+INSERT INTO Genlookup(RecId,Code) SELECT DISTINCT 7011,AnalCode17 FROM TmpPricemaster                                                    
+WHERE ((AnalCode17)) NOT IN (SELECT DISTINCT ((Code))                                                    
+FROM Genlookup Where Recid = 7011) AND ANALCODE17 IS NOT NULL                                                    
+IF (@@ERROR <> 0)                                     
+BEGIN                                     
+ GOTO ErrorHandle                                     
+END                                           
+                                     
+UPDATE Genlookup Set Descr = AnalDesc17,VActr = @vaCtr From TmpPriceMaster as t,Genlookup as gl                                                    
+Where gl.RecId = 7011 and Code = t.AnalCode17                                                    
+IF (@@ERROR <> 0)                                     
+BEGIN                                     
+ GOTO ErrorHandle                                     
+END                                           
+                                          
+INSERT INTO Genlookup(RecId,Code) SELECT DISTINCT 7012,AnalCode18 FROM TmpPricemaster                                    
+WHERE ((AnalCode18)) NOT IN (SELECT DISTINCT ((Code))                                             
+FROM Genlookup Where Recid = 7012) AND ANALCODE18 IS NOT NULL                                                    
+IF (@@ERROR <> 0)                                     
+BEGIN                                     
+ GOTO ErrorHandle                                     
+END                                           
+                                     
+UPDATE Genlookup Set Descr = AnalDesc18,VActr = @vaCtr From TmpPriceMaster as t,Genlookup as gl                                                    
+Where gl.RecId = 7012 and Code = t.AnalCode18                                                    
+IF (@@ERROR <> 0)                                     
+BEGIN                                     
+ GOTO ErrorHandle                                     
+END                                           
+                                          
+INSERT INTO Genlookup(RecId,Code) SELECT DISTINCT 7013,AnalCode19 FROM TmpPricemaster                                                    
+WHERE ((AnalCode19)) NOT IN (SELECT DISTINCT ((Code))                                                    
+FROM Genlookup Where Recid = 7013) AND ANALCODE19 IS NOT NULL                                                    
+IF (@@ERROR <> 0)                                     
+BEGIN                                     
+ GOTO ErrorHandle                                     
+END                                           
+                                     
+UPDATE Genlookup Set Descr = AnalDesc19,VActr = @vaCtr From TmpPriceMaster as t,Genlookup as gl                                                    
+Where gl.RecId = 7013 and Code = t.AnalCode19                                                    
+IF (@@ERROR <> 0)                                     
+BEGIN                                     
+ GOTO ErrorHandle                                     
+END                                           
+                                          
+INSERT INTO Genlookup(RecId,Code) SELECT DISTINCT 7014,AnalCode20 FROM TmpPricemaster                                                    
+WHERE ((AnalCode20)) NOT IN (SELECT DISTINCT ((Code))                                                    
+FROM Genlookup Where Recid = 7014) AND ANALCODE20 IS NOT NULL                                                    
+IF (@@ERROR <> 0)                                     
+BEGIN                                     
+ GOTO ErrorHandle                                     
+END                                           
+                                     
+UPDATE Genlookup Set Descr = AnalDesc20,VActr = @vaCtr From TmpPriceMaster as t,Genlookup as gl                                                    
+Where gl.RecId = 7014 and Code = t.AnalCode20                                                    
+IF (@@ERROR <> 0)                                     
+BEGIN                                     
+ GOTO ErrorHandle                                     
+END                                    
+                                         
+INSERT INTO Genlookup(RecId,Code) SELECT DISTINCT 7015,AnalCode21 FROM TmpPricemaster                                                     
+WHERE ((AnalCode21)) NOT IN (SELECT DISTINCT ((Code))                            
+FROM Genlookup Where Recid = 7015) AND ANALCODE21 IS NOT NULL                                                    
+IF (@@ERROR <> 0)                                     
+BEGIN                                     
+ GOTO ErrorHandle                                     
+END                                           
+                                     
+UPDATE Genlookup Set Descr = AnalDesc21,VActr = @vaCtr From TmpPriceMaster as t,Genlookup as gl                                                    
+Where gl.RecId = 7015 and Code = t.AnalCode21                                                    
+IF (@@ERROR <> 0)                                     
+BEGIN                                     
+ GOTO ErrorHandle                                     
+END                                           
+                                          
+INSERT INTO Genlookup(RecId,Code) SELECT DISTINCT 7016,AnalCode22 FROM TmpPricemaster                                         
+WHERE ((AnalCode22)) NOT IN (SELECT DISTINCT ((Code))                                                    
+FROM Genlookup Where Recid = 7016) AND ANALCODE22 IS NOT NULL                                                    
+IF (@@ERROR <> 0)                                     
+BEGIN                                     
+ GOTO ErrorHandle                                     
+END                                           
+                                     
+UPDATE Genlookup Set Descr = AnalDesc22,VActr = @vaCtr From TmpPriceMaster as t,Genlookup as gl                                                    
+Where gl.RecId = 7016 and Code = t.AnalCode22                                                    
+IF (@@ERROR <> 0)                                    
+BEGIN                                     
+ GOTO ErrorHandle                                     
+END                                           
+                                          
+INSERT INTO Genlookup(RecId,Code) SELECT DISTINCT 7017,AnalCode23 FROM TmpPricemaster                                                    
+WHERE ((AnalCode23)) NOT IN (SELECT DISTINCT ((Code))                                                    
+FROM Genlookup Where Recid = 7017) AND ANALCODE23 IS NOT NULL                                                    
+IF (@@ERROR <> 0)                                     
+BEGIN                                     
+ GOTO ErrorHandle                                     
+END                                           
+                                   
+UPDATE Genlookup Set Descr = AnalDesc23,VActr = @vaCtr From TmpPriceMaster as t,Genlookup as gl                                                    
+Where gl.RecId = 7017 and Code = t.AnalCode23                                                    
+IF (@@ERROR <> 0)                                     
+BEGIN                                     
+ GOTO ErrorHandle                                     
+END                                           
+                                                      
+INSERT INTO Genlookup(RecId,Code) SELECT DISTINCT 7018,AnalCode24 FROM TmpPricemaster                                                    
+WHERE ((AnalCode24)) NOT IN (SELECT DISTINCT ((Code))                                                    
+FROM Genlookup Where Recid = 7018) AND ANALCODE24 IS NOT NULL                                                    
+IF (@@ERROR <> 0)                                     
+BEGIN                                     
+ GOTO ErrorHandle                                     
+END                                           
+                                     
+UPDATE Genlookup Set Descr = AnalDesc24,VActr = @vaCtr From TmpPriceMaster as t,Genlookup as gl                                                    
+Where gl.RecId = 7018 and Code = t.AnalCode24                                                    
+IF (@@ERROR <> 0)                                     
+BEGIN                                     
+ GOTO ErrorHandle                                     
+END                                           
+                                          
+INSERT INTO Genlookup(RecId,Code) SELECT DISTINCT 7019,AnalCode25 FROM TmpPricemaster                                      
+WHERE ((AnalCode25)) NOT IN (SELECT DISTINCT ((Code))                                                    
+FROM Genlookup Where Recid = 7019) AND ANALCODE25 IS NOT NULL                                                    
+IF (@@ERROR <> 0)                                     
+BEGIN                                     
+ GOTO ErrorHandle                                     
+END                
+                                     
+UPDATE Genlookup Set Descr = AnalDesc25,VActr = @vaCtr From TmpPriceMaster as t,Genlookup as gl                                                    
+Where gl.RecId = 7019 and Code = t.AnalCode25                                                    
+IF (@@ERROR <> 0)                                     
+BEGIN                                     
+ GOTO ErrorHandle                                     
+END                                           
+                                          
+INSERT INTO Genlookup(RecId,Code) SELECT DISTINCT 7020,AnalCode26 FROM TmpPricemaster                                                    
+WHERE ((AnalCode26)) NOT IN (SELECT DISTINCT ((Code))                           
+FROM Genlookup Where Recid = 7020) AND ANALCODE26 IS NOT NULL             
+IF (@@ERROR <> 0)                                     
+BEGIN                                     
+ GOTO ErrorHandle                             
+END                                           
+                                     
+UPDATE Genlookup Set Descr = AnalDesc26,VActr = @vaCtr From TmpPriceMaster as t,Genlookup as gl                                                    
+Where gl.RecId = 7020 and Code = t.AnalCode26                                                    
+IF (@@ERROR <> 0)                                     
+BEGIN                                     
+ GOTO ErrorHandle                                     
+END                                           
+                                          
+INSERT INTO Genlookup(RecId,Code) SELECT DISTINCT 7021,AnalCode27 FROM TmpPricemaster                                                    
+WHERE ((AnalCode27)) NOT IN (SELECT DISTINCT ((Code))                                                 
+FROM Genlookup Where Recid = 7021) AND ANALCODE27 IS NOT NULL                                                    
+IF (@@ERROR <> 0)                     
+BEGIN                                     
+ GOTO ErrorHandle                                     
+END                                           
+                                     
+UPDATE Genlookup Set Descr = AnalDesc27,VActr = @vaCtr From TmpPriceMaster as t,Genlookup as gl                                                    
+Where gl.RecId = 7021 and Code = t.AnalCode27                                                    
+IF (@@ERROR <> 0)                                     
+BEGIN                                     
+ GOTO ErrorHandle                                     
+END                                           
+                                          
+INSERT INTO Genlookup(RecId,Code) SELECT DISTINCT 7022,AnalCode28 FROM TmpPricemaster                                                    
+WHERE ((AnalCode28)) NOT IN (SELECT DISTINCT ((Code))                                                    
+FROM Genlookup Where Recid = 7022) AND ANALCODE28 IS NOT NULL                                                    
+IF (@@ERROR <> 0)                                     
+BEGIN                                     
+ GOTO ErrorHandle                                     
+END                                           
+                                     
+UPDATE Genlookup Set Descr = AnalDesc28,VActr = @vaCtr From TmpPriceMaster as t,Genlookup as gl                                                    
+Where gl.RecId = 7022 and Code = t.AnalCode28                                                    
+IF (@@ERROR <> 0)                        
+BEGIN                                     
+ GOTO ErrorHandle                                     
+END                                           
+                                          
+INSERT INTO Genlookup(RecId,Code) SELECT DISTINCT 7023,AnalCode29 FROM TmpPricemaster                                                    
+WHERE ((AnalCode29)) NOT IN (SELECT DISTINCT ((Code))                                                    
+FROM Genlookup Where Recid = 7023) AND ANALCODE29 IS NOT NULL                                                    
+IF (@@ERROR <> 0)                                     
+BEGIN                            
+ GOTO ErrorHandle                                     
+END                                           
+                                     
+UPDATE Genlookup Set Descr = AnalDesc29,VActr = @vaCtr From TmpPriceMaster as t,Genlookup as gl                                                    
+Where gl.RecId = 7023 and Code = t.AnalCode29                                                    
+IF (@@ERROR <> 0)                                     
+BEGIN                                     
+GOTO ErrorHandle                            END                                           
+                                          
+INSERT INTO Genlookup(RecId,Code) SELECT DISTINCT 7024,AnalCode30 FROM TmpPricemaster                                                    
+WHERE ((AnalCode30)) NOT IN (SELECT DISTINCT ((Code))                                                    
+FROM Genlookup Where Recid = 7024) AND ANALCODE30 IS NOT NULL                         
+IF (@@ERROR <> 0)                                     
+BEGIN                                     
+ GOTO ErrorHandle                                     
+END                                           
+                                     
+UPDATE Genlookup Set Descr = AnalDesc30,VActr = @vaCtr From TmpPriceMaster as t,Genlookup as gl                                                    
+Where gl.RecId = 7024 and Code = t.AnalCode30                                                    
+IF (@@ERROR <> 0)                                     
+BEGIN                                     
+ GOTO ErrorHandle                                     
+END                                           
+                                          
+INSERT INTO Genlookup(RecId,Code) SELECT DISTINCT 7025,AnalCode31 FROM TmpPricemaster                                                     
+WHERE ((AnalCode31)) NOT IN (SELECT DISTINCT ((Code))                                                    
+FROM Genlookup Where Recid = 7025) AND ANALCODE31 IS NOT NULL                                                    
+IF (@@ERROR <> 0)                                     
+BEGIN                                     
+ GOTO ErrorHandle                                     
+END                                           
+                                     
+UPDATE Genlookup Set Descr = AnalDesc31,VActr = @vaCtr From TmpPriceMaster as t,Genlookup as gl                                                    
+Where gl.RecId = 7025 and Code = t.AnalCode31                                           
+IF (@@ERROR <> 0)                                     
+BEGIN                                     
+ GOTO ErrorHandle                                     
+END                                           
+                                                   
+INSERT INTO Genlookup(RecId,Code) SELECT DISTINCT 7026,AnalCode32 FROM TmpPricemaster                                                    
+WHERE ((AnalCode32)) NOT IN (SELECT DISTINCT ((Code))                                                    
+FROM Genlookup Where Recid = 7026) AND ANALCODE32 IS NOT NULL                                                  
+IF (@@ERROR <> 0)                                     
+BEGIN                                     
+ GOTO ErrorHandle                                     
+END                                           
+                 
+UPDATE Genlookup Set Descr = AnalDesc32,VActr = @vaCtr From TmpPriceMaster as t,Genlookup as gl                            
+Where gl.RecId = 7026 and Code = t.AnalCode32                                                  
+IF (@@ERROR <> 0)                                     
+BEGIN                                     
+ GOTO ErrorHandle                                     
+END                                           
+                                                 
+UPDATE ITEMMASTER SET BatchSrlNo = T.BatchSrlNo,IsInventoryItem =T.IsInventoryItem,ImagePresent=T.ImagePresent,                                                    
+SrcTaxType=T.SrcTaxType,ExtDescPresent=T.ExtDescPresent,ReordLvl=T.ReordLvl,EOQ=T.EOQ,MinOrdQty=T.MinOrdQty,                                                    
+IsBillable=T.IsBillable,IsService=T.IsService,RtlMarkUp=T.RtlMarkUp,DlrMarkUp=T.DlrMarkUp,MfgDate=T.MfgDate,                                                    
+ExpDate=T.ExpDate,ShelfLife=T.ShelfLife,CCStockNo=T.CCStockNo,FinalMRP=T.FinalMRP,IsConsignmentItem=T.IsConsignmentItem,VActr = @vaCtr                                                    
+FROM TMPPRICEMASTER AS T ,ITEMMASTER WHERE T.STOCKNO=ITEMMASTER.STOCKNO                                                    
+IF (@@ERROR <> 0)                                     
+BEGIN                                     
+ GOTO ErrorHandle                                     
+END                                           
+                                                 
+UPDATE CLASS12COMBO SET Billable =  1,VActr = @vaCtr WHERE Billable IS NULL                                                       
+IF (@@ERROR <> 0)                                     
+BEGIN                                     
+ GOTO ErrorHandle                                     
+END                                           
+                                     
+UPDATE CLASS12COMBO SET RetailMarkUp = 0,VActr = @vaCtr WHERE RETAILMARKUP IS NULL                                                       
+IF (@@ERROR <> 0)           
+BEGIN                                
+ GOTO ErrorHandle                                     
+END                                           
+                                     
+UPDATE CLASS12COMBO SET DealerMarkUp = 0,VActr = @vaCtr WHERE DealerMarkUp IS NULL                                                       
+IF (@@ERROR <> 0)                                     
+BEGIN                             
+ GOTO ErrorHandle                                     
+END                                           
+                                     
+UPDATE CLASS12COMBO SET IsServiceCombo = 0,VActr = @vaCtr WHERE IsServiceCombo IS NULL                                                       
+IF (@@ERROR <> 0)                                     
+BEGIN                                     
+ GOTO ErrorHandle                                     
+END                                           
+                                     
+UPDATE CLASS12COMBO SET IsConsignmentItem = 0,VActr = @vaCtr WHERE IsConsignmentItem IS NULL                                             
+IF (@@ERROR <> 0)                                     
+BEGIN                                     
+ GOTO ErrorHandle                                     
+END                                           
+                                     
+UPDATE SUBCLASS1CAT SET RegularInd = 0,VActr = @vaCtr WHERE RegularInd IS NULL                                                       
+IF (@@ERROR <> 0)                                     
+BEGIN                                     
+ GOTO ErrorHandle                                     
+END                                           
+
+INSERT INTO STOCKMASTER (StockNo,BatchSrlNo,LocnId,YrOpBalQty,YrOpBalVal,CurBalQty,CurBalVal,
+ VAUid,VActr,VATermId,VACompCode) SELECT StockNo,BatchSrlNo,0,0,0,0,0,VAUid,VActr,VATermId,VACompCode 
+	FROM ITEMMASTER WHERE STOCKNO NOT IN (SELECT STOCKNO FROM STOCKMASTER)
+IF (@@ERROR <> 0)                                     
+BEGIN                                     
+ GOTO ErrorHandle                                     
+END                                           
+
+                             
+COMMIT TRANSACTION                                     
+set @returnValue=0                           
+return (0)                                     
+                                     
+ErrorHandle:                                     
+                                                          
+begin                                     
+ ROLLBACK transaction                                     
+ RAISERROR('Error Occured in the Procedure',16,1) with nowait                                     
+ set @returnValue = -1                                 
+ return (-1)                                          
+end     
+
+
+  </s9qScript>
+</s9qsqlblk>
+
+
+
+<s9qsqlblk>
+  <s9qScriptid>	S9Q_0170_9_0006	</s9qScriptid>
+  <s9qtitle>All DDL Statements.</s9qtitle>
+  <s9qpgmtype>I</s9qpgmtype>
+  <s9qpgmtype>L</s9qpgmtype>
+  <s9qversion>*</s9qversion>
+  <s9qenvironment>P</s9qenvironment>
+  <s9qenvironment>R</s9qenvironment>
+  <s9qRunMultiple>1</s9qRunMultiple>
+  <s9qQryType>DML</s9qQryType>
+  <s9qScript>
+
+INSERT INTO [DBO].VersionwiseTblsScript(VerID,SrlNo,TblScript,VAUid,VActr,VATermId,VACompCode) VALUES (11,4,'Alter Table [DBO].PromoMnHeader Add AndConditionFreeItem Int','',1,'.','')
+-GO-
+INSERT INTO [DBO].VersionwiseTblsScript(VerID,SrlNo,TblScript,VAUid,VActr,VATermId,VACompCode) VALUES (11,5,'Alter Table [DBO].PromoMnHeader Add NoOfAndCondsFreeItem Int','',1,'.','')
+-GO-
+INSERT INTO [DBO].VersionwiseTblsScript(VerID,SrlNo,TblScript,VAUid,VActr,VATermId,VACompCode) VALUES (11,6,'Alter Table [DBO].PromoMnHeader Add SalesPromoId Int','',1,'.','')
+-GO-
+INSERT INTO [DBO].VersionwiseTblsScript(VerID,SrlNo,TblScript,VAUid,VActr,VATermId,VACompCode) VALUES (11,7,'Alter Table [DBO].PromoMnHeader Add AddlItemFlag Int','',1,'.','')
+-GO-
+INSERT INTO [DBO].VersionwiseTblsScript(VerID,SrlNo,TblScript,VAUid,VActr,VATermId,VACompCode) VALUES (11,8,'Alter Table [DBO].PromoMnHeader Add AddlItemDiscType Int','',1,'.','')
+-GO-
+INSERT INTO [DBO].VersionwiseTblsScript(VerID,SrlNo,TblScript,VAUid,VActr,VATermId,VACompCode) VALUES (11,9,'Alter Table [DBO].BakPromoMnHeader Drop Column UpdFlag','',1,'.','')
+-GO-
+INSERT INTO [DBO].VersionwiseTblsScript(VerID,SrlNo,TblScript,VAUid,VActr,VATermId,VACompCode) VALUES (11,10,'Alter Table [DBO].BakPromoMnHeader Add AndConditionFreeItem Int','',1,'.','')
+-GO-
+INSERT INTO [DBO].VersionwiseTblsScript(VerID,SrlNo,TblScript,VAUid,VActr,VATermId,VACompCode) VALUES (11,11,'Alter Table [DBO].BakPromoMnHeader Add NoOfAndCondsFreeItem Int','',1,'.','')
+-GO-
+INSERT INTO [DBO].VersionwiseTblsScript(VerID,SrlNo,TblScript,VAUid,VActr,VATermId,VACompCode) VALUES (11,12,'Alter Table [DBO].BakPromoMnHeader Add SalesPromoId Int','',1,'.','')
+-GO-
+INSERT INTO [DBO].VersionwiseTblsScript(VerID,SrlNo,TblScript,VAUid,VActr,VATermId,VACompCode) VALUES (11,13,'Alter Table [DBO].BakPromoMnHeader Add AddlItemFlag Int','',1,'.','')
+-GO-
+INSERT INTO [DBO].VersionwiseTblsScript(VerID,SrlNo,TblScript,VAUid,VActr,VATermId,VACompCode) VALUES (11,14,'Alter Table [DBO].BakPromoMnHeader Add AddlItemDiscType Int','',1,'.','')
+-GO-
+INSERT INTO [DBO].VersionwiseTblsScript(VerID,SrlNo,TblScript,VAUid,VActr,VATermId,VACompCode) VALUES (11,15,'Alter Table [DBO].BakPromoMnHeader Add UpdFlag Varchar(1)','',1,'.','')
+-GO-
+
+Update [DBO].[VersionwiseTblsScript] Set Vactr = (select intg from [DBO].sysparam where paramcode = 'VaSysCounter') where VerId=11
+-GO-
+
+  </s9qScript>
+</s9qsqlblk>
+
+
+
+<s9qsqlblk>
+  <s9qScriptID>S9Q_0170_9_0007</s9qScriptID>
+  <s9qtitle>Creating BAK Table</s9qtitle>
+  <s9qpgmtype>I</s9qpgmtype>
+  <s9qpgmtype>L</s9qpgmtype>
+  <s9qversion>*</s9qversion>
+  <s9qenvironment>P</s9qenvironment>
+  <s9qRunMultiple>0</s9qRunMultiple>
+  <s9qQryType>DLL</s9qQryType>
+  <s9qScript>BackTableCreation.clsBackTabCrt</s9qScript>
+</s9qsqlblk>

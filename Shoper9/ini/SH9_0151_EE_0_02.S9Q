@@ -1,0 +1,269 @@
+<s9qsqlblk>
+  <s9qScriptID>	S9Q_0151_0_0001	</s9qScriptID>
+  <s9qtitle></s9qtitle>
+  <s9qpgmtype>I</s9qpgmtype>
+  <s9qpgmtype>L</s9qpgmtype>
+  <s9qversion>*</s9qversion>
+  <s9qenvironment>P</s9qenvironment>
+  <s9qRunMultiple>1</s9qRunMultiple>
+  <s9qQryType>DML</s9qQryType>
+  <s9qScript>
+INSERT INTO Genlookup (recid,code,descr) values (299,'P901240','Shoper Update Version No:')
+-GO-
+Update Genlookup set Descr = (select 'Shoper Update Version No:9.0.1.9240' + ' ;system date:' + convert(varchar(20),getdate(),105) + ' ;shoper date:' + (select convert(varchar(20),dt,105) from sysparam where paramcode ='SHOPERSysDt') ) where code = 'P901240' and recid = 299
+-GO-
+Update genlookup Set Vactr = (select intg from sysparam where paramcode = 'VaSysCounter') where Recid=299 and Code='P901240'
+-GO-
+Insert Into Genlookup (Recid,Code,Descr,Flag,[Number]) Values (299,'VER9_REL1.5','Version 9 Release 1.5','Y',0)
+-GO-
+INSERT INTO [dbo].VersionDtls VALUES (8,getdate(),'9','1.51','A','P901240','',1,'.','')
+-GO-
+Update VersionDtls Set Vactr = (select intg from sysparam where paramcode = 'VaSysCounter') where VerId=8
+-GO-
+INSERT INTO [SysParamextd] ([Id], [ParamCode], [Fixed], [Changed], [Category], [CatDescr], [DispOrder] ) VALUES ( 'SR1-0901-0000340', ' AutoResetPrefixes', 'Variable', 0, '17. House Keeping', 'This Gives House Keeping Parameters',1 )
+-GO-
+</s9qScript>		
+</s9qsqlblk>
+<s9qsqlblk>
+  <s9qScriptID>	S9Q_0151_0_0002</s9qScriptID>
+  <s9qtitle>Create Table Script for New Document Number Generation.</s9qtitle>
+  <s9qpgmtype>I</s9qpgmtype>
+  <s9qpgmtype>L</s9qpgmtype>
+  <s9qversion>*</s9qversion>
+  <s9qenvironment>P</s9qenvironment>
+  <s9qRunMultiple>1</s9qRunMultiple>
+  <s9qQryType>DDL</s9qQryType>
+  <s9qScript>
+CREATE TABLE [dbo].[PrefixTrnNo](
+	[TrnType] [varchar](10)  NOT NULL,	
+	[ActualPrefix] [varchar](8) NOT NULL,	
+	[DocNumber] [int] NOT NULL,		
+	[IsActive] Int Not NULL,		
+	[VaUID] [varchar](32) NULL,		
+	[VaCtr] [int] NULL,
+	[VaTermID] [varchar](32)  NULL,
+	[VaCompCode] [varchar](16) NULL,
+ CONSTRAINT [PK_PrefixTrnNo] PRIMARY KEY CLUSTERED 
+(
+	[TrnType] ASC,	
+	[ActualPrefix]
+) ON [PRIMARY]
+) ON [PRIMARY] 
+-GO-
+CREATE TABLE [dbo].[PrefixMaster](
+	[Trntype] [varchar](10)  NOT NULL,	
+	[OPId] [varchar](10)  NOT NULL, 	
+	[TerminalGroupId] [varchar](32)  NOT NULL,	
+	[Srlno] [int] NOT NULL,			
+	[Prefix] [varchar](8)  NULL,	
+	[BasePrefix] [varchar](8) NULL,	
+	[Suffix] [varchar](8) NULL,	
+	[IsActive] Int NOT NULL,	
+	[ResetRequired] Int,		
+	[ResetType] Varchar(16), 
+	[VaUID] [varchar](32)  NULL,
+	[VaCtr] [int] NULL,
+	[VaTermID] [varchar](32) NULL,
+	[VaCompCode] [varchar](16)  NULL,
+ CONSTRAINT [PK_Prefixmaster] PRIMARY KEY CLUSTERED 
+(
+	[Trntype] ASC,
+	[OPId] ASC,
+	[TerminalGroupId] ASC,
+	[Srlno] ASC
+
+) ON [PRIMARY]
+) ON [PRIMARY]
+-GO-
+CREATE TABLE [dbo].[PrefixTrnLog](
+	[Fld1] [varchar](8)  NOT NULL,	
+	[Fld2] [varchar](10) NOT NULL,	
+	[Fld3] [varchar](10) NULL,	
+	[Fld4] int NOT NULL,		
+	[VaUID] [varchar](32) NULL,		
+	[VaCtr] [int] NULL,
+	[VaTermID] [varchar](32)  NULL,
+	[VaCompCode] [varchar](16) NULL,
+ CONSTRAINT [PK_PrefixTrnLog] PRIMARY KEY CLUSTERED 
+(
+	[Fld1] ASC,	
+	[Fld2] ASC,
+	[Fld4] ASC
+) ON [PRIMARY]
+) ON [PRIMARY] 
+-GO-
+CREATE TABLE [dbo].[PrefixConfig](
+	[SlNo] [int] NOT NULL,
+	[TrnType] [varchar](10) NOT NULL,
+	[OPId] [varchar](10) NULL,
+	[TrnName] [varchar](128) NOT NULL,
+	[TrnSubName] [varchar](128) NOT NULL,
+	[IsActive] Int NULL,
+	[TerminalWisePrefix] Int Null,
+ 	[NumberReset] Int Null,
+ 	[SamePrefixforSubTran] Int Null,
+	[ParentTrnType] Varchar(10),
+	[VaUID] [varchar](32) NULL,
+	[VaCtr] [int] NULL,
+	[VaTermID] [varchar](32) NULL,
+	[VaCompCode] [varchar](16) NULL,
+ CONSTRAINT [PK_PrefixConfig] PRIMARY KEY CLUSTERED 
+( SlNo	ASC ) ON [PRIMARY]
+) ON [PRIMARY]
+-GO-
+CREATE TABLE [dbo].[PrefixTerminalGroups](
+	[TerminalGroupId] [varchar](16) NOT NULL,
+	[SrlNo] [int] NOT NULL,
+	[TerminalId] [varchar](16) NULL,
+	[TerminalGroupDescr] [varchar](50) NOT NULL,
+	[IsActive] Int NULL,
+	[VaUID] [varchar](32) NULL,
+	[VaCtr] [int] NULL,
+	[VaTermID] [varchar](32) NULL,
+	[VaCompCode] [varchar](16) NULL,
+ CONSTRAINT [PK_PrefixTerminalGroups] PRIMARY KEY CLUSTERED 
+(TerminalGroupId, SrlNo ASC ) ON [PRIMARY]
+) ON [PRIMARY]
+-GO-
+INSERT INTO .[dbo].[PrefixConfig] ([SlNo],[TrnType],[OPId],[TrnName],[TrnSubName],[IsActive],[TerminalWisePrefix],[NumberReset],[SamePrefixforSubTran],[ParentTrnType],[VaUID],[VaCtr],[VaTermID],[VaCompCode])
+VALUES (1,'9200','1','Sales Advice Slip','Sales Advice Slip',1,NULL,NULL,NULL,'<9999-3>',NULL,NULL,NULL,NULL)
+-GO-
+INSERT INTO .[dbo].[PrefixConfig] ([SlNo],[TrnType],[OPId],[TrnName],[TrnSubName],[IsActive],[TerminalWisePrefix],[NumberReset],[SamePrefixforSubTran],[ParentTrnType],[VaUID],[VaCtr],[VaTermID],[VaCompCode])
+VALUES (2,'9300','1','Service Order','Service Order',1,NULL,NULL,NULL,'<9999-3>',NULL,NULL,NULL,NULL)
+-GO-
+INSERT INTO .[dbo].[PrefixConfig] ([SlNo],[TrnType],[OPId],[TrnName],[TrnSubName],[IsActive],[TerminalWisePrefix],[NumberReset],[SamePrefixforSubTran],[ParentTrnType],[VaUID],[VaCtr],[VaTermID],[VaCompCode])
+VALUES (3,'9700','1','Sales Order','Sales Order',1,NULL,NULL,NULL,'<9999-3>',NULL,NULL,NULL,NULL)
+-GO-
+INSERT INTO .[dbo].[PrefixConfig] ([SlNo],[TrnType],[OPId],[TrnName],[TrnSubName],[IsActive],[TerminalWisePrefix],[NumberReset],[SamePrefixforSubTran],[ParentTrnType],[VaUID],[VaCtr],[VaTermID],[VaCompCode])
+VALUES (4,'9800','1','Sales DC','Sales DC',1,NULL,NULL,NULL,'<9999-3>',NULL,NULL,NULL,NULL)
+-GO-
+INSERT INTO .[dbo].[PrefixConfig] ([SlNo],[TrnType],[OPId],[TrnName],[TrnSubName],[IsActive],[TerminalWisePrefix],[NumberReset],[SamePrefixforSubTran],[ParentTrnType],[VaUID],[VaCtr],[VaTermID],[VaCompCode])
+VALUES (5,'2100','1','Sales','Product Cash Sales',1,NULL,NULL,NULL,'<9999-1>',NULL,NULL,NULL,NULL)
+-GO-
+INSERT INTO .[dbo].[PrefixConfig] ([SlNo],[TrnType],[OPId],[TrnName],[TrnSubName],[IsActive],[TerminalWisePrefix],[NumberReset],[SamePrefixforSubTran],[ParentTrnType],[VaUID],[VaCtr],[VaTermID],[VaCompCode])
+VALUES (6,'2100','2','Sales','Service Cash Sales',1,NULL,NULL,NULL,'<9999-1>',NULL,NULL,NULL,NULL)
+-GO-
+INSERT INTO .[dbo].[PrefixConfig] ([SlNo],[TrnType],[OPId],[TrnName],[TrnSubName],[IsActive],[TerminalWisePrefix],[NumberReset],[SamePrefixforSubTran],[ParentTrnType],[VaUID],[VaCtr],[VaTermID],[VaCompCode])
+VALUES (7,'2100','3','Sales','Product Credit Sales',1,NULL,NULL,NULL,'<9999-1>',NULL,NULL,NULL,NULL)
+-GO-
+INSERT INTO .[dbo].[PrefixConfig] ([SlNo],[TrnType],[OPId],[TrnName],[TrnSubName],[IsActive],[TerminalWisePrefix],[NumberReset],[SamePrefixforSubTran],[ParentTrnType],[VaUID],[VaCtr],[VaTermID],[VaCompCode])
+VALUES (8,'2100','4','Sales','Service Credit Sales',1,NULL,NULL,NULL,'<9999-1>',NULL,NULL,NULL,NULL)
+-GO-
+INSERT INTO .[dbo].[PrefixConfig] ([SlNo],[TrnType],[OPId],[TrnName],[TrnSubName],[IsActive],[TerminalWisePrefix],[NumberReset],[SamePrefixforSubTran],[ParentTrnType],[VaUID],[VaCtr],[VaTermID],[VaCompCode])
+VALUES (9,'1300','1','Sales Return','Product Cash Sales Return',1,NULL,NULL,NULL,'<9999-1>',NULL,NULL,NULL,NULL)
+-GO-
+INSERT INTO .[dbo].[PrefixConfig] ([SlNo],[TrnType],[OPId],[TrnName],[TrnSubName],[IsActive],[TerminalWisePrefix],[NumberReset],[SamePrefixforSubTran],[ParentTrnType],[VaUID],[VaCtr],[VaTermID],[VaCompCode])
+VALUES (10,'1300','2','Sales Return','Service Cash Sales Return',1,NULL,NULL,NULL,'<9999-1>',NULL,NULL,NULL,NULL)
+-GO-
+INSERT INTO .[dbo].[PrefixConfig] ([SlNo],[TrnType],[OPId],[TrnName],[TrnSubName],[IsActive],[TerminalWisePrefix],[NumberReset],[SamePrefixforSubTran],[ParentTrnType],[VaUID],[VaCtr],[VaTermID],[VaCompCode])
+VALUES (11,'1300','3','Sales Return','Product Credit Sales Return',1,NULL,NULL,NULL,'<9999-1>',NULL,NULL,NULL,NULL)
+-GO-
+INSERT INTO .[dbo].[PrefixConfig] ([SlNo],[TrnType],[OPId],[TrnName],[TrnSubName],[IsActive],[TerminalWisePrefix],[NumberReset],[SamePrefixforSubTran],[ParentTrnType],[VaUID],[VaCtr],[VaTermID],[VaCompCode])
+VALUES (12,'1300','4','Sales Return','Service Credit Sales Return',1,NULL,NULL,NULL,'<9999-1>',NULL,NULL,NULL,NULL)
+-GO-
+INSERT INTO .[dbo].[PrefixConfig] ([SlNo],[TrnType],[OPId],[TrnName],[TrnSubName],[IsActive],[TerminalWisePrefix],[NumberReset],[SamePrefixforSubTran],[ParentTrnType],[VaUID],[VaCtr],[VaTermID],[VaCompCode])
+VALUES (13,'1600','1','Void Sales','Product Cash Void Sales',1,NULL,NULL,NULL,'<9999-1>',NULL,NULL,NULL,NULL)
+-GO-
+INSERT INTO .[dbo].[PrefixConfig] ([SlNo],[TrnType],[OPId],[TrnName],[TrnSubName],[IsActive],[TerminalWisePrefix],[NumberReset],[SamePrefixforSubTran],[ParentTrnType],[VaUID],[VaCtr],[VaTermID],[VaCompCode])
+VALUES (14,'1600','2','Void Sales','Service Cash Void Sales',1,NULL,NULL,NULL,'<9999-1>',NULL,NULL,NULL,NULL)
+-GO-
+INSERT INTO .[dbo].[PrefixConfig] ([SlNo],[TrnType],[OPId],[TrnName],[TrnSubName],[IsActive],[TerminalWisePrefix],[NumberReset],[SamePrefixforSubTran],[ParentTrnType],[VaUID],[VaCtr],[VaTermID],[VaCompCode])
+VALUES (15,'1600','3','Void Sales','Product Credit Void Sales',1,NULL,NULL,NULL,'<9999-1>',NULL,NULL,NULL,NULL)
+-GO-
+INSERT INTO .[dbo].[PrefixConfig] ([SlNo],[TrnType],[OPId],[TrnName],[TrnSubName],[IsActive],[TerminalWisePrefix],[NumberReset],[SamePrefixforSubTran],[ParentTrnType],[VaUID],[VaCtr],[VaTermID],[VaCompCode])
+VALUES (16,'1600','4','Void Sales','Service Credit Void Sales',1,NULL,NULL,NULL,'<9999-1>',NULL,NULL,NULL,NULL)
+-GO-
+INSERT INTO .[dbo].[PrefixConfig] ([SlNo],[TrnType],[OPId],[TrnName],[TrnSubName],[IsActive],[TerminalWisePrefix],[NumberReset],[SamePrefixforSubTran],[ParentTrnType],[VaUID],[VaCtr],[VaTermID],[VaCompCode])
+VALUES (17,'9900','1','Approval Issue DC','Approval Issue DC',1,NULL,NULL,NULL,'<9999-3>',NULL,NULL,NULL,NULL)
+-GO-
+INSERT INTO .[dbo].[PrefixConfig] ([SlNo],[TrnType],[OPId],[TrnName],[TrnSubName],[IsActive],[TerminalWisePrefix],[NumberReset],[SamePrefixforSubTran],[ParentTrnType],[VaUID],[VaCtr],[VaTermID],[VaCompCode])
+VALUES (18,'9100','1','Bill Suspension','Bill Suspension',1,NULL,NULL,NULL,'<9999-3>',NULL,NULL,NULL,NULL)
+-GO-
+INSERT INTO .[dbo].[PrefixConfig] ([SlNo],[TrnType],[OPId],[TrnName],[TrnSubName],[IsActive],[TerminalWisePrefix],[NumberReset],[SamePrefixforSubTran],[ParentTrnType],[VaUID],[VaCtr],[VaTermID],[VaCompCode])
+VALUES (19,'13','1','Cash Receipt','Cash Receipt',1,NULL,NULL,NULL,'<9999-2>',NULL,NULL,NULL,NULL)
+-GO-
+INSERT INTO .[dbo].[PrefixConfig] ([SlNo],[TrnType],[OPId],[TrnName],[TrnSubName],[IsActive],[TerminalWisePrefix],[NumberReset],[SamePrefixforSubTran],[ParentTrnType],[VaUID],[VaCtr],[VaTermID],[VaCompCode])
+VALUES (20,'23','1','Cash Payout','Cash Payout',1,NULL,NULL,NULL,'<9999-2>',NULL,NULL,NULL,NULL)
+-GO-
+INSERT INTO .[dbo].[PrefixConfig] ([SlNo],[TrnType],[OPId],[TrnName],[TrnSubName],[IsActive],[TerminalWisePrefix],[NumberReset],[SamePrefixforSubTran],[ParentTrnType],[VaUID],[VaCtr],[VaTermID],[VaCompCode])
+VALUES (21,'<9999-1>','1','Sales Group','Sales Group',1,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL)
+-GO-
+INSERT INTO .[dbo].[PrefixConfig] ([SlNo],[TrnType],[OPId],[TrnName],[TrnSubName],[IsActive],[TerminalWisePrefix],[NumberReset],[SamePrefixforSubTran],[ParentTrnType],[VaUID],[VaCtr],[VaTermID],[VaCompCode])
+VALUES (22,'<9999-2>','1','Cash Group','Cash Group',1,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL)
+-GO-
+INSERT INTO .[dbo].[PrefixConfig] ([SlNo],[TrnType],[OPId],[TrnName],[TrnSubName],[IsActive],[TerminalWisePrefix],[NumberReset],[SamePrefixforSubTran],[ParentTrnType],[VaUID],[VaCtr],[VaTermID],[VaCompCode])
+VALUES (23,'<9999-3>','1','Slips Group','Slip Group',1,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL)
+-GO-
+UPDATE PREFIXCONFIG SET VAUID = 'Super',VACTR = (SELECT INTG FROM SYSPARAM WHERE PARAMCODE LIKE '%VaSysCounter%')
+-GO-
+</s9qScript>		
+</s9qsqlblk>
+
+<s9qsqlblk>
+  <s9qScriptID>S9Q_0151_0_0003</s9qScriptID>
+  <s9qtitle>INSERT Script for [DBO].VersionwiseTblsScript</s9qtitle>
+  <s9qpgmtype>I</s9qpgmtype>
+  <s9qpgmtype>L</s9qpgmtype>
+  <s9qversion>*</s9qversion>
+  <s9qenvironment>P</s9qenvironment>
+  <s9qRunMultiple>0</s9qRunMultiple>
+  <s9qQryType>DML</s9qQryType>
+  <s9qScript>
+INSERT INTO [DBO].VersionwiseTblsScript(VerID,SrlNo,TblScript,VAUid,VActr,VATermId,VACompCode) VALUES (8,1,'CREATE TABLE [dbo].[PrefixTrnNo]([TrnType] [varchar](10)  NOT NULL,	[ActualPrefix] [varchar](8) NOT NULL,[DocNumber] [int] NOT NULL,[IsActive] Int Not NULL,[VaUID] [varchar](32) NULL,[VaCtr] [int] NULL,[VaTermID] [varchar](32)  NULL,[VaCompCode] [varchar](16) NULL,CONSTRAINT [PK_PrefixTrnNo] PRIMARY KEY CLUSTERED ([TrnType] ASC,[ActualPrefix]))','',1,'.','')
+-GO-
+INSERT INTO [DBO].VersionwiseTblsScript(VerID,SrlNo,TblScript,VAUid,VActr,VATermId,VACompCode) VALUES (8,2,'CREATE TABLE [dbo].[BakPrefixTrnNo]([TrnType] [varchar](10)  NOT NULL,	[ActualPrefix] [varchar](8) NOT NULL,[DocNumber] [int] NOT NULL,[IsActive] Int Not NULL,[VaUID] [varchar](32) NULL,[VaCtr] [int] NULL,[VaTermID] [varchar](32)  NULL,[VaCompCode] [varchar](16) NULL,UpdFlag varchar(1))','',1,'.','')
+-GO-
+INSERT INTO [DBO].VersionwiseTblsScript(VerID,SrlNo,TblScript,VAUid,VActr,VATermId,VACompCode) VALUES (8,3,'CREATE TABLE [dbo].[PrefixMaster]([Trntype] [varchar](10)  NOT NULL,[OPId] [varchar](10)  NOT NULL, [TerminalGroupId] [varchar](32)  NOT NULL,[Srlno] [int] NOT NULL,[Prefix] [varchar](8)  NULL,[BasePrefix] [varchar](8) NULL,[Suffix] [varchar](8) NULL,	[IsActive] Int NOT NULL,[ResetRequired] Int,[ResetType] Varchar(16),[VaUID] [varchar](32)  NULL,[VaCtr] [int] NULL,[VaTermID] [varchar](32) NULL,[VaCompCode] [varchar](16)  NULL,CONSTRAINT [PK_Prefixmaster] PRIMARY KEY CLUSTERED ([Trntype] ASC,[OPId] ASC,	[TerminalGroupId] ASC,[Srlno] ASC))','',1,'.','')
+-GO-
+INSERT INTO [DBO].VersionwiseTblsScript(VerID,SrlNo,TblScript,VAUid,VActr,VATermId,VACompCode) VALUES (8,4,'CREATE TABLE [dbo].[BakPrefixMaster]([Trntype] [varchar](10)  NOT NULL,[OPId] [varchar](10)  NOT NULL, [TerminalGroupId] [varchar](32)  NOT NULL,[Srlno] [int] NOT NULL,[Prefix] [varchar](8)  NULL,[BasePrefix] [varchar](8) NULL,[Suffix] [varchar](8) NULL,	[IsActive] Int NOT NULL,[ResetRequired] Int,[ResetType] Varchar(16),[VaUID] [varchar](32)  NULL,[VaCtr] [int] NULL,[VaTermID] [varchar](32) NULL,[VaCompCode] [varchar](16)  NULL,UpdFlag varchar(1))','',1,'.','')
+-GO-
+INSERT INTO [DBO].VersionwiseTblsScript(VerID,SrlNo,TblScript,VAUid,VActr,VATermId,VACompCode) VALUES (8,5,'CREATE TABLE [dbo].[PrefixTrnLog]([Fld1] [varchar](8)  NOT NULL,[Fld2] [varchar](10) NOT NULL,[Fld3] [varchar](10) NULL,[Fld4] int NOT NULL,[VaUID] [varchar](32) NULL,[VaCtr] [int] NULL,[VaTermID] [varchar](32)  NULL,[VaCompCode] [varchar](16) NULL, CONSTRAINT [PK_PrefixTrnLog] PRIMARY KEY CLUSTERED ([Fld1] ASC,[Fld2] ASC,[Fld4] ASC))','',1,'.','')
+-GO-
+INSERT INTO [DBO].VersionwiseTblsScript(VerID,SrlNo,TblScript,VAUid,VActr,VATermId,VACompCode) VALUES (8,6,'CREATE TABLE [dbo].[BakPrefixTrnLog]([Fld1] [varchar](8) NOT NULL,[Fld2] [varchar](10) NOT NULL,[Fld3] [varchar](10) NULL,[Fld4] int NOT NULL,[VaUID] [varchar](32) NULL,[VaCtr] [int] NULL,[VaTermID] [varchar](32) NULL,[VaCompCode] [varchar](16) NULL,UpdFlag varchar(1))','',1,'.','')
+-GO-
+INSERT INTO [DBO].VersionwiseTblsScript(VerID,SrlNo,TblScript,VAUid,VActr,VATermId,VACompCode) VALUES (8,7,'CREATE TABLE [dbo].[PrefixConfig]([SlNo] [int] NOT NULL,[TrnType] [varchar](10) NOT NULL,[OPId] [varchar](10) NULL,[TrnName] [varchar](128) NOT NULL,[TrnSubName] [varchar](128) NOT NULL,[IsActive] Int NULL,[TerminalWisePrefix] Int Null,[NumberReset] Int Null,[SamePrefixforSubTran] Int Null,[ParentTrnType] Varchar(10),[VaUID] [varchar](32) NULL,[VaCtr] [int] NULL,[VaTermID] [varchar](32) NULL,[VaCompCode] [varchar](16) NULL,CONSTRAINT [PK_PrefixConfig] PRIMARY KEY CLUSTERED ( SlNo ASC ))','',1,'.','')
+-GO-
+INSERT INTO [DBO].VersionwiseTblsScript(VerID,SrlNo,TblScript,VAUid,VActr,VATermId,VACompCode) VALUES (8,8,'CREATE TABLE [dbo].[BakPrefixConfig]([SlNo] [int] NOT NULL,[TrnType] [varchar](10) NOT NULL,[OPId] [varchar](10) NULL,[TrnName] [varchar](128) NOT NULL,[TrnSubName] [varchar](128) NOT NULL,[IsActive] Int NULL,[TerminalWisePrefix] Int Null,[NumberReset] Int Null,[SamePrefixforSubTran] Int Null,[ParentTrnType] Varchar(10),[VaUID] [varchar](32) NULL,[VaCtr] [int] NULL,[VaTermID] [varchar](32) NULL,[VaCompCode] [varchar](16) NULL,UpdFlag varchar(1))','',1,'.','')
+-GO-
+INSERT INTO [DBO].VersionwiseTblsScript(VerID,SrlNo,TblScript,VAUid,VActr,VATermId,VACompCode) VALUES (8,9,'CREATE TABLE [dbo].[PrefixTerminalGroups]([TerminalGroupId] [varchar](16) NOT NULL,[SrlNo] [int] NOT NULL,[TerminalId] [varchar](16) NULL,[TerminalGroupDescr] [varchar](50) NOT NULL,[IsActive] Int NULL,[VaUID] [varchar](32) NULL,[VaCtr] [int] NULL,[VaTermID] [varchar](32) NULL,[VaCompCode] [varchar](16) NULL,CONSTRAINT [PK_PrefixTerminalGroups] PRIMARY KEY CLUSTERED (TerminalGroupId, SrlNo ASC ))','',1,'.','')
+-GO-
+INSERT INTO [DBO].VersionwiseTblsScript(VerID,SrlNo,TblScript,VAUid,VActr,VATermId,VACompCode) VALUES (8,10,'CREATE TABLE [dbo].[BakPrefixTerminalGroups]([TerminalGroupId] [varchar](16) NOT NULL,[SrlNo] [int] NOT NULL,[TerminalId] [varchar](16) NULL,[TerminalGroupDescr] [varchar](50) NOT NULL,[IsActive] Int NULL,[VaUID] [varchar](32) NULL,[VaCtr] [int] NULL,[VaTermID] [varchar](32) NULL,[VaCompCode] [varchar](16) NULL,UpdFlag varchar(1))','',1,'.','')
+-GO-
+Update [DBO].[VersionwiseTblsScript] Set Vactr = (select intg from [DBO].sysparam where paramcode = 'VaSysCounter') where VerId=8
+-GO-
+Update Sysparam set Txt=txt + '#PrefixMaster' where txt not like '%#PrefixMaster%' AND ParamCode='AdlTablesToSync'
+-GO-
+Update Sysparam set Txt=txt + '#PrefixConfig' where txt not like '%#PrefixConfig%' AND ParamCode='AdlTablesToSync'
+-GO-
+Update Sysparam set Txt=txt + '#PrefixTerminalGroups' where txt not like '%#PrefixTerminalGroups%' AND ParamCode='AdlTablesToSync'
+-GO-
+Update Sysparam set Txt=txt + '#PrefixTrnLog' where txt not like '%#PrefixTrnLog%' AND ParamCode='AdlTablesToSync'
+-GO-
+Update Sysparam set Txt=txt + '#PrefixTrnNo' where txt not like '%#PrefixTrnNo%' AND ParamCode='AdlTablesToSync'
+-GO-
+</s9qScript>
+</s9qsqlblk
+
+<s9qsqlblk>
+  <s9qScriptID>S9Q_0151_0_0004</s9qScriptID>
+  <s9qtitle>Creating BAK Table</s9qtitle>
+  <s9qpgmtype>I</s9qpgmtype>
+  <s9qpgmtype>L</s9qpgmtype>
+  <s9qversion>*</s9qversion>
+  <s9qenvironment>P</s9qenvironment>
+  <s9qRunMultiple>1</s9qRunMultiple>
+  <s9qQryType>DLL</s9qQryType>
+  <s9qScript>BackTableCreation.clsBackTabCrt</s9qScript>
+</s9qsqlblk>
+
+<s9qsqlblk>
+  <s9qScriptid>S9Q_0151_0_0005</s9qScriptid> 
+  <s9qtitle>Migrate the Data from Genlookup 102</s9qtitle>
+  <s9qpgmtype>L</s9qpgmtype>
+  <s9qpgmtype>I</s9qpgmtype>
+  <s9qversion>*</s9qversion>
+  <s9qenvironment>P</s9qenvironment>
+  <s9qRunMultiple>0</s9qRunMultiple>
+  <s9qQryType>EXE</s9qQryType>
+  <s9qScript><APPATH>\Prefixmigration.exe</s9qScript>
+</s9qsqlblk>

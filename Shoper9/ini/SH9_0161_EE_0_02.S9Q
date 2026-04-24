@@ -1,0 +1,24 @@
+<s9qsqlblk>
+  <s9qScriptID>	S9Q_016_0_0001	</s9qScriptID>
+  <s9qtitle></s9qtitle>
+  <s9qpgmtype>I</s9qpgmtype>
+  <s9qpgmtype>L</s9qpgmtype>
+  <s9qversion>*</s9qversion>
+  <s9qenvironment>P</s9qenvironment>
+  <s9qRunMultiple>1</s9qRunMultiple>
+  <s9qQryType>DML</s9qQryType>
+  <s9qScript>
+INSERT INTO Genlookup (recid,code,descr) values (299,'P901275','Shoper Update Version No:')
+-GO-
+Update Genlookup set Descr = (select 'Shoper Update Version No:9.0.1.9275' + ' ;system date:' + convert(varchar(20),getdate(),105) + ' ;shoper date:' + (select convert(varchar(20),dt,105) from sysparam where paramcode ='SHOPERSysDt') ) where code = 'P901275' and recid = 299
+-GO-
+Update genlookup Set Vactr = (select intg from sysparam where paramcode = 'VaSysCounter') where Recid=299 and Code='P901275'
+-GO-
+INSERT INTO [dbo].VersionDtls VALUES (10,getdate(),'9','1.61','A','P901275','',1,'.','')
+-GO-
+Update VersionDtls Set Vactr = (select intg from sysparam where paramcode = 'VaSysCounter') where VerId=10
+-GO-
+Insert Into GenLookUp (Recid,Code,Descr,Flag) Values (14300,'SR413400+PROGRAMSTART+1','shprfw03.ClsUserAuthorise',1)
+-GO-
+</s9qScript>		
+</s9qsqlblk>

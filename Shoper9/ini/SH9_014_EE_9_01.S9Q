@@ -1,0 +1,298 @@
+<s9qsqlblk>
+  <s9qScriptid>S9Q_014_9_0041</s9qScriptid> 
+  <s9qtitle>Catalogue Module: New Sales Promotion Catalogue DB Changes</s9qtitle> 
+  <s9qpgmtype>I</s9qpgmtype>  
+  <s9qpgmtype>L</s9qpgmtype>  
+  <s9qversion>*</s9qversion> 
+  <s9qenvironment>P</s9qenvironment> 
+  <s9qenvironment>R</s9qenvironment> 
+  <s9qRunMultiple>1</s9qRunMultiple> 
+  <s9qQryType>DDL</s9qQryType> 
+  <s9qScript>
+Alter Table [dbo].PromoMnBuyItemGrpDtls Add BuyItemAttribLvl VarChar(128)
+-GO-
+Alter Table [dbo].PromoMnGetItemGrpDtls Add GetItemAttribLvl VarChar(128)
+-GO-
+Create Table [dbo].SPDefSettings(KeyType int, KeyVal VarChar(128),ValB Bit, ValI int, ValD Datetime,ValT VarChar(256),ValS money,  ValC money, ValTyp VarChar(2)) 
+-GO-
+INSERT INTO [dbo].VersionwiseTblsScript(VerID,SrlNo,TblScript,VAUid,VActr,VATermId,VACompCode) 
+VALUES (5,11,'Alter Table [dbo].PromoMnBuyItemGrpDtls Add BuyItemAttribLvl VarChar(128)','',1,'.','')
+-GO-
+INSERT INTO [dbo].VersionwiseTblsScript(VerID,SrlNo,TblScript,VAUid,VActr,VATermId,VACompCode) 
+VALUES (5,12,'Alter Table [dbo].BakPromoMnBuyItemGrpDtls drop column UpdFlag','',1,'.','')
+-GO-
+INSERT INTO [dbo].VersionwiseTblsScript(VerID,SrlNo,TblScript,VAUid,VActr,VATermId,VACompCode) 
+VALUES (5,13,'Alter Table [dbo].BakPromoMnBuyItemGrpDtls add BuyItemAttribLvl VarChar(128)','',1,'.','')
+-GO-
+INSERT INTO [dbo].VersionwiseTblsScript(VerID,SrlNo,TblScript,VAUid,VActr,VATermId,VACompCode) 
+VALUES (5,14,'Alter Table [dbo].BakPromoMnBuyItemGrpDtls add UpdFlag varchar(1)','',1,'.','')
+-GO-
+
+INSERT INTO [dbo].VersionwiseTblsScript(VerID,SrlNo,TblScript,VAUid,VActr,VATermId,VACompCode) 
+VALUES (5,15,'Alter Table [dbo].PromoMnGetItemGrpDtls Add GetItemAttribLvl VarChar(128)','',1,'.','')
+-GO-
+INSERT INTO [dbo].VersionwiseTblsScript(VerID,SrlNo,TblScript,VAUid,VActr,VATermId,VACompCode) 
+VALUES (5,16,'Alter Table [dbo].BakPromoMnGetItemGrpDtls drop column UpdFlag','',1,'.','')
+-GO-
+INSERT INTO [dbo].VersionwiseTblsScript(VerID,SrlNo,TblScript,VAUid,VActr,VATermId,VACompCode) 
+VALUES (5,17,'Alter Table [dbo].BakPromoMnGetItemGrpDtls Add GetItemAttribLvl VarChar(128)','',1,'.','')
+-GO-
+INSERT INTO [dbo].VersionwiseTblsScript(VerID,SrlNo,TblScript,VAUid,VActr,VATermId,VACompCode) 
+VALUES (5,18,'Alter Table [dbo].BakPromoMnGetItemGrpDtls add UpdFlag varchar(1)','',1,'.','')
+-GO-
+
+INSERT INTO [dbo].VersionwiseTblsScript(VerID,SrlNo,TblScript,VAUid,VActr,VATermId,VACompCode) 
+VALUES (5,19,'Create Table [dbo].SPDefSettings(KeyType int, KeyVal VarChar(128),ValB Bit, ValI int, ValD Datetime,ValT VarChar(256),ValS money,  ValC money, ValTyp VarChar(2)) ','',1,'.','')
+-GO-
+INSERT INTO [dbo].VersionwiseTblsScript(VerID,SrlNo,TblScript,VAUid,VActr,VATermId,VACompCode) 
+VALUES (5,20,'Create Table [dbo].BakSPDefSettings(KeyType int, KeyVal VarChar(128),ValB Bit, ValI int, ValD Datetime,ValT VarChar(256),ValS money,  ValC money, ValTyp VarChar(2),UpdFlag Varchar(1)) ','',1,'.','')
+
+-GO-
+Update [dbo].[VersionwiseTblsScript] Set Vactr = (select intg from dbo.sysparam where paramcode = 'VaSysCounter') where VerId=5
+-GO-
+
+  </s9qScript>
+</s9qsqlblk>
+
+
+<s9qsqlblk>
+  <s9qScriptid>S9Q_014_9_0042</s9qScriptid> 
+  <s9qtitle>Catalogue Module: New Sales Promotion Catalogue Default Values</s9qtitle> 
+  <s9qpgmtype>I</s9qpgmtype>  
+  <s9qpgmtype>L</s9qpgmtype>  
+  <s9qversion>*</s9qversion> 
+  <s9qenvironment>P</s9qenvironment> 
+  <s9qenvironment>R</s9qenvironment> 
+  <s9qRunMultiple>0</s9qRunMultiple> 
+  <s9qQryType>DML</s9qQryType> 
+  <s9qScript>
+
+Insert Into SPDefSettings Values(1,'ShowAdvancedForm',0,0,'12:00 AM','',0,0,'B')
+-GO-
+Insert Into SPDefSettings Values(1,'DefPromoTypeToSet',0,1,'12:00 AM','',0,0,'I')
+-GO-
+Insert Into SPDefSettings Values(1,'DefAssumeSPCodeAsDescAlso',0,1,'12:00 AM','',0,0,'I')
+-GO-
+Insert Into SPDefSettings Values(1,'DefShrmSelType',0,1,'12:00 AM','',0,0,'I')
+-GO-
+Insert Into SPDefSettings Values(1,'DefCustSelType',0,1,'12:00 AM','',0,0,'I')
+-GO-
+Insert Into SPDefSettings Values(1,'DefNoOfDaysPromoIsActive',0,1,'12:00 AM','',0,0,'I')
+-GO-
+Insert Into SPDefSettings Values(1,'DefBilledItemAttribSel',0,0,'12:00 AM','00000010101000000000000000000000000000000000000000000000000000000000000000000000',0,0,'T')
+-GO-
+Insert Into SPDefSettings Values(1,'DefFreeItemAttribSel',0,0,'12:00 AM','00000010101000000000000000000000000000000000000000000000000000000000000000000000',0,0,'T')
+-GO-
+Insert Into SPDefSettings Values(1,'DefItemBrowse',0,0,'12:00 AM','',0,0,'I')
+-GO-
+Insert Into SPDefSettings Values(1,'DefLoadItemsOption',0,1,'12:00 AM','',0,0,'I')
+-GO-
+Insert Into SPDefSettings Values(1,'DefAllowBilledItemConfig',0,1,'12:00 AM','',0,0,'I')
+-GO-
+Insert Into SPDefSettings Values(1,'DefAllowFreeItemConfig',0,1,'12:00 AM','',0,0,'I')
+-GO-
+Insert Into SPDefSettings Values(1,'DefAllowToSelAllItemsForBilledItem',0,1,'12:00 AM','',0,0,'I')
+-GO-
+Insert Into SPDefSettings Values(2,'ShowAdvancedForm',0,0,'12:00 AM','',0,0,'B')
+-GO-
+Insert Into SPDefSettings Values(2,'DefPromoTypeToSet',0,1,'12:00 AM','',0,0,'I')
+-GO-
+Insert Into SPDefSettings Values(2,'DefAssumeSPCodeAsDescAlso',0,1,'12:00 AM','',0,0,'I')
+-GO-
+Insert Into SPDefSettings Values(2,'DefShrmSelType',0,1,'12:00 AM','',0,0,'I')
+-GO-
+Insert Into SPDefSettings Values(2,'DefCustSelType',0,1,'12:00 AM','',0,0,'I')
+-GO-
+Insert Into SPDefSettings Values(2,'DefNoOfDaysPromoIsActive',0,1,'12:00 AM','',0,0,'I')
+-GO-
+Insert Into SPDefSettings Values(2,'DefBilledItemAttribSel',0,0,'12:00 AM','00000010101000000000000000000000000000000000000000000000000000000000000000000000',0,0,'T')
+-GO-
+Insert Into SPDefSettings Values(2,'DefFreeItemAttribSel',0,0,'12:00 AM','00000010101000000000000000000000000000000000000000000000000000000000000000000000',0,0,'T')
+-GO-
+Insert Into SPDefSettings Values(2,'DefItemBrowse',0,0,'12:00 AM','',0,0,'I')
+-GO-
+Insert Into SPDefSettings Values(2,'DefLoadItemsOption',0,1,'12:00 AM','',0,0,'I')
+-GO-
+Insert Into SPDefSettings Values(2,'DefAllowBilledItemConfig',0,1,'12:00 AM','',0,0,'I')
+-GO-
+Insert Into SPDefSettings Values(2,'DefAllowFreeItemConfig',0,1,'12:00 AM','',0,0,'I')
+-GO-
+Insert Into SPDefSettings Values(2,'DefAllowToSelAllItemsForBilledItem',0,1,'12:00 AM','',0,0,'I')
+-GO-
+update genlookupextd set additional1 = substring(additional1,1,1) + '#' + substring(additional1,2,1) 
+-GO-
+update genlookupextd set additional1 = additional1 + '#16#50' where recid in (1,2,8,13,16,17,18,19,20,31,51,52,53,54,55,56,57,58,59,65,66,67,68,69,70,71,144,355,904,905,7000,7001,7002,7003,7004,7005,7006,7007,7008,7009,7010,7011,7012,7013,7014,7015,7016,7017,7018,7019,7020,7021,7022,7023,7024,7025,7026,11000,13100,15500)
+-GO-
+update genlookupextd set additional1 = additional1 + '#14#50' where recid in (7)
+-GO-
+update genlookupextd set additional1 = additional1 + '#50#50' where recid in (60,61,62,63,64)
+-GO-
+DELETE FROM GENLOOKUP WHERE RECID=9050
+-GO-
+INSERT INTO GENLOOKUP VALUES(9050,'1','Percentage/Amount (Fixed)','1',1,'SUPER',1,'.','.')
+-GO-
+INSERT INTO GENLOOKUP VALUES(9050,'2','Percentage/Amount (Variable)','1',2,'SUPER',1,'.','.')
+-GO-
+INSERT INTO GENLOOKUP VALUES(9050,'3','Discounted Rate','1',3,'SUPER',1,'.','.')
+-GO-
+INSERT INTO GENLOOKUP VALUES(9050,'4','Fixed Value','1',4,'SUPER',1,'.','.')
+-GO-
+INSERT INTO GENLOOKUP VALUES(9050,'5','On Additional Item','1',5,'SUPER',1,'.','.')
+-GO-
+INSERT INTO GENLOOKUP VALUES(9050,'6','On Last Piece','1',6,'SUPER',1,'.','.')
+-GO-
+INSERT INTO GENLOOKUP VALUES(9050,'7','Bundle Discount','1',7,'SUPER',1,'.','.')
+-GO-
+INSERT INTO GENLOOKUP VALUES(9050,'8','Same Item','1',8,'SUPER',1,'.','.')
+-GO-
+INSERT INTO GENLOOKUP VALUES(9050,'9','Different Item','1',9,'SUPER',1,'.','.')
+-GO-
+INSERT INTO GENLOOKUP VALUES(9050,'10','Bundle Offer','1',10,'SUPER',1,'.','.')
+-GO-
+INSERT INTO GENLOOKUP VALUES(9050,'11','Percentage/Amount (Fixed)','1',11,'SUPER',1,'.','.')
+-GO-
+INSERT INTO GENLOOKUP VALUES(9050,'12','Percentage/Amount (Variable)','1',12,'SUPER',1,'.','.')
+-GO-
+  </s9qScript>
+</s9qsqlblk>
+
+
+<s9qsqlblk>
+  <s9qScriptid>S9Q_014_9_0043</s9qScriptid> 
+  <s9qtitle>Catalogue Module: Sales Promo Related Stored Procedures Deleted In Rel 1.4</s9qtitle> 
+  <s9qpgmtype>I</s9qpgmtype>  
+  <s9qpgmtype>L</s9qpgmtype>  
+  <s9qversion>*</s9qversion> 
+  <s9qenvironment>P</s9qenvironment> 
+  <s9qenvironment>R</s9qenvironment> 
+  <s9qRunMultiple>1</s9qRunMultiple> 
+  <s9qQryType>DDL</s9qQryType> 
+  <s9qScript>
+
+BEGIN TRANSACTION	
+
+if exists (select * from dbo.sysobjects where id = object_id(N'[dbo].[INSERTUPDATEPROMOMNINTERMEDIATE]') and OBJECTPROPERTY(id, N'IsProcedure') = 1) drop procedure [dbo].[INSERTUPDATEPROMOMNINTERMEDIATE]
+if exists (select * from dbo.sysobjects where id = object_id(N'[dbo].[SalesPromoProcessNewItems]') and OBJECTPROPERTY(id, N'IsProcedure') = 1) drop procedure [dbo].[SalesPromoProcessNewItems]
+if exists (select * from dbo.sysobjects where id = object_id(N'[dbo].[UpdatePromoMnIntermediate]') and OBJECTPROPERTY(id, N'IsProcedure') = 1) drop procedure [dbo].[UpdatePromoMnIntermediate]
+
+COMMIT TRANSACTION
+
+  </s9qScript>
+</s9qsqlblk>
+
+
+<s9qsqlblk>
+  <s9qScriptid>S9Q_014_9_0044</s9qScriptid> 
+  <s9qtitle>Catalogue Module: Sales Promo Related - Update Item Attrib Levels</s9qtitle> 
+  <s9qpgmtype>I</s9qpgmtype>  
+  <s9qpgmtype>L</s9qpgmtype>
+  <s9qpgmtype>D</s9qpgmtype>
+  <s9qversion>*</s9qversion> 
+  <s9qenvironment>P</s9qenvironment> 
+  <s9qenvironment>R</s9qenvironment> 
+  <s9qRunMultiple>1</s9qRunMultiple> 
+  <s9qQryType>DDL</s9qQryType> 
+  <s9qScript>
+
+BEGIN TRANSACTION	
+-GO-
+Update PromoMnBuyItemGrpDtls 
+Set BuyItemAttribLvl = '1000000000000000000000000000000000000000'
+from PromoMnHeader A, PromoMnBuyItemGrpDtls B WHERE 
+A.SALESPROMOCODE = B.SalesPromoCode And A.ApplicableItems=1
+and BuyItemAttribLvl Is NULL
+-GO-
+Update PromoMnBuyItemGrpDtls 
+Set BuyItemAttribLvl = '00' +
+case When (Class1Cd <>'' And Class1Cd <> '<<ALL>>') then '1' else '0' end +
+case When (Class2Cd <>'' And Class2Cd <> '<<ALL>>') then '1' else '0' end +
+case When (SubClass1Cd <>'' And SubClass1Cd <> '<<ALL>>') then '1' else '0' end +
+case When (SubClass2Cd <>'' And SubClass2Cd <> '<<ALL>>') then '1' else '0' end +
+case When (SizeCd <>'' And SizeCd <> '<<ALL>>') then '1' else '0' end +
+'0000000000000000000000000000000000'
+from PromoMnHeader A, PromoMnBuyItemGrpDtls B WHERE 
+A.SALESPROMOCODE = B.SalesPromoCode And A.ApplicableItems=2
+and BuyItemAttribLvl Is NULL
+-GO-
+Update PromoMnBuyItemGrpDtls 
+Set BuyItemAttribLvl = '01000000000000000000000000000000000000000'
+from PromoMnHeader A, PromoMnBuyItemGrpDtls B WHERE 
+A.SALESPROMOCODE = B.SalesPromoCode And A.ApplicableItems=3
+and BuyItemAttribLvl Is NULL
+-GO-
+Update PromoMnGetItemGrpDtls 
+Set GetItemAttribLvl = '1000000000000000000000000000000000000000'
+from PromoMnHeader A, PromoMnGetItemGrpDtls B WHERE 
+A.SALESPROMOCODE = B.SalesPromoCode And A.ApplicableItems=1
+and GetItemAttribLvl Is NULL
+-GO-
+Update PromoMnGetItemGrpDtls 
+Set GetItemAttribLvl = '00' +
+case When (Class1Cd <>'' And Class1Cd <> '<<ALL>>') then '1' else '0' end +
+case When (Class2Cd <>'' And Class2Cd <> '<<ALL>>') then '1' else '0' end +
+case When (SubClass1Cd <>'' And SubClass1Cd <> '<<ALL>>') then '1' else '0' end +
+case When (SubClass2Cd <>'' And SubClass2Cd <> '<<ALL>>') then '1' else '0' end +
+case When (SizeCd <>'' And SizeCd <> '<<ALL>>') then '1' else '0' end +
+'0000000000000000000000000000000000'
+from PromoMnHeader A, PromoMnGetItemGrpDtls B WHERE 
+A.SALESPROMOCODE = B.SalesPromoCode And A.ApplicableItems=2
+and GetItemAttribLvl Is NULL
+-GO-
+Update PromoMnGetItemGrpDtls 
+Set GetItemAttribLvl = '01000000000000000000000000000000000000000'
+from PromoMnHeader A, PromoMnGetItemGrpDtls B WHERE 
+A.SALESPROMOCODE = B.SalesPromoCode And A.ApplicableItems=3
+and GetItemAttribLvl Is NULL
+-GO-
+COMMIT TRANSACTION
+-GO-
+Update PromoMnHeader Set UserId = 1 Where FixedOrVariable = 1 and DefinitionType=1 and DefinitionLevel=1 And ItemLvlDiscountType = 1 And AndCondition = 0
+-GO-
+Update PromoMnHeader Set UserId = 2 Where FixedOrVariable = 2 and DefinitionType=1 and DefinitionLevel=1 And ItemLvlDiscountType = 1 And AndCondition = 0
+-GO-
+Update PromoMnHeader Set UserId = 3 Where FixedOrVariable = 1 and DefinitionType=1 and DefinitionLevel=1 And ItemLvlDiscountType = 2
+-GO-
+Update PromoMnHeader Set UserId = 4 Where FixedOrVariable = 1 and DefinitionType=1 and DefinitionLevel=1 And ItemLvlDiscountType = 3
+-GO-
+Update PromoMnHeader Set UserId = 5 Where FixedOrVariable = 1 and DefinitionType=1 and DefinitionLevel=1 And ItemLvlDiscountType = 4
+-GO-
+Update PromoMnHeader Set UserId = 6 Where FixedOrVariable = 2 and DefinitionType=1 and DefinitionLevel=1 And ItemLvlDiscountType = 2
+-GO-
+Update PromoMnHeader Set UserId = 7 Where FixedOrVariable = 1 and DefinitionType=1 and DefinitionLevel=1 And ItemLvlDiscountType = 1 And AndCondition = 1
+-GO-
+Update PromoMnHeader Set UserId = 8 Where FixedOrVariable = 1 and DefinitionType=2 and DefinitionLevel=1 And ItemLvlOfferType = 1 and ItemLvlOfferBuyNGetItemsAreSame = 1
+-GO-
+Update PromoMnHeader Set UserId = 9 Where FixedOrVariable = 1 and DefinitionType=2 and DefinitionLevel=1 And ItemLvlOfferType = 1 and ItemLvlOfferBuyNGetItemsAreSame = 2 And AndCondition = 0
+-GO-
+Update PromoMnHeader Set UserId = 10 Where FixedOrVariable = 1 and DefinitionType=2 and DefinitionLevel=1 And ItemLvlOfferType = 1 and ItemLvlOfferBuyNGetItemsAreSame = 2 And AndCondition = 1
+-GO-
+Update PromoMnHeader Set UserId = 11 Where FixedOrVariable = 1 and DefinitionType=1 and DefinitionLevel=2 
+-GO-
+Update PromoMnHeader Set UserId = 12 Where FixedOrVariable = 2 and DefinitionType=1 and DefinitionLevel=2 
+-GO-
+UPDATE SALESTAXCAT SET T1TYPE = 'F' WHERE T1TYPE = '' AND (T1DERIVEDFORMULA='' OR T1DERIVEDFORMULA IS NULL) AND T1COMPON <>''
+-GO-
+UPDATE SALESTAXCAT SET T2TYPE = 'F' WHERE T2TYPE = '' AND (T2DERIVEDFORMULA='' OR T2DERIVEDFORMULA IS NULL) AND T2COMPON <>''
+-GO-
+UPDATE SALESTAXCAT SET T3TYPE = 'F' WHERE T3TYPE = '' AND (T3DERIVEDFORMULA='' OR T3DERIVEDFORMULA IS NULL) AND T3COMPON <>''
+-GO-
+UPDATE SALESTAXCAT SET T4TYPE = 'F' WHERE T4TYPE = '' AND (T4DERIVEDFORMULA='' OR T4DERIVEDFORMULA IS NULL) AND T4COMPON <>''
+-GO-
+UPDATE SALESTAXCAT SET T5TYPE = 'F' WHERE T5TYPE = '' AND (T5DERIVEDFORMULA='' OR T5DERIVEDFORMULA IS NULL) AND T5COMPON <>''
+-GO-
+  </s9qScript>
+</s9qsqlblk>
+
+
+<s9qsqlblk>
+  <s9qScriptid>S9Q_014_9_0045</s9qScriptid> 
+  <s9qtitle></s9qtitle>
+  <s9qpgmtype>I</s9qpgmtype>
+  <s9qpgmtype>L</s9qpgmtype>
+  <s9qversion>*</s9qversion>
+  <s9qenvironment>P</s9qenvironment>
+  <s9qenvironment>R</s9qenvironment>
+  <s9qRunMultiple>1</s9qRunMultiple>
+  <s9qQryType>DLL</s9qQryType>
+  <s9qScript>BackTableCreation.clsBackTabCrt</s9qScript>		
+</s9qsqlblk>

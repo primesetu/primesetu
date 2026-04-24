@@ -1,0 +1,18 @@
+<s9qsqlblk>
+  <s9qScriptid>S9Q_017_5_0002</s9qScriptid> 
+  <s9qtitle></s9qtitle> 
+  <s9qpgmtype>I</s9qpgmtype>  
+  <s9qpgmtype>L</s9qpgmtype>  
+  <s9qversion>*</s9qversion> 
+  <s9qenvironment>P</s9qenvironment> 
+  <s9qRunMultiple>1</s9qRunMultiple> 
+  <s9qQryType>DML</s9qQryType> 
+  <s9qScript>
+Insert into GenLookUp(Recid,Code,Descr,Flag) Values(14400,'SE301400+PROMOIMPORT+1','AlertInterface.ImportAlerts',1)
+-GO-
+Insert into GenLookUp(Recid,Code,Descr,Flag) Values(14400,'SR330700+PRICEREVISIONIMPORT+1','AlertInterface.ImportAlerts',1)
+-GO-
+Update SysParam set Txt=Txt + '#SISSTatus' where ParamCode ='TempTableToSkipFromAST2' and Txt not like '%SISStatus%'
+-GO-
+  </s9qScript>
+</s9qsqlblk>

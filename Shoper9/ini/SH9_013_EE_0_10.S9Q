@@ -1,0 +1,836 @@
+<s9qsqlblk>
+  <s9qScriptid>	S9Q_013_0_0042	</s9qScriptid>
+  <s9qtitle>All Menu DB DDL Statements.</s9qtitle>
+  <s9qpgmtype>I</s9qpgmtype>
+  <s9qpgmtype>L</s9qpgmtype>
+  <s9qversion>*</s9qversion>
+  <s9qenvironment>M</s9qenvironment>
+  <s9qRunMultiple>1</s9qRunMultiple>
+  <s9qQryType>DDL</s9qQryType>
+  <s9qScript>
+CREATE TABLE [dbo].[VAPatchDtls] (
+	[CompCd] [varchar] (32)  NOT NULL ,
+	[CompanyNm] [varchar] (256)  NULL ,
+	[NodeId] [varchar] (32)  NOT NULL ,
+	[PatchVersion] [varchar] (256)  NOT NULL ,
+	[PatchDt] [datetime] NULL ,
+	[SystemDate] [datetime] NULL ,
+	[PatShoperSysDt] [datetime] NULL ,
+	[PatchEngineVer] [varchar] (50)  NULL ,
+	[TrnTypeCtrlNoDtls] [varchar] (256)  NULL ,
+	[DBScriptUpdt] [varchar] (256)  NULL ,
+	[OtherRmks] [varchar] (256)  NULL ,
+	[OtherRmks1] [varchar] (256)  NULL ,
+	[OtherRmks2] [varchar] (256)  NULL ,
+	[SecDBBackupTaken] [bit] NULL ,
+	[AppDBBackupTaken] [bit] NULL ,
+	[AppSecDBBackupTaken] [bit] NULL 
+) ON [PRIMARY]
+-GO-
+
+CREATE TABLE [dbo].[VaNode] (
+	[NodeId] [varchar] (16)  NOT NULL ,
+	[Nm] [varchar] (50)  NULL ,
+	[NodeWt] [int] NULL ,
+	[ClientType] [varchar] (50)  NULL ,
+	[DeviceId] [varchar] (50)  NULL ,
+	[Verupdated] [varchar] (50) NULL ,
+	[Active] [Varchar] (10) NULL,
+	[IPAddress] [Varchar] (32) NULL,
+	[ComputerNm] [Varchar] (256) NULL ,
+	[NodeSkip] [Varchar] (10) NULL
+) ON [PRIMARY]
+-GO-
+
+CREATE TABLE [dbo].[VaNodeDtls] (
+	[Nodeid] [varchar] (50)  NULL ,
+	[Compcode] [varchar] (32)  NULL ,
+	[PgmName] [varchar] (50)  NULL ,
+	[PrefixDecider] [varchar] (50)  NULL ,
+	[ReturnValue] [varchar] (50)  NULL ,
+	[RuleDetails] [varchar] (256)  NULL ,
+	[PgmOpt] [varchar] (16)  NULL 
+) ON [PRIMARY]
+-GO-
+
+CREATE TABLE [dbo].[VaNodeRestrict] (
+	[MnuNo] [int] NOT NULL ,
+	[MenuOpt] [int] NOT NULL ,
+	[NodeId] [varchar] (16)  NOT NULL ,
+	[MnuCap] [varchar] (50)  NULL ,
+	[Allowed] [bit] NOT NULL ,
+	[OneTimeAllowed] [bit] NOT NULL ,
+	[ExeRight] [varchar] (8)  NULL 
+) ON [PRIMARY]
+-GO-
+
+CREATE TABLE [dbo].[VaRestrictMnu] (
+	[MnuNo] [int] NOT NULL ,
+	[MenuOpt] [int] NOT NULL ,
+	[UserName] [varchar] (50)  NOT NULL ,
+	[MnuCap] [varchar] (50)  NULL ,
+	[Allowed] [bit] NOT NULL ,
+	[OneTimeAllowed] [bit] NOT NULL ,
+	[ExeRight] [varchar] (8)  NULL 
+) ON [PRIMARY]
+-GO-
+
+CREATE TABLE [dbo].[VaUsg] (
+	[LoginName] [varchar] (50)  NOT NULL ,
+	[CompCode] [varchar] (50)  NOT NULL ,
+	[DtInOut] [datetime] NULL ,
+	[TimeInOut] [datetime] NULL ,
+	[InUse] [bit] NOT NULL 
+) ON [PRIMARY]
+-GO-
+
+CREATE TABLE [dbo].[VaVerTable] (
+	[NODEID] [Varchar] (16) NOT NULL DEFAULT (0),
+	[EXESRL] [int] NOT NULL ,
+	[EXEID] [varchar] (50)  NOT NULL ,
+	[EXEName] [varchar] (50)  NULL ,
+	[EXESize] [int] NULL ,
+	[EXEVer] [varchar] (50)  NULL ,
+	[EXEMinor] [varchar] (50)  NULL ,
+	[EXESubRel] [varchar] (50)  NULL ,
+	[EXEMinVer] [varchar] (50)  NULL ,
+	[EXEMinMinor] [varchar] (50)  NULL ,
+	[EXEMinSubRel] [varchar] (50)  NULL ,
+	[EXECompatible] [varchar] (50)  NULL ,
+	[EXEDepends] [varchar] (256)  NULL ,
+	[EXEDepends2] [varchar] (256)  NULL ,
+	[EXEDepends3] [varchar] (256)  NULL ,
+	[EXEDepends4] [varchar] (256)  NULL ,
+	[EXEDate] [datetime] NULL ,
+	[EXELastUpdated] [datetime] NULL ,
+	[EXESKIP] [varchar] (50)  NULL ,
+	[EXECheck] [varchar] (256)  NULL 
+) ON [PRIMARY]
+-GO-
+
+CREATE TABLE [dbo].[vaCompWiseMnuOpt] (
+	[CompCode] [varchar] (32)  NOT NULL ,
+	[MnuNo] [int] NOT NULL ,
+	[MnuOptNo] [int] NOT NULL ,
+	[OptWght] [int] NULL 
+) ON [PRIMARY]
+-GO-
+
+CREATE TABLE [dbo].[vaCompWiseUserPriority] (
+	[CompCode] [varchar] (32)  NOT NULL ,
+	[LoginId] [varchar] (16)  NOT NULL ,
+	[Priority] [int] NULL ,
+	[MultiSession] [int] NULL 
+) ON [PRIMARY]
+-GO-
+
+CREATE TABLE [dbo].[vaCompany] (
+	[CompCode] [varchar] (32)  NOT NULL ,
+	[Nm] [varchar] (50)  NULL ,
+	[Address] [text]  NULL ,
+	[CompWght] [int] NULL ,
+	[DbName] [varchar] (50)  NULL ,
+	[DbPassWd] [varchar] (50)  NULL ,
+	[DbPath] [varchar] (200)  NULL ,
+	[DbProvider] [varchar] (50)  NULL ,
+	[DbType] [varchar] (50)  NULL ,
+	[DbServer] [varchar] (50)  NULL ,
+	[DbUserName] [varchar] (50)  NULL ,
+	[DbShareDir] [varchar] (200)  NULL ,
+	[DbInDir] [varchar] (200)  NULL ,
+	[DbOutDir] [varchar] (200)  NULL ,
+	[DbPath1] [varchar] (200)  NULL ,
+	[DbName1] [varchar] (50)  NULL ,
+	[DbPasswd1] [varchar] (50)  NULL ,
+	[DbProvider1] [varchar] (50)  NULL ,
+	[DbType1] [varchar] (50)  NULL ,
+	[DbServer1] [varchar] (50)  NULL ,
+	[DbUserName1] [varchar] (50)  NULL ,
+	[DbPath2] [varchar] (200)  NULL ,
+	[DbName2] [varchar] (50)  NULL ,
+	[DbPasswd2] [varchar] (50)  NULL ,
+	[DbProvider2] [varchar] (50)  NULL ,
+	[DbType2] [varchar] (50)  NULL ,
+	[DbServer2] [varchar] (50)  NULL ,
+	[DbUserName2] [varchar] (50)  NULL ,
+	[DbPath3] [varchar] (200)  NULL ,
+	[DbName3] [varchar] (50)  NULL ,
+	[DbPasswd3] [varchar] (50)  NULL ,
+	[DbProvider3] [varchar] (50)  NULL ,
+	[DbType3] [varchar] (50)  NULL ,
+	[DbServer3] [varchar] (50)  NULL ,
+	[DbUserName3] [varchar] (50)  NULL ,
+	[DbPath4] [varchar] (200)  NULL ,
+	[DbName4] [varchar] (50)  NULL ,
+	[DbPasswd4] [varchar] (50)  NULL ,
+	[DbProvider4] [varchar] (50)  NULL ,
+	[DbType4] [varchar] (50)  NULL ,
+	[DbServer4] [varchar] (50)  NULL ,
+	[DbUserName4] [varchar] (50)  NULL ,
+	[NdCreateAllowed] [varchar] (2)  NULL ,
+	[NdWiseNumbPresent] [varchar] (2)  NULL ,
+	[MaintNdWiseDevice] [varchar] (2)  NULL ,
+	[TemplateName] [varchar] (50) NULL ,
+	[TemplatePath] [varchar] (200) NULL ,
+	[Templatever] [varchar] (50) NULL ,
+	[EnvironmentType] [varchar] (10) NULL ,
+	[Databaseversion] [varchar] (10) NULL ,
+	[CompanyActive] [varchar] (10) NULL ,
+	[checkupdate] [varchar] (10) NULL
+) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
+-GO-
+
+CREATE TABLE [dbo].[vaDeviceids] (
+	[DeviceID] [varchar] (50)  NULL ,
+	[DeviceName] [varchar] (50)  NULL ,
+	[DeviceRemarks] [varchar] (256)  NULL 
+) ON [PRIMARY]
+-GO-
+
+CREATE TABLE [dbo].[vaMenu] (
+	[MnuNo] [int] NOT NULL ,
+	[MenuOPt] [int] NOT NULL ,
+	[MnuName] [varchar] (50)  NULL ,
+	[MnuCap] [varchar] (50)  NULL ,
+	[MnuPgm] [varchar] (50)  NULL ,
+	[ExeName] [varchar] (50)  NULL ,
+	[MnuWght] [int] NULL ,
+	[AllowWhenTrnClosed] [bit] NOT NULL ,
+	[pgmopt] [int] NULL ,
+	[DbInfo] [varchar] (16)  NULL ,
+	[MenuIcon] [varchar] (50)  NULL ,
+	[Menusep] [bit] NOT NULL ,
+	[MenuBold] [bit] NOT NULL ,
+	[MultiInstance] [int] NULL 
+) ON [PRIMARY]
+-GO-
+
+CREATE TABLE [dbo].[vaUser] (
+	[LoginId] [varchar] (16)  NOT NULL ,
+	[Nm] [varchar] (50)  NULL ,
+	[UserWt] [int] NULL ,
+	[LoginPwd] [varchar] (50)  NULL 
+) ON [PRIMARY]
+-GO-
+
+CREATE TABLE [dbo].[LiveUpdatePatDtls] (
+	[SlNo] [int] NOT NULL ,
+	[PatchVersion] [varchar] (256) NOT NULL ,
+	[ComponentName] [varchar] (50)   NULL ,
+	[ComponentType] [varchar] (20) NULL,
+	[ComponentLocation] [varchar] (100) NULL,
+	[ComponentPath] [varchar] (100) NULL,
+	[RegReqd] [varchar] (1) NULL
+) ON [PRIMARY]
+
+-GO-
+
+ALTER TABLE [dbo].[LiveUpdatePatDtls] WITH NOCHECK ADD 
+	CONSTRAINT [PK_LUPatDtls] PRIMARY KEY  CLUSTERED 
+	(
+		[SlNo] ,
+		[PatchVersion]
+	)  ON [PRIMARY] 
+
+-GO-
+
+ALTER TABLE [dbo].[VAPatchDtls] WITH NOCHECK ADD 
+	CONSTRAINT [PK_VAPatchDtls] PRIMARY KEY  CLUSTERED 
+	(
+		[CompCd],
+		[NodeId],
+		[PatchVersion]
+	)  ON [PRIMARY] 
+-GO-
+
+ALTER TABLE [dbo].[VaNode] WITH NOCHECK ADD 
+	CONSTRAINT [PK_VaNode] PRIMARY KEY  CLUSTERED 
+	(
+		[NodeId]
+	)  ON [PRIMARY] 
+-GO-
+
+ALTER TABLE [dbo].[VaNodeRestrict] WITH NOCHECK ADD 
+	CONSTRAINT [PK_VaNodeRestrict] PRIMARY KEY  CLUSTERED 
+	(
+		[MnuNo],
+		[MenuOpt],
+		[NodeId]
+	)  ON [PRIMARY] 
+-GO-
+
+ALTER TABLE [dbo].[VaRestrictMnu] WITH NOCHECK ADD 
+	CONSTRAINT [PK_varestrictmnu] PRIMARY KEY  CLUSTERED 
+	(
+		[MnuNo],
+		[MenuOpt],
+		[UserName]
+	)  ON [PRIMARY] 
+-GO-
+
+ALTER TABLE [dbo].[VaUsg] WITH NOCHECK ADD 
+	CONSTRAINT [pk_vausg] PRIMARY KEY  CLUSTERED 
+	(
+		[LoginName],
+		[CompCode]
+	)  ON [PRIMARY] 
+-GO-
+
+ALTER TABLE [dbo].[vaCompWiseMnuOpt] WITH NOCHECK ADD 
+	CONSTRAINT [PK_vacompwisemnuopt] PRIMARY KEY  CLUSTERED 
+	(
+		[CompCode],
+		[MnuNo],
+		[MnuOptNo]
+	)  ON [PRIMARY] 
+-GO-
+
+ALTER TABLE [dbo].[vaCompWiseUserPriority] WITH NOCHECK ADD 
+	CONSTRAINT [PK_vacompwisepriority] PRIMARY KEY  CLUSTERED 
+	(
+		[CompCode],
+		[LoginId]
+	)  ON [PRIMARY] 
+-GO-
+
+ALTER TABLE [dbo].[vaCompany] WITH NOCHECK ADD 
+	CONSTRAINT [PK_vacompany] PRIMARY KEY  CLUSTERED 
+	(
+		[CompCode]
+	)  ON [PRIMARY] 
+-GO-
+
+ALTER TABLE [dbo].[vaMenu] WITH NOCHECK ADD 
+	CONSTRAINT [PK_vamenu] PRIMARY KEY  CLUSTERED 
+	(
+		[MnuNo],
+		[MenuOPt]
+	)  ON [PRIMARY] 
+-GO-
+
+ALTER TABLE [dbo].[vaUser] WITH NOCHECK ADD 
+	CONSTRAINT [PK_vauser] PRIMARY KEY  CLUSTERED 
+	(
+		[LoginId]
+	)  ON [PRIMARY] 
+-GO-
+
+ALTER TABLE [dbo].[VaVerTable] WITH NOCHECK ADD 
+	CONSTRAINT [PK_VaVerTable] PRIMARY KEY  CLUSTERED 
+	(
+		[NodeId],
+		[ExeId],
+		[EXESRL]
+	)  ON [PRIMARY] 
+
+  </s9qScript>		
+</s9qsqlblk>
+
+<s9qsqlblk>
+  <s9qScriptid>	S9Q_013_0_0043	</s9qScriptid>
+  <s9qtitle>All Menu DB VAMENU Insert Statements.</s9qtitle>
+  <s9qpgmtype>I</s9qpgmtype>
+  <s9qpgmtype>L</s9qpgmtype>
+  <s9qversion>*</s9qversion>
+  <s9qenvironment>M</s9qenvironment>
+  <s9qRunMultiple>1</s9qRunMultiple>
+  <s9qQryType>DML</s9qQryType>
+  <s9qScript>
+Insert into vamenu (MnuNo, MenuOPt, MnuName, MnuCap, MnuPgm, ExeName, MnuWght, AllowWhenTrnClosed, Pgmopt, DbInfo, MenuIcon, Menusep, MenuBold, MultiInstance) values (	0,100,'Shoper','Sales','M','',0,0,0,'0','',0,0,0)
+-GO-
+Insert into vamenu (MnuNo, MenuOPt, MnuName, MnuCap, MnuPgm, ExeName, MnuWght, AllowWhenTrnClosed, Pgmopt, DbInfo, MenuIcon, Menusep, MenuBold, MultiInstance) values (	0,200,'Shoper','Cash','M','',0,0,0,'0','',0,0,0)
+-GO-
+Insert into vamenu (MnuNo, MenuOPt, MnuName, MnuCap, MnuPgm, ExeName, MnuWght, AllowWhenTrnClosed, Pgmopt, DbInfo, MenuIcon, Menusep, MenuBold, MultiInstance) values (	0,300,'Shoper','Stock','M','',0,0,0,'0','',0,0,0)
+-GO-
+Insert into vamenu (MnuNo, MenuOPt, MnuName, MnuCap, MnuPgm, ExeName, MnuWght, AllowWhenTrnClosed, Pgmopt, DbInfo, MenuIcon, Menusep, MenuBold, MultiInstance) values (	0,400,'Shoper','Reports','M','',0,0,0,'0','',0,0,0)
+-GO-
+Insert into vamenu (MnuNo, MenuOPt, MnuName, MnuCap, MnuPgm, ExeName, MnuWght, AllowWhenTrnClosed, Pgmopt, DbInfo, MenuIcon, Menusep, MenuBold, MultiInstance) values (	0,500,'Shoper','Housekeeping','M','',0,0,0,'0','',0,0,0)
+-GO-
+Insert into vamenu (MnuNo, MenuOPt, MnuName, MnuCap, MnuPgm, ExeName, MnuWght, AllowWhenTrnClosed, Pgmopt, DbInfo, MenuIcon, Menusep, MenuBold, MultiInstance) values (	0,600,'Shoper','Catalogue','M','',0,0,0,'0','',0,0,0)
+-GO-
+Insert into vamenu (MnuNo, MenuOPt, MnuName, MnuCap, MnuPgm, ExeName, MnuWght, AllowWhenTrnClosed, Pgmopt, DbInfo, MenuIcon, Menusep, MenuBold, MultiInstance) values (	0,700,'Shoper','Setup','M','',0,0,0,'0','',0,0,0)
+-GO-
+Insert into vamenu (MnuNo, MenuOPt, MnuName, MnuCap, MnuPgm, ExeName, MnuWght, AllowWhenTrnClosed, Pgmopt, DbInfo, MenuIcon, Menusep, MenuBold, MultiInstance) values (	0,800,'Shoper','Help','M','',0,0,0,'0','',0,0,0)
+-GO-
+Insert into vamenu (MnuNo, MenuOPt, MnuName, MnuCap, MnuPgm, ExeName, MnuWght, AllowWhenTrnClosed, Pgmopt, DbInfo, MenuIcon, Menusep, MenuBold, MultiInstance) values (	100,101,'Sales','Billing','P','SR130000.EXE',0,0,0,'0','',0,0,1)
+-GO-
+Insert into vamenu (MnuNo, MenuOPt, MnuName, MnuCap, MnuPgm, ExeName, MnuWght, AllowWhenTrnClosed, Pgmopt, DbInfo, MenuIcon, Menusep, MenuBold, MultiInstance) values (	100,102,'Sales','Return','P','SR130000.EXE',0,0,0,'0','',0,0,1)
+-GO-
+Insert into vamenu (MnuNo, MenuOPt, MnuName, MnuCap, MnuPgm, ExeName, MnuWght, AllowWhenTrnClosed, Pgmopt, DbInfo, MenuIcon, Menusep, MenuBold, MultiInstance) values (	100,103,'Sales','Cancellation','P','SR130000.EXE',0,0,0,'0','',0,0,1)
+-GO-
+Insert into vamenu (MnuNo, MenuOPt, MnuName, MnuCap, MnuPgm, ExeName, MnuWght, AllowWhenTrnClosed, Pgmopt, DbInfo, MenuIcon, Menusep, MenuBold, MultiInstance) values (	100,104,'Sales','Sales Advice Slips','P','SR115500.EXE',0,0,2,'0','',0,0,0)
+-GO-
+Insert into vamenu (MnuNo, MenuOPt, MnuName, MnuCap, MnuPgm, ExeName, MnuWght, AllowWhenTrnClosed, Pgmopt, DbInfo, MenuIcon, Menusep, MenuBold, MultiInstance) values (	100,105,'Sales','Service Order','P','SR115500.EXE',0,0,7,'0','',0,0,0)
+-GO-
+Insert into vamenu (MnuNo, MenuOPt, MnuName, MnuCap, MnuPgm, ExeName, MnuWght, AllowWhenTrnClosed, Pgmopt, DbInfo, MenuIcon, Menusep, MenuBold, MultiInstance) values (	100,106,'Sales','Sales Order','P','SR115500.EXE',0,0,3,'0','',0,0,0)
+-GO-
+Insert into vamenu (MnuNo, MenuOPt, MnuName, MnuCap, MnuPgm, ExeName, MnuWght, AllowWhenTrnClosed, Pgmopt, DbInfo, MenuIcon, Menusep, MenuBold, MultiInstance) values (	100,107,'Sales','Sales Order Conversion','P','SR131400.EXE',0,0,0,'0','',0,0,0)
+-GO-
+Insert into vamenu (MnuNo, MenuOPt, MnuName, MnuCap, MnuPgm, ExeName, MnuWght, AllowWhenTrnClosed, Pgmopt, DbInfo, MenuIcon, Menusep, MenuBold, MultiInstance) values (	100,108,'Sales','Walk-in Entry','P','SR120100.EXE',0,0,0,'0','',0,0,0)
+-GO-
+Insert into vamenu (MnuNo, MenuOPt, MnuName, MnuCap, MnuPgm, ExeName, MnuWght, AllowWhenTrnClosed, Pgmopt, DbInfo, MenuIcon, Menusep, MenuBold, MultiInstance) values (	100,109,'Sales','Change Payment Mode','P','SR323300.EXE',0,1,1,'0','',0,0,0)
+-GO-
+Insert into vamenu (MnuNo, MenuOPt, MnuName, MnuCap, MnuPgm, ExeName, MnuWght, AllowWhenTrnClosed, Pgmopt, DbInfo, MenuIcon, Menusep, MenuBold, MultiInstance) values (	100,110,'Sales','Pending Order/Trn Closure','P','SE101100.EXE',0,1,1,'0','',0,0,0)
+-GO-
+Insert into vamenu (MnuNo, MenuOPt, MnuName, MnuCap, MnuPgm, ExeName, MnuWght, AllowWhenTrnClosed, Pgmopt, DbInfo, MenuIcon, Menusep, MenuBold, MultiInstance) values (	200,201,'Cash','Cash Payouts','P','SR100200.EXE',0,0,2,'0','',0,0,0)
+-GO-
+Insert into vamenu (MnuNo, MenuOPt, MnuName, MnuCap, MnuPgm, ExeName, MnuWght, AllowWhenTrnClosed, Pgmopt, DbInfo, MenuIcon, Menusep, MenuBold, MultiInstance) values (	200,202,'Cash','Cash Receipts','P','SR100200.EXE',0,0,1,'0','',0,0,0)
+-GO-
+Insert into vamenu (MnuNo, MenuOPt, MnuName, MnuCap, MnuPgm, ExeName, MnuWght, AllowWhenTrnClosed, Pgmopt, DbInfo, MenuIcon, Menusep, MenuBold, MultiInstance) values (	200,250,'Cash','Credit Card Management','M','',0,0,0,'0','',0,0,0)
+-GO-
+Insert into vamenu (MnuNo, MenuOPt, MnuName, MnuCap, MnuPgm, ExeName, MnuWght, AllowWhenTrnClosed, Pgmopt, DbInfo, MenuIcon, Menusep, MenuBold, MultiInstance) values (	200,260,'Cash','Franchisee A/C','M','',0,0,0,'0','',0,0,0)
+-GO-
+Insert into vamenu (MnuNo, MenuOPt, MnuName, MnuCap, MnuPgm, ExeName, MnuWght, AllowWhenTrnClosed, Pgmopt, DbInfo, MenuIcon, Menusep, MenuBold, MultiInstance) values (	250,251,'Credit Card Management','Submission','P','SR100300.EXE',0,0,1,'0','',0,0,0)
+-GO-
+Insert into vamenu (MnuNo, MenuOPt, MnuName, MnuCap, MnuPgm, ExeName, MnuWght, AllowWhenTrnClosed, Pgmopt, DbInfo, MenuIcon, Menusep, MenuBold, MultiInstance) values (	250,252,'Credit Card Management','Realisation','P','SR100400.EXE',0,0,1,'0','',0,0,0)
+-GO-
+Insert into vamenu (MnuNo, MenuOPt, MnuName, MnuCap, MnuPgm, ExeName, MnuWght, AllowWhenTrnClosed, Pgmopt, DbInfo, MenuIcon, Menusep, MenuBold, MultiInstance) values (	260,261,'Franchisee A/C','Payments to HO','P','SR101900.EXE',0,0,0,'0','',0,0,0)
+-GO-
+Insert into vamenu (MnuNo, MenuOPt, MnuName, MnuCap, MnuPgm, ExeName, MnuWght, AllowWhenTrnClosed, Pgmopt, DbInfo, MenuIcon, Menusep, MenuBold, MultiInstance) values (	260,262,'Franchisee A/C','Franchisee Details Form','P','SR430600.Exe',0,0,0,'0','',0,0,0)
+-GO-
+Insert into vamenu (MnuNo, MenuOPt, MnuName, MnuCap, MnuPgm, ExeName, MnuWght, AllowWhenTrnClosed, Pgmopt, DbInfo, MenuIcon, Menusep, MenuBold, MultiInstance) values (	260,263,'Franchisee A/C','Franchisee Outstanding','P','SR203400.EXE',0,0,0,'0','',0,0,0)
+-GO-
+Insert into vamenu (MnuNo, MenuOPt, MnuName, MnuCap, MnuPgm, ExeName, MnuWght, AllowWhenTrnClosed, Pgmopt, DbInfo, MenuIcon, Menusep, MenuBold, MultiInstance) values (	260,265,'Franchisee A/C','Pay-in Slip Generation','P','SR410800.EXE',0,0,0,'0','',0,0,0)
+-GO-
+Insert into vamenu (MnuNo, MenuOPt, MnuName, MnuCap, MnuPgm, ExeName, MnuWght, AllowWhenTrnClosed, Pgmopt, DbInfo, MenuIcon, Menusep, MenuBold, MultiInstance) values (	300,311,'Stock','Import DC / Master from PT File','P','SR324400.exe',0,0,1,'0','',0,0,0)
+-GO-
+Insert into vamenu (MnuNo, MenuOPt, MnuName, MnuCap, MnuPgm, ExeName, MnuWght, AllowWhenTrnClosed, Pgmopt, DbInfo, MenuIcon, Menusep, MenuBold, MultiInstance) values (	300,312,'Stock','Physical Verification','P','SR101000.exe',0,0,0,'0','',0,0,0)
+-GO-
+Insert into vamenu (MnuNo, MenuOPt, MnuName, MnuCap, MnuPgm, ExeName, MnuWght, AllowWhenTrnClosed, Pgmopt, DbInfo, MenuIcon, Menusep, MenuBold, MultiInstance) values (	300,313,'Stock','Goods Inwards','P','SR127000.EXE',0,0,0,'0','',0,0,0)
+-GO-
+Insert into vamenu (MnuNo, MenuOPt, MnuName, MnuCap, MnuPgm, ExeName, MnuWght, AllowWhenTrnClosed, Pgmopt, DbInfo, MenuIcon, Menusep, MenuBold, MultiInstance) values (	300,314,'Stock','Goods Inwards Size-wise','P','SR129500.EXE',0,0,0,'0','',1,0,0)
+-GO-
+Insert into vamenu (MnuNo, MenuOPt, MnuName, MnuCap, MnuPgm, ExeName, MnuWght, AllowWhenTrnClosed, Pgmopt, DbInfo, MenuIcon, Menusep, MenuBold, MultiInstance) values (	300,315,'Transactions','Goods Outwards','P','SR100700.EXE',0,0,0,'0','',1,0,0)
+-GO-
+Insert into vamenu (MnuNo, MenuOPt, MnuName, MnuCap, MnuPgm, ExeName, MnuWght, AllowWhenTrnClosed, Pgmopt, DbInfo, MenuIcon, Menusep, MenuBold, MultiInstance) values (	300,316,'Stock','PT File Information','P','SR210700.EXE',0,1,0,'0','',0,0,0)
+-GO-
+Insert into vamenu (MnuNo, MenuOPt, MnuName, MnuCap, MnuPgm, ExeName, MnuWght, AllowWhenTrnClosed, Pgmopt, DbInfo, MenuIcon, Menusep, MenuBold, MultiInstance) values (	300,317,'Stock','Audit Trail - Size-wise','P','SR217700.EXE',0,1,0,'0','',1,0,0)
+-GO-
+Insert into vamenu (MnuNo, MenuOPt, MnuName, MnuCap, MnuPgm, ExeName, MnuWght, AllowWhenTrnClosed, Pgmopt, DbInfo, MenuIcon, Menusep, MenuBold, MultiInstance) values (	300,350,'Stock','Stock Take','M','',0,0,0,'0','',0,0,0)
+-GO-
+Insert into vamenu (MnuNo, MenuOPt, MnuName, MnuCap, MnuPgm, ExeName, MnuWght, AllowWhenTrnClosed, Pgmopt, DbInfo, MenuIcon, Menusep, MenuBold, MultiInstance) values (	300,370,'Stock','Barcode','M','',0,0,0,'0','',0,0,0)
+-GO-
+Insert into vamenu (MnuNo, MenuOPt, MnuName, MnuCap, MnuPgm, ExeName, MnuWght, AllowWhenTrnClosed, Pgmopt, DbInfo, MenuIcon, Menusep, MenuBold, MultiInstance) values (	300,380,'Stock','Purchase Order','M','',0,0,0,'0','',0,0,0)
+-GO-
+Insert into vamenu (MnuNo, MenuOPt, MnuName, MnuCap, MnuPgm, ExeName, MnuWght, AllowWhenTrnClosed, Pgmopt, DbInfo, MenuIcon, Menusep, MenuBold, MultiInstance) values (	350,351,'Stock Take','Physical Stock Management','P','SR323400.EXE',0,0,0,'0','',0,0,0)
+-GO-
+Insert into vamenu (MnuNo, MenuOPt, MnuName, MnuCap, MnuPgm, ExeName, MnuWght, AllowWhenTrnClosed, Pgmopt, DbInfo, MenuIcon, Menusep, MenuBold, MultiInstance) values (	350,352,'Stock Take','Physical vs Computed Stock Report','P','SR211000.EXE',0,1,0,'0','',0,0,0)
+-GO-
+Insert into vamenu (MnuNo, MenuOPt, MnuName, MnuCap, MnuPgm, ExeName, MnuWght, AllowWhenTrnClosed, Pgmopt, DbInfo, MenuIcon, Menusep, MenuBold, MultiInstance) values (	350,353,'Stock Take','Physical Stock Report','P','SR213300.EXE',0,1,0,'0','',0,0,0)
+-GO-
+Insert into vamenu (MnuNo, MenuOPt, MnuName, MnuCap, MnuPgm, ExeName, MnuWght, AllowWhenTrnClosed, Pgmopt, DbInfo, MenuIcon, Menusep, MenuBold, MultiInstance) values (	350,354,'Stock Take','Physical Stock Report - Batch-wise','P','SR203500.exe',0,1,0,'0','',0,0,0)
+-GO-
+Insert into vamenu (MnuNo, MenuOPt, MnuName, MnuCap, MnuPgm, ExeName, MnuWght, AllowWhenTrnClosed, Pgmopt, DbInfo, MenuIcon, Menusep, MenuBold, MultiInstance) values (	370,371,'Barcode','Design Label for Barcode Printers','P','SR413000.EXE',0,1,1,'0','',0,0,0)
+-GO-
+Insert into vamenu (MnuNo, MenuOPt, MnuName, MnuCap, MnuPgm, ExeName, MnuWght, AllowWhenTrnClosed, Pgmopt, DbInfo, MenuIcon, Menusep, MenuBold, MultiInstance) values (	370,372,'Barcode','Design Label for Standard Printers','P','SR431200.EXE',0,0,1,'0','',0,0,0)
+-GO-
+Insert into vamenu (MnuNo, MenuOPt, MnuName, MnuCap, MnuPgm, ExeName, MnuWght, AllowWhenTrnClosed, Pgmopt, DbInfo, MenuIcon, Menusep, MenuBold, MultiInstance) values (	370,373,'Barcode','Design Layout for Standard Printers','P','SR431200.EXE',0,0,2,'0','',0,0,0)
+-GO-
+Insert into vamenu (MnuNo, MenuOPt, MnuName, MnuCap, MnuPgm, ExeName, MnuWght, AllowWhenTrnClosed, Pgmopt, DbInfo, MenuIcon, Menusep, MenuBold, MultiInstance) values (	370,374,'Barcode','Print Labels','P','SR413100.EXE',0,1,1,'0','',0,0,0)
+-GO-
+Insert into vamenu (MnuNo, MenuOPt, MnuName, MnuCap, MnuPgm, ExeName, MnuWght, AllowWhenTrnClosed, Pgmopt, DbInfo, MenuIcon, Menusep, MenuBold, MultiInstance) values (	380,381,'Purchase Order','Generation','P','SE100900.EXE',0,0,1,'0','',0,0,0)
+-GO-
+Insert into vamenu (MnuNo, MenuOPt, MnuName, MnuCap, MnuPgm, ExeName, MnuWght, AllowWhenTrnClosed, Pgmopt, DbInfo, MenuIcon, Menusep, MenuBold, MultiInstance) values (	380,383,'Purchase Order','Import','P','SE100400.EXE',0,0,0,'0','',0,0,0)
+-GO-
+Insert into vamenu (MnuNo, MenuOPt, MnuName, MnuCap, MnuPgm, ExeName, MnuWght, AllowWhenTrnClosed, Pgmopt, DbInfo, MenuIcon, Menusep, MenuBold, MultiInstance) values (	380,384,'Purchase Order','Foreclosure','P','SE127800.exe',0,0,2,'0','',0,0,0)
+-GO-
+Insert into vamenu (MnuNo, MenuOPt, MnuName, MnuCap, MnuPgm, ExeName, MnuWght, AllowWhenTrnClosed, Pgmopt, DbInfo, MenuIcon, Menusep, MenuBold, MultiInstance) values (	380,385,'Purchase Order','Reopen','P','SE127800.exe',0,0,3,'0','',0,0,0)
+-GO-
+Insert into vamenu (MnuNo, MenuOPt, MnuName, MnuCap, MnuPgm, ExeName, MnuWght, AllowWhenTrnClosed, Pgmopt, DbInfo, MenuIcon, Menusep, MenuBold, MultiInstance) values (	380,386,'Purchase Order','Export','P','SE127800.exe',0,0,4,'0','',0,0,0)
+-GO-
+Insert into vamenu (MnuNo, MenuOPt, MnuName, MnuCap, MnuPgm, ExeName, MnuWght, AllowWhenTrnClosed, Pgmopt, DbInfo, MenuIcon, Menusep, MenuBold, MultiInstance) values (	380,387,'Purchase Order','Reprint','P','SE127800.exe',0,0,5,'0','',0,0,0)
+-GO-
+Insert into vamenu (MnuNo, MenuOPt, MnuName, MnuCap, MnuPgm, ExeName, MnuWght, AllowWhenTrnClosed, Pgmopt, DbInfo, MenuIcon, Menusep, MenuBold, MultiInstance) values (	380,388,'Purchase Order','Status Report','P','SE201200.EXE',0,0,1,'0','',0,0,0)
+-GO-
+Insert into vamenu (MnuNo, MenuOPt, MnuName, MnuCap, MnuPgm, ExeName, MnuWght, AllowWhenTrnClosed, Pgmopt, DbInfo, MenuIcon, Menusep, MenuBold, MultiInstance) values (	380,389,'Purchase Order','PO/Indent Conversion','P','SE101000.EXE',0,0,1,'0','',0,0,0)
+-GO-
+Insert into vamenu (MnuNo, MenuOPt, MnuName, MnuCap, MnuPgm, ExeName, MnuWght, AllowWhenTrnClosed, Pgmopt, DbInfo, MenuIcon, Menusep, MenuBold, MultiInstance) values ( 380,390,'Purchase Order','Purchase Order Configuration','P','SE100280.exe',0,0,0,'0',' ',0,0,0)
+-GO-
+Insert into vamenu (MnuNo, MenuOPt, MnuName, MnuCap, MnuPgm, ExeName, MnuWght, AllowWhenTrnClosed, Pgmopt, DbInfo, MenuIcon, Menusep, MenuBold, MultiInstance) values (	400,410,'Reports','Sales','M','',0,0,0,'0','',0,0,0)
+-GO-
+Insert into vamenu (MnuNo, MenuOPt, MnuName, MnuCap, MnuPgm, ExeName, MnuWght, AllowWhenTrnClosed, Pgmopt, DbInfo, MenuIcon, Menusep, MenuBold, MultiInstance) values (	400,430,'Reports','Stock','M','',0,0,0,'0','',0,0,0)
+-GO-
+Insert into vamenu (MnuNo, MenuOPt, MnuName, MnuCap, MnuPgm, ExeName, MnuWght, AllowWhenTrnClosed, Pgmopt, DbInfo, MenuIcon, Menusep, MenuBold, MultiInstance) values (	400,450,'Reports','Stock Registers','M','',0,0,0,'0','',0,0,0)
+-GO-
+Insert into vamenu (MnuNo, MenuOPt, MnuName, MnuCap, MnuPgm, ExeName, MnuWght, AllowWhenTrnClosed, Pgmopt, DbInfo, MenuIcon, Menusep, MenuBold, MultiInstance) values (	400,460,'Reports','Cash','M','',0,0,0,'0','',0,0,0)
+-GO-
+Insert into vamenu (MnuNo, MenuOPt, MnuName, MnuCap, MnuPgm, ExeName, MnuWght, AllowWhenTrnClosed, Pgmopt, DbInfo, MenuIcon, Menusep, MenuBold, MultiInstance) values (	400,470,'Reports','MIS','M','',0,0,0,'0','',0,0,0)
+-GO-
+Insert into vamenu (MnuNo, MenuOPt, MnuName, MnuCap, MnuPgm, ExeName, MnuWght, AllowWhenTrnClosed, Pgmopt, DbInfo, MenuIcon, Menusep, MenuBold, MultiInstance) values (	410,411,'Sales','Daily Sales Book','P','SR213600.EXE',0,1,0,'0','',0,0,0)
+-GO-
+Insert into vamenu (MnuNo, MenuOPt, MnuName, MnuCap, MnuPgm, ExeName, MnuWght, AllowWhenTrnClosed, Pgmopt, DbInfo, MenuIcon, Menusep, MenuBold, MultiInstance) values (	410,412,'Sales','Bill-wise Sales','P','SR202400.EXE',0,1,0,'0','',0,0,0)
+-GO-
+Insert into vamenu (MnuNo, MenuOPt, MnuName, MnuCap, MnuPgm, ExeName, MnuWght, AllowWhenTrnClosed, Pgmopt, DbInfo, MenuIcon, Menusep, MenuBold, MultiInstance) values (	410,413,'Sales','Item-wise Sales','P','SR202200.EXE',0,1,0,'0','',0,0,0)
+-GO-
+Insert into vamenu (MnuNo, MenuOPt, MnuName, MnuCap, MnuPgm, ExeName, MnuWght, AllowWhenTrnClosed, Pgmopt, DbInfo, MenuIcon, Menusep, MenuBold, MultiInstance) values (	410,414,'Sales','Tax Register','P','SR202300.EXE',0,1,0,'0','',0,0,0)
+-GO-
+Insert into vamenu (MnuNo, MenuOPt, MnuName, MnuCap, MnuPgm, ExeName, MnuWght, AllowWhenTrnClosed, Pgmopt, DbInfo, MenuIcon, Menusep, MenuBold, MultiInstance) values (	410,415,'Sales','Bill-wise Items','P','SR202000.EXE',0,1,0,'0','',0,0,0)
+-GO-
+Insert into vamenu (MnuNo, MenuOPt, MnuName, MnuCap, MnuPgm, ExeName, MnuWght, AllowWhenTrnClosed, Pgmopt, DbInfo, MenuIcon, Menusep, MenuBold, MultiInstance) values (	410,416,'Sales','Discount Given','P','SR202100.EXE',0,1,0,'0','',0,0,0)
+-GO-
+Insert into vamenu (MnuNo, MenuOPt, MnuName, MnuCap, MnuPgm, ExeName, MnuWght, AllowWhenTrnClosed, Pgmopt, DbInfo, MenuIcon, Menusep, MenuBold, MultiInstance) values (	410,418,'Sales','Top Selling Items','P','SR209600.EXE',0,1,0,'0','',0,0,0)
+-GO-
+Insert into vamenu (MnuNo, MenuOPt, MnuName, MnuCap, MnuPgm, ExeName, MnuWght, AllowWhenTrnClosed, Pgmopt, DbInfo, MenuIcon, Menusep, MenuBold, MultiInstance) values (	410,419,'Sales','Salesperson Sales','P','SR210000.EXE',0,1,0,'0','',0,0,0)
+-GO-
+Insert into vamenu (MnuNo, MenuOPt, MnuName, MnuCap, MnuPgm, ExeName, MnuWght, AllowWhenTrnClosed, Pgmopt, DbInfo, MenuIcon, Menusep, MenuBold, MultiInstance) values (	410,420,'Sales','Cancelled Bills','P','SR210100.EXE',0,1,0,'0','',0,0,0)
+-GO-
+Insert into vamenu (MnuNo, MenuOPt, MnuName, MnuCap, MnuPgm, ExeName, MnuWght, AllowWhenTrnClosed, Pgmopt, DbInfo, MenuIcon, Menusep, MenuBold, MultiInstance) values (	410,421,'Sales','Returned Bills','P','SR210200.EXE',0,1,0,'0','',0,0,0)
+-GO-
+Insert into vamenu (MnuNo, MenuOPt, MnuName, MnuCap, MnuPgm, ExeName, MnuWght, AllowWhenTrnClosed, Pgmopt, DbInfo, MenuIcon, Menusep, MenuBold, MultiInstance) values (	410,422,'Sales','Attribute + Size wise','P','SR236300.Exe',0,1,2,'0','',0,0,0)
+-GO-
+Insert into vamenu (MnuNo, MenuOPt, MnuName, MnuCap, MnuPgm, ExeName, MnuWght, AllowWhenTrnClosed, Pgmopt, DbInfo, MenuIcon, Menusep, MenuBold, MultiInstance) values (	410,423,'Sales','Day-wise Sales Summary','P','SR209500.EXE',0,1,0,'0','',0,0,0)
+-GO-
+Insert into vamenu (MnuNo, MenuOPt, MnuName, MnuCap, MnuPgm, ExeName, MnuWght, AllowWhenTrnClosed, Pgmopt, DbInfo, MenuIcon, Menusep, MenuBold, MultiInstance) values (	410,425,'Sales','Item-wise Sales Returns','P','SR214100.EXE',0,1,0,'0','',0,0,0)
+-GO-
+Insert into vamenu (MnuNo, MenuOPt, MnuName, MnuCap, MnuPgm, ExeName, MnuWght, AllowWhenTrnClosed, Pgmopt, DbInfo, MenuIcon, Menusep, MenuBold, MultiInstance) values (	410,426,'Sales','Salesperson Summary','P','SR221600.EXE',0,1,0,'0','',0,0,0)
+-GO-
+Insert into vamenu (MnuNo, MenuOPt, MnuName, MnuCap, MnuPgm, ExeName, MnuWght, AllowWhenTrnClosed, Pgmopt, DbInfo, MenuIcon, Menusep, MenuBold, MultiInstance) values (	410,427,'Sales','Node-wise Details','P','SR231900.EXE',0,0,1,'0','',0,0,0)
+-GO-
+Insert into vamenu (MnuNo, MenuOPt, MnuName, MnuCap, MnuPgm, ExeName, MnuWght, AllowWhenTrnClosed, Pgmopt, DbInfo, MenuIcon, Menusep, MenuBold, MultiInstance) values (	430,431,'Stock','Balance','P','SR202500.EXE',0,1,0,'0','',0,0,0)
+-GO-
+Insert into vamenu (MnuNo, MenuOPt, MnuName, MnuCap, MnuPgm, ExeName, MnuWght, AllowWhenTrnClosed, Pgmopt, DbInfo, MenuIcon, Menusep, MenuBold, MultiInstance) values (	430,432,'Stock','Movement','P','SR203000.EXE',0,1,0,'0','',0,0,0)
+-GO-
+Insert into vamenu (MnuNo, MenuOPt, MnuName, MnuCap, MnuPgm, ExeName, MnuWght, AllowWhenTrnClosed, Pgmopt, DbInfo, MenuIcon, Menusep, MenuBold, MultiInstance) values (	430,433,'Stock','Analysis','P','SR202700.EXE',0,1,0,'0','',0,0,0)
+-GO-
+Insert into vamenu (MnuNo, MenuOPt, MnuName, MnuCap, MnuPgm, ExeName, MnuWght, AllowWhenTrnClosed, Pgmopt, DbInfo, MenuIcon, Menusep, MenuBold, MultiInstance) values (	430,434,'Stock','Statement','P','SR202900.EXE',0,1,0,'0','',0,0,0)
+-GO-
+Insert into vamenu (MnuNo, MenuOPt, MnuName, MnuCap, MnuPgm, ExeName, MnuWght, AllowWhenTrnClosed, Pgmopt, DbInfo, MenuIcon, Menusep, MenuBold, MultiInstance) values (	430,435,'Stock','Balance - Style / Model wise','P','SR210300.EXE',0,1,0,'0','',0,0,0)
+-GO-
+Insert into vamenu (MnuNo, MenuOPt, MnuName, MnuCap, MnuPgm, ExeName, MnuWght, AllowWhenTrnClosed, Pgmopt, DbInfo, MenuIcon, Menusep, MenuBold, MultiInstance) values (	430,436,'Stock','Discrepancy','P','SR211600.EXE',0,1,0,'0','',0,0,0)
+-GO-
+Insert into vamenu (MnuNo, MenuOPt, MnuName, MnuCap, MnuPgm, ExeName, MnuWght, AllowWhenTrnClosed, Pgmopt, DbInfo, MenuIcon, Menusep, MenuBold, MultiInstance) values (	430,437,'Stock','Transaction Ledger','P','SR213800.EXE',0,1,0,'0','',0,0,0)
+-GO-
+Insert into vamenu (MnuNo, MenuOPt, MnuName, MnuCap, MnuPgm, ExeName, MnuWght, AllowWhenTrnClosed, Pgmopt, DbInfo, MenuIcon, Menusep, MenuBold, MultiInstance) values (	430,438,'Stock','Attribute + Size wise','P','SR236300.Exe',0,1,3,'0','',0,0,0)
+-GO-
+Insert into vamenu (MnuNo, MenuOPt, MnuName, MnuCap, MnuPgm, ExeName, MnuWght, AllowWhenTrnClosed, Pgmopt, DbInfo, MenuIcon, Menusep, MenuBold, MultiInstance) values (	430,439,'Stock','Balance as on Date','P','SR217900.EXE',0,1,0,'0','',0,0,0)
+-GO-
+Insert into vamenu (MnuNo, MenuOPt, MnuName, MnuCap, MnuPgm, ExeName, MnuWght, AllowWhenTrnClosed, Pgmopt, DbInfo, MenuIcon, Menusep, MenuBold, MultiInstance) values (	430,441,'Stock','Aging','P','SR233600.EXE',0,1,0,'0','',0,0,0)
+-GO-
+Insert into vamenu (MnuNo, MenuOPt, MnuName, MnuCap, MnuPgm, ExeName, MnuWght, AllowWhenTrnClosed, Pgmopt, DbInfo, MenuIcon, Menusep, MenuBold, MultiInstance) values (	430,442,'Stock','Inward Discrepancy','P','SR233700.EXE',0,1,0,'0','',0,0,0)
+-GO-
+Insert into vamenu (MnuNo, MenuOPt, MnuName, MnuCap, MnuPgm, ExeName, MnuWght, AllowWhenTrnClosed, Pgmopt, DbInfo, MenuIcon, Menusep, MenuBold, MultiInstance) values (	450,451,'Stock Registers','Transaction-wise Goods Register','P','SR202800.EXE',0,1,0,'0','',0,0,0)
+-GO-
+Insert into vamenu (MnuNo, MenuOPt, MnuName, MnuCap, MnuPgm, ExeName, MnuWght, AllowWhenTrnClosed, Pgmopt, DbInfo, MenuIcon, Menusep, MenuBold, MultiInstance) values (	450,452,'Stock Registers','Item-wise Goods Register','P','SR212600.EXE',0,1,0,'0','',0,0,0)
+-GO-
+Insert into vamenu (MnuNo, MenuOPt, MnuName, MnuCap, MnuPgm, ExeName, MnuWght, AllowWhenTrnClosed, Pgmopt, DbInfo, MenuIcon, Menusep, MenuBold, MultiInstance) values (	460,461,'Cash','Cash Transaction','P','SR203100.EXE',0,1,0,'0','',0,0,0)
+-GO-
+Insert into vamenu (MnuNo, MenuOPt, MnuName, MnuCap, MnuPgm, ExeName, MnuWght, AllowWhenTrnClosed, Pgmopt, DbInfo, MenuIcon, Menusep, MenuBold, MultiInstance) values (	460,462,'Cash','Submission / Realisation List','P','SR203300.EXE',0,1,0,'0','',0,0,0)
+-GO-
+Insert into vamenu (MnuNo, MenuOPt, MnuName, MnuCap, MnuPgm, ExeName, MnuWght, AllowWhenTrnClosed, Pgmopt, DbInfo, MenuIcon, Menusep, MenuBold, MultiInstance) values (	460,463,'Cash','Pending Submissions / Realisations','P','SR203200.EXE',0,1,0,'0','',0,0,0)
+-GO-
+Insert into vamenu (MnuNo, MenuOPt, MnuName, MnuCap, MnuPgm, ExeName, MnuWght, AllowWhenTrnClosed, Pgmopt, DbInfo, MenuIcon, Menusep, MenuBold, MultiInstance) values (	460,464,'Cash','Counter-wise Details','P','SR210600.EXE',0,1,0,'0','',0,0,0)
+-GO-
+Insert into vamenu (MnuNo, MenuOPt, MnuName, MnuCap, MnuPgm, ExeName, MnuWght, AllowWhenTrnClosed, Pgmopt, DbInfo, MenuIcon, Menusep, MenuBold, MultiInstance) values (	460,465,'Cash','Credit Note Status','P','SR212700.EXE',0,1,0,'0','',0,0,0)
+-GO-
+Insert into vamenu (MnuNo, MenuOPt, MnuName, MnuCap, MnuPgm, ExeName, MnuWght, AllowWhenTrnClosed, Pgmopt, DbInfo, MenuIcon, Menusep, MenuBold, MultiInstance) values (	460,466,'Cash','Counter Summary across Cashiers','P','SR212900.EXE',0,1,0,'0','',0,0,0)
+-GO-
+Insert into vamenu (MnuNo, MenuOPt, MnuName, MnuCap, MnuPgm, ExeName, MnuWght, AllowWhenTrnClosed, Pgmopt, DbInfo, MenuIcon, Menusep, MenuBold, MultiInstance) values (	460,467,'Cash','Advance Receipt Status','P','SR234400.EXE',0,1,0,'0','',0,0,0)
+-GO-
+Insert into vamenu (MnuNo, MenuOPt, MnuName, MnuCap, MnuPgm, ExeName, MnuWght, AllowWhenTrnClosed, Pgmopt, DbInfo, MenuIcon, Menusep, MenuBold, MultiInstance) values (	470,471,'MIS','Monthly Sales Comparison','P','SR203700.EXE',0,1,0,'0','',0,0,0)
+-GO-
+Insert into vamenu (MnuNo, MenuOPt, MnuName, MnuCap, MnuPgm, ExeName, MnuWght, AllowWhenTrnClosed, Pgmopt, DbInfo, MenuIcon, Menusep, MenuBold, MultiInstance) values (	470,472,'MIS','Rate Variation','P','SR203800.EXE',0,1,0,'0','',0,0,0)
+-GO-
+Insert into vamenu (MnuNo, MenuOPt, MnuName, MnuCap, MnuPgm, ExeName, MnuWght, AllowWhenTrnClosed, Pgmopt, DbInfo, MenuIcon, Menusep, MenuBold, MultiInstance) values (	470,473,'MIS','Sales Analysis','P','SR203900.EXE',0,1,0,'0','',0,0,0)
+-GO-
+Insert into vamenu (MnuNo, MenuOPt, MnuName, MnuCap, MnuPgm, ExeName, MnuWght, AllowWhenTrnClosed, Pgmopt, DbInfo, MenuIcon, Menusep, MenuBold, MultiInstance) values (	470,474,'MIS','Attribute-wise Sales and Stock','P','SR236300.Exe',0,1,1,'0','',0,0,0)
+-GO-
+Insert into vamenu (MnuNo, MenuOPt, MnuName, MnuCap, MnuPgm, ExeName, MnuWght, AllowWhenTrnClosed, Pgmopt, DbInfo, MenuIcon, Menusep, MenuBold, MultiInstance) values (	470,475,'MIS','Pending Transactions','P','SR215600.EXE',0,1,0,'0','',0,0,0)
+-GO-
+Insert into vamenu (MnuNo, MenuOPt, MnuName, MnuCap, MnuPgm, ExeName, MnuWght, AllowWhenTrnClosed, Pgmopt, DbInfo, MenuIcon, Menusep, MenuBold, MultiInstance) values (	470,476,'MIS','Walk-in Details','P','SR222800.EXE',0,1,0,'0','',0,0,0)
+-GO-
+Insert into vamenu (MnuNo, MenuOPt, MnuName, MnuCap, MnuPgm, ExeName, MnuWght, AllowWhenTrnClosed, Pgmopt, DbInfo, MenuIcon, Menusep, MenuBold, MultiInstance) values (	470,477,'MIS','Superclass-wise Sales / Stock','P','SR216000.EXE',0,1,0,'0','',0,0,0)
+-GO-
+Insert into vamenu (MnuNo, MenuOPt, MnuName, MnuCap, MnuPgm, ExeName, MnuWght, AllowWhenTrnClosed, Pgmopt, DbInfo, MenuIcon, Menusep, MenuBold, MultiInstance) values (	470,478,'MIS','Stock across Chain','P','SE201000.EXE',0,0,0,'0','',0,0,0)
+-GO-
+Insert into vamenu (MnuNo, MenuOPt, MnuName, MnuCap, MnuPgm, ExeName, MnuWght, AllowWhenTrnClosed, Pgmopt, DbInfo, MenuIcon, Menusep, MenuBold, MultiInstance) values (	470,479,'MIS','Transaction Details with Image','P','SR233000.EXE',0,0,1,'0','',0,0,0)
+-GO-
+Insert into vamenu (MnuNo, MenuOPt, MnuName, MnuCap, MnuPgm, ExeName, MnuWght, AllowWhenTrnClosed, Pgmopt, DbInfo, MenuIcon, Menusep, MenuBold, MultiInstance) values ( 470,480,'MIS','Gross Margin','P','SR229700.exe',0,0,0,'0',' ',0,0,0)
+-GO-
+Insert into vamenu (MnuNo, MenuOPt, MnuName, MnuCap, MnuPgm, ExeName, MnuWght, AllowWhenTrnClosed, Pgmopt, DbInfo, MenuIcon, Menusep, MenuBold, MultiInstance) values ( 470,481,'MIS','Bill Re-Print','P','SR233500.exe',0,0,0,'0',' ',0,0,0)
+-GO-
+Insert into vamenu (MnuNo, MenuOPt, MnuName, MnuCap, MnuPgm, ExeName, MnuWght, AllowWhenTrnClosed, Pgmopt, DbInfo, MenuIcon, Menusep, MenuBold, MultiInstance) values ( 470,482,'MIS','Sales Promotions','P','SR234900.exe',0,0,0,'0',' ',0,0,0)
+-GO-
+Insert into vamenu (MnuNo, MenuOPt, MnuName, MnuCap, MnuPgm, ExeName, MnuWght, AllowWhenTrnClosed, Pgmopt, DbInfo, MenuIcon, Menusep, MenuBold, MultiInstance) values (	470,490,'MIS','Customer Offtake','M','',0,0,0,'0','',0,0,0)
+-GO-
+Insert into vamenu (MnuNo, MenuOPt, MnuName, MnuCap, MnuPgm, ExeName, MnuWght, AllowWhenTrnClosed, Pgmopt, DbInfo, MenuIcon, Menusep, MenuBold, MultiInstance) values (	490,491,'Customer Offtake','Period-wise','P','SR208500.EXE',0,1,0,'0','',0,0,0)
+-GO-
+Insert into vamenu (MnuNo, MenuOPt, MnuName, MnuCap, MnuPgm, ExeName, MnuWght, AllowWhenTrnClosed, Pgmopt, DbInfo, MenuIcon, Menusep, MenuBold, MultiInstance) values (	490,492,'Customer Offtake','Bill-wise','P','SR208400.EXE',0,1,0,'0','',0,0,0)
+-GO-
+Insert into vamenu (MnuNo, MenuOPt, MnuName, MnuCap, MnuPgm, ExeName, MnuWght, AllowWhenTrnClosed, Pgmopt, DbInfo, MenuIcon, Menusep, MenuBold, MultiInstance) values (	490,493,'Customer Offtake','Product-wise','P','SR208600.EXE',0,1,0,'0','',0,0,0)
+-GO-
+Insert into vamenu (MnuNo, MenuOPt, MnuName, MnuCap, MnuPgm, ExeName, MnuWght, AllowWhenTrnClosed, Pgmopt, DbInfo, MenuIcon, Menusep, MenuBold, MultiInstance) values (	500,501,'Housekeeping','OPEN Day','P','SR322600.Exe',0,1,0,'0','',0,0,0)
+-GO-
+Insert into vamenu (MnuNo, MenuOPt, MnuName, MnuCap, MnuPgm, ExeName, MnuWght, AllowWhenTrnClosed, Pgmopt, DbInfo, MenuIcon, Menusep, MenuBold, MultiInstance) values (	500,502,'Housekeeping','CLOSE Day','P','SR309900.EXE',0,0,2,'0','',1,0,0)
+-GO-
+Insert into vamenu (MnuNo, MenuOPt, MnuName, MnuCap, MnuPgm, ExeName, MnuWght, AllowWhenTrnClosed, Pgmopt, DbInfo, MenuIcon, Menusep, MenuBold, MultiInstance) values (	500,503,'Housekeeping','Backup','P','SR309000.EXE',0,1,2,'0','',0,0,0)
+-GO-
+Insert into vamenu (MnuNo, MenuOPt, MnuName, MnuCap, MnuPgm, ExeName, MnuWght, AllowWhenTrnClosed, Pgmopt, DbInfo, MenuIcon, Menusep, MenuBold, MultiInstance) values (	500,504,'Housekeeping','Restore','P','SR309000.EXE',0,1,3,'0','',0,0,0)
+-GO-
+Insert into vamenu (MnuNo, MenuOPt, MnuName, MnuCap, MnuPgm, ExeName, MnuWght, AllowWhenTrnClosed, Pgmopt, DbInfo, MenuIcon, Menusep, MenuBold, MultiInstance) values (	500,505,'Housekeeping','Compact','P','SR309000.EXE',0,1,1,'0','',0,0,0)
+-GO-
+Insert into vamenu (MnuNo, MenuOPt, MnuName, MnuCap, MnuPgm, ExeName, MnuWght, AllowWhenTrnClosed, Pgmopt, DbInfo, MenuIcon, Menusep, MenuBold, MultiInstance) values (	500,506,'Housekeeping','Database Tuning Utility','P','SE900310.EXE',0,0,1,'0','',0,0,0)
+-GO-
+Insert into vamenu (MnuNo, MenuOPt, MnuName, MnuCap, MnuPgm, ExeName, MnuWght, AllowWhenTrnClosed, Pgmopt, DbInfo, MenuIcon, Menusep, MenuBold, MultiInstance) values (	500,507,'Housekeeping','Purge Data','P','SR311900.EXE',0,0,0,'0','',0,0,0)
+-GO-
+Insert into vamenu (MnuNo, MenuOPt, MnuName, MnuCap, MnuPgm, ExeName, MnuWght, AllowWhenTrnClosed, Pgmopt, DbInfo, MenuIcon, Menusep, MenuBold, MultiInstance) values (	500,509,'Housekeeping','Delete Temporary Tables','P','SR721000.EXE',0,1,0,'0','',0,0,0)
+-GO-
+Insert into vamenu (MnuNo, MenuOPt, MnuName, MnuCap, MnuPgm, ExeName, MnuWght, AllowWhenTrnClosed, Pgmopt, DbInfo, MenuIcon, Menusep, MenuBold, MultiInstance) values (	500,510,'Housekeeping','Delete Backup File','P','SR329900.EXE',0,0,1,'0','',0,0,0)
+-GO-
+Insert into vamenu (MnuNo, MenuOPt, MnuName, MnuCap, MnuPgm, ExeName, MnuWght, AllowWhenTrnClosed, Pgmopt, DbInfo, MenuIcon, Menusep, MenuBold, MultiInstance) values (	500,520,'Housekeeping','POS-HO Synchronisation','M','',0,0,0,'0','',0,0,0)
+-GO-
+Insert into vamenu (MnuNo, MenuOPt, MnuName, MnuCap, MnuPgm, ExeName, MnuWght, AllowWhenTrnClosed, Pgmopt, DbInfo, MenuIcon, Menusep, MenuBold, MultiInstance) values (	520,521,'POS-HO Synchronisation','Send Flat Files to HO','P','SR311400.EXE',0,0,0,'0','',0,0,0)
+-GO-
+Insert into vamenu (MnuNo, MenuOPt, MnuName, MnuCap, MnuPgm, ExeName, MnuWght, AllowWhenTrnClosed, Pgmopt, DbInfo, MenuIcon, Menusep, MenuBold, MultiInstance) values (	520,522,'POS-HO Synchronisation','Synchronise Manually','P','SE301100.EXE',0,0,0,'0','',1,0,0)
+-GO-
+Insert into vamenu (MnuNo, MenuOPt, MnuName, MnuCap, MnuPgm, ExeName, MnuWght, AllowWhenTrnClosed, Pgmopt, DbInfo, MenuIcon, Menusep, MenuBold, MultiInstance) values (	520,523,'POS-HO Synchronisation','Configure Synchronisation','P','SE301600.exe',0,0,0,'0','',1,0,0)
+-GO-
+Insert into vamenu (MnuNo, MenuOPt, MnuName, MnuCap, MnuPgm, ExeName, MnuWght, AllowWhenTrnClosed, Pgmopt, DbInfo, MenuIcon, Menusep, MenuBold, MultiInstance) values (	520,524,'POS-HO Synchronisation','Status Report','P','SR235400.EXE',0,0,0,'0','',0,0,0)
+-GO-
+Insert into vamenu (MnuNo, MenuOPt, MnuName, MnuCap, MnuPgm, ExeName, MnuWght, AllowWhenTrnClosed, Pgmopt, DbInfo, MenuIcon, Menusep, MenuBold, MultiInstance) values (	500,530,'Housekeeping','Data Import','M','',0,0,0,'0','',0,0,0)
+-GO-
+Insert into vamenu (MnuNo, MenuOPt, MnuName, MnuCap, MnuPgm, ExeName, MnuWght, AllowWhenTrnClosed, Pgmopt, DbInfo, MenuIcon, Menusep, MenuBold, MultiInstance) values (	500,550,'Housekeeping','Data Export Masters','M','',0,0,0,'0','',0,0,0)
+-GO-
+Insert into vamenu (MnuNo, MenuOPt, MnuName, MnuCap, MnuPgm, ExeName, MnuWght, AllowWhenTrnClosed, Pgmopt, DbInfo, MenuIcon, Menusep, MenuBold, MultiInstance) values (	530,531,'Data Import','Item Master','P','SR320500.exe',0,0,1,'0+1+2','',0,0,0)
+-GO-
+Insert into vamenu (MnuNo, MenuOPt, MnuName, MnuCap, MnuPgm, ExeName, MnuWght, AllowWhenTrnClosed, Pgmopt, DbInfo, MenuIcon, Menusep, MenuBold, MultiInstance) values (	530,532,'Data Import','Price Revision','P','SR330700.EXE',0,0,1,'0','',0,0,0)
+-GO-
+Insert into vamenu (MnuNo, MenuOPt, MnuName, MnuCap, MnuPgm, ExeName, MnuWght, AllowWhenTrnClosed, Pgmopt, DbInfo, MenuIcon, Menusep, MenuBold, MultiInstance) values (	530,533,'Data Import','Customer Information','P','SR312300.EXE',0,0,0,'0','',0,0,0)
+-GO-
+Insert into vamenu (MnuNo, MenuOPt, MnuName, MnuCap, MnuPgm, ExeName, MnuWght, AllowWhenTrnClosed, Pgmopt, DbInfo, MenuIcon, Menusep, MenuBold, MultiInstance) values (	530,534,'Data Import','Replication Import (AST)','P','SE301400.EXE',0,0,1,'0','',0,0,0)
+-GO-
+Insert into vamenu (MnuNo, MenuOPt, MnuName, MnuCap, MnuPgm, ExeName, MnuWght, AllowWhenTrnClosed, Pgmopt, DbInfo, MenuIcon, Menusep, MenuBold, MultiInstance) values (	530,535,'Data Import','Active Sales Promotions','P','SR332800.EXE',0,1,0,'0','',0,0,0)
+-GO-
+Insert into vamenu (MnuNo, MenuOPt, MnuName, MnuCap, MnuPgm, ExeName, MnuWght, AllowWhenTrnClosed, Pgmopt, DbInfo, MenuIcon, Menusep, MenuBold, MultiInstance) values (	530,536,'Data Import','Import into Secondary Db.(s)','P','SR320500.EXE',0,1,3,'0+1+2','',0,0,0)
+-GO-
+Insert into vamenu (MnuNo, MenuOPt, MnuName, MnuCap, MnuPgm, ExeName, MnuWght, AllowWhenTrnClosed, Pgmopt, DbInfo, MenuIcon, Menusep, MenuBold, MultiInstance) values (	530,537,'Data Import','Import Items from Secondary to Primary Db.','P','SR325500.EXE',0,0,0,'0+1','',0,0,0)
+-GO-
+Insert into vamenu (MnuNo, MenuOPt, MnuName, MnuCap, MnuPgm, ExeName, MnuWght, AllowWhenTrnClosed, Pgmopt, DbInfo, MenuIcon, Menusep, MenuBold, MultiInstance) values (	550,551,'Data Export Masters','Post Transactions to Tally','P','SR431500.EXE',0,1,1,'0','',0,0,0)
+-GO-
+Insert into vamenu (MnuNo, MenuOPt, MnuName, MnuCap, MnuPgm, ExeName, MnuWght, AllowWhenTrnClosed, Pgmopt, DbInfo, MenuIcon, Menusep, MenuBold, MultiInstance) values (	550,552,'Data Export Masters','Create PT File','P','SR327100.EXE',0,1,0,'0','',0,0,0)
+-GO-
+Insert into vamenu (MnuNo, MenuOPt, MnuName, MnuCap, MnuPgm, ExeName, MnuWght, AllowWhenTrnClosed, Pgmopt, DbInfo, MenuIcon, Menusep, MenuBold, MultiInstance) values (	550,553,'Data Export Masters','Pricing Details','P','SR322300.EXE',0,0,1,'0','',0,0,0)
+-GO-
+Insert into vamenu (MnuNo, MenuOPt, MnuName, MnuCap, MnuPgm, ExeName, MnuWght, AllowWhenTrnClosed, Pgmopt, DbInfo, MenuIcon, Menusep, MenuBold, MultiInstance) values (	550,554,'Data Export Masters','ID / IM Flat File','P','SR309700.EXE',0,0,1,'0','',0,0,0)
+-GO-
+Insert into vamenu (MnuNo, MenuOPt, MnuName, MnuCap, MnuPgm, ExeName, MnuWght, AllowWhenTrnClosed, Pgmopt, DbInfo, MenuIcon, Menusep, MenuBold, MultiInstance) values (	550,555,'Data Export Masters','Customer Information','P','SR312200.EXE',0,0,1,'0','',0,0,0)
+-GO-
+Insert into vamenu (MnuNo, MenuOPt, MnuName, MnuCap, MnuPgm, ExeName, MnuWght, AllowWhenTrnClosed, Pgmopt, DbInfo, MenuIcon, Menusep, MenuBold, MultiInstance) values (	550,558,'Data Export Masters','Replication Export (AST)','P','AR301500.EXE',0,0,2,'0','',0,0,0)
+-GO-
+Insert into vamenu (MnuNo, MenuOPt, MnuName, MnuCap, MnuPgm, ExeName, MnuWght, AllowWhenTrnClosed, Pgmopt, DbInfo, MenuIcon, Menusep, MenuBold, MultiInstance) values (	600,601,'Catalogue','General Lookup','P','SR429200.EXE',0,0,0,'0','',0,0,0)
+-GO-
+Insert into vamenu (MnuNo, MenuOPt, MnuName, MnuCap, MnuPgm, ExeName, MnuWght, AllowWhenTrnClosed, Pgmopt, DbInfo, MenuIcon, Menusep, MenuBold, MultiInstance) values (	600,602,'Catalogue','Vendor','P','SR404800.EXE',0,0,0,'0','',1,0,0)
+-GO-
+Insert into vamenu (MnuNo, MenuOPt, MnuName, MnuCap, MnuPgm, ExeName, MnuWght, AllowWhenTrnClosed, Pgmopt, DbInfo, MenuIcon, Menusep, MenuBold, MultiInstance) values (	600,603,'Catalogue','Tax','P','SR708100.EXE',0,0,1,'0','',0,0,0)
+-GO-
+Insert into vamenu (MnuNo, MenuOPt, MnuName, MnuCap, MnuPgm, ExeName, MnuWght, AllowWhenTrnClosed, Pgmopt, DbInfo, MenuIcon, Menusep, MenuBold, MultiInstance) values (	600,604,'Catalogue','Item Classification','P','SR404900.EXE',0,0,0,'0','',0,0,0)
+-GO-
+Insert into vamenu (MnuNo, MenuOPt, MnuName, MnuCap, MnuPgm, ExeName, MnuWght, AllowWhenTrnClosed, Pgmopt, DbInfo, MenuIcon, Menusep, MenuBold, MultiInstance) values (	600,605,'Catalogue','Size Management','P','SR430100.EXE',0,1,0,'0','',0,0,0)
+-GO-
+Insert into vamenu (MnuNo, MenuOPt, MnuName, MnuCap, MnuPgm, ExeName, MnuWght, AllowWhenTrnClosed, Pgmopt, DbInfo, MenuIcon, Menusep, MenuBold, MultiInstance) values (	600,606,'Catalogue','Item Master','P','SR122000.exe',0,0,1,'0','',1,0,0)
+-GO-
+Insert into vamenu (MnuNo, MenuOPt, MnuName, MnuCap, MnuPgm, ExeName, MnuWght, AllowWhenTrnClosed, Pgmopt, DbInfo, MenuIcon, Menusep, MenuBold, MultiInstance) values (	600,607,'Catalogue','Define Price Revisions','P','SR230500.EXE',0,0,1,'0','',0,0,0)
+-GO-
+Insert into vamenu (MnuNo, MenuOPt, MnuName, MnuCap, MnuPgm, ExeName, MnuWght, AllowWhenTrnClosed, Pgmopt, DbInfo, MenuIcon, Menusep, MenuBold, MultiInstance) values (	600,608,'Catalogue','Define Sales Promotions','P','SR430300.EXE',0,0,1,'0','',0,0,0)
+-GO-
+Insert into vamenu (MnuNo, MenuOPt, MnuName, MnuCap, MnuPgm, ExeName, MnuWght, AllowWhenTrnClosed, Pgmopt, DbInfo, MenuIcon, Menusep, MenuBold, MultiInstance) values (	600,609,'Catalogue','Sales Factors','P','SR405800.EXE',0,0,0,'0','',0,0,0)
+-GO-
+Insert into vamenu (MnuNo, MenuOPt, MnuName, MnuCap, MnuPgm, ExeName, MnuWght, AllowWhenTrnClosed, Pgmopt, DbInfo, MenuIcon, Menusep, MenuBold, MultiInstance) values (	600,610,'Catalogue','Payment Mode','P','SR405600.EXE',0,0,0,'0','',0,0,0)
+-GO-
+Insert into vamenu (MnuNo, MenuOPt, MnuName, MnuCap, MnuPgm, ExeName, MnuWght, AllowWhenTrnClosed, Pgmopt, DbInfo, MenuIcon, Menusep, MenuBold, MultiInstance) values (	600,611,'Catalogue','HO Chain Stores','P','SR405300.EXE',0,0,0,'0','',0,0,0)
+-GO-
+Insert into vamenu (MnuNo, MenuOPt, MnuName, MnuCap, MnuPgm, ExeName, MnuWght, AllowWhenTrnClosed, Pgmopt, DbInfo, MenuIcon, Menusep, MenuBold, MultiInstance) values (	600,612,'Catalogue','Sales Personnel','P','SR405700.EXE',0,0,0,'0','',1,0,0)
+-GO-
+Insert into vamenu (MnuNo, MenuOPt, MnuName, MnuCap, MnuPgm, ExeName, MnuWght, AllowWhenTrnClosed, Pgmopt, DbInfo, MenuIcon, Menusep, MenuBold, MultiInstance) values (	600,613,'Catalogue','Customer Price Group','P','SR404700.EXE',0,0,0,'0','',0,0,0)
+-GO-
+Insert into vamenu (MnuNo, MenuOPt, MnuName, MnuCap, MnuPgm, ExeName, MnuWght, AllowWhenTrnClosed, Pgmopt, DbInfo, MenuIcon, Menusep, MenuBold, MultiInstance) values (	600,614,'Catalogue','Customer','P','SR405100.EXE',0,0,0,'0','',0,0,0)
+-GO-
+Insert into vamenu (MnuNo, MenuOPt, MnuName, MnuCap, MnuPgm, ExeName, MnuWght, AllowWhenTrnClosed, Pgmopt, DbInfo, MenuIcon, Menusep, MenuBold, MultiInstance) values (	600,615,'Catalogue','Customer Mailer','P','SR430900.EXE',0,1,0,'0','',0,0,0)
+-GO-
+Insert into vamenu (MnuNo, MenuOPt, MnuName, MnuCap, MnuPgm, ExeName, MnuWght, AllowWhenTrnClosed, Pgmopt, DbInfo, MenuIcon, Menusep, MenuBold, MultiInstance) values (	600,616,'Catalogue','Print Address Labels','P','SR323600.EXE',0,1,0,'0','',1,0,0)
+-GO-
+Insert into vamenu (MnuNo, MenuOPt, MnuName, MnuCap, MnuPgm, ExeName, MnuWght, AllowWhenTrnClosed, Pgmopt, DbInfo, MenuIcon, Menusep, MenuBold, MultiInstance) values (	600,650,'Catalogue','Listings','M','',0,0,0,'0','',0,0,0)
+-GO-
+Insert into vamenu (MnuNo, MenuOPt, MnuName, MnuCap, MnuPgm, ExeName, MnuWght, AllowWhenTrnClosed, Pgmopt, DbInfo, MenuIcon, Menusep, MenuBold, MultiInstance) values (	650,651,'Listings','Price','P','SR203600.exe',0,0,1,'0','',0,0,0)
+-GO-
+Insert into vamenu (MnuNo, MenuOPt, MnuName, MnuCap, MnuPgm, ExeName, MnuWght, AllowWhenTrnClosed, Pgmopt, DbInfo, MenuIcon, Menusep, MenuBold, MultiInstance) values (	650,652,'Listings','Price Revision','P','SR230500.EXE',0,0,0,'0','',0,0,0)
+-GO-
+Insert into vamenu (MnuNo, MenuOPt, MnuName, MnuCap, MnuPgm, ExeName, MnuWght, AllowWhenTrnClosed, Pgmopt, DbInfo, MenuIcon, Menusep, MenuBold, MultiInstance) values (	650,653,'Listings','Style Catalogue','P','SR430800.EXE',0,1,0,'0','',0,0,0)
+-GO-
+Insert into vamenu (MnuNo, MenuOPt, MnuName, MnuCap, MnuPgm, ExeName, MnuWght, AllowWhenTrnClosed, Pgmopt, DbInfo, MenuIcon, Menusep, MenuBold, MultiInstance) values (	650,654,'Listings','Sales Promotions','P','SR230400.EXE',0,0,1,'0','',0,0,0)
+-GO-
+Insert into vamenu (MnuNo, MenuOPt, MnuName, MnuCap, MnuPgm, ExeName, MnuWght, AllowWhenTrnClosed, Pgmopt, DbInfo, MenuIcon, Menusep, MenuBold, MultiInstance) values (	650,655,'Listings','Sales Factors','P','SR216300.exe',0,1,1,'0','',0,0,0)
+-GO-
+Insert into vamenu (MnuNo, MenuOPt, MnuName, MnuCap, MnuPgm, ExeName, MnuWght, AllowWhenTrnClosed, Pgmopt, DbInfo, MenuIcon, Menusep, MenuBold, MultiInstance) values (	650,656,'Listings','Schedule Details','P','SE100220.EXE',0,0,2,'0','',0,0,0)
+-GO-
+Insert into vamenu (MnuNo, MenuOPt, MnuName, MnuCap, MnuPgm, ExeName, MnuWght, AllowWhenTrnClosed, Pgmopt, DbInfo, MenuIcon, Menusep, MenuBold, MultiInstance) values (	650,657,'Listings','Terminal Prefix','P','SR234300.EXE',0,0,1,'0+2','',0,0,0)
+-GO-
+Insert into vamenu (MnuNo, MenuOPt, MnuName, MnuCap, MnuPgm, ExeName, MnuWght, AllowWhenTrnClosed, Pgmopt, DbInfo, MenuIcon, Menusep, MenuBold, MultiInstance) values (	700,720,'Setup','General','M','',0,0,0,'0','',0,0,0)
+-GO-
+Insert into vamenu (MnuNo, MenuOPt, MnuName, MnuCap, MnuPgm, ExeName, MnuWght, AllowWhenTrnClosed, Pgmopt, DbInfo, MenuIcon, Menusep, MenuBold, MultiInstance) values (	700,750,'Setup','Supervisory Functions','M','',0,0,0,'0','',0,0,0)
+-GO-
+Insert into vamenu (MnuNo, MenuOPt, MnuName, MnuCap, MnuPgm, ExeName, MnuWght, AllowWhenTrnClosed, Pgmopt, DbInfo, MenuIcon, Menusep, MenuBold, MultiInstance) values (	700,711,'Setup','Company Creation','P','SR432000.exe',0,0,0,'0','',0,0,0)
+-GO-
+Insert into vamenu (MnuNo, MenuOPt, MnuName, MnuCap, MnuPgm, ExeName, MnuWght, AllowWhenTrnClosed, Pgmopt, DbInfo, MenuIcon, Menusep, MenuBold, MultiInstance) values (	700,712,'Setup','Company Maintenance','P','SR406500.exe',0,0,0,'0+2','',0,0,0)
+-GO-
+Insert into vamenu (MnuNo, MenuOPt, MnuName, MnuCap, MnuPgm, ExeName, MnuWght, AllowWhenTrnClosed, Pgmopt, DbInfo, MenuIcon, Menusep, MenuBold, MultiInstance) values (	700,713,'Setup','Create Secondary Database','P','SR429000.exe',0,0,0,'0','',1,0,0)
+-GO-
+Insert into vamenu (MnuNo, MenuOPt, MnuName, MnuCap, MnuPgm, ExeName, MnuWght, AllowWhenTrnClosed, Pgmopt, DbInfo, MenuIcon, Menusep, MenuBold, MultiInstance) values (	720,721,'General','System Parameters','P','SR426400.EXE',0,0,0,'0','',0,0,0)
+-GO-
+Insert into vamenu (MnuNo, MenuOPt, MnuName, MnuCap, MnuPgm, ExeName, MnuWght, AllowWhenTrnClosed, Pgmopt, DbInfo, MenuIcon, Menusep, MenuBold, MultiInstance) values (	720,722,'General','Bill Prefix','P','SR310900.EXE',0,0,1,'0','',0,0,0)
+-GO-
+Insert into vamenu (MnuNo, MenuOPt, MnuName, MnuCap, MnuPgm, ExeName, MnuWght, AllowWhenTrnClosed, Pgmopt, DbInfo, MenuIcon, Menusep, MenuBold, MultiInstance) values (	720,723,'General','Stock Number Methodology','P','SR123000.EXE',0,0,0,'0','',0,0,0)
+-GO-
+Insert into vamenu (MnuNo, MenuOPt, MnuName, MnuCap, MnuPgm, ExeName, MnuWght, AllowWhenTrnClosed, Pgmopt, DbInfo, MenuIcon, Menusep, MenuBold, MultiInstance) values (	720,724,'General','Printing Templates','P','SR428200.EXE',0,0,1,'0','',0,0,0)
+-GO-
+Insert into vamenu (MnuNo, MenuOPt, MnuName, MnuCap, MnuPgm, ExeName, MnuWght, AllowWhenTrnClosed, Pgmopt, DbInfo, MenuIcon, Menusep, MenuBold, MultiInstance) values (	720,725,'General','Flat File Values','P','SR428700.EXE',0,0,1,'0','',0,0,0)
+-GO-
+Insert into vamenu (MnuNo, MenuOPt, MnuName, MnuCap, MnuPgm, ExeName, MnuWght, AllowWhenTrnClosed, Pgmopt, DbInfo, MenuIcon, Menusep, MenuBold, MultiInstance) values (	720,726,'General','Goods Inward / Outward Prefix','P','SR429300.EXE',0,0,1,'0','',0,0,0)
+-GO-
+Insert into vamenu (MnuNo, MenuOPt, MnuName, MnuCap, MnuPgm, ExeName, MnuWght, AllowWhenTrnClosed, Pgmopt, DbInfo, MenuIcon, Menusep, MenuBold, MultiInstance) values (	720,727,'General','Cash / Purchase Order Prefix','P','SR429300.EXE',0,0,2,'0','',0,0,0)
+-GO-
+Insert into vamenu (MnuNo, MenuOPt, MnuName, MnuCap, MnuPgm, ExeName, MnuWght, AllowWhenTrnClosed, Pgmopt, DbInfo, MenuIcon, Menusep, MenuBold, MultiInstance) values (	720,728,'General','Tally Interface - Mapping','P','SR431000.EXE',0,1,1,'0','',0,0,0)
+-GO-
+Insert into vamenu (MnuNo, MenuOPt, MnuName, MnuCap, MnuPgm, ExeName, MnuWght, AllowWhenTrnClosed, Pgmopt, DbInfo, MenuIcon, Menusep, MenuBold, MultiInstance) values (	720,729,'General','Tally Interface - HSN Mapping','P','SR431800.EXE',0,1,0,'0','',0,0,0)
+-GO-
+Insert into vamenu (MnuNo, MenuOPt, MnuName, MnuCap, MnuPgm, ExeName, MnuWght, AllowWhenTrnClosed, Pgmopt, DbInfo, MenuIcon, Menusep, MenuBold, MultiInstance) values (	720,740,'General','Tally Interface Utilities','M','',0,0,0,'0','',0,0,0)
+-GO-
+Insert into vamenu (MnuNo, MenuOPt, MnuName, MnuCap, MnuPgm, ExeName, MnuWght, AllowWhenTrnClosed, Pgmopt, DbInfo, MenuIcon, Menusep, MenuBold, MultiInstance) values (	740,741,'Tally Interface Utilities','Change Company Information','P','SR431700.EXE',0,1,1,'0','',0,0,0)
+-GO-
+Insert into vamenu (MnuNo, MenuOPt, MnuName, MnuCap, MnuPgm, ExeName, MnuWght, AllowWhenTrnClosed, Pgmopt, DbInfo, MenuIcon, Menusep, MenuBold, MultiInstance) values (	740,742,'Tally Interface Utilities','Delete Mapping','P','SR431700.EXE',0,1,3,'0','',0,0,0)
+-GO-
+Insert into vamenu (MnuNo, MenuOPt, MnuName, MnuCap, MnuPgm, ExeName, MnuWght, AllowWhenTrnClosed, Pgmopt, DbInfo, MenuIcon, Menusep, MenuBold, MultiInstance) values (	740,743,'Tally Interface Utilities','Changes Master','P','SR431700.EXE',0,1,5,'0','',0,0,0)
+-GO-
+Insert into vamenu (MnuNo, MenuOPt, MnuName, MnuCap, MnuPgm, ExeName, MnuWght, AllowWhenTrnClosed, Pgmopt, DbInfo, MenuIcon, Menusep, MenuBold, MultiInstance) values (	740,744,'Tally Interface Utilities','Manage Missing Vouchers','P','SR431700.EXE',0,1,7,'0','',0,0,0)
+-GO-
+Insert into vamenu (MnuNo, MenuOPt, MnuName, MnuCap, MnuPgm, ExeName, MnuWght, AllowWhenTrnClosed, Pgmopt, DbInfo, MenuIcon, Menusep, MenuBold, MultiInstance) values (	740,745,'Tally Interface Utilities','Offline Re-posting','P','SR431700.EXE',0,1,9,'0','',0,0,0)
+-GO-
+Insert into vamenu (MnuNo, MenuOPt, MnuName, MnuCap, MnuPgm, ExeName, MnuWght, AllowWhenTrnClosed, Pgmopt, DbInfo, MenuIcon, Menusep, MenuBold, MultiInstance) values (	750,751,'Supervisory Functions','User Authorisation','P','SR406100.EXE',0,1,0,'0','',0,0,0)
+-GO-
+Insert into vamenu (MnuNo, MenuOPt, MnuName, MnuCap, MnuPgm, ExeName, MnuWght, AllowWhenTrnClosed, Pgmopt, DbInfo, MenuIcon, Menusep, MenuBold, MultiInstance) values (	750,752,'Supervisory Functions','Change Password','P','SR406000.exe',0,1,0,'0','',0,0,0)
+-GO-
+Insert into vamenu (MnuNo, MenuOPt, MnuName, MnuCap, MnuPgm, ExeName, MnuWght, AllowWhenTrnClosed, Pgmopt, DbInfo, MenuIcon, Menusep, MenuBold, MultiInstance) values (	750,753,'Supervisory Functions','Menu / User Weights','P','SR413900.EXE',0,1,0,'0','',1,0,0)
+-GO-
+Insert into vamenu (MnuNo, MenuOPt, MnuName, MnuCap, MnuPgm, ExeName, MnuWght, AllowWhenTrnClosed, Pgmopt, DbInfo, MenuIcon, Menusep, MenuBold, MultiInstance) values (	750,754,'Supervisory Functions','Menu / Node Restriction','P','SR413300.EXE',0,1,0,'0','',0,0,0)
+-GO-
+Insert into vamenu (MnuNo, MenuOPt, MnuName, MnuCap, MnuPgm, ExeName, MnuWght, AllowWhenTrnClosed, Pgmopt, DbInfo, MenuIcon, Menusep, MenuBold, MultiInstance) values (	750,755,'Supervisory Functions','Node Management','P','SR413400.EXE',0,1,2,'0','',1,0,0)
+-GO-
+Insert into vamenu (MnuNo, MenuOPt, MnuName, MnuCap, MnuPgm, ExeName, MnuWght, AllowWhenTrnClosed, Pgmopt, DbInfo, MenuIcon, Menusep, MenuBold, MultiInstance) values (	750,756,'Supervisory Functions','Data Rebuild','P','SR320800.EXE',0,0,1,'0','',0,0,0)
+-GO-
+Insert into vamenu (MnuNo, MenuOPt, MnuName, MnuCap, MnuPgm, ExeName, MnuWght, AllowWhenTrnClosed, Pgmopt, DbInfo, MenuIcon, Menusep, MenuBold, MultiInstance) values (	750,757,'Supervisory Functions','Cost price Variance Fixing','P','SR730000.EXE',0,0,0,'0','',0,0,0)
+-GO-
+Insert into vamenu (MnuNo, MenuOPt, MnuName, MnuCap, MnuPgm, ExeName, MnuWght, AllowWhenTrnClosed, Pgmopt, DbInfo, MenuIcon, Menusep, MenuBold, MultiInstance) values (	750,758,'Supervisory Functions','Year End Process','P','SR428100.Exe',0,0,1,'0','',0,0,0)
+-GO-
+Insert into vamenu (MnuNo, MenuOPt, MnuName, MnuCap, MnuPgm, ExeName, MnuWght, AllowWhenTrnClosed, Pgmopt, DbInfo, MenuIcon, Menusep, MenuBold, MultiInstance) values (	750,759,'Supervisory Functions','Re-Open Day','P','SR333100.Exe',0,1,1,'0','',0,0,0)
+-GO-
+Insert into vamenu (MnuNo, MenuOPt, MnuName, MnuCap, MnuPgm, ExeName, MnuWght, AllowWhenTrnClosed, Pgmopt, DbInfo, MenuIcon, Menusep, MenuBold, MultiInstance) values (	750,760,'Supervisory Functions','Database Archival','P','SR329700.EXE',0,1,1,'0','',0,0,0)
+-GO-
+Insert into vamenu (MnuNo, MenuOPt, MnuName, MnuCap, MnuPgm, ExeName, MnuWght, AllowWhenTrnClosed, Pgmopt, DbInfo, MenuIcon, Menusep, MenuBold, MultiInstance) values (	800,801,'Help','Shoper Help','P','SR428900.Exe',0,1,1,'2','',0,0,0)
+-GO-
+Insert into vamenu (MnuNo, MenuOPt, MnuName, MnuCap, MnuPgm, ExeName, MnuWght, AllowWhenTrnClosed, Pgmopt, DbInfo, MenuIcon, Menusep, MenuBold, MultiInstance) values (	800,802,'Help','Support Centre','P','SR435600.Exe',0,1,0,'0','',0,0,0)
+-GO-
+Insert into vamenu (MnuNo, MenuOPt, MnuName, MnuCap, MnuPgm, ExeName, MnuWght, AllowWhenTrnClosed, Pgmopt, DbInfo, MenuIcon, Menusep, MenuBold, MultiInstance) values (	800,803,'Help','About Shoper','P','SR428900.Exe',0,1,2,'2','',0,0,0)
+  </s9qScript>		
+</s9qsqlblk>
+<s9qsqlblk>
+  <s9qScriptid>	S9Q_013_0_0044	</s9qScriptid>
+  <s9qtitle></s9qtitle>
+  <s9qpgmtype>I</s9qpgmtype>
+  <s9qpgmtype>L</s9qpgmtype>
+  <s9qversion>*</s9qversion>
+  <s9qenvironment>M</s9qenvironment>
+  <s9qRunMultiple>1</s9qRunMultiple>
+  <s9qQryType>DML</s9qQryType>
+  <s9qScript>
+INSERT INTO VADEVICEIDS (DeviceID, DeviceName, DeviceRemarks) VALUES ('01','IBM POS',' ')
+-GO-
+INSERT INTO VADEVICEIDS (DeviceID, DeviceName, DeviceRemarks) VALUES ('02','POSIFLEX POS',' ')
+-GO-
+INSERT INTO VADEVICEIDS (DeviceID, DeviceName, DeviceRemarks) VALUES ('03','IPC POS',' ')
+-GO-
+INSERT INTO VADEVICEIDS (DeviceID, DeviceName, DeviceRemarks) VALUES ('04','PC/INKJET PRINTER',' ')
+-GO-
+INSERT INTO VADEVICEIDS (DeviceID, DeviceName, DeviceRemarks) VALUES ('05','PC/POS PRINTER',' ')
+-GO-
+Update VaMenu Set MultiInstance=0
+-GO-
+Update VaMenu Set MultiInstance=1 Where ExeName = 'SR130000.EXE'
+-GO-
+Update VaMenu Set MultiInstance=1 Where ExeName = 'SR431200.EXE'
+-GO-
+Insert into vamenu (MnuNo, MenuOPt, MnuName, MnuCap, MnuPgm, ExeName, MnuWght, AllowWhenTrnClosed, Pgmopt, DbInfo, MenuIcon, Menusep, MenuBold) values (750,765,'Supervisory options','Manage DayEnd/ DayBegin Activity List','P','SR435700.exe',0,-1,0,'0',' ',0,0)
+-GO-
+Insert into vamenu (MnuNo, MenuOPt, MnuName, MnuCap, MnuPgm, ExeName, MnuWght, AllowWhenTrnClosed, Pgmopt, DbInfo, MenuIcon, Menusep, MenuBold, MultiInstance) values ( 740,746,'Tally Interface Utilities','Voucher Comparison Utility','P','SR431700.EXE',0,1,11,'0','',0,0,0)
+-GO-
+Insert into vavertable (NodeId,ExeSrl,ExeID,ExeName,ExeSkip,ExeVer,ExeMinor,ExeSubRel) select distinct 0, 0, Exename,'','N','9','1','143' from vamenu where mnupgm = 'P'
+-GO-
+  </s9qScript>		
+</s9qsqlblk>
+
+<s9qsqlblk>
+  <s9qScriptid>	S9Q_013_0_0045	</s9qScriptid>
+  <s9qtitle></s9qtitle>
+  <s9qpgmtype>I</s9qpgmtype>
+  <s9qpgmtype>L</s9qpgmtype>
+  <s9qversion>*</s9qversion>
+  <s9qenvironment>M</s9qenvironment>
+  <s9qRunMultiple>1</s9qRunMultiple>
+  <s9qQryType>DML</s9qQryType>
+  <s9qScript>
+UPDATE VAVerTable SET EXEVER = '9', EXEMINOR = '1', EXESUBREL = '143' 
+-GO-
+UPDATE VAMENU SET DBINFO = '0+2' WHERE EXENAME IN ('SR406000.exe','SR406100.exe','SR413900.EXE','SR413300.exe')
+-GO-
+  </s9qScript>		
+</s9qsqlblk>
+
+<s9qsqlblk>
+  <s9qScriptid>	S9Q_013_0_0046	</s9qScriptid>
+  <s9qtitle></s9qtitle>
+  <s9qpgmtype>I</s9qpgmtype>
+  <s9qpgmtype>L</s9qpgmtype>
+  <s9qversion>*</s9qversion>
+  <s9qenvironment>M</s9qenvironment>
+  <s9qRunMultiple>1</s9qRunMultiple>
+  <s9qQryType>DDL</s9qQryType>
+  <s9qScript>
+Create Table VaRestrictMnuConfig(MnuNo Int, MenuOpt Int,ExeName Varchar(32), ExeOption Varchar(8),OptCaption Varchar(256), CONSTRAINT [VaRestrictMnuConfig1] PRIMARY KEY  CLUSTERED ([MnuNo],[MenuOpt],[ExeName]) ON [PRIMARY])
+-GO-
+  </s9qScript>		
+</s9qsqlblk>
+
+<s9qsqlblk>
+  <s9qScriptid>	S9Q_013_0_0047	</s9qScriptid>
+  <s9qtitle></s9qtitle>
+  <s9qpgmtype>I</s9qpgmtype>
+  <s9qpgmtype>L</s9qpgmtype>
+  <s9qversion>*</s9qversion>
+  <s9qenvironment>M</s9qenvironment>
+  <s9qRunMultiple>1</s9qRunMultiple>
+  <s9qQryType>DML</s9qQryType>
+  <s9qScript>
+Insert Into VaRestrictMnuConfig(MnuNo,MenuOpt,ExeName,ExeOption,OptCaption) Values(100,101,'SR130000.EXE','11110000','ADD#EDIT#DELETE#VIEW')
+-GO-
+Insert Into VaRestrictMnuConfig(MnuNo,MenuOpt,ExeName,ExeOption,OptCaption) Values(300,313,'SR127000.EXE','11110000','ADD#EDIT#DELETE#VIEW')
+-GO-
+Insert Into VaRestrictMnuConfig(MnuNo,MenuOpt,ExeName,ExeOption,OptCaption) Values(300,315,'SR100700.EXE','11110000','ADD#EDIT#DELETE#VIEW')
+-GO-
+update vamenu set dbinfo='0+2' where exename='SR309000.exe'
+-GO-
+UPDATE VAMENU SET DBINFO = '0+2' WHERE EXENAME = 'SR413400.EXE'
+-GO-
+UPDATE vaMenu SET  ExeName = 'SR130000.EXE'  WHERE    MnuNo = 100 AND ExeName = 'SR115500.EXE'
+-GO-
+Insert into vamenu (MnuNo, MenuOPt, MnuName, MnuCap, MnuPgm, ExeName, MnuWght, AllowWhenTrnClosed, Pgmopt, DbInfo, MenuIcon, Menusep, MenuBold, MultiInstance) values ( 800,804,'Help','Live Chat','P','sr428900.Exe',0,1,8,0,'',0,0,0)
+-GO-
+begin transaction
+select EnvironmentType from vacompany where EnvironmentType='D'
+if @@rowcount >0 
+	begin
+		
+		update vamenu set ExeName ='SR130000.exe' where mnuno =120 and menuOpt in (121,122)
+	
+	end
+commit transaction
+-GO-
+  </s9qScript>		
+</s9qsqlblk>

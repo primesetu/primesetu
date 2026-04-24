@@ -1,0 +1,19 @@
+<s9qsqlblk>
+  <s9qScriptid>S9Q_017_1_0001</s9qScriptid> 
+  <s9qtitle></s9qtitle>
+  <s9qpgmtype>I</s9qpgmtype>
+  <s9qpgmtype>L</s9qpgmtype>
+  <s9qversion>*</s9qversion>
+  <s9qenvironment>M</s9qenvironment>
+  <s9qRunMultiple>1</s9qRunMultiple>
+  <s9qQryType>DML</s9qQryType>
+  <s9qScript>
+delete from vamenu where mnuno = 270 and menuopt=277 and exename='SR240400.exe'
+-GO-
+insert into vaMenu (MnuNo,MenuOPt,MnuName,MnuCap,MnuPgm,ExeName,MnuWght,AllowWhenTrnClosed,pgmopt,DbInfo,Menusep,MenuBold,MultiInstance)
+values (460,471,'Till Management','Till Activity Log','P','SR240400.EXE',0,0,0,0,0,0,0)
+-GO-
+insert into VaVerTable (NODEID,EXESRL,EXEID,EXEVer,EXEMinor,EXESubRel,EXESKIP ) values (0,0,'SR240400.exe',9,1,381,'N')
+-GO-
+  </s9qScript>		
+</s9qsqlblk>

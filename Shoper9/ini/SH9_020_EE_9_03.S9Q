@@ -1,0 +1,389 @@
+<s9qsqlblk>
+  <s9qScriptid>S9Q_0200_9_0001</s9qScriptid>
+  <s9qtitle>All DDL Statements.</s9qtitle>
+  <s9qpgmtype>I</s9qpgmtype>
+  <s9qpgmtype>L</s9qpgmtype>
+  <s9qversion>*</s9qversion>
+  <s9qenvironment>P</s9qenvironment>
+  <s9qenvironment>R</s9qenvironment>
+  <s9qRunMultiple>0</s9qRunMultiple>
+  <s9qQryType>DDL</s9qQryType>
+  <s9qScript>
+CREATE TABLE [dbo].[SeasonsMaster]([SeasonsName] [char](255) NOT NULL,[StartDate] [datetime] NULL,[EndDate] [datetime] NULL,[IsActive] [smallint] NULL,[UserName] [char](20) NULL,[DateInsert] [datetime] NULL,[VAUid] [varchar](32) NULL,[VACtr] [int] NULL,[VATermId] [varchar](32) NULL,[VACompCode] [varchar](16) NULL,[SType] [int] NULL,[SNumber] [int] NULL,[Syear] [varchar](30) NULL)
+-GO-
+ALTER TABLE [dbo].[SeasonsMaster]  WITH NOCHECK ADD CONSTRAINT [PK_SeasonsMaster] PRIMARY KEY CLUSTERED ([SeasonsName] ASC) ON [PRIMARY]
+-GO-
+CREATE TABLE [dbo].[SeasonsMasterLog]([SeasonsName] [char](255) NOT NULL,[StartDate] [datetime] NULL,[EndDate] [datetime] NULL,[IsActive] [smallint] NULL,[UserId] [char](20) NULL,[DateTimeChange] [datetime] NULL,[TypeFlag] [char](1) NULL,[VAUid] [varchar](32) NULL,[VACtr] [int] NULL,[VATermId] [varchar](32) NULL,[VACompCode] [varchar](16) NULL) ON [PRIMARY]
+-GO-
+Alter table [dbo].[ExtdItemMaster] alter column [ItemExtDesc] Varchar(1024)
+-GO-
+Alter table [dbo].[BakExtdItemMaster] alter column [ItemExtDesc] Varchar(1024)
+-GO-
+Insert Into SysParamLookUp(ParamCode,String,Value,ReturnTyp,VAUid,VActr,VATermId,VACompCode) values ('Multipleprices','Do not allow Multiple Prices',0,'I',NULL,NULL,NULL,NULL)
+-GO-
+Insert Into SysParamLookUp(ParamCode,String,Value,ReturnTyp,VAUid,VActr,VATermId,VACompCode) values ('Multipleprices','Allow Multiple Prices for some items',1,'I',NULL,NULL,NULL,NULL)
+-GO-
+Insert Into SysParamLookUp(ParamCode,String,Value,ReturnTyp,VAUid,VActr,VATermId,VACompCode) values ('Multipleprices','Allow Multiple Prices for all items',2,'I',NULL,NULL,NULL,NULL)
+-GO-
+  </s9qScript>
+</s9qsqlblk>
+
+<s9qsqlblk>
+  <s9qScriptid>S9Q_0200_9_0002</s9qScriptid>
+  <s9qtitle>All DDL Statements.</s9qtitle>
+  <s9qpgmtype>I</s9qpgmtype>
+  <s9qpgmtype>L</s9qpgmtype>
+  <s9qversion>*</s9qversion>
+  <s9qenvironment>P</s9qenvironment>
+  <s9qenvironment>R</s9qenvironment>
+  <s9qRunMultiple>1</s9qRunMultiple>
+  <s9qQryType>DDL</s9qQryType>
+  <s9qScript>
+
+CREATE TABLE [dbo].[FactorHeader]([TrnType] [int] NOT NULL,[Name] [VarChar] (128) Not NULL,[EffectiveDate] [DateTime] Null,[LocCode] [VarChar] (16) NULL,[Category] [Int],[ApplPoint] [Int],[BasedOn] [int] NULL ,[BasedOnRangeFrom] [Money] DEFAULT(0),[BasedOnRangeTo] [Money] DEFAULT(0),[IntermsOf] [int] NULL ,[FixedOrVariable] [int] NULL ,[ValueFrom] [Int] NULL ,[Value] [Money] DEFAULT(0),[Status] [Int] NULL ,[DateInsert] [DateTime] NULL,[VAUid] [varchar](32) NULL,[VActr] [int] NULL,[VATermId] [varchar](32) NULL,[VACompCode] [varchar](16) NULL) ON [PRIMARY]
+-GO-	
+Alter Table [dbo].[FactorHeader] WITH NOCHECK ADD CONSTRAINT [PK_FactorHeader] PRIMARY KEY CLUSTERED ([TrnType],[Name]) ON [PRIMARY]
+-GO-
+ALTER TABLE [dbo].[Personnel] ADD [DOJ] [datetime] NULL,[DOB] [datetime] NULL,[ActiveFlag] [Int] NULL,[EffectiveDateofDeactivation] [datetime] NULL,[Reason] [varchar] (200) NULL,[DateInsert] [datetime] NULL,[DateOfCatalog] [datetime] NULL,[IsDefinedAtHO] [Int] Null
+-GO-
+ALTER TABLE [dbo].[Personnel] ADD [AllowInBilling] [int] NULL
+-GO-
+CREATE TABLE [dbo].PersonnelShrmWise([SMCode] [varchar] (8) Not NULL,[ShrmCode] [VarChar] (16) Not NULL,[SrlNo] [int] Not NULL, [FromDate] [datetime] NULL,[ToDate] [datetime] NULL,[ActiveFlag] [Int] NULL,[DateInsert] [datetime] NULL,[VAUid] [varchar] (32) NULL,[VACtr] [int] NULL,[VATermId] [varchar] (32) NULL,[VACompCode] [varchar] (16) NULL)
+-GO-
+ALTER TABLE [dbo].[PersonnelShrmWise] WITH NOCHECK ADD CONSTRAINT [PK_PersonnelShrmWise] PRIMARY KEY CLUSTERED ([SMCode],[ShrmCode],[SrlNo])  ON [PRIMARY]
+-GO-
+Insert into SysParam values('SR9-0919-0000001','Allowed Operations In Item Master Entry','AllowedOpInItemMaster',0,0,'111',NULL,0,0,'T','super',1,NULL,NULL)
+-GO-
+Insert Into SysParamExtd Values('SR9-0919-0000001','AllowedOpInItemMaster','Variable',0,'04. Item Master','This Gives Item Master Parameters',1,'super',1,'.',200)
+-GO-
+Insert into SysParam values('SR9-0919-0000002','Item Description Unique Across Item Master','ItemDescUniqueInIM',0,0,'',NULL,0,0,'B','super',1,NULL,NULL)
+-GO-
+Insert Into SysParamExtd Values('SR9-0919-0000002','ItemDescUniqueInIM','Variable',0,'04. Item Master','This Gives Item Master Parameters',1,'super',1,'.',200)
+-GO-
+Insert into SysParam values('SR9-0920-0000001','Basic Five Item Classifications Are Unique Across Item Master','BasicItemClassUniqueInIM',0,0,'',NULL,0,0,'B','super',1,NULL,NULL)
+-GO-
+Insert Into SysParamExtd Values('SR9-0920-0000001','BasicItemClassUniqueInIM','Variable',0,'04. Item Master','This Gives Item Master Parameters',1,'super',1,'.',200)
+-GO-
+ALTER TABLE [DBO].CHAINSTORES ADD LstNo varchar(50)
+-GO-
+ALTER TABLE [DBO].CHAINSTORES ADD CstNo varchar(50)
+-GO-
+UPDATE GenlookupExtd Set Additional1 ='1#1#16#50' Where Category = 'Modes Of Transport'
+-GO-
+UPDATE GenlookupExtd Set Additional1 ='1#1#16#50' Where Category = 'List of Transporters'
+-GO-
+UPDATE SYSPARAMEXTD SET FIXED ='Hidden' Where Paramcode in ('BrowseDescString1', 'BrowseDescString2','DisplayCurQtyInBrowse','DefaultSearchFldInClassiBrowse','CBrowseDescString1','CBrowseDescString2','SVDefaultSearchFldInClassiBrowse','ShowCodeAndDescOrderInIB','OperationsAllowedInCustCat')
+-GO-
+insert into genlookup values ('5000',4,'SR580200.ClassExtendedBrowse','',0,'Super',10,'.','')		
+-GO-
+Insert into genlookup(RecId,Code,Descr,Flag,Number,VAUid,VACtr,VATermId,VACompCode) values ('9160',1,'Season',1,0,NULL,NULL,'.',NULL)
+-GO-
+Insert into genlookup(RecId,Code,Descr,Flag,Number,VAUid,VACtr,VATermId,VACompCode) values ('9160',2,'Week',1,0,NULL,NULL,'.',NULL)
+-GO-
+Insert into genlookup(RecId,Code,Descr,Flag,Number,VAUid,VACtr,VATermId,VACompCode) values ('9160',3,'Month',1,0,NULL,NULL,'.',NULL)
+-GO-
+Insert into genlookup(RecId,Code,Descr,Flag,Number,VAUid,VACtr,VATermId,VACompCode) values ('9160',4,'Date',1,0,NULL,NULL,'.',NULL)
+-GO-
+Insert into genlookup(RecId,Code,Descr,Flag,Number,VAUid,VACtr,VATermId,VACompCode) values ('9160',5,'Year',1,0,NULL,NULL,'.',NULL)
+-GO-
+Insert into genlookup(RecId,Code,Descr,Flag,Number,VAUid,VACtr,VATermId,VACompCode) values ('101',6300,'IncentiveDef',NULL,0,NULL,NULL,'.',NULL)
+-GO-
+CREATE TABLE [dbo].[MultiplePrices]([SourceCompCode] [varchar](16) NOT NULL,[DocNo] [int] NOT NULL,[DestCompCode] [varchar](64) NOT NULL,[FileNumber] [varchar](32) NULL,[StockNo] [varchar](32) NOT NULL,[SlabNo] [int] NOT NULL,[BatchSrlNo] [varchar](16) NULL,[RetailPriceEffectiveDate] [datetime] NULL,[RetailPriceApplicableFlag] [varchar](1) NULL,[RetailPriceUpByorDownBy] [int] NULL,[IsRPRateOrAmount] [varchar](1) NULL,[RetailPriceRevisionFlag] [varchar](1) NULL,[RetailPriceChangeByVal] [money] NULL,[RetailPriceValue] [money] NULL,[DealerPriceEffectiveDate] [datetime] NULL,[DealerPriceApplicableFlag] [varchar](1) NULL,[DealerPriceUpByorDownBy] [int] NULL,[IsDpRateOrAmount] [varchar](1) NULL,[DealerPriceRevisionFlag] [varchar](1) NULL,[DealerPriceChangeByVal] [money] NULL,[DealerPriceValue] [money] NULL,[CurrentCostEffectiveDate] [datetime] NULL,[CurrentCostApplicableFlag] [varchar](1) NULL,[CurrentCostUpByorDownBy] [int] NULL,[IsCCRateOrAmount] [varchar](1) NULL,[CurrentCostRevisionFlag] [varchar](1) NULL,[CurrentCostChangeByVal] [money] NULL,[CurrentCostValue] [money] NULL,[LastPurchPriceEffectiveDate] [datetime] NULL,[LastPurchPriceApplicableFlag] [varchar](1) NULL,[LastPurchPriceUpByorDownBy] [int] NULL,[IsLPPRateOrAmount] [varchar](1) NULL,[LastPurchPriceRevisionFlag] [varchar](1) NULL,[LastPurchPriceChangeByVal] [money] NULL,[LastPurchPriceValue] [money] NULL,[ShoperDate] [datetime] NULL,[SystemDate] [datetime] NULL,[PgmMode] [varchar](32) NULL,[VoidFlag] [varchar](16) NULL,[SerialNumber] [int] NULL,[AttributeLevel] [varchar](64) NULL,[ApprovedFlag] [int] NULL,[Retail_Price] [money] NULL,[Dealer_Price] [money] NULL,[CurrentCost] [money] NULL,[LastPurchPrice] [money] NULL,[SkuLineNo] [int] NULL,[SlNo] [int] NULL,[Class1Cd] [varchar](16) NULL,[Class2Cd] [varchar](16) NULL,[SubClass1Cd] [varchar](16) NULL,[SubClass2Cd] [varchar](16) NULL,[SizeCd] [varchar](16) NULL,[DateInsert] [datetime] NULL,[IsActive] [int] NULL,[IsDefinedAtHO] [int] NULL,[VAUid] [varchar](32) NULL,[VActr] [int] NULL,[VATermId] [varchar](32) NULL,[VACompCode] [varchar](16) NULL)
+-GO-
+ALTER TABLE [dbo].[MultiplePrices] WITH NOCHECK ADD CONSTRAINT [PK_MulPrc] PRIMARY KEY  CLUSTERED ([SourceCompCode],[DocNo],[DestCompCode],[StockNo],[SlabNo]) ON [PRIMARY]
+-GO-
+CREATE TABLE [dbo].[Class12LocWise]([Class1Cd] [varchar](16)  NOT NULL,[Class1CdDesc] [varchar](50)  NULL,[Class2Cd] [varchar](16) NOT NULL,[Class2CdDesc] [varchar](50) NULL,[SubClass1Cd] [varchar](16) NULL,[SubClass2Cd] [varchar](16) NULL,[SizeCd] [varchar](16) NULL,[LocPriceAppl] [int] NULL,[MultiplePriceApplicable] [int] NULL,[SendBaseIMForNotDefined] [int] NULL,[Remarks] [varchar](256) NULL,[VaUID] [varchar](32) NULL,[VaCtr] [int] NULL,[VaTermID] [varchar](32) NULL,[VaCompCode] [varchar](16) NULL)
+-GO-
+ALTER TABLE [dbo].[Class12LocWise] WITH NOCHECK ADD CONSTRAINT [PK_Class12LocWise] PRIMARY KEY  CLUSTERED ([Class1Cd],[Class2Cd]) ON [PRIMARY]
+-GO-
+CREATE TABLE [dbo].[BAKMultiplePrices]([SourceCompCode] [varchar](16) NOT NULL,[DocNo] [int] NOT NULL,[DestCompCode] [varchar](64) NOT NULL,[FileNumber] [varchar](32) NULL,[StockNo] [varchar](32) NOT NULL,[SlabNo] [int] NOT NULL,[BatchSrlNo] [varchar](16) NULL,[RetailPriceEffectiveDate] [datetime] NULL,[RetailPriceApplicableFlag] [varchar](1) NULL,[RetailPriceUpByorDownBy] [int] NULL,[IsRPRateOrAmount] [varchar](1) NULL,[RetailPriceRevisionFlag] [varchar](1) NULL,[RetailPriceChangeByVal] [money] NULL,[RetailPriceValue] [money] NULL,[DealerPriceEffectiveDate] [datetime] NULL,[DealerPriceApplicableFlag] [varchar](1) NULL,[DealerPriceUpByorDownBy] [int] NULL,[IsDpRateOrAmount] [varchar](1) NULL,[DealerPriceRevisionFlag] [varchar](1) NULL,[DealerPriceChangeByVal] [money] NULL,[DealerPriceValue] [money] NULL,[CurrentCostEffectiveDate] [datetime] NULL,[CurrentCostApplicableFlag] [varchar](1) NULL,[CurrentCostUpByorDownBy] [int] NULL,[IsCCRateOrAmount] [varchar](1) NULL,[CurrentCostRevisionFlag] [varchar](1) NULL,[CurrentCostChangeByVal] [money] NULL,[CurrentCostValue] [money] NULL,[LastPurchPriceEffectiveDate] [datetime] NULL,[LastPurchPriceApplicableFlag] [varchar](1) NULL,[LastPurchPriceUpByorDownBy] [int] NULL,[IsLPPRateOrAmount] [varchar](1) NULL,[LastPurchPriceRevisionFlag] [varchar](1) NULL,[LastPurchPriceChangeByVal] [money] NULL,[LastPurchPriceValue] [money] NULL,[ShoperDate] [datetime] NULL,[SystemDate] [datetime] NULL,[PgmMode] [varchar](32) NULL,[VoidFlag] [varchar](16) NULL,[SerialNumber] [int] NULL,[AttributeLevel] [varchar](64) NULL,[ApprovedFlag] [int] NULL,[Retail_Price] [money] NULL,[Dealer_Price] [money] NULL,[CurrentCost] [money] NULL,[LastPurchPrice] [money] NULL,[SkuLineNo] [int] NULL,[SlNo] [int] NULL,[Class1Cd] [varchar](16) NULL,[Class2Cd] [varchar](16) NULL,[SubClass1Cd] [varchar](16) NULL,[SubClass2Cd] [varchar](16) NULL,[SizeCd] [varchar](16) NULL,[DateInsert] [datetime] NULL,[IsActive] [int] NULL,[IsDefinedAtHO] [int] NULL,[VAUid] [varchar](32) NULL,[VActr] [int] NULL,[VATermId] [varchar](32) NULL,	[VACompCode] [varchar](16) NULL,[UpdFlag] [char] (1) NULL)
+-GO-
+CREATE TABLE [dbo].[BAKClass12LocWise]([Class1Cd] [varchar](16)  NOT NULL,[Class1CdDesc] [varchar](50)  NULL,[Class2Cd] [varchar](16) NOT NULL,[Class2CdDesc] [varchar](50) NULL,[SubClass1Cd] [varchar](16) NULL,[SubClass2Cd] [varchar](16) NULL,[SizeCd] [varchar](16) NULL,[LocPriceAppl] [int] NULL,[MultiplePriceApplicable] [int] NULL,[SendBaseIMForNotDefined] [int] NULL,[Remarks] [varchar](256) NULL,[VaUID] [varchar](32) NULL,[VaCtr] [int] NULL,[VaTermID] [varchar](32) NULL,[VaCompCode] [varchar](16) NULL,[UpdFlag] [char] (1) NULL)
+-GO-
+Insert into genlookup(RecId,Code,Descr,Flag,Number,VAUid,VACtr,VATermId,VACompCode) values ('101',6300,'IncentiveDef',NULL,0,NULL,NULL,'.',NULL)
+-GO-
+Update Personnel Set AllowInBilling=1 where AllowInBilling=NULL
+-GO-
+insert into genlookup(RecId,Code,Descr,Flag,Number,VACtr,VAUid,VATermId,VACompCode) values ('101','6200','MultiplePrices',0,1,'',0,'','')
+-GO-
+insert into SysParamLookUp values('FranchiseeYearOpeningSetting','Financial Year',0,'I','super',1,'.','.')
+-GO-
+insert into SysParamLookUp values('FranchiseeYearOpeningSetting','Any Time',1,'I','super',1,'.','.')
+-GO-
+insert into SysParamLookUp values('FranchiseeYearOpeningSetting','One Time',2,'I','super',1,'.','.')
+-GO-
+insert into SysParamLookUp values('PaySlipPrintingType','DOS Format',0,'I','super',1,'.','.')
+-GO-
+insert into SysParamLookUp values('PaySlipPrintingType','GUI Format (Inkjet Printing)',1,'I','super',1,'.','.')
+-GO-
+insert into SysParamLookUp values('BillPrefixDefSetting','Never allow same prefix' ,0,'I','super',1,'.','.')
+-GO-
+insert into SysParamLookUp values('BillPrefixDefSetting','Allow Same Prefix for 1 set of Transaction like Only for Product-Cash (Or) Service-cash etc',1,'I','super',1,'.','.')
+-GO-
+insert into SysParamLookUp values('BillPrefixDefSetting','Allow Same Prefix for Cash and Credit Transaction like Product-Cash,Service-Credit etc]',2,'I','super',1,'.','.')
+-GO-
+insert into SysParamLookUp values('BillPrefixDefSetting','Allow Same Prefix for Product and Service Transaction like Product-Cash,service-credit etc]' ,3,'I','super',1,'.','.')
+-GO-
+insert into SysParamLookUp values('BillPrefixDefSetting','Allow Same prefix for All Transaction',4,'I','super',1,'.','.')
+-GO-
+insert into SysParamLookUp values('CustomerInsertionsOnTheFly','Never Allow Insertions' ,1,'I','super',1,'.','.')
+-GO-
+insert into SysParamLookUp values('CustomerInsertionsOnTheFly','Always allow insertions' ,2,'I','super',1,'.','.')
+-GO-
+insert into SysParamLookUp values('CustomerInsertionsOnTheFly','Only through Max Swipe' ,3,'I','super',1,'.','.')
+-GO-
+insert into SysParamLookUp values('CustomerInsertionsOnTheFly','Never allow Insertions But Permit entry in the customer Name field' ,4,'I','super',1,'.','.')
+-GO-
+insert into SysParamLookUp values('ActivateItemwiseSalesman','Do not activate Itemwise Salesman' ,0,'I','super',1,'.','.')
+-GO-
+insert into SysParamLookUp values('ActivateItemwiseSalesman','Activate Only Itemwise Salesman' ,1,'I','super',1,'.','.')
+-GO-
+insert into SysParamLookUp values('ActivateItemwiseSalesman','Activate Bill Level And Item Level Salesman' ,2,'I','super',1,'.','.')
+-GO-
+insert into SysParamLookUp values('SMSelectionCompulsary','No' ,0,'I','super',1,'.','.')
+-GO-
+insert into SysParamLookUp values('SMSelectionCompulsary','Yes' ,1,'I','super',1,'.','.')
+-GO-
+insert into SysParamLookUp values('ApplyGenDiscOnSpfdVal','Normal Way Of Gen Discount Calculation' ,0,'I','super',1,'.','.')
+-GO-
+insert into SysParamLookUp values('ApplyGenDiscOnSpfdVal','Calculate Gen Discount On Specified Value' ,1,'I','super',1,'.','.')
+-GO-
+insert into SysParamLookUp values('GenDiscReasonOpt','Free Hand Text' ,1,'I','super',1,'.','.')
+-GO-
+insert into SysParamLookUp values('GenDiscReasonOpt','Only Loaded Code Selected' ,2,'I','super',1,'.','.')
+-GO-
+insert into SysParamLookUp values('GenDiscReasonOpt','Both' ,3,'I','super',1,'.','.')
+-GO-
+insert into SysParamLookUp values('DefaultPayModeInBilling','Cash',1,'I','super',1,'.','.')
+-GO-
+insert into SysParamLookUp values('DefaultPayModeInBilling','Credit Card',2,'I','super',1,'.','.')
+-GO-
+insert into SysParamLookUp values('DefaultPayModeInBilling','Debit Card',3,'I','super',1,'.','.')
+-GO-
+insert into SysParamLookUp values('DefaultPayModeInBilling','Discount Card',4,'I','super',1,'.','.')
+-GO-
+insert into SysParamLookUp values('DefaultPayModeInBilling','Gift Coupon',5,'I','super',1,'.','.')
+-GO-
+insert into SysParamLookUp values('DefaultPayModeInBilling','Cheques',6,'I','super',1,'.','.')
+-GO-
+insert into SysParamLookUp values('DefaultPayModeInBilling','Advance Receipts',7,'I','super',1,'.','.')
+-GO-
+insert into SysParamLookUp values('DefaultPayModeInBilling','Credit Note',8,'I','super',1,'.','.')
+-GO-
+insert into SysParamLookUp values('DefaultPayModeInBilling','Reward Points',9,'I','super',1,'.','.')
+-GO-
+insert into SysParamLookUp values('DefaultPayModeInBilling','ON-ACC',10,'I','super',1,'.','.')
+-GO-
+insert into SysParamLookUp values('ModeOfSPAppInBilling','Auto Mode',1,'I','super',1,'.','.')
+-GO-
+insert into SysParamLookUp values('ModeOfSPAppInBilling','Manual Mode',2,'I','super',1,'.','.')
+-GO-
+insert into SysParamLookUp values('LowestHighestPricedItem','No default value(choose at the time of definition)',0,'I','super',1,'.','.')
+-GO-
+insert into SysParamLookUp values('LowestHighestPricedItem','Default set to lowest priced item and allow to choose at the time of definition',1,'I','super',1,'.','.')
+-GO-
+insert into SysParamLookUp values('LowestHighestPricedItem','Default set to lowest priced item and NOT allow to choose at the time of definition',2,'I','super',1,'.','.')
+-GO-
+insert into SysParamLookUp values('LowestHighestPricedItem','Default set to highest priced item and allow to choose at the time of definition',3,'I','super',1,'.','.')
+-GO-
+insert into SysParamLookUp values('LowestHighestPricedItem','Default set to highest priced item and NOT allow to choose at the time of definition',4,'I','super',1,'.','.')
+-GO-
+insert into SysParamLookUp values('ValidateFreeItemsInBill','Not Mandatory',0,'I','super',1,'.','.')
+-GO-
+insert into SysParamLookUp values('ValidateFreeItemsInBill','Mandatory',1,'I','super',1,'.','.')
+-GO-
+insert into SysParamLookUp values('AllowReactivationOfSlips','Will not be done',0,'I','super',1,'.','.')
+-GO-
+insert into SysParamLookUp values('AllowReactivationOfSlips','Will  be done',1,'I','super',1,'.','.')
+-GO-
+update SysParam set Opt='B',Boolean = 0 where ParamCode ='AllowRateAlterInServiceBill' and Opt ='I' and Intg =0
+-GO-
+update SysParam set Opt='B',Boolean = 1 where ParamCode ='AllowRateAlterInServiceBill' and Opt ='I' and Intg =1
+-GO-
+insert into SysParamLookUp values('PrintReCallTrnInCondensedMode','Normal mode',0,'I','super',1,'.','.')
+-GO-
+insert into SysParamLookUp values('PrintReCallTrnInCondensedMode','Condensed mode',1,'I','super',1,'.','.')
+-GO-
+insert into SysParamLookUp values('ExpTrnSlipPrintingType','Slip Printing',1,'I','super',1,'.','.')
+-GO-
+insert into SysParamLookUp values('ExpTrnSlipPrintingType','Print Engine',50,'I','super',1,'.','.')
+-GO-
+insert into SysParamLookUp values('SlipFormat','Slip Format 1',1,'I','super',1,'.','.')
+-GO-
+insert into SysParamLookUp values('SlipFormat','Slip Format 2',50,'I','super',1,'.','.')
+-GO-
+insert into SysParamLookUp values('CustDisplayType','Normal (Existing)',1,'I','super',1,'.','.')
+-GO-
+insert into SysParamLookUp values('CustDisplayType','IBM Sure One',2,'I','super',1,'.','.')
+-GO-
+insert into SysParamLookUp values('CustDisplayType','IBM SP600',3,'I','super',1,'.','.')
+-GO-
+insert into SysParamLookUp values('CashDrawPresent','Present',1,'I','super',1,'.','.')
+-GO-
+insert into SysParamLookUp values('CashDrawPresent','Not Present',0,'I','super',1,'.','.')
+-GO-
+insert into SysParamLookUp values('EnableReceivable','No',0,'I','super',1,'.','.')
+-GO-
+insert into SysParamLookUp values('EnableReceivable','yes',1,'I','super',1,'.','.')
+-GO-
+insert into SysParamLookUp values('EnableRecvopbal','Disable',0,'I','super',1,'.','.')
+-GO-
+insert into SysParamLookUp values('EnableRecvopbal','One Time',1,'I','super',1,'.','.')
+-GO-
+insert into SysParamLookUp values('EnableRecvopbal','Multiple Time',2,'I','super',1,'.','.')
+-GO-
+insert into SysParamLookUp values('ReceivablePrintingType','Print Engine',50,'I','super',1,'.','.')
+-GO-
+  </s9qScript>
+</s9qsqlblk>
+
+
+<s9qsqlblk>
+  <s9qScriptid>S9Q_0200_9_0003</s9qScriptid>
+  <s9qtitle>Replication Statements.</s9qtitle>
+  <s9qpgmtype>I</s9qpgmtype>
+  <s9qpgmtype>L</s9qpgmtype>
+  <s9qversion>*</s9qversion>
+  <s9qenvironment>P</s9qenvironment>
+  <s9qenvironment>R</s9qenvironment>
+  <s9qRunMultiple>1</s9qRunMultiple>
+  <s9qQryType>DDL</s9qQryType>
+  <s9qScript>
+INSERT INTO [DBO].VersionwiseTblsScript(VerID,SrlNo,TblScript,VAUid,VActr,VATermId,VACompCode) VALUES (16,7,'ALTER TABLE [dbo].[Personnel] ADD [DOJ] [datetime] NULL,[DOB] [datetime] NULL,[ActiveFlag] [Int] NULL,[EffectiveDateofDeactivation] [datetime] NULL,[Reason] [varchar] (200) NULL,[DateInsert] [datetime] NULL,[DateOfCatalog] [datetime] NULL,[IsDefinedAtHO] [Int] Null','',1,'.','')
+-GO-
+INSERT INTO [DBO].VersionwiseTblsScript(VerID,SrlNo,TblScript,VAUid,VActr,VATermId,VACompCode) VALUES (16,8,'ALTER TABLE [dbo].[Personnel] ADD [AllowInBilling] [int] NULL','',1,'.','')
+-GO-
+INSERT INTO [DBO].VersionwiseTblsScript(VerID,SrlNo,TblScript,VAUid,VActr,VATermId,VACompCode) VALUES (16,9,'CREATE TABLE [dbo].PersonnelShrmWise([SMCode] [varchar] (8) Not NULL,[ShrmCode] [VarChar] (16) Not NULL,[SrlNo] [int] Not NULL, [FromDate] [datetime] NULL,[ToDate] [datetime] NULL,[ActiveFlag] [Int] NULL,[DateInsert] [datetime] NULL,[VAUid] [varchar] (32) NULL,[VACtr] [int] NULL,[VATermId] [varchar] (32) NULL,[VACompCode] [varchar] (16) NULL)','',1,'.','')
+-GO-
+INSERT INTO [DBO].VersionwiseTblsScript(VerID,SrlNo,TblScript,VAUid,VActr,VATermId,VACompCode) VALUES (16,10,'ALTER TABLE [dbo].[PersonnelShrmWise] WITH NOCHECK ADD CONSTRAINT [PK_PersonnelShrmWise] PRIMARY KEY CLUSTERED ([SMCode],[ShrmCode],[SrlNo])  ON [PRIMARY]','',1,'.','')
+-GO-
+INSERT INTO [DBO].VersionwiseTblsScript(VerID,SrlNo,TblScript,VAUid,VActr,VATermId,VACompCode) VALUES (16,11,'ALTER TABLE [dbo].[BakPersonnel] Drop Column UpdFlag','',1,'.','')
+-GO-
+INSERT INTO [DBO].VersionwiseTblsScript(VerID,SrlNo,TblScript,VAUid,VActr,VATermId,VACompCode) VALUES (16,12,'ALTER TABLE [dbo].[BakPersonnel] ADD [DOJ] [datetime] NULL,[DOB] [datetime] NULL,[ActiveFlag] [Int] NULL,[EffectiveDateofDeactivation] [datetime] NULL,[Reason] [varchar] (200) NULL,[DateInsert] [datetime] NULL,[DateOfCatalog] [datetime] NULL,[IsDefinedAtHO] [Int] Null, [AllowInBilling] [int] NULL,[UpdFlag] VarChar(1)','',1,'.','')
+-GO-
+INSERT INTO [DBO].VersionwiseTblsScript(VerID,SrlNo,TblScript,VAUid,VActr,VATermId,VACompCode) VALUES (16,13,'ALTER TABLE [DBO].CHAINSTORES ADD LstNo varchar(50)','',1,'.','')
+-GO-
+INSERT INTO [DBO].VersionwiseTblsScript(VerID,SrlNo,TblScript,VAUid,VActr,VATermId,VACompCode) VALUES (16,14,'ALTER TABLE [DBO].CHAINSTORES ADD CstNo varchar(50)','',1,'.','')
+-GO-
+INSERT INTO [DBO].VersionwiseTblsScript(VerID,SrlNo,TblScript,VAUid,VActr,VATermId,VACompCode) VALUES (16,15,'Alter Table [dbo].BakCHAINSTORES Drop Column UpdFlag','',1,'.','')
+-GO-
+INSERT INTO [DBO].VersionwiseTblsScript(VerID,SrlNo,TblScript,VAUid,VActr,VATermId,VACompCode) VALUES (16,16,'ALTER TABLE [DBO].BakCHAINSTORES ADD LstNo varchar(50)','',1,'.','')
+-GO-
+INSERT INTO [DBO].VersionwiseTblsScript(VerID,SrlNo,TblScript,VAUid,VActr,VATermId,VACompCode) VALUES (16,17,'ALTER TABLE [DBO].BakCHAINSTORES ADD CstNo varchar(50)','',1,'.','')
+-GO-
+INSERT INTO [DBO].VersionwiseTblsScript(VerID,SrlNo,TblScript,VAUid,VActr,VATermId,VACompCode) VALUES (16,18,'ALTER TABLE [DBO].BakCHAINSTORES ADD UpdFlag varchar(1)','',1,'.','')
+-GO-
+INSERT INTO [DBO].VersionwiseTblsScript(VerID,SrlNo,TblScript,VAUid,VActr,VATermId,VACompCode) VALUES (16,19,'CREATE TABLE [dbo].[IncDefTable]([IncName] [varchar](64) NOT NULL,[DocNo] [int] NOT NULL,[SelectionType] [int] NOT NULL,[PersonnelCd] [varchar](8)  NOT NULL,[PtypeDesc] [varchar](64) NOT NULL,[SrlNo] [int] NULL,[BasedOn] [int] NULL,[PercentageOrAmt] [int] NULL,[PercentageOf] [int] NULL,[Value] [money] NULL,[ConditionGrtrThan] [money] NULL,[DateInsert] [datetime] NULL,[PersonnelNm] [varchar](50) NULL,[VaUID] [varchar](32)  NULL,[VaCtr] [int] NULL,[VaTermID] [varchar](32) NULL,[VaCompCode] [varchar](16) NULL)','',1,'.','')
+-GO-
+INSERT INTO [DBO].VersionwiseTblsScript(VerID,SrlNo,TblScript,VAUid,VActr,VATermId,VACompCode) VALUES (16,20,'ALTER TABLE [dbo].[IncDefTable]  WITH NOCHECK ADD CONSTRAINT [PK_IncDefTable] PRIMARY KEY CLUSTERED ([IncName],[PersonnelCd],[PtypeDesc]) ON [PRIMARY]','',1,'.','')
+-GO-
+INSERT INTO [DBO].VersionwiseTblsScript(VerID,SrlNo,TblScript,VAUid,VActr,VATermId,VACompCode) VALUES (16,21,'CREATE TABLE [dbo].[BakIncDefTable]([IncName] [varchar](64) NOT NULL,[DocNo] [int] NOT NULL,[SelectionType] [int] NOT NULL,[PersonnelCd] [varchar](8)  NOT NULL,[PtypeDesc] [varchar](64) NOT NULL,[SrlNo] [int] NULL,[BasedOn] [int] NULL,[PercentageOrAmt] [int] NULL,[PercentageOf] [int] NULL,[Value] [money] NULL,[ConditionGrtrThan] [money] NULL,[DateInsert] [datetime] NULL,[PersonnelNm] [varchar](50) NULL,[VaUID] [varchar](32)  NULL,[VaCtr] [int] NULL,[VaTermID] [varchar](32) NULL,[VaCompCode] [varchar](16) NULL,[UpdFlag] [char] (1) NULL)','',1,'.','')
+-GO-
+INSERT INTO [DBO].VersionwiseTblsScript(VerID,SrlNo,TblScript,VAUid,VActr,VATermId,VACompCode) VALUES (16,22,'CREATE TABLE [dbo].[IncentiveGrpItemDtls]([IncName] [varchar](64)  NOT NULL,[DocNo] [int] NOT NULL,[SrlNo] [int] NOT NULL,[SKUNo] [varchar](32)  NOT NULL,[Class1Cd] [varchar](16) NULL,[Class2Cd] [varchar](16) NULL,[SubClass1Cd] [varchar](16) NULL,[SubClass2Cd] [varchar](16) NULL,[SizeCd] [varchar](16) NULL,[SKUFlag] [int] NULL,[DateInsert] [datetime] NULL,[VaUID] [varchar](32) NULL,[VaCtr] [int] NULL,[VaTermID] [varchar](32) NULL,[VaCompCode] [varchar](16) NULL)','',1,'.','')
+-GO-
+INSERT INTO [DBO].VersionwiseTblsScript(VerID,SrlNo,TblScript,VAUid,VActr,VATermId,VACompCode) VALUES (16,23,'ALTER TABLE [dbo].[IncentiveGrpItemDtls] WITH NOCHECK ADD CONSTRAINT [PK_IncentiveGrpItemDtls] PRIMARY KEY CLUSTERED ([IncName],[SrlNo]) ON [PRIMARY]','',1,'.','')
+-GO-
+INSERT INTO [DBO].VersionwiseTblsScript(VerID,SrlNo,TblScript,VAUid,VActr,VATermId,VACompCode) VALUES (16,24,'CREATE TABLE [dbo].[BAKIncentiveGrpItemDtls]([IncName] [varchar](64)  NOT NULL,[DocNo] [int] NOT NULL,[SrlNo] [int] NOT NULL,[SKUNo] [varchar](32)  NOT NULL,[Class1Cd] [varchar](16) NULL,[Class2Cd] [varchar](16) NULL,[SubClass1Cd] [varchar](16) NULL,[SubClass2Cd] [varchar](16) NULL,[SizeCd] [varchar](16) NULL,[SKUFlag] [int] NULL,[DateInsert] [datetime] NULL,[VaUID] [varchar](32) NULL,[VaCtr] [int] NULL,[VaTermID] [varchar](32) NULL,[VaCompCode] [varchar](16) NULL,UpdFlag [char](1))','',1,'.','')
+-GO-
+INSERT INTO [DBO].VersionwiseTblsScript(VerID,SrlNo,TblScript,VAUid,VActr,VATermId,VACompCode) VALUES (16,25,'CREATE TABLE [dbo].[IncShrmPeriodDtls]([IncName] [varchar](64) NOT NULL,[DocNo] [int] NOT NULL,[ShrmProfCd] [varchar](64) NOT NULL,[ShrmProfName] [varchar](64) NOT NULL,[Ptype] [varchar](16) NULL,[PCode] [varchar](16) NOT NULL,[SrlNo] [int] NOT NULL,[PTypeDesc] [varchar](64) NULL,[PYear] [varchar](20) NULL,[FromDate] [datetime] NULL,[ToDate] [datetime] NULL,[DateInsert] [datetime] NULL,[VaUID] [varchar](32) NULL,[VaCtr] [int] NULL,[VaTermID] [varchar](32) NULL,[VaCompCode] [varchar](16) NULL)','',1,'.','')
+-GO-
+INSERT INTO [DBO].VersionwiseTblsScript(VerID,SrlNo,TblScript,VAUid,VActr,VATermId,VACompCode) VALUES (16,26,'ALTER TABLE [dbo].[IncShrmPeriodDtls] WITH NOCHECK ADD CONSTRAINT [PK_IncShrmPeriodDtls] PRIMARY KEY CLUSTERED ([IncName],[ShrmProfCd],[PCode],[SrlNo]) ON [PRIMARY]','',1,'.','')
+-GO-
+INSERT INTO [DBO].VersionwiseTblsScript(VerID,SrlNo,TblScript,VAUid,VActr,VATermId,VACompCode) VALUES (16,27,'CREATE TABLE [dbo].[BAKIncShrmPeriodDtls]([IncName] [varchar](64) NOT NULL,[DocNo] [int] NOT NULL,[ShrmProfCd] [varchar](64) NOT NULL,[ShrmProfName] [varchar](64) NOT NULL,[Ptype] [varchar](16) NULL,[PCode] [varchar](16) NOT NULL,[SrlNo] [int] NOT NULL,[PTypeDesc] [varchar](64) NULL,[PYear] [varchar](20) NULL,[FromDate] [datetime] NULL,[ToDate] [datetime] NULL,[DateInsert] [datetime] NULL,[VaUID] [varchar](32) NULL,[VaCtr] [int] NULL,[VaTermID] [varchar](32) NULL,[VaCompCode] [varchar](16) NULL,UpdFlag [char](1))','',1,'.','')
+-GO-
+INSERT INTO [DBO].VersionwiseTblsScript(VerID,SrlNo,TblScript,VAUid,VActr,VATermId,VACompCode) VALUES (16,28,'CREATE TABLE [dbo].[MultiplePrices]([SourceCompCode] [varchar](16) NOT NULL,[DocNo] [int] NOT NULL,[DestCompCode] [varchar](64) NOT NULL,[FileNumber] [varchar](32) NULL,[StockNo] [varchar](32) NOT NULL,[SlabNo] [int] NOT NULL,[BatchSrlNo] [varchar](16) NULL,[RetailPriceEffectiveDate] [datetime] NULL,[RetailPriceApplicableFlag] [varchar](1) NULL,[RetailPriceUpByorDownBy] [int] NULL,[IsRPRateOrAmount] [varchar](1) NULL,[RetailPriceRevisionFlag] [varchar](1) NULL,[RetailPriceChangeByVal] [money] NULL,[RetailPriceValue] [money] NULL,[DealerPriceEffectiveDate] [datetime] NULL,[DealerPriceApplicableFlag] [varchar](1) NULL,[DealerPriceUpByorDownBy] [int] NULL,[IsDpRateOrAmount] [varchar](1) NULL,[DealerPriceRevisionFlag] [varchar](1) NULL,[DealerPriceChangeByVal] [money] NULL,[DealerPriceValue] [money] NULL,[CurrentCostEffectiveDate] [datetime] NULL,[CurrentCostApplicableFlag] [varchar](1) NULL,[CurrentCostUpByorDownBy] [int] NULL,[IsCCRateOrAmount] [varchar](1) NULL,[CurrentCostRevisionFlag] [varchar](1) NULL,[CurrentCostChangeByVal] [money] NULL,[CurrentCostValue] [money] NULL,[LastPurchPriceEffectiveDate] [datetime] NULL,[LastPurchPriceApplicableFlag] [varchar](1) NULL,[LastPurchPriceUpByorDownBy] [int] NULL,[IsLPPRateOrAmount] [varchar](1) NULL,[LastPurchPriceRevisionFlag] [varchar](1) NULL,[LastPurchPriceChangeByVal] [money] NULL,[LastPurchPriceValue] [money] NULL,[ShoperDate] [datetime] NULL,[SystemDate] [datetime] NULL,[PgmMode] [varchar](32) NULL,[VoidFlag] [varchar](16) NULL,[SerialNumber] [int] NULL,[AttributeLevel] [varchar](64) NULL,[ApprovedFlag] [int] NULL,[Retail_Price] [money] NULL,[Dealer_Price] [money] NULL,[CurrentCost] [money] NULL,[LastPurchPrice] [money] NULL,[SkuLineNo] [int] NULL,[SlNo] [int] NULL,[Class1Cd] [varchar](16) NULL,[Class2Cd] [varchar](16) NULL,[SubClass1Cd] [varchar](16) NULL,[SubClass2Cd] [varchar](16) NULL,[SizeCd] [varchar](16) NULL,[DateInsert] [datetime] NULL,[IsActive][int] NULL,[IsDefinedAtHO] [int] NULL,[VAUid] [varchar](32) NULL,[VActr] [int] NULL,[VATermId] [varchar](32) NULL,[VACompCode] [varchar](16) NULL)','',1,'.','')
+-GO-
+INSERT INTO [DBO].VersionwiseTblsScript(VerID,SrlNo,TblScript,VAUid,VActr,VATermId,VACompCode) VALUES (16,29,'ALTER TABLE [dbo].[MultiplePrices] WITH NOCHECK ADD CONSTRAINT [PK_MulPrc] PRIMARY KEY  CLUSTERED ([SourceCompCode],[DocNo],[DestCompCode],[StockNo],[SlabNo]) ON [PRIMARY]','',1,'.','')
+-GO-
+INSERT INTO [DBO].VersionwiseTblsScript(VerID,SrlNo,TblScript,VAUid,VActr,VATermId,VACompCode) VALUES (16,30,'CREATE TABLE [dbo].[Class12LocWise]([Class1Cd] [varchar](16)  NOT NULL,[Class1CdDesc] [varchar](50)  NULL,[Class2Cd] [varchar](16) NOT NULL,[Class2CdDesc] [varchar](50) NULL,[SubClass1Cd] [varchar](16) NULL,[SubClass2Cd] [varchar](16) NULL,[SizeCd] [varchar](16) NULL,[LocPriceAppl] [int] NULL,[MultiplePriceApplicable] [int] NULL,[SendBaseIMForNotDefined] [int] NULL,[Remarks] [varchar](256) NULL,[VaUID] [varchar](32) NULL,[VaCtr] [int] NULL,[VaTermID] [varchar](32) NULL,[VaCompCode] [varchar](16) NULL)','',1,'.','')
+-GO-
+INSERT INTO [DBO].VersionwiseTblsScript(VerID,SrlNo,TblScript,VAUid,VActr,VATermId,VACompCode) VALUES (16,31,'ALTER TABLE [dbo].[Class12LocWise] WITH NOCHECK ADD CONSTRAINT [PK_Class12LocWise] PRIMARY KEY  CLUSTERED ([Class1Cd],[Class2Cd]) ON [PRIMARY]','',1,'.','')
+-GO-
+INSERT INTO [DBO].VersionwiseTblsScript(VerID,SrlNo,TblScript,VAUid,VActr,VATermId,VACompCode) VALUES (16,32,'CREATE TABLE [dbo].[BAKMultiplePrices]([SourceCompCode] [varchar](16) NOT NULL,[DocNo] [int] NOT NULL,[DestCompCode] [varchar](64) NOT NULL,[FileNumber] [varchar](32) NULL,[StockNo] [varchar](32) NOT NULL,[SlabNo] [int] NOT NULL,[BatchSrlNo] [varchar](16) NULL,[RetailPriceEffectiveDate] [datetime] NULL,[RetailPriceApplicableFlag] [varchar](1) NULL,[RetailPriceUpByorDownBy] [int] NULL,[IsRPRateOrAmount] [varchar](1) NULL,[RetailPriceRevisionFlag] [varchar](1) NULL,[RetailPriceChangeByVal] [money] NULL,[RetailPriceValue] [money] NULL,[DealerPriceEffectiveDate] [datetime] NULL,[DealerPriceApplicableFlag] [varchar](1) NULL,[DealerPriceUpByorDownBy] [int] NULL,[IsDpRateOrAmount] [varchar](1) NULL,[DealerPriceRevisionFlag] [varchar](1) NULL,[DealerPriceChangeByVal] [money] NULL,[DealerPriceValue] [money] NULL,[CurrentCostEffectiveDate] [datetime] NULL,[CurrentCostApplicableFlag] [varchar](1) NULL,[CurrentCostUpByorDownBy] [int] NULL,[IsCCRateOrAmount] [varchar](1) NULL,[CurrentCostRevisionFlag] [varchar](1) NULL,[CurrentCostChangeByVal] [money] NULL,[CurrentCostValue] [money] NULL,[LastPurchPriceEffectiveDate] [datetime] NULL,[LastPurchPriceApplicableFlag] [varchar](1) NULL,[LastPurchPriceUpByorDownBy] [int] NULL,[IsLPPRateOrAmount] [varchar](1) NULL,[LastPurchPriceRevisionFlag] [varchar](1) NULL,[LastPurchPriceChangeByVal] [money] NULL,[LastPurchPriceValue] [money] NULL,[ShoperDate] [datetime] NULL,[SystemDate] [datetime] NULL,[PgmMode] [varchar](32) NULL,[VoidFlag] [varchar](16) NULL,[SerialNumber] [int] NULL,[AttributeLevel] [varchar](64) NULL,[ApprovedFlag] [int] NULL,[Retail_Price] [money] NULL,[Dealer_Price] [money] NULL,[CurrentCost] [money] NULL,[LastPurchPrice] [money] NULL,[SkuLineNo] [int] NULL,[SlNo] [int] NULL,[Class1Cd] [varchar](16) NULL,[Class2Cd] [varchar](16) NULL,[SubClass1Cd] [varchar](16) NULL,[SubClass2Cd] [varchar](16) NULL,[SizeCd] [varchar](16) NULL,[DateInsert] [datetime] NULL,[IsActive][int] NULL,[IsDefinedAtHO] [int] NULL,[VAUid] [varchar](32) NULL,[VActr] [int] NULL,[VATermId] [varchar](32) NULL,[VACompCode] [varchar](16) NULL,UpdFlag [char](1))','',1,'.','')
+-GO-
+INSERT INTO [DBO].VersionwiseTblsScript(VerID,SrlNo,TblScript,VAUid,VActr,VATermId,VACompCode) VALUES (16,33,'CREATE TABLE [dbo].[BAKClass12LocWise]([Class1Cd] [varchar](16)  NOT NULL,[Class1CdDesc] [varchar](50)  NULL,[Class2Cd] [varchar](16) NOT NULL,[Class2CdDesc] [varchar](50) NULL,[SubClass1Cd] [varchar](16) NULL,[SubClass2Cd] [varchar](16) NULL,[SizeCd] [varchar](16) NULL,[LocPriceAppl] [int] NULL,[MultiplePriceApplicable] [int] NULL,[SendBaseIMForNotDefined] [int] NULL,[Remarks] [varchar](256) NULL,[VaUID] [varchar](32) NULL,[VaCtr] [int] NULL,[VaTermID] [varchar](32) NULL,[VaCompCode] [varchar](16) NULL,UpdFlag [char](1))','',1,'.','')
+-GO-
+INSERT INTO [DBO].VersionwiseTblsScript(VerID,SrlNo,TblScript,VAUid,VActr,VATermId,VACompCode) VALUES (16,34,'Alter table [dbo].[ExtdItemMaster] alter column [ItemExtDesc] Varchar(1024)','',1,'.','')
+-GO-
+INSERT INTO [DBO].VersionwiseTblsScript(VerID,SrlNo,TblScript,VAUid,VActr,VATermId,VACompCode) VALUES (16,35,'Alter table [dbo].[BakExtdItemMaster] alter column [ItemExtDesc] Varchar(1024)','',1,'.','')
+-GO-
+INSERT INTO [DBO].VersionwiseTblsScript(VerID,SrlNo,TblScript,VAUid,VActr,VATermId,VACompCode) VALUES (16,36,'CREATE TABLE [dbo].[SeasonsMaster]([SeasonsName] [char](255) NOT NULL,[StartDate] [datetime] NULL,[EndDate] [datetime] NULL,[IsActive] [smallint] NULL,[UserName] [char](20) NULL,[DateInsert] [datetime] NULL,[VAUid] [varchar](32) NULL,[VACtr] [int] NULL,[VATermId] [varchar](32) NULL,[VACompCode] [varchar](16) NULL,[SType] [int] NULL,[SNumber] [int] NULL,[Syear] [varchar](30) NULL)','',1,'.','')
+-GO-
+INSERT INTO [DBO].VersionwiseTblsScript(VerID,SrlNo,TblScript,VAUid,VActr,VATermId,VACompCode) VALUES (16,37,'ALTER TABLE [dbo].[SeasonsMaster]  WITH NOCHECK ADD CONSTRAINT [PK_SeasonsMaster] PRIMARY KEY CLUSTERED ([SeasonsName] ASC) ON [PRIMARY]','',1,'.','')
+-GO-
+INSERT INTO [DBO].VersionwiseTblsScript(VerID,SrlNo,TblScript,VAUid,VActr,VATermId,VACompCode) VALUES (16,38,'CREATE TABLE [dbo].[BakSeasonsMaster]([SeasonsName] [char](255),[StartDate] [datetime] NULL,[EndDate] [datetime] NULL,[IsActive] [smallint] NULL,[UserName] [char](20) NULL,[DateInsert] [datetime] NULL,[VAUid] [varchar](32) NULL,[VACtr] [int] NULL,[VATermId] [varchar](32) NULL,[VACompCode] [varchar](16) NULL,[SType] [int] NULL,[SNumber] [int] NULL,[Syear] [varchar](30) NULL,UpdFlag Varchar(1))','',1,'.','')
+-GO-
+INSERT INTO [DBO].VersionwiseTblsScript(VerID,SrlNo,TblScript,VAUid,VActr,VATermId,VACompCode) VALUES (16,39,'CREATE TABLE [dbo].[FactorHeader]([TrnType] [int] NOT NULL,[Name] [VarChar] (128) Not NULL,[EffectiveDate] [DateTime] Null,[LocCode] [VarChar] (16) NULL,[Category] [Int],[ApplPoint] [Int],[BasedOn] [int] NULL ,[BasedOnRangeFrom] [Money] DEFAULT(0),[BasedOnRangeTo] [Money] DEFAULT(0),[IntermsOf] [int] NULL ,[FixedOrVariable] [int] NULL ,[ValueFrom] [Int] NULL ,[Value] [Money] DEFAULT(0),[Status] [Int] NULL ,[DateInsert] [DateTime] NULL,[VAUid] [varchar](32) NULL,[VActr] [int] NULL,[VATermId] [varchar](32) NULL,[VACompCode] [varchar](16) NULL)','',1,'.','')
+-GO-	
+INSERT INTO [DBO].VersionwiseTblsScript(VerID,SrlNo,TblScript,VAUid,VActr,VATermId,VACompCode) VALUES (16,40,'Alter Table [dbo].[FactorHeader] WITH NOCHECK ADD CONSTRAINT [PK_FactorHeader] PRIMARY KEY CLUSTERED ([TrnType],[Name]) ON [PRIMARY]','',1,'.','')
+-GO-
+INSERT INTO [DBO].VersionwiseTblsScript(VerID,SrlNo,TblScript,VAUid,VActr,VATermId,VACompCode) VALUES (16,41,'CREATE TABLE [dbo].[BakFactorHeader]([TrnType] [int],[Name] [VarChar] (128),[EffectiveDate] [DateTime] Null,[LocCode] [VarChar] (16) NULL,[Category] [Int],[ApplPoint] [Int],[BasedOn] [int] NULL ,[BasedOnRangeFrom] [Money] ,[BasedOnRangeTo] [Money],[IntermsOf] [int] NULL ,[FixedOrVariable] [int] NULL ,[ValueFrom] [Int] NULL ,[Value] [Money],[Status] [Int] NULL ,[DateInsert] [DateTime] NULL,[VAUid] [varchar](32) NULL,[VActr] [int] NULL,[VATermId] [varchar](32) NULL,[VACompCode] [varchar](16) NULL,UpdFlag Varchar(1))','',1,'.','')
+-GO-
+Update VersionwiseTblsScript Set Vactr = (select intg from sysparam where paramcode = 'VaSysCounter') where VerId=16
+-GO-
+
+  </s9qScript>
+</s9qsqlblk>
+
+
+<s9qsqlblk>
+  <s9qScriptid>S9Q_0200_9_0004</s9qScriptid>
+  <s9qtitle>Replication Statements.</s9qtitle>
+  <s9qpgmtype>I</s9qpgmtype>
+  <s9qpgmtype>L</s9qpgmtype>
+  <s9qversion>*</s9qversion>
+  <s9qenvironment>P</s9qenvironment>
+  <s9qenvironment>R</s9qenvironment>
+  <s9qRunMultiple>1</s9qRunMultiple>
+  <s9qQryType>DDL</s9qQryType>
+  <s9qScript>
+
+Insert into SysParam (Id,Descr,paramCode,Boolean,Intg,Txt,Dt,Sng,Cur,Opt) values ('SR9-0920-9000001','Multiple Prices Applicable','Multipleprices','',0,'0',NULL,NULL,NULL,'I')
+-GO-
+Insert Into SysParamExtd Values('SR9-0920-9000001','Multipleprices','Variable',0,'03. Item Classification','This Gives Item Master Parameters',501,NULL,NULL,NULL,NULL)
+-GO-
+insert into sysparam (Id,Descr,paramCode,Boolean,Intg,Txt,Dt,Sng,Cur,Opt) values ('SR9-0920-4000001','Retail and Dealer Price Setting in Multipe Prices','MultiplepricesPrcSettingRetailDealer','',0,'1#1',NULL,NULL,NULL,'T')
+-GO-
+insert into sysparamextd(Id,Paramcode,Fixed,Changed,Category,CatDescr,DispOrder) values('SR9-0920-4000001','MultiplepricesPrcSettingRetailDealer','Variable',0,'03. Item Classification','',501)
+-GO-
+insert into sysparam (Id,Descr,paramCode,Boolean,Intg,Txt,Dt,Sng,Cur,Opt) values ('SR9-0920-4000002','CurrenCost and Last Purchase Price Setting in Multipe Prices','MultiplepricesPrcSettingCurCostLPP','',0,'0#0',NULL,NULL,NULL,'T')
+-GO-
+insert into sysparamextd(Id,Paramcode,Fixed,Changed,Category,CatDescr,DispOrder) values('SR9-0920-4000002','MultiplepricesPrcSettingCurCostLPP','Hidden',0,'03. Item Classification','',502)
+-GO-
+
+  </s9qScript>
+</s9qsqlblk>
+
+
+<s9qsqlblk>
+  <s9qScriptid>S9Q_0200_9_0005</s9qScriptid>
+  <s9qtitle>Replication Statements.</s9qtitle>
+  <s9qpgmtype>I</s9qpgmtype>
+  <s9qpgmtype>L</s9qpgmtype>
+  <s9qversion>*</s9qversion>
+  <s9qenvironment>P</s9qenvironment>
+  <s9qenvironment>R</s9qenvironment>
+  <s9qRunMultiple>1</s9qRunMultiple>
+  <s9qQryType>DDL</s9qQryType>
+  <s9qScript>
+
+CREATE TABLE [dbo].[IncDefTable]([IncName] [varchar](64) NOT NULL,[DocNo] [int] NOT NULL,[SelectionType] [int] NOT NULL,[PersonnelCd] [varchar](8)  NOT NULL,[PtypeDesc] [varchar](64) NOT NULL,[SrlNo] [int] NULL,[BasedOn] [int] NULL,[PercentageOrAmt] [int] NULL,[PercentageOf] [int] NULL,[Value] [money] NULL,[ConditionGrtrThan] [money] NULL,[DateInsert] [datetime] NULL,[PersonnelNm] [varchar](50) NULL,[VaUID] [varchar](32)  NULL,[VaCtr] [int] NULL,[VaTermID] [varchar](32) NULL,[VaCompCode] [varchar](16) NULL) ON [PRIMARY]
+-GO-
+ALTER TABLE [dbo].[IncDefTable]  WITH NOCHECK ADD CONSTRAINT [PK_IncDefTable] PRIMARY KEY CLUSTERED ([IncName],[PersonnelCd],[PtypeDesc]) ON [PRIMARY]
+-GO-
+CREATE TABLE [dbo].[BakIncDefTable]([IncName] [varchar](64) NOT NULL,[DocNo] [int] NOT NULL,[SelectionType] [int] NOT NULL,[PersonnelCd] [varchar](8)  NOT NULL,[PtypeDesc] [varchar](64) NOT NULL,[SrlNo] [int] NULL,[BasedOn] [int] NULL,[PercentageOrAmt] [int] NULL,[PercentageOf] [int] NULL,[Value] [money] NULL,[ConditionGrtrThan] [money] NULL,[DateInsert] [datetime] NULL,[PersonnelNm] [varchar](50) NULL,[VaUID] [varchar](32)  NULL,[VaCtr] [int] NULL,[VaTermID] [varchar](32) NULL,[VaCompCode] [varchar](16) NULL,[UpdFlag] [char] (1) NULL) ON [PRIMARY]
+-GO-
+CREATE TABLE [dbo].[IncentiveGrpItemDtls]([IncName] [varchar](64)  NOT NULL,[DocNo] [int] NOT NULL,[SrlNo] [int] NOT NULL,[SKUNo] [varchar](32)  NOT NULL,[Class1Cd] [varchar](16) NULL,[Class2Cd] [varchar](16) NULL,[SubClass1Cd] [varchar](16) NULL,[SubClass2Cd] [varchar](16) NULL,[SizeCd] [varchar](16) NULL,[SKUFlag] [int] NULL,[DateInsert] [datetime] NULL,[VaUID] [varchar](32) NULL,[VaCtr] [int] NULL,[VaTermID] [varchar](32) NULL,[VaCompCode] [varchar](16) NULL)
+-GO-
+ALTER TABLE [dbo].[IncentiveGrpItemDtls] WITH NOCHECK ADD CONSTRAINT [PK_IncentiveGrpItemDtls] PRIMARY KEY CLUSTERED ([IncName],[SrlNo]) ON [PRIMARY]
+-GO-
+CREATE TABLE [dbo].[IncShrmPeriodDtls]([IncName] [varchar](64) NOT NULL,[DocNo] [int] NOT NULL,[ShrmProfCd] [varchar](64) NOT NULL,[ShrmProfName] [varchar](64) NOT NULL,[Ptype] [varchar](16) NULL,[PCode] [varchar](16) NOT NULL,[SrlNo] [int] NOT NULL,[PTypeDesc] [varchar](64) NULL,[PYear] [varchar](20) NULL,[FromDate] [datetime] NULL,[ToDate] [datetime] NULL,[DateInsert] [datetime] NULL,[VaUID] [varchar](32) NULL,[VaCtr] [int] NULL,[VaTermID] [varchar](32) NULL,[VaCompCode] [varchar](16) NULL)
+-GO-
+ALTER TABLE [dbo].[IncShrmPeriodDtls] WITH NOCHECK ADD CONSTRAINT [PK_IncShrmPeriodDtls] PRIMARY KEY CLUSTERED ([IncName],[ShrmProfCd],[PCode],[SrlNo]) ON [PRIMARY]
+-GO-
+CREATE TABLE [dbo].[BAKIncentiveGrpItemDtls]([IncName] [varchar](64)  NOT NULL,[DocNo] [int] NOT NULL,[SrlNo] [int] NOT NULL,[SKUNo] [varchar](32)  NOT NULL,[Class1Cd] [varchar](16) NULL,[Class2Cd] [varchar](16) NULL,[SubClass1Cd] [varchar](16) NULL,[SubClass2Cd] [varchar](16) NULL,[SizeCd] [varchar](16) NULL,[SKUFlag] [int] NULL,[DateInsert] [datetime] NULL,[VaUID] [varchar](32) NULL,[VaCtr] [int] NULL,[VaTermID] [varchar](32) NULL,[VaCompCode] [varchar](16) NULL,[UpdFlag] [char] (1) NULL)
+-GO-
+CREATE TABLE [dbo].[BAKIncShrmPeriodDtls]([IncName] [varchar](64) NOT NULL,[DocNo] [int] NOT NULL,[ShrmProfCd] [varchar](64) NOT NULL,[ShrmProfName] [varchar](64) NOT NULL,[Ptype] [varchar](16) NULL,[PCode] [varchar](16) NOT NULL,[SrlNo] [int] NOT NULL,[PTypeDesc] [varchar](64) NULL,[PYear] [varchar](20) NULL,[FromDate] [datetime] NULL,[ToDate] [datetime] NULL,[DateInsert] [datetime] NULL,[VaUID] [varchar](32) NULL,[VaCtr] [int] NULL,[VaTermID] [varchar](32) NULL,[VaCompCode] [varchar](16) NULL,[UpdFlag] [char] (1) NULL)
+-GO-
+  </s9qScript>
+</s9qsqlblk>

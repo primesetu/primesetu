@@ -1,0 +1,20 @@
+<s9qsqlblk> 
+<s9qScriptID>S9Q_016_7_0003</s9qScriptID>
+<s9qtitle>Security:Alter Scripts</s9qtitle>
+<s9qpgmtype>L</s9qpgmtype>
+<s9qpgmtype>I</s9qpgmtype>
+<s9qversion>*</s9qversion>
+<s9qenvironment>M</s9qenvironment>
+<s9qRunMultiple>0</s9qRunMultiple>
+<s9qQryType>DDL</s9qQryType>
+<s9qScript>
+
+Alter table vaUser alter column LoginPwd varchar(256)
+
+-GO-
+
+Alter table VaPasswordHistory alter column LoginPwd varchar(256)
+
+-GO-
+</s9qScript>
+</s9qsqlblk>

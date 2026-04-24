@@ -11,6 +11,8 @@
 import { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
+import { LanguageProvider } from './hooks/useLanguage'
+import { F2SearchProvider, GlobalF2SearchOverlay } from './contexts/F2SearchContext'
 import App from './App'
 import './index.css'
 
@@ -26,7 +28,12 @@ const queryClient = new QueryClient({
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
     <QueryClientProvider client={queryClient}>
-      <App />
+      <LanguageProvider>
+        <F2SearchProvider>
+          <App />
+          <GlobalF2SearchOverlay />
+        </F2SearchProvider>
+      </LanguageProvider>
     </QueryClientProvider>
   </StrictMode>,
 )

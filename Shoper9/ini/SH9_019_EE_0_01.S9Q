@@ -1,0 +1,206 @@
+<s9qsqlblk>
+  <s9qScriptID>S9Q_019_0_0001</s9qScriptID>
+  <s9qtitle>Security Database Script</s9qtitle>
+  <s9qpgmtype>I</s9qpgmtype>
+  <s9qpgmtype>L</s9qpgmtype>
+  <s9qversion>*</s9qversion>
+  <s9qenvironment>M</s9qenvironment>
+  <s9qRunMultiple>1</s9qRunMultiple>
+  <s9qQryType>DML</s9qQryType>
+  <s9qScript>
+IF  EXISTS (SELECT * FROM dbo.sysobjects WHERE id = OBJECT_ID(N'[dbo].[AlertHistory]') AND OBJECTPROPERTY(id, N'IsUserTable') = 1)
+DROP TABLE [dbo].[AlertHistory]
+-GO-
+IF NOT EXISTS (SELECT * FROM dbo.sysobjects WHERE id = OBJECT_ID(N'[dbo].[AlertHistory]') AND OBJECTPROPERTY(id, N'IsUserTable') = 1)
+BEGIN
+CREATE TABLE [dbo].[AlertHistory](
+	[SerialNo] [varchar](64) NOT NULL,
+	[EntrySerialNo] [int] NULL,
+	[CompanyCode] [varchar](64) NULL,
+	[AlertId] [int] NULL,
+	[Application] [varchar](64) NULL,
+	[Event] [varchar](64) NULL,
+	[AlertMode] [varchar](64) NULL,
+	[ExecutedTime] [datetime] NULL,
+	[Status] [varchar](64) NULL,
+	[Description] [varchar](8000) NULL,
+ CONSTRAINT [PK_AlertHistory] PRIMARY KEY CLUSTERED 
+(
+	[SerialNo] ASC
+)
+)
+END
+</s9qScript>		
+</s9qsqlblk>
+
+<s9qsqlblk>
+  <s9qScriptID>S9Q_019_0_0002</s9qScriptID>
+  <s9qtitle>Security Database Script</s9qtitle>
+  <s9qpgmtype>I</s9qpgmtype>
+  <s9qpgmtype>L</s9qpgmtype>
+  <s9qversion>*</s9qversion>
+  <s9qenvironment>M</s9qenvironment>
+  <s9qRunMultiple>1</s9qRunMultiple>
+  <s9qQryType>DML</s9qQryType>
+  <s9qScript>
+IF  EXISTS (SELECT * FROM dbo.sysobjects WHERE id = OBJECT_ID(N'[dbo].[SISSysParam]') AND OBJECTPROPERTY(id, N'IsUserTable') = 1)
+DROP TABLE [dbo].[SISSysParam]
+-GO-
+IF NOT EXISTS (SELECT * FROM dbo.sysobjects WHERE id = OBJECT_ID(N'[dbo].[SISSysParam]') AND OBJECTPROPERTY(id, N'IsUserTable') = 1)
+BEGIN
+CREATE TABLE [dbo].[SISSysParam](
+	[Code] [varchar](32) NOT NULL,
+	[Value] [varchar](256) NULL,
+	[Default] [varchar](256) NULL,
+	[DataType] [varchar](8) NULL,
+	[DisplayName] [varchar](256) NULL,
+	[Status] [varchar](16) NULL,
+	[Description] [varchar](256) NULL
+)
+END
+-GO-
+INSERT [dbo].[SISSysParam] ([Code], [Value], [Default], [DataType], [DisplayName], [Status], [Description]) VALUES ('SISName', '', '', 'S', 'SIS Name', '2', 'Server name using which client can connect; Dynamically obtains machine name.')
+-GO-
+INSERT [dbo].[SISSysParam] ([Code], [Value], [Default], [DataType], [DisplayName], [Status], [Description]) VALUES ('SISPort', '', '9525', 'N', 'SIS Port', '1', 'Port number in which the server will be running.')
+-GO-
+INSERT [dbo].[SISSysParam] ([Code], [Value], [Default], [DataType], [DisplayName], [Status], [Description]) VALUES ('SISSrvcName', '', '', 'S', 'Service Name', '2', 'Service name of the server in the machine;')
+-GO-
+INSERT [dbo].[SISSysParam] ([Code], [Value], [Default], [DataType], [DisplayName], [Status], [Description]) VALUES ('JCThrdSlpTime', '10', '10', 'N', 'JC Wait Time', '1', 'Job Controller thread sleep time after processing the job store; Specify in seconds.')
+-GO-
+INSERT [dbo].[SISSysParam] ([Code], [Value], [Default], [DataType], [DisplayName], [Status], [Description]) VALUES ('JCThrdSlpNetNtAv', '30', '30', 'N', 'JC Wait while N/w unavailable', '1', 'Job Controller thread sleep time when network is not available; Specify in minutes.')
+-GO-
+INSERT [dbo].[SISSysParam] ([Code], [Value], [Default], [DataType], [DisplayName], [Status], [Description]) VALUES ('MaxThrds', '10', '10', 'N', 'Maximum Threads', '1', 'Maximum threads that can be created for job processing; Specify number per processor.')
+-GO-
+INSERT [dbo].[SISSysParam] ([Code], [Value], [Default], [DataType], [DisplayName], [Status], [Description]) VALUES ('MinThrds', '0', '0', 'N', 'Minimum Threads', '1', 'Minimum threads which always be present for job processing; Specify number per processor.')
+-GO-
+INSERT [dbo].[SISSysParam] ([Code], [Value], [Default], [DataType], [DisplayName], [Status], [Description]) VALUES ('LogFilePath', '', '', 'S', 'Log File Path', '1', 'The path where log file Log.log is created; Dynamically obtains shoper share folder.')
+-GO-
+INSERT [dbo].[SISSysParam] ([Code], [Value], [Default], [DataType], [DisplayName], [Status], [Description]) VALUES ('TruncLogSize', '10', '10', 'N', 'Backup Threshold', '1', 'The max file size after which the log file will be truncated; Specify in MB.')
+-GO-
+INSERT [dbo].[SISSysParam] ([Code], [Value], [Default], [DataType], [DisplayName], [Status], [Description]) VALUES ('ThrdIdleTime', '60', '60', 'N', 'Thread Idle Time', '1', 'Idle time to wait for the job thread before getting destroyed; Specify in seconds.')
+-GO-
+INSERT [dbo].[SISSysParam] ([Code], [Value], [Default], [DataType], [DisplayName], [Status], [Description]) VALUES ('DBCmdTimeOut', '0', '15', 'N', 'Query Time Out', '1', 'Waiting time for the query response from sql server before closing it; Specify in seconds.')
+-GO-
+INSERT [dbo].[SISSysParam] ([Code], [Value], [Default], [DataType], [DisplayName], [Status], [Description]) VALUES ('PersistPath', '', '', 'S', 'Persist Path', '1', 'The path where persisting files are created; Dynamically obtains shoper share folder.')
+-GO-
+INSERT [dbo].[SISSysParam] ([Code], [Value], [Default], [DataType], [DisplayName], [Status], [Description]) VALUES ('TempPath', '', '', 'S', 'Temp Path', '1', 'The path where temp files are created; Dynamically obtains shoper share folder.')
+-GO-
+INSERT [dbo].[SISSysParam] ([Code], [Value], [Default], [DataType], [DisplayName], [Status], [Description]) VALUES ('PingInterval', '1', '1', 'N', 'Ping Interval', '1', 'The time interval by which the Shoper manager will ping (heart beat) the SIS; Specify in minutes.')
+-GO-
+INSERT [dbo].[SISSysParam] ([Code], [Value], [Default], [DataType], [DisplayName], [Status], [Description]) VALUES ('CheckInterval', '5', '5', 'N', 'Upload Check Interval', '1', 'The time interval by which the Shoper manager will check for pending upload jobs in SIS; Specify in minutes.')
+-GO-
+DROP TABLE [dbo].[SISFieldTemplateAlias]
+-GO-
+INSERT INTO ReportConfigFields VALUES ('0', 'LeastSalableQuantity', 'Particulars', 'Least Salable Quantity', '64', '0')
+-GO-
+ALTER TABLE ReportConfigs ADD LoadDefault tinyint
+-GO-
+UPDATE ReportConfigs SET LoadDefault = 1
+-GO-
+UPDATE ReportConfigs SET LoadDefault = 0 Where TaskID = 205
+-GO-
+INSERT INTO ReportInfo(PgmOption, TaskID, TaskName, TaskType, PeriodType) VALUES ('205', '205', 'Tender', 1, 'T1')
+-GO-
+INSERT INTO ReportVariableInfo VALUES ('205', 'TDL', '<<APPPATH>>\POSREPORTS.tcp')
+-GO-
+INSERT INTO ReportActionInfo(TaskID, ActionName, ActionType, ActionObject, Arguments) VALUES ('205', 'CALL', 'ACTION', 'POS ReportMain', '')
+-GO-
+INSERT INTO ReportConfigs(TaskID, DefaultTitle, MaxAllowed, MinAllowed, SISTransaction,LoadDefault) VALUES ('205', 'Cash Summary Report', 5, 1, 'Payments', 0)
+-GO-
+INSERT INTO ReportConfigFields VALUES ('205', 'TransactionDate', 'Particulars', 'Transaction Date', 0, 0)
+-GO-
+INSERT INTO ReportConfigFields VALUES ('205', 'EntryName', 'Particulars', 'Transaction Type', 1, 1)
+-GO-
+INSERT INTO ReportConfigFields VALUES ('205', 'PayModeDesc', 'Particulars', 'Payment Mode', 2, 1)
+-GO-
+INSERT INTO ReportConfigFields VALUES ('205', 'PayModeCode', 'Particulars', 'Payment Code', 3, 1)
+-GO-
+INSERT INTO ReportConfigFields VALUES ('205', 'CurrencyName', 'Particulars', 'Currency Name', 4, 0)
+-GO-
+INSERT INTO ReportConfigFields VALUES ('205', 'BillPrefixNumber', 'Particulars', 'Document Number', 5, 0)
+-GO-
+INSERT INTO ReportConfigFields VALUES ('205', 'SaleReferencePrefixNumber', 'Particulars', 'Reference Number', 6, 0)
+-GO-
+INSERT INTO ReportConfigFields VALUES ('205', 'CashierID', 'Particulars', 'Cashier', 7, 1)
+-GO-
+INSERT INTO ReportConfigFields VALUES ('205', 'TerminalID', 'Particulars', 'Terminal', 8, 1)
+-GO-
+INSERT INTO ReportConfigFields VALUES ('205', 'CustomerCode', 'Particulars', 'Customer Code', 9, 0)
+-GO-
+INSERT INTO ReportConfigFields VALUES ('205', 'CustomerName', 'Particulars', 'Customer Name', 10, 0)
+-GO-
+INSERT INTO ReportConfigFields VALUES ('205', 'WeekDay', 'Particulars', 'Day of the Week', 11, 1)
+-GO-
+INSERT INTO ReportConfigFields VALUES ('205', 'TransactionMonth', 'Particulars', 'Month and Year', 12, 1)
+-GO-
+INSERT INTO ReportConfigFields VALUES ('205', 'PaidUnits', 'ValueFields', 'Paid Units', 1, 0)
+-GO-
+INSERT INTO ReportConfigFields VALUES ('205', 'ConversionRate', 'ValueFields', 'Conversion Rate', 2, 0)
+-GO-
+INSERT INTO ReportConfigFields VALUES ('205', 'ReceiptAmount', 'ValueFields', 'Received Amount', 3, 0)
+-GO-
+INSERT INTO ReportConfigFields VALUES ('205', 'ChangeReturned', 'ValueFields', 'Returned Amount', 4, 0)
+-GO-
+INSERT INTO ReportConfigFields VALUES ('205', 'AmountReceived', 'ValueFields', 'Net Amount', 5, 0)
+-GO-
+INSERT INTO vaMenu VALUES (940, 945, 'Report Designer', 'Tender', 'P', 'SR435600.EXE', 0, 1, 205, '0+2', '',  0, 0, 1)
+-GO-
+DELETE FROM Vamenu WHERE MnuCap='History Report' and MnuNo=650 and MenuOPt=659
+-GO-
+INSERT INTO [vaMenu]([MnuNo],[MenuOPt],[MnuName],[MnuCap],[MnuPgm],[ExeName],[MnuWght],[AllowWhenTrnClosed],[pgmopt],
+[DbInfo],[MenuIcon],[Menusep],[MenuBold],[MultiInstance]) 
+VALUES('500', '581', 'HouseKeeping', 'Activity Log', 'P', 'SR435600.EXE', '0', '1', '1', '0+2', '', 1, 0, 1)
+-GO-
+UPDATE vaMenu SET Menusep=1 where MnuNo=500 and MenuOPt=510 
+-GO-
+Insert into vavertable (NodeId,ExeSrl,ExeID,ExeName,ExeSkip,ExeVer,ExeMinor,ExeSubRel) Values( 0, 0, 'SR435600.EXE','','N','9','1','495')
+-GO-
+</s9qScript>		
+</s9qsqlblk>
+<s9qsqlblk>
+  <s9qScriptID>S9Q_019_0_0003</s9qScriptID>
+  <s9qtitle>Security Database Script</s9qtitle>
+  <s9qpgmtype>I</s9qpgmtype>
+  <s9qpgmtype>L</s9qpgmtype>
+  <s9qversion>*</s9qversion>
+  <s9qenvironment>M</s9qenvironment>
+  <s9qRunMultiple>1</s9qRunMultiple>
+  <s9qQryType>DML</s9qQryType>
+  <s9qScript>
+-GO-
+sp_rename 'ReportScheduleHistory.Status', 'Description', 'COLUMN'
+-GO-
+ALTER TABLE ReportScheduleHistory ADD Status varchar(64)
+-GO-
+UPDATE ReportScheduleHistory SET Status = 'SUCCESS' WHERE Description = 'Successfully executed.'
+-GO-
+UPDATE ReportScheduleHistory SET Status = 'FAILED' WHERE Status IS NULL
+-GO-
+Insert into vamenu (MnuNo, MenuOPt, MnuName, MnuCap, MnuPgm, ExeName, MnuWght, AllowWhenTrnClosed, Pgmopt, DbInfo, MenuIcon, Menusep, MenuBold, MultiInstance) values (430,445,'Stock','Stock Availability','P','SR241700.EXE',0,1,0,'0','',0,0,0)
+-GO-
+Insert into vamenu (MnuNo, MenuOPt, MnuName, MnuCap, MnuPgm, ExeName, MnuWght, AllowWhenTrnClosed, Pgmopt, DbInfo, MenuIcon, Menusep, MenuBold, MultiInstance) values (430,446,'Stock','Physical Verification Status','P','SR241600.EXE',0,1,0,'0','',0,0,0)
+-GO-
+Insert into vavertable (NodeId,ExeSrl,ExeID,ExeName,ExeSkip,ExeVer,ExeMinor,ExeSubRel) Values( 0, 0, 'SR241600.EXE','','N','9','1','449')
+-GO-
+Insert into vavertable (NodeId,ExeSrl,ExeID,ExeName,ExeSkip,ExeVer,ExeMinor,ExeSubRel) Values( 0, 0, 'SR241700.EXE','','N','9','1','449')
+-GO-
+Update VAMenu Set MnuCap = 'Reserved Stock', MnuName = 'Stock' where MnuNo = 430 and MenuOpt = 445
+-GO-
+Update vaMenu Set MnuName = 'Stock' Where MnuNo = 300 and MenuOPt = 315
+-GO-
+Insert into vamenu (MnuNo, MenuOPt, MnuName, MnuCap, MnuPgm, ExeName, MnuWght, AllowWhenTrnClosed, Pgmopt, DbInfo, MenuIcon, Menusep, MenuBold, MultiInstance) values (450,453,'Stock Registers','Audit Trail - Size-wise','P','SR217700.EXE',0,1,0,'0','',0,0,0)
+-GO-
+Delete from vaMenu where MnuNo = 300 and MenuOPt = 317
+-GO-
+Update vaMenu Set Menusep = 1 where MnuNo = 300 and MenuOPt = 316
+-GO-
+update VaVerTable set EXESubRel = '495' where EXEID in ('SR435600.EXE','SR440600.exe','SR203700.EXE','SN400600.EXE','SE101100.EXE','SE201200.EXE','SE301000.EXE','SE301200.EXE','SE301300.EXE','SE301400.EXE','SE301500.EXE','SE301600.EXE','SR100200.EXE','SR100400.EXE','SR100700.EXE','SR101000.EXE','SR122000.EXE','SR127000.EXE','SR129500.EXE','SR130000.EXE','SR142500.EXE','SR202000.EXE','SR202300.EXE','SR202500.EXE')
+-GO-
+update VaVerTable set EXESubRel = '495' where EXEID in ('SR202700.EXE','SR202800.EXE','SR202900.EXE','SR203000.EXE','SR203100.EXE','SR203400.EXE','SR203500.EXE','SR203600.EXE','SR209500.EXE','SR209600.EXE','SR210000.EXE','SR210300.EXE','SR210700.EXE','SR211000.EXE','SR211600.EXE','SR212600.EXE','SR212700.EXE','SR213800.EXE','SR216000.EXE','SR217900.EXE')
+-GO-
+update VaVerTable set EXESubRel = '495' where EXEID in ('SR221600.EXE','SR229700.EXE','SR233600.EXE','SR233700.EXE','SR234300.EXE','SR236300.EXE','SR238000.EXE','SR239800.EXE','SR241600.EXE','SR241700.EXE','SR242500.EXE','SR242900.EXE','SR309900.EXE','SR320500.EXE','SR322600.EXE','SR323400.EXE','SR330700.EXE','SR332800.EXE','SR405600.EXE','SR410800.EXE')
+-GO-
+update VaVerTable set EXESubRel = '495' where EXEID in ('SR413100.EXE','SR426400.EXE','SR428100.EXE','SR431000.EXE','SR431500.EXE','SR431700.EXE','SR432000.EXE','SR436900.EXE','SR437300.EXE','SR438600.EXE','SR440700.EXE','SR440900.EXE','SR441100.EXE','SR441200.EXE','SR525700.EXE','SR541200.EXE','SR541800.EXE','SR721500.EXE','SR900800.EXE','SR442300.EXE','SR123000.EXE','SR234400.EXE','SR324400.EXE')
+-GO-
+</s9qScript>		
+</s9qsqlblk>

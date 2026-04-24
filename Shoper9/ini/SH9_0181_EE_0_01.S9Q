@@ -1,0 +1,21 @@
+<s9qsqlblk>
+  <s9qScriptID>S9Q_0181_0_0001</s9qScriptID>
+  <s9qtitle>Security Database Script</s9qtitle>
+  <s9qpgmtype>I</s9qpgmtype>
+  <s9qpgmtype>L</s9qpgmtype>
+  <s9qversion>*</s9qversion>
+  <s9qenvironment>M</s9qenvironment>
+  <s9qRunMultiple>1</s9qRunMultiple>
+  <s9qQryType>DML</s9qQryType>
+  <s9qScript>
+UPDATE VAVerTable SET EXEVER = '9', EXEMINOR = '1', EXESUBREL = '435' WHERE EXEID in (
+'SR100700.EXE','SR101900.EXE','SR130000.EXE','SR203400.EXE','SR322600.EXE',
+'SR428100.EXE','SR432000.EXE','SR441500.EXE','SR708100.EXE','SR721500.EXE'
+)
+-GO-
+INSERT [SISSysParam] ([Code], [Value], [Default], [DataType], [Description]) VALUES ('CheckInterval', '5', '5', 'N', 'The time interval by which the Shoper manager will check for pending jobs in SIS; Specify in minutes.')
+-GO-
+UPDATE [SISSysParam] SET [Description] = 'The time interval by which the Shoper manager will ping (heart beat) the SIS; Specify in minutes.' WHERE [Code] = 'PingInterval'
+-GO-
+</s9qScript>		
+</s9qsqlblk>

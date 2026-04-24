@@ -1,0 +1,20 @@
+<s9qsqlblk>
+  <s9qScriptid>S9Q_016_1_0479</s9qScriptid> 
+  <s9qtitle>Inserting values to genlookup and sysparam</s9qtitle>
+  <s9qpgmtype>I</s9qpgmtype>
+  <s9qpgmtype>L</s9qpgmtype>
+  <s9qversion>*</s9qversion>
+  <s9qenvironment>P</s9qenvironment>
+  <s9qRunMultiple>0</s9qRunMultiple>
+  <s9qQryType>DML</s9qQryType>
+  <s9qScript>
+INSERT INTO genlookup(RECID,CODE,DESCR,FLAG,NUMBER)VALUES(14300,'SR130000+VALIDATETILLLIMIT+1','SR539700.ClsValidateLimit',1,0)
+-GO-
+INSERT INTO genlookup(RECID,CODE,DESCR,FLAG,NUMBER)VALUES(14300,'SR100200+VALIDATETILLLIMIT+1','SR539700.ClsValidateLimit',1,0)
+-GO-
+Insert Into Sysparam Values('SR6-0901-0000363','Cash Limit for Till(s)','MaxAmountForTill',0,0,'',null,0,0,'C','',0,'.','')
+-GO-
+Insert into SysparamExtd ([ID],[ParamCode],[Fixed],[Changed],[Category],[CatDescr],[DispOrder]) Values ('SR6-0901-0000363','MaxAmountForTill','Variable','0','22. Till Management','This Gives Item Master Parameters','12')
+-GO-
+</s9qScript>		
+</s9qsqlblk>

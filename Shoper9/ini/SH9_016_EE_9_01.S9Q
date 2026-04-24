@@ -1,0 +1,448 @@
+<s9qsqlblk>
+  <s9qScriptid>	S9Q_016_9_0001	</s9qScriptid>
+  <s9qtitle>All DDL Statements.</s9qtitle>
+  <s9qpgmtype>I</s9qpgmtype>
+  <s9qpgmtype>L</s9qpgmtype>
+  <s9qversion>*</s9qversion>
+  <s9qenvironment>H</s9qenvironment>
+  <s9qenvironment>P</s9qenvironment>
+  <s9qenvironment>R</s9qenvironment>
+  <s9qRunMultiple>1</s9qRunMultiple>
+  <s9qQryType>DDL</s9qQryType>
+  <s9qScript>
+
+CREATE TABLE GS1Dtls (SlNO  INT NOT NULL,GS1IdKey VarChar(16),GS1CompanyPrefix VarChar(32) NOT NULL,StartingNo INT NOT NULL,EndingNo INT NOT NULL,Class1Cd Varchar(16) NOT NULL,Class2Cd Varchar(16) NOT NULL,SubClass1Cd Varchar(16) ,SubClass2Cd Varchar(16) ,SizeCd Varchar(16) ,TotalBarCodesPresent int,TotalBarCodesUsed int,TotalBarCodesAvbl int,LastNoUsed int,Active int,DefaultPfx int, BarCodeLen int,DateInsert datetime,Remarks Varchar(255),VAUid Varchar(32),VActr int,VATermId Varchar(32),VACompCode Varchar(16))
+-GO-
+ALTER TABLE GS1Dtls ADD CONSTRAINT  PK_GS1Dtls  PRIMARY KEY   (SlNO,GS1CompanyPrefix,StartingNo,EndingNo,Class1Cd,Class2Cd)
+-GO-
+Alter Table CurrencyCat Add DecimalDesc Varchar(256)
+-GO-
+Alter Table CurrencyCat Add CurSymbol Varchar(64)
+-GO-
+create table CurrencyDenomination (Code varchar(16) not null, SrlNo Int not null,DenomCap varchar(64),Denominations Int,SmallestUnit Int,Active Int,ImageId varchar(64),VAUid varchar(32),VActr int,VATermId varchar(32),VACompCode varchar(16))
+-GO-
+ALTER TABLE [dbo].[CurrencyDenomination] WITH NOCHECK ADD CONSTRAINT [PK_CurrencyDenomination] PRIMARY KEY CLUSTERED (	[Code],	[SrlNo])  ON [PRIMARY]
+-GO-
+create table BakCurrencyDenomination (Code varchar(16) not null, SrlNo Int not null,DenomCap varchar(64),Denominations Int,SmallestUnit Int,Active Int,ImageId varchar(64),VAUid varchar(32),VActr int,VATermId varchar(32),VACompCode varchar(16),UpdFlag varchar(1))
+-GO-
+Create Table [ItemReClassConfig] (FldId VarChar(16) Not Null,FldDBColName Varchar(128),FldTerminology VarChar(128),FldDefaultName VarChar(128),FilterOrder Int,FilterFlag Int,ReplaceOrder Int,ReplaceFlag Int,LoookupDtls VarChar(128),FilterDataType VarChar(64),ReplaceDataType VarChar(64),DataLen Int,FilterControlType VarChar(64),ReplaceControlType VarChar(64),AttribType int,PreviewFlag Int,AllowedOp Varchar(16),AllowedInSwap Varchar(16),VAUid Varchar(32),VActr int,VATermId Varchar(32),VACompCode vARCHAR(16))
+-GO-
+ALTER TABLE [dbo].[ItemReClassConfig] WITH NOCHECK ADD CONSTRAINT [PK_ItemReClassConfig] PRIMARY KEY CLUSTERED ([FLDID])  ON [PRIMARY]
+-GO-
+Create Table [BakItemReClassConfig] (FldId VarChar(16) Not Null,FldDBColName Varchar(128),FldTerminology VarChar(128),FldDefaultName VarChar(128),FilterOrder Int,FilterFlag Int,ReplaceOrder Int,ReplaceFlag Int,LoookupDtls VarChar(128),FilterDataType VarChar(64),ReplaceDataType VarChar(64),DataLen Int,FilterControlType VarChar(64),ReplaceControlType VarChar(64),AttribType int,PreviewFlag Int,AllowedOp Varchar(16),AllowedInSwap Varchar(16),VAUid Varchar(32),VActr int,VATermId Varchar(32),VACompCode vARCHAR(16),UpdFlag varchar(1))
+-GO-
+Create Table [ItemReClassHeader] (IRCId VarChar(16) Not Null,IRCStatus Int,ApprovedFlag Int,CreatedAt Int,ShoperDate Datetime,SystemDate Datetime,Narration VarChar(256),FilterFlag Int,RunMultiple Int,RunInImport Int,RunInMenu Int,RunInDayBegin Int,RunSQLStmt Int,AtHO Int,AtHORunNo Int,AtHOLastRunDate Datetime,AtPOS Int,AtPOSRunNo Int,AtPOSLastRunDate Datetime,AtReplPOS Int,AtReplPOSRunNo Int,AtReplPOSLastRunDate Datetime,VAUid Varchar(32),VActr Int,VATermId Varchar(32),VACompCode VARCHAR(16))
+-GO-
+ALTER TABLE [dbo].[ItemReClassHeader] WITH NOCHECK ADD CONSTRAINT [PK_ItemReClassHeader] PRIMARY KEY CLUSTERED ([IRCId])  ON [PRIMARY]
+-GO-
+Create Table [BakItemReClassHeader] (IRCId VarChar(16) Not Null,IRCStatus Int,ApprovedFlag Int,CreatedAt Int,ShoperDate Datetime,SystemDate Datetime,Narration VarChar(256),FilterFlag Int,RunMultiple Int,RunInImport Int,RunInMenu Int,RunInDayBegin Int,RunSQLStmt Int,AtHO Int,AtHORunNo Int,AtHOLastRunDate Datetime,AtPOS Int,AtPOSRunNo Int,AtPOSLastRunDate Datetime,AtReplPOS Int,AtReplPOSRunNo Int,AtReplPOSLastRunDate Datetime,VAUid Varchar(32),VActr Int,VATermId Varchar(32),VACompCode VARCHAR(16),UpdFlag varchar(1))
+-GO-
+Create Table [ItemReClassDtls] (IRCId VarChar(16) Not Null,SrlNo Int Not Null,FRIndicator VarChar(1) Not Null,FRIndSrlNo Int Not Null,FldId VarChar(16),FldDBColName Varchar(128),FldTerminology VarChar(128),FldDefaultName VarChar(128),FldFilterDataType VarChar(64),FldFilterCondition VarChar(64),FldFilterCurValue VarChar(256),FldReplaceDataType VarChar(64),FldReplaceOption VarChar(64),FldReplaceNewValue VarChar(256),FldReplaceId VarChar(16),FldReplaceDBColName Varchar(128),ItItemClassFld Int,SQLBatchNo Int,SQLStmt VarChar(2000),SQLIndependent Int,SQLExcuteAtBegin Int,VAUid Varchar(32),VActr Int,VATermId Varchar(32),VACompCode VARCHAR(16))
+-GO-
+ALTER TABLE [dbo].[ItemReClassDtls] WITH NOCHECK ADD CONSTRAINT [PK_ItemReClassDtls] PRIMARY KEY CLUSTERED ([IRCId],[SrlNo],[FRIndicator],[FRIndSrlNo]) ON [PRIMARY]
+-GO-
+Create Table [BakItemReClassDtls] (IRCId VarChar(16) Not Null,SrlNo Int Not Null,FRIndicator VarChar(1) Not Null,FRIndSrlNo Int Not Null,FldId VarChar(16),FldDBColName Varchar(128),FldTerminology VarChar(128),FldDefaultName VarChar(128),FldFilterDataType VarChar(64),FldFilterCondition VarChar(64),FldFilterCurValue VarChar(256),FldReplaceDataType VarChar(64),FldReplaceOption VarChar(64),FldReplaceNewValue VarChar(256),FldReplaceId VarChar(16),FldReplaceDBColName Varchar(128),ItItemClassFld Int,SQLBatchNo Int,SQLStmt VarChar(2000),SQLIndependent Int,SQLExcuteAtBegin Int,VAUid Varchar(32),VActr Int,VATermId Varchar(32),VACompCode VARCHAR(16),UpdFlag Varchar(1))
+-GO-
+
+  </s9qScript>
+</s9qsqlblk>
+
+
+<s9qsqlblk>
+  <s9qScriptid>	S9Q_016_9_0002	</s9qScriptid>
+  <s9qtitle>All DDL Statements.</s9qtitle>
+  <s9qpgmtype>I</s9qpgmtype>
+  <s9qpgmtype>L</s9qpgmtype>
+  <s9qversion>*</s9qversion>
+  <s9qenvironment>H</s9qenvironment>
+  <s9qenvironment>P</s9qenvironment>
+  <s9qenvironment>R</s9qenvironment>
+  <s9qRunMultiple>1</s9qRunMultiple>
+  <s9qQryType>DDL</s9qQryType>
+  <s9qScript>
+
+INSERT INTO GENLOOKUP (RECID,CODE,DESCR,FLAG,NUMBER) VALUES(20000,'1','GTIN-13','Y',1)
+-GO-
+INSERT INTO GENLOOKUP (RECID,CODE,DESCR,FLAG,NUMBER) VALUES(20000,'2','GTIN-14','Y',2)
+-GO-
+INSERT INTO GENLOOKUP (RECID,CODE,DESCR,FLAG,NUMBER) VALUES(20000,'3','GTIN-12','Y',3)
+-GO-
+INSERT INTO GENLOOKUP (RECID,CODE,DESCR,FLAG,NUMBER) VALUES(20000,'4','GTIN-8','Y',4)
+-GO-
+INSERT INTO GENLOOKUP (RECID,CODE,DESCR,FLAG,NUMBER) VALUES(19000,'1','prjStkGenFw.clsDllHandler','Y',0)
+-GO-
+INSERT INTO GENLOOKUP (RECID,CODE,DESCR,FLAG,NUMBER) VALUES(19100,'1','prjGenStockNo.clsGenStockNo','Y',0)
+-GO-
+INSERT INTO GENLOOKUP (RECID,CODE,DESCR,FLAG,NUMBER) VALUES(19100,'2','prjGenEAN13.clsGenEAN','Y',0)
+-GO-
+Insert Into Genlookup Values (20100,'2100','Sale','0',1,'',0,'.','')
+-GO-
+Insert Into Genlookup Values (20100,'1300','Sales Return','0',2,'',0,'.','')
+-GO-
+Insert Into Genlookup Values (20100,'23','Cash Payout','0',3,'',0,'.','')
+-GO-
+Insert Into Genlookup Values (20100,'13','Cash Receipt','0',4,'',0,'.','')
+-GO-
+Insert Into Genlookup Values (20100,'10003','Cash Lift','0',5,'',0,'.','')
+-GO-
+Insert Into Genlookup Values (20100,'10002','Opening Balance','0',6,'',0,'.','')
+-GO-
+Insert Into Genlookup Values (20100,'10005','Till Reconciliation','1',7,'',0,'.','')
+-GO- 
+Insert Into Sysparam Values('SR6-0901-0000345','Denomination Applicable','DenominationApplicable',0,0,null,null,0,0,'B','',0,'.','')
+-GO-
+Insert Into SysparamExtd Values('SR6-0901-0000345','DenominationApplicable','Variable',0,'01. Setup','This Gives Setup Parameters',31,'',0,'.','')
+-GO-
+Update Sysparam Set Vactr = (select intg from [DBO].sysparam where paramcode = 'VaSysCounter') Where ParamCode = 'DenominationApplicable'
+-GO-
+Insert Into CurrencyDenomination (Code,SrlNo,DenomCap,Denominations,SmallestUnit,Active,ImageId,VAUid,VActr ,VATermId ,VACompCode) select Top 1 Code,1,'1000 x',1000,1000,1,'','',0,'.','' from currencycat where localcurrency=1
+-GO-
+Insert Into CurrencyDenomination (Code,SrlNo,DenomCap,Denominations,SmallestUnit,Active,ImageId,VAUid,VActr ,VATermId ,VACompCode) select Top 1 Code,2,'500 x',500,500,1,'','',0,'.','' from currencycat where localcurrency=1
+-GO-
+Insert Into CurrencyDenomination (Code,SrlNo,DenomCap,Denominations,SmallestUnit,Active,ImageId,VAUid,VActr ,VATermId ,VACompCode) select Top 1 Code,3,'100 x',100,100,1,'','',0,'.','' from currencycat where localcurrency=1
+-GO-
+Insert Into CurrencyDenomination (Code,SrlNo,DenomCap,Denominations,SmallestUnit,Active,ImageId,VAUid,VActr ,VATermId ,VACompCode) select Top 1 Code,4,'50 x',50,50,1,'','',0,'.','' from currencycat where localcurrency=1
+-GO-
+Insert Into CurrencyDenomination (Code,SrlNo,DenomCap,Denominations,SmallestUnit,Active,ImageId,VAUid,VActr ,VATermId ,VACompCode) select Top 1 Code,5,'20 x',20,20,1,'','',0,'.','' from currencycat where localcurrency=1
+-GO-
+Insert Into CurrencyDenomination (Code,SrlNo,DenomCap,Denominations,SmallestUnit,Active,ImageId,VAUid,VActr ,VATermId ,VACompCode) select Top 1 Code,6,'10 x',10,10,1,'','',0,'.','' from currencycat where localcurrency=1
+-GO-
+Insert Into CurrencyDenomination (Code,SrlNo,DenomCap,Denominations,SmallestUnit,Active,ImageId,VAUid,VActr ,VATermId ,VACompCode) select Top 1 Code,7,'Others',0,0,1,'','',0,'.','' from currencycat where localcurrency=1
+-GO-
+Update CurrencyDenomination Set Vactr = (select intg from [DBO].sysparam where paramcode = 'VaSysCounter')
+-GO-
+INSERT INTO [ItemReClassConfig] Values('FL0001','StockNo','Stock No','Stock No',1,1,1,0,'','Varchar','Varchar',32,'CellTypeStaticText','CellTypeStaticText',0,1,'1000',0,'',0,'.','')
+-GO-
+insert into [ItemReClassConfig] Values ('FL0002','BatchSrlNo','Batch SrlNo','Batch SrlNo',2,0,2,0,'','Varchar','Varchar',16,'CellTypeEdit','CellTypeEdit',0,0,'1000',0,'',0,'.','')
+-GO-
+insert into [ItemReClassConfig] Values ('FL0003','Class1Cd','Product','Product',3,1,3,1,'','VarChar','Varchar',16,'CellTypeComboBox','CellTypeComboBox',1,1,'1100',1,'',0,'.','')
+-GO-
+insert into [ItemReClassConfig] Values ('FL0004','Class2Cd','Brand','Brand',4,1,4,1,'','VarChar','VarChar',16,'CellTypeComboBox','CellTypeComboBox',1,1,'1100',1,'',0,'.','')
+-GO-
+insert into [ItemReClassConfig] Values ('FL0005','SubClass1Cd','Quality','Quality',5,1,5,1,'','Varchar','Varchar',16,'CellTypeComboBox','CellTypeComboBox',1,1,'1000',0,'',0,'.','')
+-GO-
+insert into [ItemReClassConfig] Values ('FL0006','SubClass2Cd','Shade','Shade',6,1,6,1,'','Varchar','Varchar',16,'CellTypeComboBox','CellTypeComboBox',1,1,'1000',0,'',0,'.','')
+-GO-
+insert into [ItemReClassConfig] Values ('FL0007','SizeCd','Size Code','Size Code',7,1,7,1,'','Varchar','Varchar',16,'CellTypeComboBox','CellTypeComboBox',1,1,'1000',0,'',0,'.','')
+-GO-
+insert into [ItemReClassConfig] Values ('FL0008','LeastSalableQty','L.S.Q','L.S.Q',8,1,8,0,'','Money','Money',8,'CellTypeCurrency','CellTypeCurrency',0,1,'1000',0,'',0,'.','')
+-GO-
+insert into [ItemReClassConfig] Values ('FL0009','UseJwlPricing','UseJwlPricing','UseJwlPricing',9,0,9,0,'','Int','Int',1,'CellTypeComboBox','CellTypeComboBox',0,0,'1000',0,'',0,'.','')
+-GO-
+insert into [ItemReClassConfig] Values ('FL0010','Retail_Price','Retail Price','Retail Price',10,1,10,0,'','Money','Money',8,'CellTypeCurrency','CellTypeCurrency',0,1,'1000',0,'',0,'.','')
+-GO-
+insert into [ItemReClassConfig] Values ('FL0011','Dealer_Price','Dealer Price','Dealer Price',11,1,11,0,'','Money','Money',8,'CellTypeCurrency','CellTypeCurrency',0,1,'1000',0,'',0,'.','')
+-GO-
+insert into [ItemReClassConfig] Values ('FL0012','ProdTaxType','Product Tax','Product Tax',12,1,12,0,'','Varchar','Varchar',16,'CellTypeComboBox','CellTypeComboBox',0,1,'1000',0,'',0,'.','')
+-GO-
+insert into [ItemReClassConfig] Values ('FL0013','SrcTaxType','Source Tax','Source Tax',13,0,13,0,'','Varchar','Varchar',16,'CellTypeComboBox','CellTypeComboBox',0,0,'1000',0,'',0,'.','')
+-GO-
+insert into [ItemReClassConfig] Values ('FL0014','IsInventoryItem','Inventory (Y/N)','Inventory (Y/N)',14,1,14,0,'','Boolean','Boolean',1,'CellTypeComboBox','CellTypeComboBox',0,0,'1000',0,'',0,'.','')
+-GO-
+insert into [ItemReClassConfig] Values ('FL0015','IsRPTaxInclusive','Tax Inc. (Y/N)','Tax Inc. (Y/N)',15,1,15,0,'','Boolean','Boolean',1,'CellTypeComboBox','CellTypeComboBox',0,1,'1000',0,'',0,'.','')
+-GO-
+insert into [ItemReClassConfig] Values ('FL0016','ItemDesc','Item Description','Item Description',16,0,16,0,'','Varchar','Varchar',60,'CellTypeEdit','CellTypeEdit',0,0,'1000',0,'',0,'.','')
+-GO-
+insert into [ItemReClassConfig] Values ('FL0017','ExtDescPresent','ExtDescPresent','ExtDescPresent',17,0,17,0,'','Int','Int',1,'CellTypeNumber','CellTypeNumber',0,0,'1000',0,'',0,'.','')
+-GO-
+insert into [ItemReClassConfig] Values ('FL0018','RegularInd','Regular Item','Regular Item',18,0,18,0,'','Int','Int',1,'CellTypeComboBox','CellTypeComboBox',0,0,'1000',0,'',0,'.','')
+-GO-
+insert into [ItemReClassConfig] Values ('FL0019','ReordLvl','Reorder Level','Reorder Level',19,0,19,0,'','Real','Real',4,'CellTypeNumber','CellTypeNumber',0,0,'1000',0,'',0,'.','')
+-GO-
+insert into [ItemReClassConfig] Values ('FL0020','EOQ','E.O.Q','E.O.Q',20,0,20,0,'','Real','Real',4,'CellTypeNumber','CellTypeNumber',0,0,'1000',0,'',0,'.','')
+-GO-
+insert into [ItemReClassConfig] Values ('FL0021','MinOrdQty','M.O.Q','M.O.Q',21,0,21,0,'','Real','Real',4,'CellTypeNumber','CellTypeNumber',0,0,'1000',0,'',0,'.','')
+-GO-
+insert into [ItemReClassConfig] Values ('FL0022','LastPurchPrice','Last Purc.Price','Last Purc.Price',22,0,22,0,'','Money','Money',8,'CellTypeCurrency','CellTypeCurrency',0,0,'1000',0,'',0,'.','')
+-GO-
+insert into [ItemReClassConfig] Values ('FL0023','CurrentCost','Cost Price','Cost Price',23,0,23,0,'','Money','Money',8,'CellTypeCurrency','CellTypeCurrency',0,0,'1000',0,'',0,'.','')
+-GO-
+insert into [ItemReClassConfig] Values ('FL0024','JwlMetalInd','JwlMetalInd','JwlMetalInd',24,0,24,0,'','Varchar','Varchar',2,'CellTypeEdit','CellTypeEdit',0,0,'1000',0,'',0,'.','')
+-GO-
+insert into [ItemReClassConfig] Values ('FL0025','JwlCaratage','JwlCaratage','JwlCaratage',25,0,25,0,'','Int','Int',4,'CellTypeNumber','CellTypeNumber',0,0,'1000',0,'',0,'.','')
+-GO-
+insert into [ItemReClassConfig] Values ('FL0026','JwlGrossWt','JwlGrossWt','JwlGrossWt',26,0,26,0,'','Real','Real',4,'CellTypeNumber','CellTypeNumber',0,0,'1000',0,'',0,'.','')
+-GO-
+insert into [ItemReClassConfig] Values ('FL0027','JwlStoneWt','JwlStoneWt','JwlStoneWt',27,0,27,0,'','Real','Real',4,'CellTypeNumber','CellTypeNumber',0,0,'1000',0,'',0,'.','')
+-GO-
+insert into [ItemReClassConfig] Values ('FL0028','JwlWtFactor','JwlWtFactor','JwlWtFactor',28,0,28,0,'','Real','Real',4,'CellTypeNumber','CellTypeNumber',0,0,'1000',0,'',0,'.','')
+-GO-
+insert into [ItemReClassConfig] Values ('FL0029','JwlRateFactor','JwlRateFactor','JwlRateFactor',29,0,29,0,'','Money','Money',8,'CellTypeCurrency','CellTypeCurrency',0,0,'1000',0,'',0,'.','')
+-GO-
+insert into [ItemReClassConfig] Values ('FL0030','JwlStoneVal','JwlStoneVal','JwlStoneVal',30,0,30,0,'','Money','Money',8,'CellTypeCurrency','CellTypeCurrency',0,0,'1000',0,'',0,'.','')
+-GO-
+insert into [ItemReClassConfig] Values ('FL0031','JwlMakeCharge','JwlMakeCharge','JwlMakeCharge',31,0,31,0,'','Money','Money',8,'CellTypeCurrency','CellTypeCurrency',0,0,'1000',0,'',0,'.','')
+-GO-
+insert into [ItemReClassConfig] Values ('FL0032','JwlValFactor','JwlValFactor','JwlValFactor',32,0,32,0,'','Money','Money',8,'CellTypeCurrency','CellTypeCurrency',0,0,'1000',0,'',0,'.','')
+-GO-
+insert into [ItemReClassConfig] Values ('FL0033','AnalCode1','Shade Code','Shade Code',33,1,33,1,'','Varchar','Varchar',16,'CellTypeComboBox','CellTypeComboBox',1,0,'1100',1,'',0,'.','')
+-GO-
+insert into [ItemReClassConfig] Values ('FL0034','AnalCode2','Blend','Blend',34,1,34,1,'','Varchar','Varchar',16,'CellTypeComboBox','CellTypeComboBox',1,0,'1100',1,'',0,'.','')
+-GO-
+insert into [ItemReClassConfig] Values ('FL0035','AnalCode3','Styling','Styling',35,1,35,1,'','Varchar','Varchar',16,'CellTypeComboBox','CellTypeComboBox',1,0,'1100',1,'',0,'.','')
+-GO-
+insert into [ItemReClassConfig] Values ('FL0036','AnalCode4','IA4','IA4',36,1,36,1,'','Varchar','Varchar',16,'CellTypeComboBox','CellTypeComboBox',1,0,'1100',1,'',0,'.','')
+-GO-
+insert into [ItemReClassConfig] Values ('FL0037','AnalCode5','IA5','IA5',37,1,37,1,'','Varchar','Varchar',16,'CellTypeComboBox','CellTypeComboBox',1,0,'1100',1,'',0,'.','')
+-GO-
+insert into [ItemReClassConfig] Values ('FL0038','MfgDate','Mfg. Date','Mfg. Date',38,0,38,0,'','DateTime','DateTime',8,'CellTypeDate','CellTypeDate',0,0,'1000',0,'',0,'.','')
+-GO-
+insert into [ItemReClassConfig] Values ('FL0039','ExpDate','Exp. Date','Exp. Date',39,0,39,0,'','DateTime','DateTime',8,'CellTypeDate','CellTypeDate',0,0,'1000',0,'',0,'.','')
+-GO-
+insert into [ItemReClassConfig] Values ('FL0040','ShelfLife','Shelf Life','Shelf Life',40,0,40,0,'','Int','Int',4,'CellTypeNumber','CellTypeNumber',0,0,'1000',0,'',0,'.','')
+-GO-
+insert into [ItemReClassConfig] Values ('FL0041','ImagePresent','Image Present','Image Present',41,0,41,0,'','Boolean','Boolean',1,'CellTypeComboBox','CellTypeComboBox',0,0,'1000',0,'',0,'.','')
+-GO-
+insert into [ItemReClassConfig] Values ('FL0042','IsBillable','Billable (Y/N)','Billable (Y/N)',42,1,42,1,'','Boolean','Boolean',1,'CellTypeComboBox','CellTypeComboBox',0,1,'1000',0,'',0,'.','')
+-GO-
+insert into [ItemReClassConfig] Values ('FL0043','IsService','Service (Y/N)','Service (Y/N)',43,1,43,1,'','Boolean','Boolean',1,'CellTypeComboBox','CellTypeComboBox',0,1,'1000',0,'',0,'.','')
+-GO-
+insert into [ItemReClassConfig] Values ('FL0044','RtlMarkUp','Retail Markup','Retail Markup',44,0,44,0,'','Money','Money',8,'CellTypeCurrency','CellTypeCurrency',0,0,'1000',0,'',0,'.','')
+-GO-
+insert into [ItemReClassConfig] Values ('FL0045','DlrMarkUp','Dealer Markup','Dealer Markup',45,0,45,0,'','Money','Money',8,'CellTypeCurrency','CellTypeCurrency',0,0,'1000',0,'',0,'.','')
+-GO-
+insert into [ItemReClassConfig] Values ('FL0046','VAUid','User Id','User Id',46,0,46,0,'','Varchar','Varchar',32,'CellTypeEdit','CellTypeEdit',0,0,'1000',0,'',0,'.','')
+-GO-
+insert into [ItemReClassConfig] Values ('FL0047','VActr','VA Control','VA Control',47,0,47,0,'','Int','Int',4,'CellTypeNumber','CellTypeNumber',0,0,'1000',0,'',0,'.','')
+-GO-
+insert into [ItemReClassConfig] Values ('FL0048','VATermId','Terminal Id','Terminal Id',48,0,48,0,'','Varchar','Varchar',32,'CellTypeEdit','CellTypeEdit',0,0,'1000',0,'',0,'.','')
+-GO-
+insert into [ItemReClassConfig] Values ('FL0049','VACompCode','Comp. Code','Comp. Code',49,0,49,0,'','Varchar','Varchar',16,'CellTypeEdit','CellTypeEdit',0,0,'1000',0,'',0,'.','')
+-GO-
+insert into [ItemReClassConfig] Values ('FL0050','CCStockNo','CC Stock No','CC Stock No',50,0,50,0,'','Varchar','Varchar',40,'CellTypeStaticText','CellTypeStaticText',0,0,'1000',0,'',0,'.','')
+-GO-
+insert into [ItemReClassConfig] Values ('FL0051','GradeCd','Grade Cd','Grade Cd',51,0,51,0,'','Varchar','Varchar',16,'CellTypeEdit','CellTypeEdit',0,0,'1000',0,'',0,'.','')
+-GO-
+insert into [ItemReClassConfig] values ('FL0052','ImageId','Image Id','Image Id',52,0,52,0,'','Varchar','Varchar',256,'CellTypeEdit','CellTypeEdit',0,0,'1000',0,'',0,'.','')
+-GO-
+insert into [ItemReClassConfig] values ('FL0053','MerchId','Merch. Id','Merch. Id',53,0,53,0,'','Varchar','Varchar',16,'CellTypeEdit','CellTypeEdit',0,0,'1000',0,'',0,'.','')
+-GO-
+insert into [ItemReClassConfig] values ('FL0054','DiscId','DiscId','DiscId',54,0,54,0,'','NA','NA',0,'NA','NA',0,0,'1000',0,'',0,'.','')
+-GO-
+insert into [ItemReClassConfig] values ('FL0055','DiscPer','DiscPer','DiscPer',55,0,55,0,'','NA','NA',0,'NA','NA',0,0,'1000',0,'',0,'.','')
+-GO-
+insert into [ItemReClassConfig] values ('FL0056','DiscAmt','DiscAmt','DiscAmt',56,0,56,0,'','NA','NA',0,'NA','NA',0,0,'1000',0,'',0,'.','')
+-GO-
+insert into [ItemReClassConfig] values ('FL0057','DiscSQLQry','DiscSQLQry','DiscSQLQry',57,0,57,0,'','NA','NA',0,'NA','NA',0,0,'1000',0,'',0,'.','')
+-GO-
+insert into [ItemReClassConfig] values ('FL0058','PriceFactorId','PriceFactorId','PriceFactorId',58,0,58,0,'','NA','NA',0,'NA','NA',0,0,'1000',0,'',0,'.','')
+-GO-
+insert into [ItemReClassConfig] values ('FL0059','PriceFactorPer','PriceFactorPer','PriceFactorPer',59,0,59,0,'','NA','NA',0,'NA','NA',0,0,'1000',0,'',0,'.','')
+-GO-
+insert into [ItemReClassConfig] values ('FL0060','PriceFactorAmt','PriceFactorAmt','PriceFactorAmt',60,0,60,0,'','NA','NA',0,'NA','NA',0,0,'1000',0,'',0,'.','')
+-GO-
+insert into [ItemReClassConfig] values ('FL0061','PriceFactorSQLQry','PriceFactorSQLQry','PriceFactorSQLQry',61,0,61,0,'','NA','NA',0,'NA','NA',0,0,'1000',0,'',0,'.','')
+-GO-
+insert into [ItemReClassConfig] values ('FL0062','AddonId','AddonId','AddonId',62,0,62,0,'','NA','NA',0,'NA','NA',0,0,'1000',0,'',0,'.','')
+-GO-
+insert into [ItemReClassConfig] values ('FL0063','AddonPer','AddonPer','AddonPer',63,0,63,0,'','NA','NA',0,'NA','NA',0,0,'1000',0,'',0,'.','')
+-GO-
+insert into [ItemReClassConfig] values ('FL0064','AddonSQLQry','AddonSQLQry','AddonSQLQry',64,0,64,0,'','NA','NA',0,'NA','NA',0,0,'1000',0,'',0,'.','')
+-GO-
+insert into [ItemReClassConfig] values ('FL0065','DednId','DednId','DednId',65,0,65,0,'','NA','NA',0,'NA','NA',0,0,'1000',0,'',0,'.','')
+-GO-
+insert into [ItemReClassConfig] values ('FL0066','DednPer','DednPer','DednPer',66,0,66,0,'','NA','NA',0,'NA','NA',0,0,'1000',0,'',0,'.','')
+-GO-
+insert into [ItemReClassConfig] values ('FL0067','DednAmt','DednAmt','DednAmt',67,0,67,0,'','NA','NA',0,'NA','NA',0,0,'1000',0,'',0,'.','')
+-GO-
+insert into [ItemReClassConfig] values ('FL0068','DednSQLQry','DednSQLQry','DednSQLQry',68,0,68,0,'','NA','NA',0,'NA','NA',0,0,'1000',0,'',0,'.','')
+-GO-
+insert into [ItemReClassConfig] values ('FL0069','EDId','EDId','EDId',69,0,69,0,'','NA','NA',0,'NA','NA',0,0,'1000',0,'',0,'.','')
+-GO-
+insert into [ItemReClassConfig] values ('FL0070','EDPer','EDPer','EDPer',70,0,70,0,'','NA','NA',0,'NA','NA',0,0,'1000',0,'',0,'.','')
+-GO-
+insert into [ItemReClassConfig] values ('FL0071','EDAmt','EDAmt','EDAmt',71,0,71,0,'','NA','NA',0,'NA','NA',0,0,'1000',0,'',0,'.','')
+-GO-
+insert into [ItemReClassConfig] values ('FL0072','EDSQLQry','EDSQLQry','EDSQLQry',72,0,72,0,'','NA','NA',0,'NA','NA',0,0,'1000',0,'',0,'.','')
+-GO-
+insert into [ItemReClassConfig] values ('FL0073','FinalMRP','FinalMRP','FinalMRP',73,0,73,0,'','NA','NA',0,'NA','NA',0,0,'1000',0,'',0,'.','')
+-GO-
+insert into [ItemReClassConfig] values ('FL0074','IsConsignmentitem','Consignment(Y/N)','Consignment (Y/N)',74,0,74,0,'','Boolean','Boolean',1,'CellTypeComboBox','CellTypeComboBox',0,0,'1000',0,'',0,'.','')
+-GO-
+insert into [ItemReClassConfig] values ('FL0075','SField1','SField1','SField1',75,0,75,0,'','NA','NA',0,'NA','NA',0,0,'1000',0,'',0,'.','')
+-GO-
+insert into [ItemReClassConfig] values ('FL0076','SField2','SField2','SField2',76,0,76,0,'','NA','NA',0,'NA','NA',0,0,'1000',0,'',0,'.','')
+-GO-
+insert into [ItemReClassConfig] values ('FL0077','SField3','SField3','SField3',77,0,77,0,'','NA','NA',0,'NA','NA',0,0,'1000',0,'',0,'.','')
+-GO-
+insert into [ItemReClassConfig] values ('FL0078','SField4','SField4','SField4',78,0,78,0,'','NA','NA',0,'NA','NA',0,0,'1000',0,'',0,'.','')
+-GO-
+insert into [ItemReClassConfig] values ('FL0079','SField5','SField5','SField5',79,0,79,0,'','NA','NA',0,'NA','NA',0,0,'1000',0,'',0,'.','')
+-GO-
+insert into [ItemReClassConfig] values ('FL0080','NField1','NField1','NField1',80,0,80,0,'','NA','NA',0,'NA','NA',0,0,'1000',0,'',0,'.','')
+-GO-
+insert into [ItemReClassConfig] values ('FL0081','NField2','NField2','NField2',81,0,81,0,'','NA','NA',0,'NA','NA',0,0,'1000',0,'',0,'.','')
+-GO-
+insert into [ItemReClassConfig] values ('FL0082','NField3','NField3','NField3',82,0,82,0,'','NA','NA',0,'NA','NA',0,0,'1000',0,'',0,'.','')
+-GO-
+insert into [ItemReClassConfig] values ('FL0083','NField4','NField4','NField4',83,0,83,0,'','NA','NA',0,'NA','NA',0,0,'1000',0,'',0,'.','')
+-GO-
+insert into [ItemReClassConfig] values ('FL0084','NField5','NField5','NField5',84,0,84,0,'','NA','NA',0,'NA','NA',0,0,'1000',0,'',0,'.','')
+-GO-
+insert into [ItemReClassConfig] values ('FL0085','DField1','DField1','DField1',85,0,85,0,'','NA','NA',0,'NA','NA',0,0,'1000',0,'',0,'.','')
+-GO-
+insert into [ItemReClassConfig] values ('FL0086','DField2','DField2','DField2',86,0,86,0,'','NA','NA',0,'NA','NA',0,0,'1000',0,'',0,'.','')
+-GO-
+insert into [ItemReClassConfig] values ('FL0087','DField3','DField3','DField3',87,0,87,0,'','NA','NA',0,'NA','NA',0,0,'1000',0,'',0,'.','')
+-GO-
+insert into [ItemReClassConfig] values ('FL0088','BField1','BField1','BField1',88,0,88,0,'','NA','NA',0,'NA','NA',0,0,'1000',0,'',0,'.','')
+-GO-
+insert into [ItemReClassConfig] values ('FL0089','BField2','BField2','BField2',89,0,89,0,'','NA','NA',0,'NA','NA',0,0,'1000',0,'',0,'.','')
+-GO-
+insert into [ItemReClassConfig] values ('FL0090','Addonamt','Addonamt','Addonamt',90,0,90,0,'','NA','NA',0,'NA','NA',0,0,'1000',0,'',0,'.','')
+-GO-
+insert into [ItemReClassConfig] values ('FL0091','FlgStockTake','StockTake Flag','StockTake Flag',91,0,91,0,'','NA','NA',0,'NA','NA',0,0,'1000',0,'',0,'.','')
+-GO-
+insert into [ItemReClassConfig] values ('FL0092','ANALCODE6','ANALCODE6','ANALCODE6',92,1,92,1,'','Varchar','Varchar',16,'CellTypeComboBox','CellTypeComboBox',1,0,'1100',1,'',0,'.','')
+-GO-
+insert into [ItemReClassConfig] values ('FL0093','ANALCODE7','ANALCODE7','ANALCODE7',93,1,93,1,'','Varchar','Varchar',16,'CellTypeComboBox','CellTypeComboBox',1,0,'1100',1,'',0,'.','')
+-GO-
+insert into [ItemReClassConfig] values ('FL0094','ANALCODE8','ANALCODE8','ANALCODE8',94,1,94,1,'','Varchar','Varchar',16,'CellTypeComboBox','CellTypeComboBox',1,0,'1100',1,'',0,'.','')
+-GO-
+insert into [ItemReClassConfig] values ('FL0095','ANALCODE9','ANALCODE9','ANALCODE9',95,1,95,1,'','Varchar','Varchar',16,'CellTypeComboBox','CellTypeComboBox',1,0,'1100',1,'',0,'.','')
+-GO-
+insert into [ItemReClassConfig] values ('FL0096','ANALCODE10','ANALCODE10','ANALCODE10',96,1,96,1,'','Varchar','Varchar',16,'CellTypeComboBox','CellTypeComboBox',1,0,'1100',1,'',0,'.','')
+-GO-
+insert into [ItemReClassConfig] values ('FL0097','ANALCODE11','ANALCODE11','ANALCODE11',97,1,97,1,'','Varchar','Varchar',16,'CellTypeComboBox','CellTypeComboBox',1,0,'1100',1,'',0,'.','')
+-GO-
+insert into [ItemReClassConfig] values ('FL0098','ANALCODE12','ANALCODE12','ANALCODE12',98,1,98,1,'','Varchar','Varchar',16,'CellTypeComboBox','CellTypeComboBox',1,0,'1100',1,'',0,'.','')
+-GO-
+insert into [ItemReClassConfig] values ('FL0099','ANALCODE13','ANALCODE13','ANALCODE13',99,1,99,1,'','Varchar','Varchar',16,'CellTypeComboBox','CellTypeComboBox',1,0,'1100',1,'',0,'.','')
+-GO-
+insert into [ItemReClassConfig] values ('FL0100','ANALCODE14','ANALCODE14','ANALCODE14',100,1,100,1,'','Varchar','Varchar',16,'CellTypeComboBox','CellTypeComboBox',1,0,'1100',1,'',0,'.','')
+-GO-
+insert into [ItemReClassConfig] values ('FL0101','ANALCODE15','ANALCODE15','ANALCODE15',101,1,101,1,'','Varchar','Varchar',16,'CellTypeComboBox','CellTypeComboBox',1,0,'1100',1,'',0,'.','')
+-GO-
+insert into [ItemReClassConfig] values ('FL0102','ANALCODE16','ANALCODE16','ANALCODE16',102,1,102,1,'','Varchar','Varchar',16,'CellTypeComboBox','CellTypeComboBox',1,0,'1100',1,'',0,'.','')
+-GO-
+insert into [ItemReClassConfig] values ('FL0103','ANALCODE17','ANALCODE17','ANALCODE17',103,1,103,1,'','Varchar','Varchar',16,'CellTypeComboBox','CellTypeComboBox',1,0,'1100',1,'',0,'.','')
+-GO-
+insert into [ItemReClassConfig] values ('FL0104','ANALCODE18','ANALCODE18','ANALCODE18',104,1,104,1,'','Varchar','Varchar',16,'CellTypeComboBox','CellTypeComboBox',1,0,'1100',1,'',0,'.','')
+-GO-
+insert into [ItemReClassConfig] values ('FL0105','ANALCODE19','ANALCODE19','ANALCODE19',105,1,105,1,'','Varchar','Varchar',16,'CellTypeComboBox','CellTypeComboBox',1,0,'1100',1,'',0,'.','')
+-GO-
+insert into [ItemReClassConfig] values ('FL0106','ANALCODE20','ANALCODE20','ANALCODE20',106,1,106,1,'','Varchar','Varchar',16,'CellTypeComboBox','CellTypeComboBox',1,0,'1100',1,'',0,'.','')
+-GO-
+insert into [ItemReClassConfig] values ('FL0107','ANALCODE21','ANALCODE21','ANALCODE21',107,1,107,1,'','Varchar','Varchar',16,'CellTypeComboBox','CellTypeComboBox',1,0,'1100',1,'',0,'.','')
+-GO-
+insert into [ItemReClassConfig] values ('FL0108','ANALCODE22','ANALCODE22','ANALCODE22',108,1,108,1,'','Varchar','Varchar',16,'CellTypeComboBox','CellTypeComboBox',1,0,'1100',1,'',0,'.','')
+-GO-
+insert into [ItemReClassConfig] values ('FL0109','ANALCODE23','ANALCODE23','ANALCODE23',109,1,109,1,'','Varchar','Varchar',16,'CellTypeComboBox','CellTypeComboBox',1,0,'1100',1,'',0,'.','')
+-GO-
+insert into [ItemReClassConfig] values ('FL0110','ANALCODE24','ANALCODE24','ANALCODE24',110,1,110,1,'','Varchar','Varchar',16,'CellTypeComboBox','CellTypeComboBox',1,0,'1100',1,'',0,'.','')
+-GO-
+insert into [ItemReClassConfig] values ('FL0111','ANALCODE25','ANALCODE25','ANALCODE25',111,1,111,1,'','Varchar','Varchar',16,'CellTypeComboBox','CellTypeComboBox',1,0,'1100',1,'',0,'.','')
+-GO-
+insert into [ItemReClassConfig] values ('FL0112','ANALCODE26','ANALCODE26','ANALCODE26',112,1,112,1,'','Varchar','Varchar',16,'CellTypeComboBox','CellTypeComboBox',1,0,'1100',1,'',0,'.','')
+-GO-
+insert into [ItemReClassConfig] values ('FL0113','ANALCODE27','ANALCODE27','ANALCODE27',113,1,113,1,'','Varchar','Varchar',16,'CellTypeComboBox','CellTypeComboBox',1,0,'1100',1,'',0,'.','')
+-GO-
+insert into [ItemReClassConfig] values ('FL0114','ANALCODE28','ANALCODE28','ANALCODE28',114,1,114,1,'','Varchar','Varchar',16,'CellTypeComboBox','CellTypeComboBox',1,0,'1100',1,'',0,'.','')
+-GO-
+insert into [ItemReClassConfig] values ('FL0115','ANALCODE29','ANALCODE29','ANALCODE29',115,1,115,1,'','Varchar','Varchar',16,'CellTypeComboBox','CellTypeComboBox',1,0,'1100',1,'',0,'.','')
+-GO-
+insert into [ItemReClassConfig] values ('FL0116','ANALCODE30','ANALCODE30','ANALCODE30',116,1,116,1,'','Varchar','Varchar',16,'CellTypeComboBox','CellTypeComboBox',1,0,'1100',1,'',0,'.','')
+-GO-
+insert into [ItemReClassConfig] values ('FL0117','ANALCODE31','ANALCODE31','ANALCODE31',117,1,117,1,'','Varchar','Varchar',16,'CellTypeComboBox','CellTypeComboBox',1,0,'1100',1,'',0,'.','')
+-GO-
+insert into [ItemReClassConfig] values ('FL0118','ANALCODE32','ANALCODE32','ANALCODE32',118,1,118,1,'','Varchar','Varchar',16,'CellTypeComboBox','CellTypeComboBox',1,0,'1100',1,'',0,'.','')
+-GO-
+insert into [ItemReClassConfig] values ('FL0119','FlgRateAlterable','FlgRateAlterable','FlgRateAlterable',119,0,119,0,'','Boolean','Boolean',1,'CellTypeComboBox','CellTypeComboBox',0,0,'1000',0,'',0,'.','')
+-GO- 
+insert into [ItemReClassConfig] values ('FL0120','FlgStockChkAppl','FlgStockChkAppl','FlgStockChkAppl',120,0,120,0,'','Boolean','Boolean',1,'CellTypeComboBox','CellTypeComboBox',0,0,'1000',0,'',0,'.','')
+-GO- 
+insert into [ItemReClassConfig] values ('FL0121','StockTolerance','StockTolerance','StockTolerance',121,0,121,0,'','Money','Money',8,'CellTypeCurrency','CellTypeCurrency',0,0,'1000',0,'',0,'.','')
+-GO-
+insert into [ItemReClassConfig] values ('FL0122','Dateinsert','Dateinsert','Dateinsert',122,0,122,0,'','DateTime','DateTime',8,'CellTypeDate','CellTypeDate',0,0,'1000',0,'',0,'.','')
+-GO-
+insert into [ItemReClassConfig] values ('FL0123','Lastupdateddate','Lastupdateddate','Lastupdateddate',123,0,123,0,'','DateTime','DateTime',8,'CellTypeDate','CellTypeDate',0,0,'1000',0,'',0,'.','')
+-GO-
+Update [DBO].[ItemReClassConfig] Set Vactr = (select intg from [DBO].sysparam where paramcode = 'VaSysCounter') 
+-GO-
+Insert Into GenLookUp (Recid,Code,Descr,Flag) Values (14300,'ASTIMPORT+PROGRAMEND+1','SR539500.clsItemReClassApply',1)
+-GO-
+Insert Into GenLookUp (Recid,Code,Descr,Flag) Values (14300,'ITEMRECLASSPOS+POS+1','SR539500.clsItemReClassApply',1)
+-GO-
+Insert Into GenLookUp (Recid,Code,Descr,Flag) Values (14300,'IRCRUNINMENU+POS+1','SR539500.clsItemReClassApply',1)
+-GO-
+Insert Into GenLookUp (Recid,Code,Descr,Flag) Values (14300,'RUNINDAYBEGIN+POS+1','SR539500.clsItemReClassApply',1)
+-GO-
+Update [DBO].[GenLookUp]  Set Vactr = (select intg from [DBO].sysparam where paramcode = 'VaSysCounter') Where RecId In (14300,20000,19000,19100,20100)
+-GO-
+update pospaymodes set tenderpervalue=1 where paymodetype in (2,3,6,7,8,10)
+-GO-
+
+  </s9qScript>
+</s9qsqlblk>
+
+<s9qsqlblk>
+  <s9qScriptid>	S9Q_016_9_0003	</s9qScriptid>
+  <s9qtitle>All DDL Statements.</s9qtitle>
+  <s9qpgmtype>I</s9qpgmtype>
+  <s9qpgmtype>L</s9qpgmtype>
+  <s9qversion>*</s9qversion>
+  <s9qenvironment>H</s9qenvironment>
+  <s9qenvironment>P</s9qenvironment>
+  <s9qenvironment>R</s9qenvironment>
+  <s9qRunMultiple>1</s9qRunMultiple>
+  <s9qQryType>DDL</s9qQryType>
+  <s9qScript>
+
+INSERT INTO [DBO].VersionwiseTblsScript(VerID,SrlNo,TblScript,VAUid,VActr,VATermId,VACompCode) VALUES (9,18,'CREATE TABLE [dbo].GS1Dtls (SlNO  INT NOT NULL,GS1IdKey VarChar(16),GS1CompanyPrefix VarChar(32) NOT NULL,StartingNo INT NOT NULL,EndingNo INT NOT NULL,Class1Cd Varchar(16) NOT NULL,Class2Cd Varchar(16) NOT NULL,SubClass1Cd Varchar(16) ,SubClass2Cd Varchar(16) ,SizeCd Varchar(16) ,TotalBarCodesPresent int,TotalBarCodesUsed int,TotalBarCodesAvbl int,LastNoUsed int,Active int,DefaultPfx int, BarCodeLen int,DateInsert datetime,Remarks Varchar(255),VAUid Varchar(32),VActr int,VATermId Varchar(32),VACompCode Varchar(16))','',1,'.','')
+-GO-
+INSERT INTO [DBO].VersionwiseTblsScript(VerID,SrlNo,TblScript,VAUid,VActr,VATermId,VACompCode) VALUES (9,19,'CREATE TABLE [dbo].BakGS1Dtls (SlNO  INT NOT NULL,GS1IdKey VarChar(16),GS1CompanyPrefix VarChar(32) NOT NULL,StartingNo INT NOT NULL,EndingNo INT NOT NULL,Class1Cd Varchar(16) NOT NULL,Class2Cd Varchar(16) NOT NULL,SubClass1Cd Varchar(16) ,SubClass2Cd Varchar(16) ,SizeCd Varchar(16) ,TotalBarCodesPresent int,TotalBarCodesUsed int,TotalBarCodesAvbl int,LastNoUsed int,Active int,DefaultPfx int, BarCodeLen int,DateInsert datetime,Remarks Varchar(255),VAUid Varchar(32),VActr int,VATermId Varchar(32),VACompCode Varchar(16),UpdFlag VarChar(1))','',1,'.','')
+-GO-
+INSERT INTO [DBO].VersionwiseTblsScript(VerID,SrlNo,TblScript,VAUid,VActr,VATermId,VACompCode) VALUES (9,20,'ALTER TABLE [dbo].GS1Dtls ADD CONSTRAINT  PK_GS1Dtls  PRIMARY KEY   (SlNO,GS1CompanyPrefix,StartingNo,EndingNo,Class1Cd,Class2Cd)','',1,'.','')
+-GO-
+INSERT INTO [DBO].VersionwiseTblsScript(VerID,SrlNo,TblScript,VAUid,VActr,VATermId,VACompCode) VALUES (9,21,'Alter Table [dbo].CurrencyCat Add DecimalDesc Varchar(256)','',1,'.','')
+-GO-
+INSERT INTO [DBO].VersionwiseTblsScript(VerID,SrlNo,TblScript,VAUid,VActr,VATermId,VACompCode) VALUES (9,22,'Alter Table [dbo].CurrencyCat Add CurSymbol Varchar(64)','',1,'.','')
+-GO-
+INSERT INTO [DBO].VersionwiseTblsScript(VerID,SrlNo,TblScript,VAUid,VActr,VATermId,VACompCode) VALUES (9,23,'Alter Table [dbo].BakCurrencyCat Drop Column UpdFlag','',1,'.','')
+-GO-
+INSERT INTO [DBO].VersionwiseTblsScript(VerID,SrlNo,TblScript,VAUid,VActr,VATermId,VACompCode) VALUES (9,24,'Alter Table [dbo].BakCurrencyCat Add DecimalDesc Varchar(256)','',1,'.','')
+-GO-
+INSERT INTO [DBO].VersionwiseTblsScript(VerID,SrlNo,TblScript,VAUid,VActr,VATermId,VACompCode) VALUES (9,25,'Alter Table [dbo].BakCurrencyCat Add CurSymbol Varchar(64)','',1,'.','')
+-GO-
+INSERT INTO [DBO].VersionwiseTblsScript(VerID,SrlNo,TblScript,VAUid,VActr,VATermId,VACompCode) VALUES (9,26,'Alter Table [dbo].BakCurrencyCat Add UpdFlag Varchar(1)','',1,'.','')
+-GO-
+INSERT INTO [DBO].VersionwiseTblsScript(VerID,SrlNo,TblScript,VAUid,VActr,VATermId,VACompCode) VALUES (9,27,'create table [dbo].CurrencyDenomination (Code varchar(16) not null, SrlNo Int not null,DenomCap varchar(64),Denominations Int,SmallestUnit Int,Active Int,ImageId varchar(64),VAUid varchar(32),VActr int,VATermId varchar(32),VACompCode varchar(16))','',1,'.','')
+-GO-
+INSERT INTO [DBO].VersionwiseTblsScript(VerID,SrlNo,TblScript,VAUid,VActr,VATermId,VACompCode) VALUES (9,28,'create table [dbo].BakCurrencyDenomination (Code varchar(16) not null, SrlNo Int not null,DenomCap varchar(64),Denominations Int,SmallestUnit Int,Active Int,ImageId varchar(64),VAUid varchar(32),VActr int,VATermId varchar(32),VACompCode varchar(16),UpdFlag VarChar(1))','',1,'.','')
+-GO-
+INSERT INTO [DBO].VersionwiseTblsScript(VerID,SrlNo,TblScript,VAUid,VActr,VATermId,VACompCode) VALUES (9,29,'ALTER TABLE [dbo].[CurrencyDenomination] WITH NOCHECK ADD CONSTRAINT [PK_CurrencyDenomination] PRIMARY KEY CLUSTERED (	[Code],	[SrlNo])  ON [PRIMARY]','',1,'.','')
+-GO-
+INSERT INTO [DBO].VersionwiseTblsScript(VerID,SrlNo,TblScript,VAUid,VActr,VATermId,VACompCode) VALUES (9,30,'Create Table [dbo].[ItemReClassConfig] (FldId VarChar(16) Not Null,FldDBColName Varchar(128),FldTerminology VarChar(128),FldDefaultName VarChar(128),FilterOrder Int,FilterFlag Int,ReplaceOrder Int,ReplaceFlag Int,LoookupDtls VarChar(128),FilterDataType VarChar(64),ReplaceDataType VarChar(64),DataLen Int,FilterControlType VarChar(64),ReplaceControlType VarChar(64),AttribType int,PreviewFlag Int,AllowedOp Varchar(16),AllowedInSwap Varchar(16),VAUid Varchar(32),VActr int,VATermId Varchar(32),VACompCode vARCHAR(16))','',1,'.','')
+-GO-
+INSERT INTO [DBO].VersionwiseTblsScript(VerID,SrlNo,TblScript,VAUid,VActr,VATermId,VACompCode) VALUES (9,31,'Create Table [dbo].[BakItemReClassConfig] (FldId VarChar(16) Not Null,FldDBColName Varchar(128),FldTerminology VarChar(128),FldDefaultName VarChar(128),FilterOrder Int,FilterFlag Int,ReplaceOrder Int,ReplaceFlag Int,LoookupDtls VarChar(128),FilterDataType VarChar(64),ReplaceDataType VarChar(64),DataLen Int,FilterControlType VarChar(64),ReplaceControlType VarChar(64),AttribType int,PreviewFlag Int,AllowedOp Varchar(16),AllowedInSwap Varchar(16),VAUid Varchar(32),VActr int,VATermId Varchar(32),VACompCode vARCHAR(16),UpdFlag VarChar(1))','',1,'.','')
+-GO-
+INSERT INTO [DBO].VersionwiseTblsScript(VerID,SrlNo,TblScript,VAUid,VActr,VATermId,VACompCode) VALUES (9,32,'ALTER TABLE [dbo].[ItemReClassConfig] WITH NOCHECK ADD CONSTRAINT [PK_ItemReClassConfig] PRIMARY KEY CLUSTERED ([FLDID])  ON [PRIMARY]','',1,'.','')
+-GO-
+INSERT INTO [DBO].VersionwiseTblsScript(VerID,SrlNo,TblScript,VAUid,VActr,VATermId,VACompCode) VALUES (9,33,'Create Table [dbo].[ItemReClassHeader] (IRCId VarChar(16) Not Null,IRCStatus Int,ApprovedFlag Int,CreatedAt Int,ShoperDate Datetime,SystemDate Datetime,Narration VarChar(256),FilterFlag Int,RunMultiple Int,RunInImport Int,RunInMenu Int,RunInDayBegin Int,RunSQLStmt Int,AtHO Int,AtHORunNo Int,AtHOLastRunDate Datetime,AtPOS Int,AtPOSRunNo Int,AtPOSLastRunDate Datetime,AtReplPOS Int,AtReplPOSRunNo Int,AtReplPOSLastRunDate Datetime,VAUid Varchar(32),VActr Int,VATermId Varchar(32),VACompCode VARCHAR(16))','',1,'.','')
+-GO-
+INSERT INTO [DBO].VersionwiseTblsScript(VerID,SrlNo,TblScript,VAUid,VActr,VATermId,VACompCode) VALUES (9,34,'Create Table [dbo].[BakItemReClassHeader] (IRCId VarChar(16) Not Null,IRCStatus Int,ApprovedFlag Int,CreatedAt Int,ShoperDate Datetime,SystemDate Datetime,Narration VarChar(256),FilterFlag Int,RunMultiple Int,RunInImport Int,RunInMenu Int,RunInDayBegin Int,RunSQLStmt Int,AtHO Int,AtHORunNo Int,AtHOLastRunDate Datetime,AtPOS Int,AtPOSRunNo Int,AtPOSLastRunDate Datetime,AtReplPOS Int,AtReplPOSRunNo Int,AtReplPOSLastRunDate Datetime,VAUid Varchar(32),VActr Int,VATermId Varchar(32),VACompCode VARCHAR(16),UpdFlag VarChar(1))','',1,'.','')
+-GO-
+INSERT INTO [DBO].VersionwiseTblsScript(VerID,SrlNo,TblScript,VAUid,VActr,VATermId,VACompCode) VALUES (9,35,'ALTER TABLE [dbo].[ItemReClassHeader] WITH NOCHECK ADD CONSTRAINT [PK_ItemReClassHeader] PRIMARY KEY CLUSTERED ([IRCId])  ON [PRIMARY]','',1,'.','')
+-GO-
+INSERT INTO [DBO].VersionwiseTblsScript(VerID,SrlNo,TblScript,VAUid,VActr,VATermId,VACompCode) VALUES (9,36,'Create Table [dbo].[ItemReClassDtls] (IRCId VarChar(16) Not Null,SrlNo Int Not Null,FRIndicator VarChar(1) Not Null,FRIndSrlNo Int Not Null,FldId VarChar(16),FldDBColName Varchar(128),FldTerminology VarChar(128),FldDefaultName VarChar(128),FldFilterDataType VarChar(64),FldFilterCondition VarChar(64),FldFilterCurValue VarChar(256),FldReplaceDataType VarChar(64),FldReplaceOption VarChar(64),FldReplaceNewValue VarChar(256),FldReplaceId VarChar(16),FldReplaceDBColName Varchar(128),ItItemClassFld Int,SQLBatchNo Int,SQLStmt VarChar(2000),SQLIndependent Int,SQLExcuteAtBegin Int,VAUid Varchar(32),VActr Int,VATermId Varchar(32),VACompCode VARCHAR(16))','',1,'.','')
+-GO-
+INSERT INTO [DBO].VersionwiseTblsScript(VerID,SrlNo,TblScript,VAUid,VActr,VATermId,VACompCode) VALUES (9,37,'Create Table [dbo].[BakItemReClassDtls] (IRCId VarChar(16) Not Null,SrlNo Int Not Null,FRIndicator VarChar(1) Not Null,FRIndSrlNo Int Not Null,FldId VarChar(16),FldDBColName Varchar(128),FldTerminology VarChar(128),FldDefaultName VarChar(128),FldFilterDataType VarChar(64),FldFilterCondition VarChar(64),FldFilterCurValue VarChar(256),FldReplaceDataType VarChar(64),FldReplaceOption VarChar(64),FldReplaceNewValue VarChar(256),FldReplaceId VarChar(16),FldReplaceDBColName Varchar(128),ItItemClassFld Int,SQLBatchNo Int,SQLStmt VarChar(2000),SQLIndependent Int,SQLExcuteAtBegin Int,VAUid Varchar(32),VActr Int,VATermId Varchar(32),VACompCode VARCHAR(16),UpdFlag VarChar(1))','',1,'.','')
+-GO-
+INSERT INTO [DBO].VersionwiseTblsScript(VerID,SrlNo,TblScript,VAUid,VActr,VATermId,VACompCode) VALUES (9,38,'ALTER TABLE [dbo].[ItemReClassDtls] WITH NOCHECK ADD CONSTRAINT [PK_ItemReClassDtls] PRIMARY KEY CLUSTERED ([IRCId],[SrlNo],[FRIndicator],[FRIndSrlNo]) ON [PRIMARY]','',1,'.','')
+-GO-
+Update [DBO].[VersionwiseTblsScript] Set Vactr = (select intg from [DBO].sysparam where paramcode = 'VaSysCounter') where VerId=9
+-GO-
+
+  </s9qScript>
+</s9qsqlblk>
+<s9qsqlblk>
+  <s9qScriptID>S9Q_016_9_0004</s9qScriptID>
+  <s9qtitle>Creating BAK Table</s9qtitle>
+  <s9qpgmtype>I</s9qpgmtype>
+  <s9qpgmtype>L</s9qpgmtype>
+  <s9qversion>*</s9qversion>
+  <s9qenvironment>P</s9qenvironment>
+  <s9qRunMultiple>0</s9qRunMultiple>
+  <s9qQryType>DLL</s9qQryType>
+  <s9qScript>BackTableCreation.clsBackTabCrt</s9qScript>
+</s9qsqlblk>

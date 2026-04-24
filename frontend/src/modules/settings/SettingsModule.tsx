@@ -10,26 +10,23 @@
  * ============================================================ */
 import { useState } from 'react'
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
+import { apiClient } from '@/api/client'
 
 export default function SettingsModule() {
   const queryClient = useQueryClient()
   const [activeTab, setActiveTab] = useState('store')
 
-  const { data: store, isLoading } = useQuery({
+  const { data: store } = useQuery({
     queryKey: ['settings'],
     queryFn: async () => {
-      const resp = await fetch('http://localhost:8000/api/v1/store/settings')
-      return resp.json()
+      const resp = await apiClient.get('/store/settings')
+      return resp.data
     }
   })
 
   const updateSettings = useMutation({
     mutationFn: async (data: any) => {
-      await fetch('http://localhost:8000/api/v1/store/settings', {
-        method: 'PATCH',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(data)
-      })
+      await apiClient.patch('/store/settings', data)
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['settings'] })

@@ -1,0 +1,310 @@
+<s9qsqlblk>
+  <s9qScriptid>S9Q_014_5_0005</s9qScriptid> 
+  <s9qtitle>Sync Module: New Price Revision changes</s9qtitle> 
+  <s9qpgmtype>I</s9qpgmtype>  
+  <s9qpgmtype>L</s9qpgmtype>  
+  <s9qversion>*</s9qversion> 
+  <s9qenvironment>P</s9qenvironment> 
+  <s9qenvironment>R</s9qenvironment> 
+  <s9qRunMultiple>0</s9qRunMultiple> 
+  <s9qQryType>DDL</s9qQryType> 
+  <s9qScript>
+
+--Take the PriceRevisionData to a Temp table
+if exists (select * from dbo.sysobjects where id = object_id(N'[TmpPriceRevisionOLD]')and OBJECTPROPERTY(id, N'IsUserTable') = 1)drop table [TmpPriceRevisionOLD]
+Select * into TmpPriceRevisionOLD from PriceRevision
+Drop table PriceRevision
+--Take the PriceRevisionHistoryData to a Temp table
+if exists (select * from dbo.sysobjects where id = object_id(N'[TmpPriceRevisionHistoryOLD]')and OBJECTPROPERTY(id, N'IsUserTable') = 1)drop table [TmpPriceRevisionHistoryOLD]
+Select * into TmpPriceRevisionHistoryOLD from PriceRevisionHistory
+Drop table PriceRevisionHistory
+-GO-
+
+--Create New PriceRevision table
+CREATE TABLE [dbo].[PriceRevision](
+      [SourceCompCode] [varchar](16) NOT NULL,
+      [DocNo] [int] NOT NULL,
+      [DestCompCode] [varchar](16) NOT NULL,
+      [FileNumber] [varchar](32) NOT NULL,
+      -- New Column for the PKey 
+      [SerialNumber] [varchar](32) NOT NULL,
+      -- Stock no is not part of P key and made nullable 
+      [StockNo] [varchar](32) NULL,
+      [BatchSrlNo] [varchar](16) NULL,
+      [RetailPriceEffectiveDate] [datetime] NULL,
+      [IsRPRateOrAmount] [varchar](1) NULL,
+      [RetailPriceRevisionFlag] [varchar](1) NULL,
+      [RetailPriceValue] [money] NULL,
+      [DealerPriceEffectiveDate] [datetime] NULL,
+      [IsDpRateOrAmount] [varchar](1) NULL,
+      [DealerPriceRevisionFlag] [varchar](1) NULL,
+      [DealerPriceValue] [money] NULL,
+      [ShoperDate] [datetime] NULL,
+      [SystemDate] [datetime] NULL,
+      [PgmMode] [varchar](32) NULL,
+      [VoidFlag] [varchar](1) NULL,
+      [VAUid] [varchar](32) NULL,
+      [VActr] [int] NULL,
+      [VATermId] [varchar](32) NULL,
+      [VACompCode] [varchar](16) NULL,
+      [SHOPERDBVER] [int] NULL,
+      /* new Colums */
+      AttributeLevel [varchar](64) NULL,
+      Class1Cd [varchar](16) NULL,
+      Class2Cd [varchar](16) NULL,
+      SubClass1Cd [varchar](16) NULL,
+      SubClass2Cd [varchar](16) NULL,
+      SizeCd [varchar](16) NULL,
+      SuperClass1 [Varchar](16) NULL,
+      SuperClass2 [Varchar](16) NULL,
+      AnalCode1 [varchar](16) NULL,
+      AnalCode2 [varchar](16) NULL,
+      AnalCode3 [varchar](16) NULL,
+      AnalCode4 [varchar](16) NULL,
+      AnalCode5 [varchar](16) NULL,
+      AnalCode6 [varchar](16) NULL,
+      AnalCode7 [varchar](16) NULL,
+      AnalCode8 [varchar](16) NULL,
+      AnalCode9 [varchar](16) NULL,
+      AnalCode10 [varchar](16) NULL,
+      AnalCode11 [varchar](16) NULL,
+      AnalCode12 [varchar](16) NULL,
+      AnalCode13 [varchar](16) NULL,
+      AnalCode14 [varchar](16) NULL,
+      AnalCode15 [varchar](16) NULL,
+      AnalCode16 [varchar](16) NULL,
+      AnalCode17 [varchar](16) NULL,
+      AnalCode18 [varchar](16) NULL,
+      AnalCode19 [varchar](16) NULL,
+      AnalCode20 [varchar](16) NULL,
+      AnalCode21 [varchar](16) NULL,
+      AnalCode22 [varchar](16) NULL,
+      AnalCode23 [varchar](16) NULL,
+      AnalCode24 [varchar](16) NULL,
+      AnalCode25 [varchar](16) NULL,
+      AnalCode26 [varchar](16) NULL,
+      AnalCode27 [varchar](16) NULL,
+      AnalCode28 [varchar](16) NULL,
+      AnalCode29 [varchar](16) NULL,
+      AnalCode30 [varchar](16) NULL,
+      AnalCode31 [varchar](16) NULL,
+      AnalCode32 [varchar](16) NULL,
+      ApprovedFlag [int] NULL,
+ CONSTRAINT [PK_PriceRevision] PRIMARY KEY CLUSTERED 
+(
+      [SourceCompCode] ASC,
+      [DocNo] ASC,
+      [DestCompCode] ASC,
+      [FileNumber] ASC,
+      [SerialNumber] ASC
+)
+) ON [PRIMARY]
+ -GO-
+ALTER TABLE [dbo].[PriceRevision] ADD DEFAULT ((730)) FOR [SHOPERDBVER]
+-GO-
+CREATE TABLE [dbo].[PriceRevisionHistory](
+      [SourceCompCode] [varchar](16) NOT NULL,
+      [DocNo] [int] NOT NULL,
+      [DestCompCode] [varchar](16) NOT NULL,
+      [FileNumber] [varchar](32) NOT NULL,
+      -- New Column for the PKey 
+      [SerialNumber] [varchar](32) NOT NULL,
+      -- Stock no is not part of P key and made nullable 
+      [StockNo] [varchar](32) NULL,
+      [BatchSrlNo] [varchar](16) NULL,
+      [RetailPriceEffectiveDate] [datetime] NULL,
+      [IsRPRateOrAmount] [varchar](1) NULL,
+      [RetailPriceRevisionFlag] [varchar](1) NULL,
+      [RetailPriceValue] [money] NULL,
+      [RetailPriceOld] [money] NULL,
+      [RetailPriceNew] [money] NULL,
+      [DealerPriceEffectiveDate] [datetime] NULL,
+      [IsDpRateOrAmount] [varchar](1) NULL,
+      [DealerPriceRevisionFlag] [varchar](1) NULL,
+      [DealerPriceValue] [money] NULL,
+      [DealerPriceOld] [money] NULL,
+      [DealerPriceNew] [money] NULL,
+      [ShoperDate] [datetime] NULL,
+      [SystemDate] [datetime] NULL,
+      [PgmMode] [varchar](32) NULL,
+      [DayBeginShoperDate] [datetime] NULL,
+      [DayBeginSystemDate] [datetime] NULL,
+      [VoidFlag] [varchar](1) NULL,
+      [VAUid] [varchar](32) NULL,
+      [VActr] [int] NULL,
+      [VATermId] [varchar](32) NULL,
+      [VACompCode] [varchar](16) NULL,
+      [SHOPERDBVER] [int] NULL,
+      /* new Colums */
+      AttributeLevel [varchar](64) NULL,
+      Class1Cd [varchar](16) NULL,
+      Class2Cd [varchar](16) NULL,
+      SubClass1Cd [varchar](16) NULL,
+      SubClass2Cd [varchar](16) NULL,
+      SizeCd [varchar](16) NULL,
+      SuperClass1 [Varchar](16) NULL,
+      SuperClass2 [Varchar](16) NULL,
+      AnalCode1 [varchar](16) NULL,
+      AnalCode2 [varchar](16) NULL,
+      AnalCode3 [varchar](16) NULL,
+      AnalCode4 [varchar](16) NULL,
+      AnalCode5 [varchar](16) NULL,
+      AnalCode6 [varchar](16) NULL,
+      AnalCode7 [varchar](16) NULL,
+      AnalCode8 [varchar](16) NULL,
+      AnalCode9 [varchar](16) NULL,
+      AnalCode10 [varchar](16) NULL,
+      AnalCode11 [varchar](16) NULL,
+      AnalCode12 [varchar](16) NULL,
+      AnalCode13 [varchar](16) NULL,
+      AnalCode14 [varchar](16) NULL,
+      AnalCode15 [varchar](16) NULL,
+      AnalCode16 [varchar](16) NULL,
+      AnalCode17 [varchar](16) NULL,
+      AnalCode18 [varchar](16) NULL,
+      AnalCode19 [varchar](16) NULL,
+      AnalCode20 [varchar](16) NULL,
+      AnalCode21 [varchar](16) NULL,
+      AnalCode22 [varchar](16) NULL,
+      AnalCode23 [varchar](16) NULL,
+      AnalCode24 [varchar](16) NULL,
+      AnalCode25 [varchar](16) NULL,
+      AnalCode26 [varchar](16) NULL,
+      AnalCode27 [varchar](16) NULL,
+      AnalCode28 [varchar](16) NULL,
+      AnalCode29 [varchar](16) NULL,
+      AnalCode30 [varchar](16) NULL,
+      AnalCode31 [varchar](16) NULL,
+      AnalCode32 [varchar](16) NULL,
+     ApprovedFlag [int] NULL,
+ CONSTRAINT [PK_PriceRevisionHistory] PRIMARY KEY CLUSTERED 
+(
+      [SourceCompCode] ASC,
+      [DocNo] ASC,
+      [DestCompCode] ASC,
+      [FileNumber] ASC,
+      [SerialNumber] ASC
+)
+) ON [PRIMARY]
+-GO-
+ALTER TABLE [dbo].[PriceRevisionHistory] ADD  DEFAULT ((730)) FOR [SHOPERDBVER]
+-GO-
+declare @ErrOccured int
+set @ErrOccured = 0
+Begin Transaction
+--Copy the Data from Old Price Revision table to new 
+Insert into PriceRevision(SourceCompCode,DocNo,DestCompCode,FileNumber,
+SerialNumber,StockNo,BatchSrlNo,AttributeLevel,
+RetailPriceEffectiveDate,IsRPRateOrAmount,RetailPriceRevisionFlag,RetailPriceValue,
+DealerPriceEffectiveDate,IsDpRateOrAmount,DealerPriceRevisionFlag,DealerPriceValue,
+ShoperDate,SystemDate,PgmMode,VoidFlag,VAUid,VActr,VATermId,VACompCode,SHOPERDBVER,ApprovedFlag)
+Select SourceCompCode,DocNo,DestCompCode,FileNumber,StockNo,StockNo,BatchSrlNo,'01000000000000000000000000000000000000000',
+RetailPriceEffectiveDate,IsRPRateOrAmount,RetailPriceRevisionFlag,RetailPriceValue,
+DealerPriceEffectiveDate,IsDpRateOrAmount,DealerPriceRevisionFlag,DealerPriceValue,
+ShoperDate,SystemDate,PgmMode,VoidFlag,VAUid,VActr,VATermId,VACompCode,SHOPERDBVER,1 
+from TmpPriceRevisionOLD 
+
+If (@@ERROR <> 0)  
+	Begin  
+		set @ErrOccured = 1
+	End 
+Insert into PriceRevisionHistory(SourceCompCode,DocNo,DestCompCode,FileNumber,
+SerialNumber,StockNo,BatchSrlNo,AttributeLevel,RetailPriceEffectiveDate,IsRPRateOrAmount,
+RetailPriceRevisionFlag,RetailPriceValue,RetailPriceOld,RetailPriceNew,
+DealerPriceEffectiveDate,IsDpRateOrAmount,DealerPriceRevisionFlag,DealerPriceValue,
+DealerPriceOld,DealerPriceNew,ShoperDate,SystemDate,PgmMode,DayBeginShoperDate,
+DayBeginSystemDate,VoidFlag,VAUid,VActr,VATermId,VACompCode,SHOPERDBVER)
+Select SourceCompCode,DocNo,DestCompCode,FileNumber,StockNo,StockNo,BatchSrlNo,
+'01000000000000000000000000000000000000000',RetailPriceEffectiveDate,IsRPRateOrAmount,
+RetailPriceRevisionFlag,RetailPriceValue,RetailPriceOld,RetailPriceNew,
+DealerPriceEffectiveDate,IsDpRateOrAmount,DealerPriceRevisionFlag,DealerPriceValue,
+DealerPriceOld,DealerPriceNew,ShoperDate,SystemDate,PgmMode,DayBeginShoperDate,
+DayBeginSystemDate,VoidFlag,VAUid,VActr,VATermId,VACompCode,SHOPERDBVER
+from TmpPriceRevisionHistoryOLD 
+If (@@ERROR <> 0)  
+	Begin  
+		set @ErrOccured = 1
+	End 
+if (@ErrOccured = 1)
+	BEGIN
+		ROLLBACK TRANSACTION
+	end
+else 
+	if (@ErrOccured = 0)
+		BEGIN
+			Update [dbo].[PriceRevision] Set Vactr = (select intg from dbo.sysparam where paramcode = 'VaSysCounter')
+			Update [dbo].[PriceRevisionHistory] Set Vactr = (select intg from dbo.sysparam where paramcode = 'VaSysCounter')
+			COMMIT TRANSACTION
+			Drop table TmpPriceRevisionOLD
+			Drop table TmpPriceRevisionHistoryOLD
+		END
+-GO-
+  </s9qScript>
+</s9qsqlblk>
+
+<s9qsqlblk>
+  <s9qScriptid>S9Q_014_5_0006</s9qScriptid> 
+  <s9qtitle>Sync Module: New Price Revision changes</s9qtitle> 
+  <s9qpgmtype>I</s9qpgmtype>  
+  <s9qpgmtype>L</s9qpgmtype>  
+  <s9qversion>*</s9qversion> 
+  <s9qenvironment>P</s9qenvironment> 
+  <s9qenvironment>R</s9qenvironment> 
+  <s9qRunMultiple>0</s9qRunMultiple> 
+  <s9qQryType>DML</s9qQryType> 
+  <s9qScript>
+INSERT INTO [dbo].VersionDtls VALUES (5,getdate(),'9','1.4','A','P901179','',1,'.','')
+-GO-
+Update VersionDtls Set Vactr = (select intg from sysparam where paramcode = 'VaSysCounter') where VerId=5
+-GO-
+INSERT INTO [dbo].VersionwiseTblsScript(VerID,SrlNo,TblScript,VAUid,VActr,VATermId,VACompCode) 
+VALUES (5,1,'Drop table [dbo].PriceRevision','',1,'.','')
+-GO-
+INSERT INTO [dbo].VersionwiseTblsScript(VerID,SrlNo,TblScript,VAUid,VActr,VATermId,VACompCode) 
+VALUES (5,2,'Drop table [dbo].PriceRevisionHistory','',1,'.','')
+-GO-
+INSERT INTO [dbo].VersionwiseTblsScript(VerID,SrlNo,TblScript,VAUid,VActr,VATermId,VACompCode) 
+VALUES (5,3,'Drop table [dbo].BAKPriceRevision','',1,'.','')
+-GO-
+INSERT INTO [dbo].VersionwiseTblsScript(VerID,SrlNo,TblScript,VAUid,VActr,VATermId,VACompCode) 
+VALUES (5,4,'Drop table [dbo].BAKPriceRevisionHistory','',1,'.','')
+-GO-
+INSERT INTO [dbo].VersionwiseTblsScript(VerID,SrlNo,TblScript,VAUid,VActr,VATermId,VACompCode) 
+VALUES (5,5,'CREATE TABLE [dbo].[PriceRevision]([SourceCompCode] [varchar](16) NOT NULL,[DocNo] [int] NOT NULL,[DestCompCode] [varchar](16) NOT NULL,[FileNumber] [varchar](32) NOT NULL,[SerialNumber] [varchar](32) NOT NULL,[StockNo] [varchar](32) NULL,[BatchSrlNo] [varchar](16) NULL,[RetailPriceEffectiveDate] [datetime] NULL,[IsRPRateOrAmount] [varchar](1) NULL,[RetailPriceRevisionFlag] [varchar](1) NULL,[RetailPriceValue] [money] NULL,[DealerPriceEffectiveDate] [datetime] NULL,[IsDpRateOrAmount] [varchar](1) NULL,[DealerPriceRevisionFlag] [varchar](1) NULL,[DealerPriceValue] [money] NULL,[ShoperDate] [datetime] NULL,[SystemDate] [datetime] NULL,[PgmMode] [varchar](32) NULL,[VoidFlag] [varchar](1) NULL,[VAUid] [varchar](32) NULL,[VActr] [int] NULL,[VATermId] [varchar](32) NULL,[VACompCode] [varchar](16) NULL,[SHOPERDBVER] [int] NULL,AttributeLevel [varchar](64) NULL,Class1Cd [varchar](16) NULL,Class2Cd [varchar](16) NULL,SubClass1Cd [varchar](16) NULL,SubClass2Cd [varchar](16) NULL,SizeCd [varchar](16) NULL,SuperClass1 [Varchar](16) NULL,SuperClass2 [Varchar](16) NULL,AnalCode1 [varchar](16) NULL,AnalCode2 [varchar](16) NULL,AnalCode3 [varchar](16) NULL,AnalCode4 [varchar](16) NULL,AnalCode5 [varchar](16) NULL,AnalCode6 [varchar](16) NULL,AnalCode7 [varchar](16) NULL,AnalCode8 [varchar](16) NULL,AnalCode9 [varchar](16) NULL,AnalCode10 [varchar](16) NULL,AnalCode11 [varchar](16) NULL,AnalCode12 [varchar](16) NULL,AnalCode13 [varchar](16) NULL,AnalCode14 [varchar](16) NULL,AnalCode15 [varchar](16) NULL,AnalCode16 [varchar](16) NULL,AnalCode17 [varchar](16) NULL,AnalCode18 [varchar](16) NULL,AnalCode19 [varchar](16) NULL,AnalCode20 [varchar](16) NULL,AnalCode21 [varchar](16) NULL,AnalCode22 [varchar](16) NULL,AnalCode23 [varchar](16) NULL,AnalCode24 [varchar](16) NULL,AnalCode25 [varchar](16) NULL,AnalCode26 [varchar](16) NULL,AnalCode27 [varchar](16) NULL,AnalCode28 [varchar](16) NULL,AnalCode29 [varchar](16) NULL,AnalCode30 [varchar](16) NULL,AnalCode31 [varchar](16) NULL,AnalCode32 [varchar](16) NULL,ApprovedFlag [int] NULL,CONSTRAINT [PK_PriceRevision] PRIMARY KEY CLUSTERED ([SourceCompCode] ASC,[DocNo] ASC,[DestCompCode] ASC,[FileNumber] ASC,[SerialNumber] ASC)) ON [PRIMARY]','',1,'.','')
+-GO-
+INSERT INTO [dbo].VersionwiseTblsScript(VerID,SrlNo,TblScript,VAUid,VActr,VATermId,VACompCode) 
+VALUES (5,6,'ALTER TABLE [dbo].[PriceRevision] ADD DEFAULT ((730)) FOR [SHOPERDBVER]','',1,'.','')
+-GO-
+INSERT INTO [dbo].VersionwiseTblsScript(VerID,SrlNo,TblScript,VAUid,VActr,VATermId,VACompCode) 
+VALUES (5,7,'CREATE TABLE [dbo].[BAKPriceRevision]([SourceCompCode] [varchar](16) NULL,[DocNo] [int] NULL,[DestCompCode] [varchar](16) NULL,[FileNumber] [varchar](32) NULL,[SerialNumber] [varchar](32) NULL,[StockNo] [varchar](32) NULL,[BatchSrlNo] [varchar](16) NULL,[RetailPriceEffectiveDate] [datetime] NULL,[IsRPRateOrAmount] [varchar](1) NULL,[RetailPriceRevisionFlag] [varchar](1) NULL,[RetailPriceValue] [money] NULL,[DealerPriceEffectiveDate] [datetime] NULL,[IsDpRateOrAmount] [varchar](1) NULL,[DealerPriceRevisionFlag] [varchar](1) NULL,[DealerPriceValue] [money] NULL,[ShoperDate] [datetime] NULL,[SystemDate] [datetime] NULL,[PgmMode] [varchar](32) NULL,[VoidFlag] [varchar](1) NULL,[VAUid] [varchar](32) NULL,[VActr] [int] NULL,[VATermId] [varchar](32) NULL,[VACompCode] [varchar](16) NULL,[SHOPERDBVER] [int] NULL,AttributeLevel [varchar](64) NULL,Class1Cd [varchar](16) NULL,Class2Cd [varchar](16) NULL,SubClass1Cd [varchar](16) NULL,SubClass2Cd [varchar](16) NULL,SizeCd [varchar](16) NULL,SuperClass1 [Varchar](16) NULL,SuperClass2 [Varchar](16) NULL,AnalCode1 [varchar](16) NULL,AnalCode2 [varchar](16) NULL,AnalCode3 [varchar](16) NULL,AnalCode4 [varchar](16) NULL,AnalCode5 [varchar](16) NULL,AnalCode6 [varchar](16) NULL,AnalCode7 [varchar](16) NULL,AnalCode8 [varchar](16) NULL,AnalCode9 [varchar](16) NULL,AnalCode10 [varchar](16) NULL,AnalCode11 [varchar](16) NULL,AnalCode12 [varchar](16) NULL,AnalCode13 [varchar](16) NULL,AnalCode14 [varchar](16) NULL,AnalCode15 [varchar](16) NULL,AnalCode16 [varchar](16) NULL,AnalCode17 [varchar](16) NULL,AnalCode18 [varchar](16) NULL,AnalCode19 [varchar](16) NULL,AnalCode20 [varchar](16) NULL,AnalCode21 [varchar](16) NULL,AnalCode22 [varchar](16) NULL,AnalCode23 [varchar](16) NULL,AnalCode24 [varchar](16) NULL,AnalCode25 [varchar](16) NULL,AnalCode26 [varchar](16) NULL,AnalCode27 [varchar](16) NULL,AnalCode28 [varchar](16) NULL,AnalCode29 [varchar](16) NULL,AnalCode30 [varchar](16) NULL,AnalCode31 [varchar](16) NULL,AnalCode32 [varchar](16) NULL,ApprovedFlag [int] NULL,UpdFlag [Varchar](1))','',1,'.','')
+-GO-
+INSERT INTO [dbo].VersionwiseTblsScript(VerID,SrlNo,TblScript,VAUid,VActr,VATermId,VACompCode) 
+VALUES (5,8,'CREATE TABLE [dbo].[PriceRevisionHistory]([SourceCompCode] [varchar](16) NOT NULL,[DocNo] [int] NOT NULL,[DestCompCode] [varchar](16) NOT NULL,[FileNumber] [varchar](32) NOT NULL,[SerialNumber] [varchar](32) NOT NULL,[StockNo] [varchar](32) NULL,[BatchSrlNo] [varchar](16) NULL,[RetailPriceEffectiveDate] [datetime] NULL,[IsRPRateOrAmount] [varchar](1) NULL,[RetailPriceRevisionFlag] [varchar](1) NULL,[RetailPriceValue] [money] NULL,[RetailPriceOld] [money] NULL,[RetailPriceNew] [money] NULL,[DealerPriceEffectiveDate] [datetime] NULL,[IsDpRateOrAmount] [varchar](1) NULL,[DealerPriceRevisionFlag] [varchar](1) NULL,[DealerPriceValue] [money] NULL,[DealerPriceOld] [money] NULL,[DealerPriceNew] [money] NULL,[ShoperDate] [datetime] NULL,[SystemDate] [datetime] NULL,[PgmMode] [varchar](32) NULL,[DayBeginShoperDate] [datetime] NULL,[DayBeginSystemDate] [datetime] NULL,[VoidFlag] [varchar](1) NULL,[VAUid] [varchar](32) NULL,[VActr] [int] NULL,[VATermId] [varchar](32) NULL,[VACompCode] [varchar](16) NULL,[SHOPERDBVER] [int] NULL,AttributeLevel [varchar](64) NULL,Class1Cd [varchar](16) NULL,Class2Cd [varchar](16) NULL,SubClass1Cd [varchar](16) NULL,SubClass2Cd [varchar](16) NULL,SizeCd [varchar](16) NULL,SuperClass1 [Varchar](16) NULL,SuperClass2 [Varchar](16) NULL,AnalCode1 [varchar](16) NULL,AnalCode2 [varchar](16) NULL,AnalCode3 [varchar](16) NULL,AnalCode4 [varchar](16) NULL,AnalCode5 [varchar](16) NULL,AnalCode6 [varchar](16) NULL,AnalCode7 [varchar](16) NULL,AnalCode8 [varchar](16) NULL,AnalCode9 [varchar](16) NULL,AnalCode10 [varchar](16) NULL,AnalCode11 [varchar](16) NULL,AnalCode12 [varchar](16) NULL,AnalCode13 [varchar](16) NULL,AnalCode14 [varchar](16) NULL,AnalCode15 [varchar](16) NULL,AnalCode16 [varchar](16) NULL,AnalCode17 [varchar](16) NULL,AnalCode18 [varchar](16) NULL,AnalCode19 [varchar](16) NULL,AnalCode20 [varchar](16) NULL,AnalCode21 [varchar](16) NULL,AnalCode22 [varchar](16) NULL,AnalCode23 [varchar](16) NULL,AnalCode24 [varchar](16) NULL,AnalCode25 [varchar](16) NULL,AnalCode26 [varchar](16) NULL,AnalCode27 [varchar](16) NULL,AnalCode28 [varchar](16) NULL,AnalCode29 [varchar](16) NULL,AnalCode30 [varchar](16) NULL,AnalCode31 [varchar](16) NULL,AnalCode32 [varchar](16) NULL,ApprovedFlag [int] NULL,CONSTRAINT [PK_PriceRevisionHistory] PRIMARY KEY CLUSTERED ([SourceCompCode] ASC,[DocNo] ASC,[DestCompCode] ASC,[FileNumber] ASC,[SerialNumber] ASC)) ON [PRIMARY]','',1,'.','')
+-GO-
+INSERT INTO [dbo].VersionwiseTblsScript(VerID,SrlNo,TblScript,VAUid,VActr,VATermId,VACompCode) 
+VALUES (5,9,'ALTER TABLE [dbo].[PriceRevisionHistory] ADD  DEFAULT ((730)) FOR [SHOPERDBVER]','',1,'.','')
+-GO-
+INSERT INTO [dbo].VersionwiseTblsScript(VerID,SrlNo,TblScript,VAUid,VActr,VATermId,VACompCode) 
+VALUES (5,10,'CREATE TABLE [dbo].[BAKPriceRevisionHistory]([SourceCompCode] [varchar](16) NULL,[DocNo] [int] NULL,[DestCompCode] [varchar](16) NULL,[FileNumber] [varchar](32) NULL,[SerialNumber] [varchar](32) NULL,[StockNo] [varchar](32) NULL,[BatchSrlNo] [varchar](16) NULL,[RetailPriceEffectiveDate] [datetime] NULL,[IsRPRateOrAmount] [varchar](1) NULL,[RetailPriceRevisionFlag] [varchar](1) NULL,[RetailPriceValue] [money] NULL,[RetailPriceOld] [money] NULL,[RetailPriceNew] [money] NULL,[DealerPriceEffectiveDate] [datetime] NULL,[IsDpRateOrAmount] [varchar](1) NULL,[DealerPriceRevisionFlag] [varchar](1) NULL,[DealerPriceValue] [money] NULL,[DealerPriceOld] [money] NULL,[DealerPriceNew] [money] NULL,[ShoperDate] [datetime] NULL,[SystemDate] [datetime] NULL,[PgmMode] [varchar](32) NULL,[DayBeginShoperDate] [datetime] NULL,[DayBeginSystemDate] [datetime] NULL,[VoidFlag] [varchar](1) NULL,[VAUid] [varchar](32) NULL,[VActr] [int] NULL,[VATermId] [varchar](32) NULL,[VACompCode] [varchar](16) NULL,[SHOPERDBVER] [int] NULL,AttributeLevel [varchar](64) NULL,Class1Cd [varchar](16) NULL,Class2Cd [varchar](16) NULL,SubClass1Cd [varchar](16) NULL,SubClass2Cd [varchar](16) NULL,SizeCd [varchar](16) NULL,SuperClass1 [Varchar](16) NULL,SuperClass2 [Varchar](16) NULL,AnalCode1 [varchar](16) NULL,AnalCode2 [varchar](16) NULL,AnalCode3 [varchar](16) NULL,AnalCode4 [varchar](16) NULL,AnalCode5 [varchar](16) NULL,AnalCode6 [varchar](16) NULL,AnalCode7 [varchar](16) NULL,AnalCode8 [varchar](16) NULL,AnalCode9 [varchar](16) NULL,AnalCode10 [varchar](16) NULL,AnalCode11 [varchar](16) NULL,AnalCode12 [varchar](16) NULL,AnalCode13 [varchar](16) NULL,AnalCode14 [varchar](16) NULL,AnalCode15 [varchar](16) NULL,AnalCode16 [varchar](16) NULL,AnalCode17 [varchar](16) NULL,AnalCode18 [varchar](16) NULL,AnalCode19 [varchar](16) NULL,AnalCode20 [varchar](16) NULL,AnalCode21 [varchar](16) NULL,AnalCode22 [varchar](16) NULL,AnalCode23 [varchar](16) NULL,AnalCode24 [varchar](16) NULL,AnalCode25 [varchar](16) NULL,AnalCode26 [varchar](16) NULL,AnalCode27 [varchar](16) NULL,AnalCode28 [varchar](16) NULL,AnalCode29 [varchar](16) NULL,AnalCode30 [varchar](16) NULL,AnalCode31 [varchar](16) NULL,AnalCode32 [varchar](16) NULL,ApprovedFlag [int] NULL,UpdFlag [Varchar](1))','',1,'.','')
+-GO-
+Update [dbo].[VersionwiseTblsScript] Set Vactr = (select intg from dbo.sysparam where paramcode = 'VaSysCounter') where VerId=5
+-GO-
+INSERT SYSPARAMEXTD(ID,PARAMCODE,FIXED,CATEGORY,CATDESCR,DISPORDER) SELECT 'SR4-0904-0000001','PriceRevisionAppRules','Variable','04. Item Master','This Gives Item Master Parameters',7
+-GO-
+INSERT SYSPARAM(ID,DESCR,PARAMCODE,TXT,OPT) SELECT 'SR4-0904-0000001','If Price Revisions Are Applicable, Activate Immediately','PriceRevisionAppRules','111','T'
+-GO-
+  </s9qScript>
+</s9qsqlblk>
+
+<s9qsqlblk>
+  <s9qScriptID>S9Q_014_5_0007</s9qScriptID>
+  <s9qtitle></s9qtitle>
+  <s9qpgmtype>I</s9qpgmtype>
+  <s9qpgmtype>L</s9qpgmtype>  
+  <s9qversion>*</s9qversion>
+  <s9qenvironment>P</s9qenvironment>
+  <s9qenvironment>R</s9qenvironment>
+  <s9qRunMultiple>0</s9qRunMultiple>
+  <s9qQryType>DLL</s9qQryType>
+  <s9qScript>BackTableCreation.clsBackTabCrt</s9qScript>		
+</s9qsqlblk>

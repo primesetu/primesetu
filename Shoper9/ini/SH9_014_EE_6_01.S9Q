@@ -1,0 +1,19 @@
+<s9qsqlblk>
+<s9qScriptid>S9Q_014_6_0001</s9qScriptid>
+<s9qtitle>DC Printing New Parameter</s9qtitle>
+<s9qpgmtype>L</s9qpgmtype>
+<s9qpgmtype>I</s9qpgmtype>
+<s9qversion>*</s9qversion>
+<s9qenvironment>P</s9qenvironment>
+<s9qRunMultiple>0</s9qRunMultiple>
+<s9qQryType>DML</s9qQryType>
+<s9qScript>	
+Insert into Sysparam (ID,descr,paramcode,txt,opt) Values('SR1-0901-0000324','DC Header Printing Options','DCHdrPrintingOptions','N#Y#Y','T')
+-GO-
+Insert into SysparamExtd (ID,paramcode,fixed,changed,Category,CatDescr,DispOrder) Values('SR1-0901-0000324','DCHdrPrintingOptions','Variable','0','14. Bill - Printing','This Gives Bill - Printing Parameters','49')
+-GO-
+Insert into Sysparam (ID,descr,paramcode,Intg,opt) Values('SR1-0901-0000325','DC Printing Format To Be Used','DCPrintingFormat',2,'I')
+-GO-
+Insert into SysparamExtd (ID,paramcode,fixed,changed,Category,CatDescr,DispOrder) Values('SR1-0901-0000325','DCPrintingFormat','Variable','0','14. Bill - Printing','This Gives Bill - Printing Parameters','50')
+</s9qScript>
+</s9qsqlblk>

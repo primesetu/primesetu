@@ -1,0 +1,59 @@
+<s9qsqlblk>
+  <s9qScriptID>S9Q_018_1_0002</s9qScriptID>
+  <s9qtitle>Creating New Table for Transporter Detials</s9qtitle>
+  <s9qpgmtype>I</s9qpgmtype>
+  <s9qpgmtype>L</s9qpgmtype>
+  <s9qversion>*</s9qversion>
+  <s9qenvironment>P</s9qenvironment>
+  <s9qRunMultiple>0</s9qRunMultiple>
+  <s9qQryType>DDL</s9qQryType>
+  <s9qScript>
+
+CREATE TABLE [dbo].[StkTrnAddlHdr](
+	[TrnType] [int] NOT NULL,
+	[TrnCtrlNo] [int] NOT NULL,
+	[DocNoPrefix] [varchar](8) NULL,
+	[DocNo] [int] NULL,
+	[DocDt] [datetime] NULL,
+	[LRNo] [varchar](32) NULL,
+	[LRDate] [datetime] NULL,
+	[VehicleNo] [varchar](64) NULL,
+	[DriverName] [varchar](64) NULL,
+	[PreSaleTaxFormNm] [varchar](64) NULL,
+	[PreSaleTaxSrlNo] [varchar](64) NULL,
+	[PostSaleTaxFormNm] [varchar](64) NULL,
+	[PostSaleTaxSrlNo] [varchar](64) NULL,
+	[TransportMode] [varchar](64) NULL,
+	[TransportCode] [varchar](64) NULL,
+	[AddlInfo1] [varchar](64) NULL,
+	[AddlInfo2] [varchar](64) NULL,
+	[AddlInfo3] [varchar](64) NULL,
+	[VAUid] [varchar](32) NULL,
+	[VActr] [int] NULL,
+	[VATermId] [varchar](32) NULL,
+	[VACompCode] [varchar](16) NULL,
+ CONSTRAINT [PK_StkTrnAddlHdr] PRIMARY KEY CLUSTERED 
+(
+	[TrnType] ASC,
+	[TrnCtrlNo] ASC
+) ON [PRIMARY])	
+-GO-
+</s9qScript>		
+</s9qsqlblk>
+
+
+<s9qsqlblk>
+  <s9qScriptID>S9Q_018_1_0003</s9qScriptID>
+  <s9qtitle>Query to enable extension in transporter detials exe</s9qtitle>
+  <s9qpgmtype>I</s9qpgmtype>
+  <s9qpgmtype>L</s9qpgmtype>
+  <s9qversion>*</s9qversion>
+  <s9qenvironment>P</s9qenvironment>
+  <s9qRunMultiple>0</s9qRunMultiple>
+  <s9qQryType>DML</s9qQryType>
+  <s9qScript>
+
+insert into genlookup (recid,code,descr,flag) values (14400,'SD400800+CmdTransDtl_Click+1','SR541000.ClsTransporterdtls','1')
+-GO-
+</s9qScript>		
+</s9qsqlblk>

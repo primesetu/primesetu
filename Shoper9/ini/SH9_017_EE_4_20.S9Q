@@ -1,0 +1,106 @@
+<s9qsqlblk>
+  <s9qScriptID>	S9Q_017_4_1010	</s9qScriptID>
+  <s9qtitle>Alert Framework</s9qtitle>
+  <s9qpgmtype>I</s9qpgmtype>
+  <s9qpgmtype>L</s9qpgmtype>
+  <s9qversion>*</s9qversion>
+  <s9qenvironment>M</s9qenvironment>
+  <s9qRunMultiple>1</s9qRunMultiple>
+  <s9qQryType>DML</s9qQryType>
+  <s9qScript>
+DELETE FROM [dbo].[VaSecurityConfig] WHERE [CatSrlNo] = 4
+-GO-
+DELETE VaMenu WHERE MnuNo=500 AND MenuOpt IN (570,571)
+-GO-
+DELETE FROM Vamenu WHERE Exename = 'SN400600.exe'
+-GO-
+UPDATE VaMenu SET Menusep = 1 WHERE MnuNo=500 AND MenuOpt=560
+-GO-
+INSERT INTO VaMenu VALUES(500,570,'Housekeeping','Alerts Management','P','SN400600.exe',0,0,1,'0+2','',0,0,0)
+-GO-
+INSERT INTO VaMenu VALUES(500,571,'Housekeeping','Communication Configuration','P','SR440600.exe',0,0,1,'0+2','',0,0,0)
+-GO-
+Insert into vavertable (NodeId,ExeSrl,ExeID,ExeName,ExeSkip,ExeVer,ExeMinor,ExeSubRel) 
+Values( 0, 0, 'SN400600.EXE','','N','9','1','383')
+-GO-
+Insert into vavertable (NodeId,ExeSrl,ExeID,ExeName,ExeSkip,ExeVer,ExeMinor,ExeSubRel) 
+Values( 0, 0, 'SR440600.exe','','N','9','1','383')
+-GO-
+IF  EXISTS (SELECT * FROM dbo.sysobjects WHERE id = OBJECT_ID(N'[dbo].[AlertParamDefinition]') AND OBJECTPROPERTY(id, N'IsUserTable') = 1)
+DROP TABLE [dbo].[AlertParamDefinition]
+-GO-
+IF  EXISTS (SELECT * FROM dbo.sysobjects WHERE id = OBJECT_ID(N'[dbo].[AlertEventDefinition]') AND OBJECTPROPERTY(id, N'IsUserTable') = 1)
+DROP TABLE [dbo].[AlertEventDefinition]
+-GO-
+IF  EXISTS (SELECT * FROM dbo.sysobjects WHERE id = OBJECT_ID(N'[dbo].[AlertDefinition]') AND OBJECTPROPERTY(id, N'IsUserTable') = 1)
+DROP TABLE [dbo].[AlertDefinition]
+-GO-
+IF  EXISTS (SELECT * FROM dbo.sysobjects WHERE id = OBJECT_ID(N'[dbo].[CommunicationConfig]') AND OBJECTPROPERTY(id, N'IsUserTable') = 1)
+DROP TABLE [dbo].[CommunicationConfig]
+-GO-
+IF NOT EXISTS (SELECT * FROM dbo.sysobjects WHERE id = OBJECT_ID(N'[dbo].[AlertEventDefinition]') AND OBJECTPROPERTY(id, N'IsUserTable') = 1)
+CREATE TABLE [dbo].[AlertEventDefinition](
+	[Application] [varchar](64)  NOT NULL,
+	[Event] [varchar](64)  NOT NULL,
+	[IsActive] [tinyint] NULL,
+	[ReadOnly] [tinyint] NULL,
+	[EventType] [varchar](64)  NULL,
+	[VAUid] [varchar](32) NULL,
+	[VActr] [int] NULL,
+	[VATermId] [varchar](32) NULL,
+	[VACompCode] [varchar](32) NULL,
+ CONSTRAINT [PK_AlertEventDefinition] PRIMARY KEY CLUSTERED 
+(
+	[Application] ASC,
+	[Event] ASC
+)
+)
+-GO-
+IF NOT EXISTS (SELECT * FROM dbo.sysobjects WHERE id = OBJECT_ID(N'[dbo].[AlertDefinition]') AND OBJECTPROPERTY(id, N'IsUserTable') = 1)
+CREATE TABLE [dbo].[AlertDefinition](
+	[CompanyCode] [varchar](64) NOT NULL,
+	[Application] [varchar](64) NULL,
+	[Event] [varchar](64)  NULL,
+	[IsHODefined] [tinyint] NULL,
+	[IsDeleted] [tinyint] NULL,
+	[IsActive] [tinyint] NULL,
+	[ReadOnly] [tinyint] NULL,
+	[AlertId] [int] NOT NULL,
+	[AlertMode] [varchar](64) NULL,
+	[Settings] [varchar](8000) NULL,
+	[DateModified] [datetime] NULL,
+	[Description] [varchar](8000) NULL,
+	[VAUid] [varchar](32) NULL,
+	[VActr] [int] NULL,
+	[VATermId] [varchar](32) NULL,
+	[VACompCode] [varchar](32) NULL,
+ CONSTRAINT [PK_AlertDefinition] PRIMARY KEY CLUSTERED 
+(
+	[CompanyCode] ASC,
+	[AlertId] ASC
+)
+)
+-GO-
+IF NOT EXISTS (SELECT * FROM dbo.sysobjects WHERE id = OBJECT_ID(N'[dbo].[CommunicationConfig]') AND OBJECTPROPERTY(id, N'IsUserTable') = 1)
+CREATE TABLE [dbo].[CommunicationConfig](
+	[ConfigName] [varchar](64) NOT NULL,
+	[SrlNo] [int] NOT NULL,
+	[ProfileCode] [varchar](64) NULL,
+	[ConfigType] [varchar](64) NULL,
+	[Name] [varchar](64) NULL,
+	[Value] [varchar](64) NULL,
+	[IsActive] [tinyint] NULL,
+	[DateModified] [datetime] NULL,
+	[VAUid] [varchar](32) NULL,
+	[VActr] [int] NULL,
+	[VATermId] [varchar](32) NULL,
+	[VACompCode] [varchar](32) NULL,
+ CONSTRAINT [PK_CommunicationConfig] PRIMARY KEY CLUSTERED 
+(
+	[ConfigName] ASC,
+	[SrlNo] ASC
+)
+)
+-GO-
+</s9qScript>		
+</s9qsqlblk>

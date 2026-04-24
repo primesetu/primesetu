@@ -1,0 +1,32 @@
+<s9qsqlblk> 
+<s9qScriptID>S9Q_015_7_0011</s9qScriptID>
+<s9qtitle>Security Management:Table Create Scripts</s9qtitle>
+<s9qpgmtype>L</s9qpgmtype>
+<s9qpgmtype>I</s9qpgmtype>
+<s9qversion>*</s9qversion>
+<s9qenvironment>M</s9qenvironment>
+<s9qRunMultiple>1</s9qRunMultiple>
+<s9qQryType>DDL</s9qQryType>
+<s9qScript>
+
+if NOT exists (select * from sysobjects where id = object_id(N'[dbo].[VaRestrictMnuConfig]') and OBJECTPROPERTY(id, N'IsUserTable') = 1)
+CREATE TABLE [dbo].[VaRestrictMnuConfig]([MnuNo] [int] NOT NULL,[MenuOpt] [int] NOT NULL,[ExeName] [varchar](32) NOT NULL,
+[ExeOption] [varchar](8) NULL,[OptCaption] [varchar](256) NULL,
+Constraint [Pk_VaRestrictMnuConfig] PRIMARY KEY  CLUSTERED ([MnuNo],[MenuOpt],[ExeName])  ON [PRIMARY] ) ON [PRIMARY]
+-go-
+if NOT exists (select * from sysobjects where id = object_id(N'[dbo].[VaGroupRestrict]') and OBJECTPROPERTY(id, N'IsUserTable') = 1)
+CREATE TABLE [dbo].[VaGroupRestrict]([MnuNo] [int] NOT NULL,[MenuOpt] [int] NOT NULL,[GroupId] [varchar](16) NOT NULL,
+[MnuCap] [varchar](100) NULL,[Allowed] [bit] NOT NULL,[OneTimeAllowed] [bit] NOT NULL,[ExeRight] [varchar](8),
+Constraint [PK_VaGroupRestrict] PRIMARY KEY  CLUSTERED ([MnuNo],[MenuOpt],[GroupId])  ON [PRIMARY] ) ON [PRIMARY]
+-go-
+if NOT exists (select * from sysobjects where id = object_id(N'[dbo].[VaGroup]') and OBJECTPROPERTY(id, N'IsUserTable') = 1)
+Create Table DBO.[VaGroup](GroupId Varchar(16), GroupDescr Varchar(50),
+CONSTRAINT [PK_VaGroup] PRIMARY KEY  CLUSTERED ([GroupId])  ON [PRIMARY] ) ON [PRIMARY]
+-go-
+if NOT exists (select * from sysobjects where id = object_id(N'[dbo].[vaGroupWiseUserList]') and OBJECTPROPERTY(id, N'IsUserTable') = 1)
+Create Table DBO.[VaGroupWiseUserList](LoginId varchar(16),GroupId varchar(16),
+CONSTRAINT [PK_vaGroupWiseUserList] PRIMARY KEY  CLUSTERED ([LoginId],[GroupId])  ON [PRIMARY] ) ON [PRIMARY]
+-go-
+
+</s9qScript>
+</s9qsqlblk>

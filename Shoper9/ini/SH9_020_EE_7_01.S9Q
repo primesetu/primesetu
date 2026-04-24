@@ -1,0 +1,79 @@
+<s9qsqlblk> 
+<s9qScriptID>S9Q_020_7_0001</s9qScriptID>
+<s9qtitle>Extension Frame Work: Table Create Scripts</s9qtitle>
+<s9qpgmtype>L</s9qpgmtype>
+<s9qpgmtype>I</s9qpgmtype>
+<s9qversion>*</s9qversion>
+<s9qenvironment>P</s9qenvironment>
+<s9qRunMultiple>1</s9qRunMultiple>
+<s9qQryType>DDL</s9qQryType>
+<s9qScript>
+
+if NOT exists (select * from sysobjects where id = object_id(N'[dbo].[ExtensionConfigInfo]') and OBJECTPROPERTY(id, N'IsUserTable') = 1)
+Create Table ExtensionConfigInfo(TrnType Int, ExtnLevel Int, StructType Int, 
+FieldSrlNo Int, FieldName Varchar(32),FieldType Varchar(16),FieldLength Int,
+FieldCaption Varchar(32),ExtnConfigSrlNo Int Default 0,
+VaUid Varchar(32),VaCtr Int, VaTermId Varchar(32),VaCompCode Varchar(16),
+CONSTRAINT [PK_ExtensionConfigInfo] PRIMARY KEY CLUSTERED([TrnType],[ExtnLevel],[StructType],[FieldSrlNo]) ON [PRIMARY])
+
+-GO-
+
+if NOT exists (select * from sysobjects where id = object_id(N'[dbo].[ExtensionConfigExternal]') and OBJECTPROPERTY(id, N'IsUserTable') = 1)
+Create Table ExtensionConfigExternal(RecId Int,ProgramId Varchar(64),EventId Varchar(64),SrlNo Int,
+DLLName Varchar(128),ActiveFlag Int,ExtnType Varchar(32), ProgramType Int, FileFormat Varchar(16),FileDelimiter Varchar(16),
+PartnerId Varchar(64),EncryptVer Varchar(32),
+VaUid Varchar(32),VaCtr Int, VaTermId Varchar(32),VaCompCode Varchar(16),
+CONSTRAINT [PK_ExtensionConfigExternal] PRIMARY KEY  CLUSTERED 
+([RecId],[ProgramId],[EventId],[SrlNo]) ON [PRIMARY])
+
+-GO-
+
+if NOT exists (select * from sysobjects where id = object_id(N'[dbo].[ExtensionConfigInternal]') and OBJECTPROPERTY(id, N'IsUserTable') = 1)
+Create Table ExtensionConfigInternal(RecId Int,ProgramId Varchar(64),EventId Varchar(64),SrlNo Int,
+DLLName Varchar(128),ActiveFlag Int,ExtnType Varchar(32), ProgramType Int, FileFormat Varchar(16),FileDelimiter Varchar(16),
+PartnerId Varchar(64),EncryptVer Varchar(32),
+VaUid Varchar(32),VaCtr Int, VaTermId Varchar(32),VaCompCode Varchar(16),
+CONSTRAINT [PK_ExtensionConfigInternal] PRIMARY KEY  CLUSTERED 
+([RecId],[ProgramId],[EventId],[SrlNo]) ON [PRIMARY])
+
+-GO-
+
+if NOT exists (select * from sysobjects where id = object_id(N'[dbo].[ExtnPartnerInfo]') and OBJECTPROPERTY(id, N'IsUserTable') = 1)
+Create Table ExtnPartnerInfo(PartnerId Varchar(64),PartnerName Varchar(64),
+PartnerEmail Varchar(128),ContactNo Varchar(16),
+CONSTRAINT [PK_ExtnPartnerInfo] PRIMARY KEY  CLUSTERED 
+([PartnerId]) ON [PRIMARY])
+
+-GO-
+
+IF NOT EXISTS(SELECT COLUMN_NAME FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME='EventExtnKeyValueConfig' AND COLUMN_NAME='EncryptVer') 
+ALTER TABLE EventExtnKeyValueConfig ADD EncryptVer varchar(32)
+
+-GO-
+
+if exists (Select * from GenLookUp Where Recid = 14300 and Code = 'SR130000+PROGRAMSTART+1')
+Update GenLookUp Set Recid = 14400 Where Recid = 14300 and Code = 'SR130000+PROGRAMSTART+1'
+
+-GO-
+
+if exists (Select * from GenLookUp Where Recid = 14300 and Code = 'SR130000+VALIDATETILLLIMIT+1')
+Update GenLookUp Set Recid = 14400 Where Recid = 14300 and Code = 'SR130000+VALIDATETILLLIMIT+1'
+
+-GO-
+
+if exists (Select * from GenLookUp Where Recid = 14300 and Code = 'SR100200+VALIDATETILLLIMIT+1')
+Update GenLookUp Set Recid = 14400 Where Recid = 14300 and Code = 'SR100200+VALIDATETILLLIMIT+1'
+
+-GO-
+
+if not exists (select TABLE_NAME from INFORMATION_SCHEMA.TABLES where table_name='ItemClassREstrict')
+CREATE TABLE [dbo].[ItemClassRestrict]([UserId] [VARCHAR](16) NOT NULL,[ColumnName] [VARCHAR](64) NOT NULL,
+[Value] [VARCHAR](64) NOT NULL,[IsAllowed] [INT] NULL,[DateInsert] [Datetime],[VaUID] [Varchar] (32),
+[VaCtr] [Int],[VaTermID] [Varchar] (32),[VaCompCode] [Varchar] (16), 
+CONSTRAINT [PK_ItemClassRestrict] 
+PRIMARY KEY CLUSTERED( [UserId] ASC,[ColumnName] ASC,[Value]))
+
+-GO-
+
+</s9qScript>
+</s9qsqlblk>

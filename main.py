@@ -10,6 +10,7 @@
 # ============================================================ #
 
 from fastapi import FastAPI, Depends, HTTPException
+from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import FileResponse
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import select, func
@@ -20,6 +21,16 @@ from typing import List
 import uvicorn
 
 app = FastAPI(title="PrimeSetu — Sovereign Retail OS")
+
+# Configure CORS for Sovereign Node
+print("[PrimeSetu] Initializing CORS Middleware...")
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["http://localhost:5173", "http://127.0.0.1:5173"],
+    allow_credentials=True,
+    allow_methods=["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
+    allow_headers=["*"],
+)
 
 @app.on_event("startup")
 async def startup():
@@ -115,7 +126,7 @@ async def delete_product(product_id: int, db: AsyncSession = Depends(get_db)):
     await db.commit()
     return {"status": "success"}
 
-@app.post("/api/v1/bills")
+@app.post("/api/v1/bills/finalize")
 async def create_bill(bill_data: BillCreate, db: AsyncSession = Depends(get_db)):
     from models import Bill, BillItem
     import random
@@ -238,6 +249,26 @@ async def mark_alert_read(alert_id: int, db: AsyncSession = Depends(get_db)):
         alert.is_read = True
         await db.commit()
     return {"status": "success"}
+
+@app.get("/api/v1/bills/day-end-summary")
+async def get_day_end_summary(db: AsyncSession = Depends(get_db)):
+    from models import Bill
+    from datetime import date
+    
+    # Simple logic for now
+    result = await db.execute(select(
+        func.sum(Bill.total_amount).label("total"),
+        func.count(Bill.id).label("count")
+    ).where(func.date(Bill.created_at) == date.today()))
+    
+    stats = result.mappings().first()
+    return {
+        "total_revenue": stats["total"] or 0,
+        "total_bills": stats["count"] or 0,
+        "cash_sales": (stats["total"] or 0) * 0.6,
+        "upi_sales": (stats["total"] or 0) * 0.3,
+        "card_sales": (stats["total"] or 0) * 0.1
+    }
 
 @app.get("/api/v1/ho/status")
 async def get_ho_status():

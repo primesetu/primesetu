@@ -1,0 +1,17 @@
+<s9qsqlblk>
+  <s9qScriptID>S9Q_0181_9_0002</s9qScriptID>
+  <s9qtitle>Catalogue Team</s9qtitle>
+  <s9qpgmtype>I</s9qpgmtype>
+  <s9qpgmtype>L</s9qpgmtype>
+  <s9qversion>*</s9qversion>
+  <s9qenvironment>M</s9qenvironment>
+  <s9qRunMultiple>1</s9qRunMultiple>
+  <s9qQryType>DML</s9qQryType>
+  <s9qScript>
+Insert into VaContextHelpDtls(AppName,PgmOption,ControlName,SrlNo,HelpContextId) values('SR708100.EXE',1,'FrmNewSalesTax',1,37081001)
+-GO-
+Insert into VaContextHelpDtls(AppName,PgmOption,ControlName,SrlNo,HelpContextId) values('SR708100.EXE',1,'FrmDrvdFormula',2,37081002)
+-GO-
+</s9qScript>		
+</s9qsqlblk>
+

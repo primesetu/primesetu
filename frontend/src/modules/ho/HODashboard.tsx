@@ -10,6 +10,7 @@
  * ============================================================ */
 import { useState } from 'react'
 import { useQuery, useMutation } from '@tanstack/react-query'
+import { api } from '@/api/client'
 
 export default function HODashboard() {
   const [isSyncing, setIsSyncing] = useState(false)
@@ -17,8 +18,7 @@ export default function HODashboard() {
   const { data: status } = useQuery({
     queryKey: ['ho-status'],
     queryFn: async () => {
-      const resp = await fetch('http://localhost:8000/api/v1/ho/status')
-      return resp.json()
+      return await api.ho.getStatus()
     },
     refetchInterval: 5000
   })
@@ -26,10 +26,10 @@ export default function HODashboard() {
   const syncMutation = useMutation({
     mutationFn: async () => {
       setIsSyncing(true)
-      const resp = await fetch('http://localhost:8000/api/v1/ho/sync', { method: 'POST' })
+      const data = await api.ho.triggerSync()
       // Artificial delay for premium animation feel
       await new Promise(r => setTimeout(r, 2000))
-      return resp.json()
+      return data
     },
     onSuccess: () => {
       setIsSyncing(false)

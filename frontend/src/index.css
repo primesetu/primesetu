@@ -4,14 +4,84 @@
 
 @layer base {
   :root {
-    --navy:    #0D1B3E;
-    --saffron: #F4840A;
-    --gold:    #F9B942;
-    --cream:   #FAF7F2;
-    --muted:   #8A8FA8;
-    --border:  #E8E4DC;
+    --navy:      #0D1B3E;
+    --navylight: #162248;
+    --saffron:   #F4840A;
+    --gold:      #F9B942;
+    --cream:     #FAF7F2;
+    --muted:     #8A8FA8;
+    --border:    #E8E4DC;
   }
   body {
-    @apply font-sans bg-cream text-navy antialiased;
+    background-color: var(--cream);
+    color: var(--navy);
+    font-family: 'DM Sans', sans-serif;
+    -webkit-font-smoothing: antialiased;
+    
+    /* Native App Feel: Disable text selection */
+    user-select: none;
+    -webkit-user-select: none;
+    overflow-x: hidden;
   }
+
+  /* Allow text selection only inside inputs */
+  input, textarea {
+    user-select: text;
+    -webkit-user-select: text;
+  }
+
+  /* Native App Feel: Disable image and link dragging */
+  img, a {
+    -webkit-user-drag: none;
+  }
+
+  /* Native App Feel: Sleek Scrollbars */
+  ::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+  }
+  ::-webkit-scrollbar-track {
+    background: transparent;
+  }
+  ::-webkit-scrollbar-thumb {
+    background: #cbd5e1;
+    border-radius: 3px;
+  }
+  ::-webkit-scrollbar-thumb:hover {
+    background: #94a3b8;
+  }
+}
+
+@layer utilities {
+  .glass {
+    background: rgba(255, 255, 255, 0.7);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+  }
+  .glass-dark {
+    background: rgba(22, 34, 72, 0.8);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+  }
+  .card-premium {
+    border-radius: 2rem;
+    padding: 2rem;
+    transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+  .card-premium:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 25px 50px -12px rgba(13, 27, 62, 0.25);
+  }
+  .shimmer {
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+    background-size: 200% 100%;
+    animation: shimmer 2s infinite;
+  }
+}
+
+@keyframes shimmer {
+  0% { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
 }

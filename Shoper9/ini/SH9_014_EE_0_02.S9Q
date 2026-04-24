@@ -1,0 +1,376 @@
+<s9qsqlblk>
+  <s9qScriptID>	S9Q_014_0_0001	</s9qScriptID>
+  <s9qtitle></s9qtitle>
+  <s9qpgmtype>D</s9qpgmtype>
+  <s9qversion>*</s9qversion>
+  <s9qenvironment>P</s9qenvironment>
+  <s9qRunMultiple>0</s9qRunMultiple>
+  <s9qQryType>DML</s9qQryType>
+  <s9qScript>
+Update ItemMaster set IsRPTaxInclusive = 1,VACTR =(select intg from sysparam where paramcode = 'VaSysCounter') where isrptaxinclusive is null
+-GO-
+Update ItemMaster set IsInventoryItem =1,VACTR =(select intg from sysparam where paramcode = 'VaSysCounter') where IsInventoryItem is null 
+-GO-
+Update ItemMaster set IsBillable =1,VACTR =(select intg from sysparam where paramcode = 'VaSysCounter') where IsBillable is null 
+-GO-
+Update ItemMaster set Regularind=1,VACTR =(select intg from sysparam where paramcode = 'VaSysCounter') where RegularInd is null 
+-GO-
+UPDATE ITEMMASTER SET PRODTAXTYPE ='NA',VACTR =(select intg from sysparam where paramcode = 'VaSysCounter') WHERE (PRODTAXTYPE IS NULL OR PRODTAXTYPE ='') 
+-GO-
+UPDATE SubClass1Cat SET PRODTAXTYPE ='NA',VACTR =(select intg from sysparam where paramcode = 'VaSysCounter') WHERE (PRODTAXTYPE IS NULL OR PRODTAXTYPE ='') 
+-GO-
+update itemmaster set class1cd=ltrim(rtrim(class1cd)),class2cd=ltrim(rtrim(class2cd)),subclass1cd=ltrim(rtrim(subclass1cd)),subclass2cd=ltrim(rtrim(subclass2cd)),sizecd=ltrim(rtrim(sizecd))
+-GO-
+UPDATE ITEMMASTER SET SIZECD ='NA',VACTR =(select intg from sysparam where paramcode = 'VaSysCounter') WHERE (SIZECD IS NULL OR SIZECD ='') 
+-GO-
+UPDATE ITEMMASTER SET ANALCODE1 ='NA',VACTR =(select intg from sysparam where paramcode = 'VaSysCounter') WHERE (ANALCODE1 IS NULL OR ANALCODE1 ='') AND 
+(SELECT BOOLEAN FROM SYSPARAM WHERE PARAMCODE = 'ItemAnaCd1Present') = 1 
+-GO-
+UPDATE ITEMMASTER SET ANALCODE2 ='NA',VACTR =(select intg from sysparam where paramcode = 'VaSysCounter') WHERE (ANALCODE2 IS NULL OR ANALCODE2 ='') AND
+ (SELECT BOOLEAN FROM SYSPARAM WHERE PARAMCODE = 'ItemAnaCd2Present') = 1 
+-GO-
+UPDATE ITEMMASTER SET ANALCODE3 ='NA',VACTR =(select intg from sysparam where paramcode = 'VaSysCounter') WHERE (ANALCODE3 IS NULL OR ANALCODE3 ='') AND
+ (SELECT BOOLEAN FROM SYSPARAM WHERE PARAMCODE = 'ItemAnaCd3Present') = 1 
+-GO-
+UPDATE ITEMMASTER SET ANALCODE4 ='NA',VACTR =(select intg from sysparam where paramcode = 'VaSysCounter') WHERE (ANALCODE4 IS NULL OR ANALCODE4 ='') AND
+ (SELECT BOOLEAN FROM SYSPARAM WHERE PARAMCODE = 'ItemAnaCd4Present') = 1 
+-GO-
+UPDATE ITEMMASTER SET ANALCODE5 ='NA',VACTR =(select intg from sysparam where paramcode = 'VaSysCounter') WHERE (ANALCODE5 IS NULL OR ANALCODE5 ='') AND
+ (SELECT BOOLEAN FROM SYSPARAM WHERE PARAMCODE = 'ItemAnaCd5Present') = 1 
+-GO-
+UPDATE ITEMMASTER SET ANALCODE6 ='NA',VACTR =(select intg from sysparam where paramcode = 'VaSysCounter') WHERE (ANALCODE6 IS NULL OR ANALCODE6 ='') AND
+ (SELECT BOOLEAN FROM SYSPARAM WHERE PARAMCODE = 'ItemAnaCd6Present') = 1 
+-GO-
+UPDATE ITEMMASTER SET ANALCODE7 ='NA',VACTR =(select intg from sysparam where paramcode = 'VaSysCounter') WHERE (ANALCODE7 IS NULL OR ANALCODE7 ='') AND
+ (SELECT BOOLEAN FROM SYSPARAM WHERE PARAMCODE = 'ItemAnaCd7Present') = 1 
+-GO-
+UPDATE ITEMMASTER SET ANALCODE8 ='NA',VACTR =(select intg from sysparam where paramcode = 'VaSysCounter') WHERE (ANALCODE8 IS NULL OR ANALCODE8 ='') AND
+ (SELECT BOOLEAN FROM SYSPARAM WHERE PARAMCODE = 'ItemAnaCd8Present') = 1 
+-GO-
+UPDATE ITEMMASTER SET ANALCODE9 ='NA',VACTR =(select intg from sysparam where paramcode = 'VaSysCounter') WHERE (ANALCODE9 IS NULL OR ANALCODE9 ='') AND
+ (SELECT BOOLEAN FROM SYSPARAM WHERE PARAMCODE = 'ItemAnaCd9Present') = 1 
+-GO-
+UPDATE ITEMMASTER SET ANALCODE10 ='NA',VACTR =(select intg from sysparam where paramcode = 'VaSysCounter') WHERE (ANALCODE10 IS NULL OR ANALCODE10 ='') AND
+ (SELECT BOOLEAN FROM SYSPARAM WHERE PARAMCODE = 'ItemAnaCd10Present') = 1 
+-GO-
+UPDATE ITEMMASTER SET ANALCODE11 ='NA',VACTR =(select intg from sysparam where paramcode = 'VaSysCounter') WHERE (ANALCODE11 IS NULL OR ANALCODE11 ='') AND
+ (SELECT BOOLEAN FROM SYSPARAM WHERE PARAMCODE = 'ItemAnaCd11Present') = 1 
+-GO-
+UPDATE ITEMMASTER SET ANALCODE12 ='NA',VACTR =(select intg from sysparam where paramcode = 'VaSysCounter') WHERE (ANALCODE12 IS NULL OR ANALCODE12 ='') AND
+ (SELECT BOOLEAN FROM SYSPARAM WHERE PARAMCODE = 'ItemAnaCd12Present') = 1 
+-GO-
+UPDATE ITEMMASTER SET ANALCODE13 ='NA',VACTR =(select intg from sysparam where paramcode = 'VaSysCounter') WHERE (ANALCODE13 IS NULL OR ANALCODE13 ='') AND
+ (SELECT BOOLEAN FROM SYSPARAM WHERE PARAMCODE = 'ItemAnaCd13Present') = 1 
+-GO-
+UPDATE ITEMMASTER SET ANALCODE14 ='NA',VACTR =(select intg from sysparam where paramcode = 'VaSysCounter') WHERE (ANALCODE14 IS NULL OR ANALCODE14 ='') AND
+ (SELECT BOOLEAN FROM SYSPARAM WHERE PARAMCODE = 'ItemAnaCd14Present') = 1 
+-GO-
+UPDATE ITEMMASTER SET ANALCODE15 ='NA',VACTR =(select intg from sysparam where paramcode = 'VaSysCounter') WHERE (ANALCODE15 IS NULL OR ANALCODE15 ='') AND
+ (SELECT BOOLEAN FROM SYSPARAM WHERE PARAMCODE = 'ItemAnaCd15Present') = 1 
+-GO-
+UPDATE ITEMMASTER SET ANALCODE16 ='NA',VACTR =(select intg from sysparam where paramcode = 'VaSysCounter') WHERE (ANALCODE16 IS NULL OR ANALCODE16 ='') AND
+ (SELECT BOOLEAN FROM SYSPARAM WHERE PARAMCODE = 'ItemAnaCd16Present') = 1 
+-GO-
+UPDATE ITEMMASTER SET ANALCODE17 ='NA',VACTR =(select intg from sysparam where paramcode = 'VaSysCounter') WHERE (ANALCODE17 IS NULL OR ANALCODE17 ='') AND
+ (SELECT BOOLEAN FROM SYSPARAM WHERE PARAMCODE = 'ItemAnaCd17Present') = 1 
+-GO-
+UPDATE ITEMMASTER SET ANALCODE18 ='NA',VACTR =(select intg from sysparam where paramcode = 'VaSysCounter') WHERE (ANALCODE18 IS NULL OR ANALCODE18 ='') AND
+ (SELECT BOOLEAN FROM SYSPARAM WHERE PARAMCODE = 'ItemAnaCd18Present') = 1 
+-GO-
+UPDATE ITEMMASTER SET ANALCODE19 ='NA',VACTR =(select intg from sysparam where paramcode = 'VaSysCounter') WHERE (ANALCODE19 IS NULL OR ANALCODE19 ='') AND
+ (SELECT BOOLEAN FROM SYSPARAM WHERE PARAMCODE = 'ItemAnaCd19Present') = 1 
+-GO-
+UPDATE ITEMMASTER SET ANALCODE20 ='NA',VACTR =(select intg from sysparam where paramcode = 'VaSysCounter') WHERE (ANALCODE20 IS NULL OR ANALCODE20 ='') AND
+ (SELECT BOOLEAN FROM SYSPARAM WHERE PARAMCODE = 'ItemAnaCd20Present') = 1 
+-GO-
+UPDATE ITEMMASTER SET ANALCODE21 ='NA',VACTR =(select intg from sysparam where paramcode = 'VaSysCounter') WHERE (ANALCODE21 IS NULL OR ANALCODE21 ='') AND
+ (SELECT BOOLEAN FROM SYSPARAM WHERE PARAMCODE = 'ItemAnaCd21Present') = 1 
+-GO-
+UPDATE ITEMMASTER SET ANALCODE22 ='NA',VACTR =(select intg from sysparam where paramcode = 'VaSysCounter') WHERE (ANALCODE22 IS NULL OR ANALCODE22 ='') AND
+ (SELECT BOOLEAN FROM SYSPARAM WHERE PARAMCODE = 'ItemAnaCd22Present') = 1 
+-GO-
+UPDATE ITEMMASTER SET ANALCODE23 ='NA',VACTR =(select intg from sysparam where paramcode = 'VaSysCounter') WHERE (ANALCODE23 IS NULL OR ANALCODE23 ='') AND
+ (SELECT BOOLEAN FROM SYSPARAM WHERE PARAMCODE = 'ItemAnaCd23Present') = 1 
+-GO-
+UPDATE ITEMMASTER SET ANALCODE24 ='NA',VACTR =(select intg from sysparam where paramcode = 'VaSysCounter') WHERE (ANALCODE24 IS NULL OR ANALCODE24 ='') AND
+ (SELECT BOOLEAN FROM SYSPARAM WHERE PARAMCODE = 'ItemAnaCd24Present') = 1 
+-GO-
+UPDATE ITEMMASTER SET ANALCODE25 ='NA',VACTR =(select intg from sysparam where paramcode = 'VaSysCounter') WHERE (ANALCODE25 IS NULL OR ANALCODE25 ='') AND
+ (SELECT BOOLEAN FROM SYSPARAM WHERE PARAMCODE = 'ItemAnaCd25Present') = 1 
+-GO-
+UPDATE ITEMMASTER SET ANALCODE26 ='NA',VACTR =(select intg from sysparam where paramcode = 'VaSysCounter') WHERE (ANALCODE26 IS NULL OR ANALCODE26 ='') AND
+ (SELECT BOOLEAN FROM SYSPARAM WHERE PARAMCODE = 'ItemAnaCd26Present') = 1 
+-GO-
+UPDATE ITEMMASTER SET ANALCODE27 ='NA',VACTR =(select intg from sysparam where paramcode = 'VaSysCounter') WHERE (ANALCODE27 IS NULL OR ANALCODE27 ='') AND
+ (SELECT BOOLEAN FROM SYSPARAM WHERE PARAMCODE = 'ItemAnaCd27Present') = 1 
+-GO-
+UPDATE ITEMMASTER SET ANALCODE28 ='NA',VACTR =(select intg from sysparam where paramcode = 'VaSysCounter') WHERE (ANALCODE28 IS NULL OR ANALCODE28 ='') AND
+ (SELECT BOOLEAN FROM SYSPARAM WHERE PARAMCODE = 'ItemAnaCd28Present') = 1 
+-GO-
+UPDATE ITEMMASTER SET ANALCODE29 ='NA',VACTR =(select intg from sysparam where paramcode = 'VaSysCounter') WHERE (ANALCODE29 IS NULL OR ANALCODE29 ='') AND
+ (SELECT BOOLEAN FROM SYSPARAM WHERE PARAMCODE = 'ItemAnaCd29Present') = 1 
+-GO-
+UPDATE ITEMMASTER SET ANALCODE30 ='NA',VACTR =(select intg from sysparam where paramcode = 'VaSysCounter') WHERE (ANALCODE30 IS NULL OR ANALCODE30 ='') AND
+ (SELECT BOOLEAN FROM SYSPARAM WHERE PARAMCODE = 'ItemAnaCd30Present') = 1 
+-GO-
+UPDATE ITEMMASTER SET ANALCODE31 ='NA',VACTR =(select intg from sysparam where paramcode = 'VaSysCounter') WHERE (ANALCODE31 IS NULL OR ANALCODE31 ='') AND
+ (SELECT BOOLEAN FROM SYSPARAM WHERE PARAMCODE = 'ItemAnaCd31Present') = 1 
+-GO-
+UPDATE ITEMMASTER SET ANALCODE32 ='NA',VACTR =(select intg from sysparam where paramcode = 'VaSysCounter') WHERE (ANALCODE32 IS NULL OR ANALCODE32 ='') AND
+ (SELECT BOOLEAN FROM SYSPARAM WHERE PARAMCODE = 'ItemAnaCd32Present') = 1 
+-GO-
+UPDATE SUBCLASS1CAT SET ANALCODE1 ='NA',VACTR =(select intg from sysparam where paramcode = 'VaSysCounter') WHERE (ANALCODE1 IS NULL OR ANALCODE1 ='') AND
+ (SELECT BOOLEAN FROM SYSPARAM WHERE PARAMCODE = 'ItemAnaCd1Present') = 1 
+-GO-
+UPDATE SUBCLASS1CAT SET ANALCODE2 ='NA',VACTR =(select intg from sysparam where paramcode = 'VaSysCounter') WHERE (ANALCODE2 IS NULL OR ANALCODE2 ='') AND
+ (SELECT BOOLEAN FROM SYSPARAM WHERE PARAMCODE = 'ItemAnaCd2Present') = 1 
+-GO-
+UPDATE SUBCLASS1CAT SET ANALCODE3 ='NA',VACTR =(select intg from sysparam where paramcode = 'VaSysCounter') WHERE (ANALCODE3 IS NULL OR ANALCODE3 ='') AND
+ (SELECT BOOLEAN FROM SYSPARAM WHERE PARAMCODE = 'ItemAnaCd3Present') = 1 
+-GO-
+UPDATE SUBCLASS1CAT SET ANALCODE4 ='NA',VACTR =(select intg from sysparam where paramcode = 'VaSysCounter') WHERE (ANALCODE4 IS NULL OR ANALCODE4 ='') AND
+ (SELECT BOOLEAN FROM SYSPARAM WHERE PARAMCODE = 'ItemAnaCd4Present') = 1 
+-GO-
+UPDATE SUBCLASS1CAT SET ANALCODE5 ='NA',VACTR =(select intg from sysparam where paramcode = 'VaSysCounter') WHERE (ANALCODE5 IS NULL OR ANALCODE5 ='') AND
+ (SELECT BOOLEAN FROM SYSPARAM WHERE PARAMCODE = 'ItemAnaCd5Present') = 1 
+-GO-
+UPDATE SUBCLASS1CAT SET ANALCODE6 ='NA',VACTR =(select intg from sysparam where paramcode = 'VaSysCounter') WHERE (ANALCODE6 IS NULL OR ANALCODE6 ='') AND
+ (SELECT BOOLEAN FROM SYSPARAM WHERE PARAMCODE = 'ItemAnaCd6Present') = 1 
+-GO-
+UPDATE SUBCLASS1CAT SET ANALCODE7 ='NA',VACTR =(select intg from sysparam where paramcode = 'VaSysCounter') WHERE (ANALCODE7 IS NULL OR ANALCODE7 ='') AND
+ (SELECT BOOLEAN FROM SYSPARAM WHERE PARAMCODE = 'ItemAnaCd7Present') = 1 
+-GO-
+UPDATE SUBCLASS1CAT SET ANALCODE8 ='NA',VACTR =(select intg from sysparam where paramcode = 'VaSysCounter') WHERE (ANALCODE8 IS NULL OR ANALCODE8 ='') AND
+ (SELECT BOOLEAN FROM SYSPARAM WHERE PARAMCODE = 'ItemAnaCd8Present') = 1 
+-GO-
+UPDATE SUBCLASS1CAT SET ANALCODE9 ='NA',VACTR =(select intg from sysparam where paramcode = 'VaSysCounter') WHERE (ANALCODE9 IS NULL OR ANALCODE9 ='') AND
+ (SELECT BOOLEAN FROM SYSPARAM WHERE PARAMCODE = 'ItemAnaCd9Present') = 1 
+-GO-
+UPDATE SUBCLASS1CAT SET ANALCODE10 ='NA',VACTR =(select intg from sysparam where paramcode = 'VaSysCounter') WHERE (ANALCODE10 IS NULL OR ANALCODE10 ='') AND
+ (SELECT BOOLEAN FROM SYSPARAM WHERE PARAMCODE = 'ItemAnaCd10Present') = 1 
+-GO-
+UPDATE SUBCLASS1CAT SET ANALCODE11 ='NA',VACTR =(select intg from sysparam where paramcode = 'VaSysCounter') WHERE (ANALCODE11 IS NULL OR ANALCODE11 ='') AND
+ (SELECT BOOLEAN FROM SYSPARAM WHERE PARAMCODE = 'ItemAnaCd11Present') = 1 
+-GO-
+UPDATE SUBCLASS1CAT SET ANALCODE12 ='NA',VACTR =(select intg from sysparam where paramcode = 'VaSysCounter') WHERE (ANALCODE12 IS NULL OR ANALCODE12 ='') AND
+ (SELECT BOOLEAN FROM SYSPARAM WHERE PARAMCODE = 'ItemAnaCd12Present') = 1 
+-GO-
+UPDATE SUBCLASS1CAT SET ANALCODE13 ='NA',VACTR =(select intg from sysparam where paramcode = 'VaSysCounter') WHERE (ANALCODE13 IS NULL OR ANALCODE13 ='') AND
+ (SELECT BOOLEAN FROM SYSPARAM WHERE PARAMCODE = 'ItemAnaCd13Present') = 1 
+-GO-
+UPDATE SUBCLASS1CAT SET ANALCODE14 ='NA',VACTR =(select intg from sysparam where paramcode = 'VaSysCounter') WHERE (ANALCODE14 IS NULL OR ANALCODE14 ='') AND
+ (SELECT BOOLEAN FROM SYSPARAM WHERE PARAMCODE = 'ItemAnaCd14Present') = 1 
+-GO-
+UPDATE SUBCLASS1CAT SET ANALCODE15 ='NA',VACTR =(select intg from sysparam where paramcode = 'VaSysCounter') WHERE (ANALCODE15 IS NULL OR ANALCODE15 ='') AND
+ (SELECT BOOLEAN FROM SYSPARAM WHERE PARAMCODE = 'ItemAnaCd15Present') = 1 
+-GO-
+UPDATE SUBCLASS1CAT SET ANALCODE16 ='NA',VACTR =(select intg from sysparam where paramcode = 'VaSysCounter') WHERE (ANALCODE16 IS NULL OR ANALCODE16 ='') AND
+ (SELECT BOOLEAN FROM SYSPARAM WHERE PARAMCODE = 'ItemAnaCd16Present') = 1 
+-GO-
+UPDATE SUBCLASS1CAT SET ANALCODE17 ='NA',VACTR =(select intg from sysparam where paramcode = 'VaSysCounter') WHERE (ANALCODE17 IS NULL OR ANALCODE17 ='') AND
+ (SELECT BOOLEAN FROM SYSPARAM WHERE PARAMCODE = 'ItemAnaCd17Present') = 1 
+-GO-
+UPDATE SUBCLASS1CAT SET ANALCODE18 ='NA',VACTR =(select intg from sysparam where paramcode = 'VaSysCounter') WHERE (ANALCODE18 IS NULL OR ANALCODE18 ='') AND
+ (SELECT BOOLEAN FROM SYSPARAM WHERE PARAMCODE = 'ItemAnaCd18Present') = 1 
+-GO-
+UPDATE SUBCLASS1CAT SET ANALCODE19 ='NA',VACTR =(select intg from sysparam where paramcode = 'VaSysCounter') WHERE (ANALCODE19 IS NULL OR ANALCODE19 ='') AND
+ (SELECT BOOLEAN FROM SYSPARAM WHERE PARAMCODE = 'ItemAnaCd19Present') = 1 
+-GO-
+UPDATE SUBCLASS1CAT SET ANALCODE20 ='NA',VACTR =(select intg from sysparam where paramcode = 'VaSysCounter') WHERE (ANALCODE20 IS NULL OR ANALCODE20 ='') AND
+ (SELECT BOOLEAN FROM SYSPARAM WHERE PARAMCODE = 'ItemAnaCd20Present') = 1 
+-GO-
+UPDATE SUBCLASS1CAT SET ANALCODE21 ='NA',VACTR =(select intg from sysparam where paramcode = 'VaSysCounter') WHERE (ANALCODE21 IS NULL OR ANALCODE21 ='') AND
+ (SELECT BOOLEAN FROM SYSPARAM WHERE PARAMCODE = 'ItemAnaCd21Present') = 1 
+-GO-
+UPDATE SUBCLASS1CAT SET ANALCODE22 ='NA',VACTR =(select intg from sysparam where paramcode = 'VaSysCounter') WHERE (ANALCODE22 IS NULL OR ANALCODE22 ='') AND
+ (SELECT BOOLEAN FROM SYSPARAM WHERE PARAMCODE = 'ItemAnaCd22Present') = 1 
+-GO-
+UPDATE SUBCLASS1CAT SET ANALCODE23 ='NA',VACTR =(select intg from sysparam where paramcode = 'VaSysCounter') WHERE (ANALCODE23 IS NULL OR ANALCODE23 ='') AND
+ (SELECT BOOLEAN FROM SYSPARAM WHERE PARAMCODE = 'ItemAnaCd23Present') = 1 
+-GO-
+UPDATE SUBCLASS1CAT SET ANALCODE24 ='NA',VACTR =(select intg from sysparam where paramcode = 'VaSysCounter') WHERE (ANALCODE24 IS NULL OR ANALCODE24 ='') AND
+ (SELECT BOOLEAN FROM SYSPARAM WHERE PARAMCODE = 'ItemAnaCd24Present') = 1 
+-GO-
+UPDATE SUBCLASS1CAT SET ANALCODE25 ='NA',VACTR =(select intg from sysparam where paramcode = 'VaSysCounter') WHERE (ANALCODE25 IS NULL OR ANALCODE25 ='') AND
+ (SELECT BOOLEAN FROM SYSPARAM WHERE PARAMCODE = 'ItemAnaCd25Present') = 1 
+-GO-
+UPDATE SUBCLASS1CAT SET ANALCODE26 ='NA',VACTR =(select intg from sysparam where paramcode = 'VaSysCounter') WHERE (ANALCODE26 IS NULL OR ANALCODE26 ='') AND
+ (SELECT BOOLEAN FROM SYSPARAM WHERE PARAMCODE = 'ItemAnaCd26Present') = 1 
+-GO-
+UPDATE SUBCLASS1CAT SET ANALCODE27 ='NA',VACTR =(select intg from sysparam where paramcode = 'VaSysCounter') WHERE (ANALCODE27 IS NULL OR ANALCODE27 ='') AND
+ (SELECT BOOLEAN FROM SYSPARAM WHERE PARAMCODE = 'ItemAnaCd27Present') = 1 
+-GO-
+UPDATE SUBCLASS1CAT SET ANALCODE28 ='NA',VACTR =(select intg from sysparam where paramcode = 'VaSysCounter') WHERE (ANALCODE28 IS NULL OR ANALCODE28 ='') AND
+ (SELECT BOOLEAN FROM SYSPARAM WHERE PARAMCODE = 'ItemAnaCd28Present') = 1 
+-GO-
+UPDATE SUBCLASS1CAT SET ANALCODE29 ='NA',VACTR =(select intg from sysparam where paramcode = 'VaSysCounter') WHERE (ANALCODE29 IS NULL OR ANALCODE29 ='') AND
+ (SELECT BOOLEAN FROM SYSPARAM WHERE PARAMCODE = 'ItemAnaCd29Present') = 1 
+-GO-
+UPDATE SUBCLASS1CAT SET ANALCODE30 ='NA',VACTR =(select intg from sysparam where paramcode = 'VaSysCounter') WHERE (ANALCODE30 IS NULL OR ANALCODE30 ='') AND
+ (SELECT BOOLEAN FROM SYSPARAM WHERE PARAMCODE = 'ItemAnaCd30Present') = 1 
+-GO-
+UPDATE SUBCLASS1CAT SET ANALCODE31 ='NA',VACTR =(select intg from sysparam where paramcode = 'VaSysCounter') WHERE (ANALCODE31 IS NULL OR ANALCODE31 ='') AND
+ (SELECT BOOLEAN FROM SYSPARAM WHERE PARAMCODE = 'ItemAnaCd31Present') = 1 
+-GO-
+UPDATE SUBCLASS1CAT SET ANALCODE32 ='NA',VACTR =(select intg from sysparam where paramcode = 'VaSysCounter') WHERE (ANALCODE32 IS NULL OR ANALCODE32 ='') AND
+ (SELECT BOOLEAN FROM SYSPARAM WHERE PARAMCODE = 'ItemAnaCd32Present') = 1 
+-GO-
+INSERT INTO Class12Combo (Class1Cd,Class2Cd,Billable,SizeGroup,RetailMarkUp,DealerMarkUp,PrefVendorId,ProdTaxType,
+SuperClass1,SuperClass2,IsServiceCombo,IsConsignmentItem,Vauid,Vactr,VatermId,VacompCode) 
+select distinct class1cd,class2cd,1,0,0,0,'NA','NA','NA','NA',0,0,'SUPER',
+(select intg from sysparam where paramcode = 'VaSysCounter'),'.',(select TXT from sysparam where paramcode = 'COMPANYCODE') 
+from ItemMaster where class1cd+':'+class2cd not in (select class1cd+':'+class2cd from class12combo)
+-GO-
+update class12combo set sizegroup=0 where (sizegroup is null or sizegroup='')
+-GO-
+update class12combo set SUPERCLASS1='NA' where (SUPERCLASS1 is null or SUPERCLASS1='')
+-GO-
+update class12combo set SUPERCLASS2='NA' where (SUPERCLASS2 is null or SUPERCLASS2='')
+-GO-
+Declare @VaCtr as int
+Declare @Vacompany as varchar(10) 
+Set @VaCtr = (select intg from sysparam where paramcode = 'VaSysCounter')
+Set @Vacompany = (select TXT from sysparam where paramcode = 'COMPANYCODE')  
+Insert Into Genlookup (Recid,Code,Descr,flag,number,Vauid,Vactr,VatermId,VacompCode) 
+SELECT 1,CLASS1CD,CLASS1CD,'',0,'SUPER',@VaCtr,'.',@Vacompany FROM ITEMMASTER WHERE CLASS1CD NOT IN (SELECT CODE FROM GENLOOKUP WHERE RECID = 1) Union 
+SELECT 2,CLASS2CD,CLASS2CD,'',0,'SUPER',@VaCtr,'.',@Vacompany FROM ITEMMASTER WHERE CLASS2CD NOT IN (SELECT CODE FROM GENLOOKUP WHERE RECID = 2) Union 
+SELECT 65,ANALCODE1,ANALCODE1,'',0,'SUPER',@VaCtr,'.',@Vacompany FROM ITEMMASTER WHERE ANALCODE1 NOT IN (SELECT CODE FROM GENLOOKUP WHERE RECID = 65) Union 
+SELECT 66,ANALCODE2,ANALCODE2,'',0,'SUPER',@VaCtr,'.',@Vacompany FROM ITEMMASTER WHERE ANALCODE2 NOT IN (SELECT CODE FROM GENLOOKUP WHERE RECID = 66) Union 
+SELECT 67,ANALCODE3,ANALCODE3,'',0,'SUPER',@VaCtr,'.',@Vacompany FROM ITEMMASTER WHERE ANALCODE3 NOT IN (SELECT CODE FROM GENLOOKUP WHERE RECID = 67) Union 
+SELECT 68,ANALCODE4,ANALCODE4,'',0,'SUPER',@VaCtr,'.',@Vacompany FROM ITEMMASTER WHERE ANALCODE4 NOT IN (SELECT CODE FROM GENLOOKUP WHERE RECID = 68) Union 
+SELECT 69,ANALCODE5,ANALCODE5,'',0,'SUPER',@VaCtr,'.',@Vacompany FROM ITEMMASTER WHERE ANALCODE5 NOT IN (SELECT CODE FROM GENLOOKUP WHERE RECID = 69) 
+-GO-
+Declare @VaCtr as int
+Declare @Vacompany as varchar(10) 
+Set @VaCtr = (select intg from sysparam where paramcode = 'VaSysCounter')
+Set @Vacompany = (select TXT from sysparam where paramcode = 'COMPANYCODE')  
+Insert Into Genlookup (Recid,Code,Descr,flag,number,Vauid,Vactr,VatermId,VacompCode) 
+SELECT 54,PRODTAXTYPE,PRODTAXTYPE,'',0,'SUPER',@VaCtr,'.',@Vacompany FROM ITEMMASTER WHERE PRODTAXTYPE NOT IN (SELECT CODE FROM GENLOOKUP WHERE RECID = 54) Union
+SELECT 70,SRCTAXTYPE,SRCTAXTYPE,'',0,'SUPER',@VaCtr,'.',@Vacompany FROM ITEMMASTER WHERE SRCTAXTYPE NOT IN (SELECT CODE FROM GENLOOKUP WHERE RECID = 70) Union
+SELECT 53,SIZEGROUP,SIZEGROUP,'',0,'SUPER',@VaCtr,'.',@Vacompany FROM CLASS12COMBO WHERE SIZEGROUP NOT IN (SELECT CODE FROM GENLOOKUP WHERE RECID = 53) Union
+SELECT 53,SIZEGROUPID,SIZEGROUPID,'',0,'SUPER',@VaCtr,'.',@Vacompany FROM SIZECAT WHERE SIZEGROUPID NOT IN (SELECT CODE FROM GENLOOKUP WHERE RECID = 53) Union
+SELECT 51,SUPERCLASS1,SUPERCLASS1,'',0,'SUPER',@VaCtr,'.',@Vacompany FROM CLASS12COMBO WHERE SUPERCLASS1 NOT IN (SELECT CODE FROM GENLOOKUP WHERE RECID = 51) Union 
+SELECT 52,SUPERCLASS2,SUPERCLASS2,'',0,'SUPER',@VaCtr,'.',@Vacompany FROM CLASS12COMBO WHERE SUPERCLASS2 NOT IN (SELECT CODE FROM GENLOOKUP WHERE RECID = 52)  
+-GO-
+Declare @VaCtr as int
+Declare @Vacompany as varchar(10) 
+Set @VaCtr = (select intg from sysparam where paramcode = 'VaSysCounter')
+Set @Vacompany = (select TXT from sysparam where paramcode = 'COMPANYCODE')  
+Insert Into Genlookup (Recid,Code,Descr,flag,number,Vauid,Vactr,VatermId,VacompCode) 
+SELECT 7000,ANALCODE6,ANALCODE6,'',0,'SUPER',@VaCtr,'.',@Vacompany FROM ITEMMASTER WHERE ANALCODE6 NOT IN (SELECT CODE FROM GENLOOKUP WHERE RECID = 7000) Union 
+SELECT 7001,ANALCODE7,ANALCODE7,'',0,'SUPER',@VaCtr,'.',@Vacompany FROM ITEMMASTER WHERE ANALCODE7 NOT IN (SELECT CODE FROM GENLOOKUP WHERE RECID = 7001) Union 
+SELECT 7002,ANALCODE8,ANALCODE8,'',0,'SUPER',@VaCtr,'.',@Vacompany FROM ITEMMASTER WHERE ANALCODE8 NOT IN (SELECT CODE FROM GENLOOKUP WHERE RECID = 7002) Union 
+SELECT 7003,ANALCODE9,ANALCODE9,'',0,'SUPER',@VaCtr,'.',@Vacompany FROM ITEMMASTER WHERE ANALCODE9 NOT IN (SELECT CODE FROM GENLOOKUP WHERE RECID = 7003) Union 
+SELECT 7004,ANALCODE10,ANALCODE10,'',0,'SUPER',@VaCtr,'.',@Vacompany FROM ITEMMASTER WHERE ANALCODE10 NOT IN (SELECT CODE FROM GENLOOKUP WHERE RECID = 7004) Union 
+SELECT 7005,ANALCODE11,ANALCODE11,'',0,'SUPER',@VaCtr,'.',@Vacompany FROM ITEMMASTER WHERE ANALCODE11 NOT IN (SELECT CODE FROM GENLOOKUP WHERE RECID = 7005) Union 
+SELECT 7006,ANALCODE12,ANALCODE12,'',0,'SUPER',@VaCtr,'.',@Vacompany FROM ITEMMASTER WHERE ANALCODE12 NOT IN (SELECT CODE FROM GENLOOKUP WHERE RECID = 7006) Union 
+SELECT 7007,ANALCODE13,ANALCODE13,'',0,'SUPER',@VaCtr,'.',@Vacompany FROM ITEMMASTER WHERE ANALCODE13 NOT IN (SELECT CODE FROM GENLOOKUP WHERE RECID = 7007) Union 
+SELECT 7008,ANALCODE14,ANALCODE14,'',0,'SUPER',@VaCtr,'.',@Vacompany FROM ITEMMASTER WHERE ANALCODE14 NOT IN (SELECT CODE FROM GENLOOKUP WHERE RECID = 7008) 
+-GO-
+Declare @VaCtr as int
+Declare @Vacompany as varchar(10) 
+Set @VaCtr = (select intg from sysparam where paramcode = 'VaSysCounter')
+Set @Vacompany = (select TXT from sysparam where paramcode = 'COMPANYCODE')  
+Insert Into Genlookup (Recid,Code,Descr,flag,number,Vauid,Vactr,VatermId,VacompCode) 
+SELECT 7009,ANALCODE15,ANALCODE15,'',0,'SUPER',@VaCtr,'.',@Vacompany FROM ITEMMASTER WHERE ANALCODE15 NOT IN (SELECT CODE FROM GENLOOKUP WHERE RECID = 7009) Union 
+SELECT 7010,ANALCODE16,ANALCODE16,'',0,'SUPER',@VaCtr,'.',@Vacompany FROM ITEMMASTER WHERE ANALCODE16 NOT IN (SELECT CODE FROM GENLOOKUP WHERE RECID = 7010) Union 
+SELECT 7011,ANALCODE17,ANALCODE17,'',0,'SUPER',@VaCtr,'.',@Vacompany FROM ITEMMASTER WHERE ANALCODE17 NOT IN (SELECT CODE FROM GENLOOKUP WHERE RECID = 7011) Union 
+SELECT 7012,ANALCODE18,ANALCODE18,'',0,'SUPER',@VaCtr,'.',@Vacompany FROM ITEMMASTER WHERE ANALCODE18 NOT IN (SELECT CODE FROM GENLOOKUP WHERE RECID = 7012) Union 
+SELECT 7013,ANALCODE19,ANALCODE19,'',0,'SUPER',@VaCtr,'.',@Vacompany FROM ITEMMASTER WHERE ANALCODE19 NOT IN (SELECT CODE FROM GENLOOKUP WHERE RECID = 7013) Union 
+SELECT 7014,ANALCODE20,ANALCODE20,'',0,'SUPER',@VaCtr,'.',@Vacompany FROM ITEMMASTER WHERE ANALCODE20 NOT IN (SELECT CODE FROM GENLOOKUP WHERE RECID = 7014) Union 
+SELECT 7015,ANALCODE21,ANALCODE21,'',0,'SUPER',@VaCtr,'.',@Vacompany FROM ITEMMASTER WHERE ANALCODE21 NOT IN (SELECT CODE FROM GENLOOKUP WHERE RECID = 7015) Union 
+SELECT 7016,ANALCODE22,ANALCODE22,'',0,'SUPER',@VaCtr,'.',@Vacompany FROM ITEMMASTER WHERE ANALCODE22 NOT IN (SELECT CODE FROM GENLOOKUP WHERE RECID = 7016) Union 
+SELECT 7017,ANALCODE23,ANALCODE23,'',0,'SUPER',@VaCtr,'.',@Vacompany FROM ITEMMASTER WHERE ANALCODE23 NOT IN (SELECT CODE FROM GENLOOKUP WHERE RECID = 7017) Union 
+SELECT 7018,ANALCODE24,ANALCODE24,'',0,'SUPER',@VaCtr,'.',@Vacompany FROM ITEMMASTER WHERE ANALCODE24 NOT IN (SELECT CODE FROM GENLOOKUP WHERE RECID = 7018) 
+-GO-
+Declare @VaCtr as int
+Declare @Vacompany as varchar(10) 
+Set @VaCtr = (select intg from sysparam where paramcode = 'VaSysCounter')
+Set @Vacompany = (select TXT from sysparam where paramcode = 'COMPANYCODE')  
+Insert Into Genlookup (Recid,Code,Descr,flag,number,Vauid,Vactr,VatermId,VacompCode) 
+SELECT 7019,ANALCODE25,ANALCODE25,'',0,'SUPER',@VaCtr,'.',@Vacompany FROM ITEMMASTER WHERE ANALCODE25 NOT IN (SELECT CODE FROM GENLOOKUP WHERE RECID = 7019) Union 
+SELECT 7020,ANALCODE26,ANALCODE26,'',0,'SUPER',@VaCtr,'.',@Vacompany FROM ITEMMASTER WHERE ANALCODE26 NOT IN (SELECT CODE FROM GENLOOKUP WHERE RECID = 7020) Union 
+SELECT 7021,ANALCODE27,ANALCODE27,'',0,'SUPER',@VaCtr,'.',@Vacompany FROM ITEMMASTER WHERE ANALCODE27 NOT IN (SELECT CODE FROM GENLOOKUP WHERE RECID = 7021) Union 
+SELECT 7022,ANALCODE28,ANALCODE28,'',0,'SUPER',@VaCtr,'.',@Vacompany FROM ITEMMASTER WHERE ANALCODE28 NOT IN (SELECT CODE FROM GENLOOKUP WHERE RECID = 7022) Union 
+SELECT 7023,ANALCODE29,ANALCODE29,'',0,'SUPER',@VaCtr,'.',@Vacompany FROM ITEMMASTER WHERE ANALCODE29 NOT IN (SELECT CODE FROM GENLOOKUP WHERE RECID = 7023) Union 
+SELECT 7024,ANALCODE30,ANALCODE30,'',0,'SUPER',@VaCtr,'.',@Vacompany FROM ITEMMASTER WHERE ANALCODE30 NOT IN (SELECT CODE FROM GENLOOKUP WHERE RECID = 7024) Union 
+SELECT 7025,ANALCODE31,ANALCODE31,'',0,'SUPER',@VaCtr,'.',@Vacompany FROM ITEMMASTER WHERE ANALCODE31 NOT IN (SELECT CODE FROM GENLOOKUP WHERE RECID = 7025) Union 
+SELECT 7026,ANALCODE32,ANALCODE32,'',0,'SUPER',@VaCtr,'.',@Vacompany FROM ITEMMASTER WHERE ANALCODE32 NOT IN (SELECT CODE FROM GENLOOKUP WHERE RECID = 7026) 
+-GO-
+Insert Into Genlookup (Recid,Code,Descr,flag,number,Vauid,Vactr,VatermId,VacompCode)  
+SELECT DISTINCT 53,PRODTAXTYPE,PRODTAXTYPE,'',0,'SUPER',(select intg from sysparam where paramcode = 'VaSysCounter'),'.',(select TXT from sysparam where paramcode = 'COMPANYCODE') FROM CLASS12COMBO WHERE PRODTAXTYPE NOT IN (SELECT CODE FROM GENLOOKUP WHERE RECID = 53) 
+-GO-
+UPDATE GENLOOKUP SET CODE= LTRIM(RTRIM(CODE)) WHERE RECID IN (1,2,65,66,67,68,69,53,54,70,51,52,7000,7001,7002,7003,7004,7005,7006,7007,7008,7009,7010,7011,7012,7013,7014,7015,7016,7017,7018,7019,7020,7021,7022,7023,7024,7025,7026)
+-GO-
+UPDATE GENLOOKUP SET DESCR = LEFT(LTRIM(RTRIM(DESCR)),50) WHERE RECID IN (1,2,65,66,67,68,69,53,54,70,51,52,7000,7001,7002,7003,7004,7005,7006,7007,7008,7009,7010,7011,7012,7013,7014,7015,7016,7017,7018,7019,7020,7021,7022,7023,7024,7025,7026)
+-GO-
+UPDATE GENLOOKUP SET DESCR = LTRIM(RTRIM(CODE)) WHERE RECID IN (1,2,65,66,67,68,69,53,54,70,51,52,7000,7001,7002,7003,7004,7005,7006,7007,7008,7009,7010,7011,7012,7013,7014,7015,7016,7017,7018,7019,7020,7021,7022,7023,7024,7025,7026) AND (DESCR IS NULL OR LTRIM(RTRIM(DESCR)) = '') 
+-GO-
+UPDATE SIZECAT SET SIZEGROUPID = A.SIZEGROUP,VACTR =(select intg from sysparam where paramcode = 'VaSysCounter') FROM CLASS12COMBO A,SIZECAT B WHERE A.CLASS1CD = B.CLASS1CD AND A.CLASS2CD = B.CLASS2CD AND A.SIZEGROUP <> B.SIZEGROUPID
+-GO-
+Update SizeCat set SizeGroupId=0 where sizegroupid ='' or sizegroupid is null
+-GO-
+INSERT INTO sizecat (class1cd,class2cd,sizecd,ispivotalsize,sizegroupid,sizegroupsrlno,Vauid,Vactr,VatermId,VacompCode) 
+select distinct class1cd,class2cd,sizecd,1,0,0,'SUPER',(select intg from sysparam where paramcode = 'VaSysCounter'),'.',
+(select TXT from sysparam where paramcode = 'COMPANYCODE') from itemmaster where 
+class1cd +':'+class2cd+':'+sizecd  not in (select class1cd +':'+class2cd+':'+sizecd from sizecat)
+-GO-
+UPDATE ITEMMASTER SET LASTPURCHPRICE = 0,VACTR =(select intg from sysparam where paramcode = 'VaSysCounter') WHERE LASTPURCHPRICE IS NULL 
+-GO-
+UPDATE ITEMMASTER SET CURRENTCOST = 0,VACTR =(select intg from sysparam where paramcode = 'VaSysCounter') WHERE CURRENTCOST IS NULL 
+-GO-
+UPDATE ITEMMASTER SET DEALER_PRICE = 0,VACTR =(select intg from sysparam where paramcode = 'VaSysCounter') WHERE DEALER_PRICE IS NULL 
+-GO-
+UPDATE ITEMMASTER SET RETAIL_PRICE = 0,VACTR =(select intg from sysparam where paramcode = 'VaSysCounter') WHERE RETAIL_PRICE IS NULL 
+-GO-
+UPDATE ITEMMASTER SET ITEMDESC = CLASS1CD+CLASS2CD+SUBCLASS1CD+SUBCLASS2CD+SIZECD,VACTR =(select intg from sysparam where paramcode = 'VaSysCounter') FROM ITEMMASTER WHERE (ITEMDESC IS NULL OR ITEMDESC ='')
+-GO-
+UPDATE SUBCLASS1CAT SET SUBCLASS1DESC = SUBCLASS1CD,VACTR =(select intg from sysparam where paramcode = 'VaSysCounter') WHERE (SUBCLASS1DESC IS NULL OR SUBCLASS1DESC = '')
+-GO-
+UPDATE SUBCLASS2CAT SET SUBCLASS2DESC = SUBCLASS2CD,VACTR =(select intg from sysparam where paramcode = 'VaSysCounter') WHERE (SUBCLASS2DESC IS NULL OR SUBCLASS2DESC = '')
+-GO-
+INSERT INTO SUBCLASS1CAT(Class1Cd,Class2Cd,SubClass1Cd,SubClass1Desc,Vauid)
+SELECT DISTINCT Class1Cd,Class2Cd,SubClass1Cd,SubClass1Cd,'U' FROM ItemMaster
+WHERE CLASS1CD+':'+ CLASS2CD+ ':'+SUBCLASS1CD NOT IN (SELECT DISTINCT CLASS1CD+':'+ CLASS2CD+ ':'+SUBCLASS1CD FROM SUBCLASS1CAT)
+-GO-
+UPDATE SUBCLASS1CAT Set ProdTaxType=t.ProdTaxType,                                                
+AnalCode1=t.AnalCode1,AnalCode2=t.AnalCode2,AnalCode3=t.AnalCode3,AnalCode4=t.AnalCode4,                                                
+AnalCode5=t.AnalCode5,AnalCode6=t.AnalCode6,AnalCode7=t.AnalCode7,AnalCode8=t.AnalCode8,AnalCode9=t.AnalCode9,                                       
+AnalCode10=t.AnalCode10,AnalCode11=t.AnalCode11,AnalCode12=t.AnalCode12,AnalCode13=t.AnalCode13,AnalCode14=t.AnalCode14,                                       
+AnalCode15=t.AnalCode15,AnalCode16=t.AnalCode16,AnalCode17=t.AnalCode17,AnalCode18=t.AnalCode18,AnalCode19=t.AnalCode19,                        
+AnalCode20=t.AnalCode20,AnalCode21=t.AnalCode21,AnalCode22=t.AnalCode22,AnalCode23=t.AnalCode23,AnalCode24=t.AnalCode24,                                       
+AnalCode25=t.AnalCode25,AnalCode26=t.AnalCode26,AnalCode27=t.AnalCode27,AnalCode28=t.AnalCode28,AnalCode29=t.AnalCode29,                                       
+AnalCode30=t.AnalCode30,AnalCode31=t.AnalCode31,AnalCode32=t.AnalCode32,VACTR =(select intg from sysparam where paramcode = 'VaSysCounter'),
+VaCompCode=(select TXT from sysparam where paramcode like 'COMPANYCODE') FROM ItemMaster as t inner join SUBCLASS1CAT as sc1 on 
+t.Class1Cd = sc1.Class1Cd and t.Class2Cd = sc1.Class2Cd and t.SubClass1Cd = sc1.SubClass1Cd Where Sc1.VAUID = 'U'               
+-GO-
+UPDATE SUBCLASS1CAT SET VAUID = 'SUPER' WHERE VAUID = 'U'
+-GO-
+INSERT INTO SUBCLASS2CAT(Class1Cd,Class2Cd,SubClass2Cd,SubClass2Desc,Vauid,VaCtr,VATermId,VaCompCode)
+SELECT DISTINCT Class1Cd,Class2Cd,SubClass2Cd,SubClass2Cd,'SUPER',(select intg from sysparam where paramcode = 'VaSysCounter'),'.',(select TXT from sysparam where paramcode = 'COMPANYCODE') FROM ItemMaster
+WHERE CLASS1CD+':'+ CLASS2CD+ ':'+SUBCLASS2CD NOT IN (SELECT DISTINCT CLASS1CD+':'+ CLASS2CD+ ':'+SUBCLASS2CD FROM SUBCLASS2CAT)
+-GO-
+UPDATE SUBCLASS1CAT Set Regularind=t.Regularind,VaCompCode=(select TXT from sysparam where paramcode like 'COMPANYCODE'),VaTermId='U' FROM ItemMaster as t inner join SUBCLASS1CAT as sc1 on 
+t.Class1Cd = sc1.Class1Cd and t.Class2Cd = sc1.Class2Cd and t.SubClass1Cd = sc1.SubClass1Cd Where (Sc1.RegularInd <> t.RegularInd AND T.RegularInd is not null) or Sc1.RegularInd IS NULL
+-GO-
+UPDATE SUBCLASS1CAT Set ImageId=t.ImageId,VaCompCode=(select TXT from sysparam where paramcode like 'COMPANYCODE'),VaTermId='U' FROM ItemMaster as t inner join SUBCLASS1CAT as sc1 on 
+t.Class1Cd = sc1.Class1Cd and t.Class2Cd = sc1.Class2Cd and t.SubClass1Cd = sc1.SubClass1Cd Where (Sc1.ImageId <> t.ImageId and t.Imageid is not null) or Sc1.ImageId IS NULL
+-GO-
+UPDATE SUBCLASS1CAT SET VACTR = (select intg from sysparam where paramcode like 'VaSysCounter')
+WHERE VATERMID = 'U' AND REGULARIND IS NOT NULL
+-GO-
+UPDATE SUBCLASS1CAT SET VACTR = (select intg from sysparam where paramcode like 'VaSysCounter')
+WHERE VATERMID = 'U' AND IMAGEID IS NOT NULL
+-GO-
+UPDATE SUBCLASS1CAT SET VATERMID ='.' WHERE VATERMID = 'U'
+-GO-
+Delete From Genlookup where ltrim(rtrim(code)) = ''
+-GO-
+DELETE Mailinglist WHERE RECNO IN (SELECT RECNO FROM  Mailinglist M,customers c where m.catcd=c.code and m.recno<>c.maillistsrlno )
+-GO-
+DELETE Mailinglist WHERE RECNO IN (SELECT RECNO FROM  Mailinglist M,vendors V where m.catcd=v.code and m.recno<>v.maillistsrlno )
+-GO-
+DELETE Mailinglist WHERE RECNO IN (SELECT RECNO FROM  Mailinglist M,chainstores CH where  m.catcd=ch.code and m.recno<>ch.maillistsrlno )
+-GO-
+  </s9qScript>		
+</s9qsqlblk>

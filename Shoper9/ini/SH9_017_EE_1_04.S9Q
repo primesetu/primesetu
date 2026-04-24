@@ -1,0 +1,53 @@
+<s9qsqlblk>
+  <s9qScriptid>S9Q_017_1_0005</s9qScriptid> 
+  <s9qtitle></s9qtitle>
+  <s9qpgmtype>I</s9qpgmtype>
+  <s9qpgmtype>L</s9qpgmtype>
+  <s9qversion>*</s9qversion>
+  <s9qenvironment>P</s9qenvironment>
+  <s9qRunMultiple>0</s9qRunMultiple>
+  <s9qQryType>DDL</s9qQryType>
+  <s9qScript>
+insert into genlookup(Recid,Code,Descr,flag,number) values(0,18100,'Tolerance Factor for Stock check','N',0)
+-GO-
+insert into genlookup(Recid,Code,Descr,flag,number) values(0,18200,'Applying the Current balance Quanity instead of LSQ','N',0)
+-GO-
+insert into genlookupextd (RecID,Category,IsEditable,RecType,Operations,Additional1) values('18100','Tolerance Factor for Stock check',0,'Variable','111','0#1#16#50')
+-GO-
+insert into genlookupextd (RecID,Category,IsEditable,RecType,Operations,Additional1) values('18200','Applying the Current balance Quanity instead of LSQ',0,'Variable','111','0#1#16#50')
+-GO-
+INSERT INTO [DBO].VersionwiseTblsScript(VerID,SrlNo,TblScript,VAUid,VActr,VATermId,VACompCode) VALUES (11,1,'alter table [dbo].AcceptDisplayDtls add columnName varchar(50)','',1,'.','')
+-GO-
+INSERT INTO [DBO].VersionwiseTblsScript(VerID,SrlNo,TblScript,VAUid,VActr,VATermId,VACompCode) VALUES (11,2,'Drop table [dbo].BakAcceptDisplayDtls','',1,'.','')
+-GO-
+INSERT INTO [DBO].VersionwiseTblsScript(VerID,SrlNo,TblScript,VAUid,VActr,VATermId,VACompCode)  
+VALUES (11,3,'CREATE TABLE [dbo].[BAKAcceptDisplayDtls] ([trntype] [int] NULL ,[Index] [int] NULL ,[AcptCap] [varchar] (50)   NULL ,[DispCap] [varchar] (50)   NULL ,[AcptVisible] [bit] NULL ,[DispVisible] [bit] NULL ,[AcptPos] [int] NULL ,[DispPos] [int] NULL ,[AcptDataType] [int] NULL ,[DispDataType] [int] NULL ,[AcptWidth] [real] NULL ,[DispWidth] [real] NULL ,[AcptAlign] [int] NULL ,[DispAlign] [int] NULL ,[AcptFontName] [varchar] (50)   NULL ,[DispFontName] [varchar] (50)   NULL ,[AcptFourColour] [varchar] (50)   NULL ,[DispFourColour] [varchar] (50)   NULL ,[AcptFontSize] [real] NULL ,[DispFontSize] [real] NULL ,[AcptRowHight] [real] NULL ,[DispRowHight] [real] NULL ,[AcptBackColour] [varchar] (50)   NULL ,[DispBackColour] [varchar] (50)   NULL ,[VAUid] [varchar] (32)   NULL , [VActr] [int] NULL , [VATermId] [varchar] (32)   NULL , [VACompCode] [varchar] (16) NULL,columnName varchar(50),UPDFLAG varchar(1) )  ','',1,'.','')
+-GO-
+Update VersionwiseTblsScript Set Vactr = (select intg from sysparam where paramcode = 'VaSysCounter') where VerId=11
+-GO-
+INSERT INTO [Sysparam] ([Id], [Descr], [ParamCode], [Boolean], [Opt]) 
+VALUES ('SR1-0901-0000370', 'Apply Current balance Quanity instead of LSQ', 'ApplyCurbalqty', 0, 'B')
+
+-GO-
+
+Insert into SysparamExtd 
+([ID],[ParamCode],[Fixed],[Changed],[Category],[CatDescr],[DispOrder]) Values 
+('SR1-0901-0000370','ApplyCurbalqty','Variable','0','11. Billing','This Gives Billing -Parameters','48')
+-GO-
+  </s9qScript>		
+</s9qsqlblk>
+
+<s9qsqlblk>
+  <s9qScriptID>S9Q_017_1_0006</s9qScriptID>
+  <s9qtitle>Creating BAK Table</s9qtitle>
+  <s9qpgmtype>I</s9qpgmtype>
+  <s9qpgmtype>L</s9qpgmtype>
+  <s9qversion>*</s9qversion>
+  <s9qenvironment>P</s9qenvironment>
+  <s9qRunMultiple>0</s9qRunMultiple>
+  <s9qQryType>DLL</s9qQryType>
+  <s9qScript>BackTableCreation.clsBackTabCrt</s9qScript>
+</s9qsqlblk>
+
+
+

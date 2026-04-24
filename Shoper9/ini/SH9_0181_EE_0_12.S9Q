@@ -1,0 +1,30 @@
+<s9qsqlblk>
+  <s9qScriptid>S9Q_018_0_1002</s9qScriptid> 
+  <s9qtitle></s9qtitle> 
+  <s9qpgmtype>I</s9qpgmtype>  
+  <s9qpgmtype>L</s9qpgmtype>  
+  <s9qversion>*</s9qversion> 
+  <s9qenvironment>P</s9qenvironment> 
+  <s9qRunMultiple>1</s9qRunMultiple> 
+  <s9qQryType>DML</s9qQryType> 
+  <s9qScript>
+IF  EXISTS (SELECT * FROM dbo.sysobjects WHERE id = OBJECT_ID(N'[dbo].[PurgeLogDtls]') AND OBJECTPROPERTY(id, N'IsUserTable') = 1)
+Drop table [PurgeLogDtls]
+-GO-
+CREATE TABLE [dbo].[PurgeLogDtls] ( 
+[CtrlNumber] [int] NOT NULL ,
+[SrlNo] [int] IDENTITY NOT NULL ,
+[StockNo] [varchar] (32) NULL , 
+[VaUid] [varchar] (32) NULL , 
+[Vactr] [int] NULL , 
+[VaTermId] [varchar] (32) NULL , 
+[VaCompCode] [varchar] (16) NULL , 
+CONSTRAINT [PK_PurgeLogDtls] PRIMARY KEY  CLUSTERED 
+(
+	[CtrlNumber], 
+	[SrlNo] 
+)
+) ON [PRIMARY]
+-GO-
+  </s9qScript>
+</s9qsqlblk>

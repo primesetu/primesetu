@@ -1,0 +1,31 @@
+<s9qsqlblk>
+  <s9qScriptid>S9Q_017_1_0007</s9qScriptid> 
+  <s9qtitle></s9qtitle>
+  <s9qpgmtype>I</s9qpgmtype>
+  <s9qpgmtype>L</s9qpgmtype>
+  <s9qversion>*</s9qversion>
+  <s9qenvironment>P</s9qenvironment>
+  <s9qRunMultiple>0</s9qRunMultiple>
+  <s9qQryType>DDL</s9qQryType>
+  <s9qScript>
+
+update GenLookUp set Flag = 1 where Recid =20100 and Code = 10002
+-GO-
+update GenLookUp set Flag = 1 where Recid =20100 and Code = 10003
+-GO-
+update tillacceptdisplaydtls set acptdatatype=7,dispdatatype=7 where TillTrntype =10002 and Tillindex =8
+-GO-
+update TillAcceptDisplaydtls set acptpos=10,disppos=10 where TillTrntype =10002 and Tillindex =9
+-GO-
+insert into tillacceptdisplaydtls(tilltrntype,tillindex,acptcap,dispcap,acptvisible,dispvisible,acptpos,disppos,acptdatatype,dispdatatype,acptwidth,dispwidth,acptalign,dispalign,vauid,vactr,vatermid,vacompcode) values(10002,10,'Units','Units',0,0,9,9,4,4,12,12,1,1,'Super',1,'.','.')
+-GO-
+update tillacceptdisplaydtls set acptdatatype=7,dispdatatype=7 where TillTrntype =10003 and Tillindex =9
+-GO-
+update TillAcceptDisplaydtls set acptpos=11,disppos=11 where TillTrntype =10003 and Tillindex =10
+-GO-
+update TillAcceptDisplaydtls set acptpos=12,disppos=12 where TillTrntype =10003 and Tillindex =11
+-GO-
+insert into tillacceptdisplaydtls(tilltrntype,tillindex,acptcap,dispcap,acptvisible,dispvisible,acptpos,disppos,acptdatatype,dispdatatype,acptwidth,dispwidth,acptalign,dispalign,vauid,vactr,vatermid,vacompcode) values(10003,12,'Units','Units',0,0,10,10,4,4,12,12,1,1,'Super',1,'.','.')
+  </s9qScript>		
+</s9qsqlblk>
+

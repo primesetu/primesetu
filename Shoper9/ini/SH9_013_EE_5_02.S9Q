@@ -1,0 +1,217 @@
+<S9QSQLBLK>
+<S9QSCRIPTID>S9Q_013_5_0002</S9QSCRIPTID>
+<S9QTITLE>FTP parameter changes at HO And Schema Changes in Procedures</S9QTITLE>
+<S9QPGMTYPE>L</S9QPGMTYPE>
+<S9QPGMTYPE>I</S9QPGMTYPE>
+<S9QVERSION>*</S9QVERSION>
+<S9QENVIRONMENT>H</S9QENVIRONMENT>
+<S9QRUNMULTIPLE>1</S9QRUNMULTIPLE>
+<S9QSEVERITY>3</S9QSEVERITY>
+<S9QQRYTYPE>DML</S9QQRYTYPE>
+<S9QSENDFEEDBACK>1</S9QSENDFEEDBACK>
+<S9QSCRIPT>
+update Sysparam set Descr='User ID for FTP' where ParamCode='FFileFTPUID'
+-GO-
+update Sysparam set Descr='User ID for FTP specific to HO' where ParamCode='FFileFTPUIDHO'
+-GO-
+update Sysparam set Descr='User Password for FTP specific to HO' where ParamCode='FFileFTPUPwdHO'
+-GO-
+Alter procedure ConsolidateStock (@strTblName varchar(64), @strShrmCompCode Varchar(16),@strShrmCompCodes varchar(500),       
+@strSearch1 varchar(500), @strSearch2 varchar(500),@strSuperClassPresent varchar(1)) as       
+         
+declare @strSql varchar(500)         
+declare @strShoperCompCode varchar(32)         
+declare @intpos int         
+declare @dbname varchar(32)         
+declare @SchemaName varchar(32)      
+declare @SchemaDB varchar(32) 
+declare Stock_ConsolidateCursor cursor for                     
+Select ShoperCompCode,dbname,SchemaName from ShowroomMaster where dbname is not null and dbname <> '' and Shopercompcode <>  @strShrmCompCode order by ShoperCompCode        
+         
+open Stock_ConsolidateCursor           
+           
+fetch next from Stock_ConsolidateCursor into @strShoperCompCode,@dbname,@SchemaName        
+while @@fetch_Status=0           
+begin           
+     select @intpos=charindex(@strShoperCompCode,@strShrmCompCodes)         
+     if @intpos > 0          
+     begin         
+          if exists(SELECT * FROM master.dbo.sysdatabases WHERE name=@dbName)
+          begin
+		if @SchemaName <> '' 
+		begin
+			set @SchemaDB='.' + @SchemaName + '.'
+		end
+		else
+		begin
+			set @SchemaDB='.dbo.'
+		end 
+                if @strSearch1 = '' and  @strSearch2 = ''       
+                begin       
+                    set @strSql='Insert into [' + @strTblName + '] (ShoperCompCode,StockNo,CurBalQty)'         
+                    set @strSql = @strsql + ' Select ' + char(39) + @strShoperCompCode  + char(39) +  ', StockNo,CurBalQty '         
+                    set @strSql = @strsql + ' from ' + @dbName + @SchemaDB + 'Stockmaster '        
+                end       
+                else       
+                begin       
+                    set @strSql='Insert into [' + @strTblName + '] (ShoperCompCode,StockNo,CurBalQty)'         
+                    set @strSql = @strsql + ' Select ' + char(39) + @strShoperCompCode  + char(39) +  ', SM.StockNo,CurBalQty '         
+                    set @strSql = @strsql + ' from ' + @dbName + @SchemaDB + 'Stockmaster  as SM inner join '       
+                    set @strSql = @strsql + @dbName + @SchemaDB + 'Itemmaster  as IM on SM.StockNo=Im.Stockno '       
+                    if @strSuperClassPresent = '1'       
+                    begin       
+                         set @strSql = @strsql + ' inner join ' + @dbName + @SchemaDB + 'Class12combo as CC on IM.Class1Cd = CC.Class1Cd '       
+                         set @strSql = @strsql + ' and IM.Class2Cd = CC.Class2CD '       
+                    end       
+                    if @strSearch1 <> ''       
+                    begin       
+                         set @strSql = @strsql + @strSearch1       
+                    end       
+                    if @strSearch2 <> ''       
+                    begin       
+                        set @strSql = @strsql + @strSearch2       
+                    end       
+             end       
+             execute (@strSql)                      
+         end         
+     end 
+     fetch next from Stock_ConsolidateCursor into @strShoperCompCode ,@dbname,@SchemaName          
+end           
+close Stock_ConsolidateCursor           
+deallocate Stock_ConsolidateCursor
+-GO-
+Alter PROCEDURE ItemmasterLoad_from_Repl (@dbname as varchar(255),@dbver as varchar(64),@dbVactr as int,@ProcesType as VARCHAR (10) ) as              
+DECLARE @SQUERY AS VARCHAR(3000)              
+              
+SET @SQUERY = 'TRUNCATE TABLE TmpPriceMaster'              
+EXEC (@SQUERY)               
+              
+SET @SQUERY = 'insert into TmpPriceMaster               
+(StockNo,Class1Cd,Class2Cd,SubClass1Cd,SubClass1Desc,SubClass2Cd,SubClass2Desc,SizeCd,Retail_Price,CurrentCost,                                   
+ItemDesc,AnalCode1,AnalCode2,AnalCode3,AnalCode4,AnalCode5,LeastSalableQty,GradeCd,ProdTaxType,LastPurchPrice,            
+Dealer_Price,IsRPTaxInclusive,IsInventoryItem,IsBillable,IsService,Regularind'              
+if convert(float,@dbver) > 7.2              
+   begin               
+      SET @SQUERY = @SQUERY + ',AnalCode6,Analcode7,AnalCode8,Analcode9,AnalCode10,Analcode11,AnalCode12,Analcode13,AnalCode14,Analcode15,              
+      AnalCode16,Analcode17,AnalCode18,Analcode19,AnalCode20,Analcode21,AnalCode22,Analcode23,AnalCode24,Analcode25,              
+      AnalCode26,Analcode27,AnalCode28,Analcode29,AnalCode30,Analcode31,AnalCode32'              
+   end              
+   SET @SQUERY = @SQUERY + ') SELECT StockNo,Class1Cd,Class2Cd,SubClass1Cd,SubClass1cd,SubClass2Cd,SubClass2cd,SizeCd,Retail_Price,CurrentCost,                                   
+   ItemDesc,AnalCode1,AnalCode2,AnalCode3,AnalCode4,AnalCode5,              
+   LeastSalableQty,GradeCd,ProdTaxType,LastPurchPrice,Dealer_Price,IsRPTaxInclusive,IsInventoryItem,IsBillable,IsService,              
+   CASE ISNULL(Regularind,0) WHEN '+CHAR(39)+'-1'+CHAR(39)+' THEN 1 WHEN '+CHAR(39)+'1'+CHAR(39)+' THEN 1 ELSE 0 END '               
+   if convert(float,@dbver) > 7.2              
+      begin               
+        SET @SQUERY = @SQUERY + ',AnalCode6,Analcode7,AnalCode8,Analcode9,AnalCode10,Analcode11,AnalCode12,Analcode13,AnalCode14,Analcode15,              
+        AnalCode16,Analcode17,AnalCode18,Analcode19,AnalCode20,Analcode21,AnalCode22,Analcode23,AnalCode24,Analcode25,              
+        AnalCode26,Analcode27,AnalCode28,Analcode29,AnalCode30,Analcode31,AnalCode32'              
+      end              
+  SET @SQUERY = @SQUERY + ' FROM '+ @DBNAME +'.ITEMMASTER AS A WHERE A.CURRENTCOST > 0 and A.Vactr > ' + CONVERT(VARCHAR,@dbVactr)        
+  if @ProcesType = 'NEW'     
+ BEGIN    
+   SET @SQUERY = @SQUERY + ' AND A.STOCKNO NOT IN (SELECT DISTINCT STOCKNO FROM ITEMMASTER) '   
+ END    
+EXEC (@SQUERY)               
+              
+SET @SQUERY = 'UPDATE TMPPRICEMASTER SET VendorCode = A.PREFVENDORID,SUPERCLASS1=A.SUPERCLASS1,SUPERCLASS2=A.SUPERCLASS2,              
+SIZEGROUPID = A.SIZEGROUP,SIZEGROUPDESC=A.SIZEGROUP FROM '+ @DBNAME +'.CLASS12COMBO AS A,TMPPRICEMASTER AS B               
+WHERE A.CLASS1CD = B.CLASS1CD AND A.CLASS2CD = B.CLASS2CD'              
+EXEC (@SQUERY)               
+              
+SET @SQUERY = 'UPDATE TMPPRICEMASTER SET SIZEGROUPSRLNO = A.SIZEGROUPSRLNO,SIZEGROUPID=A.SIZEGROUPID FROM '+@DBNAME +'.SIZECAT AS A,TMPPRICEMASTER AS B               
+WHERE A.CLASS1CD = B.CLASS1CD AND A.CLASS2CD = B.CLASS2CD AND A.SIZECD = B.SIZECD'              
+EXEC (@SQUERY)               
+              
+SET @SQUERY = 'UPDATE TMPPRICEMASTER SET CLASS1DESC = A.DESCR FROM '+@DBNAME+'.GENLOOKUP AS A,TMPPRICEMASTER AS B WHERE A.CODE = B.CLASS1CD AND A.RECID = 1'               
+EXEC (@SQUERY)               
+              
+SET @SQUERY = 'UPDATE TMPPRICEMASTER SET CLASS2DESC = A.DESCR FROM '+@DBNAME+'.GENLOOKUP AS A,TMPPRICEMASTER AS B WHERE A.CODE = B.CLASS2CD AND A.RECID = 2'              
+EXEC (@SQUERY)               
+              
+SET @SQUERY = 'UPDATE TMPPRICEMASTER SET ANALDESC1 = A.DESCR FROM '+@DBNAME+'.GENLOOKUP AS A,TMPPRICEMASTER AS B WHERE A.CODE = B.ANALCODE1 AND A.RECID = 65'              
+EXEC (@SQUERY)               
+              
+SET @SQUERY = 'UPDATE TMPPRICEMASTER SET ANALDESC2 = A.DESCR FROM '+@DBNAME+'.GENLOOKUP AS A,TMPPRICEMASTER AS B WHERE A.CODE = B.ANALCODE2  AND A.RECID = 66'              
+EXEC (@SQUERY)               
+             
+SET @SQUERY = 'UPDATE TMPPRICEMASTER SET ANALDESC3 = A.DESCR FROM '+@DBNAME+'.GENLOOKUP AS A,TMPPRICEMASTER AS B WHERE A.CODE = B.ANALCODE3  AND A.RECID = 67'              
+EXEC (@SQUERY)               
+              
+SET @SQUERY = 'UPDATE TMPPRICEMASTER SET ANALDESC4 = A.DESCR FROM '+@DBNAME+'.GENLOOKUP AS A,TMPPRICEMASTER AS B WHERE A.CODE = B.ANALCODE4  AND A.RECID = 68'             
+EXEC (@SQUERY)               
+              
+SET @SQUERY = 'UPDATE TMPPRICEMASTER SET ANALDESC5 = A.DESCR FROM '+@DBNAME+'.GENLOOKUP AS A,TMPPRICEMASTER AS B WHERE A.CODE = B.ANALCODE5  AND A.RECID = 69'              
+EXEC (@SQUERY)               
+              
+SET @SQUERY = 'UPDATE TMPPRICEMASTER SET SUPERCLASS1DESC = A.DESCR FROM '+@DBNAME+'.GENLOOKUP AS A,TMPPRICEMASTER AS B WHERE A.CODE = B.SUPERCLASS1  AND A.RECID = 51'              
+EXEC (@SQUERY)               
+              
+SET @SQUERY = 'UPDATE TMPPRICEMASTER SET SUPERCLASS2DESC = A.DESCR FROM '+@DBNAME+'.GENLOOKUP AS A,TMPPRICEMASTER AS B WHERE A.CODE = B.SUPERCLASS2  AND A.RECID = 52'              
+EXEC (@SQUERY)               
+              
+SET @SQUERY = 'UPDATE TMPPRICEMASTER SET PRODTAXDESC = A.DESCR FROM '+@DBNAME+'.GENLOOKUP AS A,TMPPRICEMASTER AS B WHERE A.CODE = B.PRODTAXTYPE  AND A.RECID = 54'              
+EXEC (@SQUERY)               
+            
+SET @SQUERY = 'UPDATE TMPPRICEMASTER SET SIZEGROUPDESC = A.DESCR FROM '+@DBNAME+'.GENLOOKUP AS A,TMPPRICEMASTER AS B WHERE A.CODE = B.SIZEGROUPID AND A.RECID = 53'              
+EXEC (@SQUERY)               
+            
+if convert(float,@dbver) > 7.2               
+ begin               
+  SET @SQUERY = 'UPDATE TMPPRICEMASTER SET ANALDESC6 = A.DESCR FROM '+@DBNAME+'.GENLOOKUP AS A,TMPPRICEMASTER AS B WHERE A.CODE = B.ANALCODE6 AND A.RECID = 7000'              
+  EXEC (@SQUERY)               
+  SET @SQUERY = 'UPDATE TMPPRICEMASTER SET ANALDESC7 = A.DESCR FROM '+@DBNAME+'.GENLOOKUP AS A,TMPPRICEMASTER AS B WHERE A.CODE = B.ANALCODE7 AND A.RECID = 7001'              
+  EXEC (@SQUERY)               
+  SET @SQUERY = 'UPDATE TMPPRICEMASTER SET ANALDESC8 = A.DESCR FROM '+@DBNAME+'.GENLOOKUP AS A,TMPPRICEMASTER AS B WHERE A.CODE = B.ANALCODE8 AND A.RECID = 7002'              
+  EXEC (@SQUERY)               
+  SET @SQUERY = 'UPDATE TMPPRICEMASTER SET ANALDESC9 = A.DESCR FROM '+@DBNAME+'.GENLOOKUP AS A,TMPPRICEMASTER AS B WHERE A.CODE = B.ANALCODE9 AND A.RECID = 7003'              
+  EXEC (@SQUERY)               
+  SET @SQUERY = 'UPDATE TMPPRICEMASTER SET ANALDESC10 = A.DESCR FROM '+@DBNAME+'.GENLOOKUP AS A,TMPPRICEMASTER AS B WHERE A.CODE = B.ANALCODE10 AND A.RECID = 7004'              
+  EXEC (@SQUERY)               
+  SET @SQUERY = 'UPDATE TMPPRICEMASTER SET ANALDESC11 = A.DESCR FROM '+@DBNAME+'.GENLOOKUP AS A,TMPPRICEMASTER AS B WHERE A.CODE = B.ANALCODE11 AND A.RECID = 7005'              
+  EXEC (@SQUERY)               
+  SET @SQUERY = 'UPDATE TMPPRICEMASTER SET ANALDESC12 = A.DESCR FROM '+@DBNAME+'.GENLOOKUP AS A,TMPPRICEMASTER AS B WHERE A.CODE = B.ANALCODE12 AND A.RECID = 7006'              
+  EXEC (@SQUERY)               
+  SET @SQUERY = 'UPDATE TMPPRICEMASTER SET ANALDESC13 = A.DESCR FROM '+@DBNAME+'.GENLOOKUP AS A,TMPPRICEMASTER AS B WHERE A.CODE = B.ANALCODE13 AND A.RECID = 7007'              
+  EXEC (@SQUERY)               
+  SET @SQUERY = 'UPDATE TMPPRICEMASTER SET ANALDESC14 = A.DESCR FROM '+@DBNAME+'.GENLOOKUP AS A,TMPPRICEMASTER AS B WHERE A.CODE = B.ANALCODE14 AND A.RECID = 7008'              
+  EXEC (@SQUERY)               
+  SET @SQUERY = 'UPDATE TMPPRICEMASTER SET ANALDESC15 = A.DESCR FROM '+@DBNAME+'.GENLOOKUP AS A,TMPPRICEMASTER AS B WHERE A.CODE = B.ANALCODE15 AND A.RECID = 7009'              
+  EXEC (@SQUERY)               
+  SET @SQUERY = 'UPDATE TMPPRICEMASTER SET ANALDESC16 = A.DESCR FROM '+@DBNAME+'.GENLOOKUP AS A,TMPPRICEMASTER AS B WHERE A.CODE = B.ANALCODE16 AND A.RECID = 7010'              
+  EXEC (@SQUERY)               
+  SET @SQUERY = 'UPDATE TMPPRICEMASTER SET ANALDESC17 = A.DESCR FROM '+@DBNAME+'.GENLOOKUP AS A,TMPPRICEMASTER AS B WHERE A.CODE = B.ANALCODE17 AND A.RECID = 7011'              
+  EXEC (@SQUERY)               
+  SET @SQUERY = 'UPDATE TMPPRICEMASTER SET ANALDESC18 = A.DESCR FROM '+@DBNAME+'.GENLOOKUP AS A,TMPPRICEMASTER AS B WHERE A.CODE = B.ANALCODE18 AND A.RECID = 7012'              
+  EXEC (@SQUERY)               
+  SET @SQUERY = 'UPDATE TMPPRICEMASTER SET ANALDESC19 = A.DESCR FROM '+@DBNAME+'.GENLOOKUP AS A,TMPPRICEMASTER AS B WHERE A.CODE = B.ANALCODE19 AND A.RECID = 7013'              
+  EXEC (@SQUERY)               
+  SET @SQUERY = 'UPDATE TMPPRICEMASTER SET ANALDESC20 = A.DESCR FROM '+@DBNAME+'.GENLOOKUP AS A,TMPPRICEMASTER AS B WHERE A.CODE = B.ANALCODE20 AND A.RECID = 7014'              
+  EXEC (@SQUERY)               
+  SET @SQUERY = 'UPDATE TMPPRICEMASTER SET ANALDESC21 = A.DESCR FROM '+@DBNAME+'.GENLOOKUP AS A,TMPPRICEMASTER AS B WHERE A.CODE = B.ANALCODE21 AND A.RECID = 7015'              
+  EXEC (@SQUERY)               
+  SET @SQUERY = 'UPDATE TMPPRICEMASTER SET ANALDESC22 = A.DESCR FROM '+@DBNAME+'.GENLOOKUP AS A,TMPPRICEMASTER AS B WHERE A.CODE = B.ANALCODE22 AND A.RECID = 7016'              
+  EXEC (@SQUERY)               
+  SET @SQUERY = 'UPDATE TMPPRICEMASTER SET ANALDESC23 = A.DESCR FROM '+@DBNAME+'.GENLOOKUP AS A,TMPPRICEMASTER AS B WHERE A.CODE = B.ANALCODE23 AND A.RECID = 7017'              
+  EXEC (@SQUERY)               
+  SET @SQUERY = 'UPDATE TMPPRICEMASTER SET ANALDESC24 = A.DESCR FROM '+@DBNAME+'.GENLOOKUP AS A,TMPPRICEMASTER AS B WHERE A.CODE = B.ANALCODE24 AND A.RECID = 7018'              
+  EXEC (@SQUERY)               
+  SET @SQUERY = 'UPDATE TMPPRICEMASTER SET ANALDESC25 = A.DESCR FROM '+@DBNAME+'.GENLOOKUP AS A,TMPPRICEMASTER AS B WHERE A.CODE = B.ANALCODE25 AND A.RECID = 7019'              
+  EXEC (@SQUERY)               
+  SET @SQUERY = 'UPDATE TMPPRICEMASTER SET ANALDESC26 = A.DESCR FROM '+@DBNAME+'.GENLOOKUP AS A,TMPPRICEMASTER AS B WHERE A.CODE = B.ANALCODE26 AND A.RECID = 7020'              
+  EXEC (@SQUERY)               
+  SET @SQUERY = 'UPDATE TMPPRICEMASTER SET ANALDESC27 = A.DESCR FROM '+@DBNAME+'.GENLOOKUP AS A,TMPPRICEMASTER AS B WHERE A.CODE = B.ANALCODE27 AND A.RECID = 7021'              
+  EXEC (@SQUERY)               
+  SET @SQUERY = 'UPDATE TMPPRICEMASTER SET ANALDESC28 = A.DESCR FROM '+@DBNAME+'.GENLOOKUP AS A,TMPPRICEMASTER AS B WHERE A.CODE = B.ANALCODE28 AND A.RECID = 7022'              
+  EXEC (@SQUERY)               
+  SET @SQUERY = 'UPDATE TMPPRICEMASTER SET ANALDESC29 = A.DESCR FROM '+@DBNAME+'.GENLOOKUP AS A,TMPPRICEMASTER AS B WHERE A.CODE = B.ANALCODE29 AND A.RECID = 7023'              
+  EXEC (@SQUERY)               
+  SET @SQUERY = 'UPDATE TMPPRICEMASTER SET ANALDESC30 = A.DESCR FROM '+@DBNAME+'.GENLOOKUP AS A,TMPPRICEMASTER AS B WHERE A.CODE = B.ANALCODE30 AND A.RECID = 7024'              
+  EXEC (@SQUERY)               
+  SET @SQUERY = 'UPDATE TMPPRICEMASTER SET ANALDESC31 = A.DESCR FROM '+@DBNAME+'.GENLOOKUP AS A,TMPPRICEMASTER AS B WHERE A.CODE = B.ANALCODE31 AND A.RECID = 7025'              
+  EXEC (@SQUERY)               
+  SET @SQUERY = 'UPDATE TMPPRICEMASTER SET ANALDESC32 = A.DESCR FROM '+@DBNAME+'.GENLOOKUP AS A,TMPPRICEMASTER AS B WHERE A.CODE = B.ANALCODE32 AND A.RECID = 7026'              
+  EXEC (@SQUERY)               
+ end 
+-GO-
+</S9QSCRIPT>
+</S9QSQLBLK>

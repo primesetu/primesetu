@@ -1,0 +1,46 @@
+<s9qsqlblk>
+  <s9qScriptID>	S9Q_0170_9_0001</s9qScriptID>
+  <s9qtitle>New Menus Added - Catalogue Team</s9qtitle>
+  <s9qpgmtype>I</s9qpgmtype>
+  <s9qpgmtype>L</s9qpgmtype>
+  <s9qversion>*</s9qversion>
+  <s9qenvironment>M</s9qenvironment>
+  <s9qRunMultiple>1</s9qRunMultiple>
+  <s9qQryType>DML</s9qQryType>
+  <s9qScript>
+
+Insert into vamenu (MnuNo, MenuOPt, MnuName, MnuCap, MnuPgm, ExeName, MnuWght, AllowWhenTrnClosed, Pgmopt, DbInfo, MenuIcon, Menusep, MenuBold, MultiInstance) values (	500,560,'Housekeeping','Back-end Data','M','',0,0,0,'0','',0,0,0)
+-GO-
+Insert into vamenu (MnuNo, MenuOPt, MnuName, MnuCap, MnuPgm, ExeName, MnuWght, AllowWhenTrnClosed, Pgmopt, DbInfo, MenuIcon, Menusep, MenuBold, MultiInstance) values (	560,561,'Back-end Data','Configure','P','SE100140.EXE',0,0,0,'0','',0,0,0)
+-GO-
+Insert into vamenu (MnuNo, MenuOPt, MnuName, MnuCap, MnuPgm, ExeName, MnuWght, AllowWhenTrnClosed, Pgmopt, DbInfo, MenuIcon, Menusep, MenuBold, MultiInstance) values (	560,562,'Back-end Data','Import','P','SE100120.EXE',0,0,0,'0','',0,0,0)
+-GO-
+insert into alerteventdefinition (Application,Event,IsActive,ReadOnly,EventType) values('Price Revised','Price Revisions',1,0,'Information')
+
+-GO-
+</s9qScript>		
+</s9qsqlblk>
+
+<s9qsqlblk>
+<s9qScriptID>S9Q_017_7_0001</s9qScriptID>
+<s9qtitle></s9qtitle>
+<s9qpgmtype>I</s9qpgmtype>
+<s9qpgmtype>L</s9qpgmtype>
+<s9qversion>*</s9qversion>
+<s9qenvironment>M</s9qenvironment>
+<s9qRunMultiple>1</s9qRunMultiple>
+<s9qQryType>DML</s9qQryType>
+<s9qScript>
+
+Alter Table VaUserExtdInfo add MobileCode varchar(16), MobileNo varchar(16), EmailId varchar(256)
+-GO-
+if not exists (Select * from VaSecurityConfig Where Paramcode= 'LogRetainDays')
+Insert into VaSecurityConfig(Id,ParamCode,Descr,Intg,Opt,Fixed,Category,CatSrlNo,ParamSrlNo)
+Values('Sec-000019','LogRetainDays','Number of days to retain activity log',0,'I','Variable','House Keeping',3,1)
+-GO-
+if not exists (Select * from VaSecurityConfig Where Paramcode= 'CountryCode')
+Insert into VaSecurityConfig(Id,ParamCode,Descr,Txt,Opt,Fixed,Category,CatSrlNo,ParamSrlNo)
+Values('Sec-000020','CountryCode','Country Code','+91','T','Variable','House Keeping',3,2)
+-GO-
+</s9qScript>		
+</s9qsqlblk>

@@ -1,0 +1,235 @@
+<s9qsqlblk>
+  <s9qScriptid>S9Q_019_1_0006</s9qScriptid> 
+  <s9qtitle> New table FOR Billing components</s9qtitle> 
+  <s9qpgmtype>I</s9qpgmtype>  
+  <s9qpgmtype>L</s9qpgmtype>  
+  <s9qversion>*</s9qversion> 
+  <s9qenvironment>P</s9qenvironment> 
+  <s9qRunMultiple>1</s9qRunMultiple> 
+  <s9qQryType>DDL</s9qQryType> 
+  <s9qScript>
+IF EXISTS (SELECT * FROM sysobjects WHERE id = OBJECT_ID(N'[dbo].[TransactionComponentsDtls]') AND type in (N'U'))
+drop table [TransactionComponentsDtls]
+-GO-
+CREATE TABLE [dbo].[TransactionComponentsDtls](
+	[Trntype] [int] NOT NULL,
+	[TrnSubtype] [int] NULL,
+	[FieldCode] [varchar](50) NOT NULL,
+	[Srlno] [int] NOT NULL,
+	[EventId] [varchar](50) Not NULL,
+	[EventKeycode] [int] NULL,
+	[ComponentDesc] [varchar](256) NULL,
+	[OrderOfexec] [int] NULL,
+	[CompStatus] [varchar](1) NULL) ON [PRIMARY]
+-GO-
+ALTER TABLE [dbo].[TransactionComponentsDtls]WITH NOCHECK ADD 
+	CONSTRAINT [PK_SalesComponentsDtls] PRIMARY KEY  CLUSTERED 
+	(
+		[Trntype] ASC,
+		[FieldCode] ASC,
+		[Srlno] ASC,
+		[EventId] ASC
+	)  ON [PRIMARY] 
+-GO-
+IF EXISTS (SELECT * FROM sysobjects WHERE id = OBJECT_ID(N'[dbo].[EventExtnReturnFieldDtls]') AND type in (N'U'))
+drop table [EventExtnReturnFieldDtls]
+-GO-
+  </s9qScript>
+</s9qsqlblk>
+
+
+<s9qsqlblk>
+  <s9qScriptid>S9Q_019_1_0007</s9qScriptid> 
+  <s9qtitle> iNSERT STATEMENT FOR Billing components and event base extesion return value</s9qtitle> 
+  <s9qpgmtype>I</s9qpgmtype>  
+  <s9qpgmtype>L</s9qpgmtype>  
+  <s9qversion>*</s9qversion> 
+  <s9qenvironment>P</s9qenvironment> 
+  <s9qRunMultiple>1</s9qRunMultiple> 
+  <s9qQryType>DML</s9qQryType> 
+  <s9qScript>
+truncate table [TransactionComponentsDtls]
+-GO-
+INSERT INTO [TransactionComponentsDtls] ([Trntype],[TrnSubtype],[FieldCode],[Srlno],[EventId],[EventKeycode],[ComponentDesc],[OrderOfexec],[CompStatus])VALUES(1300,NULL,'ReasonCd',1,'CellGotFocus',0,'SR542200.ClsFillReasonCodes',1,'1')
+-GO-
+INSERT INTO [TransactionComponentsDtls] ([Trntype],[TrnSubtype],[FieldCode],[Srlno],[EventId],[EventKeycode],[ComponentDesc],[OrderOfexec],[CompStatus])VALUES(1300,NULL,'ReasonCd',1,'LostFocus',0,'SR542200.ClsValidateRsnCd',1,'1')
+-GO-
+INSERT INTO [TransactionComponentsDtls] ([Trntype],[TrnSubtype],[FieldCode],[Srlno],[EventId],[EventKeycode],[ComponentDesc],[OrderOfexec],[CompStatus])VALUES(2100,NULL,'DiscAmt',1,'LostFocus',0,'SR542200.ClsDiscAmountProcess',1,'1')
+-GO-
+INSERT INTO [TransactionComponentsDtls] ([Trntype],[TrnSubtype],[FieldCode],[Srlno],[EventId],[EventKeycode],[ComponentDesc],[OrderOfexec],[CompStatus])VALUES(2100,NULL,'DiscCode',1,'ComboChange',0,'SR542200.ClsitemLvlPromoProcess',1,'1')
+-GO-
+INSERT INTO [TransactionComponentsDtls] ([Trntype],[TrnSubtype],[FieldCode],[Srlno],[EventId],[EventKeycode],[ComponentDesc],[OrderOfexec],[CompStatus])VALUES(2100,NULL,'DiscPerc',1,'LostFocus',0,'SR542200.ClsDiscPercProcess',1,'1')
+-GO-
+INSERT INTO [TransactionComponentsDtls] ([Trntype],[TrnSubtype],[FieldCode],[Srlno],[EventId],[EventKeycode],[ComponentDesc],[OrderOfexec],[CompStatus])VALUES(2100,NULL,'DiscQty',1,'LostFocus',0,'SR542200.ClsDicQtyProcess',1,'1')
+-GO-
+INSERT INTO [TransactionComponentsDtls] ([Trntype],[TrnSubtype],[FieldCode],[Srlno],[EventId],[EventKeycode],[ComponentDesc],[OrderOfexec],[CompStatus])VALUES(2100,NULL,'Qty',1,'LostFocus',0,'SR542200.ClsItemQtyValidate',1,'1')
+-GO-
+INSERT INTO [TransactionComponentsDtls] ([Trntype],[TrnSubtype],[FieldCode],[Srlno],[EventId],[EventKeycode],[ComponentDesc],[OrderOfexec],[CompStatus])VALUES(2100,NULL,'Qty',2,'LostFocus',0,'SR542200.ClsSearchItemLvlPromo',1,'1')
+-GO-
+INSERT INTO [TransactionComponentsDtls] ([Trntype],[TrnSubtype],[FieldCode],[Srlno],[EventId],[EventKeycode],[ComponentDesc],[OrderOfexec],[CompStatus])VALUES(2100,NULL,'Rate',1,'LostFocus',0,'SR542200.ClsitemRateValidation',1,'1')
+-GO-
+INSERT INTO [TransactionComponentsDtls] ([Trntype],[TrnSubtype],[FieldCode],[Srlno],[EventId],[EventKeycode],[ComponentDesc],[OrderOfexec],[CompStatus])VALUES(2100,NULL,'SalesStaff',1,'CellGotFocus',0,'SR542200.ClsSalespersonaldtls',1,'1')
+-GO-
+INSERT INTO [TransactionComponentsDtls] ([Trntype],[TrnSubtype],[FieldCode],[Srlno],[EventId],[EventKeycode],[ComponentDesc],[OrderOfexec],[CompStatus])VALUES(2100,NULL,'SalesStaff',1,'LostFocus',0,'SR542200.ClsValidateSalesPerson',1,'1')
+-GO-
+INSERT INTO [TransactionComponentsDtls] ([Trntype],[TrnSubtype],[FieldCode],[Srlno],[EventId],[EventKeycode],[ComponentDesc],[OrderOfexec],[CompStatus])VALUES(2100,NULL,'StockNo',1,'LostFocus',0,'SR542200.ClsitemDtls',1,'1')
+-GO-
+update AcceptDisplayDtls set acptvisible=0 where [index]=44
+-GO-
+update AcceptDisplayDtls set columnname='Quality'where [index]=3
+-GO-
+update AcceptDisplayDtls set columnname='Shade'where [index]=4
+-GO-
+update AcceptDisplayDtls set columnname='Sizecd'where [index]=5
+-GO-
+update AcceptDisplayDtls set columnname='Qty'where [index]=7
+-GO-
+insert into sysparam(id,descr,paramcode,boolean,opt,vauid)values('SR1-0901-0000424','Auto Selection of Bill Level Discount During Doc Level Discount entry','AutoSelectionofBillLvlDiscCode',1,'B','Super')
+-GO-
+INSERT INTO [sysparam] ([Id],[Descr],[ParamCode],[Boolean],[Opt],[VAUid])VALUES('SR1-0901-0000423','Allow Return without ref. in Return with ref. Transactions','AllowRtnWORinWR',1,'B','Super')
+-GO-
+INSERT INTO [Sysparamextd] ([Id],[ParamCode],[Fixed],[Changed],[Category],[CatDescr],[DispOrder],[VAUid],[VActr],[VATermId],[VACompCode])VALUES('SR1-0901-0000423','AllowRtnWORinWR','Variable',0,'11. Billing','This Gives Billing Parameters',36,'Super',1,'.','001')
+-GO-
+INSERT INTO [Sysparamextd] ([Id],[ParamCode],[Fixed],[Changed],[Category],[CatDescr],[DispOrder],[VAUid],[VActr],[VATermId],[VACompCode])VALUES('SR1-0901-0000424','AutoSelectionofBillLvlDiscCode','Variable',0,'11. Billing','This Gives Billing Parameters',37,'Super',1,'.','001')
+  </s9qScript>
+</s9qsqlblk>
+
+
+<s9qsqlblk>
+  <s9qScriptid>S9Q_019_1_0008</s9qScriptid> 
+  <s9qtitle> iNSERT STATEMENT FOR Billing components and event base extesion return value</s9qtitle> 
+  <s9qpgmtype>I</s9qpgmtype>  
+  <s9qpgmtype>L</s9qpgmtype>  
+  <s9qversion>*</s9qversion> 
+  <s9qenvironment>P</s9qenvironment> 
+  <s9qRunMultiple>1</s9qRunMultiple> 
+  <s9qQryType>DML</s9qQryType> 
+  <s9qScript>
+
+IF NOT EXISTS (SELECT * FROM sysobjects WHERE id = OBJECT_ID(N'[dbo].[EventExtnFieldConfig]') AND type in (N'U'))
+BEGIN
+CREATE TABLE [dbo].[EventExtnFieldConfig](
+	[ProgramId] [varchar](64) NOT NULL,
+	[EventId] [varchar](64) NOT NULL,
+	[FieldSrlNo] [int] NOT NULL,
+	[FieldName] [varchar](32) NOT NULL,
+	[ReturnFlag] [int] NULL ,
+	[FieldLock] [int] NULL,
+	[VaUid] [varchar](32) NULL,
+	[VaCtr] [int] NULL,
+	[VaTermId] [varchar](32) NULL,
+	[VaCompCode] [varchar](16) NULL,
+ CONSTRAINT [PK_EventExtnFieldConfig] PRIMARY KEY CLUSTERED 
+(
+	[ProgramId] ASC,
+	[EventId] ASC,
+	[FieldSrlNo] ASC,
+	[FieldName] ASC
+)
+) ON [PRIMARY]
+END
+-GO-
+INSERT INTO [EventExtnFieldConfig] ([ProgramId],[EventId],[FieldSrlNo],[FieldName],[ReturnFlag],[FieldLock],[VaUid],[VaCtr],[VaTermId],[VaCompCode])VALUES('1300','StockNoPostLostFocus',1,'Stockno',0,0,'super',1,'.','.')
+-GO-
+INSERT INTO [EventExtnFieldConfig] ([ProgramId],[EventId],[FieldSrlNo],[FieldName],[ReturnFlag],[FieldLock],[VaUid],[VaCtr],[VaTermId],[VaCompCode])VALUES('1300','StockNoPostLostFocus',2,'Rate',0,0,'super',1,'.','.')
+-GO-
+INSERT INTO [EventExtnFieldConfig] ([ProgramId],[EventId],[FieldSrlNo],[FieldName],[ReturnFlag],[FieldLock],[VaUid],[VaCtr],[VaTermId],[VaCompCode])VALUES('1300','StockNoPostLostFocus',4,'Qty',0,0,'super',1,'.','.')
+-GO-
+INSERT INTO [EventExtnFieldConfig] ([ProgramId],[EventId],[FieldSrlNo],[FieldName],[ReturnFlag],[FieldLock],[VaUid],[VaCtr],[VaTermId],[VaCompCode])VALUES('1300','StockNoPostLostFocus',5,'SoldQty',0,0,'super',1,'.','.')
+-GO-
+INSERT INTO [EventExtnFieldConfig] ([ProgramId],[EventId],[FieldSrlNo],[FieldName],[ReturnFlag],[FieldLock],[VaUid],[VaCtr],[VaTermId],[VaCompCode])VALUES('1300','StockNoPostLostFocus',6,'Returned',0,0,'super',1,'.','.')
+-GO-
+INSERT INTO [EventExtnFieldConfig] ([ProgramId],[EventId],[FieldSrlNo],[FieldName],[ReturnFlag],[FieldLock],[VaUid],[VaCtr],[VaTermId],[VaCompCode])VALUES('1300','StockNoPostLostFocus',7,'SalesRef',0,0,'super',1,'.','.')
+-GO-
+INSERT INTO [EventExtnFieldConfig] ([ProgramId],[EventId],[FieldSrlNo],[FieldName],[ReturnFlag],[FieldLock],[VaUid],[VaCtr],[VaTermId],[VaCompCode])VALUES('2100','DiscCodePostLostFocus',1,'DiscPerc',1,2,'super',1,'.','.')
+-GO-
+INSERT INTO [EventExtnFieldConfig] ([ProgramId],[EventId],[FieldSrlNo],[FieldName],[ReturnFlag],[FieldLock],[VaUid],[VaCtr],[VaTermId],[VaCompCode])VALUES('2100','DiscCodePostLostFocus',2,'DiscAmt',1,2,'super',1,'.','.')
+-GO-
+INSERT INTO [EventExtnFieldConfig] ([ProgramId],[EventId],[FieldSrlNo],[FieldName],[ReturnFlag],[FieldLock],[VaUid],[VaCtr],[VaTermId],[VaCompCode])VALUES('2100','DiscCodePostLostFocus',3,'Stockno',0,0,'super',1,'.','.')
+-GO-
+INSERT INTO [EventExtnFieldConfig] ([ProgramId],[EventId],[FieldSrlNo],[FieldName],[ReturnFlag],[FieldLock],[VaUid],[VaCtr],[VaTermId],[VaCompCode])VALUES('2100','DiscCodePostLostFocus',4,'Rate',0,0,'super',1,'.','.')
+-GO-
+INSERT INTO [EventExtnFieldConfig] ([ProgramId],[EventId],[FieldSrlNo],[FieldName],[ReturnFlag],[FieldLock],[VaUid],[VaCtr],[VaTermId],[VaCompCode])VALUES('2100','DiscCodePostLostFocus',5,'Qty',0,0,'super',1,'.','.')
+-GO-
+INSERT INTO [EventExtnFieldConfig] ([ProgramId],[EventId],[FieldSrlNo],[FieldName],[ReturnFlag],[FieldLock],[VaUid],[VaCtr],[VaTermId],[VaCompCode])VALUES('2100','DiscCodePostLostFocus',6,'C1',0,0,'super',1,'.','.')
+-GO-
+INSERT INTO [EventExtnFieldConfig] ([ProgramId],[EventId],[FieldSrlNo],[FieldName],[ReturnFlag],[FieldLock],[VaUid],[VaCtr],[VaTermId],[VaCompCode])VALUES('2100','DiscCodePostLostFocus',7,'C2',0,0,'super',1,'.','.')
+-GO-
+INSERT INTO [EventExtnFieldConfig] ([ProgramId],[EventId],[FieldSrlNo],[FieldName],[ReturnFlag],[FieldLock],[VaUid],[VaCtr],[VaTermId],[VaCompCode])VALUES('2100','QtyPostLostFocus',1,'Stockno',0,0,'super',1,'.','.')
+-GO-
+INSERT INTO [EventExtnFieldConfig] ([ProgramId],[EventId],[FieldSrlNo],[FieldName],[ReturnFlag],[FieldLock],[VaUid],[VaCtr],[VaTermId],[VaCompCode])VALUES('2100','QtyPostLostFocus',2,'Rate',0,0,'super',1,'.','.')
+-GO-
+INSERT INTO [EventExtnFieldConfig] ([ProgramId],[EventId],[FieldSrlNo],[FieldName],[ReturnFlag],[FieldLock],[VaUid],[VaCtr],[VaTermId],[VaCompCode])VALUES('2100','QtyPostLostFocus',3,'Qty',1,2,'super',1,'.','.')
+-GO-
+INSERT INTO [EventExtnFieldConfig] ([ProgramId],[EventId],[FieldSrlNo],[FieldName],[ReturnFlag],[FieldLock],[VaUid],[VaCtr],[VaTermId],[VaCompCode])VALUES('2100','QtyPreLostFocus',1,'StockNo',0,0,'super',1,'.','.')
+-GO-
+INSERT INTO [EventExtnFieldConfig] ([ProgramId],[EventId],[FieldSrlNo],[FieldName],[ReturnFlag],[FieldLock],[VaUid],[VaCtr],[VaTermId],[VaCompCode])VALUES('2100','QtyPreLostFocus',2,'Rate',0,0,'super',1,'.','.')
+-GO-
+INSERT INTO [EventExtnFieldConfig] ([ProgramId],[EventId],[FieldSrlNo],[FieldName],[ReturnFlag],[FieldLock],[VaUid],[VaCtr],[VaTermId],[VaCompCode])VALUES('2100','QtyPreLostFocus',3,'Qty',1,2,'super',1,'.','.')
+-GO-
+INSERT INTO [EventExtnFieldConfig] ([ProgramId],[EventId],[FieldSrlNo],[FieldName],[ReturnFlag],[FieldLock],[VaUid],[VaCtr],[VaTermId],[VaCompCode])VALUES('2100','RatePostLostFocus',1,'Stockno',0,0,'super',1,'.','.')
+-GO-
+INSERT INTO [EventExtnFieldConfig] ([ProgramId],[EventId],[FieldSrlNo],[FieldName],[ReturnFlag],[FieldLock],[VaUid],[VaCtr],[VaTermId],[VaCompCode])VALUES('2100','RatePostLostFocus',2,'Rate',1,2,'super',1,'.','.')
+-GO-
+INSERT INTO [EventExtnFieldConfig] ([ProgramId],[EventId],[FieldSrlNo],[FieldName],[ReturnFlag],[FieldLock],[VaUid],[VaCtr],[VaTermId],[VaCompCode])VALUES('2100','RatePostLostFocus',3,'Qty',1,2,'super',1,'.','.')
+-GO-
+INSERT INTO [EventExtnFieldConfig] ([ProgramId],[EventId],[FieldSrlNo],[FieldName],[ReturnFlag],[FieldLock],[VaUid],[VaCtr],[VaTermId],[VaCompCode])VALUES('2100','RatePreLostFocus',1,'Stockno',0,0,'super',1,'.','.')
+-GO-
+INSERT INTO [EventExtnFieldConfig] ([ProgramId],[EventId],[FieldSrlNo],[FieldName],[ReturnFlag],[FieldLock],[VaUid],[VaCtr],[VaTermId],[VaCompCode])VALUES('2100','RatePreLostFocus',2,'Rate',1,2,'super',1,'.','.')
+-GO-
+INSERT INTO [EventExtnFieldConfig] ([ProgramId],[EventId],[FieldSrlNo],[FieldName],[ReturnFlag],[FieldLock],[VaUid],[VaCtr],[VaTermId],[VaCompCode])VALUES('2100','RatePreLostFocus',3,'Qty',1,2,'super',1,'.','.')
+-GO-
+INSERT INTO [EventExtnFieldConfig] ([ProgramId],[EventId],[FieldSrlNo],[FieldName],[ReturnFlag],[FieldLock],[VaUid],[VaCtr],[VaTermId],[VaCompCode])VALUES('2100','StockNoPostLostFocus',1,'Stockno',0,0,'super',1,'.','.')
+-GO-
+INSERT INTO [EventExtnFieldConfig] ([ProgramId],[EventId],[FieldSrlNo],[FieldName],[ReturnFlag],[FieldLock],[VaUid],[VaCtr],[VaTermId],[VaCompCode])VALUES('2100','StockNoPostLostFocus',2,'Rate',1,2,'super',1,'.','.')
+-GO-
+INSERT INTO [EventExtnFieldConfig] ([ProgramId],[EventId],[FieldSrlNo],[FieldName],[ReturnFlag],[FieldLock],[VaUid],[VaCtr],[VaTermId],[VaCompCode])VALUES('2100','StockNoPostLostFocus',3,'Qty',1,2,'super',1,'.','.')
+-GO-
+INSERT INTO [EventExtnFieldConfig] ([ProgramId],[EventId],[FieldSrlNo],[FieldName],[ReturnFlag],[FieldLock],[VaUid],[VaCtr],[VaTermId],[VaCompCode])VALUES('2100','StockNoPreLostFocus',1,'Stockno',1,0,'super',1,'.','.')
+-GO-
+INSERT INTO [EventExtnFieldConfig] ([ProgramId],[EventId],[FieldSrlNo],[FieldName],[ReturnFlag],[FieldLock],[VaUid],[VaCtr],[VaTermId],[VaCompCode])VALUES('2100','StockNoPreLostFocus',2,'Rate',1,2,'super',1,'.','.')
+-GO-
+INSERT INTO [EventExtnFieldConfig] ([ProgramId],[EventId],[FieldSrlNo],[FieldName],[ReturnFlag],[FieldLock],[VaUid],[VaCtr],[VaTermId],[VaCompCode])VALUES('2100','StockNoPreLostFocus',3,'Qty',1,2,'super',1,'.','.')
+-GO-
+INSERT INTO [EventExtnFieldConfig] ([ProgramId],[EventId],[FieldSrlNo],[FieldName],[ReturnFlag],[FieldLock],[VaUid],[VaCtr],[VaTermId],[VaCompCode])VALUES('1300','StockNoPreLostFocus',1,'Stockno',1,0,'super',1,'.','.')
+-GO-
+  </s9qScript>
+</s9qsqlblk>
+
+
+<s9qsqlblk>
+  <s9qScriptid>S9Q_019_1_0008</s9qScriptid> 
+  <s9qtitle> iNSERT STATEMENT FOR Billing components and event base extesion return value</s9qtitle> 
+  <s9qpgmtype>I</s9qpgmtype>  
+  <s9qpgmtype>L</s9qpgmtype>  
+  <s9qversion>*</s9qversion> 
+  <s9qenvironment>P</s9qenvironment> 
+  <s9qRunMultiple>1</s9qRunMultiple> 
+  <s9qQryType>DML</s9qQryType> 
+  <s9qScript>
+
+IF NOT EXISTS (SELECT * FROM sysobjects WHERE id = OBJECT_ID(N'[dbo].[EventExtnKeyValueConfig]') AND type in (N'U'))
+BEGIN
+CREATE TABLE [dbo].[EventExtnKeyValueConfig](
+	[ProgramId] [varchar](64) NOT NULL,
+	[EventId] [varchar](64) NOT NULL,
+	[SrlNo] [int] NOT NULL,
+	[EventKeyValue] [varchar](64) NOT NULL,
+	[DllName] Varchar(128),
+	[VaUid] [varchar](32) NULL,
+	[VaCtr] [int] NULL,
+	[VaTermId] [varchar](32) NULL,
+	[VaCompCode] [varchar](16) NULL,
+ CONSTRAINT [PK_EventExtnKeyValueConfig] PRIMARY KEY CLUSTERED 
+(
+	[ProgramId] ASC,
+	[EventId] ASC,
+	[SrlNo] ASC,
+	[EventKeyValue] ASC
+)
+) ON [PRIMARY]
+END
+-GO-
+  </s9qScript>
+</s9qsqlblk>
+

@@ -1,0 +1,136 @@
+<s9qsqlblk>
+  <s9qScriptid>	S9Q_0161_9_0001	</s9qScriptid>
+  <s9qtitle>All DDL Statements.</s9qtitle>
+  <s9qpgmtype>I</s9qpgmtype>
+  <s9qpgmtype>L</s9qpgmtype>
+  <s9qversion>*</s9qversion>
+  <s9qenvironment>H</s9qenvironment>
+  <s9qenvironment>P</s9qenvironment>
+  <s9qenvironment>R</s9qenvironment>
+  <s9qRunMultiple>1</s9qRunMultiple>
+  <s9qQryType>DDL</s9qQryType>
+  <s9qScript>
+
+CREATE TABLE [dbo].[ExciseDutyDtls] (DocNo Int Not NULL,SrlNo Int Not NULL, EDDesc Varchar(128), EDStatus Int, DefinitionCreatedAt Int,ShoperDate Datetime, SystemDate Datetime, ShoperDBVer VarChar(32), FeatureId Int,ApplicableItems Int, Class1Cd VarChar(32), Class2Cd VarChar(32), StartDate Datetime, EndDate Datetime, AssessableValuePer Int,AssessableValueBasedOn Varchar(16),EDC1Code Int, EDC1Per Int, EDC1BasedOn VarChar(256),EDC2Code Int,EDC2Per Int, EDC2BasedOn VarChar(256), EDC3Code Int,EDC3Per Int, EDC3BasedOn VarChar(256), EDC4Code Int,EDC4Per Int, EDC4BasedOn VarChar(256), EDC5Code Int,EDC5Per Int, EDC5BasedOn VarChar(256),AddEDToTrnValue Int, Remarks VarChar(256), VaUID VarChar(64), VaCtr Int, VaTermID VarChar(32), VaCompCode VarChar(32))
+-GO-
+ALTER TABLE [dbo].[ExciseDutyDtls] WITH NOCHECK ADD CONSTRAINT [PK_ExciseDutyDtls] PRIMARY KEY CLUSTERED ([DocNo],[SrlNo]) ON [PRIMARY]
+-GO-
+CREATE TABLE [dbo].[ExciseDutyComponents] (EDCode Int Not NULL, OrderNo Int ,EDCStatus Int, EDCompName Varchar(256),EDCompShortForm Varchar(256), DutyType VarChar(32), MethodOfCalInEDCode VarChar(256),MethodOfCalInShortForm VarChar(256), Remarks VarChar(256), VaUID VarChar(64), VaCtr Int, VaTermID VarChar(32), VaCompCode VarChar(32))
+-GO-
+ALTER TABLE [dbo].[ExciseDutyComponents] WITH NOCHECK ADD CONSTRAINT [PK_ExciseDutyComponents] PRIMARY KEY CLUSTERED ([EDCode]) ON [PRIMARY]
+-GO-
+CREATE TABLE [dbo].[BakExciseDutyDtls] (DocNo Int Not NULL,SrlNo Int Not NULL, EDDesc Varchar(128), EDStatus Int, DefinitionCreatedAt Int,ShoperDate Datetime, SystemDate Datetime, ShoperDBVer VarChar(32), FeatureId Int,ApplicableItems Int, Class1Cd VarChar(32), Class2Cd VarChar(32), StartDate Datetime, EndDate Datetime, AssessableValuePer Int,AssessableValueBasedOn Varchar(16),EDC1Code Int, EDC1Per Int, EDC1BasedOn VarChar(256),EDC2Code Int,EDC2Per Int, EDC2BasedOn VarChar(256), EDC3Code Int,EDC3Per Int, EDC3BasedOn VarChar(256), EDC4Code Int,EDC4Per Int, EDC4BasedOn VarChar(256), EDC5Code Int,EDC5Per Int, EDC5BasedOn VarChar(256),AddEDToTrnValue Int, Remarks VarChar(256), VaUID VarChar(64), VaCtr Int, VaTermID VarChar(32), VaCompCode VarChar(32),UpdFlag VarChar(1))
+-GO-
+CREATE TABLE [dbo].[BakExciseDutyComponents] (EDCode Int Not NULL, OrderNo Int ,EDCStatus Int, EDCompName Varchar(256),EDCompShortForm Varchar(256), DutyType VarChar(32), MethodOfCalInEDCode VarChar(256),MethodOfCalInShortForm VarChar(256), Remarks VarChar(256), VaUID VarChar(64), VaCtr Int, VaTermID VarChar(32), VaCompCode VarChar(32),UpdFlag VarChar(1))
+-GO-
+
+  </s9qScript>
+</s9qsqlblk>
+
+
+<s9qsqlblk>
+  <s9qScriptid>	S9Q_0161_9_0002	</s9qScriptid>
+  <s9qtitle>All DDL Statements.</s9qtitle>
+  <s9qpgmtype>I</s9qpgmtype>
+  <s9qpgmtype>L</s9qpgmtype>
+  <s9qversion>*</s9qversion>
+  <s9qenvironment>H</s9qenvironment>
+  <s9qenvironment>P</s9qenvironment>
+  <s9qenvironment>R</s9qenvironment>
+  <s9qRunMultiple>1</s9qRunMultiple>
+  <s9qQryType>DDL</s9qQryType>
+  <s9qScript>
+
+Insert Into ExciseDutyComponents Values (1,1,1,'Basic Excise Duty', 'BED','Excise','AV','On AV','On Assessable Value','',0,'.','')
+-GO-
+Insert Into ExciseDutyComponents Values (2,2,0,'Special Excise Duty', 'SED','Excise','AV','On AV','On Assessable Value','',0,'.','')
+-GO-
+Insert Into ExciseDutyComponents Values (3,3,0,'Additional Excise Duty', 'AED','Excise','1+2','On BED+SED','On BED+SED','',0,'.','')
+-GO-
+Insert Into ExciseDutyComponents Values (4,4,1,'Educational Cess', 'EC','Excise','1+2+3','On BED+SED+AED','On BED','',0,'.','')
+-GO-
+Insert Into ExciseDutyComponents Values (5,5,1,'Sec. and Higher Ed. Cess', 'SHEC','Excise','1+2+3','On BED+SED+AED','On BED','',0,'.','')
+-GO-
+Update ExciseDutyComponents Set VaCtr = (select intg from [DBO].sysparam where paramcode = 'VaSysCounter') Where VaCtr = 0
+-GO-
+Insert into Sysparam (ID,descr,paramcode,Intg,opt) values('SR6-0901-0000375','Excise Registration Number','ExciseRegNo','','T')
+-GO-
+Insert into SysparamExtd (ID,paramcode,fixed,changed,Category,CatDescr,DispOrder) values('SR6-0901-0000375','ExciseRegNo','Variable','0','23. Excise','This Gives Excise Realted Parameter',3)
+-GO-
+Insert into Sysparam (ID,descr,paramcode,Intg,opt) values('SR6-0901-0000376','Excise Ward Number','ExciseWardNo','','T')
+-GO-
+Insert into SysparamExtd (ID,paramcode,fixed,changed,Category,CatDescr,DispOrder) values('SR6-0901-0000376','ExciseWardNo','Variable','0','23. Excise','This Gives Excise Realted Parameter',4)
+-GO-
+Insert into Sysparam (ID,descr,paramcode,Intg,opt) values('SR6-0901-0000377','Excise Range','ExciseRange','','T')
+-GO-
+Insert into SysparamExtd (ID,paramcode,fixed,changed,Category,CatDescr,DispOrder) values('SR6-0901-0000377','ExciseRange','Variable','0','23. Excise','This Gives Excise Realted Parameter',5)
+-GO-
+Insert into Sysparam (ID,descr,paramcode,Intg,opt) values('SR6-0901-0000378','Excise Division','ExciseDiv','','T')
+-GO-
+Insert into SysparamExtd (ID,paramcode,fixed,changed,Category,CatDescr,DispOrder) values('SR6-0901-0000378','ExciseDiv','Variable','0','23. Excise','This Gives Excise Realted Parameter',6)
+-GO-
+Insert into Sysparam (ID,descr,paramcode,Intg,opt) values('SR6-0901-0000379','Excise Commissionerate','ExciseCommissionerate','','T')
+-GO-
+Insert into SysparamExtd (ID,paramcode,fixed,changed,Category,CatDescr,DispOrder) values('SR6-0901-0000379','ExciseCommissionerate','Variable','0','23. Excise','This Gives Excise Realted Parameter',7)
+-GO-
+Insert into Sysparam (ID,descr,paramcode,Intg,opt) values('SR6-0901-0000380','Excise Declaration','ExciseDeclaration','','T')
+-GO-
+Insert into SysparamExtd (ID,paramcode,fixed,changed,Category,CatDescr,DispOrder) values('SR6-0901-0000380','ExciseDeclaration','Variable','0','23. Excise','This Gives Excise Realted Parameter',8)
+-GO-
+Insert into Sysparam (ID,descr,paramcode,Intg,opt) values('SR6-0901-0000381','Excise Company Name','ExciseCompNm','','T')
+-GO-
+Insert into SysparamExtd (ID,paramcode,fixed,changed,Category,CatDescr,DispOrder) values('SR6-0901-0000381','ExciseCompNm','Variable','0','23. Excise','This Gives Excise Realted Parameter',9)
+-GO-
+Insert into Sysparam (ID,descr,paramcode,Intg,opt) values('SR6-0901-0000382','Excise Compnay Address','ExciseCompAdd','','T')
+-GO-
+Insert into SysparamExtd (ID,paramcode,fixed,changed,Category,CatDescr,DispOrder) values('SR6-0901-0000382','ExciseCompAdd','Variable','0','23. Excise','This Gives Excise Realted Parameter',10)
+-GO-
+
+  </s9qScript>
+</s9qsqlblk>
+
+<s9qsqlblk>
+  <s9qScriptid>	S9Q_0161_9_0003	</s9qScriptid>
+  <s9qtitle>All DDL Statements.</s9qtitle>
+  <s9qpgmtype>I</s9qpgmtype>
+  <s9qpgmtype>L</s9qpgmtype>
+  <s9qversion>*</s9qversion>
+  <s9qenvironment>H</s9qenvironment>
+  <s9qenvironment>P</s9qenvironment>
+  <s9qenvironment>R</s9qenvironment>
+  <s9qRunMultiple>1</s9qRunMultiple>
+  <s9qQryType>DDL</s9qQryType>
+  <s9qScript>
+
+INSERT INTO [DBO].VersionwiseTblsScript(VerID,SrlNo,TblScript,VAUid,VActr,VATermId,VACompCode) VALUES (10,1,'CREATE TABLE [dbo].[ExciseDutyDtls] (DocNo Int Not NULL,SrlNo Int Not NULL, EDDesc Varchar(128), EDStatus Int, DefinitionCreatedAt Int,ShoperDate Datetime, SystemDate Datetime, ShoperDBVer VarChar(32), FeatureId Int,ApplicableItems Int, Class1Cd VarChar(32), Class2Cd VarChar(32), StartDate Datetime, EndDate Datetime, AssessableValuePer Int,AssessableValueBasedOn Varchar(16),EDC1Code Int, EDC1Per Int, EDC1BasedOn VarChar(256),EDC2Code Int,EDC2Per Int, EDC2BasedOn VarChar(256), EDC3Code Int,EDC3Per Int, EDC3BasedOn VarChar(256), EDC4Code Int,EDC4Per Int, EDC4BasedOn VarChar(256), EDC5Code Int,EDC5Per Int, EDC5BasedOn VarChar(256),AddEDToTrnValue Int, Remarks VarChar(256), VaUID VarChar(64), VaCtr Int, VaTermID VarChar(32), VaCompCode VarChar(32))','',1,'.','')
+-GO-
+INSERT INTO [DBO].VersionwiseTblsScript(VerID,SrlNo,TblScript,VAUid,VActr,VATermId,VACompCode) VALUES (10,2,'ALTER TABLE [dbo].[ExciseDutyDtls] WITH NOCHECK ADD CONSTRAINT [PK_ExciseDutyDtls] PRIMARY KEY CLUSTERED ([DocNo],[SrlNo]) ON [PRIMARY]','',1,'.','')
+-GO-
+INSERT INTO [DBO].VersionwiseTblsScript(VerID,SrlNo,TblScript,VAUid,VActr,VATermId,VACompCode) VALUES (10,3,'CREATE TABLE [dbo].[ExciseDutyComponents] (EDCode Int Not NULL, OrderNo Int ,EDCStatus Int, EDCompName Varchar(256),EDCompShortForm Varchar(256), DutyType VarChar(32), MethodOfCalInEDCode VarChar(256),MethodOfCalInShortForm VarChar(256), Remarks VarChar(256), VaUID VarChar(64), VaCtr Int, VaTermID VarChar(32), VaCompCode VarChar(32))','',1,'.','')
+-GO-
+INSERT INTO [DBO].VersionwiseTblsScript(VerID,SrlNo,TblScript,VAUid,VActr,VATermId,VACompCode) VALUES (10,4,'ALTER TABLE [dbo].[ExciseDutyComponents] WITH NOCHECK ADD CONSTRAINT [PK_ExciseDutyComponents] PRIMARY KEY CLUSTERED ([EDCode]) ON [PRIMARY]','',1,'.','')
+-GO-
+INSERT INTO [DBO].VersionwiseTblsScript(VerID,SrlNo,TblScript,VAUid,VActr,VATermId,VACompCode) VALUES (10,5,'CREATE TABLE [dbo].[BakExciseDutyDtls] (DocNo Int Not NULL,SrlNo Int Not NULL, EDDesc Varchar(128), EDStatus Int, DefinitionCreatedAt Int,ShoperDate Datetime, SystemDate Datetime, ShoperDBVer VarChar(32), FeatureId Int,ApplicableItems Int, Class1Cd VarChar(32), Class2Cd VarChar(32), StartDate Datetime, EndDate Datetime, AssessableValuePer Int,AssessableValueBasedOn Varchar(16),EDC1Code Int, EDC1Per Int, EDC1BasedOn VarChar(256),EDC2Code Int,EDC2Per Int, EDC2BasedOn VarChar(256), EDC3Code Int,EDC3Per Int, EDC3BasedOn VarChar(256), EDC4Code Int,EDC4Per Int, EDC4BasedOn VarChar(256), EDC5Code Int,EDC5Per Int, EDC5BasedOn VarChar(256),AddEDToTrnValue Int, Remarks VarChar(256), VaUID VarChar(64), VaCtr Int, VaTermID VarChar(32), VaCompCode VarChar(32),UpdFlag VarChar(1))','',1,'.','')
+-GO-
+INSERT INTO [DBO].VersionwiseTblsScript(VerID,SrlNo,TblScript,VAUid,VActr,VATermId,VACompCode) VALUES (10,6,'CREATE TABLE [dbo].[BakExciseDutyComponents] (EDCode Int Not NULL, OrderNo Int ,EDCStatus Int, EDCompName Varchar(256),EDCompShortForm Varchar(256), DutyType VarChar(32), MethodOfCalInEDCode VarChar(256),MethodOfCalInShortForm VarChar(256), Remarks VarChar(256), VaUID VarChar(64), VaCtr Int, VaTermID VarChar(32), VaCompCode VarChar(32),UpdFlag VarChar(1))','',1,'.','')
+-GO-
+Update [DBO].[VersionwiseTblsScript] Set Vactr = (select intg from [DBO].sysparam where paramcode = 'VaSysCounter') where VerId=10
+-GO-
+UPDATE SYSPARAM SET Txt=Txt + '#ExciseDutyDtls' where paramcode='AdlTablesToSync' and Txt not like '%ExciseDutyDtls%'
+-GO-
+UPDATE SYSPARAM SET Txt=Txt + '#ExciseDutyComponents' where paramcode='AdlTablesToSync' and Txt not like '%ExciseDutyComponents%'
+-GO-
+
+  </s9qScript>
+</s9qsqlblk>
+<s9qsqlblk>
+  <s9qScriptID>S9Q_0161_9_0004</s9qScriptID>
+  <s9qtitle>Creating BAK Table</s9qtitle>
+  <s9qpgmtype>I</s9qpgmtype>
+  <s9qpgmtype>L</s9qpgmtype>
+  <s9qversion>*</s9qversion>
+  <s9qenvironment>P</s9qenvironment>
+  <s9qRunMultiple>0</s9qRunMultiple>
+  <s9qQryType>DLL</s9qQryType>
+  <s9qScript>BackTableCreation.clsBackTabCrt</s9qScript>
+</s9qsqlblk>

@@ -1,0 +1,48 @@
+<s9qsqlblk>
+  <s9qScriptID>	S9Q_0161_4_0003	</s9qScriptID>
+  <s9qtitle></s9qtitle>
+  <s9qpgmtype>I</s9qpgmtype>
+  <s9qpgmtype>L</s9qpgmtype>
+  <s9qversion>*</s9qversion>
+  <s9qenvironment>P</s9qenvironment>
+  <s9qRunMultiple>1</s9qRunMultiple>
+  <s9qQryType>DML</s9qQryType>
+  <s9qScript>
+
+DELETE FROM [dbo].[TallyPrintConfigHeader] WHERE [ConfigName] LIKE '%Excise'
+DELETE FROM [dbo].[TallyPrintConfigDetails] WHERE [ConfigName] LIKE '%Excise'
+-GO-
+INSERT [dbo].[TallyPrintConfigHeader] ([Terminal], [TrnType], [ConfigName], [ReportName], [TcpLocation], [IsActive], [PrinterName], [PrintMode], [PrintPreview], [NoOfCopies]) VALUES ('<<ALLNODES>>', 2100, 'SaleExcise', 'SHExciseInvoice', '<<APPPATH>>\TallyPrinting.tcp', 0, '<<DEFAULT>>', 'Neat Mode', 0, 1)
+INSERT [dbo].[TallyPrintConfigHeader] ([Terminal], [TrnType], [ConfigName], [ReportName], [TcpLocation], [IsActive], [PrinterName], [PrintMode], [PrintPreview], [NoOfCopies]) VALUES ('<<ALLNODES>>', 2300, 'PurchaseReturnExcise', 'SHExcisePurchaseReturnInvoice', '<<APPPATH>>\TallyPrinting.tcp', 0, '<<DEFAULT>>', 'Neat Mode', 0, 1)
+INSERT [dbo].[TallyPrintConfigHeader] ([Terminal], [TrnType], [ConfigName], [ReportName], [TcpLocation], [IsActive], [PrinterName], [PrintMode], [PrintPreview], [NoOfCopies]) VALUES ('<<ALLNODES>>', 2200, 'TransferOutExcise', 'SHExciseTransferOutInvoice', '<<APPPATH>>\TallyPrinting.tcp', 0, '<<DEFAULT>>', 'Neat Mode', 0, 1)
+INSERT [dbo].[TallyPrintConfigHeader] ([Terminal], [TrnType], [ConfigName], [ReportName], [TcpLocation], [IsActive], [PrinterName], [PrintMode], [PrintPreview], [NoOfCopies]) VALUES ('<<ALLNODES>>', 2500, 'MiscIssueExcise', 'SHExciseMiscIssueInvoice', '<<APPPATH>>\TallyPrinting.tcp', 0, '<<DEFAULT>>', 'Neat Mode', 0, 1)
+-GO-
+INSERT [dbo].[TallyPrintConfigDetails] ([ConfigName], [ParamName], [ParamValue]) VALUES ('SaleExcise', 'SISIPAddress', '<<SISURL>>')
+INSERT [dbo].[TallyPrintConfigDetails] ([ConfigName], [ParamName], [ParamValue]) VALUES ('SaleExcise', 'SISCompCode', '<<COMPANYCODE>>')
+INSERT [dbo].[TallyPrintConfigDetails] ([ConfigName], [ParamName], [ParamValue]) VALUES ('SaleExcise', 'TransactionNumber', '<<CONTROLNUMBER>>')
+INSERT [dbo].[TallyPrintConfigDetails] ([ConfigName], [ParamName], [ParamValue]) VALUES ('SaleExcise', 'PrintCompanyDetails', 'Yes')
+INSERT [dbo].[TallyPrintConfigDetails] ([ConfigName], [ParamName], [ParamValue]) VALUES ('SaleExcise', 'SHTopMargin', '1% Page')
+INSERT [dbo].[TallyPrintConfigDetails] ([ConfigName], [ParamName], [ParamValue]) VALUES ('SaleExcise', 'SHBottomMargin', '1% Page')
+INSERT [dbo].[TallyPrintConfigDetails] ([ConfigName], [ParamName], [ParamValue]) VALUES ('PurchaseReturnExcise', 'SISIPAddress', '<<SISURL>>')
+INSERT [dbo].[TallyPrintConfigDetails] ([ConfigName], [ParamName], [ParamValue]) VALUES ('PurchaseReturnExcise', 'SISCompCode', '<<COMPANYCODE>>')
+INSERT [dbo].[TallyPrintConfigDetails] ([ConfigName], [ParamName], [ParamValue]) VALUES ('PurchaseReturnExcise', 'TransactionNumber', '<<CONTROLNUMBER>>')
+INSERT [dbo].[TallyPrintConfigDetails] ([ConfigName], [ParamName], [ParamValue]) VALUES ('PurchaseReturnExcise', 'PrintCompanyDetails', 'Yes')
+INSERT [dbo].[TallyPrintConfigDetails] ([ConfigName], [ParamName], [ParamValue]) VALUES ('PurchaseReturnExcise', 'SHTopMargin', '1% Page')
+INSERT [dbo].[TallyPrintConfigDetails] ([ConfigName], [ParamName], [ParamValue]) VALUES ('PurchaseReturnExcise', 'SHBottomMargin', '1% Page')
+INSERT [dbo].[TallyPrintConfigDetails] ([ConfigName], [ParamName], [ParamValue]) VALUES ('TransferOutExcise', 'SISIPAddress', '<<SISURL>>')
+INSERT [dbo].[TallyPrintConfigDetails] ([ConfigName], [ParamName], [ParamValue]) VALUES ('TransferOutExcise', 'SISCompCode', '<<COMPANYCODE>>')
+INSERT [dbo].[TallyPrintConfigDetails] ([ConfigName], [ParamName], [ParamValue]) VALUES ('TransferOutExcise', 'TransactionNumber', '<<CONTROLNUMBER>>')
+INSERT [dbo].[TallyPrintConfigDetails] ([ConfigName], [ParamName], [ParamValue]) VALUES ('TransferOutExcise', 'PrintCompanyDetails', 'Yes')
+INSERT [dbo].[TallyPrintConfigDetails] ([ConfigName], [ParamName], [ParamValue]) VALUES ('TransferOutExcise', 'SHTopMargin', '1% Page')
+INSERT [dbo].[TallyPrintConfigDetails] ([ConfigName], [ParamName], [ParamValue]) VALUES ('TransferOutExcise', 'SHBottomMargin', '1% Page')
+INSERT [dbo].[TallyPrintConfigDetails] ([ConfigName], [ParamName], [ParamValue]) VALUES ('MiscIssueExcise', 'SISIPAddress', '<<SISURL>>')
+INSERT [dbo].[TallyPrintConfigDetails] ([ConfigName], [ParamName], [ParamValue]) VALUES ('MiscIssueExcise', 'SISCompCode', '<<COMPANYCODE>>')
+INSERT [dbo].[TallyPrintConfigDetails] ([ConfigName], [ParamName], [ParamValue]) VALUES ('MiscIssueExcise', 'TransactionNumber', '<<CONTROLNUMBER>>')
+INSERT [dbo].[TallyPrintConfigDetails] ([ConfigName], [ParamName], [ParamValue]) VALUES ('MiscIssueExcise', 'PrintCompanyDetails', 'Yes')
+INSERT [dbo].[TallyPrintConfigDetails] ([ConfigName], [ParamName], [ParamValue]) VALUES ('MiscIssueExcise', 'SHTopMargin', '1% Page')
+INSERT [dbo].[TallyPrintConfigDetails] ([ConfigName], [ParamName], [ParamValue]) VALUES ('MiscIssueExcise', 'SHBottomMargin', '1% Page')
+-GO-
+
+</s9qScript>		
+</s9qsqlblk>
+

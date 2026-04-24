@@ -1,0 +1,69 @@
+<s9qsqlblk>
+<s9qScriptid>S9Q_014_6_0002</s9qScriptid>
+<s9qtitle>Cash Receipt/Payout Printing Scripts</s9qtitle>
+<s9qpgmtype>L</s9qpgmtype>
+<s9qpgmtype>I</s9qpgmtype>
+<s9qversion>*</s9qversion>
+<s9qenvironment>P</s9qenvironment>
+<s9qRunMultiple>0</s9qRunMultiple>
+<s9qQryType>DML</s9qQryType>
+<s9qScript>
+Insert into Genlookup (Recid, Code, Descr) Values (980,'1+01','SR516800.PrnCashPayRcpt')
+-GO-
+Insert into Genlookup (Recid, Code, Descr) Values (980,'1+02','99')
+-GO-
+Insert into Genlookup (Recid, Code, Descr) Values (980,'1+03','N')
+-GO-
+Insert into Genlookup (Recid, Code, Descr) Values (980,'1+04','Y#CashReciptPayout Printing-35Col')
+-GO-
+Insert into Genlookup (Recid, Code, Descr) Values (980,'2+01','SR516800.PrnCashPayRcpt')
+-GO-
+Insert into Genlookup (Recid, Code, Descr) Values (980,'2+02','99')
+-GO-
+Insert into Genlookup (Recid, Code, Descr) Values (980,'2+03','N')
+-GO-
+Insert into Genlookup (Recid, Code, Descr) Values (980,'2+04','Y#CashReciptPayout Printing-40Col SingleSpread')
+-GO-
+Insert into Genlookup (Recid, Code, Descr) Values (980,'3+01','SR516800.PrnCashPayRcpt')
+-GO-
+Insert into Genlookup (Recid, Code, Descr) Values (980,'3+02','99')
+-GO-
+Insert into Genlookup (Recid, Code, Descr) Values (980,'3+03','N')
+-GO-
+Insert into Genlookup (Recid, Code, Descr) Values (980,'3+04','Y#CashReciptPayout Printing-40Col DoubleSpread')
+-GO-
+Insert into Genlookup (Recid, Code, Descr) Values (980,'4+01','SR516800.PrnCashPayRcpt')
+-GO-
+Insert into Genlookup (Recid, Code, Descr) Values (980,'4+02','99')
+-GO-
+Insert into Genlookup (Recid, Code, Descr) Values (980,'4+03','N')
+-GO-
+Insert into Genlookup (Recid, Code, Descr) Values (980,'4+04','Y#CashReciptPayout Printing-80Col')
+-GO-
+Insert into Genlookup (Recid, Code, Descr) Values (980,'5+01','SR516800.PrnCashPayRcpt')
+-GO-
+Insert into Genlookup (Recid, Code, Descr) Values (980,'5+02','99')
+-GO-
+Insert into Genlookup (Recid, Code, Descr) Values (980,'5+03','N')
+-GO-
+Insert into Genlookup (Recid, Code, Descr) Values (980,'5+04','Y#CashReciptPayout Printing-GUI')
+-GO-
+Insert into Genlookup (Recid, Code, Descr) Values (980,'6+01','SR516800.PrnCashPayRcpt')
+-GO-
+Insert into Genlookup (Recid, Code, Descr) Values (980,'6+02','99')
+-GO-
+Insert into Genlookup (Recid, Code, Descr) Values (980,'6+03','N')
+-GO-
+Insert into Genlookup (Recid, Code, Descr) Values (980,'6+04','Y#CashReciptPayout Printing-40ColPOS')
+-GO-
+Update Sysparam Set Intg=2 where Intg=8 and ParamCode='CashRcptPayoutBillFormType'
+-GO-
+Update Sysparam Set Intg=2 where Intg=21 and ParamCode='CashRcptPayoutBillFormType'
+-GO-
+Update Sysparam Set Intg=4 where Intg=7 and ParamCode='CashRcptPayoutBillFormType'
+-GO-
+Update Sysparam Set Intg=4 where Intg=7 and ParamCode='CashRcptPayoutBillFormType'
+-GO-
+Update Sysparam Set Intg=2 where Intg=1 and ParamCode='CashRcptPayoutBillFormType'
+</s9qScript>
+</s9qsqlblk>

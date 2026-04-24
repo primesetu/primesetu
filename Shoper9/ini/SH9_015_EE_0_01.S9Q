@@ -1,0 +1,123 @@
+<s9qsqlblk>
+  <s9qScriptid>S9Q_015_0_0001</s9qScriptid> 
+  <s9qtitle></s9qtitle>
+  <s9qpgmtype>I</s9qpgmtype>
+  <s9qpgmtype>L</s9qpgmtype>
+  <s9qversion>*</s9qversion>
+  <s9qenvironment>M</s9qenvironment>
+  <s9qRunMultiple>1</s9qRunMultiple>
+  <s9qQryType>DML</s9qQryType>
+  <s9qScript>
+INSERT INTO VAMENU (MnuNo, MenuOPt, MnuName, MnuCap, MnuPgm, ExeName, MnuWght, AllowWhenTrnClosed, Pgmopt, DbInfo, MenuIcon, Menusep, MenuBold) VALUES (430,443,'Stock','Tax Register','P','SR238000.Exe',0,0,1,'0',' ',0,0)
+-GO-
+INSERT INTO VAVERTABLE (ExeSrl,ExeID,ExeName,ExeSkip,ExeVer,ExeMinor,ExeSubRel) values (0,'SR238000.Exe','Tax Register','N','9','1','231')
+-GO-
+Insert into vamenu (MnuNo, MenuOPt, MnuName, MnuCap, MnuPgm, ExeName, MnuWght, AllowWhenTrnClosed, Pgmopt, DbInfo, MenuIcon, Menusep, MenuBold, MultiInstance) values (530,538,'Data Import','Sales Promotions','P','SR430300.EXE',0,0,1,'0','',0,0,0)
+-GO-
+Insert into vamenu (MnuNo, MenuOPt, MnuName, MnuCap, MnuPgm, ExeName, MnuWght, AllowWhenTrnClosed, Pgmopt, DbInfo, MenuIcon, Menusep, MenuBold, MultiInstance) values (470,483,'MIS','Salesperson-wise Discount','P','SR238400.EXE',0,0,1,'0','',0,0,0)
+-GO-
+Insert into VaVerTable Values(0,0,'SR430300.EXE','',64651,9,1,231,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,'2010-10-14','2010-10-14','N',NULL)
+-GO-
+Insert into VaVerTable Values(0,0,'SR238400.EXE','',45651,9,1,231,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,'2010-10-14','2010-10-14','N',NULL)
+-GO-
+Insert Into VaRestrictMnuConfig Values(600,606,'SR122000.EXE','11100000','ADD#EDIT#DELETE')
+-GO-
+Insert into VaVerTable(NodeId,ExeSrl,ExeId,ExeName,ExeSize,ExeVer,ExeMinor,ExeSubRel,ExeSkip)
+values(0,0,'SE301200.EXE','',0,'9','1','231','N')
+-GO-
+Insert into VaVerTable(NodeId,ExeSrl,ExeId,ExeName,ExeSize,ExeVer,ExeMinor,ExeSubRel,ExeSkip)
+values(0,0,'SE301300.EXE','',0,'9','1','231','N')
+-GO-
+UPDATE VAVerTable SET EXEVER = '9', EXEMINOR = '1', EXESUBREL = '231' WHERE EXEID in (
+'AR301500.Exe','SE100900.EXE','SE101000.EXE','SE201200.exe','SE301000.exe',
+'SE301100.exe','SE301200.exe','SE301300.Exe','SE301400.Exe','SE301500.exe',
+'SE301600.exe','SR100200.EXE','SR100400.Exe','SR100700.EXE','SR101000.EXE',
+'SR122000.EXE','SR127000.Exe','SR129500.EXE','SR202400.exe','SR202800.exe',
+'SR203300.exe','SR203400.exe','Sr203700.exe','SR211000.exe','SR221600.exe',
+'SR229700.EXE','SR230400.exe','SR230500.Exe','SR234400.Exe','SR236300.exe',
+'SR238000.exe','SR238400.exe','SR309700.Exe','SR312200.EXE','SR312300.EXE',
+'SR320500.EXE','SR323400.EXE','SR413000.exe','SR413100.exe','SR429000.exe',
+'SR430300.exe','SR431000.exe','SR431200.exe','SR431500.exe','SR431700.exe',
+'SR431800.exe','SR435600.exe','SR436900.exe','SR437300.EXE','TSBridge.Exe','SR233600.exe','SR130000.exe','SR430100.exe','SR410800.exe')
+-GO-
+UPDATE VAVerTable SET EXEVER = '9', EXEMINOR = '1', EXESUBREL = '425' WHERE EXEID ='Sr203700.exe'
+-GO-
+begin transaction
+select EnvironmentType from vacompany where EnvironmentType='D'
+if @@rowcount >0 
+	begin
+		
+		update vamenu set ExeName ='SR130000.exe' where mnuno =120 and menuOpt in (121,122)
+	
+	end
+commit transaction
+-GO-
+</s9qScript>		
+</s9qsqlblk>
+<s9qsqlblk>
+  <s9qScriptid>S9Q_015_0_0002</s9qScriptid> 
+  <s9qtitle>Create Table Statement for Patches</s9qtitle>
+  <s9qpgmtype>I</s9qpgmtype>
+  <s9qpgmtype>L</s9qpgmtype>
+  <s9qversion>*</s9qversion>
+  <s9qenvironment>M</s9qenvironment>
+  <s9qRunMultiple>1</s9qRunMultiple>
+  <s9qQryType>DDL</s9qQryType>
+  <s9qScript>
+CREATE TABLE [dbo].[AuthorisedPOSPatches] (
+	[SrlNo] [int] NOT NULL,
+	[PatchId] [varchar] (32),
+	[PatchName] [Varchar] (64),
+	[ReleaseNo] [Varchar] (16),
+	[ApprovedStatus] [Varchar] (1),
+	[FinalDateforPatch] [Datetime],
+	[DateInsert] [Datetime],
+	[VaUID] [Varchar] (32),
+	[VaCtr] [Int],
+	[VaTermID] [Varchar] (32),
+	[VaCompCode] [Varchar] (16),
+CONSTRAINT [PK_AuthorisedPOSPatches] PRIMARY KEY  CLUSTERED ([SrlNo])  ON [PRIMARY] ) ON [PRIMARY]
+-GO-
+CREATE TABLE [dbo].[CustomPatchLocationDtls](
+	[SrlNo] [int] NOT NULL,
+	[CustmPatchName] Varchar (32) Null,
+	[DownLoadType] [varchar](16)  NULL,
+	[LocationAddress] [varchar](64)  NULL,
+	[PortNo] [varchar](16)  NULL,
+	[UserName] [varchar](32)  NULL,
+	[Password] [varchar](16)  NULL,
+	[ActiveFtp] [bit] NULL,
+	[DateInsert] [datetime] NULL,
+	[ActiveFlag] [Bit] NULL,
+	[VaUID] [varchar](32)  NULL,
+	[VaCtr] [int] NULL,
+	[VaTermID] [varchar](32)  NULL,
+	[VaCompCode] [varchar](16)  NULL,
+CONSTRAINT [PK_CustomPatchLocationDtls] PRIMARY KEY  CLUSTERED ([SrlNo])  ON [PRIMARY] ) ON [PRIMARY]
+-GO-
+CREATE TABLE [dbo].[PatchDownloadDetails](
+	[PatchNumber] [varchar](255) ,
+	[PatchName] [varchar](255) ,
+	[ReleaseNumber] [varchar](16) ,
+	[PatchDate] [datetime] NOT NULL,
+	[IsCustomPatch] [varchar](1) ,
+	[DownloadType] [varchar](16) ,
+	[DownloadDate] [datetime] NOT NULL,
+	[Location] [varchar](1024) ,
+	[Status] [varchar](255) ,
+	[SISJobId] [varchar](255) 
+) ON [PRIMARY]
+-GO-
+</s9qScript>		
+</s9qsqlblk>
+
+<s9qsqlblk>
+  <s9qScriptid>S9Q_015_0_0003</s9qScriptid> 
+  <s9qtitle>Install license server forr POS</s9qtitle>
+  <s9qpgmtype>L</s9qpgmtype>
+  <s9qversion>*</s9qversion>
+  <s9qenvironment>M</s9qenvironment>
+  <s9qRunMultiple>1</s9qRunMultiple>
+  <s9qQryType>EXE</s9qQryType>
+  <s9qScript><APPATH>\LicSvrLU.exe</s9qScript>
+</s9qsqlblk>

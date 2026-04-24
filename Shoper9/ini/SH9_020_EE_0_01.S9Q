@@ -1,0 +1,55 @@
+<s9qsqlblk>
+  <s9qScriptid>S9Q_020_0_0002</s9qScriptid> 
+  <s9qtitle>Application DB Scripts</s9qtitle> 
+  <s9qpgmtype>I</s9qpgmtype>  
+  <s9qpgmtype>L</s9qpgmtype>  
+  <s9qversion>*</s9qversion> 
+  <s9qenvironment>P</s9qenvironment> 
+  <s9qRunMultiple>1</s9qRunMultiple> 
+  <s9qQryType>DML</s9qQryType> 
+  <s9qScript>
+INSERT INTO Genlookup (recid,code,descr) values (299,'P901570','Shoper Update Version No:')
+-GO-
+Update Genlookup set Descr = (select 'Shoper Update Version No:9.0.1.9570' + ' ;system date:' + convert(varchar(20),getdate(),105) + ' ;shoper date:' + (select convert(varchar(20),dt,105) from sysparam where paramcode ='SHOPERSysDt') ) where code = 'P901570' and recid = 299
+-GO-
+INSERT INTO [dbo].VersionDtls VALUES (16,getdate(),'9','2.0','A','P901570','',1,'.','')
+-GO-
+Update VersionDtls Set Vactr = (select intg from sysparam where paramcode = 'VaSysCounter') where VerId=16
+-GO-
+Update GenLookup set Vactr = (select intg from sysparam where paramcode = 'VaSysCounter') where Recid=299 and code='P901570'
+-GO-
+Insert Into Genlookup (Recid,Code,Descr,Flag,[Number]) Values (299,'VER9_REL2.0','Version 9 Release 2.0','Y',0)
+-GO-
+Update GenLookup set Vactr = (select intg from sysparam where paramcode = 'VaSysCounter') where Recid=299 and code='VER9_REL2.0'
+-GO-
+Insert Into GenLookUp (Recid,Code,Descr,Flag) Values (13000,'1100+01+SR127000+1','1#SR544500.clsPrintBarcodeLbls',1)
+-GO-
+Insert Into GenLookUp (Recid,Code,Descr,Flag) Values (13000,'1100+02+SR127000+1','1#SR544500.clsPrintBarcodeLbls',1)
+-GO-
+Insert Into GenLookUp (Recid,Code,Descr,Flag) Values (14400,'SR127000+FormLoadCompleted+1','SR544600.ClsSelfHealingInward',1)
+-GO-
+Insert Into GenLookUp (Recid,Code,Descr,Flag) Values (14400,'SR144100+FormLoadCompleted+1','SR544600.ClsSelfHealingInward',1)
+-GO-
+ insert into SysParam (Id,Descr,ParamCode,Txt,Opt,VActr) values 
+('SR1-0901-0000464','Barcode File Path','BarcodeFilePath','C:\Shoper9\Barcode\Poshak.txt','T',0)
+-GO-
+insert into SysParamExtd (Id,ParamCode,Fixed,Changed,Category,CatDescr,DispOrder,VAUid,VActr,VATermId,VACompCode) values 
+('SR1-0901-0000464','BarcodeFilePath','Variable',0,'17. House Keeping','Barcode File Path',
+152,'super',1,'.','.')
+-GO-
+ insert into SysParam (Id,Descr,ParamCode,Txt,Opt,VActr) values 
+('SR1-0901-0000465','Number of labels per row in a barcode printer','LabelsToPrint','1','T',0)
+-GO-
+insert into SysParamExtd (Id,ParamCode,Fixed,Changed,Category,CatDescr,DispOrder,VAUid,VActr,VATermId,VACompCode) values 
+('SR1-0901-0000465','LabelsToPrint','Variable',0,'17. House Keeping','Number of labels per row in a barcode printer',
+153,'super',1,'.','.')
+-GO-
+insert into SysParam (Id,Descr,ParamCode,INtg,Opt,VActr) values 
+('SR1-0901-0000466','Print barcode after inward transaction','PrintBarcode',0,'B',0)
+-GO-
+insert into SysParamExtd (Id,ParamCode,Fixed,Changed,Category,CatDescr,DispOrder,VAUid,VActr,VATermId,VACompCode) values 
+('SR1-0901-0000466','PrintBarcode','Variable',0,'17. House Keeping','Print barcode after inward transaction',
+154,'super',1,'.','.')
+-GO-
+  </s9qScript>
+</s9qsqlblk>

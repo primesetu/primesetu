@@ -1,0 +1,161 @@
+<s9qsqlblk>
+  <s9qScriptID>S9Q_015_2_0001</s9qScriptID>
+  <s9qtitle>Version Details</s9qtitle>
+  <s9qpgmtype>I</s9qpgmtype>
+  <s9qpgmtype>L</s9qpgmtype>
+  <s9qversion>*</s9qversion>
+  <s9qenvironment>P</s9qenvironment>
+  <s9qRunMultiple>0</s9qRunMultiple>
+  <s9qQryType>DML</s9qQryType>
+  <s9qScript>
+
+Alter Table [DBO].[PurchOrdHdr] drop column DisplayTableName
+-GO-
+Alter Table [DBO].[PurchOrdHdr] drop column HeaderTableName
+-GO-
+Alter Table [DBO].[PurchOrdHdr] drop column DetailTableName
+-GO-
+Alter Table [DBO].[PurchOrdHdr] drop column FooterTableName
+-GO-
+Alter Table [DBO].[PurchOrdHdr] drop column FooterDtlTableName
+-GO-
+Alter Table [DBO].[PurchOrdHdr] drop column DtlFullInfoTableName
+-GO-
+Alter Table [DBO].[PurchOrdHdr] drop column FtrDtlFullInfoTableName
+-GO-
+Alter Table [DBO].[PurchOrdDtl] drop column DisplayTableName
+-GO-
+Alter Table [DBO].[PurchOrdDtl] drop column HeaderTableName
+-GO-
+Alter Table [DBO].[PurchOrdDtl] drop column DetailTableName
+-GO-
+Alter Table [DBO].[PurchOrdDtl] drop column FooterTableName
+-GO-
+Alter Table [DBO].[PurchOrdDtl] drop column FooterDtlTableName
+-GO-
+Alter Table [DBO].[PurchOrdDtl] drop column DtlFullInfoTableName
+-GO-
+Alter Table [DBO].[PurchOrdDtl] drop column FtrDtlFullInfoTableName
+-GO-
+Alter Table [DBO].[InpackSlipTrn] drop column DisplayTableName
+-GO-
+Alter Table [DBO].[InpackSlipTrn] drop column HeaderTableName
+-GO-
+Alter Table [DBO].[InpackSlipTrn] drop column DetailTableName
+-GO-
+Alter Table [DBO].[InpackSlipTrn] drop column FooterTableName
+-GO-
+Alter Table [DBO].[InpackSlipTrn] drop column FooterDtlTableName
+-GO-
+Alter Table [DBO].[InpackSlipTrn] drop column DtlFullInfoTableName
+-GO-
+Alter Table [DBO].[InpackSlipTrn] drop column FtrDtlFullInfoTableName
+-GO-
+Alter Table [DBO].[InpackSlipHdr] drop column DisplayTableName
+-GO-
+Alter Table [DBO].[InpackSlipHdr] drop column HeaderTableName
+-GO-
+Alter Table [DBO].[InpackSlipHdr] drop column DetailTableName
+-GO-
+Alter Table [DBO].[InpackSlipHdr] drop column FooterTableName
+-GO-
+Alter Table [DBO].[InpackSlipHdr] drop column FooterDtlTableName
+-GO-
+Alter Table [DBO].[InpackSlipHdr] drop column DtlFullInfoTableName
+-GO-
+Alter Table [DBO].[InpackSlipHdr] drop column FtrDtlFullInfoTableName
+-GO-
+INSERT INTO [DBO].VersionwiseTblsScript(VerID,SrlNo,TblScript,VAUid,VActr,VATermId,VACompCode) VALUES (7,1,'Alter Table [DBO].[PurchOrdHdr] drop column DisplayTableName','',1,'.','')
+-GO-
+INSERT INTO [DBO].VersionwiseTblsScript(VerID,SrlNo,TblScript,VAUid,VActr,VATermId,VACompCode) VALUES (7,2,'Alter Table [DBO].[PurchOrdHdr] drop column HeaderTableName','',1,'.','')
+-GO-
+INSERT INTO [DBO].VersionwiseTblsScript(VerID,SrlNo,TblScript,VAUid,VActr,VATermId,VACompCode) VALUES (7,3,'Alter Table [DBO].[PurchOrdHdr] drop column DetailTableName','',1,'.','')
+-GO-
+INSERT INTO [DBO].VersionwiseTblsScript(VerID,SrlNo,TblScript,VAUid,VActr,VATermId,VACompCode) VALUES (7,4,'Alter Table [DBO].[PurchOrdHdr] drop column FooterTableName','',1,'.','')
+-GO-
+INSERT INTO [DBO].VersionwiseTblsScript(VerID,SrlNo,TblScript,VAUid,VActr,VATermId,VACompCode) VALUES (7,5,'Alter Table [DBO].[PurchOrdHdr] drop column FooterDtlTableName','',1,'.','')
+-GO-
+INSERT INTO [DBO].VersionwiseTblsScript(VerID,SrlNo,TblScript,VAUid,VActr,VATermId,VACompCode) VALUES (7,6,'Alter Table [DBO].[PurchOrdHdr] drop column DtlFullInfoTableName','',1,'.','')
+-GO-
+INSERT INTO [DBO].VersionwiseTblsScript(VerID,SrlNo,TblScript,VAUid,VActr,VATermId,VACompCode) VALUES (7,7,'Alter Table [DBO].[PurchOrdHdr] drop column FtrDtlFullInfoTableName','',1,'.','')
+-GO-
+INSERT INTO [DBO].VersionwiseTblsScript(VerID,SrlNo,TblScript,VAUid,VActr,VATermId,VACompCode) VALUES (7,8,'Alter Table [DBO].[PurchOrdDtl] drop column DisplayTableName','',1,'.','')
+-GO-
+INSERT INTO [DBO].VersionwiseTblsScript(VerID,SrlNo,TblScript,VAUid,VActr,VATermId,VACompCode) VALUES (7,9,'Alter Table [DBO].[PurchOrdDtl] drop column HeaderTableName','',1,'.','')
+-GO-
+INSERT INTO [DBO].VersionwiseTblsScript(VerID,SrlNo,TblScript,VAUid,VActr,VATermId,VACompCode) VALUES (7,10,'Alter Table [DBO].[PurchOrdDtl] drop column DetailTableName','',1,'.','')
+-GO-
+INSERT INTO [DBO].VersionwiseTblsScript(VerID,SrlNo,TblScript,VAUid,VActr,VATermId,VACompCode) VALUES (7,11,'Alter Table [DBO].[PurchOrdDtl] drop column FooterTableName','',1,'.','')
+-GO-
+INSERT INTO [DBO].VersionwiseTblsScript(VerID,SrlNo,TblScript,VAUid,VActr,VATermId,VACompCode) VALUES (7,12,'Alter Table [DBO].[PurchOrdDtl] drop column FooterDtlTableName','',1,'.','')
+-GO-
+INSERT INTO [DBO].VersionwiseTblsScript(VerID,SrlNo,TblScript,VAUid,VActr,VATermId,VACompCode) VALUES (7,13,'Alter Table [DBO].[PurchOrdDtl] drop column DtlFullInfoTableName','',1,'.','')
+-GO-
+INSERT INTO [DBO].VersionwiseTblsScript(VerID,SrlNo,TblScript,VAUid,VActr,VATermId,VACompCode) VALUES (7,14,'Alter Table [DBO].[PurchOrdDtl] drop column FtrDtlFullInfoTableName','',1,'.','')
+-GO-
+INSERT INTO [DBO].VersionwiseTblsScript(VerID,SrlNo,TblScript,VAUid,VActr,VATermId,VACompCode) VALUES (7,15,'Alter Table [DBO].[InpackSlipTrn] drop column DisplayTableName','',1,'.','')
+-GO-
+INSERT INTO [DBO].VersionwiseTblsScript(VerID,SrlNo,TblScript,VAUid,VActr,VATermId,VACompCode) VALUES (7,16,'Alter Table [DBO].[InpackSlipTrn] drop column HeaderTableName','',1,'.','')
+-GO-
+INSERT INTO [DBO].VersionwiseTblsScript(VerID,SrlNo,TblScript,VAUid,VActr,VATermId,VACompCode) VALUES (7,17,'Alter Table [DBO].[InpackSlipTrn] drop column DetailTableName','',1,'.','')
+-GO-
+INSERT INTO [DBO].VersionwiseTblsScript(VerID,SrlNo,TblScript,VAUid,VActr,VATermId,VACompCode) VALUES (7,18,'Alter Table [DBO].[InpackSlipTrn] drop column FooterTableName','',1,'.','')
+-GO-
+INSERT INTO [DBO].VersionwiseTblsScript(VerID,SrlNo,TblScript,VAUid,VActr,VATermId,VACompCode) VALUES (7,19,'Alter Table [DBO].[InpackSlipTrn] drop column FooterDtlTableName','',1,'.','')
+-GO-
+INSERT INTO [DBO].VersionwiseTblsScript(VerID,SrlNo,TblScript,VAUid,VActr,VATermId,VACompCode) VALUES (7,20,'Alter Table [DBO].[InpackSlipTrn] drop column DtlFullInfoTableName','',1,'.','')
+-GO-
+INSERT INTO [DBO].VersionwiseTblsScript(VerID,SrlNo,TblScript,VAUid,VActr,VATermId,VACompCode) VALUES (7,21,'Alter Table [DBO].[InpackSlipTrn] drop column FtrDtlFullInfoTableName','',1,'.','')
+-GO-
+INSERT INTO [DBO].VersionwiseTblsScript(VerID,SrlNo,TblScript,VAUid,VActr,VATermId,VACompCode) VALUES (7,22,'Alter Table [DBO].[InpackSlipHdr] drop column DisplayTableName','',1,'.','')
+-GO-
+INSERT INTO [DBO].VersionwiseTblsScript(VerID,SrlNo,TblScript,VAUid,VActr,VATermId,VACompCode) VALUES (7,23,'Alter Table [DBO].[InpackSlipHdr] drop column HeaderTableName','',1,'.','')
+-GO-
+INSERT INTO [DBO].VersionwiseTblsScript(VerID,SrlNo,TblScript,VAUid,VActr,VATermId,VACompCode) VALUES (7,24,'Alter Table [DBO].[InpackSlipHdr] drop column DetailTableName','',1,'.','')
+-GO-
+INSERT INTO [DBO].VersionwiseTblsScript(VerID,SrlNo,TblScript,VAUid,VActr,VATermId,VACompCode) VALUES (7,25,'Alter Table [DBO].[InpackSlipHdr] drop column FooterTableName','',1,'.','')
+-GO-
+INSERT INTO [DBO].VersionwiseTblsScript(VerID,SrlNo,TblScript,VAUid,VActr,VATermId,VACompCode) VALUES (7,26,'Alter Table [DBO].[InpackSlipHdr] drop column FooterDtlTableName','',1,'.','')
+-GO-
+INSERT INTO [DBO].VersionwiseTblsScript(VerID,SrlNo,TblScript,VAUid,VActr,VATermId,VACompCode) VALUES (7,27,'Alter Table [DBO].[InpackSlipHdr] drop column DtlFullInfoTableName','',1,'.','')
+-GO-
+INSERT INTO [DBO].VersionwiseTblsScript(VerID,SrlNo,TblScript,VAUid,VActr,VATermId,VACompCode) VALUES (7,28,'Alter Table [DBO].[InpackSlipHdr] drop column FtrDtlFullInfoTableName','',1,'.','')
+-GO-
+INSERT INTO [DBO].VersionwiseTblsScript(VerID,SrlNo,TblScript,VAUid,VActr,VATermId,VACompCode) VALUES (7,29,'Drop table [DBO].[BAKPurchOrdHdr]','',1,'.','')
+-GO-
+INSERT INTO [DBO].VersionwiseTblsScript(VerID,SrlNo,TblScript,VAUid,VActr,VATermId,VACompCode) VALUES (7,30,'Drop table [DBO].[BAKPurchOrdDtl]','',1,'.','')
+-GO-
+INSERT INTO [DBO].VersionwiseTblsScript(VerID,SrlNo,TblScript,VAUid,VActr,VATermId,VACompCode) VALUES (7,31,'Drop table [DBO].[BAKInpackSlipHdr]','',1,'.','')
+-GO-
+INSERT INTO [DBO].VersionwiseTblsScript(VerID,SrlNo,TblScript,VAUid,VActr,VATermId,VACompCode) VALUES (7,32,'Drop table [DBO].[BAKInPackSlipTrn]','',1,'.','')
+-GO-
+INSERT INTO [DBO].VersionwiseTblsScript(VerID,SrlNo,TblScript,VAUid,VActr,VATermId,VACompCode) 
+VALUES (7,33,'CREATE TABLE [DBO].[BAKPurchOrdHdr] ([PoType] [int] NOT NULL ,[PONoPrefix] [varchar](8) ,[POCtrlNo] [int] NOT NULL,[SuppType] [varchar](2) ,[SuppId] [varchar](16) ,[PODate] [datetime] NULL,[OrdCurrency] [varchar](8) ,[OrdCurrencyVal] [money] NULL ,[ConvRate] [money] NULL ,[LocCurrencyVal] [money] NULL ,[DelDate] [datetime] NULL,[ShipType] [varchar](16) ,[TransMode] [varchar](16) ,[AdvancePer] [int] NULL ,[OrdCurrencyAdvVal] [money] NULL ,[LocCurrencyAdvVal] [money] NULL ,[CreditDays] [int] NULL ,[IsPOSizewise] [bit] NULL ,[VAUid] [varchar](32) ,[VActr] [int] NULL ,[VATermId] [varchar](32) ,[VACompCode] [varchar](16) ,[ShipmentAddr] [varchar](250),[DocRemarks] [varchar](512) ,[DelPeriodInDays] [int] NULL,[IsConsignmentItemsPO] [bit] NULL,[BuyerCode] [real] NULL,[SourceCompCd] [varchar](16),[PoSource] [int] NULL,[PoVenderType] [varchar](2) ,[PoVendorId] [varchar](16) ,[POBillToVendorType] [varchar](2) ,[POBillToVendorId] [varchar](16) ,[AddOnBeftaxHdrper] [money] NULL,[AddOnAftTaxHdrper] [money] NULL,[DeductBefTaxHdrper] [money] NULL,[DeductAftTaxHdrper] [money] NULL,[DiscountBefTaxHdrper] [money] NULL,[DiscountAftTaxHdrper] [money] NULL,[Dateinsert] [datetime] NULL,[LastModifiedDt] [datetime] NULL,[ClosureDate] [datetime] NULL,[ClosureRemarks] [varchar](256) ,[ReopenDatetime] [datetime] NULL,[ReopenRemarks] [varchar](256) ,[SHOPERDBVER] [int] NULL ,[XS1] [varchar](128) ,[XS2] [varchar](128) ,[XS3] [varchar](128) ,[XS4] [varchar](128) ,[XS5] [varchar](128) ,[XS6] [varchar](128) ,[XS7] [varchar](128) ,[XS8] [varchar](128) ,[XI1] [int] NULL,[XI2] [int] NULL,[XI3] [int] NULL,[XI4] [int] NULL,[XM1] [money] NULL,[XM2] [money] NULL,[XM3] [money] NULL,[XM4] [money] NULL,[XD1] [datetime] NULL,[XD2] [datetime] NULL,[XD3] [datetime] NULL,[XD4] [datetime] NULL,[XS1Tag] [varchar](16) ,[XS2Tag] [varchar](16) ,[XS3Tag] [varchar](16) ,[XS4Tag] [varchar](16) ,[XS5Tag] [varchar](16) ,[XS6Tag] [varchar](16) ,[XS7Tag] [varchar](16) ,[XS8Tag] [varchar](16) ,[XI1Tag] [varchar](16) ,[XI2Tag] [varchar](16) ,[XI3Tag] [varchar](16) ,[XI4Tag] [varchar](16) ,[XM1Tag] [varchar](16) ,[XM2Tag] [varchar](16), [XM3Tag] [varchar](16) ,[XM4Tag] [varchar](16) ,[XD1Tag] [varchar](16) ,[XD2Tag] [varchar](16) ,[XD3Tag] [varchar](16) ,[XD4Tag] [varchar](16) ,[CS1] [varchar](128) ,[CS2] [varchar](128) ,[CS3] [varchar](128) ,[CS4] [varchar](128) ,[CS5] [varchar](128) ,[CS6] [varchar](128) ,[CS7] [varchar](128) ,[CS8] [varchar](128) ,[CI1] [int] NULL,[CI2] [int] NULL,[CI3] [int] NULL,[CI4] [int] NULL,[CM1] [money] NULL,[CM2] [money] NULL,[CM3] [money] NULL,[CM4] [money] NULL,[CD1] [datetime] NULL,[CD2] [datetime] NULL,[CD3] [datetime] NULL,[CD4] [datetime] NULL,[Updflag] [varchar] (1)  NULL ) ON [PRIMARY]','',1,'.','')
+-GO-
+INSERT INTO [DBO].VersionwiseTblsScript(VerID,SrlNo,TblScript,VAUid,VActr,VATermId,VACompCode) 
+VALUES (7,34,'CREATE TABLE [DBO].BAKPurchOrdDtl (PoType int NOT NULL,PONoPrefix varchar(8),POCtrlNo int NOT NULL,DeliveryLocation varchar(16),EntrySrlNo int NOT NULL,EntrySubSrlNo int NOT NULL,PODate datetime NULL,ItemClass1 varchar(50),ItemClass2 varchar(50),ItemSubClass1 varchar(50),ItemSubClass2 varchar(50),ItemSize varchar(50),StockNo varchar(32),Descr varchar(256),PurchOrdQty real NULL,PurchOrdRate money NULL,POCurrency varchar(50),ConvRate money NULL,DelDate datetime NULL,RcvdQty money NULL,PlanAdhocInd varchar(16),POOrgQty money NULL,POInd varchar(1),VAUid varchar(32),VActr int NULL,VATermId varchar(32),VACompCode varchar(16),OrderedMtrs money NULL,CancelQty money NULL,HoldQty money NULL,BuyerCode real NULL,PoSource int NULL,SourceCompCd varchar(16),PoAttributeLevel varchar(64),PoAppAnlCount int NULL,AnalCode1 varchar(16),AnalCode2 varchar(16),AnalCode3 varchar(16),AnalCode4 varchar(16),AnalCode5 varchar(16),AnalCode6 varchar(16),AnalCode7 varchar(16),AnalCode8 varchar(16),AnalCode9 varchar(16),AnalCode10 varchar(16),AnalCode11 varchar(16),AnalCode12 varchar(16),AnalCode13 varchar(16),AnalCode14 varchar(16),AnalCode15 varchar(16),AnalCode16 varchar(16),AnalCode17 varchar(16),AnalCode18 varchar(16),AnalCode19 varchar(16),AnalCode20 varchar(16),AnalCode21 varchar(16),AnalCode22 varchar(16),AnalCode23 varchar(16),AnalCode24 varchar(16),AnalCode25 varchar(16),AnalCode26 varchar(16),AnalCode27 varchar(16),AnalCode28 varchar(16),AnalCode29 varchar(16),AnalCode30 varchar(16),AnalCode31 varchar(16),AnalCode32 varchar(16),LineRemarks varchar(64),DocLineGrossValue money NULL,SalesTaxPer money NULL,SalesTaxAmt money NULL,AddOnBefTaxPer money NULL,AddOnBefTaxAmt money NULL,AddOnAftTaxPer money NULL,AddOnAftTaxAmt money NULL,DeductBefTaxPer money NULL,DeductBefTaxAmt money NULL,DeductAftTaxPer money NULL,DeductAftTaxAmt money NULL,DiscountBefTaxPer money NULL,DiscountBefTaxAmt money NULL,DiscountAftTaxPer money NULL,DiscountAftTaxAmt money NULL,AddOnBeftaxAprtndAmt money NULL,AddOnAftTaxAprtndAmt money NULL,DeductBefTaxAprtndAmt money NULL,DeductAftTaxAprtndAmt money NULL,DiscountBefTaxAprtndAmt money NULL,DiscountAftTaxAprtndAmt money NULL,DocLineNetValue money NULL,LinkPoType int NULL,LinkPoLocCompCd varchar(16),LinkPoPrefix varchar(50),LinkPoNumber int NULL,LinkPoEntrySrlno int NULL,LinkPoEntrySubSrlno int NULL,POClosureFlag int NULL,PoConsolFlag int NULL,Dateinsert datetime NULL,LastModifiedDt datetime NULL,XS1 varchar(128),XS2 varchar(128),XS3 varchar(128),XS4 varchar(128),XS5 varchar(128),XS6 varchar(128),XS7 varchar(128),XS8   varchar(128),XI1 int NULL,XI2 int NULL,XI3 int NULL,XI4 int NULL,XM1 money NULL,XM2 money NULL,XM3 money NULL,XM4 money NULL,XD1 datetime NULL,XD2 datetime NULL,XD3 datetime NULL,XD4 datetime NULL,XS1Tag varchar(16),XS2Tag varchar(16),XS3Tag varchar(16),XS4Tag varchar(16),XS5Tag varchar(16),XS6Tag varchar(16),XS7Tag varchar(16),XS8Tag varchar(16),XI1Tag varchar(16),XI2Tag varchar(16),XI3Tag varchar(16),XI4Tag varchar(16),XM1Tag varchar(16),XM2Tag varchar(16),XM3Tag varchar(16),XM4Tag varchar(16),XD1Tag varchar(16),XD2Tag varchar(16),XD3Tag varchar(16),XD4Tag varchar(16),CS1 varchar(128),CS2 varchar(128),CS3 varchar(128),CS4 varchar(128),CS5 varchar(128),CS6 varchar(128),CS7 varchar(128),CS8 varchar(128),CI1 int NULL,CI2 int NULL,CI3 int NULL,CI4 int NULL,CM1 money NULL,CM2 money NULL,CM3 money NULL,CM4 money NULL,CD1 datetime NULL,CD2 datetime NULL,CD3 datetime NULL,CD4 datetime NULL,Updflag varchar (1)  NULL) ON [PRIMARY]','',1,'.','')
+-GO-
+INSERT INTO [DBO].VersionwiseTblsScript(VerID,SrlNo,TblScript,VAUid,VActr,VATermId,VACompCode) 
+VALUES (7,35,'CREATE TABLE [DBO].[BAKInPackSlipHdr] ([TrnType] [int] NOT NULL,[TrnCtrlNo] [int] NOT NULL,[DocDt] [datetime] NULL,[PartyId] [varchar](32) ,[PartyStkDocNo] [varchar](16) ,[PartyStkDocDt] [datetime] NULL,[PartyType] [varchar](50) ,[PackCountDoc] [int] NULL,[PackCountPhy] [int] NULL,[VAUid] [varchar](32) ,[VActr] [int] NULL,[VATermId] [varchar](32) ,[VACompCode] [varchar](16) ,[SHOPERDBVER] [int] NULL ,[XS1] [varchar](128) ,[XS2] [varchar](128) ,[XS3] [varchar](128) ,[XS4] [varchar](128) ,[XS5] [varchar](128) ,[XS6] [varchar](128) ,[XS7] [varchar](128) ,[XS8] [varchar](128) ,[XI1] [int] NULL,[XI2] [int] NULL,[XI3] [int] NULL,[XI4] [int] NULL,[XM1] [money] NULL,[XM2] [money] NULL,[XM3] [money] NULL,[XM4] [money] NULL,[XD1] [datetime] NULL,[XD2] [datetime] NULL,[XD3] [datetime] NULL,[XD4] [datetime] NULL,[XS1Tag] [varchar](16) ,[XS2Tag] [varchar](16) ,[XS3Tag] [varchar](16) ,[XS4Tag] [varchar](16) ,[XS5Tag] [varchar](16) ,[XS6Tag] [varchar](16) ,[XS7Tag] [varchar](16) ,[XS8Tag] [varchar](16) ,[XI1Tag] [varchar](16) ,[XI2Tag] [varchar](16) ,[XI3Tag] [varchar](16) ,[XI4Tag] [varchar](16) ,[XM1Tag] [varchar](16) ,[XM2Tag] [varchar](16) ,[XM3Tag] [varchar](16) ,[XM4Tag] [varchar](16) ,[XD1Tag] [varchar](16) ,[XD2Tag] [varchar](16) ,[XD3Tag] [varchar](16) ,[XD4Tag] [varchar](16) ,[CS1] [varchar](128) ,[CS2] [varchar](128) ,[CS3] [varchar](128) ,[CS4] [varchar](128) ,[CS5] [varchar](128) ,[CS6] [varchar](128) ,[CS7] [varchar](128) ,[CS8] [varchar](128) ,[CI1] [int] NULL,[CI2] [int] NULL,[CI3] [int] NULL,[CI4] [int] NULL,[CM1] [money] NULL,[CM2] [money] NULL,[CM3] [money] NULL,[CM4] [money] NULL,[CD1] [datetime] NULL,[CD2] [datetime] NULL,[CD3] [datetime] NULL,[CD4] [datetime] NULL,[Updflag] [varchar] (1)  NULL)  ON [PRIMARY]','',1,'.','')
+-GO-
+INSERT INTO [DBO].VersionwiseTblsScript(VerID,SrlNo,TblScript,VAUid,VActr,VATermId,VACompCode) 
+VALUES (7,36,'CREATE TABLE [DBO].[BAKInPackSlipTrn] ([TrnType] [int] NOT NULL,[TrnCtrlNo] [int] NOT NULL,[SlipCrtnNo] [varchar](16) ,[SlipEntSrlNo] [int] NOT NULL,[StockNo] [varchar](32) ,[BatchSrlNo] [varchar](16) ,[PhyQtyIn] [money] NULL ,[VAUid] [varchar](32) ,[VActr] [int] NULL ,[VATermId] [varchar](32) ,[VACompCode] [varchar](16) ,[XS1] [varchar](128) ,[XS2] [varchar](128) ,[XS3] [varchar](128) ,[XS4] [varchar](128) ,[XS5] [varchar](128) ,[XS6] [varchar](128) ,[XS7] [varchar](128) ,[XS8] [varchar](128) ,[XI1] [int] NULL,[XI2] [int] NULL,[XI3] [int] NULL,[XI4] [int] NULL,[XM1] [money] NULL,[XM2] [money] NULL,[XM3] [money] NULL,[XM4] [money] NULL,[XD1] [datetime] NULL,[XD2] [datetime] NULL,[XD3] [datetime] NULL,[XD4] [datetime] NULL,[XS1Tag] [varchar](16) ,[XS2Tag] [varchar](16) ,[XS3Tag] [varchar](16) ,[XS4Tag] [varchar](16) ,[XS5Tag] [varchar](16) ,[XS6Tag] [varchar](16) ,[XS7Tag] [varchar](16) ,[XS8Tag] [varchar](16) ,[XI1Tag] [varchar](16) ,[XI2Tag] [varchar](16) ,[XI3Tag] [varchar](16) ,[XI4Tag] [varchar](16) ,[XM1Tag] [varchar](16) ,[XM2Tag] [varchar](16) ,[XM3Tag] [varchar](16) ,[XM4Tag] [varchar](16) ,[XD1Tag] [varchar](16) ,[XD2Tag] [varchar](16) ,[XD3Tag] [varchar](16) ,[XD4Tag] [varchar](16) ,[CS1] [varchar](128) ,[CS2] [varchar](128) ,[CS3] [varchar](128) ,[CS4] [varchar](128) ,[CS5] [varchar](128) ,[CS6] [varchar](128) ,[CS7] [varchar](128) ,[CS8] [varchar](128) ,[CI1] [int] NULL,[CI2] [int] NULL,	[CI3] [int] NULL,[CI4] [int] NULL,[CM1] [money] NULL,[CM2] [money] NULL,[CM3] [money] NULL,[CM4] [money] NULL,[CD1] [datetime] NULL,[CD2] [datetime] NULL,[CD3] [datetime] NULL,[CD4] [datetime] NULL,[Updflag] [varchar] (1)  NULL ) ON [PRIMARY]','',1,'.','')
+-GO-
+Update [DBO].[VersionwiseTblsScript] Set Vactr = (select intg from [DBO].sysparam where paramcode = 'VaSysCounter') where VerId=7
+-GO-
+</s9qScript>
+</s9qsqlblk>
+
+
+<s9qsqlblk>
+  <s9qScriptID>S9Q_015_2_0002</s9qScriptID>
+  <s9qtitle>Creating BAK Table</s9qtitle>
+  <s9qpgmtype>I</s9qpgmtype>
+  <s9qpgmtype>L</s9qpgmtype>
+  <s9qversion>*</s9qversion>
+  <s9qenvironment>P</s9qenvironment>
+  <s9qRunMultiple>0</s9qRunMultiple>
+  <s9qQryType>DLL</s9qQryType>
+  <s9qScript>BackTableCreation.clsBackTabCrt</s9qScript>
+</s9qsqlblk>
+

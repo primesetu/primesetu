@@ -1,0 +1,27 @@
+<s9qsqlblk>
+<s9qScriptid>S9Q_019_6_0001</s9qScriptid>
+<s9qtitle>Print Engine Script Files</s9qtitle>
+<s9qpgmtype>L</s9qpgmtype>
+<s9qpgmtype>I</s9qpgmtype>
+<s9qversion>*</s9qversion>
+<s9qenvironment>P</s9qenvironment>
+<s9qRunMultiple>1</s9qRunMultiple>
+<s9qQryType>DML</s9qQryType>
+<s9qScript>	
+Update SysParam set Descr='Print component wise tax breakup on Bill' where Id='00157B'
+-GO-
+Insert into SysParam (Id,Descr,ParamCode,[Boolean],Opt) values('SR1-0901-0000433','Print inclusive and exclusive vat summary breakup separately','PrintInclExclVatSummarySeparately',0,'B')
+-GO-
+Insert into SysParamExtd([id],ParamCode,Fixed,Changed,Category,CatDescr,DispOrder) Values('SR1-0901-0000433','PrintInclExclVatSummarySeparately','Variable','0','14. Bill - Printing', 'Gen Printing Parameter',53)
+-GO-
+Insert into SysParam (Id,Descr,ParamCode,[Boolean],Opt) values('SR1-0901-0000434','Print tax breakup with tax component captions','PrintTaxBreakupWithTaxCompDtls',0,'B')
+-GO-
+Insert into SysParamExtd([id],ParamCode,Fixed,Changed,Category,CatDescr,DispOrder) Values('SR1-0901-0000434','PrintTaxBreakupWithTaxCompDtls','Variable','0','14. Bill - Printing','Gen Printing Parameter',54)
+-GO-
+Insert into SysParam (Id,Descr,ParamCode,[Boolean],Opt) values('SR1-0901-0000437','Print Reference Doc Prefix and Doc No in Outward Item details','PrintDocPrefixNoInOutwardItemDtls',0,'B')
+-GO-
+Insert into SysParamExtd([id],ParamCode,Fixed,Changed,Category,CatDescr,DispOrder) Values('SR1-0901-0000437','PrintDocPrefixNoInOutwardItemDtls','Variable','0','10. Outwards','This Gives Outwards Parameters',28)
+-GO-
+Update SysparamExtd set fixed='Hidden' where paramcode  in ('PrnItemWiseTaxBreak','PrnSalesTaxComponent','PrnSalesTaxAmtOrRate','PrintTaxComponentNmDescInVATSummary','PrintTaxTypeDescInVATSummary')
+</s9qScript>
+</s9qsqlblk>

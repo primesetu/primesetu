@@ -1,0 +1,1031 @@
+<s9qsqlblk>
+<s9qScriptid>S9Q_013_1_0058</s9qScriptID>
+<s9qtitle>Addons Dedcutions Appropraitions </s9qtitle>
+<s9qpgmtype>D</s9qpgmtype>
+<s9qenvironment>P</s9qenvironment>
+<s9qQryType>EXE</s9qQryType>
+<s9qRunMultiple>0</s9qRunMultiple>
+<s9qScript><APPATH>\SR328500.Exe</s9qScript>
+</s9qsqlblk>
+
+<s9qsqlblk>
+<s9qScriptid>S9Q_013_1_0010</s9qScriptID>
+<s9qtitle>Updating Zero or balnk or some specific value to transaction records field if the field value is Null </s9qtitle>
+<s9qpgmtype>D</s9qpgmtype>
+<s9qenvironment>P</s9qenvironment>
+<s9qQryType>DML</s9qQryType>
+<s9qRunMultiple>0</s9qRunMultiple>
+<s9qScript>
+
+Update dbo.stktrndtls set SField5=(case when itemmaster.isservice=1 then '2' when itemmaster.isservice=0 then '1' end), BField2=(case when itemmaster.IsInventoryItem=1 then 1 when itemmaster.IsInventoryItem=0 then 0 end) from dbo.itemmaster where itemmaster.stockno=stktrndtls.stockno and trntype in (2100,1300,1600)
+-GO-
+
+Update dbo.stktrndtls set NField5=0 where Nfield5 is null or Nfield5 in(' ','')
+-GO-
+Update dbo.stktrndtls set Taxcomp1 = docenttax where Taxcomp1 is null and docenttax <> 0
+-GO-
+Update dbo.stktrndtls set Taxcomp1 = docenttax where Taxcomp1 = 0 and docenttax <> 0
+-GO-
+Update dbo.stktrndtls set Taxcomp1 = 0 where Taxcomp1 is null and docenttax = 0
+-GO-
+Update dbo.stktrndtls set stdtaxcomp1per = 0 where stdtaxcomp1per is null 
+-GO-
+Update dbo.stktrndtls set stdtaxcomp1per= 0 where taxcomp1 = 0 and stdtaxcomp1per <> 0
+-GO-
+UPDATE dbo.saletrnhdr set custcd = '' where custcd is null
+-GO-
+update dbo.StkTrnDtls Set TaxRevisionId='0' Where TaxRevisionId is null or TaxRevisionId = ''
+-GO-
+Update dbo.StkTrnDtls Set PromoRemarks = '' Where  TrnType In(2100,1300,1600) and  PromoRemarks  is NULL
+-GO-
+Update dbo.StkTrnDtls Set PromoItemLevelOfferVal = 0 Where  TrnType In(2100,1300,1600) and  PromoItemLevelOfferVal is NULL
+-GO-
+Update dbo.StkTrnDtls Set PromoItemlLevelDiscDtls = '' Where  TrnType In(2100,1300,1600) and  PromoItemlLevelDiscDtls is NULL
+-GO-
+Update dbo.StkTrnDtls Set PromoFlgItemLevel = 0 Where  TrnType In(2100,1300,1600) and  PromoFlgItemLevel is NULL
+-GO-
+Update dbo.StkTrnDtls Set PromoFlgBillLevel = 0 Where  TrnType In(2100,1300,1600) and  PromoFlgBillLevel is NULL
+-GO-
+Update dbo.StkTrnDtls Set PromoSetSrlNo = 0 Where  TrnType In(2100,1300,1600) and  PromoSetSrlNo is NULL
+-GO-
+Update dbo.ExpectedTrnHdr Set	BillLvlDiscCode = '',BillLvlDiscPer = 0,BillLvlDiscAmt = 0,BillLvlDiscComp = 0 Where BillLvlDiscCode Is NULL
+-GO-
+Update dbo.ExpectedTrnHdr Set	GenDiscReason = '' Where GenDiscReason Is NULL
+-GO-
+Update dbo.ExpectedTrnHdr Set	BillLvlRemarks = '' Where BillLvlRemarks Is NULL
+-GO-
+Update dbo.ExpectedTrnHdr Set	ModeOfTrans = '' Where ModeOfTrans Is NULL
+-GO-
+Update dbo.ExpectedTrnHdr Set	TransCd = '' Where TransCd Is NULL
+-GO-
+Update dbo.ExpectedTrnHdr Set	TransDocDate = '12:00:00 AM' Where TransDocDate Is NULL
+-GO-
+Update dbo.ExpectedTrnHdr Set	DocTime	= '12:00:00 AM' Where DocTime Is NULL
+-GO-
+Update dbo.ExpectedTrnHdr Set	TotDocValue = 0 where TotDocValue is NULL
+-GO-
+Update dbo.ExpectedTrnHdr Set	TotDocTax = 0 where TotDocTax is NULL
+-GO-
+Update dbo.ExpectedTrnHdr Set	TotDocAddons = 0 where TotDocAddons is NULL
+-GO-
+Update dbo.ExpectedTrnHdr Set	TotDocDedns = 0 where TotDocDedns is NULL
+-GO-
+Update dbo.ExpectedTrnHdr Set	EnteredSizewise = 0 where EnteredSizewise is NULL
+-GO-
+Update dbo.ExpectedTrnHdr Set	TaxComp1 = 0 where TaxComp1 is NULL
+-GO-
+Update dbo.ExpectedTrnHdr Set	TaxComp2 = 0 where TaxComp2 is NULL
+-GO-
+Update dbo.ExpectedTrnHdr Set	TaxComp3 = 0 where TaxComp3 is NULL
+-GO-
+Update dbo.ExpectedTrnHdr Set	TaxComp4 = 0 where TaxComp4 is NULL
+-GO-
+Update dbo.ExpectedTrnHdr Set	TaxComp5 = 0 where TaxComp5 is NULL
+-GO-
+Update dbo.ExpectedTrnHdr Set	BillPassInd = 0 where BillPassInd is NULL
+-GO-
+Update dbo.ExpectedTrnHdr Set	TotalLineItems = 0 where TotalLineItems is NULL
+-GO-
+Update dbo.ExpectedTrnHdr Set	TotDocED = 0 where TotDocED is NULL
+-GO-
+Update dbo.ExpectedTrnHdr Set	LinkEtTrnType = 0,LinkEtTrnCtrlNo = 0,LinkPOVendor = '' where LinkEtTrnType is NULL	
+-GO-
+Update dbo.ExpectedTrnDtls Set	LinkEtTrntype = 0,LinkEtTrnCtrlno = 0,LinkEtDocSubSrlno = 0 where LinkEtTrntype is NULL
+-GO-
+Update dbo.ExpectedTrnDtls Set	DocRsnCd ='' where DocRsnCd is NULL
+-GO-
+Update dbo.ExpectedTrnDtls Set	DocDt = '12:00:00 AM' where DocDt is NULL
+-GO-
+Update dbo.ExpectedTrnDtls Set	LocnId = '' where LocnId is NULL
+-GO-
+Update dbo.ExpectedTrnDtls Set	OrdDocType = 0,OrdDocNoPrefix ='',OrdDocNo = 0,OrdEntSrlNo = 0,OrdEntSubSrlNo = 0  where OrdDocType is NULL
+-GO-
+Update dbo.ExpectedTrnDtls Set	StkUpdtRate = 0 where StkUpdtRate is NULL
+-GO-
+Update dbo.ExpectedTrnDtls Set	DocEntValAftDisc = 0 where	DocEntValAftDisc is NULL
+-GO-
+Update dbo.ExpectedTrnDtls Set	DocEntTax = 0 where DocEntTax is NULL
+-GO-
+Update dbo.ExpectedTrnDtls Set	DocEntDedns = 0 where DocEntDedns is NULL
+-GO-
+Update dbo.ExpectedTrnDtls Set	DocEntNetValue = 0 where DocEntNetValue is NULL
+-GO-
+Update dbo.ExpectedTrnDtls Set	PhysQtyReturned = 0 where	PhysQtyReturned is NULL
+-GO-
+Update dbo.ExpectedTrnDtls Set	DocEntDisc = 0 where DocEntDisc is NULL
+-GO-
+Update dbo.ExpectedTrnDtls Set	ItemTaxType = '' where ItemTaxType is NULL
+-GO-
+Update dbo.ExpectedTrnDtls Set	CustTaxType = '' where CustTaxType is NULL
+-GO-
+Update dbo.ExpectedTrnDtls Set	SrcTaxType = '' where SrcTaxType is NULL
+-GO-
+Update dbo.ExpectedTrnDtls Set	RetnReasonCd = '' where RetnReasonCd is NULL
+-GO-
+Update dbo.ExpectedTrnDtls Set	BackRefDocEntSrlNo = 0 where BackRefDocEntSrlNo is NULL
+-GO-
+Update dbo.ExpectedTrnDtls Set	BillPassInd = 0 where BillPassInd is NULL
+-GO-
+Update dbo.ExpectedTrnDtls Set	ItemwiseDiscReason = '' where ItemwiseDiscReason is NULL
+-GO-
+Update dbo.ExpectedTrnDtls Set	ItemMRPBillTm = 0 where ItemMRPBillTm is NULL
+-GO-
+Update dbo.ExpectedTrnDtls Set	ItemLvlPriceFacId = '' where ItemLvlPriceFacId is NULL
+-GO-
+Update dbo.ExpectedTrnDtls Set	DocEntPriceFactor = 0 where DocEntPriceFactor is NULL
+-GO-
+Update dbo.ExpectedTrnDtls Set	MerchId = '' where MerchId is NULL
+-GO-
+Update dbo.ExpectedTrnRcpts Set PayModeType = 0 where PayModeType is NULL
+-GO-
+Update dbo.ExpectedTrnRcpts Set PayModeCode = '' where PayModeCode is NULL
+-GO-
+Update dbo.ExpectedTrnRcpts Set PaidUnits = 0 where PaidUnits is NULL
+-GO-
+Update dbo.ExpectedTrnRcpts Set AppliedConvRate = 0 where AppliedConvRate	is NULL
+-GO-
+Update dbo.ExpectedTrnRcpts Set LocCurrNetAmt = 0 where	LocCurrNetAmt is NULL
+-GO-
+Update dbo.ExpectedTrnRcpts Set StartCpnNo = 0,EndCpnNo = 0 where StartCpnNo is NULL
+-GO-
+Update dbo.ExpectedTrnRcpts Set Prefix	='' where	Prefix is NULL
+-GO-
+Update dbo.ExpectedTrnRcpts Set TenderRefElement1 = '' where TenderRefElement1 is NULL
+-GO-
+Update dbo.ExpectedTrnRcpts Set TenderRefElement2 = '' where TenderRefElement2 is NULL
+-GO-
+Update dbo.ExpectedTrnRcpts Set TenderRefElement3 = '' where TenderRefElement3 is NULL
+-GO-
+Update dbo.ExpectedTrnRcpts Set TenderRefElement4 = '' where TenderRefElement4 is NULL
+-GO-
+Update dbo.ExpectedTrnRcpts Set TenderRefElement5 = '' where TenderRefElement5 is NULL
+-GO-
+Update dbo.ExpectedTrnRcpts Set TenderRefElement6 = '' where TenderRefElement6 is NULL
+-GO-
+Update dbo.ExpectedTrnRcpts Set TenderRefElement7 = '' where TenderRefElement7 is NULL
+-GO-
+Update dbo.ExpectedTrnRcpts Set TenderRefElement8 = '' where TenderRefElement8 is NULL
+-GO-
+Update dbo.ExpectedTrnRcpts Set TenderRefElement9 = '' where TenderRefElement9 is NULL
+-GO-
+Update dbo.ExpectedTrnRcpts Set TenderRefElement10 = '' where TenderRefElement10 is NULL
+-GO-
+Update dbo.ExpectedTrnRcpts Set SubmissionOnline = 0 where SubmissionOnline is NULL
+-GO-
+Update dbo.ExpectedTrnRcpts Set AgencyCode = '',AgencyCommison = 0 where AgencyCode	is NULL
+-GO-
+Update dbo.ExpectedTrnRcpts Set CrNoteTotalAmount = 0 where CrNoteTotalAmount is NULL
+-GO-
+Update dbo.ExpectedTrnRcpts Set CrnoteAmtinBilling = 0 where CrnoteAmtinBilling is NULL
+-GO-
+Update dbo.ExpectedTrnRcpts Set TrnStatus =  0 where TrnStatus is NULL
+-GO-
+Update dbo.ExpectedTrnRcpts Set [Description] = '' where [Description] is NULL
+-GO-
+Update dbo.ExpectedTrnRcpts Set LocalCurrency = 0 where LocalCurrency is NULL
+-GO-
+</s9qScript>
+</s9qsqlblk>
+
+
+
+<s9qsqlblk>
+<s9qScriptid>S9Q_013_1_0011</s9qScriptID>
+<s9qtitle>Updating of shoper db verison to the null updated field </s9qtitle>
+<s9qpgmtype>D</s9qpgmtype>
+<s9qenvironment>P</s9qenvironment>
+<s9qRunMultiple>0</s9qRunMultiple>
+<s9qQryType>DML</s9qQryType>
+<s9qScript>
+--correction done syntax error
+--Update StkTrnHdr Set SHOPERDBVER = '720' Where SHOPERDBVER not in ('720','730')' and TrnType in(2100,1300,1600)
+Update dbo.StkTrnHdr Set SHOPERDBVER = '720' Where SHOPERDBVER not in ('720','730') and TrnType in(2100,1300,1600)
+-GO-
+Update dbo.PosCashTrn Set SHOPERDBVER = '720' Where SHOPERDBVER not in ('720','730') 
+-GO-
+Update dbo.ExpectedTrnHdr Set SHOPERDBVER = '720' where SHOPERDBVER not in ('720','730')
+-GO-
+Update dbo.ExpectedTrnRcpts Set SHOPERDBVER = '720' where SHOPERDBVER not in ('720','730')
+-GO-
+</s9qScript>
+</s9qsqlblk>
+
+
+<s9qsqlblk>
+<s9qScriptid>S9Q_013_1_0012</s9qScriptID>
+<s9qtitle>Swaping of doc remarks field value to promobill level disc dtls and actual Doc remarks field will be update from ACCdocno field</s9qtitle>
+<s9qpgmtype>D</s9qpgmtype>
+<s9qenvironment>P</s9qenvironment>
+<s9qRunMultiple>0</s9qRunMultiple>
+<s9qQryType>DML</s9qQryType>
+<s9qScript>
+
+Update dbo.StkTrnHdr Set PromoBillLevelDiscDtls=DocRemarks Where TrnType in(2100,1300,1600) and (PromoBillLevelDiscDtls is null or PromoBillLevelDiscDtls='') and DocRemarks is Not NULL and SHOPERDBVER = '720'
+-GO-
+Update dbo.StkTrnHdr Set DocRemarks ='' Where TrnType in(2100,1300,1600) and SHOPERDBVER = '720'
+-GO-
+Update dbo.StkTrnHdr Set DocRemarks = AccDocNo Where AccDocNo IS NOT NULL and TrnType in(2100,1300,1600) and SHOPERDBVER = '720'
+-GO-
+
+</s9qScript>
+</s9qsqlblk>
+
+
+
+<s9qsqlblk>
+<s9qScriptid>S9Q_013_1_0013</s9qScriptID>
+<s9qtitle>Updating the Discount Id to Promocode field </s9qtitle>
+<s9qpgmtype>D</s9qpgmtype>
+<s9qenvironment>P</s9qenvironment>
+<s9qQryType>DML</s9qQryType>
+<s9qRunMultiple>0</s9qRunMultiple>
+<s9qScript>
+
+Update dbo.StkTrnHdr Set PromoCode = BilllvlDiscId Where TrnType in(2100,1300,1600)
+and (promocode ='' or promocode  is null) and SHOPERDBVER = '720'
+-GO-
+Update dbo.StkTrnHdr Set PromoSlabSrlno = 1,PromoType = 1 Where BilllvlDiscId <>''
+and TrnType in (2100,1300,1600) and SHOPERDBVER = '720'
+-GO-
+Update dbo.StkTrnDtls Set PromoCode = DocEntDiscId
+Where TrnType in(2100,1300,1600) and PromoCode <> DocEntDiscId
+-GO-
+</s9qScript>
+</s9qsqlblk>
+
+
+<s9qsqlblk>
+<s9qScriptid>S9Q_013_1_0014</s9qScriptID>
+<s9qtitle>Updating other imp field values like isinventory,is service,gen dic reason,
+product/service indicator
+</s9qtitle>
+<s9qpgmtype>D</s9qpgmtype>
+<s9qenvironment>P</s9qenvironment>
+<s9qRunMultiple>0</s9qRunMultiple>
+<s9qQryType>DML</s9qQryType>
+<s9qScript>
+
+Update dbo.stktrndtls set 
+SField5=(case when itemmaster.isservice=1 then '2' when itemmaster.isservice=0 then '1' end) 
+from dbo.itemmaster where trntype in (2100,1300,1600) and (stktrndtls.SField5< 1 or stktrndtls.SField5 is null) and
+itemmaster.stockno=stktrndtls.stockno  
+-GO-
+Update dbo.StkTrnDtls Set ProdServInd = SField5  
+Where TrnType in(2100,1300,1600) and  ProdServInd <> SField5
+-GO-
+Update dbo.stktrndtls set 
+BField2= itemmaster.IsInventoryItem
+from dbo.itemmaster where trntype in (2100,1300,1600) and 
+stktrndtls.BField2<> itemmaster.IsInventoryItem
+and   itemmaster.stockno=stktrndtls.stockno  
+-GO-
+--correction done for gendicreason (ambiguious column )
+Update dbo.StkTrnHdr Set  
+StkTrnHdr.GenDiscReason=SaleTrnHdr.GenDiscReason,StkTrnHdr.ProdServInd=SaleTrnHdr.ProdServInd from dbo.SaleTrnHdr	
+Where StkTrnHdr.TrnType in(2100,1300,1600) 
+and (StkTrnHdr.GenDiscReason<>SaleTrnHdr.GenDiscReason or StkTrnHdr.ProdServInd<>SaleTrnHdr.ProdServInd)
+and SaleTrnHdr.SaleTrnType=StkTrnHdr.TrnType and SaleTrnHdr.SaleTrnCtrlNo=StkTrnHdr.TrnCtrlNo
+-GO-
+</s9qScript>
+</s9qsqlblk>
+
+
+
+<s9qsqlblk>
+<s9qScriptid>S9Q_013_1_0015</s9qScriptID>
+<s9qtitle>Calulcating Disc percentage and updating same to disc rate field , if the field is null </s9qtitle>
+<s9qpgmtype>D</s9qpgmtype>
+<s9qenvironment>P</s9qenvironment>
+<s9qQryType>DML</s9qQryType>
+<s9qRunMultiple>0</s9qRunMultiple>
+<s9qScript>
+
+Update dbo.StkTrnDtls Set DiscRate = ((100*DocEntTotDisc)/DocEntValue) Where DiscRate is null and DocEntTotDisc > 0 AND TRNTYPE IN (2100,1600,1300)
+-GO-
+Update dbo.StkTrnDtls Set DiscRate = 0  Where DiscRate is null AND TRNTYPE IN (2100,1600,1300)
+-GO-
+
+</s9qScript>
+</s9qsqlblk>
+
+
+
+
+<s9qsqlblk>
+<s9qScriptid>S9Q_013_1_0016</s9qScriptID>
+<s9qtitle>Updating the sum of all  Item level Discount amount to the header table </s9qtitle>
+<s9qpgmtype>D</s9qpgmtype>
+<s9qenvironment>P</s9qenvironment>
+<s9qQryType>DML</s9qQryType>
+<s9qRunMultiple>0</s9qRunMultiple>
+<s9qScript>
+
+Update dbo.StkTrnHdr Set PromoItemLevelDiscVal= a.value from 
+(select trntype,trnctrlno,sum(StkTrnDtls.DocEntDisc) as value from dbo.StkTrnDtls Where TrnType in(2100,1300,1600) 
+group by trntype,trnctrlno) as a where 
+PromoItemLevelDiscVal<> a.value and
+StkTrnHdr.TrnType=a.TrnType and StkTrnHdr.TrnCtrlNo=a.TrnCtrlNo 
+-GO-
+</s9qScript>
+</s9qsqlblk>
+
+
+
+
+<s9qsqlblk>
+<s9qScriptid>S9Q_013_1_0017</s9qScriptID>
+<s9qtitle>EXTRACTING THE ROUND-OFF VALUE AND UPDATING THE SAME TO THE NEWLY ADDED FIELD (TRENACTION TYPE -2100 SALES)  </s9qtitle>
+<s9qpgmtype>D</s9qpgmtype>
+<s9qenvironment>P</s9qenvironment>
+<s9qRunMultiple>0</s9qRunMultiple>
+<s9qQryType>DML</s9qQryType>
+<s9qScript>
+
+-- 2100 sALES Round off extraction
+
+IF OBJECT_ID('tempdb..#maintemptable') IS NOT NULL BEGIN drop table #maintemptable END
+-GO-
+IF OBJECT_ID('tempdb..#Deductiontemptable') IS NOT NULL BEGIN drop table #Deductiontemptable END
+-GO-
+IF OBJECT_ID('tempdb..#onlyroundoff') IS NOT NULL BEGIN drop table #onlyroundoff END
+-GO-
+select stktrnaddldtls.trntype, stktrnaddldtls.trnctrlno, stktrnaddldtls.trndocno, stktrnaddldtls.trndocnoprefix, sum(netvalue) as SumofAddons,sum(netvalue) as SumofDeductions,sum(netvalue) as HdrAddons, sum(netvalue) as HdrDeductions ,sum(netvalue) as AddonDiff,sum(netvalue) as DeductionDiff,ApplPoint,ApplPoint as dednApppoint into #maintemptable from dbo.stktrnaddldtls,dbo.stktrnhdr  where  stktrnaddldtls.trntype=stktrnhdr.trntype and stktrnaddldtls.trnctrlno=stktrnhdr.trnctrlno and stktrnhdr.SHOPERDBVER=730 and [type] = 1 and stktrnaddldtls.trntype=2100 group by stktrnaddldtls.trntype,stktrnaddldtls.trnctrlno, stktrnaddldtls.trndocno, stktrnaddldtls.trndocnoprefix,stktrnaddldtls.ApplPoint  
+-GO-
+update #maintemptable set SumofDeductions = 0, HdrAddons = 0, HdrDeductions=0, AddonDiff=0, DeductionDiff = 0,dednApppoint=0
+-GO-
+select stktrnaddldtls.trntype, stktrnaddldtls.trnctrlno, stktrnaddldtls.trndocno, stktrnaddldtls.trndocnoprefix, sum(netvalue) as SumofDeductions, ApplPoint into #Deductiontemptable from dbo.stktrnaddldtls, dbo.StkTrnHdr  where  stktrnaddldtls.trntype=stktrnhdr.trntype and stktrnaddldtls.trnctrlno=stktrnhdr.trnctrlno and stktrnhdr.SHOPERDBVER=730 and [type] = 2 and stktrnaddldtls.trntype=2100 group by stktrnaddldtls.trntype,stktrnaddldtls.trnctrlno,stktrnaddldtls.trndocno, stktrnaddldtls.trndocnoprefix,stktrnaddldtls.ApplPoint  
+-GO-
+update #maintemptable set #maintemptable.SumofDeductions = #Deductiontemptable.SumofDeductions, dednApppoint=#Deductiontemptable.ApplPoint from #Deductiontemptable where #maintemptable.trntype = #Deductiontemptable.trntype and #maintemptable.trndocno = #Deductiontemptable.trndocno and #maintemptable.trndocnoprefix = #Deductiontemptable.trndocnoprefix 
+-GO-
+update #maintemptable set HdrAddons = TotDocAddons,HdrDeductions = TotDocDedns from dbo.StkTrnHdr where #maintemptable.trntype = stktrnhdr.trntype and  trndocno = docno and trndocnoprefix = docnoprefix 
+-GO-
+update #maintemptable set AddonDiff = HdrAddons - SumofAddons, DeductionDiff = -1 * (HdrDeductions - SumofDeductions)
+-GO-
+update dbo.StkTrnHdr set TotDocEntAftTaxAddons=0,TotDocEntAftTaxDedns=0,TotDocEntBefTaxAddons=0,TotDocEntBefTaxDedns=0 from #maintemptable where #maintemptable.trntype=stktrnhdr.trntype and #maintemptable.trndocno=docno and trndocnoprefix = docnoprefix and stktrnhdr.SHOPERDBVER = 730 
+-GO-
+--updating the docentaddon/dedn  before tax
+update dbo.StkTrnHdr set TotDocEntBefTaxAddons=SumofAddons from #maintemptable where #maintemptable.trntype=stktrnhdr.trntype and #maintemptable.trndocno=docno and trndocnoprefix = docnoprefix and stktrnhdr.trntype=2100 and Applpoint=2 and stktrnhdr.SHOPERDBVER=730 
+-GO-
+update dbo.StkTrnHdr set TotDocEntBefTaxDedns=SumofDeductions from #maintemptable where #maintemptable.trntype=stktrnhdr.trntype and #maintemptable.trndocno=docno and trndocnoprefix = docnoprefix and stktrnhdr.trntype=2100 and dednApppoint=2 and stktrnhdr.SHOPERDBVER=730
+-GO-
+update dbo.StkTrnHdr set TotDocEntAftTaxAddons=(SumofAddons + AddonDiff) from #maintemptable where #maintemptable.trntype=stktrnhdr.trntype and #maintemptable.trndocno=docno and trndocnoprefix = docnoprefix and stktrnhdr.trntype=2100 and Applpoint=3 and stktrnhdr.SHOPERDBVER=730
+-GO-
+update dbo.StkTrnHdr set TotDocEntAftTaxDedns=(SumofDeductions +abs(DeductionDiff)) from #maintemptable where #maintemptable.trntype=stktrnhdr.trntype and #maintemptable.trndocno=docno and trndocnoprefix = docnoprefix and stktrnhdr.trntype=2100 and dednApppoint=3 and stktrnhdr.SHOPERDBVER=730
+-GO-
+update dbo.StkTrnHdr set TotRndOffValue= (select case when AddonDiff =0 then DeductionDiff when AddonDiff > 0 then AddonDiff else 0 end) from #maintemptable where #maintemptable.trntype=stktrnhdr.trntype and #maintemptable.trndocno=docno and trndocnoprefix = docnoprefix and stktrnhdr.trntype=2100 and stktrnhdr.SHOPERDBVER=730
+-GO-
+update dbo.stktrndtls set DocEntBefTaxAddons=0,DocEntBefTaxDedns=0,DocEntAftTaxAddons=0,DocEntAftTaxDedns=0 from #maintemptable where #maintemptable.trntype=stktrndtls.trntype and #maintemptable.trndocno=stktrndtls.docno and trndocnoprefix = stktrndtls.docnoprefix and stktrndtls.trntype=2100 and stktrndtls.EntSrlNo=(select min(EntSrlNo) from dbo.stktrndtls as std1 where std1.docentnetvalue >0 and std1.trntype=#maintemptable.trntype and #maintemptable.trndocno=std1.docno and trndocnoprefix=std1.docnoprefix and std1.trntype=2100) 
+-GO-
+update dbo.stktrndtls set DocEntBefTaxAddons= (sth.TotDocEntBefTaxAddons - a.beftaxaddons),DocEntBefTaxDedns=(sth.TotDocEntBefTaxDedns-a.beftaxdedn),DocEntAftTaxAddons=(sth.TotDocEntAftTaxAddons-a.afttaxaddons),DocEntAftTaxDedns=(sth.TotDocEntAftTaxDedns-a.Afttaxdedns) from dbo.StkTrnHdr sth ,(select std.trntype,std.Docnoprefix,std.docno,isnull(sum(DocEntBefTaxAddons),0) as beftaxaddons,isnull(sum(DocEntBefTaxDedns),0)as beftaxdedn,isnull(sum(DocEntAftTaxAddons),0)as afttaxaddons ,isnull(sum(DocEntAftTaxDedns),0) as Afttaxdedns from dbo.stktrndtls as std , #maintemptable where #maintemptable.trntype=std.trntype and #maintemptable.trndocno= std.docno and #maintemptable.trndocnoprefix=std.Docnoprefix and std.trntype=2100 group by std.trntype,std.Docnoprefix,std.docno) as a where sth.trntype=stktrndtls.trntype and sth.trnctrlno=stktrndtls.trnctrlno and sth.SHOPERDBVER=730 and a.trntype=stktrndtls.trntype and a.Docnoprefix=stktrndtls.Docnoprefix and a.docno=stktrndtls.docno and stktrndtls.trntype=2100 and stktrndtls.EntSrlNo=(select min(EntSrlNo) from dbo.stktrndtls as std1 where std1.docentnetvalue > 0 and std1.trntype=stktrndtls.trntype and stktrndtls.docno=std1.docno and stktrndtls.docnoprefix=std1.docnoprefix and std1.trntype=2100)
+-GO-
+update dbo.stktrndtls set DocRndOffValue=sth.TotRndOffValue from dbo.StkTrnHdr sth,#maintemptable where sth.trntype=stktrndtls.trntype and sth.docno= stktrndtls.docno and sth.docnoprefix=stktrndtls.docnoprefix and sth.SHOPERDBVER=730 and #maintemptable.trntype=sth.trntype and #maintemptable.trndocno=sth.docno and #maintemptable.trndocnoprefix=sth.docnoprefix and sth.trntype=2100 and stktrndtls.EntSrlNo=(select min(EntSrlNo) from dbo.StkTrnDtls as std1 where std1.docentnetvalue >0 and std1.trntype=#maintemptable.trntype and #maintemptable.trndocno=std1.docno and trndocnoprefix=std1.docnoprefix and std1.trntype=2100) 
+-GO-
+---------only if roundoff value present--------------
+select Trntype,TrnCtrlNo into #onlyroundoff from dbo.StkTrnHdr where TrnCtrlNo not in (select distinct(TrnCtrlNo) from dbo.stktrnaddldtls where trntype=2100) and trntype=2100 and (TotDocAddons+TotDocDedns) <> 0 and SHOPERDBVER=730
+-GO-
+--updating the afttax
+update dbo.StkTrnHdr set TotDocEntAftTaxAddons=0,TotDocEntAftTaxDedns=0,TotDocEntBefTaxAddons=0,TotDocEntBefTaxDedns=0 from #onlyroundoff where stktrnhdr.Trntype= #onlyroundoff.trntype and stktrnhdr.TrnCtrlNo=#onlyroundoff.TrnCtrlNo and stktrnhdr.trntype=2100 and stktrnhdr.SHOPERDBVER=730 
+-GO-
+--updating the roundoff value from addons and deduction only if roundoff presnt scenario
+update dbo.StkTrnHdr set TotRndOffValue=  (TotDocAddons + (-1 * TotDocDedns)) from #onlyroundoff where stktrnhdr.Trntype= #onlyroundoff.trntype and stktrnhdr.TrnCtrlNo=#onlyroundoff.TrnCtrlNo and stktrnhdr.trntype=2100 and stktrnhdr.SHOPERDBVER=730 
+-GO-
+--updating the sth TotDocEntAftTaxaddons with round off only if +ve roundoff present
+update dbo.StkTrnHdr set TotDocEntAftTaxAddons=TotRndOffValue from #onlyroundoff where stktrnhdr.Trntype= #onlyroundoff.trntype and stktrnhdr.TrnCtrlNo=#onlyroundoff.TrnCtrlNo and stktrnhdr.trntype=2100 and stktrnhdr.TotRndOffValue > 0 and stktrnhdr.SHOPERDBVER=730
+-GO-
+--updating the sth TotDocEntAftTaxDedns with round off only if -ve roundoff present
+update dbo.StkTrnHdr set TotDocEntAftTaxDedns=abs(TotRndOffValue) from #onlyroundoff where stktrnhdr.Trntype= #onlyroundoff.trntype and stktrnhdr.TrnCtrlNo=#onlyroundoff.TrnCtrlNo and stktrnhdr.trntype=2100 and stktrnhdr.TotRndOffValue < 0 and stktrnhdr.SHOPERDBVER=730
+-GO-
+--updating the std roundoffvalue from sth roundoff value for those records stored in #onlyroundoff
+update dbo.stktrndtls set DocRndOffValue=stktrnhdr.TotRndOffValue from dbo.stktrnhdr,#onlyroundoff where stktrndtls.trntype=stktrnhdr.trntype and stktrndtls.TrnCtrlNo=stktrnhdr.TrnCtrlNo and stktrnhdr.SHOPERDBVER=730 and stktrnhdr.trntype= #onlyroundoff.trntype and stktrnhdr.TrnCtrlNo=#onlyroundoff.TrnCtrlNo and stktrndtls.trntype=2100 and EntSrlNo=(select min(EntSrlNo) from dbo.StkTrnDtls as std1 where std1.docentnetvalue >0 and std1.trntype=#onlyroundoff.trntype and #onlyroundoff.TrnCtrlNo=std1.TrnCtrlNo and std1.trntype=2100)
+-GO-
+--updating the beftaxaddons=0 and afttaxaddons with roundoff only if +ve roundoff present (no addons and deduction) 
+update dbo.stktrndtls set DocEntBefTaxAddons=0, DocEntAftTaxAddons=DocRndOffValue from #onlyroundoff where stktrndtls.Trntype= #onlyroundoff.trntype and stktrndtls.TrnCtrlNo=#onlyroundoff.TrnCtrlNo  and  stktrndtls.DocRndOffValue > 0  and stktrndtls.trntype=2100 and stktrndtls.EntSrlNo=(select min(EntSrlNo) from dbo.stktrndtls as std1 where std1.docentnetvalue >0 and std1.trntype=#onlyroundoff.trntype and #onlyroundoff.TrnCtrlNo=std1.TrnCtrlNo and std1.trntype=2100)
+-GO-
+--updating the beftaxdedn=0 and afttaxdedn with roundoff only if -ve roundoff present (no addons and deduction)
+update dbo.stktrndtls set DocEntBefTaxDedns=0, DocEntAftTaxDedns=abs(DocRndOffValue) from #onlyroundoff where stktrndtls.Trntype= #onlyroundoff.trntype and stktrndtls.TrnCtrlNo=#onlyroundoff.TrnCtrlNo and  stktrndtls.DocRndOffValue < 0  and  stktrndtls.trntype=2100 and stktrndtls.EntSrlNo=(select min(EntSrlNo) from dbo.stktrndtls as std1 where std1.docentnetvalue >0 and std1.trntype=#onlyroundoff.trntype and #onlyroundoff.TrnCtrlNo=std1.TrnCtrlNo and std1.trntype=2100)
+-GO-
+--updating the beftaxaddons=0 and afttaxaddons with roundoff only if +ve roundoff present (no addons and deduction) 
+update dbo.stktrndtls set DocEntBefTaxAddons=0, Docentaddons=DocRndOffValue,DocEntAftTaxAddons=DocRndOffValue from #onlyroundoff where stktrndtls.Trntype= #onlyroundoff.trntype and stktrndtls.TrnCtrlNo=#onlyroundoff.TrnCtrlNo and  stktrndtls.DocRndOffValue > 0  and stktrndtls.trntype=2100 and stktrndtls.EntSrlNo=(select min(EntSrlNo) from dbo.stktrndtls as std1 where std1.docentnetvalue >0 and std1.trntype=#onlyroundoff.trntype and #onlyroundoff.TrnCtrlNo=std1.TrnCtrlNo and std1.trntype=2100)
+-GO-
+--updating the beftaxdedn=0 and afttaxdedn with roundoff only if -ve roundoff present (no addons and deduction)
+update dbo.stktrndtls set DocEntBefTaxDedns=0, docentdedns=abs(DocRndOffValue), DocEntAftTaxDedns=abs(DocRndOffValue) from #onlyroundoff where stktrndtls.Trntype= #onlyroundoff.trntype and stktrndtls.TrnCtrlNo=#onlyroundoff.TrnCtrlNo and  stktrndtls.DocRndOffValue < 0  and stktrndtls.trntype=2100 and stktrndtls.EntSrlNo=(select min(EntSrlNo) from dbo.stktrndtls as std1 where std1.docentnetvalue >0 and std1.trntype=#onlyroundoff.trntype and #onlyroundoff.TrnCtrlNo=std1.TrnCtrlNo and std1.trntype=2100)
+-GO-
+update dbo.stktrndtls set docentnetvalue=(docentvalue-docenttotdisc+docentaddons-docentdedns) from dbo.StkTrnHdr where  stktrnhdr.trntype= stktrndtls.trntype and stktrndtls.trnctrlno=stktrnhdr.trnctrlno and  stktrnhdr.SHOPERDBVER=730 and stktrndtls.trntype=2100 and stktrndtls.TrnCtrlNo not in (select distinct(TrnCtrlNo) from dbo.stktrnaddldtls where trntype=2100) and docrndoffvalue=0 and entsrlno=(select min(EntSrlNo) from dbo.stktrndtls as std1 where std1.docentnetvalue >0 and std1.trntype=stktrndtls.trntype and stktrndtls.TrnCtrlNo=std1.TrnCtrlNo and std1.trntype=2100)
+-GO-
+update dbo.stktrndtls set docrndoffvalue=0,docentafttaxaddons=0,docentafttaxdedns=0,docentaddons=0,docentdedns=0 from dbo.StkTrnHdr as sth where sth.trntype=stktrndtls.trntype and sth.docnoprefix=stktrndtls.docnoprefix and sth.docno=stktrndtls.docno and  sth.totrndoffvalue =0 and sth.trntype=2100 and sth.SHOPERDBVER=730 and sth.TrnCtrlNo not in (select distinct(TrnCtrlNo) from dbo.stktrnaddldtls where trntype=2100) and stktrndtls.entsrlno=1 
+-GO-
+update dbo.stktrndtls set DocRndOffValue=0,docentafttaxaddons=0,docentafttaxdedns=0, docentaddons=0,docentdedns=0 from dbo.StkTrnHdr sth where  sth.trntype=stktrndtls.trntype and sth.docnoprefix=stktrndtls.docnoprefix and sth.docno=stktrndtls.docno and  sth.trntype=2100 and sth.SHOPERDBVER=730 and EntSrlNo=1 and DocRndOffValue <> 0 and docentnetvalue=0 
+-GO-
+update dbo.stktrndtls set DocRndOffValue=0 from dbo.StkTrnHdr sth where  sth.trntype=stktrndtls.trntype and sth.docnoprefix=stktrndtls.docnoprefix and sth.docno=stktrndtls.docno and  sth.trntype=2100 and sth.SHOPERDBVER=730 and EntSrlNo > 1 and DocRndOffValue is null 
+-GO-
+update dbo.stktrndtls set docentnetvalue=(docentvalue-docenttotdisc+docentaddons-docentdedns+DocEntAddonsTax) from dbo.StkTrnHdr sth where  sth.trntype=stktrndtls.trntype and sth.docnoprefix=stktrndtls.docnoprefix and sth.docno=stktrndtls.docno and  sth.trntype=2100 and sth.SHOPERDBVER=730 and stktrndtls.trntype=2100 and docrndoffvalue <> 0
+-GO-
+</s9qScript>
+</s9qsqlblk>
+
+
+
+<s9qsqlblk>
+<s9qScriptid>S9Q_013_1_0018</s9qScriptID>
+<s9qtitle>EXTRACTING THE ROUND-OFF VALUE AND UPDATING THE SAME TO THE NEWLY ADDED FIELD (TRENACTION TYPE -1300 SALES RETURN)  </s9qtitle>
+<s9qpgmtype>D</s9qpgmtype>
+<s9qenvironment>P</s9qenvironment>
+<s9qRunMultiple>0</s9qRunMultiple>
+<s9qQryType>DML</s9qQryType>
+<s9qScript>
+
+
+-- 1300 Round off extraction
+
+IF OBJECT_ID('tempdb..#maintemptable') IS NOT NULL BEGIN drop table #maintemptable END
+-GO-
+IF OBJECT_ID('tempdb..#Deductiontemptable') IS NOT NULL BEGIN drop table #Deductiontemptable END
+-GO-
+IF OBJECT_ID('tempdb..#onlyroundoff') IS NOT NULL BEGIN drop table #onlyroundoff END
+-GO-
+select stktrnaddldtls.trntype, stktrnaddldtls.trnctrlno, stktrnaddldtls.trndocno, stktrnaddldtls.trndocnoprefix, sum(netvalue) as SumofAddons,sum(netvalue) as SumofDeductions,sum(netvalue) as HdrAddons, sum(netvalue) as HdrDeductions ,sum(netvalue) as AddonDiff,sum(netvalue) as DeductionDiff,ApplPoint,ApplPoint as dednApppoint into #maintemptable from dbo.stktrnaddldtls,dbo.StkTrnHdr  where  stktrnaddldtls.trntype=stktrnhdr.trntype and stktrnaddldtls.trnctrlno=stktrnhdr.trnctrlno and stktrnhdr.SHOPERDBVER=730 and [type] = 1 and stktrnaddldtls.trntype=1300 group by stktrnaddldtls.trntype,stktrnaddldtls.trnctrlno, stktrnaddldtls.trndocno, stktrnaddldtls.trndocnoprefix,stktrnaddldtls.ApplPoint  
+-GO-
+update #maintemptable set SumofDeductions = 0, HdrAddons = 0, HdrDeductions=0, AddonDiff=0, DeductionDiff = 0,dednApppoint=0
+-GO-
+select stktrnaddldtls.trntype, stktrnaddldtls.trnctrlno, stktrnaddldtls.trndocno, stktrnaddldtls.trndocnoprefix, sum(netvalue) as SumofDeductions, ApplPoint into #Deductiontemptable from dbo.stktrnaddldtls,dbo.stktrnhdr  where  stktrnaddldtls.trntype=stktrnhdr.trntype and stktrnaddldtls.trnctrlno=stktrnhdr.trnctrlno and stktrnhdr.SHOPERDBVER=730 and [type] = 2 and stktrnaddldtls.trntype=1300 group by stktrnaddldtls.trntype,stktrnaddldtls.trnctrlno,stktrnaddldtls.trndocno, stktrnaddldtls.trndocnoprefix,stktrnaddldtls.ApplPoint  
+-GO-
+update #maintemptable set #maintemptable.SumofDeductions = #Deductiontemptable.SumofDeductions, dednApppoint=#Deductiontemptable.ApplPoint from #Deductiontemptable where #maintemptable.trntype = #Deductiontemptable.trntype and #maintemptable.trndocno = #Deductiontemptable.trndocno and #maintemptable.trndocnoprefix = #Deductiontemptable.trndocnoprefix 
+-GO-
+update #maintemptable set HdrAddons = TotDocAddons,HdrDeductions = TotDocDedns from dbo.stktrnhdr where #maintemptable.trntype = stktrnhdr.trntype and  trndocno = docno and trndocnoprefix = docnoprefix 
+-GO-
+update #maintemptable set AddonDiff = HdrAddons - SumofAddons, DeductionDiff = -1 * (HdrDeductions - SumofDeductions)
+-GO-
+update dbo.stktrnhdr set TotDocEntAftTaxAddons=0,TotDocEntAftTaxDedns=0,TotDocEntBefTaxAddons=0,TotDocEntBefTaxDedns=0 from #maintemptable where #maintemptable.trntype=stktrnhdr.trntype and #maintemptable.trndocno=docno and trndocnoprefix = docnoprefix and stktrnhdr.SHOPERDBVER = 730 
+-GO-
+--updating the docentaddon/dedn  before tax
+update dbo.StkTrnHdr set TotDocEntBefTaxAddons=SumofAddons from #maintemptable where #maintemptable.trntype=stktrnhdr.trntype and #maintemptable.trndocno=docno and trndocnoprefix = docnoprefix and stktrnhdr.trntype=1300 and Applpoint=2 and stktrnhdr.SHOPERDBVER=730 
+-GO-
+update dbo.StkTrnHdr set TotDocEntBefTaxDedns=SumofDeductions from #maintemptable where #maintemptable.trntype=stktrnhdr.trntype and #maintemptable.trndocno=docno and trndocnoprefix = docnoprefix and stktrnhdr.trntype=1300 and dednApppoint=2 and stktrnhdr.SHOPERDBVER=730
+-GO-
+update dbo.StkTrnHdr set TotDocEntAftTaxAddons=(SumofAddons + AddonDiff) from #maintemptable where #maintemptable.trntype=stktrnhdr.trntype and #maintemptable.trndocno=docno and trndocnoprefix = docnoprefix and stktrnhdr.trntype=1300 and Applpoint=3 and stktrnhdr.SHOPERDBVER=730
+-GO-
+update dbo.StkTrnHdr set TotDocEntAftTaxDedns=(SumofDeductions +abs(DeductionDiff)) from #maintemptable where #maintemptable.trntype=stktrnhdr.trntype and #maintemptable.trndocno=docno and trndocnoprefix = docnoprefix and stktrnhdr.trntype=1300 and dednApppoint=3 and stktrnhdr.SHOPERDBVER=730
+-GO-
+update dbo.StkTrnHdr set TotRndOffValue= (select case when AddonDiff =0 then DeductionDiff when AddonDiff > 0 then AddonDiff else 0 end) from #maintemptable where #maintemptable.trntype=stktrnhdr.trntype and #maintemptable.trndocno=docno and trndocnoprefix = docnoprefix and stktrnhdr.trntype=1300 and stktrnhdr.SHOPERDBVER=730
+-GO-
+update dbo.stktrndtls set DocEntBefTaxAddons=0,DocEntBefTaxDedns=0,DocEntAftTaxAddons=0,DocEntAftTaxDedns=0 from #maintemptable where #maintemptable.trntype=stktrndtls.trntype and #maintemptable.trndocno=stktrndtls.docno and trndocnoprefix = stktrndtls.docnoprefix and stktrndtls.trntype=1300 and stktrndtls.EntSrlNo=(select min(EntSrlNo) from dbo.stktrndtls as std1 where std1.docentnetvalue >0 and std1.trntype=#maintemptable.trntype and #maintemptable.trndocno=std1.docno and trndocnoprefix=std1.docnoprefix and std1.trntype=1300) 
+-GO-
+update dbo.stktrndtls set DocEntBefTaxAddons= (sth.TotDocEntBefTaxAddons - a.beftaxaddons),DocEntBefTaxDedns=(sth.TotDocEntBefTaxDedns-a.beftaxdedn),DocEntAftTaxAddons=(sth.TotDocEntAftTaxAddons-a.afttaxaddons),DocEntAftTaxDedns=(sth.TotDocEntAftTaxDedns-a.Afttaxdedns) from dbo.StkTrnHdr sth ,(select std.trntype,std.Docnoprefix,std.docno,isnull(sum(DocEntBefTaxAddons),0) as beftaxaddons,isnull(sum(DocEntBefTaxDedns),0)as beftaxdedn,isnull(sum(DocEntAftTaxAddons),0)as afttaxaddons ,isnull(sum(DocEntAftTaxDedns),0) as Afttaxdedns from dbo.stktrndtls as std , #maintemptable where #maintemptable.trntype=std.trntype and #maintemptable.trndocno= std.docno and #maintemptable.trndocnoprefix=std.Docnoprefix and std.trntype=1300 group by std.trntype,std.Docnoprefix,std.docno) as a where sth.trntype=stktrndtls.trntype and sth.trnctrlno=stktrndtls.trnctrlno and sth.SHOPERDBVER=730 and a.trntype=stktrndtls.trntype and a.Docnoprefix=stktrndtls.Docnoprefix and a.docno=stktrndtls.docno and stktrndtls.trntype=1300 and stktrndtls.EntSrlNo=(select min(EntSrlNo) from dbo.stktrndtls as std1 where std1.docentnetvalue > 0 and std1.trntype=stktrndtls.trntype and stktrndtls.docno=std1.docno and stktrndtls.docnoprefix=std1.docnoprefix and std1.trntype=1300)
+-GO-
+update dbo.stktrndtls set DocRndOffValue=sth.TotRndOffValue from dbo.StkTrnHdr sth,#maintemptable where sth.trntype=stktrndtls.trntype and sth.docno= stktrndtls.docno and sth.docnoprefix=stktrndtls.docnoprefix and sth.SHOPERDBVER=730 and #maintemptable.trntype=sth.trntype and #maintemptable.trndocno=sth.docno and #maintemptable.trndocnoprefix=sth.docnoprefix and sth.trntype=1300 and stktrndtls.EntSrlNo=(select min(EntSrlNo) from dbo.stktrndtls as std1 where std1.docentnetvalue >0 and std1.trntype=#maintemptable.trntype and #maintemptable.trndocno=std1.docno and trndocnoprefix=std1.docnoprefix and std1.trntype=1300) 
+-GO-
+---------only if roundoff value present--------------
+select Trntype,TrnCtrlNo into #onlyroundoff from dbo.StkTrnHdr where TrnCtrlNo not in (select distinct(TrnCtrlNo) from dbo.stktrnaddldtls where trntype=1300) and trntype=1300 and (TotDocAddons+TotDocDedns) <> 0 and BkwdRefTrnType=0 and SHOPERDBVER=730
+-GO-
+--updating the afttax
+update dbo.StkTrnHdr set TotDocEntAftTaxAddons=0,TotDocEntAftTaxDedns=0,TotDocEntBefTaxAddons=0,TotDocEntBefTaxDedns=0 from #onlyroundoff where stktrnhdr.Trntype= #onlyroundoff.trntype and stktrnhdr.TrnCtrlNo=#onlyroundoff.TrnCtrlNo and stktrnhdr.trntype=1300 and stktrnhdr.SHOPERDBVER=730 
+-GO-
+--updating the roundoff value from addons and deduction only if roundoff presnt scenario
+update dbo.StkTrnHdr set TotRndOffValue=  (TotDocAddons + (-1 * TotDocDedns)) from #onlyroundoff where stktrnhdr.Trntype= #onlyroundoff.trntype and stktrnhdr.TrnCtrlNo=#onlyroundoff.TrnCtrlNo and stktrnhdr.trntype=1300 and stktrnhdr.SHOPERDBVER=730 
+-GO-
+--updating the sth TotDocEntAftTaxaddons with round off only if +ve roundoff present
+update dbo.StkTrnHdr set TotDocEntAftTaxAddons=TotRndOffValue from #onlyroundoff where stktrnhdr.Trntype= #onlyroundoff.trntype and stktrnhdr.TrnCtrlNo=#onlyroundoff.TrnCtrlNo and stktrnhdr.trntype=1300 and stktrnhdr.TotRndOffValue > 0 and stktrnhdr.SHOPERDBVER=730
+-GO-
+--updating the sth TotDocEntAftTaxDedns with round off only if -ve roundoff present
+update dbo.stktrnhdr set TotDocEntAftTaxDedns=abs(TotRndOffValue) from #onlyroundoff where stktrnhdr.Trntype= #onlyroundoff.trntype and stktrnhdr.TrnCtrlNo=#onlyroundoff.TrnCtrlNo and stktrnhdr.trntype=1300 and stktrnhdr.TotRndOffValue < 0 and stktrnhdr.SHOPERDBVER=730
+-GO-
+--updating the std roundoffvalue from sth roundoff value for those records stored in #onlyroundoff
+update dbo.stktrndtls set DocRndOffValue=stktrnhdr.TotRndOffValue from dbo.stktrnhdr,#onlyroundoff where stktrndtls.trntype=stktrnhdr.trntype and stktrndtls.TrnCtrlNo=stktrnhdr.TrnCtrlNo and stktrnhdr.SHOPERDBVER=730 and stktrnhdr.trntype= #onlyroundoff.trntype and stktrnhdr.TrnCtrlNo=#onlyroundoff.TrnCtrlNo and stktrndtls.trntype=1300 and EntSrlNo=(select min(EntSrlNo) from dbo.stktrndtls as std1 where std1.docentnetvalue >0 and std1.trntype=#onlyroundoff.trntype and #onlyroundoff.TrnCtrlNo=std1.TrnCtrlNo and std1.trntype=1300)
+-GO-
+--updating the beftaxaddons=0 and afttaxaddons with roundoff only if +ve roundoff present (no addons and deduction) 
+update dbo.stktrndtls set DocEntBefTaxAddons=0, DocEntAftTaxAddons=DocRndOffValue from #onlyroundoff where stktrndtls.Trntype= #onlyroundoff.trntype and stktrndtls.TrnCtrlNo=#onlyroundoff.TrnCtrlNo  and  stktrndtls.DocRndOffValue > 0  and stktrndtls.trntype=1300 and stktrndtls.EntSrlNo=(select min(EntSrlNo) from dbo.stktrndtls as std1 where std1.docentnetvalue >0 and std1.trntype=#onlyroundoff.trntype and #onlyroundoff.TrnCtrlNo=std1.TrnCtrlNo and std1.trntype=1300)
+-GO-
+--updating the beftaxdedn=0 and afttaxdedn with roundoff only if -ve roundoff present (no addons and deduction)
+update dbo.stktrndtls set DocEntBefTaxDedns=0, DocEntAftTaxDedns=abs(DocRndOffValue) from #onlyroundoff where stktrndtls.Trntype= #onlyroundoff.trntype and stktrndtls.TrnCtrlNo=#onlyroundoff.TrnCtrlNo and  stktrndtls.DocRndOffValue < 0  and  stktrndtls.trntype=1300 and stktrndtls.EntSrlNo=(select min(EntSrlNo) from dbo.stktrndtls as std1 where std1.docentnetvalue >0 and std1.trntype=#onlyroundoff.trntype and #onlyroundoff.TrnCtrlNo=std1.TrnCtrlNo and std1.trntype=1300)
+-GO-
+--updating the beftaxaddons=0 and afttaxaddons with roundoff only if +ve roundoff present (no addons and deduction) 
+update dbo.stktrndtls set DocEntBefTaxAddons=0, Docentaddons=DocRndOffValue,DocEntAftTaxAddons=DocRndOffValue from #onlyroundoff where stktrndtls.Trntype= #onlyroundoff.trntype and stktrndtls.TrnCtrlNo=#onlyroundoff.TrnCtrlNo and  stktrndtls.DocRndOffValue > 0  and stktrndtls.trntype=1300 and stktrndtls.EntSrlNo=(select min(EntSrlNo) from dbo.stktrndtls as std1 where std1.docentnetvalue >0 and std1.trntype=#onlyroundoff.trntype and #onlyroundoff.TrnCtrlNo=std1.TrnCtrlNo and std1.trntype=1300)
+-GO-
+--updating the beftaxdedn=0 and afttaxdedn with roundoff only if -ve roundoff present (no addons and deduction)
+update dbo.stktrndtls set DocEntBefTaxDedns=0, docentdedns=abs(DocRndOffValue), DocEntAftTaxDedns=abs(DocRndOffValue) from #onlyroundoff where stktrndtls.Trntype= #onlyroundoff.trntype and stktrndtls.TrnCtrlNo=#onlyroundoff.TrnCtrlNo and  stktrndtls.DocRndOffValue < 0  and stktrndtls.trntype=1300 and stktrndtls.EntSrlNo=(select min(EntSrlNo) from dbo.stktrndtls as std1 where std1.docentnetvalue >0 and std1.trntype=#onlyroundoff.trntype and #onlyroundoff.TrnCtrlNo=std1.TrnCtrlNo and std1.trntype=1300)
+-GO-
+update dbo.stktrndtls set docentnetvalue=(docentvalue-docenttotdisc+docentaddons-docentdedns) from dbo.stktrnhdr where  stktrnhdr.trntype= stktrndtls.trntype and stktrndtls.trnctrlno=stktrnhdr.trnctrlno and  stktrnhdr.SHOPERDBVER=730 and stktrndtls.trntype=1300 and stktrndtls.TrnCtrlNo not in (select distinct(TrnCtrlNo) from dbo.stktrnaddldtls where trntype=1300) and docrndoffvalue=0 and entsrlno=(select min(EntSrlNo) from dbo.stktrndtls as std1 where std1.docentnetvalue >0 and std1.trntype=stktrndtls.trntype and stktrndtls.TrnCtrlNo=std1.TrnCtrlNo and std1.trntype=1300)
+-GO-
+update dbo.stktrndtls set docrndoffvalue=0,docentafttaxaddons=0,docentafttaxdedns=0,docentaddons=0,docentdedns=0 from dbo.stktrnhdr as sth where sth.trntype=stktrndtls.trntype and sth.docnoprefix=stktrndtls.docnoprefix and sth.docno=stktrndtls.docno and  sth.totrndoffvalue =0 and sth.trntype=1300 and sth.SHOPERDBVER=730 and sth.TrnCtrlNo not in (select distinct(TrnCtrlNo) from dbo.stktrnaddldtls where trntype=1300) and stktrndtls.entsrlno=1 
+-GO-
+update dbo.stktrndtls set DocRndOffValue=0,docentafttaxaddons=0,docentafttaxdedns=0, docentaddons=0,docentdedns=0 from dbo.stktrnhdr sth where  sth.trntype=stktrndtls.trntype and sth.docnoprefix=stktrndtls.docnoprefix and sth.docno=stktrndtls.docno and  sth.trntype=1300 and sth.SHOPERDBVER=730 and EntSrlNo=1 and DocRndOffValue <> 0 and docentnetvalue=0 
+-GO-
+update dbo.stktrndtls set DocRndOffValue=0 from dbo.stktrnhdr sth where  sth.trntype=stktrndtls.trntype and sth.docnoprefix=stktrndtls.docnoprefix and sth.docno=stktrndtls.docno and  sth.trntype=1300 and sth.SHOPERDBVER=730 and EntSrlNo > 1 and DocRndOffValue is null 
+-GO-
+update dbo.stktrndtls set docentnetvalue=(docentvalue-docenttotdisc+docentaddons-docentdedns+DocEntAddonsTax) from dbo.stktrnhdr sth where  sth.trntype=stktrndtls.trntype and sth.docnoprefix=stktrndtls.docnoprefix and sth.docno=stktrndtls.docno and  sth.trntype=1300 and sth.SHOPERDBVER=730 and stktrndtls.trntype=1300 and docrndoffvalue <> 0
+-GO-
+
+</s9qScript>
+</s9qsqlblk>
+
+
+<s9qsqlblk>
+<s9qScriptid>S9Q_013_1_0019</s9qScriptID>
+<s9qtitle>EXTRACTING THE ROUND-OFF VALUE AND UPDATING THE SAME TO THE NEWLY ADDED FIELD (TRENACTION TYPE -1600  VOID SALES)  </s9qtitle>
+<s9qpgmtype>D</s9qpgmtype>
+<s9qenvironment>P</s9qenvironment>
+<s9qRunMultiple>0</s9qRunMultiple>
+<s9qQryType>DML</s9qQryType>
+<s9qScript>
+
+-- 1600 Round off extraction
+
+IF OBJECT_ID('tempdb..#maintemptable') IS NOT NULL BEGIN drop table #maintemptable END
+-GO-
+IF OBJECT_ID('tempdb..#Deductiontemptable') IS NOT NULL BEGIN drop table #Deductiontemptable END
+-GO-
+IF OBJECT_ID('tempdb..#onlyroundoff') IS NOT NULL BEGIN drop table #onlyroundoff END
+-GO-
+select stktrnaddldtls.trntype, stktrnaddldtls.trnctrlno, stktrnaddldtls.trndocno, stktrnaddldtls.trndocnoprefix, sum(netvalue) as SumofAddons,sum(netvalue) as SumofDeductions,sum(netvalue) as HdrAddons, sum(netvalue) as HdrDeductions ,sum(netvalue) as AddonDiff,sum(netvalue) as DeductionDiff,ApplPoint,ApplPoint as dednApppoint into #maintemptable from dbo.stktrnaddldtls,dbo.stktrnhdr  where  stktrnaddldtls.trntype=stktrnhdr.trntype and stktrnaddldtls.trnctrlno=stktrnhdr.trnctrlno and stktrnhdr.SHOPERDBVER=730 and [type] = 1 and stktrnaddldtls.trntype=1600 group by stktrnaddldtls.trntype,stktrnaddldtls.trnctrlno, stktrnaddldtls.trndocno, stktrnaddldtls.trndocnoprefix,stktrnaddldtls.ApplPoint  
+-GO-
+update #maintemptable set SumofDeductions = 0, HdrAddons = 0, HdrDeductions=0, AddonDiff=0, DeductionDiff = 0,dednApppoint=0
+-GO-
+select stktrnaddldtls.trntype, stktrnaddldtls.trnctrlno, stktrnaddldtls.trndocno, stktrnaddldtls.trndocnoprefix, sum(netvalue) as SumofDeductions, ApplPoint into #Deductiontemptable from dbo.stktrnaddldtls, dbo.stktrnhdr  where  stktrnaddldtls.trntype=stktrnhdr.trntype and stktrnaddldtls.trnctrlno=stktrnhdr.trnctrlno and stktrnhdr.SHOPERDBVER=730 and [type] = 2 and stktrnaddldtls.trntype=1600 group by stktrnaddldtls.trntype,stktrnaddldtls.trnctrlno,stktrnaddldtls.trndocno, stktrnaddldtls.trndocnoprefix,stktrnaddldtls.ApplPoint  
+-GO-
+update #maintemptable set #maintemptable.SumofDeductions = #Deductiontemptable.SumofDeductions, dednApppoint=#Deductiontemptable.ApplPoint from #Deductiontemptable where #maintemptable.trntype = #Deductiontemptable.trntype and #maintemptable.trndocno = #Deductiontemptable.trndocno and #maintemptable.trndocnoprefix = #Deductiontemptable.trndocnoprefix 
+-GO-
+update #maintemptable set HdrAddons = TotDocAddons,HdrDeductions = TotDocDedns from dbo.stktrnhdr where #maintemptable.trntype = stktrnhdr.trntype and  trndocno = docno and trndocnoprefix = docnoprefix 
+-GO-
+update #maintemptable set AddonDiff = HdrAddons - SumofAddons, DeductionDiff = -1 * (HdrDeductions - SumofDeductions)
+-GO-
+update dbo.stktrnhdr set TotDocEntAftTaxAddons=0,TotDocEntAftTaxDedns=0,TotDocEntBefTaxAddons=0,TotDocEntBefTaxDedns=0 from #maintemptable where #maintemptable.trntype=stktrnhdr.trntype and #maintemptable.trndocno=docno and trndocnoprefix = docnoprefix and stktrnhdr.SHOPERDBVER = 730 
+-GO-
+--updating the docentaddon/dedn  before tax
+update dbo.stktrnhdr set TotDocEntBefTaxAddons=SumofAddons from #maintemptable where #maintemptable.trntype=stktrnhdr.trntype and #maintemptable.trndocno=docno and trndocnoprefix = docnoprefix and stktrnhdr.trntype=1600 and Applpoint=2 and stktrnhdr.SHOPERDBVER=730 
+-GO-
+update dbo.stktrnhdr set TotDocEntBefTaxDedns=SumofDeductions from #maintemptable where #maintemptable.trntype=stktrnhdr.trntype and #maintemptable.trndocno=docno and trndocnoprefix = docnoprefix and stktrnhdr.trntype=1600 and dednApppoint=2 and stktrnhdr.SHOPERDBVER=730
+-GO-
+update dbo.stktrnhdr set TotDocEntAftTaxAddons=(SumofAddons + AddonDiff) from #maintemptable where #maintemptable.trntype=stktrnhdr.trntype and #maintemptable.trndocno=docno and trndocnoprefix = docnoprefix and stktrnhdr.trntype=1600 and Applpoint=3 and stktrnhdr.SHOPERDBVER=730
+-GO-
+update dbo.stktrnhdr set TotDocEntAftTaxDedns=(SumofDeductions +abs(DeductionDiff)) from #maintemptable where #maintemptable.trntype=stktrnhdr.trntype and #maintemptable.trndocno=docno and trndocnoprefix = docnoprefix and stktrnhdr.trntype=1600 and dednApppoint=3 and stktrnhdr.SHOPERDBVER=730
+-GO-
+update dbo.stktrnhdr set TotRndOffValue= (select case when AddonDiff =0 then DeductionDiff when AddonDiff > 0 then AddonDiff else 0 end) from #maintemptable where #maintemptable.trntype=stktrnhdr.trntype and #maintemptable.trndocno=docno and trndocnoprefix = docnoprefix and stktrnhdr.trntype=1600 and stktrnhdr.SHOPERDBVER=730
+-GO-
+update dbo.stktrndtls set DocEntBefTaxAddons=0,DocEntBefTaxDedns=0,DocEntAftTaxAddons=0,DocEntAftTaxDedns=0 from #maintemptable where #maintemptable.trntype=stktrndtls.trntype and #maintemptable.trndocno=stktrndtls.docno and trndocnoprefix = stktrndtls.docnoprefix and stktrndtls.trntype=1600 and stktrndtls.EntSrlNo=(select min(EntSrlNo) from dbo.stktrndtls as std1 where std1.docentnetvalue >0 and std1.trntype=#maintemptable.trntype and #maintemptable.trndocno=std1.docno and trndocnoprefix=std1.docnoprefix and std1.trntype=1600) 
+-GO-
+update dbo.stktrndtls set DocEntBefTaxAddons= (sth.TotDocEntBefTaxAddons - a.beftaxaddons),DocEntBefTaxDedns=(sth.TotDocEntBefTaxDedns-a.beftaxdedn),DocEntAftTaxAddons=(sth.TotDocEntAftTaxAddons-a.afttaxaddons),DocEntAftTaxDedns=(sth.TotDocEntAftTaxDedns-a.Afttaxdedns) from dbo.stktrnhdr sth ,(select std.trntype,std.Docnoprefix,std.docno,isnull(sum(DocEntBefTaxAddons),0) as beftaxaddons,isnull(sum(DocEntBefTaxDedns),0)as beftaxdedn,isnull(sum(DocEntAftTaxAddons),0)as afttaxaddons ,isnull(sum(DocEntAftTaxDedns),0) as Afttaxdedns from dbo.stktrndtls as std , #maintemptable where #maintemptable.trntype=std.trntype and #maintemptable.trndocno= std.docno and #maintemptable.trndocnoprefix=std.Docnoprefix and std.trntype=1600 group by std.trntype,std.Docnoprefix,std.docno) as a where sth.trntype=stktrndtls.trntype and sth.trnctrlno=stktrndtls.trnctrlno and sth.SHOPERDBVER=730 and a.trntype=stktrndtls.trntype and a.Docnoprefix=stktrndtls.Docnoprefix and a.docno=stktrndtls.docno and stktrndtls.trntype=1600 and stktrndtls.EntSrlNo=(select min(EntSrlNo) from dbo.stktrndtls as std1 where std1.docentnetvalue > 0 and std1.trntype=stktrndtls.trntype and stktrndtls.docno=std1.docno and stktrndtls.docnoprefix=std1.docnoprefix and std1.trntype=1600)
+-GO-
+update dbo.stktrndtls set DocRndOffValue=sth.TotRndOffValue from dbo.stktrnhdr sth,#maintemptable where sth.trntype=stktrndtls.trntype and sth.docno= stktrndtls.docno and sth.docnoprefix=stktrndtls.docnoprefix and sth.SHOPERDBVER=730 and #maintemptable.trntype=sth.trntype and #maintemptable.trndocno=sth.docno and #maintemptable.trndocnoprefix=sth.docnoprefix and sth.trntype=1600 and stktrndtls.EntSrlNo=(select min(EntSrlNo) from dbo.stktrndtls as std1 where std1.docentnetvalue >0 and std1.trntype=#maintemptable.trntype and #maintemptable.trndocno=std1.docno and trndocnoprefix=std1.docnoprefix and std1.trntype=1600) 
+-GO-
+---------only if roundoff value present--------------
+select Trntype,TrnCtrlNo into #onlyroundoff from dbo.stktrnhdr where TrnCtrlNo not in (select distinct(TrnCtrlNo) from dbo.stktrnaddldtls where trntype=1600) and trntype=1600 and (TotDocAddons+TotDocDedns) <> 0 and SHOPERDBVER=730
+-GO-
+--updating the afttax
+update dbo.stktrnhdr set TotDocEntAftTaxAddons=0,TotDocEntAftTaxDedns=0,TotDocEntBefTaxAddons=0,TotDocEntBefTaxDedns=0 from #onlyroundoff where stktrnhdr.Trntype= #onlyroundoff.trntype and stktrnhdr.TrnCtrlNo=#onlyroundoff.TrnCtrlNo and stktrnhdr.trntype=1600 and stktrnhdr.SHOPERDBVER=730 
+-GO-
+--updating the roundoff value from addons and deduction only if roundoff presnt scenario
+update dbo.stktrnhdr set TotRndOffValue=  (TotDocAddons + (-1 * TotDocDedns)) from #onlyroundoff where stktrnhdr.Trntype= #onlyroundoff.trntype and stktrnhdr.TrnCtrlNo=#onlyroundoff.TrnCtrlNo and stktrnhdr.trntype=1600 and stktrnhdr.SHOPERDBVER=730 
+-GO-
+--updating the sth TotDocEntAftTaxaddons with round off only if +ve roundoff present
+update dbo.stktrnhdr set TotDocEntAftTaxAddons=TotRndOffValue from #onlyroundoff where stktrnhdr.Trntype= #onlyroundoff.trntype and stktrnhdr.TrnCtrlNo=#onlyroundoff.TrnCtrlNo and stktrnhdr.trntype=1600 and stktrnhdr.TotRndOffValue > 0 and stktrnhdr.SHOPERDBVER=730
+-GO-
+--updating the sth TotDocEntAftTaxDedns with round off only if -ve roundoff present
+update dbo.stktrnhdr set TotDocEntAftTaxDedns=abs(TotRndOffValue) from #onlyroundoff where stktrnhdr.Trntype= #onlyroundoff.trntype and stktrnhdr.TrnCtrlNo=#onlyroundoff.TrnCtrlNo and stktrnhdr.trntype=1600 and stktrnhdr.TotRndOffValue < 0 and stktrnhdr.SHOPERDBVER=730
+-GO-
+--updating the std roundoffvalue from sth roundoff value for those records stored in #onlyroundoff
+update dbo.stktrndtls set DocRndOffValue=stktrnhdr.TotRndOffValue from dbo.stktrnhdr,#onlyroundoff where stktrndtls.trntype=stktrnhdr.trntype and stktrndtls.TrnCtrlNo=stktrnhdr.TrnCtrlNo and stktrnhdr.SHOPERDBVER=730 and stktrnhdr.trntype= #onlyroundoff.trntype and stktrnhdr.TrnCtrlNo=#onlyroundoff.TrnCtrlNo and stktrndtls.trntype=1600 and EntSrlNo=(select min(EntSrlNo) from dbo.stktrndtls as std1 where std1.docentnetvalue >0 and std1.trntype=#onlyroundoff.trntype and #onlyroundoff.TrnCtrlNo=std1.TrnCtrlNo and std1.trntype=1600)
+-GO-
+--updating the beftaxaddons=0 and afttaxaddons with roundoff only if +ve roundoff present (no addons and deduction) 
+update dbo.stktrndtls set DocEntBefTaxAddons=0, DocEntAftTaxAddons=DocRndOffValue from #onlyroundoff where stktrndtls.Trntype= #onlyroundoff.trntype and stktrndtls.TrnCtrlNo=#onlyroundoff.TrnCtrlNo  and  stktrndtls.DocRndOffValue > 0  and stktrndtls.trntype=1600 and stktrndtls.EntSrlNo=(select min(EntSrlNo) from dbo.stktrndtls as std1 where std1.docentnetvalue >0 and std1.trntype=#onlyroundoff.trntype and #onlyroundoff.TrnCtrlNo=std1.TrnCtrlNo and std1.trntype=1600)
+-GO-
+--updating the beftaxdedn=0 and afttaxdedn with roundoff only if -ve roundoff present (no addons and deduction)
+update dbo.stktrndtls set DocEntBefTaxDedns=0, DocEntAftTaxDedns=abs(DocRndOffValue) from #onlyroundoff where stktrndtls.Trntype= #onlyroundoff.trntype and stktrndtls.TrnCtrlNo=#onlyroundoff.TrnCtrlNo and  stktrndtls.DocRndOffValue < 0  and  stktrndtls.trntype=1600 and stktrndtls.EntSrlNo=(select min(EntSrlNo) from dbo.stktrndtls as std1 where std1.docentnetvalue >0 and std1.trntype=#onlyroundoff.trntype and #onlyroundoff.TrnCtrlNo=std1.TrnCtrlNo and std1.trntype=1600)
+-GO-
+--updating the beftaxaddons=0 and afttaxaddons with roundoff only if +ve roundoff present (no addons and deduction) 
+update dbo.stktrndtls set DocEntBefTaxAddons=0, Docentaddons=DocRndOffValue,DocEntAftTaxAddons=DocRndOffValue from #onlyroundoff where stktrndtls.Trntype= #onlyroundoff.trntype and stktrndtls.TrnCtrlNo=#onlyroundoff.TrnCtrlNo and  stktrndtls.DocRndOffValue > 0  and stktrndtls.trntype=1600 and stktrndtls.EntSrlNo=(select min(EntSrlNo) from dbo.stktrndtls as std1 where std1.docentnetvalue >0 and std1.trntype=#onlyroundoff.trntype and #onlyroundoff.TrnCtrlNo=std1.TrnCtrlNo and std1.trntype=1600)
+-GO-
+--updating the beftaxdedn=0 and afttaxdedn with roundoff only if -ve roundoff present (no addons and deduction)
+update dbo.stktrndtls set DocEntBefTaxDedns=0, docentdedns=abs(DocRndOffValue), DocEntAftTaxDedns=abs(DocRndOffValue) from #onlyroundoff where stktrndtls.Trntype= #onlyroundoff.trntype and stktrndtls.TrnCtrlNo=#onlyroundoff.TrnCtrlNo and  stktrndtls.DocRndOffValue < 0  and stktrndtls.trntype=1600 and stktrndtls.EntSrlNo=(select min(EntSrlNo) from dbo.stktrndtls as std1 where std1.docentnetvalue >0 and std1.trntype=#onlyroundoff.trntype and #onlyroundoff.TrnCtrlNo=std1.TrnCtrlNo and std1.trntype=1600)
+-GO-
+update dbo.stktrndtls set docentnetvalue=(docentvalue-docenttotdisc+docentaddons-docentdedns) from dbo.stktrnhdr where  stktrnhdr.trntype= stktrndtls.trntype and stktrndtls.trnctrlno=stktrnhdr.trnctrlno and  stktrnhdr.SHOPERDBVER=730 and stktrndtls.trntype=1600 and stktrndtls.TrnCtrlNo not in (select distinct(TrnCtrlNo) from dbo.stktrnaddldtls where trntype=1600) and docrndoffvalue=0 and entsrlno=(select min(EntSrlNo) from dbo.stktrndtls as std1 where std1.docentnetvalue >0 and std1.trntype=stktrndtls.trntype and stktrndtls.TrnCtrlNo=std1.TrnCtrlNo and std1.trntype=1600)
+-GO-
+update dbo.stktrndtls set docrndoffvalue=0,docentafttaxaddons=0,docentafttaxdedns=0,docentaddons=0,docentdedns=0 from dbo.stktrnhdr as sth where sth.trntype=stktrndtls.trntype and sth.docnoprefix=stktrndtls.docnoprefix and sth.docno=stktrndtls.docno and  sth.totrndoffvalue =0 and sth.trntype=1600 and sth.SHOPERDBVER=730 and sth.TrnCtrlNo not in (select distinct(TrnCtrlNo) from dbo.stktrnaddldtls where trntype=1600) and stktrndtls.entsrlno=1 
+-GO-
+update dbo.stktrndtls set DocRndOffValue=0,docentafttaxaddons=0,docentafttaxdedns=0, docentaddons=0,docentdedns=0 from dbo.stktrnhdr sth where  sth.trntype=stktrndtls.trntype and sth.docnoprefix=stktrndtls.docnoprefix and sth.docno=stktrndtls.docno and  sth.trntype=1600 and sth.SHOPERDBVER=730 and EntSrlNo=1 and DocRndOffValue <> 0 and docentnetvalue=0 
+-GO-
+update dbo.stktrndtls set DocRndOffValue=0 from dbo.stktrnhdr sth where  sth.trntype=stktrndtls.trntype and sth.docnoprefix=stktrndtls.docnoprefix and sth.docno=stktrndtls.docno and  sth.trntype=1600 and sth.SHOPERDBVER=730 and EntSrlNo > 1 and DocRndOffValue is null 
+-GO-
+update dbo.stktrndtls set docentnetvalue=(docentvalue-docenttotdisc+docentaddons-docentdedns+DocEntAddonsTax) from dbo.stktrnhdr sth where  sth.trntype=stktrndtls.trntype and sth.docnoprefix=stktrndtls.docnoprefix and sth.docno=stktrndtls.docno and  sth.trntype=1600 and sth.SHOPERDBVER=730 and stktrndtls.trntype=1600 and docrndoffvalue <> 0
+-GO-
+</s9qScript>
+</s9qsqlblk>
+
+
+<s9qsqlblk>
+<s9qScriptid>S9Q_013_1_0020</s9qScriptID>
+<s9qtitle>cORRECTING THE POSCASH MISMATCH RECORDS BECOZ OF ROUND-OFF ISSUE </s9qtitle>
+<s9qpgmtype>D</s9qpgmtype>
+<s9qenvironment>P</s9qenvironment>
+<s9qRunMultiple>0</s9qRunMultiple>
+<s9qQryType>DML</s9qQryType>
+<s9qScript>
+
+-- Pos Cash Mismatch
+
+update dbo.stktrnhdr set totdocaddons=totdocaddons-totrndoffvalue, 
+totdocentafttaxaddons=totdocentafttaxaddons-totrndoffvalue from 
+dbo.stktrnhdr b ,(select salerefdocno,salerefdocprefix,sum(loccurrnetamt) as val from dbo.PosCashTrn where poscashtrn.SHOPERDBVER=730 and entrytype=11 group by salerefdocno,salerefdocprefix ) as a 
+where a.salerefdocno=b.docno and a.salerefdocprefix=b.docnoprefix 
+and a.val <> b.netdocvalue and totrndoffvalue > 0 and b.trntype=2100 and b.SHOPERDBVER=730
+-GO-
+update dbo.stktrnhdr set  totdocdedns=(totdocdedns-abs(totrndoffvalue)), 
+totdocentafttaxdedns=(totdocentafttaxdedns-abs(totrndoffvalue)) from 
+dbo.stktrnhdr b ,(select salerefdocno,salerefdocprefix,sum(loccurrnetamt) as val from dbo.PosCashTrn 
+where poscashtrn.SHOPERDBVER=730 and entrytype=11 group by salerefdocno,salerefdocprefix ) as a 
+where a.salerefdocno=b.docno and a.salerefdocprefix=b.docnoprefix and a.val <> b.netdocvalue 
+and totrndoffvalue < 0 and b.trntype=2100 and b.SHOPERDBVER=730 
+-GO-
+update dbo.stktrnhdr set totrndoffvalue=totrndoffvalue + (a.val-b.netdocvalue) from dbo.stktrnhdr b,
+(select salerefdocno,salerefdocprefix,sum(loccurrnetamt) as val from dbo.PosCashTrn 
+where poscashtrn.SHOPERDBVER=730 and entrytype=11 group by salerefdocno,salerefdocprefix ) 
+as a where a.salerefdocno=b.docno and a.salerefdocprefix=b.docnoprefix and 
+a.val <> b.netdocvalue and b.trntype=2100 and b.SHOPERDBVER=730 
+-GO-
+update dbo.stktrnhdr set totdocaddons=(totdocaddons + totrndoffvalue), 
+totdocentafttaxaddons=(totdocentafttaxaddons+totrndoffvalue)  from dbo.stktrnhdr b,
+(select salerefdocno,salerefdocprefix,sum(loccurrnetamt) as val from dbo.PosCashTrn where poscashtrn.SHOPERDBVER=730 
+and entrytype=11 group by salerefdocno,salerefdocprefix ) as a 
+where a.salerefdocno=b.docno and a.salerefdocprefix=b.docnoprefix and a.val <> b.netdocvalue and totrndoffvalue > 0 
+and b.trntype=2100 and b.SHOPERDBVER=730 
+-GO-
+update dbo.stktrnhdr set  totdocdedns=(totdocdedns+abs(totrndoffvalue)), totdocentafttaxdedns=(totdocentafttaxdedns + abs(totrndoffvalue)) from dbo.stktrnhdr b,(select salerefdocno,salerefdocprefix,sum(loccurrnetamt) as val from dbo.PosCashTrn where poscashtrn.SHOPERDBVER=730 and entrytype=11 group by salerefdocno,salerefdocprefix ) as a where a.salerefdocno=b.docno and a.salerefdocprefix=b.docnoprefix and a.val <> b.netdocvalue and totrndoffvalue < 0 and b.trntype=2100 and b.SHOPERDBVER=730
+-GO-
+update dbo.stktrnhdr set netdocvalue=a.val from dbo.stktrnhdr b,(select salerefdocno,salerefdocprefix,sum(loccurrnetamt) as val from dbo.PosCashTrn where poscashtrn.SHOPERDBVER=730 and entrytype=11 group by salerefdocno,salerefdocprefix ) as a where a.salerefdocno=b.docno and a.salerefdocprefix=b.docnoprefix and a.val <> b.netdocvalue and b.trntype=2100 and b.SHOPERDBVER=730 
+-GO-
+update dbo.stktrndtls set docrndoffvalue=stktrnhdr.totrndoffvalue from dbo.stktrnhdr  where  stktrnhdr.SHOPERDBVER=730 and stktrnhdr.docnoprefix=stktrndtls.docnoprefix and stktrnhdr.docno=stktrndtls.docno and stktrndtls.entsrlno=(select min(entsrlno) from dbo.stktrndtls as std1 where std1.DocEntNetValue > 0 and  std1.docno=stktrnhdr.docno and std1.docnoprefix=stktrnhdr.docnoprefix and std1.trntype=2100) and stktrndtls.trntype=2100 and stktrnhdr.totrndoffvalue <> 0 
+-GO-
+update dbo.stktrndtls set docentaddons=docrndoffvalue,docentafttaxaddons=docrndoffvalue from dbo.stktrnhdr  where stktrnhdr.SHOPERDBVER=730 and stktrnhdr.docnoprefix=stktrndtls.docnoprefix and stktrnhdr.docno=stktrndtls.docno and stktrndtls.entsrlno=(select min(entsrlno) from dbo.stktrndtls as std1 where std1.DocEntNetValue > 0 and  std1.docno=stktrndtls.docno and std1.docnoprefix=stktrndtls.docnoprefix and std1.trntype=2100) and docrndoffvalue >0 and stktrndtls.trntype=2100
+-GO-
+update dbo.stktrndtls set docentdedns=abs(docrndoffvalue),docentafttaxdedns=abs(docrndoffvalue) from dbo.stktrnhdr  where  stktrnhdr.SHOPERDBVER=730 and stktrnhdr.docnoprefix=stktrndtls.docnoprefix and stktrnhdr.docno=stktrndtls.docno and stktrndtls.entsrlno=(select min(entsrlno) from dbo.stktrndtls as std1 where std1.DocEntNetValue > 0 and  std1.docno=stktrndtls.docno and std1.docnoprefix=stktrndtls.docnoprefix and std1.trntype=2100) and docrndoffvalue < 0 and stktrndtls.trntype=2100
+-GO-
+update dbo.stktrndtls set DocEntNetValue=(DocEntValue-DocEntTotDisc+DocEntAddons-DocEntDedns+DocEntAddonsTax) from dbo.stktrnhdr  where  stktrnhdr.SHOPERDBVER=730 and stktrnhdr.docnoprefix=stktrndtls.docnoprefix and stktrnhdr.docno=stktrndtls.docno and stktrndtls.entsrlno=(select min(entsrlno) from dbo.stktrndtls as std1 where DocEntNetValue > 0 and  std1.docno=stktrndtls.docno and std1.docnoprefix=stktrndtls.docnoprefix and std1.trntype=2100) and docrndoffvalue <> 0 and stktrndtls.trntype=2100
+-GO-
+</s9qScript>
+</s9qsqlblk>
+
+
+<s9qsqlblk>
+<s9qScriptid>S9Q_013_1_0021</s9qScriptID>
+<s9qtitle>Updating 0.1 value for Zero value reocrds (sepcific to sales returns) </s9qtitle>
+<s9qpgmtype>D</s9qpgmtype>
+<s9qenvironment>P</s9qenvironment>
+<s9qQryType>DML</s9qQryType>
+<s9qRunMultiple>0</s9qRunMultiple>
+<s9qScript>
+
+--updating  0.1 values for zero value records
+
+update dbo.stktrndtls set stktrndtls.DocEntNetValue=0.1, stktrndtls.DocEntAddons=0.1,stktrndtls.docentafttaxaddons=0.1,stktrndtls.docrndoffvalue=0.1 from dbo.stktrnhdr where stktrnhdr.trntype=1300 and stktrnhdr.trnctrlno=stktrndtls.trnctrlno and stktrnhdr.trntype=stktrndtls.trntype and stktrnhdr.netdocvalue=0 and stktrnhdr.SHOPERDBVER=730 and stktrndtls.entsrlno=(select min(entsrlno) from dbo.stktrndtls as std1 where std1.trntype=1300 and stktrnhdr.trnctrlno=std1.trnctrlno and std1.trntype=stktrnhdr.trntype) 
+-GO-
+update dbo.stktrnhdr set netdocvalue=0.1,totdocaddons=0.1,totdocentafttaxaddons=0.1,totrndoffvalue=0.1 where trntype=1300 and netdocvalue=0 and SHOPERDBVER=730
+-GO-
+update dbo.PosCashTrn set TenderModeRcptAmt=0.1,LocCurrRcptAmt=0.1,LocCurrNetAmt=0.1,TotValUsed=0 where LocCurrNetAmt=0 and entrytype=31 and SHOPERDBVER=730
+-GO-
+</s9qScript>
+</s9qsqlblk>
+
+
+<s9qsqlblk>
+<s9qScriptid>S9Q_013_1_0022</s9qScriptID>
+<s9qtitle>cORRECTING THE Net value mismatch between STD AND STH TABLE (TRANSACTION TYPE :2100 SALES) </s9qtitle>
+<s9qpgmtype>D</s9qpgmtype>
+<s9qenvironment>P</s9qenvironment>
+<s9qQryType>DML</s9qQryType>
+<s9qRunMultiple>0</s9qRunMultiple>
+<s9qScript>
+
+-- 2100 Net Value Mismatch
+
+IF OBJECT_ID('tempdb..#valuemismatch') IS NOT NULL BEGIN drop table #valuemismatch END
+-GO-
+select stktrndtls.trntype, stktrndtls.trnctrlno,stktrndtls.entsrlno,docentvalue - (docentnetvalue + docenttotdisc + docentdedns - docentaddons) as Diffval into #valuemismatch  from dbo.stktrndtls,dbo.stktrnhdr where stktrndtls.trntype=stktrnhdr.trntype and stktrndtls.TrnCtrlNo=stktrnhdr.TrnCtrlNo and stktrnhdr.SHOPERDBVER=730 and docentvalue <> ( docentnetvalue + docenttotdisc + docentdedns - docentaddons) and stktrndtls.trntype = 2100 and stktrndtls.TrnCtrlNo not in (select distinct(TrnCtrlNo) from dbo.stktrnaddldtls where trntype=2100) 
+-GO-
+update dbo.stktrndtls set docentnetvalue=(docentnetvalue-abs(Diffval)) from #valuemismatch where #valuemismatch.trntype=stktrndtls.trntype and #valuemismatch.trnctrlno= stktrndtls.trnctrlno and #valuemismatch.entsrlno= stktrndtls.entsrlno and stktrndtls.trntype=2100 and #valuemismatch.Diffval < 0
+-GO-
+update dbo.stktrndtls set docentaddons=(docentaddons+abs(Diffval)) from #valuemismatch where #valuemismatch.trntype=stktrndtls.trntype and #valuemismatch.trnctrlno= stktrndtls.trnctrlno and stktrndtls.trntype=2100 and #valuemismatch.Diffval < 0 and stktrndtls.entsrlno=(select min(entsrlno) from dbo.stktrndtls as std where std.trntype=#valuemismatch.trntype and std.trnctrlno=#valuemismatch.trnctrlno and std.docentaddons >0) 
+-GO-
+update dbo.stktrndtls set docentnetvalue=(docentnetvalue + Diffval) from  #valuemismatch where #valuemismatch.trntype=stktrndtls.trntype and #valuemismatch.trnctrlno= stktrndtls.trnctrlno and #valuemismatch.entsrlno= stktrndtls.entsrlno and stktrndtls.trntype=2100 and #valuemismatch.Diffval > 0
+-GO-
+update dbo.stktrndtls set docentdedns=(docentdedns+Diffval) from #valuemismatch where #valuemismatch.trntype=stktrndtls.trntype and #valuemismatch.trnctrlno= stktrndtls.trnctrlno and stktrndtls.trntype=2100 and #valuemismatch.Diffval > 0 and stktrndtls.entsrlno=(select min(entsrlno) from dbo.stktrndtls as std where std.trntype=#valuemismatch.trntype and std.trnctrlno=#valuemismatch.trnctrlno and std.docentdedns >0) 
+-GO-
+update dbo.stktrndtls set docentnetvalue= (docentvalue-docenttotdisc+docentaddons-docentdedns+DocEntAddonsTax) from #valuemismatch where #valuemismatch.trntype=stktrndtls.trntype and #valuemismatch.trnctrlno= stktrndtls.trnctrlno and stktrndtls.trntype=2100 
+-GO-
+update dbo.stktrnhdr set totdocaddons=std.docentaddons from dbo.stktrndtls as std ,#valuemismatch where #valuemismatch.trntype=stktrnhdr.trntype and #valuemismatch.trnctrlno=stktrnhdr.trnctrlno  and #valuemismatch.trntype=std.trntype and #valuemismatch.trnctrlno=std.trnctrlno and std.docentaddons >0 and stktrnhdr.trntype=2100 and stktrnhdr.SHOPERDBVER=730 
+-GO-
+update dbo.stktrnhdr set totdocdedns=std.docentdedns from dbo.stktrndtls as std ,#valuemismatch where #valuemismatch.trntype=stktrnhdr.trntype and #valuemismatch.trnctrlno=stktrnhdr.trnctrlno  and #valuemismatch.trntype=std.trntype and #valuemismatch.trnctrlno=std.trnctrlno and std.docentdedns >0 and stktrnhdr.trntype=2100 and stktrnhdr.SHOPERDBVER=730
+-GO-
+
+</s9qScript>
+</s9qsqlblk>
+
+
+<s9qsqlblk>
+<s9qScriptid>S9Q_013_1_0023</s9qScriptID>
+<s9qtitle>cORRECTING THE Net value mismatch between STD AND STH TABLE (TRANSACTION TYPE :1300 SALES- RETURNS) </s9qtitle>
+<s9qpgmtype>D</s9qpgmtype>
+<s9qenvironment>P</s9qenvironment>
+<s9qRunMultiple>0</s9qRunMultiple>
+<s9qQryType>DML</s9qQryType>
+<s9qScript>
+
+
+-- 1300 Net Value Mismatch
+
+IF OBJECT_ID('tempdb..#valuemismatch') IS NOT NULL BEGIN drop table #valuemismatch END
+-GO-
+select stktrndtls.trntype, stktrndtls.trnctrlno,stktrndtls.entsrlno,docentvalue - (docentnetvalue + docenttotdisc + docentdedns - docentaddons) as Diffval into #valuemismatch  from dbo.stktrndtls,dbo.stktrnhdr where stktrndtls.trntype=stktrnhdr.trntype and stktrndtls.TrnCtrlNo=stktrnhdr.TrnCtrlNo and stktrnhdr.SHOPERDBVER=730 and docentvalue <> ( docentnetvalue + docenttotdisc + docentdedns - docentaddons) and stktrndtls.trntype = 1300 and stktrndtls.TrnCtrlNo not in (select distinct(TrnCtrlNo) from dbo.stktrnaddldtls where trntype=1300) 
+-GO-
+update dbo.stktrndtls set docentnetvalue=(docentnetvalue-abs(Diffval)) from #valuemismatch where #valuemismatch.trntype=stktrndtls.trntype and #valuemismatch.trnctrlno= stktrndtls.trnctrlno and #valuemismatch.entsrlno= stktrndtls.entsrlno and stktrndtls.trntype=1300 and #valuemismatch.Diffval < 0
+-GO-
+update dbo.stktrndtls set docentaddons=(docentaddons+abs(Diffval)) from #valuemismatch where #valuemismatch.trntype=stktrndtls.trntype and #valuemismatch.trnctrlno= stktrndtls.trnctrlno and stktrndtls.trntype=1300 and #valuemismatch.Diffval < 0 and stktrndtls.entsrlno=(select min(entsrlno) from dbo.stktrndtls as std where std.trntype=#valuemismatch.trntype and std.trnctrlno=#valuemismatch.trnctrlno and std.docentaddons >0) 
+-GO-
+update dbo.stktrndtls set docentnetvalue=(docentnetvalue + Diffval) from  #valuemismatch where #valuemismatch.trntype=stktrndtls.trntype and #valuemismatch.trnctrlno= stktrndtls.trnctrlno and #valuemismatch.entsrlno= stktrndtls.entsrlno and stktrndtls.trntype=1300 and #valuemismatch.Diffval > 0
+-GO-
+update dbo.stktrndtls set docentdedns=(docentdedns+Diffval) from #valuemismatch where #valuemismatch.trntype=stktrndtls.trntype and #valuemismatch.trnctrlno= stktrndtls.trnctrlno and stktrndtls.trntype=1300 and #valuemismatch.Diffval > 0 and stktrndtls.entsrlno=(select min(entsrlno) from dbo.stktrndtls as std where std.trntype=#valuemismatch.trntype and std.trnctrlno=#valuemismatch.trnctrlno and std.docentdedns >0) 
+-GO-
+update dbo.stktrndtls set docentnetvalue= (docentvalue-docenttotdisc+docentaddons-docentdedns+DocEntAddonsTax) from #valuemismatch where #valuemismatch.trntype=stktrndtls.trntype and #valuemismatch.trnctrlno= stktrndtls.trnctrlno and stktrndtls.trntype=1300 
+-GO-
+update dbo.stktrnhdr set totdocaddons=std.docentaddons from dbo.stktrndtls as std ,#valuemismatch where #valuemismatch.trntype=stktrnhdr.trntype and #valuemismatch.trnctrlno=stktrnhdr.trnctrlno  and #valuemismatch.trntype=std.trntype and #valuemismatch.trnctrlno=std.trnctrlno and std.docentaddons >0 and stktrnhdr.trntype=1300 and stktrnhdr.SHOPERDBVER=730 
+-GO-
+update dbo.stktrnhdr set totdocdedns=std.docentdedns from dbo.stktrndtls as std ,#valuemismatch where #valuemismatch.trntype=stktrnhdr.trntype and #valuemismatch.trnctrlno=stktrnhdr.trnctrlno  and #valuemismatch.trntype=std.trntype and #valuemismatch.trnctrlno=std.trnctrlno and std.docentdedns >0 and stktrnhdr.trntype=1300 and stktrnhdr.SHOPERDBVER=730
+-GO-
+
+</s9qScript>
+</s9qsqlblk>
+
+
+<s9qsqlblk>
+<s9qScriptid>S9Q_013_1_0024</s9qScriptID>
+<s9qtitle>cORRECTING THE Net value mismatch between STD AND STH TABLE (TRANSACTION TYPE 1600 VOID ) </s9qtitle>
+<s9qpgmtype>D</s9qpgmtype>
+<s9qenvironment>P</s9qenvironment>
+<s9qRunMultiple>0</s9qRunMultiple>
+<s9qQryType>DML</s9qQryType>
+<s9qScript>
+
+
+-- 1600 Net Value Mismatch
+
+IF OBJECT_ID('tempdb..#valuemismatch') IS NOT NULL BEGIN drop table #valuemismatch END
+-GO-
+select stktrndtls.trntype, stktrndtls.trnctrlno,stktrndtls.entsrlno,docentvalue - (docentnetvalue + docenttotdisc + docentdedns - docentaddons) as Diffval into #valuemismatch  from dbo.stktrndtls,dbo.stktrnhdr where stktrndtls.trntype=stktrnhdr.trntype and stktrndtls.TrnCtrlNo=stktrnhdr.TrnCtrlNo and stktrnhdr.SHOPERDBVER=730 and docentvalue <> ( docentnetvalue + docenttotdisc + docentdedns - docentaddons) and stktrndtls.trntype = 1600 and stktrndtls.TrnCtrlNo not in (select distinct(TrnCtrlNo) from dbo.stktrnaddldtls where trntype=1600) 
+-GO-
+update dbo.stktrndtls set docentnetvalue=(docentnetvalue-abs(Diffval)) from #valuemismatch where #valuemismatch.trntype=stktrndtls.trntype and #valuemismatch.trnctrlno= stktrndtls.trnctrlno and #valuemismatch.entsrlno= stktrndtls.entsrlno and stktrndtls.trntype=1600 and #valuemismatch.Diffval < 0
+-GO-
+update dbo.stktrndtls set docentaddons=(docentaddons+abs(Diffval)) from #valuemismatch where #valuemismatch.trntype=stktrndtls.trntype and #valuemismatch.trnctrlno= stktrndtls.trnctrlno and stktrndtls.trntype=1600 and #valuemismatch.Diffval < 0 and stktrndtls.entsrlno=(select min(entsrlno) from dbo.stktrndtls as std where std.trntype=#valuemismatch.trntype and std.trnctrlno=#valuemismatch.trnctrlno and std.docentaddons >0) 
+-GO-
+update dbo.stktrndtls set docentnetvalue=(docentnetvalue + Diffval) from  #valuemismatch where #valuemismatch.trntype=stktrndtls.trntype and #valuemismatch.trnctrlno= stktrndtls.trnctrlno and #valuemismatch.entsrlno= stktrndtls.entsrlno and stktrndtls.trntype=1600 and #valuemismatch.Diffval > 0
+-GO-
+update dbo.stktrndtls set docentdedns=(docentdedns+Diffval) from #valuemismatch where #valuemismatch.trntype=stktrndtls.trntype and #valuemismatch.trnctrlno= stktrndtls.trnctrlno and stktrndtls.trntype=1600 and #valuemismatch.Diffval > 0 and stktrndtls.entsrlno=(select min(entsrlno) from dbo.stktrndtls as std where std.trntype=#valuemismatch.trntype and std.trnctrlno=#valuemismatch.trnctrlno and std.docentdedns >0) 
+-GO-
+update dbo.stktrndtls set docentnetvalue= (docentvalue-docenttotdisc+docentaddons-docentdedns+DocEntAddonsTax) from #valuemismatch where #valuemismatch.trntype=stktrndtls.trntype and #valuemismatch.trnctrlno= stktrndtls.trnctrlno and stktrndtls.trntype=1600 
+-GO-
+update dbo.stktrnhdr set totdocaddons=std.docentaddons from dbo.stktrndtls as std ,#valuemismatch where #valuemismatch.trntype=stktrnhdr.trntype and #valuemismatch.trnctrlno=stktrnhdr.trnctrlno  and #valuemismatch.trntype=std.trntype and #valuemismatch.trnctrlno=std.trnctrlno and std.docentaddons >0 and stktrnhdr.trntype=1600 and stktrnhdr.SHOPERDBVER=730 
+-GO-
+update dbo.stktrnhdr set totdocdedns=std.docentdedns from dbo.stktrndtls as std ,#valuemismatch where #valuemismatch.trntype=stktrnhdr.trntype and #valuemismatch.trnctrlno=stktrnhdr.trnctrlno  and #valuemismatch.trntype=std.trntype and #valuemismatch.trnctrlno=std.trnctrlno and std.docentdedns >0 and stktrnhdr.trntype=1600 and stktrnhdr.SHOPERDBVER=730
+-GO-
+</s9qScript>
+</s9qsqlblk>
+
+
+<s9qsqlblk>
+<s9qScriptid>S9Q_013_1_0025</s9qScriptID>
+<s9qtitle>cORRECTING THE LINE LEVEL value mismatch IN  STH AND STD  </s9qtitle>
+<s9qpgmtype>D</s9qpgmtype>
+<s9qenvironment>P</s9qenvironment>
+<s9qQryType>DML</s9qQryType>
+<s9qRunMultiple>0</s9qRunMultiple>
+<s9qScript>
+
+-- Line level mismatch
+
+IF OBJECT_ID('tempdb..#Lineitemlvlmismatch') IS NOT NULL BEGIN drop table #Lineitemlvlmismatch END
+-GO-
+select trntype, trnctrlno, netdocvalue,netdocvalue-(totdocvalue-totdocdisc+totdocaddons-totdocdedns) as diffvalue into #Lineitemlvlmismatch from dbo.stktrnhdr  where SHOPERDBVER=730 and trntype=2100 and  netdocvalue <> (totdocvalue-totdocdisc+totdocaddons-totdocdedns) and stktrnhdr.totrndoffvalue <> 0 
+-GO-
+update dbo.stktrnhdr set totdocaddons=totdocaddons-totrndoffvalue,totdocentafttaxaddons=totdocentafttaxaddons-totrndoffvalue from #Lineitemlvlmismatch  where #Lineitemlvlmismatch.trntype=stktrnhdr.trntype and #Lineitemlvlmismatch.trnctrlno=stktrnhdr.trnctrlno and stktrnhdr.trntype=2100 and stktrnhdr.totrndoffvalue >0 and SHOPERDBVER=730 
+-GO-
+update dbo.stktrnhdr set totdocdedns=totdocdedns-abs(totrndoffvalue),totdocentafttaxdedns=totdocentafttaxdedns-abs(totrndoffvalue) from #Lineitemlvlmismatch  where #Lineitemlvlmismatch.trntype=stktrnhdr.trntype and #Lineitemlvlmismatch.trnctrlno=stktrnhdr.trnctrlno and stktrnhdr.trntype=2100 and stktrnhdr.totrndoffvalue < 0 and SHOPERDBVER=730 
+-GO-
+update dbo.stktrnhdr set totrndoffvalue=totrndoffvalue+(diffvalue) from #Lineitemlvlmismatch where #Lineitemlvlmismatch.trntype=stktrnhdr.trntype and #Lineitemlvlmismatch.trnctrlno=stktrnhdr.trnctrlno and stktrnhdr.trntype=2100 and SHOPERDBVER=730  
+-GO-
+update dbo.stktrnhdr set totdocaddons=totdocaddons+totrndoffvalue,totdocentafttaxaddons=totdocentafttaxaddons+totrndoffvalue from #Lineitemlvlmismatch  where #Lineitemlvlmismatch.trntype=stktrnhdr.trntype and #Lineitemlvlmismatch.trnctrlno=stktrnhdr.trnctrlno and stktrnhdr.trntype=2100 and stktrnhdr.totrndoffvalue >0 and SHOPERDBVER=730 
+-GO-
+update dbo.stktrnhdr set totdocdedns=totdocdedns+ abs(totrndoffvalue),totdocentafttaxdedns=totdocentafttaxdedns + abs(totrndoffvalue) from #Lineitemlvlmismatch  where #Lineitemlvlmismatch.trntype=stktrnhdr.trntype and #Lineitemlvlmismatch.trnctrlno=stktrnhdr.trnctrlno and stktrnhdr.trntype=2100 and stktrnhdr.totrndoffvalue < 0 and SHOPERDBVER=730 
+-GO-
+update dbo.stktrndtls set docentaddons=docentaddons-docrndoffvalue,docentafttaxaddons=docentafttaxaddons-docrndoffvalue from #Lineitemlvlmismatch  where #Lineitemlvlmismatch.trntype=stktrndtls.trntype and #Lineitemlvlmismatch.trnctrlno=stktrndtls.trnctrlno and stktrndtls.trntype=2100 and stktrndtls.docrndoffvalue >0 and stktrndtls.entsrlno=(select min(entsrlno) from dbo.stktrndtls as std where #Lineitemlvlmismatch.trntype=std.trntype and #Lineitemlvlmismatch.trnctrlno=std.trnctrlno and docentnetvalue > 0)
+-GO-
+update dbo.stktrndtls set docentdedns=docentdedns-abs(docrndoffvalue),docentafttaxdedns=docentafttaxdedns-abs(docrndoffvalue) from #Lineitemlvlmismatch  where #Lineitemlvlmismatch.trntype=stktrndtls.trntype and #Lineitemlvlmismatch.trnctrlno=stktrndtls.trnctrlno and stktrndtls.trntype=2100 and stktrndtls.docrndoffvalue < 0 and stktrndtls.entsrlno=(select min(entsrlno) from dbo.stktrndtls as std where #Lineitemlvlmismatch.trntype=std.trntype and #Lineitemlvlmismatch.trnctrlno= std.trnctrlno and std.docentnetvalue > 0)
+-GO-
+update dbo.stktrndtls set docrndoffvalue= stktrnhdr.totrndoffvalue from dbo.stktrnhdr,#Lineitemlvlmismatch where #Lineitemlvlmismatch.trntype=stktrndtls.trntype and #Lineitemlvlmismatch.trnctrlno=stktrndtls.trnctrlno and #Lineitemlvlmismatch.trntype=stktrnhdr.trntype and #Lineitemlvlmismatch.trnctrlno=stktrnhdr.trnctrlno and stktrnhdr.SHOPERDBVER=730 and stktrndtls.trntype=2100 and stktrndtls.entsrlno=(select min(entsrlno) from dbo.stktrndtls as std where #Lineitemlvlmismatch.trntype=std.trntype and #Lineitemlvlmismatch.trnctrlno= std.trnctrlno and std.docentnetvalue > 0)
+-GO-
+update dbo.stktrndtls set docentaddons=docentaddons+docrndoffvalue,docentafttaxaddons=docentafttaxaddons+docrndoffvalue from #Lineitemlvlmismatch where #Lineitemlvlmismatch.trntype=stktrndtls.trntype and #Lineitemlvlmismatch.trnctrlno=stktrndtls.trnctrlno and stktrndtls.trntype=2100 and stktrndtls.docrndoffvalue >0 and stktrndtls.entsrlno=(select min(entsrlno) from dbo.stktrndtls as std where #Lineitemlvlmismatch.trntype=std.trntype and #Lineitemlvlmismatch.trnctrlno=std.trnctrlno and docentnetvalue > 0)
+-GO-
+update dbo.stktrndtls set docentdedns=docentdedns+abs(docrndoffvalue),docentafttaxdedns=docentafttaxdedns+abs(docrndoffvalue) from #Lineitemlvlmismatch where #Lineitemlvlmismatch.trntype=stktrndtls.trntype and #Lineitemlvlmismatch.trnctrlno=stktrndtls.trnctrlno and stktrndtls.trntype=2100 and stktrndtls.docrndoffvalue < 0 and stktrndtls.entsrlno=(select min(entsrlno) from dbo.stktrndtls as std where #Lineitemlvlmismatch.trntype=std.trntype and #Lineitemlvlmismatch.trnctrlno= std.trnctrlno and std.docentnetvalue > 0)
+-GO-
+update dbo.stktrndtls set docentnetvalue=(docentvalue-docenttotdisc + docentaddons-docentdedns+DocEntAddonsTax) from #Lineitemlvlmismatch  where #Lineitemlvlmismatch.trntype=stktrndtls.trntype and #Lineitemlvlmismatch.trnctrlno=stktrndtls.trnctrlno and stktrndtls.trntype=2100 and stktrndtls.entsrlno=(select min(entsrlno) from dbo.stktrndtls as std where #Lineitemlvlmismatch.trntype=std.trntype and #Lineitemlvlmismatch.trnctrlno= std.trnctrlno and std.docentnetvalue > 0)  
+-GO-
+
+</s9qScript>
+</s9qsqlblk>
+
+
+<s9qsqlblk>
+<s9qScriptid>S9Q_013_1_0026</s9qScriptID>
+<s9qtitle>cORRECTING THE TX value mismatch IN  STD (TRAN TYPE -2100-SALES)</s9qtitle>
+<s9qpgmtype>D</s9qpgmtype>
+<s9qenvironment>P</s9qenvironment>
+<s9qQryType>DML</s9qQryType>
+<s9qRunMultiple>0</s9qRunMultiple>
+<s9qScript>
+
+-- 2100 Tax Mismatch
+
+IF OBJECT_ID('tempdb..#taxmismatch') IS NOT NULL BEGIN drop table #taxmismatch END
+-GO-
+select sth.trntype,sth.trnctrlno,sth.totdoctax,std.taxamt,(totdoctax-std.taxamt) as diffval  into #taxmismatch  from dbo.stktrnhdr sth, (select trntype,trnctrlno,sum(docenttax) as taxamt from dbo.stktrndtls where trntype=2100 and stdtaxcomp1per <> 0 and docentnetvalue >0 group by trntype,trnctrlno) as std where sth.trntype=std.trntype and sth.trnctrlno=std.trnctrlno and std.taxamt <>sth.totdoctax and sth.trntype=2100 and sth.SHOPERDBVER=730
+-GO-
+update dbo.stktrndtls set docenttax=docenttax+diffval,taxcomp1=taxcomp1+diffval from #taxmismatch where stktrndtls.trntype=#taxmismatch.trntype and stktrndtls.trnctrlno=#taxmismatch.trnctrlno and stktrndtls.entsrlno=(select min(entsrlno) from dbo.stktrndtls as std where #taxmismatch.trntype=std.trntype and #taxmismatch.trnctrlno=std.trnctrlno and stdtaxcomp1per <> 0 and docenttax <>0 and docentnetvalue <>0)
+-GO-
+update dbo.stktrndtls set docenttax=0,taxcomp1=0 from dbo.stktrnhdr where stktrnhdr.trntype=stktrndtls.trntype and stktrnhdr.trnctrlno=stktrndtls.trnctrlno and stktrnhdr.SHOPERDBVER=730 and docentnetvalue =0 and stktrndtls.trntype=2100 and stktrndtls.docenttax <> 0 
+-GO-
+update dbo.stktrndtls set docenttax=0,taxcomp1=0 from dbo.stktrnhdr where stktrnhdr.trntype=stktrndtls.trntype and stktrnhdr.trnctrlno=stktrndtls.trnctrlno and stktrnhdr.SHOPERDBVER=730  and stktrndtls.stdtaxcomp1per =0 and stktrndtls.trntype=2100 and stktrndtls.docenttax <> 0
+-GO-
+</s9qScript>
+</s9qsqlblk>
+
+
+<s9qsqlblk>
+<s9qScriptid>S9Q_013_1_0027</s9qScriptID>
+<s9qtitle>cORRECTING THE TAX value mismatch IN  STD (TRAN TYPE -1300-SALES RETURN)  </s9qtitle>
+<s9qpgmtype>D</s9qpgmtype>
+<s9qenvironment>P</s9qenvironment>
+<s9qQryType>DML</s9qQryType>
+<s9qRunMultiple>0</s9qRunMultiple>
+<s9qScript>
+
+-- 1300 Tax Mismatch
+
+IF OBJECT_ID('tempdb..#taxmismatch') IS NOT NULL BEGIN drop table #taxmismatch END
+-GO-
+select sth.trntype,sth.trnctrlno,sth.totdoctax,std.taxamt,(totdoctax-std.taxamt) as diffval  into #taxmismatch  from dbo.stktrnhdr sth, (select trntype,trnctrlno,sum(docenttax) as taxamt from dbo.stktrndtls where  trntype=1300 and stdtaxcomp1per <> 0 and docentnetvalue >0  group by trntype,trnctrlno) as std where sth.trntype=std.trntype and sth.trnctrlno=std.trnctrlno and std.taxamt <>sth.totdoctax and sth.trntype=1300 and sth.SHOPERDBVER=730
+-GO-
+update dbo.stktrndtls set docenttax=docenttax+diffval,taxcomp1=taxcomp1+diffval from #taxmismatch where stktrndtls.trntype=#taxmismatch.trntype and stktrndtls.trnctrlno=#taxmismatch.trnctrlno and stktrndtls.entsrlno=(select min(entsrlno) from dbo.stktrndtls as std where #taxmismatch.trntype=std.trntype and #taxmismatch.trnctrlno=std.trnctrlno and stdtaxcomp1per <> 0 and docenttax <>0 and docentnetvalue <>0) 
+-GO-
+update dbo.stktrndtls set docenttax=0,taxcomp1=0 from dbo.stktrnhdr where stktrnhdr.trntype=stktrndtls.trntype and stktrnhdr.trnctrlno=stktrndtls.trnctrlno and stktrnhdr.SHOPERDBVER=730 and docentnetvalue =0 and stktrndtls.trntype=1300 and stktrndtls.docenttax <> 0
+-GO-
+update dbo.stktrndtls set docenttax=0,taxcomp1=0 from dbo.stktrnhdr where stktrnhdr.trntype=stktrndtls.trntype and stktrnhdr.trnctrlno=stktrndtls.trnctrlno and stktrnhdr.SHOPERDBVER=730 and stktrndtls.stdtaxcomp1per =0 and stktrndtls.trntype=1300 and stktrndtls.docenttax <> 0
+-GO-
+
+</s9qScript>
+</s9qsqlblk>
+
+
+<s9qsqlblk>
+<s9qScriptid>S9Q_013_1_0028</s9qScriptID>
+<s9qtitle>cORRECTING THE TX value mismatch IN  STD (TRAN TYPE -1600-VOID SALES)  </s9qtitle>
+<s9qpgmtype>D</s9qpgmtype>
+<s9qenvironment>P</s9qenvironment>
+<s9qQryType>DML</s9qQryType>
+<s9qRunMultiple>0</s9qRunMultiple>
+<s9qScript>
+
+-- 1600 Tax Mismatch
+
+IF OBJECT_ID('tempdb..#taxmismatch') IS NOT NULL BEGIN drop table #taxmismatch END
+-GO-
+select sth.trntype,sth.trnctrlno,sth.totdoctax,std.taxamt,(totdoctax-std.taxamt) as diffval  into #taxmismatch  from dbo.stktrnhdr sth, (select trntype,trnctrlno,sum(docenttax) as taxamt from dbo.stktrndtls where trntype=1600 and stdtaxcomp1per <> 0 and docentnetvalue >0 group by trntype,trnctrlno) as std where sth.trntype=std.trntype and sth.trnctrlno=std.trnctrlno and std.taxamt <>sth.totdoctax and sth.trntype=1600 and sth.SHOPERDBVER=730
+-GO-
+update dbo.stktrndtls set docenttax=docenttax+diffval,taxcomp1=taxcomp1+diffval from #taxmismatch where stktrndtls.trntype=#taxmismatch.trntype and stktrndtls.trnctrlno=#taxmismatch.trnctrlno and dbo.stktrndtls.entsrlno=(select min(entsrlno) from dbo.stktrndtls as std where #taxmismatch.trntype=std.trntype and #taxmismatch.trnctrlno=std.trnctrlno and stdtaxcomp1per <> 0 and docenttax <>0 and docentnetvalue <>0) 
+-GO-
+update dbo.stktrndtls set docenttax=0,taxcomp1=0 from dbo.stktrnhdr where stktrnhdr.trntype=stktrndtls.trntype and stktrnhdr.trnctrlno=stktrndtls.trnctrlno and stktrnhdr.SHOPERDBVER=730 and docentnetvalue =0 and stktrndtls.trntype=1600 and stktrndtls.docenttax <> 0
+-GO-
+update dbo.stktrndtls set docenttax=0,taxcomp1=0 from dbo.stktrnhdr where stktrnhdr.trntype=stktrndtls.trntype and stktrnhdr.trnctrlno=stktrndtls.trnctrlno and stktrnhdr.SHOPERDBVER=730  and stktrndtls.stdtaxcomp1per =0 and stktrndtls.trntype=1600 and stktrndtls.docenttax <> 0
+-GO-
+</s9qScript>
+</s9qsqlblk>
+
+
+<s9qsqlblk>
+<s9qScriptid>S9Q_013_1_0029</s9qScriptID>
+<s9qtitle>INSERTION to GENLOOKUP RECORDS FOR SALES , SALES RETURN, VOID SALES AND POS CASH ENTRIES  </s9qtitle>
+<s9qpgmtype>D</s9qpgmtype>
+<s9qenvironment>P</s9qenvironment>
+<s9qQryType>DML</s9qQryType>
+<s9qRunMultiple>0</s9qRunMultiple>
+<s9qScript>
+
+insert into dbo.genlookup (Recid,Code,Descr,Flag,Number,VaUid,VaTermId,VaCompCode)
+select 101,'2100','Sales',null,0,'super','.',(select txt from dbo.sysparam where paramcode = 'CompanyCode')
+-GO-
+insert into dbo.genlookup (Recid,Code,Descr,Flag,Number,VaUid,VaTermId,VaCompCode)
+ select 101,'1600','Void Sales',null,0,'super','.',(select txt from dbo.sysparam where paramcode = 'CompanyCode')
+-GO-
+insert into dbo.genlookup (Recid,Code,Descr,Flag,Number,VaUid,VaTermId,VaCompCode)
+ select 101,'1300','Sales Return',null,0,'super','.',(select txt from dbo.sysparam where paramcode = 'CompanyCode')
+-GO-
+insert into dbo.genlookup (Recid,Code,Descr,Flag,Number,VaUid,VaTermId,VaCompCode)
+select 101,'4000','Pos Cash',null,0,'super','.',(select txt from dbo.sysparam where paramcode = 'CompanyCode')
+-GO-
+</s9qScript>
+</s9qsqlblk>
+
+
+<s9qsqlblk>
+<s9qScriptid>S9Q_013_1_0030</s9qScriptID>
+<s9qtitle>Updating the Max contorl to the FOR SALES , SALES RETURN, VOID SALES AND POS CASH ENTRIES  </s9qtitle>
+<s9qpgmtype>D</s9qpgmtype>
+<s9qenvironment>P</s9qenvironment>
+<s9qQryType>DML</s9qQryType>
+<s9qRunMultiple>0</s9qRunMultiple>
+<s9qScript>
+
+update dbo.genlookup set number=(select isnull(max(TrnCtrlNo),0)+1 from dbo.stktrnhdr where trntype=2100) where recid=101 and code='2100'
+-GO-
+update dbo.genlookup set number=(select isnull(max(TrnCtrlNo),0)+1 from dbo.stktrnhdr where trntype=1600) where recid=101 and code='1600'
+-GO-
+update dbo.genlookup set number=(select isnull(max(TrnCtrlNo),0)+1 from dbo.stktrnhdr where trntype=1300) where recid=101 and code='1300'
+-GO-
+update dbo.genlookup set number=(select isnull(max(CtrlNo),0)+1 from dbo.Poscashtrn) where recid=101 and code='4000'
+-GO-
+update dbo.genlookup set Number=(select isnull(max(Docno),0)+1 from dbo.poscashtrn where entrytype=13 and DocNoPrefix= (select reverse(left(reverse(code),charindex('+',reverse(code),1)-1 )) from dbo.genlookup where recid=102 and code like '4000+13+%')) where recid=102 and code like '4000+13+%'
+-GO-
+</s9qScript>
+</s9qsqlblk>
+
+
+<s9qsqlblk>
+<s9qScriptid>S9Q_013_1_0031</s9qScriptID>
+<s9qtitle>Insertion to the posmodedatadtls table for sales,sales return, void sales  </s9qtitle>
+<s9qpgmtype>D</s9qpgmtype>
+<s9qenvironment>P</s9qenvironment>
+<s9qQryType>DML</s9qQryType>
+<s9qRunMultiple>0</s9qRunMultiple>
+<s9qScript>
+
+insert into dbo.posmodedatadtls (fld1,fld2,fld3,fld4,fld5,fld6,fld7,fld8,fld9,fld10,fld11,fld12,VAUid,Vactr,VATermId,VACompCode,Shoperdbver) 
+select '2100','1','1','Shoper',0,(select isnull(max(TrnCtrlNo),(select [number] from dbo.genlookup where recid=101 and code='2100')) from dbo.stktrnhdr where trntype=2100),'12:00:00Am',getdate(),'Super',(select intg from dbo.sysparam where paramcode = 'VaSysCounter'),(select txt from dbo.sysparam where paramcode = 'CompanyCode'),'0','Super',(select intg from dbo.sysparam where paramcode = 'VaSysCounter'),'.',(select txt from dbo.sysparam where paramcode = 'CompanyCode'),'730'
+-GO-
+
+insert into dbo.posmodedatadtls (fld1,fld2,fld3,fld4,fld5,fld6,fld7,fld8,fld9,fld10,fld11,fld12,VAUid,Vactr,VATermId,VACompCode,Shoperdbver) 
+select '1300','1','1','Shoper',0,(select isnull(max(TrnCtrlNo),(select [number] from dbo.genlookup where recid=101 and code='1300')) from dbo.stktrnhdr where trntype=2100),'12:00:00Am',getdate(),'Super',(select intg from dbo.sysparam where paramcode = 'VaSysCounter'),(select txt from dbo.sysparam where paramcode = 'CompanyCode'),'0','Super',(select intg from dbo.sysparam where paramcode = 'VaSysCounter'),'.',(select txt from dbo.sysparam where paramcode = 'CompanyCode'),'730'
+-GO-
+
+insert into dbo.posmodedatadtls (fld1,fld2,fld3,fld4,fld5,fld6,fld7,fld8,fld9,fld10,fld11,fld12,VAUid,Vactr,VATermId,VACompCode,Shoperdbver) 
+select '1600','1','1','Shoper',0,(select isnull(max(TrnCtrlNo),(select [number] from dbo.genlookup where recid=101 and code='1600')) from dbo.stktrnhdr where trntype=2100),'12:00:00Am',getdate(),'Super',(select intg from dbo.sysparam where paramcode = 'VaSysCounter'),(select txt from dbo.sysparam where paramcode = 'CompanyCode'),'0','Super',(select intg from dbo.sysparam where paramcode = 'VaSysCounter'),'.',(select txt from dbo.sysparam where paramcode = 'CompanyCode'),'730'
+-GO-
+</s9qScript>
+</s9qsqlblk>
+
+
+<s9qsqlblk>
+<s9qScriptid>S9Q_013_1_0032</s9qScriptID>
+<s9qtitle>Updating the Tax percentage for void records  </s9qtitle>
+<s9qpgmtype>D</s9qpgmtype>
+<s9qenvironment>P</s9qenvironment>
+<s9qQryType>DML</s9qQryType>
+<s9qRunMultiple>0</s9qRunMultiple>
+<s9qScript>
+update dbo.stktrndtls set stdTaxComp1Per = (select StdTaxComp1Per from dbo.stktrndtls std1 where std.backRefTrnType =std1.TrnType and std.BackRefCtrlNo =std1.TrnCtrlNo and std.BackRefDocEntSrlNo =std1.EntSrlNo ), 
+stdTaxComp2Per = (select StdTaxComp2Per from dbo.stktrndtls std1 where std.backRefTrnType =std1.TrnType and std.BackRefCtrlNo =std1.TrnCtrlNo and std.BackRefDocEntSrlNo =std1.EntSrlNo ),
+stdTaxComp3Per = (select StdTaxComp3Per from dbo.stktrndtls std1 where std.backRefTrnType =std1.TrnType and std.BackRefCtrlNo =std1.TrnCtrlNo and std.BackRefDocEntSrlNo =std1.EntSrlNo ),
+stdTaxComp4Per = (select StdTaxComp4Per from dbo.stktrndtls std1 where std.backRefTrnType =std1.TrnType and std.BackRefCtrlNo =std1.TrnCtrlNo and std.BackRefDocEntSrlNo =std1.EntSrlNo ) ,
+stdTaxComp5Per = (select StdTaxComp5Per from dbo.stktrndtls std1 where std.backRefTrnType =std1.TrnType and std.BackRefCtrlNo =std1.TrnCtrlNo and std.BackRefDocEntSrlNo =std1.EntSrlNo ) 
+from dbo.stktrndtls std where trntype =1600
+-GO-
+</s9qScript>
+</s9qsqlblk>
+
+
+<s9qsqlblk>
+<s9qScriptid>S9Q_013_1_0033</s9qScriptID>
+<s9qtitle>replacing the enter key from order remarks column  </s9qtitle>
+<s9qpgmtype>D</s9qpgmtype>
+<s9qenvironment>P</s9qenvironment>
+<s9qQryType>DML</s9qQryType>
+<s9qRunMultiple>0</s9qRunMultiple>
+<s9qScript>
+UPDATE dbo.ExpectedTrnHdr SET OrderRemarks = REPLACE(OrderRemarks, CHAR(13), '') where (OrderRemarks is not null or OrderRemarks <> '')
+-GO-
+UPDATE dbo.ExpectedTrnHdr SET OrderRemarks = REPLACE(OrderRemarks, CHAR(10), '')  where (OrderRemarks is not null or OrderRemarks <> '')
+-GO-
+</s9qScript>
+</s9qsqlblk>
+
+
+
+<s9qsqlblk>
+<s9qScriptid>S9Q_013_1_0034</s9qScriptID>
+<s9qtitle>Inserting two more column to the acceptdisplaydtls table</s9qtitle>
+<s9qpgmtype>D</s9qpgmtype>
+<s9qenvironment>P</s9qenvironment>
+<s9qQryType>DML</s9qQryType>
+<s9qRunMultiple>0</s9qRunMultiple>
+<s9qScript>
+
+INSERT INTO dbo.ACCEPTDISPLAYDTLS VALUES(141,'IsRateorAmt','IsRateorAmt',0,0,141,141,1,1,0,0,2,2,' ',' ',' ',' ',0,0,0,0,' ',' ',' ',1,' ',' ') 
+-GO-
+INSERT INTO dbo.ACCEPTDISPLAYDTLS VALUES(142,'UseInputRateOrAmt','UseInputRateOrAmt',0,0,142,142,1,1,0,0,2,2,' ',' ',' ',' ',0,0,0,0,' ',' ',' ',1,' ',' ')
+-GO-
+</s9qScript>
+</s9qsqlblk>

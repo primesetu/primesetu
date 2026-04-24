@@ -1,0 +1,12 @@
+<s9qsqlblk>
+  <s9qScriptid>S9Q_016_0_0010</s9qScriptid> 
+  <s9qtitle>Migrate the Data from Genlookup 102</s9qtitle>
+  <s9qpgmtype>D</s9qpgmtype>
+  <s9qpgmtype>L</s9qpgmtype>
+  <s9qpgmtype>I</s9qpgmtype>
+  <s9qversion>*</s9qversion>
+  <s9qenvironment>P</s9qenvironment>
+  <s9qRunMultiple>0</s9qRunMultiple>
+  <s9qQryType>EXE</s9qQryType>
+  <s9qScript><APPATH>\Prefixmigration.exe</s9qScript>
+</s9qsqlblk>

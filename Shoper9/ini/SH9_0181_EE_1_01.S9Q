@@ -1,0 +1,111 @@
+<s9qsqlblk>
+  <s9qScriptid>S9Q_0181_1_0001</s9qScriptid> 
+  <s9qtitle>Franchise related Queries</s9qtitle> 
+  <s9qpgmtype>I</s9qpgmtype>  
+  <s9qpgmtype>L</s9qpgmtype>  
+  <s9qversion>*</s9qversion> 
+  <s9qenvironment>P</s9qenvironment> 
+  <s9qRunMultiple>0</s9qRunMultiple> 
+  <s9qQryType>DML</s9qQryType> 
+  <s9qScript>
+create table [DBO].franchiseelog(idtype varchar(32)NOT NULL,shoperdt datetime NOT NULL,srlno int default 0 NOT NULL,trnstype varchar(10)NOT NULL,paymode varchar(16)NOT NULL,
+trnsamt money default 0,VAUid	varchar	(32),VActr int,VATermId varchar(32),VACompCode varchar(16),CONSTRAINT PK_franchiseelog PRIMARY KEY (idtype,shoperdt,srlno,trnstype,paymode))
+-GO-
+create table [DBO].franmismatchlog(shoperdt datetime NOT NULL,paymode varchar(16)NOT NULL,logopbal money default 0,trnopbal money default 0,
+VAUid varchar(32),VActr	int,VATermId varchar(32),VACompCode	varchar(16),CONSTRAINT PK_franmismatchlog PRIMARY KEY (shoperdt,paymode))
+-GO-
+create table [DBO].Bakfranchiseelog(idtype varchar(32),shoperdt datetime,srlno int,
+trnstype varchar(10),paymode varchar(16),trnsamt money,VAUid varchar(32),VActr int,
+VATermId varchar(32),VACompCode varchar(16),UpdFlag Varchar(1))
+-GO-
+create table [DBO].Bakfranmismatchlog(shoperdt datetime,paymode varchar(16),logopbal money,
+trnopbal money,VAUid varchar(32),VActr int,VATermId varchar(32),VACompCode varchar(16),UpdFlag Varchar(1))
+-GO-
+Insert Into VersionwiseTblsScript (VerID,SrlNo,TblScript) Values (13,1,'create table [DBO].franchiseelog(idtype varchar(32)NOT NULL,shoperdt datetime NOT NULL,srlno int default 0 NOT NULL,trnstype varchar(10)NOT NULL,paymode varchar(16)NOT NULL,trnsamt money default 0,VAUid	varchar	(32),VActr int,VATermId varchar(32),VACompCode varchar(16),CONSTRAINT PK_franchiseelog PRIMARY KEY (idtype,shoperdt,srlno,trnstype,paymode))')
+-GO-
+Insert Into VersionwiseTblsScript (VerID,SrlNo,TblScript) Values (13,2,'create table [DBO].franmismatchlog(shoperdt datetime NOT NULL,paymode varchar(16)NOT NULL,logopbal money default 0,trnopbal money default 0,VAUid varchar(32),VActr	int,VATermId varchar(32),VACompCode	varchar(16),CONSTRAINT PK_franmismatchlog PRIMARY KEY (shoperdt,paymode))')
+-GO-
+Insert Into VersionwiseTblsScript (VerID,SrlNo,TblScript) Values (13,3,'create table [DBO].Bakfranchiseelog(idtype varchar(32),shoperdt datetime,srlno int,trnstype varchar(10),paymode varchar(16),trnsamt money,VAUid varchar(32),VActr int,VATermId varchar(32),VACompCode varchar(16),UpdFlag Varchar(1))')
+-GO-
+Insert Into VersionwiseTblsScript (VerID,SrlNo,TblScript) Values (13,4,'create table [DBO].Bakfranmismatchlog(shoperdt datetime,paymode varchar(16),logopbal money,trnopbal money,VAUid varchar(32),VActr int,VATermId varchar(32),VACompCode varchar(16),UpdFlag Varchar(1))')
+-GO-
+Update VersionwiseTblsScript Set Vactr = (select intg from sysparam where paramcode = 'VaSysCounter') where VerId=13
+-GO-
+Update Sysparam set Txt=REPLACE(Txt,'VersionwiseTblsScript#','') where ParamCode='AdlTablesToSync'
+-GO-
+Update Sysparam set Txt=REPLACE(Txt,'VersionDtls#','') where ParamCode='AdlTablesToSync'
+-GO-
+Update Sysparam set Txt=REPLACE(Txt,'SalesTaxRevision#','') where ParamCode='AdlTablesToSync'
+-GO-
+Update Sysparam set Txt=REPLACE(Txt,'SalesTaxRevisionHistory#','') where ParamCode='AdlTablesToSync'
+-GO-
+Update Sysparam set Txt=REPLACE(Txt,'PrefixMaster#','') where ParamCode='AdlTablesToSync'
+-GO-
+Update Sysparam set Txt=REPLACE(Txt,'PrefixConfig#','') where ParamCode='AdlTablesToSync'
+-GO-
+Update Sysparam set Txt=REPLACE(Txt,'PrefixTerminalGroups#','') where ParamCode='AdlTablesToSync'
+-GO-
+Update Sysparam set Txt=REPLACE(Txt,'PrefixTrnLog#','') where ParamCode='AdlTablesToSync'
+-GO-
+Update Sysparam set Txt=REPLACE(Txt,'PrefixTrnNo#','') where ParamCode='AdlTablesToSync'
+-GO-
+Update Sysparam set Txt=Txt + '#franchiseelog#franmismatchlog'  where ParamCode='AdlTablesToSync' and Txt not like '%franchiseelog#franmismatchlog%'
+-GO-
+Update Sysparam Set Vactr = (select intg from sysparam where paramcode = 'VaSysCounter') where ParamCode='AdlTablesToSync'
+-GO-
+insert into DayBeginPgms (PgmIndex,PgmExe,PgmDesc,PgmOpt,PgmFlag,VAUid,VATermId,VACompCode ) values (1,'SR441500.EXE','Franchisee Log',0,1,'.','.','.')
+-GO-
+update daybeginpgms set pgmdate=b.dt from daybeginpgms as a,(select dt from SysParam where ParamCode='shopersysdt') as b where pgmindex=1
+-GO-
+update daybeginpgms set vactr=b.intg from daybeginpgms as a,(select intg from SysParam where paramcode='vasyscounter') as b where pgmindex=1
+-GO-
+  </s9qScript>
+</s9qsqlblk>
+
+
+<s9qsqlblk>
+  <s9qScriptID>S9Q_0181_1_0002</s9qScriptID>
+  <s9qtitle>Alter table Query for expected trnsaction to handle extensions</s9qtitle>
+  <s9qpgmtype>I</s9qpgmtype>
+  <s9qpgmtype>L</s9qpgmtype>
+  <s9qversion>*</s9qversion>
+  <s9qenvironment>P</s9qenvironment>
+  <s9qRunMultiple>0</s9qRunMultiple>
+  <s9qQryType>DDL</s9qQryType>
+  <s9qScript>
+Alter Table ExpectedTrnHdr add XS1 Varchar(128), XS2 Varchar(128), XS3 Varchar(128), XS4 Varchar(128), XS5 varchar(128), XS6 varchar(128), XS7 varchar(128), XS8 varchar(128), XI1 int, XI2 int, XI3 int, XI4 int, XM1 money, XM2 money, XM3 money, XM4 money, XD1 datetime, XD2 datetime, XD3 datetime, XD4 datetime, CS1 varchar(128), CS2 varchar(128), CS3 varchar(128), CS4 varchar(128), CS5 varchar(128), CS6 varchar(128), CS7 varchar(128), CS8 varchar(128), CI1 int, CI2 int, CI3 int, CI4 int, CM1 money, CM2 money, CM3 money, CM4 money, CD1 DateTime, CD2 DateTime, CD3 DateTime, CD4 DateTime
+-GO-
+Alter Table ExpectedTrnDtls add XS1 Varchar(128), XS2 Varchar(128), XS3 Varchar(128), XS4 Varchar(128), XS5 varchar(128), XS6 varchar(128), XS7 varchar(128), XS8 varchar(128), XI1 int, XI2 int, XI3 int, XI4 int, XM1 money, XM2 money, XM3 money, XM4 money, XD1 datetime, XD2 datetime, XD3 datetime, XD4 datetime, CS1 varchar(128), CS2 varchar(128), CS3 varchar(128), CS4 varchar(128), CS5 varchar(128), CS6 varchar(128), CS7 varchar(128), CS8 varchar(128), CI1 int, CI2 int, CI3 int, CI4 int, CM1 money, CM2 money, CM3 money, CM4 money, CD1 DateTime, CD2 DateTime, CD3 DateTime, CD4 DateTime
+-GO-
+Alter Table ExpectedTrnRcpts add XS1 Varchar(128), XS2 Varchar(128), XS3 Varchar(128), XS4 Varchar(128), XS5 varchar(128), XS6 varchar(128), XS7 varchar(128), XS8 varchar(128), XI1 int, XI2 int, XI3 int, XI4 int, XM1 money, XM2 money, XM3 money, XM4 money, XD1 datetime, XD2 datetime, XD3 datetime, XD4 datetime, CS1 varchar(128), CS2 varchar(128), CS3 varchar(128), CS4 varchar(128), CS5 varchar(128), CS6 varchar(128), CS7 varchar(128), CS8 varchar(128), CI1 int, CI2 int, CI3 int, CI4 int, CM1 money, CM2 money, CM3 money, CM4 money, CD1 DateTime, CD2 DateTime, CD3 DateTime, CD4 DateTime
+-GO-
+Alter Table ExpectedTrnAddonDed add XS1 Varchar(128), XS2 Varchar(128), XS3 Varchar(128), XS4 Varchar(128), XS5 varchar(128), XS6 varchar(128), XS7 varchar(128), XS8 varchar(128), XI1 int, XI2 int, XI3 int, XI4 int, XM1 money, XM2 money, XM3 money, XM4 money, XD1 datetime, XD2 datetime, XD3 datetime, XD4 datetime, CS1 varchar(128), CS2 varchar(128), CS3 varchar(128), CS4 varchar(128), CS5 varchar(128), CS6 varchar(128), CS7 varchar(128), CS8 varchar(128), CI1 int, CI2 int, CI3 int, CI4 int, CM1 money, CM2 money, CM3 money, CM4 money, CD1 DateTime, CD2 DateTime, CD3 DateTime, CD4 DateTime
+-GO-
+Insert Into VersionwiseTblsScript (VerID,SrlNo,TblScript) Values (13,35,'Alter Table [DBO].ExpectedTrnHdr add XS1 Varchar(128), XS2 Varchar(128), XS3 Varchar(128), XS4 Varchar(128), XS5 varchar(128), XS6 varchar(128), XS7 varchar(128), XS8 varchar(128), XI1 int, XI2 int, XI3 int, XI4 int, XM1 money, XM2 money, XM3 money, XM4 money, XD1 datetime, XD2 datetime, XD3 datetime, XD4 datetime, CS1 varchar(128), CS2 varchar(128), CS3 varchar(128), CS4 varchar(128), CS5 varchar(128), CS6 varchar(128), CS7 varchar(128), CS8 varchar(128), CI1 int, CI2 int, CI3 int, CI4 int, CM1 money, CM2 money, CM3 money, CM4 money, CD1 DateTime, CD2 DateTime, CD3 DateTime, CD4 DateTime')
+-GO-
+Insert Into VersionwiseTblsScript (VerID,SrlNo,TblScript) Values (13,36,'Alter Table [DBO].ExpectedTrnDtls add XS1 Varchar(128), XS2 Varchar(128), XS3 Varchar(128), XS4 Varchar(128), XS5 varchar(128), XS6 varchar(128), XS7 varchar(128), XS8 varchar(128), XI1 int, XI2 int, XI3 int, XI4 int, XM1 money, XM2 money, XM3 money, XM4 money, XD1 datetime, XD2 datetime, XD3 datetime, XD4 datetime, CS1 varchar(128), CS2 varchar(128), CS3 varchar(128), CS4 varchar(128), CS5 varchar(128), CS6 varchar(128), CS7 varchar(128), CS8 varchar(128), CI1 int, CI2 int, CI3 int, CI4 int, CM1 money, CM2 money, CM3 money, CM4 money, CD1 DateTime, CD2 DateTime, CD3 DateTime, CD4 DateTime')
+-GO-
+Insert Into VersionwiseTblsScript (VerID,SrlNo,TblScript) Values (13,37,'Alter Table [DBO].ExpectedTrnRcpts add XS1 Varchar(128), XS2 Varchar(128), XS3 Varchar(128), XS4 Varchar(128), XS5 varchar(128), XS6 varchar(128), XS7 varchar(128), XS8 varchar(128), XI1 int, XI2 int, XI3 int, XI4 int, XM1 money, XM2 money, XM3 money, XM4 money, XD1 datetime, XD2 datetime, XD3 datetime, XD4 datetime, CS1 varchar(128), CS2 varchar(128), CS3 varchar(128), CS4 varchar(128), CS5 varchar(128), CS6 varchar(128), CS7 varchar(128), CS8 varchar(128), CI1 int, CI2 int, CI3 int, CI4 int, CM1 money, CM2 money, CM3 money, CM4 money, CD1 DateTime, CD2 DateTime, CD3 DateTime, CD4 DateTime')
+-GO-
+Insert Into VersionwiseTblsScript (VerID,SrlNo,TblScript) Values (13,38,'Alter Table [DBO].ExpectedTrnAddonDed add XS1 Varchar(128), XS2 Varchar(128), XS3 Varchar(128), XS4 Varchar(128), XS5 varchar(128), XS6 varchar(128), XS7 varchar(128), XS8 varchar(128), XI1 int, XI2 int, XI3 int, XI4 int, XM1 money, XM2 money, XM3 money, XM4 money, XD1 datetime, XD2 datetime, XD3 datetime, XD4 datetime, CS1 varchar(128), CS2 varchar(128), CS3 varchar(128), CS4 varchar(128), CS5 varchar(128), CS6 varchar(128), CS7 varchar(128), CS8 varchar(128), CI1 int, CI2 int, CI3 int, CI4 int, CM1 money, CM2 money, CM3 money, CM4 money, CD1 DateTime, CD2 DateTime, CD3 DateTime, CD4 DateTime')
+-GO-
+Insert Into VersionwiseTblsScript (VerID,SrlNo,TblScript) Values (13,39,'alter table [DBO].bakExpectedTrnHdr drop column updflag')
+-GO-
+Insert Into VersionwiseTblsScript (VerID,SrlNo,TblScript) Values (13,40,'Alter Table [DBO].bakExpectedTrnHdr add XS1 Varchar(128), XS2 Varchar(128), XS3 Varchar(128), XS4 Varchar(128), XS5 varchar(128), XS6 varchar(128), XS7 varchar(128), XS8 varchar(128), XI1 int, XI2 int, XI3 int, XI4 int, XM1 money, XM2 money, XM3 money, XM4 money, XD1 datetime, XD2 datetime, XD3 datetime, XD4 datetime, CS1 varchar(128), CS2 varchar(128), CS3 varchar(128), CS4 varchar(128), CS5 varchar(128), CS6 varchar(128), CS7 varchar(128), CS8 varchar(128), CI1 int, CI2 int, CI3 int, CI4 int, CM1 money, CM2 money, CM3 money, CM4 money, CD1 DateTime, CD2 DateTime, CD3 DateTime, CD4 DateTime,updflag varchar(1)')
+-GO-
+Insert Into VersionwiseTblsScript (VerID,SrlNo,TblScript) Values (13,41,'alter table [DBO].bakExpectedTrnDtls drop column updflag')
+-GO-
+Insert Into VersionwiseTblsScript (VerID,SrlNo,TblScript) Values (13,42,'Alter Table [DBO].BAKExpectedTrnDtls add XS1 Varchar(128), XS2 Varchar(128), XS3 Varchar(128), XS4 Varchar(128), XS5 varchar(128), XS6 varchar(128), XS7 varchar(128), XS8 varchar(128), XI1 int, XI2 int, XI3 int, XI4 int, XM1 money, XM2 money, XM3 money, XM4 money, XD1 datetime, XD2 datetime, XD3 datetime, XD4 datetime, CS1 varchar(128), CS2 varchar(128), CS3 varchar(128), CS4 varchar(128), CS5 varchar(128), CS6 varchar(128), CS7 varchar(128), CS8 varchar(128), CI1 int, CI2 int, CI3 int, CI4 int, CM1 money, CM2 money, CM3 money, CM4 money, CD1 DateTime, CD2 DateTime, CD3 DateTime, CD4 DateTime,updflag varchar(1)')
+-GO-
+Insert Into VersionwiseTblsScript (VerID,SrlNo,TblScript) Values (13,43,'alter table [DBO].bakExpectedTrnRcpts drop column updflag')
+-GO-
+Insert Into VersionwiseTblsScript (VerID,SrlNo,TblScript) Values (13,44,'Alter Table [DBO].BakExpectedTrnRcpts add XS1 Varchar(128), XS2 Varchar(128), XS3 Varchar(128), XS4 Varchar(128), XS5 varchar(128), XS6 varchar(128), XS7 varchar(128), XS8 varchar(128), XI1 int, XI2 int, XI3 int, XI4 int, XM1 money, XM2 money, XM3 money, XM4 money, XD1 datetime, XD2 datetime, XD3 datetime, XD4 datetime, CS1 varchar(128), CS2 varchar(128), CS3 varchar(128), CS4 varchar(128), CS5 varchar(128), CS6 varchar(128), CS7 varchar(128), CS8 varchar(128), CI1 int, CI2 int, CI3 int, CI4 int, CM1 money, CM2 money, CM3 money, CM4 money, CD1 DateTime, CD2 DateTime, CD3 DateTime, CD4 DateTime,updflag varchar(1)')
+-GO-
+Insert Into VersionwiseTblsScript (VerID,SrlNo,TblScript) Values (13,45,'alter table [DBO].bakExpectedTrnAddonDed drop column updflag')
+-GO-
+Insert Into VersionwiseTblsScript (VerID,SrlNo,TblScript) Values (13,46,'Alter Table [DBO].BAKExpectedTrnAddonDed add XS1 Varchar(128), XS2 Varchar(128), XS3 Varchar(128), XS4 Varchar(128), XS5 varchar(128), XS6 varchar(128), XS7 varchar(128), XS8 varchar(128), XI1 int, XI2 int, XI3 int, XI4 int, XM1 money, XM2 money, XM3 money, XM4 money, XD1 datetime, XD2 datetime, XD3 datetime, XD4 datetime, CS1 varchar(128), CS2 varchar(128), CS3 varchar(128), CS4 varchar(128), CS5 varchar(128), CS6 varchar(128), CS7 varchar(128), CS8 varchar(128), CI1 int, CI2 int, CI3 int, CI4 int, CM1 money, CM2 money, CM3 money, CM4 money, CD1 DateTime, CD2 DateTime, CD3 DateTime, CD4 DateTime,updflag varchar(1)')
+-GO-
+Update VersionwiseTblsScript Set Vactr = (select intg from sysparam where paramcode = 'VaSysCounter') where VerId=13
+-GO-
+</s9qScript>		
+</s9qsqlblk>

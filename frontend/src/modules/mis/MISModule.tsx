@@ -9,21 +9,22 @@
  * "Memory, Not Code."
  * ============================================================ */
 import { useQuery } from '@tanstack/react-query'
+import { apiClient } from '@/api/client'
 
 export default function MISModule() {
   const { data: sales, isLoading: salesLoading } = useQuery({
     queryKey: ['sales-summary'],
     queryFn: async () => {
-      const resp = await fetch('http://localhost:8000/api/v1/reports/sales-summary')
-      return resp.json()
+      const resp = await apiClient.get('/reports/sales-summary')
+      return resp.data
     }
   })
 
   const { data: inventory, isLoading: invLoading } = useQuery({
     queryKey: ['inventory-valuation'],
     queryFn: async () => {
-      const resp = await fetch('http://localhost:8000/api/v1/reports/inventory-valuation')
-      return resp.json()
+      const resp = await apiClient.get('/reports/inventory-valuation')
+      return resp.data
     }
   })
 

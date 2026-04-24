@@ -26,6 +26,7 @@ export interface Database {
       schemes:    { Row: Scheme;    Insert: SchemeInsert;    Update: SchemeUpdate }
       ledger:     { Row: Ledger;    Insert: LedgerInsert;    Update: LedgerUpdate }
       ai_outputs: { Row: AIOutput;  Insert: AIOutputInsert;  Update: AIOutputUpdate }
+      sync_log:   { Row: SyncLog;   Insert: SyncLogInsert;   Update: SyncLogUpdate }
     }
     Views: {}
     Functions: {}
@@ -75,3 +76,14 @@ export type LedgerUpdate  = Partial<LedgerInsert>
 export type AIOutput        = { id: string; store_id: string; prompt_hash: string; output: string; critic_score: number | null; loop_iterations: number; created_at: string }
 export type AIOutputInsert  = Omit<AIOutput, 'id' | 'created_at'>
 export type AIOutputUpdate  = Partial<AIOutputInsert>
+
+export type SyncLog = {
+  id: string
+  packet_id: string
+  packet_type: 'BILL' | 'RETURNS' | 'STOCK_ADJUST' | 'PO'
+  payload: Json
+  store_id: string
+  created_at: string
+}
+export type SyncLogInsert = Omit<SyncLog, 'id' | 'created_at'>
+export type SyncLogUpdate = Partial<SyncLogInsert>

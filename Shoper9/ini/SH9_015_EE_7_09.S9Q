@@ -1,0 +1,36 @@
+<s9qsqlblk> 
+<s9qScriptID>S9Q_013_7_0013</s9qScriptID>
+<s9qtitle>Extension Frame Work: Update Scripts</s9qtitle>
+<s9qpgmtype>L</s9qpgmtype>
+<s9qpgmtype>I</s9qpgmtype>
+<s9qversion>*</s9qversion>
+<s9qenvironment>P</s9qenvironment>
+<s9qRunMultiple>0</s9qRunMultiple>
+<s9qQryType>DDL</s9qQryType>
+<s9qScript>
+
+Update ExtensionConfigTable set TableStruct='TransCode varchar(16), Level varchar(5), Action int,PartyId Varchar(16),PartyName varchar(60),RefDocNo int,TotCrtnCount int,RefDate datetime,CartonNo int'
+Where TrnType = 1101 and ExtLevel = 1 and StructType = 1
+-go-
+Update ExtensionConfigTable set TableStruct='TransCode varchar(16), Level varchar(5), Action int,PartyId Varchar(16),PartyName varchar(60),RefDocNo int,TotCrtnCount int,RefDate datetime,CartonNo int'
+Where TrnType = 1201 and ExtLevel = 1 and StructType = 1
+-go-
+Insert into ExtensionConfigTable(TrnType,ExtLevel,StructType,TableStruct)
+Values(1501,1,1,'TransCode varchar(16), Level varchar(5), Action int,PartyId Varchar(16),PartyName varchar(60),RefDocNo int,TotCrtnCount int,RefDate datetime,CartonNo int')
+-go-
+Insert into ExtensionConfigTable(TrnType,ExtLevel,StructType,TableStruct)
+Values(1501,1,2,'XS1 Varchar(128),XS2 Varchar(128),XS3 Varchar(128),XS4 Varchar(128),XS5 varchar(128),XS6 varchar(128),XS7 varchar(128), XS8 varchar(128), XI1 int, XI2 int, XI3 int, XI4 int, XM1 money,XM2 money, XM3 money, XM4 money, XD1 datetime, XD2 datetime,XD3 datetime,XD4 datetime, XS1Tag varchar(16),XS2Tag varchar(16), XS3Tag varchar(16), XS4Tag varchar(16), XS5Tag varchar(16), XS6Tag varchar(16), XS7Tag varchar(16), XS8Tag varchar(16), XI1Tag varchar(16), XI2Tag varchar(16), XI3Tag varchar(16), XI4Tag varchar(16), XM1Tag varchar(16), XM2Tag varchar(16), XM3Tag varchar(16), XM4Tag varchar(16), XD1Tag varchar(16), XD2Tag varchar(16), XD3Tag varchar(16), XD4Tag varchar(16), CS1 varchar(128), CS2 varchar(128), CS3 varchar(128), CS4 varchar(128), CS5 varchar(128), CS6 varchar(128), CS7 varchar(128), CS8 varchar(128), CI1 int, CI2 int, CI3 int, CI4 int, CM1 money, CM2 money, CM3 money, CM4 money, CD1 DateTime, CD2 DateTime, CD3 DateTime, CD4 DateTime, DisplayTableName varchar(64), HeaderTableName varchar(64), DetailTableName varchar(64), FooterTableName Varchar(64), FooterDtlTableName Varchar(64), DtlFullInfoTableName Varchar(64), FtrDtlFullInfoTableName Varchar(64)')
+-go-
+Insert into ExtensionConfigTable(TrnType,ExtLevel,StructType,TableStruct)
+Values(1501,2,1,'TransCode varchar(16),Level varchar(5),Action Int,TrnCtrlNo Int,Slno int,ClubItemFlag Int,ClubItemRow Int,DocNoPrefix Varchar(8),DocNo Int,DocDt DateTime,StockNo varchar(32),BatchSrlNo int,Class1Cd varchar(16),Class2Cd varchar(16),SubClass1Cd varchar(16),SubClass2Cd varchar(16),SizeCd varchar(16),Quantity money')
+Insert into ExtensionConfigTable(TrnType,ExtLevel,StructType,TableStruct)
+Values(1501,2,2,'XS1 Varchar(128), XS2 Varchar(128), XS3 Varchar(128), XS4 Varchar(128), XS5 varchar(128), XS6 varchar(128), XS7 varchar(128), XS8 varchar(128), XI1 int, XI2 int, XI3 int, XI4 int, XM1 money, XM2 money, XM3 money, XM4 money, XD1 datetime, XD2 datetime, XD3 datetime, XD4 datetime, XS1Tag varchar(16),XS2Tag varchar(16), XS3Tag varchar(16), XS4Tag varchar(16), XS5Tag varchar(16), XS6Tag varchar(16), XS7Tag varchar(16), XS8Tag varchar(16), XI1Tag varchar(16), XI2Tag varchar(16), XI3Tag varchar(16), XI4Tag varchar(16), XM1Tag varchar(16), XM2Tag varchar(16), XM3Tag varchar(16), XM4Tag varchar(16), XD1Tag varchar(16), XD2Tag varchar(16), XD3Tag varchar(16), XD4Tag varchar(16), CS1 varchar(128), CS2 varchar(128), CS3 varchar(128), CS4 varchar(128), CS5 varchar(128), CS6 varchar(128), CS7 varchar(128), CS8 varchar(128), CI1 int, CI2 int, CI3 int, CI4 int, CM1 money, CM2 money, CM3 money, CM4 money, CD1 DateTime, CD2 DateTime, CD3 DateTime, CD4 DateTime, DisplayTableName varchar(64), HeaderTableName varchar(64), DetailTableName varchar(64), FooterTableName Varchar(64), FooterDtlTableName Varchar(64), DtlFullInfoTableName Varchar(64), FtrDtlFullInfoTableName Varchar(64)')
+-go-
+Insert into ExtensionConfigTable(TrnType,ExtLevel,StructType,TableStruct)
+Values(1501,3,1,'TransCode varchar(16),Level varchar(5),Action int,PartyId Varchar(6),PartyName varchar(15),CartonsCompleted int,CartonNoQty int')
+Insert into ExtensionConfigTable(TrnType,ExtLevel,StructType,TableStruct)
+Values(1501,3,2,'XS1 Varchar(128), XS2 Varchar(128), XS3 Varchar(128), XS4 Varchar(128), XS5 varchar(128), XS6 varchar(128), XS7 varchar(128), XS8 varchar(128), XI1 int, XI2 int, XI3 int, XI4 int, XM1 money, XM2 money, XM3 money, XM4 money, XD1 datetime, XD2 datetime, XD3 datetime, XD4 datetime, XS1Tag varchar(16),XS2Tag varchar(16), XS3Tag varchar(16), XS4Tag varchar(16), XS5Tag varchar(16), XS6Tag varchar(16), XS7Tag varchar(16), XS8Tag varchar(16), XI1Tag varchar(16), XI2Tag varchar(16), XI3Tag varchar(16), XI4Tag varchar(16), XM1Tag varchar(16), XM2Tag varchar(16), XM3Tag varchar(16), XM4Tag varchar(16), XD1Tag varchar(16), XD2Tag varchar(16), XD3Tag varchar(16), XD4Tag varchar(16), CS1 varchar(128), CS2 varchar(128), CS3 varchar(128), CS4 varchar(128), CS5 varchar(128), CS6 varchar(128), CS7 varchar(128), CS8 varchar(128), CI1 int, CI2 int, CI3 int, CI4 int, CM1 money, CM2 money, CM3 money, CM4 money, CD1 DateTime, CD2 DateTime, CD3 DateTime, CD4 DateTime, DisplayTableName varchar(64), HeaderTableName varchar(64), DetailTableName varchar(64), FooterTableName Varchar(64), FooterDtlTableName Varchar(64), DtlFullInfoTableName Varchar(64), FtrDtlFullInfoTableName Varchar(64)')
+-go-
+
+</s9qScript>
+</s9qsqlblk>

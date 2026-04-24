@@ -4,8 +4,8 @@
   "description": "PrimeSetu — Shoper9 Based Retail OS",
   "main": "main.py",
   "scripts": {
-    "dev": "python -m uvicorn main:app --reload",
-    "start": "python main.py"
+    "dev": "python -m uvicorn backend.app.main:app --reload --port 8000",
+    "start": "python -m uvicorn backend.app.main:app --port 8000"
   },
   "keywords": [
     "primesetu",

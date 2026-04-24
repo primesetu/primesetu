@@ -1,0 +1,600 @@
+<s9qsqlblk>
+  <s9qScriptid>S9Q_0192_1_0001</s9qScriptid> 
+  <s9qtitle> New Sysparam records</s9qtitle> 
+  <s9qpgmtype>I</s9qpgmtype>  
+  <s9qpgmtype>L</s9qpgmtype>  
+  <s9qversion>*</s9qversion> 
+  <s9qenvironment>P</s9qenvironment> 
+  <s9qRunMultiple>1</s9qRunMultiple> 
+  <s9qQryType>DML</s9qQryType> 
+  <s9qScript>
+INSERT INTO [sysparam] ([Id],[Descr],[ParamCode],[Boolean],[Intg],[Txt],[Dt],[Sng],[Cur],[Opt],[VAUid],[VActr],[VATermId],[VACompCode])VALUES('SR1-0901-0000455','Default Expected Transaction type in Billing','DefaultExptTranInBilling',0,9200,'',NULL,0.00,0.0000,'I','Super',1,'.','R19')
+-GO-
+INSERT INTO [sysparamextd] ([Id],[ParamCode],[Fixed],[Changed],[Category],[CatDescr],[DispOrder],[VAUid],[VActr],[VATermId],[VACompCode])VALUES('SR1-0901-0000455','DefaultExptTranInBilling','Variable',0,'11. Billing','This Gives Billing Parameters',53,'Super',1,'.','R19')
+-GO-
+INSERT INTO [SysParamLookUp] ([ParamCode],[String],[Value],[ReturnTyp],[VAUid],[VActr],[VATermId],[VACompCode])VALUES('DefaultExptTranInBilling','Bill Suspension','9100','I','Super',1,'.','R19')
+-GO-
+INSERT INTO [SysParamLookUp] ([ParamCode],[String],[Value],[ReturnTyp],[VAUid],[VActr],[VATermId],[VACompCode])VALUES('DefaultExptTranInBilling','Sales Advice Slip','9200','I','Super',1,'.','R19')
+-GO-
+INSERT INTO [SysParamLookUp] ([ParamCode],[String],[Value],[ReturnTyp],[VAUid],[VActr],[VATermId],[VACompCode])VALUES('DefaultExptTranInBilling','Sales Order','9700','I','Super',1,'.','R19')
+-GO-
+INSERT INTO [SysParamLookUp] ([ParamCode],[String],[Value],[ReturnTyp],[VAUid],[VActr],[VATermId],[VACompCode])VALUES('DefaultExptTranInBilling','Service Order','9300','I','Super',1,'.','R19')
+-GO-
+INSERT INTO [SysParamLookUp] ([ParamCode],[String],[Value],[ReturnTyp],[VAUid],[VActr],[VATermId],[VACompCode])VALUES('DefaultExptTranInBilling','Sales DC','9800','I','Super',1,'.','R19')
+-GO-
+INSERT INTO [SysParamLookUp] ([ParamCode],[String],[Value],[ReturnTyp],[VAUid],[VActr],[VATermId],[VACompCode])VALUES('DefaultExptTranInBilling','Approval Issue DC','9900','I','Super',1,'.','R19')
+-GO-
+INSERT INTO [SysParamLookUp] ([ParamCode],[String],[Value],[ReturnTyp],[VAUid],[VActr],[VATermId],[VACompCode])VALUES('DefaultExptTranInBilling','Packing Slip','8100','I','Super',1,'.','R19')
+-GO-
+INSERT INTO [SysParamLookUp] ([ParamCode],[String],[Value],[ReturnTyp],[VAUid],[VActr],[VATermId],[VACompCode])VALUES('DefaultExptTranInBilling','Pallet Slip','8200','I','Super',1,'.','R19')
+-GO-
+ </s9qScript>
+</s9qsqlblk>
+
+<s9qsqlblk>
+  <s9qScriptid>S9Q_0192_1_0002</s9qScriptid> 
+  <s9qtitle> New Transaction Components records insertion</s9qtitle> 
+  <s9qpgmtype>I</s9qpgmtype>  
+  <s9qpgmtype>L</s9qpgmtype>  
+  <s9qversion>*</s9qversion> 
+  <s9qenvironment>P</s9qenvironment> 
+  <s9qRunMultiple>1</s9qRunMultiple> 
+  <s9qQryType>DML</s9qQryType> 
+  <s9qScript>
+Truncate table [TransactionComponentsDtls]
+-GO-
+INSERT INTO [TransactionComponentsDtls] ([Trntype],[TrnSubtype],[FieldCode],[Srlno],[EventId],[EventKeycode],[ComponentDesc],[OrderOfexec],[CompStatus])VALUES(1300,NULL,'DiscAmt',1,'LostFocus',0,'SR542200.ClsDiscAmountProcess',1,'1')
+-GO-
+INSERT INTO [TransactionComponentsDtls] ([Trntype],[TrnSubtype],[FieldCode],[Srlno],[EventId],[EventKeycode],[ComponentDesc],[OrderOfexec],[CompStatus])VALUES(1300,NULL,'DiscCode',1,'ComboChange',0,'SR542200.ClsitemLvlPromoProcess',1,'1')
+-GO-
+INSERT INTO [TransactionComponentsDtls] ([Trntype],[TrnSubtype],[FieldCode],[Srlno],[EventId],[EventKeycode],[ComponentDesc],[OrderOfexec],[CompStatus])VALUES(1300,NULL,'DiscPerc',1,'LostFocus',0,'SR542200.ClsDiscPercProcess',1,'1')
+-GO-
+INSERT INTO [TransactionComponentsDtls] ([Trntype],[TrnSubtype],[FieldCode],[Srlno],[EventId],[EventKeycode],[ComponentDesc],[OrderOfexec],[CompStatus])VALUES(1300,NULL,'DiscQty',1,'LostFocus',0,'SR542200.ClsDicQtyProcess',1,'1')
+-GO-
+INSERT INTO [TransactionComponentsDtls] ([Trntype],[TrnSubtype],[FieldCode],[Srlno],[EventId],[EventKeycode],[ComponentDesc],[OrderOfexec],[CompStatus])VALUES(1300,NULL,'Qty',1,'LostFocus',0,'SR542200.ClsItemQtyValidate',1,'1')
+-GO-
+INSERT INTO [TransactionComponentsDtls] ([Trntype],[TrnSubtype],[FieldCode],[Srlno],[EventId],[EventKeycode],[ComponentDesc],[OrderOfexec],[CompStatus])VALUES(1300,NULL,'Qty',2,'LostFocus',0,'SR542200.ClsSearchItemLvlPromo',1,'1')
+-GO-
+INSERT INTO [TransactionComponentsDtls] ([Trntype],[TrnSubtype],[FieldCode],[Srlno],[EventId],[EventKeycode],[ComponentDesc],[OrderOfexec],[CompStatus])VALUES(1300,NULL,'Rate',1,'LostFocus',0,'SR542200.ClsitemRateValidation',1,'1')
+-GO-
+INSERT INTO [TransactionComponentsDtls] ([Trntype],[TrnSubtype],[FieldCode],[Srlno],[EventId],[EventKeycode],[ComponentDesc],[OrderOfexec],[CompStatus])VALUES(1300,NULL,'ReasonCd',1,'CellGotFocus',0,'SR542200.ClsFillReasonCodes',1,'1')
+-GO-
+INSERT INTO [TransactionComponentsDtls] ([Trntype],[TrnSubtype],[FieldCode],[Srlno],[EventId],[EventKeycode],[ComponentDesc],[OrderOfexec],[CompStatus])VALUES(1300,NULL,'ReasonCd',1,'LostFocus',0,'SR542200.ClsValidateRsnCd',1,'1')
+-GO-
+INSERT INTO [TransactionComponentsDtls] ([Trntype],[TrnSubtype],[FieldCode],[Srlno],[EventId],[EventKeycode],[ComponentDesc],[OrderOfexec],[CompStatus])VALUES(1300,NULL,'SalesStaff',1,'CellGotFocus',0,'SR542200.ClsSalespersonaldtls',1,'1')
+-GO-
+INSERT INTO [TransactionComponentsDtls] ([Trntype],[TrnSubtype],[FieldCode],[Srlno],[EventId],[EventKeycode],[ComponentDesc],[OrderOfexec],[CompStatus])VALUES(1300,NULL,'SalesStaff',1,'LostFocus',0,'SR542200.ClsValidateSalesPerson',1,'1')
+-GO-
+INSERT INTO [TransactionComponentsDtls] ([Trntype],[TrnSubtype],[FieldCode],[Srlno],[EventId],[EventKeycode],[ComponentDesc],[OrderOfexec],[CompStatus])VALUES(1300,NULL,'StockNo',1,'KeyDown',113,'SR542200.ClsInvokeBrowse',1,'1')
+-GO-
+INSERT INTO [TransactionComponentsDtls] ([Trntype],[TrnSubtype],[FieldCode],[Srlno],[EventId],[EventKeycode],[ComponentDesc],[OrderOfexec],[CompStatus])VALUES(1300,NULL,'StockNo',1,'LostFocus',0,'SR542200.ClsitemDtls',1,'1')
+-GO-
+INSERT INTO [TransactionComponentsDtls] ([Trntype],[TrnSubtype],[FieldCode],[Srlno],[EventId],[EventKeycode],[ComponentDesc],[OrderOfexec],[CompStatus])VALUES(2100,NULL,'DiscAmt',1,'LostFocus',0,'SR542200.ClsDiscAmountProcess',1,'1')
+-GO-
+INSERT INTO [TransactionComponentsDtls] ([Trntype],[TrnSubtype],[FieldCode],[Srlno],[EventId],[EventKeycode],[ComponentDesc],[OrderOfexec],[CompStatus])VALUES(2100,NULL,'DiscCode',1,'ComboChange',0,'SR542200.ClsitemLvlPromoProcess',1,'1')
+-GO-
+INSERT INTO [TransactionComponentsDtls] ([Trntype],[TrnSubtype],[FieldCode],[Srlno],[EventId],[EventKeycode],[ComponentDesc],[OrderOfexec],[CompStatus])VALUES(2100,NULL,'DiscPerc',1,'LostFocus',0,'SR542200.ClsDiscPercProcess',1,'1')
+-GO-
+INSERT INTO [TransactionComponentsDtls] ([Trntype],[TrnSubtype],[FieldCode],[Srlno],[EventId],[EventKeycode],[ComponentDesc],[OrderOfexec],[CompStatus])VALUES(2100,NULL,'DiscQty',1,'LostFocus',0,'SR542200.ClsDicQtyProcess',1,'1')
+-GO-
+INSERT INTO [TransactionComponentsDtls] ([Trntype],[TrnSubtype],[FieldCode],[Srlno],[EventId],[EventKeycode],[ComponentDesc],[OrderOfexec],[CompStatus])VALUES(2100,NULL,'Qty',1,'LostFocus',0,'SR542200.ClsItemQtyValidate',1,'1')
+-GO-
+INSERT INTO [TransactionComponentsDtls] ([Trntype],[TrnSubtype],[FieldCode],[Srlno],[EventId],[EventKeycode],[ComponentDesc],[OrderOfexec],[CompStatus])VALUES(2100,NULL,'Qty',2,'LostFocus',0,'SR542200.ClsSearchItemLvlPromo',1,'1')
+-GO-
+INSERT INTO [TransactionComponentsDtls] ([Trntype],[TrnSubtype],[FieldCode],[Srlno],[EventId],[EventKeycode],[ComponentDesc],[OrderOfexec],[CompStatus])VALUES(2100,NULL,'Rate',1,'LostFocus',0,'SR542200.ClsitemRateValidation',1,'1')
+-GO-
+INSERT INTO [TransactionComponentsDtls] ([Trntype],[TrnSubtype],[FieldCode],[Srlno],[EventId],[EventKeycode],[ComponentDesc],[OrderOfexec],[CompStatus])VALUES(2100,NULL,'SalesStaff',1,'CellGotFocus',0,'SR542200.ClsSalespersonaldtls',1,'1')
+-GO-
+INSERT INTO [TransactionComponentsDtls] ([Trntype],[TrnSubtype],[FieldCode],[Srlno],[EventId],[EventKeycode],[ComponentDesc],[OrderOfexec],[CompStatus])VALUES(2100,NULL,'SalesStaff',1,'LostFocus',0,'SR542200.ClsValidateSalesPerson',1,'1')
+-GO-
+INSERT INTO [TransactionComponentsDtls] ([Trntype],[TrnSubtype],[FieldCode],[Srlno],[EventId],[EventKeycode],[ComponentDesc],[OrderOfexec],[CompStatus])VALUES(2100,NULL,'StockNo',1,'KeyDown',40,'SR542200.ClsInvokeBrowse',1,'1')
+-GO-
+INSERT INTO [TransactionComponentsDtls] ([Trntype],[TrnSubtype],[FieldCode],[Srlno],[EventId],[EventKeycode],[ComponentDesc],[OrderOfexec],[CompStatus])VALUES(2100,NULL,'StockNo',1,'LostFocus',0,'SR542200.ClsitemDtls',1,'1')
+-GO-
+INSERT INTO [TransactionComponentsDtls] ([Trntype],[TrnSubtype],[FieldCode],[Srlno],[EventId],[EventKeycode],[ComponentDesc],[OrderOfexec],[CompStatus])VALUES(2100,NULL,'StockNo',3,'KeyDown',113,'SR542200.ClsInvokeBrowse',1,'1')
+-GO-
+INSERT INTO [TransactionComponentsDtls] ([Trntype],[TrnSubtype],[FieldCode],[Srlno],[EventId],[EventKeycode],[ComponentDesc],[OrderOfexec],[CompStatus])VALUES(9100,NULL,'DiscAmt',1,'LostFocus',0,'SR542200.ClsDiscAmountProcess',1,'1')
+-GO-
+INSERT INTO [TransactionComponentsDtls] ([Trntype],[TrnSubtype],[FieldCode],[Srlno],[EventId],[EventKeycode],[ComponentDesc],[OrderOfexec],[CompStatus])VALUES(9100,NULL,'DiscCode',1,'ComboChange',0,'SR542200.ClsitemLvlPromoProcess',1,'1')
+-GO-
+INSERT INTO [TransactionComponentsDtls] ([Trntype],[TrnSubtype],[FieldCode],[Srlno],[EventId],[EventKeycode],[ComponentDesc],[OrderOfexec],[CompStatus])VALUES(9100,NULL,'DiscPerc',1,'LostFocus',0,'SR542200.ClsDiscPercProcess',1,'1')
+-GO-
+INSERT INTO [TransactionComponentsDtls] ([Trntype],[TrnSubtype],[FieldCode],[Srlno],[EventId],[EventKeycode],[ComponentDesc],[OrderOfexec],[CompStatus])VALUES(9100,NULL,'DiscQty',1,'LostFocus',0,'SR542200.ClsDicQtyProcess',1,'1')
+-GO-
+INSERT INTO [TransactionComponentsDtls] ([Trntype],[TrnSubtype],[FieldCode],[Srlno],[EventId],[EventKeycode],[ComponentDesc],[OrderOfexec],[CompStatus])VALUES(9100,NULL,'Qty',1,'LostFocus',0,'SR542200.ClsItemQtyValidate',1,'1')
+-GO-
+INSERT INTO [TransactionComponentsDtls] ([Trntype],[TrnSubtype],[FieldCode],[Srlno],[EventId],[EventKeycode],[ComponentDesc],[OrderOfexec],[CompStatus])VALUES(9100,NULL,'Qty',2,'LostFocus',0,'SR542200.ClsSearchItemLvlPromo',1,'1')
+-GO-
+INSERT INTO [TransactionComponentsDtls] ([Trntype],[TrnSubtype],[FieldCode],[Srlno],[EventId],[EventKeycode],[ComponentDesc],[OrderOfexec],[CompStatus])VALUES(9100,NULL,'Rate',1,'LostFocus',0,'SR542200.ClsitemRateValidation',1,'1')
+-GO-
+INSERT INTO [TransactionComponentsDtls] ([Trntype],[TrnSubtype],[FieldCode],[Srlno],[EventId],[EventKeycode],[ComponentDesc],[OrderOfexec],[CompStatus])VALUES(9100,NULL,'SalesStaff',1,'CellGotFocus',0,'SR542200.ClsSalespersonaldtls',1,'1')
+-GO-
+INSERT INTO [TransactionComponentsDtls] ([Trntype],[TrnSubtype],[FieldCode],[Srlno],[EventId],[EventKeycode],[ComponentDesc],[OrderOfexec],[CompStatus])VALUES(9100,NULL,'SalesStaff',1,'LostFocus',0,'SR542200.ClsValidateSalesPerson',1,'1')
+-GO-
+INSERT INTO [TransactionComponentsDtls] ([Trntype],[TrnSubtype],[FieldCode],[Srlno],[EventId],[EventKeycode],[ComponentDesc],[OrderOfexec],[CompStatus])VALUES(9100,NULL,'StockNo',1,'KeyDown',40,'SR542200.ClsInvokeBrowse',1,'1')
+-GO-
+INSERT INTO [TransactionComponentsDtls] ([Trntype],[TrnSubtype],[FieldCode],[Srlno],[EventId],[EventKeycode],[ComponentDesc],[OrderOfexec],[CompStatus])VALUES(9100,NULL,'StockNo',1,'LostFocus',0,'SR542200.ClsitemDtls',1,'1')
+-GO-
+INSERT INTO [TransactionComponentsDtls] ([Trntype],[TrnSubtype],[FieldCode],[Srlno],[EventId],[EventKeycode],[ComponentDesc],[OrderOfexec],[CompStatus])VALUES(9100,NULL,'StockNo',3,'KeyDown',113,'SR542200.ClsInvokeBrowse',1,'1')
+-GO-
+INSERT INTO [TransactionComponentsDtls] ([Trntype],[TrnSubtype],[FieldCode],[Srlno],[EventId],[EventKeycode],[ComponentDesc],[OrderOfexec],[CompStatus])VALUES(9200,NULL,'DiscAmt',1,'LostFocus',0,'SR542200.ClsDiscAmountProcess',1,'1')
+-GO-
+INSERT INTO [TransactionComponentsDtls] ([Trntype],[TrnSubtype],[FieldCode],[Srlno],[EventId],[EventKeycode],[ComponentDesc],[OrderOfexec],[CompStatus])VALUES(9200,NULL,'DiscCode',1,'ComboChange',0,'SR542200.ClsitemLvlPromoProcess',1,'1')
+-GO-
+INSERT INTO [TransactionComponentsDtls] ([Trntype],[TrnSubtype],[FieldCode],[Srlno],[EventId],[EventKeycode],[ComponentDesc],[OrderOfexec],[CompStatus])VALUES(9200,NULL,'DiscPerc',1,'LostFocus',0,'SR542200.ClsDiscPercProcess',1,'1')
+-GO-
+INSERT INTO [TransactionComponentsDtls] ([Trntype],[TrnSubtype],[FieldCode],[Srlno],[EventId],[EventKeycode],[ComponentDesc],[OrderOfexec],[CompStatus])VALUES(9200,NULL,'DiscQty',1,'LostFocus',0,'SR542200.ClsDicQtyProcess',1,'1')
+-GO-
+INSERT INTO [TransactionComponentsDtls] ([Trntype],[TrnSubtype],[FieldCode],[Srlno],[EventId],[EventKeycode],[ComponentDesc],[OrderOfexec],[CompStatus])VALUES(9200,NULL,'Qty',1,'LostFocus',0,'SR542200.ClsItemQtyValidate',1,'1')
+-GO-
+INSERT INTO [TransactionComponentsDtls] ([Trntype],[TrnSubtype],[FieldCode],[Srlno],[EventId],[EventKeycode],[ComponentDesc],[OrderOfexec],[CompStatus])VALUES(9200,NULL,'Qty',2,'LostFocus',0,'SR542200.ClsSearchItemLvlPromo',1,'1')
+-GO-
+INSERT INTO [TransactionComponentsDtls] ([Trntype],[TrnSubtype],[FieldCode],[Srlno],[EventId],[EventKeycode],[ComponentDesc],[OrderOfexec],[CompStatus])VALUES(9200,NULL,'Rate',1,'LostFocus',0,'SR542200.ClsitemRateValidation',1,'1')
+-GO-
+INSERT INTO [TransactionComponentsDtls] ([Trntype],[TrnSubtype],[FieldCode],[Srlno],[EventId],[EventKeycode],[ComponentDesc],[OrderOfexec],[CompStatus])VALUES(9200,NULL,'SalesStaff',1,'CellGotFocus',0,'SR542200.ClsSalespersonaldtls',1,'1')
+-GO-
+INSERT INTO [TransactionComponentsDtls] ([Trntype],[TrnSubtype],[FieldCode],[Srlno],[EventId],[EventKeycode],[ComponentDesc],[OrderOfexec],[CompStatus])VALUES(9200,NULL,'SalesStaff',1,'LostFocus',0,'SR542200.ClsValidateSalesPerson',1,'1')
+-GO-
+INSERT INTO [TransactionComponentsDtls] ([Trntype],[TrnSubtype],[FieldCode],[Srlno],[EventId],[EventKeycode],[ComponentDesc],[OrderOfexec],[CompStatus])VALUES(9200,NULL,'StockNo',1,'KeyDown',40,'SR542200.ClsInvokeBrowse',1,'1')
+-GO-
+INSERT INTO [TransactionComponentsDtls] ([Trntype],[TrnSubtype],[FieldCode],[Srlno],[EventId],[EventKeycode],[ComponentDesc],[OrderOfexec],[CompStatus])VALUES(9200,NULL,'StockNo',1,'LostFocus',0,'SR542200.ClsitemDtls',1,'1')
+-GO-
+INSERT INTO [TransactionComponentsDtls] ([Trntype],[TrnSubtype],[FieldCode],[Srlno],[EventId],[EventKeycode],[ComponentDesc],[OrderOfexec],[CompStatus])VALUES(9200,NULL,'StockNo',3,'KeyDown',113,'SR542200.ClsInvokeBrowse',1,'1')
+-GO-
+INSERT INTO [TransactionComponentsDtls] ([Trntype],[TrnSubtype],[FieldCode],[Srlno],[EventId],[EventKeycode],[ComponentDesc],[OrderOfexec],[CompStatus])VALUES(9300,NULL,'DiscPerc',1,'LostFocus',0,'SR542200.ClsDiscPercProcess',1,'1')
+-GO-
+INSERT INTO [TransactionComponentsDtls] ([Trntype],[TrnSubtype],[FieldCode],[Srlno],[EventId],[EventKeycode],[ComponentDesc],[OrderOfexec],[CompStatus])VALUES(9300,NULL,'DiscQty',1,'LostFocus',0,'SR542200.ClsDicQtyProcess',1,'1')
+-GO-
+INSERT INTO [TransactionComponentsDtls] ([Trntype],[TrnSubtype],[FieldCode],[Srlno],[EventId],[EventKeycode],[ComponentDesc],[OrderOfexec],[CompStatus])VALUES(9300,NULL,'Qty',1,'LostFocus',0,'SR542200.ClsItemQtyValidate',1,'1')
+-GO-
+INSERT INTO [TransactionComponentsDtls] ([Trntype],[TrnSubtype],[FieldCode],[Srlno],[EventId],[EventKeycode],[ComponentDesc],[OrderOfexec],[CompStatus])VALUES(9300,NULL,'Qty',2,'LostFocus',0,'SR542200.ClsSearchItemLvlPromo',1,'1')
+-GO-
+INSERT INTO [TransactionComponentsDtls] ([Trntype],[TrnSubtype],[FieldCode],[Srlno],[EventId],[EventKeycode],[ComponentDesc],[OrderOfexec],[CompStatus])VALUES(9300,NULL,'Rate',1,'LostFocus',0,'SR542200.ClsitemRateValidation',1,'1')
+-GO-
+INSERT INTO [TransactionComponentsDtls] ([Trntype],[TrnSubtype],[FieldCode],[Srlno],[EventId],[EventKeycode],[ComponentDesc],[OrderOfexec],[CompStatus])VALUES(9300,NULL,'SalesStaff',1,'CellGotFocus',0,'SR542200.ClsSalespersonaldtls',1,'1')
+-GO-
+INSERT INTO [TransactionComponentsDtls] ([Trntype],[TrnSubtype],[FieldCode],[Srlno],[EventId],[EventKeycode],[ComponentDesc],[OrderOfexec],[CompStatus])VALUES(9300,NULL,'SalesStaff',1,'LostFocus',0,'SR542200.ClsValidateSalesPerson',1,'1')
+-GO-
+INSERT INTO [TransactionComponentsDtls] ([Trntype],[TrnSubtype],[FieldCode],[Srlno],[EventId],[EventKeycode],[ComponentDesc],[OrderOfexec],[CompStatus])VALUES(9300,NULL,'StockNo',1,'KeyDown',40,'SR542200.ClsInvokeBrowse',1,'1')
+-GO-
+INSERT INTO [TransactionComponentsDtls] ([Trntype],[TrnSubtype],[FieldCode],[Srlno],[EventId],[EventKeycode],[ComponentDesc],[OrderOfexec],[CompStatus])VALUES(9300,NULL,'StockNo',1,'LostFocus',0,'SR542200.ClsitemDtls',1,'1')
+-GO-
+INSERT INTO [TransactionComponentsDtls] ([Trntype],[TrnSubtype],[FieldCode],[Srlno],[EventId],[EventKeycode],[ComponentDesc],[OrderOfexec],[CompStatus])VALUES(9300,NULL,'StockNo',3,'KeyDown',113,'SR542200.ClsInvokeBrowse',1,'1')
+-GO-
+INSERT INTO [TransactionComponentsDtls] ([Trntype],[TrnSubtype],[FieldCode],[Srlno],[EventId],[EventKeycode],[ComponentDesc],[OrderOfexec],[CompStatus])VALUES(9700,NULL,'DiscAmt',1,'LostFocus',0,'SR542200.ClsDiscAmountProcess',1,'1')
+-GO-
+INSERT INTO [TransactionComponentsDtls] ([Trntype],[TrnSubtype],[FieldCode],[Srlno],[EventId],[EventKeycode],[ComponentDesc],[OrderOfexec],[CompStatus])VALUES(9700,NULL,'DiscCode',1,'ComboChange',0,'SR542200.ClsitemLvlPromoProcess',1,'1')
+-GO-
+INSERT INTO [TransactionComponentsDtls] ([Trntype],[TrnSubtype],[FieldCode],[Srlno],[EventId],[EventKeycode],[ComponentDesc],[OrderOfexec],[CompStatus])VALUES(9700,NULL,'DiscPerc',1,'LostFocus',0,'SR542200.ClsDiscPercProcess',1,'1')
+-GO-
+INSERT INTO [TransactionComponentsDtls] ([Trntype],[TrnSubtype],[FieldCode],[Srlno],[EventId],[EventKeycode],[ComponentDesc],[OrderOfexec],[CompStatus])VALUES(9700,NULL,'DiscQty',1,'LostFocus',0,'SR542200.ClsDicQtyProcess',1,'1')
+-GO-
+INSERT INTO [TransactionComponentsDtls] ([Trntype],[TrnSubtype],[FieldCode],[Srlno],[EventId],[EventKeycode],[ComponentDesc],[OrderOfexec],[CompStatus])VALUES(9700,NULL,'Qty',1,'LostFocus',0,'SR542200.ClsItemQtyValidate',1,'1')
+-GO-
+INSERT INTO [TransactionComponentsDtls] ([Trntype],[TrnSubtype],[FieldCode],[Srlno],[EventId],[EventKeycode],[ComponentDesc],[OrderOfexec],[CompStatus])VALUES(9700,NULL,'Qty',2,'LostFocus',0,'SR542200.ClsSearchItemLvlPromo',1,'1')
+-GO-
+INSERT INTO [TransactionComponentsDtls] ([Trntype],[TrnSubtype],[FieldCode],[Srlno],[EventId],[EventKeycode],[ComponentDesc],[OrderOfexec],[CompStatus])VALUES(9700,NULL,'Rate',1,'LostFocus',0,'SR542200.ClsitemRateValidation',1,'1')
+-GO-
+INSERT INTO [TransactionComponentsDtls] ([Trntype],[TrnSubtype],[FieldCode],[Srlno],[EventId],[EventKeycode],[ComponentDesc],[OrderOfexec],[CompStatus])VALUES(9700,NULL,'SalesStaff',1,'CellGotFocus',0,'SR542200.ClsSalespersonaldtls',1,'1')
+-GO-
+INSERT INTO [TransactionComponentsDtls] ([Trntype],[TrnSubtype],[FieldCode],[Srlno],[EventId],[EventKeycode],[ComponentDesc],[OrderOfexec],[CompStatus])VALUES(9700,NULL,'SalesStaff',1,'LostFocus',0,'SR542200.ClsValidateSalesPerson',1,'1')
+-GO-
+INSERT INTO [TransactionComponentsDtls] ([Trntype],[TrnSubtype],[FieldCode],[Srlno],[EventId],[EventKeycode],[ComponentDesc],[OrderOfexec],[CompStatus])VALUES(9700,NULL,'StockNo',1,'KeyDown',40,'SR542200.ClsInvokeBrowse',1,'1')
+-GO-
+INSERT INTO [TransactionComponentsDtls] ([Trntype],[TrnSubtype],[FieldCode],[Srlno],[EventId],[EventKeycode],[ComponentDesc],[OrderOfexec],[CompStatus])VALUES(9700,NULL,'StockNo',1,'LostFocus',0,'SR542200.ClsitemDtls',1,'1')
+-GO-
+INSERT INTO [TransactionComponentsDtls] ([Trntype],[TrnSubtype],[FieldCode],[Srlno],[EventId],[EventKeycode],[ComponentDesc],[OrderOfexec],[CompStatus])VALUES(9700,NULL,'StockNo',3,'KeyDown',113,'SR542200.ClsInvokeBrowse',1,'1')
+-GO-
+INSERT INTO [TransactionComponentsDtls] ([Trntype],[TrnSubtype],[FieldCode],[Srlno],[EventId],[EventKeycode],[ComponentDesc],[OrderOfexec],[CompStatus])VALUES(9800,NULL,'DiscCode',1,'ComboChange',0,'SR542200.ClsitemLvlPromoProcess',1,'1')
+-GO-
+INSERT INTO [TransactionComponentsDtls] ([Trntype],[TrnSubtype],[FieldCode],[Srlno],[EventId],[EventKeycode],[ComponentDesc],[OrderOfexec],[CompStatus])VALUES(9800,NULL,'DiscPerc',1,'LostFocus',0,'SR542200.ClsDiscPercProcess',1,'1')
+-GO-
+INSERT INTO [TransactionComponentsDtls] ([Trntype],[TrnSubtype],[FieldCode],[Srlno],[EventId],[EventKeycode],[ComponentDesc],[OrderOfexec],[CompStatus])VALUES(9800,NULL,'DiscQty',1,'LostFocus',0,'SR542200.ClsDicQtyProcess',1,'1')
+-GO-
+INSERT INTO [TransactionComponentsDtls] ([Trntype],[TrnSubtype],[FieldCode],[Srlno],[EventId],[EventKeycode],[ComponentDesc],[OrderOfexec],[CompStatus])VALUES(9800,NULL,'Qty',1,'LostFocus',0,'SR542200.ClsItemQtyValidate',1,'1')
+-GO-
+INSERT INTO [TransactionComponentsDtls] ([Trntype],[TrnSubtype],[FieldCode],[Srlno],[EventId],[EventKeycode],[ComponentDesc],[OrderOfexec],[CompStatus])VALUES(9800,NULL,'Qty',2,'LostFocus',0,'SR542200.ClsSearchItemLvlPromo',1,'1')
+-GO-
+INSERT INTO [TransactionComponentsDtls] ([Trntype],[TrnSubtype],[FieldCode],[Srlno],[EventId],[EventKeycode],[ComponentDesc],[OrderOfexec],[CompStatus])VALUES(9800,NULL,'Rate',1,'LostFocus',0,'SR542200.ClsitemRateValidation',1,'1')
+-GO-
+INSERT INTO [TransactionComponentsDtls] ([Trntype],[TrnSubtype],[FieldCode],[Srlno],[EventId],[EventKeycode],[ComponentDesc],[OrderOfexec],[CompStatus])VALUES(9800,NULL,'SalesStaff',1,'CellGotFocus',0,'SR542200.ClsSalespersonaldtls',1,'1')
+-GO-
+INSERT INTO [TransactionComponentsDtls] ([Trntype],[TrnSubtype],[FieldCode],[Srlno],[EventId],[EventKeycode],[ComponentDesc],[OrderOfexec],[CompStatus])VALUES(9800,NULL,'SalesStaff',1,'LostFocus',0,'SR542200.ClsValidateSalesPerson',1,'1')
+-GO-
+INSERT INTO [TransactionComponentsDtls] ([Trntype],[TrnSubtype],[FieldCode],[Srlno],[EventId],[EventKeycode],[ComponentDesc],[OrderOfexec],[CompStatus])VALUES(9800,NULL,'StockNo',1,'KeyDown',40,'SR542200.ClsInvokeBrowse',1,'1')
+-GO-
+INSERT INTO [TransactionComponentsDtls] ([Trntype],[TrnSubtype],[FieldCode],[Srlno],[EventId],[EventKeycode],[ComponentDesc],[OrderOfexec],[CompStatus])VALUES(9800,NULL,'StockNo',1,'LostFocus',0,'SR542200.ClsitemDtls',1,'1')
+-GO-
+INSERT INTO [TransactionComponentsDtls] ([Trntype],[TrnSubtype],[FieldCode],[Srlno],[EventId],[EventKeycode],[ComponentDesc],[OrderOfexec],[CompStatus])VALUES(9800,NULL,'StockNo',3,'KeyDown',113,'SR542200.ClsInvokeBrowse',1,'1')
+-GO-
+INSERT INTO [TransactionComponentsDtls] ([Trntype],[TrnSubtype],[FieldCode],[Srlno],[EventId],[EventKeycode],[ComponentDesc],[OrderOfexec],[CompStatus])VALUES(9900,NULL,'DiscAmt',1,'LostFocus',0,'SR542200.ClsDiscAmountProcess',1,'1')
+-GO-
+INSERT INTO [TransactionComponentsDtls] ([Trntype],[TrnSubtype],[FieldCode],[Srlno],[EventId],[EventKeycode],[ComponentDesc],[OrderOfexec],[CompStatus])VALUES(9900,NULL,'DiscCode',1,'ComboChange',0,'SR542200.ClsitemLvlPromoProcess',1,'1')
+-GO-
+INSERT INTO [TransactionComponentsDtls] ([Trntype],[TrnSubtype],[FieldCode],[Srlno],[EventId],[EventKeycode],[ComponentDesc],[OrderOfexec],[CompStatus])VALUES(9900,NULL,'DiscPerc',1,'LostFocus',0,'SR542200.ClsDiscPercProcess',1,'1')
+-GO-
+INSERT INTO [TransactionComponentsDtls] ([Trntype],[TrnSubtype],[FieldCode],[Srlno],[EventId],[EventKeycode],[ComponentDesc],[OrderOfexec],[CompStatus])VALUES(9900,NULL,'DiscQty',1,'LostFocus',0,'SR542200.ClsDicQtyProcess',1,'1')
+-GO-
+INSERT INTO [TransactionComponentsDtls] ([Trntype],[TrnSubtype],[FieldCode],[Srlno],[EventId],[EventKeycode],[ComponentDesc],[OrderOfexec],[CompStatus])VALUES(9900,NULL,'Qty',1,'LostFocus',0,'SR542200.ClsItemQtyValidate',1,'1')
+-GO-
+INSERT INTO [TransactionComponentsDtls] ([Trntype],[TrnSubtype],[FieldCode],[Srlno],[EventId],[EventKeycode],[ComponentDesc],[OrderOfexec],[CompStatus])VALUES(9900,NULL,'Qty',2,'LostFocus',0,'SR542200.ClsSearchItemLvlPromo',1,'1')
+-GO-
+INSERT INTO [TransactionComponentsDtls] ([Trntype],[TrnSubtype],[FieldCode],[Srlno],[EventId],[EventKeycode],[ComponentDesc],[OrderOfexec],[CompStatus])VALUES(9900,NULL,'Rate',1,'LostFocus',0,'SR542200.ClsitemRateValidation',1,'1')
+-GO-
+INSERT INTO [TransactionComponentsDtls] ([Trntype],[TrnSubtype],[FieldCode],[Srlno],[EventId],[EventKeycode],[ComponentDesc],[OrderOfexec],[CompStatus])VALUES(9900,NULL,'SalesStaff',1,'CellGotFocus',0,'SR542200.ClsSalespersonaldtls',1,'1')
+-GO-
+INSERT INTO [TransactionComponentsDtls] ([Trntype],[TrnSubtype],[FieldCode],[Srlno],[EventId],[EventKeycode],[ComponentDesc],[OrderOfexec],[CompStatus])VALUES(9900,NULL,'SalesStaff',1,'LostFocus',0,'SR542200.ClsValidateSalesPerson',1,'1')
+-GO-
+INSERT INTO [TransactionComponentsDtls] ([Trntype],[TrnSubtype],[FieldCode],[Srlno],[EventId],[EventKeycode],[ComponentDesc],[OrderOfexec],[CompStatus])VALUES(9900,NULL,'StockNo',1,'KeyDown',40,'SR542200.ClsInvokeBrowse',1,'1')
+-GO-
+INSERT INTO [TransactionComponentsDtls] ([Trntype],[TrnSubtype],[FieldCode],[Srlno],[EventId],[EventKeycode],[ComponentDesc],[OrderOfexec],[CompStatus])VALUES(9900,NULL,'StockNo',1,'LostFocus',0,'SR542200.ClsitemDtls',1,'1')
+-GO-
+INSERT INTO [TransactionComponentsDtls] ([Trntype],[TrnSubtype],[FieldCode],[Srlno],[EventId],[EventKeycode],[ComponentDesc],[OrderOfexec],[CompStatus])VALUES(9900,NULL,'StockNo',3,'KeyDown',113,'SR542200.ClsInvokeBrowse',1,'1')
+-GO-
+ </s9qScript>
+</s9qsqlblk>
+
+
+
+<s9qsqlblk>
+  <s9qScriptid>S9Q_0192_1_0003</s9qScriptid> 
+  <s9qtitle> New Records for Accept displaydtls table</s9qtitle> 
+  <s9qpgmtype>I</s9qpgmtype>  
+  <s9qpgmtype>L</s9qpgmtype>  
+  <s9qversion>*</s9qversion> 
+  <s9qenvironment>P</s9qenvironment> 
+  <s9qRunMultiple>1</s9qRunMultiple> 
+  <s9qQryType>DML</s9qQryType> 
+  <s9qScript>
+INSERT INTO acceptdisplaydtls ([trntype],[Index],[AcptCap],[DispCap],[AcptVisible],[DispVisible],[AcptPos],[DispPos],[AcptDataType],[DispDataType],[AcptWidth],[DispWidth],[AcptAlign],[DispAlign],[AcptFontName],[DispFontName],[AcptFourColour],[DispFourColour],[AcptFontSize],[DispFontSize],[AcptRowHight],[DispRowHight],[AcptBackColour],[DispBackColour],[VAUid],[VActr],[VATermId],[VACompCode],[columnName])VALUES(1300,159,'Sup1','Sup1',0,0,159,159,2,2,0,8,1,1,'','','','',0,0,0,0,'','','',1,'','','Sup1')
+-GO-
+INSERT INTO acceptdisplaydtls ([trntype],[Index],[AcptCap],[DispCap],[AcptVisible],[DispVisible],[AcptPos],[DispPos],[AcptDataType],[DispDataType],[AcptWidth],[DispWidth],[AcptAlign],[DispAlign],[AcptFontName],[DispFontName],[AcptFourColour],[DispFourColour],[AcptFontSize],[DispFontSize],[AcptRowHight],[DispRowHight],[AcptBackColour],[DispBackColour],[VAUid],[VActr],[VATermId],[VACompCode],[columnName])VALUES(1300,160,'Sup2','Sup2',0,0,160,160,2,2,0,8,1,1,'','','','',0,0,0,0,'','','',1,'','','Sup2')
+-GO-
+INSERT INTO acceptdisplaydtls ([trntype],[Index],[AcptCap],[DispCap],[AcptVisible],[DispVisible],[AcptPos],[DispPos],[AcptDataType],[DispDataType],[AcptWidth],[DispWidth],[AcptAlign],[DispAlign],[AcptFontName],[DispFontName],[AcptFourColour],[DispFourColour],[AcptFontSize],[DispFontSize],[AcptRowHight],[DispRowHight],[AcptBackColour],[DispBackColour],[VAUid],[VActr],[VATermId],[VACompCode],[columnName])VALUES(1300,161,'AC6','AC6',0,0,161,161,2,2,0,8,1,1,'','','','',0,0,0,0,'','','',1,'','','AC6')
+-GO-
+INSERT INTO acceptdisplaydtls ([trntype],[Index],[AcptCap],[DispCap],[AcptVisible],[DispVisible],[AcptPos],[DispPos],[AcptDataType],[DispDataType],[AcptWidth],[DispWidth],[AcptAlign],[DispAlign],[AcptFontName],[DispFontName],[AcptFourColour],[DispFourColour],[AcptFontSize],[DispFontSize],[AcptRowHight],[DispRowHight],[AcptBackColour],[DispBackColour],[VAUid],[VActr],[VATermId],[VACompCode],[columnName])VALUES(1300,162,'AC7','AC7',0,0,162,162,2,2,0,8,1,1,'','','','',0,0,0,0,'','','',1,'','','AC7')
+-GO-
+INSERT INTO acceptdisplaydtls ([trntype],[Index],[AcptCap],[DispCap],[AcptVisible],[DispVisible],[AcptPos],[DispPos],[AcptDataType],[DispDataType],[AcptWidth],[DispWidth],[AcptAlign],[DispAlign],[AcptFontName],[DispFontName],[AcptFourColour],[DispFourColour],[AcptFontSize],[DispFontSize],[AcptRowHight],[DispRowHight],[AcptBackColour],[DispBackColour],[VAUid],[VActr],[VATermId],[VACompCode],[columnName])VALUES(1300,163,'AC8','AC8',0,0,163,163,2,2,0,8,1,1,'','','','',0,0,0,0,'','','',1,'','','AC8')
+-GO-
+INSERT INTO acceptdisplaydtls ([trntype],[Index],[AcptCap],[DispCap],[AcptVisible],[DispVisible],[AcptPos],[DispPos],[AcptDataType],[DispDataType],[AcptWidth],[DispWidth],[AcptAlign],[DispAlign],[AcptFontName],[DispFontName],[AcptFourColour],[DispFourColour],[AcptFontSize],[DispFontSize],[AcptRowHight],[DispRowHight],[AcptBackColour],[DispBackColour],[VAUid],[VActr],[VATermId],[VACompCode],[columnName])VALUES(1300,164,'AC9','AC9',0,0,164,164,2,2,0,8,1,1,'','','','',0,0,0,0,'','','',1,'','','AC9')
+-GO-
+INSERT INTO acceptdisplaydtls ([trntype],[Index],[AcptCap],[DispCap],[AcptVisible],[DispVisible],[AcptPos],[DispPos],[AcptDataType],[DispDataType],[AcptWidth],[DispWidth],[AcptAlign],[DispAlign],[AcptFontName],[DispFontName],[AcptFourColour],[DispFourColour],[AcptFontSize],[DispFontSize],[AcptRowHight],[DispRowHight],[AcptBackColour],[DispBackColour],[VAUid],[VActr],[VATermId],[VACompCode],[columnName])VALUES(1300,165,'AC10','AC10',0,0,165,165,2,2,0,8,1,1,'','','','',0,0,0,0,'','','',1,'','','AC10')
+-GO-
+INSERT INTO acceptdisplaydtls ([trntype],[Index],[AcptCap],[DispCap],[AcptVisible],[DispVisible],[AcptPos],[DispPos],[AcptDataType],[DispDataType],[AcptWidth],[DispWidth],[AcptAlign],[DispAlign],[AcptFontName],[DispFontName],[AcptFourColour],[DispFourColour],[AcptFontSize],[DispFontSize],[AcptRowHight],[DispRowHight],[AcptBackColour],[DispBackColour],[VAUid],[VActr],[VATermId],[VACompCode],[columnName])VALUES(1300,166,'AC11','AC11',0,0,166,166,2,2,0,8,1,1,'','','','',0,0,0,0,'','','',1,'','','AC11')
+-GO-
+INSERT INTO acceptdisplaydtls ([trntype],[Index],[AcptCap],[DispCap],[AcptVisible],[DispVisible],[AcptPos],[DispPos],[AcptDataType],[DispDataType],[AcptWidth],[DispWidth],[AcptAlign],[DispAlign],[AcptFontName],[DispFontName],[AcptFourColour],[DispFourColour],[AcptFontSize],[DispFontSize],[AcptRowHight],[DispRowHight],[AcptBackColour],[DispBackColour],[VAUid],[VActr],[VATermId],[VACompCode],[columnName])VALUES(1300,167,'AC12','AC12',0,0,167,167,2,2,0,8,1,1,'','','','',0,0,0,0,'','','',1,'','','AC12')
+-GO-
+INSERT INTO acceptdisplaydtls ([trntype],[Index],[AcptCap],[DispCap],[AcptVisible],[DispVisible],[AcptPos],[DispPos],[AcptDataType],[DispDataType],[AcptWidth],[DispWidth],[AcptAlign],[DispAlign],[AcptFontName],[DispFontName],[AcptFourColour],[DispFourColour],[AcptFontSize],[DispFontSize],[AcptRowHight],[DispRowHight],[AcptBackColour],[DispBackColour],[VAUid],[VActr],[VATermId],[VACompCode],[columnName])VALUES(1300,168,'AC13','AC13',0,0,168,168,2,2,0,8,1,1,'','','','',0,0,0,0,'','','',1,'','','AC13')
+-GO-
+INSERT INTO acceptdisplaydtls ([trntype],[Index],[AcptCap],[DispCap],[AcptVisible],[DispVisible],[AcptPos],[DispPos],[AcptDataType],[DispDataType],[AcptWidth],[DispWidth],[AcptAlign],[DispAlign],[AcptFontName],[DispFontName],[AcptFourColour],[DispFourColour],[AcptFontSize],[DispFontSize],[AcptRowHight],[DispRowHight],[AcptBackColour],[DispBackColour],[VAUid],[VActr],[VATermId],[VACompCode],[columnName])VALUES(1300,169,'AC14','AC14',0,0,169,169,2,2,0,8,1,1,'','','','',0,0,0,0,'','','',1,'','','AC14')
+-GO-
+INSERT INTO acceptdisplaydtls ([trntype],[Index],[AcptCap],[DispCap],[AcptVisible],[DispVisible],[AcptPos],[DispPos],[AcptDataType],[DispDataType],[AcptWidth],[DispWidth],[AcptAlign],[DispAlign],[AcptFontName],[DispFontName],[AcptFourColour],[DispFourColour],[AcptFontSize],[DispFontSize],[AcptRowHight],[DispRowHight],[AcptBackColour],[DispBackColour],[VAUid],[VActr],[VATermId],[VACompCode],[columnName])VALUES(1300,170,'AC15','AC15',0,0,170,170,2,2,0,8,1,1,'','','','',0,0,0,0,'','','',1,'','','AC15')
+-GO-
+INSERT INTO acceptdisplaydtls ([trntype],[Index],[AcptCap],[DispCap],[AcptVisible],[DispVisible],[AcptPos],[DispPos],[AcptDataType],[DispDataType],[AcptWidth],[DispWidth],[AcptAlign],[DispAlign],[AcptFontName],[DispFontName],[AcptFourColour],[DispFourColour],[AcptFontSize],[DispFontSize],[AcptRowHight],[DispRowHight],[AcptBackColour],[DispBackColour],[VAUid],[VActr],[VATermId],[VACompCode],[columnName])VALUES(1300,171,'AC16','AC16',0,0,171,171,2,2,0,8,1,1,'','','','',0,0,0,0,'','','',1,'','','AC16')
+-GO-
+INSERT INTO acceptdisplaydtls ([trntype],[Index],[AcptCap],[DispCap],[AcptVisible],[DispVisible],[AcptPos],[DispPos],[AcptDataType],[DispDataType],[AcptWidth],[DispWidth],[AcptAlign],[DispAlign],[AcptFontName],[DispFontName],[AcptFourColour],[DispFourColour],[AcptFontSize],[DispFontSize],[AcptRowHight],[DispRowHight],[AcptBackColour],[DispBackColour],[VAUid],[VActr],[VATermId],[VACompCode],[columnName])VALUES(1300,172,'AC17','AC17',0,0,172,172,2,2,0,8,1,1,'','','','',0,0,0,0,'','','',1,'','','AC17')
+-GO-
+INSERT INTO acceptdisplaydtls ([trntype],[Index],[AcptCap],[DispCap],[AcptVisible],[DispVisible],[AcptPos],[DispPos],[AcptDataType],[DispDataType],[AcptWidth],[DispWidth],[AcptAlign],[DispAlign],[AcptFontName],[DispFontName],[AcptFourColour],[DispFourColour],[AcptFontSize],[DispFontSize],[AcptRowHight],[DispRowHight],[AcptBackColour],[DispBackColour],[VAUid],[VActr],[VATermId],[VACompCode],[columnName])VALUES(1300,173,'AC18','AC18',0,0,173,173,2,2,0,8,1,1,'','','','',0,0,0,0,'','','',1,'','','AC18')
+-GO-
+INSERT INTO acceptdisplaydtls ([trntype],[Index],[AcptCap],[DispCap],[AcptVisible],[DispVisible],[AcptPos],[DispPos],[AcptDataType],[DispDataType],[AcptWidth],[DispWidth],[AcptAlign],[DispAlign],[AcptFontName],[DispFontName],[AcptFourColour],[DispFourColour],[AcptFontSize],[DispFontSize],[AcptRowHight],[DispRowHight],[AcptBackColour],[DispBackColour],[VAUid],[VActr],[VATermId],[VACompCode],[columnName])VALUES(1300,174,'AC19','AC19',0,0,174,174,2,2,0,8,1,1,'','','','',0,0,0,0,'','','',1,'','','AC19')
+-GO-
+INSERT INTO acceptdisplaydtls ([trntype],[Index],[AcptCap],[DispCap],[AcptVisible],[DispVisible],[AcptPos],[DispPos],[AcptDataType],[DispDataType],[AcptWidth],[DispWidth],[AcptAlign],[DispAlign],[AcptFontName],[DispFontName],[AcptFourColour],[DispFourColour],[AcptFontSize],[DispFontSize],[AcptRowHight],[DispRowHight],[AcptBackColour],[DispBackColour],[VAUid],[VActr],[VATermId],[VACompCode],[columnName])VALUES(1300,175,'AC20','AC20',0,0,175,175,2,2,0,8,1,1,'','','','',0,0,0,0,'','','',1,'','','AC20')
+-GO-
+INSERT INTO acceptdisplaydtls ([trntype],[Index],[AcptCap],[DispCap],[AcptVisible],[DispVisible],[AcptPos],[DispPos],[AcptDataType],[DispDataType],[AcptWidth],[DispWidth],[AcptAlign],[DispAlign],[AcptFontName],[DispFontName],[AcptFourColour],[DispFourColour],[AcptFontSize],[DispFontSize],[AcptRowHight],[DispRowHight],[AcptBackColour],[DispBackColour],[VAUid],[VActr],[VATermId],[VACompCode],[columnName])VALUES(1300,176,'AC21','AC21',0,0,176,176,2,2,0,8,1,1,'','','','',0,0,0,0,'','','',1,'','','AC21')
+-GO-
+INSERT INTO acceptdisplaydtls ([trntype],[Index],[AcptCap],[DispCap],[AcptVisible],[DispVisible],[AcptPos],[DispPos],[AcptDataType],[DispDataType],[AcptWidth],[DispWidth],[AcptAlign],[DispAlign],[AcptFontName],[DispFontName],[AcptFourColour],[DispFourColour],[AcptFontSize],[DispFontSize],[AcptRowHight],[DispRowHight],[AcptBackColour],[DispBackColour],[VAUid],[VActr],[VATermId],[VACompCode],[columnName])VALUES(1300,177,'AC22','AC22',0,0,177,177,2,2,0,8,1,1,'','','','',0,0,0,0,'','','',1,'','','AC22')
+-GO-
+INSERT INTO acceptdisplaydtls ([trntype],[Index],[AcptCap],[DispCap],[AcptVisible],[DispVisible],[AcptPos],[DispPos],[AcptDataType],[DispDataType],[AcptWidth],[DispWidth],[AcptAlign],[DispAlign],[AcptFontName],[DispFontName],[AcptFourColour],[DispFourColour],[AcptFontSize],[DispFontSize],[AcptRowHight],[DispRowHight],[AcptBackColour],[DispBackColour],[VAUid],[VActr],[VATermId],[VACompCode],[columnName])VALUES(1300,178,'AC23','AC23',0,0,178,178,2,2,0,8,1,1,'','','','',0,0,0,0,'','','',1,'','','AC23')
+-GO-
+INSERT INTO acceptdisplaydtls ([trntype],[Index],[AcptCap],[DispCap],[AcptVisible],[DispVisible],[AcptPos],[DispPos],[AcptDataType],[DispDataType],[AcptWidth],[DispWidth],[AcptAlign],[DispAlign],[AcptFontName],[DispFontName],[AcptFourColour],[DispFourColour],[AcptFontSize],[DispFontSize],[AcptRowHight],[DispRowHight],[AcptBackColour],[DispBackColour],[VAUid],[VActr],[VATermId],[VACompCode],[columnName])VALUES(1300,179,'AC24','AC24',0,0,179,179,2,2,0,8,1,1,'','','','',0,0,0,0,'','','',1,'','','AC24')
+-GO-
+INSERT INTO acceptdisplaydtls ([trntype],[Index],[AcptCap],[DispCap],[AcptVisible],[DispVisible],[AcptPos],[DispPos],[AcptDataType],[DispDataType],[AcptWidth],[DispWidth],[AcptAlign],[DispAlign],[AcptFontName],[DispFontName],[AcptFourColour],[DispFourColour],[AcptFontSize],[DispFontSize],[AcptRowHight],[DispRowHight],[AcptBackColour],[DispBackColour],[VAUid],[VActr],[VATermId],[VACompCode],[columnName])VALUES(1300,180,'AC25','AC25',0,0,180,180,2,2,0,8,1,1,'','','','',0,0,0,0,'','','',1,'','','AC25')
+-GO-
+INSERT INTO acceptdisplaydtls ([trntype],[Index],[AcptCap],[DispCap],[AcptVisible],[DispVisible],[AcptPos],[DispPos],[AcptDataType],[DispDataType],[AcptWidth],[DispWidth],[AcptAlign],[DispAlign],[AcptFontName],[DispFontName],[AcptFourColour],[DispFourColour],[AcptFontSize],[DispFontSize],[AcptRowHight],[DispRowHight],[AcptBackColour],[DispBackColour],[VAUid],[VActr],[VATermId],[VACompCode],[columnName])VALUES(1300,181,'AC26','AC26',0,0,181,181,2,2,0,8,1,1,'','','','',0,0,0,0,'','','',1,'','','AC26')
+-GO-
+INSERT INTO acceptdisplaydtls ([trntype],[Index],[AcptCap],[DispCap],[AcptVisible],[DispVisible],[AcptPos],[DispPos],[AcptDataType],[DispDataType],[AcptWidth],[DispWidth],[AcptAlign],[DispAlign],[AcptFontName],[DispFontName],[AcptFourColour],[DispFourColour],[AcptFontSize],[DispFontSize],[AcptRowHight],[DispRowHight],[AcptBackColour],[DispBackColour],[VAUid],[VActr],[VATermId],[VACompCode],[columnName])VALUES(1300,182,'AC27','AC27',0,0,182,182,2,2,0,8,1,1,'','','','',0,0,0,0,'','','',1,'','','AC27')
+-GO-
+INSERT INTO acceptdisplaydtls ([trntype],[Index],[AcptCap],[DispCap],[AcptVisible],[DispVisible],[AcptPos],[DispPos],[AcptDataType],[DispDataType],[AcptWidth],[DispWidth],[AcptAlign],[DispAlign],[AcptFontName],[DispFontName],[AcptFourColour],[DispFourColour],[AcptFontSize],[DispFontSize],[AcptRowHight],[DispRowHight],[AcptBackColour],[DispBackColour],[VAUid],[VActr],[VATermId],[VACompCode],[columnName])VALUES(1300,183,'AC28','AC28',0,0,183,183,2,2,0,8,1,1,'','','','',0,0,0,0,'','','',1,'','','AC28')
+-GO-
+INSERT INTO acceptdisplaydtls ([trntype],[Index],[AcptCap],[DispCap],[AcptVisible],[DispVisible],[AcptPos],[DispPos],[AcptDataType],[DispDataType],[AcptWidth],[DispWidth],[AcptAlign],[DispAlign],[AcptFontName],[DispFontName],[AcptFourColour],[DispFourColour],[AcptFontSize],[DispFontSize],[AcptRowHight],[DispRowHight],[AcptBackColour],[DispBackColour],[VAUid],[VActr],[VATermId],[VACompCode],[columnName])VALUES(1300,184,'AC29','AC29',0,0,184,184,2,2,0,8,1,1,'','','','',0,0,0,0,'','','',1,'','','AC29')
+-GO-
+INSERT INTO acceptdisplaydtls ([trntype],[Index],[AcptCap],[DispCap],[AcptVisible],[DispVisible],[AcptPos],[DispPos],[AcptDataType],[DispDataType],[AcptWidth],[DispWidth],[AcptAlign],[DispAlign],[AcptFontName],[DispFontName],[AcptFourColour],[DispFourColour],[AcptFontSize],[DispFontSize],[AcptRowHight],[DispRowHight],[AcptBackColour],[DispBackColour],[VAUid],[VActr],[VATermId],[VACompCode],[columnName])VALUES(1300,185,'AC30','AC30',0,0,185,185,2,2,0,8,1,1,'','','','',0,0,0,0,'','','',1,'','','AC30')
+-GO-
+INSERT INTO acceptdisplaydtls ([trntype],[Index],[AcptCap],[DispCap],[AcptVisible],[DispVisible],[AcptPos],[DispPos],[AcptDataType],[DispDataType],[AcptWidth],[DispWidth],[AcptAlign],[DispAlign],[AcptFontName],[DispFontName],[AcptFourColour],[DispFourColour],[AcptFontSize],[DispFontSize],[AcptRowHight],[DispRowHight],[AcptBackColour],[DispBackColour],[VAUid],[VActr],[VATermId],[VACompCode],[columnName])VALUES(1300,186,'AC31','AC31',0,0,186,186,2,2,0,8,1,1,'','','','',0,0,0,0,'','','',1,'','','AC31')
+-GO-
+INSERT INTO acceptdisplaydtls ([trntype],[Index],[AcptCap],[DispCap],[AcptVisible],[DispVisible],[AcptPos],[DispPos],[AcptDataType],[DispDataType],[AcptWidth],[DispWidth],[AcptAlign],[DispAlign],[AcptFontName],[DispFontName],[AcptFourColour],[DispFourColour],[AcptFontSize],[DispFontSize],[AcptRowHight],[DispRowHight],[AcptBackColour],[DispBackColour],[VAUid],[VActr],[VATermId],[VACompCode],[columnName])VALUES(1300,187,'AC32','AC32',0,0,187,187,2,2,0,8,1,1,'','','','',0,0,0,0,'','','',1,'','','AC32')
+-GO-
+INSERT INTO Acceptdisplaydtls ([trntype],[Index],[AcptCap],[DispCap],[AcptVisible],[DispVisible],[AcptPos],[DispPos],[AcptDataType],[DispDataType],[AcptWidth],[DispWidth],[AcptAlign],[DispAlign],[AcptFontName],[DispFontName],[AcptFourColour],[DispFourColour],[AcptFontSize],[DispFontSize],[AcptRowHight],[DispRowHight],[AcptBackColour],[DispBackColour],[VAUid],[VActr],[VATermId],[VACompCode],[columnName])VALUES(9200,148,'Sup1','Sup1',0,0,148,148,2,2,0,8,1,1,'','','','',0,0,0,0,'','','',1,'','','Sup1')
+-GO-
+INSERT INTO Acceptdisplaydtls ([trntype],[Index],[AcptCap],[DispCap],[AcptVisible],[DispVisible],[AcptPos],[DispPos],[AcptDataType],[DispDataType],[AcptWidth],[DispWidth],[AcptAlign],[DispAlign],[AcptFontName],[DispFontName],[AcptFourColour],[DispFourColour],[AcptFontSize],[DispFontSize],[AcptRowHight],[DispRowHight],[AcptBackColour],[DispBackColour],[VAUid],[VActr],[VATermId],[VACompCode],[columnName])VALUES(9200,149,'Sup2','Sup2',0,0,149,149,2,2,0,8,1,1,'','','','',0,0,0,0,'','','',1,'','','Sup2')
+-GO-
+INSERT INTO Acceptdisplaydtls ([trntype],[Index],[AcptCap],[DispCap],[AcptVisible],[DispVisible],[AcptPos],[DispPos],[AcptDataType],[DispDataType],[AcptWidth],[DispWidth],[AcptAlign],[DispAlign],[AcptFontName],[DispFontName],[AcptFourColour],[DispFourColour],[AcptFontSize],[DispFontSize],[AcptRowHight],[DispRowHight],[AcptBackColour],[DispBackColour],[VAUid],[VActr],[VATermId],[VACompCode],[columnName])VALUES(9200,150,'AC6','AC6',0,0,150,150,2,2,0,8,1,1,'','','','',0,0,0,0,'','','',1,'','','AC6')
+-GO-
+INSERT INTO Acceptdisplaydtls ([trntype],[Index],[AcptCap],[DispCap],[AcptVisible],[DispVisible],[AcptPos],[DispPos],[AcptDataType],[DispDataType],[AcptWidth],[DispWidth],[AcptAlign],[DispAlign],[AcptFontName],[DispFontName],[AcptFourColour],[DispFourColour],[AcptFontSize],[DispFontSize],[AcptRowHight],[DispRowHight],[AcptBackColour],[DispBackColour],[VAUid],[VActr],[VATermId],[VACompCode],[columnName])VALUES(9200,151,'AC7','AC7',0,0,151,151,2,2,0,8,1,1,'','','','',0,0,0,0,'','','',1,'','','AC7')
+-GO-
+INSERT INTO Acceptdisplaydtls ([trntype],[Index],[AcptCap],[DispCap],[AcptVisible],[DispVisible],[AcptPos],[DispPos],[AcptDataType],[DispDataType],[AcptWidth],[DispWidth],[AcptAlign],[DispAlign],[AcptFontName],[DispFontName],[AcptFourColour],[DispFourColour],[AcptFontSize],[DispFontSize],[AcptRowHight],[DispRowHight],[AcptBackColour],[DispBackColour],[VAUid],[VActr],[VATermId],[VACompCode],[columnName])VALUES(9200,152,'AC8','AC8',0,0,152,152,2,2,0,8,1,1,'','','','',0,0,0,0,'','','',1,'','','AC8')
+-GO-
+INSERT INTO Acceptdisplaydtls ([trntype],[Index],[AcptCap],[DispCap],[AcptVisible],[DispVisible],[AcptPos],[DispPos],[AcptDataType],[DispDataType],[AcptWidth],[DispWidth],[AcptAlign],[DispAlign],[AcptFontName],[DispFontName],[AcptFourColour],[DispFourColour],[AcptFontSize],[DispFontSize],[AcptRowHight],[DispRowHight],[AcptBackColour],[DispBackColour],[VAUid],[VActr],[VATermId],[VACompCode],[columnName])VALUES(9200,153,'AC9','AC9',0,0,153,153,2,2,0,8,1,1,'','','','',0,0,0,0,'','','',1,'','','AC9')
+-GO-
+INSERT INTO Acceptdisplaydtls ([trntype],[Index],[AcptCap],[DispCap],[AcptVisible],[DispVisible],[AcptPos],[DispPos],[AcptDataType],[DispDataType],[AcptWidth],[DispWidth],[AcptAlign],[DispAlign],[AcptFontName],[DispFontName],[AcptFourColour],[DispFourColour],[AcptFontSize],[DispFontSize],[AcptRowHight],[DispRowHight],[AcptBackColour],[DispBackColour],[VAUid],[VActr],[VATermId],[VACompCode],[columnName])VALUES(9200,154,'AC10','AC10',0,0,154,154,2,2,0,8,1,1,'','','','',0,0,0,0,'','','',1,'','','AC10')
+-GO-
+INSERT INTO Acceptdisplaydtls ([trntype],[Index],[AcptCap],[DispCap],[AcptVisible],[DispVisible],[AcptPos],[DispPos],[AcptDataType],[DispDataType],[AcptWidth],[DispWidth],[AcptAlign],[DispAlign],[AcptFontName],[DispFontName],[AcptFourColour],[DispFourColour],[AcptFontSize],[DispFontSize],[AcptRowHight],[DispRowHight],[AcptBackColour],[DispBackColour],[VAUid],[VActr],[VATermId],[VACompCode],[columnName])VALUES(9200,155,'AC11','AC11',0,0,155,155,2,2,0,8,1,1,'','','','',0,0,0,0,'','','',1,'','','AC11')
+-GO-
+INSERT INTO Acceptdisplaydtls ([trntype],[Index],[AcptCap],[DispCap],[AcptVisible],[DispVisible],[AcptPos],[DispPos],[AcptDataType],[DispDataType],[AcptWidth],[DispWidth],[AcptAlign],[DispAlign],[AcptFontName],[DispFontName],[AcptFourColour],[DispFourColour],[AcptFontSize],[DispFontSize],[AcptRowHight],[DispRowHight],[AcptBackColour],[DispBackColour],[VAUid],[VActr],[VATermId],[VACompCode],[columnName])VALUES(9200,156,'AC12','AC12',0,0,156,156,2,2,0,8,1,1,'','','','',0,0,0,0,'','','',1,'','','AC12')
+-GO-
+INSERT INTO Acceptdisplaydtls ([trntype],[Index],[AcptCap],[DispCap],[AcptVisible],[DispVisible],[AcptPos],[DispPos],[AcptDataType],[DispDataType],[AcptWidth],[DispWidth],[AcptAlign],[DispAlign],[AcptFontName],[DispFontName],[AcptFourColour],[DispFourColour],[AcptFontSize],[DispFontSize],[AcptRowHight],[DispRowHight],[AcptBackColour],[DispBackColour],[VAUid],[VActr],[VATermId],[VACompCode],[columnName])VALUES(9200,157,'AC13','AC13',0,0,157,157,2,2,0,8,1,1,'','','','',0,0,0,0,'','','',1,'','','AC13')
+-GO-
+INSERT INTO Acceptdisplaydtls ([trntype],[Index],[AcptCap],[DispCap],[AcptVisible],[DispVisible],[AcptPos],[DispPos],[AcptDataType],[DispDataType],[AcptWidth],[DispWidth],[AcptAlign],[DispAlign],[AcptFontName],[DispFontName],[AcptFourColour],[DispFourColour],[AcptFontSize],[DispFontSize],[AcptRowHight],[DispRowHight],[AcptBackColour],[DispBackColour],[VAUid],[VActr],[VATermId],[VACompCode],[columnName])VALUES(9200,158,'AC14','AC14',0,0,158,158,2,2,0,8,1,1,'','','','',0,0,0,0,'','','',1,'','','AC14')
+-GO-
+INSERT INTO Acceptdisplaydtls ([trntype],[Index],[AcptCap],[DispCap],[AcptVisible],[DispVisible],[AcptPos],[DispPos],[AcptDataType],[DispDataType],[AcptWidth],[DispWidth],[AcptAlign],[DispAlign],[AcptFontName],[DispFontName],[AcptFourColour],[DispFourColour],[AcptFontSize],[DispFontSize],[AcptRowHight],[DispRowHight],[AcptBackColour],[DispBackColour],[VAUid],[VActr],[VATermId],[VACompCode],[columnName])VALUES(9200,159,'AC15','AC15',0,0,159,159,2,2,0,8,1,1,'','','','',0,0,0,0,'','','',1,'','','AC15')
+-GO-
+INSERT INTO Acceptdisplaydtls ([trntype],[Index],[AcptCap],[DispCap],[AcptVisible],[DispVisible],[AcptPos],[DispPos],[AcptDataType],[DispDataType],[AcptWidth],[DispWidth],[AcptAlign],[DispAlign],[AcptFontName],[DispFontName],[AcptFourColour],[DispFourColour],[AcptFontSize],[DispFontSize],[AcptRowHight],[DispRowHight],[AcptBackColour],[DispBackColour],[VAUid],[VActr],[VATermId],[VACompCode],[columnName])VALUES(9200,160,'AC16','AC16',0,0,160,160,2,2,0,8,1,1,'','','','',0,0,0,0,'','','',1,'','','AC16')
+-GO-
+INSERT INTO Acceptdisplaydtls ([trntype],[Index],[AcptCap],[DispCap],[AcptVisible],[DispVisible],[AcptPos],[DispPos],[AcptDataType],[DispDataType],[AcptWidth],[DispWidth],[AcptAlign],[DispAlign],[AcptFontName],[DispFontName],[AcptFourColour],[DispFourColour],[AcptFontSize],[DispFontSize],[AcptRowHight],[DispRowHight],[AcptBackColour],[DispBackColour],[VAUid],[VActr],[VATermId],[VACompCode],[columnName])VALUES(9200,161,'AC17','AC17',0,0,161,161,2,2,0,8,1,1,'','','','',0,0,0,0,'','','',1,'','','AC17')
+-GO-
+INSERT INTO Acceptdisplaydtls ([trntype],[Index],[AcptCap],[DispCap],[AcptVisible],[DispVisible],[AcptPos],[DispPos],[AcptDataType],[DispDataType],[AcptWidth],[DispWidth],[AcptAlign],[DispAlign],[AcptFontName],[DispFontName],[AcptFourColour],[DispFourColour],[AcptFontSize],[DispFontSize],[AcptRowHight],[DispRowHight],[AcptBackColour],[DispBackColour],[VAUid],[VActr],[VATermId],[VACompCode],[columnName])VALUES(9200,162,'AC18','AC18',0,0,162,162,2,2,0,8,1,1,'','','','',0,0,0,0,'','','',1,'','','AC18')
+-GO-
+INSERT INTO Acceptdisplaydtls ([trntype],[Index],[AcptCap],[DispCap],[AcptVisible],[DispVisible],[AcptPos],[DispPos],[AcptDataType],[DispDataType],[AcptWidth],[DispWidth],[AcptAlign],[DispAlign],[AcptFontName],[DispFontName],[AcptFourColour],[DispFourColour],[AcptFontSize],[DispFontSize],[AcptRowHight],[DispRowHight],[AcptBackColour],[DispBackColour],[VAUid],[VActr],[VATermId],[VACompCode],[columnName])VALUES(9200,163,'AC19','AC19',0,0,163,163,2,2,0,8,1,1,'','','','',0,0,0,0,'','','',1,'','','AC19')
+-GO-
+INSERT INTO Acceptdisplaydtls ([trntype],[Index],[AcptCap],[DispCap],[AcptVisible],[DispVisible],[AcptPos],[DispPos],[AcptDataType],[DispDataType],[AcptWidth],[DispWidth],[AcptAlign],[DispAlign],[AcptFontName],[DispFontName],[AcptFourColour],[DispFourColour],[AcptFontSize],[DispFontSize],[AcptRowHight],[DispRowHight],[AcptBackColour],[DispBackColour],[VAUid],[VActr],[VATermId],[VACompCode],[columnName])VALUES(9200,164,'AC20','AC20',0,0,164,164,2,2,0,8,1,1,'','','','',0,0,0,0,'','','',1,'','','AC20')
+-GO-
+INSERT INTO Acceptdisplaydtls ([trntype],[Index],[AcptCap],[DispCap],[AcptVisible],[DispVisible],[AcptPos],[DispPos],[AcptDataType],[DispDataType],[AcptWidth],[DispWidth],[AcptAlign],[DispAlign],[AcptFontName],[DispFontName],[AcptFourColour],[DispFourColour],[AcptFontSize],[DispFontSize],[AcptRowHight],[DispRowHight],[AcptBackColour],[DispBackColour],[VAUid],[VActr],[VATermId],[VACompCode],[columnName])VALUES(9200,165,'AC21','AC21',0,0,165,165,2,2,0,8,1,1,'','','','',0,0,0,0,'','','',1,'','','AC21')
+-GO-
+INSERT INTO Acceptdisplaydtls ([trntype],[Index],[AcptCap],[DispCap],[AcptVisible],[DispVisible],[AcptPos],[DispPos],[AcptDataType],[DispDataType],[AcptWidth],[DispWidth],[AcptAlign],[DispAlign],[AcptFontName],[DispFontName],[AcptFourColour],[DispFourColour],[AcptFontSize],[DispFontSize],[AcptRowHight],[DispRowHight],[AcptBackColour],[DispBackColour],[VAUid],[VActr],[VATermId],[VACompCode],[columnName])VALUES(9200,166,'AC22','AC22',0,0,166,166,2,2,0,8,1,1,'','','','',0,0,0,0,'','','',1,'','','AC22')
+-GO-
+INSERT INTO Acceptdisplaydtls ([trntype],[Index],[AcptCap],[DispCap],[AcptVisible],[DispVisible],[AcptPos],[DispPos],[AcptDataType],[DispDataType],[AcptWidth],[DispWidth],[AcptAlign],[DispAlign],[AcptFontName],[DispFontName],[AcptFourColour],[DispFourColour],[AcptFontSize],[DispFontSize],[AcptRowHight],[DispRowHight],[AcptBackColour],[DispBackColour],[VAUid],[VActr],[VATermId],[VACompCode],[columnName])VALUES(9200,167,'AC23','AC23',0,0,167,167,2,2,0,8,1,1,'','','','',0,0,0,0,'','','',1,'','','AC23')
+-GO-
+INSERT INTO Acceptdisplaydtls ([trntype],[Index],[AcptCap],[DispCap],[AcptVisible],[DispVisible],[AcptPos],[DispPos],[AcptDataType],[DispDataType],[AcptWidth],[DispWidth],[AcptAlign],[DispAlign],[AcptFontName],[DispFontName],[AcptFourColour],[DispFourColour],[AcptFontSize],[DispFontSize],[AcptRowHight],[DispRowHight],[AcptBackColour],[DispBackColour],[VAUid],[VActr],[VATermId],[VACompCode],[columnName])VALUES(9200,168,'AC24','AC24',0,0,168,168,2,2,0,8,1,1,'','','','',0,0,0,0,'','','',1,'','','AC24')
+-GO-
+INSERT INTO Acceptdisplaydtls ([trntype],[Index],[AcptCap],[DispCap],[AcptVisible],[DispVisible],[AcptPos],[DispPos],[AcptDataType],[DispDataType],[AcptWidth],[DispWidth],[AcptAlign],[DispAlign],[AcptFontName],[DispFontName],[AcptFourColour],[DispFourColour],[AcptFontSize],[DispFontSize],[AcptRowHight],[DispRowHight],[AcptBackColour],[DispBackColour],[VAUid],[VActr],[VATermId],[VACompCode],[columnName])VALUES(9200,169,'AC25','AC25',0,0,169,169,2,2,0,8,1,1,'','','','',0,0,0,0,'','','',1,'','','AC25')
+-GO-
+INSERT INTO Acceptdisplaydtls ([trntype],[Index],[AcptCap],[DispCap],[AcptVisible],[DispVisible],[AcptPos],[DispPos],[AcptDataType],[DispDataType],[AcptWidth],[DispWidth],[AcptAlign],[DispAlign],[AcptFontName],[DispFontName],[AcptFourColour],[DispFourColour],[AcptFontSize],[DispFontSize],[AcptRowHight],[DispRowHight],[AcptBackColour],[DispBackColour],[VAUid],[VActr],[VATermId],[VACompCode],[columnName])VALUES(9200,170,'AC26','AC26',0,0,170,170,2,2,0,8,1,1,'','','','',0,0,0,0,'','','',1,'','','AC26')
+-GO-
+INSERT INTO Acceptdisplaydtls ([trntype],[Index],[AcptCap],[DispCap],[AcptVisible],[DispVisible],[AcptPos],[DispPos],[AcptDataType],[DispDataType],[AcptWidth],[DispWidth],[AcptAlign],[DispAlign],[AcptFontName],[DispFontName],[AcptFourColour],[DispFourColour],[AcptFontSize],[DispFontSize],[AcptRowHight],[DispRowHight],[AcptBackColour],[DispBackColour],[VAUid],[VActr],[VATermId],[VACompCode],[columnName])VALUES(9200,171,'AC27','AC27',0,0,171,171,2,2,0,8,1,1,'','','','',0,0,0,0,'','','',1,'','','AC27')
+-GO-
+INSERT INTO Acceptdisplaydtls ([trntype],[Index],[AcptCap],[DispCap],[AcptVisible],[DispVisible],[AcptPos],[DispPos],[AcptDataType],[DispDataType],[AcptWidth],[DispWidth],[AcptAlign],[DispAlign],[AcptFontName],[DispFontName],[AcptFourColour],[DispFourColour],[AcptFontSize],[DispFontSize],[AcptRowHight],[DispRowHight],[AcptBackColour],[DispBackColour],[VAUid],[VActr],[VATermId],[VACompCode],[columnName])VALUES(9200,172,'AC28','AC28',0,0,172,172,2,2,0,8,1,1,'','','','',0,0,0,0,'','','',1,'','','AC28')
+-GO-
+INSERT INTO Acceptdisplaydtls ([trntype],[Index],[AcptCap],[DispCap],[AcptVisible],[DispVisible],[AcptPos],[DispPos],[AcptDataType],[DispDataType],[AcptWidth],[DispWidth],[AcptAlign],[DispAlign],[AcptFontName],[DispFontName],[AcptFourColour],[DispFourColour],[AcptFontSize],[DispFontSize],[AcptRowHight],[DispRowHight],[AcptBackColour],[DispBackColour],[VAUid],[VActr],[VATermId],[VACompCode],[columnName])VALUES(9200,173,'AC29','AC29',0,0,173,173,2,2,0,8,1,1,'','','','',0,0,0,0,'','','',1,'','','AC29')
+-GO-
+INSERT INTO Acceptdisplaydtls ([trntype],[Index],[AcptCap],[DispCap],[AcptVisible],[DispVisible],[AcptPos],[DispPos],[AcptDataType],[DispDataType],[AcptWidth],[DispWidth],[AcptAlign],[DispAlign],[AcptFontName],[DispFontName],[AcptFourColour],[DispFourColour],[AcptFontSize],[DispFontSize],[AcptRowHight],[DispRowHight],[AcptBackColour],[DispBackColour],[VAUid],[VActr],[VATermId],[VACompCode],[columnName])VALUES(9200,174,'AC30','AC30',0,0,174,174,2,2,0,8,1,1,'','','','',0,0,0,0,'','','',1,'','','AC30')
+-GO-
+INSERT INTO Acceptdisplaydtls ([trntype],[Index],[AcptCap],[DispCap],[AcptVisible],[DispVisible],[AcptPos],[DispPos],[AcptDataType],[DispDataType],[AcptWidth],[DispWidth],[AcptAlign],[DispAlign],[AcptFontName],[DispFontName],[AcptFourColour],[DispFourColour],[AcptFontSize],[DispFontSize],[AcptRowHight],[DispRowHight],[AcptBackColour],[DispBackColour],[VAUid],[VActr],[VATermId],[VACompCode],[columnName])VALUES(9200,175,'AC31','AC31',0,0,175,175,2,2,0,8,1,1,'','','','',0,0,0,0,'','','',1,'','','AC31')
+-GO-
+INSERT INTO Acceptdisplaydtls ([trntype],[Index],[AcptCap],[DispCap],[AcptVisible],[DispVisible],[AcptPos],[DispPos],[AcptDataType],[DispDataType],[AcptWidth],[DispWidth],[AcptAlign],[DispAlign],[AcptFontName],[DispFontName],[AcptFourColour],[DispFourColour],[AcptFontSize],[DispFontSize],[AcptRowHight],[DispRowHight],[AcptBackColour],[DispBackColour],[VAUid],[VActr],[VATermId],[VACompCode],[columnName])VALUES(9200,176,'AC32','AC32',0,0,176,176,2,2,0,8,1,1,'','','','',0,0,0,0,'','','',1,'','','AC32')
+-GO-
+INSERT INTO AcceptDisplaydtls ([trntype],[Index],[AcptCap],[DispCap],[AcptVisible],[DispVisible],[AcptPos],[DispPos],[AcptDataType],[DispDataType],[AcptWidth],[DispWidth],[AcptAlign],[DispAlign],[AcptFontName],[DispFontName],[AcptFourColour],[DispFourColour],[AcptFontSize],[DispFontSize],[AcptRowHight],[DispRowHight],[AcptBackColour],[DispBackColour],[VAUid],[VActr],[VATermId],[VACompCode],[columnName])VALUES(9300,148,'Sup1','Sup1',0,0,148,148,2,2,0,8,1,1,'','','','',0,0,0,0,'','','',1,'','','Sup1')
+-GO-
+INSERT INTO AcceptDisplaydtls ([trntype],[Index],[AcptCap],[DispCap],[AcptVisible],[DispVisible],[AcptPos],[DispPos],[AcptDataType],[DispDataType],[AcptWidth],[DispWidth],[AcptAlign],[DispAlign],[AcptFontName],[DispFontName],[AcptFourColour],[DispFourColour],[AcptFontSize],[DispFontSize],[AcptRowHight],[DispRowHight],[AcptBackColour],[DispBackColour],[VAUid],[VActr],[VATermId],[VACompCode],[columnName])VALUES(9300,149,'Sup2','Sup2',0,0,149,149,2,2,0,8,1,1,'','','','',0,0,0,0,'','','',1,'','','Sup2')
+-GO-
+INSERT INTO AcceptDisplaydtls ([trntype],[Index],[AcptCap],[DispCap],[AcptVisible],[DispVisible],[AcptPos],[DispPos],[AcptDataType],[DispDataType],[AcptWidth],[DispWidth],[AcptAlign],[DispAlign],[AcptFontName],[DispFontName],[AcptFourColour],[DispFourColour],[AcptFontSize],[DispFontSize],[AcptRowHight],[DispRowHight],[AcptBackColour],[DispBackColour],[VAUid],[VActr],[VATermId],[VACompCode],[columnName])VALUES(9300,150,'AC6','AC6',0,0,150,150,2,2,0,8,1,1,'','','','',0,0,0,0,'','','',1,'','','AC6')
+-GO-
+INSERT INTO AcceptDisplaydtls ([trntype],[Index],[AcptCap],[DispCap],[AcptVisible],[DispVisible],[AcptPos],[DispPos],[AcptDataType],[DispDataType],[AcptWidth],[DispWidth],[AcptAlign],[DispAlign],[AcptFontName],[DispFontName],[AcptFourColour],[DispFourColour],[AcptFontSize],[DispFontSize],[AcptRowHight],[DispRowHight],[AcptBackColour],[DispBackColour],[VAUid],[VActr],[VATermId],[VACompCode],[columnName])VALUES(9300,151,'AC7','AC7',0,0,151,151,2,2,0,8,1,1,'','','','',0,0,0,0,'','','',1,'','','AC7')
+-GO-
+INSERT INTO AcceptDisplaydtls ([trntype],[Index],[AcptCap],[DispCap],[AcptVisible],[DispVisible],[AcptPos],[DispPos],[AcptDataType],[DispDataType],[AcptWidth],[DispWidth],[AcptAlign],[DispAlign],[AcptFontName],[DispFontName],[AcptFourColour],[DispFourColour],[AcptFontSize],[DispFontSize],[AcptRowHight],[DispRowHight],[AcptBackColour],[DispBackColour],[VAUid],[VActr],[VATermId],[VACompCode],[columnName])VALUES(9300,152,'AC8','AC8',0,0,152,152,2,2,0,8,1,1,'','','','',0,0,0,0,'','','',1,'','','AC8')
+-GO-
+INSERT INTO AcceptDisplaydtls ([trntype],[Index],[AcptCap],[DispCap],[AcptVisible],[DispVisible],[AcptPos],[DispPos],[AcptDataType],[DispDataType],[AcptWidth],[DispWidth],[AcptAlign],[DispAlign],[AcptFontName],[DispFontName],[AcptFourColour],[DispFourColour],[AcptFontSize],[DispFontSize],[AcptRowHight],[DispRowHight],[AcptBackColour],[DispBackColour],[VAUid],[VActr],[VATermId],[VACompCode],[columnName])VALUES(9300,153,'AC9','AC9',0,0,153,153,2,2,0,8,1,1,'','','','',0,0,0,0,'','','',1,'','','AC9')
+-GO-
+INSERT INTO AcceptDisplaydtls ([trntype],[Index],[AcptCap],[DispCap],[AcptVisible],[DispVisible],[AcptPos],[DispPos],[AcptDataType],[DispDataType],[AcptWidth],[DispWidth],[AcptAlign],[DispAlign],[AcptFontName],[DispFontName],[AcptFourColour],[DispFourColour],[AcptFontSize],[DispFontSize],[AcptRowHight],[DispRowHight],[AcptBackColour],[DispBackColour],[VAUid],[VActr],[VATermId],[VACompCode],[columnName])VALUES(9300,154,'AC10','AC10',0,0,154,154,2,2,0,8,1,1,'','','','',0,0,0,0,'','','',1,'','','AC10')
+-GO-
+INSERT INTO AcceptDisplaydtls ([trntype],[Index],[AcptCap],[DispCap],[AcptVisible],[DispVisible],[AcptPos],[DispPos],[AcptDataType],[DispDataType],[AcptWidth],[DispWidth],[AcptAlign],[DispAlign],[AcptFontName],[DispFontName],[AcptFourColour],[DispFourColour],[AcptFontSize],[DispFontSize],[AcptRowHight],[DispRowHight],[AcptBackColour],[DispBackColour],[VAUid],[VActr],[VATermId],[VACompCode],[columnName])VALUES(9300,155,'AC11','AC11',0,0,155,155,2,2,0,8,1,1,'','','','',0,0,0,0,'','','',1,'','','AC11')
+-GO-
+INSERT INTO AcceptDisplaydtls ([trntype],[Index],[AcptCap],[DispCap],[AcptVisible],[DispVisible],[AcptPos],[DispPos],[AcptDataType],[DispDataType],[AcptWidth],[DispWidth],[AcptAlign],[DispAlign],[AcptFontName],[DispFontName],[AcptFourColour],[DispFourColour],[AcptFontSize],[DispFontSize],[AcptRowHight],[DispRowHight],[AcptBackColour],[DispBackColour],[VAUid],[VActr],[VATermId],[VACompCode],[columnName])VALUES(9300,156,'AC12','AC12',0,0,156,156,2,2,0,8,1,1,'','','','',0,0,0,0,'','','',1,'','','AC12')
+-GO-
+INSERT INTO AcceptDisplaydtls ([trntype],[Index],[AcptCap],[DispCap],[AcptVisible],[DispVisible],[AcptPos],[DispPos],[AcptDataType],[DispDataType],[AcptWidth],[DispWidth],[AcptAlign],[DispAlign],[AcptFontName],[DispFontName],[AcptFourColour],[DispFourColour],[AcptFontSize],[DispFontSize],[AcptRowHight],[DispRowHight],[AcptBackColour],[DispBackColour],[VAUid],[VActr],[VATermId],[VACompCode],[columnName])VALUES(9300,157,'AC13','AC13',0,0,157,157,2,2,0,8,1,1,'','','','',0,0,0,0,'','','',1,'','','AC13')
+-GO-
+INSERT INTO AcceptDisplaydtls ([trntype],[Index],[AcptCap],[DispCap],[AcptVisible],[DispVisible],[AcptPos],[DispPos],[AcptDataType],[DispDataType],[AcptWidth],[DispWidth],[AcptAlign],[DispAlign],[AcptFontName],[DispFontName],[AcptFourColour],[DispFourColour],[AcptFontSize],[DispFontSize],[AcptRowHight],[DispRowHight],[AcptBackColour],[DispBackColour],[VAUid],[VActr],[VATermId],[VACompCode],[columnName])VALUES(9300,158,'AC14','AC14',0,0,158,158,2,2,0,8,1,1,'','','','',0,0,0,0,'','','',1,'','','AC14')
+-GO-
+INSERT INTO AcceptDisplaydtls ([trntype],[Index],[AcptCap],[DispCap],[AcptVisible],[DispVisible],[AcptPos],[DispPos],[AcptDataType],[DispDataType],[AcptWidth],[DispWidth],[AcptAlign],[DispAlign],[AcptFontName],[DispFontName],[AcptFourColour],[DispFourColour],[AcptFontSize],[DispFontSize],[AcptRowHight],[DispRowHight],[AcptBackColour],[DispBackColour],[VAUid],[VActr],[VATermId],[VACompCode],[columnName])VALUES(9300,159,'AC15','AC15',0,0,159,159,2,2,0,8,1,1,'','','','',0,0,0,0,'','','',1,'','','AC15')
+-GO-
+INSERT INTO AcceptDisplaydtls ([trntype],[Index],[AcptCap],[DispCap],[AcptVisible],[DispVisible],[AcptPos],[DispPos],[AcptDataType],[DispDataType],[AcptWidth],[DispWidth],[AcptAlign],[DispAlign],[AcptFontName],[DispFontName],[AcptFourColour],[DispFourColour],[AcptFontSize],[DispFontSize],[AcptRowHight],[DispRowHight],[AcptBackColour],[DispBackColour],[VAUid],[VActr],[VATermId],[VACompCode],[columnName])VALUES(9300,160,'AC16','AC16',0,0,160,160,2,2,0,8,1,1,'','','','',0,0,0,0,'','','',1,'','','AC16')
+-GO-
+INSERT INTO AcceptDisplaydtls ([trntype],[Index],[AcptCap],[DispCap],[AcptVisible],[DispVisible],[AcptPos],[DispPos],[AcptDataType],[DispDataType],[AcptWidth],[DispWidth],[AcptAlign],[DispAlign],[AcptFontName],[DispFontName],[AcptFourColour],[DispFourColour],[AcptFontSize],[DispFontSize],[AcptRowHight],[DispRowHight],[AcptBackColour],[DispBackColour],[VAUid],[VActr],[VATermId],[VACompCode],[columnName])VALUES(9300,161,'AC17','AC17',0,0,161,161,2,2,0,8,1,1,'','','','',0,0,0,0,'','','',1,'','','AC17')
+-GO-
+INSERT INTO AcceptDisplaydtls ([trntype],[Index],[AcptCap],[DispCap],[AcptVisible],[DispVisible],[AcptPos],[DispPos],[AcptDataType],[DispDataType],[AcptWidth],[DispWidth],[AcptAlign],[DispAlign],[AcptFontName],[DispFontName],[AcptFourColour],[DispFourColour],[AcptFontSize],[DispFontSize],[AcptRowHight],[DispRowHight],[AcptBackColour],[DispBackColour],[VAUid],[VActr],[VATermId],[VACompCode],[columnName])VALUES(9300,162,'AC18','AC18',0,0,162,162,2,2,0,8,1,1,'','','','',0,0,0,0,'','','',1,'','','AC18')
+-GO-
+INSERT INTO AcceptDisplaydtls ([trntype],[Index],[AcptCap],[DispCap],[AcptVisible],[DispVisible],[AcptPos],[DispPos],[AcptDataType],[DispDataType],[AcptWidth],[DispWidth],[AcptAlign],[DispAlign],[AcptFontName],[DispFontName],[AcptFourColour],[DispFourColour],[AcptFontSize],[DispFontSize],[AcptRowHight],[DispRowHight],[AcptBackColour],[DispBackColour],[VAUid],[VActr],[VATermId],[VACompCode],[columnName])VALUES(9300,163,'AC19','AC19',0,0,163,163,2,2,0,8,1,1,'','','','',0,0,0,0,'','','',1,'','','AC19')
+-GO-
+INSERT INTO AcceptDisplaydtls ([trntype],[Index],[AcptCap],[DispCap],[AcptVisible],[DispVisible],[AcptPos],[DispPos],[AcptDataType],[DispDataType],[AcptWidth],[DispWidth],[AcptAlign],[DispAlign],[AcptFontName],[DispFontName],[AcptFourColour],[DispFourColour],[AcptFontSize],[DispFontSize],[AcptRowHight],[DispRowHight],[AcptBackColour],[DispBackColour],[VAUid],[VActr],[VATermId],[VACompCode],[columnName])VALUES(9300,164,'AC20','AC20',0,0,164,164,2,2,0,8,1,1,'','','','',0,0,0,0,'','','',1,'','','AC20')
+-GO-
+INSERT INTO AcceptDisplaydtls ([trntype],[Index],[AcptCap],[DispCap],[AcptVisible],[DispVisible],[AcptPos],[DispPos],[AcptDataType],[DispDataType],[AcptWidth],[DispWidth],[AcptAlign],[DispAlign],[AcptFontName],[DispFontName],[AcptFourColour],[DispFourColour],[AcptFontSize],[DispFontSize],[AcptRowHight],[DispRowHight],[AcptBackColour],[DispBackColour],[VAUid],[VActr],[VATermId],[VACompCode],[columnName])VALUES(9300,165,'AC21','AC21',0,0,165,165,2,2,0,8,1,1,'','','','',0,0,0,0,'','','',1,'','','AC21')
+-GO-
+INSERT INTO AcceptDisplaydtls ([trntype],[Index],[AcptCap],[DispCap],[AcptVisible],[DispVisible],[AcptPos],[DispPos],[AcptDataType],[DispDataType],[AcptWidth],[DispWidth],[AcptAlign],[DispAlign],[AcptFontName],[DispFontName],[AcptFourColour],[DispFourColour],[AcptFontSize],[DispFontSize],[AcptRowHight],[DispRowHight],[AcptBackColour],[DispBackColour],[VAUid],[VActr],[VATermId],[VACompCode],[columnName])VALUES(9300,166,'AC22','AC22',0,0,166,166,2,2,0,8,1,1,'','','','',0,0,0,0,'','','',1,'','','AC22')
+-GO-
+INSERT INTO AcceptDisplaydtls ([trntype],[Index],[AcptCap],[DispCap],[AcptVisible],[DispVisible],[AcptPos],[DispPos],[AcptDataType],[DispDataType],[AcptWidth],[DispWidth],[AcptAlign],[DispAlign],[AcptFontName],[DispFontName],[AcptFourColour],[DispFourColour],[AcptFontSize],[DispFontSize],[AcptRowHight],[DispRowHight],[AcptBackColour],[DispBackColour],[VAUid],[VActr],[VATermId],[VACompCode],[columnName])VALUES(9300,167,'AC23','AC23',0,0,167,167,2,2,0,8,1,1,'','','','',0,0,0,0,'','','',1,'','','AC23')
+-GO-
+INSERT INTO AcceptDisplaydtls ([trntype],[Index],[AcptCap],[DispCap],[AcptVisible],[DispVisible],[AcptPos],[DispPos],[AcptDataType],[DispDataType],[AcptWidth],[DispWidth],[AcptAlign],[DispAlign],[AcptFontName],[DispFontName],[AcptFourColour],[DispFourColour],[AcptFontSize],[DispFontSize],[AcptRowHight],[DispRowHight],[AcptBackColour],[DispBackColour],[VAUid],[VActr],[VATermId],[VACompCode],[columnName])VALUES(9300,168,'AC24','AC24',0,0,168,168,2,2,0,8,1,1,'','','','',0,0,0,0,'','','',1,'','','AC24')
+-GO-
+INSERT INTO AcceptDisplaydtls ([trntype],[Index],[AcptCap],[DispCap],[AcptVisible],[DispVisible],[AcptPos],[DispPos],[AcptDataType],[DispDataType],[AcptWidth],[DispWidth],[AcptAlign],[DispAlign],[AcptFontName],[DispFontName],[AcptFourColour],[DispFourColour],[AcptFontSize],[DispFontSize],[AcptRowHight],[DispRowHight],[AcptBackColour],[DispBackColour],[VAUid],[VActr],[VATermId],[VACompCode],[columnName])VALUES(9300,169,'AC25','AC25',0,0,169,169,2,2,0,8,1,1,'','','','',0,0,0,0,'','','',1,'','','AC25')
+-GO-
+INSERT INTO AcceptDisplaydtls ([trntype],[Index],[AcptCap],[DispCap],[AcptVisible],[DispVisible],[AcptPos],[DispPos],[AcptDataType],[DispDataType],[AcptWidth],[DispWidth],[AcptAlign],[DispAlign],[AcptFontName],[DispFontName],[AcptFourColour],[DispFourColour],[AcptFontSize],[DispFontSize],[AcptRowHight],[DispRowHight],[AcptBackColour],[DispBackColour],[VAUid],[VActr],[VATermId],[VACompCode],[columnName])VALUES(9300,170,'AC26','AC26',0,0,170,170,2,2,0,8,1,1,'','','','',0,0,0,0,'','','',1,'','','AC26')
+-GO-
+INSERT INTO AcceptDisplaydtls ([trntype],[Index],[AcptCap],[DispCap],[AcptVisible],[DispVisible],[AcptPos],[DispPos],[AcptDataType],[DispDataType],[AcptWidth],[DispWidth],[AcptAlign],[DispAlign],[AcptFontName],[DispFontName],[AcptFourColour],[DispFourColour],[AcptFontSize],[DispFontSize],[AcptRowHight],[DispRowHight],[AcptBackColour],[DispBackColour],[VAUid],[VActr],[VATermId],[VACompCode],[columnName])VALUES(9300,171,'AC27','AC27',0,0,171,171,2,2,0,8,1,1,'','','','',0,0,0,0,'','','',1,'','','AC27')
+-GO-
+INSERT INTO AcceptDisplaydtls ([trntype],[Index],[AcptCap],[DispCap],[AcptVisible],[DispVisible],[AcptPos],[DispPos],[AcptDataType],[DispDataType],[AcptWidth],[DispWidth],[AcptAlign],[DispAlign],[AcptFontName],[DispFontName],[AcptFourColour],[DispFourColour],[AcptFontSize],[DispFontSize],[AcptRowHight],[DispRowHight],[AcptBackColour],[DispBackColour],[VAUid],[VActr],[VATermId],[VACompCode],[columnName])VALUES(9300,172,'AC28','AC28',0,0,172,172,2,2,0,8,1,1,'','','','',0,0,0,0,'','','',1,'','','AC28')
+-GO-
+INSERT INTO AcceptDisplaydtls ([trntype],[Index],[AcptCap],[DispCap],[AcptVisible],[DispVisible],[AcptPos],[DispPos],[AcptDataType],[DispDataType],[AcptWidth],[DispWidth],[AcptAlign],[DispAlign],[AcptFontName],[DispFontName],[AcptFourColour],[DispFourColour],[AcptFontSize],[DispFontSize],[AcptRowHight],[DispRowHight],[AcptBackColour],[DispBackColour],[VAUid],[VActr],[VATermId],[VACompCode],[columnName])VALUES(9300,173,'AC29','AC29',0,0,173,173,2,2,0,8,1,1,'','','','',0,0,0,0,'','','',1,'','','AC29')
+-GO-
+INSERT INTO AcceptDisplaydtls ([trntype],[Index],[AcptCap],[DispCap],[AcptVisible],[DispVisible],[AcptPos],[DispPos],[AcptDataType],[DispDataType],[AcptWidth],[DispWidth],[AcptAlign],[DispAlign],[AcptFontName],[DispFontName],[AcptFourColour],[DispFourColour],[AcptFontSize],[DispFontSize],[AcptRowHight],[DispRowHight],[AcptBackColour],[DispBackColour],[VAUid],[VActr],[VATermId],[VACompCode],[columnName])VALUES(9300,174,'AC30','AC30',0,0,174,174,2,2,0,8,1,1,'','','','',0,0,0,0,'','','',1,'','','AC30')
+-GO-
+INSERT INTO AcceptDisplaydtls ([trntype],[Index],[AcptCap],[DispCap],[AcptVisible],[DispVisible],[AcptPos],[DispPos],[AcptDataType],[DispDataType],[AcptWidth],[DispWidth],[AcptAlign],[DispAlign],[AcptFontName],[DispFontName],[AcptFourColour],[DispFourColour],[AcptFontSize],[DispFontSize],[AcptRowHight],[DispRowHight],[AcptBackColour],[DispBackColour],[VAUid],[VActr],[VATermId],[VACompCode],[columnName])VALUES(9300,175,'AC31','AC31',0,0,175,175,2,2,0,8,1,1,'','','','',0,0,0,0,'','','',1,'','','AC31')
+-GO-
+INSERT INTO AcceptDisplaydtls ([trntype],[Index],[AcptCap],[DispCap],[AcptVisible],[DispVisible],[AcptPos],[DispPos],[AcptDataType],[DispDataType],[AcptWidth],[DispWidth],[AcptAlign],[DispAlign],[AcptFontName],[DispFontName],[AcptFourColour],[DispFourColour],[AcptFontSize],[DispFontSize],[AcptRowHight],[DispRowHight],[AcptBackColour],[DispBackColour],[VAUid],[VActr],[VATermId],[VACompCode],[columnName])VALUES(9300,176,'AC32','AC32',0,0,176,176,2,2,0,8,1,1,'','','','',0,0,0,0,'','','',1,'','','AC32')
+-GO-
+INSERT INTO Acceptdisplaydtls ([trntype],[Index],[AcptCap],[DispCap],[AcptVisible],[DispVisible],[AcptPos],[DispPos],[AcptDataType],[DispDataType],[AcptWidth],[DispWidth],[AcptAlign],[DispAlign],[AcptFontName],[DispFontName],[AcptFourColour],[DispFourColour],[AcptFontSize],[DispFontSize],[AcptRowHight],[DispRowHight],[AcptBackColour],[DispBackColour],[VAUid],[VActr],[VATermId],[VACompCode],[columnName])VALUES(9700,148,'Sup1','Sup1',0,0,148,148,2,2,0,8,1,1,'','','','',0,0,0,0,'','','',1,'','','Sup1')
+-GO-
+INSERT INTO Acceptdisplaydtls ([trntype],[Index],[AcptCap],[DispCap],[AcptVisible],[DispVisible],[AcptPos],[DispPos],[AcptDataType],[DispDataType],[AcptWidth],[DispWidth],[AcptAlign],[DispAlign],[AcptFontName],[DispFontName],[AcptFourColour],[DispFourColour],[AcptFontSize],[DispFontSize],[AcptRowHight],[DispRowHight],[AcptBackColour],[DispBackColour],[VAUid],[VActr],[VATermId],[VACompCode],[columnName])VALUES(9700,149,'Sup2','Sup2',0,0,149,149,2,2,0,8,1,1,'','','','',0,0,0,0,'','','',1,'','','Sup2')
+-GO-
+INSERT INTO Acceptdisplaydtls ([trntype],[Index],[AcptCap],[DispCap],[AcptVisible],[DispVisible],[AcptPos],[DispPos],[AcptDataType],[DispDataType],[AcptWidth],[DispWidth],[AcptAlign],[DispAlign],[AcptFontName],[DispFontName],[AcptFourColour],[DispFourColour],[AcptFontSize],[DispFontSize],[AcptRowHight],[DispRowHight],[AcptBackColour],[DispBackColour],[VAUid],[VActr],[VATermId],[VACompCode],[columnName])VALUES(9700,150,'AC6','AC6',0,0,150,150,2,2,0,8,1,1,'','','','',0,0,0,0,'','','',1,'','','AC6')
+-GO-
+INSERT INTO Acceptdisplaydtls ([trntype],[Index],[AcptCap],[DispCap],[AcptVisible],[DispVisible],[AcptPos],[DispPos],[AcptDataType],[DispDataType],[AcptWidth],[DispWidth],[AcptAlign],[DispAlign],[AcptFontName],[DispFontName],[AcptFourColour],[DispFourColour],[AcptFontSize],[DispFontSize],[AcptRowHight],[DispRowHight],[AcptBackColour],[DispBackColour],[VAUid],[VActr],[VATermId],[VACompCode],[columnName])VALUES(9700,151,'AC7','AC7',0,0,151,151,2,2,0,8,1,1,'','','','',0,0,0,0,'','','',1,'','','AC7')
+-GO-
+INSERT INTO Acceptdisplaydtls ([trntype],[Index],[AcptCap],[DispCap],[AcptVisible],[DispVisible],[AcptPos],[DispPos],[AcptDataType],[DispDataType],[AcptWidth],[DispWidth],[AcptAlign],[DispAlign],[AcptFontName],[DispFontName],[AcptFourColour],[DispFourColour],[AcptFontSize],[DispFontSize],[AcptRowHight],[DispRowHight],[AcptBackColour],[DispBackColour],[VAUid],[VActr],[VATermId],[VACompCode],[columnName])VALUES(9700,152,'AC8','AC8',0,0,152,152,2,2,0,8,1,1,'','','','',0,0,0,0,'','','',1,'','','AC8')
+-GO-
+INSERT INTO Acceptdisplaydtls ([trntype],[Index],[AcptCap],[DispCap],[AcptVisible],[DispVisible],[AcptPos],[DispPos],[AcptDataType],[DispDataType],[AcptWidth],[DispWidth],[AcptAlign],[DispAlign],[AcptFontName],[DispFontName],[AcptFourColour],[DispFourColour],[AcptFontSize],[DispFontSize],[AcptRowHight],[DispRowHight],[AcptBackColour],[DispBackColour],[VAUid],[VActr],[VATermId],[VACompCode],[columnName])VALUES(9700,153,'AC9','AC9',0,0,153,153,2,2,0,8,1,1,'','','','',0,0,0,0,'','','',1,'','','AC9')
+-GO-
+INSERT INTO Acceptdisplaydtls ([trntype],[Index],[AcptCap],[DispCap],[AcptVisible],[DispVisible],[AcptPos],[DispPos],[AcptDataType],[DispDataType],[AcptWidth],[DispWidth],[AcptAlign],[DispAlign],[AcptFontName],[DispFontName],[AcptFourColour],[DispFourColour],[AcptFontSize],[DispFontSize],[AcptRowHight],[DispRowHight],[AcptBackColour],[DispBackColour],[VAUid],[VActr],[VATermId],[VACompCode],[columnName])VALUES(9700,154,'AC10','AC10',0,0,154,154,2,2,0,8,1,1,'','','','',0,0,0,0,'','','',1,'','','AC10')
+-GO-
+INSERT INTO Acceptdisplaydtls ([trntype],[Index],[AcptCap],[DispCap],[AcptVisible],[DispVisible],[AcptPos],[DispPos],[AcptDataType],[DispDataType],[AcptWidth],[DispWidth],[AcptAlign],[DispAlign],[AcptFontName],[DispFontName],[AcptFourColour],[DispFourColour],[AcptFontSize],[DispFontSize],[AcptRowHight],[DispRowHight],[AcptBackColour],[DispBackColour],[VAUid],[VActr],[VATermId],[VACompCode],[columnName])VALUES(9700,155,'AC11','AC11',0,0,155,155,2,2,0,8,1,1,'','','','',0,0,0,0,'','','',1,'','','AC11')
+-GO-
+INSERT INTO Acceptdisplaydtls ([trntype],[Index],[AcptCap],[DispCap],[AcptVisible],[DispVisible],[AcptPos],[DispPos],[AcptDataType],[DispDataType],[AcptWidth],[DispWidth],[AcptAlign],[DispAlign],[AcptFontName],[DispFontName],[AcptFourColour],[DispFourColour],[AcptFontSize],[DispFontSize],[AcptRowHight],[DispRowHight],[AcptBackColour],[DispBackColour],[VAUid],[VActr],[VATermId],[VACompCode],[columnName])VALUES(9700,156,'AC12','AC12',0,0,156,156,2,2,0,8,1,1,'','','','',0,0,0,0,'','','',1,'','','AC12')
+-GO-
+INSERT INTO Acceptdisplaydtls ([trntype],[Index],[AcptCap],[DispCap],[AcptVisible],[DispVisible],[AcptPos],[DispPos],[AcptDataType],[DispDataType],[AcptWidth],[DispWidth],[AcptAlign],[DispAlign],[AcptFontName],[DispFontName],[AcptFourColour],[DispFourColour],[AcptFontSize],[DispFontSize],[AcptRowHight],[DispRowHight],[AcptBackColour],[DispBackColour],[VAUid],[VActr],[VATermId],[VACompCode],[columnName])VALUES(9700,157,'AC13','AC13',0,0,157,157,2,2,0,8,1,1,'','','','',0,0,0,0,'','','',1,'','','AC13')
+-GO-
+INSERT INTO Acceptdisplaydtls ([trntype],[Index],[AcptCap],[DispCap],[AcptVisible],[DispVisible],[AcptPos],[DispPos],[AcptDataType],[DispDataType],[AcptWidth],[DispWidth],[AcptAlign],[DispAlign],[AcptFontName],[DispFontName],[AcptFourColour],[DispFourColour],[AcptFontSize],[DispFontSize],[AcptRowHight],[DispRowHight],[AcptBackColour],[DispBackColour],[VAUid],[VActr],[VATermId],[VACompCode],[columnName])VALUES(9700,158,'AC14','AC14',0,0,158,158,2,2,0,8,1,1,'','','','',0,0,0,0,'','','',1,'','','AC14')
+-GO-
+INSERT INTO Acceptdisplaydtls ([trntype],[Index],[AcptCap],[DispCap],[AcptVisible],[DispVisible],[AcptPos],[DispPos],[AcptDataType],[DispDataType],[AcptWidth],[DispWidth],[AcptAlign],[DispAlign],[AcptFontName],[DispFontName],[AcptFourColour],[DispFourColour],[AcptFontSize],[DispFontSize],[AcptRowHight],[DispRowHight],[AcptBackColour],[DispBackColour],[VAUid],[VActr],[VATermId],[VACompCode],[columnName])VALUES(9700,159,'AC15','AC15',0,0,159,159,2,2,0,8,1,1,'','','','',0,0,0,0,'','','',1,'','','AC15')
+-GO-
+INSERT INTO Acceptdisplaydtls ([trntype],[Index],[AcptCap],[DispCap],[AcptVisible],[DispVisible],[AcptPos],[DispPos],[AcptDataType],[DispDataType],[AcptWidth],[DispWidth],[AcptAlign],[DispAlign],[AcptFontName],[DispFontName],[AcptFourColour],[DispFourColour],[AcptFontSize],[DispFontSize],[AcptRowHight],[DispRowHight],[AcptBackColour],[DispBackColour],[VAUid],[VActr],[VATermId],[VACompCode],[columnName])VALUES(9700,160,'AC16','AC16',0,0,160,160,2,2,0,8,1,1,'','','','',0,0,0,0,'','','',1,'','','AC16')
+-GO-
+INSERT INTO Acceptdisplaydtls ([trntype],[Index],[AcptCap],[DispCap],[AcptVisible],[DispVisible],[AcptPos],[DispPos],[AcptDataType],[DispDataType],[AcptWidth],[DispWidth],[AcptAlign],[DispAlign],[AcptFontName],[DispFontName],[AcptFourColour],[DispFourColour],[AcptFontSize],[DispFontSize],[AcptRowHight],[DispRowHight],[AcptBackColour],[DispBackColour],[VAUid],[VActr],[VATermId],[VACompCode],[columnName])VALUES(9700,161,'AC17','AC17',0,0,161,161,2,2,0,8,1,1,'','','','',0,0,0,0,'','','',1,'','','AC17')
+-GO-
+INSERT INTO Acceptdisplaydtls ([trntype],[Index],[AcptCap],[DispCap],[AcptVisible],[DispVisible],[AcptPos],[DispPos],[AcptDataType],[DispDataType],[AcptWidth],[DispWidth],[AcptAlign],[DispAlign],[AcptFontName],[DispFontName],[AcptFourColour],[DispFourColour],[AcptFontSize],[DispFontSize],[AcptRowHight],[DispRowHight],[AcptBackColour],[DispBackColour],[VAUid],[VActr],[VATermId],[VACompCode],[columnName])VALUES(9700,162,'AC18','AC18',0,0,162,162,2,2,0,8,1,1,'','','','',0,0,0,0,'','','',1,'','','AC18')
+-GO-
+INSERT INTO Acceptdisplaydtls ([trntype],[Index],[AcptCap],[DispCap],[AcptVisible],[DispVisible],[AcptPos],[DispPos],[AcptDataType],[DispDataType],[AcptWidth],[DispWidth],[AcptAlign],[DispAlign],[AcptFontName],[DispFontName],[AcptFourColour],[DispFourColour],[AcptFontSize],[DispFontSize],[AcptRowHight],[DispRowHight],[AcptBackColour],[DispBackColour],[VAUid],[VActr],[VATermId],[VACompCode],[columnName])VALUES(9700,163,'AC19','AC19',0,0,163,163,2,2,0,8,1,1,'','','','',0,0,0,0,'','','',1,'','','AC19')
+-GO-
+INSERT INTO Acceptdisplaydtls ([trntype],[Index],[AcptCap],[DispCap],[AcptVisible],[DispVisible],[AcptPos],[DispPos],[AcptDataType],[DispDataType],[AcptWidth],[DispWidth],[AcptAlign],[DispAlign],[AcptFontName],[DispFontName],[AcptFourColour],[DispFourColour],[AcptFontSize],[DispFontSize],[AcptRowHight],[DispRowHight],[AcptBackColour],[DispBackColour],[VAUid],[VActr],[VATermId],[VACompCode],[columnName])VALUES(9700,164,'AC20','AC20',0,0,164,164,2,2,0,8,1,1,'','','','',0,0,0,0,'','','',1,'','','AC20')
+-GO-
+INSERT INTO Acceptdisplaydtls ([trntype],[Index],[AcptCap],[DispCap],[AcptVisible],[DispVisible],[AcptPos],[DispPos],[AcptDataType],[DispDataType],[AcptWidth],[DispWidth],[AcptAlign],[DispAlign],[AcptFontName],[DispFontName],[AcptFourColour],[DispFourColour],[AcptFontSize],[DispFontSize],[AcptRowHight],[DispRowHight],[AcptBackColour],[DispBackColour],[VAUid],[VActr],[VATermId],[VACompCode],[columnName])VALUES(9700,165,'AC21','AC21',0,0,165,165,2,2,0,8,1,1,'','','','',0,0,0,0,'','','',1,'','','AC21')
+-GO-
+INSERT INTO Acceptdisplaydtls ([trntype],[Index],[AcptCap],[DispCap],[AcptVisible],[DispVisible],[AcptPos],[DispPos],[AcptDataType],[DispDataType],[AcptWidth],[DispWidth],[AcptAlign],[DispAlign],[AcptFontName],[DispFontName],[AcptFourColour],[DispFourColour],[AcptFontSize],[DispFontSize],[AcptRowHight],[DispRowHight],[AcptBackColour],[DispBackColour],[VAUid],[VActr],[VATermId],[VACompCode],[columnName])VALUES(9700,166,'AC22','AC22',0,0,166,166,2,2,0,8,1,1,'','','','',0,0,0,0,'','','',1,'','','AC22')
+-GO-
+INSERT INTO Acceptdisplaydtls ([trntype],[Index],[AcptCap],[DispCap],[AcptVisible],[DispVisible],[AcptPos],[DispPos],[AcptDataType],[DispDataType],[AcptWidth],[DispWidth],[AcptAlign],[DispAlign],[AcptFontName],[DispFontName],[AcptFourColour],[DispFourColour],[AcptFontSize],[DispFontSize],[AcptRowHight],[DispRowHight],[AcptBackColour],[DispBackColour],[VAUid],[VActr],[VATermId],[VACompCode],[columnName])VALUES(9700,167,'AC23','AC23',0,0,167,167,2,2,0,8,1,1,'','','','',0,0,0,0,'','','',1,'','','AC23')
+-GO-
+INSERT INTO Acceptdisplaydtls ([trntype],[Index],[AcptCap],[DispCap],[AcptVisible],[DispVisible],[AcptPos],[DispPos],[AcptDataType],[DispDataType],[AcptWidth],[DispWidth],[AcptAlign],[DispAlign],[AcptFontName],[DispFontName],[AcptFourColour],[DispFourColour],[AcptFontSize],[DispFontSize],[AcptRowHight],[DispRowHight],[AcptBackColour],[DispBackColour],[VAUid],[VActr],[VATermId],[VACompCode],[columnName])VALUES(9700,168,'AC24','AC24',0,0,168,168,2,2,0,8,1,1,'','','','',0,0,0,0,'','','',1,'','','AC24')
+-GO-
+INSERT INTO Acceptdisplaydtls ([trntype],[Index],[AcptCap],[DispCap],[AcptVisible],[DispVisible],[AcptPos],[DispPos],[AcptDataType],[DispDataType],[AcptWidth],[DispWidth],[AcptAlign],[DispAlign],[AcptFontName],[DispFontName],[AcptFourColour],[DispFourColour],[AcptFontSize],[DispFontSize],[AcptRowHight],[DispRowHight],[AcptBackColour],[DispBackColour],[VAUid],[VActr],[VATermId],[VACompCode],[columnName])VALUES(9700,169,'AC25','AC25',0,0,169,169,2,2,0,8,1,1,'','','','',0,0,0,0,'','','',1,'','','AC25')
+-GO-
+INSERT INTO Acceptdisplaydtls ([trntype],[Index],[AcptCap],[DispCap],[AcptVisible],[DispVisible],[AcptPos],[DispPos],[AcptDataType],[DispDataType],[AcptWidth],[DispWidth],[AcptAlign],[DispAlign],[AcptFontName],[DispFontName],[AcptFourColour],[DispFourColour],[AcptFontSize],[DispFontSize],[AcptRowHight],[DispRowHight],[AcptBackColour],[DispBackColour],[VAUid],[VActr],[VATermId],[VACompCode],[columnName])VALUES(9700,170,'AC26','AC26',0,0,170,170,2,2,0,8,1,1,'','','','',0,0,0,0,'','','',1,'','','AC26')
+-GO-
+INSERT INTO Acceptdisplaydtls ([trntype],[Index],[AcptCap],[DispCap],[AcptVisible],[DispVisible],[AcptPos],[DispPos],[AcptDataType],[DispDataType],[AcptWidth],[DispWidth],[AcptAlign],[DispAlign],[AcptFontName],[DispFontName],[AcptFourColour],[DispFourColour],[AcptFontSize],[DispFontSize],[AcptRowHight],[DispRowHight],[AcptBackColour],[DispBackColour],[VAUid],[VActr],[VATermId],[VACompCode],[columnName])VALUES(9700,171,'AC27','AC27',0,0,171,171,2,2,0,8,1,1,'','','','',0,0,0,0,'','','',1,'','','AC27')
+-GO-
+INSERT INTO Acceptdisplaydtls ([trntype],[Index],[AcptCap],[DispCap],[AcptVisible],[DispVisible],[AcptPos],[DispPos],[AcptDataType],[DispDataType],[AcptWidth],[DispWidth],[AcptAlign],[DispAlign],[AcptFontName],[DispFontName],[AcptFourColour],[DispFourColour],[AcptFontSize],[DispFontSize],[AcptRowHight],[DispRowHight],[AcptBackColour],[DispBackColour],[VAUid],[VActr],[VATermId],[VACompCode],[columnName])VALUES(9700,172,'AC28','AC28',0,0,172,172,2,2,0,8,1,1,'','','','',0,0,0,0,'','','',1,'','','AC28')
+-GO-
+INSERT INTO Acceptdisplaydtls ([trntype],[Index],[AcptCap],[DispCap],[AcptVisible],[DispVisible],[AcptPos],[DispPos],[AcptDataType],[DispDataType],[AcptWidth],[DispWidth],[AcptAlign],[DispAlign],[AcptFontName],[DispFontName],[AcptFourColour],[DispFourColour],[AcptFontSize],[DispFontSize],[AcptRowHight],[DispRowHight],[AcptBackColour],[DispBackColour],[VAUid],[VActr],[VATermId],[VACompCode],[columnName])VALUES(9700,173,'AC29','AC29',0,0,173,173,2,2,0,8,1,1,'','','','',0,0,0,0,'','','',1,'','','AC29')
+-GO-
+INSERT INTO Acceptdisplaydtls ([trntype],[Index],[AcptCap],[DispCap],[AcptVisible],[DispVisible],[AcptPos],[DispPos],[AcptDataType],[DispDataType],[AcptWidth],[DispWidth],[AcptAlign],[DispAlign],[AcptFontName],[DispFontName],[AcptFourColour],[DispFourColour],[AcptFontSize],[DispFontSize],[AcptRowHight],[DispRowHight],[AcptBackColour],[DispBackColour],[VAUid],[VActr],[VATermId],[VACompCode],[columnName])VALUES(9700,174,'AC30','AC30',0,0,174,174,2,2,0,8,1,1,'','','','',0,0,0,0,'','','',1,'','','AC30')
+-GO-
+INSERT INTO Acceptdisplaydtls ([trntype],[Index],[AcptCap],[DispCap],[AcptVisible],[DispVisible],[AcptPos],[DispPos],[AcptDataType],[DispDataType],[AcptWidth],[DispWidth],[AcptAlign],[DispAlign],[AcptFontName],[DispFontName],[AcptFourColour],[DispFourColour],[AcptFontSize],[DispFontSize],[AcptRowHight],[DispRowHight],[AcptBackColour],[DispBackColour],[VAUid],[VActr],[VATermId],[VACompCode],[columnName])VALUES(9700,175,'AC31','AC31',0,0,175,175,2,2,0,8,1,1,'','','','',0,0,0,0,'','','',1,'','','AC31')
+-GO-
+INSERT INTO Acceptdisplaydtls ([trntype],[Index],[AcptCap],[DispCap],[AcptVisible],[DispVisible],[AcptPos],[DispPos],[AcptDataType],[DispDataType],[AcptWidth],[DispWidth],[AcptAlign],[DispAlign],[AcptFontName],[DispFontName],[AcptFourColour],[DispFourColour],[AcptFontSize],[DispFontSize],[AcptRowHight],[DispRowHight],[AcptBackColour],[DispBackColour],[VAUid],[VActr],[VATermId],[VACompCode],[columnName])VALUES(9700,176,'AC32','AC32',0,0,176,176,2,2,0,8,1,1,'','','','',0,0,0,0,'','','',1,'','','AC32')
+-GO-
+INSERT INTO Acceptdisplaydtls ([trntype],[Index],[AcptCap],[DispCap],[AcptVisible],[DispVisible],[AcptPos],[DispPos],[AcptDataType],[DispDataType],[AcptWidth],[DispWidth],[AcptAlign],[DispAlign],[AcptFontName],[DispFontName],[AcptFourColour],[DispFourColour],[AcptFontSize],[DispFontSize],[AcptRowHight],[DispRowHight],[AcptBackColour],[DispBackColour],[VAUid],[VActr],[VATermId],[VACompCode],[columnName])VALUES(9800,148,'Sup1','Sup1',0,0,148,148,2,2,0,8,1,1,'','','','',0,0,0,0,'','','',1,'','','Sup1')
+-GO-
+INSERT INTO Acceptdisplaydtls ([trntype],[Index],[AcptCap],[DispCap],[AcptVisible],[DispVisible],[AcptPos],[DispPos],[AcptDataType],[DispDataType],[AcptWidth],[DispWidth],[AcptAlign],[DispAlign],[AcptFontName],[DispFontName],[AcptFourColour],[DispFourColour],[AcptFontSize],[DispFontSize],[AcptRowHight],[DispRowHight],[AcptBackColour],[DispBackColour],[VAUid],[VActr],[VATermId],[VACompCode],[columnName])VALUES(9800,149,'Sup2','Sup2',0,0,149,149,2,2,0,8,1,1,'','','','',0,0,0,0,'','','',1,'','','Sup2')
+-GO-
+INSERT INTO Acceptdisplaydtls ([trntype],[Index],[AcptCap],[DispCap],[AcptVisible],[DispVisible],[AcptPos],[DispPos],[AcptDataType],[DispDataType],[AcptWidth],[DispWidth],[AcptAlign],[DispAlign],[AcptFontName],[DispFontName],[AcptFourColour],[DispFourColour],[AcptFontSize],[DispFontSize],[AcptRowHight],[DispRowHight],[AcptBackColour],[DispBackColour],[VAUid],[VActr],[VATermId],[VACompCode],[columnName])VALUES(9800,150,'AC6','AC6',0,0,150,150,2,2,0,8,1,1,'','','','',0,0,0,0,'','','',1,'','','AC6')
+-GO-
+INSERT INTO Acceptdisplaydtls ([trntype],[Index],[AcptCap],[DispCap],[AcptVisible],[DispVisible],[AcptPos],[DispPos],[AcptDataType],[DispDataType],[AcptWidth],[DispWidth],[AcptAlign],[DispAlign],[AcptFontName],[DispFontName],[AcptFourColour],[DispFourColour],[AcptFontSize],[DispFontSize],[AcptRowHight],[DispRowHight],[AcptBackColour],[DispBackColour],[VAUid],[VActr],[VATermId],[VACompCode],[columnName])VALUES(9800,151,'AC7','AC7',0,0,151,151,2,2,0,8,1,1,'','','','',0,0,0,0,'','','',1,'','','AC7')
+-GO-
+INSERT INTO Acceptdisplaydtls ([trntype],[Index],[AcptCap],[DispCap],[AcptVisible],[DispVisible],[AcptPos],[DispPos],[AcptDataType],[DispDataType],[AcptWidth],[DispWidth],[AcptAlign],[DispAlign],[AcptFontName],[DispFontName],[AcptFourColour],[DispFourColour],[AcptFontSize],[DispFontSize],[AcptRowHight],[DispRowHight],[AcptBackColour],[DispBackColour],[VAUid],[VActr],[VATermId],[VACompCode],[columnName])VALUES(9800,152,'AC8','AC8',0,0,152,152,2,2,0,8,1,1,'','','','',0,0,0,0,'','','',1,'','','AC8')
+-GO-
+INSERT INTO Acceptdisplaydtls ([trntype],[Index],[AcptCap],[DispCap],[AcptVisible],[DispVisible],[AcptPos],[DispPos],[AcptDataType],[DispDataType],[AcptWidth],[DispWidth],[AcptAlign],[DispAlign],[AcptFontName],[DispFontName],[AcptFourColour],[DispFourColour],[AcptFontSize],[DispFontSize],[AcptRowHight],[DispRowHight],[AcptBackColour],[DispBackColour],[VAUid],[VActr],[VATermId],[VACompCode],[columnName])VALUES(9800,153,'AC9','AC9',0,0,153,153,2,2,0,8,1,1,'','','','',0,0,0,0,'','','',1,'','','AC9')
+-GO-
+INSERT INTO Acceptdisplaydtls ([trntype],[Index],[AcptCap],[DispCap],[AcptVisible],[DispVisible],[AcptPos],[DispPos],[AcptDataType],[DispDataType],[AcptWidth],[DispWidth],[AcptAlign],[DispAlign],[AcptFontName],[DispFontName],[AcptFourColour],[DispFourColour],[AcptFontSize],[DispFontSize],[AcptRowHight],[DispRowHight],[AcptBackColour],[DispBackColour],[VAUid],[VActr],[VATermId],[VACompCode],[columnName])VALUES(9800,154,'AC10','AC10',0,0,154,154,2,2,0,8,1,1,'','','','',0,0,0,0,'','','',1,'','','AC10')
+-GO-
+INSERT INTO Acceptdisplaydtls ([trntype],[Index],[AcptCap],[DispCap],[AcptVisible],[DispVisible],[AcptPos],[DispPos],[AcptDataType],[DispDataType],[AcptWidth],[DispWidth],[AcptAlign],[DispAlign],[AcptFontName],[DispFontName],[AcptFourColour],[DispFourColour],[AcptFontSize],[DispFontSize],[AcptRowHight],[DispRowHight],[AcptBackColour],[DispBackColour],[VAUid],[VActr],[VATermId],[VACompCode],[columnName])VALUES(9800,155,'AC11','AC11',0,0,155,155,2,2,0,8,1,1,'','','','',0,0,0,0,'','','',1,'','','AC11')
+-GO-
+INSERT INTO Acceptdisplaydtls ([trntype],[Index],[AcptCap],[DispCap],[AcptVisible],[DispVisible],[AcptPos],[DispPos],[AcptDataType],[DispDataType],[AcptWidth],[DispWidth],[AcptAlign],[DispAlign],[AcptFontName],[DispFontName],[AcptFourColour],[DispFourColour],[AcptFontSize],[DispFontSize],[AcptRowHight],[DispRowHight],[AcptBackColour],[DispBackColour],[VAUid],[VActr],[VATermId],[VACompCode],[columnName])VALUES(9800,156,'AC12','AC12',0,0,156,156,2,2,0,8,1,1,'','','','',0,0,0,0,'','','',1,'','','AC12')
+-GO-
+INSERT INTO Acceptdisplaydtls ([trntype],[Index],[AcptCap],[DispCap],[AcptVisible],[DispVisible],[AcptPos],[DispPos],[AcptDataType],[DispDataType],[AcptWidth],[DispWidth],[AcptAlign],[DispAlign],[AcptFontName],[DispFontName],[AcptFourColour],[DispFourColour],[AcptFontSize],[DispFontSize],[AcptRowHight],[DispRowHight],[AcptBackColour],[DispBackColour],[VAUid],[VActr],[VATermId],[VACompCode],[columnName])VALUES(9800,157,'AC13','AC13',0,0,157,157,2,2,0,8,1,1,'','','','',0,0,0,0,'','','',1,'','','AC13')
+-GO-
+INSERT INTO Acceptdisplaydtls ([trntype],[Index],[AcptCap],[DispCap],[AcptVisible],[DispVisible],[AcptPos],[DispPos],[AcptDataType],[DispDataType],[AcptWidth],[DispWidth],[AcptAlign],[DispAlign],[AcptFontName],[DispFontName],[AcptFourColour],[DispFourColour],[AcptFontSize],[DispFontSize],[AcptRowHight],[DispRowHight],[AcptBackColour],[DispBackColour],[VAUid],[VActr],[VATermId],[VACompCode],[columnName])VALUES(9800,158,'AC14','AC14',0,0,158,158,2,2,0,8,1,1,'','','','',0,0,0,0,'','','',1,'','','AC14')
+-GO-
+INSERT INTO Acceptdisplaydtls ([trntype],[Index],[AcptCap],[DispCap],[AcptVisible],[DispVisible],[AcptPos],[DispPos],[AcptDataType],[DispDataType],[AcptWidth],[DispWidth],[AcptAlign],[DispAlign],[AcptFontName],[DispFontName],[AcptFourColour],[DispFourColour],[AcptFontSize],[DispFontSize],[AcptRowHight],[DispRowHight],[AcptBackColour],[DispBackColour],[VAUid],[VActr],[VATermId],[VACompCode],[columnName])VALUES(9800,159,'AC15','AC15',0,0,159,159,2,2,0,8,1,1,'','','','',0,0,0,0,'','','',1,'','','AC15')
+-GO-
+INSERT INTO Acceptdisplaydtls ([trntype],[Index],[AcptCap],[DispCap],[AcptVisible],[DispVisible],[AcptPos],[DispPos],[AcptDataType],[DispDataType],[AcptWidth],[DispWidth],[AcptAlign],[DispAlign],[AcptFontName],[DispFontName],[AcptFourColour],[DispFourColour],[AcptFontSize],[DispFontSize],[AcptRowHight],[DispRowHight],[AcptBackColour],[DispBackColour],[VAUid],[VActr],[VATermId],[VACompCode],[columnName])VALUES(9800,160,'AC16','AC16',0,0,160,160,2,2,0,8,1,1,'','','','',0,0,0,0,'','','',1,'','','AC16')
+-GO-
+INSERT INTO Acceptdisplaydtls ([trntype],[Index],[AcptCap],[DispCap],[AcptVisible],[DispVisible],[AcptPos],[DispPos],[AcptDataType],[DispDataType],[AcptWidth],[DispWidth],[AcptAlign],[DispAlign],[AcptFontName],[DispFontName],[AcptFourColour],[DispFourColour],[AcptFontSize],[DispFontSize],[AcptRowHight],[DispRowHight],[AcptBackColour],[DispBackColour],[VAUid],[VActr],[VATermId],[VACompCode],[columnName])VALUES(9800,161,'AC17','AC17',0,0,161,161,2,2,0,8,1,1,'','','','',0,0,0,0,'','','',1,'','','AC17')
+-GO-
+INSERT INTO Acceptdisplaydtls ([trntype],[Index],[AcptCap],[DispCap],[AcptVisible],[DispVisible],[AcptPos],[DispPos],[AcptDataType],[DispDataType],[AcptWidth],[DispWidth],[AcptAlign],[DispAlign],[AcptFontName],[DispFontName],[AcptFourColour],[DispFourColour],[AcptFontSize],[DispFontSize],[AcptRowHight],[DispRowHight],[AcptBackColour],[DispBackColour],[VAUid],[VActr],[VATermId],[VACompCode],[columnName])VALUES(9800,162,'AC18','AC18',0,0,162,162,2,2,0,8,1,1,'','','','',0,0,0,0,'','','',1,'','','AC18')
+-GO-
+INSERT INTO Acceptdisplaydtls ([trntype],[Index],[AcptCap],[DispCap],[AcptVisible],[DispVisible],[AcptPos],[DispPos],[AcptDataType],[DispDataType],[AcptWidth],[DispWidth],[AcptAlign],[DispAlign],[AcptFontName],[DispFontName],[AcptFourColour],[DispFourColour],[AcptFontSize],[DispFontSize],[AcptRowHight],[DispRowHight],[AcptBackColour],[DispBackColour],[VAUid],[VActr],[VATermId],[VACompCode],[columnName])VALUES(9800,163,'AC19','AC19',0,0,163,163,2,2,0,8,1,1,'','','','',0,0,0,0,'','','',1,'','','AC19')
+-GO-
+INSERT INTO Acceptdisplaydtls ([trntype],[Index],[AcptCap],[DispCap],[AcptVisible],[DispVisible],[AcptPos],[DispPos],[AcptDataType],[DispDataType],[AcptWidth],[DispWidth],[AcptAlign],[DispAlign],[AcptFontName],[DispFontName],[AcptFourColour],[DispFourColour],[AcptFontSize],[DispFontSize],[AcptRowHight],[DispRowHight],[AcptBackColour],[DispBackColour],[VAUid],[VActr],[VATermId],[VACompCode],[columnName])VALUES(9800,164,'AC20','AC20',0,0,164,164,2,2,0,8,1,1,'','','','',0,0,0,0,'','','',1,'','','AC20')
+-GO-
+INSERT INTO Acceptdisplaydtls ([trntype],[Index],[AcptCap],[DispCap],[AcptVisible],[DispVisible],[AcptPos],[DispPos],[AcptDataType],[DispDataType],[AcptWidth],[DispWidth],[AcptAlign],[DispAlign],[AcptFontName],[DispFontName],[AcptFourColour],[DispFourColour],[AcptFontSize],[DispFontSize],[AcptRowHight],[DispRowHight],[AcptBackColour],[DispBackColour],[VAUid],[VActr],[VATermId],[VACompCode],[columnName])VALUES(9800,165,'AC21','AC21',0,0,165,165,2,2,0,8,1,1,'','','','',0,0,0,0,'','','',1,'','','AC21')
+-GO-
+INSERT INTO Acceptdisplaydtls ([trntype],[Index],[AcptCap],[DispCap],[AcptVisible],[DispVisible],[AcptPos],[DispPos],[AcptDataType],[DispDataType],[AcptWidth],[DispWidth],[AcptAlign],[DispAlign],[AcptFontName],[DispFontName],[AcptFourColour],[DispFourColour],[AcptFontSize],[DispFontSize],[AcptRowHight],[DispRowHight],[AcptBackColour],[DispBackColour],[VAUid],[VActr],[VATermId],[VACompCode],[columnName])VALUES(9800,166,'AC22','AC22',0,0,166,166,2,2,0,8,1,1,'','','','',0,0,0,0,'','','',1,'','','AC22')
+-GO-
+INSERT INTO Acceptdisplaydtls ([trntype],[Index],[AcptCap],[DispCap],[AcptVisible],[DispVisible],[AcptPos],[DispPos],[AcptDataType],[DispDataType],[AcptWidth],[DispWidth],[AcptAlign],[DispAlign],[AcptFontName],[DispFontName],[AcptFourColour],[DispFourColour],[AcptFontSize],[DispFontSize],[AcptRowHight],[DispRowHight],[AcptBackColour],[DispBackColour],[VAUid],[VActr],[VATermId],[VACompCode],[columnName])VALUES(9800,167,'AC23','AC23',0,0,167,167,2,2,0,8,1,1,'','','','',0,0,0,0,'','','',1,'','','AC23')
+-GO-
+INSERT INTO Acceptdisplaydtls ([trntype],[Index],[AcptCap],[DispCap],[AcptVisible],[DispVisible],[AcptPos],[DispPos],[AcptDataType],[DispDataType],[AcptWidth],[DispWidth],[AcptAlign],[DispAlign],[AcptFontName],[DispFontName],[AcptFourColour],[DispFourColour],[AcptFontSize],[DispFontSize],[AcptRowHight],[DispRowHight],[AcptBackColour],[DispBackColour],[VAUid],[VActr],[VATermId],[VACompCode],[columnName])VALUES(9800,168,'AC24','AC24',0,0,168,168,2,2,0,8,1,1,'','','','',0,0,0,0,'','','',1,'','','AC24')
+-GO-
+INSERT INTO Acceptdisplaydtls ([trntype],[Index],[AcptCap],[DispCap],[AcptVisible],[DispVisible],[AcptPos],[DispPos],[AcptDataType],[DispDataType],[AcptWidth],[DispWidth],[AcptAlign],[DispAlign],[AcptFontName],[DispFontName],[AcptFourColour],[DispFourColour],[AcptFontSize],[DispFontSize],[AcptRowHight],[DispRowHight],[AcptBackColour],[DispBackColour],[VAUid],[VActr],[VATermId],[VACompCode],[columnName])VALUES(9800,169,'AC25','AC25',0,0,169,169,2,2,0,8,1,1,'','','','',0,0,0,0,'','','',1,'','','AC25')
+-GO-
+INSERT INTO Acceptdisplaydtls ([trntype],[Index],[AcptCap],[DispCap],[AcptVisible],[DispVisible],[AcptPos],[DispPos],[AcptDataType],[DispDataType],[AcptWidth],[DispWidth],[AcptAlign],[DispAlign],[AcptFontName],[DispFontName],[AcptFourColour],[DispFourColour],[AcptFontSize],[DispFontSize],[AcptRowHight],[DispRowHight],[AcptBackColour],[DispBackColour],[VAUid],[VActr],[VATermId],[VACompCode],[columnName])VALUES(9800,170,'AC26','AC26',0,0,170,170,2,2,0,8,1,1,'','','','',0,0,0,0,'','','',1,'','','AC26')
+-GO-
+INSERT INTO Acceptdisplaydtls ([trntype],[Index],[AcptCap],[DispCap],[AcptVisible],[DispVisible],[AcptPos],[DispPos],[AcptDataType],[DispDataType],[AcptWidth],[DispWidth],[AcptAlign],[DispAlign],[AcptFontName],[DispFontName],[AcptFourColour],[DispFourColour],[AcptFontSize],[DispFontSize],[AcptRowHight],[DispRowHight],[AcptBackColour],[DispBackColour],[VAUid],[VActr],[VATermId],[VACompCode],[columnName])VALUES(9800,171,'AC27','AC27',0,0,171,171,2,2,0,8,1,1,'','','','',0,0,0,0,'','','',1,'','','AC27')
+-GO-
+INSERT INTO Acceptdisplaydtls ([trntype],[Index],[AcptCap],[DispCap],[AcptVisible],[DispVisible],[AcptPos],[DispPos],[AcptDataType],[DispDataType],[AcptWidth],[DispWidth],[AcptAlign],[DispAlign],[AcptFontName],[DispFontName],[AcptFourColour],[DispFourColour],[AcptFontSize],[DispFontSize],[AcptRowHight],[DispRowHight],[AcptBackColour],[DispBackColour],[VAUid],[VActr],[VATermId],[VACompCode],[columnName])VALUES(9800,172,'AC28','AC28',0,0,172,172,2,2,0,8,1,1,'','','','',0,0,0,0,'','','',1,'','','AC28')
+-GO-
+INSERT INTO Acceptdisplaydtls ([trntype],[Index],[AcptCap],[DispCap],[AcptVisible],[DispVisible],[AcptPos],[DispPos],[AcptDataType],[DispDataType],[AcptWidth],[DispWidth],[AcptAlign],[DispAlign],[AcptFontName],[DispFontName],[AcptFourColour],[DispFourColour],[AcptFontSize],[DispFontSize],[AcptRowHight],[DispRowHight],[AcptBackColour],[DispBackColour],[VAUid],[VActr],[VATermId],[VACompCode],[columnName])VALUES(9800,173,'AC29','AC29',0,0,173,173,2,2,0,8,1,1,'','','','',0,0,0,0,'','','',1,'','','AC29')
+-GO-
+INSERT INTO Acceptdisplaydtls ([trntype],[Index],[AcptCap],[DispCap],[AcptVisible],[DispVisible],[AcptPos],[DispPos],[AcptDataType],[DispDataType],[AcptWidth],[DispWidth],[AcptAlign],[DispAlign],[AcptFontName],[DispFontName],[AcptFourColour],[DispFourColour],[AcptFontSize],[DispFontSize],[AcptRowHight],[DispRowHight],[AcptBackColour],[DispBackColour],[VAUid],[VActr],[VATermId],[VACompCode],[columnName])VALUES(9800,174,'AC30','AC30',0,0,174,174,2,2,0,8,1,1,'','','','',0,0,0,0,'','','',1,'','','AC30')
+-GO-
+INSERT INTO Acceptdisplaydtls ([trntype],[Index],[AcptCap],[DispCap],[AcptVisible],[DispVisible],[AcptPos],[DispPos],[AcptDataType],[DispDataType],[AcptWidth],[DispWidth],[AcptAlign],[DispAlign],[AcptFontName],[DispFontName],[AcptFourColour],[DispFourColour],[AcptFontSize],[DispFontSize],[AcptRowHight],[DispRowHight],[AcptBackColour],[DispBackColour],[VAUid],[VActr],[VATermId],[VACompCode],[columnName])VALUES(9800,175,'AC31','AC31',0,0,175,175,2,2,0,8,1,1,'','','','',0,0,0,0,'','','',1,'','','AC31')
+-GO-
+INSERT INTO Acceptdisplaydtls ([trntype],[Index],[AcptCap],[DispCap],[AcptVisible],[DispVisible],[AcptPos],[DispPos],[AcptDataType],[DispDataType],[AcptWidth],[DispWidth],[AcptAlign],[DispAlign],[AcptFontName],[DispFontName],[AcptFourColour],[DispFourColour],[AcptFontSize],[DispFontSize],[AcptRowHight],[DispRowHight],[AcptBackColour],[DispBackColour],[VAUid],[VActr],[VATermId],[VACompCode],[columnName])VALUES(9800,176,'AC32','AC32',0,0,176,176,2,2,0,8,1,1,'','','','',0,0,0,0,'','','',1,'','','AC32')
+-GO-
+INSERT INTO Acceptdisplaydtls ([trntype],[Index],[AcptCap],[DispCap],[AcptVisible],[DispVisible],[AcptPos],[DispPos],[AcptDataType],[DispDataType],[AcptWidth],[DispWidth],[AcptAlign],[DispAlign],[AcptFontName],[DispFontName],[AcptFourColour],[DispFourColour],[AcptFontSize],[DispFontSize],[AcptRowHight],[DispRowHight],[AcptBackColour],[DispBackColour],[VAUid],[VActr],[VATermId],[VACompCode],[columnName])VALUES(9900,148,'Sup1','Sup1',0,0,148,148,2,2,0,8,1,1,'','','','',0,0,0,0,'','','',1,'','','Sup1')
+-GO-
+INSERT INTO Acceptdisplaydtls ([trntype],[Index],[AcptCap],[DispCap],[AcptVisible],[DispVisible],[AcptPos],[DispPos],[AcptDataType],[DispDataType],[AcptWidth],[DispWidth],[AcptAlign],[DispAlign],[AcptFontName],[DispFontName],[AcptFourColour],[DispFourColour],[AcptFontSize],[DispFontSize],[AcptRowHight],[DispRowHight],[AcptBackColour],[DispBackColour],[VAUid],[VActr],[VATermId],[VACompCode],[columnName])VALUES(9900,149,'Sup2','Sup2',0,0,149,149,2,2,0,8,1,1,'','','','',0,0,0,0,'','','',1,'','','Sup2')
+-GO-
+INSERT INTO Acceptdisplaydtls ([trntype],[Index],[AcptCap],[DispCap],[AcptVisible],[DispVisible],[AcptPos],[DispPos],[AcptDataType],[DispDataType],[AcptWidth],[DispWidth],[AcptAlign],[DispAlign],[AcptFontName],[DispFontName],[AcptFourColour],[DispFourColour],[AcptFontSize],[DispFontSize],[AcptRowHight],[DispRowHight],[AcptBackColour],[DispBackColour],[VAUid],[VActr],[VATermId],[VACompCode],[columnName])VALUES(9900,150,'AC6','AC6',0,0,150,150,2,2,0,8,1,1,'','','','',0,0,0,0,'','','',1,'','','AC6')
+-GO-
+INSERT INTO Acceptdisplaydtls ([trntype],[Index],[AcptCap],[DispCap],[AcptVisible],[DispVisible],[AcptPos],[DispPos],[AcptDataType],[DispDataType],[AcptWidth],[DispWidth],[AcptAlign],[DispAlign],[AcptFontName],[DispFontName],[AcptFourColour],[DispFourColour],[AcptFontSize],[DispFontSize],[AcptRowHight],[DispRowHight],[AcptBackColour],[DispBackColour],[VAUid],[VActr],[VATermId],[VACompCode],[columnName])VALUES(9900,151,'AC7','AC7',0,0,151,151,2,2,0,8,1,1,'','','','',0,0,0,0,'','','',1,'','','AC7')
+-GO-
+INSERT INTO Acceptdisplaydtls ([trntype],[Index],[AcptCap],[DispCap],[AcptVisible],[DispVisible],[AcptPos],[DispPos],[AcptDataType],[DispDataType],[AcptWidth],[DispWidth],[AcptAlign],[DispAlign],[AcptFontName],[DispFontName],[AcptFourColour],[DispFourColour],[AcptFontSize],[DispFontSize],[AcptRowHight],[DispRowHight],[AcptBackColour],[DispBackColour],[VAUid],[VActr],[VATermId],[VACompCode],[columnName])VALUES(9900,152,'AC8','AC8',0,0,152,152,2,2,0,8,1,1,'','','','',0,0,0,0,'','','',1,'','','AC8')
+-GO-
+INSERT INTO Acceptdisplaydtls ([trntype],[Index],[AcptCap],[DispCap],[AcptVisible],[DispVisible],[AcptPos],[DispPos],[AcptDataType],[DispDataType],[AcptWidth],[DispWidth],[AcptAlign],[DispAlign],[AcptFontName],[DispFontName],[AcptFourColour],[DispFourColour],[AcptFontSize],[DispFontSize],[AcptRowHight],[DispRowHight],[AcptBackColour],[DispBackColour],[VAUid],[VActr],[VATermId],[VACompCode],[columnName])VALUES(9900,153,'AC9','AC9',0,0,153,153,2,2,0,8,1,1,'','','','',0,0,0,0,'','','',1,'','','AC9')
+-GO-
+INSERT INTO Acceptdisplaydtls ([trntype],[Index],[AcptCap],[DispCap],[AcptVisible],[DispVisible],[AcptPos],[DispPos],[AcptDataType],[DispDataType],[AcptWidth],[DispWidth],[AcptAlign],[DispAlign],[AcptFontName],[DispFontName],[AcptFourColour],[DispFourColour],[AcptFontSize],[DispFontSize],[AcptRowHight],[DispRowHight],[AcptBackColour],[DispBackColour],[VAUid],[VActr],[VATermId],[VACompCode],[columnName])VALUES(9900,154,'AC10','AC10',0,0,154,154,2,2,0,8,1,1,'','','','',0,0,0,0,'','','',1,'','','AC10')
+-GO-
+INSERT INTO Acceptdisplaydtls ([trntype],[Index],[AcptCap],[DispCap],[AcptVisible],[DispVisible],[AcptPos],[DispPos],[AcptDataType],[DispDataType],[AcptWidth],[DispWidth],[AcptAlign],[DispAlign],[AcptFontName],[DispFontName],[AcptFourColour],[DispFourColour],[AcptFontSize],[DispFontSize],[AcptRowHight],[DispRowHight],[AcptBackColour],[DispBackColour],[VAUid],[VActr],[VATermId],[VACompCode],[columnName])VALUES(9900,155,'AC11','AC11',0,0,155,155,2,2,0,8,1,1,'','','','',0,0,0,0,'','','',1,'','','AC11')
+-GO-
+INSERT INTO Acceptdisplaydtls ([trntype],[Index],[AcptCap],[DispCap],[AcptVisible],[DispVisible],[AcptPos],[DispPos],[AcptDataType],[DispDataType],[AcptWidth],[DispWidth],[AcptAlign],[DispAlign],[AcptFontName],[DispFontName],[AcptFourColour],[DispFourColour],[AcptFontSize],[DispFontSize],[AcptRowHight],[DispRowHight],[AcptBackColour],[DispBackColour],[VAUid],[VActr],[VATermId],[VACompCode],[columnName])VALUES(9900,156,'AC12','AC12',0,0,156,156,2,2,0,8,1,1,'','','','',0,0,0,0,'','','',1,'','','AC12')
+-GO-
+INSERT INTO Acceptdisplaydtls ([trntype],[Index],[AcptCap],[DispCap],[AcptVisible],[DispVisible],[AcptPos],[DispPos],[AcptDataType],[DispDataType],[AcptWidth],[DispWidth],[AcptAlign],[DispAlign],[AcptFontName],[DispFontName],[AcptFourColour],[DispFourColour],[AcptFontSize],[DispFontSize],[AcptRowHight],[DispRowHight],[AcptBackColour],[DispBackColour],[VAUid],[VActr],[VATermId],[VACompCode],[columnName])VALUES(9900,157,'AC13','AC13',0,0,157,157,2,2,0,8,1,1,'','','','',0,0,0,0,'','','',1,'','','AC13')
+-GO-
+INSERT INTO Acceptdisplaydtls ([trntype],[Index],[AcptCap],[DispCap],[AcptVisible],[DispVisible],[AcptPos],[DispPos],[AcptDataType],[DispDataType],[AcptWidth],[DispWidth],[AcptAlign],[DispAlign],[AcptFontName],[DispFontName],[AcptFourColour],[DispFourColour],[AcptFontSize],[DispFontSize],[AcptRowHight],[DispRowHight],[AcptBackColour],[DispBackColour],[VAUid],[VActr],[VATermId],[VACompCode],[columnName])VALUES(9900,158,'AC14','AC14',0,0,158,158,2,2,0,8,1,1,'','','','',0,0,0,0,'','','',1,'','','AC14')
+-GO-
+INSERT INTO Acceptdisplaydtls ([trntype],[Index],[AcptCap],[DispCap],[AcptVisible],[DispVisible],[AcptPos],[DispPos],[AcptDataType],[DispDataType],[AcptWidth],[DispWidth],[AcptAlign],[DispAlign],[AcptFontName],[DispFontName],[AcptFourColour],[DispFourColour],[AcptFontSize],[DispFontSize],[AcptRowHight],[DispRowHight],[AcptBackColour],[DispBackColour],[VAUid],[VActr],[VATermId],[VACompCode],[columnName])VALUES(9900,159,'AC15','AC15',0,0,159,159,2,2,0,8,1,1,'','','','',0,0,0,0,'','','',1,'','','AC15')
+-GO-
+INSERT INTO Acceptdisplaydtls ([trntype],[Index],[AcptCap],[DispCap],[AcptVisible],[DispVisible],[AcptPos],[DispPos],[AcptDataType],[DispDataType],[AcptWidth],[DispWidth],[AcptAlign],[DispAlign],[AcptFontName],[DispFontName],[AcptFourColour],[DispFourColour],[AcptFontSize],[DispFontSize],[AcptRowHight],[DispRowHight],[AcptBackColour],[DispBackColour],[VAUid],[VActr],[VATermId],[VACompCode],[columnName])VALUES(9900,160,'AC16','AC16',0,0,160,160,2,2,0,8,1,1,'','','','',0,0,0,0,'','','',1,'','','AC16')
+-GO-
+INSERT INTO Acceptdisplaydtls ([trntype],[Index],[AcptCap],[DispCap],[AcptVisible],[DispVisible],[AcptPos],[DispPos],[AcptDataType],[DispDataType],[AcptWidth],[DispWidth],[AcptAlign],[DispAlign],[AcptFontName],[DispFontName],[AcptFourColour],[DispFourColour],[AcptFontSize],[DispFontSize],[AcptRowHight],[DispRowHight],[AcptBackColour],[DispBackColour],[VAUid],[VActr],[VATermId],[VACompCode],[columnName])VALUES(9900,161,'AC17','AC17',0,0,161,161,2,2,0,8,1,1,'','','','',0,0,0,0,'','','',1,'','','AC17')
+-GO-
+INSERT INTO Acceptdisplaydtls ([trntype],[Index],[AcptCap],[DispCap],[AcptVisible],[DispVisible],[AcptPos],[DispPos],[AcptDataType],[DispDataType],[AcptWidth],[DispWidth],[AcptAlign],[DispAlign],[AcptFontName],[DispFontName],[AcptFourColour],[DispFourColour],[AcptFontSize],[DispFontSize],[AcptRowHight],[DispRowHight],[AcptBackColour],[DispBackColour],[VAUid],[VActr],[VATermId],[VACompCode],[columnName])VALUES(9900,162,'AC18','AC18',0,0,162,162,2,2,0,8,1,1,'','','','',0,0,0,0,'','','',1,'','','AC18')
+-GO-
+INSERT INTO Acceptdisplaydtls ([trntype],[Index],[AcptCap],[DispCap],[AcptVisible],[DispVisible],[AcptPos],[DispPos],[AcptDataType],[DispDataType],[AcptWidth],[DispWidth],[AcptAlign],[DispAlign],[AcptFontName],[DispFontName],[AcptFourColour],[DispFourColour],[AcptFontSize],[DispFontSize],[AcptRowHight],[DispRowHight],[AcptBackColour],[DispBackColour],[VAUid],[VActr],[VATermId],[VACompCode],[columnName])VALUES(9900,163,'AC19','AC19',0,0,163,163,2,2,0,8,1,1,'','','','',0,0,0,0,'','','',1,'','','AC19')
+-GO-
+INSERT INTO Acceptdisplaydtls ([trntype],[Index],[AcptCap],[DispCap],[AcptVisible],[DispVisible],[AcptPos],[DispPos],[AcptDataType],[DispDataType],[AcptWidth],[DispWidth],[AcptAlign],[DispAlign],[AcptFontName],[DispFontName],[AcptFourColour],[DispFourColour],[AcptFontSize],[DispFontSize],[AcptRowHight],[DispRowHight],[AcptBackColour],[DispBackColour],[VAUid],[VActr],[VATermId],[VACompCode],[columnName])VALUES(9900,164,'AC20','AC20',0,0,164,164,2,2,0,8,1,1,'','','','',0,0,0,0,'','','',1,'','','AC20')
+-GO-
+INSERT INTO Acceptdisplaydtls ([trntype],[Index],[AcptCap],[DispCap],[AcptVisible],[DispVisible],[AcptPos],[DispPos],[AcptDataType],[DispDataType],[AcptWidth],[DispWidth],[AcptAlign],[DispAlign],[AcptFontName],[DispFontName],[AcptFourColour],[DispFourColour],[AcptFontSize],[DispFontSize],[AcptRowHight],[DispRowHight],[AcptBackColour],[DispBackColour],[VAUid],[VActr],[VATermId],[VACompCode],[columnName])VALUES(9900,165,'AC21','AC21',0,0,165,165,2,2,0,8,1,1,'','','','',0,0,0,0,'','','',1,'','','AC21')
+-GO-
+INSERT INTO Acceptdisplaydtls ([trntype],[Index],[AcptCap],[DispCap],[AcptVisible],[DispVisible],[AcptPos],[DispPos],[AcptDataType],[DispDataType],[AcptWidth],[DispWidth],[AcptAlign],[DispAlign],[AcptFontName],[DispFontName],[AcptFourColour],[DispFourColour],[AcptFontSize],[DispFontSize],[AcptRowHight],[DispRowHight],[AcptBackColour],[DispBackColour],[VAUid],[VActr],[VATermId],[VACompCode],[columnName])VALUES(9900,166,'AC22','AC22',0,0,166,166,2,2,0,8,1,1,'','','','',0,0,0,0,'','','',1,'','','AC22')
+-GO-
+INSERT INTO Acceptdisplaydtls ([trntype],[Index],[AcptCap],[DispCap],[AcptVisible],[DispVisible],[AcptPos],[DispPos],[AcptDataType],[DispDataType],[AcptWidth],[DispWidth],[AcptAlign],[DispAlign],[AcptFontName],[DispFontName],[AcptFourColour],[DispFourColour],[AcptFontSize],[DispFontSize],[AcptRowHight],[DispRowHight],[AcptBackColour],[DispBackColour],[VAUid],[VActr],[VATermId],[VACompCode],[columnName])VALUES(9900,167,'AC23','AC23',0,0,167,167,2,2,0,8,1,1,'','','','',0,0,0,0,'','','',1,'','','AC23')
+-GO-
+INSERT INTO Acceptdisplaydtls ([trntype],[Index],[AcptCap],[DispCap],[AcptVisible],[DispVisible],[AcptPos],[DispPos],[AcptDataType],[DispDataType],[AcptWidth],[DispWidth],[AcptAlign],[DispAlign],[AcptFontName],[DispFontName],[AcptFourColour],[DispFourColour],[AcptFontSize],[DispFontSize],[AcptRowHight],[DispRowHight],[AcptBackColour],[DispBackColour],[VAUid],[VActr],[VATermId],[VACompCode],[columnName])VALUES(9900,168,'AC24','AC24',0,0,168,168,2,2,0,8,1,1,'','','','',0,0,0,0,'','','',1,'','','AC24')
+-GO-
+INSERT INTO Acceptdisplaydtls ([trntype],[Index],[AcptCap],[DispCap],[AcptVisible],[DispVisible],[AcptPos],[DispPos],[AcptDataType],[DispDataType],[AcptWidth],[DispWidth],[AcptAlign],[DispAlign],[AcptFontName],[DispFontName],[AcptFourColour],[DispFourColour],[AcptFontSize],[DispFontSize],[AcptRowHight],[DispRowHight],[AcptBackColour],[DispBackColour],[VAUid],[VActr],[VATermId],[VACompCode],[columnName])VALUES(9900,169,'AC25','AC25',0,0,169,169,2,2,0,8,1,1,'','','','',0,0,0,0,'','','',1,'','','AC25')
+-GO-
+INSERT INTO Acceptdisplaydtls ([trntype],[Index],[AcptCap],[DispCap],[AcptVisible],[DispVisible],[AcptPos],[DispPos],[AcptDataType],[DispDataType],[AcptWidth],[DispWidth],[AcptAlign],[DispAlign],[AcptFontName],[DispFontName],[AcptFourColour],[DispFourColour],[AcptFontSize],[DispFontSize],[AcptRowHight],[DispRowHight],[AcptBackColour],[DispBackColour],[VAUid],[VActr],[VATermId],[VACompCode],[columnName])VALUES(9900,170,'AC26','AC26',0,0,170,170,2,2,0,8,1,1,'','','','',0,0,0,0,'','','',1,'','','AC26')
+-GO-
+INSERT INTO Acceptdisplaydtls ([trntype],[Index],[AcptCap],[DispCap],[AcptVisible],[DispVisible],[AcptPos],[DispPos],[AcptDataType],[DispDataType],[AcptWidth],[DispWidth],[AcptAlign],[DispAlign],[AcptFontName],[DispFontName],[AcptFourColour],[DispFourColour],[AcptFontSize],[DispFontSize],[AcptRowHight],[DispRowHight],[AcptBackColour],[DispBackColour],[VAUid],[VActr],[VATermId],[VACompCode],[columnName])VALUES(9900,171,'AC27','AC27',0,0,171,171,2,2,0,8,1,1,'','','','',0,0,0,0,'','','',1,'','','AC27')
+-GO-
+INSERT INTO Acceptdisplaydtls ([trntype],[Index],[AcptCap],[DispCap],[AcptVisible],[DispVisible],[AcptPos],[DispPos],[AcptDataType],[DispDataType],[AcptWidth],[DispWidth],[AcptAlign],[DispAlign],[AcptFontName],[DispFontName],[AcptFourColour],[DispFourColour],[AcptFontSize],[DispFontSize],[AcptRowHight],[DispRowHight],[AcptBackColour],[DispBackColour],[VAUid],[VActr],[VATermId],[VACompCode],[columnName])VALUES(9900,172,'AC28','AC28',0,0,172,172,2,2,0,8,1,1,'','','','',0,0,0,0,'','','',1,'','','AC28')
+-GO-
+INSERT INTO Acceptdisplaydtls ([trntype],[Index],[AcptCap],[DispCap],[AcptVisible],[DispVisible],[AcptPos],[DispPos],[AcptDataType],[DispDataType],[AcptWidth],[DispWidth],[AcptAlign],[DispAlign],[AcptFontName],[DispFontName],[AcptFourColour],[DispFourColour],[AcptFontSize],[DispFontSize],[AcptRowHight],[DispRowHight],[AcptBackColour],[DispBackColour],[VAUid],[VActr],[VATermId],[VACompCode],[columnName])VALUES(9900,173,'AC29','AC29',0,0,173,173,2,2,0,8,1,1,'','','','',0,0,0,0,'','','',1,'','','AC29')
+-GO-
+INSERT INTO Acceptdisplaydtls ([trntype],[Index],[AcptCap],[DispCap],[AcptVisible],[DispVisible],[AcptPos],[DispPos],[AcptDataType],[DispDataType],[AcptWidth],[DispWidth],[AcptAlign],[DispAlign],[AcptFontName],[DispFontName],[AcptFourColour],[DispFourColour],[AcptFontSize],[DispFontSize],[AcptRowHight],[DispRowHight],[AcptBackColour],[DispBackColour],[VAUid],[VActr],[VATermId],[VACompCode],[columnName])VALUES(9900,174,'AC30','AC30',0,0,174,174,2,2,0,8,1,1,'','','','',0,0,0,0,'','','',1,'','','AC30')
+-GO-
+INSERT INTO Acceptdisplaydtls ([trntype],[Index],[AcptCap],[DispCap],[AcptVisible],[DispVisible],[AcptPos],[DispPos],[AcptDataType],[DispDataType],[AcptWidth],[DispWidth],[AcptAlign],[DispAlign],[AcptFontName],[DispFontName],[AcptFourColour],[DispFourColour],[AcptFontSize],[DispFontSize],[AcptRowHight],[DispRowHight],[AcptBackColour],[DispBackColour],[VAUid],[VActr],[VATermId],[VACompCode],[columnName])VALUES(9900,175,'AC31','AC31',0,0,175,175,2,2,0,8,1,1,'','','','',0,0,0,0,'','','',1,'','','AC31')
+-GO-
+INSERT INTO Acceptdisplaydtls ([trntype],[Index],[AcptCap],[DispCap],[AcptVisible],[DispVisible],[AcptPos],[DispPos],[AcptDataType],[DispDataType],[AcptWidth],[DispWidth],[AcptAlign],[DispAlign],[AcptFontName],[DispFontName],[AcptFourColour],[DispFourColour],[AcptFontSize],[DispFontSize],[AcptRowHight],[DispRowHight],[AcptBackColour],[DispBackColour],[VAUid],[VActr],[VATermId],[VACompCode],[columnName])VALUES(9900,176,'AC32','AC32',0,0,176,176,2,2,0,8,1,1,'','','','',0,0,0,0,'','','',1,'','','AC32')
+-GO-
+update Acceptdisplaydtls set AcptDataType=4,DispDataType=4 where columnName='LSQ'
+-GO-
+ </s9qScript>
+</s9qsqlblk>

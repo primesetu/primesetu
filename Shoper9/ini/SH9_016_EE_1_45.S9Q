@@ -1,0 +1,928 @@
+<s9qsqlblk>
+  <s9qScriptid>S9Q_016_1_0449</s9qScriptid> 
+  <s9qtitle>POS Rel 1.6 Creation of tables</s9qtitle> 
+  <s9qpgmtype>I</s9qpgmtype>  
+  <s9qpgmtype>L</s9qpgmtype>  
+  <s9qversion>*</s9qversion> 
+  <s9qenvironment>P</s9qenvironment> 
+  <s9qRunMultiple>1</s9qRunMultiple> 
+  <s9qQryType>DDL</s9qQryType> 
+  <s9qScript>
+CREATE TABLE [dbo].[TillOperationJournalHdr](
+	[TillTrntype] [int] NOT NULL,
+	[TillTrnctrlno] [int] NOT NULL,
+	[TillTrndt] [datetime] NOT NULL,
+	[TrnTime] [datetime] NULL,
+	[RefTrntype] [int] NULL,
+	[RefTrnctrlno] [int] NULL,
+	[Nodeid] [varchar](32) NULL,
+	[Tillid] [varchar](64) NULL,
+	[Shiftid] [varchar](32) NULL,
+	[TOJamt] [money] NULL,
+	[TOJnarration] [varchar](128) NULL,
+	[TOJreason] [varchar](32) NULL,
+	[TOJLifttype] [varchar](8) NULL,
+	[FromTillid] [varchar](64) NULL,
+	[ToTillid] [varchar](64) NULL,
+	[TOJdiffamt] [money] NULL,
+	[refshiftctrlno] [int] NULL,
+	[RcptUnits] [money] NULL,
+	[LocCurrRcptAmt] [money] NULL,
+	[PaidUnits] [money] NULL,
+	[LocCurrPaidAmt] [money] NULL,
+	[BackRefTrntype] [int] NULL,
+	[BackRefTrnctrlno] [int] NULL,
+	[FwdRefTrntype] [int] NULL,
+	[FwdRefTrnctrlno] [int] NULL,
+	[XS1]  [varchar](128) NULL,
+	[XS2]  [varchar](128) NULL,
+	[XS3]  [varchar](128) NULL,
+	[XS4]  [varchar](128) NULL,
+	[XS5]  [varchar](128) NULL,
+	[XS6]  [varchar](128) NULL,
+	[XS7]  [varchar](128) NULL,
+	[XS8]  [varchar](128) NULL,
+	[XI1]  [int] NULL,
+	[XI2]  [int] NULL,
+	[XI3]  [int] NULL,
+	[XI4]  [int] NULL,
+	[XM1]  [money] NULL,
+	[XM2]  [money] NULL,
+	[XM3]  [money] NULL,
+	[XM4]  [money] NULL,
+	[XD1]  [datetime] NULL,
+	[XD2]  [datetime] NULL,
+	[XD3]  [datetime] NULL,
+	[XD4]  [datetime] NULL,
+	[CS1]  [varchar](128) NULL,
+	[CS2]  [varchar](128) NULL,
+	[CS3]  [varchar](128) NULL,
+	[CS4]  [varchar](128) NULL,
+	[CS5]  [varchar](128) NULL,
+	[CS6]  [varchar](128) NULL,
+	[CS7]  [varchar](128) NULL,
+	[CS8]  [varchar](128) NULL,
+	[CI1]  [int] NULL,
+	[CI2]  [int] NULL,
+	[CI3]  [int] NULL,
+	[CI4]  [int] NULL,
+	[CM1]  [money] NULL,
+	[CM2]  [money] NULL,
+	[CM3]  [money] NULL,
+	[CM4]  [money] NULL,
+	[CD1]  [datetime] NULL,
+	[CD2]  [datetime] NULL,
+	[CD3]  [datetime] NULL,
+	[CD4]  [datetime] NULL,
+	[VAuid] [varchar](32) NULL,
+	[VActr] [int] NULL,
+	[VAtermid] [varchar](32) NULL,
+	[VAcompcode] [varchar](16) NULL,
+	[shoperdbver] [int] NOT NULL default 730,
+ CONSTRAINT [PK_TillOperationJournalHdr] PRIMARY KEY CLUSTERED 
+(
+	[TillTrntype] ASC,
+	[TillTrnctrlno] ASC,
+	[TillTrndt] ASC
+)
+) ON [PRIMARY]
+
+-GO-
+CREATE TABLE [dbo].[BAKTillOperationJournalHdr](
+	[TillTrntype] [int] NOT NULL,
+	[TillTrnctrlno] [int] NOT NULL,
+	[TillTrndt] [datetime] NOT NULL,
+	[TrnTime] [datetime] NULL,
+	[RefTrntype] [int] NULL,
+	[RefTrnctrlno] [int] NULL,
+	[Nodeid] [varchar](32) NULL,
+	[Tillid] [varchar](64) NULL,
+	[Shiftid] [varchar](32) NULL,
+	[TOJamt] [money] NULL,
+	[TOJnarration] [varchar](128) NULL,
+	[TOJreason] [varchar](32) NULL,
+	[TOJLifttype] [varchar](8) NULL,
+	[FromTillid] [varchar](64) NULL,
+	[ToTillid] [varchar](64) NULL,
+	[TOJdiffamt] [money] NULL,
+	[refshiftctrlno] [int] NULL,
+	[RcptUnits] [money] NULL,
+	[LocCurrRcptAmt] [money] NULL,
+	[PaidUnits] [money] NULL,
+	[LocCurrPaidAmt] [money] NULL,
+	[BackRefTrntype] [int] NULL,
+	[BackRefTrnctrlno] [int] NULL,
+	[FwdRefTrntype] [int] NULL,
+	[FwdRefTrnctrlno] [int] NULL,
+	[XS1]  [varchar](128) NULL,
+	[XS2]  [varchar](128) NULL,
+	[XS3]  [varchar](128) NULL,
+	[XS4]  [varchar](128) NULL,
+	[XS5]  [varchar](128) NULL,
+	[XS6]  [varchar](128) NULL,
+	[XS7]  [varchar](128) NULL,
+	[XS8]  [varchar](128) NULL,
+	[XI1]  [int] NULL,
+	[XI2]  [int] NULL,
+	[XI3]  [int] NULL,
+	[XI4]  [int] NULL,
+	[XM1]  [money] NULL,
+	[XM2]  [money] NULL,
+	[XM3]  [money] NULL,
+	[XM4]  [money] NULL,
+	[XD1]  [datetime] NULL,
+	[XD2]  [datetime] NULL,
+	[XD3]  [datetime] NULL,
+	[XD4]  [datetime] NULL,
+	[CS1]  [varchar](128) NULL,
+	[CS2]  [varchar](128) NULL,
+	[CS3]  [varchar](128) NULL,
+	[CS4]  [varchar](128) NULL,
+	[CS5]  [varchar](128) NULL,
+	[CS6]  [varchar](128) NULL,
+	[CS7]  [varchar](128) NULL,
+	[CS8]  [varchar](128) NULL,
+	[CI1]  [int] NULL,
+	[CI2]  [int] NULL,
+	[CI3]  [int] NULL,
+	[CI4]  [int] NULL,
+	[CM1]  [money] NULL,
+	[CM2]  [money] NULL,
+	[CM3]  [money] NULL,
+	[CM4]  [money] NULL,
+	[CD1]  [datetime] NULL,
+	[CD2]  [datetime] NULL,
+	[CD3]  [datetime] NULL,
+	[CD4]  [datetime] NULL,
+	[VAuid] [varchar](32) NULL,
+	[VActr] [int] NULL,
+	[VAtermid] [varchar](32) NULL,
+	[VAcompcode] [varchar](16) NULL,
+	[shoperdbver] [int] NULL ,
+	[updflag] [varchar](1)
+) 
+
+-GO-
+
+CREATE TABLE [dbo].[TillOperationJournalDtls](
+	[TillTrntype] [int] NOT NULL,
+	[TillTrnctrlno] [int] NOT NULL,
+	[TillTrndt] [datetime] NOT NULL,
+	[srlno] [int] NOT NULL,
+	[currencycd] [varchar](16) NOT NULL,
+	[TrnUnits] [money] NULL,
+	[ConvRate] [money] NULL,
+	[RcptUnits] [money] NULL,
+	[LocCurrRcptAmt] [money] NULL,
+	[PaidUnits] [money] NULL,
+	[LocCurrPaidAmt] [money] NULL,
+	[Trnvalue] [money] NULL,
+	[diffamt] [money] NULL,
+	[Tillpaymodetype] [int] NULL,
+	[BackRefTrntype] [int] NULL,
+	[BackRefTrnctrlno] [int] NULL,
+	[FwdRefTrntype] [int] NULL,
+	[FwdRefTrnctrlno] [int] NULL,
+	[XS1]  [varchar](128) NULL,
+	[XS2]  [varchar](128) NULL,
+	[XS3]  [varchar](128) NULL,
+	[XS4]  [varchar](128) NULL,
+	[XS5]  [varchar](128) NULL,
+	[XS6]  [varchar](128) NULL,
+	[XS7]  [varchar](128) NULL,
+	[XS8]  [varchar](128) NULL,
+	[XI1]  [int] NULL,
+	[XI2]  [int] NULL,
+	[XI3]  [int] NULL,
+	[XI4]  [int] NULL,
+	[XM1]  [money] NULL,
+	[XM2]  [money] NULL,
+	[XM3]  [money] NULL,
+	[XM4]  [money] NULL,
+	[XD1]  [datetime] NULL,
+	[XD2]  [datetime] NULL,
+	[XD3]  [datetime] NULL,
+	[XD4]  [datetime] NULL,
+	[CS1]  [varchar](128) NULL,
+	[CS2]  [varchar](128) NULL,
+	[CS3]  [varchar](128) NULL,
+	[CS4]  [varchar](128) NULL,
+	[CS5]  [varchar](128) NULL,
+	[CS6]  [varchar](128) NULL,
+	[CS7]  [varchar](128) NULL,
+	[CS8]  [varchar](128) NULL,
+	[CI1]  [int] NULL,
+	[CI2]  [int] NULL,
+	[CI3]  [int] NULL,
+	[CI4]  [int] NULL,
+	[CM1]  [money] NULL,
+	[CM2]  [money] NULL,
+	[CM3]  [money] NULL,
+	[CM4]  [money] NULL,
+	[CD1]  [datetime] NULL,
+	[CD2]  [datetime] NULL,
+	[CD3]  [datetime] NULL,
+	[CD4]  [datetime] NULL,
+	[VAuid] [varchar](32) NULL,
+	[VActr] [int] NULL,
+	[VATermid] [varchar](32) NULL,
+	[VAcompcode] [varchar](16) NULL,
+ CONSTRAINT [PK_TillOperaionJournalDtls] PRIMARY KEY CLUSTERED 
+(
+	[TillTrntype] ASC,
+	[TillTrnctrlno] ASC,
+	[TillTrndt] ASC,
+	[srlno] ASC
+)
+) ON [PRIMARY]
+
+-GO-
+
+CREATE TABLE [dbo].[BAKTillOperationJournalDtls](
+	[TillTrntype] [int] NOT NULL,
+	[TillTrnctrlno] [int] NOT NULL,
+	[TillTrndt] [datetime] NOT NULL,
+	[srlno] [int] NOT NULL,
+	[currencycd] [varchar](16) NOT NULL,
+	[TrnUnits] [money] NULL,
+	[ConvRate] [money] NULL,
+	[RcptUnits] [money] NULL,	
+	[LocCurrRcptAmt] [money] NULL,
+	[PaidUnits] [money] NULL,
+	[LocCurrPaidAmt] [money] NULL,
+	[Trnvalue] [money] NULL,
+	[diffamt] [money] NULL,
+	[Tillpaymodetype] [int] NULL,
+	[BackRefTrntype] [int] NULL,
+	[BackRefTrnctrlno] [int] NULL,
+	[FwdRefTrntype] [int] NULL,
+	[FwdRefTrnctrlno] [int] NULL,
+	[XS1]  [varchar](128) NULL,
+	[XS2]  [varchar](128) NULL,
+	[XS3]  [varchar](128) NULL,
+	[XS4]  [varchar](128) NULL,
+	[XS5]  [varchar](128) NULL,
+	[XS6]  [varchar](128) NULL,
+	[XS7]  [varchar](128) NULL,
+	[XS8]  [varchar](128) NULL,
+	[XI1]  [int] NULL,
+	[XI2]  [int] NULL,
+	[XI3]  [int] NULL,
+	[XI4]  [int] NULL,
+	[XM1]  [money] NULL,
+	[XM2]  [money] NULL,
+	[XM3]  [money] NULL,
+	[XM4]  [money] NULL,
+	[XD1]  [datetime] NULL,
+	[XD2]  [datetime] NULL,
+	[XD3]  [datetime] NULL,
+	[XD4]  [datetime] NULL,
+	[CS1]  [varchar](128) NULL,
+	[CS2]  [varchar](128) NULL,
+	[CS3]  [varchar](128) NULL,
+	[CS4]  [varchar](128) NULL,
+	[CS5]  [varchar](128) NULL,
+	[CS6]  [varchar](128) NULL,
+	[CS7]  [varchar](128) NULL,
+	[CS8]  [varchar](128) NULL,
+	[CI1]  [int] NULL,
+	[CI2]  [int] NULL,
+	[CI3]  [int] NULL,
+	[CI4]  [int] NULL,
+	[CM1]  [money] NULL,
+	[CM2]  [money] NULL,
+	[CM3]  [money] NULL,
+	[CM4]  [money] NULL,
+	[CD1]  [datetime] NULL,
+	[CD2]  [datetime] NULL,
+	[CD3]  [datetime] NULL,
+	[CD4]  [datetime] NULL,
+	[VAuid] [varchar](32) NULL,
+	[VActr] [int] NULL,
+	[VATermid] [varchar](32) NULL,
+	[VAcompcode] [varchar](16) NULL,
+	[updflag] [varchar] (1)
+) 
+
+-GO-
+
+CREATE TABLE [dbo].[TillShiftdtls](
+	[TillTrndt] [datetime] NOT NULL,
+	[Nodeid] [varchar](32) NOT NULL,
+	[shiftno] [varchar](32) NOT NULL,
+	[shiftctrlno] [int] NULL,
+	[shiftstarttime] [datetime] NULL,
+	[shiftendtime] [datetime] NULL,
+	[shiftstartvactr] [int] NULL,
+	[shiftendvactr] [int] NULL,
+	[cashierid] [varchar](32) NULL,
+	[Tillid] [varchar](64) NULL,
+	[shiftstatus] [varchar](16) NULL,
+	[XS1]  [varchar](128) NULL,
+	[XS2]  [varchar](128) NULL,
+	[XS3]  [varchar](128) NULL,
+	[XS4]  [varchar](128) NULL,
+	[XS5]  [varchar](128) NULL,
+	[XS6]  [varchar](128) NULL,
+	[XS7]  [varchar](128) NULL,
+	[XS8]  [varchar](128) NULL,
+	[XI1]  [int] NULL,
+	[XI2]  [int] NULL,
+	[XI3]  [int] NULL,
+	[XI4]  [int] NULL,
+	[XM1]  [money] NULL,
+	[XM2]  [money] NULL,
+	[XM3]  [money] NULL,
+	[XM4]  [money] NULL,
+	[XD1]  [datetime] NULL,
+	[XD2]  [datetime] NULL,
+	[XD3]  [datetime] NULL,
+	[XD4]  [datetime] NULL,
+	[CS1]  [varchar](128) NULL,
+	[CS2]  [varchar](128) NULL,
+	[CS3]  [varchar](128) NULL,
+	[CS4]  [varchar](128) NULL,
+	[CS5]  [varchar](128) NULL,
+	[CS6]  [varchar](128) NULL,
+	[CS7]  [varchar](128) NULL,
+	[CS8]  [varchar](128) NULL,
+	[CI1]  [int] NULL,
+	[CI2]  [int] NULL,
+	[CI3]  [int] NULL,
+	[CI4]  [int] NULL,
+	[CM1]  [money] NULL,
+	[CM2]  [money] NULL,
+	[CM3]  [money] NULL,
+	[CM4]  [money] NULL,
+	[CD1]  [datetime] NULL,
+	[CD2]  [datetime] NULL,
+	[CD3]  [datetime] NULL,
+	[CD4]  [datetime] NULL,
+	[VAuid] [varchar](32) NULL,
+	[VActr] [int] NULL,
+	[VAtermid] [varchar](32) NULL,
+	[VACompcode] [varchar](16) NULL,
+ CONSTRAINT [PK_TillShiftdtls] PRIMARY KEY CLUSTERED 
+(
+	[TillTrndt] ASC,
+	[Nodeid] ASC,
+	[shiftno] ASC
+)
+) ON [PRIMARY]
+
+-GO-
+CREATE TABLE [dbo].[BAKTillShiftdtls](
+	[TillTrndt] [datetime] NOT NULL,
+	[Nodeid] [varchar](32) NOT NULL,
+	[shiftno] [varchar](32) NOT NULL,
+	[shiftctrlno] [int] NULL,
+	[shiftstarttime] [datetime] NULL,
+	[shiftendtime] [datetime] NULL,
+	[shiftstartvactr] [int] NULL,
+	[shiftendvactr] [int] NULL,
+	[cashierid] [varchar](32) NULL,
+	[Tillid] [varchar](64) NULL,
+	[shiftstatus] [varchar](16) NULL,
+	[XS1]  [varchar](128) NULL,
+	[XS2]  [varchar](128) NULL,
+	[XS3]  [varchar](128) NULL,
+	[XS4]  [varchar](128) NULL,
+	[XS5]  [varchar](128) NULL,
+	[XS6]  [varchar](128) NULL,
+	[XS7]  [varchar](128) NULL,
+	[XS8]  [varchar](128) NULL,
+	[XI1]  [int] NULL,
+	[XI2]  [int] NULL,
+	[XI3]  [int] NULL,
+	[XI4]  [int] NULL,
+	[XM1]  [money] NULL,
+	[XM2]  [money] NULL,
+	[XM3]  [money] NULL,
+	[XM4]  [money] NULL,
+	[XD1]  [datetime] NULL,
+	[XD2]  [datetime] NULL,
+	[XD3]  [datetime] NULL,
+	[XD4]  [datetime] NULL,
+	[CS1]  [varchar](128) NULL,
+	[CS2]  [varchar](128) NULL,
+	[CS3]  [varchar](128) NULL,
+	[CS4]  [varchar](128) NULL,
+	[CS5]  [varchar](128) NULL,
+	[CS6]  [varchar](128) NULL,
+	[CS7]  [varchar](128) NULL,
+	[CS8]  [varchar](128) NULL,
+	[CI1]  [int] NULL,
+	[CI2]  [int] NULL,
+	[CI3]  [int] NULL,
+	[CI4]  [int] NULL,
+	[CM1]  [money] NULL,
+	[CM2]  [money] NULL,
+	[CM3]  [money] NULL,
+	[CM4]  [money] NULL,
+	[CD1]  [datetime] NULL,
+	[CD2]  [datetime] NULL,
+	[CD3]  [datetime] NULL,
+	[CD4]  [datetime] NULL,
+	[VAuid] [varchar](32) NULL,
+	[VActr] [int] NULL,
+	[VAtermid] [varchar](32) NULL,
+	[VACompcode] [varchar](16) NULL,
+	[updflag] [varchar] (1)
+) 
+
+-GO-
+
+CREATE TABLE [dbo].[TillTrnswiseDenomination](
+	[TillTrntype] [int] NOT NULL,
+	[TillTrnctrlno] [int] NOT NULL,
+	[srlno] [int] NOT NULL,
+	[subsrlno] [int] NOT NULL,
+	[Tilltrndt] [datetime] NOT NULL,
+	[currencycd] [varchar](16) NOT NULL,
+	[Trnfacevalue] [money] NOT NULL,
+	[Trnunits] [money] NOT NULL,
+	[convrate] [money] NULL,
+	[TrnValue] [money] NOT NULL,
+	[XS1]  [varchar](128) NULL,
+	[XS2]  [varchar](128) NULL,
+	[XS3]  [varchar](128) NULL,
+	[XS4]  [varchar](128) NULL,
+	[XS5]  [varchar](128) NULL,
+	[XS6]  [varchar](128) NULL,
+	[XS7]  [varchar](128) NULL,
+	[XS8]  [varchar](128) NULL,
+	[XI1]  [int] NULL,
+	[XI2]  [int] NULL,
+	[XI3]  [int] NULL,
+	[XI4]  [int] NULL,
+	[XM1]  [money] NULL,
+	[XM2]  [money] NULL,
+	[XM3]  [money] NULL,
+	[XM4]  [money] NULL,
+	[XD1]  [datetime] NULL,
+	[XD2]  [datetime] NULL,
+	[XD3]  [datetime] NULL,
+	[XD4]  [datetime] NULL,
+	[CS1]  [varchar](128) NULL,
+	[CS2]  [varchar](128) NULL,
+	[CS3]  [varchar](128) NULL,
+	[CS4]  [varchar](128) NULL,
+	[CS5]  [varchar](128) NULL,
+	[CS6]  [varchar](128) NULL,
+	[CS7]  [varchar](128) NULL,
+	[CS8]  [varchar](128) NULL,
+	[CI1]  [int] NULL,
+	[CI2]  [int] NULL,
+	[CI3]  [int] NULL,
+	[CI4]  [int] NULL,
+	[CM1]  [money] NULL,
+	[CM2]  [money] NULL,
+	[CM3]  [money] NULL,
+	[CM4]  [money] NULL,
+	[CD1]  [datetime] NULL,
+	[CD2]  [datetime] NULL,
+	[CD3]  [datetime] NULL,
+	[CD4]  [datetime] NULL,
+	[VAuid] [varchar](32) NULL,
+	[VActr] [int] NULL,
+	[VAtermid] [varchar](32) NULL,
+	[VAcompcode] [varchar](16) NULL,
+ CONSTRAINT [PK_TillTrnswiseDenomination] PRIMARY KEY CLUSTERED 
+(
+	[TillTrntype] ASC,
+	[TillTrnctrlno] ASC,
+	[srlno] ASC,
+	[subsrlno] ASC,
+	[Tilltrndt] ASC
+)
+) ON [PRIMARY]
+
+
+-GO-
+
+CREATE TABLE [dbo].[BAKTillTrnswiseDenomination](
+	[TillTrntype] [int] NOT NULL,
+	[TillTrnctrlno] [int] NOT NULL,
+	[srlno] [int] NOT NULL,
+	[subsrlno] [int] NOT NULL,
+	[Tilltrndt] [datetime] NOT NULL,
+	[currencycd] [varchar](16) NOT NULL,
+	[Trnfacevalue] [money] NOT NULL,
+	[Trnunits] [money] NOT NULL,
+	[convrate] [money] NULL,
+	[TrnValue] [money] NOT NULL,
+	[XS1]  [varchar](128) NULL,
+	[XS2]  [varchar](128) NULL,
+	[XS3]  [varchar](128) NULL,
+	[XS4]  [varchar](128) NULL,
+	[XS5]  [varchar](128) NULL,
+	[XS6]  [varchar](128) NULL,
+	[XS7]  [varchar](128) NULL,
+	[XS8]  [varchar](128) NULL,
+	[XI1]  [int] NULL,
+	[XI2]  [int] NULL,
+	[XI3]  [int] NULL,
+	[XI4]  [int] NULL,
+	[XM1]  [money] NULL,
+	[XM2]  [money] NULL,
+	[XM3]  [money] NULL,
+	[XM4]  [money] NULL,
+	[XD1]  [datetime] NULL,
+	[XD2]  [datetime] NULL,
+	[XD3]  [datetime] NULL,
+	[XD4]  [datetime] NULL,
+	[CS1]  [varchar](128) NULL,
+	[CS2]  [varchar](128) NULL,
+	[CS3]  [varchar](128) NULL,
+	[CS4]  [varchar](128) NULL,
+	[CS5]  [varchar](128) NULL,
+	[CS6]  [varchar](128) NULL,
+	[CS7]  [varchar](128) NULL,
+	[CS8]  [varchar](128) NULL,
+	[CI1]  [int] NULL,
+	[CI2]  [int] NULL,
+	[CI3]  [int] NULL,
+	[CI4]  [int] NULL,
+	[CM1]  [money] NULL,
+	[CM2]  [money] NULL,
+	[CM3]  [money] NULL,
+	[CM4]  [money] NULL,
+	[CD1]  [datetime] NULL,
+	[CD2]  [datetime] NULL,
+	[CD3]  [datetime] NULL,
+	[CD4]  [datetime] NULL,
+	[VAuid] [varchar](32) NULL,
+	[VActr] [int] NULL,
+	[VAtermid] [varchar](32) NULL,
+	[VAcompcode] [varchar](16) NULL,
+	[updflag] [varchar] (1)
+) 
+
+
+-GO-
+CREATE TABLE [dbo].[LogTilldtls](
+	[TillTrndt] [datetime] NOT NULL,
+	[Nodeid] [varchar](32) NOT NULL,
+	[Tillid] [varchar](64) NOT NULL,
+	[cashierid] [varchar](32) NULL,
+	[shiftno] [varchar](32) NULL,
+	[OpenTime] [datetime] NULL,
+	[OpenReason] [varchar](32) NULL,
+	[TillStatus] [varchar](16) NULL,
+	[VAuid] [varchar](32) NULL,
+	[VActr] [int] NULL,
+	[VATermid] [varchar](32) NULL,
+	[VAcompcode] [varchar](16) NULL,
+	 CONSTRAINT [PK_LogTillOpendtls] PRIMARY KEY CLUSTERED 
+	(
+		[TillTrndt] ASC,
+		[Nodeid] ASC
+	)
+) ON [PRIMARY]
+-GO-
+CREATE TABLE [dbo].[BAKLogTilldtls](
+	[TillTrndt] [datetime] NOT NULL,
+	[Nodeid] [varchar](32) NOT NULL,
+	[Tillid] [varchar](64) NOT NULL,
+	[cashierid] [varchar](32) NULL,
+	[shiftno] [varchar](32) NULL,
+	[OpenTime] [datetime] NULL,
+	[OpenReason] [varchar](32) NULL,
+	[TillStatus] [varchar](16) NULL,
+	[VAuid] [varchar](32) NULL,
+	[VActr] [int] NULL,
+	[VATermid] [varchar](32) NULL,
+	[VAcompcode] [varchar](16) NULL,
+	[updflag] [varchar] (1)
+) 
+-GO-
+
+CREATE TABLE [dbo].[TillAcceptDisplaydtls](
+	[TillTrntype] [int] NOT NULL,
+	[Tillindex] [int] NOT NULL,
+	[AcptCap] [varchar](50) NULL,
+	[DispCap] [varchar](50) NULL,
+	[AcptVisible] [bit] NULL,
+	[DispVisible] [bit] NULL,
+	[AcptPos] [int] NULL,
+	[DispPos] [int] NULL,
+	[AcptDataType] [int] NULL,
+	[DispDataType] [int] NULL,
+	[AcptWidth] [real] NULL,
+	[DispWidth] [real] NULL,
+	[AcptAlign] [int] NULL,
+	[DispAlign] [int] NULL,
+	[AcptFontName] [varchar](50) NULL,
+	[DispFontName] [varchar](50) NULL,
+	[AcptFourColour] [varchar](50) NULL,
+	[DispFourColour] [varchar](50) NULL,
+	[AcptFontSize] [real] NULL,
+	[DispFontSize] [real] NULL,
+	[AcptRowHight] [real] NULL,
+	[DispRowHight] [real] NULL,
+	[AcptBackColour] [varchar](50) NULL,
+	[DispBackColour] [varchar](50) NULL,
+	[VAUid] [varchar](32) NULL,
+	[VActr] [int] NULL,
+	[VAtermid] [varchar](32) NULL,
+	[VAcompcode] [varchar](16) NULL,
+ CONSTRAINT [PK_TillAcceptDisplaydtls] PRIMARY KEY CLUSTERED 
+(
+	[TillTrntype] ASC,
+	[Tillindex] ASC
+)
+) ON [PRIMARY]
+-GO-
+CREATE TABLE [dbo].[BAKTillAcceptDisplaydtls](
+	[TillTrntype] [int] NOT NULL,
+	[Tillindex] [int] NOT NULL,
+	[AcptCap] [varchar](50) NULL,
+	[DispCap] [varchar](50) NULL,
+	[AcptVisible] [bit] NULL,
+	[DispVisible] [bit] NULL,
+	[AcptPos] [int] NULL,
+	[DispPos] [int] NULL,
+	[AcptDataType] [int] NULL,
+	[DispDataType] [int] NULL,
+	[AcptWidth] [real] NULL,
+	[DispWidth] [real] NULL,
+	[AcptAlign] [int] NULL,
+	[DispAlign] [int] NULL,
+	[AcptFontName] [varchar](50) NULL,
+	[DispFontName] [varchar](50) NULL,
+	[AcptFourColour] [varchar](50) NULL,
+	[DispFourColour] [varchar](50) NULL,
+	[AcptFontSize] [real] NULL,
+	[DispFontSize] [real] NULL,
+	[AcptRowHight] [real] NULL,
+	[DispRowHight] [real] NULL,
+	[AcptBackColour] [varchar](50) NULL,
+	[DispBackColour] [varchar](50) NULL,
+	[VAUid] [varchar](32) NULL,
+	[VActr] [int] NULL,
+	[VAtermid] [varchar](32) NULL,
+	[VAcompcode] [varchar](16) NULL,
+	[updflag] [varchar] (1)
+) 
+-GO-
+
+Alter table poscashtrn add  TillTrntype int,TillTrnctrlno int
+-GO-
+</s9qScript>
+</s9qsqlblk>
+
+
+<s9qsqlblk>
+  <s9qScriptid>S9Q_016_1_0450</s9qScriptid> 
+  <s9qtitle>POS Rel 1.6 genlookup entry </s9qtitle> 
+  <s9qpgmtype>I</s9qpgmtype>  
+  <s9qpgmtype>L</s9qpgmtype>  
+  <s9qversion>*</s9qversion> 
+  <s9qenvironment>P</s9qenvironment> 
+  <s9qRunMultiple>1</s9qRunMultiple> 
+  <s9qQryType>DML</s9qQryType> 
+  <s9qScript>
+
+insert into GenLookUp (Recid,Code,Descr,VaUid,VaCtr,VaTermId,VaCompCode) values (9997,'TillCtrl','SR539000.ClsStartup','Super',1,'.','.')
+-GO-
+--shift code generation format
+insert into GenLookUp (Recid,Code,Descr,VaUid,VaCtr,VaTermId,VaCompCode) values (9997,'ShiftCd','YYYYMMDD-NODEID-NN','Super',1,'.','.')
+-GO-
+insert into GenLookUp (Recid,Code,Descr,VaUid,VaCtr,VaTermId,VaCompCode) values (9998,'1','Limit Reached','Super',1,'.','.')
+-GO-
+insert into GenLookUp (Recid,Code,Descr,VaUid,VaCtr,VaTermId,VaCompCode) values (9998,'2','Counter Close','Super',1,'.','.')
+-GO-
+insert into GenLookUp (Recid,Code,Descr,VaUid,VaCtr,VaTermId,VaCompCode) values (9998,'3','Internal Transfer','Super',1,'.','.')
+-GO-
+delete from genlookup where recid=14300 and code='SR130000+PROGRAMSTART+1'
+-GO-
+Insert Into GenLookUp (Recid,Code,Descr,Flag) Values (14300,'SR130000+PROGRAMSTART+1','shprfw03.ClsUserAuthorise',1)
+-GO-
+</s9qScript>
+</s9qsqlblk>
+
+<s9qsqlblk>
+  <s9qScriptid>S9Q_016_1_0451</s9qScriptid> 
+  <s9qtitle>Inserting records for grid setup in till </s9qtitle> 
+  <s9qpgmtype>I</s9qpgmtype>  
+  <s9qpgmtype>L</s9qpgmtype>  
+  <s9qversion>*</s9qversion> 
+  <s9qenvironment>P</s9qenvironment> 
+  <s9qRunMultiple>1</s9qRunMultiple> 
+  <s9qQryType>DML</s9qQryType> 
+  <s9qScript>
+
+
+insert into tillacceptdisplaydtls(tilltrntype,tillindex,acptcap,dispcap,acptvisible,dispvisible,acptpos,disppos,acptdatatype,dispdatatype,acptwidth,dispwidth,acptalign,dispalign,vauid,vactr,vatermid,vacompcode) values(10002,1,'No','No',1,1,1,1,1,2,5,5,1,1,'Super',1,'.','.')
+-GO-
+insert into tillacceptdisplaydtls(tilltrntype,tillindex,acptcap,dispcap,acptvisible,dispvisible,acptpos,disppos,acptdatatype,dispdatatype,acptwidth,dispwidth,acptalign,dispalign,vauid,vactr,vatermid,vacompcode) values(10002,2,'Payment Code','Payment Code',1,1,2,2,1,2,13,13,1,1,'Super',1,'.','.')
+-GO-
+insert into tillacceptdisplaydtls(tilltrntype,tillindex,acptcap,dispcap,acptvisible,dispvisible,acptpos,disppos,acptdatatype,dispdatatype,acptwidth,dispwidth,acptalign,dispalign,vauid,vactr,vatermid,vacompcode) values(10002,3,'Description','Description',1,1,3,3,1,2,20,20,1,1,'Super',1,'.','.')
+-GO-
+insert into tillacceptdisplaydtls(tilltrntype,tillindex,acptcap,dispcap,acptvisible,dispvisible,acptpos,disppos,acptdatatype,dispdatatype,acptwidth,dispwidth,acptalign,dispalign,vauid,vactr,vatermid,vacompcode) values(10002,4,'Type','Type',1,1,4,4,1,2,16,16,1,1,'Super',1,'.','.')
+-GO-
+insert into tillacceptdisplaydtls(tilltrntype,tillindex,acptcap,dispcap,acptvisible,dispvisible,acptpos,disppos,acptdatatype,dispdatatype,acptwidth,dispwidth,acptalign,dispalign,vauid,vactr,vatermid,vacompcode) values(10002,5,'Symbol','Symbol',0,0,5,5,1,2,7,7,1,1,'Super',1,'.','.')
+-GO-
+insert into tillacceptdisplaydtls(tilltrntype,tillindex,acptcap,dispcap,acptvisible,dispvisible,acptpos,disppos,acptdatatype,dispdatatype,acptwidth,dispwidth,acptalign,dispalign,vauid,vactr,vatermid,vacompcode) values(10002,6,'Units Available','Units Available',1,1,6,6,4,4,12,12,1,1,'Super',1,'.','.')
+-GO-
+insert into tillacceptdisplaydtls(tilltrntype,tillindex,acptcap,dispcap,acptvisible,dispvisible,acptpos,disppos,acptdatatype,dispdatatype,acptwidth,dispwidth,acptalign,dispalign,vauid,vactr,vatermid,vacompcode) values(10002,7,'Conv.Rate','Conv.Rate',1,1,7,7,4,4,10,10,1,1,'Super',1,'.','.')
+-GO-
+insert into tillacceptdisplaydtls(tilltrntype,tillindex,acptcap,dispcap,acptvisible,dispvisible,acptpos,disppos,acptdatatype,dispdatatype,acptwidth,dispwidth,acptalign,dispalign,vauid,vactr,vatermid,vacompcode) values(10002,8,'Units','Units',1,1,8,8,4,4,12,12,1,1,'Super',1,'.','.')
+-GO-
+insert into tillacceptdisplaydtls(tilltrntype,tillindex,acptcap,dispcap,acptvisible,dispvisible,acptpos,disppos,acptdatatype,dispdatatype,acptwidth,dispwidth,acptalign,dispalign,vauid,vactr,vatermid,vacompcode) values(10002,9,'Total Amount','Total Amount',1,1,9,9,4,4,14,14,1,1,'Super',1,'.','.')
+-GO-
+insert into tillacceptdisplaydtls(tilltrntype,tillindex,acptcap,dispcap,acptvisible,dispvisible,acptpos,disppos,acptdatatype,dispdatatype,acptwidth,dispwidth,acptalign,dispalign,vauid,vactr,vatermid,vacompcode) values(10003,1,'No.','No.',1,1,1,1,2,2,5,5,1,1,'Super',1,'.','.')
+-GO-
+insert into tillacceptdisplaydtls(tilltrntype,tillindex,acptcap,dispcap,acptvisible,dispvisible,acptpos,disppos,acptdatatype,dispdatatype,acptwidth,dispwidth,acptalign,dispalign,vauid,vactr,vatermid,vacompcode) values(10003,2,'Payment Code','Payment Code',1,1,2,2,2,2,12,12,1,1,'Super',1,'.','.')
+-GO-
+insert into tillacceptdisplaydtls(tilltrntype,tillindex,acptcap,dispcap,acptvisible,dispvisible,acptpos,disppos,acptdatatype,dispdatatype,acptwidth,dispwidth,acptalign,dispalign,vauid,vactr,vatermid,vacompcode) values(10003,3,'Description','Description',1,1,3,3,2,2,15,15,1,1,'Super',1,'.','.')
+-GO-
+insert into tillacceptdisplaydtls(tilltrntype,tillindex,acptcap,dispcap,acptvisible,dispvisible,acptpos,disppos,acptdatatype,dispdatatype,acptwidth,dispwidth,acptalign,dispalign,vauid,vactr,vatermid,vacompcode) values(10003,4,'Type','Type',1,1,4,4,2,2,14,14,1,1,'Super',1,'.','.')
+-GO-
+insert into tillacceptdisplaydtls(tilltrntype,tillindex,acptcap,dispcap,acptvisible,dispvisible,acptpos,disppos,acptdatatype,dispdatatype,acptwidth,dispwidth,acptalign,dispalign,vauid,vactr,vatermid,vacompcode) values(10003,5,'Symbol','Symbol',0,0,5,5,2,2,8,8,1,1,'Super',1,'.','.')
+-GO-
+insert into tillacceptdisplaydtls(tilltrntype,tillindex,acptcap,dispcap,acptvisible,dispvisible,acptpos,disppos,acptdatatype,dispdatatype,acptwidth,dispwidth,acptalign,dispalign,vauid,vactr,vatermid,vacompcode) values(10003,6,'Units Available','Units Available',1,1,6,6,4,4,12,12,1,1,'Super',1,'.','.')
+-GO-
+insert into tillacceptdisplaydtls(tilltrntype,tillindex,acptcap,dispcap,acptvisible,dispvisible,acptpos,disppos,acptdatatype,dispdatatype,acptwidth,dispwidth,acptalign,dispalign,vauid,vactr,vatermid,vacompcode) values(10003,7,'Full/Partial','Full/Partial',1,1,7,7,5,5,11,11,1,1,'Super',1,'.','.')
+-GO-
+insert into tillacceptdisplaydtls(tilltrntype,tillindex,acptcap,dispcap,acptvisible,dispvisible,acptpos,disppos,acptdatatype,dispdatatype,acptwidth,dispwidth,acptalign,dispalign,vauid,vactr,vatermid,vacompcode) values(10003,8,'Conv.Rate','Conv.Rate',1,1,8,8,4,4,9,9,1,1,'Super',1,'.','.')
+-GO-
+insert into tillacceptdisplaydtls(tilltrntype,tillindex,acptcap,dispcap,acptvisible,dispvisible,acptpos,disppos,acptdatatype,dispdatatype,acptwidth,dispwidth,acptalign,dispalign,vauid,vactr,vatermid,vacompcode) values(10003,9,'Units','Units',1,1,9,9,4,4,12,12,1,1,'Super',1,'.','.')
+-GO-
+insert into tillacceptdisplaydtls(tilltrntype,tillindex,acptcap,dispcap,acptvisible,dispvisible,acptpos,disppos,acptdatatype,dispdatatype,acptwidth,dispwidth,acptalign,dispalign,vauid,vactr,vatermid,vacompcode) values(10003,10,'Amount','Amount',1,1,10,10,4,4,12,12,1,1,'Super',1,'.','.')
+-GO-
+insert into tillacceptdisplaydtls(tilltrntype,tillindex,acptcap,dispcap,acptvisible,dispvisible,acptpos,disppos,acptdatatype,dispdatatype,acptwidth,dispwidth,acptalign,dispalign,vauid,vactr,vatermid,vacompcode) values(10003,11,'Diff. Amount','Diff. Amount',0,0,11,11,4,4,12,12,1,1,'Super',1,'.','.')
+-GO-
+insert into tillacceptdisplaydtls(tilltrntype,Tillindex,acptcap,dispcap,acptvisible,dispvisible,acptpos,disppos,acptdatatype,dispdatatype,acptwidth,dispwidth,acptalign,dispalign,vauid,vactr,vatermid,vacompcode) values(10005,1,'No.','No.',1,1,1,1,2,2,6,6,1,1,'Super',1,'.','.')
+-GO-
+insert into tillacceptdisplaydtls(tilltrntype,Tillindex,acptcap,dispcap,acptvisible,dispvisible,acptpos,disppos,acptdatatype,dispdatatype,acptwidth,dispwidth,acptalign,dispalign,vauid,vactr,vatermid,vacompcode) values(10005,2,'Payment Code','Payment Code',1,1,2,2,2,2,8,8,1,1,'Super',1,'.','.')
+-GO-
+insert into tillacceptdisplaydtls(tilltrntype,Tillindex,acptcap,dispcap,acptvisible,dispvisible,acptpos,disppos,acptdatatype,dispdatatype,acptwidth,dispwidth,acptalign,dispalign,vauid,vactr,vatermid,vacompcode) values(10005,3,'Description','Description',1,1,3,3,2,2,15,15,1,1,'Super',1,'.','.')
+-GO-
+insert into tillacceptdisplaydtls(tilltrntype,Tillindex,acptcap,dispcap,acptvisible,dispvisible,acptpos,disppos,acptdatatype,dispdatatype,acptwidth,dispwidth,acptalign,dispalign,vauid,vactr,vatermid,vacompcode) values(10005,4,'Type','Type',1,1,4,4,2,2,13,13,1,1,'Super',1,'.','.')
+-GO-
+insert into tillacceptdisplaydtls(tilltrntype,Tillindex,acptcap,dispcap,acptvisible,dispvisible,acptpos,disppos,acptdatatype,dispdatatype,acptwidth,dispwidth,acptalign,dispalign,vauid,vactr,vatermid,vacompcode) values(10005,5,'Symbol','Symbol',0,0,5,5,2,2,8,8,1,1,'Super',1,'.','.')
+-GO-
+insert into tillacceptdisplaydtls(tilltrntype,Tillindex,acptcap,dispcap,acptvisible,dispvisible,acptpos,disppos,acptdatatype,dispdatatype,acptwidth,dispwidth,acptalign,dispalign,vauid,vactr,vatermid,vacompcode) values(10005,6,'Units Available','Units Available',1,1,6,6,4,4,12,12,1,1,'Super',1,'.','.')
+-GO-
+insert into tillacceptdisplaydtls(tilltrntype,Tillindex,acptcap,dispcap,acptvisible,dispvisible,acptpos,disppos,acptdatatype,dispdatatype,acptwidth,dispwidth,acptalign,dispalign,vauid,vactr,vatermid,vacompcode) values(10005,7,'Conv.Rate','Conv.Rate',1,1,7,7,4,4,9,9,1,1,'Super',1,'.','.')
+-GO-
+insert into tillacceptdisplaydtls(tilltrntype,tillindex,acptcap,dispcap,acptvisible,dispvisible,acptpos,disppos,acptdatatype,dispdatatype,acptwidth,dispwidth,acptalign,dispalign,vauid,vactr,vatermid,vacompcode) values(10005,8,'Units','Units',1,1,8,8,4,4,12,12,1,1,'Super',1,'.','.')
+-GO-
+insert into tillacceptdisplaydtls(tilltrntype,tillindex,acptcap,dispcap,acptvisible,dispvisible,acptpos,disppos,acptdatatype,dispdatatype,acptwidth,dispwidth,acptalign,dispalign,vauid,vactr,vatermid,vacompcode) values(10005,9,'Units','Units',1,1,9,9,7,7,12,12,1,1,'Super',1,'.','.')
+-GO-
+insert into tillacceptdisplaydtls(tilltrntype,Tillindex,acptcap,dispcap,acptvisible,dispvisible,acptpos,disppos,acptdatatype,dispdatatype,acptwidth,dispwidth,acptalign,dispalign,vauid,vactr,vatermid,vacompcode) values(10005,10,'Amount','Amount',1,1,10,10,4,4,10,10,1,1,'Super',1,'.','.')
+-GO-
+insert into tillacceptdisplaydtls(tilltrntype,tillindex,acptcap,dispcap,acptvisible,dispvisible,acptpos,disppos,acptdatatype,dispdatatype,acptwidth,dispwidth,acptalign,dispalign,vauid,vactr,vatermid,vacompcode) values(10005,11,'Diff. Amount','Diff. Amount',1,1,11,11,4,4,12,12,1,1,'Super',1,'.','.')
+-GO-
+update TillAcceptDisplaydtls set VActr =(select intg from SysParam where ParamCode='vasyscounter')
+-GO-
+</s9qScript>
+</s9qsqlblk>
+
+<s9qsqlblk>
+  <s9qScriptid>S9Q_016_1_0452</s9qScriptid> 
+  <s9qtitle>POS Rel 1.6 Inserting values for prefix master and prefix transaction </s9qtitle> 
+  <s9qpgmtype>I</s9qpgmtype>  
+  <s9qpgmtype>L</s9qpgmtype>  
+  <s9qversion>*</s9qversion> 
+  <s9qenvironment>P</s9qenvironment> 
+  <s9qRunMultiple>1</s9qRunMultiple> 
+  <s9qQryType>DML</s9qQryType> 
+  <s9qScript>
+
+insert into prefixmaster(trntype,opid,terminalgroupid,srlno,baseprefix,suffix,isactive,resetrequired,vauid,vactr,vatermid,vacompcode) values('10001',99,'<<ALLNODE>>',9999,'<CTRLPX>','<<9999>>',1,1,'super',1,'.','.')
+-GO-
+insert into prefixmaster(trntype,opid,terminalgroupid,srlno,baseprefix,suffix,isactive,resetrequired,vauid,vactr,vatermid,vacompcode) values('10002',99,'<<ALLNODE>>',9999,'<CTRLPX>','<<9999>>',1,1,'super',1,'.','.')
+-GO-
+insert into prefixmaster(trntype,opid,terminalgroupid,srlno,baseprefix,suffix,isactive,resetrequired,vauid,vactr,vatermid,vacompcode) values('10003',99,'<<ALLNODE>>',9999,'<CTRLPX>','<<9999>>',1,1,'super',1,'.','.')
+-GO-
+insert into prefixmaster(trntype,opid,terminalgroupid,srlno,baseprefix,suffix,isactive,resetrequired,vauid,vactr,vatermid,vacompcode) values('10004',99,'<<ALLNODE>>',9999,'<CTRLPX>','<<9999>>',1,1,'super',1,'.','.')
+-GO-
+insert into prefixmaster(trntype,opid,terminalgroupid,srlno,baseprefix,suffix,isactive,resetrequired,vauid,vactr,vatermid,vacompcode) values('10005',99,'<<ALLNODE>>',9999,'<CTRLPX>','<<9999>>',1,1,'super',1,'.','.')
+-GO-
+insert into prefixmaster(trntype,opid,terminalgroupid,srlno,baseprefix,suffix,isactive,resetrequired,vauid,vactr,vatermid,vacompcode) values('10006',99,'<<ALLNODE>>',9999,'<CTRLPX>','<<9999>>',1,1,'super',1,'.','.')
+-GO-
+insert into prefixmaster(trntype,opid,terminalgroupid,srlno,baseprefix,suffix,isactive,resetrequired,vauid,vactr,vatermid,vacompcode) values('10007',99,'<<ALLNODE>>',9999,'<CTRLPX>','<<9999>>',1,1,'super',1,'.','.')
+-GO-
+insert into prefixmaster(trntype,opid,terminalgroupid,srlno,baseprefix,suffix,isactive,resetrequired,vauid,vactr,vatermid,vacompcode) values('10008',99,'<<ALLNODE>>',9999,'<CTRLPX>','<<9999>>',1,1,'super',1,'.','.')
+-GO-
+insert into prefixmaster(trntype,opid,terminalgroupid,srlno,baseprefix,suffix,isactive,resetrequired,vauid,vactr,vatermid,vacompcode) values('10009',99,'<<ALLNODE>>',9999,'<CTRLPX>','<<9999>>',1,1,'super',1,'.','.')
+-GO-
+insert into prefixmaster(trntype,opid,terminalgroupid,srlno,baseprefix,suffix,isactive,resetrequired,vauid,vactr,vatermid,vacompcode) values('10010',99,'<<ALLNODE>>',9999,'<CTRLPX>','<<9999>>',1,1,'super',1,'.','.')
+-GO-
+insert into prefixmaster(trntype,opid,terminalgroupid,srlno,baseprefix,suffix,isactive,resetrequired,vauid,vactr,vatermid,vacompcode) values('10011',99,'<<ALLNODE>>',9999,'<CTRLPX>','<<9999>>',1,1,'super',1,'.','.')
+-GO-
+insert into prefixmaster(trntype,opid,terminalgroupid,srlno,baseprefix,suffix,isactive,resetrequired,vauid,vactr,vatermid,vacompcode) values('10015',99,'<<ALLNODE>>',9999,'<CTRLPX>','<<9999>>',1,1,'super',1,'.','.')
+-GO-
+insert into PrefixTrnNo (TrnType,ActualPrefix,DocNumber,IsActive,VaUID,VaCtr,VaTermID,VaCompCode) values ('10001','<CTRLPX>',1,1,'super',1,'.','.')
+-GO-
+insert into PrefixTrnNo (TrnType,ActualPrefix,DocNumber,IsActive,VaUID,VaCtr,VaTermID,VaCompCode) values ('10002','<CTRLPX>',1,1,'super',1,'.','.')
+-GO-
+insert into PrefixTrnNo (TrnType,ActualPrefix,DocNumber,IsActive,VaUID,VaCtr,VaTermID,VaCompCode) values ('10003','<CTRLPX>',1,1,'super',1,'.','.')
+-GO-
+insert into PrefixTrnNo (TrnType,ActualPrefix,DocNumber,IsActive,VaUID,VaCtr,VaTermID,VaCompCode) values ('10004','<CTRLPX>',1,1,'super',1,'.','.')
+-GO-
+insert into PrefixTrnNo (TrnType,ActualPrefix,DocNumber,IsActive,VaUID,VaCtr,VaTermID,VaCompCode) values ('10005','<CTRLPX>',1,1,'super',1,'.','.')
+-GO-
+insert into PrefixTrnNo (TrnType,ActualPrefix,DocNumber,IsActive,VaUID,VaCtr,VaTermID,VaCompCode) values ('10006','<CTRLPX>',1,1,'super',1,'.','.')
+-GO-
+insert into PrefixTrnNo (TrnType,ActualPrefix,DocNumber,IsActive,VaUID,VaCtr,VaTermID,VaCompCode) values ('10007','<CTRLPX>',1,1,'super',1,'.','.')
+-GO-
+insert into PrefixTrnNo (TrnType,ActualPrefix,DocNumber,IsActive,VaUID,VaCtr,VaTermID,VaCompCode) values ('10008','<CTRLPX>',1,1,'super',1,'.','.')
+-GO-
+insert into PrefixTrnNo (TrnType,ActualPrefix,DocNumber,IsActive,VaUID,VaCtr,VaTermID,VaCompCode) values ('10009','<CTRLPX>',1,1,'super',1,'.','.')
+-GO-
+insert into PrefixTrnNo (TrnType,ActualPrefix,DocNumber,IsActive,VaUID,VaCtr,VaTermID,VaCompCode) values ('10010','<CTRLPX>',1,1,'super',1,'.','.')
+-GO-
+insert into PrefixTrnNo (TrnType,ActualPrefix,DocNumber,IsActive,VaUID,VaCtr,VaTermID,VaCompCode) values ('10011','<CTRLPX>',1,1,'super',1,'.','.')
+-GO-
+insert into PrefixTrnNo (TrnType,ActualPrefix,DocNumber,IsActive,VaUID,VaCtr,VaTermID,VaCompCode) values ('10012','<CTRLPX>',1,1,'super',1,'.','.')
+-GO-
+insert into PrefixTrnNo (TrnType,ActualPrefix,DocNumber,IsActive,VaUID,VaCtr,VaTermID,VaCompCode) values ('10015','<CTRLPX>',1,1,'super',1,'.','.')
+-GO-
+update PrefixMaster set VActr =(select intg from SysParam where ParamCode='vasyscounter') where Trntype in (10001,10002,10003,10004,10005,10006,10007,10008,10009,10010,10011,10012,10015)
+-GO-
+update PrefixTrnNo set VActr =(select intg from SysParam where ParamCode='vasyscounter') where Trntype in (10001,10002,10003,10004,10005,10006,10007,10008,10009,10010,10011,10012,10015)
+-GO-
+</s9qScript>
+</s9qsqlblk>
+
+<s9qsqlblk>
+  <s9qScriptid>S9Q_016_1_0453</s9qScriptid> 
+  <s9qtitle>POS Rel 1.6 Inserting values for Sysparam and sysparm extd </s9qtitle> 
+  <s9qpgmtype>I</s9qpgmtype>  
+  <s9qpgmtype>L</s9qpgmtype>  
+  <s9qversion>*</s9qversion> 
+  <s9qenvironment>P</s9qenvironment> 
+  <s9qRunMultiple>1</s9qRunMultiple> 
+  <s9qQryType>DML</s9qQryType> 
+  <s9qScript>
+
+Insert Into Sysparam Values('SR6-0901-0000346','Enable Till Management','EnableTill',0,0,null,null,0,0,'B','',0,'.','')
+-GO-
+Insert into SysParamExtd Values('SR6-0901-0000346','EnableTill','Variable',0,'22. Till Management','This Gives Till Realted Parameter',1,'Super',1,'.','001')
+-GO-
+Insert Into Sysparam Values('SR6-0901-0000347','Till Id Same as Node Id','NodeIdActasTillid',1,0,null,null,0,0,'B','',0,'.','')
+-GO-
+Insert into SysParamExtd Values('SR6-0901-0000347','NodeIdActasTillid','Hidden',0,'22. Till Management','This Gives Till Realted Parameter',2,'Super',1,'.','001')
+-GO-
+Insert Into Sysparam Values('SR6-0901-0000348','Caption for Till Management','CaptionforTill',0,0,'Till',null,0,0,'T','',0,'.','')
+-GO-
+Insert into SysParamExtd Values('SR6-0901-0000348','CaptionforTill','Hidden',0,'22. Till Management','This Gives Till Realted Parameter',3,'Super',1,'.','001')
+-GO-
+Insert Into Sysparam Values('SR6-0901-0000350','displaying of ignore denomination in cash lift screen','EnableIgnoreDenominationInCashlift',0,0,null,null,0,0,'B','',0,'.','')
+-GO-
+Insert into SysParamExtd Values('SR6-0901-0000350','EnableIgnoreDenominationInCashlift','Hidden',0,'22. Till Management','This Gives Till Realted Parameter',4,'Super',1,'.','001')
+-GO-
+Insert Into Sysparam Values('SR6-0901-0000351','Admin User Login Required for Cash Lift','EnableSuperuserValidationInCashLift',0,0,null,null,0,0,'B','',0,'.','')
+-GO-
+Insert into SysParamExtd Values('SR6-0901-0000351','EnableSuperuserValidationInCashLift','Hidden',0,'22. Till Management','This Gives Till Realted Parameter',5,'Super',1,'.','001')
+-GO-
+Insert Into Sysparam Values('SR6-0901-0000352','Automatic Till Close after Cash Lift','EnableCounterCloseOnCashLift',0,0,null,null,0,0,'B','',0,'.','')
+-GO-
+Insert into SysParamExtd Values('SR6-0901-0000352','EnableCounterCloseOnCashLift','Hidden',0,'22. Till Management','This Gives Till Realted Parameter',6,'Super',1,'.','001')
+-GO-
+Insert Into Sysparam Values('SR6-0901-0000353','setting Till Opening Balance Remotely','EnableTillOpenBlncRemote',0,0,null,null,0,0,'B','',0,'.','')
+-GO-
+Insert into SysParamExtd Values('SR6-0901-0000353','EnableTillOpenBlncRemote','Hidden',0,'22. Till Management','This Gives Till Realted Parameter',7,'Super',1,'.','001')
+-GO-
+Insert Into Sysparam Values('SR6-0901-0000354','Enable validation of Till Related Process while shoper Login','EnableTillProcessWhileLogin',0,0,null,null,0,0,'B','',0,'.','')
+-GO-
+Insert into SysParamExtd Values('SR6-0901-0000354','EnableTillProcessWhileLogin','Hidden',0,'22. Till Management','This Gives Till Realted Parameter',8,'Super',1,'.','001')
+-GO-
+Insert Into Sysparam Values('SR6-0901-0000355','Till Discrepancy Tolerance Allowed (In Amount)','TillToleranceDiscrepencyAmtLevel',0,0,null,null,0,0,'C','',0,'.','')
+-GO-
+Insert into SysParamExtd Values('SR6-0901-0000355','TillToleranceDiscrepencyAmtLevel','Hidden',0,'22. Till Management','This Gives Till Realted Parameter',9,'Super',1,'.','001')
+-GO-
+Insert Into Sysparam Values('SR6-0901-0000356','Display Total Amount Recorded in Till','DisplayTillActualAmount',0,0,null,null,0,0,'B','',0,'.','')
+-GO-
+Insert into SysParamExtd Values('SR6-0901-0000356','DisplayTillActualAmount','Variable',0,'22. Till Management','This Gives Till Realted Parameter',10,'Super',1,'.','001')
+-GO-
+Insert Into Sysparam Values('SR6-0901-0000357','Enabling previous balance prefilling automatically','EnablePrefillPrevBalance',0,0,null,null,0,0,'B','',0,'.','')
+-GO-
+Insert into SysParamExtd Values('SR6-0901-0000357','EnablePrefillPrevBalance','Hidden',0,'22. Till Management','This Gives Till Realted Parameter',11,'Super',1,'.','001')
+-GO-
+Insert Into Sysparam Values('SR6-0901-0000359','Authentication Required for Individual Bills/ Billing Activities','AuthencatingtheeachBill',0,0,null,null,0,0,'B','',0,'.','')
+-GO-
+Insert into SysParamExtd Values('SR6-0901-0000359','AuthencatingtheeachBill','Variable',0,'11. Billing','This Gives Till Realted Parameter',11,'Super',1,'.','001')
+-GO-
+Insert Into Sysparam Values('SR6-0901-0000349','Enabling Paymode in Till management','paymodeintillmanagement',0,0,'1000000000#1000000000#1000000000',null,0,0,'T','',0,'.','')
+-GO-
+Insert into SysparamExtd ([ID],[ParamCode],[Fixed],[Changed],[Category],[CatDescr],[DispOrder]) Values ('SR6-0901-0000349','paymodeintillmanagement','Hidden','0','22. Till Management','This Gives Item Master Parameters','13')
+-GO-
+</s9qScript>
+</s9qsqlblk>
+
+
+<s9qsqlblk>
+  <s9qScriptID>S9Q_016_1_0471</s9qScriptID>
+  <s9qtitle>Creating BAK Table</s9qtitle>
+  <s9qpgmtype>I</s9qpgmtype>
+  <s9qpgmtype>L</s9qpgmtype>
+  <s9qversion>*</s9qversion>
+  <s9qenvironment>P</s9qenvironment>
+  <s9qRunMultiple>0</s9qRunMultiple>
+  <s9qQryType>DLL</s9qQryType>
+  <s9qScript>BackTableCreation.clsBackTabCrt</s9qScript>
+</s9qsqlblk>

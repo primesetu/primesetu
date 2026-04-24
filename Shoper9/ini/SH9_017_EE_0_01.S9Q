@@ -1,0 +1,59 @@
+<s9qsqlblk>
+  <s9qScriptID>S9Q_017_0_0001</s9qScriptID>
+  <s9qtitle>Security Database Script</s9qtitle>
+  <s9qpgmtype>I</s9qpgmtype>
+  <s9qpgmtype>L</s9qpgmtype>
+  <s9qversion>*</s9qversion>
+  <s9qenvironment>M</s9qenvironment>
+  <s9qRunMultiple>1</s9qRunMultiple>
+  <s9qQryType>DML</s9qQryType>
+  <s9qScript>
+CREATE TABLE [dbo].[ShprManiFest](
+      [DllName] [varchar](32) NULL,
+      [TypeLibTlbId] [varchar](64) NULL,
+      [DllVersion] [varchar](16) NULL,
+      [Flags] [varchar](16) NULL,
+      [HelpDir] [varchar](64) NULL,
+      [ComClassId] [varchar](64) NULL,
+      [ThreadingModel] [varchar](32) NULL,
+      [ProgId] [varchar](64) NULL,
+      [ClassDesc] [varchar](64) NULL,
+      [ApplicationName] [varchar](64) NULL,
+      [IsitActive] [bit] NULL,
+      [HOPosOpt] [int] NULL
+) ON [PRIMARY]
+-GO-
+Create Table ShprManifestLink (AppName Varchar(64),LinkDllName Varchar(64))
+-GO-
+ALTER TABLE VACOMPANY ADD WindowsAuthAppDb BIT, WindowsAuthDb1 BIT, WindowsAuthDb2 BIT, WindowsAuthDb3 BIT, WindowsAuthDb4 BIT
+-GO-
+INSERT INTO [vaMenu] ([MnuNo],[MenuOPt],[MnuName],[MnuCap],[MnuPgm],[ExeName],[MnuWght],[AllowWhenTrnClosed],[pgmopt],[DbInfo],[MenuIcon],[Menusep],[MenuBold],[MultiInstance]) VALUES (430,444,'Stock','Void Transactions','P','SR239800.Exe',0,0,0,'','',0,0,0)
+-GO-
+INSERT INTO [VaVerTable] ([NODEID],[EXESRL],[EXEID],[EXEName],[EXESize],[EXEVer],[EXEMinor],[EXESubRel],[EXESKIP]) VALUES ('0',0,'SR239800.Exe','NULL',0,'9','1','358','N')
+-GO-
+UPDATE VAVerTable SET EXEVER = '9', EXEMINOR = '1', EXESUBREL = '383' WHERE EXEID in (
+'SR239800.EXE','SR320500.EXE','SR330700.EXE','SR405100.EXE','SR100700.Exe','SR101000.Exe','SR127000.Exe','SR438500.EXE','SR450600.EXE',
+'SR525700.EXE','SR100200.EXE','SE301200.EXE','SD500400.EXE','SE301400.EXE','SR138900.EXE','SR130000.Exe','SR229700.EXE','SR210700.Exe',
+'SR323400.Exe','SE301600.EXE','SR129500.Exe','SR536400.EXE','SR440100.EXE','SR438500.EXE','sr428900.EXE','SR730000.EXE','SR405600.EXE',
+'SE201200.EXE','SR309900.EXE','SR721000.Exe','SE100220.EXE'
+)
+-GO-
+UPDATE VAVerTable SET EXEVER = '9', EXEMINOR = '1', EXESUBREL = '383' WHERE EXEID in (
+'SE100120.EXE','SE100140.EXE','SE100900.EXE','SE101000.Exe','SR202400.EXE','SR202800.Exe','SR209600.EXE','SR233700.Exe','SR236300.Exe',
+'SR240400.EXE','SR406500.EXE','SR413100.EXE','SR431200.EXE','SR436900.EXE','SR437300.EXE','SR435600.EXE','SR431800.EXE','SR431700.EXE',
+'SR431500.EXE','SR431000.EXE','SN400600.EXE','SR230400.EXE','SR230500.EXE','SR240000.EXE','SR439900.EXE'
+)
+-GO-
+</s9qScript>		
+</s9qsqlblk>
+
+<s9qsqlblk>
+  <s9qScriptid>S9Q_017_0_0002</s9qScriptid> 
+  <s9qtitle>Install SIS for POS</s9qtitle>
+  <s9qpgmtype>L</s9qpgmtype>
+  <s9qversion>*</s9qversion>
+  <s9qenvironment>M</s9qenvironment>
+  <s9qRunMultiple>1</s9qRunMultiple>
+  <s9qQryType>EXE</s9qQryType>
+  <s9qScript><APPATH>\CreateShoperDatFile.exe</s9qScript>
+</s9qsqlblk>

@@ -1,0 +1,16 @@
+<s9qsqlblk>
+  <s9qScriptid>S9Q_0181_9_0001</s9qScriptid> 
+  <s9qtitle>Tax Catalog Correction</s9qtitle> 
+  <s9qpgmtype>I</s9qpgmtype>  
+  <s9qpgmtype>L</s9qpgmtype>  
+  <s9qversion>*</s9qversion> 
+  <s9qenvironment>P</s9qenvironment>
+  <s9qRunMultiple>0</s9qRunMultiple> 
+  <s9qQryType>DML</s9qQryType> 
+  <s9qScript>
+
+Insert Into GenLookup Values(909,'P7','Item Quantity','11',null,'super',1,'.',181)
+-GO-
+  </s9qScript>
+</s9qsqlblk>
+

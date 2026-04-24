@@ -1,0 +1,284 @@
+<s9qsqlblk>
+<s9qScriptid>S9Q_013_1_0047</s9qScriptID>
+<s9qtitle>cORRECTING THE POSCASH MISMATCH RECORDS BECOZ OF ROUND-OFF ISSUE </s9qtitle>
+<s9qpgmtype>L</s9qpgmtype>
+<s9qenvironment>P</s9qenvironment>
+<s9qRunMultiple>0</s9qRunMultiple>
+<s9qQryType>DML</s9qQryType>
+<s9qScript>
+
+-- Pos Cash Mismatch
+IF OBJECT_ID('tempdb..#Poscashmismatch') IS NOT NULL BEGIN drop table #Poscashmismatch END
+select trntype,trnctrlno,docno,docnoprefix,totrndoffvalue into #Poscashmismatch from stktrnhdr b ,(select salerefdocno,salerefdocprefix,sum(loccurrnetamt) as val from poscashtrn where poscashtrn.SHOPERDBVER=730 and entrytype=11 group by salerefdocno,salerefdocprefix ) as a where a.salerefdocno=b.docno and a.salerefdocprefix=b.docnoprefix and a.val <> b.netdocvalue and totrndoffvalue <> 0 and b.trntype=2100 and b.SHOPERDBVER=730
+-GO-
+update stktrnhdr set totdocaddons=totdocaddons-totrndoffvalue, totdocentafttaxaddons=totdocentafttaxaddons-totrndoffvalue from stktrnhdr b ,(select salerefdocno,salerefdocprefix,sum(loccurrnetamt) as val from poscashtrn where poscashtrn.SHOPERDBVER=730 and entrytype=11 group by salerefdocno,salerefdocprefix ) as a where a.salerefdocno=b.docno and a.salerefdocprefix=b.docnoprefix and a.val <> b.netdocvalue and totrndoffvalue > 0 and b.trntype=2100 and b.SHOPERDBVER=730
+-GO-
+update stktrnhdr set totdocdedns=(totdocdedns-abs(totrndoffvalue)), totdocentafttaxdedns=(totdocentafttaxdedns-abs(totrndoffvalue)) from stktrnhdr b ,(select salerefdocno,salerefdocprefix,sum(loccurrnetamt) as val from poscashtrn where poscashtrn.SHOPERDBVER=730 and entrytype=11 group by salerefdocno,salerefdocprefix ) as a where a.salerefdocno=b.docno and a.salerefdocprefix=b.docnoprefix and a.val <> b.netdocvalue and totrndoffvalue < 0 and b.trntype=2100 and b.SHOPERDBVER=730 
+-GO-
+update stktrnhdr set totrndoffvalue=totrndoffvalue + (a.val-b.netdocvalue) from stktrnhdr b,(select salerefdocno,salerefdocprefix,sum(loccurrnetamt) as val from poscashtrn where poscashtrn.SHOPERDBVER=730 and entrytype=11 group by salerefdocno,salerefdocprefix ) as a where a.salerefdocno=b.docno and a.salerefdocprefix=b.docnoprefix and a.val <> b.netdocvalue and b.trntype=2100 and b.SHOPERDBVER=730 
+-GO-
+update stktrnhdr set  totdocaddons=(totdocaddons + totrndoffvalue), totdocentafttaxaddons=(totdocentafttaxaddons+totrndoffvalue)  from stktrnhdr b,(select salerefdocno,salerefdocprefix,sum(loccurrnetamt) as val from poscashtrn where poscashtrn.SHOPERDBVER=730 and entrytype=11 group by salerefdocno,salerefdocprefix ) as a where a.salerefdocno=b.docno and a.salerefdocprefix=b.docnoprefix and a.val <> b.netdocvalue and totrndoffvalue > 0 and b.trntype=2100 and b.SHOPERDBVER=730 
+-GO-
+update stktrnhdr set totdocdedns=(totdocdedns+abs(totrndoffvalue)), totdocentafttaxdedns=(totdocentafttaxdedns + abs(totrndoffvalue)) from stktrnhdr b,(select salerefdocno,salerefdocprefix,sum(loccurrnetamt) as val from poscashtrn where poscashtrn.SHOPERDBVER=730 and entrytype=11 group by salerefdocno,salerefdocprefix ) as a where a.salerefdocno=b.docno and a.salerefdocprefix=b.docnoprefix and a.val <> b.netdocvalue and totrndoffvalue < 0 and b.trntype=2100 and b.SHOPERDBVER=730
+-GO-
+update stktrnhdr set netdocvalue=a.val from stktrnhdr b,(select salerefdocno,salerefdocprefix,sum(loccurrnetamt) as val from poscashtrn where poscashtrn.SHOPERDBVER=730 and entrytype=11 group by salerefdocno,salerefdocprefix ) as a where a.salerefdocno=b.docno and a.salerefdocprefix=b.docnoprefix and a.val <> b.netdocvalue and b.trntype=2100 and b.SHOPERDBVER=730 
+-GO-
+update stktrndtls set docrndoffvalue=stktrnhdr.totrndoffvalue from stktrnhdr,#Poscashmismatch  where  stktrnhdr.SHOPERDBVER=730 and stktrnhdr.docnoprefix=stktrndtls.docnoprefix and stktrnhdr.docno=stktrndtls.docno and stktrnhdr.trntype=#Poscashmismatch.trntype and stktrnhdr.trnctrlno=#Poscashmismatch.trnctrlno and stktrndtls.entsrlno=(select min(entsrlno) from stktrndtls as std1 where std1.DocEntNetValue > 0 and  std1.docno=stktrnhdr.docno and std1.docnoprefix=stktrnhdr.docnoprefix and std1.trntype=2100) and stktrndtls.trntype=2100 and stktrnhdr.totrndoffvalue <> 0 
+-GO-
+update stktrndtls set docentaddons=docrndoffvalue,docentafttaxaddons=docrndoffvalue from stktrnhdr,#Poscashmismatch  where stktrnhdr.SHOPERDBVER=730 and stktrnhdr.docnoprefix=stktrndtls.docnoprefix and stktrnhdr.docno=stktrndtls.docno and stktrnhdr.trntype=#Poscashmismatch.trntype and stktrnhdr.trnctrlno=#Poscashmismatch.trnctrlno and #Poscashmismatch.totrndoffvalue > 0 and stktrndtls.entsrlno=(select min(entsrlno) from stktrndtls as std1 where std1.DocEntNetValue > 0 and  std1.docno=stktrndtls.docno and std1.docnoprefix=stktrndtls.docnoprefix and std1.trntype=2100) and docrndoffvalue >0 and stktrndtls.trntype=2100 
+-GO-
+update stktrndtls set docentdedns=abs(docrndoffvalue),docentafttaxdedns=abs(docrndoffvalue) from stktrnhdr,#Poscashmismatch  where  stktrnhdr.SHOPERDBVER=730 and stktrnhdr.docnoprefix=stktrndtls.docnoprefix and stktrnhdr.docno=stktrndtls.docno and stktrnhdr.trntype=#Poscashmismatch.trntype and stktrnhdr.trnctrlno=#Poscashmismatch.trnctrlno and #Poscashmismatch.totrndoffvalue < 0 and stktrndtls.entsrlno=(select min(entsrlno) from stktrndtls as std1 where std1.DocEntNetValue > 0 and  std1.docno=stktrndtls.docno and std1.docnoprefix=stktrndtls.docnoprefix and std1.trntype=2100) and docrndoffvalue < 0 and stktrndtls.trntype=2100
+-GO-
+update stktrndtls set DocEntNetValue=(DocEntValue-DocEntTotDisc+DocEntAddons-DocEntDedns+DocEntAddonsTax) from stktrnhdr,#Poscashmismatch  where  stktrnhdr.SHOPERDBVER=730 and stktrnhdr.docnoprefix=stktrndtls.docnoprefix and stktrnhdr.docno=stktrndtls.docno and stktrnhdr.trntype=#Poscashmismatch.trntype and stktrnhdr.trnctrlno=#Poscashmismatch.trnctrlno and stktrndtls.entsrlno=(select min(entsrlno) from stktrndtls as std1 where DocEntNetValue > 0 and  std1.docno=stktrndtls.docno and std1.docnoprefix=stktrndtls.docnoprefix and std1.trntype=2100) and docrndoffvalue <> 0 and stktrndtls.trntype=2100 
+-GO-
+</s9qScript>
+</s9qsqlblk>
+
+
+<s9qsqlblk>
+<s9qScriptid>S9Q_013_1_0048</s9qScriptID>
+<s9qtitle>Updating 0.1 value for Zero value reocrds (sepcific to sales returns) </s9qtitle>
+<s9qpgmtype>L</s9qpgmtype>
+<s9qenvironment>P</s9qenvironment>
+<s9qRunMultiple>0</s9qRunMultiple>
+<s9qQryType>DML</s9qQryType>
+<s9qScript>
+
+--updating  0.1 values for zero value records
+update stktrndtls set stktrndtls.DocEntNetValue=0.1, stktrndtls.DocEntAddons=0.1,stktrndtls.docentafttaxaddons=0.1,stktrndtls.docrndoffvalue=0.1 from stktrnhdr where stktrnhdr.trntype=1300 and stktrnhdr.trnctrlno=stktrndtls.trnctrlno and stktrnhdr.trntype=stktrndtls.trntype and stktrnhdr.netdocvalue=0 and stktrnhdr.SHOPERDBVER=730 and stktrndtls.entsrlno=(select min(entsrlno) from stktrndtls as std1 where std1.trntype=1300 and stktrnhdr.trnctrlno=std1.trnctrlno and std1.trntype=stktrnhdr.trntype) 
+-GO-
+update stktrnhdr set netdocvalue=0.1,totdocaddons=0.1,totdocentafttaxaddons=0.1,totrndoffvalue=0.1 where trntype=1300 and netdocvalue=0 and SHOPERDBVER=730
+-GO-
+update poscashtrn set TenderModeRcptAmt=0.1,LocCurrRcptAmt=0.1,LocCurrNetAmt=0.1,TotValUsed=0 where LocCurrNetAmt=0 and entrytype=31 and SHOPERDBVER=730
+-GO-
+
+
+</s9qScript>
+</s9qsqlblk>
+
+
+<s9qsqlblk>
+<s9qScriptid>S9Q_013_1_0049</s9qScriptID>
+<s9qtitle>cORRECTING THE Net value mismatch between STD AND STH TABLE (TRANSACTION TYPE :2100 SALES) </s9qtitle>
+<s9qpgmtype>L</s9qpgmtype>
+<s9qenvironment>P</s9qenvironment>
+<s9qRunMultiple>0</s9qRunMultiple>
+<s9qQryType>DML</s9qQryType>
+<s9qScript>
+
+-- 2100 Net Value Mismatch
+IF OBJECT_ID('tempdb..#valuemismatch') IS NOT NULL BEGIN drop table #valuemismatch END
+select stktrndtls.trntype, stktrndtls.trnctrlno,stktrndtls.entsrlno,docentvalue - (docentnetvalue + docenttotdisc + docentdedns - docentaddons) as Diffval into #valuemismatch  from stktrndtls,stktrnhdr where stktrndtls.trntype=stktrnhdr.trntype and stktrndtls.TrnCtrlNo=stktrnhdr.TrnCtrlNo and stktrnhdr.SHOPERDBVER=730 and docentvalue <> ( docentnetvalue + docenttotdisc + docentdedns - docentaddons) and stktrndtls.trntype = 2100 and stktrndtls.TrnCtrlNo not in (select distinct(TrnCtrlNo) from stktrnaddldtls where trntype=2100) 
+-GO-
+update stktrndtls set   docentnetvalue=(docentnetvalue-abs(Diffval)) from #valuemismatch where #valuemismatch.trntype=stktrndtls.trntype and #valuemismatch.trnctrlno= stktrndtls.trnctrlno and #valuemismatch.entsrlno= stktrndtls.entsrlno and stktrndtls.trntype=2100 and #valuemismatch.Diffval < 0
+-GO-
+update stktrndtls set docentaddons=(docentaddons+abs(Diffval)) from #valuemismatch where #valuemismatch.trntype=stktrndtls.trntype and #valuemismatch.trnctrlno= stktrndtls.trnctrlno and stktrndtls.trntype=2100 and #valuemismatch.Diffval < 0 and stktrndtls.entsrlno=(select min(entsrlno) from stktrndtls as std where std.trntype=#valuemismatch.trntype and std.trnctrlno=#valuemismatch.trnctrlno and std.docentaddons >0) 
+-GO-
+update stktrndtls set  docentnetvalue=(docentnetvalue + Diffval) from  #valuemismatch where #valuemismatch.trntype=stktrndtls.trntype and #valuemismatch.trnctrlno= stktrndtls.trnctrlno and #valuemismatch.entsrlno= stktrndtls.entsrlno and stktrndtls.trntype=2100 and #valuemismatch.Diffval > 0
+-GO-
+update stktrndtls set  docentdedns=(docentdedns+Diffval) from #valuemismatch where #valuemismatch.trntype=stktrndtls.trntype and #valuemismatch.trnctrlno= stktrndtls.trnctrlno and stktrndtls.trntype=2100 and #valuemismatch.Diffval > 0 and stktrndtls.entsrlno=(select min(entsrlno) from stktrndtls as std where std.trntype=#valuemismatch.trntype and std.trnctrlno=#valuemismatch.trnctrlno and std.docentdedns >0) 
+-GO-
+update stktrndtls set   docentnetvalue= (docentvalue-docenttotdisc+docentaddons-docentdedns+DocEntAddonsTax) from #valuemismatch where #valuemismatch.trntype=stktrndtls.trntype and #valuemismatch.trnctrlno= stktrndtls.trnctrlno and stktrndtls.trntype=2100 
+-GO-
+update stktrnhdr set totdocaddons=std.docentaddons from stktrndtls as std ,#valuemismatch where #valuemismatch.trntype=stktrnhdr.trntype and #valuemismatch.trnctrlno=stktrnhdr.trnctrlno  and #valuemismatch.trntype=std.trntype and #valuemismatch.trnctrlno=std.trnctrlno and std.docentaddons >0 and stktrnhdr.trntype=2100 and stktrnhdr.SHOPERDBVER=730 
+-GO-
+update stktrnhdr set totdocdedns=std.docentdedns from stktrndtls as std ,#valuemismatch where #valuemismatch.trntype=stktrnhdr.trntype and #valuemismatch.trnctrlno=stktrnhdr.trnctrlno  and #valuemismatch.trntype=std.trntype and #valuemismatch.trnctrlno=std.trnctrlno and std.docentdedns >0 and stktrnhdr.trntype=2100 and stktrnhdr.SHOPERDBVER=730
+-GO-
+
+</s9qScript>
+</s9qsqlblk>
+
+
+<s9qsqlblk>
+<s9qScriptid>S9Q_013_1_0050</s9qScriptID>
+<s9qtitle>cORRECTING THE Net value mismatch between STD AND STH TABLE (TRANSACTION TYPE :1300 SALES- RETURNS) </s9qtitle>
+<s9qpgmtype>L</s9qpgmtype>
+<s9qenvironment>P</s9qenvironment>
+<s9qRunMultiple>0</s9qRunMultiple>
+<s9qQryType>DML</s9qQryType>
+<s9qScript>
+
+
+-- 1300 Net Value Mismatch
+IF OBJECT_ID('tempdb..#valuemismatch') IS NOT NULL BEGIN drop table #valuemismatch END
+select stktrndtls.trntype, stktrndtls.trnctrlno,stktrndtls.entsrlno,docentvalue - (docentnetvalue + docenttotdisc + docentdedns - docentaddons) as Diffval into #valuemismatch  from stktrndtls,stktrnhdr where stktrndtls.trntype=stktrnhdr.trntype and stktrndtls.TrnCtrlNo=stktrnhdr.TrnCtrlNo and stktrnhdr.SHOPERDBVER=730 and docentvalue <> ( docentnetvalue + docenttotdisc + docentdedns - docentaddons) and stktrndtls.trntype = 1300 and stktrndtls.TrnCtrlNo not in (select distinct(TrnCtrlNo) from stktrnaddldtls where trntype=1300) 
+-GO-
+update stktrndtls set  docentnetvalue=(docentnetvalue-abs(Diffval)) from #valuemismatch where #valuemismatch.trntype=stktrndtls.trntype and #valuemismatch.trnctrlno= stktrndtls.trnctrlno and #valuemismatch.entsrlno= stktrndtls.entsrlno and stktrndtls.trntype=1300 and #valuemismatch.Diffval < 0
+-GO-
+update stktrndtls set docentaddons=(docentaddons+abs(Diffval)) from #valuemismatch where #valuemismatch.trntype=stktrndtls.trntype and #valuemismatch.trnctrlno= stktrndtls.trnctrlno and stktrndtls.trntype=1300 and #valuemismatch.Diffval < 0 and stktrndtls.entsrlno=(select min(entsrlno) from stktrndtls as std where std.trntype=#valuemismatch.trntype and std.trnctrlno=#valuemismatch.trnctrlno and std.docentaddons >0) 
+-GO-
+update stktrndtls set  docentnetvalue=(docentnetvalue + Diffval) from  #valuemismatch where #valuemismatch.trntype=stktrndtls.trntype and #valuemismatch.trnctrlno= stktrndtls.trnctrlno and #valuemismatch.entsrlno= stktrndtls.entsrlno and stktrndtls.trntype=1300 and #valuemismatch.Diffval > 0
+-GO-
+update stktrndtls set  docentdedns=(docentdedns+Diffval) from #valuemismatch where #valuemismatch.trntype=stktrndtls.trntype and #valuemismatch.trnctrlno= stktrndtls.trnctrlno and stktrndtls.trntype=1300 and #valuemismatch.Diffval > 0 and stktrndtls.entsrlno=(select min(entsrlno) from stktrndtls as std where std.trntype=#valuemismatch.trntype and std.trnctrlno=#valuemismatch.trnctrlno and std.docentdedns >0) 
+-GO-
+update stktrndtls set docentnetvalue= (docentvalue-docenttotdisc+docentaddons-docentdedns+DocEntAddonsTax) from #valuemismatch where #valuemismatch.trntype=stktrndtls.trntype and #valuemismatch.trnctrlno= stktrndtls.trnctrlno and stktrndtls.trntype=1300 
+-GO-
+update stktrnhdr set  totdocaddons=std.docentaddons from stktrndtls as std ,#valuemismatch where #valuemismatch.trntype=stktrnhdr.trntype and #valuemismatch.trnctrlno=stktrnhdr.trnctrlno  and #valuemismatch.trntype=std.trntype and #valuemismatch.trnctrlno=std.trnctrlno and std.docentaddons >0 and stktrnhdr.trntype=1300 and stktrnhdr.SHOPERDBVER=730 
+-GO-
+update stktrnhdr set  totdocdedns=std.docentdedns from stktrndtls as std ,#valuemismatch where #valuemismatch.trntype=stktrnhdr.trntype and #valuemismatch.trnctrlno=stktrnhdr.trnctrlno  and #valuemismatch.trntype=std.trntype and #valuemismatch.trnctrlno=std.trnctrlno and std.docentdedns >0 and stktrnhdr.trntype=1300 and stktrnhdr.SHOPERDBVER=730
+-GO-
+
+</s9qScript>
+</s9qsqlblk>
+
+<s9qsqlblk>
+<s9qScriptid>S9Q_013_1_0051</s9qScriptID>
+<s9qtitle>cORRECTING THE Net value mismatch between STD AND STH TABLE (TRANSACTION TYPE 1600 VOID ) </s9qtitle>
+<s9qpgmtype>L</s9qpgmtype>
+<s9qenvironment>P</s9qenvironment>
+<s9qRunMultiple>0</s9qRunMultiple>
+<s9qQryType>DML</s9qQryType>
+<s9qScript>
+-- 1600 Net Value Mismatch
+IF OBJECT_ID('tempdb..#valuemismatch') IS NOT NULL BEGIN drop table #valuemismatch END
+select stktrndtls.trntype, stktrndtls.trnctrlno,stktrndtls.entsrlno,docentvalue - (docentnetvalue + docenttotdisc + docentdedns - docentaddons) as Diffval into #valuemismatch  from stktrndtls,stktrnhdr where stktrndtls.trntype=stktrnhdr.trntype and stktrndtls.TrnCtrlNo=stktrnhdr.TrnCtrlNo and stktrnhdr.SHOPERDBVER=730 and docentvalue <> ( docentnetvalue + docenttotdisc + docentdedns - docentaddons) and stktrndtls.trntype = 1600 and stktrndtls.TrnCtrlNo not in (select distinct(TrnCtrlNo) from stktrnaddldtls where trntype=1600) 
+-GO-
+update stktrndtls set  docentnetvalue=(docentnetvalue-abs(Diffval)) from #valuemismatch where #valuemismatch.trntype=stktrndtls.trntype and #valuemismatch.trnctrlno= stktrndtls.trnctrlno and #valuemismatch.entsrlno= stktrndtls.entsrlno and stktrndtls.trntype=1600 and #valuemismatch.Diffval < 0
+-GO-
+update stktrndtls set   docentaddons=(docentaddons+abs(Diffval)) from #valuemismatch where #valuemismatch.trntype=stktrndtls.trntype and #valuemismatch.trnctrlno= stktrndtls.trnctrlno and stktrndtls.trntype=1600 and #valuemismatch.Diffval < 0 and stktrndtls.entsrlno=(select min(entsrlno) from stktrndtls as std where std.trntype=#valuemismatch.trntype and std.trnctrlno=#valuemismatch.trnctrlno and std.docentaddons >0) 
+-GO-
+update stktrndtls set   docentnetvalue=(docentnetvalue + Diffval) from  #valuemismatch where #valuemismatch.trntype=stktrndtls.trntype and #valuemismatch.trnctrlno= stktrndtls.trnctrlno and #valuemismatch.entsrlno= stktrndtls.entsrlno and stktrndtls.trntype=1600 and #valuemismatch.Diffval > 0
+-GO-
+update stktrndtls set   docentdedns=(docentdedns+Diffval) from #valuemismatch where #valuemismatch.trntype=stktrndtls.trntype and #valuemismatch.trnctrlno= stktrndtls.trnctrlno and stktrndtls.trntype=1600 and #valuemismatch.Diffval > 0 and stktrndtls.entsrlno=(select min(entsrlno) from stktrndtls as std where std.trntype=#valuemismatch.trntype and std.trnctrlno=#valuemismatch.trnctrlno and std.docentdedns >0) 
+-GO-
+update stktrndtls set   docentnetvalue= (docentvalue-docenttotdisc+docentaddons-docentdedns+DocEntAddonsTax) from #valuemismatch where #valuemismatch.trntype=stktrndtls.trntype and #valuemismatch.trnctrlno= stktrndtls.trnctrlno and stktrndtls.trntype=1600 
+-GO-
+update stktrnhdr set   totdocaddons=std.docentaddons from stktrndtls as std ,#valuemismatch where #valuemismatch.trntype=stktrnhdr.trntype and #valuemismatch.trnctrlno=stktrnhdr.trnctrlno  and #valuemismatch.trntype=std.trntype and #valuemismatch.trnctrlno=std.trnctrlno and std.docentaddons >0 and stktrnhdr.trntype=1600 and stktrnhdr.SHOPERDBVER=730 
+-GO-
+update stktrnhdr set   totdocdedns=std.docentdedns from stktrndtls as std ,#valuemismatch where #valuemismatch.trntype=stktrnhdr.trntype and #valuemismatch.trnctrlno=stktrnhdr.trnctrlno  and #valuemismatch.trntype=std.trntype and #valuemismatch.trnctrlno=std.trnctrlno and std.docentdedns >0 and stktrnhdr.trntype=1600 and stktrnhdr.SHOPERDBVER=730
+-GO-
+
+</s9qScript>
+</s9qsqlblk>
+
+
+<s9qsqlblk>
+<s9qScriptid>S9Q_013_1_0052</s9qScriptID>
+<s9qtitle>cORRECTING THE LINE LEVEL value mismatch IN  STH AND STD  </s9qtitle>
+<s9qpgmtype>L</s9qpgmtype>
+<s9qenvironment>P</s9qenvironment>
+<s9qRunMultiple>0</s9qRunMultiple>
+<s9qQryType>DML</s9qQryType>
+<s9qScript>
+
+-- Line level mismatch
+IF OBJECT_ID('tempdb..#Lineitemlvlmismatch') IS NOT NULL BEGIN drop table #Lineitemlvlmismatch END
+select trntype, trnctrlno, netdocvalue,netdocvalue-(totdocvalue-totdocdisc+totdocaddons-totdocdedns) as diffvalue into #Lineitemlvlmismatch from stktrnhdr  where SHOPERDBVER=730 and trntype=2100 and  netdocvalue <> (totdocvalue-totdocdisc+totdocaddons-totdocdedns) and stktrnhdr.totrndoffvalue <> 0 
+-GO-
+update stktrnhdr set  totdocaddons=totdocaddons-totrndoffvalue,totdocentafttaxaddons=totdocentafttaxaddons-totrndoffvalue from #Lineitemlvlmismatch  where #Lineitemlvlmismatch.trntype=stktrnhdr.trntype and #Lineitemlvlmismatch.trnctrlno=stktrnhdr.trnctrlno and stktrnhdr.trntype=2100 and stktrnhdr.totrndoffvalue >0 and SHOPERDBVER=730 
+-GO-
+update stktrnhdr set  totdocdedns=totdocdedns-abs(totrndoffvalue),totdocentafttaxdedns=totdocentafttaxdedns-abs(totrndoffvalue) from #Lineitemlvlmismatch  where #Lineitemlvlmismatch.trntype=stktrnhdr.trntype and #Lineitemlvlmismatch.trnctrlno=stktrnhdr.trnctrlno and stktrnhdr.trntype=2100 and stktrnhdr.totrndoffvalue < 0 and SHOPERDBVER=730 
+-GO-
+update stktrnhdr set  totrndoffvalue=totrndoffvalue+(diffvalue) from #Lineitemlvlmismatch where #Lineitemlvlmismatch.trntype=stktrnhdr.trntype and #Lineitemlvlmismatch.trnctrlno=stktrnhdr.trnctrlno and stktrnhdr.trntype=2100 and SHOPERDBVER=730  
+-GO-
+update stktrnhdr set  totdocaddons=totdocaddons+totrndoffvalue,totdocentafttaxaddons=totdocentafttaxaddons+totrndoffvalue from #Lineitemlvlmismatch  where #Lineitemlvlmismatch.trntype=stktrnhdr.trntype and #Lineitemlvlmismatch.trnctrlno=stktrnhdr.trnctrlno and stktrnhdr.trntype=2100 and stktrnhdr.totrndoffvalue >0 and SHOPERDBVER=730 
+-GO-
+update stktrnhdr set  totdocdedns=totdocdedns+ abs(totrndoffvalue),totdocentafttaxdedns=totdocentafttaxdedns + abs(totrndoffvalue) from #Lineitemlvlmismatch  where #Lineitemlvlmismatch.trntype=stktrnhdr.trntype and #Lineitemlvlmismatch.trnctrlno=stktrnhdr.trnctrlno and stktrnhdr.trntype=2100 and stktrnhdr.totrndoffvalue < 0 and SHOPERDBVER=730 
+-GO-
+update stktrndtls set docentaddons=docentaddons-docrndoffvalue,docentafttaxaddons=docentafttaxaddons-docrndoffvalue from #Lineitemlvlmismatch  where #Lineitemlvlmismatch.trntype=stktrndtls.trntype and #Lineitemlvlmismatch.trnctrlno=stktrndtls.trnctrlno and stktrndtls.trntype=2100 and stktrndtls.docrndoffvalue >0 and stktrndtls.entsrlno=(select min(entsrlno) from stktrndtls as std where #Lineitemlvlmismatch.trntype=std.trntype and #Lineitemlvlmismatch.trnctrlno=std.trnctrlno and docentnetvalue > 0)
+-GO-
+update stktrndtls set docentdedns=docentdedns-abs(docrndoffvalue),docentafttaxdedns=docentafttaxdedns-abs(docrndoffvalue) from #Lineitemlvlmismatch  where #Lineitemlvlmismatch.trntype=stktrndtls.trntype and #Lineitemlvlmismatch.trnctrlno=stktrndtls.trnctrlno and stktrndtls.trntype=2100 and stktrndtls.docrndoffvalue < 0 and stktrndtls.entsrlno=(select min(entsrlno) from stktrndtls as std where #Lineitemlvlmismatch.trntype=std.trntype and #Lineitemlvlmismatch.trnctrlno= std.trnctrlno and std.docentnetvalue > 0)
+-GO-
+update stktrndtls set docrndoffvalue= stktrnhdr.totrndoffvalue from stktrnhdr,#Lineitemlvlmismatch where #Lineitemlvlmismatch.trntype=stktrndtls.trntype and #Lineitemlvlmismatch.trnctrlno=stktrndtls.trnctrlno and #Lineitemlvlmismatch.trntype=stktrnhdr.trntype and #Lineitemlvlmismatch.trnctrlno=stktrnhdr.trnctrlno and stktrnhdr.SHOPERDBVER=730 and stktrndtls.trntype=2100 and stktrndtls.entsrlno=(select min(entsrlno) from stktrndtls as std where #Lineitemlvlmismatch.trntype=std.trntype and #Lineitemlvlmismatch.trnctrlno= std.trnctrlno and std.docentnetvalue > 0)
+-GO-
+update stktrndtls set docentaddons=docentaddons+docrndoffvalue,docentafttaxaddons=docentafttaxaddons+docrndoffvalue from #Lineitemlvlmismatch where #Lineitemlvlmismatch.trntype=stktrndtls.trntype and #Lineitemlvlmismatch.trnctrlno=stktrndtls.trnctrlno and stktrndtls.trntype=2100 and stktrndtls.docrndoffvalue >0 and stktrndtls.entsrlno=(select min(entsrlno) from stktrndtls as std where #Lineitemlvlmismatch.trntype=std.trntype and #Lineitemlvlmismatch.trnctrlno=std.trnctrlno and docentnetvalue > 0)
+-GO-
+update stktrndtls set docentdedns=docentdedns+abs(docrndoffvalue),docentafttaxdedns=docentafttaxdedns+abs(docrndoffvalue) from #Lineitemlvlmismatch where #Lineitemlvlmismatch.trntype=stktrndtls.trntype and #Lineitemlvlmismatch.trnctrlno=stktrndtls.trnctrlno and stktrndtls.trntype=2100 and stktrndtls.docrndoffvalue < 0 and stktrndtls.entsrlno=(select min(entsrlno) from stktrndtls as std where #Lineitemlvlmismatch.trntype=std.trntype and #Lineitemlvlmismatch.trnctrlno= std.trnctrlno and std.docentnetvalue > 0)
+-GO-
+update stktrndtls set docentnetvalue=(docentvalue-docenttotdisc + docentaddons-docentdedns) from #Lineitemlvlmismatch  where #Lineitemlvlmismatch.trntype=stktrndtls.trntype and #Lineitemlvlmismatch.trnctrlno=stktrndtls.trnctrlno and stktrndtls.trntype=2100 and stktrndtls.entsrlno=(select min(entsrlno) from stktrndtls as std where #Lineitemlvlmismatch.trntype=std.trntype and #Lineitemlvlmismatch.trnctrlno= std.trnctrlno and std.docentnetvalue > 0)  
+-GO-
+</s9qScript>
+</s9qsqlblk>
+
+
+<s9qsqlblk>
+<s9qScriptid>S9Q_013_1_0053</s9qScriptID>
+<s9qtitle>cORRECTING THE TAX value mismatch IN  STD (TRAN TYPE -2100-SALES)  </s9qtitle>
+<s9qpgmtype>L</s9qpgmtype>
+<s9qenvironment>P</s9qenvironment>
+<s9qRunMultiple>0</s9qRunMultiple>
+<s9qQryType>DML</s9qQryType>
+<s9qScript>
+
+-- 2100 Tax Mismatch
+IF OBJECT_ID('tempdb..#taxmismatch') IS NOT NULL BEGIN drop table #taxmismatch END
+select sth.trntype,sth.trnctrlno,sth.totdoctax,std.taxamt,(totdoctax-std.taxamt) as diffval  into #taxmismatch  from stktrnhdr sth, (select trntype,trnctrlno,sum(docenttax) as taxamt from stktrndtls where trntype=2100 and stdtaxcomp1per <> 0 and docentnetvalue >0 group by trntype,trnctrlno) as std where sth.trntype=std.trntype and sth.trnctrlno=std.trnctrlno and std.taxamt <>sth.totdoctax and sth.trntype=2100 and sth.SHOPERDBVER=730
+-GO-
+update stktrndtls set docenttax=docenttax+diffval,taxcomp1=taxcomp1+diffval from #taxmismatch where stktrndtls.trntype=#taxmismatch.trntype and stktrndtls.trnctrlno=#taxmismatch.trnctrlno and stktrndtls.entsrlno=(select min(entsrlno) from stktrndtls as std where #taxmismatch.trntype=std.trntype and #taxmismatch.trnctrlno=std.trnctrlno and stdtaxcomp1per <> 0 and docenttax <>0 and docentnetvalue <>0)
+-GO-
+update stktrndtls set docenttax=0,taxcomp1=0 from stktrnhdr where stktrnhdr.trntype=stktrndtls.trntype and stktrnhdr.trnctrlno=stktrndtls.trnctrlno and stktrnhdr.SHOPERDBVER=730 and docentnetvalue =0 and stktrndtls.trntype=2100 and stktrndtls.docenttax <> 0 
+-GO-
+update stktrndtls set docenttax=0,taxcomp1=0 from stktrnhdr where stktrnhdr.trntype=stktrndtls.trntype and stktrnhdr.trnctrlno=stktrndtls.trnctrlno and stktrnhdr.SHOPERDBVER=730  and stktrndtls.stdtaxcomp1per =0 and stktrndtls.trntype=2100 and stktrndtls.docenttax <> 0
+-GO-
+
+</s9qScript>
+</s9qsqlblk>
+
+
+<s9qsqlblk>
+<s9qScriptid>S9Q_013_1_0054</s9qScriptID>
+<s9qtitle>cORRECTING THE TAX value mismatch IN  STD (TRAN TYPE -1300-SALES RETURN)  </s9qtitle>
+<s9qpgmtype>L</s9qpgmtype>
+<s9qenvironment>P</s9qenvironment>
+<s9qRunMultiple>0</s9qRunMultiple>
+<s9qQryType>DML</s9qQryType>
+<s9qScript>
+
+
+-- 1300 Tax Mismatch
+IF OBJECT_ID('tempdb..#taxmismatch') IS NOT NULL BEGIN drop table #taxmismatch END
+select sth.trntype,sth.trnctrlno,sth.totdoctax,std.taxamt,(totdoctax-std.taxamt) as diffval  into #taxmismatch  from stktrnhdr sth, (select trntype,trnctrlno,sum(docenttax) as taxamt from stktrndtls where  trntype=1300 and stdtaxcomp1per <> 0 and docentnetvalue >0  group by trntype,trnctrlno) as std where sth.trntype=std.trntype and sth.trnctrlno=std.trnctrlno and std.taxamt <>sth.totdoctax and sth.trntype=1300 and sth.SHOPERDBVER=730
+-GO-
+update stktrndtls set docenttax=docenttax+diffval,taxcomp1=taxcomp1+diffval from #taxmismatch where stktrndtls.trntype=#taxmismatch.trntype and stktrndtls.trnctrlno=#taxmismatch.trnctrlno and stktrndtls.entsrlno=(select min(entsrlno) from stktrndtls as std where #taxmismatch.trntype=std.trntype and #taxmismatch.trnctrlno=std.trnctrlno and stdtaxcomp1per <> 0 and docenttax <>0 and docentnetvalue <>0) 
+-GO-
+update stktrndtls set docenttax=0,taxcomp1=0 from stktrnhdr where stktrnhdr.trntype=stktrndtls.trntype and stktrnhdr.trnctrlno=stktrndtls.trnctrlno and stktrnhdr.SHOPERDBVER=730 and docentnetvalue =0 and stktrndtls.trntype=1300 and stktrndtls.docenttax <> 0
+-GO-
+update stktrndtls set docenttax=0,taxcomp1=0 from stktrnhdr where stktrnhdr.trntype=stktrndtls.trntype and stktrnhdr.trnctrlno=stktrndtls.trnctrlno and stktrnhdr.SHOPERDBVER=730 and stktrndtls.stdtaxcomp1per =0 and stktrndtls.trntype=1300 and stktrndtls.docenttax <> 0
+-GO-
+
+</s9qScript>
+</s9qsqlblk>
+
+
+<s9qsqlblk>
+<s9qScriptid>S9Q_013_1_0055</s9qScriptID>
+<s9qtitle>cORRECTING THE TX value mismatch IN  STD (TRAN TYPE -1600-VOID SALES)  </s9qtitle>
+<s9qpgmtype>L</s9qpgmtype>
+<s9qenvironment>P</s9qenvironment>
+<s9qRunMultiple>0</s9qRunMultiple>
+<s9qQryType>DML</s9qQryType>
+<s9qScript>
+
+-- 1600 Tax Mismatch
+IF OBJECT_ID('tempdb..#taxmismatch') IS NOT NULL BEGIN drop table #taxmismatch END
+select sth.trntype,sth.trnctrlno,sth.totdoctax,std.taxamt,(totdoctax-std.taxamt) as diffval  into #taxmismatch  from stktrnhdr sth, (select trntype,trnctrlno,sum(docenttax) as taxamt from stktrndtls where trntype=1600 and stdtaxcomp1per <> 0 and docentnetvalue >0 group by trntype,trnctrlno) as std where sth.trntype=std.trntype and sth.trnctrlno=std.trnctrlno and std.taxamt <>sth.totdoctax and sth.trntype=1600 and sth.SHOPERDBVER=730
+-GO-
+update stktrndtls set docenttax=docenttax+diffval,taxcomp1=taxcomp1+diffval from #taxmismatch where stktrndtls.trntype=#taxmismatch.trntype and stktrndtls.trnctrlno=#taxmismatch.trnctrlno and stktrndtls.entsrlno=(select min(entsrlno) from stktrndtls as std where #taxmismatch.trntype=std.trntype and #taxmismatch.trnctrlno=std.trnctrlno and stdtaxcomp1per <> 0 and docenttax <>0 and docentnetvalue <>0) 
+-GO-
+update stktrndtls set docenttax=0,taxcomp1=0 from stktrnhdr where stktrnhdr.trntype=stktrndtls.trntype and stktrnhdr.trnctrlno=stktrndtls.trnctrlno and stktrnhdr.SHOPERDBVER=730 and docentnetvalue =0 and stktrndtls.trntype=1600 and stktrndtls.docenttax <> 0
+-GO-
+update stktrndtls set docenttax=0,taxcomp1=0 from stktrnhdr where stktrnhdr.trntype=stktrndtls.trntype and stktrnhdr.trnctrlno=stktrndtls.trnctrlno and stktrnhdr.SHOPERDBVER=730  and stktrndtls.stdtaxcomp1per =0 and stktrndtls.trntype=1600 and stktrndtls.docenttax <> 0
+-GO-
+
+</s9qScript>
+</s9qsqlblk>
+
+
+<s9qsqlblk>
+<s9qScriptid>S9Q_013_1_0056</s9qScriptID>
+<s9qtitle>UPDATING THE TAX PERCENTAGE FOR 1600 RECORDS </s9qtitle>
+<s9qpgmtype>L</s9qpgmtype>
+<s9qenvironment>P</s9qenvironment>
+<s9qRunMultiple>0</s9qRunMultiple>
+<s9qQryType>DML</s9qQryType>
+<s9qScript>
+update stktrndtls set 
+stdTaxComp1Per = (select StdTaxComp1Per from stktrndtls std1 where std.backRefTrnType =std1.TrnType and std.BackRefCtrlNo =std1.TrnCtrlNo and std.BackRefDocEntSrlNo =std1.EntSrlNo ), 
+stdTaxComp2Per = (select StdTaxComp2Per from stktrndtls std1 where std.backRefTrnType =std1.TrnType and std.BackRefCtrlNo =std1.TrnCtrlNo and std.BackRefDocEntSrlNo =std1.EntSrlNo ),
+stdTaxComp3Per = (select StdTaxComp3Per from stktrndtls std1 where std.backRefTrnType =std1.TrnType and std.BackRefCtrlNo =std1.TrnCtrlNo and std.BackRefDocEntSrlNo =std1.EntSrlNo ),
+stdTaxComp4Per = (select StdTaxComp4Per from stktrndtls std1 where std.backRefTrnType =std1.TrnType and std.BackRefCtrlNo =std1.TrnCtrlNo and std.BackRefDocEntSrlNo =std1.EntSrlNo ),
+stdTaxComp5Per = (select StdTaxComp5Per from stktrndtls std1 where std.backRefTrnType =std1.TrnType and std.BackRefCtrlNo =std1.TrnCtrlNo and std.BackRefDocEntSrlNo =std1.EntSrlNo )
+ from stktrndtls std where trntype =1600
+-GO-
+</s9qScript>
+</s9qsqlblk>

@@ -1,0 +1,38 @@
+<s9qsqlblk>
+  <s9qScriptid>S9Q_0161_0_0001</s9qScriptid> 
+  <s9qtitle></s9qtitle>
+  <s9qpgmtype>I</s9qpgmtype>
+  <s9qpgmtype>L</s9qpgmtype>
+  <s9qversion>*</s9qversion>
+  <s9qenvironment>M</s9qenvironment>
+  <s9qRunMultiple>1</s9qRunMultiple>
+  <s9qQryType>DML</s9qQryType>
+  <s9qScript>
+INSERT INTO VAMENU VALUES (750,772,'Tax Re-computation','Tax Re-computation','P','SR721500.EXE',0,0,0,0,'',0,0,0)
+-GO-
+INSERT INTO VAVERTABLE VALUES (0,0,'SR721500.EXE','',303104,9,1,275,NULL,NULL,NULL, NULL,NULL,NULL,NULL,NULL,'2011-03-30 00:00:00.000','2011-03-30 00:00:00.000','N',NULL)
+-GO-
+Insert into vamenu (MnuNo, MenuOPt, MnuName, MnuCap, MnuPgm, ExeName, MnuWght, AllowWhenTrnClosed, Pgmopt, DbInfo, MenuIcon, Menusep, MenuBold, MultiInstance) values (600,617,'Excise Duty','Excise Duty','P','SR439900.EXE',0,0,1,'0','',0,0,0)
+-GO-
+Insert into VaVerTable Values(0,0,'SR439900.EXE','',64651,9,1,275,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,'2010-12-03','2010-12-03','N',NULL)
+-GO-
+Insert into vamenu (MnuNo, MenuOPt, MnuName, MnuCap, MnuPgm, ExeName, MnuWght, 	AllowWhenTrnClosed, Pgmopt, DbInfo, MenuIcon, Menusep, MenuBold, MultiInstance) values (100,111,'Sales','Excise Invoice Generation','P','SR440100.EXE',0,0,0,'0','',0,0,0)
+-GO-
+Insert into vamenu (MnuNo, MenuOPt, MnuName, MnuCap, MnuPgm, ExeName, MnuWght, 	AllowWhenTrnClosed, Pgmopt, DbInfo, MenuIcon, Menusep, MenuBold, MultiInstance) values (470,491,'MIS','Excise Report','P','SR240000.EXE',0,0,0,'0','',0,0,0)
+-GO-
+Insert into VaVerTable (NODEID,EXESRL,EXEID,EXESize,EXEVer,EXEMinor,EXESubRel,EXEDate,EXELastUpdated,EXESKIP) values (0,0,'SR240000.exe',0,9,1,275,'2011-03-28','2011-03-28','N')
+-GO-
+Insert into VaVerTable (NODEID,EXESRL,EXEID,EXESize,EXEVer,EXEMinor,EXESubRel,EXEDate,EXELastUpdated,EXESKIP) values (0,0,'SR440100.exe',0,9,1,275,'2011-03-28','2011-03-28','N')
+-GO-
+UPDATE VAVerTable SET EXEVER = '9', EXEMINOR = '1', EXESUBREL = '275' WHERE EXEID in (
+'SE100900.EXE','SE301200.exe','SR127000.Exe','SR202400.exe','SR209600.exe','SR236300.exe',
+'SR240000.Exe','SR330700.exe','SR413100.exe','SR431000.exe','SR431200.exe','SR431500.exe',
+'SR431700.exe','SR431800.exe','SR435600.exe','SR439900.EXE','SR721500.exe','SR440100.exe'
+)
+-GO-
+UPDATE VaRestrictMnu SET exeright='11111100' WHERE mnuno=100 AND menuopt=101
+-GO-
+UPDATE VaRestrictMnuConfig SET Optcaption='NEW#VOID#RETURN#VOID RETURN#RETURN W/O REF#REPRINT',ExeOption='11111100'  WHERE mnuno=100 AND menuopt=101
+-GO-
+</s9qScript>		
+</s9qsqlblk>

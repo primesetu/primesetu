@@ -1,0 +1,54 @@
+<s9qsqlblk>
+<s9qScriptid>S9Q_016_6_0012</s9qScriptid>
+<s9qtitle>Printing Script Files</s9qtitle>
+<s9qpgmtype>L</s9qpgmtype>
+<s9qpgmtype>I</s9qpgmtype>
+<s9qversion>*</s9qversion>
+<s9qenvironment>P</s9qenvironment>
+<s9qRunMultiple>1</s9qRunMultiple>
+<s9qQryType>DML</s9qQryType>
+<s9qScript>
+IF EXISTS
+(
+	SELECT * from sysparam WHERE paramcode = 'ShoperEnv' and Txt='D'
+)
+Insert into Sysparam(ID,Descr,ParamCode,txt,opt) Values('SR1-0901-0000341','Print SKU Wise or Item Wise (Extension Framework/Customisation fields)','PrnSKUORItemWiseExtnFields','NNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNN','T')
+-GO-      
+IF EXISTS
+(
+	SELECT * from sysparam WHERE paramcode = 'ShoperEnv' and Txt='D'
+)
+INSERT INTO SysParamExtd(Id,ParamCode,Fixed,Changed,Category,CatDescr,DispOrder)  Values('SR1-0901-0000341','PrnSKUORItemWiseExtnFields','Variable','0','14. Bill - Printing','This Gives Bill - Printing Parameters','9')
+-GO-
+Insert Into [dbo].[Genlookup] 
+(
+	Recid,Code,Descr
+)
+Values
+(
+	8500,'50','SR535300.ClsPrintingInterface'
+)
+-GO-
+IF EXISTS
+(
+	SELECT * from Sysparam WHERE paramcode = 'ShoperEnv' and Txt='R'
+)
+Insert into Sysparam (ID,Descr,ParamCode,Intg,opt) Values('SR6-0901-0000358','Till Printing Type','TillPrnType',50,'I')
+-GO-
+IF EXISTS
+(
+	SELECT * from sysparam WHERE paramcode = 'ShoperEnv' and Txt='R'
+)
+INSERT INTO SysParamExtd(Id,ParamCode,Fixed,Changed,Category,CatDescr,DispOrder)  Values('SR6-0901-0000358','TillPrnType','Variable','0','22. Till Management','Select Printing Type','1')
+-GO-
+Insert Into Genlookup (Recid,Code,Descr,Flag,[Number]) Values (9500,'50','SR535300.ClsPrintingInterface','',0)
+-GO-
+Update SysParam set txt='Y#Y#Y#N#N#N#N#N#N#N#N#N#N#N#N#N#N#N#N#N#N#N#N#N#N#N#N#N#N#N#N#N#N#N#N#N#N#N#N#N#N#N#N#N#Y#Y#Y#N#N#N#N#Y#N#N#Y' where paramcode='GIRAuditTrailFields'
+-GO-
+Insert into Sysparam(ID,Descr,ParamCode,txt,opt) Values('SR6-0901-0000360','Specify Caption for Detail Section Fields for Inward Audit Trial','CaptionForInwardDetailSectionFields','Act Qty#Doc Qty#Cost Price#Selling Price#Dlr. Price#Tax%#Tax Amt#Amount#Amount#Amount#PO/Prefix No','T')
+-GO-
+INSERT INTO SysParamExtd(Id,ParamCode,Fixed,Changed,Category,CatDescr,DispOrder)  Values('SR6-0901-0000360','CaptionForInwardDetailSectionFields','Variable','0','09. Inwards','This Gives Bill - Printing Parameters','30')
+-GO-
+Update SysParam set Descr='Purchase Order Stockno,class1cd,class2cd,subclass1cd,subclass2cd,sizecd,ItemDesc to Print',Txt='1#1#1#1#1#1#0' where ParamCode='POSKUformatatrributeprint'
+</s9qScript>
+</s9qsqlblk>

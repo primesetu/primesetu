@@ -1,0 +1,831 @@
+<s9qsqlblk>
+  <s9qScriptid>S9Q_020_10_0001</s9qScriptid>
+  <s9qtitle>All DDL Statements.</s9qtitle>
+  <s9qpgmtype>I</s9qpgmtype>
+  <s9qpgmtype>L</s9qpgmtype>
+  <s9qversion>*</s9qversion>
+  <s9qenvironment>P</s9qenvironment>
+  <s9qRunMultiple>1</s9qRunMultiple>
+  <s9qQryType>DDL</s9qQryType>
+  <s9qScript>
+CREATE TABLE [dbo].[DashBoardConfig](
+	[UserID] [varchar](16) NOT NULL,
+	[ChartAreaCD] [varchar](16) NOT NULL,
+	[ParamCD] [varchar](32) NOT NULL,
+	[Descr] [varchar](64) NULL,
+	[CtrlValue] [varchar](64) NULL,
+	[VaUid]	Varchar(32) NULL,
+	[VaCtr]	Int,
+	[VaTermId]	Varchar	(32),
+	[VaCompCode] Varchar(16)
+CONSTRAINT [pk_constraint] PRIMARY KEY CLUSTERED 
+(
+	[UserID] ASC,
+	[ChartAreaCD] ASC,
+	[ParamCD] ASC
+)WITH (IGNORE_DUP_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY]
+-GO-
+Insert into genlookup values (0,'31000','Dashboard Reports','N',0,'SUPER',1,'.',NULL)
+-GO-
+INSERT INTO GENLOOKUPEXTD VALUES (31000,'Dashboard Reports',0,'Variable',111,NULL,NULL,NULL,'0#1#16#50',NULL,NULL,NULL,NULL,NULL,NULL)
+-GO-
+Delete From Genlookup Where Recid = 31000
+-GO-
+insert into genlookup (RecId,Code,Descr,Flag,Number,VAUid,VActr,VATermId,VACompCode) values (31000,'CHART0','None','',1,'super',40,'.','pos')
+-GO-
+insert into genlookup (RecId,Code,Descr,Flag,Number,VAUid,VActr,VATermId,VACompCode) values (31000,'CHART1','Last 7 Days Sales','GenerateGraphPOS',2,'super',40,'.','pos')
+-GO-
+insert into genlookup (RecId,Code,Descr,Flag,Number,VAUid,VActr,VATermId,VACompCode) values (31000,'CHART2','Last 15 Days Sales','GenerateGraphPOS',3,'super',40,'.','pos')
+-GO-
+insert into genlookup (RecId,Code,Descr,Flag,Number,VAUid,VActr,VATermId,VACompCode) values (31000,'CHART3','Last Month Sales','GenerateGraphPOS',4,'super',40,'.','pos')
+-GO-
+insert into genlookup (RecId,Code,Descr,Flag,Number,VAUid,VActr,VATermId,VACompCode) values (31000,'CHART4','This Month Sales','GenerateGraphPOS',5,'super',40,'.','pos')
+-GO-
+insert into genlookup (RecId,Code,Descr,Flag,Number,VAUid,VActr,VATermId,VACompCode) values (31000,'CHART5','Current Financial Year Sales','GenerateGraphPOS',6,'super',40,'.','pos')
+-GO-
+insert into genlookup (RecId,Code,Descr,Flag,Number,VAUid,VActr,VATermId,VACompCode) values (31000,'CHART6','Last Financial Year Sales','GenerateGraphPOS',7,'super',40,'.','pos')
+-GO-
+insert into genlookup (RecId,Code,Descr,Flag,Number,VAUid,VActr,VATermId,VACompCode) values (31000,'CHART7','Current Quarter','GenerateGraphPOS',8,'super',40,'.','pos')
+-GO-
+insert into genlookup (RecId,Code,Descr,Flag,Number,VAUid,VActr,VATermId,VACompCode) values (31000,'CHART8','Last Quarter','GenerateGraphPOS',9,'super',40,'.','pos')
+-GO-
+insert into genlookup (RecId,Code,Descr,Flag,Number,VAUid,VActr,VATermId,VACompCode) values (31000,'CHART9','Quarter Wise Comparision','GenerateGraphPOS',10,'super',40,'.','pos')
+-GO-
+insert into genlookup (RecId,Code,Descr,Flag,Number,VAUid,VActr,VATermId,VACompCode) values (31000,'CHART10','Hourly Sales (Today & Yesterday)','GenerateGraphPOS',11,'super',40,'.','pos')
+-GO-
+insert into genlookup (RecId,Code,Descr,Flag,Number,VAUid,VActr,VATermId,VACompCode) values (31000,'CHART11','Top 10 <<Class1Cd>>s','GenerateGraphPOS',12,'super',40,'.','pos')
+-GO-
+insert into genlookup (RecId,Code,Descr,Flag,Number,VAUid,VActr,VATermId,VACompCode) values (31000,'CHART12','Top 10 <<Class2Cd>>s','GenerateGraphPOS',13,'super',40,'.','pos')
+-GO-
+insert into genlookup (RecId,Code,Descr,Flag,Number,VAUid,VActr,VATermId,VACompCode) values (31000,'CHART13','Top 10 <<SubClass1Cd>>s','GenerateGraphPOS',14,'super',40,'.','pos')
+-GO-
+insert into genlookup (RecId,Code,Descr,Flag,Number,VAUid,VActr,VATermId,VACompCode) values (31000,'CHART14','10 Least Selling <<Class1Cd>>s','GenerateGraphPOS',15,'super',40,'.','pos')
+-GO-
+insert into genlookup (RecId,Code,Descr,Flag,Number,VAUid,VActr,VATermId,VACompCode) values (31000,'CHART15','10 Least Selling <<Class2Cd>>s','GenerateGraphPOS',16,'super',40,'.','pos')
+-GO-
+insert into genlookup (RecId,Code,Descr,Flag,Number,VAUid,VActr,VATermId,VACompCode) values (31000,'CHART16','10 Least Selling <<SubClass1Cd>>s','GenerateGraphPOS',17,'super',40,'.','pos')
+-GO-
+insert into genlookup (RecId,Code,Descr,Flag,Number,VAUid,VActr,VATermId,VACompCode) values (31000,'CHART17','Sales Person wise Comparison','GenerateGraphPOS',18,'super',40,'.','pos')
+-GO-
+insert into genlookup (RecId,Code,Descr,Flag,Number,VAUid,VActr,VATermId,VACompCode) values (31000,'CHART18','Payment Mode wise Comparison','GenerateGraphPOS',19,'super',40,'.','pos')
+-GO-
+insert into genlookup (RecId,Code,Descr,Flag,Number,VAUid,VActr,VATermId,VACompCode) values (31000,'CHART19','Transaction Wise Comparison','GenerateGraphPOS',20,'super',40,'.','pos')
+-GO-
+insert into genlookup (RecId,Code,Descr,Flag,Number,VAUid,VActr,VATermId,VACompCode) values (32000,1,'Line','N',null,'super',40,'.','pos')
+-GO-
+insert into genlookup (RecId,Code,Descr,Flag,Number,VAUid,VActr,VATermId,VACompCode) values (32000,2,'Bar','N',null,'super',40,'.','pos')
+-GO-
+insert into genlookup (RecId,Code,Descr,Flag,Number,VAUid,VActr,VATermId,VACompCode) values (32000,3,'Column','N',null,'super',40,'.','pos')
+-GO-
+insert into genlookup (RecId,Code,Descr,Flag,Number,VAUid,VActr,VATermId,VACompCode) values (32000,4,'Pie','N',null,'super',40,'.','pos')
+-GO-
+insert into genlookup (RecId,Code,Descr,Flag,Number,VAUid,VActr,VATermId,VACompCode) values (32000,5,'StackedColumn','N',null,'super',40,'.','pos')
+-GO-
+INSERT INTO [DashBoardConfig] ([UserID],[ChartAreaCD],[ParamCD],[Descr],[CtrlValue]) VALUES ('<default>','ChartArea1','ChartType','ChartType','Column')
+-GO- 
+INSERT INTO [DashBoardConfig] ([UserID],[ChartAreaCD],[ParamCD],[Descr],[CtrlValue]) VALUES ('<default>','ChartArea1','DisplayType','DisplayType','2D')
+-GO- 
+INSERT INTO [DashBoardConfig] ([UserID],[ChartAreaCD],[ParamCD],[Descr],[CtrlValue]) VALUES ('<default>','ChartArea1','ReportType','ReportCd','CHART1')
+-GO- 
+INSERT INTO [DashBoardConfig] ([UserID],[ChartAreaCD],[ParamCD],[Descr],[CtrlValue]) VALUES ('<default>','ChartArea1','ShowLegend','ShowLegend','YES')
+-GO- 
+INSERT INTO [DashBoardConfig] ([UserID],[ChartAreaCD],[ParamCD],[Descr],[CtrlValue]) VALUES ('<default>','ChartArea1','ValueType','ValueType','QTY')
+-GO- 
+INSERT INTO [DashBoardConfig] ([UserID],[ChartAreaCD],[ParamCD],[Descr],[CtrlValue]) VALUES ('<default>','ChartArea2','ChartType','ChartType','Column')
+-GO- 
+INSERT INTO [DashBoardConfig] ([UserID],[ChartAreaCD],[ParamCD],[Descr],[CtrlValue]) VALUES ('<default>','ChartArea2','DisplayType','DisplayType','2D')
+-GO- 
+INSERT INTO [DashBoardConfig] ([UserID],[ChartAreaCD],[ParamCD],[Descr],[CtrlValue]) VALUES ('<default>','ChartArea2','ReportType','ReportCd','CHART2')
+-GO- 
+INSERT INTO [DashBoardConfig] ([UserID],[ChartAreaCD],[ParamCD],[Descr],[CtrlValue]) VALUES ('<default>','ChartArea2','ShowLegend','ShowLegend','YES')
+-GO- 
+INSERT INTO [DashBoardConfig] ([UserID],[ChartAreaCD],[ParamCD],[Descr],[CtrlValue]) VALUES ('<default>','ChartArea2','ValueType','ValueType','QTY')
+-GO- 
+INSERT INTO [DashBoardConfig] ([UserID],[ChartAreaCD],[ParamCD],[Descr],[CtrlValue]) VALUES ('<default>','ChartArea3','ChartType','ChartType','Column')
+-GO- 
+INSERT INTO [DashBoardConfig] ([UserID],[ChartAreaCD],[ParamCD],[Descr],[CtrlValue]) VALUES ('<default>','ChartArea3','DisplayType','DisplayType','2D')
+-GO- 
+INSERT INTO [DashBoardConfig] ([UserID],[ChartAreaCD],[ParamCD],[Descr],[CtrlValue]) VALUES ('<default>','ChartArea3','ReportType','ReportCd','CHART13')
+-GO- 
+INSERT INTO [DashBoardConfig] ([UserID],[ChartAreaCD],[ParamCD],[Descr],[CtrlValue]) VALUES ('<default>','ChartArea3','ShowLegend','ShowLegend','YES')
+-GO- 
+INSERT INTO [DashBoardConfig] ([UserID],[ChartAreaCD],[ParamCD],[Descr],[CtrlValue]) VALUES ('<default>','ChartArea3','ValueType','ValueType','QTY')
+-GO- 
+INSERT INTO [DashBoardConfig] ([UserID],[ChartAreaCD],[ParamCD],[Descr],[CtrlValue]) VALUES ('<default>','ChartArea4','ChartType','ChartType','Column')
+-GO- 
+INSERT INTO [DashBoardConfig] ([UserID],[ChartAreaCD],[ParamCD],[Descr],[CtrlValue]) VALUES ('<default>','ChartArea4','DisplayType','DisplayType','2D')
+-GO- 
+INSERT INTO [DashBoardConfig] ([UserID],[ChartAreaCD],[ParamCD],[Descr],[CtrlValue]) VALUES ('<default>','ChartArea4','ReportType','ReportCd','CHART4')
+-GO- 
+INSERT INTO [DashBoardConfig] ([UserID],[ChartAreaCD],[ParamCD],[Descr],[CtrlValue]) VALUES ('<default>','ChartArea4','ShowLegend','ShowLegend','YES')
+-GO- 
+INSERT INTO [DashBoardConfig] ([UserID],[ChartAreaCD],[ParamCD],[Descr],[CtrlValue]) VALUES ('<default>','ChartArea4','ValueType','ValueType','QTY')
+-GO- 
+INSERT INTO [DashBoardConfig] ([UserID],[ChartAreaCD],[ParamCD],[Descr],[CtrlValue]) VALUES ('<default>','ChartArea5','ChartType','ChartType','Column')
+-GO- 
+INSERT INTO [DashBoardConfig] ([UserID],[ChartAreaCD],[ParamCD],[Descr],[CtrlValue]) VALUES ('<default>','ChartArea5','DisplayType','DisplayType','2D')
+-GO- 
+INSERT INTO [DashBoardConfig] ([UserID],[ChartAreaCD],[ParamCD],[Descr],[CtrlValue]) VALUES ('<default>','ChartArea5','ReportType','ReportCd','CHART5')
+-GO- 
+INSERT INTO [DashBoardConfig] ([UserID],[ChartAreaCD],[ParamCD],[Descr],[CtrlValue]) VALUES ('<default>','ChartArea5','ShowLegend','ShowLegend','YES')
+-GO- 
+INSERT INTO [DashBoardConfig] ([UserID],[ChartAreaCD],[ParamCD],[Descr],[CtrlValue]) VALUES ('<default>','ChartArea5','ValueType','ValueType','QTY')
+-GO- 
+INSERT INTO [DashBoardConfig] ([UserID],[ChartAreaCD],[ParamCD],[Descr],[CtrlValue]) VALUES ('<default>','ChartArea6','ChartType','ChartType','Column')
+-GO- 
+INSERT INTO [DashBoardConfig] ([UserID],[ChartAreaCD],[ParamCD],[Descr],[CtrlValue]) VALUES ('<default>','ChartArea6','DisplayType','DisplayType','2D')
+-GO- 
+INSERT INTO [DashBoardConfig] ([UserID],[ChartAreaCD],[ParamCD],[Descr],[CtrlValue]) VALUES ('<default>','ChartArea6','ReportType','ReportCd','CHART7')
+-GO- 
+INSERT INTO [DashBoardConfig] ([UserID],[ChartAreaCD],[ParamCD],[Descr],[CtrlValue]) VALUES ('<default>','ChartArea6','ShowLegend','ShowLegend','YES')
+-GO- 
+INSERT INTO [DashBoardConfig] ([UserID],[ChartAreaCD],[ParamCD],[Descr],[CtrlValue]) VALUES ('<default>','ChartArea6','ValueType','ValueType','QTY')
+-GO- 
+ALTER TABLE BROWSESETTINGS ALTER COLUMN BrowseType Varchar(64)
+-GO- 
+ALTER TABLE BROWSESETTINGS ALTER COLUMN SearchVal1 Varchar(1000)
+-GO- 
+ALTER TABLE BROWSESETTINGS ALTER COLUMN SearchVal2 Varchar(1000)
+-GO- 
+ALTER TABLE BROWSESETTINGS ALTER COLUMN OthValue Varchar(1000)
+-GO- 
+
+  </s9qScript>
+</s9qsqlblk>
+
+<s9qsqlblk>
+  <s9qScriptid>	S9Q_020_10_0002</s9qScriptid>
+  <s9qtitle>All DDL Statements.</s9qtitle>
+  <s9qpgmtype>I</s9qpgmtype>
+  <s9qpgmtype>L</s9qpgmtype>
+  <s9qversion>*</s9qversion>
+  <s9qenvironment>P</s9qenvironment>
+  <s9qRunMultiple>1</s9qRunMultiple>
+  <s9qQryType>DDL</s9qQryType>
+  <s9qScript>
+
+Drop Procedure GenerateGraphPOS
+-GO-
+
+Create PROCEDURE GenerateGraphPOS @ChartType as Varchar(32), @OptQtyVal as Int,   
+@TmpTable as Varchar(64), @StrUserId as Varchar(16),@UserWt as Int           
+AS        
+Declare @StrSql as Varchar(5000)    
+Declare @StrSqlExec as nVarchar(4000)        
+Declare @ShoperDate as Datetime        
+Declare @FinYearDate as datetime      
+Declare @QtyValCap as Varchar(16)        
+Declare @StrOptQtyVal As Varchar(32)        
+Declare @YearEndMonth as Integer      
+Declare @ColCaption as Varchar(32)  
+Declare @IntClass12FltrCnt as Integer   
+        
+SELECT @ShoperDate = DT FROM SYSPARAM WHERE PARAMCODE LIKE 'SHOPERSysDt'        
+SELECT @YearEndMonth = Convert(int,Txt) FROM SYSPARAM WHERE PARAMCODE LIKE 'YearEndMonthNo'        
+      
+If @OptQtyVal = 1         
+ BEGIN        
+  Set @StrOptQtyVal = ' Sum(DocQty) QtyVal'        
+  Set @QtyValCap = 'Qty'        
+ END        
+If @OptQtyVal = 2         
+ BEGIN         
+  Set @StrOptQtyVal = ' Sum(DocEntNetValue) QtyVal'        
+  Set @QtyValCap = 'Value'        
+ END        
+  
+Set @StrSql = 'if object_ID(' + CHAR(39) + 'TempDb..[##TmpGraphClass12' + @StrUserId + ']' + CHAR(39) + ',' + CHAR(39) + 'U' + CHAR(39) + ' ) IS NULL '  
+Set @StrSql = @StrSql + ' SELECT Class1cd,Class2Cd Into [##TmpGraphClass12' + @StrUserId  + ']'  
+Set @StrSql = @StrSql + ' From Class12combo Where (Class1cd In (Select Value From ItemClassRestrict Where IsAllowed = 1 And UserId = '   
+Set @StrSql = @StrSql +  CHAR(39) + @StrUserId + CHAR(39)+' And ColumnName = ' + Char(39) +'Class1cd' + Char(39) + ')) Or '  
+Set @StrSql = @StrSql + ' (Class2cd In (Select Value From ItemClassRestrict Where IsAllowed = 1 And UserId = '   
+Set @StrSql = @StrSql + CHAR(39) + @StrUserId + CHAR(39) +' And ColumnName = '+ Char(39) +'Class2cd' + Char(39) +'))'  
+Execute (@StrSql)    
+  
+Set @StrSqlExec = 'Select @IntClass12FltrCnt = Count(*) From [##TmpGraphClass12' + @StrUserId + ']'  
+Exec Sp_executesql  
+ @Query = @StrSqlExec,  
+ @Params = N'@IntClass12FltrCnt INT OUTPUT',         
+ @IntClass12FltrCnt = @IntClass12FltrCnt OUTPUT         
+  
+IF @UserWt = 9999  
+ Set @IntClass12FltrCnt = 0   
+  
+SET @StrSql = 'IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N' +char(39) + '[dbo].[' + @TmpTable + ']'+ char(39) +') AND type in (N' + char(39) + 'U' +char(39) +'))'  
+SET @StrSql = @StrSql + ' DROP TABLE [dbo].[' + @TmpTable + ']'  
+Execute (@StrSql)      
+  
+IF @ChartType = 'CHART1' ---Last 7 Days         
+ BEGIN           
+        Set @StrSql = 'SELECT Convert(Varchar,DocDt,03) As Date,TrnType,' + @StrOptQtyVal + ' Into [##TmpGraph' + @StrUserId + ']'         
+        Set @StrSql = @StrSql + ' FROM STKTRNDTLS A,ItemMaster B WHERE TRNTYPE In(2100,1300) And A.StockNo = B.StockNo And DocDt Between '        
+        Set @StrSql = @StrSql + CHAR(39) + CONVERT(VARCHAR(10),@ShoperDate - 6,127) + CHAR(39) + ' And '         
+        Set @StrSql = @StrSql + CHAR(39) + CONVERT(VARCHAR(10),@ShoperDate,127) + CHAR(39)   
+        if @IntClass12FltrCnt > 0   
+   Begin     
+    Set @StrSql = @StrSql + ' And B.Class1Cd +' + Char(39)+':' + Char(39) +'+ B.Class2cd In (Select Class1cd + '+Char(39)+':'+Char(39)+' +Class2cd From [##TmpGraphClass12' + @StrUserId + '])'  
+   End          
+        Set @StrSql = @StrSql + ' GROUP BY DOCDT,Trntype '        
+        Execute (@StrSql)        
+          
+        Set @StrSql = 'Update [##TmpGraph' + @StrUserId + '] Set QtyVal = -QtyVal Where Trntype = 1300'        
+        Execute (@StrSql)        
+                
+        Set @StrSql = 'Select Date,Sum(QtyVal) As ' + @QtyValCap + ' Into ' + @TmpTable + ' From [##TmpGraph' + @StrUserId + '] Group By Date Order By Date'        
+  Execute (@StrSql)        
+  Set @StrSql = 'Drop Table [##TmpGraph' + @StrUserId + ']'     
+  Execute (@StrSql)        
+ END           
+IF @ChartType = 'CHART2' ---Last 15 Days         
+ BEGIN           
+        Set @StrSql = 'SELECT Convert(Varchar,DocDt,03) As Date,TrnType,' + @StrOptQtyVal + ' Into [##TmpGraph' + @StrUserId + ']'         
+        Set @StrSql = @StrSql + ' FROM STKTRNDTLS A,ItemMaster B WHERE TRNTYPE In(2100,1300) And A.StockNo = B.StockNo And DocDt Between '        
+        Set @StrSql = @StrSql + CHAR(39) + CONVERT(VARCHAR(10),@ShoperDate - 14,127) + CHAR(39) + ' And '         
+        Set @StrSql = @StrSql + CHAR(39) + CONVERT(VARCHAR(10),@ShoperDate,127) + CHAR(39)   
+        if @IntClass12FltrCnt > 0   
+   Begin     
+    Set @StrSql = @StrSql + ' And B.Class1Cd +' + Char(39)+':' + Char(39) +'+ B.Class2cd In (Select Class1cd + '+Char(39)+':'+Char(39)+' +Class2cd From [##TmpGraphClass12' + @StrUserId + '])'  
+   End          
+        Set @StrSql = @StrSql + ' GROUP BY DOCDT,Trntype '        
+        Execute (@StrSql)        
+          
+        Set @StrSql = 'Update [##TmpGraph' + @StrUserId + '] Set QtyVal = -QtyVal Where Trntype = 1300'        
+        Execute (@StrSql)        
+                
+        Set @StrSql = 'Select Date,Sum(QtyVal) As ' + @QtyValCap + ' Into ' + @TmpTable + ' From [##TmpGraph' + @StrUserId + '] Group By Date Order By Date'        
+  Execute (@StrSql)        
+  Set @StrSql = 'Drop Table [##TmpGraph' + @StrUserId + ']'     
+  Execute (@StrSql)        
+ END           
+IF @ChartType = 'CHART3' ---Last Month        
+ BEGIN           
+        Set @StrSql = 'SELECT Convert(Varchar,DocDt,03) As Date,TrnType,' + @StrOptQtyVal + ' Into [##TmpGraph' + @StrUserId + ']'         
+        Set @StrSql = @StrSql + ' FROM STKTRNDTLS A,ItemMaster B WHERE TRNTYPE In(2100,1300) And A.StockNo = B.StockNo And DocDt Between '        
+        Set @StrSql = @StrSql + CHAR(39) + CONVERT(VARCHAR,YEAR(@ShoperDate)) + '-' + CONVERT(VARCHAR,MONTH(@ShoperDate)-1) +'-01' + CHAR(39) + ' And '         
+        Set @StrSql = @StrSql + CHAR(39) + CONVERT(VARCHAR,YEAR(@ShoperDate)) + '-' + CONVERT(VARCHAR,MONTH(@ShoperDate)-1) + '-' + CONVERT(VARCHAR,DAY(DATEADD(DAY,-DATEPART(DAY,@ShoperDate),@ShoperDate))) + CHAR(39)   
+        if @IntClass12FltrCnt > 0   
+   Begin     
+    Set @StrSql = @StrSql + ' And B.Class1Cd +' + Char(39)+':' + Char(39) +'+ B.Class2cd In (Select Class1cd + '+Char(39)+':'+Char(39)+' +Class2cd From [##TmpGraphClass12' + @StrUserId + '])'  
+   End          
+        Set @StrSql = @StrSql + ' GROUP BY DOCDT,Trntype '        
+        Execute (@StrSql)        
+          
+        Set @StrSql = 'Update [##TmpGraph' + @StrUserId + '] Set QtyVal = -QtyVal Where Trntype = 1300'        
+        Execute (@StrSql)        
+                
+        Set @StrSql = 'Select Date,Sum(QtyVal) As ' + @QtyValCap + ' Into ' + @TmpTable + ' From [##TmpGraph' + @StrUserId + '] Group By Date Order By Date'        
+  Execute (@StrSql)        
+  Set @StrSql = 'Drop Table [##TmpGraph' + @StrUserId + ']'     
+  Execute (@StrSql)        
+ END           
+IF @ChartType = 'CHART4' ---This Month        
+ BEGIN           
+        Set @StrSql = 'SELECT Convert(Varchar,DocDt,03) As Date,TrnType,' + @StrOptQtyVal + ' Into [##TmpGraph' + @StrUserId + ']'         
+        Set @StrSql = @StrSql + ' FROM STKTRNDTLS A,ItemMaster B WHERE TRNTYPE In(2100,1300) And A.StockNo = B.StockNo And DocDt Between '        
+        Set @StrSql = @StrSql + CHAR(39) + CONVERT(VARCHAR,YEAR(@ShoperDate)) + '-' + CONVERT(VARCHAR,MONTH(@ShoperDate)) +'-01' + CHAR(39) + ' And '         
+        Set @StrSql = @StrSql + CHAR(39) + CONVERT(VARCHAR(10),@ShoperDate,127) + CHAR(39)   
+        if @IntClass12FltrCnt > 0   
+   Begin     
+    Set @StrSql = @StrSql + ' And B.Class1Cd +' + Char(39)+':' + Char(39) +'+ B.Class2cd In (Select Class1cd + '+Char(39)+':'+Char(39)+' +Class2cd From [##TmpGraphClass12' + @StrUserId + '])'  
+   End          
+        Set @StrSql = @StrSql + ' GROUP BY DOCDT,Trntype '        
+        Execute (@StrSql)        
+          
+        Set @StrSql = 'Update [##TmpGraph' + @StrUserId + '] Set QtyVal = -QtyVal Where Trntype = 1300'        
+        Execute (@StrSql)        
+                
+        Set @StrSql = 'Select Date,Sum(QtyVal) As ' + @QtyValCap + ' Into ' + @TmpTable + ' From [##TmpGraph' + @StrUserId + '] Group By Date Order By Date'        
+  Execute (@StrSql)        
+  Set @StrSql = 'Drop Table [##TmpGraph' + @StrUserId + ']'     
+  Execute (@StrSql)        
+ END           
+IF @ChartType = 'CHART5' ---Current Financial Year      
+ BEGIN           
+        Set @StrSql = Convert(Varchar,Year(@ShoperDate)) + '-' + Convert(Varchar,@YearEndMonth + 1) + '-01'       
+        Set @FinYearDate = Convert(Varchar(10),@StrSQl,127)      
+        If @FinYearDate > @ShoperDate       
+   Begin       
+    Set @StrSql = Convert(Varchar,Year(@ShoperDate)-1) + '-' + Convert(Varchar,@YearEndMonth + 1) + '-01'       
+    Set @FinYearDate = Convert(Varchar(10),@StrSQl,127)      
+   End       
+        Set @StrSql = 'SELECT Convert(Varchar,Month(DocDt)) As MonNo,Convert(Varchar,Year(DocDt)) As Yr,TrnType,' + @StrOptQtyVal + ' Into [##TmpGraph' + @StrUserId + ']'      
+        Set @StrSql = @StrSql + ' FROM STKTRNDTLS A,ItemMaster B WHERE TRNTYPE In(2100,1300) And A.StockNo = B.StockNo And DocDt Between '      
+        Set @StrSql = @StrSql + CHAR(39) + Convert(Varchar(10),@FinYearDate ,127) + CHAR(39) + ' And ' + CHAR(39) + Convert(Varchar(10),@ShoperDate,127) + CHAR(39)      
+        if @IntClass12FltrCnt > 0   
+   Begin     
+    Set @StrSql = @StrSql + ' And B.Class1Cd +' + Char(39)+':' + Char(39) +'+ B.Class2cd In (Select Class1cd + '+Char(39)+':'+Char(39)+' +Class2cd From [##TmpGraphClass12' + @StrUserId + '])'  
+   End          
+        Set @StrSql = @StrSql + ' GROUP BY Month(DOCDT),YEAR(DocDt),Trntype '      
+        Execute (@StrSql)        
+        Set @StrSql = 'Update [##TmpGraph' + @StrUserId + '] Set QtyVal = -QtyVal Where Trntype = 1300'        
+        Execute (@StrSql)        
+             
+        Set @StrSql = ' Select Substring(DateName(Month,Convert(Datetime,Yr + ' + Char(39) + '-' + Char(39)+' + MonNo + ' + Char(39) + '-01' + CHAR(39) + ')),1,3) As Month,Sum(QtyVal) As ' + @QtyValCap + ' Into ' + @TmpTable + ' From [##TmpGraph' + @StrUserId + ']'     
+ 
+        Set @StrSql = @StrSql + ' Group by Convert(datetime,Yr +' + Char(39) + '-' + Char(39) + '+ MonNo + ' +Char(39) +'-01' + Char(39) + ') Order By Convert(datetime,Yr +' + Char(39) + '-' + Char(39) +' + MonNo + ' + Char(39) +'-01' + Char(39) +')'     
+ 
+  Execute (@StrSql)        
+  Set @StrSql = 'Drop Table [##TmpGraph' + @StrUserId + ']'     
+  Execute (@StrSql)        
+ END            
+IF @ChartType = 'CHART6' ---Last Financial Year      
+ BEGIN           
+        Set @StrSql = Convert(Varchar,Year(@ShoperDate)) + '-' + Convert(Varchar,@YearEndMonth + 1) + '-01'       
+        Set @FinYearDate = Convert(Varchar(10),@StrSQl,127)      
+        If @FinYearDate > @ShoperDate       
+   Begin       
+    Set @StrSql = Convert(Varchar,Year(@ShoperDate)-1) + '-' + Convert(Varchar,@YearEndMonth + 1) + '-01'       
+    Set @FinYearDate = Convert(Varchar(10),@StrSQl,127)      
+   End       
+        
+  Set @StrSql = Convert(Varchar,Year(@FinYearDate)-1) + '-' + Convert(Varchar,Month(@FinYearDate)) + '-01'          
+  Set @FinYearDate = Convert(Varchar(10),@StrSQl,127)      
+        
+        Set @StrSql = 'SELECT Convert(Varchar,Month(DocDt)) As MonNo,Convert(Varchar,Year(DocDt)) As Yr,TrnType,' + @StrOptQtyVal + ' Into [##TmpGraph' + @StrUserId + ']'   
+        Set @StrSql = @StrSql + ' FROM STKTRNDTLS A,ItemMaster B WHERE TRNTYPE In(2100,1300) And A.StockNo = B.StockNo And DocDt Between '      
+        Set @StrSql = @StrSql + CHAR(39) + Convert(Varchar(10),@FinYearDate ,127) + CHAR(39) + ' And ' + CHAR(39) + Convert(Varchar(10),DateAdd(Year,1,@FinYearDate)-1,127) + CHAR(39)      
+        if @IntClass12FltrCnt > 0   
+   Begin     
+    Set @StrSql = @StrSql + ' And B.Class1Cd +' + Char(39)+':' + Char(39) +'+ B.Class2cd In (Select Class1cd + '+Char(39)+':'+Char(39)+' +Class2cd From [##TmpGraphClass12' + @StrUserId + '])'  
+   End          
+        Set @StrSql = @StrSql + ' GROUP BY Month(DOCDT),YEAR(DocDt),Trntype '      
+        Execute (@StrSql)        
+        Set @StrSql = 'Update [##TmpGraph' + @StrUserId + '] Set QtyVal = -QtyVal Where Trntype = 1300'        
+        Execute (@StrSql)        
+             
+        Set @StrSql = ' Select Substring(DateName(Month,Convert(Datetime,Yr + ' + Char(39) + '-' + Char(39)+' + MonNo + ' + Char(39) + '-01' + CHAR(39) + ')),1,3) As Month ,Sum(QtyVal) As ' + @QtyValCap + ' Into ' + @TmpTable + ' From [##TmpGraph' + @StrUserId + ']'    
+  
+        Set @StrSql = @StrSql + ' Group by Convert(datetime,Yr +' + Char(39) + '-' + Char(39) + '+ MonNo + ' +Char(39) +'-01' + Char(39) + ') Order By Convert(datetime,Yr +' + Char(39) + '-' + Char(39) +' + MonNo + ' + Char(39) +'-01' + Char(39) +')'     
+ 
+  Execute (@StrSql)        
+  Set @StrSql = 'Drop Table [##TmpGraph' + @StrUserId + ']'     
+  Execute (@StrSql)        
+ END            
+IF @ChartType = 'CHART7' ---'Current Quarter   
+ BEGIN           
+     Set @StrSql = Convert(Varchar,Year(@ShoperDate)) + '-' + Convert(Varchar,@YearEndMonth + 1) + '-01'       
+        Set @FinYearDate = Convert(Varchar(10),@StrSQl,127)      
+        If @FinYearDate > @ShoperDate       
+   Begin       
+    Set @StrSql = Convert(Varchar,Year(@ShoperDate)-1) + '-' + Convert(Varchar,@YearEndMonth + 1) + '-01'       
+    Set @FinYearDate = Convert(Varchar(10),@StrSQl,127)      
+   End    
+  If @ShoperDate > dateadd(Month,3,@FinYearDate)   
+   Set @FinYearDate = dateadd(Month,3,@FinYearDate)  
+  If @ShoperDate > dateadd(Month,3,@FinYearDate)   
+   Set @FinYearDate = dateadd(Month,3,@FinYearDate)  
+  If @ShoperDate > dateadd(Month,3,@FinYearDate)   
+   Set @FinYearDate = dateadd(Month,3,@FinYearDate)  
+  
+        Set @StrSql = 'SELECT Convert(Varchar,Month(DocDt)) As MonNo,Convert(Varchar,Year(DocDt)) As Yr,TrnType,' + @StrOptQtyVal + ' Into [##TmpGraph' + @StrUserId + ']'      
+        Set @StrSql = @StrSql + ' FROM STKTRNDTLS A,ItemMaster B WHERE TRNTYPE In(2100,1300) And A.StockNo = B.StockNo And DocDt Between '      
+        Set @StrSql = @StrSql + CHAR(39) + Convert(Varchar(10),@FinYearDate ,127) + CHAR(39) + ' And ' + CHAR(39) + Convert(Varchar(10),@ShoperDate,127) + CHAR(39)      
+        if @IntClass12FltrCnt > 0   
+   Begin     
+    Set @StrSql = @StrSql + ' And B.Class1Cd +' + Char(39)+':' + Char(39) +'+ B.Class2cd In (Select Class1cd + '+Char(39)+':'+Char(39)+' +Class2cd From [##TmpGraphClass12' + @StrUserId + '])'  
+   End          
+        Set @StrSql = @StrSql + ' GROUP BY Month(DOCDT),YEAR(DocDt),Trntype '      
+        Execute (@StrSql)           
+  
+        Set @StrSql = 'Update [##TmpGraph' + @StrUserId + '] Set QtyVal = -QtyVal Where Trntype = 1300'        
+        Execute (@StrSql)        
+             
+        Set @StrSql = ' Select Substring(DateName(Month,Convert(Datetime,Yr + ' + Char(39) + '-' + Char(39)+' + MonNo + ' + Char(39) + '-01' + CHAR(39) + ')),1,3) As Month,Sum(QtyVal) As ' + @QtyValCap + ' Into ' + @TmpTable + ' From [##TmpGraph' + @StrUserId + ']'     
+ 
+        Set @StrSql = @StrSql + ' Group by Convert(datetime,Yr +' + Char(39) + '-' + Char(39) + '+ MonNo + ' +Char(39) +'-01' + Char(39) + ') Order By Convert(datetime,Yr +' + Char(39) + '-' + Char(39) +' + MonNo + ' + Char(39) +'-01' + Char(39) +')'     
+ 
+  Execute (@StrSql)        
+  Set @StrSql = 'Drop Table [##TmpGraph' + @StrUserId + ']'     
+  Execute (@StrSql)        
+ END            
+IF @ChartType = 'CHART8' ---'Last Quarter   
+ BEGIN           
+     Set @StrSql = Convert(Varchar,Year(@ShoperDate)) + '-' + Convert(Varchar,@YearEndMonth + 1) + '-01'       
+        Set @FinYearDate = Convert(Varchar(10),@StrSQl,127)      
+        If @FinYearDate > @ShoperDate       
+   Begin       
+    Set @StrSql = Convert(Varchar,Year(@ShoperDate)-1) + '-' + Convert(Varchar,@YearEndMonth + 1) + '-01'       
+    Set @FinYearDate = Convert(Varchar(10),@StrSQl,127)      
+   End    
+  If @ShoperDate > Dateadd(Month,3,@FinYearDate)   
+   Set @FinYearDate = Dateadd(Month,3,@FinYearDate)  
+  If @ShoperDate > Dateadd(Month,3,@FinYearDate)   
+   Set @FinYearDate = Dateadd(Month,3,@FinYearDate)  
+  If @ShoperDate > Dateadd(Month,3,@FinYearDate)   
+   Set @FinYearDate = Dateadd(Month,3,@FinYearDate)  
+  
+  Set @FinYearDate = Dateadd(Month,-3,@FinYearDate)  
+    
+        Set @StrSql = 'SELECT Convert(Varchar,Month(DocDt)) As MonNo,Convert(Varchar,Year(DocDt)) As Yr,TrnType,' + @StrOptQtyVal + ' Into [##TmpGraph' + @StrUserId + ']'      
+        Set @StrSql = @StrSql + ' FROM STKTRNDTLS A,ItemMaster B WHERE TRNTYPE In(2100,1300) And A.StockNo = B.StockNo And DocDt Between '      
+        Set @StrSql = @StrSql + CHAR(39) + Convert(Varchar(10),@FinYearDate ,127) + CHAR(39) + ' And ' + CHAR(39) + Convert(Varchar(10),DateAdd(Day,-1,Dateadd(Month,3,@FinYearDate)),127) + CHAR(39)      
+        if @IntClass12FltrCnt > 0   
+   Begin     
+    Set @StrSql = @StrSql + ' And B.Class1Cd +' + Char(39)+':' + Char(39) +'+ B.Class2cd In (Select Class1cd + '+Char(39)+':'+Char(39)+' +Class2cd From [##TmpGraphClass12' + @StrUserId + '])'  
+   End          
+        Set @StrSql = @StrSql + ' GROUP BY Month(DOCDT),YEAR(DocDt),Trntype '      
+        Execute (@StrSql)           
+  
+        Set @StrSql = 'Update [##TmpGraph' + @StrUserId + '] Set QtyVal = -QtyVal Where Trntype = 1300'        
+        Execute (@StrSql)        
+             
+        Set @StrSql = ' Select Substring(DateName(Month,Convert(Datetime,Yr + ' + Char(39) + '-' + Char(39)+' + MonNo + ' + Char(39) + '-01' + CHAR(39) + ')),1,3) As Month,Sum(QtyVal) As ' + @QtyValCap + ' Into ' + @TmpTable + ' From [##TmpGraph' + @StrUserId + ']'     
+ 
+        Set @StrSql = @StrSql + ' Group by Convert(datetime,Yr +' + Char(39) + '-' + Char(39) + '+ MonNo + ' +Char(39) +'-01' + Char(39) + ') Order By Convert(datetime,Yr +' + Char(39) + '-' + Char(39) +' + MonNo + ' + Char(39) +'-01' + Char(39) +')'     
+ 
+  Execute (@StrSql)        
+  Set @StrSql = 'Drop Table [##TmpGraph' + @StrUserId + ']'     
+  Execute (@StrSql)        
+ END            
+IF @ChartType = 'CHART9' ---Quarter Wise Comparision  
+ BEGIN           
+        Set @StrSql = Convert(Varchar,Year(@ShoperDate)) + '-' + Convert(Varchar,@YearEndMonth + 1) + '-01'       
+        Set @FinYearDate = Convert(Varchar(10),@StrSQl,127)      
+        If @FinYearDate > @ShoperDate       
+   Begin       
+    Set @StrSql = Convert(Varchar,Year(@ShoperDate)-1) + '-' + Convert(Varchar,@YearEndMonth + 1) + '-01'       
+    Set @FinYearDate = Convert(Varchar(10),@StrSQl,127)      
+   End       
+        Set @StrSql = 'SELECT Convert(Varchar,Month(DocDt)) As MonNo,Convert(Varchar,Year(DocDt)) As Yr,Convert(Varchar(16),' + Char(39) + Char(39)+ ') As ' + Char(39) + 'QtrName' + Char(39) +',TrnType,'   
+        Set @StrSql = @StrSql + @StrOptQtyVal + ' Into [##TmpGraph' + @StrUserId + ']'      
+        Set @StrSql = @StrSql + ' FROM STKTRNDTLS A,ItemMaster B WHERE TRNTYPE In(2100,1300) And A.StockNo = B.StockNo And DocDt Between '      
+        Set @StrSql = @StrSql + CHAR(39) + Convert(Varchar(10),@FinYearDate ,127) + CHAR(39) + ' And ' + CHAR(39) + Convert(Varchar(10),@ShoperDate,127) + CHAR(39)      
+        if @IntClass12FltrCnt > 0   
+   Begin     
+    Set @StrSql = @StrSql + ' And B.Class1Cd +' + Char(39)+':' + Char(39) +'+ B.Class2cd In (Select Class1cd + '+Char(39)+':'+Char(39)+' +Class2cd From [##TmpGraphClass12' + @StrUserId + '])'  
+   End          
+        Set @StrSql = @StrSql + ' GROUP BY Month(DOCDT),YEAR(DocDt),Trntype '      
+        Execute (@StrSql)        
+          
+        Set @StrSql = 'Update [##TmpGraph' + @StrUserId + '] Set QtyVal = -QtyVal Where Trntype = 1300'        
+        Execute (@StrSql)        
+  If @YearEndMonth = 3   
+   Begin   
+       Set @StrSql = 'Update [##TmpGraph' + @StrUserId + '] Set QtrName = ' + Char(39)+ '1st Quarter' + Char(39) +' Where MonNo in (4,5,6)'  
+    Execute (@StrSql)        
+       Set @StrSql = 'Update [##TmpGraph' + @StrUserId + '] Set QtrName = ' + Char(39)+ '2nd Quarter' + Char(39) +' Where MonNo in (7,8,9)'  
+    Execute (@StrSql)        
+       Set @StrSql = 'Update [##TmpGraph' + @StrUserId + '] Set QtrName = ' + Char(39)+ '3rd Quarter' + Char(39) +' Where MonNo in (10,11,12)'  
+    Execute (@StrSql)        
+       Set @StrSql = 'Update [##TmpGraph' + @StrUserId + '] Set QtrName = ' + Char(39)+ '4th Quarter' + Char(39) +' Where MonNo in (1,2,3)'  
+    Execute (@StrSql)        
+   End  
+             
+        Set @StrSql = ' Select QtrName As ' + Char(39) + 'Quarter' + Char(39) + ',Sum(QtyVal) As ' + @QtyValCap + ' Into ' + @TmpTable + ' From [##TmpGraph' + @StrUserId + ']'      
+        Set @StrSql = @StrSql + ' Group by QtrName '      
+  Execute (@StrSql)        
+  Set @StrSql = 'Drop Table [##TmpGraph' + @StrUserId + ']'     
+  Execute (@StrSql)        
+ END            
+IF @ChartType = 'CHART10' ---Hourly Sales for Today & Yesterday      
+ BEGIN           
+        SET @STRSQL = 'CREATE TABLE [##TmpGraph' + @StrUserId + '] (TransDate DateTime,TimeStart Varchar(16),TimeEnd Varchar(16),Val2100 Money, Val1300 Money)'      
+        Execute (@StrSql)  
+        ---For Today      
+        Set @StrSql = 'Insert Into [##TmpGraph' + @StrUserId + '] Values (' + Char(39) + CONVERT(Varchar(10),@ShoperDate,127) + Char(39) + ',' + Char(39) + '09:00 AM' + Char(39) + ',' + Char(39) + '10:00 AM' + Char(39) + ',0,0)'      
+        Execute (@StrSql)        
+        Set @StrSql = 'Insert Into [##TmpGraph' + @StrUserId + '] Values (' + Char(39) + CONVERT(Varchar(10),@ShoperDate,127) + Char(39) + ',' + Char(39) + '10:01 AM' + Char(39) + ',' + Char(39) + '11:00 AM' + Char(39) + ',0,0)'      
+        Execute (@StrSql)        
+        Set @StrSql = 'Insert Into [##TmpGraph' + @StrUserId + '] Values (' + Char(39) + CONVERT(Varchar(10),@ShoperDate,127) + Char(39) + ',' + Char(39) + '11:01 AM' + Char(39) + ',' + Char(39) + '12:00 PM' + Char(39) + ',0,0)'      
+        Execute (@StrSql)        
+        Set @StrSql = 'Insert Into [##TmpGraph' + @StrUserId + '] Values (' + Char(39) + CONVERT(Varchar(10),@ShoperDate,127) + Char(39) + ',' + Char(39) + '12:01 PM' + Char(39) + ',' + Char(39) + '13:00 PM' + Char(39) + ',0,0)'      
+        Execute (@StrSql)        
+        Set @StrSql = 'Insert Into [##TmpGraph' + @StrUserId + '] Values (' + Char(39) + CONVERT(Varchar(10),@ShoperDate,127) + Char(39) + ',' + Char(39) + '13:01 PM' + Char(39) + ',' + Char(39) + '14:00 PM' + Char(39) + ',0,0)'      
+        Execute (@StrSql)        
+        Set @StrSql = 'Insert Into [##TmpGraph' + @StrUserId + '] Values (' + Char(39) + CONVERT(Varchar(10),@ShoperDate,127) + Char(39) + ',' + Char(39) + '14:01 PM' + Char(39) + ',' + Char(39) + '15:00 PM' + Char(39) + ',0,0)'      
+        Execute (@StrSql)        
+        Set @StrSql = 'Insert Into [##TmpGraph' + @StrUserId + '] Values (' + Char(39) + CONVERT(Varchar(10),@ShoperDate,127) + Char(39) + ',' + Char(39) + '15:01 PM' + Char(39) + ',' + Char(39) + '16:00 PM' + Char(39) + ',0,0)'      
+        Execute (@StrSql)        
+        Set @StrSql = 'Insert Into [##TmpGraph' + @StrUserId + '] Values (' + Char(39) + CONVERT(Varchar(10),@ShoperDate,127) + Char(39) + ',' + Char(39) + '16:01 PM' + Char(39) + ',' + Char(39) + '17:00 PM' + Char(39) + ',0,0)'      
+        Execute (@StrSql)        
+        Set @StrSql = 'Insert Into [##TmpGraph' + @StrUserId + '] Values (' + Char(39) + CONVERT(Varchar(10),@ShoperDate,127) + Char(39) + ',' + Char(39) + '17:01 PM' + Char(39) + ',' + Char(39) + '18:00 PM' + Char(39) + ',0,0)'      
+        Execute (@StrSql)        
+        Set @StrSql = 'Insert Into [##TmpGraph' + @StrUserId + '] Values (' + Char(39) + CONVERT(Varchar(10),@ShoperDate,127) + Char(39) + ',' + Char(39) + '18:01 PM' + Char(39) + ',' + Char(39) + '19:00 PM' + Char(39) + ',0,0)'      
+        Execute (@StrSql)        
+        Set @StrSql = 'Insert Into [##TmpGraph' + @StrUserId + '] Values (' + Char(39) + CONVERT(Varchar(10),@ShoperDate,127) + Char(39) + ',' + Char(39) + '19:01 PM' + Char(39) + ',' + Char(39) + '20:00 PM' + Char(39) + ',0,0)'      
+        Execute (@StrSql)        
+        Set @StrSql = 'Insert Into [##TmpGraph' + @StrUserId + '] Values (' + Char(39) + CONVERT(Varchar(10),@ShoperDate,127) + Char(39) + ',' + Char(39) + '20:01 PM' + Char(39) + ',' + Char(39) + '21:00 PM' + Char(39) + ',0,0)'      
+        Execute (@StrSql)        
+        Set @StrSql = 'Insert Into [##TmpGraph' + @StrUserId + '] Values (' + Char(39) + CONVERT(Varchar(10),@ShoperDate,127) + Char(39) + ',' + Char(39) + '21:01 PM' + Char(39) + ',' + Char(39) + '22:00 PM' + Char(39) + ',0,0)'      
+        Execute (@StrSql)        
+        --For Yesterday      
+        Set @StrSql = 'Insert Into [##TmpGraph' + @StrUserId + '] Values (' + Char(39) + CONVERT(Varchar(10),@ShoperDate-1,127) + Char(39) + ',' + Char(39) + '09:00 AM' + Char(39) + ',' + Char(39) + '10:00 AM' + Char(39) + ',0,0)'      
+        Execute (@StrSql)        
+        Set @StrSql = 'Insert Into [##TmpGraph' + @StrUserId + '] Values (' + Char(39) + CONVERT(Varchar(10),@ShoperDate-1,127) + Char(39) + ',' + Char(39) + '10:01 AM' + Char(39) + ',' + Char(39) + '11:00 AM' + Char(39) + ',0,0)'      
+        Execute (@StrSql)        
+        Set @StrSql = 'Insert Into [##TmpGraph' + @StrUserId + '] Values (' + Char(39) + CONVERT(Varchar(10),@ShoperDate-1,127) + Char(39) + ',' + Char(39) + '11:01 AM' + Char(39) + ',' + Char(39) + '12:00 PM' + Char(39) + ',0,0)'      
+        Execute (@StrSql)        
+        Set @StrSql = 'Insert Into [##TmpGraph' + @StrUserId + '] Values (' + Char(39) + CONVERT(Varchar(10),@ShoperDate-1,127) + Char(39) + ',' + Char(39) + '12:01 PM' + Char(39) + ',' + Char(39) + '13:00 PM' + Char(39) + ',0,0)'      
+        Execute (@StrSql)        
+        Set @StrSql = 'Insert Into [##TmpGraph' + @StrUserId + '] Values (' + Char(39) + CONVERT(Varchar(10),@ShoperDate-1,127) + Char(39) + ',' + Char(39) + '13:01 PM' + Char(39) + ',' + Char(39) + '14:00 PM' + Char(39) + ',0,0)'      
+        Execute (@StrSql)        
+        Set @StrSql = 'Insert Into [##TmpGraph' + @StrUserId + '] Values (' + Char(39) + CONVERT(Varchar(10),@ShoperDate-1,127) + Char(39) + ',' + Char(39) + '14:01 PM' + Char(39) + ',' + Char(39) + '15:00 PM' + Char(39) + ',0,0)'      
+        Execute (@StrSql)        
+        Set @StrSql = 'Insert Into [##TmpGraph' + @StrUserId + '] Values (' + Char(39) + CONVERT(Varchar(10),@ShoperDate-1,127) + Char(39) + ',' + Char(39) + '15:01 PM' + Char(39) + ',' + Char(39) + '16:00 PM' + Char(39) + ',0,0)'      
+        Execute (@StrSql)        
+        Set @StrSql = 'Insert Into [##TmpGraph' + @StrUserId + '] Values (' + Char(39) + CONVERT(Varchar(10),@ShoperDate-1,127) + Char(39) + ',' + Char(39) + '16:01 PM' + Char(39) + ',' + Char(39) + '17:00 PM' + Char(39) + ',0,0)'      
+        Execute (@StrSql)        
+        Set @StrSql = 'Insert Into [##TmpGraph' + @StrUserId + '] Values (' + Char(39) + CONVERT(Varchar(10),@ShoperDate-1,127) + Char(39) + ',' + Char(39) + '17:01 PM' + Char(39) + ',' + Char(39) + '18:00 PM' + Char(39) + ',0,0)'      
+        Execute (@StrSql)        
+        Set @StrSql = 'Insert Into [##TmpGraph' + @StrUserId + '] Values (' + Char(39) + CONVERT(Varchar(10),@ShoperDate-1,127) + Char(39) + ',' + Char(39) + '18:01 PM' + Char(39) + ',' + Char(39) + '19:00 PM' + Char(39) + ',0,0)'      
+        Execute (@StrSql)        
+        Set @StrSql = 'Insert Into [##TmpGraph' + @StrUserId + '] Values (' + Char(39) + CONVERT(Varchar(10),@ShoperDate-1,127) + Char(39) + ',' + Char(39) + '19:01 PM' + Char(39) + ',' + Char(39) + '20:00 PM' + Char(39) + ',0,0)'      
+        Execute (@StrSql)        
+        Set @StrSql = 'Insert Into [##TmpGraph' + @StrUserId + '] Values (' + Char(39) + CONVERT(Varchar(10),@ShoperDate-1,127) + Char(39) + ',' + Char(39) + '20:01 PM' + Char(39) + ',' + Char(39) + '21:00 PM' + Char(39) + ',0,0)'      
+        Execute (@StrSql)        
+        Set @StrSql = 'Insert Into [##TmpGraph' + @StrUserId + '] Values (' + Char(39) + CONVERT(Varchar(10),@ShoperDate-1,127) + Char(39) + ',' + Char(39) + '21:01 PM' + Char(39) + ',' + Char(39) + '22:00 PM' + Char(39) + ',0,0)'      
+        Execute (@StrSql)        
+      
+        Set @StrSql = 'Update [##TmpGraph' + @StrUserId + '] Set Val2100=X.QtyVal From (Select a.TransDate,a.TimeStart,TimeEnd,' + @StrOptQtyVal      
+        Set @StrSql = @StrSql + ' FROM [##TmpGraph' + @StrUserId + '] A INNER JOIN StkTrnHdr B ON A.TransDate = B.DocDt INNER JOIN STKTRNDTLS C'      
+        Set @StrSql = @StrSql + ' ON B.TRNTYPE = C.TRNTYPE AND B.TRNCTRLNO = C.TRNCTRLNO Inner Join ItemMaster D On C.StockNo = D.StockNo Where Convert(VarChar,B.DocTime,108) Between'      
+        Set @StrSql = @StrSql + ' CONVERT(VARCHAR,Cast(A.TimeStart as datetime) ,108) and CONVERT(VARCHAR,cast(A.TimeEnd as datetime)' + '+' + Char(39) + '00:00:59' + Char(39) +',108)'      
+        Set @StrSql = @StrSql + ' and B.TrnType in (2100) And B.DocDt Between ' + Char(39) + Convert(Varchar(10),@ShoperDate-1,127) + Char(39) + ' and ' + Char(39) + Convert(Varchar(10),@ShoperDate,127) + Char(39)       
+        if @IntClass12FltrCnt > 0   
+   Begin     
+    Set @StrSql = @StrSql + ' And D.Class1Cd +' + Char(39)+':' + Char(39) +'+ D.Class2cd In (Select Class1cd + '+Char(39)+':'+Char(39)+' +Class2cd From [##TmpGraphClass12' + @StrUserId + '])'  
+   End          
+        Set @StrSql = @StrSql + ' Group By A.TransDate,A.TimeStart,A.TimeEnd) As X, [##TmpGraph' + @StrUserId + '] As Y'      
+        Set @StrSql = @StrSql + ' Where X.TransDate = Y.TransDate And X.TimeStart = Y.TimeStart And X.TimeEnd = Y.TimeEnd'      
+        Execute (@StrSql)       
+                    
+        Set @StrSql = 'Update [##TmpGraph' + @StrUserId + '] Set Val1300=X.QtyVal From (Select a.TransDate,a.TimeStart,TimeEnd,' + @StrOptQtyVal      
+        Set @StrSql = @StrSql + ' FROM [##TmpGraph' + @StrUserId + '] A INNER JOIN StkTrnHdr B ON A.TransDate = B.DocDt INNER JOIN STKTRNDTLS C'      
+        Set @StrSql = @StrSql + ' ON B.TRNTYPE = C.TRNTYPE AND B.TRNCTRLNO = C.TRNCTRLNO Inner Join ItemMaster D On C.StockNo = D.StockNo Where Convert(VarChar,B.DocTime,108) Between'      
+        Set @StrSql = @StrSql + ' CONVERT(VARCHAR,Cast(A.TimeStart as datetime) ,108) and CONVERT(VARCHAR,cast(A.TimeEnd as datetime)' + '+' + Char(39) + '00:00:59' + Char(39) +',108)'      
+        Set @StrSql = @StrSql + ' and B.TrnType in (1300) And B.DocDt Between ' + Char(39) + Convert(Varchar(10),@ShoperDate-1,127) + Char(39) + ' and ' + Char(39) + Convert(Varchar(10),@ShoperDate,127) + Char(39)       
+        if @IntClass12FltrCnt > 0   
+   Begin     
+    Set @StrSql = @StrSql + ' And D.Class1Cd +' + Char(39)+':' + Char(39) +'+ D.Class2cd In (Select Class1cd + '+Char(39)+':'+Char(39)+' +Class2cd From [##TmpGraphClass12' + @StrUserId + '])'  
+   End          
+        Set @StrSql = @StrSql + ' Group By A.TransDate,A.TimeStart,A.TimeEnd) As X, [##TmpGraph' + @StrUserId + ']  As Y'      
+        Set @StrSql = @StrSql + ' Where X.TransDate = Y.TransDate And X.TimeStart = Y.TimeStart And X.TimeEnd = Y.TimeEnd'      
+        Execute (@StrSql)      
+    
+        Set @StrSql = 'SELECT A.TM As Time,SUM(A.TODAY) AS Today,SUM(A.YESTERDAY) AS Yesterday Into ' + @TmpTable +' FROM'    
+        Set @StrSql = @StrSql + ' (SELECT SUBSTRING(TimeStart,1,2)+' + CHAR(39) + '-' + CHAR(39) + '+SUBSTRING(TimeEnd,1,2) Tm,(SELECT Case TransDate WHEN ' + CHAR(39) + Convert(Varchar(10),@ShoperDate,127) + CHAR(39) + ' Then SUM(Val2100-Val1300) ELSE 0 END)'    
+        Set @StrSql = @StrSql + ' AS TODAY,(SELECT Case TransDate WHEN ' + CHAR(39) + Convert(Varchar(10),@ShoperDate-1,127) + CHAR(39) + ' Then SUM(Val2100-Val1300) ELSE 0 END) AS YESTERDAY'    
+        Set @StrSql = @StrSql + ' FROM [##TmpGraph' + @StrUserId + '] GROUP BY TransDate,SUBSTRING(TimeStart,1,2)+' + CHAR(39)+ '-' + CHAR(39) + '+SUBSTRING(TimeEnd,1,2)) AS A GROUP BY A.TM'    
+        Execute (@StrSql)        
+  Set @StrSql = 'Drop Table [##TmpGraph' + @StrUserId + ']'     
+  Execute (@StrSql)        
+ END    
+IF @ChartType = 'CHART11' Or @ChartType = 'CHART14'  ---Top 10 Class1Cd For the Financial Year      
+ BEGIN           
+        Set @StrSql = Convert(Varchar,Year(@ShoperDate)) + '-' + Convert(Varchar,@YearEndMonth + 1) + '-01'       
+        Set @FinYearDate = Convert(Varchar(10),@StrSQl,127)      
+        If @FinYearDate > @ShoperDate       
+   Begin       
+    Set @StrSql = Convert(Varchar,Year(@ShoperDate)-1) + '-' + Convert(Varchar,@YearEndMonth + 1) + '-01'       
+    Set @FinYearDate = Convert(Varchar(10),@StrSQl,127)      
+   End       
+        Set @StrSql = 'SELECT Convert(Varchar,Month(DocDt)) As MonNo,Convert(Varchar,Year(DocDt)) As Yr,TrnType,B.Class1cd,' + @StrOptQtyVal + ' Into [##TmpGraph' + @StrUserId + ']'       
+        Set @StrSql = @StrSql + ' FROM STKTRNDTLS A,ItemMaster B WHERE TRNTYPE In(2100,1300) And A.StockNo = B.StockNo And DocDt Between '      
+        Set @StrSql = @StrSql + CHAR(39) + Convert(Varchar(10),@FinYearDate ,127) + CHAR(39) + ' And ' + CHAR(39) + Convert(Varchar(10),@ShoperDate,127) + CHAR(39)      
+        if @IntClass12FltrCnt > 0   
+   Begin     
+    Set @StrSql = @StrSql + ' And B.Class1Cd +' + Char(39)+':' + Char(39) +'+ B.Class2cd In (Select Class1cd + '+Char(39)+':'+Char(39)+' +Class2cd From [##TmpGraphClass12' + @StrUserId + '])'  
+   End          
+        Set @StrSql = @StrSql + ' GROUP BY Month(DOCDT),YEAR(DocDt),Trntype,B.Class1cd '      
+        Execute (@StrSql)        
+        Set @StrSql = 'Update [##TmpGraph' + @StrUserId + '] Set QtyVal = -QtyVal Where Trntype = 1300'        
+        Execute (@StrSql)        
+  
+  SELECT @ColCaption = Txt FROM SYSPARAM WHERE PARAMCODE LIKE 'ItemClass1Cap'  
+  IF @ChartType = 'CHART11'                  
+   Begin   
+    Set @StrSql = ' Select Top 10 Class1cd AS [' + @ColCaption + '],Sum(QtyVal) As ' + @QtyValCap + ' Into ' + @TmpTable + ' From [##TmpGraph' + @StrUserId + ']'       
+    Set @StrSql = @StrSql + ' Group by Class1Cd Order By Sum(QtyVal) Desc '      
+    Execute (@StrSql)        
+   End  
+  IF @ChartType = 'CHART14'                  
+   Begin   
+    Set @StrSql = ' Select Top 10 Class1cd AS [' + @ColCaption + '],Sum(QtyVal) As ' + @QtyValCap + ' Into ' + @TmpTable + ' From [##TmpGraph' + @StrUserId + ']'       
+    Set @StrSql = @StrSql + ' Group by Class1Cd Having Sum(QtyVal) > 0 Order By Sum(QtyVal) Asc '      
+    Execute (@StrSql)        
+   End  
+  Set @StrSql = 'Drop Table [##TmpGraph' + @StrUserId + ']'     
+  Execute (@StrSql)        
+ END            
+IF @ChartType = 'CHART12' OR @ChartType = 'CHART15' ---Top 10 Class2Cd For the Financial Year      
+ BEGIN           
+        Set @StrSql = Convert(Varchar,Year(@ShoperDate)) + '-' + Convert(Varchar,@YearEndMonth + 1) + '-01'       
+        Set @FinYearDate = Convert(Varchar(10),@StrSQl,127)      
+        If @FinYearDate > @ShoperDate       
+  Begin       
+   Set @StrSql = Convert(Varchar,Year(@ShoperDate)-1) + '-' + Convert(Varchar,@YearEndMonth + 1) + '-01'       
+   Set @FinYearDate = Convert(Varchar(10),@StrSQl,127)      
+  End       
+        Set @StrSql = 'SELECT Convert(Varchar,Month(DocDt)) As MonNo,Convert(Varchar,Year(DocDt)) As Yr,TrnType,B.Class2cd,' + @StrOptQtyVal + ' Into [##TmpGraph' + @StrUserId + ']'       
+        Set @StrSql = @StrSql + ' FROM STKTRNDTLS A,ItemMaster B WHERE TRNTYPE In(2100,1300) And A.StockNo = B.StockNo And DocDt Between '      
+        Set @StrSql = @StrSql + CHAR(39) + Convert(Varchar(10),@FinYearDate ,127) + CHAR(39) + ' And ' + CHAR(39) + Convert(Varchar(10),@ShoperDate,127) + CHAR(39)      
+        if @IntClass12FltrCnt > 0   
+   Begin     
+    Set @StrSql = @StrSql + ' And B.Class1Cd +' + Char(39)+':' + Char(39) +'+ B.Class2cd In (Select Class1cd + '+Char(39)+':'+Char(39)+' +Class2cd From [##TmpGraphClass12' + @StrUserId + '])'  
+   End          
+        Set @StrSql = @StrSql + ' GROUP BY Month(DOCDT),YEAR(DocDt),Trntype,B.Class2cd '      
+        Execute (@StrSql)        
+        Set @StrSql = 'Update [##TmpGraph' + @StrUserId + '] Set QtyVal = -QtyVal Where Trntype = 1300'        
+        Execute (@StrSql)        
+  
+  SELECT @ColCaption = Txt FROM SYSPARAM WHERE PARAMCODE LIKE 'ItemClass2Cap'  
+    
+  If @ChartType = 'CHART12'              
+   Begin   
+    Set @StrSql = ' Select Top 10 Class2cd AS [' + @ColCaption + '],Sum(QtyVal) As ' + @QtyValCap + ' Into ' + @TmpTable + ' From [##TmpGraph' + @StrUserId + ']'      
+    Set @StrSql = @StrSql + ' Group by Class2Cd Order By Sum(QtyVal) Desc '      
+    Execute (@StrSql)     
+   End  
+  If @ChartType = 'CHART15'             
+   Begin   
+    Set @StrSql = ' Select Top 10 Class2cd AS [' + @ColCaption + '],Sum(QtyVal) As ' + @QtyValCap + ' Into ' + @TmpTable + ' From [##TmpGraph' + @StrUserId + ']'      
+    Set @StrSql = @StrSql + ' Group by Class2Cd Having Sum(QtyVal) > 0 Order By Sum(QtyVal) Asc '      
+    Execute (@StrSql)     
+   End  
+  Set @StrSql = 'Drop Table [##TmpGraph' + @StrUserId + ']'     
+  Execute (@StrSql)        
+ END            
+IF @ChartType = 'CHART13' OR @ChartType = 'CHART16' ---Top/Least 10 SubClass1Cd For the Financial Year      
+ BEGIN           
+        Set @StrSql = Convert(Varchar,Year(@ShoperDate)) + '-' + Convert(Varchar,@YearEndMonth + 1) + '-01'       
+        Set @FinYearDate = Convert(Varchar(10),@StrSQl,127)      
+        If @FinYearDate > @ShoperDate       
+   Begin       
+    Set @StrSql = Convert(Varchar,Year(@ShoperDate)-1) + '-' + Convert(Varchar,@YearEndMonth + 1) + '-01'       
+    Set @FinYearDate = Convert(Varchar(10),@StrSQl,127)      
+   End       
+        Set @StrSql = 'SELECT Convert(Varchar,Month(DocDt)) As MonNo,Convert(Varchar,Year(DocDt)) As Yr,TrnType,B.SubClass1cd,' + @StrOptQtyVal + ' Into [##TmpGraph' + @StrUserId + ']'       
+        Set @StrSql = @StrSql + ' FROM STKTRNDTLS A,ItemMaster B WHERE TRNTYPE In(2100,1300) And A.StockNo = B.StockNo And DocDt Between '      
+        Set @StrSql = @StrSql + CHAR(39) + Convert(Varchar(10),@FinYearDate ,127) + CHAR(39) + ' And ' + CHAR(39) + Convert(Varchar(10),@ShoperDate,127) + CHAR(39)      
+        if @IntClass12FltrCnt > 0   
+   Begin     
+    Set @StrSql = @StrSql + ' And B.Class1Cd +' + Char(39)+':' + Char(39) +'+ B.Class2cd In (Select Class1cd + '+Char(39)+':'+Char(39)+' +Class2cd From [##TmpGraphClass12' + @StrUserId + '])'  
+   End          
+        Set @StrSql = @StrSql + ' GROUP BY Month(DOCDT),YEAR(DocDt),Trntype,B.SubClass1cd '      
+        Execute (@StrSql)        
+        Set @StrSql = 'Update [##TmpGraph' + @StrUserId + '] Set QtyVal = -QtyVal Where Trntype = 1300'        
+        Execute (@StrSql)        
+  
+  SELECT @ColCaption = Txt FROM SYSPARAM WHERE PARAMCODE LIKE 'ItemSubClass1Cap'  
+  If @ChartType = 'CHART13'  
+   Begin             
+    Set @StrSql = ' Select Top 10 SubClass1cd As [' + @ColCaption + '],Sum(QtyVal) As ' + @QtyValCap + ' Into ' + @TmpTable + ' From [##TmpGraph' + @StrUserId + ']'      
+    Set @StrSql = @StrSql + ' Group by SubClass1Cd Order By Sum(QtyVal) Desc '      
+    Execute (@StrSql)        
+   End  
+  If @ChartType = 'CHART16'  
+   Begin             
+    Set @StrSql = ' Select Top 10 SubClass1cd As [' + @ColCaption + '],Sum(QtyVal) As ' + @QtyValCap + ' Into ' + @TmpTable + ' From [##TmpGraph' + @StrUserId + ']'      
+    Set @StrSql = @StrSql + ' Group by SubClass1Cd Having Sum(QtyVal) > 0 Order By Sum(QtyVal) Asc '      
+    Execute (@StrSql)        
+   End  
+  Set @StrSql = 'Drop Table [##TmpGraph' + @StrUserId + ']'     
+  Execute (@StrSql)        
+ END            
+IF @ChartType = 'CHART17' ---'Sales Person wise Sales    
+ BEGIN           
+        Set @StrSql = Convert(Varchar,Year(@ShoperDate)) + '-' + Convert(Varchar,@YearEndMonth + 1) + '-01'       
+        Set @FinYearDate = Convert(Varchar(10),@StrSQl,127)      
+        If @FinYearDate > @ShoperDate       
+   Begin       
+    Set @StrSql = Convert(Varchar,Year(@ShoperDate)-1) + '-' + Convert(Varchar,@YearEndMonth + 1) + '-01'       
+    Set @FinYearDate = Convert(Varchar(10),@StrSQl,127)      
+   End       
+        Set @StrSql = 'SELECT B.SalesPersonCd,A.TrnType,' + @StrOptQtyVal + ' Into [##TmpGraph' + @StrUserId + ']'       
+        Set @StrSql = @StrSql + ' FROM STKTRNDTLS A INNER JOIN SALETRNHDR AS B ON A.TRNTYPE = B.SALETRNTYPE AND A.TRNCTRLNO = B.SALETRNCTRLNO '      
+        Set @StrSql = @StrSql + ' Inner Join ItemMaster C On A.StockNo = C.Stockno WHERE A.TRNTYPE In(2100,1300) And A.DocDt Between ' + CHAR(39) + Convert(Varchar(10),@FinYearDate ,127) + CHAR(39)     
+        set @StrSql = @StrSql + ' And ' + CHAR(39) + Convert(Varchar(10),@ShoperDate,127) + CHAR(39)      
+        if @IntClass12FltrCnt > 0   
+   Begin     
+    Set @StrSql = @StrSql + ' And C.Class1Cd +' + Char(39)+':' + Char(39) +'+ C.Class2cd In (Select Class1cd + '+Char(39)+':'+Char(39)+' +Class2cd From [##TmpGraphClass12' + @StrUserId + '])'  
+   End          
+        Set @StrSql = @StrSql + ' GROUP By B.SalesPersonCd,A.Trntype '      
+        Execute (@StrSql)        
+        Set @StrSql = 'Update [##TmpGraph' + @StrUserId + '] Set QtyVal = -QtyVal Where Trntype = 1300'        
+        Execute (@StrSql)        
+             
+        Set @StrSql = ' Select Top 10 SalesPersonCd As [Sales Person],Sum(QtyVal) As ' + @QtyValCap + ' Into ' + @TmpTable + ' From [##TmpGraph' + @StrUserId + ']'      
+        Set @StrSql = @StrSql + ' Group By SalesPersonCd Order By Sum(QtyVal) Desc '      
+        Execute (@StrSql)        
+  Set @StrSql = 'Drop Table [##TmpGraph' + @StrUserId + ']'     
+  Execute (@StrSql)        
+ END            
+IF @ChartType = 'CHART18' ---'Payment Mode wise Details    
+ BEGIN           
+        Set @StrSql = Convert(Varchar,Year(@ShoperDate)) + '-' + Convert(Varchar,@YearEndMonth + 1) + '-01'       
+        Set @FinYearDate = Convert(Varchar(10),@StrSQl,127)      
+        If @FinYearDate > @ShoperDate       
+   Begin       
+    Set @StrSql = Convert(Varchar,Year(@ShoperDate)-1) + '-' + Convert(Varchar,@YearEndMonth + 1) + '-01'       
+    Set @FinYearDate = Convert(Varchar(10),@StrSQl,127)      
+   End       
+        Set @StrSql =  'SELECT (Select Case PayModeType When 1 Then ' + Char(39) + 'Cash' + Char(39) + ' When 2 Then ' + Char(39) + 'Credit Card' + Char(39) + ' When 4 Then ' + Char(39) + 'Discount Card' + Char(39) + ' When 5 Then ' + Char(39) + 'Gift Coupon' + Char(39) + ''    
+        Set @StrSql = @StrSql + ' When 6 Then ' + Char(39) + 'Cheque' + Char(39) + ' When 7 Then ' + Char(39) + 'Advance Receipt' + Char(39) + ' When 8 Then ' + Char(39) + 'Credit Note' + Char(39) + ' End) As [Payment Mode],Sum(LocCurrNetAmt) Amount Into ' + @TmpTable    
+        Set @StrSql = @StrSql + ' FROM POSCASHTRN WHERE DOCDT Between ' + CHAR(39) + Convert(Varchar(10),@FinYearDate ,127) + CHAR(39)     
+        set @StrSql = @StrSql + ' And ' + CHAR(39) + Convert(Varchar(10),@ShoperDate,127) + CHAR(39)      
+        Set @StrSql = @StrSql + ' Group By PAYMODETYPE ORDER BY PAYMODETYPE '      
+        Execute (@StrSql)        
+ END            
+IF @ChartType = 'CHART19' ---'Transaction Wise Details    
+ BEGIN           
+        Set @StrSql = Convert(Varchar,Year(@ShoperDate)) + '-' + Convert(Varchar,@YearEndMonth + 1) + '-01'       
+        Set @FinYearDate = Convert(Varchar(10),@StrSQl,127)      
+        If @FinYearDate > @ShoperDate       
+   Begin       
+    Set @StrSql = Convert(Varchar,Year(@ShoperDate)-1) + '-' + Convert(Varchar,@YearEndMonth + 1) + '-01'       
+    Set @FinYearDate = Convert(Varchar(10),@StrSQl,127)      
+   End       
+        Set @StrSql =  'SELECT Descr,' + @StrOptQtyVal + ' Into [##TmpGraph' + @StrUserId + ']'     
+        Set @StrSql = @StrSql + ' FROM STKTRNDTLS A,Genlookup B,ItemMaster C WHERE DOCDT Between ' + CHAR(39) + Convert(Varchar(10),@FinYearDate ,127) + CHAR(39)     
+        set @StrSql = @StrSql + ' And ' + CHAR(39) + Convert(Varchar(10),@ShoperDate,127) + CHAR(39)      
+        if @IntClass12FltrCnt > 0   
+   Begin     
+    Set @StrSql = @StrSql + ' And C.Class1Cd +' + Char(39)+':' + Char(39) +'+ C.Class2cd In (Select Class1cd + '+Char(39)+':'+Char(39)+' +Class2cd From [##TmpGraphClass12' + @StrUserId + '])'  
+   End          
+        Set @StrSql = @StrSql + ' And A.StockNo = C.Stockno And CODE = CONVERT(VARCHAR,TRNTYPE) And Recid = 101 and DocEntVoidind <> 1 GROUP BY Descr '      
+        Execute (@StrSql)        
+  
+        Set @StrSql = ' Select Descr As [Transaction Name],QtyVal As ' + @QtyValCap + ' Into ' + @TmpTable + ' From [##TmpGraph' + @StrUserId + ']'      
+        Execute (@StrSql)        
+  Set @StrSql = 'Drop Table [##TmpGraph' + @StrUserId + ']'     
+  Execute (@StrSql)        
+ END           
+IF @ChartType = 'CHART99' ---Company Summary Info - Current Financial Year  
+ BEGIN           
+        Set @StrSql = Convert(Varchar,Year(@ShoperDate)) + '-' + Convert(Varchar,@YearEndMonth + 1) + '-01'       
+        Set @FinYearDate = Convert(Varchar(10),@StrSQl,127)      
+        If @FinYearDate > @ShoperDate       
+   Begin       
+    Set @StrSql = Convert(Varchar,Year(@ShoperDate)-1) + '-' + Convert(Varchar,@YearEndMonth + 1) + '-01'       
+    Set @FinYearDate = Convert(Varchar(10),@StrSQl,127)      
+   End       
+        Set @StrSql = 'SELECT TrnType,Sum(DocQty) AS Qty,Sum(DocEntNetValue) As Value Into [##TmpGraph' + @StrUserId + ']'      
+        Set @StrSql = @StrSql + ' FROM STKTRNDTLS A,ItemMaster B WHERE TRNTYPE In(2100,1300) And A.StockNo = B.StockNo And DocDt Between '      
+        Set @StrSql = @StrSql + CHAR(39) + Convert(Varchar(10),@FinYearDate ,127) + CHAR(39) + ' And ' + CHAR(39) + Convert(Varchar(10),@ShoperDate,127) + CHAR(39)      
+        if @IntClass12FltrCnt > 0   
+   Begin     
+    Set @StrSql = @StrSql + ' And B.Class1Cd +' + Char(39)+':' + Char(39) +'+ B.Class2cd In (Select Class1cd + '+Char(39)+':'+Char(39)+' +Class2cd From [##TmpGraphClass12' + @StrUserId + '])'  
+   End          
+        Set @StrSql = @StrSql + ' GROUP BY Trntype '      
+        Execute (@StrSql)        
+        Set @StrSql = 'Update [##TmpGraph' + @StrUserId + '] Set Qty = -Qty,Value = -Value Where Trntype = 1300'        
+        Execute (@StrSql)        
+             
+        Set @StrSql =  'SELECT 1 As Slno,Convert(Varchar(50),'+ Char(39) + 'Current Year Sales' + Char(39)+')  As Descr,Sum(Qty) As Qty,Convert(Numeric(12,2),Sum(Value)) As Value Into ' + @TmpTable + ' From [##TmpGraph' + @StrUserId + ']'      
+		  Execute (@StrSql)        
+		  Set @StrSql = 'Drop Table [##TmpGraph' + @StrUserId + ']'     
+		  Execute (@StrSql)        
+  
+        Set @StrSql = Convert(Varchar,Year(@ShoperDate)) + '-' + Convert(Varchar,@YearEndMonth + 1) + '-01'       
+        Set @FinYearDate = Convert(Varchar(10),@StrSQl,127)      
+        If @FinYearDate > @ShoperDate       
+   Begin       
+    Set @StrSql = Convert(Varchar,Year(@ShoperDate)-1) + '-' + Convert(Varchar,@YearEndMonth + 1) + '-01'       
+    Set @FinYearDate = Convert(Varchar(10),@StrSQl,127)      
+   End       
+        
+  Set @StrSql = Convert(Varchar,Year(@FinYearDate)-1) + '-' + Convert(Varchar,Month(@FinYearDate)) + '-01'          
+  Set @FinYearDate = Convert(Varchar(10),@StrSQl,127)      
+        
+        Set @StrSql = 'SELECT TrnType,Sum(DocQty) AS Qty,Sum(DocEntNetValue) As Value Into [##TmpGraph' + @StrUserId + ']'   
+        Set @StrSql = @StrSql + ' FROM STKTRNDTLS A,ItemMaster B WHERE TRNTYPE In(2100,1300) And A.StockNo = B.StockNo And DocDt Between '      
+        Set @StrSql = @StrSql + CHAR(39) + Convert(Varchar(10),@FinYearDate ,127) + CHAR(39) + ' And ' + CHAR(39) + Convert(Varchar(10),DateAdd(Year,1,@FinYearDate)-1,127) + CHAR(39)      
+        if @IntClass12FltrCnt > 0   
+	   Begin     
+		Set @StrSql = @StrSql + ' And B.Class1Cd +' + Char(39)+':' + Char(39) +'+ B.Class2cd In (Select Class1cd + '+Char(39)+':'+Char(39)+' +Class2cd From [##TmpGraphClass12' + @StrUserId + '])'  
+	   End          
+        Set @StrSql = @StrSql + ' GROUP BY Trntype '      
+        Execute (@StrSql)        
+        Set @StrSql = 'Update [##TmpGraph' + @StrUserId + '] Set Qty = -Qty,Value = -Value Where Trntype = 1300'        
+        Execute (@StrSql)        
+             
+        Set @StrSql =  ' Insert Into ' + @TmpTable + ' SELECT 2 As Slno,'+ Char(39) + 'Last Year Sales' + Char(39)+' As Descr,Sum(Qty) As Qty,Sum(Value) As Value From [##TmpGraph' + @StrUserId + ']'      
+		  Execute (@StrSql)        
+		  Set @StrSql = 'Drop Table [##TmpGraph' + @StrUserId + ']'     
+		  Execute (@StrSql)        
+    
+        Set @StrSql = 'SELECT TrnType,Sum(DocQty) AS Qty,Sum(DocEntNetValue) As Value Into [##TmpGraph' + @StrUserId + ']'         
+        Set @StrSql = @StrSql + ' FROM STKTRNDTLS A,ItemMaster B WHERE TRNTYPE In(2100,1300) And A.StockNo = B.StockNo And DocDt Between '        
+        Set @StrSql = @StrSql + CHAR(39) + CONVERT(VARCHAR,YEAR(@ShoperDate)) + '-' + CONVERT(VARCHAR,MONTH(@ShoperDate)) +'-01' + CHAR(39) + ' And '         
+        Set @StrSql = @StrSql + CHAR(39) + CONVERT(VARCHAR(10),@ShoperDate,127) + CHAR(39)   
+        if @IntClass12FltrCnt > 0   
+	   Begin     
+		Set @StrSql = @StrSql + ' And B.Class1Cd +' + Char(39)+':' + Char(39) +'+ B.Class2cd In (Select Class1cd + '+Char(39)+':'+Char(39)+' +Class2cd From [##TmpGraphClass12' + @StrUserId + '])'  
+	   End          
+		Set @StrSql = @StrSql + ' GROUP BY Trntype '        
+        Execute (@StrSql)        
+          
+        Set @StrSql = 'Update [##TmpGraph' + @StrUserId + '] Set Qty = -Qty,Value = -Value Where Trntype = 1300'        
+        Execute (@StrSql)        
+  
+        Set @StrSql =  ' Insert Into ' + @TmpTable + ' SELECT 3 As Slno,'+ Char(39) + 'Current Month Sales' + Char(39)+' As Descr,Sum(Qty) As Qty,Sum(Value) As Value From [##TmpGraph' + @StrUserId + ']'      
+  Execute (@StrSql)        
+  
+  Set @StrSql = 'Drop Table [##TmpGraph' + @StrUserId + ']'     
+  Execute (@StrSql)        
+ END            
+ -GO-
+
+  </s9qScript>
+</s9qsqlblk>

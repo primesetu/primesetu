@@ -1,0 +1,171 @@
+<s9qsqlblk>
+  <s9qScriptid>S9Q_013_9_0021</s9qScriptid> 
+  <s9qtitle>Catalogue Module: Sales tax Revision Tables</s9qtitle> 
+  <s9qpgmtype>I</s9qpgmtype>  
+  <s9qpgmtype>L</s9qpgmtype>  
+  <s9qversion>*</s9qversion> 
+  <s9qenvironment>P</s9qenvironment> 
+  <s9qenvironment>R</s9qenvironment> 
+  <s9qRunMultiple>0</s9qRunMultiple> 
+  <s9qQryType>DDL</s9qQryType> 
+  <s9qScript>
+
+BEGIN TRANSACTION	
+
+Alter Table [dbo].[SalesTaxCat] Add EffectiveDate datetime 
+-GO-
+Alter Table [dbo].[SalesTaxCat] Add AppliedDate datetime
+-GO-
+Alter Table [dbo].[SalesTaxCat] Add DateInsert datetime
+-GO-
+Alter Table [dbo].[SalesTaxCat] Add ShowRoomCode varchar(32) NULL
+-GO-
+Alter Table [dbo].[SalesTaxRevision] Add DateInsert datetime
+-GO-
+Alter Table [dbo].[SalesTaxRevision] Add ShowRoomCode varchar(32) NULL
+-GO-
+CREATE TABLE [dbo].[SalesTaxRevisionHistory] (
+	[TaxRevisionId] [int] NOT NULL ,
+	[DestTaxType] [varchar] (16) NOT NULL ,
+	[ProdTaxType] [varchar] (16) NOT NULL ,
+	[SrcTaxType] [varchar] (16)  NOT NULL ,
+	[TaxDesc] [varchar] (50) NULL ,
+	[CompCnt] [int] NULL ,
+	[T1Name] [varchar] (25) NULL ,
+	[T1Descr] [varchar] (50) NULL ,
+	[T1Type] [varchar] (1)   NULL ,
+	[T1DerivedFormula] [varchar] (256)   NULL ,
+	[T1CompOn] [varchar] (50)   NULL ,
+	[T1Rate] [money] NULL ,
+	[T1TaxInclusive] [bit] NULL ,
+	[T1TaxPrintBill] [bit] NULL ,
+	[T2Name] [varchar] (25)   NULL ,
+	[T2Descr] [varchar] (50)   NULL ,
+	[T2Type] [varchar] (1)   NULL ,
+	[T2DerivedFormula] [varchar] (256)   NULL ,
+	[T2CompOn] [varchar] (50)   NULL ,
+	[T2Rate] [money] NULL ,
+	[T2TaxInclusive] [bit] NULL ,
+	[T2TaxPrintBill] [bit] NULL ,
+	[T3Name] [varchar] (25)   NULL ,
+	[T3Descr] [varchar] (50)   NULL ,
+	[T3Type] [varchar] (1)   NULL ,
+	[T3DerivedFormula] [varchar] (256)   NULL ,
+	[T3CompOn] [varchar] (50)   NULL ,
+	[T3Rate] [money] NULL ,
+	[T3TaxInclusive] [bit] NULL ,
+	[T3TaxPrintBill] [bit] NULL ,
+	[T4Name] [varchar] (25)   NULL ,
+	[T4Descr] [varchar] (50)   NULL ,
+	[T4Type] [varchar] (1)   NULL ,
+	[T4DerivedFormula] [varchar] (256)   NULL ,
+	[T4CompOn] [varchar] (50)   NULL ,
+	[T4Rate] [money] NULL ,
+	[T4TaxInclusive] [bit] NULL ,
+	[T4TaxPrintBill] [bit] NULL ,
+	[T5Name] [varchar] (25)   NULL ,
+	[T5Descr] [varchar] (50)   NULL ,
+	[T5Type] [varchar] (1)   NULL ,
+	[T5DerivedFormula] [varchar] (256)   NULL ,
+	[T5CompOn] [varchar] (50)   NULL ,
+	[T5Rate] [money] NULL ,
+	[T5TaxInclusive] [bit] NULL ,
+	[T5TaxPrintBill] [bit] NULL ,
+	[HasPreTaxForm] [bit] NULL ,
+	[PreTaxFormName] [varchar] (150)   NULL ,
+	[HasPostTaxForm] [bit] NULL ,
+	[PostTaxFormName] [varchar] (150)   NULL ,
+	[EffectiveDate] [datetime] NULL ,
+	[AppliedDate] [datetime] NULL ,
+	[DateInsert] [datetime] NULL ,
+	[ShowRoomCode] [varchar] (32) NULL,	
+	[VAUid] [varchar] (32)   NULL ,
+	[VActr] [int] NULL ,
+	[VATermId] [varchar] (32)   NULL ,
+	[VACompCode] [varchar] (16)   NULL 
+) ON [PRIMARY]
+-GO-
+
+ALTER TABLE [dbo].[SalesTaxRevisionHistory] WITH NOCHECK ADD 
+	CONSTRAINT [PK_SalesTaxRevisionHistory] PRIMARY KEY  CLUSTERED 
+	(
+		[TaxRevisionId],
+		[ProdTaxType],
+		[SrcTaxType],
+		[DestTaxType]
+	)  ON [PRIMARY] 
+
+-GO-
+
+COMMIT TRANSACTION
+  </s9qScript>
+</s9qsqlblk>
+
+
+<s9qsqlblk>
+  <s9qScriptid>S9Q_013_9_0022</s9qScriptid> 
+  <s9qtitle>Catalogue Module: Sales Tax Revision Data Modifications </s9qtitle> 
+  <s9qpgmtype>I</s9qpgmtype>
+  <s9qpgmtype>L</s9qpgmtype>
+  <s9qversion>*</s9qversion> 
+  <s9qenvironment>P</s9qenvironment> 
+  <s9qRunMultiple>0</s9qRunMultiple> 
+  <s9qQryType>DML</s9qQryType> 
+  <s9qScript>
+
+BEGIN TRANSACTION
+-GO-
+Update [dbo].[SalesTaxCat] Set TaxRevisionId = 0, ShowRoomCode ='0'
+-GO-
+Update [dbo].[SalesTaxCat] Set EffectiveDate = '2010-04-01',AppliedDate='2010-04-01'
+-GO-
+INSERT INTO [dbo].VersionwiseTblsScript(VerID,SrlNo,TblScript,VAUid,VActr,VATermId,VACompCode) VALUES (4,9,'Alter Table [dbo].[SalesTaxCat] Add EffectiveDate datetime','',1,'.','')
+-GO-
+INSERT INTO [dbo].VersionwiseTblsScript(VerID,SrlNo,TblScript,VAUid,VActr,VATermId,VACompCode) VALUES (4,10,'Alter Table [dbo].[SalesTaxCat] Add AppliedDate datetime','',1,'.','')
+-GO-
+INSERT INTO [dbo].VersionwiseTblsScript(VerID,SrlNo,TblScript,VAUid,VActr,VATermId,VACompCode) VALUES (4,11,'Alter Table [dbo].[SalesTaxCat] Add DateInsert datetime','',1,'.','')
+-GO-
+INSERT INTO [dbo].VersionwiseTblsScript(VerID,SrlNo,TblScript,VAUid,VActr,VATermId,VACompCode) VALUES (4,12,'Alter Table [dbo].[SalesTaxCat] Add ShowRoomCode varchar(32) NULL','',1,'.','')
+-GO-
+INSERT INTO [dbo].VersionwiseTblsScript(VerID,SrlNo,TblScript,VAUid,VActr,VATermId,VACompCode) VALUES (4,13,'Alter Table [dbo].[SalesTaxRevision] Add DateInsert datetime','',1,'.','')
+-GO-
+INSERT INTO [dbo].VersionwiseTblsScript(VerID,SrlNo,TblScript,VAUid,VActr,VATermId,VACompCode) VALUES (4,14,'Alter Table [dbo].[SalesTaxRevision] Add ShowRoomCode varchar(32) NULL','',1,'.','')
+-GO-
+INSERT INTO [dbo].VersionwiseTblsScript(VerID,SrlNo,TblScript,VAUid,VActr,VATermId,VACompCode) VALUES (4,15,'CREATE TABLE [dbo].[SalesTaxRevisionHistory] ([TaxRevisionId] [int] NOT NULL,[DestTaxType][varchar](16) NOT NULL,[ProdTaxType] [varchar](16) NOT NULL,[SrcTaxType][varchar] (16) NOT NULL,[TaxDesc] [varchar](50) NULL,[CompCnt][int] NULL,[T1Name] [varchar](25) NULL,[T1Descr] [varchar](50) NULL,[T1Type] [varchar] (1) NULL,[T1DerivedFormula] [varchar] (256) NULL,[T1CompOn] [varchar](50) NULL,[T1Rate] [money] NULL,[T1TaxInclusive] [bit] NULL ,[T1TaxPrintBill] [bit] NULL ,[T2Name] [varchar] (25)   NULL ,[T2Descr] [varchar] (50)   NULL ,[T2Type] [varchar] (1)   NULL ,[T2DerivedFormula] [varchar] (256)   NULL ,[T2CompOn] [varchar] (50)   NULL ,[T2Rate] [money] NULL ,[T2TaxInclusive] [bit] NULL ,	[T2TaxPrintBill] [bit] NULL ,[T3Name] [varchar] (25)   NULL ,[T3Descr] [varchar] (50)   NULL ,[T3Type] [varchar] (1)   NULL ,[T3DerivedFormula] [varchar] (256)   NULL ,[T3CompOn] [varchar] (50)   NULL ,[T3Rate] [money] NULL ,[T3TaxInclusive] [bit] NULL ,[T3TaxPrintBill] [bit] NULL ,[T4Name] [varchar] (25)   NULL ,[T4Descr] [varchar] (50)   NULL ,[T4Type] [varchar] (1)   NULL ,[T4DerivedFormula] [varchar] (256)   NULL ,[T4CompOn] [varchar] (50)   NULL ,[T4Rate] [money] NULL ,[T4TaxInclusive] [bit] NULL ,[T4TaxPrintBill] [bit] NULL ,[T5Name] [varchar] (25)   NULL ,[T5Descr] [varchar] (50)   NULL ,[T5Type] [varchar] (1)   NULL ,[T5DerivedFormula] [varchar] (256)   NULL ,[T5CompOn] [varchar] (50)   NULL ,[T5Rate] [money] NULL ,[T5TaxInclusive] [bit] NULL ,[T5TaxPrintBill] [bit] NULL ,[HasPreTaxForm] [bit] NULL ,[PreTaxFormName] [varchar] (150)   NULL ,[HasPostTaxForm] [bit] NULL ,[PostTaxFormName] [varchar] (150)   NULL ,[EffectiveDate] [datetime] NULL ,[AppliedDate] [datetime] NULL ,[DateInsert] [datetime] NULL ,[ShowRoomCode] [varchar] (32) NULL,	[VAUid] [varchar] (32)   NULL ,	[VActr] [int] NULL ,	[VATermId] [varchar] (32)   NULL ,	[VACompCode] [varchar] (16)   NULL )','',1,'.','')
+-GO-
+INSERT INTO [dbo].VersionwiseTblsScript(VerID,SrlNo,TblScript,VAUid,VActr,VATermId,VACompCode) VALUES (4,16,'ALTER TABLE [dbo].[SalesTaxRevisionHistory] WITH NOCHECK ADD CONSTRAINT [PK_SalesTaxRevisionHistory] PRIMARY KEY  CLUSTERED ([TaxRevisionId],[ProdTaxType],[SrcTaxType],[DestTaxType]) ','',1,'.','')
+-GO-
+INSERT INTO [dbo].VersionwiseTblsScript(VerID,SrlNo,TblScript,VAUid,VActr,VATermId,VACompCode) VALUES (4,17,'Drop table [dbo].[BakSalesTaxCat]','',1,'.','')
+-GO-
+INSERT INTO [dbo].VersionwiseTblsScript(VerID,SrlNo,TblScript,VAUid,VActr,VATermId,VACompCode) VALUES (4,18,'CREATE TABLE [dbo].[BakSalesTaxCat]([DestTaxType] [varchar](16) NOT NULL,[ProdTaxType] [varchar](16) NOT NULL,[SrcTaxType] [varchar](16) NOT NULL,[TaxDesc] [varchar](50) NULL,[CompCnt] [int] NULL,[T1Name] [varchar](25) NULL,[T1Descr] [varchar](50) NULL,[T1Type] [varchar](1) NULL,[T1DerivedFormula] [varchar](256) NULL,[T1CompOn] [varchar](50)  NULL,[T1Rate] [money] NULL,[T1TaxInclusive] [bit] NULL,[T1TaxPrintBill] [bit] NULL,[T2Name] [varchar](25) NULL,[T2Descr] [varchar](50) NULL,[T2Type] [varchar](1) NULL,[T2DerivedFormula] [varchar](256) NULL,[T2CompOn] [varchar](50) NULL,[T2Rate] [money] NULL,[T2TaxInclusive] [bit] NULL,[T2TaxPrintBill] [bit] NULL,[T3Name] [varchar](25) NULL,[T3Descr] [varchar](50) NULL,[T3Type] [varchar](1) NULL,[T3DerivedFormula] [varchar](256) NULL,[T3CompOn] [varchar](50) NULL,[T3Rate] [money] NULL,[T3TaxInclusive] [bit] NULL,[T3TaxPrintBill] [bit] NULL,[T4Name] [varchar](25) NULL,[T4Descr] [varchar](50) NULL,[T4Type] [varchar](1) NULL,[T4DerivedFormula] [varchar](256) NULL,[T4CompOn] [varchar](50) NULL,[T4Rate] [money] NULL,[T4TaxInclusive] [bit] NULL,[T4TaxPrintBill] [bit] NULL,[T5Name] [varchar](25) NULL,[T5Descr] [varchar](50) NULL,[T5Type] [varchar](1) NULL,[T5DerivedFormula] [varchar](256) NULL,[T5CompOn] [varchar](50) NULL,[T5Rate] [money] NULL,[T5TaxInclusive] [bit] NULL,[T5TaxPrintBill] [bit] NULL,[HasPreTaxForm] [bit] NULL,[PreTaxFormName] [varchar](150) NULL,[HasPostTaxForm] [bit] NULL,[PostTaxFormName] [varchar](150) NULL,[VAUid] [varchar](32) NULL,[VActr] [int] NULL,[VATermId] [varchar](32) NULL,[VACompCode] [varchar](16) NULL,[TaxRevisionId] [int] NULL,[EffectiveDate] [datetime] NULL,[AppliedDate] [datetime] NULL,[DateInsert] [datetime] NULL,[ShowRoomCode] [varchar](32) NULL,[UpdFlag] [varchar](1) NULL)','',1,'.','')
+-GO-
+INSERT INTO [dbo].VersionwiseTblsScript(VerID,SrlNo,TblScript,VAUid,VActr,VATermId,VACompCode) VALUES (4,19,'Drop table [dbo].[BakSalesTaxRevision]','',1,'.','')
+-GO-
+INSERT INTO [dbo].VersionwiseTblsScript(VerID,SrlNo,TblScript,VAUid,VActr,VATermId,VACompCode) VALUES (4,20,'CREATE TABLE [dbo].[BakSalesTaxRevision]([TaxRevisionId] [int] NOT NULL,[DestTaxType] [varchar](16)NOT NULL,[ProdTaxType] [varchar](16)NOT NULL,[SrcTaxType] [varchar](16) NOT NULL,[TaxDesc] [varchar](50)NULL,[CompCnt] [int] NULL,[T1Name] [varchar](25) NULL,[T1Descr] [varchar](50)NULL,[T1Type] [varchar](1)NULL,[T1DerivedFormula] [varchar](256) NULL,[T1CompOn] [varchar](50) NULL,[T1Rate] [money] NULL,[T1TaxInclusive] [bit] NULL,[T1TaxPrintBill] [bit] NULL,[T2Name] [varchar](25) NULL,[T2Descr] [varchar](50) NULL,[T2Type] [varchar](1) NULL,[T2DerivedFormula] [varchar](256) NULL,[T2CompOn] [varchar](50) NULL,[T2Rate] [money] NULL,[T2TaxInclusive] [bit] NULL,[T2TaxPrintBill] [bit] NULL,[T3Name] [varchar](25) NULL,[T3Descr] [varchar](50)NULL,[T3Type] [varchar](1)NULL,[T3DerivedFormula] [varchar](256) NULL,[T3CompOn] [varchar](50) NULL,[T3Rate] [money] NULL,[T3TaxInclusive] [bit] NULL,[T3TaxPrintBill] [bit] NULL,[T4Name] [varchar](25) NULL,[T4Descr] [varchar](50) NULL,[T4Type] [varchar](1)NULL,[T4DerivedFormula] [varchar](256) NULL,[T4CompOn] [varchar](50) NULL,[T4Rate] [money] NULL,[T4TaxInclusive] [bit] NULL,[T4TaxPrintBill] [bit] NULL,[T5Name] [varchar](25) NULL,[T5Descr] [varchar](50) NULL,[T5Type] [varchar](1) NULL,[T5DerivedFormula] [varchar](256) NULL,[T5CompOn] [varchar](50)NULL,[T5Rate] [money] NULL,[T5TaxInclusive] [bit] NULL,[T5TaxPrintBill] [bit] NULL,[HasPreTaxForm] [bit] NULL,[PreTaxFormName] [varchar](150)NULL,[HasPostTaxForm] [bit] NULL,[PostTaxFormName] [varchar](150)  NULL,[EffectiveDate] [datetime] NULL,[AppliedDate] [datetime] NULL,[VAUid] [varchar](32) NULL,[VActr] [int] NULL,[VATermId] [varchar](32) NULL,[VACompCode] [varchar](16) NULL,[DateInsert] [datetime] NULL,[ShowRoomCode] [varchar](32) NULL,[UpdFlag] [varchar](1) NULL) ','',1,'.','')
+-GO-
+INSERT INTO [dbo].VersionwiseTblsScript(VerID,SrlNo,TblScript,VAUid,VActr,VATermId,VACompCode) VALUES (4,21,'Drop table [dbo].[BakSalesTaxRevisionHistory]','',1,'.','')
+-GO-
+INSERT INTO [dbo].VersionwiseTblsScript(VerID,SrlNo,TblScript,VAUid,VActr,VATermId,VACompCode) VALUES (4,22,'CREATE TABLE [dbo].[BakSalesTaxRevisionHistory]([TaxRevisionId] [int] NOT NULL,[DestTaxType] [varchar](16)NOT NULL,[ProdTaxType] [varchar](16)NOT NULL,[SrcTaxType] [varchar](16)NOT NULL,[TaxDesc] [varchar](50) NULL,[CompCnt] [int] NULL,[T1Name] [varchar](25) NULL,[T1Descr] [varchar](50) NULL,[T1Type] [varchar](1)NULL,[T1DerivedFormula] [varchar](256) NULL,[T1CompOn] [varchar](50) NULL,[T1Rate] [money] NULL,[T1TaxInclusive] [bit] NULL,[T1TaxPrintBill] [bit] NULL,[T2Name] [varchar](25) NULL,[T2Descr] [varchar](50) NULL,[T2Type] [varchar](1) NULL,[T2DerivedFormula] [varchar](256) NULL,[T2CompOn] [varchar](50) NULL,[T2Rate] [money] NULL,[T2TaxInclusive] [bit] NULL,[T2TaxPrintBill] [bit] NULL,[T3Name] [varchar](25) NULL,[T3Descr] [varchar](50) NULL,[T3Type] [varchar](1) NULL,[T3DerivedFormula] [varchar](256) NULL,[T3CompOn] [varchar](50) NULL,[T3Rate] [money] NULL,[T3TaxInclusive] [bit] NULL,[T3TaxPrintBill] [bit] NULL,[T4Name] [varchar](25) NULL,[T4Descr] [varchar](50) NULL,[T4Type] [varchar](1)  NULL,[T4DerivedFormula] [varchar](256)NULL,[T4CompOn] [varchar](50) NULL,[T4Rate] [money] NULL,[T4TaxInclusive] [bit] NULL,[T4TaxPrintBill] [bit] NULL,[T5Name] [varchar](25) NULL,[T5Descr] [varchar](50) NULL,[T5Type] [varchar](1)NULL,[T5DerivedFormula] [varchar](256) NULL,[T5CompOn] [varchar](50) NULL,[T5Rate] [money] NULL,[T5TaxInclusive] [bit] NULL,[T5TaxPrintBill] [bit] NULL,[HasPreTaxForm] [bit] NULL,[PreTaxFormName] [varchar](150) NULL,[HasPostTaxForm] [bit] NULL,[PostTaxFormName] [varchar](150) NULL,[EffectiveDate] [datetime] NULL,	[AppliedDate] [datetime] NULL,[DateInsert] [datetime] NULL,[ShowRoomCode] [varchar](32)  NULL,[VAUid] [varchar](32) NULL,[VActr] [int] NULL,[VATermId] [varchar](32) NULL,[VACompCode] [varchar](16)  NULL,[UpdFlag] [varchar](1)  NULL)','',1,'.','')
+-GO-
+INSERT INTO SALESTAXREVISIONHISTORY (TaxRevisionId,ShowRoomCode,DestTaxType,ProdTaxType,SrcTaxType,TaxDesc,CompCnt,T1Name,T1Descr,T1Type,T1DerivedFormula,T1CompOn,T1Rate,T1TaxInclusive,T1TaxPrintBill,T2Name,T2Descr,T2Type,T2DerivedFormula,T2CompOn,T2Rate,T2TaxInclusive,T2TaxPrintBill,T3Name,T3Descr,T3Type,T3DerivedFormula,T3CompOn,T3Rate,T3TaxInclusive,T3TaxPrintBill,T4Name,T4Descr,T4Type,T4DerivedFormula,T4CompOn,T4Rate,T4TaxInclusive,T4TaxPrintBill,T5Name,T5Descr,T5Type,T5DerivedFormula,T5CompOn,T5Rate,T5TaxInclusive,T5TaxPrintBill,HasPreTaxForm,PreTaxFormName,HasPostTaxForm,PostTaxFormName,DateInsert,EffectiveDate,AppliedDate,VAUid,VActr,VATermId,VACompCode) SELECT TaxRevisionId,ShowRoomCode,DestTaxType,ProdTaxType,SrcTaxType,TaxDesc,CompCnt,T1Name,T1Descr,T1Type,T1DerivedFormula,T1CompOn,T1Rate,T1TaxInclusive,T1TaxPrintBill,T2Name,T2Descr,T2Type,T2DerivedFormula,T2CompOn,T2Rate,T2TaxInclusive,T2TaxPrintBill,T3Name,T3Descr,T3Type,T3DerivedFormula,T3CompOn,T3Rate,T3TaxInclusive,T3TaxPrintBill,T4Name,T4Descr,T4Type,T4DerivedFormula,T4CompOn,T4Rate,T4TaxInclusive,T4TaxPrintBill,T5Name,T5Descr,T5Type,T5DerivedFormula,T5CompOn,T5Rate,T5TaxInclusive,T5TaxPrintBill,HasPreTaxForm,PreTaxFormName,HasPostTaxForm,PostTaxFormName,DateInsert,EffectiveDate,AppliedDate,VAUid,VActr,VATermId,VACompCode FROM [dbo].SALESTAXCAT
+-GO-
+Update [dbo].VersionwiseTblsScript Set Vactr = (select intg from [dbo].sysparam where paramcode = 'VaSysCounter') where VerId=4
+-GO-
+COMMIT TRANSACTION
+
+  </s9qScript>	
+</s9qsqlblk>
+
+
+<s9qsqlblk>
+  <s9qScriptid>S9Q_013_9_0023</s9qScriptid> 
+  <s9qtitle></s9qtitle>
+  <s9qpgmtype>I</s9qpgmtype>
+  <s9qpgmtype>L</s9qpgmtype>
+  <s9qversion>*</s9qversion>
+  <s9qenvironment>P</s9qenvironment>
+  <s9qenvironment>R</s9qenvironment>
+  <s9qRunMultiple>1</s9qRunMultiple>
+  <s9qQryType>DLL</s9qQryType>
+  <s9qScript>BackTableCreation.clsBackTabCrt</s9qScript>		
+</s9qsqlblk>

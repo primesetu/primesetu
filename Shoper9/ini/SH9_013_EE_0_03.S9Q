@@ -1,0 +1,2358 @@
+<s9qsqlblk>
+  <s9qScriptid>	S9Q_013_0_0008	</s9qScriptid>
+  <s9qtitle>All DDL Statements.</s9qtitle>
+  <s9qpgmtype>I</s9qpgmtype>
+  <s9qversion>*</s9qversion>
+  <s9qenvironment>P</s9qenvironment>
+  <s9qenvironment>R</s9qenvironment>
+  <s9qRunMultiple>1</s9qRunMultiple>
+  <s9qQryType>DML</s9qQryType>
+  <s9qScript>
+update agentactivity set hocompcd='HHHH', Vactr = (select intg from sysparam where paramcode = 'VaSysCounter')  where hocompcd is NULL
+</s9qScript>
+</s9qsqlblk>
+
+<s9qsqlblk>
+  <s9qScriptID>S9Q_013_0_0009</s9qScriptID>
+  <s9qtitle></s9qtitle>
+  <s9qpgmtype>L</s9qpgmtype>
+  <s9qversion>*</s9qversion>
+  <s9qenvironment>P</s9qenvironment>
+  <s9qRunMultiple>0</s9qRunMultiple>
+  <s9qQryType>DML</s9qQryType>
+  <s9qScript>		
+	Update genlookup set vacompcode= (Select txt from sysparam where paramcode='CompanyCode') where (vacompcode is null or vacompcode='')
+  </s9qScript>		
+</s9qsqlblk>
+
+<s9qsqlblk>
+  <s9qScriptID>	S9Q_013_0_0010	</s9qScriptID>
+  <s9qtitle></s9qtitle>
+  <s9qpgmtype>L</s9qpgmtype>
+  <s9qversion>*</s9qversion>
+  <s9qenvironment>P</s9qenvironment>
+  <s9qRunMultiple>0</s9qRunMultiple>
+  <s9qQryType>DML</s9qQryType>
+  <s9qScript>		
+Update Sysparam Set Txt = 'N09#N10#N11#N12#N13#N14#N15#N16#N17' Where paramcode = 'BrowseDescString2' and Txt <> 'N09#N10#N11#N12#N13#N14#N15#N16#N17'
+-GO-
+Update sysparam set txt ='BILL SUSPENSION#SALES ADVICE SLIP#SALES ORDER#BRIDAL REGISTRY#APPROVAL ISSUES#APPROVAL RECEIPTS#TAILORING ORDER#SALES DC#APPROVAL ISSUE DC#DISPATCH ADVICE' WHERE PARAMCODE='EXPTTRNTITLE' and txt <>'BILL SUSPENSION#SALES ADVICE SLIP#SALES ORDER#BRIDAL REGISTRY#APPROVAL ISSUES#APPROVAL RECEIPTS#TAILORING ORDER#SALES DC#APPROVAL ISSUE DC#DISPATCH ADVICE'
+  </s9qScript>		
+</s9qsqlblk>
+
+<s9qsqlblk>
+  <s9qScriptID>	S9Q_013_0_0011	</s9qScriptID>
+  <s9qtitle></s9qtitle>
+  <s9qpgmtype>L</s9qpgmtype>
+  <s9qversion>*</s9qversion>
+  <s9qenvironment>P</s9qenvironment>
+  <s9qRunMultiple>0</s9qRunMultiple>
+  <s9qQryType>DML</s9qQryType>
+  <s9qScript>		
+Update genlookupextd Set Additional1 = '01' where recid in (70,71) and Additional1 <> '01' 
+  </s9qScript>		
+</s9qsqlblk>
+
+
+<s9qsqlblk>
+  <s9qScriptID>	S9Q_013_0_0012	</s9qScriptID>
+  <s9qtitle></s9qtitle>
+  <s9qpgmtype>L</s9qpgmtype>
+  <s9qversion>*</s9qversion>
+  <s9qenvironment>P</s9qenvironment>
+  <s9qRunMultiple>0</s9qRunMultiple>
+  <s9qQryType>DML</s9qQryType>
+  <s9qScript>		
+Update Sysparam Set Txt = 'BAK#TMP#XTMP#MSYS#TEMP#AST#PASTE#RST#SDR#DTP#SYS#DCREF#PTHDR#PTDTL#RST#SDR#COPY#PASTE#DCREF#GLOBAL#PHYTMP#REP#AST#LOG#LST#RPT#TALLY#XSP' Where paramcode = 'TempTableToSkipFromAST1' and len(txt) < 135
+  </s9qScript>		
+</s9qsqlblk>
+
+<s9qsqlblk>
+  <s9qScriptID>	S9Q_013_0_0013	</s9qScriptID>
+  <s9qtitle></s9qtitle>
+  <s9qpgmtype>L</s9qpgmtype>
+  <s9qversion>*</s9qversion>
+  <s9qenvironment>P</s9qenvironment>
+  <s9qRunMultiple>0</s9qRunMultiple>
+  <s9qQryType>DML</s9qQryType>
+  <s9qScript>		
+update genlookup set [number] = (select isnull(max(TrnCtrlNo)+1,1) from franchiseetrans where TrnAccType = '1') where recid = 101 and code = '5000'
+-GO-
+update genlookup set [number] = (select isnull(max(TrnCtrlNo)+1,1) from franchiseetrans where TrnAccType = '2') where recid = 101 and code = '5100'
+  </s9qScript>		
+</s9qsqlblk>	
+
+<s9qsqlblk>
+  <s9qScriptID>	S9Q_013_0_0014	</s9qScriptID>
+  <s9qtitle></s9qtitle>
+  <s9qpgmtype>L</s9qpgmtype>
+  <s9qversion>*</s9qversion>
+  <s9qenvironment>P</s9qenvironment>
+  <s9qRunMultiple>0</s9qRunMultiple>
+  <s9qQryType>DML</s9qQryType>
+  <s9qScript>		
+INSERT INTO GENLOOKUP SELECT 102,'PO+' + PONOPREFIX,'PO#Purchase Order',NULL,MAX(POCTRLNO+1),'super',(select intg from sysparam where paramcode = 'VaSysCounter'),'.',(select txt from sysparam where paramcode = 'CompanyCode') FROM PURCHORDHDR WHERE 'PO+' + PONOPREFIX NOT IN (SELECT CODE FROM GENLOOKUP WHERE RECID = 102) GROUP BY PONOPREFIX
+-GO-
+insert into genlookup select 101,'2100','Sales',null,1,'super',(select intg from sysparam where paramcode = 'VaSysCounter'),'.',(select txt from sysparam where paramcode = 'CompanyCode')
+-GO-
+update genlookup set number=(select isnull(max(TrnCtrlNo),0)+1 from stktrnhdr where trntype=2100) where recid=101 and code='2100'
+-GO-
+insert into genlookup select 101,'1600','Void Sales',null,0,'super',(select intg from sysparam where paramcode = 'VaSysCounter'),'.',(select txt from sysparam where paramcode = 'CompanyCode')
+-GO-
+update genlookup set number=(select isnull(max(TrnCtrlNo),0)+1 from stktrnhdr where trntype=1600)  where recid=101 and code='1600'
+-GO-
+insert into genlookup select 101,'1300','Sales Return',null,0,'super',(select intg from sysparam where paramcode = 'VaSysCounter'),'.',(select txt from sysparam where paramcode = 'CompanyCode')
+-GO-
+update genlookup set number=(select isnull(max(TrnCtrlNo),0)+1 from stktrnhdr where trntype=1300)  where recid=101 and code='1300'
+-GO-
+insert into genlookup select 101,'4000','Pos Cash',null,0,'super',(select intg from sysparam where paramcode = 'VaSysCounter'),'.',(select txt from sysparam where paramcode = 'CompanyCode')
+-GO-
+update genlookup set number=(select isnull(max(CtrlNo),0)+1 from Poscashtrn)  where recid=101 and code='4000'
+-GO-
+update genlookup set Number=(select isnull(max(Docno),0)+1 from poscashtrn where entrytype=13 and DocNoPrefix= (select reverse(left(reverse(code),charindex('+',reverse(code),1)-1 )) from genlookup where recid=102 and code like '4000+13+%'))  where recid=102 and code like '4000+13+%'
+-GO-
+Update Genlookup Set Descr = Code  Where Descr is NULL
+  </s9qScript>		
+</s9qsqlblk>
+
+
+<s9qsqlblk>
+  <s9qScriptID>	S9Q_013_0_0015	</s9qScriptID>
+  <s9qtitle></s9qtitle>
+  <s9qpgmtype>L</s9qpgmtype>
+  <s9qversion>*</s9qversion>
+  <s9qenvironment>P</s9qenvironment>
+  <s9qRunMultiple>0</s9qRunMultiple>
+  <s9qQryType>DML</s9qQryType>
+  <s9qScript>		
+Update Sysparam Set Descr = 'Allow Blank Size'  Where [Id] = '000008'
+-GO-
+Update Sysparam Set Descr = 'Extended Item Description applicable'  Where [Id] = '000011'
+-GO-
+Update Sysparam Set Descr = 'Shoper Opening Date'  Where [Id] = '000014'
+-GO-
+Update Sysparam Set Descr = 'Shoper System Status'  Where [Id] = '000015'
+-GO-
+Update Sysparam Set Descr = 'Item Classification1 Caption'  Where [Id] = '00001A'
+-GO-
+Update Sysparam Set Descr = 'Item Classification1 Code is Generated'  Where [Id] = '00001B'
+-GO-
+Update Sysparam Set Descr = 'Item Classification2 Caption'  Where [Id] = '00002A'
+-GO-
+Update Sysparam Set Descr = 'Item Classification2 Code is Generated'  Where [Id] = '00002B'
+-GO-
+Update Sysparam Set Descr = 'Multi Location Installation'  Where [Id] = '000032'
+-GO-
+Update Sysparam Set Descr = 'Allow Selection of Prefix from a list of document prefixes in Billing'  Where [Id] = '000032B'
+-GO-
+Update Sysparam Set Descr = 'Default Location for Billing'  Where [Id] = '000033'
+-GO-
+Update Sysparam Set Descr = 'Partial Receipt Against Purchase Orders Allowed'  Where [Id] = '000034'
+-GO-
+Update Sysparam Set Descr = 'Item Sub-Classification1 Present'  Where [Id] = '00003A'
+-GO-
+Update Sysparam Set Descr = 'Item Sub-Classification1 Caption'  Where [Id] = '00003B'
+-GO-
+Update Sysparam Set Descr = 'Customer Code User Assigned'  Where [Id] = '000040'
+-GO-
+Update Sysparam Set Descr = 'Item Sub-Classification2 Present'  Where [Id] = '00004A'
+-GO-
+Update Sysparam Set Descr = 'Item Sub-Classification2 Caption'  Where [Id] = '00004B'
+-GO-
+Update Sysparam Set Descr = 'Allow insertions to Sub-Classification2(Shade) on the fly'  Where [Id] = '00004C'
+-GO-
+Update Sysparam Set Descr = 'Item Size/Pack/UOM Present'  Where [Id] = '00005A'
+-GO-
+Update Sysparam Set Descr = 'Item Size/Pack/UOM Caption'  Where [Id] = '00005B'
+-GO-
+Update Sysparam Set Descr = 'Allow insertion of new Item Size on the fly'  Where [Id] = '00005C'
+-GO-
+Update Sysparam Set Descr = 'Sub-classification1 (Style) unique across Classification1 (Product) and Classification2 (Brand)'  Where [Id] = '00006A'
+-GO-
+Update Sysparam Set Descr = 'Maintain look-up for Sub-classification1(Style)'  Where [Id] = '00006B'
+-GO-
+Update Sysparam Set Descr = 'Minimum Length of Sub-classification1(Style)'  Where [Id] = '00006C'
+-GO-
+Update Sysparam Set Descr = 'Max Length of Sub-classification1(Style)'  Where [Id] = '00006D'
+-GO-
+Update Sysparam Set Descr = 'Allow Insertions to Sub-classification1(Style) on the fly'  Where [Id] = '00006E'
+-GO-
+Update Sysparam Set Descr = 'Allow Blank Sub-classification1(Style)'  Where [Id] = '00006F'
+-GO-
+Update Sysparam Set Descr = 'Maintain Sub-classification2(Shade) Catalogue'  Where [Id] = '00007A'
+-GO-
+Update Sysparam Set Descr = 'Sub-classification2(Shade) Unique across Classification1 (Product) and Classification2 (Brand)'  Where [Id] = '00007B'
+-GO-
+Update Sysparam Set Descr = 'Allow Blank Sub-classification2(Shade)'  Where [Id] = '00007C'
+-GO-
+Update Sysparam Set Descr = 'Retail Price Applicable Y/N'  Where [Id] = '00009A'
+-GO-
+Update Sysparam Set Descr = 'Allow Billing at Retail Price Y/N'  Where [Id] = '00009B'
+-GO-
+Update Sysparam Set Descr = 'Retail Price is Tax Inclusive'  Where [Id] = '00009C'
+-GO-
+Update Sysparam Set Descr = 'Dealer Price Applicable Y/N'  Where [Id] = '00010A'
+-GO-
+Update Sysparam Set Descr = 'Allow Billing at Dealer Price Y/N'  Where [Id] = '00010B'
+-GO-
+Update Sysparam Set Descr = 'Shoper Company Code'  Where [Id] = '00012A'
+-GO-
+Update Sysparam Set Descr = 'Shoper Company Name'  Where [Id] = '00012B'
+-GO-
+Update Sysparam Set Descr = 'State (Local) Sales Tax Registration Number'  Where [Id] = '00012C'
+-GO-
+Update Sysparam Set Descr = 'Central (Federal) Sales Tax Registration Number'  Where [Id] = '00012D'
+-GO-
+Update Sysparam Set Descr = 'Shoper IN Files Path'  Where [Id] = '00013A'
+-GO-
+Update Sysparam Set Descr = 'Shoper Profile Files Path'  Where [Id] = '00013B'
+-GO-
+Update Sysparam Set Descr = 'Billing Stationery Type'  Where [Id] = '000150'
+-GO-
+Update Sysparam Set Descr = 'Size Groups Applicable'  Where [Id] = '00016A'
+-GO-
+Update Sysparam Set Descr = 'Size Group Look-Up Rec Id'  Where [Id] = '00016B'
+-GO-
+Update Sysparam Set Descr = 'Batch Serial Number Applicable'  Where [Id] = '00018A'
+-GO-
+Update Sysparam Set Descr = 'Allow Blank Batch Serial Number'  Where [Id] = '00018B'
+-GO-
+Update Sysparam Set Descr = 'Can Price Vary between Batch Serial Numbers'  Where [Id] = '00018C'
+-GO-
+Update Sysparam Set Descr = 'Maintain Batch Serial No. in Stock Transaction Summary'  Where [Id] = '00018D'
+-GO-
+Update Sysparam Set Descr = 'Customer Classification1 Applicable'  Where [Id] = '00019A'
+-GO-
+Update Sysparam Set Descr = 'Customer Classification1 Caption'  Where [Id] = '00019B'
+-GO-
+Update Sysparam Set Descr = 'Customer Classification1 Look-up Rec-Id'  Where [Id] = '00019C'
+-GO-
+Update Sysparam Set Descr = 'Customer Classification2 Applicable'  Where [Id] = '00020A'
+-GO-
+Update Sysparam Set Descr = 'Customer Classification2 Caption' Where [Id] = '00020B'
+-GO-
+Update Sysparam Set Descr = 'Customer Classification2 Look-up Rec-Id' Where [Id] = '00020C'
+-GO-
+Update Sysparam Set Descr = 'Customer Classification3 Applicable' Where [Id] = '00021A'
+-GO-
+Update Sysparam Set Descr = 'Customer Classification3 Caption' Where [Id] = '00021B'
+-GO-
+Update Sysparam Set Descr = 'Customer Classification3 Look-up Rec-Id' Where [Id] = '00021C'
+-GO-
+Update Sysparam Set Descr = 'Customer Classification4 Applicable' Where [Id] = '00022A'
+-GO-
+Update Sysparam Set Descr = 'Customer Classification4 Caption' Where [Id] = '00022B'
+-GO-
+Update Sysparam Set Descr = 'Customer Classification4 Look-up Rec-Id' Where [Id] = '00022C'
+-GO-
+Update Sysparam Set Descr = 'Customer Classification5 Applicable' Where [Id] = '00023A'
+-GO-
+Update Sysparam Set Descr = 'Customer Classification5 Caption' Where [Id] = '00023B'
+-GO-
+Update Sysparam Set Descr = 'Customer Classification5 Look-up Rec-Id' Where [Id] = '00023C'
+-GO-
+Update Sysparam Set Descr = 'Shoper Application Segment' Where [Id] = '00024A'
+-GO-
+Update Sysparam Set Descr = 'Jewellry Segment' Where [Id] = '00024B'
+-GO-
+Update Sysparam Set Descr = 'SHOPER Environment' Where [Id] = '00026A'
+-GO-
+Update Sysparam Set Descr = 'Retail Environment True' Where [Id] = '00026R'
+-GO-
+Update Sysparam Set Descr = 'Wholesale Environment True' Where [Id] = '00026W'
+-GO-
+Update Sysparam Set Descr = 'Stock Module Present' Where [Id] = '00028A'
+-GO-
+Update Sysparam Set Descr = 'Accounting Module Present' Where [Id] = '00028B'
+-GO-
+Update Sysparam Set Descr = 'Product-wise Sales Tax Applicable' Where [Id] = '00035A'
+-GO-
+Update Sysparam Set Descr = 'Product-wise Sales Tax Type Look-up Rec-Id' Where [Id] = '00035B'
+-GO-
+Update Sysparam Set Descr = 'Source-wise Tax Grouping Applicable' Where [Id] = '00036A'
+-GO-
+Update Sysparam Set Descr = 'Source-wise Sales Tax Type Look-up Rec-Id' Where [Id] = '00036B'
+-GO-
+Update Sysparam Set Descr = 'Destination-wise Tax Grouping Applicable' Where [Id] = '00037A'
+-GO-
+Update Sysparam Set Descr = 'Destination-wise Sales Tax Type Look-up Rec-Id' Where [Id] = '00037B'
+-GO-
+Update Sysparam Set Descr = 'Goods Inward Physical Verification Applicable' Where [Id] = '00038A'
+-GO-
+Update Sysparam Set Descr = 'Allow Goods Inward without PO Reference' Where [Id] = '00038B'
+-GO-
+Update Sysparam Set Descr = 'Location wise Stock Transaction Summary Maintained' Where [Id] = '00039A'
+-GO-
+Update Sysparam Set Descr = 'Customer Profile1 Used' Where [Id] = '00041A'
+-GO-
+Update Sysparam Set Descr = 'Customer Profile1 Caption' Where [Id] = '00041B'
+-GO-
+Update Sysparam Set Descr = 'Customer Profile1 Look-Up Rec-Id' Where [Id] = '00041C'
+-GO-
+Update Sysparam Set Descr = 'Customer Profile2 Used' Where [Id] = '00042A'
+-GO-
+Update Sysparam Set Descr = 'Customer Profile2 Caption' Where [Id] = '00042B'
+-GO-
+Update Sysparam Set Descr = 'Customer Profile2 Look-up Rec-Id' Where [Id] = '00042C'
+-GO-
+Update Sysparam Set Descr = 'Customer Profile3 Used' Where [Id] = '00043A'
+-GO-
+Update Sysparam Set Descr = 'Customer Profile3 Caption' Where [Id] = '00043B'
+-GO-
+Update Sysparam Set Descr = 'Customer Profile3 Look-up Rec-Id' Where [Id] = '00043C'
+-GO-
+Update Sysparam Set Descr = 'Customer Profile4 Used' Where [Id] = '00044A'
+-GO-
+Update Sysparam Set Descr = 'Customer Profile4 Caption' Where [Id] = '00044B'
+-GO-
+Update Sysparam Set Descr = 'Customer Profile4 Look-up Rec-Id' Where [Id] = '00044C'
+-GO-
+Update Sysparam Set Descr = 'Customer Profile5 Used' Where [Id] = '00045A'
+-GO-
+Update Sysparam Set Descr = 'Customer Profile5 Caption' Where [Id] = '00045B'
+-GO-
+Update Sysparam Set Descr = 'Customer Profile5 Look-up Rec-Id' Where [Id] = '00045C'
+-GO-
+Update Sysparam Set Descr = 'Jewellry Segment Parameter: Is Gross Weight Variable' Where [Id] = '00046A'
+-GO-
+Update Sysparam Set Descr = 'Jewellry Segment Parameter: Max Variation Allowed (%)' Where [Id] = '00046B'
+-GO-
+Update Sysparam Set Descr = 'Item Analysis Code1 Present' Where [Id] = '00047A'
+-GO-
+Update Sysparam Set Descr = 'Item Analysis Code1 Caption' Where [Id] = '00047B'
+-GO-
+Update Sysparam Set Descr = 'Item Analysis Code1 Look-up Rec Id' Where [Id] = '00047C'
+-GO-
+Update Sysparam Set Descr = 'Item Analysis Code2  Present' Where [Id] = '00048A'
+-GO-
+Update Sysparam Set Descr = 'Item Analysis Code2 Caption' Where [Id] = '00048B'
+-GO-
+Update Sysparam Set Descr = 'Item Analysis Code2 Look-up Rec Id' Where [Id] = '00048C'
+-GO-
+Update Sysparam Set Descr = 'Item Analysis Code3  Present' Where [Id] = '00050A'
+-GO-
+Update Sysparam Set Descr = 'Item Analysis Code3 Caption' Where [Id] = '00050B'
+-GO-
+Update Sysparam Set Descr = 'Item Analysis Code3 Look-up Rec Id' Where [Id] = '00050C'
+-GO-
+Update Sysparam Set Descr = 'Item Analysis Code4  Present' Where [Id] = '00051A'
+-GO-
+Update Sysparam Set Descr = 'Item Analysis Code4 Caption' Where [Id] = '00051B'
+-GO-
+Update Sysparam Set Descr = 'Item Analysis Code4 Look-up Rec Id' Where [Id] = '00051C'
+-GO-
+Update Sysparam Set Descr = 'Item Analysis Code5  Present' Where [Id] = '00052A'
+-GO-
+Update Sysparam Set Descr = 'Item Analysis Code5 Caption' Where [Id] = '00052B'
+-GO-
+Update Sysparam Set Descr = 'Item Analysis Code5 Look-up Rec Id' Where [Id] = '00052C'
+-GO-
+Update Sysparam Set Descr = 'Item Super Classification1 Present' Where [Id] = '00053A'
+-GO-
+Update Sysparam Set Descr = 'Item Super Classification1 Look-up Rec Id' Where [Id] = '00053B'
+-GO-
+Update Sysparam Set Descr = 'Item Super Classification1 Caption' Where [Id] = '00053C'
+-GO-
+Update Sysparam Set Descr = 'Item Super Classification2 Present' Where [Id] = '00054A'
+-GO-
+Update Sysparam Set Descr = 'Item Super Classification2 Look-up Rec Id' Where [Id] = '00054B'
+-GO-
+Update Sysparam Set Descr = 'Item Super Classification2 Caption' Where [Id] = '00054C'
+-GO-
+Update Sysparam Set Descr = 'User Assigned Stock Number' Where [Id] = '00055A'
+-GO-
+Update Sysparam Set Descr = 'Stock Number generation methodology param' Where [Id] = '00055B'
+-GO-
+Update Sysparam Set Descr = 'Discounts Applicable' Where [Id] = '00056A'
+-GO-
+Update Sysparam Set Descr = 'Discount Look-up Id' Where [Id] = '00056B'
+-GO-
+Update Sysparam Set Descr = 'Add-ons Applicable in Billing' Where [Id] = '00057A'
+-GO-
+Update Sysparam Set Descr = 'Add-ons Look-up Id' Where [Id] = '00057B'
+-GO-
+Update Sysparam Set Descr = 'Deductions Applicable in Billing' Where [Id] = '00058A'
+-GO-
+Update Sysparam Set Descr = 'Deductions Look-up Id' Where [Id] = '00058B'
+-GO-
+Update Sysparam Set Descr = 'Allow Multiple Price Factors in a bill for a single item' Where [Id] = '00059A'
+-GO-
+Update Sysparam Set Descr = 'Allow Multiple Discounts in a bill for a single Item' Where [Id] = '00059B'
+-GO-
+Update Sysparam Set Descr = 'Allow User Selection for Rate of Issue (Outwards)' Where [Id] = '00060A'
+-GO-
+Update Sysparam Set Descr = 'Rate to be applied in Goods Outwards - Misc Issue (if above is False)' Where [Id] = '00060B'
+-GO-
+Update Sysparam Set Descr = 'Rate to pre-display in Goods Outwards - Misc Issues (if above is 3)' Where [Id] = '00060C'
+-GO-
+Update Sysparam Set Descr = 'Least Saleable Quantity on Item Selection - Misc. Issue' Where [Id] = '00061A'
+-GO-
+Update Sysparam Set Descr = 'Stock check in Goods Outwards - Misc. Issue' Where [Id] = '00061B'
+-GO-
+Update Sysparam Set Descr = 'Least Saleable Quantity on Item Selection in Purchase Returns' Where [Id] = '00062A'
+-GO-
+Update Sysparam Set Descr = 'Stock check in Goods Outwards - Purchase Returns' Where [Id] = '00062B'
+-GO-
+Update Sysparam Set Descr = 'Apply Least Saleable Quantity on item selection in Goods Inwards' Where [Id] = '00062C'
+-GO-
+Update Sysparam Set Descr = 'Least Saleable Quantity on Item Selection in Transfer Out' Where [Id] = '00063A'
+-GO-
+Update Sysparam Set Descr = 'Stock check in Goods Outwards - Transfer Out' Where [Id] = '00063B'
+-GO-
+Update Sysparam Set Descr = 'Least Saleable Quantity on Item Selection in Approval Issues' Where [Id] = '00064A'
+-GO-
+Update Sysparam Set Descr = 'Stock check in Goods Outwards - Approval Issue' Where [Id] = '00064B'
+-GO-
+Update Sysparam Set Descr = 'Allow Service Billing' Where [Id] = '00100A'
+-GO-
+Update Sysparam Set Descr = 'Credit Billing Allowed' Where [Id] = '00100B'
+-GO-
+Update Sysparam Set Descr = 'Accept Customer Id in Billing' Where [Id] = '00101A'
+-GO-
+Update Sysparam Set Descr = 'Accept Sales Man Id in Bill' Where [Id] = '00101B'
+-GO-
+Update Sysparam Set Descr = 'Personnel Type applicable for Sales man' Where [Id] = '00101C'
+-GO-
+Update Sysparam Set Descr = 'Club Duplicate Items in Bill' Where [Id] = '00103A'
+-GO-
+Update Sysparam Set Descr = 'Allow Service Items in a Product Bill' Where [Id] = '00103B'
+-GO-
+Update Sysparam Set Descr = 'Apply Least Saleable Quantity on Item Selection in Billing' Where [Id] = '00104A'
+-GO-
+Update Sysparam Set Descr = 'Check Stock on Item Selection in Billing' Where [Id] = '00104B'
+-GO-
+Update Sysparam Set Descr = 'Stock Out Action in Billing' Where [Id] = '00104C'
+-GO-
+Update Sysparam Set Descr = 'Allow Rate Alteration in Billing' Where [Id] = '00105A'
+-GO-
+Update Sysparam Set Descr = 'Bill Header Line#1' Where [Id] = '00151A'
+-GO-
+Update Sysparam Set Descr = 'Bill Header Line#2' Where [Id] = '00151B'
+-GO-
+Update Sysparam Set Descr = 'Bill Header Line#3' Where [Id] = '00151C'
+-GO-
+Update Sysparam Set Descr = 'Bill Header Line#4' Where [Id] = '00151D'
+-GO-
+Update Sysparam Set Descr = 'Bill Header Line#5' Where [Id] = '00151E'
+-GO-
+Update Sysparam Set Descr = 'Bill Header Line#6' Where [Id] = '00151F'
+-GO-
+Update Sysparam Set Descr = 'Bill Header Line#7' Where [Id] = '00151G'
+-GO-
+Update Sysparam Set Descr = 'Bill Header Line#8' Where [Id] = '00151H'
+-GO-
+Update Sysparam Set Descr = 'Print Customer Name on Bill' Where [Id] = '00152A'
+-GO-
+Update Sysparam Set Descr = 'Print Sales Tax Regn No on Bill' Where [Id] = '00152B'
+-GO-
+Update Sysparam Set Descr = 'Print Salesman Id on Bill' Where [Id] = '00153A'
+-GO-
+Update Sysparam Set Descr = 'Print Copy Number on Bill Footer' Where [Id] = '00153B'
+-GO-
+Update Sysparam Set Descr = 'Print Time on Bill' Where [Id] = '00153C'
+-GO-
+Update Sysparam Set Descr = 'Message to be Printed on Bill Footer Line#1' Where [Id] = '00154A'
+-GO-
+Update Sysparam Set Descr = 'Message to be Printed on Bill Footer Line#2' Where [Id] = '00154B'
+-GO-
+Update Sysparam Set Descr = 'Message to be Printed on Bill Footer Line#3' Where [Id] = '00154C'
+-GO-
+Update Sysparam Set Descr = 'Print Stock Number in Bill' Where [Id] = '00155A'
+-GO-
+Update Sysparam Set Descr = 'Formation of Item Description String printed on Bill' Where [Id] = '00155B'
+-GO-
+Update Sysparam Set Descr = 'No. of Decimal Places for Quantity' Where [Id] = '00155C'
+-GO-
+Update Sysparam Set Descr = 'No. of Decimal Places for Value' Where [Id] = '00155D'
+-GO-
+Update Sysparam Set Descr = 'Print Item Level discount on Bill' Where [Id] = '00155E'
+-GO-
+Update Sysparam Set Descr = 'POS Printer Device Name' Where [Id] = '00156A'
+-GO-
+Update Sysparam Set Descr = 'POS Printing ON' Where [Id] = '00156B'
+-GO-
+Update Sysparam Set Descr = 'Print Sales Tax on Bill' Where [Id] = '00157A'
+-GO-
+Update Sysparam Set Descr = 'Print Tax Break up on Bill' Where [Id] = '00157B'
+-GO-
+Update Sysparam Set Descr = 'Print Bill Type in the Main Heading of Bill (Cash Or Credit)' Where [Id] = '00157C'
+-GO-
+Update Sysparam Set Descr = '40 Column POS Printed Used' Where [Id] = '00157D'
+-GO-
+Update Sysparam Set Descr = 'Customer Display Unit Present' Where [Id] = '00157E'
+-GO-
+Update Sysparam Set Descr = 'String displayed on Customer Display Unit' Where [Id] = '00157F'
+-GO-
+Update Sysparam Set Descr = 'Port Number used for Customer Display Unit' Where [Id] = '00157G'
+-GO-
+Update Sysparam Set Descr = 'Is Size Wise Enabled In GIR/R' Where [Id] = '00157H'
+-GO-
+Update Sysparam Set Descr = 'FlatFile1' Where [Id] = '00158A'
+-GO-
+Update Sysparam Set Descr = 'FlatFileId1' Where [Id] = '00158B'
+-GO-
+Update Sysparam Set Descr = 'Subject of Mail' Where [Id] = '00158C'
+-GO-
+Update Sysparam Set Descr = 'FlatFile2' Where [Id] = '00159A'
+-GO-
+Update Sysparam Set Descr = 'FlatFileId2' Where [Id] = '00159B'
+-GO-
+Update Sysparam Set Descr = 'Subject of Mail' Where [Id] = '00159C'
+-GO-
+Update Sysparam Set Descr = 'FlatFile3' Where [Id] = '00160A'
+-GO-
+Update Sysparam Set Descr = 'FlatFileId3' Where [Id] = '00160B'
+-GO-
+Update Sysparam Set Descr = 'Subject of Mail' Where [Id] = '00160C'
+-GO-
+Update Sysparam Set Descr = 'User Name for Mail' Where [Id] = '00161A'
+-GO-
+Update Sysparam Set Descr = 'User Password for Mail' Where [Id] = '00161B'
+-GO-
+Update Sysparam Set Descr = 'Printer Supports Reverse Line Feed' Where [Id] = '00162A'
+-GO-
+Update Sysparam Set Descr = 'No of Lines to be Reversed' Where [Id] = '00162B'
+-GO-
+Update Sysparam Set Descr = 'Payin Slip Stationery' Where [Id] = '00163A'
+-GO-
+Update Sysparam Set Descr = 'Service Item Size Group ID' Where [Id] = '00164A'
+-GO-
+Update Sysparam Set Descr = 'Service Item SizeCode Srl No' Where [Id] = '00164B'
+-GO-
+Update Sysparam Set Descr = 'Default Entry Mode For Transactions' Where [Id] = '00165C'
+-GO-
+Update Sysparam Set Descr = 'Item Details Printed in Audit Trial' Where [Id] = '00165D'
+-GO-
+Update Sysparam Set Descr = 'System Counter Number' Where [Id] = '00165E'
+-GO-
+Update Sysparam Set Descr = 'Shoper-Care Client Installed' Where [Id] = '00165F'
+-GO-
+Update Sysparam Set Descr = 'ReUse Same Credit Note Or Issue New Credit Note for balance value in Old Credit Note' Where [Id] = '00165G'
+-GO-
+Update Sysparam Set Descr = 'Allow customer classfications if customer code is not chosen' Where [Id] = '00166A'
+-GO-
+Update Sysparam Set Descr = 'Customer Demography#1 Present' Where [Id] = '00167A'
+-GO-
+Update Sysparam Set Descr = 'Caption For Customer Demography#1' Where [Id] = '00167B'
+-GO-
+Update Sysparam Set Descr = 'Customer Demography#2 Present' Where [Id] = '00168A'
+-GO-
+Update Sysparam Set Descr = 'Caption For Customer Demography#2' Where [Id] = '00168B'
+-GO-
+Update Sysparam Set Descr = 'Customer Demography#3 Present' Where [Id] = '00169A'
+-GO-
+Update Sysparam Set Descr = 'Caption For Customer Demography#3' Where [Id] = '00169B'
+-GO-
+Update Sysparam Set Descr = 'Customer Demography#4 Present' Where [Id] = '00170A'
+-GO-
+Update Sysparam Set Descr = 'Caption For Customer Demography#4' Where [Id] = '00170B'
+-GO-
+Update Sysparam Set Descr = 'Customer Demography#5 Present' Where [Id] = '00171A'
+-GO-
+Update Sysparam Set Descr = 'Caption For Customer Demography#5' Where [Id] = '00171B'
+-GO-
+Update Sysparam Set Descr = 'Shop Prefix For Expected Transaction' Where [Id] = '00172A'
+-GO-
+Update Sysparam Set Descr = 'Re-Call Transaction(Slips) Loading Present In Billing' Where [Id] = '00173A'
+-GO-
+Update Sysparam Set Descr = 'Item Browse Description String Formation - 1' Where [Id] = '00200A'
+-GO-
+Update Sysparam Set Descr = 'Item Browse Description String Formation - 2' Where [Id] = '00200B'
+-GO-
+Update Sysparam Set Descr = 'Display Current Quantity in Item Browse for Billing' Where [Id] = '00200c'
+-GO-
+Update Sysparam Set Descr = 'Maximum Rows in Item Browse' Where [Id] = '00200D'
+-GO-
+Update Sysparam Set Descr = 'Default Sorting Order Field in Item Browse' Where [Id] = '00200E'
+-GO-
+Update Sysparam Set Descr = 'Code And Desc Order For Classfn Fields Displayed in Item Browse' Where [Id] = '00200F'
+-GO-
+Update Sysparam Set Descr = 'Delimiting Char For Code And Desc Display In Items Browse' Where [Id] = '00200G'
+-GO-
+Update Sysparam Set Descr = 'Default Search Field in Item Browse' Where [Id] = '00200H'
+-GO-
+Update Sysparam Set Descr = 'Activate New Customer Browse' Where [Id] = '00200X'
+-GO-
+Update Sysparam Set Descr = 'Customer Browse Description String - 1' Where [Id] = '00200Y'
+-GO-
+Update Sysparam Set Descr = 'Customer Browse Description String - 2' Where [Id] = '00200Z'
+-GO-
+Update Sysparam Set Descr = 'Advanced Query - Browse Description String - 1' Where [Id] = '00201A'
+-GO-
+Update Sysparam Set Descr = 'Advanced Query - Browse Description String - 2' Where [Id] = '00201B'
+-GO-
+Update Sysparam Set Descr = 'Browse Display Cur Qty For Items-Advanced Query' Where [Id] = '00201C'
+-GO-
+Update Sysparam Set Descr = 'Primary Cust Browse Field Selection - Adv. Query' Where [Id] = '00201X'
+-GO-
+Update Sysparam Set Descr = 'Flat File Transfer Through Mail' Where [Id] = '00211A'
+-GO-
+Update Sysparam Set Descr = 'Flat File Transfer Through FTP' Where [Id] = '00211B'
+-GO-
+Update Sysparam Set Descr = 'Flat File Transfer Through Direct Copy' Where [Id] = '00211C'
+-GO-
+Update Sysparam Set Descr = 'Server Name for FTP' Where [Id] = '00212A'
+-GO-
+Update Sysparam Set Descr = 'User ID for FTP' Where [Id] = '00212B'
+-GO-
+Update Sysparam Set Descr = 'User Password for FTP' Where [Id] = '00212C'
+-GO-
+Update Sysparam Set Descr = 'IP Address for FTP' Where [Id] = '00212D'
+-GO-
+Update Sysparam Set Descr = 'Direct Copy Path' Where [Id] = '00213A'
+-GO-
+Update Sysparam Set Descr = 'Valid Transactions in Goods Inwards' Where [Id] = '00400A'
+-GO-
+Update Sysparam Set Descr = 'Valid Transactions in Goods Outwards' Where [Id] = '00401A'
+-GO-
+Update Sysparam Set Descr = 'Apply UniformTax code in Goods Inwards' Where [Id] = '00402A'
+-GO-
+Update Sysparam Set Descr = 'Print Size Wise AuditTrail' Where [Id] = '00403A'
+-GO-
+Update Sysparam Set Descr = 'Rate Acceptance in Goods Inwards' Where [Id] = '00404A'
+-GO-
+Update Sysparam Set Descr = 'Rate Acceptance in Goods Outwards' Where [Id] = '00405A'
+-GO-
+Update Sysparam Set Descr = 'Allow New Insertions in Goods Inwards(Item Fly)' Where [Id] = '00406A'
+-GO-
+Update Sysparam Set Descr = 'Allow New Insertions in Goods Outwards (Item Fly)' Where [Id] = '00407A'
+-GO-
+Update Sysparam Set Descr = 'Allow New Insertions in Billing(Item Fly)' Where [Id] = '00408A'
+-GO-
+Update Sysparam Set Descr = 'Rate Acceptance in Po in Goods Inwards' Where [Id] = '00409A'
+-GO-
+Update Sysparam Set Descr = 'Permitted Operations Configuration for Goods Inwards' Where [Id] = '00410A'
+-GO-
+Update Sysparam Set Descr = 'Permitted Operations for Goods Outwards' Where [Id] = '00411A'
+-GO-
+Update Sysparam Set Descr = 'Print Receiver Address in Goods Outwards' Where [Id] = '00412A'
+-GO-
+Update Sysparam Set Descr = 'Fields to be printed in Goods Inward Audit Trail' Where [Id] = '00413A'
+-GO-
+Update Sysparam Set Descr = 'Fields to be printed in Goods Outwards audit Trail' Where [Id] = '00414A'
+-GO-
+Update Sysparam Set Descr = 'Fields to be Printed in Goods Outwards Audit Trail1' Where [Id] = '00414B'
+-GO-
+Update Sysparam Set Descr = 'Fields to be Printed in Goods Outwards Audit Trail2' Where [Id] = '00414C'
+-GO-
+Update Sysparam Set Descr = 'Fields to be Printed in Goods Outwards Audit Trail3' Where [Id] = '00414D'
+-GO-
+Update Sysparam Set Descr = 'Fields to be Printed in Goods Outwards Audit Trail4' Where [Id] = '00414E'
+-GO-
+Update Sysparam Set Descr = 'Add-ons & Deductions Included for Cost Appropriation in Goods Inwards' Where [Id] = '00415A'
+-GO-
+Update Sysparam Set Descr = 'Add-ons & Deductions Included for Cost Appropriation in Goods Outwards' Where [Id] = '00416A'
+-GO-
+Update Sysparam Set Descr = 'Option For Holding Details in PTFile Invoice' Where [Id] = '00417A'
+-GO-
+Update Sysparam Set Descr = 'Party Type Allowed in Misc., Receipts and Issues' Where [Id] = '00418A'
+-GO-
+Update Sysparam Set Descr = 'Display PT File Information Details Using Browse' Where [Id] = '00419A'
+-GO-
+Update Sysparam Set Descr = 'StockNo Creation during PT File Loading' Where [Id] = '00420A'
+-GO-
+Update Sysparam Set Descr = 'Grade Applicable for Stock No.' Where [Id] = '00421A'
+-GO-
+Update Sysparam Set Descr = 'Company PT(XT) File In Path' Where [Id] = '00421B'
+-GO-
+Update Sysparam Set Descr = 'Company PT(XT) File Out Path' Where [Id] = '00421C'
+-GO-
+Update Sysparam Set Descr = 'PT File Creation - Overwrite/ Append to File' Where [Id] = '00421D'
+-GO-
+Update Sysparam Set Descr = 'LSQ Applicable on Mutiples' Where [Id] = '00421E'
+-GO-
+Update Sysparam Set Descr = 'Whether to Display Bale Details' Where [Id] = '00421F'
+-GO-
+Update Sysparam Set Descr = 'Caption For Stock Module for Raymonds' Where [Id] = '00421G'
+-GO-
+Update Sysparam Set Descr = 'Allow Physical Stock Loading with Delimiter' Where [Id] = '00422A'
+-GO-
+Update Sysparam Set Descr = 'Show Directory Name for Physical Stock' Where [Id] = '00422B'
+-GO-
+Update Sysparam Set Descr = 'Physical Stock Loading Delimiter Character' Where [Id] = '00422C'
+-GO-
+Update Sysparam Set Descr = 'Loading Applicable For Master and Stock' Where [Id] = '00423A'
+-GO-
+Update Sysparam Set Descr = 'Display Actual Qty From PTFile' Where [Id] = '00424A'
+-GO-
+Update Sysparam Set Descr = 'Validate Classification & Po Dtls' Where [Id] = '00425A'
+-GO-
+Update Sysparam Set Descr = 'Whether to Check PTInvoice or StkTrnHdr Table' Where [Id] = '00426A'
+-GO-
+Update Sysparam Set Descr = 'Delete Existent PT File Before Creation' Where [Id] = '00426B'
+-GO-
+Update Sysparam Set Descr = 'Allowed Transactions in Billing Module' Where [Id] = '00501A'
+-GO-
+Update Sysparam Set Descr = 'Allowed Transactions in Bill Returns' Where [Id] = '00502A'
+-GO-
+Update Sysparam Set Descr = 'Plain Stationery Used in Billing' Where [Id] = '00503A'
+-GO-
+Update Sysparam Set Descr = 'Returned Bill Details Printing Options' Where [Id] = '00504A'
+-GO-
+Update Sysparam Set Descr = 'Void Bill Details Printing Options' Where [Id] = '00504B'
+-GO-
+Update Sysparam Set Descr = 'Default Setting For Generate Credit Note Option In Billing' Where [Id] = '00505A'
+-GO-
+Update Sysparam Set Descr = 'Donot Prompt For Credit Note Generation If Bill Return Value Is Less Than Specified' Where [Id] = '00505B'
+-GO-
+Update Sysparam Set Descr = 'Print UserId in Bill Printing' Where [Id] = '00506A'
+-GO-
+Update Sysparam Set Descr = 'Issue Cash Or Adjust/New Credit Note For Remaining Balance' Where [Id] = '00507A'
+-GO-
+Update Sysparam Set Descr = 'Print LST/CST Number' Where [Id] = '00508A'
+-GO-
+Update Sysparam Set Descr = 'Number of lines Used for Header and Footer' Where [Id] = '00509A'
+-GO-
+Update Sysparam Set Descr = 'Printer Supports Auto Cut' Where [Id] = '00510A'
+-GO-
+Update Sysparam Set Descr = 'Number of Blank Lines to be Printed' Where [Id] = '00511A'
+-GO-
+Update Sysparam Set Descr = 'SmartCard Interface Used In Billing' Where [Id] = '00512A'
+-GO-
+Update Sysparam Set Descr = 'Maximum No.of lines to be printed in a bill' Where [Id] = '00513A'
+-GO-
+Update Sysparam Set Descr = 'Print Header and Footer details for all pages' Where [Id] = '00513B'
+-GO-
+Update Sysparam Set Descr = 'Bill Form Length (in Lines)' Where [Id] = '00513C'
+-GO-
+Update Sysparam Set Descr = 'No.of Characters in a line for Extended Item Description' Where [Id] = '00514A'
+-GO-
+Update Sysparam Set Descr = 'Item Foot Notes to be Printed In Bill' Where [Id] = '00515A'
+-GO-
+Update Sysparam Set Descr = 'Print Item Wise Tax Break' Where [Id] = '00516A'
+-GO-
+Update Sysparam Set Descr = 'Print Sales Tax Component' Where [Id] = '00516B'
+-GO-
+Update Sysparam Set Descr = 'Print Sales Tax Caption' Where [Id] = '00516C'
+-GO-
+Update Sysparam Set Descr = 'Print Sales Tax Amt or Rate' Where [Id] = '00516D'
+-GO-
+Update Sysparam Set Descr = 'Print Border Line or Blank' Where [Id] = '00516E'
+-GO-
+Update Sysparam Set Descr = 'No. of Characters to Print the VAT Caption' Where [Id] = '00516F'
+-GO-
+Update Sysparam Set Descr = 'Node Creation Allowed' Where [Id] = '00600A'
+-GO-
+Update Sysparam Set Descr = 'Node Wise Numbering Allowed' Where [Id] = '00600B'
+-GO-
+Update Sysparam Set Descr = 'Maintain Node-wise Devices In Billing' Where [Id] = '00600C'
+-GO-
+Update Sysparam Set Descr = 'Node ID Role In Bill' Where [Id] = '00600D'
+-GO-
+Update Sysparam Set Descr = 'Node ID Role In Void Bill' Where [Id] = '00600E'
+-GO-
+Update Sysparam Set Descr = 'Node ID Role In Return' Where [Id] = '00600F'
+-GO-
+Update Sysparam Set Descr = 'Node ID Role In Void Return' Where [Id] = '00600G'
+-GO-
+Update Sysparam Set Descr = 'Node ID Role In Cash' Where [Id] = '00600H'
+-GO-
+Update Sysparam Set Descr = 'Node ID Role in Goods Inwards' Where [Id] = '00600I'
+-GO-
+Update Sysparam Set Descr = 'Node ID Role In GOR' Where [Id] = '00600J'
+-GO-
+Update Sysparam Set Descr = 'Node ID Role In Physical Stock' Where [Id] = '00600K'
+-GO-
+Update Sysparam Set Descr = 'Node ID Role In Other Transactions' Where [Id] = '00600L'
+-GO-
+Update Sysparam Set Descr = 'Payin Slip Caption' Where [Id] = '00700A'
+-GO-
+Update Sysparam Set Descr = 'Bank where Cheque is deposited' Where [Id] = '00700B'
+-GO-
+Update Sysparam Set Descr = 'Bank Address Line 1 (where Cheque is deposited)' Where [Id] = '00700C'
+-GO-
+Update Sysparam Set Descr = 'Bank Address Line 2 (where Cheque is deposited)' Where [Id] = '00700D'
+-GO-
+Update Sysparam Set Descr = 'Bank Address Line 3 (where Cheque is deposited)' Where [Id] = '00700E'
+-GO-
+Update Sysparam Set Descr = 'Franchisee Name' Where [Id] = '00700F'
+-GO-
+Update Sysparam Set Descr = 'Card PIF Number' Where [Id] = '00700G'
+-GO-
+Update Sysparam Set Descr = 'Cash PIF Number' Where [Id] = '00700H'
+-GO-
+Update Sysparam Set Descr = 'Franchisee Code' Where [Id] = '00700I'
+-GO-
+Update Sysparam Set Descr = 'Head Office Name' Where [Id] = '00700J'
+-GO-
+Update Sysparam Set Descr = 'Minimum days For Cash Overdue' Where [Id] = '00700K'
+-GO-
+Update Sysparam Set Descr = 'Minimum days For Credit Overdue' Where [Id] = '00700L'
+-GO-
+Update Sysparam Set Descr = 'Interest Rate For Card Overdue' Where [Id] = '00700M'
+-GO-
+Update Sysparam Set Descr = 'Interest Rate For Cash Overdue' Where [Id] = '00700N'
+-GO-
+Update Sysparam Set Descr = 'Card Overdue Balance' Where [Id] = '00700O'
+-GO-
+Update Sysparam Set Descr = 'Cash Overdue Balance' Where [Id] = '00700P'
+-GO-
+Update Sysparam Set Descr = 'Reduce From Cash Or Card A/c' Where [Id] = '00700Q'
+-GO-
+Update Sysparam Set Descr = 'Financial Year' Where [Id] = '00700R'
+-GO-
+Update Sysparam Set Descr = 'Turn Over Tax Rate' Where [Id] = '00700S'
+-GO-
+Update Sysparam Set Descr = 'Calculation Of Sales Commission Report-Value computation for TOT' Where [Id] = '00700T'
+-GO-
+Update Sysparam Set Descr = 'Stock No. Barcode Stripping Required in Billing' Where [Id] = '00800A'
+-GO-
+Update Sysparam Set Descr = 'Stripping from Left Side of Stock No./ Barcode' Where [Id] = '00800B'
+-GO-
+Update Sysparam Set Descr = 'Stock No. Length in Barcode' Where [Id] = '00800C'
+-GO-
+Update Sysparam Set Descr = 'Stripping Length in Barcode' Where [Id] = '00800D'
+-GO-
+Update Sysparam Set Descr = 'StockNo Decoding Option' Where [Id] = '00800E'
+-GO-
+Update Sysparam Set Descr = 'Default SKU Decoding (Padding) Rule' Where [Id] = '00800F'
+-GO-
+Update Sysparam Set Descr = 'Style Decoding Option' Where [Id] = '00800G'
+-GO-
+Update Sysparam Set Descr = 'Default Style Decoding (Padding) Rule' Where [Id] = '00800H'
+-GO-
+Update Sysparam Set Descr = 'Customer Display Type' Where [Id] = '00900A'
+-GO-
+Update Sysparam Set Descr = 'Cash Draw Present' Where [Id] = '00900B'
+-GO-
+Update Sysparam Set Descr = 'Activate PO Suggested Order' Where [Id] = '01000A'
+-GO-
+Update Sysparam Set Descr = 'Method followed for Demand Projection  In Suggested Order' Where [Id] = '01000B'
+-GO-
+Update Sysparam Set Descr = 'Time units for computing projection  In Suggested Order' Where [Id] = '01000C'
+-GO-
+Update Sysparam Set Descr = 'Number of units for computing projection in Suggested Order' Where [Id] = '01000D'
+-GO-
+Update Sysparam Set Descr = 'Time units for computing average sale  In Suggested Order' Where [Id] = '01000E'
+-GO-
+Update Sysparam Set Descr = 'Number of units for computing average sale in Suggested Order' Where [Id] = '01000F'
+-GO-
+Update Sysparam Set Descr = 'Maximum Stock Carrying value type in Suggested Order' Where [Id] = '01000G'
+-GO-
+Update Sysparam Set Descr = 'Maximum Stock Carrying value in Suggested Order' Where [Id] = '01000H'
+-GO-
+Update Sysparam Set Descr = 'Expected Transaction Titles' Where [Id] = '01100A'
+-GO-
+Update Sysparam Set Descr = 'Min Lines For Expected Transaction Print' Where [Id] = '01100B'
+-GO-
+Update Sysparam Set Descr = 'Print Expected Transaction Header' Where [Id] = '01100C'
+-GO-
+Update Sysparam Set Descr = 'Print Expected Transaction Details' Where [Id] = '01100D'
+-GO-
+Update Sysparam Set Descr = 'Print Expected Transaction Footer' Where [Id] = '01100E'
+-GO-
+Update Sysparam Set Descr = 'Header Details Accepted in Expected Transactions' Where [Id] = '01100F'
+-GO-
+Update Sysparam Set Descr = 'Item Details Accepted in Expected Transactions' Where [Id] = '01100G'
+-GO-
+Update Sysparam Set Descr = 'Check Stock On Item Selection In Expected Transactions' Where [Id] = '01100H'
+-GO-
+Update Sysparam Set Descr = 'Expected Transaction Printing On' Where [Id] = '01100J'
+-GO-
+Update Sysparam Set Descr = 'Expected Transaction Form Length' Where [Id] = '01100K'
+-GO-
+Update Sysparam Set Descr = 'Allow Re-print of Cancelled Expected Transactions' Where [Id] = '01100L'
+-GO-
+Update Sysparam Set Descr = 'Print Expected Transaction Item Details' Where [Id] = '01100M'
+-GO-
+Update Sysparam Set Descr = 'Display Column Headings 1 (0 to 20)' Where [Id] = '01200A1'
+-GO-
+Update Sysparam Set Descr = 'Display Column Headings 2 (21 to 40)' Where [Id] = '01200A2'
+-GO-
+Update Sysparam Set Descr = 'Display Column Headings 2 (41 to 45)' Where [Id] = '01200A3'
+-GO-
+Update Sysparam Set Descr = 'Display Column Visible' Where [Id] = '01200B'
+-GO-
+Update Sysparam Set Descr = 'Display Column Position' Where [Id] = '01200C'
+-GO-
+Update Sysparam Set Descr = 'Display Column Data Type' Where [Id] = '01200D'
+-GO-
+Update Sysparam Set Descr = 'Display Column Width' Where [Id] = '01200E'
+-GO-
+Update Sysparam Set Descr = 'Display Column Align' Where [Id] = '01200F'
+-GO-
+Update Sysparam Set Descr = 'Total Columns/Display Columns For Display' Where [Id] = '01200G'
+-GO-
+Update Sysparam Set Descr = 'Accept Column Headings 1 (0 to 20)' Where [Id] = '01300A1'
+-GO-
+Update Sysparam Set Descr = 'Accept Column Headings 2 (21 to 40)' Where [Id] = '01300A2'
+-GO-
+Update Sysparam Set Descr = 'Accept Column Headings 2 (41 to 44)' Where [Id] = '01300A3'
+-GO-
+Update Sysparam Set Descr = 'Accept Column Visible' Where [Id] = '01300B'
+-GO-
+Update Sysparam Set Descr = 'Accept Column Position' Where [Id] = '01300C'
+-GO-
+Update Sysparam Set Descr = 'Accept Column Data Type' Where [Id] = '01300D'
+-GO-
+Update Sysparam Set Descr = 'Accept Column Width' Where [Id] = '01300E'
+-GO-
+Update Sysparam Set Descr = 'Accept Column Align' Where [Id] = '01300F'
+-GO-
+Update Sysparam Set Descr = 'Total Columns/Accept Columns For Accept' Where [Id] = '01300G'
+-GO-
+Update Sysparam Set Descr = 'Printer Device Name Setting Required' Where [Id] = '02000A'
+-GO-
+Update Sysparam Set Descr = 'Printer Device Port (COM Port)' Where [Id] = '02000B'
+-GO-
+Update Sysparam Set Descr = 'Printer Device Port Band' Where [Id] = '02000C'
+-GO-
+Update Sysparam Set Descr = 'Printer Normal' Where [Id] = '02001A'
+-GO-
+Update Sysparam Set Descr = 'Printer Compressed' Where [Id] = '02001B'
+-GO-
+Update Sysparam Set Descr = 'Printer Double Width' Where [Id] = '02001C'
+-GO-
+Update Sysparam Set Descr = 'Printer Normal Emphazised' Where [Id] = '02001D'
+-GO-
+Update Sysparam Set Descr = 'Printer Compressed Emphazised' Where [Id] = '02001E'
+-GO-
+Update Sysparam Set Descr = 'Printer Double Width Emphazised' Where [Id] = '02001F'
+-GO-
+Update Sysparam Set Descr = 'Printer Normal For IBM POS Machines' Where [Id] = '02002A'
+-GO-
+Update Sysparam Set Descr = 'Printer Compressed For IBM POS Machines' Where [Id] = '02002B'
+-GO-
+Update Sysparam Set Descr = 'Printer Double Width For IBM POS Machines' Where [Id] = '02002C'
+-GO-
+Update Sysparam Set Descr = 'Printer Normal Emphazised For IBM POS Machines' Where [Id] = '02002D'
+-GO-
+Update Sysparam Set Descr = 'Printer Compressed Emphazised For IBM POS Machines' Where [Id] = '02002E'
+-GO-
+Update Sysparam Set Descr = 'Printer Double Width Emphazised For IBM POS Machines' Where [Id] = '02002F'
+-GO-
+Update Sysparam Set Descr = 'Whether to Print Party Stk Doc No as Invoice or DC' Where [Id] = '12346'
+-GO-
+Update Sysparam Set Descr = 'ID file - Value Computation for Sales Fields' Where [Id] = '800001'
+-GO-
+Update Sysparam Set Descr = 'Franchisee - Credit Card Sales Return Handling' Where [Id] = '800002'
+-GO-
+Update Sysparam Set Descr = 'Local Application Path' Where [Id] = '800003'
+-GO-
+Update Sysparam Set Descr = 'Mail Id Of The Sender' Where [Id] = '800004'
+-GO-
+Update Sysparam Set Descr = 'Store And Floor DB Names' Where [Id] = '800005'
+-GO-
+Update Sysparam Set Descr = 'Overwrite Loaded PO Details' Where [Id] = '800008'
+-GO-
+Update Sysparam Set Descr = 'Activate Stock No Browse in All PO fields' Where [Id] = '800009'
+-GO-
+Update Sysparam Set Descr = 'Allow Customer Insertions on the Fly in Billing' Where [Id] = '800010'
+-GO-
+Update Sysparam Set Descr = 'Permitted Operations for Customer Catalogue' Where [Id] = '800011'
+-GO-
+Update Sysparam Set Descr = 'Walk-in - Time Display Format' Where [Id] = '800012A'
+-GO-
+Update Sysparam Set Descr = 'Walk-in - Interval' Where [Id] = '800012B'
+-GO-
+Update Sysparam Set Descr = 'Walk-in - Allow Internal to Edit' Where [Id] = '800012C'
+-GO-
+Update Sysparam Set Descr = 'Walk-in - Start Time' Where [Id] = '800012D'
+-GO-
+Update Sysparam Set Descr = 'Walk-in - End Time' Where [Id] = '800012E'
+-GO-
+Update Sysparam Set Descr = 'Walk-in - Allow To Edit Date' Where [Id] = '800012F'
+-GO-
+Update Sysparam Set Descr = 'Display Percentage of Sales In Daily Sales Report' Where [Id] = '800012G'
+-GO-
+Update Sysparam Set Descr = 'Default Setting for Sales Man Selection in Billing' Where [Id] = '800013'
+-GO-
+Update Sysparam Set Descr = 'ID/IM File - SKU Formation' Where [Id] = '800014'
+-GO-
+Update Sysparam Set Descr = 'WEB Server Settings' Where [Id] = '800015A'
+-GO-
+Update Sysparam Set Descr = 'Web Server Settings for Download File' Where [Id] = '800015B'
+-GO-
+Update Sysparam Set Descr = 'Number of Report Header Lines to be Printed' Where [Id] = '800016A'
+-GO-
+Update Sysparam Set Descr = 'Report Header Line#1' Where [Id] = '800017A'
+-GO-
+Update Sysparam Set Descr = 'Report Header Line#2' Where [Id] = '800017B'
+-GO-
+Update Sysparam Set Descr = 'Report Header Line#3' Where [Id] = '800017C'
+-GO-
+Update Sysparam Set Descr = 'Report Header Line#4' Where [Id] = '800017D'
+-GO-
+Update Sysparam Set Descr = 'Report Header Line#5' Where [Id] = '800017E'
+-GO-
+Update Sysparam Set Descr = 'Report Header Line#6' Where [Id] = '800017F'
+-GO-
+Update Sysparam Set Descr = 'Font Details of Report Header Line#1' Where [Id] = '800018A'
+-GO-
+Update Sysparam Set Descr = 'Font Details of Report Header Line#2' Where [Id] = '800018B'
+-GO-
+Update Sysparam Set Descr = 'Font Details of Report Header Line#3' Where [Id] = '800018C'
+-GO-
+Update Sysparam Set Descr = 'Font Details of Report Header Line#4' Where [Id] = '800018D'
+-GO-
+Update Sysparam Set Descr = 'Font Details of Report Header Line#5' Where [Id] = '800018E'
+-GO-
+Update Sysparam Set Descr = 'Font Details of Report Header Line#6' Where [Id] = '800018F'
+-GO-
+Update Sysparam Set Descr = 'Font Details of Report Header Line#7' Where [Id] = '800019A'
+-GO-
+Update Sysparam Set Descr = 'Font Details of PageNo,PrintDate,ShoperDate' Where [Id] = '800019B'
+-GO-
+Update Sysparam Set Descr = 'Print Report Generation Date' Where [Id] = '800020A'
+-GO-
+Update Sysparam Set Descr = 'General Discount Reason Configuration in Billing' Where [Id] = '800021'
+-GO-
+Update Sysparam Set Descr = 'General Discount Activation Option(s) And  Value Type(s) In Billing' Where [Id] = '800022'
+-GO-
+Update Sysparam Set Descr = 'Customer Mandatory in Cash Payouts / Receipts' Where [Id] = '800022A'
+-GO-
+Update Sysparam Set Descr = 'Discount Configuration in Billing' Where [Id] = '800023'
+-GO-
+Update Sysparam Set Descr = 'Pricing Master Import/Export Key Match' Where [Id] = '800024'
+-GO-
+Update Sysparam Set Descr = 'Auto Price Revision Update' Where [Id] = '800025'
+-GO-
+Update Sysparam Set Descr = 'In PO Details Report Which Qty Fields To Show' Where [Id] = '800026'
+-GO-
+Update Sysparam Set Descr = 'Accepting Customer In Expected Tranactions' Where [Id] = '800027'
+-GO-
+Update Sysparam Set Descr = 'Print Expected Transactions in Condensed Mode' Where [Id] = '800028'
+-GO-
+Update Sysparam Set Descr = 'Print Discount Percentage and Amount In Header' Where [Id] = '800029'
+-GO-
+Update Sysparam Set Descr = 'Print Raymond Shop Number' Where [Id] = '800030'
+-GO-
+Update Sysparam Set Descr = 'Apply LSQ For Line Item Calculation In Billing' Where [Id] = '800031'
+-GO-
+Update Sysparam Set Descr = 'Print Classification Code/ Description in Qlty Field' Where [Id] = '800031A'
+-GO-
+Update Sysparam Set Descr = 'Calculate General Discount on Specified Value Rather Than Bill Value' Where [Id] = '800032'
+-GO-
+Update Sysparam Set Descr = 'Number of Blank Lines to be Printed at End of Slip Printing' Where [Id] = '800033'
+-GO-
+Update Sysparam Set Descr = 'Num Of Records Reserved For Last Piece Disc(Item Spc Disc) In SF Table' Where [Id] = '800034'
+-GO-
+Update Sysparam Set Descr = 'Year Opening Date' Where [Id] = '800036'
+-GO-
+Update Sysparam Set Descr = 'Promt Error Message In Billing Updation' Where [Id] = '800037'
+-GO-
+Update Sysparam Set Descr = 'Whether Computed Cost to be Edited in Pricing Master' Where [Id] = '800037A'
+-GO-
+Update Sysparam Set Descr = 'Default Payment Mode in Billing (Payment Details Frame)' Where [Id] = '800038'
+-GO-
+Update Sysparam Set Descr = 'Show Expected Transaction Title in Report' Where [Id] = '800039'
+-GO-
+Update Sysparam Set Descr = 'Whether to Display Sales Person Code or Job Worker Code' Where [Id] = '800040'
+-GO-
+Update Sysparam Set Descr = 'Selective Updation of Price Revision' Where [Id] = '800041'
+-GO-
+Update Sysparam Set Descr = 'Print Small Credit Note In Any Stationery' Where [Id] = '800042'
+-GO-
+Update Sysparam Set Descr = 'Goods Outwards Audit Trail Footer Details' Where [Id] = '800043'
+-GO-
+Update Sysparam Set Descr = 'Week Starting Information' Where [Id] = '900000'
+-GO-
+Update Sysparam Set Descr = 'Include All Receipt Reasons' Where [Id] = 'B45-0601-0000144'
+-GO-
+Update Sysparam Set Descr = 'Print Discount Percentage/Amount And VAT Details' Where [Id] = 'B61-0700-0000122'
+-GO-
+Update Sysparam Set Descr = 'Luxury Tax Calculation' Where [Id] = 'B64-0601-0000005'
+-GO-
+Update Sysparam Set Descr = 'Vendor Type for Luxury Tax Report' Where [Id] = 'B64-0601-0000028'
+-GO-
+Update Sysparam Set Descr = 'Expected Transaction Header Details Mandatory' Where [Id] = 'SR1-0601-0000001'
+-GO-
+Update Sysparam Set Descr = 'Expected Transaction Item Details Mandatory' Where [Id] = 'SR1-0601-0000002'
+-GO-
+Update Sysparam Set Descr = 'Print In Compressed Mode For POS40 Column' Where [Id] = 'SR1-0601-0000025'
+-GO-
+Update Sysparam Set Descr = 'Service Bill Caption to be Printed' Where [Id] = 'SR1-0601-0000027'
+-GO-
+Update Sysparam Set Descr = 'Show Item Browse Automatically For Matching Stock Nos (Based On Starting Chars Entered)' Where [Id] = 'SR1-0602-0000012'
+-GO-
+Update Sysparam Set Descr = 'Search Item Price Factors For Stock No/Item Classification In Billing' Where [Id] = 'SR1-0602-0000014'
+-GO-
+Update Sysparam Set Descr = 'Sales Man Selection Mandatory in Billing' Where [Id] = 'SR1-0602-0000017'
+-GO-
+Update Sysparam Set Descr = 'Default Item Entry Mode in Billing (SKU Wise Or Style,Shade and Size Wise)' Where [Id] = 'SR1-0602-0000021'
+-GO-
+Update Sysparam Set Descr = 'Cut-off Price (MRP) of Item to be Blocked from Billing' Where [Id] = 'SR1-0602-0000040'
+-GO-
+Update Sysparam Set Descr = 'Sales Factor Id Used For Quantity Wise Discount Which Can Be Used For Item Spc. Discounts In Billing' Where [Id] = 'SR1-0602-0000043'
+-GO-
+Update Sysparam Set Descr = 'Item Details To be Shown In Billing Status Bar' Where [Id] = 'SR1-0602-0000067'
+-GO-
+Update Sysparam Set Descr = 'Bill Printing in Goods Outwards Transaction' Where [Id] = 'SR1-0602-0000078'
+-GO-
+Update Sysparam Set Descr = 'Print Bill Type as Cash or Reason Code in Goods Outwards' Where [Id] = 'SR1-0602-0000079'
+-GO-
+Update Sysparam Set Descr = 'Default Search For Item Specific Discounts In Billing' Where [Id] = 'SR1-0602-0000096'
+-GO-
+Update Sysparam Set Descr = 'Delivery Challan Printing Type' Where [Id] = 'SR1-0602-0000102'
+-GO-
+Update Sysparam Set Descr = 'Print SKU Wise or Item Wise' Where [Id] = 'SR1-0602-0000103'
+-GO-
+Update Sysparam Set Descr = 'Re-Calculate for Sales Tax in Bill Printing' Where [Id] = 'SR1-0602-0000104'
+-GO-
+Update Sysparam Set Descr = 'Customer Selection Mandatory in Billing' Where [Id] = 'SR1-0603-0000086'
+-GO-
+Update Sysparam Set Descr = 'Additional Transactions Considered For Stock Check Along With Stock Master In Billing/Slips' Where [Id] = 'SR1-0603-0000087'
+-GO-
+Update Sysparam Set Descr = 'Whether DC to Print from Invoice' Where [Id] = 'SR1-0603-0000113'
+-GO-
+Update Sysparam Set Descr = 'Whether DC to Print in Compressed Mode' Where [Id] = 'SR1-0603-0000114'
+-GO-
+Update Sysparam Set Descr = 'Caption to Print in Distributor' Where [Id] = 'SR1-0603-0000115'
+-GO-
+Update Sysparam Set Descr = 'Component Caption to Print in Distributor' Where [Id] = 'SR1-0603-0000118'
+-GO-
+Update Sysparam Set Descr = 'Print Customer Address Remarks and Discount in Bill' Where [Id] = 'SR1-0700-0000123'
+-GO-
+Update Sysparam Set Descr = 'Printing Template Folder' Where [Id] = 'SR1-0701-0000125'
+-GO-
+Update Sysparam Set Descr = 'Default Printing Template File Path' Where [Id] = 'SR1-0701-0000126'
+-GO-
+Update Sysparam Set Descr = 'Default Printing Control File Path' Where [Id] = 'SR1-0701-0000127'
+-GO-
+Update Sysparam Set Descr = 'Default Printing Conditional File Path' Where [Id] = 'SR1-0701-0000128'
+-GO-
+Update Sysparam Set Descr = 'Multiple Printing templates Active' Where [Id] = 'SR1-0701-0000129'
+-GO-
+Update Sysparam Set Descr = 'Temporary folder to write all temp files during generalized printing' Where [Id] = 'SR1-0701-0000130'
+-GO-
+Update Sysparam Set Descr = 'No of Copies to be Printed' Where [Id] = 'SR1-0701-0000131'
+-GO-
+Update Sysparam Set Descr = 'Whether to Print Credit Note in Same Page or Not' Where [Id] = 'SR1-0701-0000134'
+-GO-
+Update Sysparam Set Descr = 'Location Of The ConfigFile.INI Used In Bill Printing' Where [Id] = 'SR1-0701-0000143'
+-GO-
+Update Sysparam Set Descr = 'Auto generate Bill Suspension Number' Where [Id] = 'SR1-0702-0000001'
+-GO-
+Update Sysparam Set Descr = 'Print Bill Suspension' Where [Id] = 'SR1-0702-0000002'
+-GO-
+Update Sysparam Set Descr = 'DC Print based on Class1/Class2 or SubClass1/SubClass2' Where [Id] = 'SR1-0702-0000158'
+-GO-
+Update Sysparam Set Descr = 'Bill Prefix Definition Setting' Where [Id] = 'SR1-0702-0000159'
+-GO-
+Update Sysparam Set Descr = 'Cash Receipt/ Payout Printing Mode' Where [Id] = 'SR1-0702-0000163'
+-GO-
+Update Sysparam Set Descr = 'Tolerance for Tax Rate in Inward and Outward' Where [Id] = 'SR1-0702-0000166'
+-GO-
+Update Sysparam Set Descr = 'Print Preview' Where [Id] = 'SR1-0702-0000167'
+-GO-
+Update Sysparam Set Descr = 'Use Common Prefix for Billing Across All Terminals' Where [Id] = 'SR1-0702-0000171'
+-GO-
+Update Sysparam Set Descr = 'Item Level Net Amt Calculation Requried' Where [Id] = 'SR1-0702-0000172'
+-GO-
+Update Sysparam Set Descr = 'Validation for the Expected Transaction Customer' Where [Id] = 'SR1-0702-0000173'
+-GO-
+Update Sysparam Set Descr = 'Validation for the Advance Receipt Customer' Where [Id] = 'SR1-0702-0000174'
+-GO-
+Update Sysparam Set Descr = 'Validate Quantity and Rate Range in Goods Inwards' Where [Id] = 'SR1-0730-0000181'
+-GO-
+Update Sysparam Set Descr = 'Validate Quantity and Rate Range in Goods Outwards' Where [Id] = 'SR1-0730-0000182'
+-GO-
+Update Sysparam Set Descr = 'Validate Quantity and Rate Range In Billing' Where [Id] = 'SR1-0730-0000183'
+-GO-
+Update Sysparam Set Descr = 'Auto Selection of Discount Code During Item Entry' Where [Id] = 'SR1-0730-0000274'
+-GO-
+Update Sysparam Set Descr = 'Allow reactivation of slips from cancelled bills' Where [Id] = 'SR1-0730-0000286'
+-GO-
+Update Sysparam Set Descr = 'Allow deletion of items from recalled documents' Where [Id] = 'SR1-0730-0000287'
+-GO-
+Update Sysparam Set Descr = 'Report Name Of The Style Code Delimiter Concept And Key Word Used' Where [Id] = 'SR2-0600-0000003'
+-GO-
+Update Sysparam Set Descr = 'Common Style Code Delimiter Indicator Position For All Product Brand Combination' Where [Id] = 'SR2-0600-0000004'
+-GO-
+Update Sysparam Set Descr = 'Whether Create TT File For Distributor Or Retail' Where [Id] = 'SR2-0700-0000124'
+-GO-
+Update Sysparam Set Descr = 'List of Payment Mode Including Franchise Transactions' Where [Id] = 'SR2-0702-0000152'
+-GO-
+Update Sysparam Set Descr = 'Caption for Add-ons/ Deductions' Where [Id] = 'SR3-0600-0000020'
+-GO-
+Update Sysparam Set Descr = 'PT File Loading From Shoper In-Path' Where [Id] = 'SR3-0600-0000029'
+-GO-
+Update Sysparam Set Descr = 'Whether PT File With Delimeter or Not' Where [Id] = 'SR3-0602-0000046'
+-GO-
+Update Sysparam Set Descr = 'Display PT File Delimeter' Where [Id] = 'SR3-0602-0000047'
+-GO-
+Update Sysparam Set Descr = 'Whether PT File Details Taken From Browse or Not' Where [Id] = 'SR3-0602-0000048'
+-GO-
+Update Sysparam Set Descr = 'Default Grade Code to be Updated' Where [Id] = 'SR3-0602-0000049'
+-GO-
+Update Sysparam Set Descr = 'Source Tax Type in Inwards' Where [Id] = 'SR3-0602-0000050'
+-GO-
+Update Sysparam Set Descr = 'Valid Transactions in Physical Verification' Where [Id] = 'SR3-0602-0000051'
+-GO-
+Update Sysparam Set Descr = 'Apply LSQ in Physical Verification' Where [Id] = 'SR3-0602-0000052'
+-GO-
+Update Sysparam Set Descr = 'Club duplicated items in Physical Verification' Where [Id] = 'SR3-0602-0000053'
+-GO-
+Update Sysparam Set Descr = 'Retail Price Alteration in Goods Inwards' Where [Id] = 'SR3-0602-0000069'
+-GO-
+Update Sysparam Set Descr = 'Tolerance Factor In Goods Inwards' Where [Id] = 'SR3-0602-0000081'
+-GO-
+Update Sysparam Set Descr = 'Whether to Display Stock Discrepancy Report in Goods Inwards' Where [Id] = 'SR3-0602-0000082'
+-GO-
+Update Sysparam Set Descr = 'Reason Code Applicable In Goods Outwards' Where [Id] = 'SR3-0602-0000083'
+-GO-
+Update Sysparam Set Descr = 'Display Computed Stock While Stock Recording' Where [Id] = 'SR3-0602-0000088'
+-GO-
+Update Sysparam Set Descr = 'Display Retail Price & Current Cost' Where [Id] = 'SR3-0602-0000089'
+-GO-
+Update Sysparam Set Descr = 'Physical Stock Taking Commence Status' Where [Id] = 'SR3-0602-0000090'
+-GO-
+Update Sysparam Set Descr = 'Physical Stock Taking Scope' Where [Id] = 'SR3-0602-0000091'
+-GO-
+Update Sysparam Set Descr = 'Physical Stock Taking Process' Where [Id] = 'SR3-0602-0000092'
+-GO-
+Update Sysparam Set Descr = 'Physical Stock Taking Scope ID' Where [Id] = 'SR3-0602-0000093'
+-GO-
+Update Sysparam Set Descr = 'Display Column Details in Physical Verification' Where [Id] = 'SR3-0602-0000094'
+-GO-
+Update Sysparam Set Descr = 'Whether to Create PT File Based On Invoice or DC' Where [Id] = 'SR3-0602-0000100'
+-GO-
+Update Sysparam Set Descr = 'Editing Goods Inwards Document after Day Close' Where [Id] = 'SR3-0602-0000106'
+-GO-
+Update Sysparam Set Descr = 'Disable PT File Loading in Goods Inwards' Where [Id] = 'SR3-0602-0000107'
+-GO-
+Update Sysparam Set Descr = 'DC Number Validation Present' Where [Id] = 'SR3-0602-0000108'
+-GO-
+Update Sysparam Set Descr = 'Print DC Detail in Goods Outwards' Where [Id] = 'SR3-0602-0000109'
+-GO-
+Update Sysparam Set Descr = 'Import Goods Inwards into Goods Outwards' Where [Id] = 'SR3-0602-0000110'
+-GO-
+Update Sysparam Set Descr = 'Goods Outwards Printing Type' Where [Id] = 'SR3-0700-0000116'
+-GO-
+Update Sysparam Set Descr = 'Goods Inwards Printing Type' Where [Id] = 'SR3-0700-0000117'
+-GO-
+Update Sysparam Set Descr = 'Whether VAT Invoice or Not in GIR/GOR' Where [Id] = 'SR3-0700-0000119'
+-GO-
+Update Sysparam Set Descr = 'Accept Column for VAT Details in GIR/GOR' Where [Id] = 'SR3-0700-0000121'
+-GO-
+Update Sysparam Set Descr = 'Rate To Display in Goods Outward - Transfer Out' Where [Id] = 'SR3-0701-0000131'
+-GO-
+Update Sysparam Set Descr = 'Flat File Creation based on PartyId or Company Code' Where [Id] = 'SR3-0701-0000132'
+-GO-
+Update Sysparam Set Descr = 'Load PT File Into Other File Option' Where [Id] = 'SR3-0701-0000138'
+-GO-
+Update Sysparam Set Descr = 'Allow PDT File Loading in Goods Inwards/Goods Outwards/Physical Verification' Where [Id] = 'SR3-0701-0000141'
+-GO-
+Update Sysparam Set Descr = 'Purchase Order Stockno,class1cd,class2cd,subclass1cd,subclass2cd,sizecd to Print' Where [Id] = 'SR3-0730-0000223'
+-GO-
+Update Sysparam Set Descr = 'Purchase Order Mode of Printing ( 0 inkjet ,1 means dot matrix)' Where [Id] = 'SR3-0730-0000224'
+-GO-
+Update Sysparam Set Descr = 'PO/Indent SKU Rate ( 1 Retail Price, 2 Dealer Price, 3 Current Cost, 4 Last Purchase Price)' Where [Id] = 'SR3-0730-0000225'
+-GO-
+Update Sysparam Set Descr = 'Delete Suspension Details as Part of Day-Begin Process' Where [Id] = 'SR3-0730-0000247'
+-GO-
+Update Sysparam Set Descr = 'Allow PO/Indent Configuration' Where [Id] = 'SR3-0730-0000267'
+-GO-
+Update Sysparam Set Descr = 'Company Code which has to be recorded in the PT file(s) created.' Where [Id] = 'SR3-0730-0000277'
+-GO-
+Update Sysparam Set Descr = 'Company name which has to be recorded in the PT file(s) created.' Where [Id] = 'SR3-0730-0000278'
+-GO-
+Update Sysparam Set Descr = 'Allow Rate Alteration in PO/Indent Conversion' Where [Id] = 'SR3-0730-0000281'
+-GO-
+Update Sysparam Set Descr = 'Allow Dealer Price Zero during Pricing Master Import' Where [Id] = 'SR3-0730-0000283'
+-GO-
+Update Sysparam Set Descr = 'PO print margin specification for Laser/inkjet print' Where [Id] = 'SR3-0730-0000288'
+-GO-
+Update Sysparam Set Descr = 'Show all pending POs for the selected party in PO browse' Where [Id] = 'SR3-0730-0000289'
+-GO-
+Update Sysparam Set Descr = 'Report Page Length (in Lines)' Where [Id] = 'SR4-0601-0000026'
+-GO-
+Update Sysparam Set Descr = 'Compute Stock Closing Balance on Retail Price / Cost Price' Where [Id] = 'SR4-0601-0000029'
+-GO-
+Update Sysparam Set Descr = 'Show Cash And Card Details In Sales Summary Report' Where [Id] = 'SR4-0602-0000022'
+-GO-
+Update Sysparam Set Descr = 'Show % Of Sales In Daily Sales Book' Where [Id] = 'SR4-0602-0000023'
+-GO-
+Update Sysparam Set Descr = 'Credit Cards Commisionwise Breakup Required In Counterwise Summary ?' Where [Id] = 'SR4-0602-0000024'
+-GO-
+Update Sysparam Set Descr = 'Transcation Types to be used for Stock Ageing Inwards' Where [Id] = 'SR4-0602-0000058'
+-GO-
+Update Sysparam Set Descr = 'Transaction Types to be used for Stock Ageing Outwards' Where [Id] = 'SR4-0602-0000059'
+-GO-
+Update Sysparam Set Descr = 'Transaction Types to be used for Sales Ageing' Where [Id] = 'SR4-0602-0000060'
+-GO-
+Update Sysparam Set Descr = 'Continuation Delimiter Used in Printing Label' Where [Id] = 'SR4-0602-0000061'
+-GO-
+Update Sysparam Set Descr = 'Customer Label Print Configuration' Where [Id] = 'SR4-0602-0000063'
+-GO-
+Update Sysparam Set Descr = 'Display the Current Stock in Attribute Wise Sale Report' Where [Id] = 'SR4-0602-0000095'
+-GO-
+Update Sysparam Set Descr = 'Cost Price Inclusive of Tax' Where [Id] = 'SR4-0702-0000185'
+-GO-
+Update Sysparam Set Descr = 'Select Price to be displayed in Rate field for Purchase (Cost / Last Purchase Price)' Where [Id] = 'SR4-0702-0000186'
+-GO-
+Update Sysparam Set Descr = 'Mode of Sales Promotion Applicability in Billing' Where [Id] = 'SR4-0702-0000187'
+-GO-
+Update Sysparam Set Descr = 'List Of Prefixes Blocked In Sales Promotion Catalogue' Where [Id] = 'SR4-0730-0000184'
+-GO-
+Update Sysparam Set Descr = 'Auto Generate Sales Promotion Code' Where [Id] = 'SR4-0730-0000276'
+-GO-
+Update Sysparam Set Descr = 'Item Description for Style Catalogue' Where [Id] = 'SR4-0730-0000290'
+-GO-
+Update Sysparam Set Descr = 'Whether Sale Tax Percentage depend upon Parameter or SaleTax Catalog' Where [Id] = 'SR4-6000-0000008'
+-GO-
+Update Sysparam Set Descr = 'Sales Tax Percentage For Audit Report(Arvind-VIIB)' Where [Id] = 'SR4-6000-0000009'
+-GO-
+Update Sysparam Set Descr = 'List Of Class2Cds which belongs to Gift Voucher Report' Where [Id] = 'SR4-6000-0000054'
+-GO-
+Update Sysparam Set Descr = 'AST Export Based On Date Or VaCtr' Where [Id] = 'SR5-0600-0000010'
+-GO-
+Update Sysparam Set Descr = 'Sleep Timer Set For AST Import' Where [Id] = 'SR5-0600-0000013'
+-GO-
+Update Sysparam Set Descr = 'Export Entire StockTrnSummary For IM' Where [Id] = 'SR5-0600-0000018'
+-GO-
+Update Sysparam Set Descr = 'Update Patch Date & Release Number' Where [Id] = 'SR5-0600-0000019'
+-GO-
+Update Sysparam Set Descr = 'IM Flat File Creation Date' Where [Id] = 'SR5-0601-0000006'
+-GO-
+Update Sysparam Set Descr = 'Check IM File Date Updated In IM File Or Send Flat File To Ho' Where [Id] = 'SR5-0601-0000007'
+-GO-
+Update Sysparam Set Descr = 'During IM-ID File Creation Skipped Record or Default Record' Where [Id] = 'SR5-0601-0000011'
+-GO-
+Update Sysparam Set Descr = 'Tally Accounting Interface Generation Number' Where [Id] = 'SR5-0601-0000016'
+-GO-
+Update Sysparam Set Descr = 'Walk-in - Extended Information' Where [Id] = 'SR5-0602-0000017'
+-GO-
+Update Sysparam Set Descr = 'Update Tax Automatically in Pricing Master Import' Where [Id] = 'SR5-0602-0000041'
+-GO-
+Update Sysparam Set Descr = 'Franchisee Checks During Day End' Where [Id] = 'SR5-0602-0000042'
+-GO-
+Update Sysparam Set Descr = 'Allow Day Open Date' Where [Id] = 'SR5-0602-0000044'
+-GO-
+Update Sysparam Set Descr = 'Allow POS Payment Modes Modification Date For Other Dates' Where [Id] = 'SR5-0602-0000045'
+-GO-
+Update Sysparam Set Descr = 'Year Ending Month' Where [Id] = 'SR5-0602-0000065'
+-GO-
+Update Sysparam Set Descr = 'Update Sysparam and Genlookup Counter During Day End' Where [Id] = 'SR5-0602-0000066'
+-GO-
+Update Sysparam Set Descr = 'Print Details of Customer Label Line#1' Where [Id] = 'SR5-0602-0000070'
+-GO-
+Update Sysparam Set Descr = 'Print Details of Customer Label Line#2' Where [Id] = 'SR5-0602-0000071'
+-GO-
+Update Sysparam Set Descr = 'Print Details of Customer Label Line#3' Where [Id] = 'SR5-0602-0000072'
+-GO-
+Update Sysparam Set Descr = 'Print Details of Customer Label Line#4' Where [Id] = 'SR5-0602-0000073'
+-GO-
+Update Sysparam Set Descr = 'Print Details of Customer Label Line#5' Where [Id] = 'SR5-0602-0000074'
+-GO-
+Update Sysparam Set Descr = 'Print Details of Customer Label Line#6' Where [Id] = 'SR5-0602-0000075'
+-GO-
+Update Sysparam Set Descr = 'Print Details of Customer Label Line#7' Where [Id] = 'SR5-0602-0000076'
+-GO-
+Update Sysparam Set Descr = 'Print Details of Customer Label Line#8' Where [Id] = 'SR5-0602-0000077'
+-GO-
+Update Sysparam Set Descr = 'Franchisee Checks Applicable During Day End' Where [Id] = 'SR5-0602-0000084'
+-GO-
+Update Sysparam Set Descr = 'Option For Conversion Of Sale DC To Approval DC In Day End' Where [Id] = 'SR5-0602-0000101'
+-GO-
+Update Sysparam Set Descr = 'Additional Columns Exist for General Price Revision' Where [Id] = 'SR5-0602-0000105'
+-GO-
+Update Sysparam Set Descr = 'Validate Against MOP Vs Current Stock Qty' Where [Id] = 'SR5-0602-0000111'
+-GO-
+Update Sysparam Set Descr = 'Flat File Creation in App Path Out or DBOut Directory' Where [Id] = 'SR5-0701-0000130'
+-GO-
+Update Sysparam Set Descr = 'Whether to display Customer Code or Name in Tally' Where [Id] = 'SR5-0701-0000133'
+-GO-
+Update Sysparam Set Descr = 'Convert Negative Stock to Misc. Receipt' Where [Id] = 'SR5-0701-0000135'
+-GO-
+Update Sysparam Set Descr = 'Whether to display Alias for Account Name in Tally' Where [Id] = 'SR5-0701-0000136'
+-GO-
+Update Sysparam Set Descr = 'PM Import and GIR - Update TAX automatically' Where [Id] = 'SR5-0701-0000137'
+-GO-
+Update Sysparam Set Descr = 'Tolerance Factor In Day Begin for Qty And Value' Where [Id] = 'SR5-0701-0000139'
+-GO-
+Update Sysparam Set Descr = 'Enable Common PT File Creation' Where [Id] = 'SR5-0701-0000140'
+-GO-
+Update Sysparam Set Descr = 'AST Export Path' Where [Id] = 'SR5-0702-0000145'
+-GO-
+Update Sysparam Set Descr = 'AST Import Path' Where [Id] = 'SR5-0702-0000146'
+-GO-
+Update Sysparam Set Descr = 'AST BackUp Path' Where [Id] = 'SR5-0702-0000147'
+-GO-
+Update Sysparam Set Descr = 'AST DSN Name' Where [Id] = 'SR5-0702-0000148'
+-GO-
+Update Sysparam Set Descr = 'Tables to be excluded during export to replication1' Where [Id] = 'SR5-0702-0000149'
+-GO-
+Update Sysparam Set Descr = 'Tables to be excluded during export to replication2' Where [Id] = 'SR5-0702-0000150'
+-GO-
+Update Sysparam Set Descr = 'Tally IP Address' Where [Id] = 'SR5-0702-0000153'
+-GO-
+Update Sysparam Set Descr = 'Tally Company Name' Where [Id] = 'SR5-0702-0000154'
+-GO-
+Update Sysparam Set Descr = 'Tally Port No' Where [Id] = 'SR5-0702-0000155'
+-GO-
+Update Sysparam Set Descr = 'Option to Export Sales Transaction to Tally' Where [Id] = 'SR5-0702-0000156'
+-GO-
+Update Sysparam Set Descr = 'Actual Quantity in Flat File Creation' Where [Id] = 'SR5-0702-0000157'
+-GO-
+Update Sysparam Set Descr = 'FTP Remote Path For Uploading the Files' Where [Id] = 'SR5-0702-0000160'
+-GO-
+Update Sysparam Set Descr = 'FTP IS Passive mode' Where [Id] = 'SR5-0702-0000161'
+-GO-
+Update Sysparam Set Descr = 'Flat File Party Code Based on Franchise Code' Where [Id] = 'SR5-0702-0000164'
+-GO-
+Update Sysparam Set Descr = 'Export Entire Stock Transaction Summary in Day End Process' Where [Id] = 'SR5-0702-0000168'
+-GO-
+Update Sysparam Set Descr = 'No. of Days Backup to be Preserved' Where [Id] = 'SR5-0702-0000170'
+-GO-
+Update Sysparam Set Descr = 'Print To Address in  Goods Inwards' Where [Id] = 'SR5-0730-0000188'
+-GO-
+Update Sysparam Set Descr = 'Loading / Storing Path for Barcode Design Templates' Where [Id] = 'SR5-0730-0000189'
+-GO-
+Update Sysparam Set Descr = 'Display Actual Quantity and Doc Quantity for PO Pre-fill' Where [Id] = 'SR5-0730-0000190'
+-GO-
+Update Sysparam Set Descr = 'Split Quantity If Actual Qty is More than PO Qty' Where [Id] = 'SR5-0730-0000191'
+-GO-
+Update Sysparam Set Descr = 'Auto Pre-fill PO details in Goods Inwards (Only for POs based on stock number)' Where [Id] = 'SR5-0730-0000192'
+-GO-
+Update Sysparam Set Descr = 'Re Open PO when GIR Document Edited or Deleted If PO is Closed' Where [Id] = 'SR5-0730-0000193'
+-GO-
+Update Sysparam Set Descr = 'Validate Flat File PO Ref. with POS PO Ref.' Where [Id] = 'SR5-0730-0000194'
+-GO-
+Update Sysparam Set Descr = 'Validate Data during Pricing Master Import' Where [Id] = 'SR5-0730-0000195'
+-GO-
+Update Sysparam Set Descr = 'Running No for Data Extract Transaction File' Where [Id] = 'SR5-0730-0000226'
+-GO-
+Update Sysparam Set Descr = 'Wait Time for Data Extraction Before Data Polling' Where [Id] = 'SR5-0730-0000227'
+-GO-
+Update Sysparam Set Descr = 'Flat File thru On Line' Where [Id] = 'SR5-0730-0000228'
+-GO-
+Update Sysparam Set Descr = 'Server Name for On Line Data Sync' Where [Id] = 'SR5-0730-0000229'
+-GO-
+Update Sysparam Set Descr = 'Subject Line for POS generated Mails to HO' Where [Id] = 'SR5-0730-0000230'
+-GO-
+Update Sysparam Set Descr = 'Subject Line of Mails to be Downloaded at POS' Where [Id] = 'SR5-0730-0000231'
+-GO-
+Update Sysparam Set Descr = 'Subject Line of Mail Acknowledgement From HO' Where [Id] = 'SR5-0730-0000232'
+-GO-
+Update Sysparam Set Descr = 'Message for Mail From HO' Where [Id] = 'SR5-0730-0000233'
+-GO-
+Update Sysparam Set Descr = 'Message for Mail From POS' Where [Id] = 'SR5-0730-0000234'
+-GO-
+Update Sysparam Set Descr = 'Message for Mail Ack From HO' Where [Id] = 'SR5-0730-0000235'
+-GO-
+Update Sysparam Set Descr = 'File Type for Downloading at HO' Where [Id] = 'SR5-0730-0000236'
+-GO-
+Update Sysparam Set Descr = 'File Type for Downloading at POS' Where [Id] = 'SR5-0730-0000237'
+-GO-
+Update Sysparam Set Descr = 'Stock Visibility Browse Description String Formation - 1' Where [Id] = 'SR5-0730-0000238'
+-GO-
+Update Sysparam Set Descr = 'Stock Visibility Browse Description String Formation - 2' Where [Id] = 'SR5-0730-0000239'
+-GO-
+Update Sysparam Set Descr = 'Display Current Quantity in Stock Visibility Browse' Where [Id] = 'SR5-0730-0000240'
+-GO-
+Update Sysparam Set Descr = 'Maximum Rows in Stock Visibility Browse' Where [Id] = 'SR5-0730-0000241'
+-GO-
+Update Sysparam Set Descr = 'Default Sorting Order in Stock Visibility Browse' Where [Id] = 'SR5-0730-0000242'
+-GO-
+Update Sysparam Set Descr = 'Code And Desc Order For Classfn Fields Displayed in Stock Visibility Browse' Where [Id] = 'SR5-0730-0000243'
+-GO-
+Update Sysparam Set Descr = 'Delimiter Character for Code and Description Display in Stock Visibility Browse' Where [Id] = 'SR5-0730-0000244'
+-GO-
+Update Sysparam Set Descr = 'Default Searching Field(CodeOrDesc) in Stock Visibility Browse' Where [Id] = 'SR5-0730-0000245'
+-GO-
+Update Sysparam Set Descr = 'Additional Tables to be Included During Sync.' Where [Id] = 'SR5-0730-0000246'
+-GO-
+Update Sysparam Set Descr = 'Connection Time Out in Seconds' Where [Id] = 'SR5-0730-0000248'
+-GO-
+Update Sysparam Set Descr = 'Command Time Out in Seconds' Where [Id] = 'SR5-0730-0000249'
+-GO-
+Update Sysparam Set Descr = 'Database Version' Where [Id] = 'SR5-0730-0000250'
+-GO-
+Update Sysparam Set Descr = 'TCP Version' Where [Id] = 'SR5-0730-0000251'
+-GO-
+Update Sysparam Set Descr = 'Purchase Order Printint format' Where [Id] = 'SR5-0730-0000252'
+-GO-
+Update Sysparam Set Descr = 'Upload Folder for FTP' Where [Id] = 'SR5-0730-0000253'
+-GO-
+Update Sysparam Set Descr = 'Download Folder for FTP' Where [Id] = 'SR5-0730-0000254'
+-GO-
+Update Sysparam Set Descr = 'DialUp Check for FTP' Where [Id] = 'SR5-0730-0000255'
+-GO-
+Update Sysparam Set Descr = 'Upload Folder for Direct Copy' Where [Id] = 'SR5-0730-0000256'
+-GO-
+Update Sysparam Set Descr = 'Download Folder for Direct Copy' Where [Id] = 'SR5-0730-0000257'
+-GO-
+Update Sysparam Set Descr = 'HO Email Id' Where [Id] = 'SR5-0730-0000258'
+-GO-
+Update Sysparam Set Descr = 'File Type for HO' Where [Id] = 'SR5-0730-0000259'
+-GO-
+Update Sysparam Set Descr = 'File Type for POS' Where [Id] = 'SR5-0730-0000260'
+-GO-
+Update Sysparam Set Descr = 'Subject for Resync Request From HO' Where [Id] = 'SR5-0730-0000261'
+-GO-
+Update Sysparam Set Descr = 'Message for Resync Request From HO' Where [Id] = 'SR5-0730-0000262'
+-GO-
+Update Sysparam Set Descr = 'Shoper Temporary Backup Path' Where [Id] = 'SR5-0730-0000263'
+-GO-
+Update Sysparam Set Descr = 'Default Size Group Id' Where [Id] = 'SR5-0730-0000264'
+-GO-
+Update Sysparam Set Descr = 'Free Items Mandatory in Billing' Where [Id] = 'SR5-0730-0000265'
+-GO-
+Update Sysparam Set Descr = 'Free Items Billed at Value' Where [Id] = 'SR5-0730-0000266'
+-GO-
+Update Sysparam Set Descr = 'Number of digits to be Stored in credit card number' Where [Id] = 'SR5-0730-0000267'
+-GO-
+Update Sysparam Set Descr = 'Print Audit Trail Title  in Goods Outwards' Where [Id] = 'SR5-0730-0000268'
+-GO-
+Update Sysparam Set Descr = 'Print Tax Component Name and Description In VAT Summary' Where [Id] = 'SR5-0730-0000269'
+-GO-
+Update Sysparam Set Descr = 'File Upload/download Retrying times' Where [Id] = 'SR5-0730-0000270'
+-GO-
+Update Sysparam Set Descr = 'File Upload/download Retrying Delay interval seconds' Where [Id] = 'SR5-0730-0000271'
+-GO-
+Update Sysparam Set Descr = 'Print Tax Type Description in VAT Summary' Where [Id] = 'SR5-0730-0000272'
+-GO-
+Update Sysparam Set Descr = 'Allow SKU Rate Alteration in PO/Indent' Where [Id] = 'SR5-0730-0000273'
+-GO-
+Update Sysparam Set Descr = 'Automatic Retain only Last n months for Data Archival' Where [Id] = 'SR5-0730-0000275'
+-GO-
+Update Sysparam Set Descr = 'Extended Data Input Mode' Where [Id] = 'SR5-0730-0000279'
+-GO-
+Update Sysparam Set Descr = 'Apply PO Rate with PO Reference in Inwards' Where [Id] = 'SR5-0730-0000280'
+-GO-
+Update Sysparam Set Descr = 'Extraction Zip file split size specification in KB' Where [Id] = 'SR5-0730-0000282'
+-GO-
+Update Sysparam Set Descr = 'DBVersion to be updated for POS Transactions' Where [Id] = 'SR5-0730-0000285'
+-GO-
+Update Sysparam Set Descr = 'Shoper Live Update Backup Parameter' Where [Id] = 'SR5-0730-0000291'
+-GO-
+Update Sysparam Set Descr = 'Customer Code Generation Format' Where [Id] = 'SR6-0601-0000015'
+-GO-
+Update Sysparam Set Descr = 'Cut-Off Quantity For Excess Stock Handling' Where [Id] = 'SR6-0601-0000017'
+-GO-
+Update Sysparam Set Descr = 'Conversion Factor For Excess Stock Handling' Where [Id] = 'SR6-0601-0000018'
+-GO-
+Update Sysparam Set Descr = 'Print Counter Summary Report' Where [Id] = 'SR6-0601-0000019'
+-GO-
+Update Sysparam Set Descr = 'Display SubClass1 and SubClass2 Description in Item Master Entry' Where [Id] = 'SR6-0602-0000055'
+-GO-
+Update Sysparam Set Descr = 'Configure Display of Analysis Code in Item Master Entry' Where [Id] = 'SR6-0602-0000056'
+-GO-
+Update Sysparam Set Descr = 'Display Common Field in top or Spread  in Item Master Entry' Where [Id] = 'SR6-0602-0000057'
+-GO-
+Update Sysparam Set Descr = 'Activate the Multiple Selection in Customer Browse' Where [Id] = 'SR6-0602-0000062'
+-GO-
+Update Sysparam Set Descr = 'Order By Class Code for Goods Register' Where [Id] = 'SR6-0602-0000064'
+-GO-
+Update Sysparam Set Descr = 'Accept Document Remarks in Bill' Where [Id] = 'SR6-0602-0000068'
+-GO-
+Update Sysparam Set Descr = 'Image Applicable at Style or SKU level' Where [Id] = 'SR6-0602-0000080'
+-GO-
+Update Sysparam Set Descr = 'StockNo used for Handling Bill Jumping' Where [Id] = 'SR6-0602-0000112'
+-GO-
+Update Sysparam Set Descr = 'Item Master Creation - (1) Record By Record Insertion Or (0) Bulk Insert' Where [Id] = 'SR6-0701-0000142'
+-GO-
+Update Sysparam Set Descr = 'Accept Quantity in Item Master Entry' Where [Id] = 'SR6-0702-0000144'
+-GO-
+Update Sysparam Set Descr = 'Sales Factor Rec. Id Auto Generation' Where [Id] = 'SR6-0702-0000151'
+-GO-
+Update Sysparam Set Descr = 'Image ID Applicable in Item Master' Where [Id] = 'SR6-0702-0000162'
+-GO-
+Update Sysparam Set Descr = 'Shoper Image File Path' Where [Id] = 'SR6-0702-0000165'
+-GO-
+Update Sysparam Set Descr = 'Batch SrlNo For Item Master Entry' Where [Id] = 'SR6-0702-000143A'
+-GO-
+Update Sysparam Set Descr = 'Batch SrlNo Rec-Id For Item Master Entry' Where [Id] = 'SR6-0702-000143B'
+-GO-
+Update Sysparam Set Descr = 'Regular Indicator for ItemMaster Entry' Where [Id] = 'SR6-0702-000144A'
+-GO-
+Update Sysparam Set Descr = 'Regular Indicator Rec-Id for ItemMaster Entry' Where [Id] = 'SR6-0702-000144B'
+-GO-
+Update Sysparam Set Descr = 'Allowed Operations in Size Catalogue Management' Where [Id] = 'SR6-0730-0000175'
+-GO-
+Update Sysparam Set Descr = 'If Sales Promotions are Applicable to New Items Created, Activate Immediately' Where [Id] = 'SR6-0730-0000284'
+-GO-
+Update Sysparam Set Descr = 'Item Analysis Code6 Present' Where [Id] = 'SR6-0730-000196A'
+-GO-
+Update Sysparam Set Descr = 'Item Analysis Code6 Caption' Where [Id] = 'SR6-0730-000196B'
+-GO-
+Update Sysparam Set Descr = 'Item Analysis Code6 Look-up Rec Id' Where [Id] = 'SR6-0730-000196C'
+-GO-
+Update Sysparam Set Descr = 'Item Analysis Code7 Present' Where [Id] = 'SR6-0730-000197A'
+-GO-
+Update Sysparam Set Descr = 'Item Analysis Code7 Caption' Where [Id] = 'SR6-0730-000197B'
+-GO-
+Update Sysparam Set Descr = 'Item Analysis Code7 Look-up Rec Id' Where [Id] = 'SR6-0730-000197C'
+-GO-
+Update Sysparam Set Descr = 'Item Analysis Code8 Present' Where [Id] = 'SR6-0730-000198A'
+-GO-
+Update Sysparam Set Descr = 'Item Analysis Code8 Caption' Where [Id] = 'SR6-0730-000198B'
+-GO-
+Update Sysparam Set Descr = 'Item Analysis Code8 Look-up Rec Id' Where [Id] = 'SR6-0730-000198C'
+-GO-
+Update Sysparam Set Descr = 'Item Analysis Code9 Present' Where [Id] = 'SR6-0730-000199A'
+-GO-
+Update Sysparam Set Descr = 'Item Analysis Code9 Caption' Where [Id] = 'SR6-0730-000199B'
+-GO-
+Update Sysparam Set Descr = 'Item Analysis Code9 Look-up Rec Id' Where [Id] = 'SR6-0730-000199C'
+-GO-
+Update Sysparam Set Descr = 'Item Analysis Code10 Present' Where [Id] = 'SR6-0730-000200A'
+-GO-
+Update Sysparam Set Descr = 'Item Analysis Code10 Caption' Where [Id] = 'SR6-0730-000200B'
+-GO-
+Update Sysparam Set Descr = 'Item Analysis Code10 Look-up Rec Id' Where [Id] = 'SR6-0730-000200C'
+-GO-
+Update Sysparam Set Descr = 'Item Analysis Code11 Present' Where [Id] = 'SR6-0730-000201A'
+-GO-
+Update Sysparam Set Descr = 'Item Analysis Code11 Caption' Where [Id] = 'SR6-0730-000201B'
+-GO-
+Update Sysparam Set Descr = 'Item Analysis Code11 Look-up Rec Id' Where [Id] = 'SR6-0730-000201C'
+-GO-
+Update Sysparam Set Descr = 'Item Analysis Code12 Present' Where [Id] = 'SR6-0730-000202A'
+-GO-
+Update Sysparam Set Descr = 'Item Analysis Code12 Caption' Where [Id] = 'SR6-0730-000202B'
+-GO-
+Update Sysparam Set Descr = 'Item Analysis Code12 Look-up Rec Id' Where [Id] = 'SR6-0730-000202C'
+-GO-
+Update Sysparam Set Descr = 'Item Analysis Code13 Present' Where [Id] = 'SR6-0730-000203A'
+-GO-
+Update Sysparam Set Descr = 'Item Analysis Code13 Caption' Where [Id] = 'SR6-0730-000203B'
+-GO-
+Update Sysparam Set Descr = 'Item Analysis Code13 Look-up Rec Id' Where [Id] = 'SR6-0730-000203C'
+-GO-
+Update Sysparam Set Descr = 'Item Analysis Code14 Present' Where [Id] = 'SR6-0730-000204A'
+-GO-
+Update Sysparam Set Descr = 'Item Analysis Code14 Caption' Where [Id] = 'SR6-0730-000204B'
+-GO-
+Update Sysparam Set Descr = 'Item Analysis Code14 Look-up Rec Id' Where [Id] = 'SR6-0730-000204C'
+-GO-
+Update Sysparam Set Descr = 'Item Analysis Code15 Present' Where [Id] = 'SR6-0730-000205A'
+-GO-
+Update Sysparam Set Descr = 'Item Analysis Code15 Caption' Where [Id] = 'SR6-0730-000205B'
+-GO-
+Update Sysparam Set Descr = 'Item Analysis Code15 Look-up Rec Id' Where [Id] = 'SR6-0730-000205C'
+-GO-
+Update Sysparam Set Descr = 'Item Analysis Code16 Present' Where [Id] = 'SR6-0730-000206A'
+-GO-
+Update Sysparam Set Descr = 'Item Analysis Code16 Caption' Where [Id] = 'SR6-0730-000206B'
+-GO-
+Update Sysparam Set Descr = 'Item Analysis Code16 Look-up Rec Id' Where [Id] = 'SR6-0730-000206C'
+-GO-
+Update Sysparam Set Descr = 'Item Analysis Code17 Present' Where [Id] = 'SR6-0730-000207A'
+-GO-
+Update Sysparam Set Descr = 'Item Analysis Code17 Caption' Where [Id] = 'SR6-0730-000207B'
+-GO-
+Update Sysparam Set Descr = 'Item Analysis Code17 Look-up Rec Id' Where [Id] = 'SR6-0730-000207C'
+-GO-
+Update Sysparam Set Descr = 'Item Analysis Code18 Present' Where [Id] = 'SR6-0730-000208A'
+-GO-
+Update Sysparam Set Descr = 'Item Analysis Code18 Caption' Where [Id] = 'SR6-0730-000208B'
+-GO-
+Update Sysparam Set Descr = 'Item Analysis Code18 Look-up Rec Id' Where [Id] = 'SR6-0730-000208C'
+-GO-
+Update Sysparam Set Descr = 'Item Analysis Code19 Present' Where [Id] = 'SR6-0730-000209A'
+-GO-
+Update Sysparam Set Descr = 'Item Analysis Code19 Caption' Where [Id] = 'SR6-0730-000209B'
+-GO-
+Update Sysparam Set Descr = 'Item Analysis Code19 Look-up Rec Id' Where [Id] = 'SR6-0730-000209C'
+-GO-
+Update Sysparam Set Descr = 'Item Analysis Code20 Present' Where [Id] = 'SR6-0730-000210A'
+-GO-
+Update Sysparam Set Descr = 'Item Analysis Code20 Caption' Where [Id] = 'SR6-0730-000210B'
+-GO-
+Update Sysparam Set Descr = 'Item Analysis Code20 Look-up Rec Id' Where [Id] = 'SR6-0730-000210C'
+-GO-
+Update Sysparam Set Descr = 'Item Analysis Code21 Present' Where [Id] = 'SR6-0730-000211A'
+-GO-
+Update Sysparam Set Descr = 'Item Analysis Code21 Caption' Where [Id] = 'SR6-0730-000211B'
+-GO-
+Update Sysparam Set Descr = 'Item Analysis Code21 Look-up Rec Id' Where [Id] = 'SR6-0730-000211C'
+-GO-
+Update Sysparam Set Descr = 'Item Analysis Code22 Present' Where [Id] = 'SR6-0730-000212A'
+-GO-
+Update Sysparam Set Descr = 'Item Analysis Code22 Caption' Where [Id] = 'SR6-0730-000212B'
+-GO-
+Update Sysparam Set Descr = 'Item Analysis Code22 Look-up Rec Id' Where [Id] = 'SR6-0730-000212C'
+-GO-
+Update Sysparam Set Descr = 'Item Analysis Code23 Present' Where [Id] = 'SR6-0730-000213A'
+-GO-
+Update Sysparam Set Descr = 'Item Analysis Code23 Caption' Where [Id] = 'SR6-0730-000213B'
+-GO-
+Update Sysparam Set Descr = 'Item Analysis Code23 Look-up Rec Id' Where [Id] = 'SR6-0730-000213C'
+-GO-
+Update Sysparam Set Descr = 'Item Analysis Code24 Present' Where [Id] = 'SR6-0730-000214A'
+-GO-
+Update Sysparam Set Descr = 'Item Analysis Code24 Caption' Where [Id] = 'SR6-0730-000214B'
+-GO-
+Update Sysparam Set Descr = 'Item Analysis Code24 Look-up Rec Id' Where [Id] = 'SR6-0730-000214C'
+-GO-
+Update Sysparam Set Descr = 'Item Analysis Code25 Present' Where [Id] = 'SR6-0730-000215A'
+-GO-
+Update Sysparam Set Descr = 'Item Analysis Code25 Caption' Where [Id] = 'SR6-0730-000215B'
+-GO-
+Update Sysparam Set Descr = 'Item Analysis Code25 Look-up Rec Id' Where [Id] = 'SR6-0730-000215C'
+-GO-
+Update Sysparam Set Descr = 'Item Analysis Code26 Present' Where [Id] = 'SR6-0730-000216A'
+-GO-
+Update Sysparam Set Descr = 'Item Analysis Code26 Caption' Where [Id] = 'SR6-0730-000216B'
+-GO-
+Update Sysparam Set Descr = 'Item Analysis Code26 Look-up Rec Id' Where [Id] = 'SR6-0730-000216C'
+-GO-
+Update Sysparam Set Descr = 'Item Analysis Code27 Present' Where [Id] = 'SR6-0730-000217A'
+-GO-
+Update Sysparam Set Descr = 'Item Analysis Code27 Caption' Where [Id] = 'SR6-0730-000217B'
+-GO-
+Update Sysparam Set Descr = 'Item Analysis Code27 Look-up Rec Id' Where [Id] = 'SR6-0730-000217C'
+-GO-
+Update Sysparam Set Descr = 'Item Analysis Code28 Present' Where [Id] = 'SR6-0730-000218A'
+-GO-
+Update Sysparam Set Descr = 'Item Analysis Code28 Caption' Where [Id] = 'SR6-0730-000218B'
+-GO-
+Update Sysparam Set Descr = 'Item Analysis Code28 Look-up Rec Id' Where [Id] = 'SR6-0730-000218C'
+-GO-
+Update Sysparam Set Descr = 'Item Analysis Code29 Present' Where [Id] = 'SR6-0730-000219A'
+-GO-
+Update Sysparam Set Descr = 'Item Analysis Code29 Caption' Where [Id] = 'SR6-0730-000219B'
+-GO-
+Update Sysparam Set Descr = 'Item Analysis Code29 Look-up Rec Id' Where [Id] = 'SR6-0730-000219C'
+-GO-
+Update Sysparam Set Descr = 'Item Analysis Code30 Present' Where [Id] = 'SR6-0730-000220A'
+-GO-
+Update Sysparam Set Descr = 'Item Analysis Code30 Caption' Where [Id] = 'SR6-0730-000220B'
+-GO-
+Update Sysparam Set Descr = 'Item Analysis Code30 Look-up Rec Id' Where [Id] = 'SR6-0730-000220C'
+-GO-
+Update Sysparam Set Descr = 'Item Analysis Code31 Present' Where [Id] = 'SR6-0730-000221A'
+-GO-
+Update Sysparam Set Descr = 'Item Analysis Code31 Caption' Where [Id] = 'SR6-0730-000221B'
+-GO-
+Update Sysparam Set Descr = 'Item Analysis Code31 Look-up Rec Id' Where [Id] = 'SR6-0730-000221C'
+-GO-
+Update Sysparam Set Descr = 'Item Analysis Code32 Present' Where [Id] = 'SR6-0730-000222A'
+-GO-
+Update Sysparam Set Descr = 'Item Analysis Code32 Caption' Where [Id] = 'SR6-0730-000222B'
+-GO-
+Update Sysparam Set Descr = 'Item Analysis Code32 Look-up Rec Id' Where [Id] = 'SR6-0730-000222C'
+-GO-
+Update Sysparam Set Descr = 'Company TIN Number' Where [Id] = 'SR7-0700-0000120'
+-GO-
+Update Sysparam Set Descr = 'Tax Cal. Method In Billing : First Remove Tax From Sale Value & Apply Discounts, Then Cal. Tax Value' Where [Id] = 'SR7-0701-0000002'
+-GO-
+Update Sysparam Set Descr = 'Franchisee Year Opening Setting' Where [Id] = 'SR7-0730-0000176'
+-GO-
+Update Sysparam Set Descr = 'No. of Digits for Pay-in Slip Number' Where [Id] = 'SR7-0730-0000177'
+-GO-
+Update Sysparam Set Descr = 'Use Same Pay-in Slip for Cash & Credit' Where [Id] = 'SR7-0730-0000178'
+-GO-
+Update Sysparam Set Descr = 'HO and Franchisee Code' Where [Id] = 'SR7-0730-0000179'
+-GO-
+Update Sysparam Set Descr = 'Cash/ Credit Payment to HO Configuration' Where [Id] = 'SR7-0730-0000180'
+  </s9qScript>		
+</s9qsqlblk>
+
+
+
+<s9qsqlblk>
+  <s9qScriptID>	S9Q_013_0_0016	</s9qScriptID>
+  <s9qtitle></s9qtitle>
+  <s9qpgmtype>L</s9qpgmtype>
+  <s9qversion>*</s9qversion>
+  <s9qenvironment>P</s9qenvironment>
+  <s9qRunMultiple>0</s9qRunMultiple>
+  <s9qQryType>DML</s9qQryType>
+  <s9qScript>		
+TRUNCATE TABLE DBTUNINGCONFIG
+-GO-
+INSERT INTO [dbo].[DBTUNINGCONFIG] ([srlno], [type], [groupcaption], [subcaption], [command], [arg1], [arg2], [arg3], [Resultdisp], [Resulttofilter] ) VALUES ( 1, 'POS', 'Truncation of Log', '', '', '', NULL, NULL, 'Y', NULL )
+-GO-
+INSERT INTO [dbo].[DBTUNINGCONFIG] ([srlno], [type], [groupcaption], [subcaption], [command], [arg1], [arg2], [arg3], [Resultdisp], [Resulttofilter] ) VALUES ( 2, 'POS', 'Re-Indexing DB Master Tables', '', '', '', '', NULL, 'Y', NULL )
+-GO-
+INSERT INTO [dbo].[DBTUNINGCONFIG] ([srlno], [type], [groupcaption], [subcaption], [command], [arg1], [arg2], [arg3], [Resultdisp], [Resulttofilter] ) VALUES ( 3, 'POS', 'Re-Indexing DB Master Tables', 'Item', '', '', 'Itemmaster', NULL, 'Y', NULL )
+-GO-
+INSERT INTO [dbo].[DBTUNINGCONFIG] ([srlno], [type], [groupcaption], [subcaption], [command], [arg1], [arg2], [arg3], [Resultdisp], [Resulttofilter] ) VALUES ( 4, 'POS', 'Re-Indexing DB Master Tables', 'Customer', '', '', 'customers', NULL, 'Y', NULL )
+-GO-
+INSERT INTO [dbo].[DBTUNINGCONFIG] ([srlno], [type], [groupcaption], [subcaption], [command], [arg1], [arg2], [arg3], [Resultdisp], [Resulttofilter] ) VALUES (5, 'POS', 'Re-Indexing DB Master Tables', 'Stock', '', '', 'stockmaster', NULL, 'Y', NULL )
+-GO-
+INSERT INTO [dbo].[DBTUNINGCONFIG] ([srlno], [type], [groupcaption], [subcaption], [command], [arg1], [arg2], [arg3], [Resultdisp], [Resulttofilter] ) VALUES ( 6, 'POS', 'Re-Indexing DB Transaction Tables', '', '', '', '', NULL, 'Y', NULL )
+-GO-
+INSERT INTO [dbo].[DBTUNINGCONFIG] ([srlno], [type], [groupcaption], [subcaption], [command], [arg1], [arg2], [arg3], [Resultdisp], [Resulttofilter] ) VALUES ( 7, 'POS', 'Re-Indexing DB Transaction Tables', 'Stock Header', '', '', 'stktrnhdr', NULL, 'Y', NULL )
+-GO-
+INSERT INTO [dbo].[DBTUNINGCONFIG] ([srlno], [type], [groupcaption], [subcaption], [command], [arg1], [arg2], [arg3], [Resultdisp], [Resulttofilter] ) VALUES ( 8, 'POS', 'Re-Indexing DB Transaction Tables', 'Stock Details', '', '', 'stktrndtls', NULL, 'Y', NULL )
+-GO-
+INSERT INTO [dbo].[DBTUNINGCONFIG] ([srlno], [type], [groupcaption], [subcaption], [command], [arg1], [arg2], [arg3], [Resultdisp], [Resulttofilter] ) VALUES (9, 'POS', 'Re-Indexing DB Transaction Tables', 'Sales Header', '', '', 'saletrnhdr', NULL, 'Y', NULL )
+-GO-
+INSERT INTO [dbo].[DBTUNINGCONFIG] ([srlno], [type], [groupcaption], [subcaption], [command], [arg1], [arg2], [arg3], [Resultdisp], [Resulttofilter] ) VALUES (10, 'SECDB', 'Truncation of Log', '', '', '', NULL, NULL, 'Y', NULL )
+-GO-
+INSERT INTO [dbo].[DBTUNINGCONFIG] ([srlno], [type], [groupcaption], [subcaption], [command], [arg1], [arg2], [arg3], [Resultdisp], [Resulttofilter] ) VALUES (11, 'SECDB', 'Re-Indexing DB Master Tables', '', '', '', '', NULL, 'Y', NULL )
+-GO-
+INSERT INTO [dbo].[DBTUNINGCONFIG] ([srlno], [type], [groupcaption], [subcaption], [command], [arg1], [arg2], [arg3], [Resultdisp], [Resulttofilter] ) VALUES ( 12, 'SECDB', 'Re-Indexing DB Master Tables', 'Item', '', '', 'Itemmaster', NULL, 'Y', NULL )
+-GO-
+INSERT INTO [dbo].[DBTUNINGCONFIG] ([srlno], [type], [groupcaption], [subcaption], [command], [arg1], [arg2], [arg3], [Resultdisp], [Resulttofilter] ) VALUES ( 13, 'SECDB', 'Re-Indexing DB Master Tables', 'Customer', '', '', 'customers', NULL, 'Y', NULL )
+-GO-
+INSERT INTO [dbo].[DBTUNINGCONFIG] ([srlno], [type], [groupcaption], [subcaption], [command], [arg1], [arg2], [arg3], [Resultdisp], [Resulttofilter] ) VALUES (14, 'SECDB', 'Re-Indexing DB Master Tables', 'Stock', '', '', 'stockmaster', NULL, 'Y', NULL )
+-GO-
+INSERT INTO [dbo].[DBTUNINGCONFIG] ([srlno], [type], [groupcaption], [subcaption], [command], [arg1], [arg2], [arg3], [Resultdisp], [Resulttofilter] ) VALUES ( 15, 'SECDB', 'Re-Indexing DB Transaction Tables', '', '', '', '', NULL, 'Y', NULL )
+-GO-
+INSERT INTO [dbo].[DBTUNINGCONFIG] ([srlno], [type], [groupcaption], [subcaption], [command], [arg1], [arg2], [arg3], [Resultdisp], [Resulttofilter] ) VALUES (16, 'SECDB', 'Re-Indexing DB Transaction Tables', 'Stock Header', '', '', 'stktrnhdr', NULL, 'Y', NULL )
+-GO-
+INSERT INTO [dbo].[DBTUNINGCONFIG] ([srlno], [type], [groupcaption], [subcaption], [command], [arg1], [arg2], [arg3], [Resultdisp], [Resulttofilter] ) VALUES (17, 'SECDB', 'Re-Indexing DB Transaction Tables', 'Stock Detail', '', '', 'stktrndtls', NULL, 'Y', NULL )
+-GO-
+INSERT INTO [dbo].[DBTUNINGCONFIG] ([srlno], [type], [groupcaption], [subcaption], [command], [arg1], [arg2], [arg3], [Resultdisp], [Resulttofilter] ) VALUES (18, 'SECDB', 'Re-Indexing DB Transaction Tables', 'Sales Header', '', '', 'saletrnhdr', NULL, 'Y', NULL )
+-GO-
+INSERT INTO [dbo].[DBTUNINGCONFIG] ([srlno], [type], [groupcaption], [subcaption], [command], [arg1], [arg2], [arg3], [Resultdisp], [Resulttofilter] ) VALUES ( 19, 'EIS-POS', 'Truncation of Log', '', '', '', NULL, NULL, 'Y', NULL )
+-GO-
+INSERT INTO DBTUNINGCONFIG(SRLNO,TYPE,GROUPCAPTION,SUBCAPTION,COMMAND,ARG1,ARG2,RESULTDISP) VALUES (20,'POS','Repair DB Without Data Loss','','ALTER DATABASE <<dbname>> SET SINGLE_USER; DBCC CHECKDB(''<<dbname>>'',REPAIR_REBUILD); ALTER DATABASE <<dbname>> SET MULTI_USER','<<dbname>>','','Y')
+-GO-
+INSERT INTO DBTUNINGCONFIG(SRLNO,TYPE,GROUPCAPTION,SUBCAPTION,COMMAND,ARG1,ARG2,RESULTDISP) VALUES (21,'POS','Set DB Recovery Mode to SIMPLE','','ALTER DATABASE <<dbname>> SET RECOVERY SIMPLE','<<dbname>>','','Y')
+-GO-
+INSERT INTO DBTUNINGCONFIG(SRLNO,TYPE,GROUPCAPTION,SUBCAPTION,COMMAND,ARG1,ARG2,RESULTDISP) VALUES (22,'POS','Show Contig for Master Tables','','','','','Y')
+-GO-
+INSERT INTO DBTUNINGCONFIG(SRLNO,TYPE,GROUPCAPTION,SUBCAPTION,COMMAND,ARG1,ARG2,RESULTDISP) VALUES (23,'POS','Show Contig for Master Tables','Item','DBCC SHOWCONTIG(''<<dbname>>.dbo.<<tablename>>'')','<<dbname>>','ItemMaster','Y')
+-GO-
+INSERT INTO DBTUNINGCONFIG(SRLNO,TYPE,GROUPCAPTION,SUBCAPTION,COMMAND,ARG1,ARG2,RESULTDISP) VALUES (24,'POS','Show Contig for Master Tables','GenlookUp','DBCC SHOWCONTIG(''<<dbname>>.dbo.<<tablename>>'')','<<dbname>>','GenlookUp','Y')
+-GO-
+INSERT INTO DBTUNINGCONFIG(SRLNO,TYPE,GROUPCAPTION,SUBCAPTION,COMMAND,ARG1,ARG2,RESULTDISP) VALUES (25,'POS','Show Contig for Master Tables','Class12Combo','DBCC SHOWCONTIG(''<<dbname>>.dbo.<<tablename>>'')','<<dbname>>','Class12Combo','Y')
+-GO-
+INSERT INTO DBTUNINGCONFIG(SRLNO,TYPE,GROUPCAPTION,SUBCAPTION,COMMAND,ARG1,ARG2,RESULTDISP) VALUES (26,'POS','Show Contig for Master Tables','SizeCat','DBCC SHOWCONTIG(''<<dbname>>.dbo.<<tablename>>'')','<<dbname>>','SizeCat','Y')
+-GO-
+INSERT INTO DBTUNINGCONFIG(SRLNO,TYPE,GROUPCAPTION,SUBCAPTION,COMMAND,ARG1,ARG2,RESULTDISP) VALUES (27,'POS','Show Contig for Master Tables','Sysparam','DBCC SHOWCONTIG(''<<dbname>>.dbo.<<tablename>>'')','<<dbname>>','Sysparam','Y')
+-GO-
+INSERT INTO DBTUNINGCONFIG(SRLNO,TYPE,GROUPCAPTION,SUBCAPTION,COMMAND,ARG1,ARG2,RESULTDISP) VALUES (28,'POS','Show Contig for Master Tables','Customer','DBCC SHOWCONTIG(''<<dbname>>.dbo.<<tablename>>'')','<<dbname>>','Customers','Y')
+-GO-
+INSERT INTO DBTUNINGCONFIG(SRLNO,TYPE,GROUPCAPTION,SUBCAPTION,COMMAND,ARG1,ARG2,RESULTDISP) VALUES (29,'POS','Show Contig for Master Tables','Vendors','DBCC SHOWCONTIG(''<<dbname>>.dbo.<<tablename>>'')','<<dbname>>','Vendors','Y')
+-GO-
+INSERT INTO DBTUNINGCONFIG(SRLNO,TYPE,GROUPCAPTION,SUBCAPTION,COMMAND,ARG1,ARG2,RESULTDISP) VALUES (30,'POS','Show Contig for Master Tables','MailingList','DBCC SHOWCONTIG(''<<dbname>>.dbo.<<tablename>>'')','<<dbname>>','MailingList','Y')
+-GO-
+INSERT INTO DBTUNINGCONFIG(SRLNO,TYPE,GROUPCAPTION,SUBCAPTION,COMMAND,ARG1,ARG2,RESULTDISP) VALUES (31,'POS','Show Contig for Master Tables','Stock','DBCC SHOWCONTIG(''<<dbname>>.dbo.<<tablename>>'')','<<dbname>>','StockMaster','Y')
+-GO-
+INSERT INTO DBTUNINGCONFIG(SRLNO,TYPE,GROUPCAPTION,SUBCAPTION,COMMAND,ARG1,ARG2,RESULTDISP) VALUES (32,'POS','Show Contig for Transaction Tables','','','','','Y')
+-GO-
+INSERT INTO DBTUNINGCONFIG(SRLNO,TYPE,GROUPCAPTION,SUBCAPTION,COMMAND,ARG1,ARG2,RESULTDISP) VALUES (33,'POS','Show Contig for Transaction Tables','Stock Header','DBCC SHOWCONTIG (''<<dbname>>.dbo.<<tablename>>'')','<<dbname>>','StkTrnHdr','Y')
+-GO-
+INSERT INTO DBTUNINGCONFIG(SRLNO,TYPE,GROUPCAPTION,SUBCAPTION,COMMAND,ARG1,ARG2,RESULTDISP) VALUES (34,'POS','Show Contig for Transaction Tables','PT Invoice Header','DBCC SHOWCONTIG (''<<dbname>>.dbo.<<tablename>>'')','<<dbname>>','PtInvoiceHdr','Y')
+-GO-
+INSERT INTO DBTUNINGCONFIG(SRLNO,TYPE,GROUPCAPTION,SUBCAPTION,COMMAND,ARG1,ARG2,RESULTDISP) VALUES (35,'POS','Show Contig for Transaction Tables','Purchase Order Header','DBCC SHOWCONTIG (''<<dbname>>.dbo.<<tablename>>'')','<<dbname>>','PurchOrdHdr','Y')
+-GO-
+INSERT INTO DBTUNINGCONFIG(SRLNO,TYPE,GROUPCAPTION,SUBCAPTION,COMMAND,ARG1,ARG2,RESULTDISP) VALUES (36,'POS','Show Contig for Transaction Tables','Stock Details','DBCC SHOWCONTIG (''<<dbname>>.dbo.<<tablename>>'')','<<dbname>>','StkTrnDtls','Y')
+-GO-
+INSERT INTO DBTUNINGCONFIG(SRLNO,TYPE,GROUPCAPTION,SUBCAPTION,COMMAND,ARG1,ARG2,RESULTDISP) VALUES (37,'POS','Show Contig for Transaction Tables','PT Invoice Details','DBCC SHOWCONTIG (''<<dbname>>.dbo.<<tablename>>'')','<<dbname>>','PtInvoiceDtl','Y')
+-GO-
+INSERT INTO DBTUNINGCONFIG(SRLNO,TYPE,GROUPCAPTION,SUBCAPTION,COMMAND,ARG1,ARG2,RESULTDISP) VALUES (38,'POS','Show Contig for Transaction Tables','Purchase Order Details','DBCC SHOWCONTIG (''<<dbname>>.dbo.<<tablename>>'')','<<dbname>>','PurchOrdDtl','Y')
+-GO-
+INSERT INTO DBTUNINGCONFIG(SRLNO,TYPE,GROUPCAPTION,SUBCAPTION,COMMAND,ARG1,ARG2,RESULTDISP) VALUES (39,'POS','Show Contig for Transaction Tables','Stock Transaction','DBCC SHOWCONTIG (''<<dbname>>.dbo.<<tablename>>'')','<<dbname>>','StockTrnSummary','Y')
+-GO-
+INSERT INTO DBTUNINGCONFIG(SRLNO,TYPE,GROUPCAPTION,SUBCAPTION,COMMAND,ARG1,ARG2,RESULTDISP) VALUES (40,'POS','Show Contig for Transaction Tables','Sales','DBCC SHOWCONTIG (''<<dbname>>.dbo.<<tablename>>'')','<<dbname>>','SaleTrnHdr','Y')
+-GO-
+INSERT INTO DBTUNINGCONFIG(SRLNO,TYPE,GROUPCAPTION,SUBCAPTION,COMMAND,ARG1,ARG2,RESULTDISP) VALUES (41,'POS','Show Contig for Transaction Tables','POS cash transaction','DBCC SHOWCONTIG (''<<dbname>>.dbo.<<tablename>>'')','<<dbname>>','PosCashTrn','Y')
+-GO-
+INSERT INTO DBTUNINGCONFIG(SRLNO,TYPE,GROUPCAPTION,SUBCAPTION,COMMAND,ARG1,ARG2,RESULTDISP) VALUES (42,'SECDB','Repair DB Without Data Loss','','ALTER DATABASE <<dbname>> SET SINGLE_USER; DBCC CHECKDB(''<<dbname>>'',REPAIR_REBUILD); ALTER DATABASE <<dbname>> SET MULTI_USER','<<dbname>>','','Y')
+-GO-
+INSERT INTO DBTUNINGCONFIG(SRLNO,TYPE,GROUPCAPTION,SUBCAPTION,COMMAND,ARG1,ARG2,RESULTDISP) VALUES (43,'SECDB','Set DB Recovery Mode to SIMPLE','','ALTER DATABASE <<dbname>> SET RECOVERY SIMPLE','<<dbname>>','','Y')
+-GO-
+INSERT INTO DBTUNINGCONFIG(SRLNO,TYPE,GROUPCAPTION,SUBCAPTION,COMMAND,ARG1,ARG2,RESULTDISP) VALUES (44,'SECDB','Show Contig for Master Tables','','','','','Y')
+-GO-
+INSERT INTO DBTUNINGCONFIG(SRLNO,TYPE,GROUPCAPTION,SUBCAPTION,COMMAND,ARG1,ARG2,RESULTDISP) VALUES (45,'SECDB','Show Contig for Master Tables','Item','DBCC SHOWCONTIG(''<<dbname>>.dbo.<<tablename>>'')','<<dbname>>','ItemMaster','Y')
+-GO-
+INSERT INTO DBTUNINGCONFIG(SRLNO,TYPE,GROUPCAPTION,SUBCAPTION,COMMAND,ARG1,ARG2,RESULTDISP) VALUES (46,'SECDB','Show Contig for Master Tables','GenlookUp','DBCC SHOWCONTIG(''<<dbname>>.dbo.<<tablename>>'')','<<dbname>>','GenlookUp','Y')
+-GO-
+INSERT INTO DBTUNINGCONFIG(SRLNO,TYPE,GROUPCAPTION,SUBCAPTION,COMMAND,ARG1,ARG2,RESULTDISP) VALUES (47,'SECDB','Show Contig for Master Tables','Class12Combo','DBCC SHOWCONTIG(''<<dbname>>.dbo.<<tablename>>'')','<<dbname>>','Class12Combo','Y')
+-GO-
+INSERT INTO DBTUNINGCONFIG(SRLNO,TYPE,GROUPCAPTION,SUBCAPTION,COMMAND,ARG1,ARG2,RESULTDISP) VALUES (48,'SECDB','Show Contig for Master Tables','SizeCat','DBCC SHOWCONTIG(''<<dbname>>.dbo.<<tablename>>'')','<<dbname>>','SizeCat','Y')
+-GO-
+INSERT INTO DBTUNINGCONFIG(SRLNO,TYPE,GROUPCAPTION,SUBCAPTION,COMMAND,ARG1,ARG2,RESULTDISP) VALUES (49,'SECDB','Show Contig for Master Tables','Sysparam','DBCC SHOWCONTIG(''<<dbname>>.dbo.<<tablename>>'')','<<dbname>>','Sysparam','Y')
+-GO-
+INSERT INTO DBTUNINGCONFIG(SRLNO,TYPE,GROUPCAPTION,SUBCAPTION,COMMAND,ARG1,ARG2,RESULTDISP) VALUES (50,'SECDB','Show Contig for Master Tables','Customer','DBCC SHOWCONTIG(''<<dbname>>.dbo.<<tablename>>'')','<<dbname>>','Customer','Y')
+-GO-
+INSERT INTO DBTUNINGCONFIG(SRLNO,TYPE,GROUPCAPTION,SUBCAPTION,COMMAND,ARG1,ARG2,RESULTDISP) VALUES (51,'SECDB','Show Contig for Master Tables','Vendors','DBCC SHOWCONTIG(''<<dbname>>.dbo.<<tablename>>'')','<<dbname>>','Vendors','Y')
+-GO-
+INSERT INTO DBTUNINGCONFIG(SRLNO,TYPE,GROUPCAPTION,SUBCAPTION,COMMAND,ARG1,ARG2,RESULTDISP) VALUES (52,'SECDB','Show Contig for Master Tables','MailingList','DBCC SHOWCONTIG(''<<dbname>>.dbo.<<tablename>>'')','<<dbname>>','MailingList','Y')
+-GO-
+INSERT INTO DBTUNINGCONFIG(SRLNO,TYPE,GROUPCAPTION,SUBCAPTION,COMMAND,ARG1,ARG2,RESULTDISP) VALUES (53,'SECDB','Show Contig for Master Tables','Stock','DBCC SHOWCONTIG(''<<dbname>>.dbo.<<tablename>>'')','<<dbname>>','StockMaster','Y')
+-GO-
+INSERT INTO DBTUNINGCONFIG(SRLNO,TYPE,GROUPCAPTION,SUBCAPTION,COMMAND,ARG1,ARG2,RESULTDISP) VALUES (54,'SECDB','Show Contig for Transaction Tables','','','','','Y')
+-GO-
+INSERT INTO DBTUNINGCONFIG(SRLNO,TYPE,GROUPCAPTION,SUBCAPTION,COMMAND,ARG1,ARG2,RESULTDISP) VALUES (55,'SECDB','Show Contig for Transaction Tables','Stock Header','DBCC SHOWCONTIG (''<<dbname>>.dbo.<<tablename>>'')','<<dbname>>','StkTrnHdr','Y')
+-GO-
+INSERT INTO DBTUNINGCONFIG(SRLNO,TYPE,GROUPCAPTION,SUBCAPTION,COMMAND,ARG1,ARG2,RESULTDISP) VALUES (56,'SECDB','Show Contig for Transaction Tables','PT Invoice Header','DBCC SHOWCONTIG (''<<dbname>>.dbo.<<tablename>>'')','<<dbname>>','PtInvoiceHdr','Y')
+-GO-
+INSERT INTO DBTUNINGCONFIG(SRLNO,TYPE,GROUPCAPTION,SUBCAPTION,COMMAND,ARG1,ARG2,RESULTDISP) VALUES (57,'SECDB','Show Contig for Transaction Tables','Purchase Order Header','DBCC SHOWCONTIG (''<<dbname>>.dbo.<<tablename>>'')','<<dbname>>','PurchOrdHdr','Y')
+-GO-
+INSERT INTO DBTUNINGCONFIG(SRLNO,TYPE,GROUPCAPTION,SUBCAPTION,COMMAND,ARG1,ARG2,RESULTDISP) VALUES (58,'SECDB','Show Contig for Transaction Tables','Stock Details','DBCC SHOWCONTIG (''<<dbname>>.dbo.<<tablename>>'')','<<dbname>>','StkTrnDtls','Y')
+-GO-
+INSERT INTO DBTUNINGCONFIG(SRLNO,TYPE,GROUPCAPTION,SUBCAPTION,COMMAND,ARG1,ARG2,RESULTDISP) VALUES (59,'SECDB','Show Contig for Transaction Tables','PT Invoice Details','DBCC SHOWCONTIG (''<<dbname>>.dbo.<<tablename>>'')','<<dbname>>','PtInvoiceDtl','Y')
+-GO-
+INSERT INTO DBTUNINGCONFIG(SRLNO,TYPE,GROUPCAPTION,SUBCAPTION,COMMAND,ARG1,ARG2,RESULTDISP) VALUES (60,'SECDB','Show Contig for Transaction Tables','Purchase Order Details','DBCC SHOWCONTIG (''<<dbname>>.dbo.<<tablename>>'')','<<dbname>>','PurchOrdDtl','Y')
+-GO-
+INSERT INTO DBTUNINGCONFIG(SRLNO,TYPE,GROUPCAPTION,SUBCAPTION,COMMAND,ARG1,ARG2,RESULTDISP) VALUES (61,'SECDB','Show Contig for Transaction Tables','Purchase Order Details','DBCC SHOWCONTIG (''<<dbname>>.dbo.<<tablename>>'')','<<dbname>>','StockTrnSummary','Y')
+-GO-
+INSERT INTO DBTUNINGCONFIG(SRLNO,TYPE,GROUPCAPTION,SUBCAPTION,COMMAND,ARG1,ARG2,RESULTDISP) VALUES (62,'SECDB','Show Contig for Transaction Tables','Sales','DBCC SHOWCONTIG (''<<dbname>>.dbo.<<tablename>>'')','<<dbname>>','SaleTrnHdr','Y')
+-GO-
+INSERT INTO DBTUNINGCONFIG(SRLNO,TYPE,GROUPCAPTION,SUBCAPTION,COMMAND,ARG1,ARG2,RESULTDISP) VALUES (63,'SECDB','Show Contig for Transaction Tables','POS cash transaction','DBCC SHOWCONTIG (''<<dbname>>.dbo.<<tablename>>'')','<<dbname>>','PosCashTrn','Y')
+-GO-
+INSERT INTO DBTUNINGCONFIG(SRLNO,TYPE,GROUPCAPTION,SUBCAPTION,COMMAND,ARG1,ARG2,RESULTDISP) VALUES (64,'POS','Re-Indexing DB Master Tables','Genlookup','DBCC DBREINDEX (''<<dbname>>.dbo.<<tablename>>'')','<<dbname>>','genlookup','Y')
+-GO-
+INSERT INTO DBTUNINGCONFIG(SRLNO,TYPE,GROUPCAPTION,SUBCAPTION,COMMAND,ARG1,ARG2,RESULTDISP) VALUES (65,'POS','Re-Indexing DB Master Tables','Classification','DBCC DBREINDEX (''<<dbname>>.dbo.<<tablename>>'')','<<dbname>>','class12combo','Y')
+-GO-
+INSERT INTO DBTUNINGCONFIG(SRLNO,TYPE,GROUPCAPTION,SUBCAPTION,COMMAND,ARG1,ARG2,RESULTDISP) VALUES (66,'POS','Re-Indexing DB Master Tables','Size','DBCC DBREINDEX (''<<dbname>>.dbo.<<tablename>>'')','<<dbname>>','sizecat','Y')
+-GO-
+INSERT INTO DBTUNINGCONFIG(SRLNO,TYPE,GROUPCAPTION,SUBCAPTION,COMMAND,ARG1,ARG2,RESULTDISP) VALUES (67,'POS','Re-Indexing DB Master Tables','System Parameter','DBCC DBREINDEX (''<<dbname>>.dbo.<<tablename>>'')','<<dbname>>','sysparam','Y')
+-GO-
+INSERT INTO DBTUNINGCONFIG(SRLNO,TYPE,GROUPCAPTION,SUBCAPTION,COMMAND,ARG1,ARG2,RESULTDISP) VALUES (68,'POS','Re-Indexing DB Master Tables','Vendor','DBCC DBREINDEX (''<<dbname>>.dbo.<<tablename>>'')','<<dbname>>','vendors','Y')
+-GO-
+INSERT INTO DBTUNINGCONFIG(SRLNO,TYPE,GROUPCAPTION,SUBCAPTION,COMMAND,ARG1,ARG2,RESULTDISP) VALUES (69,'POS','Re-Indexing DB Master Tables','Mailing','DBCC DBREINDEX (''<<dbname>>.dbo.<<tablename>>'')','<<dbname>>','Mailinglist','Y')
+-GO-
+INSERT INTO DBTUNINGCONFIG(SRLNO,TYPE,GROUPCAPTION,SUBCAPTION,COMMAND,ARG1,ARG2,RESULTDISP) VALUES (70,'POS','Re-Indexing DB Transaction Tables','Stock Master','DBCC DBREINDEX (''<<dbname>>.dbo.<<tablename>>'')','<<dbname>>','stockmaster','Y')
+-GO-
+INSERT INTO DBTUNINGCONFIG(SRLNO,TYPE,GROUPCAPTION,SUBCAPTION,COMMAND,ARG1,ARG2,RESULTDISP) VALUES (71,'POS','Re-Indexing DB Transaction Tables','Stock Summary','DBCC DBREINDEX (''<<dbname>>.dbo.<<tablename>>'')','<<dbname>>','StockTrnSummary','Y')
+-GO-
+INSERT INTO DBTUNINGCONFIG(SRLNO,TYPE,GROUPCAPTION,SUBCAPTION,COMMAND,ARG1,ARG2,RESULTDISP) VALUES (72,'POS','Re-Indexing DB Transaction Tables','POS cash Transaction','DBCC DBREINDEX (''<<dbname>>.dbo.<<tablename>>'')','<<dbname>>','PosCashTrn','Y')
+-GO-
+INSERT INTO DBTUNINGCONFIG(SRLNO,TYPE,GROUPCAPTION,SUBCAPTION,COMMAND,ARG1,ARG2,RESULTDISP) VALUES (73,'POS','Re-Indexing DB Transaction Tables','PT Invoice Header','DBCC DBREINDEX (''<<dbname>>.dbo.<<tablename>>'')','<<dbname>>','PtInvoiceHdr','Y')
+-GO-
+INSERT INTO DBTUNINGCONFIG(SRLNO,TYPE,GROUPCAPTION,SUBCAPTION,COMMAND,ARG1,ARG2,RESULTDISP) VALUES (74,'POS','Re-Indexing DB Transaction Tables','PT Invoice Detail','DBCC DBREINDEX (''<<dbname>>.dbo.<<tablename>>'')','<<dbname>>','PtInvoiceDtl','Y')
+-GO-
+INSERT INTO DBTUNINGCONFIG(SRLNO,TYPE,GROUPCAPTION,SUBCAPTION,COMMAND,ARG1,ARG2,RESULTDISP) VALUES (75,'POS','Re-Indexing DB Transaction Tables','Purchase Order Header','DBCC DBREINDEX (''<<dbname>>.dbo.<<tablename>>'')','<<dbname>>','PurchOrdHdr','Y')
+-GO-
+INSERT INTO DBTUNINGCONFIG(SRLNO,TYPE,GROUPCAPTION,SUBCAPTION,COMMAND,ARG1,ARG2,RESULTDISP) VALUES (76,'POS','Re-Indexing DB Transaction Tables','Purchase Order Detail','DBCC DBREINDEX (''<<dbname>>.dbo.<<tablename>>'')','<<dbname>>','PurchOrdDtl','Y')
+-GO-
+INSERT INTO DBTUNINGCONFIG(SRLNO,TYPE,GROUPCAPTION,SUBCAPTION,COMMAND,ARG1,RESULTDISP) VALUES (77,'POS','Checking Database','','DBCC CHECKDB (''<<dbname>>'')','<<dbname>>','Y')
+-GO-
+update DBTUNINGCONFIG set command='BACKUP LOG <<dbname>> WITH  TRUNCATE_ONLY',arg1='<<dbname>>' where type='POS' and groupcaption='Truncation of Log'
+-GO-
+update DBTUNINGCONFIG set command='BACKUP LOG <<dbname>> WITH  TRUNCATE_ONLY',arg1='<<dbname>>' where type='SECDB' and groupcaption='Truncation of Log'
+-GO-
+update DBTUNINGCONFIG set command='BACKUP LOG <<dbname>> WITH  TRUNCATE_ONLY',arg1='<<dbname>>' where type='EIS-POS' and groupcaption='Truncation of Log'
+-GO-
+update DBTUNINGCONFIG set command='DBCC DBREINDEX (''<<dbname>>.dbo.<<tablename>>'')',arg1='<<dbname>>' where type='POS' and subcaption='item'
+-GO-
+update DBTUNINGCONFIG set command='DBCC DBREINDEX (''<<dbname>>.dbo.<<tablename>>'')',arg1='<<dbname>>' where type='POS' and subcaption='customer'
+-GO-
+update DBTUNINGCONFIG set command='DBCC DBREINDEX (''<<dbname>>.dbo.<<tablename>>'')',arg1='<<dbname>>' where type='POS' and subcaption='stock'
+-GO-
+update DBTUNINGCONFIG set command='DBCC DBREINDEX (''<<dbname>>.dbo.<<tablename>>'')',arg1='<<dbname>>' where type='POS' and subcaption='stock Header'
+-GO-
+update DBTUNINGCONFIG set command='DBCC DBREINDEX (''<<dbname>>.dbo.<<tablename>>'')',arg1='<<dbname>>' where type='POS' and subcaption='stock Details'
+-GO-
+update DBTUNINGCONFIG set command='DBCC DBREINDEX (''<<dbname>>.dbo.<<tablename>>'')',arg1='<<dbname>>' where type='POS' and subcaption='sales Header'
+-GO-
+update DBTUNINGCONFIG set command='DBCC DBREINDEX (''<<dbname>>.dbo.<<tablename>>'')',arg1='<<dbname>>' where type='SECDB' and subcaption='item'
+-GO-
+update DBTUNINGCONFIG set command='DBCC DBREINDEX (''<<dbname>>.dbo.<<tablename>>'')',arg1='<<dbname>>' where type='SECDB' and subcaption='customer'
+-GO-
+update DBTUNINGCONFIG set command='DBCC DBREINDEX (''<<dbname>>.dbo.<<tablename>>'')',arg1='<<dbname>>' where type='SECDB' and subcaption='stock'
+-GO-
+update DBTUNINGCONFIG set command='DBCC DBREINDEX (''<<dbname>>.dbo.<<tablename>>'')',arg1='<<dbname>>' where type='SECDB' and subcaption='stock Header'
+-GO-
+update DBTUNINGCONFIG set command='DBCC DBREINDEX (''<<dbname>>.dbo.<<tablename>>'')',arg1='<<dbname>>' where type='SECDB' and subcaption='stock Detail'
+-GO-
+update DBTUNINGCONFIG set command='DBCC DBREINDEX (''<<dbname>>.dbo.<<tablename>>'')',arg1='<<dbname>>' where type='SECDB' and subcaption='sales Header'
+-GO-
+update DBTUNINGCONFIG set command='BACKUP LOG <<dbname>> WITH  TRUNCATE_ONLY;DBCC SHRINKDATABASE (<<dbname>>)' where command like 'backup log%'
+  </s9qScript>		
+</s9qsqlblk>
+
+
+<s9qsqlblk>
+  <s9qScriptID>	S9Q_013_0_0017	</s9qScriptID>
+  <s9qtitle></s9qtitle>
+  <s9qpgmtype>L</s9qpgmtype>
+  <s9qversion>*</s9qversion>
+  <s9qenvironment>P</s9qenvironment>
+  <s9qRunMultiple>0</s9qRunMultiple>
+  <s9qQryType>DML</s9qQryType>
+  <s9qScript>		
+Insert Into Genlookup Values(9060,'2','Last Piece Discount','1',2,'super',1,'.','')
+-GO-
+update genlookup set number = (select isnull(max(docno),0) from stktrnhdr where trntype = 3200) where recid = 101 and code = '3200'
+  </s9qScript>		
+</s9qsqlblk>
+
+<s9qsqlblk>
+  <s9qScriptID>	S9Q_013_0_0018	</s9qScriptID>
+  <s9qtitle></s9qtitle>
+  <s9qpgmtype>L</s9qpgmtype>
+  <s9qversion>*</s9qversion>
+  <s9qenvironment>P</s9qenvironment>
+  <s9qRunMultiple>0</s9qRunMultiple>
+  <s9qQryType>DML</s9qQryType>
+  <s9qScript>		
+Update Sysparam Set Txt = '1' Where Paramcode = 'ValidateMOPVsCurrentStkQty' and (Txt is NULL or Txt = '') 
+-GO-
+Update SysparamExtd Set Fixed = 'Hidden' where paramcode = 'RPTPgHdr7Font'
+  </s9qScript>		
+</s9qsqlblk>
+
+<s9qsqlblk>
+  <s9qScriptID>	S9Q_013_0_0019	</s9qScriptID>
+  <s9qtitle></s9qtitle>
+  <s9qpgmtype>L</s9qpgmtype>
+  <s9qversion>*</s9qversion>
+  <s9qenvironment>P</s9qenvironment>
+  <s9qRunMultiple>0</s9qRunMultiple>
+  <s9qQryType>DML</s9qQryType>
+  <s9qScript>		
+Delete from genlookup where recid = 15500 and code = '2'
+  </s9qScript>		
+</s9qsqlblk>
+
+<s9qsqlblk>
+  <s9qScriptID>	S9Q_013_0_0020	</s9qScriptID>
+  <s9qtitle></s9qtitle>
+  <s9qpgmtype>L</s9qpgmtype>
+  <s9qversion>*</s9qversion>
+  <s9qenvironment>P</s9qenvironment>
+  <s9qRunMultiple>0</s9qRunMultiple>
+  <s9qQryType>DML</s9qQryType>
+  <s9qScript>		
+Update Sysparam Set Descr = 'Create detailed log file in tally mapping' where Id = 'SR5-0901-0000310'
+-GO-
+Insert Into Sysparam (Id, Descr, Paramcode, Intg, Opt) Values ('SR1-0901-0000312','Allow rate Alteration in service billing','AllowRateAlterInServiceBill',1,'I')
+-GO-
+Insert Into SysparamExtd (Id,ParamCode,Fixed,Changed,Category,CatDescr,DispOrder) Values ('SR1-0901-0000312','AllowRateAlterInServiceBill','Variable',0,'11. Billing','This Gives Billing Parameters',35)
+-GO-
+Update SysParamExtd Set Fixed = 'Hidden' WHERE paramcode In ('SendFFThruMail','SendFFThruFTP','SendFFThruDCopy','SendFFThruOnLine','FFileFTPServer','FFileFTPUID','FFileFTPUPwd','FFileFTPIP','FFileDCopyPath','FFileFTPPASSIVEMODE','FFileOnLineServer','FFileMailSubjectHO','FFileMailSubjectPOS','FFileMailAckSubjectHO','FFileMessageHO','FFileMessagePOS','FFileMessageAckHO','FFileTypeDownHO','FFileTypeDownPOS','FFileFTPUpFolder','FFileFTPDownFolder','FFileFTPDialUpCheck','FFileDCopyUpFolder','FFileDCopyDownFolder','FFileEmailId','FFileTypeHO','FFileTypePOS','FFileMailResyncSubjectHO','FFileMessageResyncHO','Extractzipsplitsize','Fileuploaddownloadretrytimes','Fileuploaddownloadretryinterval')
+  </s9qScript>		
+</s9qsqlblk>
+
+
+<s9qsqlblk>
+  <s9qScriptID>	S9Q_013_0_0021	</s9qScriptID>
+  <s9qtitle></s9qtitle>
+  <s9qpgmtype>L</s9qpgmtype>
+  <s9qversion>*</s9qversion>
+  <s9qenvironment>P</s9qenvironment>
+  <s9qRunMultiple>0</s9qRunMultiple>
+  <s9qQryType>DML</s9qQryType>
+  <s9qScript>		
+INSERT INTO GENLOOKUP SELECT 102,'IND+IND9','IND#Indent',NULL,1,'super',1,'.',(SELECT TXT FROM SYSPARAM WHERE PARAMCODE = 'CompanyCode') WHERE 'IND+IND9' NOT IN (SELECT CODE FROM GENLOOKUP WHERE RECID = 102 AND CODE LIKE 'IND%') 
+-GO-
+INSERT INTO GENLOOKUP SELECT 102,'PO+PO9','PO#Purchase Order',NULL,1,'super',1,'.',(SELECT TXT FROM SYSPARAM WHERE PARAMCODE = 'CompanyCode') WHERE 'PO+PO9' NOT IN (SELECT CODE FROM GENLOOKUP WHERE RECID = 102 AND CODE LIKE 'PO%') 
+  </s9qScript>		
+</s9qsqlblk>
+
+
+<s9qsqlblk>
+  <s9qScriptID>	S9Q_013_0_0022	</s9qScriptID>
+  <s9qtitle></s9qtitle>
+  <s9qpgmtype>L</s9qpgmtype>
+  <s9qversion>*</s9qversion>
+  <s9qenvironment>P</s9qenvironment>
+  <s9qRunMultiple>0</s9qRunMultiple>
+  <s9qQryType>DML</s9qQryType>
+  <s9qScript>		
+Insert Into Sysparam (Id,Descr,ParamCode,Boolean,Opt) values ('SR1-0901-0000297','DC Printing in Graphic Printer','DCPrintingInGraphicPrinter',0,'B')
+-GO-
+Insert Into SysparamExtd (Id,ParamCode,Fixed,Changed,Category,CatDescr,DispOrder) Values ('SR1-0901-0000297','DCPrintingInGraphicPrinter','Variable',0,'14. Bill - Printing','This Gives Bill - Printing Parameters',47)
+-GO-
+Insert Into Sysparam (Id, Descr, Paramcode, Txt, Opt) Values ('SR5-0901-0000298','Path to move file after processing','ProcessedFilePath','.Processed','T')
+-GO-
+Insert Into Sysparam (Id, Descr, Paramcode, Txt, Opt) Values ('SR3-0901-0000299','Purchase Order or Indent is mandatory in Goods Inwards','PurchaseOrderMandatoryInGIR','Y#Y','T')
+-GO-
+Insert Into SysparamExtd (Id,ParamCode,Fixed,Changed,Category,CatDescr,DispOrder) Values ('SR5-0901-0000298','ProcessedFilePath','Hidden',0,'17. House Keeping','This Gives House Keeping Parameters',46)
+-GO-
+Insert Into SysparamExtd (Id,ParamCode,Fixed,Changed,Category,CatDescr,DispOrder) Values ('SR3-0901-0000299','PurchaseOrderMandatoryInGIR','Variable',0,'09. Inwards','This Gives Inwards Parameters',32)
+-GO-
+Insert Into Sysparam (Id, Descr, Paramcode, Boolean, Opt) Values ('SR5-0901-0000302','Post Cost Center information to tally','PostCCToTally',0,'B')
+-GO-
+Insert Into SysparamExtd (Id,ParamCode,Fixed,Changed,Category,CatDescr,DispOrder) Values ('SR5-0901-0000302','PostCCToTally','Hidden',0,'17. House Keeping','This Gives House Keeping Parameters',47)
+-GO-
+Insert Into Sysparam (Id, Descr, Paramcode, Intg, Opt) Values ('SR1-0901-0000303','Apply Bill Level Discount first','FirstCalculateBillLvlDisc',0,'I')
+-GO-
+Insert Into SysparamExtd (Id,ParamCode,Fixed,Changed,Category,CatDescr,DispOrder) Values ('SR1-0901-0000303','FirstCalculateBillLvlDisc','Variable',0,'11. Billing','This Gives Billing Parameters',34)
+-GO-
+Insert Into Sysparam (Id, Descr, Paramcode, Intg, Opt) Values ('SR1-0901-0000303','Apply Bill Level Discount first','FirstCalculateBillLvlDisc',0,'I')
+-GO-
+Insert Into SysparamExtd (Id,ParamCode,Fixed,Changed,Category,CatDescr,DispOrder) Values ('SR1-0901-0000303','FirstCalculateBillLvlDisc','Variable',0,'01. Billing','This Gives Billing Parameters',32)
+-GO-
+Insert Into Sysparam (Id, Descr, Paramcode, Txt, Opt) Values ('SR6-0901-0000304','Caption for Address1','Address1Cap','Address1','T')
+-GO-
+Insert Into Sysparam (Id, Descr, Paramcode, Txt, Opt) Values ('SR6-0901-0000305','Caption for Address2','Address2Cap','Address2','T')
+-GO-
+Insert Into Sysparam (Id, Descr, Paramcode, Txt, Opt) Values ('SR6-0901-0000306','Caption for Address3','Address3Cap','Address3','T')
+-GO-
+Insert Into Sysparam (Id, Descr, Paramcode, Txt, Opt) Values ('SR6-0901-0000307','Caption for Address4','Address4Cap','Address4','T')
+-GO-
+Insert Into Sysparam (Id, Descr, Paramcode, Txt, Opt) Values ('SR6-0901-0000308','Caption for Address5','Address5Cap','Address5','T')
+-GO-
+Insert Into Sysparam (Id, Descr, Paramcode, Txt, Opt) Values ('SR6-0901-0000309','Caption for Default Address','DefaultAddressCap','Default Address','T')
+-GO-
+Insert Into SysparamExtd (Id,ParamCode,Fixed,Changed,Category,CatDescr,DispOrder) Values ('SR6-0901-0000304','Address1Cap','Variable',0,'05. Customer','This Gives Customer Parameters',12)
+-GO-
+Insert Into SysparamExtd (Id,ParamCode,Fixed,Changed,Category,CatDescr,DispOrder) Values ('SR6-0901-0000305','Address2Cap','Variable',0,'05. Customer','This Gives Customer Parameters',13)
+-GO-
+Insert Into SysparamExtd (Id,ParamCode,Fixed,Changed,Category,CatDescr,DispOrder) Values ('SR6-0901-0000306','Address3Cap','Variable',0,'05. Customer','This Gives Customer Parameters',14)
+-GO-
+Insert Into SysparamExtd (Id,ParamCode,Fixed,Changed,Category,CatDescr,DispOrder) Values ('SR6-0901-0000307','Address4Cap','Variable',0,'05. Customer','This Gives Customer Parameters',15)
+-GO-
+Insert Into SysparamExtd (Id,ParamCode,Fixed,Changed,Category,CatDescr,DispOrder) Values ('SR6-0901-0000308','Address5Cap','Variable',0,'05. Customer','This Gives Customer Parameters',16)
+-GO-
+Insert Into SysparamExtd (Id,ParamCode,Fixed,Changed,Category,CatDescr,DispOrder) Values ('SR6-0901-0000309','DefaultAddressCap','Variable',0,'05. Customer','This Gives Customer Parameters',17)
+  </s9qScript>		
+</s9qsqlblk>
+
+
+
+<s9qsqlblk>
+  <s9qScriptID>	S9Q_013_0_0023	</s9qScriptID>
+  <s9qtitle></s9qtitle>
+  <s9qpgmtype>L</s9qpgmtype>
+  <s9qversion>*</s9qversion>
+  <s9qenvironment>P</s9qenvironment>
+  <s9qRunMultiple>0</s9qRunMultiple>
+  <s9qQryType>DML</s9qQryType>
+  <s9qScript>		
+Insert Into Genlookup (Recid,Code,Descr,Flag,[Number]) Values (0,15500,'Type of Address','N','0')
+-GO-
+Insert Into Genlookup (Recid,Code,Descr) Values (15500,1,'Address Type')
+-GO-
+Insert Into Genlookup (Recid,Code,Descr) Values (15500,2,'Address Type')
+-GO-
+Insert Into GenlookUpExtd (Recid,Category,RecType,Operations,Additional1,IsEditable) Values (15500,'Type of Address','Variable','111','11',0)
+-GO-
+Insert Into Genlookup (Recid,Code,Descr,Flag,[Number]) Values (101,'MAILNO','Mailing List Serial Number','0',5000000)
+  </s9qScript>		
+</s9qsqlblk>
+
+
+<s9qsqlblk>
+  <s9qScriptID>	S9Q_013_0_0024	</s9qScriptID>
+  <s9qtitle></s9qtitle>
+  <s9qpgmtype>L</s9qpgmtype>
+  <s9qversion>*</s9qversion>
+  <s9qenvironment>P</s9qenvironment>
+  <s9qRunMultiple>0</s9qRunMultiple>
+  <s9qQryType>DML</s9qQryType>
+  <s9qScript>		
+Insert Into Sysparam (Id, Descr, Paramcode, Boolean, Opt) Values ('SR5-0901-0000302','Post Cost Center information to tally','PostCCToTally',0,'B')
+-GO-
+Insert Into SysparamExtd (Id,ParamCode,Fixed,Changed,Category,CatDescr,DispOrder) Values ('SR5-0901-0000302','PostCCToTally','Hidden',0,'17. House Keeping','This Gives House Keeping Parameters',47)
+-GO-
+Insert Into Sysparam (Id, Descr, Paramcode, Boolean, Opt) Values ('SR5-0901-0000310','Created detailed log file in tally mapping','TallyLogType',0,'B')
+-GO-
+Insert Into SysparamExtd (Id,ParamCode,Fixed,Changed,Category,CatDescr,DispOrder) Values ('SR5-0901-0000310','TallyLogType','Variable',0,'17. House Keeping','This Gives House Keeping Parameters',30)
+-GO-
+Update Sysparam Set vactr = (select intg from sysparam where paramcode = 'VaSysCounter')
+  </s9qScript>		
+</s9qsqlblk>
+
+<s9qsqlblk>
+  <s9qScriptID>	S9Q_013_0_0025	</s9qScriptID>
+  <s9qtitle></s9qtitle>
+  <s9qpgmtype>L</s9qpgmtype>
+  <s9qversion>*</s9qversion>
+  <s9qenvironment>P</s9qenvironment>
+  <s9qRunMultiple>0</s9qRunMultiple>
+  <s9qQryType>DML</s9qQryType>
+  <s9qScript>		
+Update GenLookup Set vactr = (select intg from sysparam where paramcode = 'VaSysCounter')
+  </s9qScript>		
+</s9qsqlblk>
+
+<s9qsqlblk>
+  <s9qScriptID>	S9Q_013_0_1000	</s9qScriptID>
+  <s9qtitle>Missing parameters insertion</s9qtitle>
+  <s9qpgmtype>I</s9qpgmtype>
+  <s9qversion>*</s9qversion>
+  <s9qenvironment>P</s9qenvironment>
+  <s9qRunMultiple>0</s9qRunMultiple>
+  <s9qQryType>DML</s9qQryType>
+  <s9qScript>		
+INSERT INTO [dbo].[SysParam] ([Id], [Descr], [ParamCode], [Boolean], [Intg], [Txt], [Dt], [Sng], [Cur], [Opt], [VAUid], [VActr], [VATermId], [VACompCode] )  VALUES ( 'SR5-0730-0000188', 'Print To Address in  Goods Inwards', 'PrintToAddressGIR', 0, 0, '1111', NULL, 0, 0.0000, 'T', 'super', 21, '.', 'R01' )
+-GO-
+INSERT INTO [dbo].[SysParam] ([Id], [Descr], [ParamCode], [Boolean], [Intg], [Txt], [Dt], [Sng], [Cur], [Opt], [VAUid], [VActr], [VATermId], [VACompCode] )  VALUES ( 'SR5-0730-0000189', 'Loading / Storing Path for Barcode Design Templates', 'PathBarcodeDesignTemplates', 0, 0, '\\DILEEP\shoper9\Barcode', NULL, 0, 0.0000, 'T', 'super', 21, '.', 'R01' )
+-GO-
+INSERT INTO [dbo].[SysParam] ([Id], [Descr], [ParamCode], [Boolean], [Intg], [Txt], [Dt], [Sng], [Cur], [Opt], [VAUid], [VActr], [VATermId], [VACompCode] )  VALUES ( 'SR5-0730-0000190', 'Display Actual Quantity and Doc Quantity for PO Pre-fill', 'DispActQtyDocQtyForPOPrefill', 0, 0, '0#0', NULL, 0, 0.0000, 'T', 'super', 21, '.', 'R01' )
+-GO-
+INSERT INTO [dbo].[SysParam] ([Id], [Descr], [ParamCode], [Boolean], [Intg], [Txt], [Dt], [Sng], [Cur], [Opt], [VAUid], [VActr], [VATermId], [VACompCode] )  VALUES ( 'SR5-0730-0000191', 'Split Quantity If Actual Qty is More than PO Qty', 'SplitActQtyIfMoreThanPOQty', 0, 0, NULL, NULL, 0, 0.0000, 'I', 'super', 21, '.', 'R01' )
+-GO-
+INSERT INTO [dbo].[SysParam] ([Id], [Descr], [ParamCode], [Boolean], [Intg], [Txt], [Dt], [Sng], [Cur], [Opt], [VAUid], [VActr], [VATermId], [VACompCode] )  VALUES ( 'SR5-0730-0000192', 'Auto Pre-fill PO details in Goods Inwards (Only for POs based on stock number)', 'PrefillPODetailsInGIR', 0, 0, NULL, NULL, 0, 0.0000, 'I', 'super', 21, '.', 'R01' )
+-GO-
+INSERT INTO [dbo].[SysParam] ([Id], [Descr], [ParamCode], [Boolean], [Intg], [Txt], [Dt], [Sng], [Cur], [Opt], [VAUid], [VActr], [VATermId], [VACompCode] )  VALUES ( 'SR5-0730-0000193', 'Re Open PO when GIR Document Edited or Deleted If PO is Closed', 'ReOpenPOWhenGIREditOrDelete', 0, 0, NULL, NULL, 0, 0.0000, 'I', 'super', 21, '.', 'R01' )
+-GO-
+INSERT INTO [dbo].[SysParam] ([Id], [Descr], [ParamCode], [Boolean], [Intg], [Txt], [Dt], [Sng], [Cur], [Opt], [VAUid], [VActr], [VATermId], [VACompCode] )  VALUES ( 'SR5-0730-0000194', 'Validate Flat File PO Ref. with POS PO Ref.', 'ValidateFlatFilePORefInGIR', 0, 0, NULL, NULL, 0, 0.0000, 'I', 'super', 21, '.', 'R01' )
+-GO-
+INSERT INTO [dbo].[SysParam] ([Id], [Descr], [ParamCode], [Boolean], [Intg], [Txt], [Dt], [Sng], [Cur], [Opt], [VAUid], [VActr], [VATermId], [VACompCode] )  VALUES ( 'SR5-0730-0000195', 'Validate Data during Pricing Master Import', 'ValidateDataDuringPMImport', 0, 2, NULL, NULL, 0, 0.0000, 'I', 'super', 21, '.', 'R01' )
+-GO-
+INSERT INTO [dbo].[SysParam] ([Id], [Descr], [ParamCode], [Boolean], [Intg], [Txt], [Dt], [Sng], [Cur], [Opt], [VAUid], [VActr], [VATermId], [VACompCode] )  VALUES ( 'SR5-0730-0000226', 'Running No for Data Extract Transaction File', 'RunNoDataExtract', 0, 0, NULL, NULL, 0, 0.0000, 'I', 'super', 21, '.', 'R01' )
+-GO-
+INSERT INTO [dbo].[SysParam] ([Id], [Descr], [ParamCode], [Boolean], [Intg], [Txt], [Dt], [Sng], [Cur], [Opt], [VAUid], [VActr], [VATermId], [VACompCode] )  VALUES ( 'SR5-0730-0000227', 'Wait Time for Data Extraction Before Data Polling', 'ExtractDataWaitTime', 0, 5000, NULL, NULL, 0, 0.0000, 'I', 'super', 21, '.', 'R01' )
+-GO-
+INSERT INTO [dbo].[SysParam] ([Id], [Descr], [ParamCode], [Boolean], [Intg], [Txt], [Dt], [Sng], [Cur], [Opt], [VAUid], [VActr], [VATermId], [VACompCode] )  VALUES ( 'SR5-0730-0000228', 'Flat File thru On Line', 'SendFFThruOnLine', 0, 0, NULL, NULL, 0, 0.0000, 'B', 'super', 21, '.', 'R01' )
+-GO-
+INSERT INTO [dbo].[SysParam] ([Id], [Descr], [ParamCode], [Boolean], [Intg], [Txt], [Dt], [Sng], [Cur], [Opt], [VAUid], [VActr], [VATermId], [VACompCode] )  VALUES ( 'SR5-0730-0000229', 'Server Name for On Line Data Sync', 'FFileOnLineServer', 0, 0, 'Server name', NULL, 0, 0.0000, 'T', 'super', 21, '.', 'R01' )
+-GO-
+INSERT INTO [dbo].[SysParam] ([Id], [Descr], [ParamCode], [Boolean], [Intg], [Txt], [Dt], [Sng], [Cur], [Opt], [VAUid], [VActr], [VATermId], [VACompCode] )  VALUES ( 'SR5-0730-0000230', 'Subject Line for POS generated Mails to HO', 'FFileMailSubjectHO', 0, 0, 'Transaction Files From POS', NULL, 0, 0.0000, 'T', 'super', 21, '.', 'R01' )
+-GO-
+INSERT INTO [dbo].[SysParam] ([Id], [Descr], [ParamCode], [Boolean], [Intg], [Txt], [Dt], [Sng], [Cur], [Opt], [VAUid], [VActr], [VATermId], [VACompCode] )  VALUES ( 'SR5-0730-0000231', 'Subject Line of Mails to be Downloaded at POS', 'FFileMailSubjectPOS', 0, 0, 'Master Files From HO', NULL, 0, 0.0000, 'T', 'super', 21, '.', 'R01' )
+-GO-
+INSERT INTO [dbo].[SysParam] ([Id], [Descr], [ParamCode], [Boolean], [Intg], [Txt], [Dt], [Sng], [Cur], [Opt], [VAUid], [VActr], [VATermId], [VACompCode] )  VALUES ( 'SR5-0730-0000232', 'Subject Line of Mail Acknowledgement From HO', 'FFileMailAckSubjectHO', 0, 0, 'Acknowledgement for Transaction Files', NULL, 0, 0.0000, 'T', 'super', 21, '.', 'R01' )
+-GO-
+INSERT INTO [dbo].[SysParam] ([Id], [Descr], [ParamCode], [Boolean], [Intg], [Txt], [Dt], [Sng], [Cur], [Opt], [VAUid], [VActr], [VATermId], [VACompCode] )  VALUES ( 'SR5-0730-0000233', 'Message for Mail From HO', 'FFileMessageHO', 0, 0, 'Please Download the Masters', NULL, 0, 0.0000, 'T', 'super', 21, '.', 'R01' )
+-GO-
+INSERT INTO [dbo].[SysParam] ([Id], [Descr], [ParamCode], [Boolean], [Intg], [Txt], [Dt], [Sng], [Cur], [Opt], [VAUid], [VActr], [VATermId], [VACompCode] )  VALUES ( 'SR5-0730-0000234', 'Message for Mail From POS', 'FFileMessagePOS', 0, 0, 'Please Download Transaction Files', NULL, 0, 0.0000, 'T', 'super', 21, '.', 'R01' )
+-GO-
+INSERT INTO [dbo].[SysParam] ([Id], [Descr], [ParamCode], [Boolean], [Intg], [Txt], [Dt], [Sng], [Cur], [Opt], [VAUid], [VActr], [VATermId], [VACompCode] )  VALUES ( 'SR5-0730-0000235', 'Message for Mail Ack From HO', 'FFileMessageAckHO', 0, 0, 'Acknowledgement for Transaction Files', NULL, 0, 0.0000, 'T', 'super', 21, '.', 'R01' )
+-GO-
+INSERT INTO [dbo].[SysParam] ([Id], [Descr], [ParamCode], [Boolean], [Intg], [Txt], [Dt], [Sng], [Cur], [Opt], [VAUid], [VActr], [VATermId], [VACompCode] )  VALUES ( 'SR5-0730-0000236', 'File Type for Downloading at HO', 'FFileTypeDownHO', 0, 0, 's*.zip,r*.zip', NULL, 0, 0.0000, 'T', 'super', 21, '.', 'R01' )
+-GO-
+INSERT INTO [dbo].[SysParam] ([Id], [Descr], [ParamCode], [Boolean], [Intg], [Txt], [Dt], [Sng], [Cur], [Opt], [VAUid], [VActr], [VATermId], [VACompCode] )  VALUES ( 'SR5-0730-0000237', 'File Type for Downloading at POS', 'FFileTypeDownPOS', 0, 0, 'hhhccc*.zip,*CCC*.ack,*ccc*.req', NULL, 0, 0.0000, 'T', 'super', 21, '.', 'R01' )
+-GO-
+INSERT INTO [dbo].[SysParam] ([Id], [Descr], [ParamCode], [Boolean], [Intg], [Txt], [Dt], [Sng], [Cur], [Opt], [VAUid], [VActr], [VATermId], [VACompCode] )  VALUES ( 'SR5-0730-0000238', 'Stock Visibility Browse Description String Formation - 1', 'SVBrowseDescString1', 0, 0, 'Y01#N02#Y03#N04#Y05#Y06#Y07#N08', NULL, 0, 0.0000, 'T', 'super', 21, '.', 'R01' )
+-GO-
+INSERT INTO [dbo].[SysParam] ([Id], [Descr], [ParamCode], [Boolean], [Intg], [Txt], [Dt], [Sng], [Cur], [Opt], [VAUid], [VActr], [VATermId], [VACompCode] )  VALUES ( 'SR5-0730-0000239', 'Stock Visibility Browse Description String Formation - 2', 'SVBrowseDescString2', 0, 0, 'N09#N10#N11#N12#N13#N14#N15', NULL, 0, 0.0000, 'T', 'super', 21, '.', 'R01' )
+-GO-
+INSERT INTO [dbo].[SysParam] ([Id], [Descr], [ParamCode], [Boolean], [Intg], [Txt], [Dt], [Sng], [Cur], [Opt], [VAUid], [VActr], [VATermId], [VACompCode] )  VALUES ( 'SR5-0730-0000240', 'Display Current Quantity in Stock Visibility Browse', 'SVDisplayCurQtyInBrowse', 0, 1, NULL, NULL, 0, 0.0000, 'B', 'super', 21, '.', 'R01' )
+-GO-
+INSERT INTO [dbo].[SysParam] ([Id], [Descr], [ParamCode], [Boolean], [Intg], [Txt], [Dt], [Sng], [Cur], [Opt], [VAUid], [VActr], [VATermId], [VACompCode] )  VALUES ( 'SR5-0730-0000241', 'Maximum Rows in Stock Visibility Browse', 'SVBrowseMaxRows', 0, 200, NULL, NULL, 0, 0.0000, 'I', 'super', 21, '.', 'R01' )
+-GO-
+INSERT INTO [dbo].[SysParam] ([Id], [Descr], [ParamCode], [Boolean], [Intg], [Txt], [Dt], [Sng], [Cur], [Opt], [VAUid], [VActr], [VATermId], [VACompCode] )  VALUES ( 'SR5-0730-0000242', 'Default Sorting Order in Stock Visibility Browse', 'SVDefaultSortingOrderFieldInIB', 0, 1, NULL, NULL, 0, 0.0000, 'I', 'super', 21, '.', 'R01' )
+-GO-
+INSERT INTO [dbo].[SysParam] ([Id], [Descr], [ParamCode], [Boolean], [Intg], [Txt], [Dt], [Sng], [Cur], [Opt], [VAUid], [VActr], [VATermId], [VACompCode] )  VALUES ( 'SR5-0730-0000243', 'Code And Desc Order For Classfn Fields Displayed in Stock Visibility Browse', 'SVShowCodeAndDescOrderInIB', 0, 1, NULL, NULL, 0, 0.0000, 'I', 'super', 21, '.', 'R01' )
+-GO-
+INSERT INTO [dbo].[SysParam] ([Id], [Descr], [ParamCode], [Boolean], [Intg], [Txt], [Dt], [Sng], [Cur], [Opt], [VAUid], [VActr], [VATermId], [VACompCode] )  VALUES ( 'SR5-0730-0000244', 'Delimiter Character for Code and Description Display in Stock Visibility Browse', 'SVDelimitCharForCodeDescInIB', 0, 0, '\\', NULL, 0, 0.0000, 'T', 'super', 21, '.', 'R01' )
+-GO-
+INSERT INTO [dbo].[SysParam] ([Id], [Descr], [ParamCode], [Boolean], [Intg], [Txt], [Dt], [Sng], [Cur], [Opt], [VAUid], [VActr], [VATermId], [VACompCode] )  VALUES ( 'SR5-0730-0000245', 'Default Searching Field(CodeOrDesc) in Stock Visibility Browse', 'SVDefaultSearchFldInClassiBrowse', 0, 1, NULL, NULL, 0, 0.0000, 'I', 'super', 21, '.', 'R01' )
+-GO-
+INSERT INTO [dbo].[SysParam] ([Id], [Descr], [ParamCode], [Boolean], [Intg], [Txt], [Dt], [Sng], [Cur], [Opt], [VAUid], [VActr], [VATermId], [VACompCode] )  VALUES ( 'SR5-0730-0000246', 'Additional Tables to be Included During Sync.', 'AdlTablesToSync', 0, 0, 'VersionwiseTblsScript#VersionDtls#SalesTaxRevision#SalesTaxRevisionHistory#GVCustData', NULL, 0, 0.0000, 'T', 'super', 21, '.', 'R01' )
+-GO-
+INSERT INTO [dbo].[SysParam] ([Id], [Descr], [ParamCode], [Boolean], [Intg], [Txt], [Dt], [Sng], [Cur], [Opt], [VAUid], [VActr], [VATermId], [VACompCode] )  VALUES ( 'SR5-0730-0000248', 'Connection Time Out in Seconds', 'ConnectionTimeOut', 0, 0, '900', NULL, 0, 0.0000, 'T', 'super', 21, '.', 'R01' )
+-GO-
+INSERT INTO [dbo].[SysParam] ([Id], [Descr], [ParamCode], [Boolean], [Intg], [Txt], [Dt], [Sng], [Cur], [Opt], [VAUid], [VActr], [VATermId], [VACompCode] )  VALUES ( 'SR5-0730-0000249', 'Command Time Out in Seconds', 'CommandTimeOut', 0, 0, '900', NULL, 0, 0.0000, 'T', 'super', 21, '.', 'R01' )
+-GO-
+INSERT INTO [dbo].[SysParam] ([Id], [Descr], [ParamCode], [Boolean], [Intg], [Txt], [Dt], [Sng], [Cur], [Opt], [VAUid], [VActr], [VATermId], [VACompCode] )  VALUES ( 'SR5-0730-0000250', 'Database Version', 'DBVersion', 0, 0, '3.0', NULL, 0, 0.0000, 'T', 'super', 21, '.', 'R01' )
+-GO-
+INSERT INTO [dbo].[SysParam] ([Id], [Descr], [ParamCode], [Boolean], [Intg], [Txt], [Dt], [Sng], [Cur], [Opt], [VAUid], [VActr], [VATermId], [VACompCode] )  VALUES ( 'SR5-0730-0000251', 'TCP Version', 'TCPVersion', 0, 0, '910.3', NULL, 0, 0.0000, 'T', 'super', 21, '.', 'R01' )
+-GO-
+INSERT INTO [dbo].[SysParam] ([Id], [Descr], [ParamCode], [Boolean], [Intg], [Txt], [Dt], [Sng], [Cur], [Opt], [VAUid], [VActr], [VATermId], [VACompCode] )  VALUES ( 'SR5-0730-0000252', 'Purchase Order Printint format', 'POPrintFormat', 0, 0, 'SKU', NULL, 0, 0.0000, 'T', 'super', 21, '.', 'R01' )
+-GO-
+INSERT INTO [dbo].[SysParam] ([Id], [Descr], [ParamCode], [Boolean], [Intg], [Txt], [Dt], [Sng], [Cur], [Opt], [VAUid], [VActr], [VATermId], [VACompCode] )  VALUES ( 'SR5-0730-0000253', 'Upload Folder for FTP', 'FFileFTPUpFolder', 0, 0, NULL, NULL, 0, 0.0000, 'T', 'super', 21, '.', 'R01' )
+-GO-
+INSERT INTO [dbo].[SysParam] ([Id], [Descr], [ParamCode], [Boolean], [Intg], [Txt], [Dt], [Sng], [Cur], [Opt], [VAUid], [VActr], [VATermId], [VACompCode] )  VALUES ( 'SR5-0730-0000254', 'Download Folder for FTP', 'FFileFTPDownFolder', 0, 0, NULL, NULL, 0, 0.0000, 'T', 'super', 21, '.', 'R01' )
+-GO-
+INSERT INTO [dbo].[SysParam] ([Id], [Descr], [ParamCode], [Boolean], [Intg], [Txt], [Dt], [Sng], [Cur], [Opt], [VAUid], [VActr], [VATermId], [VACompCode] )  VALUES ( 'SR5-0730-0000255', 'DialUp Check for FTP', 'FFileFTPDialUpCheck', 0, 0, NULL, NULL, 0, 0.0000, 'B', 'super', 21, '.', 'R01' )
+-GO-
+INSERT INTO [dbo].[SysParam] ([Id], [Descr], [ParamCode], [Boolean], [Intg], [Txt], [Dt], [Sng], [Cur], [Opt], [VAUid], [VActr], [VATermId], [VACompCode] )  VALUES ( 'SR5-0730-0000256', 'Upload Folder for Direct Copy', 'FFileDCopyUpFolder', 0, 0, NULL, NULL, 0, 0.0000, 'T', 'super', 21, '.', 'R01' )
+-GO-
+INSERT INTO [dbo].[SysParam] ([Id], [Descr], [ParamCode], [Boolean], [Intg], [Txt], [Dt], [Sng], [Cur], [Opt], [VAUid], [VActr], [VATermId], [VACompCode] )  VALUES ( 'SR5-0730-0000257', 'Download Folder for Direct Copy', 'FFileDCopyDownFolder', 0, 0, NULL, NULL, 0, 0.0000, 'T', 'super', 21, '.', 'R01' )
+-GO-
+INSERT INTO [dbo].[SysParam] ([Id], [Descr], [ParamCode], [Boolean], [Intg], [Txt], [Dt], [Sng], [Cur], [Opt], [VAUid], [VActr], [VATermId], [VACompCode] )  VALUES ( 'SR5-0730-0000258', 'HO Email Id', 'FFileEmailId', 0, 0, 'tally@tallysolutions.com', NULL, 0, 0.0000, 'T', 'super', 21, '.', 'R01' )
+-GO-
+INSERT INTO [dbo].[SysParam] ([Id], [Descr], [ParamCode], [Boolean], [Intg], [Txt], [Dt], [Sng], [Cur], [Opt], [VAUid], [VActr], [VATermId], [VACompCode] )  VALUES ( 'SR5-0730-0000259', 'File Type for HO', 'FFileTypeHO', 0, 0, 'pt*.seq,a*.ast,shfm02*.txt,shpr_hhh_*.txt', NULL, 0, 0.0000, 'T', 'super', 21, '.', 'R01' )
+-GO-
+INSERT INTO [dbo].[SysParam] ([Id], [Descr], [ParamCode], [Boolean], [Intg], [Txt], [Dt], [Sng], [Cur], [Opt], [VAUid], [VActr], [VATermId], [VACompCode] )  VALUES ( 'SR5-0730-0000260', 'File Type for POS', 'FFileTypePOS', 0, 0, '*.seq,*.vsp', NULL, 0, 0.0000, 'T', 'super', 21, '.', 'R01' )
+-GO-
+INSERT INTO [dbo].[SysParam] ([Id], [Descr], [ParamCode], [Boolean], [Intg], [Txt], [Dt], [Sng], [Cur], [Opt], [VAUid], [VActr], [VATermId], [VACompCode] )  VALUES ( 'SR5-0730-0000261', 'Subject for Resync Request From HO', 'FFileMailResyncSubjectHO', 0, 0, 'Data Resynch', NULL, 0, 0.0000, 'T', 'super', 21, '.', 'R01' )
+-GO-
+INSERT INTO [dbo].[SysParam] ([Id], [Descr], [ParamCode], [Boolean], [Intg], [Txt], [Dt], [Sng], [Cur], [Opt], [VAUid], [VActr], [VATermId], [VACompCode] )  VALUES ( 'SR5-0730-0000262', 'Message for Resync Request From HO', 'FFileMessageResyncHO', 0, 0, 'Data Resynch from HO', NULL, 0, 0.0000, 'T', 'super', 21, '.', 'R01' )
+-GO-
+INSERT INTO [dbo].[SysParam] ([Id], [Descr], [ParamCode], [Boolean], [Intg], [Txt], [Dt], [Sng], [Cur], [Opt], [VAUid], [VActr], [VATermId], [VACompCode] )  VALUES ( 'SR5-0730-0000263', 'Shoper Temporary Backup Path', 'BackupPath', 0, 0, 'c:\Shoper9\Backup', NULL, 0, 0.0000, 'T', 'super', 21, '.', 'R01' )
+-GO-
+INSERT INTO [dbo].[SysParam] ([Id], [Descr], [ParamCode], [Boolean], [Intg], [Txt], [Dt], [Sng], [Cur], [Opt], [VAUid], [VActr], [VATermId], [VACompCode] )  VALUES ( 'SR5-0730-0000264', 'Default Size Group Id', 'DefaultSizeGroupId', 0, 0, 'OT', NULL, 0, 0.0000, 'T', 'super', 21, '.', 'R01' )
+-GO-
+INSERT INTO [dbo].[SysParam] ([Id], [Descr], [ParamCode], [Boolean], [Intg], [Txt], [Dt], [Sng], [Cur], [Opt], [VAUid], [VActr], [VATermId], [VACompCode] )  VALUES ( 'SR5-0730-0000265', 'Free Items Mandatory in Billing', 'ValidateFreeItemsInBill', 0, 0, NULL, NULL, 0, 0.0000, 'I', 'super', 21, '.', 'R01' )
+-GO-
+INSERT INTO [dbo].[SysParam] ([Id], [Descr], [ParamCode], [Boolean], [Intg], [Txt], [Dt], [Sng], [Cur], [Opt], [VAUid], [VActr], [VATermId], [VACompCode] )  VALUES ( 'SR5-0730-0000266', 'Free Items Billed at Value', 'FreeItemsBillAt', 0, 0, 'A#value', NULL, 0, 0.0000, 'T', 'super', 21, '.', 'R01' )
+-GO-
+INSERT INTO [dbo].[SysParam] ([Id], [Descr], [ParamCode], [Boolean], [Intg], [Txt], [Dt], [Sng], [Cur], [Opt], [VAUid], [VActr], [VATermId], [VACompCode] )  VALUES ( 'SR5-0730-0000267', 'Number of digits to be Stored in credit card number', 'NoDigitStoredinCreditCardNo', 0, 0, '0#0|0#0|0', NULL, 0, 0.0000, 'T', 'super', 21, '.', 'R01' )
+-GO-
+INSERT INTO [dbo].[SysParam] ([Id], [Descr], [ParamCode], [Boolean], [Intg], [Txt], [Dt], [Sng], [Cur], [Opt], [VAUid], [VActr], [VATermId], [VACompCode] )  VALUES ( 'SR5-0730-0000268', 'Print Audit Trail Title  in Goods Outwards', 'PrnAuditTrailTitleInGOR', 0, 0, '0#Transfer Out|Purchase Return|Misc Issue|Approval Rcpt', NULL, 0, 0.0000, 'T', 'super', 21, '.', 'R01' )
+-GO-
+INSERT INTO [dbo].[SysParam] ([Id], [Descr], [ParamCode], [Boolean], [Intg], [Txt], [Dt], [Sng], [Cur], [Opt], [VAUid], [VActr], [VATermId], [VACompCode] )  VALUES ( 'SR5-0730-0000269', 'Print Tax Component Name and Description In VAT Summary', 'PrintTaxComponentNmDescInVATSummary', 0, 0, 'N#N#N#N#N#N#N#N#N#N', NULL, 0, 0.0000, 'T', 'super', 21, '.', 'R01' )
+-GO-
+INSERT INTO [dbo].[SysParam] ([Id], [Descr], [ParamCode], [Boolean], [Intg], [Txt], [Dt], [Sng], [Cur], [Opt], [VAUid], [VActr], [VATermId], [VACompCode] )  VALUES ( 'SR5-0730-0000270', 'File Upload/download Retrying times', 'Fileuploaddownloadretrytimes', 0, 0, NULL, NULL, 0, 0.0000, 'I', 'super', 21, '.', 'R01' )
+-GO-
+INSERT INTO [dbo].[SysParam] ([Id], [Descr], [ParamCode], [Boolean], [Intg], [Txt], [Dt], [Sng], [Cur], [Opt], [VAUid], [VActr], [VATermId], [VACompCode] )  VALUES ( 'SR5-0730-0000271', 'File Upload/download Retrying Delay interval seconds', 'Fileuploaddownloadretryinterval', 0, 0, NULL, NULL, 0, 0.0000, 'I', 'super', 21, '.', 'R01' )
+-GO-
+INSERT INTO [dbo].[SysParam] ([Id], [Descr], [ParamCode], [Boolean], [Intg], [Txt], [Dt], [Sng], [Cur], [Opt], [VAUid], [VActr], [VATermId], [VACompCode] )  VALUES ( 'SR5-0730-0000272', 'Print Tax Type Description in VAT Summary', 'PrintTaxTypeDescInVATSummary', 0, 0, NULL, NULL, 0, 0.0000, 'B', 'super', 21, '.', 'R01' )
+-GO-
+INSERT INTO [dbo].[SysParam] ([Id], [Descr], [ParamCode], [Boolean], [Intg], [Txt], [Dt], [Sng], [Cur], [Opt], [VAUid], [VActr], [VATermId], [VACompCode] )  VALUES ( 'SR5-0730-0000273', 'Allow SKU Rate Alteration in PO/Indent', 'SKUPORateAlter', 0, 0, NULL, NULL, 0, 0.0000, 'B', 'super', 21, '.', 'R01' )
+-GO-
+INSERT INTO [dbo].[SysParam] ([Id], [Descr], [ParamCode], [Boolean], [Intg], [Txt], [Dt], [Sng], [Cur], [Opt], [VAUid], [VActr], [VATermId], [VACompCode] )  VALUES ( 'SR5-0730-0000275', 'Automatic Retain only Last n months for Data Archival', 'AutomaticRetainOnlyLastNMonthDataArchival', 0, 0, '0#4#042008', NULL, 0, 0.0000, 'T', 'super', 21, '.', 'R01' )
+-GO-
+INSERT INTO [dbo].[SysParam] ([Id], [Descr], [ParamCode], [Boolean], [Intg], [Txt], [Dt], [Sng], [Cur], [Opt], [VAUid], [VActr], [VATermId], [VACompCode] )  VALUES ( 'SR5-0730-0000279', 'Extended Data Input Mode', 'ExtendedDataInputMode', 0, 0, NULL, NULL, 0, 0.0000, 'I', 'super', 21, '.', 'R01' )
+-GO-
+INSERT INTO [dbo].[SysParam] ([Id], [Descr], [ParamCode], [Boolean], [Intg], [Txt], [Dt], [Sng], [Cur], [Opt], [VAUid], [VActr], [VATermId], [VACompCode] )  VALUES ( 'SR5-0730-0000280', 'Apply PO Rate with PO Reference in Inwards', 'ApplyPORateWithPORefInGIR', 0, 0, NULL, NULL, 0, 0.0000, 'I', 'super', 21, '.', 'R01' )
+-GO-
+INSERT INTO [dbo].[SysParam] ([Id], [Descr], [ParamCode], [Boolean], [Intg], [Txt], [Dt], [Sng], [Cur], [Opt], [VAUid], [VActr], [VATermId], [VACompCode] )  VALUES ( 'SR5-0730-0000282', 'Extraction Zip file split size specification in KB', 'Extractzipsplitsize', 0, 0, NULL, NULL, 0, 0.0000, 'I', 'super', 21, '.', 'R01' )
+-GO-
+INSERT INTO [dbo].[SysParam] ([Id], [Descr], [ParamCode], [Boolean], [Intg], [Txt], [Dt], [Sng], [Cur], [Opt], [VAUid], [VActr], [VATermId], [VACompCode] )  VALUES ( 'SR5-0730-0000285', 'DBVersion to be updated for POS Transactions', 'DBVersionUpdtInPOS', 0, 730, NULL, NULL, 0, 0.0000, 'I', 'super', 21, '.', 'R01' )
+-GO-
+INSERT INTO [dbo].[SysParam] ([Id], [Descr], [ParamCode], [Boolean], [Intg], [Txt], [Dt], [Sng], [Cur], [Opt], [VAUid], [VActr], [VATermId], [VACompCode] )  VALUES ( 'SR5-0730-0000291', 'Shoper Live Update Backup Parameter', 'LUBackupParam', 0, 0, 'Y', NULL, 0, 0.0000, 'T', 'super', 21, '.', 'R01' )
+-GO-
+INSERT INTO [dbo].[SysParam] ([Id], [Descr], [ParamCode], [Boolean], [Intg], [Txt], [Dt], [Sng], [Cur], [Opt], [VAUid], [VActr], [VATermId], [VACompCode] )  VALUES ( 'SR5-0901-0000298', 'Path to move file after processing', 'ProcessedFilePath', 0, 0, '.Processed', NULL, 0, 0.0000, 'T', 'super', 21, '.', 'R01' )
+-GO-
+INSERT INTO [dbo].[SysParam] ([Id], [Descr], [ParamCode], [Boolean], [Intg], [Txt], [Dt], [Sng], [Cur], [Opt], [VAUid], [VActr], [VATermId], [VACompCode] )  VALUES ( 'SR5-0901-0000300', 'Display Net Avaliable Quantity in Item Browse for Billing', 'DisplayNetQtyInBrowse', 0, 0, NULL, NULL, 0, 0.0000, 'B', NULL, 0, NULL, NULL )
+-GO-
+INSERT INTO [dbo].[SysParam] ([Id], [Descr], [ParamCode], [Boolean], [Intg], [Txt], [Dt], [Sng], [Cur], [Opt], [VAUid], [VActr], [VATermId], [VACompCode] )  VALUES ( 'SR5-0901-0000302', 'Post Cost Center information to tally', 'PostCCToTally', 0, 0, NULL, NULL, 0, 0.0000, 'B', 'super', 21, '.', 'R01' )
+-GO-
+INSERT INTO [dbo].[SysParam] ([Id], [Descr], [ParamCode], [Boolean], [Intg], [Txt], [Dt], [Sng], [Cur], [Opt], [VAUid], [VActr], [VATermId], [VACompCode] )  VALUES ( 'SR5-0901-0000310', 'Create detailed log file in tally mapping', 'TallyLogType', 0, 0, NULL, NULL, 0, 0.0000, 'B', 'super', 21, '.', 'R01' )
+-GO-
+INSERT INTO [dbo].[SysParam] ([Id], [Descr], [ParamCode], [Boolean], [Intg], [Txt], [Dt], [Sng], [Cur], [Opt], [VAUid], [VActr], [VATermId], [VACompCode] )  VALUES ( 'SR6-0601-0000015', 'Customer Code Generation Format', 'CustomerCdGenerationFormat', 0, 0, '!02010301#!07010804', NULL, 0, 0.0000, 'T', 'super', 21, '.', 'R01' )
+-GO-
+INSERT INTO [dbo].[SysParam] ([Id], [Descr], [ParamCode], [Boolean], [Intg], [Txt], [Dt], [Sng], [Cur], [Opt], [VAUid], [VActr], [VATermId], [VACompCode] )  VALUES ( 'SR6-0601-0000017', 'Cut-Off Quantity For Excess Stock Handling', 'ExcStkHandlingCutOffQty', 0, 0, '2#1#0.05', NULL, 0, 0.0000, 'T', 'super', 21, '.', 'R01' )
+-GO-
+INSERT INTO [dbo].[SysParam] ([Id], [Descr], [ParamCode], [Boolean], [Intg], [Txt], [Dt], [Sng], [Cur], [Opt], [VAUid], [VActr], [VATermId], [VACompCode] )  VALUES ( 'SR6-0601-0000018', 'Conversion Factor For Excess Stock Handling', 'ExcStkConvFactor', 0, 0, '2#2#5', NULL, 0, 0.0000, 'T', 'super', 21, '.', 'R01' )
+-GO-
+INSERT INTO [dbo].[SysParam] ([Id], [Descr], [ParamCode], [Boolean], [Intg], [Txt], [Dt], [Sng], [Cur], [Opt], [VAUid], [VActr], [VATermId], [VACompCode] )  VALUES ( 'SR6-0601-0000019', 'Print Counter Summary Report', 'PrintCounterSummRpt', 1, 0, NULL, NULL, 0, 0.0000, 'B', 'super', 21, '.', 'R01' )
+-GO-
+INSERT INTO [dbo].[SysParam] ([Id], [Descr], [ParamCode], [Boolean], [Intg], [Txt], [Dt], [Sng], [Cur], [Opt], [VAUid], [VActr], [VATermId], [VACompCode] )  VALUES ( 'SR6-0602-0000055', 'Display SubClass1 and SubClass2 Description in Item Master Entry', 'DispSubClass12Desc', 0, 0, NULL, NULL, 0, 0.0000, 'B', 'super', 21, '.', 'R01' )
+-GO-
+INSERT INTO [dbo].[SysParam] ([Id], [Descr], [ParamCode], [Boolean], [Intg], [Txt], [Dt], [Sng], [Cur], [Opt], [VAUid], [VActr], [VATermId], [VACompCode] )  VALUES ( 'SR6-0602-0000056', 'Configure Display of Analysis Code in Item Master Entry', 'DispCodeDescOrBothForAnalCode', 0, 0, '1', NULL, 0, 0.0000, 'T', 'super', 21, '.', 'R01' )
+-GO-
+INSERT INTO [dbo].[SysParam] ([Id], [Descr], [ParamCode], [Boolean], [Intg], [Txt], [Dt], [Sng], [Cur], [Opt], [VAUid], [VActr], [VATermId], [VACompCode] )  VALUES ( 'SR6-0602-0000057', 'Display Common Field in top or Spread  in Item Master Entry', 'DispCommonFldTopOrSpread', 0, 0, NULL, NULL, 0, 0.0000, 'B', 'super', 21, '.', 'R01' )
+-GO-
+INSERT INTO [dbo].[SysParam] ([Id], [Descr], [ParamCode], [Boolean], [Intg], [Txt], [Dt], [Sng], [Cur], [Opt], [VAUid], [VActr], [VATermId], [VACompCode] )  VALUES ( 'SR6-0602-0000062', 'Activate the Multiple Selection in Customer Browse', 'ActivateMulSelectCustomerBrowse', 1, 0, NULL, NULL, 0, 0.0000, 'B', 'super', 21, '.', 'R01' )
+-GO-
+INSERT INTO [dbo].[SysParam] ([Id], [Descr], [ParamCode], [Boolean], [Intg], [Txt], [Dt], [Sng], [Cur], [Opt], [VAUid], [VActr], [VATermId], [VACompCode] )  VALUES ( 'SR6-0602-0000064', 'Order By Class Code for Goods Register', 'OrderByC2C1ForGoodsReg', 0, 0, NULL, NULL, 0, 0.0000, 'B', 'super', 21, '.', 'R01' )
+-GO-
+INSERT INTO [dbo].[SysParam] ([Id], [Descr], [ParamCode], [Boolean], [Intg], [Txt], [Dt], [Sng], [Cur], [Opt], [VAUid], [VActr], [VATermId], [VACompCode] )  VALUES ( 'SR6-0602-0000068', 'Accept Document Remarks in Bill', 'AcceptDocRemarksInBilling', 1, 0, NULL, NULL, 0, 0.0000, 'B', 'super', 21, '.', 'R01' )
+-GO-
+INSERT INTO [dbo].[SysParam] ([Id], [Descr], [ParamCode], [Boolean], [Intg], [Txt], [Dt], [Sng], [Cur], [Opt], [VAUid], [VActr], [VATermId], [VACompCode] )  VALUES ( 'SR6-0602-0000080', 'Image Applicable at Style or SKU level', 'PMImageHeirarchyLevel', 0, 0, '2', NULL, 0, 0.0000, 'T', 'super', 21, '.', 'R01' )
+-GO-
+INSERT INTO [dbo].[SysParam] ([Id], [Descr], [ParamCode], [Boolean], [Intg], [Txt], [Dt], [Sng], [Cur], [Opt], [VAUid], [VActr], [VATermId], [VACompCode] )  VALUES ( 'SR6-0602-0000112', 'StockNo used for Handling Bill Jumping', 'SKUforHandlingBillJump', 0, 0, NULL, NULL, 0, 0.0000, 'T', 'super', 21, '.', 'R01' )
+-GO-
+INSERT INTO [dbo].[SysParam] ([Id], [Descr], [ParamCode], [Boolean], [Intg], [Txt], [Dt], [Sng], [Cur], [Opt], [VAUid], [VActr], [VATermId], [VACompCode] )  VALUES ( 'SR6-0701-0000142', 'Item Master Creation - (1) Record By Record Insertion Or (0) Bulk Insert', 'InsertStockNoLineItemLevel', 1, 0, NULL, NULL, 0, 0.0000, 'B', 'super', 21, '.', 'R01' )
+-GO-
+INSERT INTO [dbo].[SysParam] ([Id], [Descr], [ParamCode], [Boolean], [Intg], [Txt], [Dt], [Sng], [Cur], [Opt], [VAUid], [VActr], [VATermId], [VACompCode] )  VALUES ( 'SR6-0702-0000144', 'Accept Quantity in Item Master Entry', 'AcceptQtyInItemMasterEntry', 0, 0, NULL, NULL, 0, 0.0000, 'B', 'super', 21, '.', 'R01' )
+-GO-
+INSERT INTO [dbo].[SysParam] ([Id], [Descr], [ParamCode], [Boolean], [Intg], [Txt], [Dt], [Sng], [Cur], [Opt], [VAUid], [VActr], [VATermId], [VACompCode] )  VALUES ( 'SR6-0702-0000151', 'Sales Factor Rec. Id Auto Generation', 'SalesFactorRecIdAutoGen', 0, 0, NULL, NULL, 0, 0.0000, 'B', 'super', 21, '.', 'R01' )
+-GO-
+INSERT INTO [dbo].[SysParam] ([Id], [Descr], [ParamCode], [Boolean], [Intg], [Txt], [Dt], [Sng], [Cur], [Opt], [VAUid], [VActr], [VATermId], [VACompCode] )  VALUES ( 'SR6-0702-0000162', 'Image ID Applicable in Item Master', 'ImageIDPresentInItemmaster', 0, 0, NULL, NULL, 0, 0.0000, 'B', 'super', 21, '.', 'R01' )
+-GO-
+INSERT INTO [dbo].[SysParam] ([Id], [Descr], [ParamCode], [Boolean], [Intg], [Txt], [Dt], [Sng], [Cur], [Opt], [VAUid], [VActr], [VATermId], [VACompCode] )  VALUES ( 'SR6-0702-0000165', 'Shoper Image File Path', 'ShoperImageFilePath', 0, 0, 'c:\Shoper9\Images', NULL, 0, 0.0000, 'T', 'super', 21, '.', 'R01' )
+-GO-
+INSERT INTO [dbo].[SysParam] ([Id], [Descr], [ParamCode], [Boolean], [Intg], [Txt], [Dt], [Sng], [Cur], [Opt], [VAUid], [VActr], [VATermId], [VACompCode] )  VALUES ( 'SR6-0702-000143A', 'Batch SrlNo For Item Master Entry', 'BatchSrlNoA', 1, 0, '.', NULL, 0, 0.0000, 'B', 'super', 21, '.', 'R01' )
+-GO-
+INSERT INTO [dbo].[SysParam] ([Id], [Descr], [ParamCode], [Boolean], [Intg], [Txt], [Dt], [Sng], [Cur], [Opt], [VAUid], [VActr], [VATermId], [VACompCode] )  VALUES ( 'SR6-0702-000143B', 'Batch SrlNo Rec-Id For Item Master Entry', 'BatchSrlNoB', 0, 960, '.', NULL, 0, 0.0000, 'I', 'super', 21, '.', 'R01' )
+-GO-
+INSERT INTO [dbo].[SysParam] ([Id], [Descr], [ParamCode], [Boolean], [Intg], [Txt], [Dt], [Sng], [Cur], [Opt], [VAUid], [VActr], [VATermId], [VACompCode] )  VALUES ( 'SR6-0702-000144A', 'Regular Indicator for ItemMaster Entry', 'RegIndA', 1, 0, NULL, NULL, 0, 0.0000, 'B', 'super', 21, '.', 'R01' )
+-GO-
+INSERT INTO [dbo].[SysParam] ([Id], [Descr], [ParamCode], [Boolean], [Intg], [Txt], [Dt], [Sng], [Cur], [Opt], [VAUid], [VActr], [VATermId], [VACompCode] )  VALUES ( 'SR6-0702-000144B', 'Regular Indicator Rec-Id for ItemMaster Entry', 'RegIndB', 0, 961, NULL, NULL, 0, 0.0000, 'I', 'super', 21, '.', 'R01' )
+-GO-
+INSERT INTO [dbo].[SysParam] ([Id], [Descr], [ParamCode], [Boolean], [Intg], [Txt], [Dt], [Sng], [Cur], [Opt], [VAUid], [VActr], [VATermId], [VACompCode] )  VALUES ( 'SR6-0730-0000175', 'Allowed Operations in Size Catalogue Management', 'OperationsAllowedInSizeCatManage', 0, 0, '1111', NULL, 0, 0.0000, 'T', 'super', 21, '.', 'R01' )
+-GO-
+INSERT INTO [dbo].[SysParam] ([Id], [Descr], [ParamCode], [Boolean], [Intg], [Txt], [Dt], [Sng], [Cur], [Opt], [VAUid], [VActr], [VATermId], [VACompCode] )  VALUES ( 'SR6-0730-0000284', 'If Sales Promotions are Applicable to New Items Created, Activate Immediately', 'ActivateSalesPromosToNewItems', 0, 0, '1100', NULL, 0, 0.0000, 'T', 'super', 21, '.', 'R01' )
+-GO-
+INSERT INTO [dbo].[SysParam] ([Id], [Descr], [ParamCode], [Boolean], [Intg], [Txt], [Dt], [Sng], [Cur], [Opt], [VAUid], [VActr], [VATermId], [VACompCode] )  VALUES ( 'SR6-0901-0000304', 'Caption for Address1', 'Address1Cap', 0, 0, 'Address1', NULL, 0, 0.0000, 'T', 'super', 21, '.', 'R01' )
+-GO-
+INSERT INTO [dbo].[SysParam] ([Id], [Descr], [ParamCode], [Boolean], [Intg], [Txt], [Dt], [Sng], [Cur], [Opt], [VAUid], [VActr], [VATermId], [VACompCode] )  VALUES ( 'SR6-0901-0000305', 'Caption for Address2', 'Address2Cap', 0, 0, 'Address2', NULL, 0, 0.0000, 'T', 'super', 21, '.', 'R01' )
+-GO-
+INSERT INTO [dbo].[SysParam] ([Id], [Descr], [ParamCode], [Boolean], [Intg], [Txt], [Dt], [Sng], [Cur], [Opt], [VAUid], [VActr], [VATermId], [VACompCode] )  VALUES ( 'SR6-0901-0000306', 'Caption for Address3', 'Address3Cap', 0, 0, 'Address3', NULL, 0, 0.0000, 'T', 'super', 21, '.', 'R01' )
+-GO-
+INSERT INTO [dbo].[SysParam] ([Id], [Descr], [ParamCode], [Boolean], [Intg], [Txt], [Dt], [Sng], [Cur], [Opt], [VAUid], [VActr], [VATermId], [VACompCode] )  VALUES ( 'SR6-0901-0000307', 'Caption for Address4', 'Address4Cap', 0, 0, 'Address4', NULL, 0, 0.0000, 'T', 'super', 21, '.', 'R01' )
+-GO-
+INSERT INTO [dbo].[SysParam] ([Id], [Descr], [ParamCode], [Boolean], [Intg], [Txt], [Dt], [Sng], [Cur], [Opt], [VAUid], [VActr], [VATermId], [VACompCode] )  VALUES ( 'SR6-0901-0000308', 'Caption for Address5', 'Address5Cap', 0, 0, 'Address5', NULL, 0, 0.0000, 'T', 'super', 21, '.', 'R01' )
+-GO-
+INSERT INTO [dbo].[SysParam] ([Id], [Descr], [ParamCode], [Boolean], [Intg], [Txt], [Dt], [Sng], [Cur], [Opt], [VAUid], [VActr], [VATermId], [VACompCode] )  VALUES ( 'SR6-0901-0000309', 'Caption for Default Address', 'DefaultAddressCap', 0, 0, 'Default Address', NULL, 0, 0.0000, 'T', 'super', 21, '.', 'R01' )
+-GO-
+INSERT INTO [dbo].[SysParam] ([Id], [Descr], [ParamCode], [Boolean], [Intg], [Txt], [Dt], [Sng], [Cur], [Opt], [VAUid], [VActr], [VATermId], [VACompCode] )  VALUES ( 'SR7-0700-0000120', 'Company TIN Number', 'CompanyTINNumber', 0, 0, NULL, NULL, 0, 0.0000, 'T', 'super', 21, '.', 'R01' )
+-GO-
+INSERT INTO [dbo].[SysParam] ([Id], [Descr], [ParamCode], [Boolean], [Intg], [Txt], [Dt], [Sng], [Cur], [Opt], [VAUid], [VActr], [VATermId], [VACompCode] )  VALUES ( 'SR7-0701-0000002', 'Tax Cal. Method In Billing : First Remove Tax From Sale Value & Apply Discounts, Then Cal. Tax Value', 'ForTIItemsInBillingSVIsIncOfTax', 0, 1, NULL, NULL, 0, 0.0000, 'I', 'super', 21, '.', 'R01' )
+-GO-
+INSERT INTO [dbo].[SysParam] ([Id], [Descr], [ParamCode], [Boolean], [Intg], [Txt], [Dt], [Sng], [Cur], [Opt], [VAUid], [VActr], [VATermId], [VACompCode] )  VALUES ( 'SR7-0730-0000176', 'Franchisee Year Opening Setting', 'FranchiseeYearOpeningSetting', 0, 2, NULL, NULL, 0, 0.0000, 'I', 'super', 21, '.', 'R01' )
+-GO-
+INSERT INTO [dbo].[SysParam] ([Id], [Descr], [ParamCode], [Boolean], [Intg], [Txt], [Dt], [Sng], [Cur], [Opt], [VAUid], [VActr], [VATermId], [VACompCode] )  VALUES ( 'SR7-0730-0000177', 'No. of Digits for Pay-in Slip Number', 'SetLengthPaySlipNoCashCredit', 0, 0, '8;5;3#8;5;3', NULL, 0, 0.0000, 'T', 'super', 21, '.', 'R01' )
+-GO-
+INSERT INTO [dbo].[SysParam] ([Id], [Descr], [ParamCode], [Boolean], [Intg], [Txt], [Dt], [Sng], [Cur], [Opt], [VAUid], [VActr], [VATermId], [VACompCode] )  VALUES ( 'SR7-0730-0000178', 'Use Same Pay-in Slip for Cash & Credit', 'SamePayInSlipUsedCashCredit', 0, 0, NULL, NULL, 0, 0.0000, 'B', 'super', 21, '.', 'R01' )
+-GO-
+INSERT INTO [dbo].[SysParam] ([Id], [Descr], [ParamCode], [Boolean], [Intg], [Txt], [Dt], [Sng], [Cur], [Opt], [VAUid], [VActr], [VATermId], [VACompCode] )  VALUES ( 'SR7-0730-0000179', 'HO and Franchisee Code', 'HOCodeFranchiseCode', 0, 0, '0#0', NULL, 0, 0.0000, 'T', 'super', 21, '.', 'R01' )
+-GO-
+INSERT INTO [dbo].[SysParam] ([Id], [Descr], [ParamCode], [Boolean], [Intg], [Txt], [Dt], [Sng], [Cur], [Opt], [VAUid], [VActr], [VATermId], [VACompCode] )  VALUES ( 'SR7-0730-0000180', 'Cash/ Credit Payment to HO Configuration', 'PaymentHOByCashAndCredit', 0, 0, '11', NULL, 0, 0.0000, 'T', 'super', 21, '.', 'R01' )
+-GO-
+INSERT INTO [dbo].[SysParam] ([Id], [Descr], [ParamCode], [Boolean], [Intg], [Txt], [Dt], [Sng], [Cur], [Opt], [VAUid], [VActr], [VATermId], [VACompCode] )  VALUES ( 'SR7-0901-0000313', 'Pay Slip Printing Type', 'PaySlipPrintingType', 0, 50, NULL, NULL, 0, 0.0000, 'I', NULL, 21, NULL, NULL )
+-GO-
+INSERT INTO [dbo].[SysParam] ([Id], [Descr], [ParamCode], [Boolean], [Intg], [Txt], [Dt], [Sng], [Cur], [Opt], [VAUid], [VActr], [VATermId], [VACompCode] )  VALUES ( 'SR7-0913-0000313', 'Pay Modes Considered under Cash Sales', 'PayModesConsideredUnderCashSales', 0, 0, '1#1#0#1', NULL, 0, 0.0000, 'T', NULL, 0, NULL, NULL )
+-GO-
+  </s9qScript>		
+</s9qsqlblk>

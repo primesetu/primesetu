@@ -8,142 +8,137 @@
  * © 2026 — All Rights Reserved
  * "Memory, Not Code."
  * ============================================================ */
+import { useLanguage } from '@/hooks/useLanguage'
+import { useStore } from '@/hooks/useStore'
 import { useQuery } from '@tanstack/react-query'
-import { Link } from 'react-router-dom'
-
-interface Stats {
-  today_revenue: number
-  active_skus: number
-  bills_today: number
-  low_stock_alerts: number
-  revenue_change: number
-  sku_change: number
-}
-
-const MODULES = [
-  { id: 'billing',   name: 'Billing & POS',   icon: '🧾', path: '/billing',   desc: 'Counter Sales & GST' },
-  { id: 'inventory', name: 'Inventory',       icon: '📦', path: '/inventory', desc: 'Stock & SKU Mgmt' },
-  { id: 'schemes',   name: 'Offer Schemes',   icon: '🏷️', path: '/schemes',   desc: 'Promos & Loyalty' },
-  { id: 'ho',        name: 'HO Control',      icon: '🏢', path: '/ho',        desc: 'Centralized Admin' },
-  { id: 'mis',       name: 'MIS Reports',     icon: '📊', path: '/mis',       desc: 'Analytics & Insights' },
-  { id: 'alerts',    name: 'Stock Alerts',    icon: '⚠️', path: '/alerts',      desc: 'Critical Reorders' },
-  { id: 'users',     name: 'Staff Access',    icon: '👥', path: '/users',      desc: 'Role Management' },
-  { id: 'ledgers',   name: 'Sovereign Ledger', icon: '📖', path: '/ledgers',    desc: 'Audit & Accounts' },
-  { id: 'settings',  name: 'System Config',   icon: '⚙️', path: '/settings',   desc: 'Hardware & OS' },
-]
+import { api } from '@/api/client'
 
 export default function Dashboard() {
-  const { data: stats, isLoading } = useQuery<Stats>({
+  const { t } = useLanguage()
+  const { store } = useStore()
+  const now = new Date()
+  const hour = now.getHours()
+  
+  const greeting = hour < 12 ? 'Suprabhat' : hour < 17 ? 'Namaste' : 'Shubh Sandhya'
+
+  const { data: stats } = useQuery({
     queryKey: ['dashboard-stats'],
-    queryFn: async () => {
-      const resp = await fetch('http://localhost:8000/api/v1/dashboard/stats')
-      if (!resp.ok) throw new Error('Failed to fetch stats')
-      return resp.json()
-    }
+    queryFn: api.dashboard.getStats
   })
 
+  const STATS = [
+    { label: 'Aaj ki Bikri', key: 'today_sales', value: `₹ ${stats?.today_revenue?.toLocaleString() || '0'}`, trend: `${stats?.revenue_change || 0}%`, icon: '📈', color: 'bg-emerald-50 text-emerald-600' },
+    { label: 'Stock ka Khazana', key: 'stock_value', value: `${stats?.active_skus || 0} SKUs`, trend: 'Healthy', icon: '📦', color: 'bg-amber-50 text-amber-600' },
+    { label: 'Aaj ke Bills', key: 'bills_today', value: `${stats?.bills_today || 0}`, trend: 'Active', icon: '🧾', color: 'bg-blue-50 text-blue-600' },
+    { label: 'Low Stock Alerts', key: 'low_stock', value: `${stats?.low_stock_alerts || 0}`, trend: 'Review', icon: '⚠️', color: 'bg-rose-50 text-rose-600' },
+  ]
+
   return (
-    <div className="space-y-8 animate-in fade-in duration-700">
+    <div className="space-y-10 animate-in fade-in slide-in-from-bottom-4 duration-1000">
       {/* Header Section */}
-      <div className="flex items-end justify-between">
+      <div className="flex flex-col md:flex-row md:items-end justify-between gap-6">
         <div>
-          <h1 className="font-serif text-3xl font-black text-navy">Store Aangan</h1>
-          <p className="text-sm text-muted mt-1 uppercase tracking-widest font-semibold">Real-Time Terminal Intelligence</p>
+          <div className="flex items-center gap-3 text-saffron font-bold text-sm uppercase tracking-[0.2em] mb-2">
+            <span className="w-8 h-[2px] bg-saffron"></span>
+            {greeting}, {store?.name || 'Sovereign Owner'}
+          </div>
+          <h1 className="text-5xl font-serif font-black text-navy leading-tight tracking-tighter">
+            {t('aangan')} <span className="text-navy/20">/ Overview</span>
+          </h1>
         </div>
-        <div className="flex gap-2 text-[10px] font-bold uppercase tracking-tighter bg-white px-3 py-1.5 rounded-full border border-border shadow-sm">
-          <span className="text-green-600">● Live</span>
-          <span className="text-navy/40">Terminal T1</span>
+        <div className="glass px-6 py-4 rounded-3xl flex items-center gap-4">
+          <div className="text-right">
+            <div className="text-[10px] font-black text-muted uppercase tracking-widest">Business Date</div>
+            <div className="text-sm font-bold text-navy">14 Aug 2025</div>
+          </div>
+          <div className="w-[1px] h-8 bg-border"></div>
+          <div className="text-2xl">📅</div>
         </div>
       </div>
 
       {/* Stats Grid */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-        <StatsCard 
-          title="Today's Revenue" 
-          value={`₹${stats?.today_revenue.toLocaleString() || '0'}`} 
-          change={stats?.revenue_change || 0} 
-          loading={isLoading}
-          icon="💰"
-        />
-        <StatsCard 
-          title="Active SKUs" 
-          value={stats?.active_skus.toString() || '0'} 
-          change={stats?.sku_change || 0} 
-          loading={isLoading}
-          icon="📦"
-        />
-        <StatsCard 
-          title="Bills Printed" 
-          value={stats?.bills_today.toString() || '0'} 
-          change={5.2} 
-          loading={isLoading}
-          icon="📜"
-        />
-        <StatsCard 
-          title="Low Stock" 
-          value={stats?.low_stock_alerts.toString() || '0'} 
-          change={-2} 
-          loading={isLoading}
-          icon="🚨"
-          danger={Number(stats?.low_stock_alerts) > 5}
-        />
-      </div>
-
-      {/* Module Grid */}
-      <div className="space-y-4">
-        <h2 className="font-serif text-xl font-bold text-navy flex items-center gap-2">
-          <span className="w-8 h-[2px] bg-saffron rounded-full"></span>
-          Terminal Modules
-        </h2>
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-          {MODULES.map((mod) => (
-            <Link 
-              key={mod.id} 
-              to={mod.path}
-              className="group bg-white p-6 rounded-2xl border border-border shadow-sm hover:shadow-xl hover:border-saffron/30 transition-all duration-300 relative overflow-hidden"
-            >
-              <div className="absolute top-0 right-0 p-3 opacity-10 group-hover:opacity-20 transition-opacity">
-                <span className="text-6xl grayscale group-hover:grayscale-0 transition-all">{mod.icon}</span>
-              </div>
-              <div className="relative z-10">
-                <div className="w-12 h-12 bg-cream rounded-xl flex items-center justify-center text-2xl mb-4 group-hover:scale-110 group-hover:bg-saffron/10 transition-all">
-                  {mod.icon}
+        {STATS.map((stat, i) => (
+          <div key={i} className="glass card-premium group overflow-hidden relative">
+            <div className={`absolute top-0 right-0 w-32 h-32 ${stat.color} opacity-10 rounded-bl-full -mr-10 -mt-10 transition-transform group-hover:scale-110 duration-700`}></div>
+            <div className="relative z-10">
+              <div className="flex items-center justify-between mb-6">
+                <div className={`w-12 h-12 rounded-2xl ${stat.color} flex items-center justify-center text-xl shadow-inner`}>
+                  {stat.icon}
                 </div>
-                <h3 className="font-bold text-navy text-lg group-hover:text-saffron transition-colors">{mod.name}</h3>
-                <p className="text-xs text-muted mt-1 leading-relaxed">{mod.desc}</p>
-                <div className="mt-4 flex items-center text-[10px] font-black uppercase tracking-widest text-saffron opacity-0 group-hover:opacity-100 transition-all transform translate-x-[-10px] group-hover:translate-x-0">
-                  Open Module →
+                <div className="text-[10px] font-black px-2 py-1 bg-white/50 rounded-lg text-muted shadow-sm uppercase tracking-tighter">
+                  {stat.trend}
                 </div>
               </div>
-            </Link>
-          ))}
-        </div>
+              <div className="text-[11px] font-bold text-muted uppercase tracking-widest mb-1">{t(stat.key) || stat.label}</div>
+              <div className="text-3xl font-black text-navy tracking-tighter font-serif">{stat.value}</div>
+            </div>
+          </div>
+        ))}
       </div>
-    </div>
-  )
-}
 
-function StatsCard({ title, value, change, loading, icon, danger }: any) {
-  return (
-    <div className={`bg-white p-6 rounded-2xl border ${danger ? 'border-red/20 bg-red/5' : 'border-border'} shadow-sm relative overflow-hidden group`}>
-      <div className="flex items-start justify-between">
-        <div>
-          <p className="text-[10px] font-bold uppercase tracking-widest text-muted">{title}</p>
-          {loading ? (
-            <div className="h-8 w-24 bg-cream animate-pulse mt-1 rounded-lg"></div>
-          ) : (
-            <h3 className={`text-2xl font-black mt-1 ${danger ? 'text-red-600' : 'text-navy'}`}>{value}</h3>
-          )}
+      {/* Main Content Area */}
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+        {/* Recent Activity */}
+        <div className="lg:col-span-2 glass rounded-[2.5rem] p-10 relative overflow-hidden">
+          <div className="flex items-center justify-between mb-8">
+            <h3 className="text-2xl font-serif font-black text-navy">Recent Invoices</h3>
+            <button className="text-[10px] font-black uppercase tracking-widest text-saffron border-b-2 border-saffron/20 hover:border-saffron transition-all pb-1">
+              View Bazaar →
+            </button>
+          </div>
+          <div className="space-y-4">
+            {[1, 2, 3].map((_, i) => (
+              <div key={i} className="flex items-center gap-6 p-5 rounded-3xl hover:bg-cream/50 transition-colors border border-transparent hover:border-border group">
+                <div className="w-14 h-14 rounded-2xl bg-white flex flex-col items-center justify-center border border-border shadow-sm group-hover:rotate-3 transition-transform">
+                  <span className="text-[8px] font-black text-muted uppercase">Inv</span>
+                  <span className="text-sm font-bold text-navy">#892</span>
+                </div>
+                <div className="flex-1">
+                  <div className="text-sm font-bold text-navy">Bilal Khan</div>
+                  <div className="text-[10px] text-muted font-medium uppercase tracking-tighter">Puma RS-X · Size 9</div>
+                </div>
+                <div className="text-right">
+                  <div className="text-sm font-black text-navy">₹ 4,999</div>
+                  <div className="text-[9px] text-emerald-500 font-bold uppercase tracking-tighter">Paid via UPI</div>
+                </div>
+              </div>
+            ))}
+          </div>
         </div>
-        <div className="w-10 h-10 bg-cream rounded-xl flex items-center justify-center text-xl grayscale group-hover:grayscale-0 transition-all">
-          {icon}
+
+        {/* Live Node Feed */}
+        <div className="glass-dark rounded-[2.5rem] p-10 text-white overflow-hidden relative">
+          <div className="absolute top-0 right-0 w-64 h-64 bg-saffron/10 blur-[100px]"></div>
+          <h3 className="text-2xl font-serif font-black mb-8 relative z-10">System Alerts</h3>
+          <div className="space-y-8 relative z-10">
+            <div className="flex gap-4">
+              <div className="w-2 h-2 rounded-full bg-saffron mt-1.5 shadow-[0_0_10px_#F4840A]"></div>
+              <div>
+                <div className="text-xs font-bold text-white/90">Local Node Status</div>
+                <div className="text-[10px] text-white/40 mt-1 uppercase tracking-tighter font-medium">Syncing with PrimeSetu Core · Stable</div>
+              </div>
+            </div>
+            <div className="flex gap-4">
+              <div className="w-2 h-2 rounded-full bg-emerald-400 mt-1.5 shadow-[0_0_10px_#10B981]"></div>
+              <div>
+                <div className="text-xs font-bold text-white/90">Native POS Active</div>
+                <div className="text-[10px] text-white/40 mt-1 uppercase tracking-tighter font-medium">Terminal 001 ready for high-speed billing</div>
+              </div>
+            </div>
+          </div>
+          <div className="mt-12 pt-8 border-t border-white/5 relative z-10">
+            <div className="bg-white/5 rounded-2xl p-4 flex items-center gap-4">
+              <div className="w-10 h-10 rounded-xl bg-saffron flex items-center justify-center text-xl">
+                ⚙️
+              </div>
+              <div>
+                <div className="text-[10px] font-black uppercase tracking-widest text-white/40">Operations Hub</div>
+                <div className="text-xs font-bold text-white">All Systems Native</div>
+              </div>
+            </div>
+          </div>
         </div>
-      </div>
-      <div className="mt-4 flex items-center gap-2">
-        <span className={`text-[10px] font-bold px-2 py-0.5 rounded-full ${change >= 0 ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700'}`}>
-          {change >= 0 ? '↑' : '↓'} {Math.abs(change)}%
-        </span>
-        <span className="text-[10px] text-muted font-medium">vs last 24h</span>
       </div>
     </div>
   )

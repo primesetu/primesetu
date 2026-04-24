@@ -1,0 +1,481 @@
+<s9qsqlblk>
+  <s9qScriptID>S9Q_018_0_0001</s9qScriptID>
+  <s9qtitle>Security Database Script</s9qtitle>
+  <s9qpgmtype>I</s9qpgmtype>
+  <s9qpgmtype>L</s9qpgmtype>
+  <s9qversion>*</s9qversion>
+  <s9qenvironment>M</s9qenvironment>
+  <s9qRunMultiple>1</s9qRunMultiple>
+  <s9qQryType>DML</s9qQryType>
+  <s9qScript>
+INSERT [dbo].[VaSecurityConfig] ([Id], [Descr], [ParamCode], [Boolean], [Intg], [Txt], [Dt], [Sng], [Cur], [Opt], [Fixed], [Changed], [Category], 
+[CatSrlNo], [ParamSrlNo]) VALUES ('Sec-000021', 'Patch Download Reminder', 'PtReminder', 
+NULL, 7, NULL, NULL, NULL, NULL, 'I', 'Variable', NULL, 'Housekeeping', 3, 3)
+-GO-
+INSERT [dbo].[vaMenu] ([MnuNo], [MenuOPt], [MnuName], [MnuCap], [MnuPgm], [ExeName], [MnuWght], [AllowWhenTrnClosed], [pgmopt], [DbInfo], [MenuIcon], [Menusep], [MenuBold], [MultiInstance]) VALUES (900, 940, 'Analysis Reports', 'Report Designer', 'M', '', 0, 0, 0, '0', '', 0, 0, 0)
+INSERT [dbo].[vaMenu] ([MnuNo], [MenuOPt], [MnuName], [MnuCap], [MnuPgm], [ExeName], [MnuWght], [AllowWhenTrnClosed], [pgmopt], [DbInfo], [MenuIcon], [Menusep], [MenuBold], [MultiInstance]) VALUES (940, 941, 'Report Designer', 'Sales', 'P', 'SR435600.EXE', 0, 1, 201, '0+2', '', 0, 0, 0)
+INSERT [dbo].[vaMenu] ([MnuNo], [MenuOPt], [MnuName], [MnuCap], [MnuPgm], [ExeName], [MnuWght], [AllowWhenTrnClosed], [pgmopt], [DbInfo], [MenuIcon], [Menusep], [MenuBold], [MultiInstance]) VALUES (940, 942, 'Report Designer', 'Stock', 'P', 'SR435600.EXE', 0, 1, 202, '0+2', '', 0, 0, 0)
+INSERT [dbo].[vaMenu] ([MnuNo], [MenuOPt], [MnuName], [MnuCap], [MnuPgm], [ExeName], [MnuWght], [AllowWhenTrnClosed], [pgmopt], [DbInfo], [MenuIcon], [Menusep], [MenuBold], [MultiInstance]) VALUES (940, 943, 'Report Designer', 'Sales && Stock', 'P', 'SR435600.EXE', 0, 1, 203, '0+2', '', 0, 0, 0)
+INSERT [dbo].[vaMenu] ([MnuNo], [MenuOPt], [MnuName], [MnuCap], [MnuPgm], [ExeName], [MnuWght], [AllowWhenTrnClosed], [pgmopt], [DbInfo], [MenuIcon], [Menusep], [MenuBold], [MultiInstance]) VALUES (940, 944, 'Report Designer', 'Stock as on Date', 'P', 'SR435600.EXE', 0, 1, 204, '0+2', '', 0, 0, 0)
+-GO-
+If Not Exists (Select * From vaMenu Where MnuCap = 'Transport Receipt Entry' and MnuName = 'DC Generation' ) Insert into vamenu (MnuNo, MenuOPt, MnuName, MnuCap, MnuPgm, ExeName, MnuWght, AllowWhenTrnClosed, Pgmopt, DbInfo, MenuIcon, Menusep, MenuBold, MultiInstance) values (100,112,'Sales','Transport Receipt Entry','P','SD400800.EXE',0,0,8,'0','',0,0,0)
+-GO-
+INSERT INTO vavertable (NodeId,ExeSrl,ExeID,ExeName,ExeSkip,ExeVer,ExeMinor,ExeSubRel) VALUES (0, 0, 'SD400800.Exe','','N','9','1','398')
+-GO-
+Insert into vamenu (MnuNo, MenuOPt, MnuName, MnuCap, MnuPgm, ExeName, MnuWght, AllowWhenTrnClosed, Pgmopt, DbInfo, MenuIcon, Menusep, MenuBold, MultiInstance) values (	300,360,'Stock','Carton Management','M','',0,0,0,'0','',0,0,0)
+-GO-
+Insert into vamenu (MnuNo, MenuOPt, MnuName, MnuCap, MnuPgm, ExeName, MnuWght, AllowWhenTrnClosed, Pgmopt, DbInfo, MenuIcon, Menusep, MenuBold, MultiInstance) values (	360,361,'Stock','Carton Type Creation','P','SR441100.EXE',0,0,0,'0','',0,0,0)
+-GO-
+Insert into vamenu (MnuNo, MenuOPt, MnuName, MnuCap, MnuPgm, ExeName, MnuWght, AllowWhenTrnClosed, Pgmopt, DbInfo, MenuIcon, Menusep, MenuBold, MultiInstance) values (	360,362,'Stock','Carton','P','SR440700.EXE',0,0,0,'0','',0,0,0)
+-GO-
+Insert into vamenu (MnuNo, MenuOPt, MnuName, MnuCap, MnuPgm, ExeName, MnuWght, AllowWhenTrnClosed, Pgmopt, DbInfo, MenuIcon, Menusep, MenuBold, MultiInstance) values (	360,363,'Stock','Packing','P','SR440900.EXE',0,0,0,'0','',0,0,0)
+-GO-
+Insert into vavertable (NodeId,ExeSrl,ExeID,ExeName,ExeSkip,ExeVer,ExeMinor,ExeSubRel) Values (0, 0, 'SR440700.EXE','','N','9','1','403')
+-GO-
+Insert into vavertable (NodeId,ExeSrl,ExeID,ExeName,ExeSkip,ExeVer,ExeMinor,ExeSubRel) Values (0, 0, 'SR440900.EXE','','N','9','1','403')
+-GO-
+Insert into vavertable (NodeId,ExeSrl,ExeID,ExeName,ExeSkip,ExeVer,ExeMinor,ExeSubRel) Values (0, 0, 'SR441100.EXE','','N','9','1','403')
+-GO-
+Update VAMenu Set MnuCap = 'Packing' Where MnuNo = 300 and MenuOPt = 360
+-GO-
+Update VAMenu Set MnuCap = 'Carton Specification' Where MnuNo = 360 and MenuOPt = 361
+-GO-
+Update VAMenu Set MnuCap = 'Packing Slip' Where MnuNo = 360 and MenuOPt = 362
+-GO-
+Update VAMenu Set MnuCap = 'Pallet Slip' Where MnuNo = 360 and MenuOPt = 363
+-GO-
+Insert into vamenu (MnuNo, MenuOPt, MnuName, MnuCap, MnuPgm, ExeName, MnuWght, AllowWhenTrnClosed, Pgmopt, 
+DbInfo, MenuIcon, Menusep, MenuBold, MultiInstance) values 
+(500, 580,'Housekeeping','Schedule for &Reports','P','SR435600.EXE',0,0,'302','0+2','',0,0,0)
+-GO-
+Insert into vavertable (NodeId,ExeSrl,ExeID,ExeName,ExeSkip,ExeVer,ExeMinor,ExeSubRel) Values 
+(500, 580, 'SR435600.EXE','','N','9','1','425')
+-GO-
+UPDATE VAVerTable SET EXEVER = '9', EXEMINOR = '1', EXESUBREL = '425' WHERE EXEID in (
+'SD400800.exe','SD500400.exe','SE100900.exe','SE301300.exe','SE900310.exe','SN400600.exe','SN500400.exe',
+'SR100200.exe','SR100700.exe','SR101000.exe','SR122000.exe','SR127000.exe','SR130000.exe','SR202000.exe',
+'SR202400.exe','Sr203700.exe','Sr210200.exe','SR210600.exe','SR210700.exe','SR211000.exe','SR213800.exe',
+'SR215600.exe','SR217900.exe','SR230500.exe','SR233000.exe','SR309000.exe','SR309900.exe','SR311900.exe',
+'SR320500.exe','SR320800.exe','SR322300.exe','SR322600.exe','SR323400.exe','SR404700.exe','SR404800.exe',
+'SR405100.exe','SR405300.exe','SR405600.exe','SR405800.exe','SR413000.exe','SR413100.exe','SR430300.exe',
+'SR431000.exe','SR431500.exe','SR435600.exe','SR437300.exe','SR439400.exe','SR440600.exe','SR440700.exe',
+'SR440900.exe','SR441100.exe','SR507700.exe','SR507900.exe','SR525700.exe','SR541200.exe','SR708100.exe',
+'SR721500.exe','SR730000.exe','Sr208400.exe','Sr208500.exe','SR208600.exe','SR426400.exe','SR329700.exe',
+'SR329700.exe','SR323300.exe'
+)
+-GO-
+UPDATE vaMenu SET MultiInstance =1 WHERE ExeName='SR435600.EXE'
+-GO-
+</s9qScript>		
+</s9qsqlblk>
+
+<s9qsqlblk>
+  <s9qScriptID>S9Q_018_0_0002</s9qScriptID>
+  <s9qtitle>Analysis Reports Scripts</s9qtitle>
+  <s9qpgmtype>I</s9qpgmtype>
+  <s9qpgmtype>L</s9qpgmtype>
+  <s9qversion>*</s9qversion>
+  <s9qenvironment>M</s9qenvironment>
+  <s9qRunMultiple>1</s9qRunMultiple>
+  <s9qQryType>DML</s9qQryType>
+  <s9qScript>
+DROP TABLE vaRepoInfo 
+DROP TABLE vaRepoVariableInfo 
+DROP TABLE vaRepoActionInfo
+-GO-
+UPDATE vaMenu SET DbInfo = '0+2' Where ExeName = 'SR435600.Exe' AND MnuCap = 'Support Centre'
+-GO-
+IF  EXISTS (SELECT * FROM dbo.sysobjects WHERE id = OBJECT_ID(N'[dbo].[ReportInfo]') AND OBJECTPROPERTY(id, N'IsUserTable') = 1)
+DROP TABLE [dbo].[ReportInfo]
+-GO-
+IF  EXISTS (SELECT * FROM dbo.sysobjects WHERE id = OBJECT_ID(N'[dbo].[ReportActionInfo]') AND OBJECTPROPERTY(id, N'IsUserTable') = 1)
+DROP TABLE [dbo].[ReportActionInfo]
+-GO-
+IF  EXISTS (SELECT * FROM dbo.sysobjects WHERE id = OBJECT_ID(N'[dbo].[ReportVariableInfo]') AND OBJECTPROPERTY(id, N'IsUserTable') = 1)
+DROP TABLE [dbo].[ReportVariableInfo]
+-GO-
+IF  EXISTS (SELECT * FROM dbo.sysobjects WHERE id = OBJECT_ID(N'[dbo].[ReportConfigSettings]') AND OBJECTPROPERTY(id, N'IsUserTable') = 1)
+DROP TABLE [dbo].[ReportConfigSettings]
+-GO-
+IF  EXISTS (SELECT * FROM dbo.sysobjects WHERE id = OBJECT_ID(N'[dbo].[ReportConfigs]') AND OBJECTPROPERTY(id, N'IsUserTable') = 1)
+DROP TABLE [dbo].[ReportConfigs]
+-GO-
+IF  EXISTS (SELECT * FROM dbo.sysobjects WHERE id = OBJECT_ID(N'[dbo].[ReportConfigFields]') AND OBJECTPROPERTY(id, N'IsUserTable') = 1)
+DROP TABLE [dbo].[ReportConfigFields]
+-GO-
+IF NOT EXISTS (SELECT * FROM dbo.sysobjects WHERE id = OBJECT_ID(N'[dbo].[ReportConfigFields]') AND OBJECTPROPERTY(id, N'IsUserTable') = 1)
+BEGIN
+CREATE TABLE [dbo].[ReportConfigFields](
+	[TaskID] [int] NOT NULL,
+	[FieldName] [varchar](64)  NOT NULL,
+	[FieldType] [varchar](64)  NOT NULL,
+	[Caption] [varchar](255)  NULL,
+	[OrderNo] [int] NULL,
+	[IsRepeatable] [tinyint] NULL,
+ CONSTRAINT [PK_ReportConfigItems] PRIMARY KEY CLUSTERED 
+(
+	[FieldName] ASC,
+	[TaskID] ASC,
+	[FieldType] ASC
+)
+)
+END
+-GO-
+INSERT [dbo].[ReportConfigFields] ([TaskID], [FieldName], [FieldType], [Caption], [OrderNo], [IsRepeatable]) VALUES (0,'AnalysisCode1','Particulars','<<AnaCd1>>', 14, 1)
+INSERT [dbo].[ReportConfigFields] ([TaskID], [FieldName], [FieldType], [Caption], [OrderNo], [IsRepeatable]) VALUES (0,'AnalysisCode10','Particulars','<<AnaCd10>>', 23, 1)
+INSERT [dbo].[ReportConfigFields] ([TaskID], [FieldName], [FieldType], [Caption], [OrderNo], [IsRepeatable]) VALUES (0,'AnalysisCode11','Particulars','<<AnaCd11>>', 24, 1)
+INSERT [dbo].[ReportConfigFields] ([TaskID], [FieldName], [FieldType], [Caption], [OrderNo], [IsRepeatable]) VALUES (0,'AnalysisCode12','Particulars','<<AnaCd12>>', 25, 1)
+INSERT [dbo].[ReportConfigFields] ([TaskID], [FieldName], [FieldType], [Caption], [OrderNo], [IsRepeatable]) VALUES (0,'AnalysisCode13','Particulars','<<AnaCd13>>', 26, 1)
+INSERT [dbo].[ReportConfigFields] ([TaskID], [FieldName], [FieldType], [Caption], [OrderNo], [IsRepeatable]) VALUES (0,'AnalysisCode14','Particulars','<<AnaCd14>>', 27, 1)
+INSERT [dbo].[ReportConfigFields] ([TaskID], [FieldName], [FieldType], [Caption], [OrderNo], [IsRepeatable]) VALUES (0,'AnalysisCode15','Particulars','<<AnaCd15>>', 28, 1)
+INSERT [dbo].[ReportConfigFields] ([TaskID], [FieldName], [FieldType], [Caption], [OrderNo], [IsRepeatable]) VALUES (0,'AnalysisCode16','Particulars','<<AnaCd16>>', 29, 1)
+INSERT [dbo].[ReportConfigFields] ([TaskID], [FieldName], [FieldType], [Caption], [OrderNo], [IsRepeatable]) VALUES (0,'AnalysisCode17','Particulars','<<AnaCd17>>', 30, 1)
+INSERT [dbo].[ReportConfigFields] ([TaskID], [FieldName], [FieldType], [Caption], [OrderNo], [IsRepeatable]) VALUES (0,'AnalysisCode18','Particulars','<<AnaCd18>>', 31, 1)
+INSERT [dbo].[ReportConfigFields] ([TaskID], [FieldName], [FieldType], [Caption], [OrderNo], [IsRepeatable]) VALUES (0,'AnalysisCode19','Particulars','<<AnaCd19>>', 32, 1)
+INSERT [dbo].[ReportConfigFields] ([TaskID], [FieldName], [FieldType], [Caption], [OrderNo], [IsRepeatable]) VALUES (0,'AnalysisCode2','Particulars','<<AnaCd2>>', 15, 1)
+INSERT [dbo].[ReportConfigFields] ([TaskID], [FieldName], [FieldType], [Caption], [OrderNo], [IsRepeatable]) VALUES (0,'AnalysisCode20','Particulars','<<AnaCd20>>', 33, 1)
+INSERT [dbo].[ReportConfigFields] ([TaskID], [FieldName], [FieldType], [Caption], [OrderNo], [IsRepeatable]) VALUES (0,'AnalysisCode21','Particulars','<<AnaCd21>>', 34, 1)
+INSERT [dbo].[ReportConfigFields] ([TaskID], [FieldName], [FieldType], [Caption], [OrderNo], [IsRepeatable]) VALUES (0,'AnalysisCode22','Particulars','<<AnaCd22>>', 35, 1)
+INSERT [dbo].[ReportConfigFields] ([TaskID], [FieldName], [FieldType], [Caption], [OrderNo], [IsRepeatable]) VALUES (0,'AnalysisCode23','Particulars','<<AnaCd23>>', 36, 1)
+INSERT [dbo].[ReportConfigFields] ([TaskID], [FieldName], [FieldType], [Caption], [OrderNo], [IsRepeatable]) VALUES (0,'AnalysisCode24','Particulars','<<AnaCd24>>', 37, 1)
+INSERT [dbo].[ReportConfigFields] ([TaskID], [FieldName], [FieldType], [Caption], [OrderNo], [IsRepeatable]) VALUES (0,'AnalysisCode25','Particulars','<<AnaCd25>>', 38, 1)
+INSERT [dbo].[ReportConfigFields] ([TaskID], [FieldName], [FieldType], [Caption], [OrderNo], [IsRepeatable]) VALUES (0,'AnalysisCode26','Particulars','<<AnaCd26>>', 39, 1)
+INSERT [dbo].[ReportConfigFields] ([TaskID], [FieldName], [FieldType], [Caption], [OrderNo], [IsRepeatable]) VALUES (0,'AnalysisCode27','Particulars','<<AnaCd27>>', 40, 1)
+INSERT [dbo].[ReportConfigFields] ([TaskID], [FieldName], [FieldType], [Caption], [OrderNo], [IsRepeatable]) VALUES (0,'AnalysisCode28','Particulars','<<AnaCd28>>', 41, 1)
+INSERT [dbo].[ReportConfigFields] ([TaskID], [FieldName], [FieldType], [Caption], [OrderNo], [IsRepeatable]) VALUES (0,'AnalysisCode29','Particulars','<<AnaCd29>>', 42, 1)
+INSERT [dbo].[ReportConfigFields] ([TaskID], [FieldName], [FieldType], [Caption], [OrderNo], [IsRepeatable]) VALUES (0,'AnalysisCode3','Particulars','<<AnaCd3>>', 16, 1)
+INSERT [dbo].[ReportConfigFields] ([TaskID], [FieldName], [FieldType], [Caption], [OrderNo], [IsRepeatable]) VALUES (0,'AnalysisCode30','Particulars','<<AnaCd30>>', 43, 1)
+INSERT [dbo].[ReportConfigFields] ([TaskID], [FieldName], [FieldType], [Caption], [OrderNo], [IsRepeatable]) VALUES (0,'AnalysisCode31','Particulars','<<AnaCd31>>', 44, 1)
+INSERT [dbo].[ReportConfigFields] ([TaskID], [FieldName], [FieldType], [Caption], [OrderNo], [IsRepeatable]) VALUES (0,'AnalysisCode32','Particulars','<<AnaCd32>>', 45, 1)
+INSERT [dbo].[ReportConfigFields] ([TaskID], [FieldName], [FieldType], [Caption], [OrderNo], [IsRepeatable]) VALUES (0,'AnalysisCode4','Particulars','<<AnaCd4>>', 17, 1)
+INSERT [dbo].[ReportConfigFields] ([TaskID], [FieldName], [FieldType], [Caption], [OrderNo], [IsRepeatable]) VALUES (0,'AnalysisCode5','Particulars','<<AnaCd5>>', 18, 1)
+INSERT [dbo].[ReportConfigFields] ([TaskID], [FieldName], [FieldType], [Caption], [OrderNo], [IsRepeatable]) VALUES (0,'AnalysisCode6','Particulars','<<AnaCd6>>', 19, 1)
+INSERT [dbo].[ReportConfigFields] ([TaskID], [FieldName], [FieldType], [Caption], [OrderNo], [IsRepeatable]) VALUES (0,'AnalysisCode7','Particulars','<<AnaCd7>>', 20, 1)
+INSERT [dbo].[ReportConfigFields] ([TaskID], [FieldName], [FieldType], [Caption], [OrderNo], [IsRepeatable]) VALUES (0,'AnalysisCode8','Particulars','<<AnaCd8>>', 21, 1)
+INSERT [dbo].[ReportConfigFields] ([TaskID], [FieldName], [FieldType], [Caption], [OrderNo], [IsRepeatable]) VALUES (0,'AnalysisCode9','Particulars','<<AnaCd9>>', 22, 1)
+INSERT [dbo].[ReportConfigFields] ([TaskID], [FieldName], [FieldType], [Caption], [OrderNo], [IsRepeatable]) VALUES (202,'ApprovalIssueQuantity','ValueFields','ApprovalIssue Quantity', 24, 0)
+INSERT [dbo].[ReportConfigFields] ([TaskID], [FieldName], [FieldType], [Caption], [OrderNo], [IsRepeatable]) VALUES (203,'ApprovalIssueQuantity','ValueFields','ApprovalIssue Quantity', 34, 0)
+INSERT [dbo].[ReportConfigFields] ([TaskID], [FieldName], [FieldType], [Caption], [OrderNo], [IsRepeatable]) VALUES (202,'ApprovalIssueValue','ValueFields','ApprovalIssue Value', 25, 0)
+INSERT [dbo].[ReportConfigFields] ([TaskID], [FieldName], [FieldType], [Caption], [OrderNo], [IsRepeatable]) VALUES (203,'ApprovalIssueValue','ValueFields','ApprovalIssue Value', 35, 0)
+INSERT [dbo].[ReportConfigFields] ([TaskID], [FieldName], [FieldType], [Caption], [OrderNo], [IsRepeatable]) VALUES (202,'ApprovalReturnQuantity','ValueFields','ApprovalReturn Quantity', 26, 0)
+INSERT [dbo].[ReportConfigFields] ([TaskID], [FieldName], [FieldType], [Caption], [OrderNo], [IsRepeatable]) VALUES (203,'ApprovalReturnQuantity','ValueFields','ApprovalReturn Quantity', 36, 0)
+INSERT [dbo].[ReportConfigFields] ([TaskID], [FieldName], [FieldType], [Caption], [OrderNo], [IsRepeatable]) VALUES (202,'ApprovalReturnValue','ValueFields','ApprovalReturn Value', 27, 0)
+INSERT [dbo].[ReportConfigFields] ([TaskID], [FieldName], [FieldType], [Caption], [OrderNo], [IsRepeatable]) VALUES (203,'ApprovalReturnValue','ValueFields','ApprovalReturn Value', 37, 0)
+INSERT [dbo].[ReportConfigFields] ([TaskID], [FieldName], [FieldType], [Caption], [OrderNo], [IsRepeatable]) VALUES (201,'BillPrefixNumber','Particulars','Document Number', 48, 0)
+INSERT [dbo].[ReportConfigFields] ([TaskID], [FieldName], [FieldType], [Caption], [OrderNo], [IsRepeatable]) VALUES (203,'BillPrefixNumber','Particulars','Document Number', 48, 0)
+INSERT [dbo].[ReportConfigFields] ([TaskID], [FieldName], [FieldType], [Caption], [OrderNo], [IsRepeatable]) VALUES (0,'Class1Code','Particulars','<<Class1>> Code', 5, 1)
+INSERT [dbo].[ReportConfigFields] ([TaskID], [FieldName], [FieldType], [Caption], [OrderNo], [IsRepeatable]) VALUES (0,'Class1Desc','Particulars','<<Class1>> Desc', 6, 1)
+INSERT [dbo].[ReportConfigFields] ([TaskID], [FieldName], [FieldType], [Caption], [OrderNo], [IsRepeatable]) VALUES (0,'Class2Code','Particulars','<<Class2>> Code', 7, 1)
+INSERT [dbo].[ReportConfigFields] ([TaskID], [FieldName], [FieldType], [Caption], [OrderNo], [IsRepeatable]) VALUES (0,'Class2Desc','Particulars','<<Class2>> Desc', 8, 1)
+INSERT [dbo].[ReportConfigFields] ([TaskID], [FieldName], [FieldType], [Caption], [OrderNo], [IsRepeatable]) VALUES (202,'ClosingStockQuantity','ValueFields','Closing Quantity', 2, 0)
+INSERT [dbo].[ReportConfigFields] ([TaskID], [FieldName], [FieldType], [Caption], [OrderNo], [IsRepeatable]) VALUES (204,'ClosingStockQuantity','ValueFields','Closing Quantity', 0, 0)
+INSERT [dbo].[ReportConfigFields] ([TaskID], [FieldName], [FieldType], [Caption], [OrderNo], [IsRepeatable]) VALUES (202,'ClosingStockValue','ValueFields','Closing Value', 3, 0)
+INSERT [dbo].[ReportConfigFields] ([TaskID], [FieldName], [FieldType], [Caption], [OrderNo], [IsRepeatable]) VALUES (204,'ClosingStockValue','ValueFields','Closing Value', 1, 0)
+INSERT [dbo].[ReportConfigFields] ([TaskID], [FieldName], [FieldType], [Caption], [OrderNo], [IsRepeatable]) VALUES (0,'CurrentCost','Particulars','Current Cost', 62, 0)
+INSERT [dbo].[ReportConfigFields] ([TaskID], [FieldName], [FieldType], [Caption], [OrderNo], [IsRepeatable]) VALUES (201,'CustomerCode','Particulars','Customer Code', 50, 0)
+INSERT [dbo].[ReportConfigFields] ([TaskID], [FieldName], [FieldType], [Caption], [OrderNo], [IsRepeatable]) VALUES (203,'CustomerCode','Particulars','Customer Code', 51, 0)
+INSERT [dbo].[ReportConfigFields] ([TaskID], [FieldName], [FieldType], [Caption], [OrderNo], [IsRepeatable]) VALUES (201,'CustomerName','Particulars','Customer Name', 51, 0)
+INSERT [dbo].[ReportConfigFields] ([TaskID], [FieldName], [FieldType], [Caption], [OrderNo], [IsRepeatable]) VALUES (203,'CustomerName','Particulars','Customer Name', 52, 0)
+INSERT [dbo].[ReportConfigFields] ([TaskID], [FieldName], [FieldType], [Caption], [OrderNo], [IsRepeatable]) VALUES (201,'CustomerPriceGroup','Particulars','Customer Price Group', 49, 1)
+INSERT [dbo].[ReportConfigFields] ([TaskID], [FieldName], [FieldType], [Caption], [OrderNo], [IsRepeatable]) VALUES (203,'CustomerPriceGroup','Particulars','Customer Price Group', 50, 1)
+INSERT [dbo].[ReportConfigFields] ([TaskID], [FieldName], [FieldType], [Caption], [OrderNo], [IsRepeatable]) VALUES (0,'DealerPrice','Particulars','Dealer Price', 61, 0)
+INSERT [dbo].[ReportConfigFields] ([TaskID], [FieldName], [FieldType], [Caption], [OrderNo], [IsRepeatable]) VALUES (0,'ItemDesc','Particulars','Item Description', 59, 0)
+INSERT [dbo].[ReportConfigFields] ([TaskID], [FieldName], [FieldType], [Caption], [OrderNo], [IsRepeatable]) VALUES (0,'LastPurchasePrice','Particulars','Last Purchase Price', 63, 0)
+INSERT [dbo].[ReportConfigFields] ([TaskID], [FieldName], [FieldType], [Caption], [OrderNo], [IsRepeatable]) VALUES (202,'MiscIssueQuantity','ValueFields','MiscIssue Quantity', 20, 0)
+INSERT [dbo].[ReportConfigFields] ([TaskID], [FieldName], [FieldType], [Caption], [OrderNo], [IsRepeatable]) VALUES (203,'MiscIssueQuantity','ValueFields','MiscIssue Quantity', 30, 0)
+INSERT [dbo].[ReportConfigFields] ([TaskID], [FieldName], [FieldType], [Caption], [OrderNo], [IsRepeatable]) VALUES (202,'MiscIssueValue','ValueFields','MiscIssue Value', 21, 0)
+INSERT [dbo].[ReportConfigFields] ([TaskID], [FieldName], [FieldType], [Caption], [OrderNo], [IsRepeatable]) VALUES (203,'MiscIssueValue','ValueFields','MiscIssue Value', 31, 0)
+INSERT [dbo].[ReportConfigFields] ([TaskID], [FieldName], [FieldType], [Caption], [OrderNo], [IsRepeatable]) VALUES (202,'MiscReceiptQuantity','ValueFields','MiscReceipt Quantity', 22, 0)
+INSERT [dbo].[ReportConfigFields] ([TaskID], [FieldName], [FieldType], [Caption], [OrderNo], [IsRepeatable]) VALUES (203,'MiscReceiptQuantity','ValueFields','MiscReceipt Quantity', 32, 0)
+INSERT [dbo].[ReportConfigFields] ([TaskID], [FieldName], [FieldType], [Caption], [OrderNo], [IsRepeatable]) VALUES (202,'MiscReceiptValue','ValueFields','MiscReceipt Value', 23, 0)
+INSERT [dbo].[ReportConfigFields] ([TaskID], [FieldName], [FieldType], [Caption], [OrderNo], [IsRepeatable]) VALUES (203,'MiscReceiptValue','ValueFields','MiscReceipt Value', 33, 0)
+INSERT [dbo].[ReportConfigFields] ([TaskID], [FieldName], [FieldType], [Caption], [OrderNo], [IsRepeatable]) VALUES (0,'MRP','Particulars','Retail Price', 60, 0)
+INSERT [dbo].[ReportConfigFields] ([TaskID], [FieldName], [FieldType], [Caption], [OrderNo], [IsRepeatable]) VALUES (201,'NetItemLevelAddonsValue','ValueFields','Addons', 10, 0)
+INSERT [dbo].[ReportConfigFields] ([TaskID], [FieldName], [FieldType], [Caption], [OrderNo], [IsRepeatable]) VALUES (201,'NetItemLevelDeductionsValue','ValueFields','Deductions', 11, 0)
+INSERT [dbo].[ReportConfigFields] ([TaskID], [FieldName], [FieldType], [Caption], [OrderNo], [IsRepeatable]) VALUES (201,'NetItemTax1','ValueFields','Tax1 Value', 7, 0)
+INSERT [dbo].[ReportConfigFields] ([TaskID], [FieldName], [FieldType], [Caption], [OrderNo], [IsRepeatable]) VALUES (201,'NetItemTax2','ValueFields','Tax2 Value', 8, 0)
+INSERT [dbo].[ReportConfigFields] ([TaskID], [FieldName], [FieldType], [Caption], [OrderNo], [IsRepeatable]) VALUES (201,'NetItemTotalDiscount','ValueFields','Discount Value', 6, 0)
+INSERT [dbo].[ReportConfigFields] ([TaskID], [FieldName], [FieldType], [Caption], [OrderNo], [IsRepeatable]) VALUES (201,'NetTotalItemTaxValue','ValueFields','Total Tax', 9, 0)
+INSERT [dbo].[ReportConfigFields] ([TaskID], [FieldName], [FieldType], [Caption], [OrderNo], [IsRepeatable]) VALUES (202,'OpeningStockQuantity','ValueFields','Opening Quantity', 0, 0)
+INSERT [dbo].[ReportConfigFields] ([TaskID], [FieldName], [FieldType], [Caption], [OrderNo], [IsRepeatable]) VALUES (202,'OpeningStockValue','ValueFields','Opening Value', 1, 0)
+INSERT [dbo].[ReportConfigFields] ([TaskID], [FieldName], [FieldType], [Caption], [OrderNo], [IsRepeatable]) VALUES (202,'PurchaseQuantity','ValueFields','Purchase Quantity', 12, 0)
+INSERT [dbo].[ReportConfigFields] ([TaskID], [FieldName], [FieldType], [Caption], [OrderNo], [IsRepeatable]) VALUES (203,'PurchaseQuantity','ValueFields','Purchase Quantity', 22, 0)
+INSERT [dbo].[ReportConfigFields] ([TaskID], [FieldName], [FieldType], [Caption], [OrderNo], [IsRepeatable]) VALUES (202,'PurchaseReturnQuantity','ValueFields','PurchaseReturn Quantity', 14, 0)
+INSERT [dbo].[ReportConfigFields] ([TaskID], [FieldName], [FieldType], [Caption], [OrderNo], [IsRepeatable]) VALUES (203,'PurchaseReturnQuantity','ValueFields','PurchaseReturn Quantity', 24, 0)
+INSERT [dbo].[ReportConfigFields] ([TaskID], [FieldName], [FieldType], [Caption], [OrderNo], [IsRepeatable]) VALUES (202,'PurchaseReturnValue','ValueFields','PurchaseReturn Value', 15, 0)
+INSERT [dbo].[ReportConfigFields] ([TaskID], [FieldName], [FieldType], [Caption], [OrderNo], [IsRepeatable]) VALUES (203,'PurchaseReturnValue','ValueFields','PurchaseReturn Value', 25, 0)
+INSERT [dbo].[ReportConfigFields] ([TaskID], [FieldName], [FieldType], [Caption], [OrderNo], [IsRepeatable]) VALUES (202,'PurchaseValue','ValueFields','Purchase Value', 13, 0)
+INSERT [dbo].[ReportConfigFields] ([TaskID], [FieldName], [FieldType], [Caption], [OrderNo], [IsRepeatable]) VALUES (203,'PurchaseValue','ValueFields','Purchase Value', 23, 0)
+INSERT [dbo].[ReportConfigFields] ([TaskID], [FieldName], [FieldType], [Caption], [OrderNo], [IsRepeatable]) VALUES (202,'SaleQuantity','ValueFields','Sale Quantity', 8, 0)
+INSERT [dbo].[ReportConfigFields] ([TaskID], [FieldName], [FieldType], [Caption], [OrderNo], [IsRepeatable]) VALUES (203,'SaleQuantity','ValueFields','Sale Quantity', 0, 0)
+INSERT [dbo].[ReportConfigFields] ([TaskID], [FieldName], [FieldType], [Caption], [OrderNo], [IsRepeatable]) VALUES (202,'SaleReturnQuantity','ValueFields','SaleReturn Quantity', 10, 0)
+INSERT [dbo].[ReportConfigFields] ([TaskID], [FieldName], [FieldType], [Caption], [OrderNo], [IsRepeatable]) VALUES (203,'SaleReturnQuantity','ValueFields','SaleReturn Quantity', 18, 0)
+INSERT [dbo].[ReportConfigFields] ([TaskID], [FieldName], [FieldType], [Caption], [OrderNo], [IsRepeatable]) VALUES (202,'SaleReturnValue','ValueFields','SaleReturn Value', 11, 0)
+INSERT [dbo].[ReportConfigFields] ([TaskID], [FieldName], [FieldType], [Caption], [OrderNo], [IsRepeatable]) VALUES (203,'SaleReturnValue','ValueFields','SaleReturn Value', 19, 0)
+INSERT [dbo].[ReportConfigFields] ([TaskID], [FieldName], [FieldType], [Caption], [OrderNo], [IsRepeatable]) VALUES (201,'SalesNetQuantity','ValueFields','Net Quantity', 13, 0)
+INSERT [dbo].[ReportConfigFields] ([TaskID], [FieldName], [FieldType], [Caption], [OrderNo], [IsRepeatable]) VALUES (201,'SalesNetValue','ValueFields','Net Value', 14, 0)
+INSERT [dbo].[ReportConfigFields] ([TaskID], [FieldName], [FieldType], [Caption], [OrderNo], [IsRepeatable]) VALUES (201,'SalesPersonCode','Particulars','Sales Person Code', 53, 0)
+INSERT [dbo].[ReportConfigFields] ([TaskID], [FieldName], [FieldType], [Caption], [OrderNo], [IsRepeatable]) VALUES (201,'SalesPersonName','Particulars','Sales Person Name', 54, 0)
+INSERT [dbo].[ReportConfigFields] ([TaskID], [FieldName], [FieldType], [Caption], [OrderNo], [IsRepeatable]) VALUES (201,'SalesQuantity','ValueFields','Sale Quantity', 0, 0)
+INSERT [dbo].[ReportConfigFields] ([TaskID], [FieldName], [FieldType], [Caption], [OrderNo], [IsRepeatable]) VALUES (201,'SalesReturnQuantity','ValueFields','SaleReturn Quantity', 2, 0)
+INSERT [dbo].[ReportConfigFields] ([TaskID], [FieldName], [FieldType], [Caption], [OrderNo], [IsRepeatable]) VALUES (201,'SalesReturnValue','ValueFields','SaleReturn Value', 3, 0)
+INSERT [dbo].[ReportConfigFields] ([TaskID], [FieldName], [FieldType], [Caption], [OrderNo], [IsRepeatable]) VALUES (201,'SalesValue','ValueFields','Sale Value', 1, 0)
+INSERT [dbo].[ReportConfigFields] ([TaskID], [FieldName], [FieldType], [Caption], [OrderNo], [IsRepeatable]) VALUES (202,'SaleValue','ValueFields','Sale Value', 9, 0)
+INSERT [dbo].[ReportConfigFields] ([TaskID], [FieldName], [FieldType], [Caption], [OrderNo], [IsRepeatable]) VALUES (203,'SaleValue','ValueFields','Sale Value', 1, 0)
+INSERT [dbo].[ReportConfigFields] ([TaskID], [FieldName], [FieldType], [Caption], [OrderNo], [IsRepeatable]) VALUES (0,'SizeCode','Particulars','<<Size>> Code', 13, 0)
+INSERT [dbo].[ReportConfigFields] ([TaskID], [FieldName], [FieldType], [Caption], [OrderNo], [IsRepeatable]) VALUES (0,'StockNumber','Particulars','Stock Number', 0, 0)
+INSERT [dbo].[ReportConfigFields] ([TaskID], [FieldName], [FieldType], [Caption], [OrderNo], [IsRepeatable]) VALUES (203,'StoreCode','Particulars','Store Code', 55, 0)
+INSERT [dbo].[ReportConfigFields] ([TaskID], [FieldName], [FieldType], [Caption], [OrderNo], [IsRepeatable]) VALUES (203,'StoreName','Particulars','Store Name', 56, 0)
+INSERT [dbo].[ReportConfigFields] ([TaskID], [FieldName], [FieldType], [Caption], [OrderNo], [IsRepeatable]) VALUES (0,'SubClass1Code','Particulars','<<SubClass1>> Code', 9, 1)
+INSERT [dbo].[ReportConfigFields] ([TaskID], [FieldName], [FieldType], [Caption], [OrderNo], [IsRepeatable]) VALUES (0,'SubClass1Desc','Particulars','<<SubClass1>> Desc', 10, 1)
+INSERT [dbo].[ReportConfigFields] ([TaskID], [FieldName], [FieldType], [Caption], [OrderNo], [IsRepeatable]) VALUES (0,'SubClass2Code','Particulars','<<SubClass2>> Code', 11, 1)
+INSERT [dbo].[ReportConfigFields] ([TaskID], [FieldName], [FieldType], [Caption], [OrderNo], [IsRepeatable]) VALUES (0,'SubClass2Desc','Particulars','<<SubClass2>> Desc', 12, 1)
+INSERT [dbo].[ReportConfigFields] ([TaskID], [FieldName], [FieldType], [Caption], [OrderNo], [IsRepeatable]) VALUES (0,'SuperClass1Code','Particulars','<<SuperClass1>> Code', 1, 0)
+INSERT [dbo].[ReportConfigFields] ([TaskID], [FieldName], [FieldType], [Caption], [OrderNo], [IsRepeatable]) VALUES (0,'SuperClass1Desc','Particulars','<<SuperClass1>> Desc', 2, 0)
+INSERT [dbo].[ReportConfigFields] ([TaskID], [FieldName], [FieldType], [Caption], [OrderNo], [IsRepeatable]) VALUES (0,'SuperClass2Code','Particulars','<<SuperClass2>> Code', 3, 0)
+INSERT [dbo].[ReportConfigFields] ([TaskID], [FieldName], [FieldType], [Caption], [OrderNo], [IsRepeatable]) VALUES (0,'SuperClass2Desc','Particulars','<<SuperClass2>> Desc', 4, 0)
+INSERT [dbo].[ReportConfigFields] ([TaskID], [FieldName], [FieldType], [Caption], [OrderNo], [IsRepeatable]) VALUES (201,'Tax1Name','Particulars','Tax1 Name', 55, 0)
+INSERT [dbo].[ReportConfigFields] ([TaskID], [FieldName], [FieldType], [Caption], [OrderNo], [IsRepeatable]) VALUES (201,'Tax1Percentage','Particulars','Tax1 Percentage', 57, 0)
+INSERT [dbo].[ReportConfigFields] ([TaskID], [FieldName], [FieldType], [Caption], [OrderNo], [IsRepeatable]) VALUES (201,'Tax2Name','Particulars','Tax2 Name', 56, 0)
+INSERT [dbo].[ReportConfigFields] ([TaskID], [FieldName], [FieldType], [Caption], [OrderNo], [IsRepeatable]) VALUES (201,'Tax2Percentage','Particulars','Tax2 Percentage', 58, 0)
+INSERT [dbo].[ReportConfigFields] ([TaskID], [FieldName], [FieldType], [Caption], [OrderNo], [IsRepeatable]) VALUES (202,'TotalInwardQuantity','ValueFields','Total Inward Quantity', 4, 0)
+INSERT [dbo].[ReportConfigFields] ([TaskID], [FieldName], [FieldType], [Caption], [OrderNo], [IsRepeatable]) VALUES (203,'TotalInwardQuantity','ValueFields','Total Inward Quantity', 12, 0)
+INSERT [dbo].[ReportConfigFields] ([TaskID], [FieldName], [FieldType], [Caption], [OrderNo], [IsRepeatable]) VALUES (202,'TotalInwardValue','ValueFields','Total Inward Value', 5, 0)
+INSERT [dbo].[ReportConfigFields] ([TaskID], [FieldName], [FieldType], [Caption], [OrderNo], [IsRepeatable]) VALUES (203,'TotalInwardValue','ValueFields','Total Inward Value', 13, 0)
+INSERT [dbo].[ReportConfigFields] ([TaskID], [FieldName], [FieldType], [Caption], [OrderNo], [IsRepeatable]) VALUES (202,'TotalOutwardQuantity','ValueFields','Total Outward Quantity', 6, 0)
+INSERT [dbo].[ReportConfigFields] ([TaskID], [FieldName], [FieldType], [Caption], [OrderNo], [IsRepeatable]) VALUES (203,'TotalOutwardQuantity','ValueFields','Total Outward Quantity', 14, 0)
+INSERT [dbo].[ReportConfigFields] ([TaskID], [FieldName], [FieldType], [Caption], [OrderNo], [IsRepeatable]) VALUES (202,'TotalOutwardValue','ValueFields','Total Outward Value', 7, 0)
+INSERT [dbo].[ReportConfigFields] ([TaskID], [FieldName], [FieldType], [Caption], [OrderNo], [IsRepeatable]) VALUES (203,'TotalOutwardValue','ValueFields','Total Outward Value', 15, 0)
+INSERT [dbo].[ReportConfigFields] ([TaskID], [FieldName], [FieldType], [Caption], [OrderNo], [IsRepeatable]) VALUES (201,'TransactionDate','Particulars','Transaction Date', 52, 0)
+INSERT [dbo].[ReportConfigFields] ([TaskID], [FieldName], [FieldType], [Caption], [OrderNo], [IsRepeatable]) VALUES (203,'TransactionDate','Particulars','Transaction Date', 49, 0)
+INSERT [dbo].[ReportConfigFields] ([TaskID], [FieldName], [FieldType], [Caption], [OrderNo], [IsRepeatable]) VALUES (201,'TransactionMonth','Particulars','Month and Year', 47, 1)
+INSERT [dbo].[ReportConfigFields] ([TaskID], [FieldName], [FieldType], [Caption], [OrderNo], [IsRepeatable]) VALUES (203,'TransactionMonth','Particulars','Month and Year', 47, 1)
+INSERT [dbo].[ReportConfigFields] ([TaskID], [FieldName], [FieldType], [Caption], [OrderNo], [IsRepeatable]) VALUES (202,'TransferInQuantity','ValueFields','TransferIn Quantity', 16, 0)
+INSERT [dbo].[ReportConfigFields] ([TaskID], [FieldName], [FieldType], [Caption], [OrderNo], [IsRepeatable]) VALUES (203,'TransferInQuantity','ValueFields','TransferIn Quantity', 26, 0)
+INSERT [dbo].[ReportConfigFields] ([TaskID], [FieldName], [FieldType], [Caption], [OrderNo], [IsRepeatable]) VALUES (202,'TransferInValue','ValueFields','TransferIn Value', 17, 0)
+INSERT [dbo].[ReportConfigFields] ([TaskID], [FieldName], [FieldType], [Caption], [OrderNo], [IsRepeatable]) VALUES (203,'TransferInValue','ValueFields','TransferIn Value', 27, 0)
+INSERT [dbo].[ReportConfigFields] ([TaskID], [FieldName], [FieldType], [Caption], [OrderNo], [IsRepeatable]) VALUES (202,'TransferOutQuantity','ValueFields','TransferOut Quantity', 18, 0)
+INSERT [dbo].[ReportConfigFields] ([TaskID], [FieldName], [FieldType], [Caption], [OrderNo], [IsRepeatable]) VALUES (203,'TransferOutQuantity','ValueFields','TransferOut Quantity', 28, 0)
+INSERT [dbo].[ReportConfigFields] ([TaskID], [FieldName], [FieldType], [Caption], [OrderNo], [IsRepeatable]) VALUES (202,'TransferOutValue','ValueFields','TransferOut Value', 19, 0)
+INSERT [dbo].[ReportConfigFields] ([TaskID], [FieldName], [FieldType], [Caption], [OrderNo], [IsRepeatable]) VALUES (203,'TransferOutValue','ValueFields','TransferOut Value', 29, 0)
+INSERT [dbo].[ReportConfigFields] ([TaskID], [FieldName], [FieldType], [Caption], [OrderNo], [IsRepeatable]) VALUES (203,'VendorCode','Particulars','Vendor Code', 53, 0)
+INSERT [dbo].[ReportConfigFields] ([TaskID], [FieldName], [FieldType], [Caption], [OrderNo], [IsRepeatable]) VALUES (203,'VendorName','Particulars','Vendor Name', 54, 0)
+INSERT [dbo].[ReportConfigFields] ([TaskID], [FieldName], [FieldType], [Caption], [OrderNo], [IsRepeatable]) VALUES (201,'VoidSalesQuantity','ValueFields','VoidSale Quantity', 4, 0)
+INSERT [dbo].[ReportConfigFields] ([TaskID], [FieldName], [FieldType], [Caption], [OrderNo], [IsRepeatable]) VALUES (201,'VoidSalesValue','ValueFields','VoidSale Value', 5, 0)
+INSERT [dbo].[ReportConfigFields] ([TaskID], [FieldName], [FieldType], [Caption], [OrderNo], [IsRepeatable]) VALUES (201,'WeekDay','Particulars','Day of the Week', 46, 1)
+INSERT [dbo].[ReportConfigFields] ([TaskID], [FieldName], [FieldType], [Caption], [OrderNo], [IsRepeatable]) VALUES (203,'WeekDay','Particulars','Day of the Week', 46, 1)
+-GO-
+IF NOT EXISTS (SELECT * FROM dbo.sysobjects WHERE id = OBJECT_ID(N'[dbo].[ReportConfigs]') AND OBJECTPROPERTY(id, N'IsUserTable') = 1)
+BEGIN
+CREATE TABLE [dbo].[ReportConfigs](
+	[TaskID] [int] NOT NULL,
+	[DefaultTitle] [varchar](255)  NULL,
+	[MaxAllowed] [tinyint] NULL,
+	[MinAllowed] [tinyint] NULL,
+	[SISTransaction] [varchar](50) NULL,
+ CONSTRAINT [PK_ReportConfig] PRIMARY KEY CLUSTERED 
+(
+	[TaskID] ASC
+)
+)
+END
+-GO-
+INSERT [dbo].[ReportConfigs] ([TaskID], [DefaultTitle], [MaxAllowed], [MinAllowed], [SISTransaction]) VALUES (201,'Sales Summary Report', 5, 1,'POSSummary')
+INSERT [dbo].[ReportConfigs] ([TaskID], [DefaultTitle], [MaxAllowed], [MinAllowed], [SISTransaction]) VALUES (202,'Stock Summary Report', 5, 1,'StockSummary')
+INSERT [dbo].[ReportConfigs] ([TaskID], [DefaultTitle], [MaxAllowed], [MinAllowed], [SISTransaction]) VALUES (203,'Sales and Stock Summary Report', 5, 1,'POSSummary')
+INSERT [dbo].[ReportConfigs] ([TaskID], [DefaultTitle], [MaxAllowed], [MinAllowed], [SISTransaction]) VALUES (204,'Stock Summary Report', 5, 1,'StockSummary')
+-GO-
+IF NOT EXISTS (SELECT * FROM dbo.sysobjects WHERE id = OBJECT_ID(N'[dbo].[ReportVariableInfo]') AND OBJECTPROPERTY(id, N'IsUserTable') = 1)
+BEGIN
+CREATE TABLE [dbo].[ReportVariableInfo](
+	[TaskID] [int] NOT NULL,
+	[VariableName] [varchar](64)  NOT NULL,
+	[VariableValue] [varchar](8000)  NULL,
+ CONSTRAINT [PK_ReportVariableInfo] PRIMARY KEY CLUSTERED 
+(
+	[TaskID] ASC,
+	[VariableName] ASC
+)
+)
+END
+-GO-
+INSERT [dbo].[ReportVariableInfo] ([TaskID], [VariableName], [VariableValue]) VALUES (0, 'EISShoperDate', '<<SHOPERDATE>>')
+INSERT [dbo].[ReportVariableInfo] ([TaskID], [VariableName], [VariableValue]) VALUES (0, 'SCCCompanyCode', '<<SHOPERCOMPCODE>>')
+INSERT [dbo].[ReportVariableInfo] ([TaskID], [VariableName], [VariableValue]) VALUES (0, 'SCCHostName', '<<SISSERVERNAME>>')
+INSERT [dbo].[ReportVariableInfo] ([TaskID], [VariableName], [VariableValue]) VALUES (0, 'SCCPortNumber', '<<SISPORT>>')
+INSERT [dbo].[ReportVariableInfo] ([TaskID], [VariableName], [VariableValue]) VALUES (2, 'TDL', '<<APPPATH>>\EISRept.tcp')
+INSERT [dbo].[ReportVariableInfo] ([TaskID], [VariableName], [VariableValue]) VALUES (3, 'TDL', '<<APPPATH>>\EISRept.tcp')
+INSERT [dbo].[ReportVariableInfo] ([TaskID], [VariableName], [VariableValue]) VALUES (4, 'TDL', '<<APPPATH>>\EISRept.tcp')
+INSERT [dbo].[ReportVariableInfo] ([TaskID], [VariableName], [VariableValue]) VALUES (5, 'TDL', '<<APPPATH>>\EISRept.tcp')
+INSERT [dbo].[ReportVariableInfo] ([TaskID], [VariableName], [VariableValue]) VALUES (6, 'TDL', '<<APPPATH>>\EISRept.tcp')
+INSERT [dbo].[ReportVariableInfo] ([TaskID], [VariableName], [VariableValue]) VALUES (7, 'TDL', '<<APPPATH>>\EISRept.tcp')
+INSERT [dbo].[ReportVariableInfo] ([TaskID], [VariableName], [VariableValue]) VALUES (8, 'TDL', '<<APPPATH>>\EISRept.tcp')
+INSERT [dbo].[ReportVariableInfo] ([TaskID], [VariableName], [VariableValue]) VALUES (9, 'TDL', '<<APPPATH>>\EISRept.tcp')
+INSERT [dbo].[ReportVariableInfo] ([TaskID], [VariableName], [VariableValue]) VALUES (10, 'TDL', '<<APPPATH>>\EISRept.tcp')
+INSERT [dbo].[ReportVariableInfo] ([TaskID], [VariableName], [VariableValue]) VALUES (11, 'TDL', '<<APPPATH>>\EISRept.tcp')
+INSERT [dbo].[ReportVariableInfo] ([TaskID], [VariableName], [VariableValue]) VALUES (12, 'TDL', '<<APPPATH>>\EISRept.tcp')
+INSERT [dbo].[ReportVariableInfo] ([TaskID], [VariableName], [VariableValue]) VALUES (13, 'TDL', '<<APPPATH>>\EISRept.tcp')
+INSERT [dbo].[ReportVariableInfo] ([TaskID], [VariableName], [VariableValue]) VALUES (14, 'TDL', '<<APPPATH>>\EISRept.tcp')
+INSERT [dbo].[ReportVariableInfo] ([TaskID], [VariableName], [VariableValue]) VALUES (201, 'TDL', '<<APPPATH>>\POSREPORTS.tcp')
+INSERT [dbo].[ReportVariableInfo] ([TaskID], [VariableName], [VariableValue]) VALUES (202, 'TDL', '<<APPPATH>>\POSREPORTS.tcp')
+INSERT [dbo].[ReportVariableInfo] ([TaskID], [VariableName], [VariableValue]) VALUES (203, 'TDL', '<<APPPATH>>\POSREPORTS.tcp')
+INSERT [dbo].[ReportVariableInfo] ([TaskID], [VariableName], [VariableValue]) VALUES (204, 'TDL', '<<APPPATH>>\POSREPORTS.tcp')
+-GO-
+IF NOT EXISTS (SELECT * FROM dbo.sysobjects WHERE id = OBJECT_ID(N'[dbo].[ReportActionInfo]') AND OBJECTPROPERTY(id, N'IsUserTable') = 1)
+BEGIN
+CREATE TABLE [dbo].[ReportActionInfo](
+	[TaskID] [int] NOT NULL,
+	[ActionName] [varchar](64)  NULL,
+	[ActionType] [varchar](64)  NULL,
+	[ActionObject] [varchar](64)  NULL,
+	[Arguments] [varchar](8000)  NULL,
+ CONSTRAINT [PK_ReportActionInfo] PRIMARY KEY CLUSTERED 
+(
+	[TaskID] ASC
+)
+)
+END
+-GO-
+INSERT [dbo].[ReportActionInfo] ([TaskID], [ActionName], [ActionType], [ActionObject], [Arguments]) VALUES (2, 'DISPLAY', 'ACTION', 'EIS Billwise', '')
+INSERT [dbo].[ReportActionInfo] ([TaskID], [ActionName], [ActionType], [ActionObject], [Arguments]) VALUES (3, 'DISPLAY', 'ACTION', 'EIS OffTake', '')
+INSERT [dbo].[ReportActionInfo] ([TaskID], [ActionName], [ActionType], [ActionObject], [Arguments]) VALUES (4, 'DISPLAY', 'ACTION', 'EIS Cust Cons Sales', '')
+INSERT [dbo].[ReportActionInfo] ([TaskID], [ActionName], [ActionType], [ActionObject], [Arguments]) VALUES (5, 'DISPLAY', 'ACTION', 'EIS CustomerWiseClass2Code', '')
+INSERT [dbo].[ReportActionInfo] ([TaskID], [ActionName], [ActionType], [ActionObject], [Arguments]) VALUES (6, 'DISPLAY', 'ACTION', 'EIS MonthlyReport', '')
+INSERT [dbo].[ReportActionInfo] ([TaskID], [ActionName], [ActionType], [ActionObject], [Arguments]) VALUES (7, 'DISPLAY', 'ACTION', 'EIS Reorder Level Report', '')
+INSERT [dbo].[ReportActionInfo] ([TaskID], [ActionName], [ActionType], [ActionObject], [Arguments]) VALUES (8, 'DISPLAY', 'ACTION', 'EIS Productwise Sales', '')
+INSERT [dbo].[ReportActionInfo] ([TaskID], [ActionName], [ActionType], [ActionObject], [Arguments]) VALUES (9, 'DISPLAY', 'ACTION', 'EIS ProdBrandSaleAndReturn', '')
+INSERT [dbo].[ReportActionInfo] ([TaskID], [ActionName], [ActionType], [ActionObject], [Arguments]) VALUES (10, 'DISPLAY', 'ACTION', 'EIS Itemwise Sales', '')
+INSERT [dbo].[ReportActionInfo] ([TaskID], [ActionName], [ActionType], [ActionObject], [Arguments]) VALUES (11, 'DISPLAY', 'ACTION', 'EIS StockBalance', '')
+INSERT [dbo].[ReportActionInfo] ([TaskID], [ActionName], [ActionType], [ActionObject], [Arguments]) VALUES (12, 'DISPLAY', 'ACTION', 'EIS Sizewise Report', '')
+INSERT [dbo].[ReportActionInfo] ([TaskID], [ActionName], [ActionType], [ActionObject], [Arguments]) VALUES (13, 'DISPLAY', 'ACTION', 'EIS Stock Movement', '')
+INSERT [dbo].[ReportActionInfo] ([TaskID], [ActionName], [ActionType], [ActionObject], [Arguments]) VALUES (14, 'DISPLAY', 'ACTION', 'EIS Stock Value Analysis', '')
+INSERT [dbo].[ReportActionInfo] ([TaskID], [ActionName], [ActionType], [ActionObject], [Arguments]) VALUES (201, 'CALL', 'ACTION', 'POS ReportMain', '')
+INSERT [dbo].[ReportActionInfo] ([TaskID], [ActionName], [ActionType], [ActionObject], [Arguments]) VALUES (202, 'CALL', 'ACTION', 'POS ReportMain', '')
+INSERT [dbo].[ReportActionInfo] ([TaskID], [ActionName], [ActionType], [ActionObject], [Arguments]) VALUES (203, 'CALL', 'ACTION', 'POS ReportMain', '')
+INSERT [dbo].[ReportActionInfo] ([TaskID], [ActionName], [ActionType], [ActionObject], [Arguments]) VALUES (204, 'CALL', 'ACTION', 'POS ReportMain', '')
+-GO-
+IF NOT EXISTS (SELECT * FROM dbo.sysobjects WHERE id = OBJECT_ID(N'[dbo].[ReportInfo]') AND OBJECTPROPERTY(id, N'IsUserTable') = 1)
+BEGIN
+CREATE TABLE [dbo].[ReportInfo](
+	[PgmOption] [int] NOT NULL,
+	[TaskID] [int] NOT NULL,
+	[TaskName] [varchar](64)  NULL,
+	[TaskType] [tinyint] NULL,
+	[PeriodType] [varchar](2)  NULL,
+ CONSTRAINT [PK_ReportInfo] PRIMARY KEY CLUSTERED 
+(
+	[PgmOption] ASC,
+	[TaskID] ASC
+)
+)
+END
+-GO-
+INSERT [dbo].[ReportInfo] ([PgmOption], [TaskID], [TaskName], [TaskType], [PeriodType]) VALUES (2, 2, 'Billwise Sales Item Details', 1, NULL)
+INSERT [dbo].[ReportInfo] ([PgmOption], [TaskID], [TaskName], [TaskType], [PeriodType]) VALUES (3, 3, 'Customer Offtake Reports', 1, NULL)
+INSERT [dbo].[ReportInfo] ([PgmOption], [TaskID], [TaskName], [TaskType], [PeriodType]) VALUES (4, 4, 'Customerwise Sales', 1, NULL)
+INSERT [dbo].[ReportInfo] ([PgmOption], [TaskID], [TaskName], [TaskType], [PeriodType]) VALUES (5, 5, 'Customerwise Brand Sales', 1, NULL)
+INSERT [dbo].[ReportInfo] ([PgmOption], [TaskID], [TaskName], [TaskType], [PeriodType]) VALUES (6, 6, 'Monthly Sales comparision', 1, NULL)
+INSERT [dbo].[ReportInfo] ([PgmOption], [TaskID], [TaskName], [TaskType], [PeriodType]) VALUES (7, 7, 'Re-Order Level', 1, NULL)
+INSERT [dbo].[ReportInfo] ([PgmOption], [TaskID], [TaskName], [TaskType], [PeriodType]) VALUES (8, 8, 'Productwise Sales', 1, NULL)
+INSERT [dbo].[ReportInfo] ([PgmOption], [TaskID], [TaskName], [TaskType], [PeriodType]) VALUES (9, 9, 'Product Brandwise Sales and Return', 1, NULL)
+INSERT [dbo].[ReportInfo] ([PgmOption], [TaskID], [TaskName], [TaskType], [PeriodType]) VALUES (10, 10, 'Itemwise Sales', 1, NULL)
+INSERT [dbo].[ReportInfo] ([PgmOption], [TaskID], [TaskName], [TaskType], [PeriodType]) VALUES (11, 11, 'Stock Balance', 1, NULL)
+INSERT [dbo].[ReportInfo] ([PgmOption], [TaskID], [TaskName], [TaskType], [PeriodType]) VALUES (12, 12, 'Sizewise Stock Balance', 1, NULL)
+INSERT [dbo].[ReportInfo] ([PgmOption], [TaskID], [TaskName], [TaskType], [PeriodType]) VALUES (13, 13, 'Stock Movement', 1, NULL)
+INSERT [dbo].[ReportInfo] ([PgmOption], [TaskID], [TaskName], [TaskType], [PeriodType]) VALUES (14, 14, 'Stock Analysis (Value)', 1, NULL)
+INSERT [dbo].[ReportInfo] ([PgmOption], [TaskID], [TaskName], [TaskType], [PeriodType]) VALUES (201, 201, 'Sales', 1, 'T1')
+INSERT [dbo].[ReportInfo] ([PgmOption], [TaskID], [TaskName], [TaskType], [PeriodType]) VALUES (202, 202, 'Stock', 1, 'T1')
+INSERT [dbo].[ReportInfo] ([PgmOption], [TaskID], [TaskName], [TaskType], [PeriodType]) VALUES (203, 203, 'Sales and Stock', 1, 'T1')
+INSERT [dbo].[ReportInfo] ([PgmOption], [TaskID], [TaskName], [TaskType], [PeriodType]) VALUES (204, 204, 'Stock as on Date', 1, 'T2')
+-GO-
+ALTER TABLE SISTASKLIST ALTER COLUMN TaskId int
+-GO-
+</s9qScript>		
+</s9qsqlblk>
+
+<s9qsqlblk>
+  <s9qScriptID>S9Q_018_0_0003</s9qScriptID>
+  <s9qtitle>Scheduler Scripts</s9qtitle>
+  <s9qpgmtype>I</s9qpgmtype>
+  <s9qpgmtype>L</s9qpgmtype>
+  <s9qversion>*</s9qversion>
+  <s9qenvironment>M</s9qenvironment>
+  <s9qRunMultiple>1</s9qRunMultiple>
+  <s9qQryType>DML</s9qQryType>
+  <s9qScript>
+IF  EXISTS (SELECT * FROM dbo.sysobjects WHERE id = OBJECT_ID(N'[dbo].[ReportScheduleHeader]') AND OBJECTPROPERTY(id, N'IsUserTable') = 1)
+DROP TABLE [dbo].[ReportScheduleHeader]
+-GO-
+IF  EXISTS (SELECT * FROM dbo.sysobjects WHERE id = OBJECT_ID(N'[dbo].[ReportScheduleHistory]') AND OBJECTPROPERTY(id, N'IsUserTable') = 1)
+DROP TABLE [dbo].[ReportScheduleHistory]
+-GO-
+IF  EXISTS (SELECT * FROM dbo.sysobjects WHERE id = OBJECT_ID(N'[dbo].[ReportScheduleDetails]') AND OBJECTPROPERTY(id, N'IsUserTable') = 1)
+DROP TABLE [dbo].[ReportScheduleDetails]
+-GO-
+IF NOT EXISTS (SELECT * FROM dbo.sysobjects WHERE id = OBJECT_ID(N'[dbo].[ReportScheduleDetails]') AND OBJECTPROPERTY(id, N'IsUserTable') = 1)
+BEGIN
+CREATE TABLE [dbo].[ReportScheduleDetails](
+	[CompanyCode] [varchar](50), 
+	[ScheduleID] [varchar](50), 
+	[EntrySerial] [int] NOT NULL,
+	[ReportConfigName] [varchar](50) ,
+	[CommunicationMode] [varchar](50), 
+	[CommunicationInfo] [varchar](8000) ,
+	[Status] [int] NULL,
+	[DateModified] [datetime] NULL,
+	[VaUID] [varchar](32), 
+	[VaCtr] [int] NULL,
+	[VaTermid] [varchar](32) ,
+	[VaCompanyCode] [varchar](16) 
+ CONSTRAINT [PK_ReportScheduleDetails] PRIMARY KEY CLUSTERED 
+(
+	[CompanyCode] ASC,
+	[ScheduleID] ASC,
+	[EntrySerial] ASC,
+	[CommunicationMode] ASC
+)
+)
+END
+-GO-
+IF NOT EXISTS (SELECT * FROM dbo.sysobjects WHERE id = OBJECT_ID(N'[dbo].[ReportScheduleHistory]') AND OBJECTPROPERTY(id, N'IsUserTable') = 1)
+BEGIN
+CREATE TABLE [dbo].[ReportScheduleHistory](
+	[ScheduleId] [varchar](50) ,
+	[ReportConfigName] [varchar](50) ,
+	[CommunicationMode] [varchar](50) ,
+	[ExecutedTime] [varchar](50) ,
+	[Status] [varchar](8000) 
+)
+END
+-GO-
+IF NOT EXISTS (SELECT * FROM dbo.sysobjects WHERE id = OBJECT_ID(N'[dbo].[ReportScheduleHeader]') AND OBJECTPROPERTY(id, N'IsUserTable') = 1)
+BEGIN
+CREATE TABLE [dbo].[ReportScheduleHeader](
+	[CompanyCode] [varchar](16) ,
+	[ScheduleID] [varchar](50) ,
+	[ScheduleName] [varchar](255) ,
+	[TimeType] [int] NULL,
+	[StartTime] [varchar](50) ,
+	[TimeRange] [varchar](50) ,
+	[PatternType] [int] NULL,
+	[PatternValue] [varchar](50) ,
+	[StartDate] [varchar](50) ,
+	[RangeType] [int] NULL,
+	[RangeRecurrances] [varchar](50) ,
+	[LastExecutedTime] [varchar](50) ,
+	[Status] [tinyint] NULL,
+	[DateModified] [datetime] NULL,
+	[VaUID] [varchar](32) ,
+	[VaCtr] [int] NULL,
+	[VaTermId] [varchar](32) ,
+	[VaCompanyCode] [varchar](16) 
+ CONSTRAINT [PK_ReportScheduleHeader] PRIMARY KEY CLUSTERED 
+(
+	[CompanyCode] ASC,
+	[ScheduleID] ASC
+)
+)
+END
+-GO-
+</s9qScript>		
+</s9qsqlblk>

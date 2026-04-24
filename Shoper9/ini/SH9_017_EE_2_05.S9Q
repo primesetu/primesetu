@@ -1,0 +1,34 @@
+<s9qsqlblk>
+  <s9qScriptID>S9Q_017_2_0005</s9qScriptID>
+  <s9qtitle>Version Details</s9qtitle>
+  <s9qpgmtype>I</s9qpgmtype>
+  <s9qpgmtype>L</s9qpgmtype>
+  <s9qversion>*</s9qversion>
+  <s9qenvironment>P</s9qenvironment>
+  <s9qRunMultiple>0</s9qRunMultiple>
+  <s9qQryType>DML</s9qQryType>
+  <s9qScript>
+
+Insert Into Sysparam (Id,Descr,Paramcode,Cur,Opt) Values ('SR3-0901-0000366','The Net Value is rounded off to the nearest whole number','PONetValueRndOff',0,'C')
+-GO-
+Insert into SysparamExtd (ID,Paramcode,Fixed,Category,CatDescr,DispOrder)  Values ('SR3-0901-0000366','PONetValueRndOff','Variable','07. Purchase Order','This Gives Purchase Order Parameters',7)
+-GO-
+Update SysparamExtd Set Fixed = 'Hidden',VACtr = (select intg from sysparam where paramcode = 'VaSysCounter') Where ID = '00038B'
+-GO-
+Update SizeEntryFieldsConfig Set Fieldcaption = 'Addon Before Tax',VACtr = (select intg from sysparam where paramcode = 'VaSysCounter') where Fieldcaption = 'Add-On B-Tax' 
+-GO-
+Update SizeEntryFieldsConfig Set Fieldcaption = 'Addon After Tax',VACtr = (select intg from sysparam where paramcode = 'VaSysCounter') where Fieldcaption = 'Add-On A-Tax' 
+-GO-
+Update SizeEntryFieldsConfig Set Fieldcaption = 'Dedn. Before Tax',VACtr = (select intg from sysparam where paramcode = 'VaSysCounter') where Fieldcaption = 'Dedn B-Tax' 
+-GO-
+Update SizeEntryFieldsConfig Set Fieldcaption = 'Dedn. After Tax',VACtr = (select intg from sysparam where paramcode = 'VaSysCounter') where Fieldcaption = 'Dedn A-Tax'
+-GO-
+Update SizeEntryFieldsConfig Set Fieldcaption = 'Rate',VACtr = (select intg from sysparam where paramcode = 'VaSysCounter') where Fieldcaption = 'DocEnt Rate'
+-GO-
+Update SizeEntryFieldsConfig Set Fieldcaption = 'Total Qty',VACtr = (select intg from sysparam where paramcode = 'VaSysCounter') where Fieldcaption = 'Qty Total'
+-GO-
+Update SizeEntryFieldsConfig Set Fieldcaption = 'Net Value',VACtr = (select intg from sysparam where paramcode = 'VaSysCounter') where Fieldcaption = 'Total Value'
+-GO-
+
+</s9qScript>
+</s9qsqlblk>

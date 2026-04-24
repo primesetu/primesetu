@@ -1,0 +1,28 @@
+<s9qsqlblk>
+  <s9qScriptID>	S9Q_0190_9_0001</s9qScriptID>
+  <s9qtitle>New Menus Added - Catalogue Team</s9qtitle>
+  <s9qpgmtype>I</s9qpgmtype>
+  <s9qpgmtype>L</s9qpgmtype>
+  <s9qversion>*</s9qversion>
+  <s9qenvironment>M</s9qenvironment>
+  <s9qRunMultiple>1</s9qRunMultiple>
+  <s9qQryType>DML</s9qQryType>
+  <s9qScript>
+Update VaMenu Set ExeName = 'SR430300.EXE' Where ExeName = 'SR437300.EXE' and MnuNo = 530 and MenuOpt = 538
+-GO-
+Insert Into VaMenu (MnuNo,MenuOPt,MnuName,MnuCap,MnuPgm,ExeName,MnuWght,AllowWhenTrnClosed,pgmopt,DbInfo,MenuIcon,Menusep,MenuBold,MultiInstance) Values(650,658,'Listing','Customers','P','SR242500.EXE',0,0,0,'','','',0,0)
+-GO-
+UPDATE VAMENU SET EXENAME = 'SR442300.EXE' WHERE EXENAME ='SR405100.EXE'
+-GO-
+UPDATE VAVERTABLE SET EXEID = 'SR442300.EXE' WHERE EXEID ='SR405100.EXE'
+-GO-
+Insert Into VaContextHelpDtls Values ('SR542400.DLL',0,'FrmCustomerRetail',1,Null,34423001,Null,Null)
+-GO-
+Insert Into VaContextHelpDtls Values ('SR542400.DLL',0,'FrmAdvanceRetail',1,Null,34423002,Null,Null)
+-GO-
+Insert Into VaContextHelpDtls Values ('SR542400.DLL',0,'FrmCustomerDistributor',1,Null,34423003,Null,Null)
+-GO-
+Insert Into VaContextHelpDtls Values ('SR542400.DLL',0,'FrmAdvanceDist',1,Null,34423004,Null,Null)
+-GO-
+</s9qScript>		
+</s9qsqlblk>

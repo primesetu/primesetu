@@ -1,0 +1,11 @@
+<s9qsqlblk>
+  <s9qScriptid>S9Q_020_0_0111</s9qScriptid> 
+  <s9qtitle>Alternate Script Exec Tool App DB</s9qtitle>
+  <s9qpgmtype>L</s9qpgmtype>
+  <s9qpgmtype>I</s9qpgmtype>
+  <s9qversion>*</s9qversion>
+  <s9qenvironment>P</s9qenvironment>
+  <s9qRunMultiple>1</s9qRunMultiple>
+  <s9qQryType>EXE</s9qQryType>
+  <s9qScript><APPATH>\APP_ScriptExecAltTool_Rel20.exe</s9qScript>
+</s9qsqlblk>

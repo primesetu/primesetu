@@ -1,0 +1,52 @@
+<s9qsqlblk>
+<s9qScriptid>S9Q_018_6_0002</s9qScriptid>
+<s9qtitle>Print Engine and other Script Files</s9qtitle>
+<s9qpgmtype>L</s9qpgmtype>
+<s9qpgmtype>I</s9qpgmtype>
+<s9qversion>*</s9qversion>
+<s9qenvironment>P</s9qenvironment>
+<s9qRunMultiple>1</s9qRunMultiple>
+<s9qQryType>DML</s9qQryType>
+<s9qScript>	
+Insert into SysParam ([ID],[Descr],[ParamCode],[Sng],[Opt]) Values('SR3-0901-0000399','No of Lines to be Reversed(Inward)','LinesToBeReversed_Inward',0,'S')
+-GO-
+Insert into SysParamExtd ([id],[ParamCode],[Fixed],[Changed],[Category],[CatDescr],[DispOrder]) Values('SR3-0901-0000399','LinesToBeReversed_Inward','Variable','0','09. Inwards','Inward Printing Paramter','37')
+-GO-
+Insert into SysParam ([ID],[Descr],[ParamCode],[Sng],[Opt]) Values('SR3-0901-0000400','No of Lines to be Reversed(Outward)','LinesToBeReversed_Outward',0,'S')
+-GO-
+Insert into SysParamExtd ([id],[ParamCode],[Fixed],[Changed],[Category],[CatDescr],[DispOrder]) Values('SR3-0901-0000400','LinesToBeReversed_Outward','Variable','0','10. Outwards','Inward Printing Paramter','25')
+-GO-
+Insert into PrintNodeTrnConfigMaster (NodeID,TrnTypeIdentifier,TrnTypeIDCaption,TrnTypeGroup,DisplayOrder,LinkedRefID,TrnLinkedRefExecutionOrder,PrintPreference,IsActive)
+Values('<<ALLNODES>>',8100,'Packing Slip','SLIPS',28,'DEFAULTLR',1,2,1)
+-GO-
+Insert into PrintNodeTrnConfigMaster (NodeID,TrnTypeIdentifier,TrnTypeIDCaption,TrnTypeGroup,DisplayOrder,LinkedRefID,TrnLinkedRefExecutionOrder,PrintPreference,IsActive)
+Values('<<ALLNODES>>',8200,'Pallet Slip','SLIPS',29,'DEFAULTLR',1,2,1)
+-GO-
+Insert into PrintLinkedRefInterface(LinkedRefID,LinkedRefCaption,BusHandlerId,RenHandlerID,ConfigSettingID,LinkedRefExecutionOrder,LRType,IsActive)
+Values('L0010','Default Shoper Packing slips','B0010','R0010','DEFAULTCS',1,'D',1)
+-GO-
+Insert into PrintLinkedRefInterface(LinkedRefID,LinkedRefCaption,BusHandlerId,RenHandlerID,ConfigSettingID,LinkedRefExecutionOrder,LRType,IsActive)
+Values('L0011','Default Shoper Pallet slips','B0010','R0010','DEFAULTCS',1,'D',1)
+-GO-
+Insert into PrintBusinessHandlerMaster (BusHandlerId,BHLibFilePath,BHClassName,BHCaption,BHType,Remarks,IsActive)
+Values('B0010','<<APPPATH>>\SN500200.dll','PrintingEngine.CartonAndPackingBusHandler','Packing And Pallet Business Logic','D','Shoper Default Business Handler for Packing Slip and Pallet Slip Printing',1)
+-GO-
+Insert into PrintRendererMaster(RenHandlerID,RenLibFilePath,RenClassName,RenCaption,RenType,IsActive,Remarks) 
+Values('R0010','<<APPPATH>>\SN500200.dll','PrintingEngine.CartonAndPackingRenderer','Shoper Packing and Pallet Renderer','D',1,'Shoper default renderer for Packing and Pallet slip Printing')
+-GO-
+Insert into SysParam ([ID],[Descr],[ParamCode],[Intg],[Opt]) Values('SR7-0901-0000412','Slip Format to be used','SlipFormat',1,'I')
+-GO-
+Insert into SysParamExtd ([id],[ParamCode],[Fixed],[Changed],[Category],[CatDescr],[DispOrder]) Values('SR7-0901-0000412','SlipFormat','Variable','0','12. Slips','Slips Printing Paramter','17')
+-GO-
+update sysparam set Txt=REPLACE(Txt,'Mark Up','Tax%') where ParamCode='GORAuditTrailFields4'
+-GO-
+update sysparam set Txt=REPLACE(Txt,'Mark Dn','Tax Amt') where ParamCode='GORAuditTrailFields4'
+-GO-
+Insert into sysparam ([Id],Descr,ParamCode,Txt,Opt) 
+Values('SR7-0901-0000413','Transporter Details to be printed (Outward)','TransporterDetailsPrintingInOutward','1111111111111#0000000000000#0000000000000','T')
+-GO-
+Insert into SysParamExtd ([Id],ParamCode,Fixed,Changed,Category,CatDescr,DispOrder) 
+Values('SR7-0901-0000413','TransporterDetailsPrintingInOutward','Variable','0','10. Outwards','Outward printing parameter',26)
+-GO-
+</s9qScript>
+</s9qsqlblk>

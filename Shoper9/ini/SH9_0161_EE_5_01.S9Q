@@ -1,0 +1,23 @@
+<s9qsqlblk>
+  <s9qScriptid>	S9Q_0161_5_0001	</s9qScriptid>
+  <s9qtitle>All DDL Statements.</s9qtitle>
+  <s9qpgmtype>I</s9qpgmtype>
+  <s9qpgmtype>L</s9qpgmtype>
+  <s9qversion>*</s9qversion>
+  <s9qenvironment>P</s9qenvironment>
+  <s9qRunMultiple>1</s9qRunMultiple>
+  <s9qQryType>DML</s9qQryType>
+  <s9qScript>
+
+INSERT INTO [dbo].[SysParam] ([Id], [Descr], [ParamCode], [Boolean], [Intg], [Txt], [Dt], [Sng], [Cur], [Opt], [VAUid], [VActr], [VATermId], [VACompCode] )  VALUES ( 'SR1-0901-0000368', 'Use SIS for file downloads', 'UseSISForDownload', 0, 0, NULL, NULL, 0, 0.0000, 'B', 'super', 1, '.', '' )
+-GO-
+Insert into SysparamExtd ([ID],[ParamCode],[Fixed],[Changed],[Category],[CatDescr],[DispOrder]) Values ('SR1-0901-0000368','UseSISForDownload','Variable','0','17. House Keeping','This Gives House Keeping Parameters','49')
+-GO-
+INSERT INTO [dbo].[SysParam] ([Id], [Descr], [ParamCode], [Boolean], [Intg], [Txt], [Dt], [Sng], [Cur], [Opt], [VAUid], [VActr], [VATermId], [VACompCode] )  VALUES ( 'SR1-0901-0000369', 'Use SIS for file uploads', 'UseSISForUpload', 1, 0, NULL, NULL, 0, 0.0000, 'B', 'super', 1, '.', '' )
+-GO-
+Insert into SysparamExtd ([ID],[ParamCode],[Fixed],[Changed],[Category],[CatDescr],[DispOrder]) Values ('SR1-0901-0000369','UseSISForUpload','Variable','0','17. House Keeping','This Gives House Keeping Parameters','50')
+-GO-
+
+
+  </s9qScript>
+</s9qsqlblk>

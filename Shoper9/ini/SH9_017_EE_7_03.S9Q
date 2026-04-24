@@ -1,0 +1,28 @@
+<s9qsqlblk>
+<s9qScriptID>S9Q_017_7_0003</s9qScriptID>
+<s9qtitle></s9qtitle>
+<s9qpgmtype>I</s9qpgmtype>
+<s9qpgmtype>L</s9qpgmtype>
+<s9qversion>*</s9qversion>
+<s9qenvironment>M</s9qenvironment>
+<s9qRunMultiple>1</s9qRunMultiple>
+<s9qQryType>DML</s9qQryType>
+<s9qScript>
+
+Insert Into AlertEventDefinition(Application,Event,isactive,ReadOnly,eventtype)
+values('ShoperMenu','ForgotPWD',1,1,'info')
+
+-go-
+
+Insert Into AlertDefinition(CompanyCode,application,event,IsHODefined,IsDeleted,isactive,ReadOnly,AlertId,AlertMode,Settings,DateModified)
+values('','ShoperMenu','ForgotPWD',0,0,1,1,1,'SMTPMAIL','',GETDATE())
+
+-go-
+
+Insert Into AlertDefinition(CompanyCode,application,event,IsHODefined,IsDeleted,isactive,ReadOnly,AlertId,AlertMode,Settings,DateModified)
+values('','ShoperMenu','ForgotPWD',0,0,1,1,2,'HTTPSMS','',GETDATE())
+-go-
+
+</s9qScript>		
+</s9qsqlblk>
+

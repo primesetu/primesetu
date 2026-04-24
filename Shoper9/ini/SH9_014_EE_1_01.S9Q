@@ -1,0 +1,20 @@
+<s9qsqlblk>
+  <s9qScriptID>S9Q_014_1_0062</s9qScriptID>
+  <s9qtitle></s9qtitle>
+  <s9qpgmtype>I</s9qpgmtype>
+  <s9qpgmtype>L</s9qpgmtype>
+  <s9qversion>*</s9qversion>
+  <s9qenvironment>P</s9qenvironment>
+  <s9qRunMultiple>1</s9qRunMultiple>
+  <s9qQryType>DDL</s9qQryType>
+  <s9qScript>
+update CustPriceGroups set DestTaxType='' where DestTaxType =' '
+-GO-
+UPDATE genlookup SET descr='StockNo~Qty~#' where recid=950 and code='05'
+-GO-
+INSERT INTO genlookup (recid,code,descr,flag,number,vauid,vactr) 
+select '950' as recid,'05' as code,'StockNo~Qty~#' as descr,'N' as flag,0 as number,'super' as vauid,
+(SELECT intg from sysparam where paramcode='vasyscounter') AS vactr
+-GO-
+</s9qScript>		
+</s9qsqlblk>

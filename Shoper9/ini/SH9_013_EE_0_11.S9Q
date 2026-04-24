@@ -1,0 +1,56 @@
+<s9qsqlblk>
+  <s9qScriptID>	S9Q_013_0_0048	</s9qScriptID>
+  <s9qtitle></s9qtitle>
+  <s9qpgmtype>I</s9qpgmtype>
+  <s9qpgmtype>L</s9qpgmtype>
+  <s9qversion>*</s9qversion>
+  <s9qenvironment>P</s9qenvironment>
+  <s9qRunMultiple>1</s9qRunMultiple>
+  <s9qQryType>DML</s9qQryType>
+  <s9qScript>
+Insert Into Genlookup (Recid,Code,Descr,Flag,[Number]) Values (299,'VER9_REL1.2','Version 9 Release 1.2','Y',0)
+-GO-
+Insert Into Genlookup (Recid,Code,Descr,Flag,[Number]) Values (299,'VER9_REL1.3','Version 9 Release 1.3','Y',0)
+-GO-
+INSERT INTO VersionDtls VALUES (4,getdate(),'9','1.3','A','P901143','',1,'.','')
+-GO-
+INSERT INTO Genlookup (recid,code,descr) values (299,'P901143','Shoper Update Version No:')
+-GO-
+Update Genlookup set Descr = (select 'Shoper Update Version No:9.0.1.9143' + ' ;system date:' + convert(varchar(20),getdate(),105) + ' ;shoper date:' + (select convert(varchar(20),dt,105) from sysparam where paramcode ='SHOPERSysDt') ) where code = 'P901143' and recid = 299
+-GO-
+Insert Into Sysparam (Id,Descr,Paramcode,Boolean,Opt) Values ('SR5-0901-0000300','Display Net Avaliable Quantity in Item Browse for Billing','DisplayNetQtyInBrowse',0,'B')
+-GO-
+INSERT INTO sysparamextd (Id,Paramcode,Fixed,changed,category,catdescr,Disporder ) values ('SR5-0901-0000300','DisplayNetQtyInBrowse','Hidden','0','16. Browse','This Gives Browse Parameters','8')
+-GO-
+INSERT INTO dbtuningconfig VALUES(78,'POS','Shrinking Database','','DBCC SHRINKDATABASE (''<<dbname>>'')','<<dbname>>',NULL,NULL,'Y',NULL,NULL,0,NULL,NULL)
+-GO-
+INSERT INTO VersionwiseTblsScript(VerID,SrlNo,TblScript,VAUid,VActr,VATermId,VACompCode) VALUES (4,4,'drop table [dbo].[AcceptDisplayDtls]','',1,'.','')
+-GO-
+INSERT INTO VersionwiseTblsScript(VerID,SrlNo,TblScript,VAUid,VActr,VATermId,VACompCode) VALUES (4,5,'CREATE TABLE [dbo].[AcceptDisplayDtls] (	[trntype] [int] NOT NULL ,[Index] [int] NOT NULL ,[AcptCap] [varchar] (50)   NULL ,[DispCap] [varchar] (50)   NULL ,[AcptVisible] [bit] NULL ,[DispVisible] [bit] NULL ,[AcptPos] [int] NULL ,[DispPos] [int] NULL ,[AcptDataType] [int] NULL ,[DispDataType] [int] NULL ,[AcptWidth] [real] NULL ,[DispWidth] [real] NULL ,[AcptAlign] [int] NULL ,[DispAlign] [int] NULL ,[AcptFontName] [varchar] (50)   NULL ,[DispFontName] [varchar] (50)   NULL ,[AcptFourColour] [varchar] (50)   NULL ,[DispFourColour] [varchar] (50)   NULL ,[AcptFontSize] [real] NULL ,[DispFontSize] [real] NULL ,[AcptRowHight] [real] NULL ,[DispRowHight] [real] NULL ,[AcptBackColour] [varchar] (50)   NULL ,[DispBackColour] [varchar] (50)   NULL ,[VAUid] [varchar] (32)   NULL ,	[VActr] [int] NULL , [VATermId] [varchar] (32)   NULL ,	[VACompCode] [varchar] (16)   NULL ) ON [PRIMARY]','',1,'.','')
+-GO-
+INSERT INTO VersionwiseTblsScript(VerID,SrlNo,TblScript,VAUid,VActr,VATermId,VACompCode) VALUES (4,6,'ALTER TABLE [dbo].[AcceptDisplayDtls] WITH NOCHECK ADD CONSTRAINT [PK_AcceptDisplayDtls] PRIMARY KEY  CLUSTERED (	[trntype],[Index])  ON [PRIMARY] ','',1,'.','')
+-GO-
+INSERT INTO VersionwiseTblsScript(VerID,SrlNo,TblScript,VAUid,VActr,VATermId,VACompCode) VALUES (4,7,'drop table [dbo].[BAKAcceptDisplayDtls]','',1,'.','')
+-GO-
+INSERT INTO VersionwiseTblsScript(VerID,SrlNo,TblScript,VAUid,VActr,VATermId,VACompCode) VALUES (4,8,'CREATE TABLE [dbo].[BAKAcceptDisplayDtls] ([trntype] [int] NULL ,[Index] [int] NULL ,[AcptCap] [varchar] (50)   NULL ,[DispCap] [varchar] (50)   NULL ,[AcptVisible] [bit] NULL ,[DispVisible] [bit] NULL ,[AcptPos] [int] NULL ,[DispPos] [int] NULL ,[AcptDataType] [int] NULL ,[DispDataType] [int] NULL ,[AcptWidth] [real] NULL ,[DispWidth] [real] NULL ,[AcptAlign] [int] NULL ,[DispAlign] [int] NULL ,[AcptFontName] [varchar] (50)   NULL ,[DispFontName] [varchar] (50)   NULL ,[AcptFourColour] [varchar] (50)   NULL ,[DispFourColour] [varchar] (50)   NULL ,[AcptFontSize] [real] NULL ,[DispFontSize] [real] NULL ,[AcptRowHight] [real] NULL ,[DispRowHight] [real] NULL ,[AcptBackColour] [varchar] (50)   NULL ,[DispBackColour] [varchar] (50)   NULL ,[VAUid] [varchar] (32)   NULL ,	[VActr] [int] NULL , [VATermId] [varchar] (32)   NULL ,	[VACompCode] [varchar] (16)   NULL,UPDFLAG varchar(1) ) ON [PRIMARY]','',1,'.','')
+-GO-
+Update Acceptdisplaydtls Set Vactr = (select intg from sysparam where paramcode = 'VaSysCounter')
+-GO-
+Update VersionwiseTblsScript Set Vactr = (select intg from sysparam where paramcode = 'VaSysCounter') where VerId=4
+-GO-
+Update VersionDtls Set Vactr = (select intg from sysparam where paramcode = 'VaSysCounter') where VerId=4
+-GO-
+</s9qScript>		
+</s9qsqlblk>
+
+<s9qsqlblk>
+  <s9qScriptID>	S9Q_013_0_0049	</s9qScriptID>
+  <s9qtitle></s9qtitle>
+  <s9qpgmtype>I</s9qpgmtype>
+  <s9qpgmtype>L</s9qpgmtype>
+  <s9qversion>*</s9qversion>
+  <s9qenvironment>P</s9qenvironment>
+  <s9qRunMultiple>0</s9qRunMultiple>
+  <s9qQryType>EXE</s9qQryType>
+  <s9qScript><APPATH>\CreateShoperDatFile.exe</s9qScript>		
+</s9qsqlblk>

@@ -1,0 +1,16 @@
+<s9qsqlblk> 
+<s9qScriptID>S9Q_018_7_0001</s9qScriptID>
+<s9qtitle>Security:Update Scripts</s9qtitle>
+<s9qpgmtype>L</s9qpgmtype>
+<s9qpgmtype>I</s9qpgmtype>
+<s9qversion>*</s9qversion>
+<s9qenvironment>P</s9qenvironment>
+<s9qRunMultiple>0</s9qRunMultiple>
+<s9qQryType>DDL</s9qQryType>
+<s9qScript>
+Update Extensionconfigtable set tablestruct = 'TransCode varchar(16),Level varchar(5),Action int,PartyId varchar(15),PartyName varchar(60),DocNo int,DocPrefix varchar(10),DeliveryDate datetime,DeliveryLoc varchar(255),BillTo varchar(255)' where trntype = 1 and extlevel = 1 and structtype = 1
+-GO-
+Update Extensionconfigtable set tablestruct = 'TransCode varchar(16),Level varchar(5),Action int,PartyId varchar(15),PartyName varchar(60),DocNo int,DocPrefix varchar(10),DeliveryDate datetime,DeliveryLoc varchar(255),BillTo varchar(255)' where trntype =2  and extlevel = 1 and structtype = 1
+-GO-
+</s9qScript>
+</s9qsqlblk>

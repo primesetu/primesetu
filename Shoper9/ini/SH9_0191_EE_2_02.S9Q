@@ -1,0 +1,63 @@
+<s9qsqlblk>
+  <s9qScriptID>S9Q_0191_2_0002</s9qScriptID>
+  <s9qtitle>Version Details</s9qtitle>
+  <s9qpgmtype>I</s9qpgmtype>
+  <s9qpgmtype>L</s9qpgmtype>
+  <s9qversion>*</s9qversion>
+  <s9qenvironment>P</s9qenvironment>
+  <s9qRunMultiple>1</s9qRunMultiple>
+  <s9qQryType>DML</s9qQryType>
+  <s9qScript>
+
+Update StkTrnDtls Set OrdDocType = POType,OrdEntSubSrlNo = EntrySubSrlNo from PurchOrdDtl, StkTrnDtls where PurchOrdDtl.PoNoPrefix = StkTrnDtls.OrdDocNoPrefix and PurchOrdDtl.POCtrlNo = StkTrnDtls.OrdDocNo and PurchOrdDtl.EntrySrlNo = StkTrnDtls.OrdEntSrlNo and StkTrnDtls.OrdDocType = 0 and StkTrnDtls.OrdEntSubSrlNo = 0
+-GO-
+Update PurchOrdDtl Set VActr = (Select Intg from SysParam Where ParamCode = 'Vasyscounter'), PurchOrdDtl.RcvdQty = (Select isnull(sum(PhyQtyIn),0) From StkTrnDtls Where PurchOrdDtl.POType = StkTrnDtls.OrdDocType      and   PurchOrdDtl.PoNoPrefix = StkTrnDtls.OrdDocNoPrefix and PurchOrdDtl.POCtrlNo = StkTrnDtls.OrdDocNo and PurchOrdDtl.EntrySrlNo = StkTrnDtls.OrdEntSrlNo and PurchOrdDtl.EntrySubSrlNo = StkTrnDtls.OrdEntSubSrlNo) from StkTrnDtls, PurchOrdDtl Where PurchOrdDtl.POType = StkTrnDtls.OrdDocType      and   PurchOrdDtl.PoNoPrefix = StkTrnDtls.OrdDocNoPrefix and PurchOrdDtl.POCtrlNo = StkTrnDtls.OrdDocNo and PurchOrdDtl.EntrySrlNo = StkTrnDtls.OrdEntSrlNo and PurchOrdDtl.EntrySubSrlNo = StkTrnDtls.OrdEntSubSrlNo
+-GO-
+Insert Into Sysparam (Id, Descr, Paramcode, Boolean, Opt) Values ('SR3-0901-0000447','Import Goods Outwards Into Goods Inwards','ImportGORIntoGIR',0,'B')
+-GO-
+Insert Into SysparamExtd (Id, ParamCode, Fixed, Changed, Category, CatDescr, DispOrder) Values ('SR3-0901-0000447','ImportGORIntoGIR','Variable',0,'09. Inwards','This Gives Inwards Parameters',39)
+-GO-
+Insert Into Genlookup (Recid, Code, Descr, Flag) Values ('0','21100','Reasons for Purchase','N')
+-GO-
+Insert Into Genlookup (Recid, Code, Descr, Flag) Values ('0','21200','Reasons for Transfer In','N')
+-GO-
+Insert Into Genlookup (Recid, Code, Descr, Flag) Values ('0','21400','Reasons for Approval Return','N')
+-GO-
+Insert Into Genlookup (Recid, Code, Descr, Flag) Values ('0','22200','Reasons for Transfer Out','N')
+-GO-
+Insert Into Genlookup (Recid, Code, Descr, Flag) Values ('0','22300','Reasons for Purchase Return','N')
+-GO-
+Insert Into Genlookup (Recid, Code, Descr, Flag) Values ('0','22400','Reasons for Approval Issue','N')
+-GO-
+Insert into GenLookupExtd (RecID,Category,IsEditable,RecType,Operations,Additional1) values ('21100','Reasons for Purchase',0,'Variable','111','0#1#16#50')
+-GO-
+Insert into GenLookupExtd (RecID,Category,IsEditable,RecType,Operations,Additional1) values ('21200','Reasons for Transfer In',0,'Variable','111','0#1#16#50')
+-GO-
+Insert into GenLookupExtd (RecID,Category,IsEditable,RecType,Operations,Additional1) values ('21400','Reasons for Approval Return',0,'Variable','111','0#1#16#50')
+-GO-
+Insert into GenLookupExtd (RecID,Category,IsEditable,RecType,Operations,Additional1) values ('22200','Reasons for Transfer Out',0,'Variable','111','0#1#16#50')
+-GO-
+Insert into GenLookupExtd (RecID,Category,IsEditable,RecType,Operations,Additional1) values ('22300','Reasons for Purchase Return',0,'Variable','111','0#1#16#50')
+-GO-
+Insert into GenLookupExtd (RecID,Category,IsEditable,RecType,Operations,Additional1) values ('22400','Reasons for Approval Issue',0,'Variable','111','0#1#16#50')
+-GO-
+Update PurchOrdDtl set DocLineNetValue=DocLineGrossValue+ISNULL(SalesTaxAmt,0)+(ISNULL(AddOnBefTaxAmt,0)+ISNULL(AddOnAftTaxAmt,0)+ISNULL(AddOnBeftaxAprtndAmt,0)+ISNULL(AddOnAftTaxAprtndAmt,0))-(ISNULL(DeductBefTaxAmt,0)+ISNULL(DeductAftTaxAmt,0)+ISNULL(DeductBefTaxAprtndAmt,0)+ISNULL(DeductAftTaxAprtndAmt,0))-(ISNULL(DiscountBefTaxAmt,0)+ISNULL(DiscountAftTaxAmt,0)+ISNULL(DiscountBefTaxAprtndAmt,0)+ISNULL(DiscountAftTaxAprtndAmt,0)) 
+-GO-
+UPDATE GenlookupExtd Set Additional1 ='1#1#16#50' Where Category = 'Modes Of Transport'
+-GO-
+UPDATE GenlookupExtd Set Additional1 ='1#1#16#50' Where Category = 'List of Transporters'
+-GO-
+INSERT INTO Genlookup (recid,code,descr) values (299,'P901499','Shoper Update Version No:')
+-GO-
+Update Genlookup set Descr = (select 'Shoper Update Version No:9.0.1.9499' + ' ;system date:' + convert(varchar(20),getdate(),105) + ' ;shoper date:' + (select convert(varchar(20),dt,105) from sysparam where paramcode ='SHOPERSysDt') ) where code = 'P901499' and recid = 299
+-GO-
+INSERT INTO [dbo].VersionDtls VALUES (15,getdate(),'9','1.91','A','P901499','',1,'.','')
+-GO-
+Update VersionDtls Set Vactr = (select intg from sysparam where paramcode = 'VaSysCounter') where VerId=14
+-GO-
+Update VersionDtls Set Vactr = (select intg from sysparam where paramcode = 'VaSysCounter') where VerId=15
+-GO-
+Insert Into Genlookup Values (5000,4,'SR580200.ClassExtendedBrowse','',0,'Super',10,'.','')
+-GO-
+</s9qScript>
+</s9qsqlblk>

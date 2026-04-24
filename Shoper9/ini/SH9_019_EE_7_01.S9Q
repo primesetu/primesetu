@@ -1,0 +1,27 @@
+<s9qsqlblk> 
+<s9qScriptID>S9Q_019_7_0001</s9qScriptID>
+<s9qtitle>Security:Update Scripts</s9qtitle>
+<s9qpgmtype>L</s9qpgmtype>
+<s9qpgmtype>I</s9qpgmtype>
+<s9qversion>*</s9qversion>
+<s9qenvironment>M</s9qenvironment>
+<s9qRunMultiple>0</s9qRunMultiple>
+<s9qQryType>DDL</s9qQryType>
+<s9qScript>
+
+if NOT exists (select * from sysobjects where id = object_id(N'[dbo].[VaRestrictInfo]') and OBJECTPROPERTY(id, N'IsUserTable') = 1)
+Create Table VaRestrictInfo(RestrictId Varchar(16),RestrictLevel Varchar(16),Code Varchar(128),Value Int,DateInsert Datetime,
+VaUid Varchar(32), VaCtr Int, VaTermId Varchar(32), VaCompCode Varchar(16)
+CONSTRAINT [PK_VaRestrictInfo] PRIMARY KEY  CLUSTERED (RestrictId,RestrictLevel,Code)  ON [PRIMARY] ) ON [PRIMARY]
+-go-
+if NOT exists (select * from sysobjects where id = object_id(N'[dbo].[VaGenlookup]') and OBJECTPROPERTY(id, N'IsUserTable') = 1)
+CREATE TABLE [dbo].[VaGenlookup]([Recid] [int] NOT NULL, [Code] [varchar](128) NOT NULL,
+[Descr] [varchar](256), [Flag] [varchar](256),[Number] [int] NULL,
+CONSTRAINT [PK_VaGenlookup] PRIMARY KEY CLUSTERED ([Recid],[Code] ) ON [PRIMARY] ) ON [PRIMARY]
+-go-
+if NOT exists (select * from VaGenlookup where Recid = 103 and Code='HideCurrentCost')
+Insert into VaGenlookup(Recid,Code,Descr,Flag,Number)
+Values(103,'HideCurrentCost','Hide Cost Price in Reports',1,1)
+-go-
+</s9qScript>
+</s9qsqlblk>

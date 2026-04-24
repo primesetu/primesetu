@@ -1,0 +1,104 @@
+<s9qsqlblk>
+  <s9qScriptID>	S9Q_016_0_0001	</s9qScriptID>
+  <s9qtitle></s9qtitle>
+  <s9qpgmtype>I</s9qpgmtype>
+  <s9qpgmtype>L</s9qpgmtype>
+  <s9qversion>*</s9qversion>
+  <s9qenvironment>P</s9qenvironment>
+  <s9qRunMultiple>1</s9qRunMultiple>
+  <s9qQryType>DML</s9qQryType>
+  <s9qScript>
+INSERT INTO Genlookup (recid,code,descr) values (299,'P901260','Shoper Update Version No:')
+-GO-
+Update Genlookup set Descr = (select 'Shoper Update Version No:9.0.1.9260' + ' ;system date:' + convert(varchar(20),getdate(),105) + ' ;shoper date:' + (select convert(varchar(20),dt,105) from sysparam where paramcode ='SHOPERSysDt') ) where code = 'P901260' and recid = 299
+-GO-
+Update genlookup Set Vactr = (select intg from sysparam where paramcode = 'VaSysCounter') where Recid=299 and Code='P901260'
+-GO-
+INSERT INTO [dbo].VersionDtls VALUES (9,getdate(),'9','1.6','A','P901260','',1,'.','')
+-GO-
+Update VersionDtls Set Vactr = (select intg from sysparam where paramcode = 'VaSysCounter') where VerId=9
+-GO-
+Insert Into GenLookUp (Recid,Code,Descr,Flag) Values (14300,'SR413400+PROGRAMSTART+1','shprfw03.ClsUserAuthorise',1)
+-GO-
+</s9qScript>		
+</s9qsqlblk>
+<s9qsqlblk>
+  <s9qScriptID>	S9Q_016_0_0002</s9qScriptID>
+  <s9qtitle>Create Bak Table Script for New Document Number Generation.</s9qtitle>
+  <s9qpgmtype>I</s9qpgmtype>
+  <s9qpgmtype>L</s9qpgmtype>
+  <s9qversion>*</s9qversion>
+  <s9qenvironment>P</s9qenvironment>
+  <s9qRunMultiple>1</s9qRunMultiple>
+  <s9qQryType>DDL</s9qQryType>
+  <s9qScript>
+CREATE TABLE [dbo].[BakPrefixTrnNo](
+	[TrnType] [varchar](10)  NOT NULL,	
+	[ActualPrefix] [varchar](8) NOT NULL,	
+	[DocNumber] [int] NOT NULL,		
+	[IsActive] Int Not NULL,		
+	[VaUID] [varchar](32) NULL,		
+	[VaCtr] [int] NULL,
+	[VaTermID] [varchar](32)  NULL,
+	[VaCompCode] [varchar](16) NULL,
+	[UpdFlag] [Varchar] (1) )
+-GO-
+CREATE TABLE [dbo].[BakPrefixMaster](
+	[Trntype] [varchar](10)  NOT NULL,	
+	[OPId] [varchar](10)  NOT NULL, 	
+	[TerminalGroupId] [varchar](32)  NOT NULL,	
+	[Srlno] [int] NOT NULL,			
+	[Prefix] [varchar](8)  NULL,	
+	[BasePrefix] [varchar](8) NULL,	
+	[Suffix] [varchar](8) NULL,	
+	[IsActive] Int NOT NULL,	
+	[ResetRequired] Int,		
+	[ResetType] Varchar(16), 
+	[VaUID] [varchar](32)  NULL,
+	[VaCtr] [int] NULL,
+	[VaTermID] [varchar](32) NULL,
+	[VaCompCode] [varchar](16)  NULL,
+	[UpdFlag] [Varchar] (1) )
+-GO-
+CREATE TABLE [dbo].[BakPrefixTrnLog](
+	[Fld1] [varchar](8)  NOT NULL,	
+	[Fld2] [varchar](10) NOT NULL,	
+	[Fld3] [varchar](10) NULL,	
+	[Fld4] int NOT NULL,		
+	[VaUID] [varchar](32) NULL,		
+	[VaCtr] [int] NULL,
+	[VaTermID] [varchar](32)  NULL,
+	[VaCompCode] [varchar](16) NULL,
+	[UpdFlag] [Varchar] (1) ) 
+-GO-
+CREATE TABLE [dbo].[BakPrefixConfig](
+	[SlNo] [int] NOT NULL,
+	[TrnType] [varchar](10) NOT NULL,
+	[OPId] [varchar](10) NULL,
+	[TrnName] [varchar](128) NOT NULL,
+	[TrnSubName] [varchar](128) NOT NULL,
+	[IsActive] Int NULL,
+	[TerminalWisePrefix] Int Null,
+ 	[NumberReset] Int Null,
+ 	[SamePrefixforSubTran] Int Null,
+	[ParentTrnType] Varchar(10),
+	[VaUID] [varchar](32) NULL,
+	[VaCtr] [int] NULL,
+	[VaTermID] [varchar](32) NULL,
+	[VaCompCode] [varchar](16) NULL,
+	[UpdFlag] [Varchar] (1) )
+-GO-
+CREATE TABLE [dbo].[BakPrefixTerminalGroups](
+	[TerminalGroupId] [varchar](16) NOT NULL,
+	[SrlNo] [int] NOT NULL,
+	[TerminalId] [varchar](16) NULL,
+	[TerminalGroupDescr] [varchar](50) NOT NULL,
+	[IsActive] Int NULL,
+	[VaUID] [varchar](32) NULL,
+	[VaCtr] [int] NULL,
+	[VaTermID] [varchar](32) NULL,
+	[VaCompCode] [varchar](16) NULL,
+	[UpdFlag] [Varchar] (1) )
+-GO-
+</s9qScript>		
+</s9qsqlblk>

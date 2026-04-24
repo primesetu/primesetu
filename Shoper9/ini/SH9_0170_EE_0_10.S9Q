@@ -1,0 +1,257 @@
+<s9qsqlblk>
+<s9qScriptID>S9Q_017_99_0001</s9qScriptID>
+<s9qtitle>Help Context Scripts</s9qtitle>
+<s9qpgmtype>I</s9qpgmtype>
+<s9qpgmtype>L</s9qpgmtype>
+<s9qversion>*</s9qversion>
+<s9qenvironment>M</s9qenvironment>
+<s9qRunMultiple>1</s9qRunMultiple>
+<s9qQryType>DML</s9qQryType>
+<s9qScript>
+
+IF EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[VaContextHelpDtls]') AND type in (N'U'))
+BEGIN
+	Drop table [VaContextHelpDtls]
+END
+-GO-
+CREATE TABLE [dbo].[VaContextHelpDtls](
+	[AppName] [varchar](64) NOT NULL,
+	[PgmOption] [int] NOT NULL,
+	[ControlName] [varchar](64) NOT NULL,
+	[Srlno] [int] NOT NULL,
+	[TransId] [varchar](32) NULL,
+	[HelpContextId] [int] NULL,
+	[HelpPath] [varchar](128) NULL,
+	[HelpFileName] [varchar](64) NULL,
+ CONSTRAINT [PK_VaContextHelpDtls] PRIMARY KEY CLUSTERED 
+([AppName] ,[PgmOption],[ControlName],[Srlno]) ON [PRIMARY])
+-GO-
+insert into VaContextHelpDtls(AppName,PgmOption,ControlName,TransId,HelpContextId,SrlNo)
+values('SR130000.EXE',0,'frmRBill','2100','313000',1)
+-GO-
+insert into VaContextHelpDtls(AppName,PgmOption,ControlName,TransId,HelpContextId,SrlNo)
+values('SR130000.EXE',0,'frmRBill','1300','313001',2)
+-GO-
+insert into VaContextHelpDtls(AppName,PgmOption,ControlName,TransId,HelpContextId,SrlNo)
+values('SR130000.EXE',0,'frmVoidBill','','313002',3)
+-GO-
+insert into VaContextHelpDtls(AppName,PgmOption,ControlName,TransId,HelpContextId,SrlNo)
+values('SR130000.EXE',2,'frmRBill','9200','313003',4)
+-GO-
+insert into VaContextHelpDtls(AppName,PgmOption,ControlName,TransId,HelpContextId,SrlNo)
+values('SR130000.EXE',3,'frmRBill','9700','313004',5)
+-GO-
+insert into VaContextHelpDtls(AppName,PgmOption,ControlName,TransId,HelpContextId,SrlNo)
+values('SR130000.EXE',7,'frmRBill','9300','313005',6)
+-GO-
+insert into VaContextHelpDtls(AppName,PgmOption,ControlName,TransId,HelpContextId,SrlNo)
+values('SR130000.EXE',8,'frmRBill','9800','313006',7)
+-GO-
+insert into VaContextHelpDtls(AppName,PgmOption,ControlName,TransId,HelpContextId,SrlNo)
+values('SR130000.EXE',9,'frmRBill','9900','313007',8)
+-GO-
+insert into VaContextHelpDtls(AppName,PgmOption,ControlName,TransId,HelpContextId,SrlNo)
+values('SR130000.EXE',0,'frmReprint','','313008',9)
+-GO-
+insert into VaContextHelpDtls(AppName,PgmOption,ControlName,TransId,HelpContextId,SrlNo)
+values('SR130000.EXE',0,'mdiBill','','313009',1)
+-GO-
+insert into VaContextHelpDtls(AppName,PgmOption,ControlName,TransId,HelpContextId,SrlNo)
+values('SR130000.EXE',0,'FrmSlipReprint','','313010',1)
+-GO-
+insert into VaContextHelpDtls(AppName,PgmOption,ControlName,TransId,HelpContextId,SrlNo)
+values('SR100200.EXE',1,'frmCashRcpt','13','310020',1)
+-GO-
+insert into VaContextHelpDtls(AppName,PgmOption,ControlName,TransId,HelpContextId,SrlNo)
+values('SR100200.EXE',2,'frmCashRcpt','23','310021',1)
+-GO-
+Insert into VaContextHelpDtls(AppName,PgmOption,ControlName,SrlNo,HelpContextId) values('SR437300.EXE',1,'frmSalesPromo',1,34373001)
+-GO-
+Insert into VaContextHelpDtls(AppName,PgmOption,ControlName,SrlNo,HelpContextId) values('SR437300.EXE',1,'FrmSPCustomers',1,34373002)
+-GO-
+Insert into VaContextHelpDtls(AppName,PgmOption,ControlName,SrlNo,HelpContextId) values('SR437300.EXE',1,'FrmSPview',1,34373003)
+-GO-
+Insert into VaContextHelpDtls(AppName,PgmOption,ControlName,SrlNo,HelpContextId) values('SR437300.EXE',1,'frmLoadCsvFile',1,34373004)
+-GO-
+Insert into VaContextHelpDtls(AppName,PgmOption,ControlName,SrlNo,HelpContextId) values('SR437300.EXE',1,'FrmBrowse',1,34373005)
+-GO-
+if not exists (Select * from VaContextHelpDtls Where AppName='SR436900.EXE' and PgmOption = 1 and ControlName = 'MDIFrmMain' and HelpContextId =34369001)
+Insert into VaContextHelpDtls(AppName,PgmOption,ControlName,TransId,HelpContextId,Srlno)
+values('SR436900.EXE',1,'MDIFrmMain','',34369001,1)
+-GO-
+if not exists (Select * from VaContextHelpDtls Where AppName='SR436900.EXE' and PgmOption = 1 and ControlName = 'FrmListing' and HelpContextId =34369002)
+Insert into VaContextHelpDtls(AppName,PgmOption,ControlName,TransId,HelpContextId,SrlNo)
+values('SR436900.EXE',1,'FrmListing','Listing',34369002,1)
+-GO-
+if not exists (Select * from VaContextHelpDtls Where AppName='SR436900.EXE' and PgmOption = 1 and ControlName = 'FrmNewUser' and HelpContextId =34369003)
+Insert into VaContextHelpDtls(AppName,PgmOption,ControlName,TransId,HelpContextId,SrlNo)
+values('SR436900.EXE',1,'FrmNewUser','',34369003,1)
+-GO-
+if not exists (Select * from VaContextHelpDtls Where AppName='SR436900.EXE' and PgmOption = 1 and ControlName = 'FrmNewGroup' and HelpContextId =34369004)
+Insert into VaContextHelpDtls(AppName,PgmOption,ControlName,TransId,HelpContextId,SrlNo)
+values('SR436900.EXE',1,'FrmNewGroup','',34369004,1)
+-GO-
+if not exists (Select * from VaContextHelpDtls Where AppName='SR436900.EXE' and PgmOption = 1 and ControlName = 'FrmChngPwd' and HelpContextId =34369005)
+Insert into VaContextHelpDtls(AppName,PgmOption,ControlName,TransId,HelpContextId,SrlNo)
+values('SR436900.EXE',1,'FrmChngPwd','',34369005,1)
+-GO-
+if not exists (Select * from VaContextHelpDtls Where AppName='SR436900.EXE' and PgmOption = 1 and ControlName = 'FrmMenuRestrict' and HelpContextId =34369006)
+Insert into VaContextHelpDtls(AppName,PgmOption,ControlName,TransId,HelpContextId,SrlNo)
+values('SR436900.EXE',1,'FrmMenuRestrict','',34369006,1)
+-GO-
+if not exists (Select * from VaContextHelpDtls Where AppName='SR436900.EXE' and PgmOption = 1 and ControlName = 'FrmListing' and HelpContextId =34369007)
+Insert into VaContextHelpDtls(AppName,PgmOption,ControlName,TransId,HelpContextId,SrlNo)
+values('SR436900.EXE',1,'FrmListing','UnlockUsers',34369007,2)
+-GO-
+if not exists (Select * from VaContextHelpDtls Where AppName='SR436900.EXE' and PgmOption = 1 and ControlName = 'FrmConfiguration' and HelpContextId =34369008)
+Insert into VaContextHelpDtls(AppName,PgmOption,ControlName,TransId,HelpContextId,SrlNo)
+values('SR436900.EXE',1,'FrmConfiguration','',34369008,1)
+-GO-
+if not exists (Select * from VaContextHelpDtls Where AppName='SR436900.EXE' and PgmOption = 1 and ControlName = 'FrmListing' and HelpContextId =34369009)
+Insert into VaContextHelpDtls(AppName,PgmOption,ControlName,TransId,HelpContextId,SrlNo)
+values('SR436900.EXE',1,'FrmListing','LogReport',34369009,3)
+-GO-
+if not exists (Select * from VaContextHelpDtls Where AppName='SR436900.EXE' and PgmOption = 1 and ControlName = 'FrmMyProfile' and HelpContextId =34369010)
+Insert into VaContextHelpDtls(AppName,PgmOption,ControlName,TransId,HelpContextId,SrlNo)
+values('SR436900.EXE',1,'FrmMyProfile','',34369010,1)
+-GO-
+Insert Into VaContextHelpDtls (AppName,PgmOption,ControlName,SrlNo,TransId,HelpContextId,HelpPath,HelpFileName) Values ('SR100700.Exe',0,'frmMisceIssues',1,NULL,31007001,NULL,NULL)
+-GO-
+Insert Into VaContextHelpDtls (AppName,PgmOption,ControlName,SrlNo,TransId,HelpContextId,HelpPath,HelpFileName) Values ('SR100700.Exe',0,'frmMultiStock',1,NULL,31007003,NULL,NULL)
+-GO-
+Insert Into VaContextHelpDtls (AppName,PgmOption,ControlName,SrlNo,TransId,HelpContextId,HelpPath,HelpFileName) Values ('SR100700.Exe',0,'FrmLoadFile',1,NULL,31007004,NULL,NULL)
+-GO-
+Insert Into VaContextHelpDtls (AppName,PgmOption,ControlName,SrlNo,TransId,HelpContextId,HelpPath,HelpFileName) Values ('SR100700.Exe',0,'frmDispLoad',1,NULL,31007005,NULL,NULL)
+-GO-
+Insert Into VaContextHelpDtls (AppName,PgmOption,ControlName,SrlNo,TransId,HelpContextId,HelpPath,HelpFileName) Values ('SR100700.Exe',0,'frmMulPurchRetSel',1,NULL,31007006,NULL,NULL)
+-GO-
+Insert Into VaContextHelpDtls (AppName,PgmOption,ControlName,SrlNo,TransId,HelpContextId,HelpPath,HelpFileName) Values ('SR100700.Exe',0,'frmListofValues',1,NULL,31007007,NULL,NULL)
+-GO-
+Insert Into VaContextHelpDtls (AppName,PgmOption,ControlName,SrlNo,TransId,HelpContextId,HelpPath,HelpFileName) Values ('SR101000.Exe',0,'frmPhyVer',1,NULL,31010001,NULL,NULL)
+-GO-
+Insert Into VaContextHelpDtls (AppName,PgmOption,ControlName,SrlNo,TransId,HelpContextId,HelpPath,HelpFileName) Values ('SR127000.Exe',0,'frmGoodsLoad',1,NULL,31270001,NULL,NULL)
+-GO-
+Insert Into VaContextHelpDtls (AppName,PgmOption,ControlName,SrlNo,TransId,HelpContextId,HelpPath,HelpFileName) Values ('SR127000.Exe',0,'frmBox',1,NULL,31270002,NULL,NULL)
+-GO-
+Insert Into VaContextHelpDtls (AppName,PgmOption,ControlName,SrlNo,TransId,HelpContextId,HelpPath,HelpFileName) Values ('SR127000.Exe',0,'frmDispRcds',1,NULL,31270003,NULL,NULL)
+-GO-
+Insert Into VaContextHelpDtls (AppName,PgmOption,ControlName,SrlNo,TransId,HelpContextId,HelpPath,HelpFileName) Values ('SR127000.Exe',0,'FrmReprint',1,NULL,31270006,NULL,NULL)
+-GO-
+Insert Into VaContextHelpDtls (AppName,PgmOption,ControlName,SrlNo,TransId,HelpContextId,HelpPath,HelpFileName) Values ('SR127000.Exe',0,'FrmItemMasterCreate',1,NULL,31270008,NULL,NULL)
+-GO-
+Insert Into VaContextHelpDtls (AppName,PgmOption,ControlName,SrlNo,TransId,HelpContextId,HelpPath,HelpFileName) Values ('SR127000.Exe',0,'frmPTBrowse',1,NULL,31270011,NULL,NULL)
+-GO-
+Insert Into VaContextHelpDtls (AppName,PgmOption,ControlName,SrlNo,TransId,HelpContextId,HelpPath,HelpFileName) Values ('SR129500.Exe',0,'FrmInward',1,NULL,31295001,NULL,NULL)
+-GO-
+Insert Into VaContextHelpDtls (AppName,PgmOption,ControlName,SrlNo,TransId,HelpContextId,HelpPath,HelpFileName) Values ('SR129500.Exe',0,'FrmPrint',1,NULL,31295003,NULL,NULL)
+-GO-
+Insert Into VaContextHelpDtls (AppName,PgmOption,ControlName,SrlNo,TransId,HelpContextId,HelpPath,HelpFileName) Values ('SR129500.Exe',0,'FrmReprint',1,NULL,31295004,NULL,NULL)
+-GO-
+Insert Into VaContextHelpDtls (AppName,PgmOption,ControlName,SrlNo,TransId,HelpContextId,HelpPath,HelpFileName) Values ('SR129500.Exe',0,'frmPTBrowse',1,NULL,31295006,NULL,NULL)
+-GO-
+Insert Into VaContextHelpDtls (AppName,PgmOption,ControlName,SrlNo,TransId,HelpContextId,HelpPath,HelpFileName) Values ('SR323400.Exe',0,'frmBrowse',1,NULL,33234001,NULL,NULL)
+-GO-
+Insert Into VaContextHelpDtls (AppName,PgmOption,ControlName,SrlNo,TransId,HelpContextId,HelpPath,HelpFileName) Values ('SR323400.Exe',0,'frmItemList',1,NULL,33234002,NULL,NULL)
+-GO-
+Insert Into VaContextHelpDtls (AppName,PgmOption,ControlName,SrlNo,TransId,HelpContextId,HelpPath,HelpFileName) Values ('SR323400.Exe',0,'frmPhyStkTakingScope',1,NULL,33234003,NULL,NULL)
+-GO-
+Insert Into VaContextHelpDtls (AppName,PgmOption,ControlName,SrlNo,TransId,HelpContextId,HelpPath,HelpFileName) Values ('SR323400.Exe',0,'frmQuery',1,NULL,33234004,NULL,NULL)
+-GO-
+Insert Into VaContextHelpDtls (AppName,PgmOption,ControlName,SrlNo,TransId,HelpContextId,HelpPath,HelpFileName) Values ('SR323400.Exe',0,'frmRecType',1,NULL,33234005,NULL,NULL)
+-GO-
+Insert Into VaContextHelpDtls (AppName,PgmOption,ControlName,SrlNo,TransId,HelpContextId,HelpPath,HelpFileName) Values ('SR323400.Exe',0,'frmScanItem',1,NULL,33234006,NULL,NULL)
+-GO-
+Insert Into VaContextHelpDtls (AppName,PgmOption,ControlName,SrlNo,TransId,HelpContextId,HelpPath,HelpFileName) Values ('SR323400.Exe',0,'frmScope',1,NULL,33234007,NULL,NULL)
+-GO-
+Insert Into VaContextHelpDtls (AppName,PgmOption,ControlName,SrlNo,TransId,HelpContextId,HelpPath,HelpFileName) Values ('SR323400.Exe',0,'frmSelScope',1,NULL,33234008,NULL,NULL)
+-GO-
+Insert Into VaContextHelpDtls (AppName,PgmOption,ControlName,SrlNo,TransId,HelpContextId,HelpPath,HelpFileName) Values ('SR323400.Exe',0,'frmShowProgress',1,NULL,33234009,NULL,NULL)
+-GO-
+Insert Into VaContextHelpDtls (AppName,PgmOption,ControlName,SrlNo,TransId,HelpContextId,HelpPath,HelpFileName) Values ('SR323400.Exe',0,'mdiPhyStkTaking',1,NULL,33234010,NULL,NULL)
+-GO-
+Insert Into VaContextHelpDtls (AppName,PgmOption,ControlName,SrlNo,TransId,HelpContextId,HelpPath,HelpFileName) Values ('SR323400.Exe',0,'frmImport',1,NULL,33234014,NULL,NULL)
+-GO-
+Insert Into VaContextHelpDtls (AppName,PgmOption,ControlName,SrlNo,TransId,HelpContextId,HelpPath,HelpFileName) Values ('SR323400.Exe',0,'frmPhyStkRecordingScope',1,NULL,33234015,NULL,NULL)
+-GO-
+Insert Into VaContextHelpDtls (AppName,PgmOption,ControlName,SrlNo,TransId,HelpContextId,HelpPath,HelpFileName) Values ('SR323400.Exe',0,'frmSearchPhyBatchNo',1,NULL,33234016,NULL,NULL)
+-GO-
+Insert Into VaContextHelpDtls (AppName,PgmOption,ControlName,SrlNo,TransId,HelpContextId,HelpPath,HelpFileName) Values ('SR323400.Exe',0,'FrmReport',1,NULL,33234017,NULL,NULL)
+-GO-
+Insert Into VaContextHelpDtls (AppName,PgmOption,ControlName,SrlNo,TransId,HelpContextId,HelpPath,HelpFileName) Values ('SR323400.Exe',0,'FrmLogView',1,NULL,33234018,NULL,NULL)
+-GO-
+Insert Into VaContextHelpDtls (AppName,PgmOption,ControlName,SrlNo,TransId,HelpContextId,HelpPath,HelpFileName) Values ('SR239800.Exe',0,'FrmVoidTrnRpt',1,NULL,32398001,NULL,NULL)
+-GO-
+Insert Into VaContextHelpDtls (AppName,PgmOption,ControlName,SrlNo,TransId,HelpContextId,HelpPath,HelpFileName) Values ('SR210700.Exe',0,'Form1',1,NULL,32107001,NULL,NULL)
+-GO-
+Insert Into VaContextHelpDtls (AppName,PgmOption,ControlName,SrlNo,TransId,HelpContextId,HelpPath,HelpFileName) Values ('SR210700.Exe',0,'Form2',1,NULL,32107002,NULL,NULL)
+-GO-
+Insert Into VaContextHelpDtls (AppName,PgmOption,ControlName,SrlNo,TransId,HelpContextId,HelpPath,HelpFileName) Values ('SR236300.Exe',3,'frmAttributeWise',1,NULL,32363091,NULL,NULL)
+-GO-
+Insert Into VaContextHelpDtls (AppName,PgmOption,ControlName,SrlNo,TransId,HelpContextId,HelpPath,HelpFileName) Values ('SR202800.Exe',0,'frmGoodsRegister',1,NULL,32028001,NULL,NULL)
+-GO-
+Insert Into VaContextHelpDtls (AppName,PgmOption,ControlName,SrlNo,TransId,HelpContextId,HelpPath,HelpFileName) Values ('SR202800.Exe',0,'frmGoodsRegPreview',1,NULL,32028002,NULL,NULL)
+-GO-
+Insert Into VaContextHelpDtls (AppName,PgmOption,ControlName,SrlNo,TransId,HelpContextId,HelpPath,HelpFileName) Values ('SE100900.Exe',0,'frmPurchaseOrder',1,NULL,21009001,NULL,NULL)
+-GO-
+Insert Into VaContextHelpDtls (AppName,PgmOption,ControlName,SrlNo,TransId,HelpContextId,HelpPath,HelpFileName) Values ('SE100900.Exe',0,'FrmBrowse',1,NULL,21009002,NULL,NULL)
+-GO-
+Insert Into VaContextHelpDtls (AppName,PgmOption,ControlName,SrlNo,TransId,HelpContextId,HelpPath,HelpFileName) Values ('SE100900.Exe',0,'frmChangeLevel',1,NULL,21009003,NULL,NULL)
+-GO-
+Insert Into VaContextHelpDtls (AppName,PgmOption,ControlName,SrlNo,TransId,HelpContextId,HelpPath,HelpFileName) Values ('SE100900.Exe',0,'frmIndentView',1,NULL,21009004,NULL,NULL)
+-GO-
+Insert Into VaContextHelpDtls (AppName,PgmOption,ControlName,SrlNo,TransId,HelpContextId,HelpPath,HelpFileName) Values ('SE100900.Exe',0,'FrmLoadFrmFile',1,NULL,21009005,NULL,NULL)
+-GO-
+Insert Into VaContextHelpDtls (AppName,PgmOption,ControlName,SrlNo,TransId,HelpContextId,HelpPath,HelpFileName) Values ('SE100900.Exe',0,'FrmShrmSelection',1,NULL,21009006,NULL,NULL)
+-GO-
+Insert Into VaContextHelpDtls (AppName,PgmOption,ControlName,SrlNo,TransId,HelpContextId,HelpPath,HelpFileName) Values ('SE100900.Exe',0,'FrmShrmSzEntry',1,NULL,21009007,NULL,NULL)
+-GO-
+Insert Into VaContextHelpDtls (AppName,PgmOption,ControlName,SrlNo,TransId,HelpContextId,HelpPath,HelpFileName) Values ('SE101000.Exe',0,'frmSalesOrderConversion',1,NULL,21010001,NULL,NULL)
+-GO-
+Insert Into VaContextHelpDtls (AppName,PgmOption,ControlName,SrlNo,TransId,HelpContextId,HelpPath,HelpFileName) Values ('SR233700.Exe',0,'frmInwardDiscrepancy',1,NULL,32337001,NULL,NULL)
+-GO-
+Insert Into VaContextHelpDtls (AppName,PgmOption,ControlName,SrlNo,TransId,HelpContextId,HelpPath,HelpFileName) Values ('SR236300.Exe',2,'frmAttributeWise',1,NULL,32363092,NULL,NULL)
+-GO-
+Insert Into VaContextHelpDtls (AppName,PgmOption,ControlName,SrlNo,TransId,HelpContextId,HelpPath,HelpFileName) Values ('SR236300.Exe',1,'frmAttributeWise',1,NULL,32363093,NULL,NULL)
+-GO-
+Insert Into VaContextHelpDtls (AppName,PgmOption,ControlName,SrlNo,TransId,HelpContextId,HelpPath,HelpFileName) values('SE301400.Exe',1,'frmMain',1,NULL,23014001,NULL,NULL)
+-GO-
+Insert Into VaContextHelpDtls (AppName,PgmOption,ControlName,SrlNo,TransId,HelpContextId,HelpPath,HelpFileName) values('SE301600.Exe',0,'frmMain',1,NULL,23016001,NULL,NULL)
+-GO-
+Insert Into VaContextHelpDtls (AppName,PgmOption,ControlName,SrlNo,TransId,HelpContextId,HelpPath,HelpFileName) values('SR320500.Exe',1,'frmPricingMasterImport',1,NULL,33205001,NULL,NULL)
+-GO-
+Insert Into VaContextHelpDtls (AppName,PgmOption,ControlName,SrlNo,TransId,HelpContextId,HelpPath,HelpFileName) values('SR320500.Exe',3,'frmPricingMasterImport',2,NULL,33205003,NULL,NULL)
+-GO-
+Insert into VaContextHelpDtls(AppName,PgmOption,ControlName,SrlNo,HelpContextId) 
+values('SR439900.EXE',1,'FrmEDCatalogue',1,34399001)
+-GO-
+Insert into VaContextHelpDtls(AppName,PgmOption,ControlName,SrlNo,HelpContextId) 
+values('SR439900.EXE',1,'frmEDDocBrowse',1,34399002)
+-GO-
+Insert into VaContextHelpDtls(AppName,PgmOption,ControlName,SrlNo,HelpContextId) 
+values('SR439900.EXE',1,'FrmShrmSelection',1,34399003)
+-GO-
+Insert into VaContextHelpDtls(AppName,PgmOption,ControlName,SrlNo,HelpContextId) 
+values('SR439900.EXE',1,'FrmApplyOtherState',1,34399004)
+-GO-
+Insert into VaContextHelpDtls(AppName,PgmOption,ControlName,SrlNo,HelpContextId) 
+values('SE100220.EXE',2,'frmscheduler',1,21002203)
+-GO-
+Insert into VaContextHelpDtls(AppName,PgmOption,ControlName,TransId,HelpContextId,SrlNo)
+values('SR436900.EXE',1,'FrmBrowse','',34369006,1)
+-GO-
+Insert into VaContextHelpDtls(AppName,PgmOption,ControlName,TransId,HelpContextId,SrlNo)
+values('SR436900.EXE',1,'FrmSelection','SelectGroup',34369003,1)
+-GO-
+Insert into VaContextHelpDtls(AppName,PgmOption,ControlName,TransId,HelpContextId,SrlNo)
+values('SR436900.EXE',1,'FrmSelection','SelectCompany',34369003,2)
+-GO-
+Insert into VaContextHelpDtls(AppName,PgmOption,ControlName,TransId,HelpContextId,SrlNo)
+values('SR436900.EXE',1,'FrmSelection','SelectUser',34369004,3)
+-GO-
+Update VaContextHelpDtls Set PgmOption = 1 where AppName in ('SE100900.Exe','SE101000.Exe') and PgmOption = 0
+-GO-
+UPDATE SISJobList SET Status = 'DELETED' WHERE JobType='DOWNLOAD' and Owner='SE301200.EXE'
+-GO-
+</s9qScript>		
+</s9qsqlblk>
+

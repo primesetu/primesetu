@@ -1,0 +1,44 @@
+<s9qsqlblk>
+  <s9qScriptID>	S9Q_013_4_0001	</s9qScriptID>
+  <s9qtitle>Version update for TCP</s9qtitle>
+  <s9qpgmtype>L</s9qpgmtype>
+  <s9qpgmtype>I</s9qpgmtype>
+  <s9qversion>*</s9qversion>
+  <s9qenvironment>P</s9qenvironment>
+  <s9qRunMultiple>0</s9qRunMultiple>
+  <s9qQryType>DML</s9qQryType>
+  <s9qScript>
+update sysparam  set txt = '910.3'  where paramcode ='TCPVersion'
+-GO-
+  </s9qScript>		
+</s9qsqlblk>
+
+<s9qsqlblk>
+  <s9qScriptID>	S9Q_013_4_0002	</s9qScriptID>
+  <s9qtitle>Version update for TCP</s9qtitle>
+  <s9qpgmtype>L</s9qpgmtype>
+  <s9qpgmtype>I</s9qpgmtype>
+  <s9qversion>*</s9qversion>
+  <s9qenvironment>P</s9qenvironment>
+  <s9qRunMultiple>0</s9qRunMultiple>
+  <s9qQryType>DML</s9qQryType>
+  <s9qScript>
+	INSERT INTO sysparam (Id,Descr,ParamCode,Boolean,intg,txt,Sng,Cur,Opt ,VAUid,VATermId)  
+	VALUES ('SR5-0702-0000314','Tally Application Path','TallyAppPath',0,0,'<APP>\SupportCentre\tally.exe',0,0,'T' ,'Super','.') 
+	-GO-
+	INSERT INTO SysParamExtd (Id,CatDescr,ParamCode,Fixed,Category,Changed,DispOrder,VAUid,VATermId )
+	VALUES ('SR5-0702-0000314','Tally Application Path','TallyAppPath','Hidden','17. House Keeping',0,47,'Super','.')
+	-GO-
+	UPDATE sysparam 
+	SET VActr = (SELECT intg FROM dbo.sysparam WHERE paramcode = 'VaSysCounter'),
+	VACompCode=(SELECT txt FROM dbo.sysparam WHERE paramcode = 'CompanyCode')
+	WHERE id='SR5-0702-0000314'
+	-GO-
+	UPDATE sysparamExtd 
+	SET VActr = (SELECT intg FROM dbo.sysparam WHERE paramcode = 'VaSysCounter'),
+	 VACompCode=(SELECT txt FROM dbo.sysparam WHERE paramcode = 'CompanyCode')
+	WHERE id='SR5-0702-0000314'
+	-GO-
+
+  </s9qScript>		
+</s9qsqlblk>

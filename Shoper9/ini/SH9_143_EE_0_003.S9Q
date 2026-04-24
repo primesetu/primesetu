@@ -1,0 +1,26 @@
+<s9qsqlblk>
+  <s9qScriptID>SH9_143_EE_0_003</s9qScriptID>
+  <s9qtitle>Security Database Script</s9qtitle>
+  <s9qpgmtype>I</s9qpgmtype>
+  <s9qpgmtype>L</s9qpgmtype>
+  <s9qversion>*</s9qversion>
+  <s9qenvironment>P</s9qenvironment>
+  <s9qRunMultiple>1</s9qRunMultiple>
+  <s9qQryType>DML</s9qQryType>
+  <s9qScript>
+update stktrndtls set discrate=0 where discrate is null
+-GO-
+INSERT INTO Genlookup (recid,code,descr) values (299,'P901193','Shoper Update Version No:')
+-GO-
+Update Genlookup set Descr = (select 'Shoper Update Version No:9.0.1.9193' + ' ;system date:' + convert(varchar(20),getdate(),105) + ' ;shoper date:' + (select convert(varchar(20),dt,105) from sysparam where paramcode ='SHOPERSysDt') ) where code = 'P901193' and recid = 299
+-GO-
+Update genlookup Set Vactr = (select intg from sysparam where paramcode = 'VaSysCounter') where Recid=299 and Code='P901193'
+-GO-
+INSERT INTO Genlookup (recid,code,descr) values (299,'P901199','Shoper Update Version No:')
+-GO-
+Update Genlookup set Descr = (select 'Shoper Update Version No:9.0.1.9199' + ' ;system date:' + convert(varchar(20),getdate(),105) + ' ;shoper date:' + (select convert(varchar(20),dt,105) from sysparam where paramcode ='SHOPERSysDt') ) where code = 'P901199' and recid = 299
+-GO-
+Update genlookup Set Vactr = (select intg from sysparam where paramcode = 'VaSysCounter') where Recid=299 and Code='P901199'
+-GO-
+</s9qScript>		
+</s9qsqlblk>

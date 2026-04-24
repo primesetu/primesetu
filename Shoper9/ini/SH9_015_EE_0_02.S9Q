@@ -1,0 +1,31 @@
+<s9qsqlblk>
+  <s9qScriptID>	S9Q_015_0_0002	</s9qScriptID>
+  <s9qtitle></s9qtitle>
+  <s9qpgmtype>I</s9qpgmtype>
+  <s9qpgmtype>L</s9qpgmtype>
+  <s9qversion>*</s9qversion>
+  <s9qenvironment>P</s9qenvironment>
+  <s9qRunMultiple>1</s9qRunMultiple>
+  <s9qQryType>DML</s9qQryType>
+  <s9qScript>
+INSERT INTO Genlookup (recid,code,descr) values (299,'P901231','Shoper Update Version No:')
+-GO-
+Update Genlookup set Descr = (select 'Shoper Update Version No:9.0.1.9231' + ' ;system date:' + convert(varchar(20),getdate(),105) + ' ;shoper date:' + (select convert(varchar(20),dt,105) from sysparam where paramcode ='SHOPERSysDt') ) where code = 'P901231' and recid = 299
+-GO-
+Update genlookup Set Vactr = (select intg from sysparam where paramcode = 'VaSysCounter') where Recid=299 and Code='P901231'
+-GO-
+Insert Into Genlookup (Recid,Code,Descr,Flag,[Number]) Values (299,'VER9_REL1.5','Version 9 Release 1.5','Y',0)
+-GO-
+INSERT INTO [dbo].VersionDtls VALUES (7,getdate(),'9','1.5','A','P901231','',1,'.','')
+-GO-
+Update VersionDtls Set Vactr = (select intg from sysparam where paramcode = 'VaSysCounter') where VerId=5
+-GO-
+INSERT INTO dbtuningconfig (srlno,type,groupcaption,command,arg1) VALUES (79,'POS','Set Auto Close for Application DB',
+'ALTER DATABASE <<dbname>> SET AUTO_CLOSE OFF WITH NO_WAIT','<<dbname>>')
+-GO-
+INSERT INTO dbtuningconfig (srlno,type,groupcaption,command,arg1) VALUES (80,'SECDB','Set Auto Close for Secondary DB',
+'ALTER DATABASE <<dbname>> SET AUTO_CLOSE OFF WITH NO_WAIT','<<dbname>>')
+-GO-
+</s9qScript>		
+</s9qsqlblk>
+

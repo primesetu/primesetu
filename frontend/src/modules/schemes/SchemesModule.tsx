@@ -10,6 +10,7 @@
  * ============================================================ */
 import { useState } from 'react'
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
+import { api } from '@/api/client'
 
 interface Scheme {
   id: number
@@ -19,17 +20,41 @@ interface Scheme {
   min_amount: number
   is_active: boolean
   start_date: string
+  created_at?: string
 }
 
 export default function SchemesModule() {
   const queryClient = useQueryClient()
   const [showForm, setShowForm] = useState(false)
 
+  const [name, setName] = useState('')
+  const [type, setType] = useState('percentage')
+  const [value, setValue] = useState(0)
+  const [minAmount, setMinAmount] = useState(0)
+
   const { data: schemes, isLoading } = useQuery<Scheme[]>({
     queryKey: ['schemes'],
     queryFn: async () => {
-      const resp = await fetch('http://localhost:8000/api/v1/schemes')
-      return resp.json()
+      return await api.schemes.list()
+    }
+  })
+
+  const createMutation = useMutation({
+    mutationFn: async () => {
+      return await api.schemes.create({
+        name,
+        type,
+        value,
+        min_amount: minAmount,
+        is_active: true
+      })
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['schemes'] })
+      setShowForm(false)
+      setName('')
+      setValue(0)
+      setMinAmount(0)
     }
   })
 
@@ -84,7 +109,7 @@ export default function SchemesModule() {
 
               <div className="mt-6 pt-6 border-t border-dashed border-border flex justify-between items-center relative z-10">
                 <div className="text-[9px] text-muted font-bold uppercase">
-                  Started: {new Date(s.start_date).toLocaleDateString()}
+                  Started: {new Date(s.start_date || s.created_at || '').toLocaleDateString()}
                 </div>
                 <button className="text-[10px] font-black text-saffron uppercase tracking-widest opacity-0 group-hover:opacity-100 transition-opacity">
                   Edit Offer →
@@ -103,28 +128,54 @@ export default function SchemesModule() {
             <div className="space-y-5">
               <div>
                 <label className="text-[10px] font-black uppercase tracking-widest text-muted ml-1">Scheme Name</label>
-                <input type="text" placeholder="e.g. Diwali Dhamaka 10%" className="w-full bg-cream/50 border border-border rounded-xl px-4 py-3 text-sm focus:border-saffron outline-none transition-all mt-1" />
+                <input 
+                  type="text" 
+                  placeholder="e.g. Diwali Dhamaka 10%" 
+                  value={name}
+                  onChange={(e) => setName(e.target.value)}
+                  className="w-full bg-cream/50 border border-border rounded-xl px-4 py-3 text-sm focus:border-saffron outline-none transition-all mt-1" 
+                />
               </div>
               <div className="grid grid-cols-2 gap-4">
                 <div>
                   <label className="text-[10px] font-black uppercase tracking-widest text-muted ml-1">Type</label>
-                  <select className="w-full bg-cream/50 border border-border rounded-xl px-4 py-3 text-sm focus:border-saffron outline-none transition-all mt-1">
-                    <option>Percentage</option>
-                    <option>Flat Discount</option>
-                    <option>BOGO</option>
+                  <select 
+                    value={type}
+                    onChange={(e) => setType(e.target.value)}
+                    className="w-full bg-cream/50 border border-border rounded-xl px-4 py-3 text-sm focus:border-saffron outline-none transition-all mt-1"
+                  >
+                    <option value="percentage">Percentage</option>
+                    <option value="flat">Flat Discount</option>
+                    <option value="bogo">BOGO</option>
                   </select>
                 </div>
                 <div>
                   <label className="text-[10px] font-black uppercase tracking-widest text-muted ml-1">Value</label>
-                  <input type="number" placeholder="10" className="w-full bg-cream/50 border border-border rounded-xl px-4 py-3 text-sm focus:border-saffron outline-none transition-all mt-1" />
+                  <input 
+                    type="number" 
+                    placeholder="10" 
+                    value={value}
+                    onChange={(e) => setValue(Number(e.target.value))}
+                    className="w-full bg-cream/50 border border-border rounded-xl px-4 py-3 text-sm focus:border-saffron outline-none transition-all mt-1" 
+                  />
                 </div>
               </div>
               <div>
                 <label className="text-[10px] font-black uppercase tracking-widest text-muted ml-1">Min Order Amount</label>
-                <input type="number" placeholder="500" className="w-full bg-cream/50 border border-border rounded-xl px-4 py-3 text-sm focus:border-saffron outline-none transition-all mt-1" />
+                <input 
+                  type="number" 
+                  placeholder="500" 
+                  value={minAmount}
+                  onChange={(e) => setMinAmount(Number(e.target.value))}
+                  className="w-full bg-cream/50 border border-border rounded-xl px-4 py-3 text-sm focus:border-saffron outline-none transition-all mt-1" 
+                />
               </div>
-              <button className="w-full bg-saffron text-white font-bold py-4 rounded-xl shadow-lg shadow-saffron/20 hover:scale-[1.02] active:scale-95 transition-all mt-4">
-                Activate Scheme
+              <button 
+                onClick={() => createMutation.mutate()}
+                disabled={!name || createMutation.isPending}
+                className="w-full bg-saffron text-white font-bold py-4 rounded-xl shadow-lg shadow-saffron/20 hover:scale-[1.02] active:scale-95 transition-all mt-4 disabled:opacity-50"
+              >
+                {createMutation.isPending ? 'Activating...' : 'Activate Scheme'}
               </button>
             </div>
           </div>

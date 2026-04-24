@@ -1,0 +1,55 @@
+<s9qsqlblk>
+  <s9qScriptID>S9Q_0151_5_0002</s9qScriptID>
+  <s9qtitle>SISInterface</s9qtitle>
+  <s9qpgmtype>I</s9qpgmtype>
+  <s9qpgmtype>L</s9qpgmtype>
+  <s9qversion>*</s9qversion>
+  <s9qenvironment>P</s9qenvironment>
+  <s9qRunMultiple>0</s9qRunMultiple>
+  <s9qQryType>DML</s9qQryType>
+  <s9qScript>
+Drop table [dbo].[SISStatus]
+-GO-
+CREATE TABLE [dbo].[SISStatus]
+(
+                [RunNo] [int] NOT NULL,
+                [Filenm] [varchar](50),
+                [JobId] [varchar](50),
+                [ProgramName] [varchar](25),
+                [CommMode] [varchar](25),
+                [OpType] [char](1),
+                [DestinationCompCode] [varchar](16),
+                [Status] [varchar](50),
+                [ServerResponse] [varchar](1024),
+                [Field1] [varchar](40),
+                [Field2] [varchar](40),
+                [Request] [varchar](8000),
+                [ShoperDate] [datetime],
+                [DateInsert] [datetime],
+                [DateUpdate] [datetime],
+                [VAUid] [varchar](32),
+                [VActr] [int],
+                [VATermId] [varchar](32),           
+                [VACompCode] [varchar](16), 
+                CONSTRAINT [PK_SISSTATUS] PRIMARY KEY  CLUSTERED 
+ (
+  [RunNo]
+)  
+) 
+-GO-
+
+	
+</s9qScript>
+</s9qsqlblk>
+
+<s9qsqlblk>
+  <s9qScriptID>S9Q_0151_5_0003</s9qScriptID>
+  <s9qtitle>Creating BAK Table</s9qtitle>
+  <s9qpgmtype>I</s9qpgmtype>
+  <s9qpgmtype>L</s9qpgmtype>
+  <s9qversion>*</s9qversion>
+  <s9qenvironment>P</s9qenvironment>
+  <s9qRunMultiple>0</s9qRunMultiple>
+  <s9qQryType>DLL</s9qQryType>
+  <s9qScript>BackTableCreation.clsBackTabCrt</s9qScript>
+</s9qsqlblk>

@@ -1,0 +1,34 @@
+<s9qsqlblk>
+  <s9qScriptid>S9Q_013_9_0023</s9qScriptid> 
+  <s9qtitle>Catalogue Module: USERWISEITEMCONFIG TRUNCATE/INSERT</s9qtitle> 
+  <s9qpgmtype>I</s9qpgmtype>  
+  <s9qversion>*</s9qversion> 
+  <s9qenvironment>P</s9qenvironment> 
+  <s9qRunMultiple>0</s9qRunMultiple> 
+  <s9qQryType>DML</s9qQryType> 
+  <s9qScript>
+
+BEGIN TRANSACTION	
+TRUNCATE TABLE USERWISEITEMCONFIG
+INSERT INTO USERWISEITEMCONFIG VALUES ('super','FL0001#1#FL0004#2#FL0003#3#FL0005#4#FL0006#5#FL0007#6#FL0016#7#FL0010#8#FL0011#9#FL0023#10#FL0022#11#FL0012#12#FL0013#13#FL0008#14#FL0020#15#FL0021#16#FL0019#17#FL0002#18#FL0018#19#FL0014#20#FL0015#21#FL0042#22#FL0043#23#FL0033#24#FL0034#25#FL0036#26#FL0037#27#FL0035#28#','','2#2#0',1,'',1,'','')
+COMMIT TRANSACTION
+  </s9qScript>
+</s9qsqlblk>
+
+
+<s9qsqlblk>
+  <s9qScriptid>S9Q_013_9_0024</s9qScriptid> 
+  <s9qtitle>Catalogue Module: itemmasterconfig FL0122/FL0123 </s9qtitle> 
+  <s9qpgmtype>I</s9qpgmtype>  
+  <s9qversion>*</s9qversion> 
+  <s9qenvironment>P</s9qenvironment> 
+  <s9qRunMultiple>0</s9qRunMultiple> 
+  <s9qQryType>DML</s9qQryType> 
+  <s9qScript>
+
+BEGIN TRANSACTION
+insert into itemmasterconfig values ('FL0122','Dateinsert','Dateinsert',0,1,1,0,'','','','','','','','0','','','','','',1,'','')
+insert into itemmasterconfig values ('FL0123','Lastupdateddate','Lastupdateddate',0,1,1,0,'','','','','','','','0','','','','','',1,'','')
+COMMIT TRANSACTION
+  </s9qScript>	
+</s9qsqlblk>

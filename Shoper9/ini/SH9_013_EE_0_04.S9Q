@@ -1,0 +1,785 @@
+<s9qsqlblk>
+  <s9qScriptID>	S9Q_013_0_0026	</s9qScriptID>
+  <s9qtitle></s9qtitle>
+  <s9qpgmtype>L</s9qpgmtype>
+  <s9qversion>*</s9qversion>
+  <s9qenvironment>P</s9qenvironment>
+  <s9qRunMultiple>0</s9qRunMultiple>
+  <s9qQryType>DML</s9qQryType>
+  <s9qScript>
+
+Insert Into Genlookup (Recid,Code,Descr) Values (930,'1+01','PrintGIR.GoodsAudit')
+-GO-
+Insert Into Genlookup (Recid,Code,Descr) Values (930,'1+02','99')
+-GO-
+Insert Into Genlookup (Recid,Code,Descr) Values (930,'1+03','N')
+-GO-
+insert into genlookup (recid,code,descr,flag,number,vauid,vactr) select '950' as recid,'05' as code,'Stock~Qty~#' as descr,'N' as flag,0 as number,'super' as vauid,(select intg from sysparam where paramcode='vasyscounter') as vactr
+-GO-
+insert into genlookup (recid,code,descr) values ('940','1+01','SR535800.ClsPayinslipPrint')
+-GO-
+insert into genlookup (recid,code,descr) values ('940','1+02','99')
+-GO-
+insert into genlookup (recid,code,descr) values ('940','1+03','N')
+-GO-
+insert into genlookup (recid,code,descr) values ('940','2+01','SR535900.ClsPayinslipPrint')
+-GO-
+insert into genlookup (recid,code,descr) values ('940','2+02','99')
+-GO-
+insert into genlookup (recid,code,descr) values ('940','2+03','N')
+-GO-
+insert into sysparam (id,Descr,Paramcode,Intg,opt) values ('SR7-0901-0000313','Pay Slip Printing Type','PaySlipPrintingType','1','I')
+-GO-
+insert into sysparamextd (Id,Paramcode,Fixed,changed,category,catdescr,Disporder ) values ('SR7-0901-0000313','PaySlipPrintingType','Variable','0','02. Franchisee','This Gives Franchisee Parameters','7')
+  </s9qScript>		
+</s9qsqlblk>
+
+<s9qsqlblk>
+  <s9qScriptID>	S9Q_013_0_0027	</s9qScriptID>
+  <s9qtitle></s9qtitle>
+  <s9qpgmtype>L</s9qpgmtype>
+  <s9qpgmtype>I</s9qpgmtype>
+  <s9qversion>*</s9qversion>
+  <s9qenvironment>P</s9qenvironment>
+  <s9qRunMultiple>0</s9qRunMultiple>
+  <s9qQryType>DML</s9qQryType>
+  <s9qScript>
+
+Insert Into VersionDtls Values(1,getdate(),'9','1.0','A','VER9_REL1','',1,'.','')
+-GO-
+Insert Into VersionDtls Values(2,getdate(),'9','1.11','A','P901129','',1,'.','')
+  </s9qScript>		
+</s9qsqlblk>
+
+<s9qsqlblk>
+  <s9qScriptID>	S9Q_013_0_0028	</s9qScriptID>
+  <s9qtitle></s9qtitle>
+  <s9qpgmtype>L</s9qpgmtype>
+  <s9qpgmtype>I</s9qpgmtype>
+  <s9qversion>*</s9qversion>
+  <s9qenvironment>P</s9qenvironment>
+  <s9qRunMultiple>0</s9qRunMultiple>
+  <s9qQryType>DML</s9qQryType>
+  <s9qScript>
+Insert Into FeatureIntroDtls Values(1,1,0,'',1,'.','')
+-GO-
+Insert Into FeatureIntroDtls Values(2,2,0,'',1,'.','')
+  </s9qScript>		
+</s9qsqlblk>
+
+<s9qsqlblk>
+  <s9qScriptID>	S9Q_013_0_0029	</s9qScriptID>
+  <s9qtitle></s9qtitle>
+  <s9qpgmtype>L</s9qpgmtype>
+  <s9qpgmtype>I</s9qpgmtype>
+  <s9qversion>*</s9qversion>
+  <s9qenvironment>P</s9qenvironment>
+  <s9qRunMultiple>0</s9qRunMultiple>
+  <s9qQryType>DDL</s9qQryType>
+  <s9qScript>
+
+if exists (select * from dbo.sysobjects where id = object_id(N'[dbo].[INSERTUPDATEPROMOMNINTERMEDIATE]') and OBJECTPROPERTY(id, N'IsProcedure') = 1) drop procedure [dbo].[INSERTUPDATEPROMOMNINTERMEDIATE]
+-GO-
+if exists (select * from dbo.sysobjects where id = object_id(N'[dbo].[SalesPromoProcessNewItems]') and OBJECTPROPERTY(id, N'IsProcedure') = 1) drop procedure [dbo].[SalesPromoProcessNewItems]
+-GO-
+CREATE PROCEDURE [dbo].[INSERTUPDATEPROMOMNINTERMEDIATE]  
+ @StrTableName VARCHAR(100),  
+ @returnValue  INT  OUTPUT  
+AS  
+DECLARE    
+	@StrSql                      VARCHAR(1024),  
+	@ErrorSave                   VARCHAR(256),  
+	@SPCodeCount INT
+
+SET NOCOUNT ON  
+SET @ErrorSave = ' '  
+
+BEGIN TRANSACTION
+	--INSERT INTO TEMPTIME VALUES ('BEFORE DELETE FROM STAGE0 TABLE...', getdate())
+
+	SET @StrSql = 'delete from ' + @StrTableName + ' where SalesPromoCd in(select distinct SalesPromoCode from  PromoMnIntermediate)'
+	EXECUTE( @StrSql)  
+
+	--INSERT INTO TEMPTIME VALUES ('AFTER DELETE FROM STAGE0 TABLE...', getdate())
+
+	Select @SPCodeCount = Count(*) From TmpinsertionfromStage0
+	-- exit the loop IF no codes present in stage 0 table
+	IF (@SPCodeCount = 0)
+		BEGIN
+		-- sree on 07/08/2008, Donot change "NoNewSPCodesToProcess" in the following If Condition,
+		-- since it is raised in Stored Procedure, when no Sp codes to process
+		   SET @ErrorSave = 'NoNewSPCodesToProcess'
+		   GOTO ERREXIT  
+		END
+		
+	-- NOTE ----  
+	-- sree on 03/02/2009 -- Following new logic written to populate Intermediate table to avoid "COALESCE" related performance issues
+	-- 21/10/2009 -- Modified to properly indicate Set No In Each Sales Promo
+	-- To Process Buy Item Details (For All Items)
+	BEGIN
+		--INSERT INTO TEMPTIME VALUES ('Start FOR ALL ITEMS ...', getdate())
+		-- 26/09/2009
+		-- Set No Is Udpated From Main Table Value
+		Insert Into PromoMnIntermediate
+		(StockNo,SalesPromoCode,PromoDescription,BuyOrGetId,SetNo,ApplicableHappyHours,HappyHoursStartTime,HappyHoursEndTime,Weekdays,ApplicableCustomers,DefinationType, FixedOrVariable,ItemLvlDiscountType,ItemLvlDefVariesOnBuyingQty, ItemLvlBuyingRateValueCond ,UseIMTable,ItemDiscPercent,ItemDiscAmount,ItemDiscountedRate,ItemMaxDiscPercent,ItemMaxDiscAmount ,BuyingQuantity,BUYANDGETSAMEITEMS)
+		select 'FOR ALL ITEMS',A.salespromocode,C.SalesPromoDesc,1,A.ItemSetNo, C.ApplicableHappyHours,C.HappyHoursStartTime,C.HappyHoursEndTime,	C.WeekDays,C.ApplicableCustomers,C.DefinitionType,C.FixedOrVariable,C.ItemLvlDiscountType,C.ItemLvlDefVariesOnBuyingQty,C.ItemLvlBuyingRateValueCond,
+		case C.ITEMLVLDEFVARIESONBUYINGQTY + C.MultipleRateCond when 0 then 1 ELSE 2 end,
+		case C.ITEMLVLDEFVARIESONBUYINGQTY + C.MultipleRateCond when 0 then d.ITEMDISCPERCENT ELSE NULL END,
+		case C.ITEMLVLDEFVARIESONBUYINGQTY + C.MultipleRateCond when 0 then d.ITEMDISCAMOUNT ELSE NULL END,
+		case C.ITEMLVLDEFVARIESONBUYINGQTY + C.MultipleRateCond when 0 then d.ITEMDISCOUNTEDRATE ELSE NULL END,
+		case C.ITEMLVLDEFVARIESONBUYINGQTY + C.MultipleRateCond when 0 then d.ITEMMAXDISCPERCENT ELSE NULL END,
+		case C.ITEMLVLDEFVARIESONBUYINGQTY + C.MultipleRateCond when 0 then d.ITEMMAXDISCAMOUNT ELSE NULL END,
+		case C.ITEMLVLDEFVARIESONBUYINGQTY + C.MultipleRateCond when 0 then d.ITEMLVLDISCBUYQTY ELSE NULL END,C.ItemLvlOfferBuyNGetItemsAreSame
+		from promomnheader as C LEFT OUTER JOIN PROMOMNITEMLVLDISCDTLS as d on C.SalesPromocode = d.SalesPromocode and d.srlno=1 ,PROMOMNBUYITEMGRPDTLS as A
+		where C.salespromocode In (Select SalesPromoCd From TmpinsertionfromStage0) And C.ApplicableItems = 1 AND C.Status  In(1,9) AND A.ItemIncExFlag =1 AND C.SalesPromocode = A.salespromocode
+		--INSERT INTO TEMPTIME VALUES ('END FOR ALL ITEMS ...', getdate())
+		IF (@@ERROR <> 0)  
+			BEGIN  
+				SET @ErrorSave = 'Failure: Insertion to PromoMnIntermediate (All-Items-Buy) ' + CAST(@@ERROR AS VARCHAR(32))  
+				GOTO ERREXIT  
+			END  
+	END
+
+	-- 14/07/2009, Replacing "ApplicableItems" field with "FreeOfferItemType" field, since Get Item, Item Selection Type Is Updated In "FreeOfferItemType".
+	-- Where ever "ApplicableItems" field is present in the following Get Item SQL Stmts, it is replaced with "FreeOfferItemType"
+	-- To Process Get Item Details (For All Items)
+	BEGIN
+		--INSERT INTO TEMPTIME VALUES ('Start FOR ALL ITEMS ...', getdate())
+		Insert Into PromoMnIntermediate
+		(StockNo,SalesPromoCode,PromoDescription,BuyOrGetId,SetNo,ApplicableHappyHours,HappyHoursStartTime,HappyHoursEndTime,Weekdays,ApplicableCustomers,DefinationType, FixedOrVariable,ItemLvlDiscountType,ItemLvlDefVariesOnBuyingQty, ItemLvlBuyingRateValueCond ,UseIMTable,ItemDiscPercent,ItemDiscAmount,ItemDiscountedRate,ItemMaxDiscPercent,ItemMaxDiscAmount ,BuyingQuantity,BUYANDGETSAMEITEMS)
+		select 'FOR ALL ITEMS',A.salespromocode,C.SalesPromoDesc,1,A.ItemSetNo, C.ApplicableHappyHours,C.HappyHoursStartTime,C.HappyHoursEndTime,	C.WeekDays,C.ApplicableCustomers,C.DefinitionType,C.FixedOrVariable,C.ItemLvlDiscountType,C.ItemLvlDefVariesOnBuyingQty,C.ItemLvlBuyingRateValueCond,case C.ITEMLVLDEFVARIESONBUYINGQTY + C.MultipleRateCond when 0 then 1 ELSE 2 end,case C.ITEMLVLDEFVARIESONBUYINGQTY + C.MultipleRateCond when 0 then d.ITEMDISCPERCENT ELSE NULL END,case C.ITEMLVLDEFVARIESONBUYINGQTY + C.MultipleRateCond when 0 then d.ITEMDISCAMOUNT ELSE NULL END,case C.ITEMLVLDEFVARIESONBUYINGQTY + C.MultipleRateCond when 0 then d.ITEMDISCOUNTEDRATE ELSE NULL END,case C.ITEMLVLDEFVARIESONBUYINGQTY + C.MultipleRateCond when 0 then d.ITEMMAXDISCPERCENT ELSE NULL END,case C.ITEMLVLDEFVARIESONBUYINGQTY + C.MultipleRateCond when 0 then d.ITEMMAXDISCAMOUNT ELSE NULL END,case C.ITEMLVLDEFVARIESONBUYINGQTY + C.MultipleRateCond when 0 then d.ITEMLVLDISCBUYQTY ELSE NULL END,C.ItemLvlOfferBuyNGetItemsAreSame
+		from promomnheader as C LEFT OUTER JOIN PROMOMNITEMLVLDISCDTLS as d on C.SalesPromocode = d.SalesPromocode and d.srlno=1 ,PROMOMNGETITEMGRPDTLS as A
+		where C.salespromocode In (Select SalesPromoCd From TmpinsertionfromStage0) And C.FreeOfferItemType = 1 AND C.Status  In(1,9) AND A.ItemIncExFlag =1 AND C.SalesPromocode = A.salespromocode
+		--INSERT INTO TEMPTIME VALUES ('END FOR ALL ITEMS ...', getdate())
+		IF (@@ERROR <> 0)  
+			BEGIN  
+				SET @ErrorSave = 'Failure: Insertion to promomnintermediate (All-Items-Get) ' + CAST(@@ERROR AS VARCHAR(32))  
+				GOTO ERREXIT  
+			END  
+	END
+	-- End FOR ALL ITEMS    
+
+		
+	-- To Process Buy Item Details
+	BEGIN	
+		Insert Into PromoMnIntermediate
+		(StockNo,SalesPromoCode,PromoDescription,BuyOrGetId,SetNo,ApplicableHappyHours,HappyHoursStartTime,HappyHoursEndTime,Weekdays,ApplicableCustomers,DefinationType, FixedOrVariable,ItemLvlDiscountType, ItemLvlDefVariesOnBuyingQty, ItemLvlBuyingRateValueCond ,UseIMTable,ItemDiscPercent,ItemDiscAmount,ItemDiscountedRate,ItemMaxDiscPercent,ItemMaxDiscAmount ,BuyingQuantity,BUYANDGETSAMEITEMS)
+		-- 0. Stockno
+		select b.stockno,A.salespromocode,C.SalesPromoDesc,1,A.ItemSetNo, C.ApplicableHappyHours,C.HappyHoursStartTime,C.HappyHoursEndTime,C.WeekDays,C.ApplicableCustomers,C.DefinitionType,C.FixedOrVariable,C.ItemLvlDiscountType,C.ItemLvlDefVariesOnBuyingQty,C.ItemLvlBuyingRateValueCond,case C.ITEMLVLDEFVARIESONBUYINGQTY + C.MultipleRateCond when 0 then 1 ELSE 2 end,case C.ITEMLVLDEFVARIESONBUYINGQTY + C.MultipleRateCond when 0 then d.ITEMDISCPERCENT ELSE NULL END,case C.ITEMLVLDEFVARIESONBUYINGQTY + C.MultipleRateCond when 0 then d.ITEMDISCAMOUNT ELSE NULL END,case C.ITEMLVLDEFVARIESONBUYINGQTY + C.MultipleRateCond when 0 then d.ITEMDISCOUNTEDRATE ELSE NULL END,case C.ITEMLVLDEFVARIESONBUYINGQTY + C.MultipleRateCond when 0 then d.ITEMMAXDISCPERCENT ELSE NULL END,case C.ITEMLVLDEFVARIESONBUYINGQTY + C.MultipleRateCond when 0 then d.ITEMMAXDISCAMOUNT ELSE NULL END,case C.ITEMLVLDEFVARIESONBUYINGQTY + C.MultipleRateCond when 0 then d.ITEMLVLDISCBUYQTY ELSE NULL END,C.ItemLvlOfferBuyNGetItemsAreSame
+		from promomnheader as C LEFT OUTER JOIN PROMOMNITEMLVLDISCDTLS as d on C.SalesPromocode = d.SalesPromocode and d.srlno=1 ,ItemMaster as b,PROMOMNBUYITEMGRPDTLS as A
+		where C.salespromocode In (Select SalesPromoCd From TmpinsertionfromStage0) And C.ApplicableItems = 3 AND C.Status  In(1,9) AND A.ItemIncExFlag =1 AND C.SalesPromocode = A.salespromocode  and 
+		ISNULL(B.JwlCaratage,0) = 0  AND A.Stockno= B.Stockno 
+		Union All
+		-- 1. C1,C2,SC1,SC2,Size
+		select b.stockno,A.salespromocode,C.SalesPromoDesc,1,A.ItemSetNo, C.ApplicableHappyHours,C.HappyHoursStartTime,C.HappyHoursEndTime,C.WeekDays,C.ApplicableCustomers,C.DefinitionType,C.FixedOrVariable,C.ItemLvlDiscountType,C.ItemLvlDefVariesOnBuyingQty,C.ItemLvlBuyingRateValueCond,case C.ITEMLVLDEFVARIESONBUYINGQTY + C.MultipleRateCond when 0 then 1 ELSE 2 end,case C.ITEMLVLDEFVARIESONBUYINGQTY + C.MultipleRateCond when 0 then d.ITEMDISCPERCENT ELSE NULL END,case C.ITEMLVLDEFVARIESONBUYINGQTY + C.MultipleRateCond when 0 then d.ITEMDISCAMOUNT ELSE NULL END,case C.ITEMLVLDEFVARIESONBUYINGQTY + C.MultipleRateCond when 0 then d.ITEMDISCOUNTEDRATE ELSE NULL END,case C.ITEMLVLDEFVARIESONBUYINGQTY + C.MultipleRateCond when 0 then d.ITEMMAXDISCPERCENT ELSE NULL END,case C.ITEMLVLDEFVARIESONBUYINGQTY + C.MultipleRateCond when 0 then d.ITEMMAXDISCAMOUNT ELSE NULL END,case C.ITEMLVLDEFVARIESONBUYINGQTY + C.MultipleRateCond when 0 then d.ITEMLVLDISCBUYQTY ELSE NULL END,C.ItemLvlOfferBuyNGetItemsAreSame
+		from promomnheader as C LEFT OUTER JOIN PROMOMNITEMLVLDISCDTLS as d on C.SalesPromocode = d.SalesPromocode and d.srlno=1 ,ItemMaster as b,PROMOMNBUYITEMGRPDTLS as A 
+		where C.salespromocode In (Select SalesPromoCd From TmpinsertionfromStage0) And C.ApplicableItems = 2 AND C.Status  In(1,9) AND A.ItemIncExFlag =1 AND C.SalesPromocode = A.salespromocode  and 
+		ISNULL(B.JwlCaratage,0) = 0  AND A.Class1Cd = B.Class1Cd AND A.Class2Cd = B.Class2Cd AND A.SubClass1Cd = B.SubClass1Cd AND A.SubClass2Cd = B.SubClass2Cd AND A.SizeCd = B.SizeCd
+		Union All
+		-- 2. C1,C2,SC1,SC2,Size=All
+		select b.stockno,A.salespromocode,C.SalesPromoDesc,1,A.ItemSetNo, C.ApplicableHappyHours,C.HappyHoursStartTime,C.HappyHoursEndTime,C.WeekDays,C.ApplicableCustomers,C.DefinitionType,C.FixedOrVariable,C.ItemLvlDiscountType,C.ItemLvlDefVariesOnBuyingQty,C.ItemLvlBuyingRateValueCond,case C.ITEMLVLDEFVARIESONBUYINGQTY + C.MultipleRateCond when 0 then 1 ELSE 2 end,case C.ITEMLVLDEFVARIESONBUYINGQTY + C.MultipleRateCond when 0 then d.ITEMDISCPERCENT ELSE NULL END,case C.ITEMLVLDEFVARIESONBUYINGQTY + C.MultipleRateCond when 0 then d.ITEMDISCAMOUNT ELSE NULL END,case C.ITEMLVLDEFVARIESONBUYINGQTY + C.MultipleRateCond when 0 then d.ITEMDISCOUNTEDRATE ELSE NULL END,case C.ITEMLVLDEFVARIESONBUYINGQTY + C.MultipleRateCond when 0 then d.ITEMMAXDISCPERCENT ELSE NULL END,case C.ITEMLVLDEFVARIESONBUYINGQTY + C.MultipleRateCond when 0 then d.ITEMMAXDISCAMOUNT ELSE NULL END,case C.ITEMLVLDEFVARIESONBUYINGQTY + C.MultipleRateCond when 0 then d.ITEMLVLDISCBUYQTY ELSE NULL END,C.ItemLvlOfferBuyNGetItemsAreSame
+		from promomnheader as C LEFT OUTER JOIN PROMOMNITEMLVLDISCDTLS as d on C.SalesPromocode = d.SalesPromocode and d.srlno=1 ,ItemMaster as b,PROMOMNBUYITEMGRPDTLS as A 
+		where C.salespromocode In (Select SalesPromoCd From TmpinsertionfromStage0) And C.ApplicableItems = 2 AND C.Status  In(1,9) AND A.ItemIncExFlag =1 AND C.SalesPromocode = A.salespromocode  and 
+		ISNULL(B.JwlCaratage,0) = 0  AND A.Class1Cd = B.Class1Cd AND A.Class2Cd = B.Class2Cd AND A.SubClass1Cd = B.SubClass1Cd AND A.SubClass2Cd = B.SubClass2Cd AND A.SizeCd = '<<ALL>>'
+		Union All
+		-- 3. C1,C2,SC1,SC2=All,Size
+		select b.stockno,A.salespromocode,C.SalesPromoDesc,1,A.ItemSetNo, C.ApplicableHappyHours,C.HappyHoursStartTime,C.HappyHoursEndTime,C.WeekDays,C.ApplicableCustomers,C.DefinitionType,C.FixedOrVariable,C.ItemLvlDiscountType,C.ItemLvlDefVariesOnBuyingQty,C.ItemLvlBuyingRateValueCond,case C.ITEMLVLDEFVARIESONBUYINGQTY + C.MultipleRateCond when 0 then 1 ELSE 2 end,case C.ITEMLVLDEFVARIESONBUYINGQTY + C.MultipleRateCond when 0 then d.ITEMDISCPERCENT ELSE NULL END,case C.ITEMLVLDEFVARIESONBUYINGQTY + C.MultipleRateCond when 0 then d.ITEMDISCAMOUNT ELSE NULL END,case C.ITEMLVLDEFVARIESONBUYINGQTY + C.MultipleRateCond when 0 then d.ITEMDISCOUNTEDRATE ELSE NULL END,case C.ITEMLVLDEFVARIESONBUYINGQTY + C.MultipleRateCond when 0 then d.ITEMMAXDISCPERCENT ELSE NULL END,case C.ITEMLVLDEFVARIESONBUYINGQTY + C.MultipleRateCond when 0 then d.ITEMMAXDISCAMOUNT ELSE NULL END,case C.ITEMLVLDEFVARIESONBUYINGQTY + C.MultipleRateCond when 0 then d.ITEMLVLDISCBUYQTY ELSE NULL END,C.ItemLvlOfferBuyNGetItemsAreSame
+		from promomnheader as C LEFT OUTER JOIN PROMOMNITEMLVLDISCDTLS as d on C.SalesPromocode = d.SalesPromocode and d.srlno=1 ,ItemMaster as b,PROMOMNBUYITEMGRPDTLS as A 
+		where C.salespromocode In (Select SalesPromoCd From TmpinsertionfromStage0) And C.ApplicableItems = 2 AND C.Status  In(1,9) AND A.ItemIncExFlag =1 AND C.SalesPromocode = A.salespromocode  and 
+		ISNULL(B.JwlCaratage,0) = 0  AND A.Class1Cd = B.Class1Cd AND A.Class2Cd = B.Class2Cd AND A.SubClass1Cd = B.SubClass1Cd AND A.SubClass2Cd = '<<ALL>>' AND A.SizeCd = B.SizeCd
+		Union All
+		-- 4. C1,C2,SC1,SC2=All,Size=All
+		select b.stockno,A.salespromocode,C.SalesPromoDesc,1,A.ItemSetNo, C.ApplicableHappyHours,C.HappyHoursStartTime,C.HappyHoursEndTime,C.WeekDays,C.ApplicableCustomers,C.DefinitionType,C.FixedOrVariable,C.ItemLvlDiscountType,C.ItemLvlDefVariesOnBuyingQty,C.ItemLvlBuyingRateValueCond,case C.ITEMLVLDEFVARIESONBUYINGQTY + C.MultipleRateCond when 0 then 1 ELSE 2 end,case C.ITEMLVLDEFVARIESONBUYINGQTY + C.MultipleRateCond when 0 then d.ITEMDISCPERCENT ELSE NULL END,case C.ITEMLVLDEFVARIESONBUYINGQTY + C.MultipleRateCond when 0 then d.ITEMDISCAMOUNT ELSE NULL END,case C.ITEMLVLDEFVARIESONBUYINGQTY + C.MultipleRateCond when 0 then d.ITEMDISCOUNTEDRATE ELSE NULL END,case C.ITEMLVLDEFVARIESONBUYINGQTY + C.MultipleRateCond when 0 then d.ITEMMAXDISCPERCENT ELSE NULL END,case C.ITEMLVLDEFVARIESONBUYINGQTY + C.MultipleRateCond when 0 then d.ITEMMAXDISCAMOUNT ELSE NULL END,case C.ITEMLVLDEFVARIESONBUYINGQTY + C.MultipleRateCond when 0 then d.ITEMLVLDISCBUYQTY ELSE NULL END,C.ItemLvlOfferBuyNGetItemsAreSame
+		from promomnheader as C LEFT OUTER JOIN PROMOMNITEMLVLDISCDTLS as d on C.SalesPromocode = d.SalesPromocode and d.srlno=1 ,ItemMaster as b,PROMOMNBUYITEMGRPDTLS as A 
+		where C.salespromocode In (Select SalesPromoCd From TmpinsertionfromStage0) And C.ApplicableItems = 2 AND C.Status  In(1,9) AND A.ItemIncExFlag =1 AND C.SalesPromocode = A.salespromocode  and 
+		ISNULL(B.JwlCaratage,0) = 0  AND A.Class1Cd = B.Class1Cd AND A.Class2Cd = B.Class2Cd AND A.SubClass1Cd = B.SubClass1Cd AND A.SubClass2Cd = '<<ALL>>' AND A.SizeCd = '<<ALL>>'
+		Union All
+		-- 5. C1,C2,SC1=All,SC2,Size
+		select b.stockno,A.salespromocode,C.SalesPromoDesc,1,A.ItemSetNo, C.ApplicableHappyHours,C.HappyHoursStartTime,C.HappyHoursEndTime,C.WeekDays,C.ApplicableCustomers,C.DefinitionType,C.FixedOrVariable,C.ItemLvlDiscountType,C.ItemLvlDefVariesOnBuyingQty,C.ItemLvlBuyingRateValueCond,case C.ITEMLVLDEFVARIESONBUYINGQTY + C.MultipleRateCond when 0 then 1 ELSE 2 end,case C.ITEMLVLDEFVARIESONBUYINGQTY + C.MultipleRateCond when 0 then d.ITEMDISCPERCENT ELSE NULL END,case C.ITEMLVLDEFVARIESONBUYINGQTY + C.MultipleRateCond when 0 then d.ITEMDISCAMOUNT ELSE NULL END,case C.ITEMLVLDEFVARIESONBUYINGQTY + C.MultipleRateCond when 0 then d.ITEMDISCOUNTEDRATE ELSE NULL END,case C.ITEMLVLDEFVARIESONBUYINGQTY + C.MultipleRateCond when 0 then d.ITEMMAXDISCPERCENT ELSE NULL END,case C.ITEMLVLDEFVARIESONBUYINGQTY + C.MultipleRateCond when 0 then d.ITEMMAXDISCAMOUNT ELSE NULL END,case C.ITEMLVLDEFVARIESONBUYINGQTY + C.MultipleRateCond when 0 then d.ITEMLVLDISCBUYQTY ELSE NULL END,C.ItemLvlOfferBuyNGetItemsAreSame
+		from promomnheader as C LEFT OUTER JOIN PROMOMNITEMLVLDISCDTLS as d on C.SalesPromocode = d.SalesPromocode and d.srlno=1 ,ItemMaster as b,PROMOMNBUYITEMGRPDTLS as A 
+		where C.salespromocode In (Select SalesPromoCd From TmpinsertionfromStage0) And C.ApplicableItems = 2 AND C.Status  In(1,9) AND A.ItemIncExFlag =1 AND C.SalesPromocode = A.salespromocode  and 
+		ISNULL(B.JwlCaratage,0) = 0  AND A.Class1Cd = B.Class1Cd AND A.Class2Cd = B.Class2Cd AND A.SubClass1Cd = '<<ALL>>' AND A.SubClass2Cd = B.SubClass2Cd AND A.SizeCd = B.SizeCd
+		Union All
+		-- 6. C1,C2,SC1=All,SC2,Size=All
+		select b.stockno,A.salespromocode,C.SalesPromoDesc,1,A.ItemSetNo, C.ApplicableHappyHours,C.HappyHoursStartTime,C.HappyHoursEndTime,C.WeekDays,C.ApplicableCustomers,C.DefinitionType,C.FixedOrVariable,C.ItemLvlDiscountType,C.ItemLvlDefVariesOnBuyingQty,C.ItemLvlBuyingRateValueCond,case C.ITEMLVLDEFVARIESONBUYINGQTY + C.MultipleRateCond when 0 then 1 ELSE 2 end,case C.ITEMLVLDEFVARIESONBUYINGQTY + C.MultipleRateCond when 0 then d.ITEMDISCPERCENT ELSE NULL END,case C.ITEMLVLDEFVARIESONBUYINGQTY + C.MultipleRateCond when 0 then d.ITEMDISCAMOUNT ELSE NULL END,case C.ITEMLVLDEFVARIESONBUYINGQTY + C.MultipleRateCond when 0 then d.ITEMDISCOUNTEDRATE ELSE NULL END,case C.ITEMLVLDEFVARIESONBUYINGQTY + C.MultipleRateCond when 0 then d.ITEMMAXDISCPERCENT ELSE NULL END,case C.ITEMLVLDEFVARIESONBUYINGQTY + C.MultipleRateCond when 0 then d.ITEMMAXDISCAMOUNT ELSE NULL END,case C.ITEMLVLDEFVARIESONBUYINGQTY + C.MultipleRateCond when 0 then d.ITEMLVLDISCBUYQTY ELSE NULL END,C.ItemLvlOfferBuyNGetItemsAreSame
+		from promomnheader as C LEFT OUTER JOIN PROMOMNITEMLVLDISCDTLS as d on C.SalesPromocode = d.SalesPromocode and d.srlno=1 ,ItemMaster as b,PROMOMNBUYITEMGRPDTLS as A 
+		where C.salespromocode In (Select SalesPromoCd From TmpinsertionfromStage0) And C.ApplicableItems = 2 AND C.Status  In(1,9) AND A.ItemIncExFlag =1 AND C.SalesPromocode = A.salespromocode  and 
+		ISNULL(B.JwlCaratage,0) = 0  AND A.Class1Cd = B.Class1Cd AND A.Class2Cd = B.Class2Cd AND A.SubClass1Cd = '<<ALL>>' AND A.SubClass2Cd = B.SubClass2Cd AND A.SizeCd = '<<ALL>>'
+		Union All
+		-- 7. C1,C2,SC1=All,SC2=All,Size
+		select b.stockno,A.salespromocode,C.SalesPromoDesc,1,A.ItemSetNo, C.ApplicableHappyHours,C.HappyHoursStartTime,C.HappyHoursEndTime,C.WeekDays,C.ApplicableCustomers,C.DefinitionType,C.FixedOrVariable,C.ItemLvlDiscountType,C.ItemLvlDefVariesOnBuyingQty,C.ItemLvlBuyingRateValueCond,case C.ITEMLVLDEFVARIESONBUYINGQTY + C.MultipleRateCond when 0 then 1 ELSE 2 end,case C.ITEMLVLDEFVARIESONBUYINGQTY + C.MultipleRateCond when 0 then d.ITEMDISCPERCENT ELSE NULL END,case C.ITEMLVLDEFVARIESONBUYINGQTY + C.MultipleRateCond when 0 then d.ITEMDISCAMOUNT ELSE NULL END,case C.ITEMLVLDEFVARIESONBUYINGQTY + C.MultipleRateCond when 0 then d.ITEMDISCOUNTEDRATE ELSE NULL END,case C.ITEMLVLDEFVARIESONBUYINGQTY + C.MultipleRateCond when 0 then d.ITEMMAXDISCPERCENT ELSE NULL END,case C.ITEMLVLDEFVARIESONBUYINGQTY + C.MultipleRateCond when 0 then d.ITEMMAXDISCAMOUNT ELSE NULL END,case C.ITEMLVLDEFVARIESONBUYINGQTY + C.MultipleRateCond when 0 then d.ITEMLVLDISCBUYQTY ELSE NULL END,C.ItemLvlOfferBuyNGetItemsAreSame
+		from promomnheader as C LEFT OUTER JOIN PROMOMNITEMLVLDISCDTLS as d on C.SalesPromocode = d.SalesPromocode and d.srlno=1 ,ItemMaster as b,PROMOMNBUYITEMGRPDTLS as A 
+		where C.salespromocode In (Select SalesPromoCd From TmpinsertionfromStage0) And C.ApplicableItems = 2 AND C.Status  In(1,9) AND A.ItemIncExFlag =1 AND C.SalesPromocode = A.salespromocode  and 
+		ISNULL(B.JwlCaratage,0) = 0  AND A.Class1Cd = B.Class1Cd AND A.Class2Cd = B.Class2Cd AND A.SubClass1Cd = '<<ALL>>' AND A.SubClass2Cd = '<<ALL>>' AND A.SizeCd = B.SizeCd
+		Union All
+		-- 8. C1,C2,SC1=All,SC2=All,Size=All
+		select b.stockno,A.salespromocode,C.SalesPromoDesc,1,A.ItemSetNo, C.ApplicableHappyHours,C.HappyHoursStartTime,C.HappyHoursEndTime,C.WeekDays,C.ApplicableCustomers,C.DefinitionType,C.FixedOrVariable,C.ItemLvlDiscountType,C.ItemLvlDefVariesOnBuyingQty,C.ItemLvlBuyingRateValueCond,case C.ITEMLVLDEFVARIESONBUYINGQTY + C.MultipleRateCond when 0 then 1 ELSE 2 end,case C.ITEMLVLDEFVARIESONBUYINGQTY + C.MultipleRateCond when 0 then d.ITEMDISCPERCENT ELSE NULL END,case C.ITEMLVLDEFVARIESONBUYINGQTY + C.MultipleRateCond when 0 then d.ITEMDISCAMOUNT ELSE NULL END,case C.ITEMLVLDEFVARIESONBUYINGQTY + C.MultipleRateCond when 0 then d.ITEMDISCOUNTEDRATE ELSE NULL END,case C.ITEMLVLDEFVARIESONBUYINGQTY + C.MultipleRateCond when 0 then d.ITEMMAXDISCPERCENT ELSE NULL END,case C.ITEMLVLDEFVARIESONBUYINGQTY + C.MultipleRateCond when 0 then d.ITEMMAXDISCAMOUNT ELSE NULL END,case C.ITEMLVLDEFVARIESONBUYINGQTY + C.MultipleRateCond when 0 then d.ITEMLVLDISCBUYQTY ELSE NULL END,C.ItemLvlOfferBuyNGetItemsAreSame
+		from promomnheader as C LEFT OUTER JOIN PROMOMNITEMLVLDISCDTLS as d on C.SalesPromocode = d.SalesPromocode and d.srlno=1 ,ItemMaster as b,PROMOMNBUYITEMGRPDTLS as A 
+		where C.salespromocode In (Select SalesPromoCd From TmpinsertionfromStage0) And C.ApplicableItems = 2 AND C.Status  In(1,9) AND A.ItemIncExFlag =1 AND C.SalesPromocode = A.salespromocode  and 
+		ISNULL(B.JwlCaratage,0) = 0  AND A.Class1Cd = B.Class1Cd AND A.Class2Cd = B.Class2Cd AND A.SubClass1Cd = '<<ALL>>' AND A.SubClass2Cd = '<<ALL>>' AND A.SizeCd = '<<ALL>>'
+		Union All
+		-- 9. C1=All,C2=All,SC1,SC2,Size
+		select b.stockno,A.salespromocode,C.SalesPromoDesc,1,A.ItemSetNo, C.ApplicableHappyHours,C.HappyHoursStartTime,C.HappyHoursEndTime,C.WeekDays,C.ApplicableCustomers,C.DefinitionType,C.FixedOrVariable,C.ItemLvlDiscountType,C.ItemLvlDefVariesOnBuyingQty,C.ItemLvlBuyingRateValueCond,case C.ITEMLVLDEFVARIESONBUYINGQTY + C.MultipleRateCond when 0 then 1 ELSE 2 end,case C.ITEMLVLDEFVARIESONBUYINGQTY + C.MultipleRateCond when 0 then d.ITEMDISCPERCENT ELSE NULL END,case C.ITEMLVLDEFVARIESONBUYINGQTY + C.MultipleRateCond when 0 then d.ITEMDISCAMOUNT ELSE NULL END,case C.ITEMLVLDEFVARIESONBUYINGQTY + C.MultipleRateCond when 0 then d.ITEMDISCOUNTEDRATE ELSE NULL END,case C.ITEMLVLDEFVARIESONBUYINGQTY + C.MultipleRateCond when 0 then d.ITEMMAXDISCPERCENT ELSE NULL END,case C.ITEMLVLDEFVARIESONBUYINGQTY + C.MultipleRateCond when 0 then d.ITEMMAXDISCAMOUNT ELSE NULL END,case C.ITEMLVLDEFVARIESONBUYINGQTY + C.MultipleRateCond when 0 then d.ITEMLVLDISCBUYQTY ELSE NULL END,C.ItemLvlOfferBuyNGetItemsAreSame
+		from promomnheader as C LEFT OUTER JOIN PROMOMNITEMLVLDISCDTLS as d on C.SalesPromocode = d.SalesPromocode and d.srlno=1 ,ItemMaster as b,PROMOMNBUYITEMGRPDTLS as A 
+		where C.salespromocode In (Select SalesPromoCd From TmpinsertionfromStage0) And C.ApplicableItems = 2 AND C.Status  In(1,9) AND A.ItemIncExFlag =1 AND C.SalesPromocode = A.salespromocode  and 
+		ISNULL(B.JwlCaratage,0) = 0  AND A.Class1Cd = '<<ALL>>' AND A.Class2Cd = '<<ALL>>' AND A.SubClass1Cd = B.SubClass1Cd AND A.SubClass2Cd = B.SubClass2Cd AND A.SizeCd = B.SizeCd
+		Union All
+		-- 10. C1=All,C2=All,SC1,SC2,Size=All
+		select b.stockno,A.salespromocode,C.SalesPromoDesc,1,A.ItemSetNo, C.ApplicableHappyHours,C.HappyHoursStartTime,C.HappyHoursEndTime,C.WeekDays,C.ApplicableCustomers,C.DefinitionType,C.FixedOrVariable,C.ItemLvlDiscountType,C.ItemLvlDefVariesOnBuyingQty,C.ItemLvlBuyingRateValueCond,case C.ITEMLVLDEFVARIESONBUYINGQTY + C.MultipleRateCond when 0 then 1 ELSE 2 end,case C.ITEMLVLDEFVARIESONBUYINGQTY + C.MultipleRateCond when 0 then d.ITEMDISCPERCENT ELSE NULL END,case C.ITEMLVLDEFVARIESONBUYINGQTY + C.MultipleRateCond when 0 then d.ITEMDISCAMOUNT ELSE NULL END,case C.ITEMLVLDEFVARIESONBUYINGQTY + C.MultipleRateCond when 0 then d.ITEMDISCOUNTEDRATE ELSE NULL END,case C.ITEMLVLDEFVARIESONBUYINGQTY + C.MultipleRateCond when 0 then d.ITEMMAXDISCPERCENT ELSE NULL END,case C.ITEMLVLDEFVARIESONBUYINGQTY + C.MultipleRateCond when 0 then d.ITEMMAXDISCAMOUNT ELSE NULL END,case C.ITEMLVLDEFVARIESONBUYINGQTY + C.MultipleRateCond when 0 then d.ITEMLVLDISCBUYQTY ELSE NULL END,C.ItemLvlOfferBuyNGetItemsAreSame
+		from promomnheader as C LEFT OUTER JOIN PROMOMNITEMLVLDISCDTLS as d on C.SalesPromocode = d.SalesPromocode and d.srlno=1 ,ItemMaster as b,PROMOMNBUYITEMGRPDTLS as A 
+		where C.salespromocode In (Select SalesPromoCd From TmpinsertionfromStage0) And C.ApplicableItems = 2 AND C.Status  In(1,9) AND A.ItemIncExFlag =1 AND C.SalesPromocode = A.salespromocode  and 
+		ISNULL(B.JwlCaratage,0) = 0  AND A.Class1Cd = '<<ALL>>' AND A.Class2Cd = '<<ALL>>' AND A.SubClass1Cd = B.SubClass1Cd AND A.SubClass2Cd = B.SubClass2Cd AND A.SizeCd = '<<ALL>>'
+		Union All
+		-- 11. C1=All,C2=All,SC1,SC2=All,Size 
+		select b.stockno,A.salespromocode,C.SalesPromoDesc,1,A.ItemSetNo, C.ApplicableHappyHours,C.HappyHoursStartTime,C.HappyHoursEndTime,C.WeekDays,C.ApplicableCustomers,C.DefinitionType,C.FixedOrVariable,C.ItemLvlDiscountType,C.ItemLvlDefVariesOnBuyingQty,C.ItemLvlBuyingRateValueCond,case C.ITEMLVLDEFVARIESONBUYINGQTY + C.MultipleRateCond when 0 then 1 ELSE 2 end,case C.ITEMLVLDEFVARIESONBUYINGQTY + C.MultipleRateCond when 0 then d.ITEMDISCPERCENT ELSE NULL END,case C.ITEMLVLDEFVARIESONBUYINGQTY + C.MultipleRateCond when 0 then d.ITEMDISCAMOUNT ELSE NULL END,case C.ITEMLVLDEFVARIESONBUYINGQTY + C.MultipleRateCond when 0 then d.ITEMDISCOUNTEDRATE ELSE NULL END,case C.ITEMLVLDEFVARIESONBUYINGQTY + C.MultipleRateCond when 0 then d.ITEMMAXDISCPERCENT ELSE NULL END,case C.ITEMLVLDEFVARIESONBUYINGQTY + C.MultipleRateCond when 0 then d.ITEMMAXDISCAMOUNT ELSE NULL END,case C.ITEMLVLDEFVARIESONBUYINGQTY + C.MultipleRateCond when 0 then d.ITEMLVLDISCBUYQTY ELSE NULL END,C.ItemLvlOfferBuyNGetItemsAreSame
+		from promomnheader as C LEFT OUTER JOIN PROMOMNITEMLVLDISCDTLS as d on C.SalesPromocode = d.SalesPromocode and d.srlno=1 ,ItemMaster as b,PROMOMNBUYITEMGRPDTLS as A 
+		where C.salespromocode In (Select SalesPromoCd From TmpinsertionfromStage0) And C.ApplicableItems = 2 AND C.Status  In(1,9) AND A.ItemIncExFlag =1 AND C.SalesPromocode = A.salespromocode  and 
+		ISNULL(B.JwlCaratage,0) = 0  AND A.Class1Cd = '<<ALL>>' AND A.Class2Cd = '<<ALL>>' AND A.SubClass1Cd = B.SubClass1Cd AND A.SubClass2Cd = '<<ALL>>' AND A.SizeCd = B.SizeCd
+		Union All
+		-- 12. C1=All,C2=All,SC1,SC2=All,Size=All
+		select b.stockno,A.salespromocode,C.SalesPromoDesc,1,A.ItemSetNo, C.ApplicableHappyHours,C.HappyHoursStartTime,C.HappyHoursEndTime,C.WeekDays,C.ApplicableCustomers,C.DefinitionType,C.FixedOrVariable,C.ItemLvlDiscountType,C.ItemLvlDefVariesOnBuyingQty,C.ItemLvlBuyingRateValueCond,case C.ITEMLVLDEFVARIESONBUYINGQTY + C.MultipleRateCond when 0 then 1 ELSE 2 end,case C.ITEMLVLDEFVARIESONBUYINGQTY + C.MultipleRateCond when 0 then d.ITEMDISCPERCENT ELSE NULL END,case C.ITEMLVLDEFVARIESONBUYINGQTY + C.MultipleRateCond when 0 then d.ITEMDISCAMOUNT ELSE NULL END,case C.ITEMLVLDEFVARIESONBUYINGQTY + C.MultipleRateCond when 0 then d.ITEMDISCOUNTEDRATE ELSE NULL END,case C.ITEMLVLDEFVARIESONBUYINGQTY + C.MultipleRateCond when 0 then d.ITEMMAXDISCPERCENT ELSE NULL END,case C.ITEMLVLDEFVARIESONBUYINGQTY + C.MultipleRateCond when 0 then d.ITEMMAXDISCAMOUNT ELSE NULL END,case C.ITEMLVLDEFVARIESONBUYINGQTY + C.MultipleRateCond when 0 then d.ITEMLVLDISCBUYQTY ELSE NULL END,C.ItemLvlOfferBuyNGetItemsAreSame
+		from promomnheader as C LEFT OUTER JOIN PROMOMNITEMLVLDISCDTLS as d on C.SalesPromocode = d.SalesPromocode and d.srlno=1 ,ItemMaster as b,PROMOMNBUYITEMGRPDTLS as A 
+		where C.salespromocode In (Select SalesPromoCd From TmpinsertionfromStage0) And C.ApplicableItems = 2 AND C.Status  In(1,9) AND A.ItemIncExFlag =1 AND C.SalesPromocode = A.salespromocode  and 
+		ISNULL(B.JwlCaratage,0) = 0  AND A.Class1Cd = '<<ALL>>' AND A.Class2Cd = '<<ALL>>' AND A.SubClass1Cd = B.SubClass1Cd AND A.SubClass2Cd = '<<ALL>>' AND A.SizeCd = '<<ALL>>'
+		Union All
+		-- 13. C1=All,C2=All,SC1=All,SC2,Size
+		select b.stockno,A.salespromocode,C.SalesPromoDesc,1,A.ItemSetNo, C.ApplicableHappyHours,C.HappyHoursStartTime,C.HappyHoursEndTime,C.WeekDays,C.ApplicableCustomers,C.DefinitionType,C.FixedOrVariable,C.ItemLvlDiscountType,C.ItemLvlDefVariesOnBuyingQty,C.ItemLvlBuyingRateValueCond,case C.ITEMLVLDEFVARIESONBUYINGQTY + C.MultipleRateCond when 0 then 1 ELSE 2 end,case C.ITEMLVLDEFVARIESONBUYINGQTY + C.MultipleRateCond when 0 then d.ITEMDISCPERCENT ELSE NULL END,case C.ITEMLVLDEFVARIESONBUYINGQTY + C.MultipleRateCond when 0 then d.ITEMDISCAMOUNT ELSE NULL END,case C.ITEMLVLDEFVARIESONBUYINGQTY + C.MultipleRateCond when 0 then d.ITEMDISCOUNTEDRATE ELSE NULL END,case C.ITEMLVLDEFVARIESONBUYINGQTY + C.MultipleRateCond when 0 then d.ITEMMAXDISCPERCENT ELSE NULL END,case C.ITEMLVLDEFVARIESONBUYINGQTY + C.MultipleRateCond when 0 then d.ITEMMAXDISCAMOUNT ELSE NULL END,case C.ITEMLVLDEFVARIESONBUYINGQTY + C.MultipleRateCond when 0 then d.ITEMLVLDISCBUYQTY ELSE NULL END,C.ItemLvlOfferBuyNGetItemsAreSame
+		from promomnheader as C LEFT OUTER JOIN PROMOMNITEMLVLDISCDTLS as d on C.SalesPromocode = d.SalesPromocode and d.srlno=1 ,ItemMaster as b,PROMOMNBUYITEMGRPDTLS as A 
+		where C.salespromocode In (Select SalesPromoCd From TmpinsertionfromStage0) And C.ApplicableItems = 2 AND C.Status  In(1,9) AND A.ItemIncExFlag =1 AND C.SalesPromocode = A.salespromocode  and 
+		ISNULL(B.JwlCaratage,0) = 0  AND A.Class1Cd = '<<ALL>>' AND A.Class2Cd = '<<ALL>>' AND A.SubClass1Cd = '<<ALL>>' AND A.SubClass2Cd = B.SubClass2Cd AND A.SizeCd = B.SizeCd
+		Union All
+		-- 14. C1=All,C2=All,SC1=All,SC2,Size=All
+		select b.stockno,A.salespromocode,C.SalesPromoDesc,1,A.ItemSetNo, C.ApplicableHappyHours,C.HappyHoursStartTime,C.HappyHoursEndTime,C.WeekDays,C.ApplicableCustomers,C.DefinitionType,C.FixedOrVariable,C.ItemLvlDiscountType,C.ItemLvlDefVariesOnBuyingQty,C.ItemLvlBuyingRateValueCond,case C.ITEMLVLDEFVARIESONBUYINGQTY + C.MultipleRateCond when 0 then 1 ELSE 2 end,case C.ITEMLVLDEFVARIESONBUYINGQTY + C.MultipleRateCond when 0 then d.ITEMDISCPERCENT ELSE NULL END,case C.ITEMLVLDEFVARIESONBUYINGQTY + C.MultipleRateCond when 0 then d.ITEMDISCAMOUNT ELSE NULL END,case C.ITEMLVLDEFVARIESONBUYINGQTY + C.MultipleRateCond when 0 then d.ITEMDISCOUNTEDRATE ELSE NULL END,case C.ITEMLVLDEFVARIESONBUYINGQTY + C.MultipleRateCond when 0 then d.ITEMMAXDISCPERCENT ELSE NULL END,case C.ITEMLVLDEFVARIESONBUYINGQTY + C.MultipleRateCond when 0 then d.ITEMMAXDISCAMOUNT ELSE NULL END,case C.ITEMLVLDEFVARIESONBUYINGQTY + C.MultipleRateCond when 0 then d.ITEMLVLDISCBUYQTY ELSE NULL END,C.ItemLvlOfferBuyNGetItemsAreSame
+		from promomnheader as C LEFT OUTER JOIN PROMOMNITEMLVLDISCDTLS as d on C.SalesPromocode = d.SalesPromocode and d.srlno=1 ,ItemMaster as b,PROMOMNBUYITEMGRPDTLS as A 
+		where C.salespromocode In (Select SalesPromoCd From TmpinsertionfromStage0) And C.ApplicableItems = 2 AND C.Status  In(1,9) AND A.ItemIncExFlag =1 AND C.SalesPromocode = A.salespromocode  and 
+		ISNULL(B.JwlCaratage,0) = 0  AND A.Class1Cd = '<<ALL>>' AND A.Class2Cd = '<<ALL>>' AND A.SubClass1Cd = '<<ALL>>' AND A.SubClass2Cd = B.SubClass2Cd AND A.SizeCd = '<<ALL>>'
+		Union All
+		-- 15. C1=All,C2=All,SC1=All,SC2=All,Size
+		select b.stockno,A.salespromocode,C.SalesPromoDesc,1,A.ItemSetNo, C.ApplicableHappyHours,C.HappyHoursStartTime,C.HappyHoursEndTime,C.WeekDays,C.ApplicableCustomers,C.DefinitionType,C.FixedOrVariable,C.ItemLvlDiscountType,C.ItemLvlDefVariesOnBuyingQty,C.ItemLvlBuyingRateValueCond,case C.ITEMLVLDEFVARIESONBUYINGQTY + C.MultipleRateCond when 0 then 1 ELSE 2 end,case C.ITEMLVLDEFVARIESONBUYINGQTY + C.MultipleRateCond when 0 then d.ITEMDISCPERCENT ELSE NULL END,case C.ITEMLVLDEFVARIESONBUYINGQTY + C.MultipleRateCond when 0 then d.ITEMDISCAMOUNT ELSE NULL END,case C.ITEMLVLDEFVARIESONBUYINGQTY + C.MultipleRateCond when 0 then d.ITEMDISCOUNTEDRATE ELSE NULL END,case C.ITEMLVLDEFVARIESONBUYINGQTY + C.MultipleRateCond when 0 then d.ITEMMAXDISCPERCENT ELSE NULL END,case C.ITEMLVLDEFVARIESONBUYINGQTY + C.MultipleRateCond when 0 then d.ITEMMAXDISCAMOUNT ELSE NULL END,case C.ITEMLVLDEFVARIESONBUYINGQTY + C.MultipleRateCond when 0 then d.ITEMLVLDISCBUYQTY ELSE NULL END,C.ItemLvlOfferBuyNGetItemsAreSame
+		from promomnheader as C LEFT OUTER JOIN PROMOMNITEMLVLDISCDTLS as d on C.SalesPromocode = d.SalesPromocode and d.srlno=1 ,ItemMaster as b,PROMOMNBUYITEMGRPDTLS as A 
+		where C.salespromocode In (Select SalesPromoCd From TmpinsertionfromStage0) And C.ApplicableItems = 2 AND C.Status  In(1,9) AND A.ItemIncExFlag =1 AND C.SalesPromocode = A.salespromocode  and 
+		ISNULL(B.JwlCaratage,0) = 0  AND A.Class1Cd = '<<ALL>>' AND A.Class2Cd = '<<ALL>>' AND A.SubClass1Cd = '<<ALL>>' AND A.SubClass2Cd = '<<ALL>>' AND A.SizeCd = B.SizeCd
+
+		IF (@@ERROR <> 0)  
+			BEGIN  
+				SET @ErrorSave = 'Failure: Insertion to PromoMnIntermediate (Buy Item Details) ' + CAST(@@ERROR AS VARCHAR(32))  
+				GOTO ERREXIT  
+			END  
+
+	END
+
+	-- To Process Get Item Details
+	BEGIN
+		Insert Into PromoMnIntermediate
+		(StockNo,SalesPromoCode,PromoDescription,BuyOrGetId  ,SetNo,ApplicableHappyHours,HappyHoursStartTime,HappyHoursEndTime,Weekdays,ApplicableCustomers,DefinationType, FixedOrVariable,ItemLvlDiscountType, ItemLvlDefVariesOnBuyingQty, ItemLvlBuyingRateValueCond ,UseIMTable,BUYANDGETSAMEITEMS)
+		select b.stockno,A.salespromocode,C.SalesPromoDesc,2,A.ItemSetNo, C.ApplicableHappyHours,C.HappyHoursStartTime,C.HappyHoursEndTime,C.WeekDays,C.ApplicableCustomers,C.DefinitionType,C.FixedOrVariable,C.ItemLvlDiscountType,C.ItemLvlDefVariesOnBuyingQty,C.ItemLvlBuyingRateValueCond,case C.ITEMLVLDEFVARIESONBUYINGQTY + C.MultipleRateCond when 0 then 1 ELSE 2 end,C.ItemLvlOfferBuyNGetItemsAreSame
+		from promomnheader as C, itemmaster as b,PROMOMNgetITEMGRPDTLS as A 
+		where C.salespromocode In (Select SalesPromoCd From TmpinsertionfromStage0) And C.FreeOfferItemType = 3 AND C.Status  In(1,9) AND A.ItemIncExFlag =1 AND C.SalesPromocode = A.salespromocode  and 
+		ISNULL(B.JwlCaratage,0) = 0  AND A.Stockno= B.Stockno 
+		Union All
+		-- 1. C1,C2,SC1,SC2,Size
+		select b.stockno,A.salespromocode,C.SalesPromoDesc,2,A.ItemSetNo, C.ApplicableHappyHours,C.HappyHoursStartTime,C.HappyHoursEndTime,C.WeekDays,C.ApplicableCustomers,C.DefinitionType,C.FixedOrVariable,C.ItemLvlDiscountType,C.ItemLvlDefVariesOnBuyingQty,C.ItemLvlBuyingRateValueCond,case C.ITEMLVLDEFVARIESONBUYINGQTY + C.MultipleRateCond when 0 then 1 ELSE 2 end,C.ItemLvlOfferBuyNGetItemsAreSame
+		from promomnheader as C, itemmaster as b,PROMOMNgetITEMGRPDTLS as A 
+		where C.salespromocode In (Select SalesPromoCd From TmpinsertionfromStage0) And C.FreeOfferItemType = 2 AND C.Status  In(1,9) AND A.ItemIncExFlag =1 AND C.SalesPromocode = A.salespromocode  and 
+		ISNULL(B.JwlCaratage,0) = 0  AND A.Class1Cd = B.Class1Cd AND A.Class2Cd = B.Class2Cd AND A.SubClass1Cd = B.SubClass1Cd AND A.SubClass2Cd = B.SubClass2Cd AND A.SizeCd = B.SizeCd
+		Union All
+		-- 2. C1,C2,SC1,SC2,Size=All
+		select b.stockno,A.salespromocode,C.SalesPromoDesc,2,A.ItemSetNo, C.ApplicableHappyHours,C.HappyHoursStartTime,C.HappyHoursEndTime,C.WeekDays,C.ApplicableCustomers,C.DefinitionType,C.FixedOrVariable,C.ItemLvlDiscountType,C.ItemLvlDefVariesOnBuyingQty,C.ItemLvlBuyingRateValueCond,case C.ITEMLVLDEFVARIESONBUYINGQTY + C.MultipleRateCond when 0 then 1 ELSE 2 end,C.ItemLvlOfferBuyNGetItemsAreSame
+		from promomnheader as C, itemmaster as b,PROMOMNgetITEMGRPDTLS as A 
+		where C.salespromocode In (Select SalesPromoCd From TmpinsertionfromStage0) And C.FreeOfferItemType = 2 AND C.Status  In(1,9) AND A.ItemIncExFlag =1 AND C.SalesPromocode = A.salespromocode  and 
+		ISNULL(B.JwlCaratage,0) = 0  AND A.Class1Cd = B.Class1Cd AND A.Class2Cd = B.Class2Cd AND A.SubClass1Cd = B.SubClass1Cd AND A.SubClass2Cd = B.SubClass2Cd AND A.SizeCd = '<<ALL>>'
+		Union All
+		-- 3. C1,C2,SC1,SC2=All,Size
+		select b.stockno,A.salespromocode,C.SalesPromoDesc,2,A.ItemSetNo, C.ApplicableHappyHours,C.HappyHoursStartTime,C.HappyHoursEndTime,C.WeekDays,C.ApplicableCustomers,C.DefinitionType,C.FixedOrVariable,C.ItemLvlDiscountType,C.ItemLvlDefVariesOnBuyingQty,C.ItemLvlBuyingRateValueCond,case C.ITEMLVLDEFVARIESONBUYINGQTY + C.MultipleRateCond when 0 then 1 ELSE 2 end,C.ItemLvlOfferBuyNGetItemsAreSame
+		from promomnheader as C, itemmaster as b,PROMOMNgetITEMGRPDTLS as A 
+		where C.salespromocode In (Select SalesPromoCd From TmpinsertionfromStage0) And C.FreeOfferItemType = 2 AND C.Status  In(1,9) AND A.ItemIncExFlag =1 AND C.SalesPromocode = A.salespromocode  and 
+		ISNULL(B.JwlCaratage,0) = 0  AND A.Class1Cd = B.Class1Cd AND A.Class2Cd = B.Class2Cd AND A.SubClass1Cd = B.SubClass1Cd AND A.SubClass2Cd = '<<ALL>>' AND A.SizeCd = B.SizeCd
+		Union All
+		-- 4. C1,C2,SC1,SC2=All,Size=All
+		select b.stockno,A.salespromocode,C.SalesPromoDesc,2,A.ItemSetNo, C.ApplicableHappyHours,C.HappyHoursStartTime,C.HappyHoursEndTime,C.WeekDays,C.ApplicableCustomers,C.DefinitionType,C.FixedOrVariable,C.ItemLvlDiscountType,C.ItemLvlDefVariesOnBuyingQty,C.ItemLvlBuyingRateValueCond,case C.ITEMLVLDEFVARIESONBUYINGQTY + C.MultipleRateCond when 0 then 1 ELSE 2 end,C.ItemLvlOfferBuyNGetItemsAreSame
+		from promomnheader as C, itemmaster as b,PROMOMNgetITEMGRPDTLS as A 
+		where C.salespromocode In (Select SalesPromoCd From TmpinsertionfromStage0) And C.FreeOfferItemType = 2 AND C.Status  In(1,9) AND A.ItemIncExFlag =1 AND C.SalesPromocode = A.salespromocode  and 
+		ISNULL(B.JwlCaratage,0) = 0  AND A.Class1Cd = B.Class1Cd AND A.Class2Cd = B.Class2Cd AND A.SubClass1Cd = B.SubClass1Cd AND A.SubClass2Cd = '<<ALL>>' AND A.SizeCd = '<<ALL>>'
+		Union All
+		-- 5. C1,C2,SC1=All,SC2,Size
+		select b.stockno,A.salespromocode,C.SalesPromoDesc,2,A.ItemSetNo, C.ApplicableHappyHours,C.HappyHoursStartTime,C.HappyHoursEndTime,C.WeekDays,C.ApplicableCustomers,C.DefinitionType,C.FixedOrVariable,C.ItemLvlDiscountType,C.ItemLvlDefVariesOnBuyingQty,C.ItemLvlBuyingRateValueCond,case C.ITEMLVLDEFVARIESONBUYINGQTY + C.MultipleRateCond when 0 then 1 ELSE 2 end,C.ItemLvlOfferBuyNGetItemsAreSame
+		from promomnheader as C, itemmaster as b,PROMOMNgetITEMGRPDTLS as A 
+		where C.salespromocode In (Select SalesPromoCd From TmpinsertionfromStage0) And C.FreeOfferItemType = 2 AND C.Status  In(1,9) AND A.ItemIncExFlag =1 AND C.SalesPromocode = A.salespromocode  and 
+		ISNULL(B.JwlCaratage,0) = 0  AND A.Class1Cd = B.Class1Cd AND A.Class2Cd = B.Class2Cd AND A.SubClass1Cd = '<<ALL>>' AND A.SubClass2Cd = B.SubClass2Cd AND A.SizeCd = B.SizeCd
+		Union All
+		-- 6. C1,C2,SC1=All,SC2,Size=All
+		select b.stockno,A.salespromocode,C.SalesPromoDesc,2,A.ItemSetNo, C.ApplicableHappyHours,C.HappyHoursStartTime,C.HappyHoursEndTime,C.WeekDays,C.ApplicableCustomers,C.DefinitionType,C.FixedOrVariable,C.ItemLvlDiscountType,C.ItemLvlDefVariesOnBuyingQty,C.ItemLvlBuyingRateValueCond,case C.ITEMLVLDEFVARIESONBUYINGQTY + C.MultipleRateCond when 0 then 1 ELSE 2 end,C.ItemLvlOfferBuyNGetItemsAreSame
+		from promomnheader as C, itemmaster as b,PROMOMNgetITEMGRPDTLS as A 
+		where C.salespromocode In (Select SalesPromoCd From TmpinsertionfromStage0) And C.FreeOfferItemType = 2 AND C.Status  In(1,9) AND A.ItemIncExFlag =1 AND C.SalesPromocode = A.salespromocode  and 
+		ISNULL(B.JwlCaratage,0) = 0  AND A.Class1Cd = B.Class1Cd AND A.Class2Cd = B.Class2Cd AND A.SubClass1Cd = '<<ALL>>' AND A.SubClass2Cd = B.SubClass2Cd AND A.SizeCd = '<<ALL>>'
+		Union All
+		-- 7. C1,C2,SC1=All,SC2=All,Size
+		select b.stockno,A.salespromocode,C.SalesPromoDesc,2,A.ItemSetNo, C.ApplicableHappyHours,C.HappyHoursStartTime,C.HappyHoursEndTime,C.WeekDays,C.ApplicableCustomers,C.DefinitionType,C.FixedOrVariable,C.ItemLvlDiscountType,C.ItemLvlDefVariesOnBuyingQty,C.ItemLvlBuyingRateValueCond,case C.ITEMLVLDEFVARIESONBUYINGQTY + C.MultipleRateCond when 0 then 1 ELSE 2 end,C.ItemLvlOfferBuyNGetItemsAreSame
+		from promomnheader as C, itemmaster as b,PROMOMNgetITEMGRPDTLS as A 
+		where C.salespromocode In (Select SalesPromoCd From TmpinsertionfromStage0) And C.FreeOfferItemType = 2 AND C.Status  In(1,9) AND A.ItemIncExFlag =1 AND C.SalesPromocode = A.salespromocode  and 
+		ISNULL(B.JwlCaratage,0) = 0  AND A.Class1Cd = B.Class1Cd AND A.Class2Cd = B.Class2Cd AND A.SubClass1Cd = '<<ALL>>' AND A.SubClass2Cd = '<<ALL>>' AND A.SizeCd = B.SizeCd
+		Union All
+		-- 8. C1,C2,SC1=All,SC2=All,Size=All
+		select b.stockno,A.salespromocode,C.SalesPromoDesc,2,A.ItemSetNo, C.ApplicableHappyHours,C.HappyHoursStartTime,C.HappyHoursEndTime,C.WeekDays,C.ApplicableCustomers,C.DefinitionType,C.FixedOrVariable,C.ItemLvlDiscountType,C.ItemLvlDefVariesOnBuyingQty,C.ItemLvlBuyingRateValueCond,case C.ITEMLVLDEFVARIESONBUYINGQTY + C.MultipleRateCond when 0 then 1 ELSE 2 end,C.ItemLvlOfferBuyNGetItemsAreSame
+		from promomnheader as C, itemmaster as b,PROMOMNgetITEMGRPDTLS as A 
+		where C.salespromocode In (Select SalesPromoCd From TmpinsertionfromStage0) And C.FreeOfferItemType = 2 AND C.Status  In(1,9) AND A.ItemIncExFlag =1 AND C.SalesPromocode = A.salespromocode  and 
+		ISNULL(B.JwlCaratage,0) = 0  AND A.Class1Cd = B.Class1Cd AND A.Class2Cd = B.Class2Cd AND A.SubClass1Cd = '<<ALL>>' AND A.SubClass2Cd = '<<ALL>>' AND A.SizeCd = '<<ALL>>'
+		Union All
+		-- 9. C1=All,C2=All,SC1,SC2,Size
+		select b.stockno,A.salespromocode,C.SalesPromoDesc,2,A.ItemSetNo, C.ApplicableHappyHours,C.HappyHoursStartTime,C.HappyHoursEndTime,C.WeekDays,C.ApplicableCustomers,C.DefinitionType,C.FixedOrVariable,C.ItemLvlDiscountType,C.ItemLvlDefVariesOnBuyingQty,C.ItemLvlBuyingRateValueCond,case C.ITEMLVLDEFVARIESONBUYINGQTY + C.MultipleRateCond when 0 then 1 ELSE 2 end,C.ItemLvlOfferBuyNGetItemsAreSame
+		from promomnheader as C, itemmaster as b,PROMOMNgetITEMGRPDTLS as A 
+		where C.salespromocode In (Select SalesPromoCd From TmpinsertionfromStage0) And C.FreeOfferItemType = 2 AND C.Status  In(1,9) AND A.ItemIncExFlag =1 AND C.SalesPromocode = A.salespromocode  and 
+		ISNULL(B.JwlCaratage,0) = 0  AND A.Class1Cd = '<<ALL>>' AND A.Class2Cd = '<<ALL>>' AND A.SubClass1Cd = B.SubClass1Cd AND A.SubClass2Cd = B.SubClass2Cd AND A.SizeCd = B.SizeCd
+		Union All
+		-- 10. C1=All,C2=All,SC1,SC2,Size=All
+		select b.stockno,A.salespromocode,C.SalesPromoDesc,2,A.ItemSetNo, C.ApplicableHappyHours,C.HappyHoursStartTime,C.HappyHoursEndTime,C.WeekDays,C.ApplicableCustomers,C.DefinitionType,C.FixedOrVariable,C.ItemLvlDiscountType,C.ItemLvlDefVariesOnBuyingQty,C.ItemLvlBuyingRateValueCond,case C.ITEMLVLDEFVARIESONBUYINGQTY + C.MultipleRateCond when 0 then 1 ELSE 2 end,C.ItemLvlOfferBuyNGetItemsAreSame
+		from promomnheader as C, itemmaster as b,PROMOMNgetITEMGRPDTLS as A 
+		where C.salespromocode In (Select SalesPromoCd From TmpinsertionfromStage0) And C.FreeOfferItemType = 2 AND C.Status  In(1,9) AND A.ItemIncExFlag =1 AND C.SalesPromocode = A.salespromocode  and 
+		ISNULL(B.JwlCaratage,0) = 0  AND A.Class1Cd = '<<ALL>>' AND A.Class2Cd = '<<ALL>>' AND A.SubClass1Cd = B.SubClass1Cd AND A.SubClass2Cd = B.SubClass2Cd AND A.SizeCd = '<<ALL>>'
+		Union All
+		-- 11. C1=All,C2=All,SC1,SC2=All,Size 
+		select b.stockno,A.salespromocode,C.SalesPromoDesc,2,A.ItemSetNo, C.ApplicableHappyHours,C.HappyHoursStartTime,C.HappyHoursEndTime,C.WeekDays,C.ApplicableCustomers,C.DefinitionType,C.FixedOrVariable,C.ItemLvlDiscountType,C.ItemLvlDefVariesOnBuyingQty,C.ItemLvlBuyingRateValueCond,case C.ITEMLVLDEFVARIESONBUYINGQTY + C.MultipleRateCond when 0 then 1 ELSE 2 end,C.ItemLvlOfferBuyNGetItemsAreSame
+		from promomnheader as C, itemmaster as b,PROMOMNgetITEMGRPDTLS as A 
+		where C.salespromocode In (Select SalesPromoCd From TmpinsertionfromStage0) And C.FreeOfferItemType = 2 AND C.Status  In(1,9) AND A.ItemIncExFlag =1 AND C.SalesPromocode = A.salespromocode  and 
+		ISNULL(B.JwlCaratage,0) = 0  AND A.Class1Cd = '<<ALL>>' AND A.Class2Cd = '<<ALL>>' AND A.SubClass1Cd = B.SubClass1Cd AND A.SubClass2Cd = '<<ALL>>' AND A.SizeCd = B.SizeCd
+		Union All
+		-- 12. C1=All,C2=All,SC1,SC2=All,Size=All
+		select b.stockno,A.salespromocode,C.SalesPromoDesc,2,A.ItemSetNo, C.ApplicableHappyHours,C.HappyHoursStartTime,C.HappyHoursEndTime,C.WeekDays,C.ApplicableCustomers,C.DefinitionType,C.FixedOrVariable,C.ItemLvlDiscountType,C.ItemLvlDefVariesOnBuyingQty,C.ItemLvlBuyingRateValueCond,case C.ITEMLVLDEFVARIESONBUYINGQTY + C.MultipleRateCond when 0 then 1 ELSE 2 end,C.ItemLvlOfferBuyNGetItemsAreSame
+		from promomnheader as C, itemmaster as b,PROMOMNgetITEMGRPDTLS as A 
+		where C.salespromocode In (Select SalesPromoCd From TmpinsertionfromStage0) And C.FreeOfferItemType = 2 AND C.Status  In(1,9) AND A.ItemIncExFlag =1 AND C.SalesPromocode = A.salespromocode  and 
+		ISNULL(B.JwlCaratage,0) = 0  AND A.Class1Cd = '<<ALL>>' AND A.Class2Cd = '<<ALL>>' AND A.SubClass1Cd = B.SubClass1Cd AND A.SubClass2Cd = '<<ALL>>' AND A.SizeCd = '<<ALL>>'
+		Union All
+		-- 13. C1=All,C2=All,SC1=All,SC2,Size
+		select b.stockno,A.salespromocode,C.SalesPromoDesc,2,A.ItemSetNo, C.ApplicableHappyHours,C.HappyHoursStartTime,C.HappyHoursEndTime,C.WeekDays,C.ApplicableCustomers,C.DefinitionType,C.FixedOrVariable,C.ItemLvlDiscountType,C.ItemLvlDefVariesOnBuyingQty,C.ItemLvlBuyingRateValueCond,case C.ITEMLVLDEFVARIESONBUYINGQTY + C.MultipleRateCond when 0 then 1 ELSE 2 end,C.ItemLvlOfferBuyNGetItemsAreSame
+		from promomnheader as C, itemmaster as b,PROMOMNgetITEMGRPDTLS as A 
+		where C.salespromocode In (Select SalesPromoCd From TmpinsertionfromStage0) And C.FreeOfferItemType = 2 AND C.Status  In(1,9) AND A.ItemIncExFlag =1 AND C.SalesPromocode = A.salespromocode  and 
+		ISNULL(B.JwlCaratage,0) = 0  AND A.Class1Cd = '<<ALL>>' AND A.Class2Cd = '<<ALL>>' AND A.SubClass1Cd = '<<ALL>>' AND A.SubClass2Cd = B.SubClass2Cd AND A.SizeCd = B.SizeCd
+		Union All
+		-- 14. C1=All,C2=All,SC1=All,SC2,Size=All
+		select b.stockno,A.salespromocode,C.SalesPromoDesc,2,A.ItemSetNo, C.ApplicableHappyHours,C.HappyHoursStartTime,C.HappyHoursEndTime,C.WeekDays,C.ApplicableCustomers,C.DefinitionType,C.FixedOrVariable,C.ItemLvlDiscountType,C.ItemLvlDefVariesOnBuyingQty,C.ItemLvlBuyingRateValueCond,case C.ITEMLVLDEFVARIESONBUYINGQTY + C.MultipleRateCond when 0 then 1 ELSE 2 end,C.ItemLvlOfferBuyNGetItemsAreSame
+		from promomnheader as C, itemmaster as b,PROMOMNgetITEMGRPDTLS as A 
+		where C.salespromocode In (Select SalesPromoCd From TmpinsertionfromStage0) And C.FreeOfferItemType = 2 AND C.Status  In(1,9) AND A.ItemIncExFlag =1 AND C.SalesPromocode = A.salespromocode  and 
+		ISNULL(B.JwlCaratage,0) = 0  AND A.Class1Cd = '<<ALL>>' AND A.Class2Cd = '<<ALL>>' AND A.SubClass1Cd = '<<ALL>>' AND A.SubClass2Cd = B.SubClass2Cd AND A.SizeCd = '<<ALL>>'
+		Union All
+		-- 15. C1=All,C2=All,SC1=All,SC2=All,Size
+		select b.stockno,A.salespromocode,C.SalesPromoDesc,2,A.ItemSetNo, C.ApplicableHappyHours,C.HappyHoursStartTime,C.HappyHoursEndTime,C.WeekDays,C.ApplicableCustomers,C.DefinitionType,C.FixedOrVariable,C.ItemLvlDiscountType,C.ItemLvlDefVariesOnBuyingQty,C.ItemLvlBuyingRateValueCond,case C.ITEMLVLDEFVARIESONBUYINGQTY + C.MultipleRateCond when 0 then 1 ELSE 2 end,C.ItemLvlOfferBuyNGetItemsAreSame
+		from promomnheader as C, itemmaster as b,PROMOMNgetITEMGRPDTLS as A 
+		where C.salespromocode In (Select SalesPromoCd From TmpinsertionfromStage0) And C.FreeOfferItemType = 2 AND C.Status  In(1,9) AND A.ItemIncExFlag =1 AND C.SalesPromocode = A.salespromocode  and 
+		ISNULL(B.JwlCaratage,0) = 0  AND A.Class1Cd = '<<ALL>>' AND A.Class2Cd = '<<ALL>>' AND A.SubClass1Cd = '<<ALL>>' AND A.SubClass2Cd = '<<ALL>>' AND A.SizeCd = B.SizeCd
+
+		IF (@@ERROR <> 0)  
+			BEGIN  
+				SET @ErrorSave = 'Failure: Insertion to PromoMnIntermediate (Get Item Details) ' + CAST(@@ERROR AS VARCHAR(32))  
+				GOTO ERREXIT  
+			END  
+
+	END
+
+COMMIT TRANSACTION  
+Return (0)  
+
+ERREXIT:  
+	BEGIN  
+		ROLLBACK TRANSACTION
+		RAISERROR(@ErrorSave,16,1)   
+		RETURN (-1)  
+	END
+-GO-
+CREATE PROCEDURE [dbo].[SalesPromoProcessNewItems]  
+ @StrTableName VARCHAR(100),  
+ @returnValue  INT  OUTPUT  
+AS  
+DECLARE    
+	@strsql	VARCHAR(1024),  
+	@ErrorSave VARCHAR(256),  
+	@SPCodeCount INT,
+	@NewItemCount INT
+
+SET NOCOUNT ON  
+SET @ErrorSave = ' '  
+
+BEGIN TRANSACTION
+
+	Select @SPCodeCount = Count(*) From TmpinsertionfromStage0
+	-- exit the loop IF no codes present in stage 0 table
+	IF (@SPCodeCount = 0)
+		BEGIN
+		-- sree on 07/08/2008, Donot change "NoNewSPCodesToProcess" in the following If Condition,
+		-- since it is raised in Stored Procedure, when no Sp codes to process
+		   SET @ErrorSave = 'NoNewSPCodesToProcess'
+		   GOTO ERREXIT  
+		END
+
+	Select @NewItemCount = Count(*) From ItemMaster Where JwlCaratage = 1
+	-- exit the loop IF no NEW ITEMS present in ITEMMASTER table
+	IF (@NewItemCount = 0)
+		BEGIN
+		-- sree on 07/08/2008, Donot change "NoNewSPCodesToProcess" in the following If Condition,
+		-- since it is raised in Stored Procedure, when no Sp codes to process
+		   SET @ErrorSave = 'NoNewItemsToProcess'
+		   GOTO ERREXIT  
+		END
+
+	-- Change JwlCaratage Value to 2, to represent it is under process
+	UPDATE ITEMMASTER SET JwlCaratage =2 WHERE JwlCaratage=1
+	IF (@@ERROR <> 0)  
+		BEGIN  
+			SET @ErrorSave = 'Failure: Change JwlCaratage Value to 2(Progress) ' + CAST(@@ERROR AS VARCHAR(32))  
+			GOTO ERREXIT  
+		END  
+  
+
+	-- NOTE ----  
+	-- sree on 03/02/2009 -- Following new logic written to populate Intermediate table to avoid "COALESCE" related performance issues
+	-- 21/10/2009 -- Modified to properly indicate Set No In Each Sales Promo
+	-- To Process Buy Item Details
+	BEGIN	
+		Insert Into PromoMnIntermediate
+		(StockNo,SalesPromoCode,PromoDescription,BuyOrGetId,SetNo,ApplicableHappyHours,HappyHoursStartTime,HappyHoursEndTime,Weekdays,ApplicableCustomers,DefinationType, FixedOrVariable,ItemLvlDiscountType, ItemLvlDefVariesOnBuyingQty, ItemLvlBuyingRateValueCond ,UseIMTable,ItemDiscPercent,ItemDiscAmount,ItemDiscountedRate,ItemMaxDiscPercent,ItemMaxDiscAmount ,BuyingQuantity,BUYANDGETSAMEITEMS)
+		-- 0. Stockno
+		select b.stockno,A.salespromocode,C.SalesPromoDesc,1,A.ItemSetNo, C.ApplicableHappyHours,C.HappyHoursStartTime,C.HappyHoursEndTime,C.WeekDays,C.ApplicableCustomers,C.DefinitionType,C.FixedOrVariable,C.ItemLvlDiscountType,C.ItemLvlDefVariesOnBuyingQty,C.ItemLvlBuyingRateValueCond,case C.ITEMLVLDEFVARIESONBUYINGQTY + C.MultipleRateCond when 0 then 1 ELSE 2 end,case C.ITEMLVLDEFVARIESONBUYINGQTY + C.MultipleRateCond when 0 then d.ITEMDISCPERCENT ELSE NULL END,case C.ITEMLVLDEFVARIESONBUYINGQTY + C.MultipleRateCond when 0 then d.ITEMDISCAMOUNT ELSE NULL END,case C.ITEMLVLDEFVARIESONBUYINGQTY + C.MultipleRateCond when 0 then d.ITEMDISCOUNTEDRATE ELSE NULL END,case C.ITEMLVLDEFVARIESONBUYINGQTY + C.MultipleRateCond when 0 then d.ITEMMAXDISCPERCENT ELSE NULL END,case C.ITEMLVLDEFVARIESONBUYINGQTY + C.MultipleRateCond when 0 then d.ITEMMAXDISCAMOUNT ELSE NULL END,case C.ITEMLVLDEFVARIESONBUYINGQTY + C.MultipleRateCond when 0 then d.ITEMLVLDISCBUYQTY ELSE NULL END,C.ItemLvlOfferBuyNGetItemsAreSame
+		from promomnheader as C LEFT OUTER JOIN PROMOMNITEMLVLDISCDTLS as d on C.SalesPromocode = d.SalesPromocode and d.srlno=1 ,ItemMaster as b,PROMOMNBUYITEMGRPDTLS as A
+		where C.salespromocode In (Select SalesPromoCd From TmpinsertionfromStage0) And C.ApplicableItems = 3 AND C.Status  In(1,9) AND A.ItemIncExFlag =1 AND C.SalesPromocode = A.salespromocode  and 
+		B.JwlCaratage = 2  AND A.Stockno= B.Stockno 
+		Union All
+		-- 1. C1,C2,SC1,SC2,Size
+		select b.stockno,A.salespromocode,C.SalesPromoDesc,1,A.ItemSetNo, C.ApplicableHappyHours,C.HappyHoursStartTime,C.HappyHoursEndTime,C.WeekDays,C.ApplicableCustomers,C.DefinitionType,C.FixedOrVariable,C.ItemLvlDiscountType,C.ItemLvlDefVariesOnBuyingQty,C.ItemLvlBuyingRateValueCond,case C.ITEMLVLDEFVARIESONBUYINGQTY + C.MultipleRateCond when 0 then 1 ELSE 2 end,case C.ITEMLVLDEFVARIESONBUYINGQTY + C.MultipleRateCond when 0 then d.ITEMDISCPERCENT ELSE NULL END,case C.ITEMLVLDEFVARIESONBUYINGQTY + C.MultipleRateCond when 0 then d.ITEMDISCAMOUNT ELSE NULL END,case C.ITEMLVLDEFVARIESONBUYINGQTY + C.MultipleRateCond when 0 then d.ITEMDISCOUNTEDRATE ELSE NULL END,case C.ITEMLVLDEFVARIESONBUYINGQTY + C.MultipleRateCond when 0 then d.ITEMMAXDISCPERCENT ELSE NULL END,case C.ITEMLVLDEFVARIESONBUYINGQTY + C.MultipleRateCond when 0 then d.ITEMMAXDISCAMOUNT ELSE NULL END,case C.ITEMLVLDEFVARIESONBUYINGQTY + C.MultipleRateCond when 0 then d.ITEMLVLDISCBUYQTY ELSE NULL END,C.ItemLvlOfferBuyNGetItemsAreSame
+		from promomnheader as C LEFT OUTER JOIN PROMOMNITEMLVLDISCDTLS as d on C.SalesPromocode = d.SalesPromocode and d.srlno=1 ,ItemMaster as b,PROMOMNBUYITEMGRPDTLS as A 
+		where C.salespromocode In (Select SalesPromoCd From TmpinsertionfromStage0) And C.ApplicableItems = 2 AND C.Status  In(1,9) AND A.ItemIncExFlag =1 AND C.SalesPromocode = A.salespromocode  and 
+		B.JwlCaratage = 2  AND A.Class1Cd = B.Class1Cd AND A.Class2Cd = B.Class2Cd AND A.SubClass1Cd = B.SubClass1Cd AND A.SubClass2Cd = B.SubClass2Cd AND A.SizeCd = B.SizeCd
+		Union All
+		-- 2. C1,C2,SC1,SC2,Size=All
+		select b.stockno,A.salespromocode,C.SalesPromoDesc,1,A.ItemSetNo, C.ApplicableHappyHours,C.HappyHoursStartTime,C.HappyHoursEndTime,C.WeekDays,C.ApplicableCustomers,C.DefinitionType,C.FixedOrVariable,C.ItemLvlDiscountType,C.ItemLvlDefVariesOnBuyingQty,C.ItemLvlBuyingRateValueCond,case C.ITEMLVLDEFVARIESONBUYINGQTY + C.MultipleRateCond when 0 then 1 ELSE 2 end,case C.ITEMLVLDEFVARIESONBUYINGQTY + C.MultipleRateCond when 0 then d.ITEMDISCPERCENT ELSE NULL END,case C.ITEMLVLDEFVARIESONBUYINGQTY + C.MultipleRateCond when 0 then d.ITEMDISCAMOUNT ELSE NULL END,case C.ITEMLVLDEFVARIESONBUYINGQTY + C.MultipleRateCond when 0 then d.ITEMDISCOUNTEDRATE ELSE NULL END,case C.ITEMLVLDEFVARIESONBUYINGQTY + C.MultipleRateCond when 0 then d.ITEMMAXDISCPERCENT ELSE NULL END,case C.ITEMLVLDEFVARIESONBUYINGQTY + C.MultipleRateCond when 0 then d.ITEMMAXDISCAMOUNT ELSE NULL END,case C.ITEMLVLDEFVARIESONBUYINGQTY + C.MultipleRateCond when 0 then d.ITEMLVLDISCBUYQTY ELSE NULL END,C.ItemLvlOfferBuyNGetItemsAreSame
+		from promomnheader as C LEFT OUTER JOIN PROMOMNITEMLVLDISCDTLS as d on C.SalesPromocode = d.SalesPromocode and d.srlno=1 ,ItemMaster as b,PROMOMNBUYITEMGRPDTLS as A 
+		where C.salespromocode In (Select SalesPromoCd From TmpinsertionfromStage0) And C.ApplicableItems = 2 AND C.Status  In(1,9) AND A.ItemIncExFlag =1 AND C.SalesPromocode = A.salespromocode  and 
+		B.JwlCaratage = 2  AND A.Class1Cd = B.Class1Cd AND A.Class2Cd = B.Class2Cd AND A.SubClass1Cd = B.SubClass1Cd AND A.SubClass2Cd = B.SubClass2Cd AND A.SizeCd = '<<ALL>>'
+		Union All
+		-- 3. C1,C2,SC1,SC2=All,Size
+		select b.stockno,A.salespromocode,C.SalesPromoDesc,1,A.ItemSetNo, C.ApplicableHappyHours,C.HappyHoursStartTime,C.HappyHoursEndTime,C.WeekDays,C.ApplicableCustomers,C.DefinitionType,C.FixedOrVariable,C.ItemLvlDiscountType,C.ItemLvlDefVariesOnBuyingQty,C.ItemLvlBuyingRateValueCond,case C.ITEMLVLDEFVARIESONBUYINGQTY + C.MultipleRateCond when 0 then 1 ELSE 2 end,case C.ITEMLVLDEFVARIESONBUYINGQTY + C.MultipleRateCond when 0 then d.ITEMDISCPERCENT ELSE NULL END,case C.ITEMLVLDEFVARIESONBUYINGQTY + C.MultipleRateCond when 0 then d.ITEMDISCAMOUNT ELSE NULL END,case C.ITEMLVLDEFVARIESONBUYINGQTY + C.MultipleRateCond when 0 then d.ITEMDISCOUNTEDRATE ELSE NULL END,case C.ITEMLVLDEFVARIESONBUYINGQTY + C.MultipleRateCond when 0 then d.ITEMMAXDISCPERCENT ELSE NULL END,case C.ITEMLVLDEFVARIESONBUYINGQTY + C.MultipleRateCond when 0 then d.ITEMMAXDISCAMOUNT ELSE NULL END,case C.ITEMLVLDEFVARIESONBUYINGQTY + C.MultipleRateCond when 0 then d.ITEMLVLDISCBUYQTY ELSE NULL END,C.ItemLvlOfferBuyNGetItemsAreSame
+		from promomnheader as C LEFT OUTER JOIN PROMOMNITEMLVLDISCDTLS as d on C.SalesPromocode = d.SalesPromocode and d.srlno=1 ,ItemMaster as b,PROMOMNBUYITEMGRPDTLS as A 
+		where C.salespromocode In (Select SalesPromoCd From TmpinsertionfromStage0) And C.ApplicableItems = 2 AND C.Status  In(1,9) AND A.ItemIncExFlag =1 AND C.SalesPromocode = A.salespromocode  and 
+		B.JwlCaratage = 2  AND A.Class1Cd = B.Class1Cd AND A.Class2Cd = B.Class2Cd AND A.SubClass1Cd = B.SubClass1Cd AND A.SubClass2Cd = '<<ALL>>' AND A.SizeCd = B.SizeCd
+		Union All
+		-- 4. C1,C2,SC1,SC2=All,Size=All
+		select b.stockno,A.salespromocode,C.SalesPromoDesc,1,A.ItemSetNo, C.ApplicableHappyHours,C.HappyHoursStartTime,C.HappyHoursEndTime,C.WeekDays,C.ApplicableCustomers,C.DefinitionType,C.FixedOrVariable,C.ItemLvlDiscountType,C.ItemLvlDefVariesOnBuyingQty,C.ItemLvlBuyingRateValueCond,case C.ITEMLVLDEFVARIESONBUYINGQTY + C.MultipleRateCond when 0 then 1 ELSE 2 end,case C.ITEMLVLDEFVARIESONBUYINGQTY + C.MultipleRateCond when 0 then d.ITEMDISCPERCENT ELSE NULL END,case C.ITEMLVLDEFVARIESONBUYINGQTY + C.MultipleRateCond when 0 then d.ITEMDISCAMOUNT ELSE NULL END,case C.ITEMLVLDEFVARIESONBUYINGQTY + C.MultipleRateCond when 0 then d.ITEMDISCOUNTEDRATE ELSE NULL END,case C.ITEMLVLDEFVARIESONBUYINGQTY + C.MultipleRateCond when 0 then d.ITEMMAXDISCPERCENT ELSE NULL END,case C.ITEMLVLDEFVARIESONBUYINGQTY + C.MultipleRateCond when 0 then d.ITEMMAXDISCAMOUNT ELSE NULL END,case C.ITEMLVLDEFVARIESONBUYINGQTY + C.MultipleRateCond when 0 then d.ITEMLVLDISCBUYQTY ELSE NULL END,C.ItemLvlOfferBuyNGetItemsAreSame
+		from promomnheader as C LEFT OUTER JOIN PROMOMNITEMLVLDISCDTLS as d on C.SalesPromocode = d.SalesPromocode and d.srlno=1 ,ItemMaster as b,PROMOMNBUYITEMGRPDTLS as A 
+		where C.salespromocode In (Select SalesPromoCd From TmpinsertionfromStage0) And C.ApplicableItems = 2 AND C.Status  In(1,9) AND A.ItemIncExFlag =1 AND C.SalesPromocode = A.salespromocode  and 
+		B.JwlCaratage = 2  AND A.Class1Cd = B.Class1Cd AND A.Class2Cd = B.Class2Cd AND A.SubClass1Cd = B.SubClass1Cd AND A.SubClass2Cd = '<<ALL>>' AND A.SizeCd = '<<ALL>>'
+		Union All
+		-- 5. C1,C2,SC1=All,SC2,Size
+		select b.stockno,A.salespromocode,C.SalesPromoDesc,1,A.ItemSetNo, C.ApplicableHappyHours,C.HappyHoursStartTime,C.HappyHoursEndTime,C.WeekDays,C.ApplicableCustomers,C.DefinitionType,C.FixedOrVariable,C.ItemLvlDiscountType,C.ItemLvlDefVariesOnBuyingQty,C.ItemLvlBuyingRateValueCond,case C.ITEMLVLDEFVARIESONBUYINGQTY + C.MultipleRateCond when 0 then 1 ELSE 2 end,case C.ITEMLVLDEFVARIESONBUYINGQTY + C.MultipleRateCond when 0 then d.ITEMDISCPERCENT ELSE NULL END,case C.ITEMLVLDEFVARIESONBUYINGQTY + C.MultipleRateCond when 0 then d.ITEMDISCAMOUNT ELSE NULL END,case C.ITEMLVLDEFVARIESONBUYINGQTY + C.MultipleRateCond when 0 then d.ITEMDISCOUNTEDRATE ELSE NULL END,case C.ITEMLVLDEFVARIESONBUYINGQTY + C.MultipleRateCond when 0 then d.ITEMMAXDISCPERCENT ELSE NULL END,case C.ITEMLVLDEFVARIESONBUYINGQTY + C.MultipleRateCond when 0 then d.ITEMMAXDISCAMOUNT ELSE NULL END,case C.ITEMLVLDEFVARIESONBUYINGQTY + C.MultipleRateCond when 0 then d.ITEMLVLDISCBUYQTY ELSE NULL END,C.ItemLvlOfferBuyNGetItemsAreSame
+		from promomnheader as C LEFT OUTER JOIN PROMOMNITEMLVLDISCDTLS as d on C.SalesPromocode = d.SalesPromocode and d.srlno=1 ,ItemMaster as b,PROMOMNBUYITEMGRPDTLS as A 
+		where C.salespromocode In (Select SalesPromoCd From TmpinsertionfromStage0) And C.ApplicableItems = 2 AND C.Status  In(1,9) AND A.ItemIncExFlag =1 AND C.SalesPromocode = A.salespromocode  and 
+		B.JwlCaratage = 2  AND A.Class1Cd = B.Class1Cd AND A.Class2Cd = B.Class2Cd AND A.SubClass1Cd = '<<ALL>>' AND A.SubClass2Cd = B.SubClass2Cd AND A.SizeCd = B.SizeCd
+		Union All
+		-- 6. C1,C2,SC1=All,SC2,Size=All
+		select b.stockno,A.salespromocode,C.SalesPromoDesc,1,A.ItemSetNo, C.ApplicableHappyHours,C.HappyHoursStartTime,C.HappyHoursEndTime,C.WeekDays,C.ApplicableCustomers,C.DefinitionType,C.FixedOrVariable,C.ItemLvlDiscountType,C.ItemLvlDefVariesOnBuyingQty,C.ItemLvlBuyingRateValueCond,case C.ITEMLVLDEFVARIESONBUYINGQTY + C.MultipleRateCond when 0 then 1 ELSE 2 end,case C.ITEMLVLDEFVARIESONBUYINGQTY + C.MultipleRateCond when 0 then d.ITEMDISCPERCENT ELSE NULL END,case C.ITEMLVLDEFVARIESONBUYINGQTY + C.MultipleRateCond when 0 then d.ITEMDISCAMOUNT ELSE NULL END,case C.ITEMLVLDEFVARIESONBUYINGQTY + C.MultipleRateCond when 0 then d.ITEMDISCOUNTEDRATE ELSE NULL END,case C.ITEMLVLDEFVARIESONBUYINGQTY + C.MultipleRateCond when 0 then d.ITEMMAXDISCPERCENT ELSE NULL END,case C.ITEMLVLDEFVARIESONBUYINGQTY + C.MultipleRateCond when 0 then d.ITEMMAXDISCAMOUNT ELSE NULL END,case C.ITEMLVLDEFVARIESONBUYINGQTY + C.MultipleRateCond when 0 then d.ITEMLVLDISCBUYQTY ELSE NULL END,C.ItemLvlOfferBuyNGetItemsAreSame
+		from promomnheader as C LEFT OUTER JOIN PROMOMNITEMLVLDISCDTLS as d on C.SalesPromocode = d.SalesPromocode and d.srlno=1 ,ItemMaster as b,PROMOMNBUYITEMGRPDTLS as A 
+		where C.salespromocode In (Select SalesPromoCd From TmpinsertionfromStage0) And C.ApplicableItems = 2 AND C.Status  In(1,9) AND A.ItemIncExFlag =1 AND C.SalesPromocode = A.salespromocode  and 
+		B.JwlCaratage = 2  AND A.Class1Cd = B.Class1Cd AND A.Class2Cd = B.Class2Cd AND A.SubClass1Cd = '<<ALL>>' AND A.SubClass2Cd = B.SubClass2Cd AND A.SizeCd = '<<ALL>>'
+		Union All
+		-- 7. C1,C2,SC1=All,SC2=All,Size
+		select b.stockno,A.salespromocode,C.SalesPromoDesc,1,A.ItemSetNo, C.ApplicableHappyHours,C.HappyHoursStartTime,C.HappyHoursEndTime,C.WeekDays,C.ApplicableCustomers,C.DefinitionType,C.FixedOrVariable,C.ItemLvlDiscountType,C.ItemLvlDefVariesOnBuyingQty,C.ItemLvlBuyingRateValueCond,case C.ITEMLVLDEFVARIESONBUYINGQTY + C.MultipleRateCond when 0 then 1 ELSE 2 end,case C.ITEMLVLDEFVARIESONBUYINGQTY + C.MultipleRateCond when 0 then d.ITEMDISCPERCENT ELSE NULL END,case C.ITEMLVLDEFVARIESONBUYINGQTY + C.MultipleRateCond when 0 then d.ITEMDISCAMOUNT ELSE NULL END,case C.ITEMLVLDEFVARIESONBUYINGQTY + C.MultipleRateCond when 0 then d.ITEMDISCOUNTEDRATE ELSE NULL END,case C.ITEMLVLDEFVARIESONBUYINGQTY + C.MultipleRateCond when 0 then d.ITEMMAXDISCPERCENT ELSE NULL END,case C.ITEMLVLDEFVARIESONBUYINGQTY + C.MultipleRateCond when 0 then d.ITEMMAXDISCAMOUNT ELSE NULL END,case C.ITEMLVLDEFVARIESONBUYINGQTY + C.MultipleRateCond when 0 then d.ITEMLVLDISCBUYQTY ELSE NULL END,C.ItemLvlOfferBuyNGetItemsAreSame
+		from promomnheader as C LEFT OUTER JOIN PROMOMNITEMLVLDISCDTLS as d on C.SalesPromocode = d.SalesPromocode and d.srlno=1 ,ItemMaster as b,PROMOMNBUYITEMGRPDTLS as A 
+		where C.salespromocode In (Select SalesPromoCd From TmpinsertionfromStage0) And C.ApplicableItems = 2 AND C.Status  In(1,9) AND A.ItemIncExFlag =1 AND C.SalesPromocode = A.salespromocode  and 
+		B.JwlCaratage = 2  AND A.Class1Cd = B.Class1Cd AND A.Class2Cd = B.Class2Cd AND A.SubClass1Cd = '<<ALL>>' AND A.SubClass2Cd = '<<ALL>>' AND A.SizeCd = B.SizeCd
+		Union All
+		-- 8. C1,C2,SC1=All,SC2=All,Size=All
+		select b.stockno,A.salespromocode,C.SalesPromoDesc,1,A.ItemSetNo, C.ApplicableHappyHours,C.HappyHoursStartTime,C.HappyHoursEndTime,C.WeekDays,C.ApplicableCustomers,C.DefinitionType,C.FixedOrVariable,C.ItemLvlDiscountType,C.ItemLvlDefVariesOnBuyingQty,C.ItemLvlBuyingRateValueCond,case C.ITEMLVLDEFVARIESONBUYINGQTY + C.MultipleRateCond when 0 then 1 ELSE 2 end,case C.ITEMLVLDEFVARIESONBUYINGQTY + C.MultipleRateCond when 0 then d.ITEMDISCPERCENT ELSE NULL END,case C.ITEMLVLDEFVARIESONBUYINGQTY + C.MultipleRateCond when 0 then d.ITEMDISCAMOUNT ELSE NULL END,case C.ITEMLVLDEFVARIESONBUYINGQTY + C.MultipleRateCond when 0 then d.ITEMDISCOUNTEDRATE ELSE NULL END,case C.ITEMLVLDEFVARIESONBUYINGQTY + C.MultipleRateCond when 0 then d.ITEMMAXDISCPERCENT ELSE NULL END,case C.ITEMLVLDEFVARIESONBUYINGQTY + C.MultipleRateCond when 0 then d.ITEMMAXDISCAMOUNT ELSE NULL END,case C.ITEMLVLDEFVARIESONBUYINGQTY + C.MultipleRateCond when 0 then d.ITEMLVLDISCBUYQTY ELSE NULL END,C.ItemLvlOfferBuyNGetItemsAreSame
+		from promomnheader as C LEFT OUTER JOIN PROMOMNITEMLVLDISCDTLS as d on C.SalesPromocode = d.SalesPromocode and d.srlno=1 ,ItemMaster as b,PROMOMNBUYITEMGRPDTLS as A 
+		where C.salespromocode In (Select SalesPromoCd From TmpinsertionfromStage0) And C.ApplicableItems = 2 AND C.Status  In(1,9) AND A.ItemIncExFlag =1 AND C.SalesPromocode = A.salespromocode  and 
+		B.JwlCaratage = 2  AND A.Class1Cd = B.Class1Cd AND A.Class2Cd = B.Class2Cd AND A.SubClass1Cd = '<<ALL>>' AND A.SubClass2Cd = '<<ALL>>' AND A.SizeCd = '<<ALL>>'
+		Union All
+		-- 9. C1=All,C2=All,SC1,SC2,Size
+		select b.stockno,A.salespromocode,C.SalesPromoDesc,1,A.ItemSetNo, C.ApplicableHappyHours,C.HappyHoursStartTime,C.HappyHoursEndTime,C.WeekDays,C.ApplicableCustomers,C.DefinitionType,C.FixedOrVariable,C.ItemLvlDiscountType,C.ItemLvlDefVariesOnBuyingQty,C.ItemLvlBuyingRateValueCond,case C.ITEMLVLDEFVARIESONBUYINGQTY + C.MultipleRateCond when 0 then 1 ELSE 2 end,case C.ITEMLVLDEFVARIESONBUYINGQTY + C.MultipleRateCond when 0 then d.ITEMDISCPERCENT ELSE NULL END,case C.ITEMLVLDEFVARIESONBUYINGQTY + C.MultipleRateCond when 0 then d.ITEMDISCAMOUNT ELSE NULL END,case C.ITEMLVLDEFVARIESONBUYINGQTY + C.MultipleRateCond when 0 then d.ITEMDISCOUNTEDRATE ELSE NULL END,case C.ITEMLVLDEFVARIESONBUYINGQTY + C.MultipleRateCond when 0 then d.ITEMMAXDISCPERCENT ELSE NULL END,case C.ITEMLVLDEFVARIESONBUYINGQTY + C.MultipleRateCond when 0 then d.ITEMMAXDISCAMOUNT ELSE NULL END,case C.ITEMLVLDEFVARIESONBUYINGQTY + C.MultipleRateCond when 0 then d.ITEMLVLDISCBUYQTY ELSE NULL END,C.ItemLvlOfferBuyNGetItemsAreSame
+		from promomnheader as C LEFT OUTER JOIN PROMOMNITEMLVLDISCDTLS as d on C.SalesPromocode = d.SalesPromocode and d.srlno=1 ,ItemMaster as b,PROMOMNBUYITEMGRPDTLS as A 
+		where C.salespromocode In (Select SalesPromoCd From TmpinsertionfromStage0) And C.ApplicableItems = 2 AND C.Status  In(1,9) AND A.ItemIncExFlag =1 AND C.SalesPromocode = A.salespromocode  and 
+		B.JwlCaratage = 2  AND A.Class1Cd = '<<ALL>>' AND A.Class2Cd = '<<ALL>>' AND A.SubClass1Cd = B.SubClass1Cd AND A.SubClass2Cd = B.SubClass2Cd AND A.SizeCd = B.SizeCd
+		Union All
+		-- 10. C1=All,C2=All,SC1,SC2,Size=All
+		select b.stockno,A.salespromocode,C.SalesPromoDesc,1,A.ItemSetNo, C.ApplicableHappyHours,C.HappyHoursStartTime,C.HappyHoursEndTime,C.WeekDays,C.ApplicableCustomers,C.DefinitionType,C.FixedOrVariable,C.ItemLvlDiscountType,C.ItemLvlDefVariesOnBuyingQty,C.ItemLvlBuyingRateValueCond,case C.ITEMLVLDEFVARIESONBUYINGQTY + C.MultipleRateCond when 0 then 1 ELSE 2 end,case C.ITEMLVLDEFVARIESONBUYINGQTY + C.MultipleRateCond when 0 then d.ITEMDISCPERCENT ELSE NULL END,case C.ITEMLVLDEFVARIESONBUYINGQTY + C.MultipleRateCond when 0 then d.ITEMDISCAMOUNT ELSE NULL END,case C.ITEMLVLDEFVARIESONBUYINGQTY + C.MultipleRateCond when 0 then d.ITEMDISCOUNTEDRATE ELSE NULL END,case C.ITEMLVLDEFVARIESONBUYINGQTY + C.MultipleRateCond when 0 then d.ITEMMAXDISCPERCENT ELSE NULL END,case C.ITEMLVLDEFVARIESONBUYINGQTY + C.MultipleRateCond when 0 then d.ITEMMAXDISCAMOUNT ELSE NULL END,case C.ITEMLVLDEFVARIESONBUYINGQTY + C.MultipleRateCond when 0 then d.ITEMLVLDISCBUYQTY ELSE NULL END,C.ItemLvlOfferBuyNGetItemsAreSame
+		from promomnheader as C LEFT OUTER JOIN PROMOMNITEMLVLDISCDTLS as d on C.SalesPromocode = d.SalesPromocode and d.srlno=1 ,ItemMaster as b,PROMOMNBUYITEMGRPDTLS as A 
+		where C.salespromocode In (Select SalesPromoCd From TmpinsertionfromStage0) And C.ApplicableItems = 2 AND C.Status  In(1,9) AND A.ItemIncExFlag =1 AND C.SalesPromocode = A.salespromocode  and 
+		B.JwlCaratage = 2  AND A.Class1Cd = '<<ALL>>' AND A.Class2Cd = '<<ALL>>' AND A.SubClass1Cd = B.SubClass1Cd AND A.SubClass2Cd = B.SubClass2Cd AND A.SizeCd = '<<ALL>>'
+		Union All
+		-- 11. C1=All,C2=All,SC1,SC2=All,Size 
+		select b.stockno,A.salespromocode,C.SalesPromoDesc,1,A.ItemSetNo, C.ApplicableHappyHours,C.HappyHoursStartTime,C.HappyHoursEndTime,C.WeekDays,C.ApplicableCustomers,C.DefinitionType,C.FixedOrVariable,C.ItemLvlDiscountType,C.ItemLvlDefVariesOnBuyingQty,C.ItemLvlBuyingRateValueCond,case C.ITEMLVLDEFVARIESONBUYINGQTY + C.MultipleRateCond when 0 then 1 ELSE 2 end,case C.ITEMLVLDEFVARIESONBUYINGQTY + C.MultipleRateCond when 0 then d.ITEMDISCPERCENT ELSE NULL END,case C.ITEMLVLDEFVARIESONBUYINGQTY + C.MultipleRateCond when 0 then d.ITEMDISCAMOUNT ELSE NULL END,case C.ITEMLVLDEFVARIESONBUYINGQTY + C.MultipleRateCond when 0 then d.ITEMDISCOUNTEDRATE ELSE NULL END,case C.ITEMLVLDEFVARIESONBUYINGQTY + C.MultipleRateCond when 0 then d.ITEMMAXDISCPERCENT ELSE NULL END,case C.ITEMLVLDEFVARIESONBUYINGQTY + C.MultipleRateCond when 0 then d.ITEMMAXDISCAMOUNT ELSE NULL END,case C.ITEMLVLDEFVARIESONBUYINGQTY + C.MultipleRateCond when 0 then d.ITEMLVLDISCBUYQTY ELSE NULL END,C.ItemLvlOfferBuyNGetItemsAreSame
+		from promomnheader as C LEFT OUTER JOIN PROMOMNITEMLVLDISCDTLS as d on C.SalesPromocode = d.SalesPromocode and d.srlno=1 ,ItemMaster as b,PROMOMNBUYITEMGRPDTLS as A 
+		where C.salespromocode In (Select SalesPromoCd From TmpinsertionfromStage0) And C.ApplicableItems = 2 AND C.Status  In(1,9) AND A.ItemIncExFlag =1 AND C.SalesPromocode = A.salespromocode  and 
+		B.JwlCaratage = 2  AND A.Class1Cd = '<<ALL>>' AND A.Class2Cd = '<<ALL>>' AND A.SubClass1Cd = B.SubClass1Cd AND A.SubClass2Cd = '<<ALL>>' AND A.SizeCd = B.SizeCd
+		Union All
+		-- 12. C1=All,C2=All,SC1,SC2=All,Size=All
+		select b.stockno,A.salespromocode,C.SalesPromoDesc,1,A.ItemSetNo, C.ApplicableHappyHours,C.HappyHoursStartTime,C.HappyHoursEndTime,C.WeekDays,C.ApplicableCustomers,C.DefinitionType,C.FixedOrVariable,C.ItemLvlDiscountType,C.ItemLvlDefVariesOnBuyingQty,C.ItemLvlBuyingRateValueCond,case C.ITEMLVLDEFVARIESONBUYINGQTY + C.MultipleRateCond when 0 then 1 ELSE 2 end,case C.ITEMLVLDEFVARIESONBUYINGQTY + C.MultipleRateCond when 0 then d.ITEMDISCPERCENT ELSE NULL END,case C.ITEMLVLDEFVARIESONBUYINGQTY + C.MultipleRateCond when 0 then d.ITEMDISCAMOUNT ELSE NULL END,case C.ITEMLVLDEFVARIESONBUYINGQTY + C.MultipleRateCond when 0 then d.ITEMDISCOUNTEDRATE ELSE NULL END,case C.ITEMLVLDEFVARIESONBUYINGQTY + C.MultipleRateCond when 0 then d.ITEMMAXDISCPERCENT ELSE NULL END,case C.ITEMLVLDEFVARIESONBUYINGQTY + C.MultipleRateCond when 0 then d.ITEMMAXDISCAMOUNT ELSE NULL END,case C.ITEMLVLDEFVARIESONBUYINGQTY + C.MultipleRateCond when 0 then d.ITEMLVLDISCBUYQTY ELSE NULL END,C.ItemLvlOfferBuyNGetItemsAreSame
+		from promomnheader as C LEFT OUTER JOIN PROMOMNITEMLVLDISCDTLS as d on C.SalesPromocode = d.SalesPromocode and d.srlno=1 ,ItemMaster as b,PROMOMNBUYITEMGRPDTLS as A 
+		where C.salespromocode In (Select SalesPromoCd From TmpinsertionfromStage0) And C.ApplicableItems = 2 AND C.Status  In(1,9) AND A.ItemIncExFlag =1 AND C.SalesPromocode = A.salespromocode  and 
+		B.JwlCaratage = 2  AND A.Class1Cd = '<<ALL>>' AND A.Class2Cd = '<<ALL>>' AND A.SubClass1Cd = B.SubClass1Cd AND A.SubClass2Cd = '<<ALL>>' AND A.SizeCd = '<<ALL>>'
+		Union All
+		-- 13. C1=All,C2=All,SC1=All,SC2,Size
+		select b.stockno,A.salespromocode,C.SalesPromoDesc,1,A.ItemSetNo, C.ApplicableHappyHours,C.HappyHoursStartTime,C.HappyHoursEndTime,C.WeekDays,C.ApplicableCustomers,C.DefinitionType,C.FixedOrVariable,C.ItemLvlDiscountType,C.ItemLvlDefVariesOnBuyingQty,C.ItemLvlBuyingRateValueCond,case C.ITEMLVLDEFVARIESONBUYINGQTY + C.MultipleRateCond when 0 then 1 ELSE 2 end,case C.ITEMLVLDEFVARIESONBUYINGQTY + C.MultipleRateCond when 0 then d.ITEMDISCPERCENT ELSE NULL END,case C.ITEMLVLDEFVARIESONBUYINGQTY + C.MultipleRateCond when 0 then d.ITEMDISCAMOUNT ELSE NULL END,case C.ITEMLVLDEFVARIESONBUYINGQTY + C.MultipleRateCond when 0 then d.ITEMDISCOUNTEDRATE ELSE NULL END,case C.ITEMLVLDEFVARIESONBUYINGQTY + C.MultipleRateCond when 0 then d.ITEMMAXDISCPERCENT ELSE NULL END,case C.ITEMLVLDEFVARIESONBUYINGQTY + C.MultipleRateCond when 0 then d.ITEMMAXDISCAMOUNT ELSE NULL END,case C.ITEMLVLDEFVARIESONBUYINGQTY + C.MultipleRateCond when 0 then d.ITEMLVLDISCBUYQTY ELSE NULL END,C.ItemLvlOfferBuyNGetItemsAreSame
+		from promomnheader as C LEFT OUTER JOIN PROMOMNITEMLVLDISCDTLS as d on C.SalesPromocode = d.SalesPromocode and d.srlno=1 ,ItemMaster as b,PROMOMNBUYITEMGRPDTLS as A 
+		where C.salespromocode In (Select SalesPromoCd From TmpinsertionfromStage0) And C.ApplicableItems = 2 AND C.Status  In(1,9) AND A.ItemIncExFlag =1 AND C.SalesPromocode = A.salespromocode  and 
+		B.JwlCaratage = 2  AND A.Class1Cd = '<<ALL>>' AND A.Class2Cd = '<<ALL>>' AND A.SubClass1Cd = '<<ALL>>' AND A.SubClass2Cd = B.SubClass2Cd AND A.SizeCd = B.SizeCd
+		Union All
+		-- 14. C1=All,C2=All,SC1=All,SC2,Size=All
+		select b.stockno,A.salespromocode,C.SalesPromoDesc,1,A.ItemSetNo, C.ApplicableHappyHours,C.HappyHoursStartTime,C.HappyHoursEndTime,C.WeekDays,C.ApplicableCustomers,C.DefinitionType,C.FixedOrVariable,C.ItemLvlDiscountType,C.ItemLvlDefVariesOnBuyingQty,C.ItemLvlBuyingRateValueCond,case C.ITEMLVLDEFVARIESONBUYINGQTY + C.MultipleRateCond when 0 then 1 ELSE 2 end,case C.ITEMLVLDEFVARIESONBUYINGQTY + C.MultipleRateCond when 0 then d.ITEMDISCPERCENT ELSE NULL END,case C.ITEMLVLDEFVARIESONBUYINGQTY + C.MultipleRateCond when 0 then d.ITEMDISCAMOUNT ELSE NULL END,case C.ITEMLVLDEFVARIESONBUYINGQTY + C.MultipleRateCond when 0 then d.ITEMDISCOUNTEDRATE ELSE NULL END,case C.ITEMLVLDEFVARIESONBUYINGQTY + C.MultipleRateCond when 0 then d.ITEMMAXDISCPERCENT ELSE NULL END,case C.ITEMLVLDEFVARIESONBUYINGQTY + C.MultipleRateCond when 0 then d.ITEMMAXDISCAMOUNT ELSE NULL END,case C.ITEMLVLDEFVARIESONBUYINGQTY + C.MultipleRateCond when 0 then d.ITEMLVLDISCBUYQTY ELSE NULL END,C.ItemLvlOfferBuyNGetItemsAreSame
+		from promomnheader as C LEFT OUTER JOIN PROMOMNITEMLVLDISCDTLS as d on C.SalesPromocode = d.SalesPromocode and d.srlno=1 ,ItemMaster as b,PROMOMNBUYITEMGRPDTLS as A 
+		where C.salespromocode In (Select SalesPromoCd From TmpinsertionfromStage0) And C.ApplicableItems = 2 AND C.Status  In(1,9) AND A.ItemIncExFlag =1 AND C.SalesPromocode = A.salespromocode  and 
+		B.JwlCaratage = 2  AND A.Class1Cd = '<<ALL>>' AND A.Class2Cd = '<<ALL>>' AND A.SubClass1Cd = '<<ALL>>' AND A.SubClass2Cd = B.SubClass2Cd AND A.SizeCd = '<<ALL>>'
+		Union All
+		-- 15. C1=All,C2=All,SC1=All,SC2=All,Size
+		select b.stockno,A.salespromocode,C.SalesPromoDesc,1,A.ItemSetNo, C.ApplicableHappyHours,C.HappyHoursStartTime,C.HappyHoursEndTime,C.WeekDays,C.ApplicableCustomers,C.DefinitionType,C.FixedOrVariable,C.ItemLvlDiscountType,C.ItemLvlDefVariesOnBuyingQty,C.ItemLvlBuyingRateValueCond,case C.ITEMLVLDEFVARIESONBUYINGQTY + C.MultipleRateCond when 0 then 1 ELSE 2 end,case C.ITEMLVLDEFVARIESONBUYINGQTY + C.MultipleRateCond when 0 then d.ITEMDISCPERCENT ELSE NULL END,case C.ITEMLVLDEFVARIESONBUYINGQTY + C.MultipleRateCond when 0 then d.ITEMDISCAMOUNT ELSE NULL END,case C.ITEMLVLDEFVARIESONBUYINGQTY + C.MultipleRateCond when 0 then d.ITEMDISCOUNTEDRATE ELSE NULL END,case C.ITEMLVLDEFVARIESONBUYINGQTY + C.MultipleRateCond when 0 then d.ITEMMAXDISCPERCENT ELSE NULL END,case C.ITEMLVLDEFVARIESONBUYINGQTY + C.MultipleRateCond when 0 then d.ITEMMAXDISCAMOUNT ELSE NULL END,case C.ITEMLVLDEFVARIESONBUYINGQTY + C.MultipleRateCond when 0 then d.ITEMLVLDISCBUYQTY ELSE NULL END,C.ItemLvlOfferBuyNGetItemsAreSame
+		from promomnheader as C LEFT OUTER JOIN PROMOMNITEMLVLDISCDTLS as d on C.SalesPromocode = d.SalesPromocode and d.srlno=1 ,ItemMaster as b,PROMOMNBUYITEMGRPDTLS as A 
+		where C.salespromocode In (Select SalesPromoCd From TmpinsertionfromStage0) And C.ApplicableItems = 2 AND C.Status  In(1,9) AND A.ItemIncExFlag =1 AND C.SalesPromocode = A.salespromocode  and 
+		B.JwlCaratage = 2  AND A.Class1Cd = '<<ALL>>' AND A.Class2Cd = '<<ALL>>' AND A.SubClass1Cd = '<<ALL>>' AND A.SubClass2Cd = '<<ALL>>' AND A.SizeCd = B.SizeCd
+
+		IF (@@ERROR <> 0)  
+			BEGIN  
+				SET @ErrorSave = 'Failure: Insertion to PromoMnIntermediate (Buy Item Details) ' + CAST(@@ERROR AS VARCHAR(32))  
+				GOTO ERREXIT  
+			END  
+
+	END
+
+	-- 14/07/2009, Replacing "ApplicableItems" field with "FreeOfferItemType" field, since Get Item, Item Selection Type Is Updated In "FreeOfferItemType".
+	-- Where ever "ApplicableItems" field is present in the following Get Item SQL Stmts, it is replaced with "FreeOfferItemType"
+	-- To Process Get Item Details
+	BEGIN
+		Insert Into PromoMnIntermediate
+		(StockNo,SalesPromoCode,PromoDescription,BuyOrGetId  ,SetNo,ApplicableHappyHours,HappyHoursStartTime,HappyHoursEndTime,Weekdays,ApplicableCustomers,DefinationType, FixedOrVariable,ItemLvlDiscountType, ItemLvlDefVariesOnBuyingQty, ItemLvlBuyingRateValueCond ,UseIMTable,BUYANDGETSAMEITEMS)
+		select b.stockno,A.salespromocode,C.SalesPromoDesc,2,A.ItemSetNo, C.ApplicableHappyHours,C.HappyHoursStartTime,C.HappyHoursEndTime,C.WeekDays,C.ApplicableCustomers,C.DefinitionType,C.FixedOrVariable,C.ItemLvlDiscountType,C.ItemLvlDefVariesOnBuyingQty,C.ItemLvlBuyingRateValueCond,case C.ITEMLVLDEFVARIESONBUYINGQTY + C.MultipleRateCond when 0 then 1 ELSE 2 end,C.ItemLvlOfferBuyNGetItemsAreSame
+		from promomnheader as C, itemmaster as b,PROMOMNgetITEMGRPDTLS as A 
+		where C.salespromocode In (Select SalesPromoCd From TmpinsertionfromStage0) And C.FreeOfferItemType = 3 AND C.Status  In(1,9) AND A.ItemIncExFlag =1 AND C.SalesPromocode = A.salespromocode  and 
+		B.JwlCaratage = 2  AND A.Stockno= B.Stockno 
+		Union All
+		-- 1. C1,C2,SC1,SC2,Size
+		select b.stockno,A.salespromocode,C.SalesPromoDesc,2,A.ItemSetNo, C.ApplicableHappyHours,C.HappyHoursStartTime,C.HappyHoursEndTime,C.WeekDays,C.ApplicableCustomers,C.DefinitionType,C.FixedOrVariable,C.ItemLvlDiscountType,C.ItemLvlDefVariesOnBuyingQty,C.ItemLvlBuyingRateValueCond,case C.ITEMLVLDEFVARIESONBUYINGQTY + C.MultipleRateCond when 0 then 1 ELSE 2 end,C.ItemLvlOfferBuyNGetItemsAreSame
+		from promomnheader as C, itemmaster as b,PROMOMNgetITEMGRPDTLS as A 
+		where C.salespromocode In (Select SalesPromoCd From TmpinsertionfromStage0) And C.FreeOfferItemType = 2 AND C.Status  In(1,9) AND A.ItemIncExFlag =1 AND C.SalesPromocode = A.salespromocode  and 
+		B.JwlCaratage = 2  AND A.Class1Cd = B.Class1Cd AND A.Class2Cd = B.Class2Cd AND A.SubClass1Cd = B.SubClass1Cd AND A.SubClass2Cd = B.SubClass2Cd AND A.SizeCd = B.SizeCd
+		Union All
+		-- 2. C1,C2,SC1,SC2,Size=All
+		select b.stockno,A.salespromocode,C.SalesPromoDesc,2,A.ItemSetNo, C.ApplicableHappyHours,C.HappyHoursStartTime,C.HappyHoursEndTime,C.WeekDays,C.ApplicableCustomers,C.DefinitionType,C.FixedOrVariable,C.ItemLvlDiscountType,C.ItemLvlDefVariesOnBuyingQty,C.ItemLvlBuyingRateValueCond,case C.ITEMLVLDEFVARIESONBUYINGQTY + C.MultipleRateCond when 0 then 1 ELSE 2 end,C.ItemLvlOfferBuyNGetItemsAreSame
+		from promomnheader as C, itemmaster as b,PROMOMNgetITEMGRPDTLS as A 
+		where C.salespromocode In (Select SalesPromoCd From TmpinsertionfromStage0) And C.FreeOfferItemType = 2 AND C.Status  In(1,9) AND A.ItemIncExFlag =1 AND C.SalesPromocode = A.salespromocode  and 
+		B.JwlCaratage = 2  AND A.Class1Cd = B.Class1Cd AND A.Class2Cd = B.Class2Cd AND A.SubClass1Cd = B.SubClass1Cd AND A.SubClass2Cd = B.SubClass2Cd AND A.SizeCd = '<<ALL>>'
+		Union All
+		-- 3. C1,C2,SC1,SC2=All,Size
+		select b.stockno,A.salespromocode,C.SalesPromoDesc,2,A.ItemSetNo, C.ApplicableHappyHours,C.HappyHoursStartTime,C.HappyHoursEndTime,C.WeekDays,C.ApplicableCustomers,C.DefinitionType,C.FixedOrVariable,C.ItemLvlDiscountType,C.ItemLvlDefVariesOnBuyingQty,C.ItemLvlBuyingRateValueCond,case C.ITEMLVLDEFVARIESONBUYINGQTY + C.MultipleRateCond when 0 then 1 ELSE 2 end,C.ItemLvlOfferBuyNGetItemsAreSame
+		from promomnheader as C, itemmaster as b,PROMOMNgetITEMGRPDTLS as A 
+		where C.salespromocode In (Select SalesPromoCd From TmpinsertionfromStage0) And C.FreeOfferItemType = 2 AND C.Status  In(1,9) AND A.ItemIncExFlag =1 AND C.SalesPromocode = A.salespromocode  and 
+		B.JwlCaratage = 2  AND A.Class1Cd = B.Class1Cd AND A.Class2Cd = B.Class2Cd AND A.SubClass1Cd = B.SubClass1Cd AND A.SubClass2Cd = '<<ALL>>' AND A.SizeCd = B.SizeCd
+		Union All
+		-- 4. C1,C2,SC1,SC2=All,Size=All
+		select b.stockno,A.salespromocode,C.SalesPromoDesc,2,A.ItemSetNo, C.ApplicableHappyHours,C.HappyHoursStartTime,C.HappyHoursEndTime,C.WeekDays,C.ApplicableCustomers,C.DefinitionType,C.FixedOrVariable,C.ItemLvlDiscountType,C.ItemLvlDefVariesOnBuyingQty,C.ItemLvlBuyingRateValueCond,case C.ITEMLVLDEFVARIESONBUYINGQTY + C.MultipleRateCond when 0 then 1 ELSE 2 end,C.ItemLvlOfferBuyNGetItemsAreSame
+		from promomnheader as C, itemmaster as b,PROMOMNgetITEMGRPDTLS as A 
+		where C.salespromocode In (Select SalesPromoCd From TmpinsertionfromStage0) And C.FreeOfferItemType = 2 AND C.Status  In(1,9) AND A.ItemIncExFlag =1 AND C.SalesPromocode = A.salespromocode  and 
+		B.JwlCaratage = 2  AND A.Class1Cd = B.Class1Cd AND A.Class2Cd = B.Class2Cd AND A.SubClass1Cd = B.SubClass1Cd AND A.SubClass2Cd = '<<ALL>>' AND A.SizeCd = '<<ALL>>'
+		Union All
+		-- 5. C1,C2,SC1=All,SC2,Size
+		select b.stockno,A.salespromocode,C.SalesPromoDesc,2,A.ItemSetNo, C.ApplicableHappyHours,C.HappyHoursStartTime,C.HappyHoursEndTime,C.WeekDays,C.ApplicableCustomers,C.DefinitionType,C.FixedOrVariable,C.ItemLvlDiscountType,C.ItemLvlDefVariesOnBuyingQty,C.ItemLvlBuyingRateValueCond,case C.ITEMLVLDEFVARIESONBUYINGQTY + C.MultipleRateCond when 0 then 1 ELSE 2 end,C.ItemLvlOfferBuyNGetItemsAreSame
+		from promomnheader as C, itemmaster as b,PROMOMNgetITEMGRPDTLS as A 
+		where C.salespromocode In (Select SalesPromoCd From TmpinsertionfromStage0) And C.FreeOfferItemType = 2 AND C.Status  In(1,9) AND A.ItemIncExFlag =1 AND C.SalesPromocode = A.salespromocode  and 
+		B.JwlCaratage = 2  AND A.Class1Cd = B.Class1Cd AND A.Class2Cd = B.Class2Cd AND A.SubClass1Cd = '<<ALL>>' AND A.SubClass2Cd = B.SubClass2Cd AND A.SizeCd = B.SizeCd
+		Union All
+		-- 6. C1,C2,SC1=All,SC2,Size=All
+		select b.stockno,A.salespromocode,C.SalesPromoDesc,2,A.ItemSetNo, C.ApplicableHappyHours,C.HappyHoursStartTime,C.HappyHoursEndTime,C.WeekDays,C.ApplicableCustomers,C.DefinitionType,C.FixedOrVariable,C.ItemLvlDiscountType,C.ItemLvlDefVariesOnBuyingQty,C.ItemLvlBuyingRateValueCond,case C.ITEMLVLDEFVARIESONBUYINGQTY + C.MultipleRateCond when 0 then 1 ELSE 2 end,C.ItemLvlOfferBuyNGetItemsAreSame
+		from promomnheader as C, itemmaster as b,PROMOMNgetITEMGRPDTLS as A 
+		where C.salespromocode In (Select SalesPromoCd From TmpinsertionfromStage0) And C.FreeOfferItemType = 2 AND C.Status  In(1,9) AND A.ItemIncExFlag =1 AND C.SalesPromocode = A.salespromocode  and 
+		B.JwlCaratage = 2  AND A.Class1Cd = B.Class1Cd AND A.Class2Cd = B.Class2Cd AND A.SubClass1Cd = '<<ALL>>' AND A.SubClass2Cd = B.SubClass2Cd AND A.SizeCd = '<<ALL>>'
+		Union All
+		-- 7. C1,C2,SC1=All,SC2=All,Size
+		select b.stockno,A.salespromocode,C.SalesPromoDesc,2,A.ItemSetNo, C.ApplicableHappyHours,C.HappyHoursStartTime,C.HappyHoursEndTime,C.WeekDays,C.ApplicableCustomers,C.DefinitionType,C.FixedOrVariable,C.ItemLvlDiscountType,C.ItemLvlDefVariesOnBuyingQty,C.ItemLvlBuyingRateValueCond,case C.ITEMLVLDEFVARIESONBUYINGQTY + C.MultipleRateCond when 0 then 1 ELSE 2 end,C.ItemLvlOfferBuyNGetItemsAreSame
+		from promomnheader as C, itemmaster as b,PROMOMNgetITEMGRPDTLS as A 
+		where C.salespromocode In (Select SalesPromoCd From TmpinsertionfromStage0) And C.FreeOfferItemType = 2 AND C.Status  In(1,9) AND A.ItemIncExFlag =1 AND C.SalesPromocode = A.salespromocode  and 
+		B.JwlCaratage = 2  AND A.Class1Cd = B.Class1Cd AND A.Class2Cd = B.Class2Cd AND A.SubClass1Cd = '<<ALL>>' AND A.SubClass2Cd = '<<ALL>>' AND A.SizeCd = B.SizeCd
+		Union All
+		-- 8. C1,C2,SC1=All,SC2=All,Size=All
+		select b.stockno,A.salespromocode,C.SalesPromoDesc,2,A.ItemSetNo, C.ApplicableHappyHours,C.HappyHoursStartTime,C.HappyHoursEndTime,C.WeekDays,C.ApplicableCustomers,C.DefinitionType,C.FixedOrVariable,C.ItemLvlDiscountType,C.ItemLvlDefVariesOnBuyingQty,C.ItemLvlBuyingRateValueCond,case C.ITEMLVLDEFVARIESONBUYINGQTY + C.MultipleRateCond when 0 then 1 ELSE 2 end,C.ItemLvlOfferBuyNGetItemsAreSame
+		from promomnheader as C, itemmaster as b,PROMOMNgetITEMGRPDTLS as A 
+		where C.salespromocode In (Select SalesPromoCd From TmpinsertionfromStage0) And C.FreeOfferItemType = 2 AND C.Status  In(1,9) AND A.ItemIncExFlag =1 AND C.SalesPromocode = A.salespromocode  and 
+		B.JwlCaratage = 2  AND A.Class1Cd = B.Class1Cd AND A.Class2Cd = B.Class2Cd AND A.SubClass1Cd = '<<ALL>>' AND A.SubClass2Cd = '<<ALL>>' AND A.SizeCd = '<<ALL>>'
+		Union All
+		-- 9. C1=All,C2=All,SC1,SC2,Size
+		select b.stockno,A.salespromocode,C.SalesPromoDesc,2,A.ItemSetNo, C.ApplicableHappyHours,C.HappyHoursStartTime,C.HappyHoursEndTime,C.WeekDays,C.ApplicableCustomers,C.DefinitionType,C.FixedOrVariable,C.ItemLvlDiscountType,C.ItemLvlDefVariesOnBuyingQty,C.ItemLvlBuyingRateValueCond,case C.ITEMLVLDEFVARIESONBUYINGQTY + C.MultipleRateCond when 0 then 1 ELSE 2 end,C.ItemLvlOfferBuyNGetItemsAreSame
+		from promomnheader as C, itemmaster as b,PROMOMNgetITEMGRPDTLS as A 
+		where C.salespromocode In (Select SalesPromoCd From TmpinsertionfromStage0) And C.FreeOfferItemType = 2 AND C.Status  In(1,9) AND A.ItemIncExFlag =1 AND C.SalesPromocode = A.salespromocode  and 
+		B.JwlCaratage = 2  AND A.Class1Cd = '<<ALL>>' AND A.Class2Cd = '<<ALL>>' AND A.SubClass1Cd = B.SubClass1Cd AND A.SubClass2Cd = B.SubClass2Cd AND A.SizeCd = B.SizeCd
+		Union All
+		-- 10. C1=All,C2=All,SC1,SC2,Size=All
+		select b.stockno,A.salespromocode,C.SalesPromoDesc,2,A.ItemSetNo, C.ApplicableHappyHours,C.HappyHoursStartTime,C.HappyHoursEndTime,C.WeekDays,C.ApplicableCustomers,C.DefinitionType,C.FixedOrVariable,C.ItemLvlDiscountType,C.ItemLvlDefVariesOnBuyingQty,C.ItemLvlBuyingRateValueCond,case C.ITEMLVLDEFVARIESONBUYINGQTY + C.MultipleRateCond when 0 then 1 ELSE 2 end,C.ItemLvlOfferBuyNGetItemsAreSame
+		from promomnheader as C, itemmaster as b,PROMOMNgetITEMGRPDTLS as A 
+		where C.salespromocode In (Select SalesPromoCd From TmpinsertionfromStage0) And C.FreeOfferItemType = 2 AND C.Status  In(1,9) AND A.ItemIncExFlag =1 AND C.SalesPromocode = A.salespromocode  and 
+		B.JwlCaratage = 2  AND A.Class1Cd = '<<ALL>>' AND A.Class2Cd = '<<ALL>>' AND A.SubClass1Cd = B.SubClass1Cd AND A.SubClass2Cd = B.SubClass2Cd AND A.SizeCd = '<<ALL>>'
+		Union All
+		-- 11. C1=All,C2=All,SC1,SC2=All,Size 
+		select b.stockno,A.salespromocode,C.SalesPromoDesc,2,A.ItemSetNo, C.ApplicableHappyHours,C.HappyHoursStartTime,C.HappyHoursEndTime,C.WeekDays,C.ApplicableCustomers,C.DefinitionType,C.FixedOrVariable,C.ItemLvlDiscountType,C.ItemLvlDefVariesOnBuyingQty,C.ItemLvlBuyingRateValueCond,case C.ITEMLVLDEFVARIESONBUYINGQTY + C.MultipleRateCond when 0 then 1 ELSE 2 end,C.ItemLvlOfferBuyNGetItemsAreSame
+		from promomnheader as C, itemmaster as b,PROMOMNgetITEMGRPDTLS as A 
+		where C.salespromocode In (Select SalesPromoCd From TmpinsertionfromStage0) And C.FreeOfferItemType = 2 AND C.Status  In(1,9) AND A.ItemIncExFlag =1 AND C.SalesPromocode = A.salespromocode  and 
+		B.JwlCaratage = 2  AND A.Class1Cd = '<<ALL>>' AND A.Class2Cd = '<<ALL>>' AND A.SubClass1Cd = B.SubClass1Cd AND A.SubClass2Cd = '<<ALL>>' AND A.SizeCd = B.SizeCd
+		Union All
+		-- 12. C1=All,C2=All,SC1,SC2=All,Size=All
+		select b.stockno,A.salespromocode,C.SalesPromoDesc,2,A.ItemSetNo, C.ApplicableHappyHours,C.HappyHoursStartTime,C.HappyHoursEndTime,C.WeekDays,C.ApplicableCustomers,C.DefinitionType,C.FixedOrVariable,C.ItemLvlDiscountType,C.ItemLvlDefVariesOnBuyingQty,C.ItemLvlBuyingRateValueCond,case C.ITEMLVLDEFVARIESONBUYINGQTY + C.MultipleRateCond when 0 then 1 ELSE 2 end,C.ItemLvlOfferBuyNGetItemsAreSame
+		from promomnheader as C, itemmaster as b,PROMOMNgetITEMGRPDTLS as A 
+		where C.salespromocode In (Select SalesPromoCd From TmpinsertionfromStage0) And C.FreeOfferItemType = 2 AND C.Status  In(1,9) AND A.ItemIncExFlag =1 AND C.SalesPromocode = A.salespromocode  and 
+		B.JwlCaratage = 2  AND A.Class1Cd = '<<ALL>>' AND A.Class2Cd = '<<ALL>>' AND A.SubClass1Cd = B.SubClass1Cd AND A.SubClass2Cd = '<<ALL>>' AND A.SizeCd = '<<ALL>>'
+		Union All
+		-- 13. C1=All,C2=All,SC1=All,SC2,Size
+		select b.stockno,A.salespromocode,C.SalesPromoDesc,2,A.ItemSetNo, C.ApplicableHappyHours,C.HappyHoursStartTime,C.HappyHoursEndTime,C.WeekDays,C.ApplicableCustomers,C.DefinitionType,C.FixedOrVariable,C.ItemLvlDiscountType,C.ItemLvlDefVariesOnBuyingQty,C.ItemLvlBuyingRateValueCond,case C.ITEMLVLDEFVARIESONBUYINGQTY + C.MultipleRateCond when 0 then 1 ELSE 2 end,C.ItemLvlOfferBuyNGetItemsAreSame
+		from promomnheader as C, itemmaster as b,PROMOMNgetITEMGRPDTLS as A 
+		where C.salespromocode In (Select SalesPromoCd From TmpinsertionfromStage0) And C.FreeOfferItemType = 2 AND C.Status  In(1,9) AND A.ItemIncExFlag =1 AND C.SalesPromocode = A.salespromocode  and 
+		B.JwlCaratage = 2  AND A.Class1Cd = '<<ALL>>' AND A.Class2Cd = '<<ALL>>' AND A.SubClass1Cd = '<<ALL>>' AND A.SubClass2Cd = B.SubClass2Cd AND A.SizeCd = B.SizeCd
+		Union All
+		-- 14. C1=All,C2=All,SC1=All,SC2,Size=All
+		select b.stockno,A.salespromocode,C.SalesPromoDesc,2,A.ItemSetNo, C.ApplicableHappyHours,C.HappyHoursStartTime,C.HappyHoursEndTime,C.WeekDays,C.ApplicableCustomers,C.DefinitionType,C.FixedOrVariable,C.ItemLvlDiscountType,C.ItemLvlDefVariesOnBuyingQty,C.ItemLvlBuyingRateValueCond,case C.ITEMLVLDEFVARIESONBUYINGQTY + C.MultipleRateCond when 0 then 1 ELSE 2 end,C.ItemLvlOfferBuyNGetItemsAreSame
+		from promomnheader as C, itemmaster as b,PROMOMNgetITEMGRPDTLS as A 
+		where C.salespromocode In (Select SalesPromoCd From TmpinsertionfromStage0) And C.FreeOfferItemType = 2 AND C.Status  In(1,9) AND A.ItemIncExFlag =1 AND C.SalesPromocode = A.salespromocode  and 
+		B.JwlCaratage = 2  AND A.Class1Cd = '<<ALL>>' AND A.Class2Cd = '<<ALL>>' AND A.SubClass1Cd = '<<ALL>>' AND A.SubClass2Cd = B.SubClass2Cd AND A.SizeCd = '<<ALL>>'
+		Union All
+		-- 15. C1=All,C2=All,SC1=All,SC2=All,Size
+		select b.stockno,A.salespromocode,C.SalesPromoDesc,2,A.ItemSetNo, C.ApplicableHappyHours,C.HappyHoursStartTime,C.HappyHoursEndTime,C.WeekDays,C.ApplicableCustomers,C.DefinitionType,C.FixedOrVariable,C.ItemLvlDiscountType,C.ItemLvlDefVariesOnBuyingQty,C.ItemLvlBuyingRateValueCond,case C.ITEMLVLDEFVARIESONBUYINGQTY + C.MultipleRateCond when 0 then 1 ELSE 2 end,C.ItemLvlOfferBuyNGetItemsAreSame
+		from promomnheader as C, itemmaster as b,PROMOMNgetITEMGRPDTLS as A 
+		where C.salespromocode In (Select SalesPromoCd From TmpinsertionfromStage0) And C.FreeOfferItemType = 2 AND C.Status  In(1,9) AND A.ItemIncExFlag =1 AND C.SalesPromocode = A.salespromocode  and 
+		B.JwlCaratage = 2  AND A.Class1Cd = '<<ALL>>' AND A.Class2Cd = '<<ALL>>' AND A.SubClass1Cd = '<<ALL>>' AND A.SubClass2Cd = '<<ALL>>' AND A.SizeCd = B.SizeCd
+
+		IF (@@ERROR <> 0)  
+			BEGIN  
+				SET @ErrorSave = 'Failure: Insertion to PromoMnIntermediate (Get Item Details) ' + CAST(@@ERROR AS VARCHAR(32))  
+				GOTO ERREXIT  
+			END  
+
+	END
+
+	-- Change JwlCaratage Value to 0, to represent NEW Items process is over(i.e: it becomes old items)
+	UPDATE ITEMMASTER SET JwlCaratage = 0 WHERE JwlCaratage = 2
+	IF (@@ERROR <> 0)  
+		BEGIN  
+			SET @ErrorSave = 'Failure: Change JwlCaratage Value to 0(Over) ' + CAST(@@ERROR AS VARCHAR(32))  
+			GOTO ERREXIT  
+		END  
+
+COMMIT TRANSACTION  
+Return (0)  
+
+ERREXIT:  
+	BEGIN  
+		ROLLBACK TRANSACTION
+		RAISERROR(@ErrorSave,16,1)   
+		RETURN (-1)  
+	END
+  </s9qScript>		
+</s9qsqlblk>
+
+<s9qsqlblk>
+  <s9qScriptID>	S9Q_013_0_0030	</s9qScriptID>
+  <s9qtitle></s9qtitle>
+  <s9qpgmtype>L</s9qpgmtype>
+  <s9qpgmtype>I</s9qpgmtype>
+  <s9qversion>*</s9qversion>
+  <s9qenvironment>P</s9qenvironment>
+  <s9qRunMultiple>0</s9qRunMultiple>
+  <s9qQryType>DML</s9qQryType>
+  <s9qScript>
+
+INSERT INTO Genlookup (recid,code,descr) values (299,'P901130','Shoper Update Version No:')
+-GO-
+Update Genlookup set Descr = (select 'Shoper Update Version No:9.0.1.9130' + ' ;system date:' + convert(varchar(20),getdate(),105) + ' ;shoper date:' + (select convert(varchar(20),dt,105) from sysparam where paramcode ='SHOPERSysDt') ) where code = 'P901130' and recid = 299
+-GO-
+INSERT INTO Genlookup (recid,code,descr) values (299,'P901131','Shoper Update Version No:')
+-GO-
+Update Genlookup set Descr = (select 'Shoper Update Version No:9.0.1.9131' + ' ;system date:' + convert(varchar(20),getdate(),105) + ' ;shoper date:' + (select convert(varchar(20),dt,105) from sysparam where paramcode ='SHOPERSysDt') ) where code = 'P901130' and recid = 299
+-GO-
+INSERT SYSPARAMEXTD(ID,PARAMCODE,FIXED,CATEGORY,CATDESCR,DISPORDER) SELECT 'SR3-0901-0000314','PrnAuditTrailTitleInGIR','Variable','09. Inwards','This Gives Inwards Parameters',30
+-GO-
+INSERT SYSPARAM(ID,DESCR,PARAMCODE,TXT,OPT) SELECT 'SR3-0901-0000314','Print Audit Trail Title  in Goods Inwards','PrnAuditTrailTitleInGIR','0#Purchase|Transfer In|Approval Returns|Miscellaneous Receipts','T'
+-GO-
+INSERT INTO Genlookup (recid,code,descr) values (299,'P901132','Shoper Update Version No:')
+-GO-
+Update Genlookup set Descr = (select 'Shoper Update Version No:9.0.1.9132' + ' ;system date:' + convert(varchar(20),getdate(),105) + ' ;shoper date:' + (select convert(varchar(20),dt,105) from sysparam where paramcode ='SHOPERSysDt') ) where code = 'P901132' and recid = 299
+  </s9qScript>		
+</s9qsqlblk>
+
+<s9qsqlblk>
+  <s9qScriptID>	S9Q_013_0_0031	</s9qScriptID>
+  <s9qtitle></s9qtitle>
+  <s9qpgmtype>L</s9qpgmtype>
+  <s9qpgmtype>I</s9qpgmtype>
+  <s9qversion>*</s9qversion>
+  <s9qenvironment>P</s9qenvironment>
+  <s9qRunMultiple>0</s9qRunMultiple>
+  <s9qQryType>DML</s9qQryType>
+  <s9qScript>
+INSERT INTO VersionDtls VALUES (3,getdate(),'9','1.2','A','P901132','',1,'.','')
+-GO-
+INSERT INTO VersionwiseTblsScript(VerID,SrlNo,TblScript,VAUid,VActr,VATermId,VACompCode) VALUES (3,1,'CREATE TABLE [dbo].[ExportGenLookUp]([RecId][int] NOT NULL,[Code] [varchar] (128) NOT NULL,[Descr] [varchar] (255) NULL,[Flag] [varchar] (255) NULL,[Number] [int] NULL,[VAUid] [varchar] (32) NULL,[VActr] [int] NULL,[VATermId] [varchar] (32) NULL,[VACompCode] [varchar] (16) NULL,[HOCompCode] [varchar] (32) NOT NULL,[FlagAckRecd] bit null,[FileNumber] [numeric] (9) NOT NULL CONSTRAINT [PK_ExportGenlookup] PRIMARY KEY CLUSTERED([HOCompCode],[RecId],[Code],[FileNumber])ON [PRIMARY]) ON [PRIMARY]','',1,'.','')
+-GO-
+INSERT INTO VersionwiseTblsScript(VerID,SrlNo,TblScript,VAUid,VActr,VATermId,VACompCode) VALUES (3,2,'CREATE TABLE [dbo].[BakExportGenLookUp]([RecId][int] NOT NULL,[Code] [varchar] (128) NOT NULL,[Descr] [varchar] (255) NULL,[Flag] [varchar] (255) NULL,[Number] [int] NULL,[VAUid] [varchar] (32) NULL,[VActr] [int] NULL,[VATermId] [varchar] (32) NULL,[VACompCode] [varchar] (16) NULL,[HOCompCode] [varchar] (32) NOT NULL,[FlagAckRecd] bit null,[FileNumber] [numeric] (9) NOT NULL,UpdFlag Varchar(1))','',1,'.','')
+-GO-
+INSERT INTO VersionwiseTblsScript(VerID,SrlNo,TblScript,VAUid,VActr,VATermId,VACompCode) VALUES (3,3,'CREATE TABLE [dbo].[ExportSysparam]([Id] [varchar] (16) NOT NULL,[Descr] [varchar] (100) NULL,[ParamCode] [varchar] (50) NULL,[Boolean] [bit] NULL,[Intg] [int] NULL,[Txt] [varchar] (255) NULL,[Dt] [datetime] NULL,[Sng] [real] NULL,[Cur] [money] NULL,[Opt] [varchar] (16) NULL,[VAUid] [varchar] (32) NULL,[VActr] [int] NULL,[VATermId] [varchar] (32) NULL,[VACompCode] [varchar] (16) NULL,[HOCompCode] [varchar] (32) NOT NULL,[FlagAckRecd] bit null,[FileNumber] [numeric] (9) NOT NULL CONSTRAINT [pk_ExportSysParam] PRIMARY KEY CLUSTERED([HOCompCode],[Id],[FileNumber]) ON [PRIMARY])ON [PRIMARY]','',1,'.','')
+-GO-
+INSERT INTO VersionwiseTblsScript(VerID,SrlNo,TblScript,VAUid,VActr,VATermId,VACompCode) VALUES (3,4,'CREATE TABLE [dbo].[BakExportSysparam]([Id] [varchar] (16) NOT NULL,[Descr] [varchar] (100) NULL,[ParamCode] [varchar] (50) NULL,[Boolean] [bit] NULL,[Intg] [int] NULL,[Txt] [varchar] (255) NULL,[Dt] [datetime] NULL,[Sng] [real] NULL,[Cur] [money] NULL,[Opt] [varchar] (16) NULL,[VAUid] [varchar] (32) NULL,[VActr] [int] NULL,[VATermId] [varchar] (32) NULL,[VACompCode] [varchar] (16) NULL,[HOCompCode] [varchar] (32) NOT NULL,[FlagAckRecd] bit null,[FileNumber] [numeric] (9) NOT NULL,UpdFlag Varchar(1))','',1,'.','')
+  </s9qScript>		
+</s9qsqlblk>
+
+<s9qsqlblk>
+  <s9qScriptID>	S9Q_013_0_0032	</s9qScriptID>
+  <s9qtitle></s9qtitle>
+  <s9qpgmtype>L</s9qpgmtype>
+  <s9qpgmtype>I</s9qpgmtype>
+  <s9qversion>*</s9qversion>
+  <s9qenvironment>P</s9qenvironment>
+  <s9qRunMultiple>0</s9qRunMultiple>
+  <s9qQryType>DML</s9qQryType>
+  <s9qScript>
+
+INSERT INTO VersionwiseTblsScript(VerID,SrlNo,TblScript,VAUid,VActr,VATermId,VACompCode) VALUES (3,5,'Alter table [dbo].DataSyncConfig alter Column ModeUnm VarChar(32)','',1,'.','')
+-GO-
+INSERT INTO VersionwiseTblsScript(VerID,SrlNo,TblScript,VAUid,VActr,VATermId,VACompCode) VALUES (3,6,'Alter table [dbo].DataSyncConfig alter Column ModePwd VarChar(32)','',1,'.','')
+-GO-
+INSERT INTO VersionwiseTblsScript(VerID,SrlNo,TblScript,VAUid,VActr,VATermId,VACompCode) VALUES (3,7,'Alter table [dbo].BakDataSyncConfig alter Column ModeUnm VarChar(32)','',1,'.','')
+-GO-
+INSERT INTO VersionwiseTblsScript(VerID,SrlNo,TblScript,VAUid,VActr,VATermId,VACompCode) VALUES (3,8,'Alter table [dbo].BakDataSyncConfig alter Column ModePwd VarChar(32)','',1,'.','')
+-GO-
+UPDATE DBTUNINGCONFIG SET ARG3 = '9.00' WHERE COMMAND LIKE '%TRUNCATE_ONLY%'
+  </s9qScript>		
+</s9qsqlblk>
+
+<s9qsqlblk>
+  <s9qScriptID>	S9Q_013_0_0033	</s9qScriptID>
+  <s9qtitle></s9qtitle>
+  <s9qpgmtype>L</s9qpgmtype>
+  <s9qpgmtype>I</s9qpgmtype>
+  <s9qversion>*</s9qversion>
+  <s9qenvironment>P</s9qenvironment>
+  <s9qRunMultiple>0</s9qRunMultiple>
+  <s9qQryType>DML</s9qQryType>
+  <s9qScript>
+INSERT INTO VersionwiseTblsScript(VerID,SrlNo,TblScript,VAUid,VActr,VATermId,VACompCode) VALUES (3,9,'Alter table [dbo].POSActivityLogHdr add Remarks varchar(250)','',1,'.','')
+-GO-
+INSERT INTO VersionwiseTblsScript(VerID,SrlNo,TblScript,VAUid,VActr,VATermId,VACompCode) VALUES (3,10,'Alter table [dbo].BakPOSActivityLogHdr Drop Column UpdFlag','',1,'.','')
+-GO-
+INSERT INTO VersionwiseTblsScript(VerID,SrlNo,TblScript,VAUid,VActr,VATermId,VACompCode) VALUES (3,11,'Alter table [dbo].BakPOSActivityLogHdr add Remarks varchar(250)','',1,'.','')
+-GO-
+INSERT INTO VersionwiseTblsScript(VerID,SrlNo,TblScript,VAUid,VActr,VATermId,VACompCode) VALUES (3,12,'Alter table [dbo].BakPOSActivityLogHdr add UpdFlag varchar(1)','',1,'.','')
+-GO-
+Update VersionwiseTblsScript Set Vactr = (select intg from sysparam where paramcode = 'VaSysCounter') where VerId=3
+-GO-
+Insert Into FeatureIntroDtls Values(3,3,0,'',1,'.','')
+-GO-
+INSERT INTO VersionDtls VALUES (4,getdate(),'9','1.3','A','P901143','',1,'.','')
+-GO-
+Update VersionDtls Set Vactr = (select intg from sysparam where paramcode = 'VaSysCounter') where VerId=4
+-GO-
+INSERT INTO Genlookup (recid,code,descr) values (299,'P901143','Shoper Update Version No:')
+-GO-
+Update Genlookup set Descr = (select 'Shoper Update Version No:9.0.1.9143' + ' ;system date:' + convert(varchar(20),getdate(),105) + ' ;shoper date:' + (select convert(varchar(20),dt,105) from sysparam where paramcode ='SHOPERSysDt') ) where code = 'P901143' and recid = 299
+-GO-
+INSERT INTO Genlookup (recid,code,descr) values (299,'P901179','Shoper Update Version No:')
+-GO-
+Update Genlookup set Descr = (select 'Shoper Update Version No:9.0.1.9179' + ' ;system date:' + convert(varchar(20),getdate(),105) + ' ;shoper date:' + (select convert(varchar(20),dt,105) from sysparam where paramcode ='SHOPERSysDt') ) where code = 'P901179' and recid = 299
+-GO-
+Update genlookup Set Vactr = (select intg from sysparam where paramcode = 'VaSysCounter') where Recid=299 and Code='P901179'
+-GO-
+Insert Into Genlookup (Recid,Code,Descr,Flag,[Number]) Values (299,'VER9_REL1.4','Version 9 Release 1.4','Y',0)
+-GO-
+  </s9qScript>		
+</s9qsqlblk>

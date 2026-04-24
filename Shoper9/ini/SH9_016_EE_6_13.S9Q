@@ -1,0 +1,25 @@
+<s9qsqlblk>
+<s9qScriptid>S9Q_016_6_0013</s9qScriptid>
+<s9qtitle>Printing Script Files</s9qtitle>
+<s9qpgmtype>L</s9qpgmtype>
+<s9qpgmtype>I</s9qpgmtype>
+<s9qversion>*</s9qversion>
+<s9qenvironment>P</s9qenvironment>
+<s9qRunMultiple>1</s9qRunMultiple>
+<s9qQryType>DML</s9qQryType>
+<s9qScript>
+Insert into [dbo].[PrintNodeTrnConfigMaster]
+(
+	[NodeID],[TrnTypeIdentifier],[TrnTypeIDCaption],[TrnTypeGroup],[DisplayOrder],[LinkedRefID],
+	[TrnLinkedRefExecutionOrder],[PrintPreference],[IsActive]
+)
+Values
+(
+	'<<ALLNODES>>',10005,'Reconciliation','TILL MANAGEMENT',25,'DEFAULTLR',1,1,1
+)
+-GO-
+Update [dbo].[PrintBusinessHandlerMaster] Set BHCaption='TILL Business Logic', Remarks='Shoper Default Business Handler for Till Printing' Where BusHandlerID='B0008'
+-GO-
+Update [dbo].[PrintRendererMaster] Set RenCaption='SHOPER TILL Printing Renderer', Remarks='Shoper default renderer for Till Printing' Where RenHandlerID='R0008'
+</s9qScript>
+</s9qsqlblk>

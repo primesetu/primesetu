@@ -1,0 +1,162 @@
+<s9qsqlblk>
+  <s9qScriptID>S9Q_020_0_0001</s9qScriptID>
+  <s9qtitle>Security Database Scripts</s9qtitle>
+  <s9qpgmtype>I</s9qpgmtype>
+  <s9qpgmtype>L</s9qpgmtype>
+  <s9qversion>*</s9qversion>
+  <s9qenvironment>M</s9qenvironment>
+  <s9qRunMultiple>1</s9qRunMultiple>
+  <s9qQryType>DML</s9qQryType>
+  <s9qScript>
+ALTER TABLE VaContextHelpDtls Add AppNoteDtls Varchar(8000), RemindFlag Varchar(1)
+-GO-
+UPDATE vaMenu SET ExeName = 'SR435600.exe', pgmopt = 312, MultiInstance = 1 WHERE MnuNo = 500 AND MenuOPt = 570
+-GO-
+Update VAMenu Set MenuOpt = 317 Where MnuCap = 'PT File Information'
+-GO-
+Update VAMenu Set MenuOpt = 316, MnuCap = 'Goods Outwards Size-wise' Where MnuCap = 'Goods Outwards'
+-GO-
+Insert into VAMenu (MnuNo, MenuOPt, MnuName, MnuCap, MnuPgm, ExeName, MnuWght, AllowWhenTrnClosed, Pgmopt, DbInfo, MenuIcon, Menusep, MenuBold, MultiInstance) Values (300,315,'Stock','Goods Outwards','P','SR144100.Exe',0,0,0,'0','',0,0,0)
+-GO-
+Insert into VAVertable (NodeId,ExeSrl,ExeID,ExeName,ExeSkip,ExeVer,ExeMinor,ExeSubRel) Values (0, 0, 'SR144100.EXE','','N','9','1','570')
+-GO-
+Update VaRestrictMnuConfig set ExeName = 'SR144100.EXE' Where MnuNo = 300 and MenuOpt = 315
+-GO-
+Insert into VaRestrictMnuConfig (MnuNo, MenuOpt, ExeName, ExeOption, OptCaption) values(300, 316, 'SR100700.EXE', '11111100', 'ADD#EDIT#DELETE#VIEW')
+-GO-
+Update VAMenu Set ExeName = 'SR100700.Exe' Where MnuCap = 'Goods Outwards Size-wise'
+-GO-
+Update VAMenu Set MnuCap = 'Transaction Prefix' Where MnuNo = '720' and MenuOPt = '722'
+-GO-
+Delete from vaMenu Where MnuNo = '720' and MenuOPt = '726' and MnuCap = 'Goods Inward / Outward Prefix'
+-GO-
+Update VaContextHelpDtls Set AppName = 'SR144100.Exe',AppNoteDtls = NULL  Where AppName = 'SR100700.EXE'
+-GO- 
+Update VaContextHelpDtls Set RemindFlag = NULL, AppNoteDtls = 'Goods Outwards :
+Use this option to record details of outward transactions. Goods Outwards refers to transactions such as purchase return, inter-showroom transfers, and miscellaneous issues.
+	* An entry panel (a separate line provided to enter new entries which are then appended to the display grid) is available  to enter the details of outward bound items.
+	* Similar usability is available  for all outbound transactions (Billing and Goods Outward).
+	* The size-wise outward transaction is available under a separate menu option, Goods Outwards Size-wise.
+	
+New Features: 
+	* Multiple pricing is enabled for MRP/Dealer Price based on the environment - Retail or Distributor and the values displayed are based on Effective From date.
+	* Provision to zip the PT file and send this PT file to the POS locations based on the synchronisation configuration settings.
+	* Configure Goods Outwards transaction prefix in Prefix Management under Transaction Prefix.' Where AppName = 'SR144100.Exe' and ControlName = 'frmMisceIssues'
+
+-GO-
+Insert into VaVerTable (NodeId,ExeSrl,ExeID,ExeName,ExeSkip,ExeVer,ExeMinor,ExeSubRel) values(0, 0, 'SR438500.EXE','','N','9','1','570')
+-GO-
+Insert Into VaMenu (MnuNo,MenuOPt,MnuName,MnuCap,MnuPgm,ExeName,MnuWght, AllowWhenTrnClosed,pgmopt,DbInfo,MenuIcon,Menusep,MenuBold,MultiInstance) Values(650,660,'PersonnelListing','Personnel Listing','P','SR244000.exe',0,0,1,'','','',0,0)
+-GO-
+Delete from vaMenu where MnuNo = 600 and MenuOPt=609
+-GO-
+Insert Into VaMenu (MnuNo,MenuOPt,MnuName,MnuCap,MnuPgm,ExeName,MnuWght, AllowWhenTrnClosed,pgmopt,DbInfo,MenuIcon,Menusep,MenuBold,MultiInstance) Values(600,609,'Factors','Factors','M','',0,0,1,'','','',0,0)
+-GO-
+Insert Into VaMenu (MnuNo,MenuOPt,MnuName,MnuCap,MnuPgm,ExeName,MnuWght, AllowWhenTrnClosed,pgmopt,DbInfo,MenuIcon,Menusep,MenuBold,MultiInstance) Values(609,6091,'Sales Factors','Sales Factors','P','SR405800.EXE',0,0,0,'','','',0,0)
+-GO-
+Insert Into VaMenu (MnuNo,MenuOPt,MnuName,MnuCap,MnuPgm,ExeName,MnuWght, AllowWhenTrnClosed,pgmopt,DbInfo,MenuIcon,Menusep,MenuBold,MultiInstance) Values(609,6092,'Stock Factors','Stock Factors','P','CZ100700.EXE',0,0,0,'','','',0,0)
+-GO-
+Delete from vaMenu where MnuNo = 600 and MenuOPt=612
+-GO-
+Insert Into VaMenu (MnuNo,MenuOPt,MnuName,MnuCap,MnuPgm,ExeName,MnuWght, AllowWhenTrnClosed,pgmopt,DbInfo,MenuIcon,Menusep,MenuBold,MultiInstance) Values(600,612,'Personnel','Personnel','M','',0,0,1,'','','',0,0)
+-GO-
+Insert Into VaMenu (MnuNo,MenuOPt,MnuName,MnuCap,MnuPgm,ExeName,MnuWght, AllowWhenTrnClosed,pgmopt,DbInfo,MenuIcon,Menusep,MenuBold,MultiInstance) Values(612,6121,'Personnel','Personnel Catalogue','P','SR442900.EXE',0,0,1,'','','',0,0)
+-GO-
+Insert Into VaMenu (MnuNo,MenuOPt,MnuName,MnuCap,MnuPgm,ExeName,MnuWght, AllowWhenTrnClosed,pgmopt,DbInfo,MenuIcon,Menusep,MenuBold,MultiInstance) Values(612,6124,'Personnel','Incentive Definition','P','SR443900.exe',0,0,1,'','','',0,0)
+-GO-
+Delete from vaMenu where MnuNo = 600 and MenuOPt=603
+-GO-
+Delete from vaMenu where MnuNo = 600 and MenuOPt=617
+-GO-
+Insert Into VaMenu (MnuNo,MenuOPt,MnuName,MnuCap,MnuPgm,ExeName,MnuWght, AllowWhenTrnClosed,pgmopt,DbInfo,MenuIcon,Menusep,MenuBold,MultiInstance) Values(600,603,'Duties & Taxes','Taxes and Duties','M','',0,0,1,'','','',0,0)
+-GO-
+Insert Into VaMenu (MnuNo,MenuOPt,MnuName,MnuCap,MnuPgm,ExeName,MnuWght, AllowWhenTrnClosed,pgmopt,DbInfo,MenuIcon,Menusep,MenuBold,MultiInstance) Values(603,6031,'Sales Tax','Sales Tax','P','SR708100.EXE',0,0,1,'','','',0,0)
+-GO-
+Insert Into VaMenu (MnuNo,MenuOPt,MnuName,MnuCap,MnuPgm,ExeName,MnuWght, AllowWhenTrnClosed,pgmopt,DbInfo,MenuIcon,Menusep,MenuBold,MultiInstance) Values(603,6032,'Purchase Tax','Purchase Tax','P','SR708100.EXE',0,0,3,'','','',0,0)
+-GO-
+Insert Into VaMenu (MnuNo,MenuOPt,MnuName,MnuCap,MnuPgm,ExeName,MnuWght, AllowWhenTrnClosed,pgmopt,DbInfo,MenuIcon,Menusep,MenuBold,MultiInstance) Values(603,6033,'Excise Duty','Excise Duty','P','SR439900.EXE',0,0,1,'','','',0,0)
+-GO-
+Delete from vaMenu where MnuNo = 600 and MenuOPt=613
+-GO-
+Delete from vaMenu where MnuNo = 600 and MenuOPt=614
+-GO-
+Delete from vaMenu where MnuNo = 600 and MenuOPt=615
+-GO-
+Delete from vaMenu where MnuNo = 600 and MenuOPt=616
+-GO-
+Insert Into VaMenu (MnuNo,MenuOPt,MnuName,MnuCap,MnuPgm,ExeName,MnuWght, AllowWhenTrnClosed,pgmopt,DbInfo,MenuIcon,Menusep,MenuBold,MultiInstance) Values(600,613,'Customer','Customer','M','',0,0,1,'','','',0,0)
+-GO-
+Insert Into VaMenu (MnuNo,MenuOPt,MnuName,MnuCap,MnuPgm,ExeName,MnuWght, AllowWhenTrnClosed,pgmopt,DbInfo,MenuIcon,Menusep,MenuBold,MultiInstance) Values(613,6131,'Customer Price Group','Customer Price Group','P','SR404700.EXE',0,0,1,'','','',0,0)
+-GO-
+Insert Into VaMenu (MnuNo,MenuOPt,MnuName,MnuCap,MnuPgm,ExeName,MnuWght, AllowWhenTrnClosed,pgmopt,DbInfo,MenuIcon,Menusep,MenuBold,MultiInstance) Values(613,6132,'Customer','Customer Catalogue','P','SR442300.EXE',0,0,0,'','','',0,0)
+-GO-
+Insert Into VaMenu (MnuNo,MenuOPt,MnuName,MnuCap,MnuPgm,ExeName,MnuWght, AllowWhenTrnClosed,pgmopt,DbInfo,MenuIcon,Menusep,MenuBold,MultiInstance) Values(613,6133,'Customer Mailer','Customer Mailer','P','SR430900.EXE',0,0,0,'','','',0,0)
+-GO-
+Insert Into VaMenu (MnuNo,MenuOPt,MnuName,MnuCap,MnuPgm,ExeName,MnuWght, AllowWhenTrnClosed,pgmopt,DbInfo,MenuIcon,Menusep,MenuBold,MultiInstance) Values(613,6134,'Print Address Labels','Print Address Labels','P','SR323600.EXE',0,0,0,'','','',0,0)
+-GO-
+Insert Into VaMenu (MnuNo,MenuOPt,MnuName,MnuCap,MnuPgm,ExeName,MnuWght, AllowWhenTrnClosed,pgmopt,DbInfo,MenuIcon,Menusep,MenuBold,MultiInstance) Values(600,614,'Multiple Price','Define Multiple Prices','M','',0,0,1,'','','',0,0)
+-GO-
+Insert Into VaMenu (MnuNo,MenuOPt,MnuName,MnuCap,MnuPgm,ExeName,MnuWght, AllowWhenTrnClosed,pgmopt,DbInfo,MenuIcon,Menusep,MenuBold,MultiInstance) Values(614,6140,'<<Class1>>-<<Class2>> Combo','Product + Brand Combo Settings','P','SH400900.EXE',0,0,1,'','','',0,0)
+-GO-
+Insert Into VaMenu (MnuNo,MenuOPt,MnuName,MnuCap,MnuPgm,ExeName,MnuWght, AllowWhenTrnClosed,pgmopt,DbInfo,MenuIcon,Menusep,MenuBold,MultiInstance) Values(614,6141,'Multiple Price','Multiple Price','P','SR143500.EXE',0,0,1,'','','',0,0)
+-GO-
+Insert Into VaMenu (MnuNo,MenuOPt,MnuName,MnuCap,MnuPgm,ExeName,MnuWght, AllowWhenTrnClosed,pgmopt,DbInfo,MenuIcon,Menusep,MenuBold,MultiInstance) Values(600,615,'Period','Period','M','',0,0,1,'','','',0,0)
+-GO-
+Insert Into VaMenu (MnuNo,MenuOPt,MnuName,MnuCap,MnuPgm,ExeName,MnuWght,AllowWhenTrnClosed,pgmopt,DbInfo,MenuIcon,Menusep,MenuBold,MultiInstance) Values(615,6122,'Period','Week Catalogue','P','SH400600.exe',0,0,0,'','','',0,0)
+-GO-
+Insert Into VaMenu (MnuNo,MenuOPt,MnuName,MnuCap,MnuPgm,ExeName,MnuWght,AllowWhenTrnClosed,pgmopt,DbInfo,MenuIcon,Menusep,MenuBold,MultiInstance) Values(615,6123,'Period','Season Catalogue','P','SE200300.exe',0,0,0,'','','',0,0)
+-GO-
+Insert into VaVerTable (NodeId,ExeSrl,ExeID,ExeName,ExeSkip,ExeVer,ExeMinor,ExeSubRel) values(0, 0, 'SR442900.EXE','','N','9','1','570')
+-GO-
+Insert into VaVerTable (NodeId,ExeSrl,ExeID,ExeName,ExeSkip,ExeVer,ExeMinor,ExeSubRel) values(0, 0, 'SH400900.EXE','','N','9','1','570')
+-GO-
+Insert into VaVerTable (NodeId,ExeSrl,ExeID,ExeName,ExeSkip,ExeVer,ExeMinor,ExeSubRel) values(0, 0, 'SR443900.EXE','','N','9','1','570')
+-GO-
+Insert into VaVerTable (NodeId,ExeSrl,ExeID,ExeName,ExeSkip,ExeVer,ExeMinor,ExeSubRel) values(0, 0, 'SR244000.EXE','','N','9','1','570')
+-GO-
+Insert into VaVerTable (NodeId,ExeSrl,ExeID,ExeName,ExeSkip,ExeVer,ExeMinor,ExeSubRel) values(0, 0, 'CZ100700.EXE','','N','9','1','570')
+-GO-
+Insert Into VaMenu (MnuNo,MenuOPt,MnuName,MnuCap,MnuPgm,ExeName,MnuWght,AllowWhenTrnClosed,pgmopt,DbInfo,MenuIcon,Menusep,MenuBold,MultiInstance)
+Values(650,661,'Price Listing','Price Listing-New','P','SR244300.exe',0,0,1,'','','',0,0)
+-GO-
+Insert into VaVerTable (NodeId,ExeSrl,ExeID,ExeName,ExeSkip,ExeVer,ExeMinor,ExeSubRel) values(0, 0, 'SR244300.exe','','N','9','1','570')
+-GO-
+UPDATE VAMENU SET EXENAME = 'SR442900.EXE' WHERE EXENAME = 'SR405700.EXE'
+-GO-
+UPDATE VAMENU SET PGMOPT = 1 WHERE EXENAME = 'SR442900.EXE'
+-GO-
+update vamenu set pgmopt=1 where exename='SE200300.exe'
+-GO-
+update vamenu set pgmopt=1 where exename='SH400600.exe'
+-GO-
+Update Vamenu set MnuCap='Synchronisation' where  MnuCap='POS-HO Synchronisation'
+-GO-
+update VaNodeExtd set NodeAC4 ='Yes'
+-GO-
+update VaSecurityConfig set Boolean =1 where ParamCode ='NodeAc4Present'
+-GO-
+update VaSecurityConfig set Txt='Opening Balance' where ParamCode='NodeAc4Caption'
+-GO-
+insert into VaGenlookup (Recid,Code,Descr,Flag,Number) values(104,1,'Yes',1,1)
+-GO-
+insert into VaGenlookup (Recid,Code,Descr,Flag,Number) values(104,2,'No',1,1)
+-GO-
+Insert Into Vamenu Values (720,726,'General','Entry Panel Configuration','P','SR443300.exe',0,0,0,0,'',0,0,0)
+-GO-
+Insert Into Vavertable Values (0,0,'SR443300.Exe','',NULL,9,1,570,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,'N',NULL)
+-GO-
+Insert into VaVerTable (NodeId,ExeSrl,ExeID,ExeName,ExeSkip,ExeVer,ExeMinor,ExeSubRel) values(0, 0, 'SR438500.EXE','','N','9','1','570')
+-GO-
+Update VaVerTable set EXESubRel = '0.0' where EXEID ='SHOPERTBLVIEW.EXE'
+-GO-
+Update VaVerTable set EXESubRel = '570' where EXEID in('CZ100700.Exe','SE101100.Exe','SE200300.Exe','SE201200.Exe','SE301000.Exe','SE301100.Exe','SE301200.Exe','SE301300.Exe','SE301400.Exe','SE301500.Exe','SE301600.Exe','SH400600.Exe','SH400900.Exe','SR100200.Exe','SR100300.Exe','SR100700.Exe','SR101000.Exe','SR101900.Exe','SR122000.Exe','SR123000.Exe','SR127000.Exe','SR129500.Exe','SR130000.Exe','SR138900.Exe','SR143500.Exe','SR144100.Exe','SR202000.Exe','SR202200.Exe','SR202300.Exe','SR202400.Exe','SR202800.Exe','SR203100.Exe','SR203400.Exe','SR203800.Exe','SR208400.Exe','SR208500.Exe','SR208600.Exe','SR209500.Exe','SR209600.Exe','SR210200.Exe','SR210300.Exe','SR212700.Exe','SR213600.Exe','SR213800.Exe','SR221600.Exe','SR222800.Exe','SR230400.Exe','SR233600.Exe','SR233700.Exe','SR234400.Exe','SR234900.Exe','SR235400.Exe','SR236300.Exe','SR238400.Exe','SR239600.Exe','SR242500.Exe','SR242900.Exe','SR244000.Exe','SR244300.Exe','SR309900.Exe','SR311500.Exe','SR320500.Exe','SR322300.Exe','SR323400.Exe','SR327100.Exe','SR343800.Exe','SR404700.Exe','SR405600.Exe','SR430600.Exe','SR430800.Exe','SR431000.Exe','SR431500.Exe','SR431700.Exe','SR431800.Exe','SR432000.Exe','SR435600.Exe','SR436900.Exe','SR438500.Exe','SR438600.Exe','SR440600.Exe','SR440700.Exe','SR440900.Exe','SR442300.Exe','SR442900.Exe','SR443300.Exe','SR443900.Exe','SR580500.Exe','SR708100.Exe','SR721500.Exe','SR730000.Exe')
+
+-GO-
+insert into vaMenu (MnuNo,MenuOPt,MnuName,MnuCap,MnuPgm,ExeName,MnuWght,AllowWhenTrnClosed,pgmopt,DbInfo,Menusep,MenuBold,MultiInstance )
+values(470,492,'MIS','Incentive Analysis','P','SR244700.EXE',0,1,1,0,0,0,0)
+-GO-
+insert into VaVerTable (NODEID,EXESRL,EXEID,EXEVer,EXEMinor,EXESubRel,EXESKIP)
+values(0,0,'SR244700.exe',9,1,570,'N')
+-GO-
+</s9qScript>		
+</s9qsqlblk>

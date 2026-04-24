@@ -1,0 +1,98 @@
+<s9qsqlblk>
+  <s9qScriptID>S9Q_019_2_0001</s9qScriptID>
+  <s9qtitle>Version Details</s9qtitle>
+  <s9qpgmtype>I</s9qpgmtype>
+  <s9qpgmtype>L</s9qpgmtype>
+  <s9qversion>*</s9qversion>
+  <s9qenvironment>P</s9qenvironment>
+  <s9qRunMultiple>1</s9qRunMultiple>
+  <s9qQryType>DML</s9qQryType>
+  <s9qScript>
+
+Update Sysparam Set Intg = 3,Txt = '',Opt = 'I' where Id = 'SR7-0901-0000402'
+-GO-
+Update SysparamExtd Set Fixed = 'Variable' where Id = 'SR7-0901-0000402'
+-GO-
+Insert Into SysParam (Id,Descr,ParamCode,Txt,Opt) Values ('SR3-0901-0000418','Display the list of Purchase Documents on selecting stock number','DispPurchDocSelectingStockNo','Y','T')
+-GO-
+Insert Into SysparamExtd (Id,ParamCode,Fixed,Changed,Category,CatDescr,DispOrder) Values ('SR3-0901-0000418','DispPurchDocSelectingStockNo','Variable',0,'10. Outwards','This Gives Outwards Parameters',27)
+-GO-
+Insert Into SysParam (Id,Descr,ParamCode,Boolean,Opt) Values ('SR3-0901-0000420','Allow individual stock items in GOR along with recalled packing/pallet slip','AllowIndStockItemGORRecalledPackingSlip',0,'B')
+-GO-
+Insert Into SysparamExtd (Id,ParamCode,Fixed,Changed,Category,CatDescr,DispOrder) Values ('SR3-0901-0000420','AllowIndStockItemGORRecalledPackingSlip','Variable',0,'10. Outwards','This Gives Outwards Parameters',28)
+-GO-
+Insert Into SysParam (Id,Descr,ParamCode,Txt,Opt) Values ('SR3-0901-0000422','Capture transporter details','CaptureTransporterDtls','N#N','T')
+-GO-
+Insert Into SysparamExtd (Id,ParamCode,Fixed,Changed,Category,CatDescr,DispOrder) Values ('SR3-0901-0000422','CaptureTransporterDtls','Variable',0,'09. Inwards','This Gives Inwards Parameters',35)
+-GO-
+Insert Into SysParam (Id,Descr,ParamCode,Txt,Opt) Values ('SR7-0901-0000425','Transporter Details to be printed in Inward','GIRTransporterDetailsPrinting','1111111111111#0000000000000#0000000000000','T')
+-GO-
+Insert Into SysparamExtd (Id,ParamCode,Fixed,Changed,Category,CatDescr,DispOrder) Values ('SR7-0901-0000425','GIRTransporterDetailsPrinting','Variable',0,'09. Inwards','This Gives Inwards Parameters',38)
+-GO-
+Update SysParam Set Txt = '1101' Where ParamCode = 'ValidTrnInPhysicalVerification' and Txt = '1111'
+-GO-
+Insert into GENLOOKUP (Recid,Code,Descr,Flag,Number,Vauid,Vactr,VatermId,VaCompCode) values (14400,'SR127000+CmdTransDtl_Click+1','SR541000.ClsTransporterdtls','1',0,'Super',0,'.','')
+-GO-
+Insert into GENLOOKUP (Recid,Code,Descr,Flag,Number,Vauid,Vactr,VatermId,VaCompCode) values (14400,'SR129500+CmdTransDtl_Click+1','SR541000.ClsTransporterdtls','1',0,'Super',0,'.','')
+-GO-
+Update GENLOOKUP Set Vactr = (select intg from sysparam where paramcode = 'VaSysCounter') where Recid in (14400)
+-GO-
+Update SysParam Set Vactr = (select intg from sysparam where paramcode = 'VaSysCounter') Where Id in ('SR7-0901-0000402','SR3-0901-0000418','SR3-0901-0000420','SR3-0901-0000422','SR7-0901-0000425')
+-GO-
+Update SysParamExtd Set Vactr = (select intg from sysparam where paramcode = 'VaSysCounter') Where Id in ('SR7-0901-0000402','SR3-0901-0000418','SR3-0901-0000420','SR3-0901-0000422','SR7-0901-0000425')
+-GO-
+ALTER TABLE [dbo].[PTInvoiceHdr] ALTER COLUMN BillNo Varchar(32) Not Null
+-GO-
+ALTER TABLE [dbo].[PTInvoiceHdr] ALTER COLUMN DCNo Varchar(32)
+-GO-
+ALTER TABLE [dbo].[PTInvoiceHdr] ALTER COLUMN GRNNo Varchar(32)
+-GO-
+ALTER TABLE [dbo].[PTInvoiceDtl] ALTER COLUMN BillNo Varchar(32) Not Null
+-GO-
+ALTER TABLE [dbo].[InPackSlipHdr] ALTER COLUMN PartyStkDocNo Varchar(32) 
+-GO-
+ALTER TABLE [dbo].[BAKPTInvoiceHdr] ALTER COLUMN BillNo Varchar(32)
+-GO-
+ALTER TABLE [dbo].[BAKPTInvoiceHdr] ALTER COLUMN DCNo Varchar(32)
+-GO-
+ALTER TABLE [dbo].[BAKPTInvoiceHdr] ALTER COLUMN GRNNo Varchar(32)
+-GO-
+ALTER TABLE [dbo].[BAKPTInvoiceDtl] ALTER COLUMN BillNo Varchar(32)
+-GO-
+ALTER TABLE [dbo].[BAKInPackSlipHdr] ALTER COLUMN PartyStkDocNo Varchar(32) 
+-GO-
+Insert Into VersionwiseTblsScript (VerID,SrlNo,TblScript) Values (14,10,'ALTER TABLE [dbo].[PTInvoiceHdr] ALTER COLUMN BillNo Varchar(32) Not Null')
+-GO-
+Insert Into VersionwiseTblsScript (VerID,SrlNo,TblScript) Values (14,11,'ALTER TABLE [dbo].[PTInvoiceHdr] ALTER COLUMN DCNo Varchar(32)')
+-GO-
+Insert Into VersionwiseTblsScript (VerID,SrlNo,TblScript) Values (14,12,'ALTER TABLE [dbo].[PTInvoiceHdr] ALTER COLUMN GRNNo Varchar(32)')
+-GO-
+Insert Into VersionwiseTblsScript (VerID,SrlNo,TblScript) Values (14,13,'ALTER TABLE [dbo].[PTInvoiceDtl] ALTER COLUMN BillNo Varchar(32) Not Null')
+-GO-
+Insert Into VersionwiseTblsScript (VerID,SrlNo,TblScript) Values (14,14,'ALTER TABLE [dbo].[InPackSlipHdr] ALTER COLUMN PartyStkDocNo Varchar(32)')
+-GO-
+Insert Into VersionwiseTblsScript (VerID,SrlNo,TblScript) Values (14,15,'ALTER TABLE [dbo].[BAKPTInvoiceHdr] ALTER COLUMN BillNo Varchar(32)')
+-GO-
+Insert Into VersionwiseTblsScript (VerID,SrlNo,TblScript) Values (14,16,'ALTER TABLE [dbo].[BAKPTInvoiceHdr] ALTER COLUMN DCNo Varchar(32)')
+-GO-
+Insert Into VersionwiseTblsScript (VerID,SrlNo,TblScript) Values (14,17,'ALTER TABLE [dbo].[BAKPTInvoiceHdr] ALTER COLUMN GRNNo Varchar(32)')
+-GO-
+Insert Into VersionwiseTblsScript (VerID,SrlNo,TblScript) Values (14,18,'ALTER TABLE [dbo].[BAKPTInvoiceDtl] ALTER COLUMN BillNo Varchar(32)')
+-GO-
+Insert Into VersionwiseTblsScript (VerID,SrlNo,TblScript) Values (14,19,'ALTER TABLE [dbo].[BAKInPackSlipHdr] ALTER COLUMN PartyStkDocNo Varchar(32)')
+-GO-
+Update VersionwiseTblsScript Set Vactr = (select intg from sysparam where paramcode = 'VaSysCounter') where VerId=14
+-GO-
+Insert into PrintRendererMaster (RenHandlerID,RenLibFilePath,RenClassName,RenCaption,RenType,IsActive,Remarks) values('CusR0002','<<APPPATH>>\SN501100.dll','clsPackPrint.clsPackPrint','Packing Barcode Print','C',1,'Packing Barcode Rendrer')
+-GO-
+Insert into PrintConfigSetting select 'CusS0002', ConfigParamID,ConfigParamDesc,ConfigParamValue,ConfigParamDataType,ConfigParamType,IsActive,Remarks,VAUId,VACtr,VATermId,VACompCode,ShoperDBVer from PrintConfigSetting where ConfigSettingID='DEFAULTCS'
+-GO-
+Insert into PrintConfigSettingMaster(ConfigSettingID,ConfigSettingName,ConfigSettingType,IsActive,Remarks) values('CusS0002','PackingBarcodeRndr','C',1,'Parameter Configuration of Packing Barcode')
+-GO-
+Insert into PrintLinkedRefInterface(LinkedRefID,LinkedRefCaption,BusHandlerId,RenHandlerID,ConfigSettingID,LinkedRefExecutionOrder,LRType,IsActive) values('CusL0002','PackingBarcodeRndr','DEFAULTBH','CusR0002','CusS0002',1,'C',1)
+-GO-
+Update StkTrnDtls Set DiscRate = 0 where DiscRate is Null
+-GO-
+
+</s9qScript>
+</s9qsqlblk>

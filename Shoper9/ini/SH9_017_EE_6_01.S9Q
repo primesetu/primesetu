@@ -1,0 +1,86 @@
+<s9qsqlblk>
+  <s9qScriptID>S9Q_017_6_0001</s9qScriptID>
+  <s9qtitle>Printing</s9qtitle>
+  <s9qpgmtype>I</s9qpgmtype>
+  <s9qpgmtype>L</s9qpgmtype>
+  <s9qversion>*</s9qversion>
+  <s9qenvironment>P</s9qenvironment>
+  <s9qRunMultiple>1</s9qRunMultiple>
+  <s9qQryType>DML</s9qQryType>
+  <s9qScript>
+Insert into Sysparam (ID,descr,paramcode,txt,opt)values('SR1-0901-0000367','Print DC Item Classification Wise','DCPrnItemClassificationWise',0,'I')
+-GO-
+Insert into SysparamExtd (ID,paramcode,fixed,changed,Category,CatDescr,DispOrder) values('SR1-0901-0000367','DCPrnItemClassificationWise','Variable','0','14. Bill - Printing','This Gives Bill - Printing Parameters','51')
+-GO-
+Insert into SysParam (Id,Descr,ParamCode,Txt,Opt) Values('SR6-0901-0000388','DC Printing Columns (Item Classification Wise)','DCPrnColForItemClassificationWise','Y#Y#Y#Y#Y#Y#Y#Y#Y#Y#Y#Y','T')
+-GO-
+Insert into SysParamExtd (Id,ParamCode,Fixed,Category,CatDescr,DispOrder) Values ('SR6-0901-0000388','DCPrnColForItemClassificationWise','Variable','14. Bill - Printing','This Gives Bill - Printing Parameters','52')
+-GO-
+</s9qScript>		
+</s9qsqlblk>
+
+<s9qsqlblk>
+  <s9qScriptID>S9Q_017_6_0002</s9qScriptID>
+  <s9qtitle>Printing</s9qtitle>
+  <s9qpgmtype>I</s9qpgmtype>
+  <s9qpgmtype>L</s9qpgmtype>
+  <s9qversion>*</s9qversion>
+  <s9qenvironment>P</s9qenvironment>
+  <s9qRunMultiple>1</s9qRunMultiple>
+  <s9qQryType>DML</s9qQryType>
+  <s9qScript>
+Insert into sysparam (ID,Descr,ParamCode,[Boolean],Opt) 
+Values('SR4-0901-0000392','Print Slips Receipt & Advance Receipt in same page','PrintSlipsRcptAndAdvRcptInSamePg',0,'B')
+-GO-
+INSERT INTO SysParamExtd(Id,ParamCode,Fixed,Changed,Category,CatDescr,DispOrder)
+Values('SR4-0901-0000392','PrintSlipsRcptAndAdvRcptInSamePg','Variable','0','12. Slips','Print slips receipt & adv receipt in same page','17')
+-GO-
+Insert into SysParam (ID,Descr,ParamCode,Intg,Opt) 
+Values('SR4-0901-0000393','Barcode Printing Type','BarcodePrintingType',1,'I')
+-GO-
+INSERT INTO SysParamExtd(Id,ParamCode,Fixed,Changed,Category,CatDescr,DispOrder)
+Values('SR4-0901-0000393','BarcodePrintingType','Variable','0','17. House Keeping','Select Printing Type','51')
+-GO-
+Insert into GenLookUp (Recid,Code,Descr) Values(6300,'50','SR535300.ClsPrintingInterface')
+-GO-
+Insert into PrintBusinessHandlerMaster (BusHandlerId,BHLibFilePath,BHClassName,BHCaption,BHType,Remarks,IsActive)
+Values('B0009','<<APPPATH>>\SN500200.dll','PrintingEngine.BarcodeBusHandler','Barcode Business Logic','D','Shoper Default Business Handler for Barcode Printing',1)
+-GO-
+Insert into PrintLinkedRefInterface(LinkedRefID,LinkedRefCaption,BusHandlerId,RenHandlerID,ConfigSettingID,LinkedRefExecutionOrder,LRType,IsActive)
+Values('L0009','Default Shoper Barcode Printing','B0009','R0009','DEFAULTCS',1,'D',1)
+-GO-
+Insert into PrintNodeTrnConfigMaster (NodeID,TrnTypeIdentifier,TrnTypeIDCaption,TrnTypeGroup,DisplayOrder,LinkedRefID,TrnLinkedRefExecutionOrder,PrintPreference,IsActive)
+Values('<<ALLNODES>>',6300,'Barcode Printing','BARCODE',26,'DEFAULTLR',1,1,1)
+-GO-
+Insert into PrintRendererMaster(RenHandlerID,RenLibFilePath,RenClassName,RenCaption,RenType,IsActive,Remarks) 
+Values('R0009','<<APPPATH>>\SN500200.dll','PrintingEngine.BarcodePrintingRenderer','Shoper Barcode Printing Renderer','D',1,'Shoper default renderer for Barcode Printing')
+-GO-
+</s9qScript>		
+</s9qsqlblk>
+
+<s9qsqlblk>
+  <s9qScriptID>S9Q_017_6_0003</s9qScriptID>
+  <s9qtitle>Printing</s9qtitle>
+  <s9qpgmtype>I</s9qpgmtype>
+  <s9qpgmtype>L</s9qpgmtype>
+  <s9qversion>*</s9qversion>
+  <s9qenvironment>P</s9qenvironment>
+  <s9qRunMultiple>1</s9qRunMultiple>
+  <s9qQryType>DML</s9qQryType>
+  <s9qScript>
+Insert into GenLookUp (Recid,Code,Descr) Values(6400,'50','SR535300.ClsPrintingInterface')
+-GO-
+Insert into Sysparam (ID,Descr,ParamCode,Intg,opt) Values('SR1-0901-0000375','Excise Printing Type','ExcisePrintingType',50,'I')
+-GO-
+INSERT INTO SysParamExtd(Id,ParamCode,Fixed,Changed,Category,CatDescr,DispOrder) Values('SR1-0901-0000375','ExcisePrintingType','Variable','0','23. Excise','Select Printing Type','1')
+-GO-
+Insert into PrintLinkedRefInterface(LinkedRefID,LinkedRefCaption,BusHandlerId,RenHandlerID,ConfigSettingID,LinkedRefExecutionOrder,LRType,IsActive) Values('TALLYDEFAULTLR','Tally Default Renderer','N/A','TALLYDEFAULTRH','N/A',1,'D',1)
+-GO-
+Insert into PrintLinkedRefLookUp (TrnTypeIdentifier,LinkedRefID) Values(6400,'TALLYDEFAULTLR')
+-GO-
+Insert into PrintNodeTrnConfigMaster (NodeID,TrnTypeIdentifier,TrnTypeIDCaption,TrnTypeGroup,DisplayOrder,LinkedRefID,TrnLinkedRefExecutionOrder,PrintPreference,IsActive) Values('<<ALLNODES>>',6400,'Excise','EXCISE',27,'TALLYDEFAULTLR',1,1,1)
+-GO-
+</s9qScript>		
+</s9qsqlblk>
+
+

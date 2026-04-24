@@ -1,0 +1,254 @@
+<s9qsqlblk>
+  <s9qScriptid>S9Q_020_6_0010</s9qScriptid> 
+  <s9qtitle>App DB scripts</s9qtitle> 
+  <s9qpgmtype>I</s9qpgmtype>  
+  <s9qpgmtype>L</s9qpgmtype>  
+  <s9qversion>*</s9qversion> 
+  <s9qenvironment>P</s9qenvironment> 
+  <s9qRunMultiple>1</s9qRunMultiple> 
+  <s9qQryType>DML</s9qQryType> 
+  <s9qScript>
+CREATE TABLE [dbo].[PrintTemplateConfigDtls] (
+	[LinkRefID] [Varchar] (256)   NOT NULL ,	
+	[TerminalID] [Varchar] (16) NOT NULL ,
+	[TrnType] [Int] NOT NULL ,
+	[TemplateName] [Varchar] (256) NOT NULL ,
+	[TemplateType] [Varchar] (16) NULL ,
+	[ShowPrintPreview] [Int] NOT NULL ,
+	[AdditionalDetails1] [Varchar] (250),
+	[AdditionalDetails2] [Varchar] (250),
+	[AdditionalDetails3] [Varchar] (250),
+	[AdditionalDetails4] [Varchar] (250),
+	[AdditionalDetails5] [Varchar] (250),
+	[ConditionalTemplateID] [Varchar] (16) NULL ,		
+	[VAUid] [varchar] (32)   NULL ,
+	[VActr] [int] NULL ,
+	[VATermId] [varchar] (32)   NULL ,
+	[VACompCode] [varchar] (16)   NULL ,
+	[SHOPERDBVER] [Int] NULL 
+) ON [PRIMARY]
+-GO-
+ALTER TABLE [dbo].[PrintTemplateConfigDtls] WITH NOCHECK ADD 
+	CONSTRAINT [PK_PrintTemplateConfigDtls] PRIMARY KEY  CLUSTERED 
+	(
+		[LinkRefID],
+		[TerminalID],
+		[TrnType],
+		[TemplateName]
+	)  ON [PRIMARY] 
+
+</s9qScript>
+</s9qsqlblk>
+<s9qsqlblk>
+  <s9qScriptid>S9Q_020_6_0011</s9qScriptid> 
+  <s9qtitle>App DB scripts</s9qtitle> 
+  <s9qpgmtype>I</s9qpgmtype>  
+  <s9qpgmtype>L</s9qpgmtype>  
+  <s9qversion>*</s9qversion> 
+  <s9qenvironment>P</s9qenvironment> 
+  <s9qRunMultiple>1</s9qRunMultiple> 
+  <s9qQryType>DDL</s9qQryType> 
+  <s9qScript>
+Insert into PrintLinkedRefLookUp(TrnTypeIdentifier,LinkedRefID) Values('2100','TEMPLATEBASEDPRNLR')
+-GO-
+Insert into PrintLinkedRefLookUp(TrnTypeIdentifier,LinkedRefID) Values('1300','TEMPLATEBASEDPRNLR')
+-GO-
+Insert into PrintLinkedRefLookUp(TrnTypeIdentifier,LinkedRefID) Values('1600','TEMPLATEBASEDPRNLR')
+-GO-
+Insert into PrintLinkedRefLookUp(TrnTypeIdentifier,LinkedRefID) Values('9100','TEMPLATEBASEDPRNLR')
+-GO-
+Insert into PrintLinkedRefLookUp(TrnTypeIdentifier,LinkedRefID) Values('9200','TEMPLATEBASEDPRNLR')
+-GO-
+Insert into PrintLinkedRefLookUp(TrnTypeIdentifier,LinkedRefID) Values('9300','TEMPLATEBASEDPRNLR')
+-GO-
+Insert into PrintLinkedRefLookUp(TrnTypeIdentifier,LinkedRefID) Values('9500','TEMPLATEBASEDPRNLR')
+-GO-
+Insert into PrintLinkedRefLookUp(TrnTypeIdentifier,LinkedRefID) Values('9600','TEMPLATEBASEDPRNLR')
+-GO-
+Insert into PrintLinkedRefLookUp(TrnTypeIdentifier,LinkedRefID) Values('9700','TEMPLATEBASEDPRNLR')
+-GO-
+Insert into PrintLinkedRefLookUp(TrnTypeIdentifier,LinkedRefID) Values('9800','TEMPLATEBASEDPRNLR')
+-GO-
+Insert into PrintLinkedRefLookUp(TrnTypeIdentifier,LinkedRefID) Values('9900','TEMPLATEBASEDPRNLR')
+-GO-
+Insert into PrintLinkedRefLookUp(TrnTypeIdentifier,LinkedRefID) Values('8100','TEMPLATEBASEDPRNLR')
+-GO-
+Insert into PrintLinkedRefLookUp(TrnTypeIdentifier,LinkedRefID) Values('8200','TEMPLATEBASEDPRNLR')
+-GO-
+Insert into PrintLinkedRefLookUp(TrnTypeIdentifier,LinkedRefID) Values('1100','TEMPLATEBASEDPRNLR')
+-GO-
+Insert into PrintLinkedRefLookUp(TrnTypeIdentifier,LinkedRefID) Values('1200','TEMPLATEBASEDPRNLR')
+-GO-
+Insert into PrintLinkedRefLookUp(TrnTypeIdentifier,LinkedRefID) Values('1500','TEMPLATEBASEDPRNLR')
+-GO-
+Insert into PrintLinkedRefLookUp(TrnTypeIdentifier,LinkedRefID) Values('2200','TEMPLATEBASEDPRNLR')
+-GO-
+Insert into PrintLinkedRefLookUp(TrnTypeIdentifier,LinkedRefID) Values('2300','TEMPLATEBASEDPRNLR')
+-GO-
+Insert into PrintLinkedRefLookUp(TrnTypeIdentifier,LinkedRefID) Values('2500','TEMPLATEBASEDPRNLR')
+-GO-
+Insert into PrintRendererMaster(RenHandlerID,RenLibFilePath,RenClassName,RenCaption,RenType,IsActive,Remarks) Values('R0011','<<APPPATH>>\SN500200.dll','PrintingEngine.DesignerPrintRenderer','Shoper Template based printing Renderer','D',1,'Shoper default renderer for template based printing')
+-GO-
+Insert into PrintBusinessHandlerMaster (BusHandlerId,BHLibFilePath,BHClassName,BHCaption,BHType,Remarks,IsActive) Values('B0011','<<APPPATH>>\SN500200.dll','PrintingEngine.ClsSalesBusHandler','Shoper Sales Group Business Logic','D','Shoper template based BH',1)
+-GO-
+Insert into PrintLinkedRefInterface(LinkedRefID,LinkedRefCaption,BusHandlerId,RenHandlerID,ConfigSettingID,LinkedRefExecutionOrder,LRType,IsActive) Values('TEMPLATEBASEDPRNLR','Template based printing LR','B0011','R0011','TEMPLATEPRNCS',1,'D',1)
+-GO-
+Insert into PrintConfigSettingMaster(ConfigSettingID,ConfigSettingName,ConfigSettingType,IsActive,Remarks) Values('TEMPLATEPRNCS','Default Template Based Print Configuration','D',1,'Default template based printing configuration')
+-GO-
+Insert into PrintConfigSetting([ConfigSettingID],[ConfigParamID],[ConfigParamDesc],[ConfigParamValue],[ConfigParamDataType],[ConfigParamType],[IsActive],[Remarks]) Select 'TEMPLATEPRNCS', [ConfigParamID],[ConfigParamDesc],[ConfigParamValue],[ConfigParamDataType],'C',1,[Remarks] from [dbo].[PrintConfigSetting] where ConfigSettingID='DEFAULTCS'
+-GO-
+Update PrintConfigSetting set ConfigParamDesc='Type of printing Option/Methodology to be used', configparamvalue='2' where ConfigParamID='PrintingOption' and ConfigSettingID='TEMPLATEPRNCS'
+-GO-
+  </s9qScript>
+</s9qsqlblk>
+
+<s9qsqlblk>
+  <s9qScriptid>S9Q_020_6_0012</s9qScriptid> 
+  <s9qtitle>App DB scripts</s9qtitle> 
+  <s9qpgmtype>I</s9qpgmtype>  
+  <s9qpgmtype>L</s9qpgmtype>  
+  <s9qversion>*</s9qversion> 
+  <s9qenvironment>P</s9qenvironment> 
+  <s9qRunMultiple>1</s9qRunMultiple> 
+  <s9qQryType>DDL</s9qQryType> 
+  <s9qScript>
+CREATE PROCEDURE [dbo].[PrnTaxSummary]
+	-- Add the parameters for the stored procedure here
+	--<@Param1, sysname, @p1> <Datatype_For_Param1, , int> = <Default_Value_For_Param1, , 0>, 
+	--<@Param2, sysname, @p2> <Datatype_For_Param2, , int> = <Default_Value_For_Param2, , 0>
+	@DBname Varchar(20),
+	@TrnType int,
+	@CtrlNo int,
+	@UserName Varchar(20),
+	@RetTableName Varchar(20) Out
+AS
+BEGIN
+	Declare @StrSQL as nvarchar(4000)	
+	Declare @TempTabName Varchar(20)
+	Declare @ShowComponentWise bit
+	Declare @ShowExclusiveSeperatey bit
+	Declare @ShowTaxCaptions bit
+	Declare @SelectFields Varchar(2000)
+	Declare @GroupFields Varchar(2000)
+	Declare @InsertFields Varchar(2000)
+	Declare @intLp int
+	
+	Set @ShowExclusiveSeperatey=0
+	Set @ShowComponentWise=0
+	Set @ShowTaxCaptions=0
+
+	Set @SelectFields=''
+	Set @GroupFields=''
+	Set @InsertFields=''
+
+Begin try	
+	Select @ShowExclusiveSeperatey =[Boolean]  from sysparam Where paramcode='PrintInclExclVatSummarySeparately'
+	Select @ShowComponentWise =[Boolean]  from sysparam Where paramcode='PrintTaxBreakUpOnBill'
+	Select @ShowTaxCaptions =[Boolean]  from sysparam Where paramcode='PrintTaxBreakupWithTaxCompDtls'
+	
+
+	Set @TempTabName='##xtmpTaxSmry' + @UserName
+    Set @StrSQL = N'if object_ID(''tempdb..' + @TempTabName+''') is Not NULL Drop Table ' + @TempTabName 
+    Print (@StrSQL)
+	Execute sp_ExecuteSQl @StrSQL
+	
+	Set @StrSQL = 'CREATE TABLE [dbo].['+@TempTabName+']('+
+		'[SeqNum] [int] NULL,'+
+		'[ProdTaxType] [varchar](16) NOT NULL,'+
+		'[DestTaxType] [varchar](16) NOT NULL,'+
+		'[SrcTaxType] [varchar](16) NOT NULL,'+
+		'[ItemTaxFlag] [int] NULL,'+
+		'[TaxDesc] [varchar](50) NULL,'+
+		'[TaxName] [varchar](25) NULL,'+
+		'[TaxDescr] [varchar](50) NULL,'+
+		'[TaxPercOfSTD] [money] NULL,'+
+		'[TaxPercOfSalesTaxCat] [money] NULL,'+
+		'[TaxableValue] [money] NULL,'+
+		'[TaxAmount] [money] NULL,'+
+		'[ExclIndicator] Varchar(10) NULL' +
+	')'
+
+	Exec (@StrSQL)
+		
+If @ShowComponentWise=0
+Begin
+Set @SelectFields='Convert(int,0) As SeqNum,STC.ProdTaxType,STC.DestTaxType,STC.SrcTaxType,(Sum(STD.stdTaxComp1Per+STD.stdTaxComp2Per+STD.stdTaxComp3Per+STD.stdTaxComp4Per+STD.stdTaxComp5Per)/count(*)) as TaxPercOfSTD'+
+	',(Sum(STD.stdTaxComp1Per+STD.stdTaxComp2Per+STD.stdTaxComp3Per+STD.stdTaxComp4Per+STD.stdTaxComp5Per)/count(*)) as TaxPercOfSalesTaxCat'+	--In this, TaxPercOfSalesTaxCat is actually not required but it is used because in print engine, render, this column used to extract taxper value.
+	---',Sum(STD.TaxAV1+STD.TaxAV2+STD.TaxAV3+STD.TaxAV4+STD.TaxAV5) As TaxableValue,Sum(STD.TaxComp1+STD.TaxComp2+STD.TaxComp3+STD.TaxComp4+STD.TaxComp5) As TaxAmount'
+	',Sum(STD.TaxAV1) As TaxableValue,Sum(STD.TaxComp1+STD.TaxComp2+STD.TaxComp3+STD.TaxComp4+STD.TaxComp5) As TaxAmount'
+	Set @GroupFields='STC.ProdTaxType,STC.DestTaxType,STC.SrcTaxType'	
+	Set @InsertFields='SeqNum,ProdTaxType,DestTaxType,SrcTaxType,TaxPercOfSTD,TaxPercOfSalesTaxCat,TaxableValue,TaxAmount'	--In this, TaxPercOfSalesTaxCat is actually not required but it is used because in print engine, render, this column used to extract taxper value.
+
+	if @ShowExclusiveSeperatey=1
+	Begin
+		Set @SelectFields=@SelectFields + ',STD.ItemTaxFlag'
+		Set @GroupFields=@GroupFields + ',STD.ItemTaxFlag'
+		Set @InsertFields= @InsertFields+',ItemTaxFlag'
+	End
+	if @ShowTaxCaptions=1
+	Begin
+		Set @SelectFields=@SelectFields + ',STC.TaxDesc'
+		Set @GroupFields=@GroupFields + ',STC.TaxDesc'
+		Set @InsertFields= @InsertFields+',TaxDesc'
+	End
+	Set @StrSQL=N'Insert Into '+ @TempTabName +'('+@InsertFields+') Select ' + @SelectFields +
+		' from '+ @DBname +'..StktrnDtls STD Inner Join '+ @DBname +'..SalesTaxCat STC ON' +
+		' STC.ProdTaxType=STD.ItemTaxType and STC.DestTaxType=STD.CustTaxType and STC.SrcTaxType=STD.SrcTaxType'+
+		' Where STD.TrnType='+Convert(Varchar(20),@TrnType) +' And TrnCtrlNo='+ Convert(Varchar(20),@CtrlNo) 
+	
+	Set @StrSQL=@StrSQL+ ' Group by '+ @GroupFields
+	Execute Sp_ExecuteSQL @StrSQL
+	
+End
+Else
+Begin
+	set @intLp = 1
+    WHILE (@intLp <=5)
+	BEGIN
+		Set @SelectFields='Convert(int,'+Char(39)+Convert(Varchar(1),@intLp) +Char(39)+') As SeqNum,STC.ProdTaxType,STC.DestTaxType,STC.SrcTaxType,STD.stdTaxComp'+Convert(Varchar(1),@intLp)+'Per as TaxPercOfSTD'+
+						',STC.T'+Convert(Varchar(1),@intLp)+'Rate as TaxPercOfSalesTaxCat,Sum(STD.TaxAV'+Convert(Varchar(1),@intLp)+') As TaxableValue,Sum(STD.TaxComp'+Convert(Varchar(1),@intLp)+') As TaxAmount'
+		Set @GroupFields='STC.ProdTaxType,STC.DestTaxType,STC.SrcTaxType,STD.stdTaxComp'+Convert(Varchar(1),@intLp)+'Per,STC.T'+Convert(Varchar(1),@intLp)+'Rate'
+		Set @InsertFields='SeqNum,ProdTaxType,DestTaxType,SrcTaxType,TaxPercOfSTD,TaxPercOfSalesTaxCat,TaxableValue,TaxAmount'
+
+		if @ShowExclusiveSeperatey=1 
+		Begin
+			Set @SelectFields=@SelectFields + ',STD.ItemTaxFlag'
+			Set @GroupFields=@GroupFields + ',STD.ItemTaxFlag'
+			Set @InsertFields= @InsertFields+',ItemTaxFlag'
+		End
+		if @ShowTaxCaptions=1
+		Begin
+			Set @SelectFields=@SelectFields + ',STC.TaxDesc,STC.T'++Convert(Varchar(1),@intLp)+'Name As TaxName,STC.T'+Convert(Varchar(1),@intLp)+'Descr As TaxDescr'
+			Set @GroupFields=@GroupFields + ',STC.TaxDesc,STC.T'+Convert(Varchar(1),@intLp)+'Name,STC.T'+Convert(Varchar(1),@intLp)+'Descr'
+			Set @InsertFields= @InsertFields+',TaxDesc,TaxName,TaxDescr'
+		End
+		Set @StrSQL='Insert Into '+ @TempTabName +'('+@InsertFields+') Select ' + @SelectFields +
+					' from '+ @DBname +'..StktrnDtls STD Inner Join '+ @DBname +'..SalesTaxCat STC ON' +
+					' STC.ProdTaxType=STD.ItemTaxType and STC.DestTaxType=STD.CustTaxType and STC.SrcTaxType=STD.SrcTaxType'+
+					' Where STD.TrnType='+Convert(Varchar(20),@TrnType) +' And TrnCtrlNo='+ Convert(Varchar(20),@CtrlNo) 
+		If @intLp>1 
+		Begin
+			Set @StrSQL=@StrSQL+ ' AND TaxComp'+Convert(Varchar(1),@intLp)+'>0'
+		End
+					
+		Set @StrSQL=@StrSQL+ ' Group by '+ @GroupFields
+		Execute Sp_ExecuteSQL @StrSQL
+		SET @intLp = @intLp + 1
+	END
+End
+
+Set @StrSQL ='Update '+@TempTabName + ' Set ExclIndicator=''**'' Where ItemTaxFlag=2'
+Execute Sp_ExecuteSQL @StrSQL
+
+Set @StrSQL ='Update '+@TempTabName + ' Set ExclIndicator='''' Where ExclIndicator IS NULL'
+Execute Sp_ExecuteSQL @StrSQL
+
+
+Set @RetTableName= @TempTabName
+End try
+Begin catch
+Set @RetTableName= 'Error'
+End catch
+END
+</s9qScript>
+</s9qsqlblk>

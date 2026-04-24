@@ -1,0 +1,57 @@
+<s9qsqlblk>
+  <s9qScriptid>S9Q_0171_1_0002</s9qScriptid> 
+  <s9qtitle></s9qtitle>
+  <s9qpgmtype>I</s9qpgmtype>
+  <s9qpgmtype>L</s9qpgmtype>
+  <s9qversion>*</s9qversion>
+  <s9qenvironment>P</s9qenvironment>
+  <s9qRunMultiple>1</s9qRunMultiple>
+  <s9qQryType>DDL</s9qQryType>
+  <s9qScript>
+
+alter table AcceptDisplayDtls add columnName varchar(50)
+-GO-
+  </s9qScript>		
+</s9qsqlblk>
+
+
+<s9qsqlblk>
+  <s9qScriptid>S9Q_0171_1_0003</s9qScriptid> 
+  <s9qtitle></s9qtitle>
+  <s9qpgmtype>I</s9qpgmtype>
+  <s9qpgmtype>L</s9qpgmtype>
+  <s9qversion>*</s9qversion>
+  <s9qenvironment>P</s9qenvironment>
+  <s9qRunMultiple>1</s9qRunMultiple>
+  <s9qQryType>DML</s9qQryType>
+  <s9qScript>
+Insert Into Sysparam Values('SR6-0901-0000386','Allow Tolerence Factor For Stock Check','AllowTolFactForStockCheckinSlips',0,0,'000000000',null,0,0,'T','',0,'.','')
+-GO-
+Insert into SysParamExtd Values('SR6-0901-0000386','AllowTolFactForStockCheckinSlips','Variable',0,'12. Slips','This Gives Slips Related Parameter',1,'Super',1,'.','001')
+-GO-
+Insert Into Sysparam Values('SR6-0901-0000387','Delimiter Character for PDT Import in Sales Transaction','DelimiterCharForPDTImportSales',0,0,'~',null,0,0,'T','',0,'.','')
+-GO-
+Insert into SysParamExtd Values('SR6-0901-0000387','DelimiterCharForPDTImportSales','Variable',0,'11. Billing','This Gives Till Realted Parameter',1,'Super',1,'.','001')
+-GO-
+update AcceptDisplayDtls set ColumnName= AcptCap
+-GO-
+update  AcceptDisplayDtls set ColumnName= replace(columnname,' ','')  
+-GO-
+update  AcceptDisplayDtls set ColumnName= replace(columnname,'.','') 
+-GO-
+update  AcceptDisplayDtls set ColumnName= replace(columnname,'%','Perc') 
+-GO-
+update  AcceptDisplayDtls set ColumnName= replace(columnname,'[','') 
+-GO-
+update  AcceptDisplayDtls set ColumnName= replace(columnname,']','') 
+-GO-
+update  AcceptDisplayDtls set ColumnName= replace(columnname,'/','') 
+-GO-
+update  AcceptDisplayDtls set ColumnName= replace(columnname,'-','') 
+-GO-
+update  AcceptDisplayDtls set ColumnName='ItemValue' where [index]=8
+-GO-
+update  AcceptDisplayDtls set ColumnName='Sizecd' where [index]=5
+-GO-
+  </s9qScript>		
+</s9qsqlblk>

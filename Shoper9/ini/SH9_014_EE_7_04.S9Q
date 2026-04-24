@@ -1,0 +1,31 @@
+<s9qsqlblk> 
+<s9qScriptID>S9Q_014_7_0008</s9qScriptID>
+<s9qtitle>Extension Frame Work: Update Scripts for Sales TrnType</s9qtitle>
+<s9qpgmtype>L</s9qpgmtype>
+<s9qpgmtype>I</s9qpgmtype>
+<s9qversion>*</s9qversion>
+<s9qenvironment>P</s9qenvironment>
+<s9qRunMultiple>0</s9qRunMultiple>
+<s9qQryType>DDL</s9qQryType>
+<s9qScript>
+
+
+Update DBO.[ExtensionConfigTable] Set [TableStruct] = 'TransCode VarChar(16), Level VarChar(5), Action int, TrnCtrlNo Int, Slno int, ClubItemFlag Int, ClubItemRow Int, StockNo varchar(32), Item_Description varchar(64), Class1cd varchar(32), Class2cd varchar(32), Subclass1cd varchar(32), Subclass2cd varchar(32), SizeCd varchar(32), CostPrice money, ItemRate money, PriceFactor varchar(32), DocQty Money, ActualQtyIn money, ActualQtyOut money, ItemValue money, Disc_Code varchar(32), DiscPerc money, DiscAmt money, ItemLvlNetValue money, ItemLvl_Sales_Staff VarChar(32),SMCurBalQty money,SMCurBalVal Money,ReservedQty money,CurStockPosition Money'
+Where [TrnType] = 2100 and [ExtLevel] = 2 and [StructType] = 1
+
+-go-
+
+Update DBO.[ExtensionConfigTable] Set [TableStruct] ='TransCode varchar(16), Level varchar(5), Action int, TrnCtrlNo Int, CustId Varchar(32), CustName Varchar(60), SlNo Int, DocPrefix varchar(8), DocNo int, PayModeType varchar(16), PayModeCode varchar(16), PaidUnits money, AppliedConvRate money, Amount money, Netamount money, AdvanceReceiptPrefix varchar(16), AdvanceReceiptNo int, ChequeNo varchar(16), ChequeDate datetime, TenderRefElem1 Varchar(64),TenderRefElem2 Varchar(64),TenderRefElem3 Varchar(64),TenderRefElem4 Varchar(64),TenderRefElem5 Varchar(64),TenderRefElem6 Varchar(64),TenderRefElem7 Varchar(64),TenderRefElem8 Varchar(64),TenderRefElem9 Varchar(64),TenderRefElem10 Varchar(64),Narration varchar(60),ReasonCd varchar(16)'
+Where [TrnType] = 13 and [ExtLevel] = 4 and StructType = 1
+
+-go-
+
+Update DBO.[ExtensionConfigTable] Set TableStruct ='TransCode varchar(16), Level varchar(5), Action int, TrnCtrlNo Int, CustId Varchar(32), CustName Varchar(60), SlNo Int, DocPrefix varchar(8), DocNo int, PayModeType varchar(16), PayModeCode varchar(16), PaidUnits money, AppliedConvRate money, Amount money, Netamount money, AdvanceReceiptPrefix varchar(16), AdvanceReceiptNo int, ChequeNo varchar(16), ChequeDate datetime, TenderRefElem1 Varchar(64),TenderRefElem2 Varchar(64),TenderRefElem3 Varchar(64),TenderRefElem4 Varchar(64),TenderRefElem5 Varchar(64),TenderRefElem6 Varchar(64),TenderRefElem7 Varchar(64),TenderRefElem8 Varchar(64),TenderRefElem9 Varchar(64),TenderRefElem10 Varchar(64),Narration varchar(60),ReasonCd varchar(16)'
+Where TrnType = 23 and ExtLevel = 4 and StructType = 1
+
+-go-
+
+</s9qScript>
+</s9qsqlblk>
+
+

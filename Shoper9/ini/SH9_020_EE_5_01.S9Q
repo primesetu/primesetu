@@ -1,0 +1,113 @@
+<s9qsqlblk>
+  <s9qScriptid>S9Q_020_5_0001</s9qScriptid> 
+  <s9qtitle></s9qtitle> 
+  <s9qpgmtype>I</s9qpgmtype>  
+  <s9qpgmtype>L</s9qpgmtype>  
+  <s9qversion>*</s9qversion> 
+  <s9qenvironment>P</s9qenvironment> 
+  <s9qRunMultiple>1</s9qRunMultiple> 
+  <s9qQryType>DML</s9qQryType> 
+  <s9qScript>
+Alter table DataSyncConfig add UseSISForOnline varchar(1) 
+-GO-
+Alter table DataSyncConfig add IsSecureMode varchar(1) 
+-GO-
+Alter table bakdatasyncconfig drop column UpdFlag 
+-GO-
+Alter table bakDataSyncConfig add UseSISForOnline varchar(1) 
+-GO-
+Alter table bakDataSyncConfig add IsSecureMode varchar(1) 
+-GO-
+Alter table bakdatasyncconfig add UpdFlag varchar(1)
+-GO-
+Insert Into VersionwiseTblsScript (VerID,SrlNo,TblScript) Values (16,1,'Alter table [DBO].DataSyncConfig add UseSISForOnline varchar(1)')
+-GO-
+Insert Into VersionwiseTblsScript (VerID,SrlNo,TblScript) Values (16,2,'Alter table [DBO].DataSyncConfig add IsSecureMode varchar(1)')
+-GO-
+Insert Into VersionwiseTblsScript (VerID,SrlNo,TblScript) Values (16,3,'alter table [DBO].bakdatasyncconfig drop column UpdFlag')
+-GO-
+Insert Into VersionwiseTblsScript (VerID,SrlNo,TblScript) Values (16,4,'Alter table [DBO].bakDataSyncConfig add UseSISForOnline varchar(1)')
+-GO-
+Insert Into VersionwiseTblsScript (VerID,SrlNo,TblScript) Values (16,5,'Alter table [DBO].bakDataSyncConfig add IsSecureMode varchar(1)')
+-GO-
+Insert Into VersionwiseTblsScript (VerID,SrlNo,TblScript) Values (16,6,'alter table [DBO].bakdatasyncconfig add UpdFlag varchar(1)')
+-GO-
+Update VersionwiseTblsScript Set Vactr = (select intg from sysparam where paramcode = 'VaSysCounter') where VerId=16
+-GO-
+
+CREATE TABLE [dbo].[FilesFromHO](
+      [InfoFile] [varchar](256) NOT NULL,
+      [SlNo] [SmallInt] NOT NULL,
+      [File_Name] [varchar](256) NULL,
+      [RegOrExe] [varchar](5) NULL,
+      [VersionDtls] [varchar](256) null,
+      [CopyToPath] [varchar](512) NULL,
+      [CmdLineArgs] [varchar](1024) NULL,
+      [PgmOpt] [SmallInt] NULL,
+      [DateInsert] [datetime] NULL,
+      [Status] [varchar](128) NULL,
+      [Remarks] [varchar](512) NULL,
+      [VAUid] varchar(32),
+      [VActr] int default 0,
+      [VATermId] varchar(32),
+      [VACompCode] varchar(16)
+) ON [PRIMARY]
+-GO-
+ALTER TABLE [dbo].[FilesFromHO] WITH NOCHECK ADD 
+      CONSTRAINT [PK_FilesFromHO] PRIMARY KEY  CLUSTERED 
+      (
+            [InfoFile] ,
+            [SlNo]
+      )  ON [PRIMARY]
+
+-GO-
+CREATE TABLE [dbo].[CommConfig](
+      [SyncType] [varchar](128) NOT NULL,
+      [Mode] [varchar](64) NOT NULL,
+      [Active] [int] NULL,
+      [ConfigXML] [varchar](8000) NULL,
+      [VAUid] [varchar](32) NULL,
+      [VActr] [int] NULL,
+      [VATermId] [varchar](32) NULL,
+      [VACompCode] [varchar](16) NULL)
+-GO-
+ALTER TABLE [dbo].[CommConfig] WITH NOCHECK ADD 
+      CONSTRAINT [PK_CommConfig] PRIMARY KEY  CLUSTERED 
+(
+      [SyncType] ASC,
+      [Mode] ASC
+) 
+-GO-
+Update GenLookUp Set Descr = '?3ccc0103#*2PT#?3sss0103#?2mm0102#?2dd0102#*4.ZIP' where Recid = 141 and Code = 'TZip'
+-GO-
+declare @poscompcd as varchar(3)
+declare @UploadStr as varchar(32)
+declare @DownloadStr as varchar(32)
+declare @DownloadReplaceStr  as varchar(32)
+ 
+set @poscompcd=''
+set @DownloadStr = ''
+set @DownloadReplaceStr = ''
+
+select @poscompcd=isnull(txt,'') from dbo.sysparam where paramcode='companycode'
+
+set @UploadStr =  '<UPLOADFILETYPES>???PT' + @poscompcd + '*.zip'         
+Update CommConfig set ConfigXML=Replace(ConfigXML,'<UPLOADFILETYPES>PT*.zip',@UploadStr)  where SyncType='PT'
+Update CommConfig set ConfigXML=Replace(ConfigXML,'<UPLOADFILETYPES> PT*.zip',@UploadStr)  where SyncType='PT'
+
+set @DownloadStr = @poscompcd + 'PT*.zip'
+set @DownloadReplaceStr = 'PT' +  @poscompcd + '???????.zip'
+Update CommConfig set ConfigXML=Replace(ConfigXML,@DownloadReplaceStr,@DownloadStr)  where SyncType='PT'
+
+-GO-
+Update PosActivityLogHdr set Remarks=Replace(Remarks, Char(10), '')
+-GO-
+Update PosActivityLogHdr set Remarks=Replace(Remarks, Char(13), '')
+-GO-
+ Update versionwisetblsscript set TblScript=Replace(TblScript, Char(10), '')
+-GO-
+ Update versionwisetblsscript set TblScript=Replace(TblScript, Char(13), '')
+-GO-
+
+  </s9qScript>		
+</s9qsqlblk>

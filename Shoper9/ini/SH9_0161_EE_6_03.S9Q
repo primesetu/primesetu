@@ -1,0 +1,193 @@
+<s9qsqlblk>
+  <s9qScriptid>S9Q_0161_6_0001</s9qScriptid> 
+  <s9qtitle>Excise</s9qtitle>
+  <s9qpgmtype>I</s9qpgmtype>
+  <s9qpgmtype>L</s9qpgmtype>
+  <s9qversion>*</s9qversion>
+  <s9qenvironment>P</s9qenvironment>
+  <s9qRunMultiple>1</s9qRunMultiple>
+  <s9qQryType>DML</s9qQryType>
+  <s9qScript>
+
+Create Table [dbo].[StkTrnEDhdr]
+(
+	[TrnType] [Int] NOT NULL,
+	[TrnCtrlNo] [Int] NOT NULL,
+	[DocNoPrefix] [Varchar] (8),
+	[DocNo] [Int],
+	[DocDt] [datetime],
+	[EDBookNo] [Varchar] (16),
+	[EDDocNo] [int],
+	[EDDate] [datetime],
+	[CustId] [varchar] (32),
+	[LRNo] [varchar] (32),
+	[LRdate] [datetime],
+	[VehicleNo] [varchar] (64),
+	[DriverName] [varchar] (64),
+	[RemovalDate] [datetime],
+	[RemovalTime] [datetime],
+	[EDRemarks] [varchar] (2000),
+	[EDVoidInd] [Int],
+	[CopyNo] [int] NULL,
+	[VAUid] [varchar] (32),
+	[VActr] [int],
+	[VATermId] [varchar] (32),
+	[VACompCode] [varchar] (16)
+) ON [PRIMARY]
+
+-GO-
+ALTER TABLE [dbo].[StkTrnEDhdr] WITH NOCHECK ADD 
+	CONSTRAINT [PK_StkTrnEDHdr] PRIMARY KEY  CLUSTERED 
+	(
+		[TrnType],
+		[TrnCtrlNo]
+	)  ON [PRIMARY] 
+
+-GO-
+Create Table [dbo].[BakStkTrnEDhdr]
+(
+	[TrnType] [Int] NOT NULL,
+	[TrnCtrlNo] [Int] NOT NULL,
+	[DocNoPrefix] [Varchar] (8),
+	[DocNo] [Int],
+	[DocDt] [datetime],
+	[EDBookNo] [Varchar] (16),
+	[EDDocNo] [int],
+	[EDDate] [datetime],
+	[CustId] [varchar] (32),
+	[LRNo] [varchar] (32),
+	[LRdate] [datetime],
+	[VehicleNo] [varchar] (64),
+	[DriverName] [varchar] (64),
+	[RemovalDate] [datetime],
+	[RemovalTime] [datetime],
+	[EDRemarks] [varchar] (2000),
+	[EDVoidInd] [Int],
+	[CopyNo] [int] NULL,
+	[VAUid] [varchar] (32),
+	[VActr] [int],
+	[VATermId] [varchar] (32),
+	[VACompCode] [varchar] (16),
+	[UpdFlag] [varchar] (1)
+) ON [PRIMARY]
+-GO-
+Create Table [dbo].[StkTrnEDDtls]
+(
+
+	[TrnType] [Int] NOT NULL,
+	[TrnCtrlNo] [Int] NOT NULL,
+	[EntSrlNo] [Int] NOT NULL,
+	[StockNo] [Varchar] (32),
+	[ItemQty] [Money],
+	[ItemRate] [Money],
+	[ItemAssessableAmt1] [Money],
+	[ItemAssessableAmt2] [Money],
+	[ItemAssessableAmt3] [Money],
+	[ItemAssessableAmt4] [Money],
+	[ItemAssessableAmt5] [Money],
+	[EDTaxCode1] [Varchar] (16),
+	[EDTaxCode2] [Varchar] (16),
+	[EDTaxCode3] [Varchar] (16),
+	[EDTaxCode4] [Varchar] (16),
+	[EDTaxCode5] [Varchar] (16),
+	[EDTaxComp1] [Money],
+	[EDTaxComp2] [Money],
+	[EDTaxComp3] [Money],
+	[EDTaxComp4] [Money],
+	[EDTaxComp5] [Money],
+	[EDTaxComp1Per] [Money],
+	[EDTaxComp2Per] [Money],
+	[EDTaxComp3Per] [Money],
+	[EDTaxComp4Per] [Money],
+	[EDTaxComp5Per] [Money],
+	[VAUid] [varchar] (32),
+	[VActr] [int],
+	[VATermId] [varchar] (32),
+	[VACompCode] [varchar] (16)
+
+)
+
+-GO-
+ALTER TABLE [dbo].[StkTrnEDDtls] WITH NOCHECK ADD 
+	CONSTRAINT [PK_StkTrnEDDtls] PRIMARY KEY  CLUSTERED 
+	(
+		[TrnType],
+		[TrnCtrlNo],
+		EntSrlNo
+	)  ON [PRIMARY] 
+
+-GO-
+Create Table [dbo].[BakStkTrnEDDtls]
+(
+
+	[TrnType] [Int] NOT NULL,
+	[TrnCtrlNo] [Int] NOT NULL,
+	[EntSrlNo] [Int] NOT NULL,
+	[StockNo] [Varchar] (32),
+	[ItemQty] [Money],
+	[ItemRate] [Money],
+	[ItemAssessableAmt1] [Money],
+	[ItemAssessableAmt2] [Money],
+	[ItemAssessableAmt3] [Money],
+	[ItemAssessableAmt4] [Money],
+	[ItemAssessableAmt5] [Money],
+	[EDTaxCode1] [Varchar] (16),
+	[EDTaxCode2] [Varchar] (16),
+	[EDTaxCode3] [Varchar] (16),
+	[EDTaxCode4] [Varchar] (16),
+	[EDTaxCode5] [Varchar] (16),
+	[EDTaxComp1] [Money],
+	[EDTaxComp2] [Money],
+	[EDTaxComp3] [Money],
+	[EDTaxComp4] [Money],
+	[EDTaxComp5] [Money],
+	[EDTaxComp1Per] [Money],
+	[EDTaxComp2Per] [Money],
+	[EDTaxComp3Per] [Money],
+	[EDTaxComp4Per] [Money],
+	[EDTaxComp5Per] [Money],
+	[VAUid] [varchar] (32),
+	[VActr] [int],
+	[VATermId] [varchar] (32),
+	[VACompCode] [varchar] (16),
+	[UpdFlag] [varchar] (1)
+)
+-GO-
+Insert Into [DBO].Sysparam (Id,Descr,Paramcode,Intg,Opt) Values ('SR6-0901-0000365','Whether Excise Duty is Applicable','ExciseDutyEnabledorNot',0,'I')
+-GO-
+Insert Into [DBO].SysparamExtd (Id,Paramcode,Fixed,changed,category,catdescr,Disporder ) values ('SR6-0901-0000365','ExciseDutyEnabledorNot','Variable','0','23. Excise','This Gives Browse Parameters','1')
+-GO-
+Insert into [DBO].Sysparam (ID,descr,paramcode,txt,opt) values('SR1-0901-0000372','Valid Excise Transactions','ValidExciseTransactions','Sales:2100#Transfer Out:2200#Purchase Return:2300#Misc. Issue:2500','T')
+-GO-
+Insert into [DBO].SysparamExtd (ID,paramcode,fixed,changed,Category,CatDescr,DispOrder) values('SR1-0901-0000372','ValidExciseTransactions','Hidden','0','23. Excise','This Gives Excise Realted Parameter',1)
+-GO-
+Insert into [DBO].Sysparam (ID,descr,paramcode,Intg,opt) values('SR1-0901-0000373','Excise Invoice Number Generation Mode','ExciseInvoiceNoGenMode',1,'I')
+-GO-
+Insert into [DBO].SysparamExtd (ID,paramcode,fixed,changed,Category,CatDescr,DispOrder) values('SR1-0901-0000373','ExciseInvoiceNoGenMode','Variable','0','23. Excise','This Gives Excise Realted Parameter',1)
+-GO-
+Insert into [DBO].Genlookup (recid,code,descr) values (0,25000,'Excise Book No.')
+-GO-
+Insert into [DBO].GenlookupExtd(Recid,Category,IsEditable,RecType,Operations,Additional1) Values(25000,'Excise Book No.',0,'Variable',111,'0#1#16#16')
+-GO-
+INSERT INTO [DBO].VersionwiseTblsScript(VerID,SrlNo,TblScript,VAUid,VActr,VATermId,VACompCode) VALUES (10,7,'Create Table [dbo].[StkTrnEDhdr]([TrnType] [Int] NOT NULL,[TrnCtrlNo] [Int] NOT NULL,[DocNoPrefix] [Varchar] (8),[DocNo] [Int],[DocDt] [datetime],[EDBookNo] [Varchar] (16),[EDDocNo][int],[EDDate] [datetime],[CustId] [varchar] (32),[LRNo] [varchar] (32),[LRdate] [datetime],[VehicleNo] [varchar] (64),[DriverName] [varchar] (64),[RemovalDate] [datetime],[RemovalTime] [datetime],[EDRemarks] [varchar] (2000),[EDVoidInd] [Int],[CopyNo] [int],[VAUid] [varchar] (32),[VActr] [int],[VATermId] [varchar] (32),[VACompCode] [varchar] (16))','',1,'.','')
+-GO-
+INSERT INTO [DBO].VersionwiseTblsScript(VerID,SrlNo,TblScript,VAUid,VActr,VATermId,VACompCode) VALUES (10,8,'ALTER TABLE [dbo].[StkTrnEDhdr] WITH NOCHECK ADD CONSTRAINT [PK_StkTrnEDHdr] PRIMARY KEY  CLUSTERED ([TrnType],[TrnCtrlNo])','',1,'.','')
+-GO-
+INSERT INTO [DBO].VersionwiseTblsScript(VerID,SrlNo,TblScript,VAUid,VActr,VATermId,VACompCode) VALUES (10,9,'Create Table [dbo].[BakStkTrnEDhdr]([TrnType] [Int] NOT NULL,[TrnCtrlNo] [Int] NOT NULL,[DocNoPrefix] [Varchar] (8),[DocNo] [Int],[DocDt] [datetime],[EDBookNo] [Varchar] (16),[EDDocNo][int],[EDDate] [datetime],[CustId] [varchar] (32),[LRNo] [varchar] (32),[LRdate] [datetime],[VehicleNo] [varchar] (64),[DriverName] [varchar] (64),[RemovalDate] [datetime],[RemovalTime] [datetime],[EDRemarks] [varchar] (2000),[EDVoidInd] [Int],[CopyNo] [int],[VAUid] [varchar] (32),[VActr] [int],	[VATermId] [varchar] (32),[VACompCode] [varchar] (16),UpdFlag Varchar(1))','',1,'.','')
+-GO-
+INSERT INTO [DBO].VersionwiseTblsScript(VerID,SrlNo,TblScript,VAUid,VActr,VATermId,VACompCode) VALUES (10,10,'Create Table [dbo].[StkTrnEDDtls]([TrnType] [Int] NOT NULL,[TrnCtrlNo] [Int] NOT NULL,[EntSrlNo][Int] NOT NULL,[StockNo] [Varchar] (32),[ItemQty] [Money],[ItemRate] [Money],[ItemAssessableAmt1] [Money],[ItemAssessableAmt2] [Money],[ItemAssessableAmt3] [Money],[ItemAssessableAmt4] [Money],[ItemAssessableAmt5] [Money],[EDTaxCode1] [Varchar] (16),[EDTaxCode2] [Varchar] (16),[EDTaxCode3] [Varchar] (16),[EDTaxCode4] [Varchar] (16),[EDTaxCode5][Varchar] (16),[EDTaxComp1] [Money],[EDTaxComp2] [Money],[EDTaxComp3] [Money],[EDTaxComp4] [Money],[EDTaxComp5] [Money],[EDTaxComp1Per] [Money],[EDTaxComp2Per] [Money],[EDTaxComp3Per] [Money],[EDTaxComp4Per] [Money],[EDTaxComp5Per] [Money],[VAUid] [varchar] (32),[VActr] [int],[VATermId] [varchar] (32),[VACompCode] [varchar] (16))','',1,'.','')
+-GO-
+INSERT INTO [DBO].VersionwiseTblsScript(VerID,SrlNo,TblScript,VAUid,VActr,VATermId,VACompCode) VALUES (10,11,'ALTER TABLE [dbo].[StkTrnEDDtls] WITH NOCHECK ADD CONSTRAINT [PK_StkTrnEDDtls] PRIMARY KEY  CLUSTERED ([TrnType],[TrnCtrlNo],EntSrlNo)','',1,'.','')
+-GO-
+INSERT INTO [DBO].VersionwiseTblsScript(VerID,SrlNo,TblScript,VAUid,VActr,VATermId,VACompCode) VALUES (10,12,'Create Table [dbo].[BakStkTrnEDDtls]([TrnType] [Int] NOT NULL,[TrnCtrlNo] [Int] NOT NULL,[EntSrlNo][Int] NOT NULL,[StockNo] [Varchar] (32),[ItemQty] [Money],[ItemRate] [Money],[ItemAssessableAmt1] [Money],[ItemAssessableAmt2] [Money],[ItemAssessableAmt3] [Money],[ItemAssessableAmt4] [Money],[ItemAssessableAmt5] [Money],[EDTaxCode1] [Varchar] (16),[EDTaxCode2] [Varchar] (16),[EDTaxCode3] [Varchar] (16),[EDTaxCode4] [Varchar] (16),[EDTaxCode5][Varchar] (16),[EDTaxComp1] [Money],[EDTaxComp2] [Money],[EDTaxComp3] [Money],[EDTaxComp4] [Money],[EDTaxComp5] [Money],[EDTaxComp1Per] [Money],[EDTaxComp2Per] [Money],[EDTaxComp3Per] [Money],[EDTaxComp4Per] [Money],[EDTaxComp5Per] [Money],[VAUid] [varchar] (32),[VActr] [int],[VATermId] [varchar] (32),[VACompCode] [varchar] (16),UpdFlag Varchar(1))','',1,'.','')
+-GO-
+Update [DBO].[VersionwiseTblsScript] Set Vactr = (select intg from [DBO].sysparam where paramcode = 'VaSysCounter') where VerId=10
+-GO-
+UPDATE SYSPARAM SET Txt=Txt + '#StkTrnEDhdr' where paramcode='AdlTablesToSync' and Txt not like '%StkTrnEDhdr%'
+-GO-
+UPDATE SYSPARAM SET Txt=Txt + '#StkTrnEDDtls' where paramcode='AdlTablesToSync' and Txt not like '%StkTrnEDDtls%'
+-GO-
+
+
+</s9qScript>		
+</s9qsqlblk>

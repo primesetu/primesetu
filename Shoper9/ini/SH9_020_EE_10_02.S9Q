@@ -1,0 +1,87 @@
+<s9qsqlblk>
+<s9qScriptID>S9Q_020_10_0004</s9qScriptID>
+<s9qtitle>Security Database Script</s9qtitle>
+<s9qpgmtype>I</s9qpgmtype>
+<s9qpgmtype>L</s9qpgmtype>
+<s9qversion>*</s9qversion>
+<s9qenvironment>M</s9qenvironment>
+<s9qRunMultiple>1</s9qRunMultiple>
+<s9qQryType>DML</s9qQryType>
+<s9qScript>
+
+insert into VaSecurityConfig(id,Descr,ParamCode,Boolean,Opt,Fixed,Category,CatSrlNo,ParamSrlNo)
+values('Sec-000023','Allow Dashboard Report Selection','AllowDashboardReportSelection',1,'B','Variable','Housekeeping',3,5)
+-GO-	
+If NOT exists (select * from VaGenlookup where Recid = 103 and Code='DashBoardRestrict')
+Insert into VaGenlookup(Recid,Code,Descr,Flag,Number) Values(103,'DashBoardRestrict','Restrict users from selecting Dashboard Reports',1,3)
+-GO-
+CREATE TABLE [dbo].[BrowseSettings](
+	[BrowseID] [varchar](16) NULL,
+	[BrowseType] [varchar](64) NULL,
+	[BrowseName] [varchar](16) NULL,
+	[UserId] [varchar](16) NULL,
+	[AppName] [varchar](32) NULL,
+	[TrnType] [int] NULL,
+	[FldName] [varchar](64) NULL,
+	[FldCaption] [varchar](64) NULL,
+	[FldType] [varchar](16) NULL,
+	[FldEnabled] [bit] NULL,
+	[DispInBrowse] [bit] NULL,
+	[DispInFilter] [bit] NULL,
+	[DispInResult] [bit] NULL,
+	[AlowFilter] [bit] NULL,
+	[Condition] [varchar](16) NULL,
+	[SearchVal1] [varchar](1000) NULL,
+	[SearchVal2] [varchar](1000) NULL,
+	[OthValue] [varchar](1000) NULL,
+	[SortOrder] [int] NULL,
+	[VaUid] [varchar](32) NULL,
+	[VaCtr] [int] NULL,
+	[VaTermId] [varchar](32) NULL,
+	[VaCompCode] [varchar](16) NULL
+) ON [PRIMARY]
+
+-GO-
+INSERT INTO VaRestrictMnuConfig Values (600,614,'SR442300.EXE','11110000','ADD#EDIT#DELETE#VIEW')
+-GO-
+INSERT INTO VaRestrictMnuConfig Values (600,602,'SR442300.EXE','11110000','ADD#EDIT#DELETE#VIEW')
+-GO-
+INSERT INTO VaRestrictMnuConfig Values (613,6132,'SR442300.EXE','11110000','ADD#EDIT#DELETE#VIEW')
+-GO-
+INSERT INTO VaRestrictMnuConfig Values (600,611,'SR442300.EXE','11110000','ADD#EDIT#DELETE#VIEW')
+-GO-
+Insert Into VaGenlookup (Recid,Code,Descr,Flag,Number) Values (5000,4,'SR580200.ClassExtendedBrowse',1,1)
+-GO-
+Update VaRestrictMnuConfig Set Mnuno = 613,MenuOpt = 6132 Where Mnuno = 600 And MenuOpt = 602
+-GO-
+Update Vamenu Set Exename = 'SR442300.EXE',PGMOPT= 1 WHERE EXENAME = 'SR404800.EXE'
+-GO-
+Update Vamenu Set Exename = 'SR442300.EXE',PGMOPT= 2 WHERE EXENAME = 'SR405300.EXE'
+-GO-
+DELETE FROM VAVERTABLE WHERE EXEID IN ('SR404800.EXE','SR405300.EXE')
+-GO-
+Insert Into VaContextHelpDtls (AppName,PgmOption,ControlName,Srlno,TransId,HelpContextId,HelpPath,HelpFileName)
+Values ('SR438600.EXE',1,'FrmPrefix',1,'','',Null,Null) 
+-GO-
+Update VaContextHelpDtls Set AppNoteDtls = 'Bill Prefix :
+This option is used to define the document prefixes and the starting document number for list of transactions 
+	* Sales transactions (Sales, Sales Return and Void Sales)
+	* Cash transactions (Cash Receipts and Cash Payouts) 
+	* Intermediate transaction Slips 
+		* Bill Suspension
+		* Sales Advice Slip
+		* Service Order
+		* Sales Order
+		* Sales DC 
+		* Approval DC
+	* Inward Transaction (Purchase, TransferIn and Misc.Receipt)
+	* Outward Transaction (Purchase Return, TransferOut and Misc.Issues) 
+
+Note: You are allowed to perform any Sales/Cash/Inward/Outward transactions in Shoper 9, 
+only after defining the document prefixes of the corresponding transaction type. 
+If you try to open the transaction windows without defining the prefix, you will be alerted 
+with an appropriate message.' Where AppName = 'SR438600.EXE'
+
+
+</s9qScript>
+</s9qsqlblk>

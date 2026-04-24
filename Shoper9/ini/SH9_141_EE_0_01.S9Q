@@ -1,0 +1,37 @@
+<s9qsqlblk>
+  <s9qScriptID>S9Q_141_0_0001</s9qScriptID>
+  <s9qtitle>Security Database Script</s9qtitle>
+  <s9qpgmtype>I</s9qpgmtype>
+  <s9qpgmtype>L</s9qpgmtype>
+  <s9qversion>*</s9qversion>
+  <s9qenvironment>M</s9qenvironment>
+  <s9qRunMultiple>1</s9qRunMultiple>
+  <s9qQryType>DML</s9qQryType>
+  <s9qScript>
+UPDATE VAVerTable SET EXEVER = '9', EXEMINOR = '1', EXESUBREL = '193' WHERE EXEID in (
+'SE100400.exe','SE100900.EXE','SE101000.EXE','SE127800.exe',
+'SE301200.exe','SE301300.Exe','SE301400.Exe','SE301600.exe',
+'SR100700.EXE','SR101000.EXE','SR127000.Exe','SR130000.exe',
+'SR202500.exe','SR210700.EXE','SR211000.exe','SR233700.exe',
+'SR236300.exe','SR309900.Exe','SR311400.Exe','SR320500.EXE',
+'SR323400.EXE','SR324400.Exe','SR311500.EXE','SR404900.EXE',
+'SR235400.Exe','SR215600.Exe','SR129500.EXE')
+-GO-
+InSert Into VARestrictMnuConfig Values ('380','381','SE100900.EXE','11100000','ADD#EDIT#VIEW')
+-GO-
+InSert Into VARestrictMnuConfig Values ('380','383','SE100400.EXE','11000000','Import#Clear')
+-GO-
+InSert Into VARestrictMnuConfig Values ('380','384','SE127800.EXE','11000000','Apply#Clear')
+-GO-
+InSert Into VARestrictMnuConfig Values ('380','385','SE127800.EXE','11000000','Apply#Clear')
+-GO-
+InSert Into VARestrictMnuConfig Values ('380','386','SE127800.EXE','11000000','Export#Clear')
+-GO-
+InSert Into VARestrictMnuConfig Values ('380','387','SE127800.EXE','11100000','Preview#Print#Clear')
+-GO-
+InSert Into VARestrictMnuConfig Values ('380','389','SE101000.EXE','11000000','SAVE#CLEAR')
+-GO-
+UPDATE VAMENU SET DBINFO = '0+2' WHERE EXENAME IN ('SR406500.exe')
+-GO-
+</s9qScript>		
+</s9qsqlblk>

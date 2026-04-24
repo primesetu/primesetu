@@ -1,0 +1,509 @@
+<s9qsqlblk>
+  <s9qScriptID>S9Q_017_4_0004</s9qScriptID>
+  <s9qtitle>Version Details</s9qtitle>
+  <s9qpgmtype>I</s9qpgmtype>
+  <s9qpgmtype>L</s9qpgmtype>
+  <s9qversion>*</s9qversion>
+  <s9qenvironment>P</s9qenvironment>
+  <s9qRunMultiple>0</s9qRunMultiple>
+  <s9qQryType>DML</s9qQryType>
+  <s9qScript>
+
+Insert into Sysparam (ID,Descr,ParamCode,Boolean ,opt) Values('SR4-0901-0000391','Post Corrected Vouchers to Tally','PostCorrectedVouchers','0','B')
+-GO-
+Insert into SysparamExtd (ID,paramcode,fixed,changed,Category,CatDescr,DispOrder) values('SR4-0901-0000391','PostCorrectedVouchers','Variable','0','17. House Keeping','Post Corrected Vouchers to Tally','150')
+-GO-
+alter table tallyvchinfo add Narration varchar(4000)
+-GO-
+alter table tallyvchinfo add isCorrectedVoucher varchar(1)
+-GO-
+update SysParam set Txt ='910.5' where ParamCode = 'TCPVersion'
+-GO-
+</s9qScript>		
+</s9qsqlblk>
+
+<s9qsqlblk>
+  <s9qScriptID>S9Q_017_4_0006</s9qScriptID>
+  <s9qtitle>Version Details</s9qtitle>
+  <s9qpgmtype>I</s9qpgmtype>
+  <s9qpgmtype>L</s9qpgmtype>
+  <s9qversion>*</s9qversion>
+  <s9qenvironment>P</s9qenvironment>
+  <s9qRunMultiple>1</s9qRunMultiple>
+  <s9qQryType>DML</s9qQryType>
+  <s9qScript>
+
+Delete [dbo].[TallyPrintConfigDetails] 
+-GO-
+INSERT [dbo].[TallyPrintConfigDetails] ([ConfigName], [ParamName], [ParamValue]) VALUES ('TaxInvoice', 'SISIPAddress', '<<SISURL>>')
+-GO-
+INSERT [dbo].[TallyPrintConfigDetails] ([ConfigName], [ParamName], [ParamValue]) VALUES ('TaxInvoice', 'SISCompCode', '<<COMPANYCODE>>')
+-GO-
+INSERT [dbo].[TallyPrintConfigDetails] ([ConfigName], [ParamName], [ParamValue]) VALUES ('TaxInvoice', 'TransactionNumber', '<<CONTROLNUMBER>>')
+-GO-
+INSERT [dbo].[TallyPrintConfigDetails] ([ConfigName], [ParamName], [ParamValue]) VALUES ('TaxInvoice', 'InvoiceTitle', 'TAX INVOICE')
+-GO-
+INSERT [dbo].[TallyPrintConfigDetails] ([ConfigName], [ParamName], [ParamValue]) VALUES ('TaxInvoice', 'ShowClass1Code', 'Yes')
+-GO-
+INSERT [dbo].[TallyPrintConfigDetails] ([ConfigName], [ParamName], [ParamValue]) VALUES ('TaxInvoice', 'PrintCompanyDetails', 'Yes')
+-GO-
+INSERT [dbo].[TallyPrintConfigDetails] ([ConfigName], [ParamName], [ParamValue]) VALUES ('TaxInvoice', 'ShowAddOnDeduction', 'Yes')
+-GO-
+INSERT [dbo].[TallyPrintConfigDetails] ([ConfigName], [ParamName], [ParamValue]) VALUES ('TaxInvoice', 'ShowAddOnDeductionBreakup', 'Yes')
+-GO-
+INSERT [dbo].[TallyPrintConfigDetails] ([ConfigName], [ParamName], [ParamValue]) VALUES ('TaxInvoice', 'ShowClass1Desc', 'Yes')
+-GO-
+INSERT [dbo].[TallyPrintConfigDetails] ([ConfigName], [ParamName], [ParamValue]) VALUES ('TaxInvoice', 'ShowClass2Code', 'No')
+-GO-
+INSERT [dbo].[TallyPrintConfigDetails] ([ConfigName], [ParamName], [ParamValue]) VALUES ('TaxInvoice', 'ShowClass2Desc', 'Yes')
+-GO-
+INSERT [dbo].[TallyPrintConfigDetails] ([ConfigName], [ParamName], [ParamValue]) VALUES ('TaxInvoice', 'ShowItemDiscountPer', 'No')
+-GO-
+INSERT [dbo].[TallyPrintConfigDetails] ([ConfigName], [ParamName], [ParamValue]) VALUES ('TaxInvoice', 'ShowItemDiscountValue', 'Yes')
+-GO-
+INSERT [dbo].[TallyPrintConfigDetails] ([ConfigName], [ParamName], [ParamValue]) VALUES ('TaxInvoice', 'ShowItemQuantity', 'Yes')
+-GO-
+INSERT [dbo].[TallyPrintConfigDetails] ([ConfigName], [ParamName], [ParamValue]) VALUES ('TaxInvoice', 'ShowItemRate', 'Yes')
+-GO-
+INSERT [dbo].[TallyPrintConfigDetails] ([ConfigName], [ParamName], [ParamValue]) VALUES ('TaxInvoice', 'ShowMRP', 'No')
+-GO-
+INSERT [dbo].[TallyPrintConfigDetails] ([ConfigName], [ParamName], [ParamValue]) VALUES ('TaxInvoice', 'ShowPaymentDetails', 'Yes')
+-GO-
+INSERT [dbo].[TallyPrintConfigDetails] ([ConfigName], [ParamName], [ParamValue]) VALUES ('TaxInvoice', 'ShowSizeCode', 'Yes')
+-GO-
+INSERT [dbo].[TallyPrintConfigDetails] ([ConfigName], [ParamName], [ParamValue]) VALUES ('TaxInvoice', 'ShowStockNumber', 'Yes')
+-GO-
+INSERT [dbo].[TallyPrintConfigDetails] ([ConfigName], [ParamName], [ParamValue]) VALUES ('TaxInvoice', 'ShowSubClass1Code', 'No')
+-GO-
+INSERT [dbo].[TallyPrintConfigDetails] ([ConfigName], [ParamName], [ParamValue]) VALUES ('TaxInvoice', 'ShowSubClass1Desc', 'Yes')
+-GO-
+INSERT [dbo].[TallyPrintConfigDetails] ([ConfigName], [ParamName], [ParamValue]) VALUES ('TaxInvoice', 'ShowSubClass2Code', 'No')
+-GO-
+INSERT [dbo].[TallyPrintConfigDetails] ([ConfigName], [ParamName], [ParamValue]) VALUES ('TaxInvoice', 'ShowSubClass2Desc', 'No')
+-GO-
+INSERT [dbo].[TallyPrintConfigDetails] ([ConfigName], [ParamName], [ParamValue]) VALUES ('TaxInvoice', 'ShowTax1Per', 'No')
+-GO-
+INSERT [dbo].[TallyPrintConfigDetails] ([ConfigName], [ParamName], [ParamValue]) VALUES ('TaxInvoice', 'ShowTax1Value', 'Yes')
+-GO-
+INSERT [dbo].[TallyPrintConfigDetails] ([ConfigName], [ParamName], [ParamValue]) VALUES ('TaxInvoice', 'ShowVatSummary', 'Yes')
+-GO-
+INSERT [dbo].[TallyPrintConfigDetails] ([ConfigName], [ParamName], [ParamValue]) VALUES ('TaxInvoice', 'SHTopMargin', '2% Page')
+-GO-
+INSERT [dbo].[TallyPrintConfigDetails] ([ConfigName], [ParamName], [ParamValue]) VALUES ('TaxInvoice', 'SHBottomMargin', '2% Page')
+-GO-
+INSERT [dbo].[TallyPrintConfigDetails] ([ConfigName], [ParamName], [ParamValue]) VALUES ('CashBill40Col', 'SISIPAddress', '<<SISURL>>')
+-GO-
+INSERT [dbo].[TallyPrintConfigDetails] ([ConfigName], [ParamName], [ParamValue]) VALUES ('CashBill40Col', 'SISCompCode', '<<COMPANYCODE>>')
+-GO-
+INSERT [dbo].[TallyPrintConfigDetails] ([ConfigName], [ParamName], [ParamValue]) VALUES ('CashBill40Col', 'TransactionNumber', '<<CONTROLNUMBER>>')
+-GO-
+INSERT [dbo].[TallyPrintConfigDetails] ([ConfigName], [ParamName], [ParamValue]) VALUES ('CashBill40Col', 'InvoiceTitle', 'CASH-BILL')
+-GO-
+INSERT [dbo].[TallyPrintConfigDetails] ([ConfigName], [ParamName], [ParamValue]) VALUES ('CashBill40Col', 'PrintCompanyDetails', 'Yes')
+-GO-
+INSERT [dbo].[TallyPrintConfigDetails] ([ConfigName], [ParamName], [ParamValue]) VALUES ('CashBill40Col', 'ShowStockNumber', 'Yes')
+-GO-
+INSERT [dbo].[TallyPrintConfigDetails] ([ConfigName], [ParamName], [ParamValue]) VALUES ('CashBill40Col', 'ShowItemQuantity', 'Yes')
+-GO-
+INSERT [dbo].[TallyPrintConfigDetails] ([ConfigName], [ParamName], [ParamValue]) VALUES ('CashBill40Col', 'ShowMRP', 'Yes')
+-GO-
+INSERT [dbo].[TallyPrintConfigDetails] ([ConfigName], [ParamName], [ParamValue]) VALUES ('CashBill40Col', 'ShowItemDiscountValue', 'Yes')
+-GO-
+INSERT [dbo].[TallyPrintConfigDetails] ([ConfigName], [ParamName], [ParamValue]) VALUES ('CashBill40Col', 'ShowTax1Per', 'Yes')
+-GO-
+INSERT [dbo].[TallyPrintConfigDetails] ([ConfigName], [ParamName], [ParamValue]) VALUES ('CashBill40Col', 'ShowTax1Value', 'No')
+-GO-
+INSERT [dbo].[TallyPrintConfigDetails] ([ConfigName], [ParamName], [ParamValue]) VALUES ('CashBill40Col', 'ShowVatSummary', 'Yes')
+-GO-
+INSERT [dbo].[TallyPrintConfigDetails] ([ConfigName], [ParamName], [ParamValue]) VALUES ('CashBill40Col', 'ShowPaymentDetails', 'Yes')
+-GO-
+INSERT [dbo].[TallyPrintConfigDetails] ([ConfigName], [ParamName], [ParamValue]) VALUES ('CashBill40Col', 'SHTopMargin', '1% Page')
+-GO-
+INSERT [dbo].[TallyPrintConfigDetails] ([ConfigName], [ParamName], [ParamValue]) VALUES ('CashBill40Col', 'SHBottomMargin', '1% Page')
+-GO-
+INSERT [dbo].[TallyPrintConfigDetails] ([ConfigName], [ParamName], [ParamValue]) VALUES ('CashBill40Col', 'SHLeftMargin', '1% Page')
+-GO-
+INSERT [dbo].[TallyPrintConfigDetails] ([ConfigName], [ParamName], [ParamValue]) VALUES ('CashBill40Col', 'SHRightMargin', '1% Page')
+-GO-
+INSERT [dbo].[TallyPrintConfigDetails] ([ConfigName], [ParamName], [ParamValue]) VALUES ('ReturnBill40Col', 'SISIPAddress', '<<SISURL>>')
+-GO-
+INSERT [dbo].[TallyPrintConfigDetails] ([ConfigName], [ParamName], [ParamValue]) VALUES ('ReturnBill40Col', 'SISCompCode', '<<COMPANYCODE>>')
+-GO-
+INSERT [dbo].[TallyPrintConfigDetails] ([ConfigName], [ParamName], [ParamValue]) VALUES ('ReturnBill40Col', 'TransactionNumber', '<<CONTROLNUMBER>>')
+-GO-
+INSERT [dbo].[TallyPrintConfigDetails] ([ConfigName], [ParamName], [ParamValue]) VALUES ('ReturnBill40Col', 'InvoiceTitle', 'RETURN-BILL')
+-GO-
+INSERT [dbo].[TallyPrintConfigDetails] ([ConfigName], [ParamName], [ParamValue]) VALUES ('ReturnBill40Col', 'PrintCompanyDetails', 'Yes')
+-GO-
+INSERT [dbo].[TallyPrintConfigDetails] ([ConfigName], [ParamName], [ParamValue]) VALUES ('ReturnBill40Col', 'ShowStockNumber', 'Yes')
+-GO-
+INSERT [dbo].[TallyPrintConfigDetails] ([ConfigName], [ParamName], [ParamValue]) VALUES ('ReturnBill40Col', 'ShowItemQuantity', 'Yes')
+-GO-
+INSERT [dbo].[TallyPrintConfigDetails] ([ConfigName], [ParamName], [ParamValue]) VALUES ('ReturnBill40Col', 'ShowMRP', 'Yes')
+-GO-
+INSERT [dbo].[TallyPrintConfigDetails] ([ConfigName], [ParamName], [ParamValue]) VALUES ('ReturnBill40Col', 'ShowItemDiscountValue', 'Yes')
+-GO-
+INSERT [dbo].[TallyPrintConfigDetails] ([ConfigName], [ParamName], [ParamValue]) VALUES ('ReturnBill40Col', 'ShowTax1Per', 'Yes')
+-GO-
+INSERT [dbo].[TallyPrintConfigDetails] ([ConfigName], [ParamName], [ParamValue]) VALUES ('ReturnBill40Col', 'ShowTax1Value', 'No')
+-GO-
+INSERT [dbo].[TallyPrintConfigDetails] ([ConfigName], [ParamName], [ParamValue]) VALUES ('ReturnBill40Col', 'ShowVatSummary', 'Yes')
+-GO-
+INSERT [dbo].[TallyPrintConfigDetails] ([ConfigName], [ParamName], [ParamValue]) VALUES ('ReturnBill40Col', 'SHTopMargin', '1% Page')
+-GO-
+INSERT [dbo].[TallyPrintConfigDetails] ([ConfigName], [ParamName], [ParamValue]) VALUES ('ReturnBill40Col', 'SHBottomMargin', '1% Page')
+-GO-
+INSERT [dbo].[TallyPrintConfigDetails] ([ConfigName], [ParamName], [ParamValue]) VALUES ('ReturnBill40Col', 'SHLeftMargin', '1% Page')
+-GO-
+INSERT [dbo].[TallyPrintConfigDetails] ([ConfigName], [ParamName], [ParamValue]) VALUES ('ReturnBill40Col', 'SHRightMargin', '1% Page')
+-GO-
+INSERT [dbo].[TallyPrintConfigDetails] ([ConfigName], [ParamName], [ParamValue]) VALUES ('VoidBill40Col', 'SISIPAddress', '<<SISURL>>')
+-GO-
+INSERT [dbo].[TallyPrintConfigDetails] ([ConfigName], [ParamName], [ParamValue]) VALUES ('VoidBill40Col', 'SISCompCode', '<<COMPANYCODE>>')
+-GO-
+INSERT [dbo].[TallyPrintConfigDetails] ([ConfigName], [ParamName], [ParamValue]) VALUES ('VoidBill40Col', 'TransactionNumber', '<<CONTROLNUMBER>>')
+-GO-
+INSERT [dbo].[TallyPrintConfigDetails] ([ConfigName], [ParamName], [ParamValue]) VALUES ('VoidBill40Col', 'InvoiceTitle', 'VOID-BILL')
+-GO-
+INSERT [dbo].[TallyPrintConfigDetails] ([ConfigName], [ParamName], [ParamValue]) VALUES ('VoidBill40Col', 'PrintCompanyDetails', 'Yes')
+-GO-
+INSERT [dbo].[TallyPrintConfigDetails] ([ConfigName], [ParamName], [ParamValue]) VALUES ('VoidBill40Col', 'ShowStockNumber', 'Yes')
+-GO-
+INSERT [dbo].[TallyPrintConfigDetails] ([ConfigName], [ParamName], [ParamValue]) VALUES ('VoidBill40Col', 'ShowItemQuantity', 'Yes')
+-GO-
+INSERT [dbo].[TallyPrintConfigDetails] ([ConfigName], [ParamName], [ParamValue]) VALUES ('VoidBill40Col', 'ShowMRP', 'Yes')
+-GO-
+INSERT [dbo].[TallyPrintConfigDetails] ([ConfigName], [ParamName], [ParamValue]) VALUES ('VoidBill40Col', 'ShowItemDiscountValue', 'Yes')
+-GO-
+INSERT [dbo].[TallyPrintConfigDetails] ([ConfigName], [ParamName], [ParamValue]) VALUES ('VoidBill40Col', 'ShowTax1Per', 'Yes')
+-GO-
+INSERT [dbo].[TallyPrintConfigDetails] ([ConfigName], [ParamName], [ParamValue]) VALUES ('VoidBill40Col', 'ShowTax1Value', 'No')
+-GO-
+INSERT [dbo].[TallyPrintConfigDetails] ([ConfigName], [ParamName], [ParamValue]) VALUES ('VoidBill40Col', 'ShowVatSummary', 'Yes')
+-GO-
+INSERT [dbo].[TallyPrintConfigDetails] ([ConfigName], [ParamName], [ParamValue]) VALUES ('VoidBill40Col', 'SHTopMargin', '1% Page')
+-GO-
+INSERT [dbo].[TallyPrintConfigDetails] ([ConfigName], [ParamName], [ParamValue]) VALUES ('VoidBill40Col', 'SHBottomMargin', '1% Page')
+-GO-
+INSERT [dbo].[TallyPrintConfigDetails] ([ConfigName], [ParamName], [ParamValue]) VALUES ('VoidBill40Col', 'SHLeftMargin', '1% Page')
+-GO-
+INSERT [dbo].[TallyPrintConfigDetails] ([ConfigName], [ParamName], [ParamValue]) VALUES ('VoidBill40Col', 'SHRightMargin', '1% Page')
+-GO-
+INSERT [dbo].[TallyPrintConfigDetails] ([ConfigName], [ParamName], [ParamValue]) VALUES ('Purchase', 'SISIPAddress', '<<SISURL>>')
+-GO-
+INSERT [dbo].[TallyPrintConfigDetails] ([ConfigName], [ParamName], [ParamValue]) VALUES ('Purchase', 'SISCompCode', '<<COMPANYCODE>>')
+-GO-
+INSERT [dbo].[TallyPrintConfigDetails] ([ConfigName], [ParamName], [ParamValue]) VALUES ('Purchase', 'TransactionNumber', '<<CONTROLNUMBER>>')
+-GO-
+INSERT [dbo].[TallyPrintConfigDetails] ([ConfigName], [ParamName], [ParamValue]) VALUES ('Purchase', 'InvoiceTitle', 'PURCHASE INVOICE')
+-GO-
+INSERT [dbo].[TallyPrintConfigDetails] ([ConfigName], [ParamName], [ParamValue]) VALUES ('Purchase', 'ShowOrderDetails', 'Yes')
+-GO-
+INSERT [dbo].[TallyPrintConfigDetails] ([ConfigName], [ParamName], [ParamValue]) VALUES ('Purchase', 'ShowItemDiscountPer', 'No')
+-GO-
+INSERT [dbo].[TallyPrintConfigDetails] ([ConfigName], [ParamName], [ParamValue]) VALUES ('Purchase', 'ShowItemDiscountValue', 'Yes')
+-GO-
+INSERT [dbo].[TallyPrintConfigDetails] ([ConfigName], [ParamName], [ParamValue]) VALUES ('Purchase', 'ShowTax1Per', 'Yes')
+-GO-
+INSERT [dbo].[TallyPrintConfigDetails] ([ConfigName], [ParamName], [ParamValue]) VALUES ('Purchase', 'ShowTax1Value', 'Yes')
+-GO-
+INSERT [dbo].[TallyPrintConfigDetails] ([ConfigName], [ParamName], [ParamValue]) VALUES ('Purchase', 'ShowItemLevelDiscountTotal', 'Yes')
+-GO-
+INSERT [dbo].[TallyPrintConfigDetails] ([ConfigName], [ParamName], [ParamValue]) VALUES ('Purchase', 'ShowBillDiscount', 'Yes')
+-GO-
+INSERT [dbo].[TallyPrintConfigDetails] ([ConfigName], [ParamName], [ParamValue]) VALUES ('Purchase', 'ShowAddOnDeductionBreakup', 'Yes')
+-GO-
+INSERT [dbo].[TallyPrintConfigDetails] ([ConfigName], [ParamName], [ParamValue]) VALUES ('Purchase', 'SHTopMargin', '2% Page')
+-GO-
+INSERT [dbo].[TallyPrintConfigDetails] ([ConfigName], [ParamName], [ParamValue]) VALUES ('Purchase', 'SHBottomMargin', '2% Page')
+-GO-
+INSERT [dbo].[TallyPrintConfigDetails] ([ConfigName], [ParamName], [ParamValue]) VALUES ('PurchaseReturn', 'SISIPAddress', '<<SISURL>>')
+-GO-
+INSERT [dbo].[TallyPrintConfigDetails] ([ConfigName], [ParamName], [ParamValue]) VALUES ('PurchaseReturn', 'SISCompCode', '<<COMPANYCODE>>')
+-GO-
+INSERT [dbo].[TallyPrintConfigDetails] ([ConfigName], [ParamName], [ParamValue]) VALUES ('PurchaseReturn', 'TransactionNumber', '<<CONTROLNUMBER>>')
+-GO-
+INSERT [dbo].[TallyPrintConfigDetails] ([ConfigName], [ParamName], [ParamValue]) VALUES ('PurchaseReturn', 'InvoiceTitle', 'PURCHASE RETURN')
+-GO-
+INSERT [dbo].[TallyPrintConfigDetails] ([ConfigName], [ParamName], [ParamValue]) VALUES ('PurchaseReturn', 'ShowOrderDetails', 'Yes')
+-GO-
+INSERT [dbo].[TallyPrintConfigDetails] ([ConfigName], [ParamName], [ParamValue]) VALUES ('PurchaseReturn', 'ShowItemDiscountPer', 'No')
+-GO-
+INSERT [dbo].[TallyPrintConfigDetails] ([ConfigName], [ParamName], [ParamValue]) VALUES ('PurchaseReturn', 'ShowItemDiscountValue', 'Yes')
+-GO-
+INSERT [dbo].[TallyPrintConfigDetails] ([ConfigName], [ParamName], [ParamValue]) VALUES ('PurchaseReturn', 'ShowTax1Per', 'Yes')
+-GO-
+INSERT [dbo].[TallyPrintConfigDetails] ([ConfigName], [ParamName], [ParamValue]) VALUES ('PurchaseReturn', 'ShowTax1Value', 'Yes')
+-GO-
+INSERT [dbo].[TallyPrintConfigDetails] ([ConfigName], [ParamName], [ParamValue]) VALUES ('PurchaseReturn', 'ShowItemLevelDiscountTotal', 'Yes')
+-GO-
+INSERT [dbo].[TallyPrintConfigDetails] ([ConfigName], [ParamName], [ParamValue]) VALUES ('PurchaseReturn', 'ShowBillDiscount', 'Yes')
+-GO-
+INSERT [dbo].[TallyPrintConfigDetails] ([ConfigName], [ParamName], [ParamValue]) VALUES ('PurchaseReturn', 'ShowAddOnDeductionBreakup', 'Yes')
+-GO-
+INSERT [dbo].[TallyPrintConfigDetails] ([ConfigName], [ParamName], [ParamValue]) VALUES ('PurchaseReturn', 'SHTopMargin', '2% Page')
+-GO-
+INSERT [dbo].[TallyPrintConfigDetails] ([ConfigName], [ParamName], [ParamValue]) VALUES ('PurchaseReturn', 'SHBottomMargin', '2% Page')
+-GO-
+INSERT [dbo].[TallyPrintConfigDetails] ([ConfigName], [ParamName], [ParamValue]) VALUES ('MiscIssue', 'SISIPAddress', '<<SISURL>>')
+-GO-
+INSERT [dbo].[TallyPrintConfigDetails] ([ConfigName], [ParamName], [ParamValue]) VALUES ('MiscIssue', 'SISCompCode', '<<COMPANYCODE>>')
+-GO-
+INSERT [dbo].[TallyPrintConfigDetails] ([ConfigName], [ParamName], [ParamValue]) VALUES ('MiscIssue', 'TransactionNumber', '<<CONTROLNUMBER>>')
+-GO-
+INSERT [dbo].[TallyPrintConfigDetails] ([ConfigName], [ParamName], [ParamValue]) VALUES ('MiscIssue', 'InvoiceTitle', 'MISC ISSUE')
+-GO-
+INSERT [dbo].[TallyPrintConfigDetails] ([ConfigName], [ParamName], [ParamValue]) VALUES ('MiscIssue', 'ShowOrderDetails', 'Yes')
+-GO-
+INSERT [dbo].[TallyPrintConfigDetails] ([ConfigName], [ParamName], [ParamValue]) VALUES ('MiscIssue', 'ShowItemDiscountPer', 'No')
+-GO-
+INSERT [dbo].[TallyPrintConfigDetails] ([ConfigName], [ParamName], [ParamValue]) VALUES ('MiscIssue', 'ShowItemDiscountValue', 'Yes')
+-GO-
+INSERT [dbo].[TallyPrintConfigDetails] ([ConfigName], [ParamName], [ParamValue]) VALUES ('MiscIssue', 'ShowTax1Per', 'Yes')
+-GO-
+INSERT [dbo].[TallyPrintConfigDetails] ([ConfigName], [ParamName], [ParamValue]) VALUES ('MiscIssue', 'ShowTax1Value', 'Yes')
+-GO-
+INSERT [dbo].[TallyPrintConfigDetails] ([ConfigName], [ParamName], [ParamValue]) VALUES ('MiscIssue', 'ShowItemLevelDiscountTotal', 'Yes')
+-GO-
+INSERT [dbo].[TallyPrintConfigDetails] ([ConfigName], [ParamName], [ParamValue]) VALUES ('MiscIssue', 'ShowBillDiscount', 'Yes')
+-GO-
+INSERT [dbo].[TallyPrintConfigDetails] ([ConfigName], [ParamName], [ParamValue]) VALUES ('MiscIssue', 'ShowAddOnDeductionBreakup', 'Yes')
+-GO-
+INSERT [dbo].[TallyPrintConfigDetails] ([ConfigName], [ParamName], [ParamValue]) VALUES ('MiscIssue', 'SHTopMargin', '2% Page')
+-GO-
+INSERT [dbo].[TallyPrintConfigDetails] ([ConfigName], [ParamName], [ParamValue]) VALUES ('MiscIssue', 'SHBottomMargin', '2% Page')
+-GO-
+INSERT [dbo].[TallyPrintConfigDetails] ([ConfigName], [ParamName], [ParamValue]) VALUES ('MiscReceipt', 'SISIPAddress', '<<SISURL>>')
+-GO-
+INSERT [dbo].[TallyPrintConfigDetails] ([ConfigName], [ParamName], [ParamValue]) VALUES ('MiscReceipt', 'SISCompCode', '<<COMPANYCODE>>')
+-GO-
+INSERT [dbo].[TallyPrintConfigDetails] ([ConfigName], [ParamName], [ParamValue]) VALUES ('MiscReceipt', 'TransactionNumber', '<<CONTROLNUMBER>>')
+-GO-
+INSERT [dbo].[TallyPrintConfigDetails] ([ConfigName], [ParamName], [ParamValue]) VALUES ('MiscReceipt', 'InvoiceTitle', 'MISC RECEIPT')
+-GO-
+INSERT [dbo].[TallyPrintConfigDetails] ([ConfigName], [ParamName], [ParamValue]) VALUES ('MiscReceipt', 'ShowOrderDetails', 'Yes')
+-GO-
+INSERT [dbo].[TallyPrintConfigDetails] ([ConfigName], [ParamName], [ParamValue]) VALUES ('MiscReceipt', 'ShowItemDiscountPer', 'No')
+-GO-
+INSERT [dbo].[TallyPrintConfigDetails] ([ConfigName], [ParamName], [ParamValue]) VALUES ('MiscReceipt', 'ShowItemDiscountValue', 'Yes')
+-GO-
+INSERT [dbo].[TallyPrintConfigDetails] ([ConfigName], [ParamName], [ParamValue]) VALUES ('MiscReceipt', 'ShowTax1Per', 'Yes')
+-GO-
+INSERT [dbo].[TallyPrintConfigDetails] ([ConfigName], [ParamName], [ParamValue]) VALUES ('MiscReceipt', 'ShowTax1Value', 'Yes')
+-GO-
+INSERT [dbo].[TallyPrintConfigDetails] ([ConfigName], [ParamName], [ParamValue]) VALUES ('MiscReceipt', 'ShowItemLevelDiscountTotal', 'Yes')
+-GO-
+INSERT [dbo].[TallyPrintConfigDetails] ([ConfigName], [ParamName], [ParamValue]) VALUES ('MiscReceipt', 'ShowBillDiscount', 'Yes')
+-GO-
+INSERT [dbo].[TallyPrintConfigDetails] ([ConfigName], [ParamName], [ParamValue]) VALUES ('MiscReceipt', 'ShowAddOnDeductionBreakup', 'Yes')
+-GO-
+INSERT [dbo].[TallyPrintConfigDetails] ([ConfigName], [ParamName], [ParamValue]) VALUES ('MiscReceipt', 'SHTopMargin', '2% Page')
+-GO-
+INSERT [dbo].[TallyPrintConfigDetails] ([ConfigName], [ParamName], [ParamValue]) VALUES ('MiscReceipt', 'SHBottomMargin', '2% Page')
+-GO-
+INSERT [dbo].[TallyPrintConfigDetails] ([ConfigName], [ParamName], [ParamValue]) VALUES ('TransferIn', 'SISIPAddress', '<<SISURL>>')
+-GO-
+INSERT [dbo].[TallyPrintConfigDetails] ([ConfigName], [ParamName], [ParamValue]) VALUES ('TransferIn', 'SISCompCode', '<<COMPANYCODE>>')
+-GO-
+INSERT [dbo].[TallyPrintConfigDetails] ([ConfigName], [ParamName], [ParamValue]) VALUES ('TransferIn', 'TransactionNumber', '<<CONTROLNUMBER>>')
+-GO-
+INSERT [dbo].[TallyPrintConfigDetails] ([ConfigName], [ParamName], [ParamValue]) VALUES ('TransferIn', 'InvoiceTitle', 'TRANSFER IN')
+-GO-
+INSERT [dbo].[TallyPrintConfigDetails] ([ConfigName], [ParamName], [ParamValue]) VALUES ('TransferIn', 'ShowOrderDetails', 'Yes')
+-GO-
+INSERT [dbo].[TallyPrintConfigDetails] ([ConfigName], [ParamName], [ParamValue]) VALUES ('TransferIn', 'ShowItemDiscountPer', 'No')
+-GO-
+INSERT [dbo].[TallyPrintConfigDetails] ([ConfigName], [ParamName], [ParamValue]) VALUES ('TransferIn', 'ShowItemDiscountValue', 'Yes')
+-GO-
+INSERT [dbo].[TallyPrintConfigDetails] ([ConfigName], [ParamName], [ParamValue]) VALUES ('TransferIn', 'ShowTax1Per', 'Yes')
+-GO-
+INSERT [dbo].[TallyPrintConfigDetails] ([ConfigName], [ParamName], [ParamValue]) VALUES ('TransferIn', 'ShowTax1Value', 'Yes')
+-GO-
+INSERT [dbo].[TallyPrintConfigDetails] ([ConfigName], [ParamName], [ParamValue]) VALUES ('TransferIn', 'ShowItemLevelDiscountTotal', 'Yes')
+-GO-
+INSERT [dbo].[TallyPrintConfigDetails] ([ConfigName], [ParamName], [ParamValue]) VALUES ('TransferIn', 'ShowBillDiscount', 'Yes')
+-GO-
+INSERT [dbo].[TallyPrintConfigDetails] ([ConfigName], [ParamName], [ParamValue]) VALUES ('TransferIn', 'ShowAddOnDeductionBreakup', 'Yes')
+-GO-
+INSERT [dbo].[TallyPrintConfigDetails] ([ConfigName], [ParamName], [ParamValue]) VALUES ('TransferIn', 'SHTopMargin', '2% Page')
+-GO-
+INSERT [dbo].[TallyPrintConfigDetails] ([ConfigName], [ParamName], [ParamValue]) VALUES ('TransferIn', 'SHBottomMargin', '2% Page')
+-GO-
+INSERT [dbo].[TallyPrintConfigDetails] ([ConfigName], [ParamName], [ParamValue]) VALUES ('TransferOut', 'SISIPAddress', '<<SISURL>>')
+-GO-
+INSERT [dbo].[TallyPrintConfigDetails] ([ConfigName], [ParamName], [ParamValue]) VALUES ('TransferOut', 'SISCompCode', '<<COMPANYCODE>>')
+-GO-
+INSERT [dbo].[TallyPrintConfigDetails] ([ConfigName], [ParamName], [ParamValue]) VALUES ('TransferOut', 'TransactionNumber', '<<CONTROLNUMBER>>')
+-GO-
+INSERT [dbo].[TallyPrintConfigDetails] ([ConfigName], [ParamName], [ParamValue]) VALUES ('TransferOut', 'InvoiceTitle', 'TRANSFER OUT')
+-GO-
+INSERT [dbo].[TallyPrintConfigDetails] ([ConfigName], [ParamName], [ParamValue]) VALUES ('TransferOut', 'ShowOrderDetails', 'Yes')
+-GO-
+INSERT [dbo].[TallyPrintConfigDetails] ([ConfigName], [ParamName], [ParamValue]) VALUES ('TransferOut', 'ShowItemDiscountPer', 'No')
+-GO-
+INSERT [dbo].[TallyPrintConfigDetails] ([ConfigName], [ParamName], [ParamValue]) VALUES ('TransferOut', 'ShowItemDiscountValue', 'Yes')
+-GO-
+INSERT [dbo].[TallyPrintConfigDetails] ([ConfigName], [ParamName], [ParamValue]) VALUES ('TransferOut', 'ShowTax1Per', 'Yes')
+-GO-
+INSERT [dbo].[TallyPrintConfigDetails] ([ConfigName], [ParamName], [ParamValue]) VALUES ('TransferOut', 'ShowTax1Value', 'Yes')
+-GO-
+INSERT [dbo].[TallyPrintConfigDetails] ([ConfigName], [ParamName], [ParamValue]) VALUES ('TransferOut', 'ShowItemLevelDiscountTotal', 'Yes')
+-GO-
+INSERT [dbo].[TallyPrintConfigDetails] ([ConfigName], [ParamName], [ParamValue]) VALUES ('TransferOut', 'ShowBillDiscount', 'Yes')
+-GO-
+INSERT [dbo].[TallyPrintConfigDetails] ([ConfigName], [ParamName], [ParamValue]) VALUES ('TransferOut', 'ShowAddOnDeductionBreakup', 'Yes')
+-GO-
+INSERT [dbo].[TallyPrintConfigDetails] ([ConfigName], [ParamName], [ParamValue]) VALUES ('TransferOut', 'SHTopMargin', '2% Page')
+-GO-
+INSERT [dbo].[TallyPrintConfigDetails] ([ConfigName], [ParamName], [ParamValue]) VALUES ('TransferOut', 'SHBottomMargin', '2% Page')
+-GO-
+INSERT [dbo].[TallyPrintConfigDetails] ([ConfigName], [ParamName], [ParamValue]) VALUES ('SaleA4Retail', 'SISIPAddress', '<<SISURL>>')
+-GO-
+INSERT [dbo].[TallyPrintConfigDetails] ([ConfigName], [ParamName], [ParamValue]) VALUES ('SaleA4Retail', 'SISCompCode', '<<COMPANYCODE>>')
+-GO-
+INSERT [dbo].[TallyPrintConfigDetails] ([ConfigName], [ParamName], [ParamValue]) VALUES ('SaleA4Retail', 'TransactionNumber', '<<CONTROLNUMBER>>')
+-GO-
+INSERT [dbo].[TallyPrintConfigDetails] ([ConfigName], [ParamName], [ParamValue]) VALUES ('SaleA4Retail', 'InvoiceTitle', 'TAX/RETAIL INVOICE')
+-GO-
+INSERT [dbo].[TallyPrintConfigDetails] ([ConfigName], [ParamName], [ParamValue]) VALUES ('SaleA4Retail', 'PrintCompanyDetails', 'Yes')
+-GO-
+INSERT [dbo].[TallyPrintConfigDetails] ([ConfigName], [ParamName], [ParamValue]) VALUES ('SaleA4Retail', 'ShowPaymentDetails', 'Yes')
+-GO-
+INSERT [dbo].[TallyPrintConfigDetails] ([ConfigName], [ParamName], [ParamValue]) VALUES ('SaleA4Retail', 'ShowItemDiscountValue', 'Yes')
+-GO-
+INSERT [dbo].[TallyPrintConfigDetails] ([ConfigName], [ParamName], [ParamValue]) VALUES ('SaleA4Retail', 'ShowItemQuantity', 'Yes')
+-GO-
+INSERT [dbo].[TallyPrintConfigDetails] ([ConfigName], [ParamName], [ParamValue]) VALUES ('SaleA4Retail', 'ShowItemRate', 'Yes')
+-GO-
+INSERT [dbo].[TallyPrintConfigDetails] ([ConfigName], [ParamName], [ParamValue]) VALUES ('SaleA4Retail', 'ShowMRP', 'No')
+-GO-
+INSERT [dbo].[TallyPrintConfigDetails] ([ConfigName], [ParamName], [ParamValue]) VALUES ('SaleA4Retail', 'ShowSubClass1Code', 'Yes')
+-GO-
+INSERT [dbo].[TallyPrintConfigDetails] ([ConfigName], [ParamName], [ParamValue]) VALUES ('SaleA4Retail', 'ShowTax1Per', 'Yes')
+-GO-
+INSERT [dbo].[TallyPrintConfigDetails] ([ConfigName], [ParamName], [ParamValue]) VALUES ('SaleA4Retail', 'SHTopMargin', '2% Page')
+-GO-
+INSERT [dbo].[TallyPrintConfigDetails] ([ConfigName], [ParamName], [ParamValue]) VALUES ('SaleA4Retail', 'SHBottomMargin', '2% Page')
+-GO-
+INSERT [dbo].[TallyPrintConfigDetails] ([ConfigName], [ParamName], [ParamValue]) VALUES ('SaleA4Retail', 'SVCompanyLogoFile', 'C:\CompanyLogo.bmp')
+-GO-
+INSERT [dbo].[TallyPrintConfigDetails] ([ConfigName], [ParamName], [ParamValue]) VALUES ('ExciseInvoiceFormat', 'SISIPAddress', '<<SISURL>>')
+-GO-
+INSERT [dbo].[TallyPrintConfigDetails] ([ConfigName], [ParamName], [ParamValue]) VALUES ('ExciseInvoiceFormat', 'SISCompCode', '<<COMPANYCODE>>')
+-GO-
+INSERT [dbo].[TallyPrintConfigDetails] ([ConfigName], [ParamName], [ParamValue]) VALUES ('ExciseInvoiceFormat', 'TransactionNumber', '<<CONTROLNUMBER>>')
+-GO-
+INSERT [dbo].[TallyPrintConfigDetails] ([ConfigName], [ParamName], [ParamValue]) VALUES ('ExciseInvoiceFormat', 'SubTransactionType', '<<SUBTRANSACTIONTYPE>>')
+-GO-
+INSERT [dbo].[TallyPrintConfigDetails] ([ConfigName], [ParamName], [ParamValue]) VALUES ('ExciseInvoiceFormat', 'InvoiceTitle', 'EXCISE INVOICE')
+-GO-
+INSERT [dbo].[TallyPrintConfigDetails] ([ConfigName], [ParamName], [ParamValue]) VALUES ('ExciseInvoiceFormat', 'PrintCompanyDetails', 'Yes')
+-GO-
+INSERT [dbo].[TallyPrintConfigDetails] ([ConfigName], [ParamName], [ParamValue]) VALUES ('ExciseInvoiceFormat', 'ShowPaymentDetails', 'Yes')
+-GO-
+INSERT [dbo].[TallyPrintConfigDetails] ([ConfigName], [ParamName], [ParamValue]) VALUES ('ExciseInvoiceFormat', 'ShowItemDiscountValue', 'Yes')
+-GO-
+INSERT [dbo].[TallyPrintConfigDetails] ([ConfigName], [ParamName], [ParamValue]) VALUES ('ExciseInvoiceFormat', 'ShowItemQuantity', 'Yes')
+-GO-
+INSERT [dbo].[TallyPrintConfigDetails] ([ConfigName], [ParamName], [ParamValue]) VALUES ('ExciseInvoiceFormat', 'ShowItemRate', 'Yes')
+-GO-
+INSERT [dbo].[TallyPrintConfigDetails] ([ConfigName], [ParamName], [ParamValue]) VALUES ('ExciseInvoiceFormat', 'ShowMRP', 'No')
+-GO-
+INSERT [dbo].[TallyPrintConfigDetails] ([ConfigName], [ParamName], [ParamValue]) VALUES ('ExciseInvoiceFormat', 'ShowSubClass1Code', 'Yes')
+-GO-
+INSERT [dbo].[TallyPrintConfigDetails] ([ConfigName], [ParamName], [ParamValue]) VALUES ('ExciseInvoiceFormat', 'ShowTax1Per', 'Yes')
+-GO-
+INSERT [dbo].[TallyPrintConfigDetails] ([ConfigName], [ParamName], [ParamValue]) VALUES ('ExciseInvoiceFormat', 'SHTopMargin', '2% Page')
+-GO-
+INSERT [dbo].[TallyPrintConfigDetails] ([ConfigName], [ParamName], [ParamValue]) VALUES ('ExciseInvoiceFormat', 'SHBottomMargin', '2% Page')
+-GO-
+INSERT [dbo].[TallyPrintConfigDetails] ([ConfigName], [ParamName], [ParamValue]) VALUES ('ExciseInvoiceFormat', 'SISIPAddress', '<<SISURL>>')
+-GO-
+INSERT [dbo].[TallyPrintConfigDetails] ([ConfigName], [ParamName], [ParamValue]) VALUES ('ExciseInvoiceFormat', 'SISCompCode', '<<COMPANYCODE>>')
+-GO-
+INSERT [dbo].[TallyPrintConfigDetails] ([ConfigName], [ParamName], [ParamValue]) VALUES ('ExciseInvoiceFormat', 'TransactionNumber', '<<CONTROLNUMBER>>')
+-GO-
+INSERT [dbo].[TallyPrintConfigDetails] ([ConfigName], [ParamName], [ParamValue]) VALUES ('ExciseInvoiceFormat', 'SubTransactionType', '<<SUBTRANSACTIONTYPE>>')
+-GO-
+INSERT [dbo].[TallyPrintConfigDetails] ([ConfigName], [ParamName], [ParamValue]) VALUES ('ExciseInvoiceFormat', 'InvoiceTitle', 'EXCISE INVOICE')
+-GO-
+INSERT [dbo].[TallyPrintConfigDetails] ([ConfigName], [ParamName], [ParamValue]) VALUES ('ExciseInvoiceFormat', 'PrintCompanyDetails', 'Yes')
+-GO-
+INSERT [dbo].[TallyPrintConfigDetails] ([ConfigName], [ParamName], [ParamValue]) VALUES ('ExciseInvoiceFormat', 'ShowPaymentDetails', 'Yes')
+-GO-
+INSERT [dbo].[TallyPrintConfigDetails] ([ConfigName], [ParamName], [ParamValue]) VALUES ('ExciseInvoiceFormat', 'ShowItemDiscountValue', 'Yes')
+-GO-
+INSERT [dbo].[TallyPrintConfigDetails] ([ConfigName], [ParamName], [ParamValue]) VALUES ('ExciseInvoiceFormat', 'ShowItemQuantity', 'Yes')
+-GO-
+INSERT [dbo].[TallyPrintConfigDetails] ([ConfigName], [ParamName], [ParamValue]) VALUES ('ExciseInvoiceFormat', 'ShowItemRate', 'Yes')
+-GO-
+INSERT [dbo].[TallyPrintConfigDetails] ([ConfigName], [ParamName], [ParamValue]) VALUES ('ExciseInvoiceFormat', 'ShowMRP', 'No')
+-GO-
+INSERT [dbo].[TallyPrintConfigDetails] ([ConfigName], [ParamName], [ParamValue]) VALUES ('ExciseInvoiceFormat', 'ShowSubClass1Code', 'Yes')
+-GO-
+INSERT [dbo].[TallyPrintConfigDetails] ([ConfigName], [ParamName], [ParamValue]) VALUES ('ExciseInvoiceFormat', 'ShowTax1Per', 'Yes')
+-GO-
+INSERT [dbo].[TallyPrintConfigDetails] ([ConfigName], [ParamName], [ParamValue]) VALUES ('ExciseInvoiceFormat', 'SHTopMargin', '2% Page')
+-GO-
+INSERT [dbo].[TallyPrintConfigDetails] ([ConfigName], [ParamName], [ParamValue]) VALUES ('ExciseInvoiceFormat', 'SHBottomMargin', '2% Page')
+-GO-
+INSERT [dbo].[TallyPrintConfigDetails] ([ConfigName], [ParamName], [ParamValue]) VALUES ('SaleSimpleExcise', 'SISIPAddress', '<<SISURL>>')
+-GO-
+INSERT [dbo].[TallyPrintConfigDetails] ([ConfigName], [ParamName], [ParamValue]) VALUES ('SaleSimpleExcise', 'SISCompCode', '<<COMPANYCODE>>')
+-GO-
+INSERT [dbo].[TallyPrintConfigDetails] ([ConfigName], [ParamName], [ParamValue]) VALUES ('SaleSimpleExcise', 'TransactionNumber', '<<CONTROLNUMBER>>')
+-GO-
+INSERT [dbo].[TallyPrintConfigDetails] ([ConfigName], [ParamName], [ParamValue]) VALUES ('SaleSimpleExcise', 'InvoiceTitle', 'TAX/RETAIL INVOICE')
+-GO-
+INSERT [dbo].[TallyPrintConfigDetails] ([ConfigName], [ParamName], [ParamValue]) VALUES ('SaleSimpleExcise', 'PrintCompanyDetails', 'Yes')
+-GO-
+INSERT [dbo].[TallyPrintConfigDetails] ([ConfigName], [ParamName], [ParamValue]) VALUES ('SaleSimpleExcise', 'ShowItemDiscountValue', 'No')
+-GO-
+INSERT [dbo].[TallyPrintConfigDetails] ([ConfigName], [ParamName], [ParamValue]) VALUES ('SaleSimpleExcise', 'ShowItemQuantity', 'Yes')
+-GO-
+INSERT [dbo].[TallyPrintConfigDetails] ([ConfigName], [ParamName], [ParamValue]) VALUES ('SaleSimpleExcise', 'ShowItemRate', 'No')
+-GO-
+INSERT [dbo].[TallyPrintConfigDetails] ([ConfigName], [ParamName], [ParamValue]) VALUES ('SaleSimpleExcise', 'ShowMRP', 'Yes')
+-GO-
+INSERT [dbo].[TallyPrintConfigDetails] ([ConfigName], [ParamName], [ParamValue]) VALUES ('SaleSimpleExcise', 'ShowSubClass1Code', 'Yes')
+-GO-
+INSERT [dbo].[TallyPrintConfigDetails] ([ConfigName], [ParamName], [ParamValue]) VALUES ('SaleSimpleExcise', 'ShowTax1Per', 'Yes')
+-GO-
+INSERT [dbo].[TallyPrintConfigDetails] ([ConfigName], [ParamName], [ParamValue]) VALUES ('SaleSimpleExcise', 'ShowItemAssessable', 'Yes')
+-GO-
+INSERT [dbo].[TallyPrintConfigDetails] ([ConfigName], [ParamName], [ParamValue]) VALUES ('SaleSimpleExcise', 'SHTopMargin', '2% Page')
+-GO-
+INSERT [dbo].[TallyPrintConfigDetails] ([ConfigName], [ParamName], [ParamValue]) VALUES ('SaleSimpleExcise', 'SHBottomMargin', '2% Page')
+-GO-
+DELETE [dbo].[TallyPrintConfigHeader]
+-GO-
+INSERT [dbo].[TallyPrintConfigHeader] ([Terminal], [TrnType], [ConfigName], [ReportName], [TcpLocation], [IsActive], [PrinterName], [PrintMode], [PrintPreview], [NoOfCopies]) VALUES ('<<ALLNODES>>', 2100, 'TaxInvoice', 'SHVatInvoice', '<<APPPATH>>\TallyPrinting.tcp', 0, '<<DEFAULT>>', 'Neat Mode', 0, 1)
+-GO-
+INSERT [dbo].[TallyPrintConfigHeader] ([Terminal], [TrnType], [ConfigName], [ReportName], [TcpLocation], [IsActive], [PrinterName], [PrintMode], [PrintPreview], [NoOfCopies]) VALUES ('<<ALLNODES>>', 2100, 'Sizewise', 'SHSizewiseInvoice', '<<APPPATH>>\TallyPrinting.tcp', 0, '<<DEFAULT>>', 'Neat Mode', 0, 1)
+-GO-
+INSERT [dbo].[TallyPrintConfigHeader] ([Terminal], [TrnType], [ConfigName], [ReportName], [TcpLocation], [IsActive], [PrinterName], [PrintMode], [PrintPreview], [NoOfCopies]) VALUES ('<<ALLNODES>>', 2100, 'CashBill40Col', 'CashBill40Column', '<<APPPATH>>\TallyPrinting.tcp', 0, '<<DEFAULT>>', 'Neat Mode', 0, 1)
+-GO-
+INSERT [dbo].[TallyPrintConfigHeader] ([Terminal], [TrnType], [ConfigName], [ReportName], [TcpLocation], [IsActive], [PrinterName], [PrintMode], [PrintPreview], [NoOfCopies]) VALUES ('<<ALLNODES>>', 2100, 'SaleA4Retail', 'SHA4RetailInvoice', '<<APPPATH>>\TallyPrinting.tcp', 1, '<<DEFAULT>>', 'Neat Mode', 1, 1)
+-GO-
+INSERT [dbo].[TallyPrintConfigHeader] ([Terminal], [TrnType], [ConfigName], [ReportName], [TcpLocation], [IsActive], [PrinterName], [PrintMode], [PrintPreview], [NoOfCopies]) VALUES ('<<ALLNODES>>', 2200, 'TransferOut', 'SHTRANSFEROUTINVOICE', '<<APPPATH>>\TallyPrinting.tcp', 1, '<<DEFAULT>>', 'Neat Mode', 0, 1)
+-GO-
+INSERT [dbo].[TallyPrintConfigHeader] ([Terminal], [TrnType], [ConfigName], [ReportName], [TcpLocation], [IsActive], [PrinterName], [PrintMode], [PrintPreview], [NoOfCopies]) VALUES ('<<ALLNODES>>', 2300, 'PurchaseReturn', 'SHPURCHASERETURNINVOICE', '<<APPPATH>>\TallyPrinting.tcp', 1, '<<DEFAULT>>', 'Neat Mode', 0, 1)
+-GO-
+INSERT [dbo].[TallyPrintConfigHeader] ([Terminal], [TrnType], [ConfigName], [ReportName], [TcpLocation], [IsActive], [PrinterName], [PrintMode], [PrintPreview], [NoOfCopies]) VALUES ('<<ALLNODES>>', 2500, 'MiscIssue', 'SHMISCELLANEOUSISSUEINVOICE', '<<APPPATH>>\TallyPrinting.tcp', 1, '<<DEFAULT>>', 'Neat Mode', 0, 1)
+-GO-
+INSERT [dbo].[TallyPrintConfigHeader] ([Terminal], [TrnType], [ConfigName], [ReportName], [TcpLocation], [IsActive], [PrinterName], [PrintMode], [PrintPreview], [NoOfCopies]) VALUES ('<<ALLNODES>>', 1100, 'Purchase', 'SHPURCHASEINVOICE', '<<APPPATH>>\TallyPrinting.tcp', 1, '<<DEFAULT>>', 'Neat Mode', 0, 1)
+-GO-
+INSERT [dbo].[TallyPrintConfigHeader] ([Terminal], [TrnType], [ConfigName], [ReportName], [TcpLocation], [IsActive], [PrinterName], [PrintMode], [PrintPreview], [NoOfCopies]) VALUES ('<<ALLNODES>>', 1200, 'TransferIn', 'SHTRANSFERININVOICE', '<<APPPATH>>\TallyPrinting.tcp', 1, '<<DEFAULT>>', 'Neat Mode', 0, 1)
+-GO-
+INSERT [dbo].[TallyPrintConfigHeader] ([Terminal], [TrnType], [ConfigName], [ReportName], [TcpLocation], [IsActive], [PrinterName], [PrintMode], [PrintPreview], [NoOfCopies]) VALUES ('<<ALLNODES>>', 1300, 'ReturnBill40Col', 'ReturnBill40Column', '<<APPPATH>>\TallyPrinting.tcp', 1, '<<DEFAULT>>', 'Neat Mode', 0, 1)
+-GO-
+INSERT [dbo].[TallyPrintConfigHeader] ([Terminal], [TrnType], [ConfigName], [ReportName], [TcpLocation], [IsActive], [PrinterName], [PrintMode], [PrintPreview], [NoOfCopies]) VALUES ('<<ALLNODES>>', 1500, 'MiscReceipt', 'SHMISCELLANEOUSRECEIPTINVOICE', '<<APPPATH>>\TallyPrinting.tcp', 1, '<<DEFAULT>>', 'Neat Mode', 0, 1)
+-GO-
+INSERT [dbo].[TallyPrintConfigHeader] ([Terminal], [TrnType], [ConfigName], [ReportName], [TcpLocation], [IsActive], [PrinterName], [PrintMode], [PrintPreview], [NoOfCopies]) VALUES ('<<ALLNODES>>', 1600, 'VoidBill40Col', 'VoidBill40Column', '<<APPPATH>>\TallyPrinting.tcp', 1, '<<DEFAULT>>', 'Neat Mode', 0, 1)
+-GO-
+INSERT [dbo].[TallyPrintConfigHeader] ([Terminal], [TrnType], [ConfigName], [ReportName], [TcpLocation], [IsActive], [PrinterName], [PrintMode], [PrintPreview], [NoOfCopies]) VALUES ('<<ALLNODES>>', 6400, 'ExciseInvoiceFormat', 'SHExciseInvoiceFormat', '<<APPPATH>>\TallyPrinting.tcp', 1, '<<DEFAULT>>', 'Neat Mode', 0, 1)
+-GO-
+INSERT [dbo].[TallyPrintConfigHeader] ([Terminal], [TrnType], [ConfigName], [ReportName], [TcpLocation], [IsActive], [PrinterName], [PrintMode], [PrintPreview], [NoOfCopies]) VALUES ('<<ALLNODES>>', 6400, 'SaleSimpleExcise', 'SHSimpleExciseInvoice', '<<APPPATH>>\TallyPrinting.tcp', 0, '<<DEFAULT>>', 'Neat Mode', 1, 1)
+-GO-
+</s9qScript>		
+</s9qsqlblk>

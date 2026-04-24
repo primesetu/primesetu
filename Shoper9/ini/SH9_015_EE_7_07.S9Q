@@ -1,0 +1,70 @@
+<s9qsqlblk> 
+<s9qScriptID>S9Q_015_7_0012</s9qScriptID>
+<s9qtitle>Security Management:Insert Scripts</s9qtitle>
+<s9qpgmtype>L</s9qpgmtype>
+<s9qpgmtype>I</s9qpgmtype>
+<s9qversion>*</s9qversion>
+<s9qenvironment>M</s9qenvironment>
+<s9qRunMultiple>1</s9qRunMultiple>
+<s9qQryType>DDL</s9qQryType>
+<s9qScript>
+
+if exists (Select * from VaMenu Where Exename = 'sr130000.exe')
+Insert into DBO.vamenu (MnuNo, MenuOPt, MnuName, MnuCap, MnuPgm, ExeName, MnuWght, AllowWhenTrnClosed, Pgmopt, DbInfo, MenuIcon, Menusep, MenuBold, MultiInstance) 
+values (750,766,'Supervisory Functions','Security Management','P','SR436900.exe',0,1,1,'0+2','',0,0,0)
+-go-
+if exists (Select * from VaMenu Where Exename = 'SE100200.EXE')
+Insert into DBO.vamenu (MnuNo, MenuOPt, MnuName, MnuCap, MnuPgm, ExeName, MnuWght, AllowWhenTrnClosed, Pgmopt, DbInfo, MenuIcon, Menusep, MenuBold, MultiInstance) 
+values (950,993,'Supervisory Functions','Security Management-HO','P','SR436900.exe',0,1,2,'0+2','',0,0,0)
+-go-
+if exists (Select * from VaMenu Where Exename = 'SE100200.EXE')
+Insert into DBO.vamenu (MnuNo, MenuOPt, MnuName, MnuCap, MnuPgm, ExeName, MnuWght, AllowWhenTrnClosed, Pgmopt, DbInfo, MenuIcon, Menusep, MenuBold, MultiInstance) 
+values (950,994,'Supervisory Functions','Security Management-POS','P','SR436900.exe',0,1,3,'0+2','',0,0,0)
+-go-
+if exists (Select * from VaMenu Where Exename = 'SE100200.EXE')
+Insert into vavertable (NodeId,ExeSrl,ExeID,ExeName,ExeSkip,ExeVer,ExeMinor,ExeSubRel) 
+values(0,0,'SR436900.EXE','','N','9','1','231')
+-go-
+if Not exists (Select * from VaMenu Where Exename = 'sr130000.exe')
+Insert into vavertable (NodeId,ExeSrl,ExeID,ExeName,ExeSkip,ExeVer,ExeMinor,ExeSubRel) 
+values(0,0,'SR436900.EXE','','N','9','1','231')
+-go-
+if exists (Select * from VaMenu Where Exename = 'sr130000.exe')
+Delete from vaMenu Where MnuNo = 750 and MenuOPt = 751 and ExeName = 'SR406100.EXE'
+-go-
+if exists (Select * from VaMenu Where Exename = 'sr130000.exe')
+Delete from vaMenu Where MnuNo = 750 and MenuOPt = 752 and ExeName = 'SR406000.EXE'
+-go-
+if exists (Select * from VaMenu Where Exename = 'sr130000.exe')
+Delete from vaMenu Where MnuNo = 750 and MenuOPt = 753 and ExeName = 'SR413900.EXE'
+-go-
+if exists (Select * from VaMenu Where Exename = 'sr130000.exe')
+Delete from vaMenu Where MnuNo = 750 and MenuOPt = 754 and ExeName = 'SR413300.EXE'
+-go-
+if exists (Select * from VaMenu Where Exename = 'sr130000.exe')
+Delete from vavertable Where Exeid in ('sr406000.exe','SR406100.EXE','SR413900.EXE','SR413300.EXE')
+-go-
+if exists (Select * from VaMenu Where Exename = 'SE100200.EXE')
+Delete from vaMenu Where MnuNo = 950 and MenuOPt = 951 and ExeName = 'sr406000.exe'
+-go-
+if exists (Select * from VaMenu Where Exename = 'SE100200.EXE')
+Delete from vaMenu Where MnuNo = 950 and MenuOPt = 952 and ExeName = 'sr406100.exe'
+-go-
+if exists (Select * from VaMenu Where Exename = 'SE100200.EXE')
+Delete from vaMenu Where MnuNo = 950 and MenuOPt = 954 and ExeName = 'SR413900.EXE'
+-go-
+if exists (Select * from VaMenu Where Exename = 'SE100200.EXE')
+Delete from vaMenu Where MnuNo = 950 and MenuOPt = 955 and ExeName = 'SR413300.exe'
+-go-
+if exists (Select * from VaMenu Where Exename = 'SE100200.EXE')
+Delete from vaMenu Where MnuNo = 950 and MenuOPt = 983 and ExeName = 'SE900100.EXE'
+-go-
+if exists (Select * from VaMenu Where Exename = 'SE100200.EXE')
+Delete from vaMenu Where MnuNo = 950 and MenuOPt = 957 and ExeName = 'SE900160.exe'
+-go-
+if exists (Select * from VaMenu Where Exename = 'SE100200.EXE')
+Delete from vavertable Where Exeid in ('sr406000.exe','sr406100.exe','SR413900.EXE','SE900100.EXE', 'SE900160.exe', 'SR413300.exe')
+-go-
+</s9qScript>
+</s9qsqlblk>
+

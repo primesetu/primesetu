@@ -1,0 +1,345 @@
+<s9qsqlblk>
+  <s9qScriptID>S9Q_020_4_0003</s9qScriptID>
+  <s9qtitle>Security Database Script-Template Scripts</s9qtitle>
+  <s9qpgmtype>I</s9qpgmtype>
+  <s9qpgmtype>L</s9qpgmtype>
+  <s9qversion>*</s9qversion>
+  <s9qenvironment>M</s9qenvironment>
+  <s9qRunMultiple>1</s9qRunMultiple>
+  <s9qQryType>DML</s9qQryType>
+  <s9qScript>
+DELETE FROM ReportConfigFields WHERE TaskID = 202 and FieldType = 'ValueFields'
+-GO-
+INSERT INTO ReportConfigFields VALUES (202, 'OpeningStockQuantity', 'ValueFields', 'Opening Quantity', '0', 0)
+INSERT INTO ReportConfigFields VALUES (202, 'OpeningStockValue', 'ValueFields', 'Opening Value', '1', 0)
+INSERT INTO ReportConfigFields VALUES (202, 'ClosingStockQuantity', 'ValueFields', 'Closing Quantity', '2', 0)
+INSERT INTO ReportConfigFields VALUES (202, 'ClosingStockValue', 'ValueFields', 'Closing Value', '3', 0)
+INSERT INTO ReportConfigFields VALUES (202, 'TotalInwardAddons', 'ValueFields', 'Total Inward Addons', '4', 0)
+INSERT INTO ReportConfigFields VALUES (202, 'TotalInwardDeductions', 'ValueFields', 'Total Inward Deductions', '5', 0)
+INSERT INTO ReportConfigFields VALUES (202, 'TotalInwardDiscount', 'ValueFields', 'Total Inward Discount', '6', 0)
+INSERT INTO ReportConfigFields VALUES (202, 'TotalInwardTax', 'ValueFields', 'Total InwardTax', '7', 0)
+INSERT INTO ReportConfigFields VALUES (202, 'TotalInwardQuantity', 'ValueFields', 'Total Inward Quantity', '8', 0)
+INSERT INTO ReportConfigFields VALUES (202, 'TotalInwardValue', 'ValueFields', 'Total Inward Value', '9', 0)
+INSERT INTO ReportConfigFields VALUES (202, 'TotalOutwardAddons', 'ValueFields', 'Total Outward Addons', '10', 0)
+INSERT INTO ReportConfigFields VALUES (202, 'TotalOutwardDeductions', 'ValueFields', 'Total Outward Deductions', '11', 0)
+INSERT INTO ReportConfigFields VALUES (202, 'TotalOutwardDiscount', 'ValueFields', 'Total Outward Discount', '12', 0)
+INSERT INTO ReportConfigFields VALUES (202, 'TotalOutwardTax', 'ValueFields', 'Total OutwardTax', '13', 0)
+INSERT INTO ReportConfigFields VALUES (202, 'TotalOutwardQuantity', 'ValueFields', 'Total Outward Quantity', '14', 0)
+INSERT INTO ReportConfigFields VALUES (202, 'TotalOutwardValue', 'ValueFields', 'Total Outward Value', '15', 0)
+INSERT INTO ReportConfigFields VALUES (202, 'PurchaseAddons', 'ValueFields', 'Purchase Addons', '16', 0)
+INSERT INTO ReportConfigFields VALUES (202, 'PurchaseDeductions', 'ValueFields', 'Purchase Deductions', '17', 0)
+INSERT INTO ReportConfigFields VALUES (202, 'PurchaseDiscount', 'ValueFields', 'Purchase Discount', '18', 0)
+INSERT INTO ReportConfigFields VALUES (202, 'PurchaseTax', 'ValueFields', 'PurchaseTax', '19', 0)
+INSERT INTO ReportConfigFields VALUES (202, 'PurchaseQuantity', 'ValueFields', 'Purchase Quantity', '20', 0)
+INSERT INTO ReportConfigFields VALUES (202, 'PurchaseValue', 'ValueFields', 'Purchase Value', '21', 0)
+INSERT INTO ReportConfigFields VALUES (202, 'PurchaseReturnAddons', 'ValueFields', 'PurchaseReturn Addons', '22', 0)
+INSERT INTO ReportConfigFields VALUES (202, 'PurchaseReturnDeductions', 'ValueFields', 'PurchaseReturn Deductions', '23', 0)
+INSERT INTO ReportConfigFields VALUES (202, 'PurchaseReturnDiscount', 'ValueFields', 'PurchaseReturn Discount', '24', 0)
+INSERT INTO ReportConfigFields VALUES (202, 'PurchaseReturnTax', 'ValueFields', 'PurchaseReturnTax', '25', 0)
+INSERT INTO ReportConfigFields VALUES (202, 'PurchaseReturnQuantity', 'ValueFields', 'PurchaseReturn Quantity', '26', 0)
+INSERT INTO ReportConfigFields VALUES (202, 'PurchaseReturnValue', 'ValueFields', 'PurchaseReturn Value', '27', 0)
+INSERT INTO ReportConfigFields VALUES (202, 'SaleAddons', 'ValueFields', 'Sale Addons', '28', 0)
+INSERT INTO ReportConfigFields VALUES (202, 'SaleDeductions', 'ValueFields', 'Sale Deductions', '29', 0)
+INSERT INTO ReportConfigFields VALUES (202, 'SaleDiscount', 'ValueFields', 'Sale Discount', '30', 0)
+INSERT INTO ReportConfigFields VALUES (202, 'SaleTax', 'ValueFields', 'SaleTax', '31', 0)
+INSERT INTO ReportConfigFields VALUES (202, 'SaleQuantity', 'ValueFields', 'Sale Quantity', '32', 0)
+INSERT INTO ReportConfigFields VALUES (202, 'SaleValue', 'ValueFields', 'Sale Value', '33', 0)
+INSERT INTO ReportConfigFields VALUES (202, 'SaleReturnAddons', 'ValueFields', 'SaleReturn Addons', '34', 0)
+INSERT INTO ReportConfigFields VALUES (202, 'SaleReturnDeductions', 'ValueFields', 'SaleReturn Deductions', '35', 0)
+INSERT INTO ReportConfigFields VALUES (202, 'SaleReturnDiscount', 'ValueFields', 'SaleReturn Discount', '36', 0)
+INSERT INTO ReportConfigFields VALUES (202, 'SaleReturnTax', 'ValueFields', 'SaleReturnTax', '37', 0)
+INSERT INTO ReportConfigFields VALUES (202, 'SaleReturnQuantity', 'ValueFields', 'SaleReturn Quantity', '38', 0)
+INSERT INTO ReportConfigFields VALUES (202, 'SaleReturnValue', 'ValueFields', 'SaleReturn Value', '39', 0)
+INSERT INTO ReportConfigFields VALUES (202, 'TransferInAddons', 'ValueFields', 'TransferIn Addons', '40', 0)
+INSERT INTO ReportConfigFields VALUES (202, 'TransferInDeductions', 'ValueFields', 'TransferIn Deductions', '41', 0)
+INSERT INTO ReportConfigFields VALUES (202, 'TransferInDiscount', 'ValueFields', 'TransferIn Discount', '42', 0)
+INSERT INTO ReportConfigFields VALUES (202, 'TransferInTax', 'ValueFields', 'TransferInTax', '43', 0)
+INSERT INTO ReportConfigFields VALUES (202, 'TransferInQuantity', 'ValueFields', 'TransferIn Quantity', '44', 0)
+INSERT INTO ReportConfigFields VALUES (202, 'TransferInValue', 'ValueFields', 'TransferIn Value', '45', 0)
+INSERT INTO ReportConfigFields VALUES (202, 'TransferOutAddons', 'ValueFields', 'TransferOut Addons', '46', 0)
+INSERT INTO ReportConfigFields VALUES (202, 'TransferOutDeductions', 'ValueFields', 'TransferOut Deductions', '47', 0)
+INSERT INTO ReportConfigFields VALUES (202, 'TransferOutDiscount', 'ValueFields', 'TransferOut Discount', '48', 0)
+INSERT INTO ReportConfigFields VALUES (202, 'TransferOutTax', 'ValueFields', 'TransferOutTax', '49', 0)
+INSERT INTO ReportConfigFields VALUES (202, 'TransferOutQuantity', 'ValueFields', 'TransferOut Quantity', '50', 0)
+INSERT INTO ReportConfigFields VALUES (202, 'TransferOutValue', 'ValueFields', 'TransferOut Value', '51', 0)
+INSERT INTO ReportConfigFields VALUES (202, 'MiscIssueAddons', 'ValueFields', 'MiscIssue Addons', '52', 0)
+INSERT INTO ReportConfigFields VALUES (202, 'MiscIssueDeductions', 'ValueFields', 'MiscIssue Deductions', '53', 0)
+INSERT INTO ReportConfigFields VALUES (202, 'MiscIssueDiscount', 'ValueFields', 'MiscIssue Discount', '54', 0)
+INSERT INTO ReportConfigFields VALUES (202, 'MiscIssueTax', 'ValueFields', 'MiscIssueTax', '55', 0)
+INSERT INTO ReportConfigFields VALUES (202, 'MiscIssueQuantity', 'ValueFields', 'MiscIssue Quantity', '56', 0)
+INSERT INTO ReportConfigFields VALUES (202, 'MiscIssueValue', 'ValueFields', 'MiscIssue Value', '57', 0)
+INSERT INTO ReportConfigFields VALUES (202, 'MiscReceiptAddons', 'ValueFields', 'MiscReceipt Addons', '58', 0)
+INSERT INTO ReportConfigFields VALUES (202, 'MiscReceiptDeductions', 'ValueFields', 'MiscReceipt Deductions', '59', 0)
+INSERT INTO ReportConfigFields VALUES (202, 'MiscReceiptDiscount', 'ValueFields', 'MiscReceipt Discount', '60', 0)
+INSERT INTO ReportConfigFields VALUES (202, 'MiscReceiptTax', 'ValueFields', 'MiscReceiptTax', '61', 0)
+INSERT INTO ReportConfigFields VALUES (202, 'MiscReceiptQuantity', 'ValueFields', 'MiscReceipt Quantity', '62', 0)
+INSERT INTO ReportConfigFields VALUES (202, 'MiscReceiptValue', 'ValueFields', 'MiscReceipt Value', '63', 0)
+INSERT INTO ReportConfigFields VALUES (202, 'ApprovalIssueAddons', 'ValueFields', 'ApprovalIssue Addons', '64', 0)
+INSERT INTO ReportConfigFields VALUES (202, 'ApprovalIssueDeductions', 'ValueFields', 'ApprovalIssue Deductions', '65', 0)
+INSERT INTO ReportConfigFields VALUES (202, 'ApprovalIssueDiscount', 'ValueFields', 'ApprovalIssue Discount', '66', 0)
+INSERT INTO ReportConfigFields VALUES (202, 'ApprovalIssueTax', 'ValueFields', 'ApprovalIssueTax', '67', 0)
+INSERT INTO ReportConfigFields VALUES (202, 'ApprovalIssueQuantity', 'ValueFields', 'ApprovalIssue Quantity', '68', 0)
+INSERT INTO ReportConfigFields VALUES (202, 'ApprovalIssueValue', 'ValueFields', 'ApprovalIssue Value', '69', 0)
+INSERT INTO ReportConfigFields VALUES (202, 'ApprovalReturnAddons', 'ValueFields', 'ApprovalReturn Addons', '70', 0)
+INSERT INTO ReportConfigFields VALUES (202, 'ApprovalReturnDeductions', 'ValueFields', 'ApprovalReturn Deductions', '71', 0)
+INSERT INTO ReportConfigFields VALUES (202, 'ApprovalReturnDiscount', 'ValueFields', 'ApprovalReturn Discount', '72', 0)
+INSERT INTO ReportConfigFields VALUES (202, 'ApprovalReturnTax', 'ValueFields', 'ApprovalReturnTax', '73', 0)
+INSERT INTO ReportConfigFields VALUES (202, 'ApprovalReturnQuantity', 'ValueFields', 'ApprovalReturn Quantity', '74', 0)
+INSERT INTO ReportConfigFields VALUES (202, 'ApprovalReturnValue', 'ValueFields', 'ApprovalReturn Value', '75', 0)
+-GO-
+DELETE FROM ReportConfigFields WHERE TaskID = 203 and FieldType = 'ValueFields'
+-GO-
+INSERT INTO ReportConfigFields VALUES (203, 'TotalInwardAddons', 'ValueFields', 'Total Inward Addons', '0', 0)
+INSERT INTO ReportConfigFields VALUES (203, 'TotalInwardDeductions', 'ValueFields', 'Total Inward Deductions', '1', 0)
+INSERT INTO ReportConfigFields VALUES (203, 'TotalInwardDiscount', 'ValueFields', 'Total Inward Discount', '2', 0)
+INSERT INTO ReportConfigFields VALUES (203, 'TotalInwardTax', 'ValueFields', 'Total InwardTax', '3', 0)
+INSERT INTO ReportConfigFields VALUES (203, 'TotalInwardQuantity', 'ValueFields', 'Total Inward Quantity', '4', 0)
+INSERT INTO ReportConfigFields VALUES (203, 'TotalInwardValue', 'ValueFields', 'Total Inward Value', '5', 0)
+INSERT INTO ReportConfigFields VALUES (203, 'TotalOutwardAddons', 'ValueFields', 'Total Outward Addons', '6', 0)
+INSERT INTO ReportConfigFields VALUES (203, 'TotalOutwardDeductions', 'ValueFields', 'Total Outward Deductions', '7', 0)
+INSERT INTO ReportConfigFields VALUES (203, 'TotalOutwardDiscount', 'ValueFields', 'Total Outward Discount', '8', 0)
+INSERT INTO ReportConfigFields VALUES (203, 'TotalOutwardTax', 'ValueFields', 'Total OutwardTax', '9', 0)
+INSERT INTO ReportConfigFields VALUES (203, 'TotalOutwardQuantity', 'ValueFields', 'Total Outward Quantity', '10', 0)
+INSERT INTO ReportConfigFields VALUES (203, 'TotalOutwardValue', 'ValueFields', 'Total Outward Value', '11', 0)
+INSERT INTO ReportConfigFields VALUES (203, 'PurchaseAddons', 'ValueFields', 'Purchase Addons', '12', 0)
+INSERT INTO ReportConfigFields VALUES (203, 'PurchaseDeductions', 'ValueFields', 'Purchase Deductions', '13', 0)
+INSERT INTO ReportConfigFields VALUES (203, 'PurchaseDiscount', 'ValueFields', 'Purchase Discount', '14', 0)
+INSERT INTO ReportConfigFields VALUES (203, 'PurchaseTax', 'ValueFields', 'PurchaseTax', '15', 0)
+INSERT INTO ReportConfigFields VALUES (203, 'PurchaseQuantity', 'ValueFields', 'Purchase Quantity', '16', 0)
+INSERT INTO ReportConfigFields VALUES (203, 'PurchaseValue', 'ValueFields', 'Purchase Value', '17', 0)
+INSERT INTO ReportConfigFields VALUES (203, 'PurchaseReturnAddons', 'ValueFields', 'PurchaseReturn Addons', '18', 0)
+INSERT INTO ReportConfigFields VALUES (203, 'PurchaseReturnDeductions', 'ValueFields', 'PurchaseReturn Deductions', '19', 0)
+INSERT INTO ReportConfigFields VALUES (203, 'PurchaseReturnDiscount', 'ValueFields', 'PurchaseReturn Discount', '20', 0)
+INSERT INTO ReportConfigFields VALUES (203, 'PurchaseReturnTax', 'ValueFields', 'PurchaseReturnTax', '21', 0)
+INSERT INTO ReportConfigFields VALUES (203, 'PurchaseReturnQuantity', 'ValueFields', 'PurchaseReturn Quantity', '22', 0)
+INSERT INTO ReportConfigFields VALUES (203, 'PurchaseReturnValue', 'ValueFields', 'PurchaseReturn Value', '23', 0)
+INSERT INTO ReportConfigFields VALUES (203, 'SaleAddons', 'ValueFields', 'Sale Addons', '24', 0)
+INSERT INTO ReportConfigFields VALUES (203, 'SaleDeductions', 'ValueFields', 'Sale Deductions', '25', 0)
+INSERT INTO ReportConfigFields VALUES (203, 'SaleDiscount', 'ValueFields', 'Sale Discount', '26', 0)
+INSERT INTO ReportConfigFields VALUES (203, 'SaleTax', 'ValueFields', 'SaleTax', '27', 0)
+INSERT INTO ReportConfigFields VALUES (203, 'SaleQuantity', 'ValueFields', 'Sale Quantity', '28', 0)
+INSERT INTO ReportConfigFields VALUES (203, 'SaleValue', 'ValueFields', 'Sale Value', '29', 0)
+INSERT INTO ReportConfigFields VALUES (203, 'SaleReturnAddons', 'ValueFields', 'SaleReturn Addons', '30', 0)
+INSERT INTO ReportConfigFields VALUES (203, 'SaleReturnDeductions', 'ValueFields', 'SaleReturn Deductions', '31', 0)
+INSERT INTO ReportConfigFields VALUES (203, 'SaleReturnDiscount', 'ValueFields', 'SaleReturn Discount', '32', 0)
+INSERT INTO ReportConfigFields VALUES (203, 'SaleReturnTax', 'ValueFields', 'SaleReturnTax', '33', 0)
+INSERT INTO ReportConfigFields VALUES (203, 'SaleReturnQuantity', 'ValueFields', 'SaleReturn Quantity', '34', 0)
+INSERT INTO ReportConfigFields VALUES (203, 'SaleReturnValue', 'ValueFields', 'SaleReturn Value', '35', 0)
+INSERT INTO ReportConfigFields VALUES (203, 'TransferInAddons', 'ValueFields', 'TransferIn Addons', '36', 0)
+INSERT INTO ReportConfigFields VALUES (203, 'TransferInDeductions', 'ValueFields', 'TransferIn Deductions', '37', 0)
+INSERT INTO ReportConfigFields VALUES (203, 'TransferInDiscount', 'ValueFields', 'TransferIn Discount', '38', 0)
+INSERT INTO ReportConfigFields VALUES (203, 'TransferInTax', 'ValueFields', 'TransferInTax', '39', 0)
+INSERT INTO ReportConfigFields VALUES (203, 'TransferInQuantity', 'ValueFields', 'TransferIn Quantity', '40', 0)
+INSERT INTO ReportConfigFields VALUES (203, 'TransferInValue', 'ValueFields', 'TransferIn Value', '41', 0)
+INSERT INTO ReportConfigFields VALUES (203, 'TransferOutAddons', 'ValueFields', 'TransferOut Addons', '42', 0)
+INSERT INTO ReportConfigFields VALUES (203, 'TransferOutDeductions', 'ValueFields', 'TransferOut Deductions', '43', 0)
+INSERT INTO ReportConfigFields VALUES (203, 'TransferOutDiscount', 'ValueFields', 'TransferOut Discount', '44', 0)
+INSERT INTO ReportConfigFields VALUES (203, 'TransferOutTax', 'ValueFields', 'TransferOutTax', '45', 0)
+INSERT INTO ReportConfigFields VALUES (203, 'TransferOutQuantity', 'ValueFields', 'TransferOut Quantity', '46', 0)
+INSERT INTO ReportConfigFields VALUES (203, 'TransferOutValue', 'ValueFields', 'TransferOut Value', '47', 0)
+INSERT INTO ReportConfigFields VALUES (203, 'MiscIssueAddons', 'ValueFields', 'MiscIssue Addons', '48', 0)
+INSERT INTO ReportConfigFields VALUES (203, 'MiscIssueDeductions', 'ValueFields', 'MiscIssue Deductions', '49', 0)
+INSERT INTO ReportConfigFields VALUES (203, 'MiscIssueDiscount', 'ValueFields', 'MiscIssue Discount', '50', 0)
+INSERT INTO ReportConfigFields VALUES (203, 'MiscIssueTax', 'ValueFields', 'MiscIssueTax', '51', 0)
+INSERT INTO ReportConfigFields VALUES (203, 'MiscIssueQuantity', 'ValueFields', 'MiscIssue Quantity', '52', 0)
+INSERT INTO ReportConfigFields VALUES (203, 'MiscIssueValue', 'ValueFields', 'MiscIssue Value', '53', 0)
+INSERT INTO ReportConfigFields VALUES (203, 'MiscReceiptAddons', 'ValueFields', 'MiscReceipt Addons', '54', 0)
+INSERT INTO ReportConfigFields VALUES (203, 'MiscReceiptDeductions', 'ValueFields', 'MiscReceipt Deductions', '55', 0)
+INSERT INTO ReportConfigFields VALUES (203, 'MiscReceiptDiscount', 'ValueFields', 'MiscReceipt Discount', '56', 0)
+INSERT INTO ReportConfigFields VALUES (203, 'MiscReceiptTax', 'ValueFields', 'MiscReceiptTax', '57', 0)
+INSERT INTO ReportConfigFields VALUES (203, 'MiscReceiptQuantity', 'ValueFields', 'MiscReceipt Quantity', '58', 0)
+INSERT INTO ReportConfigFields VALUES (203, 'MiscReceiptValue', 'ValueFields', 'MiscReceipt Value', '59', 0)
+INSERT INTO ReportConfigFields VALUES (203, 'ApprovalIssueAddons', 'ValueFields', 'ApprovalIssue Addons', '60', 0)
+INSERT INTO ReportConfigFields VALUES (203, 'ApprovalIssueDeductions', 'ValueFields', 'ApprovalIssue Deductions', '61', 0)
+INSERT INTO ReportConfigFields VALUES (203, 'ApprovalIssueDiscount', 'ValueFields', 'ApprovalIssue Discount', '62', 0)
+INSERT INTO ReportConfigFields VALUES (203, 'ApprovalIssueTax', 'ValueFields', 'ApprovalIssueTax', '63', 0)
+INSERT INTO ReportConfigFields VALUES (203, 'ApprovalIssueQuantity', 'ValueFields', 'ApprovalIssue Quantity', '64', 0)
+INSERT INTO ReportConfigFields VALUES (203, 'ApprovalIssueValue', 'ValueFields', 'ApprovalIssue Value', '65', 0)
+INSERT INTO ReportConfigFields VALUES (203, 'ApprovalReturnAddons', 'ValueFields', 'ApprovalReturn Addons', '66', 0)
+INSERT INTO ReportConfigFields VALUES (203, 'ApprovalReturnDeductions', 'ValueFields', 'ApprovalReturn Deductions', '67', 0)
+INSERT INTO ReportConfigFields VALUES (203, 'ApprovalReturnDiscount', 'ValueFields', 'ApprovalReturn Discount', '68', 0)
+INSERT INTO ReportConfigFields VALUES (203, 'ApprovalReturnTax', 'ValueFields', 'ApprovalReturnTax', '69', 0)
+INSERT INTO ReportConfigFields VALUES (203, 'ApprovalReturnQuantity', 'ValueFields', 'ApprovalReturn Quantity', '70', 0)
+INSERT INTO ReportConfigFields VALUES (203, 'ApprovalReturnValue', 'ValueFields', 'ApprovalReturn Value', '71', 0)
+-GO-
+UPDATE ReportConfigs SET DefaultTitle = 'Stock Balance Report' where TaskID = 204
+-GO-
+INSERT INTO vaMenu VALUES (940, 946, 'Report Designer', 'Slips', 'P', 'SR435600.EXE', '0', 1, '206', '0+2', '', 0, 0, 1)
+-GO-
+INSERT INTO ReportInfo VALUES (206, 206, 'Slips', 1, 'T1')
+INSERT INTO ReportActionInfo VALUES (206, 'CALL', 'ACTION', 'POS ReportMain', '')
+INSERT INTO ReportVariableInfo VALUES (206, 'TDL', '<<APPPATH>>\POSREPORTS.tcp')
+INSERT INTO ReportConfigs VALUES (206, 'Slips Summary Report', 5, 1, 'Slips', 1)
+-GO-
+INSERT INTO ReportConfigFields VALUES (206, 'TransactionDate', 'Particulars', 'Transaction Date', '0', 0)
+INSERT INTO ReportConfigFields VALUES (206, 'SlipType', 'Particulars', 'Slip Type', '1', 1)
+INSERT INTO ReportConfigFields VALUES (206, 'SlipStatus', 'Particulars', 'Status', '2', 1)
+INSERT INTO ReportConfigFields VALUES (206, 'PartyType', 'Particulars', 'Party Type', '3', 1)
+INSERT INTO ReportConfigFields VALUES (206, 'PartyCode', 'Particulars', 'Party Code', '4', 1)
+INSERT INTO ReportConfigFields VALUES (206, 'PartyName', 'Particulars', 'Party Name', '5', 1)
+INSERT INTO ReportConfigFields VALUES (206, 'BillPrefixNumber', 'Particulars', 'Document Number', '6', 0)
+INSERT INTO ReportConfigFields VALUES (206, 'WeekDay', 'Particulars', 'Day of the Week', '7', 1)
+INSERT INTO ReportConfigFields VALUES (206, 'TransactionMonth', 'Particulars', 'Month and Year', '8', 1)
+INSERT INTO ReportConfigFields VALUES (206, 'ItemRate', 'ValueFields', 'Rate', '1', 0)
+INSERT INTO ReportConfigFields VALUES (206, 'ItemQuantity', 'ValueFields', 'Quantity', '2', 0)
+INSERT INTO ReportConfigFields VALUES (206, 'ItemValue', 'ValueFields', 'Gross Value', '3', 0)
+INSERT INTO ReportConfigFields VALUES (206, 'ItemTotalDiscount', 'ValueFields', 'Discount', '4', 0)
+INSERT INTO ReportConfigFields VALUES (206, 'PendingQuantity', 'ValueFields', 'Pending Quantity', '5', 0)
+INSERT INTO ReportConfigFields VALUES (206, 'PendingValue', 'ValueFields', 'Pending Value', '6', 0)
+INSERT INTO ReportConfigFields VALUES (206, 'BilledQuantity', 'ValueFields', 'Billed Quantity', '7', 0)
+INSERT INTO ReportConfigFields VALUES (206, 'BilledValue', 'ValueFields', 'Billed Value', '8', 0)
+INSERT INTO ReportConfigFields VALUES (206, 'CancelledQuantity', 'ValueFields', 'Cancelled Quantity', '9', 0)
+INSERT INTO ReportConfigFields VALUES (206, 'CancelledValue', 'ValueFields', 'Cancelled Value', '10', 0)
+INSERT INTO ReportConfigFields VALUES (206, 'NetValue', 'ValueFields', 'Net Value', '11', 0)
+-GO-
+INSERT INTO ReportConfigFields VALUES (203,'Tax1Percentage','Particulars','Tax1 Percentage',57,0)
+INSERT INTO ReportConfigFields VALUES (203,'Tax2Percentage','Particulars','Tax2 Percentage',58,0)
+INSERT INTO ReportConfigFields VALUES (201,'CurrentBalanceQuantity','ValueFields','Current Bal Qty',20,0)
+INSERT INTO ReportConfigFields VALUES (203,'CurrentBalanceQuantity','ValueFields','Current Bal Qty',80,0)
+-GO-
+
+</s9qScript>		
+</s9qsqlblk>
+
+<s9qsqlblk>
+  <s9qScriptID>S9Q_020_4_0004</s9qScriptID>
+  <s9qtitle>Security Database Script-508</s9qtitle>
+  <s9qpgmtype>I</s9qpgmtype>
+  <s9qpgmtype>L</s9qpgmtype>
+  <s9qversion>*</s9qversion>
+  <s9qenvironment>M</s9qenvironment>
+  <s9qRunMultiple>1</s9qRunMultiple>
+  <s9qQryType>DML</s9qQryType>
+  <s9qScript>
+INSERT INTO ReportConfigFields VALUES (201,'LRNumber','Particulars','LRNumber',58,0)
+-GO-
+INSERT INTO ReportConfigFields VALUES (201,'LRDate','Particulars','LRDate',59,0)
+-GO-
+INSERT INTO ReportConfigFields VALUES (201,'ModeOfTransport','Particulars','Transport Mode',60,0)
+-GO-
+INSERT INTO ReportConfigFields VALUES (201,'Transporter','Particulars','Transport Code',61,0)
+-GO-
+INSERT INTO ReportConfigFields VALUES (201,'VehicleNumber','Particulars','VehicleNo',62,0)
+-GO-
+INSERT INTO ReportConfigFields VALUES (201,'DriverName','Particulars','Driver Name',63,0)
+-GO-
+INSERT INTO ReportConfigFields VALUES (206,'TrialDate','Particulars','Trial Date',9,0)
+-GO-
+INSERT INTO ReportConfigFields VALUES (206,'DelivaryDate','Particulars','Delivary Date',10,0)
+-GO-
+INSERT INTO ReportConfigFields VALUES (201, 'BillRemarks', 'Particulars', 'Bill Remarks', 64, 0)
+-GO-
+UPDATE ReportConfigFields SET Caption = 'Current Retail Price' WHERE Caption = 'Retail Price'
+-GO-
+INSERT INTO ReportConfigFields VALUES (201, 'SalesNetRetailValue', 'ValueFields', 'Retail Value', 15, 0)
+-GO-
+DELETE FROM ReportConfigFields WHERE FieldName LIKE 'AnalysisCode%'
+-GO-
+INSERT INTO ReportConfigFields VALUES ('0','Analysis1Code','Particulars','<<AnaCd1>> Code','25','1')
+INSERT INTO ReportConfigFields VALUES ('0','Analysis1Desc','Particulars','<<AnaCd1>> Desc','25','1')
+INSERT INTO ReportConfigFields VALUES ('0','Analysis2Code','Particulars','<<AnaCd2>> Code','25','1')
+INSERT INTO ReportConfigFields VALUES ('0','Analysis2Desc','Particulars','<<AnaCd2>> Desc','25','1')
+INSERT INTO ReportConfigFields VALUES ('0','Analysis3Code','Particulars','<<AnaCd3>> Code','25','1')
+INSERT INTO ReportConfigFields VALUES ('0','Analysis3Desc','Particulars','<<AnaCd3>> Desc','25','1')
+INSERT INTO ReportConfigFields VALUES ('0','Analysis4Code','Particulars','<<AnaCd4>> Code','25','1')
+INSERT INTO ReportConfigFields VALUES ('0','Analysis4Desc','Particulars','<<AnaCd4>> Desc','25','1')
+INSERT INTO ReportConfigFields VALUES ('0','Analysis5Code','Particulars','<<AnaCd5>> Code','25','1')
+INSERT INTO ReportConfigFields VALUES ('0','Analysis5Desc','Particulars','<<AnaCd5>> Desc','25','1')
+INSERT INTO ReportConfigFields VALUES ('0','Analysis6Code','Particulars','<<AnaCd6>> Code','25','1')
+INSERT INTO ReportConfigFields VALUES ('0','Analysis6Desc','Particulars','<<AnaCd6>> Desc','25','1')
+INSERT INTO ReportConfigFields VALUES ('0','Analysis7Code','Particulars','<<AnaCd7>> Code','25','1')
+INSERT INTO ReportConfigFields VALUES ('0','Analysis7Desc','Particulars','<<AnaCd7>> Desc','25','1')
+INSERT INTO ReportConfigFields VALUES ('0','Analysis8Code','Particulars','<<AnaCd8>> Code','25','1')
+INSERT INTO ReportConfigFields VALUES ('0','Analysis8Desc','Particulars','<<AnaCd8>> Desc','25','1')
+INSERT INTO ReportConfigFields VALUES ('0','Analysis9Code','Particulars','<<AnaCd9>> Code','25','1')
+INSERT INTO ReportConfigFields VALUES ('0','Analysis9Desc','Particulars','<<AnaCd9>> Desc','25','1')
+INSERT INTO ReportConfigFields VALUES ('0','Analysis10Code','Particulars','<<AnaCd10>> Code','26','1')
+INSERT INTO ReportConfigFields VALUES ('0','Analysis10Desc','Particulars','<<AnaCd10>> Desc','26','1')
+INSERT INTO ReportConfigFields VALUES ('0','Analysis11Code','Particulars','<<AnaCd11>> Code','26','1')
+INSERT INTO ReportConfigFields VALUES ('0','Analysis11Desc','Particulars','<<AnaCd11>> Desc','26','1')
+INSERT INTO ReportConfigFields VALUES ('0','Analysis12Code','Particulars','<<AnaCd12>> Code','26','1')
+INSERT INTO ReportConfigFields VALUES ('0','Analysis12Desc','Particulars','<<AnaCd12>> Desc','26','1')
+INSERT INTO ReportConfigFields VALUES ('0','Analysis13Code','Particulars','<<AnaCd13>> Code','26','1')
+INSERT INTO ReportConfigFields VALUES ('0','Analysis13Desc','Particulars','<<AnaCd13>> Desc','26','1')
+INSERT INTO ReportConfigFields VALUES ('0','Analysis14Code','Particulars','<<AnaCd14>> Code','26','1')
+INSERT INTO ReportConfigFields VALUES ('0','Analysis14Desc','Particulars','<<AnaCd14>> Desc','26','1')
+INSERT INTO ReportConfigFields VALUES ('0','Analysis15Code','Particulars','<<AnaCd15>> Code','26','1')
+INSERT INTO ReportConfigFields VALUES ('0','Analysis15Desc','Particulars','<<AnaCd15>> Desc','26','1')
+INSERT INTO ReportConfigFields VALUES ('0','Analysis16Code','Particulars','<<AnaCd16>> Code','26','1')
+INSERT INTO ReportConfigFields VALUES ('0','Analysis16Desc','Particulars','<<AnaCd16>> Desc','26','1')
+INSERT INTO ReportConfigFields VALUES ('0','Analysis17Code','Particulars','<<AnaCd17>> Code','26','1')
+INSERT INTO ReportConfigFields VALUES ('0','Analysis17Desc','Particulars','<<AnaCd17>> Desc','26','1')
+INSERT INTO ReportConfigFields VALUES ('0','Analysis18Code','Particulars','<<AnaCd18>> Code','26','1')
+INSERT INTO ReportConfigFields VALUES ('0','Analysis18Desc','Particulars','<<AnaCd18>> Desc','26','1')
+INSERT INTO ReportConfigFields VALUES ('0','Analysis19Code','Particulars','<<AnaCd19>> Code','26','1')
+INSERT INTO ReportConfigFields VALUES ('0','Analysis19Desc','Particulars','<<AnaCd19>> Desc','26','1')
+INSERT INTO ReportConfigFields VALUES ('0','Analysis20Code','Particulars','<<AnaCd20>> Code','26','1')
+INSERT INTO ReportConfigFields VALUES ('0','Analysis20Desc','Particulars','<<AnaCd20>> Desc','26','1')
+INSERT INTO ReportConfigFields VALUES ('0','Analysis21Code','Particulars','<<AnaCd21>> Code','26','1')
+INSERT INTO ReportConfigFields VALUES ('0','Analysis21Desc','Particulars','<<AnaCd21>> Desc','26','1')
+INSERT INTO ReportConfigFields VALUES ('0','Analysis22Code','Particulars','<<AnaCd22>> Code','26','1')
+INSERT INTO ReportConfigFields VALUES ('0','Analysis22Desc','Particulars','<<AnaCd22>> Desc','26','1')
+INSERT INTO ReportConfigFields VALUES ('0','Analysis23Code','Particulars','<<AnaCd23>> Code','26','1')
+INSERT INTO ReportConfigFields VALUES ('0','Analysis23Desc','Particulars','<<AnaCd23>> Desc','26','1')
+INSERT INTO ReportConfigFields VALUES ('0','Analysis24Code','Particulars','<<AnaCd24>> Code','26','1')
+INSERT INTO ReportConfigFields VALUES ('0','Analysis24Desc','Particulars','<<AnaCd24>> Desc','26','1')
+INSERT INTO ReportConfigFields VALUES ('0','Analysis25Code','Particulars','<<AnaCd25>> Code','26','1')
+INSERT INTO ReportConfigFields VALUES ('0','Analysis25Desc','Particulars','<<AnaCd25>> Desc','26','1')
+INSERT INTO ReportConfigFields VALUES ('0','Analysis26Code','Particulars','<<AnaCd26>> Code','26','1')
+INSERT INTO ReportConfigFields VALUES ('0','Analysis26Desc','Particulars','<<AnaCd26>> Desc','26','1')
+INSERT INTO ReportConfigFields VALUES ('0','Analysis27Code','Particulars','<<AnaCd27>> Code','26','1')
+INSERT INTO ReportConfigFields VALUES ('0','Analysis27Desc','Particulars','<<AnaCd27>> Desc','26','1')
+INSERT INTO ReportConfigFields VALUES ('0','Analysis28Code','Particulars','<<AnaCd28>> Code','26','1')
+INSERT INTO ReportConfigFields VALUES ('0','Analysis28Desc','Particulars','<<AnaCd28>> Desc','26','1')
+INSERT INTO ReportConfigFields VALUES ('0','Analysis29Code','Particulars','<<AnaCd29>> Code','26','1')
+INSERT INTO ReportConfigFields VALUES ('0','Analysis29Desc','Particulars','<<AnaCd29>> Desc','26','1')
+INSERT INTO ReportConfigFields VALUES ('0','Analysis30Code','Particulars','<<AnaCd30>> Code','26','1')
+INSERT INTO ReportConfigFields VALUES ('0','Analysis30Desc','Particulars','<<AnaCd30>> Desc','26','1')
+INSERT INTO ReportConfigFields VALUES ('0','Analysis31Code','Particulars','<<AnaCd31>> Code','26','1')
+INSERT INTO ReportConfigFields VALUES ('0','Analysis31Desc','Particulars','<<AnaCd31>> Desc','26','1')
+INSERT INTO ReportConfigFields VALUES ('0','Analysis32Code','Particulars','<<AnaCd32>> Code','26','1')
+INSERT INTO ReportConfigFields VALUES ('0','Analysis32Desc','Particulars','<<AnaCd32>> Desc','26','1')
+-GO-
+Update CommunicationConfig Set ConfigType = 'SMS' Where ConfigType = 'HTTPSMS'
+Update CommunicationConfig Set ConfigType = 'SMTP' Where ConfigType = 'SMTPMAIL'
+-GO-
+Update AlertDefinition Set AlertMode = 'SMS', Settings = REPLACE(Settings, '<ALERTMODE>HTTPSMS</ALERTMODE>', '<ALERTMODE>SMS</ALERTMODE>') Where AlertMode = 'HTTPSMS'
+Update AlertDefinition Set AlertMode = 'SMTP', Settings = REPLACE(Settings, '<ALERTMODE>SMTPMAIL</ALERTMODE>', '<ALERTMODE>SMTP</ALERTMODE>') Where AlertMode = 'SMTPMAIL'
+-GO-
+Update ReportScheduleDetails Set CommunicationMode = 'SMS', CommunicationInfo = REPLACE(CommunicationInfo, '<SCHEDULEMODE>HTTPSMS</SCHEDULEMODE>', '<SCHEDULEMODE>SMS</SCHEDULEMODE>') Where CommunicationMode = 'HTTPSMS'
+Update ReportScheduleDetails Set CommunicationMode = 'SMTP', CommunicationInfo = REPLACE(CommunicationInfo, '<SCHEDULEMODE>SMTPMAIL</SCHEDULEMODE>', '<SCHEDULEMODE>SMTP</SCHEDULEMODE>') Where CommunicationMode = 'SMTPMAIL'
+-GO-
+Update AlertHistory Set AlertMode = 'SMS' Where AlertMode = 'HTTPSMS'
+Update AlertHistory Set AlertMode = 'SMTP' Where AlertMode = 'E-Mail'
+Update AlertHistory Set AlertMode = 'MESSAGEBOX' Where AlertMode = 'Message Box'
+Update AlertHistory Set AlertMode = 'BALLOONTIP' Where AlertMode = 'Balloon Tip'
+Update AlertHistory Set Status = 'COMPLETED' Where Status = 'SUCCESS'
+-GO-
+Update ReportScheduleHistory Set CommunicationMode = 'SMS' Where CommunicationMode = 'HTTPSMS'
+Update ReportScheduleHistory Set CommunicationMode = 'SMTP' Where CommunicationMode = 'SMTPMAIL'
+Update ReportScheduleHistory Set Status = 'COMPLETED' Where Status = 'SUCCESS'
+-GO-
+ALTER TABLE CommunicationConfig ALTER COLUMN ConfigType VARCHAR(64) NOT NULL
+-GO-
+ALTER TABLE CommunicationConfig DROP CONSTRAINT PK_CommunicationConfig 
+-GO-
+ALTER TABLE CommunicationConfig ADD CONSTRAINT PK_CommunicationConfig PRIMARY KEY (ConfigName, SrlNo, ConfigType)
+-GO-
+Alter Table ReportScheduleHeader Alter Column TimeRange VARCHAR(255)
+-GO-
+INSERT INTO ReportConfigFields VALUES('201', 'Tax1AssessableValue', 'ValueFields', 'Sale Value Before Tax', 1, 0)
+-GO-
+INSERT INTO ReportConfigFields VALUES('202', 'BillRemarks', 'Particulars', 'Bill Remarks', 64, 0)
+-GO-
+INSERT INTO ReportConfigFields VALUES('203', 'BillRemarks', 'Particulars', 'Bill Remarks', 64, 0)
+-GO-
+INSERT INTO ReportConfigFields VALUES('201', 'ItemLevelReasonCode', 'Particulars', 'Reason Code', 65,   0)
+-GO-
+INSERT INTO ReportConfigFields VALUES('202', 'ItemLevelReasonCode', 'Particulars', 'Reason Code', 65,   0)
+-GO-
+INSERT INTO ReportConfigFields VALUES('203', 'ItemLevelReasonCode', 'Particulars', 'Reason Code', 65,   0)
+-GO-
+DELETE FROM VaVerTable WHERE EXEID = 'SN400600.EXE'
+-GO-
+</s9qScript>		
+</s9qsqlblk>

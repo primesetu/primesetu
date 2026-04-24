@@ -1,0 +1,31 @@
+<s9qsqlblk>
+  <s9qScriptID>S9Q_0201_0_0001</s9qScriptID>
+  <s9qtitle>Security Database Scripts</s9qtitle>
+  <s9qpgmtype>I</s9qpgmtype>
+  <s9qpgmtype>L</s9qpgmtype>
+  <s9qversion>*</s9qversion>
+  <s9qenvironment>M</s9qenvironment>
+  <s9qRunMultiple>1</s9qRunMultiple>
+  <s9qQryType>DML</s9qQryType>
+  <s9qScript>
+Insert into vamenu (MnuNo, MenuOPt, MnuName, MnuCap, MnuPgm, ExeName, MnuWght, AllowWhenTrnClosed, Pgmopt, DbInfo, MenuIcon, Menusep, MenuBold, MultiInstance) values (300,317,'Stock','PT File Information','P','SR210700.EXE',0,1,0,'0','',1,0,0)
+-GO-
+Update VaVerTable set ExeSubRel = 574 where ExeID in ('SE301600.Exe','SR127000.Exe','SR144100.Exe','SR130000.exe','SR209500.Exe','SR234900.exe','SR143500.exe','SR343800.exe','SR443900.exe','SR721500.exe','SR320500.exe')
+-GO-
+Update VaverTable set ExeSubRel=570 where ExeId in('SR440600.EXE')
+-GO-
+Delete from PrintDesignerFields where FieldName LIKE 'BILLREMARKS%' AND FieldDisplayOrder=14
+-GO-
+</s9qScript>		
+</s9qsqlblk>
+
+<s9qsqlblk>
+  <s9qScriptid>S9Q_0201_4_0002</s9qScriptid> 
+  <s9qtitle>Install SIS for POS</s9qtitle>
+  <s9qpgmtype>L</s9qpgmtype>
+  <s9qversion>*</s9qversion>
+  <s9qenvironment>M</s9qenvironment>
+  <s9qRunMultiple>1</s9qRunMultiple>
+  <s9qQryType>EXE</s9qQryType>
+  <s9qScript><APPATH>\SIS\SISInst.exe</s9qScript>
+</s9qsqlblk>

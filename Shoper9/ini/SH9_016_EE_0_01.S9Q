@@ -1,0 +1,63 @@
+<s9qsqlblk>
+  <s9qScriptid>S9Q_016_0_0001</s9qScriptid> 
+  <s9qtitle></s9qtitle>
+  <s9qpgmtype>I</s9qpgmtype>
+  <s9qpgmtype>L</s9qpgmtype>
+  <s9qversion>*</s9qversion>
+  <s9qenvironment>M</s9qenvironment>
+  <s9qRunMultiple>1</s9qRunMultiple>
+  <s9qQryType>DML</s9qQryType>
+  <s9qScript>
+insert into vaMenu(MnuNo,MenuOPt,MnuName,MnuCap,MnuPgm,MnuWght,AllowWhenTrnClosed,pgmopt ,DbInfo,Menusep,MenuBold,MultiInstance ) values (200,270,'Cash','Till Management','M',0,0,0,0,0,0,0)
+-GO-
+insert into VaVerTable (NODEID,EXESRL,EXEID,EXESize,EXEVer,EXEMinor,EXESubRel,EXEDate,EXELastUpdated,EXESKIP) values (0,0,'SR138900.EXE',0,9,1,248,'2011-01-21','2011-01-21','N')
+-GO-
+insert into vaMenu(MnuNo,MenuOPt,MnuName,MnuCap,MnuPgm,MnuWght,AllowWhenTrnClosed,pgmopt ,DbInfo,Menusep,MenuBold,MultiInstance ) values (200,270,'Cash','Till Management','M',0,0,0,0,0,0,0)
+-GO-
+insert into vaMenu(MnuNo,MenuOPt,MnuName,MnuCap,MnuPgm,ExeName ,MnuWght,AllowWhenTrnClosed,pgmopt ,DbInfo,Menusep,MenuBold,MultiInstance ) values (270,271,'Till Management','Till Status','P','SR138900.EXE',0,0,1,0,0,0,0)
+-GO-
+insert into vaMenu(MnuNo,MenuOPt,MnuName,MnuCap,MnuPgm,ExeName ,MnuWght,AllowWhenTrnClosed,pgmopt ,DbInfo,Menusep,MenuBold,MultiInstance )values (270,272,'Till Management','Set Opening Balance','P','SR138900.EXE',0,0,2,0,0,0,0)
+-GO-
+insert into vaMenu(MnuNo,MenuOPt,MnuName,MnuCap,MnuPgm,ExeName ,MnuWght,AllowWhenTrnClosed,pgmopt ,DbInfo,Menusep,MenuBold,MultiInstance )values (270,273,'Till Management','Cash Lift','P','SR138900.EXE',0,0,3,0,0,0,0)
+-GO-
+insert into vaMenu(MnuNo,MenuOPt,MnuName,MnuCap,MnuPgm,ExeName ,MnuWght,AllowWhenTrnClosed,pgmopt ,DbInfo,Menusep,MenuBold,MultiInstance )values (270,274,'Till Management','Reconciliation','P','SR138900.EXE',0,0,4,0,0,0,0)
+-GO-
+insert into vaMenu(MnuNo,MenuOPt,MnuName,MnuCap,MnuPgm,ExeName ,MnuWght,AllowWhenTrnClosed,pgmopt ,DbInfo,Menusep,MenuBold,MultiInstance )values (270,275,'Till Management','Open Cash Drawer','P','SR138900.EXE',0,0,5,0,0,0,0)
+-GO-
+insert into vaMenu(MnuNo,MenuOPt,MnuName,MnuCap,MnuPgm,ExeName ,MnuWght,AllowWhenTrnClosed,pgmopt ,DbInfo,Menusep,MenuBold,MultiInstance )values (270,276,'Till Management','Till - Reprint','P','SR138900.EXE',0,0,6,0,0,0,0)insert into vaMenu(MnuNo,MenuOPt,MnuName,MnuCap,MnuPgm,ExeName ,MnuWght,AllowWhenTrnClosed,pgmopt ,DbInfo,Menusep,MenuBold,MultiInstance )values (270,276,'Till Management','Till - Reprint','P','SR138900.EXE',0,0,6,0,0,0,0)
+-GO-
+Insert into Vamenu values(460,469,'Cash','Reconciliation Report','P','SR239600.EXE',0,1,1,0,'',0,0,0)
+-GO-
+Insert into Vamenu values(460,470,'Cash','Till Status Report','P','SR239600.EXE',0,1,2,0,'',0,0,0)
+-GO-
+Insert into vamenu (MnuNo, MenuOPt, MnuName, MnuCap, MnuPgm, ExeName, MnuWght, AllowWhenTrnClosed, Pgmopt, DbInfo, MenuIcon, Menusep, MenuBold, MultiInstance) values (750,771,'Item Reclassification','Item Reclassification','P','SR439400.EXE',0,0,1,'0','',0,0,0)
+-GO-
+Insert into VaVerTable Values(0,0,'SR439400.EXE','',64651,9,1,260,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,'2010-12-03','2010-12-03','N',NULL)
+-GO-
+Insert into VaVerTable Values(0,0,'SR239600.EXE','',64651,9,1,260,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,'2010-12-03','2010-12-03','N',NULL)
+-GO-
+UPDATE VAVerTable SET EXEVER = '9', EXEMINOR = '1', EXESUBREL = '260' WHERE EXEID in (
+'SR322600.exe','SR309900.exe','SR428100.Exe','SR432000.exe','SR432100.exe','SR432500.exe',
+'SR320800.exe','SR328400.exe','SR413400.exe','SR438600.exe','SR322300.Exe','SE301400.Exe',
+'SE301200.Exe','SR436900.EXE','SR130000.EXE','SR123000.EXE','SR122000.EXE','SR405600.EXE',
+'SR405800.EXE','SR405100.EXE','SR138900.EXE','SE300310.exe','SR217900.Exe','SR202500.exe',
+'SE100900.exe','SE127800.exe','SR127000.exe','SR101000.Exe','SR100700.exe','SR129500.exe',
+'SR438500.exe','SR213800.Exe','SE301300.Exe','SE201200.EXE','SR100200.EXE','SR431000.EXE',
+'SR431500.EXE','SR435600.Exe','SR131400.exe','SR210700.EXE','SR230500.EXE','SR239600.EXE',
+'SR431700.EXE','SR431800.EXE','SR437300.EXE','SR439400.EXE','SR233600.exe','SR429300.Exe',
+'SR309000.exe','SR215600.Exe'
+)
+-GO-
+Delete from VaMenu Where Mnuno = 100 and MenuOpt = 102 and ExeName ='SR130000.EXE'
+-GO-
+Delete from VaMenu Where Mnuno = 100 and MenuOpt = 103 and ExeName ='SR130000.EXE'
+-GO-
+Update varestrictmnuconfig SEt ExeOption='11111000', OptCaption ='NEW#VOID#RETURN#RETURN W/O REF#REPRINT'
+Where MnuNo = 100 and MenuOpt = 101 and ExeName = 'SR130000.EXE'
+-GO-
+update VaRestrictMnu set exeright='11111100' where mnuno=100 and menuopt=101
+-GO-
+UPDATE VAMENU SET MnuCap = 'Purchase Order Prefix' WHERE MnuCap='Cash / Purchase Order Prefix'
+-GO-
+</s9qScript>		
+</s9qsqlblk>

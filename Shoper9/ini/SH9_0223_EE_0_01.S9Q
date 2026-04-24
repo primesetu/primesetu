@@ -1,0 +1,33 @@
+<s9qsqlblk>
+  <s9qScriptid>SH9_0223_EE_0_1000</s9qScriptid>
+  <s9qtitle>Common Script execution exe</s9qtitle>
+  <s9qpgmtype>I</s9qpgmtype>
+  <s9qpgmtype>L</s9qpgmtype>
+  <s9qversion>*</s9qversion>
+  <s9qenvironment>P</s9qenvironment>
+  <s9qRunMultiple>1</s9qRunMultiple>
+  <s9qQryType>EXE</s9qQryType>
+  <s9qScript><APPATH>\POS710ScriptExecRel223.exe</s9qScript>
+</s9qsqlblk>
+<s9qsqlblk>
+  <s9qScriptid>SH9_0223_EE_0_1001</s9qScriptid>
+  <s9qtitle>Additional Scripts</s9qtitle>
+  <s9qpgmtype>I</s9qpgmtype>
+  <s9qpgmtype>L</s9qpgmtype>
+  <s9qversion>*</s9qversion>
+  <s9qenvironment>P</s9qenvironment>
+  <s9qRunMultiple>1</s9qRunMultiple>
+  <s9qQryType>DML</s9qQryType>
+  <s9qScript>
+update sysparam set txt='10000000000' where ParamCode='AllowDeletionOfItemsFromRecalledDocuments'
+-GO-
+INSERT INTO [dbo].VersionDtls VALUES (23,getdate(),'9','2.23','A','P901710','',1,'.','')
+-GO-
+Update VersionDtls Set Vactr = (select intg from sysparam where paramcode = 'VaSysCounter') where VerId=23
+-GO-
+INSERT INTO Genlookup (recid,code,descr) values (299,'P901710','Shoper Update Version No:')
+-GO-
+Update Genlookup set Descr = (select 'Shoper Update Version No:9.0.1.9710' + ' ;system date:' + convert(varchar(20),getdate(),105) + ' ;shoper date:' + (select convert(varchar(20),dt,105) from sysparam where paramcode ='SHOPERSysDt') ) where code = 'P901710' and recid = 299
+-GO-
+</s9qScript>
+</s9qsqlblk>

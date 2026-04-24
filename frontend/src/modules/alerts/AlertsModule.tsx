@@ -10,6 +10,7 @@
  * ============================================================ */
 import { useState } from 'react'
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
+import { apiClient } from '@/api/client'
 
 interface Alert {
   id: number
@@ -28,14 +29,14 @@ export default function AlertsModule() {
   const { data: alerts, isLoading } = useQuery<Alert[]>({
     queryKey: ['alerts'],
     queryFn: async () => {
-      const resp = await fetch('http://localhost:8000/api/v1/alerts')
-      return resp.json()
+      const resp = await apiClient.get('/alerts')
+      return resp.data
     }
   })
 
   const markRead = useMutation({
     mutationFn: async (id: number) => {
-      await fetch(`http://localhost:8000/api/v1/alerts/${id}/read`, { method: 'PATCH' })
+      await apiClient.patch(`/alerts/${id}/read`)
     },
     onSuccess: () => queryClient.invalidateQueries({ queryKey: ['alerts'] })
   })

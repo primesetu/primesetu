@@ -1,0 +1,18 @@
+<s9qsqlblk>
+  <s9qScriptid>S9Q_0192_1_0010</s9qScriptid> 
+  <s9qtitle> New Sysparam records</s9qtitle> 
+  <s9qpgmtype>I</s9qpgmtype>  
+  <s9qpgmtype>L</s9qpgmtype>  
+  <s9qversion>*</s9qversion> 
+  <s9qenvironment>P</s9qenvironment> 
+  <s9qRunMultiple>0</s9qRunMultiple> 
+  <s9qQryType>DML</s9qQryType> 
+  <s9qScript>
+UPDATE custpricegroups set isfactorbyclass=0
+-GO-
+INSERT INTO Genlookup (recid,code,descr) values (299,'P901502','Shoper Update Version No:')
+-GO-
+Update Genlookup set Descr = (select 'Shoper Update Version No:9.0.1.9502' + ' ;system date:' + convert(varchar(20),getdate(),105) + ' ;shoper date:' + (select convert(varchar(20),dt,105) from sysparam where paramcode ='SHOPERSysDt') ) where code = 'P901502' and recid = 299
+-GO-
+ </s9qScript>
+</s9qsqlblk>

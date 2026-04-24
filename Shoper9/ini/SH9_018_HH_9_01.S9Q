@@ -1,0 +1,23 @@
+<s9qsqlblk>
+  <s9qScriptid>	S9Q_0170_9_0001	</s9qScriptid>
+  <s9qtitle>All DDL Statements.</s9qtitle>
+  <s9qpgmtype>I</s9qpgmtype>
+  <s9qpgmtype>L</s9qpgmtype>
+  <s9qversion>*</s9qversion>
+  <s9qenvironment>H</s9qenvironment>
+  <s9qenvironment>P</s9qenvironment>
+  <s9qenvironment>R</s9qenvironment>
+  <s9qRunMultiple>1</s9qRunMultiple>
+  <s9qQryType>DDL</s9qQryType>
+  <s9qScript>
+<s9qScript>
+ALTER TABLE [dbo].[PromoMnHeader] WITH NOCHECK ADD 
+      CONSTRAINT [PMH_AndConditionFreeItem] DEFAULT (0) FOR [AndConditionFreeItem],
+      CONSTRAINT [PMH_NoOfAndCondsFreeItem] DEFAULT (0) FOR [NoOfAndCondsFreeItem],
+      CONSTRAINT [PMH_SalesPromoId] DEFAULT (1) FOR [SalesPromoId],
+      CONSTRAINT [PMH_AddlItemFlag] DEFAULT (0) FOR [AddlItemFlag],
+      CONSTRAINT [PMH_AddlItemDiscType] DEFAULT (0) FOR [AddlItemDiscType]
+-GO-
+
+</s9qScript>
+</s9qsqlblk>

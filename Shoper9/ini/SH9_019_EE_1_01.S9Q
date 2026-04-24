@@ -1,0 +1,51 @@
+<s9qsqlblk>
+<s9qScriptID>S9Q_019_1_0001</s9qScriptID>
+<s9qtitle>Security Database Script</s9qtitle>
+<s9qpgmtype>I</s9qpgmtype>
+<s9qpgmtype>L</s9qpgmtype>
+<s9qversion>*</s9qversion>
+<s9qenvironment>M</s9qenvironment>
+<s9qRunMultiple>1</s9qRunMultiple>
+<s9qQryType>DML</s9qQryType>
+<s9qScript>
+insert into vaMenu (MnuNo,MenuOPt,MnuName,MnuCap,MnuPgm,MnuWght,AllowWhenTrnClosed,pgmopt,DbInfo,Menusep,MenuBold,MultiInstance )
+values (200,280,'Cash','Credit Sale Management','M',0,0,0,0,0,0,0)
+-GO-
+insert into vaMenu (MnuNo,MenuOPt,MnuName,MnuCap,MnuPgm,ExeName,MnuWght,AllowWhenTrnClosed,pgmopt,DbInfo,Menusep,MenuBold,MultiInstance )
+values (280,281,'Credit Sale Management','Collect Payment','P','SR142500.EXE',0,0,0,0,0,0,0)
+-GO-
+insert into vaMenu (MnuNo,MenuOPt,MnuName,MnuCap,MnuPgm,ExeName,MnuWght,AllowWhenTrnClosed,pgmopt,DbInfo,Menusep,MenuBold,MultiInstance )
+values (280,282,'Credit Sale Management','Set Opening Balance','P','SR142500.EXE',0,0,1,0,0,0,0)
+-GO-
+insert into vaMenu (MnuNo,MenuOPt,MnuName,MnuCap,MnuPgm,ExeName,MnuWght,AllowWhenTrnClosed,pgmopt,DbInfo,Menusep,MenuBold,MultiInstance )
+values (280,283,'Credit Sale Management','Clear Credit Note','P','SR142500.EXE',0,0,2,0,0,0,0)
+-GO-
+insert into vavertable (NODEID,EXESRL,EXEID,EXEVer,EXEMinor,EXESubRel,EXEDate,EXELastUpdated,EXESKIP)
+values(0,0,'SR142500.EXE',9,1,495,'2012-01-06','2012-01-06','N')
+-GO-
+update vaMenu set MenuOPt=4700 where MnuNo=460 and MenuOPt =470
+-GO-
+update vaMenu set MenuOPt=4701 where MnuNo=460 and MenuOPt =471
+-GO-
+insert into vaMenu(MnuNo,MenuOPt,MnuName,MnuCap,MnuPgm,ExeName,MnuWght,AllowWhenTrnClosed,pgmopt,DbInfo,MenuIcon,Menusep,MenuBold,MultiInstance )
+values (460,4702,'Credit Sale Management','Credit Sale','P','SR242900.EXE',0,1,0,0,'',0,0,0)
+-GO-
+insert into vavertable (NODEID,EXESRL,EXEID,EXEVer,EXEMinor,EXESubRel,EXEDate,EXELastUpdated,EXESKIP)
+values(0,0,'SR242900.EXE',9,1,475,'2012-01-11','2012-01-11','N')
+-GO-
+IF NOT EXISTS
+(
+ select * from vaMenu where MnuNo =0 and MenuOPt =200
+)
+insert into vaMenu (MnuNo,MenuOPt,MnuName,MnuCap,MnuPgm,MnuWght,AllowWhenTrnClosed,pgmopt,DbInfo,Menusep,MenuBold,MultiInstance )
+values(0,200,'Shoper','Cash','M',0,0,0,0,0,0,0)
+-GO-
+IF NOT EXISTS
+(
+ select * from vaMenu where MnuNo =400 and MenuOPt =460
+)
+insert into vaMenu (MnuNo,MenuOPt,MnuName,MnuCap,MnuPgm,MnuWght,AllowWhenTrnClosed,pgmopt,DbInfo,Menusep,MenuBold,MultiInstance )
+values(400,460,'Reports','Cash','M',0,0,0,0,0,0,0)
+-GO-
+</s9qScript>
+</s9qsqlblk>

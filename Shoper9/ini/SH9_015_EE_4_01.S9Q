@@ -1,0 +1,29 @@
+<s9qsqlblk>
+  <s9qScriptID>S9Q_015_4_0002</s9qScriptID>
+  <s9qtitle>script for tally interface</s9qtitle>
+  <s9qpgmtype>I</s9qpgmtype>
+  <s9qpgmtype>L</s9qpgmtype>
+  <s9qversion>*</s9qversion>
+  <s9qenvironment>P</s9qenvironment>
+  <s9qRunMultiple>1</s9qRunMultiple>
+  <s9qQryType>DDL</s9qQryType>
+  <s9qScript>
+
+alter table tallymapsettinginfo add isUsePrefixForVoucherTypes varchar(1) default 0
+-GO-
+alter table tallymapsettinginfo add isPostBeforeTaxDetails varchar(1) default 0
+-GO-
+alter table tallymapsettinginfo add isPostVoucherNarration varchar(1) default 0
+-GO-
+alter table tallymapsettinginfo add isSendAllCustomers varchar(1) default 0
+-GO-
+alter table tallymapsettinginfo add isUsePrefixForLedgers varchar(1) default 0
+-GO-
+update  tallymapsettinginfo set isUsePrefixForVoucherTypes = 0,isPostBeforeTaxDetails = 0, isPostVoucherNarration = 0, isSendAllCustomers = 0,isUsePrefixForLedgers = 1
+-GO-
+alter table tallymasterinfo add  CreditLimitAmount MONEY ,CreditLimitDays INT
+-GO-
+update  SysParam  set Txt='910.4' where ParamCode = 'TCPVersion'
+-GO-
+</s9qScript>		
+</s9qsqlblk>

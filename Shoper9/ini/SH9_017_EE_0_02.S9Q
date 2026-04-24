@@ -1,0 +1,35 @@
+<s9qsqlblk>
+  <s9qScriptid>S9Q_017_0_0002</s9qScriptid> 
+  <s9qtitle></s9qtitle> 
+  <s9qpgmtype>I</s9qpgmtype>  
+  <s9qpgmtype>L</s9qpgmtype>  
+  <s9qversion>*</s9qversion> 
+  <s9qenvironment>P</s9qenvironment> 
+  <s9qRunMultiple>1</s9qRunMultiple> 
+  <s9qQryType>DML</s9qQryType> 
+  <s9qScript>
+INSERT INTO SYSPARAM (Id,Descr,ParamCode,Txt,Opt)
+VALUES ('SR4-0901-0000394','Encoded Cost Price For Labels','CostPriceEncoding','0,A#1,B#2,C#3,D#4,E#5,F#6,G#7,H#8,I#9,J','T')
+-GO-
+Insert into SysparamExtd ([ID],[ParamCode],[Fixed],[Changed],[Category],[CatDescr],[DispOrder]) 
+VALUES ('SR4-0901-0000394','CostPriceEncoding','Variable','0','17. House Keeping',
+'','51')
+-GO-
+INSERT INTO Genlookup (recid,code,descr) values (299,'P901383','Shoper Update Version No:')
+-GO-
+Update Genlookup set Descr = (select 'Shoper Update Version No:9.0.1.9383' + ' ;system date:' + convert(varchar(20),getdate(),105) + ' ;shoper date:' + (select convert(varchar(20),dt,105) from sysparam where paramcode ='SHOPERSysDt') ) where code = 'P901383' and recid = 299
+-GO-
+Update genlookup Set Vactr = (select intg from sysparam where paramcode = 'VaSysCounter') where Recid=299 and Code='P901383'
+-GO-
+INSERT INTO [dbo].VersionDtls VALUES (11,getdate(),'9','1.7','A','P901383','',1,'.','')
+-GO-
+Update VersionDtls Set Vactr = (select intg from sysparam where paramcode = 'VaSysCounter') where VerId=11
+-GO-
+Insert Into Genlookup (Recid,Code,Descr,Flag,[Number]) Values (299,'VER9_REL1.7','Version 9 Release 1.7','Y',0)
+-GO-
+update prefixtrnno set vactr=(select intg from sysparam where id='00165E')
+-GO-
+update prefixmaster set vactr=(select intg from sysparam where id='00165E')
+-GO-
+  </s9qScript>
+</s9qsqlblk>

@@ -1,0 +1,25 @@
+<s9qsqlblk>
+<s9qScriptID>S9Q_017_7_0002</s9qScriptID>
+<s9qtitle></s9qtitle>
+<s9qpgmtype>I</s9qpgmtype>
+<s9qpgmtype>L</s9qpgmtype>
+<s9qversion>*</s9qversion>
+<s9qenvironment>P</s9qenvironment>
+<s9qRunMultiple>1</s9qRunMultiple>
+<s9qQryType>DML</s9qQryType>
+<s9qScript>
+
+Insert Into GenLookUp(Recid,Code,Descr,Flag) Values(14300,'SR406500+PROGRAMSTART+1','shprfw03.ClsUserAuthorise',1)
+
+-go-
+
+Insert Into GenLookUp(Recid,Code,Descr,Flag) Values(14300,'SR730000+PROGRAMSTART+1','shprfw03.ClsUserAuthorise',1)
+
+-go-
+
+Insert Into GenLookUp(Recid,Code,Descr,Flag) Values(14300,'SR436900+PROGRAMSTART+1','shprfw03.ClsUserAuthorise',1)
+
+-go-
+
+</s9qScript>		
+</s9qsqlblk>

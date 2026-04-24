@@ -1,0 +1,34 @@
+<s9qsqlblk>
+  <s9qScriptid>S9Q_0181_0_0002</s9qScriptid> 
+  <s9qtitle></s9qtitle> 
+  <s9qpgmtype>I</s9qpgmtype>  
+  <s9qpgmtype>L</s9qpgmtype>  
+  <s9qversion>*</s9qversion> 
+  <s9qenvironment>P</s9qenvironment> 
+  <s9qRunMultiple>1</s9qRunMultiple> 
+  <s9qQryType>DML</s9qQryType> 
+  <s9qScript>
+INSERT INTO Genlookup (recid,code,descr) values (299,'P901435','Shoper Update Version No:')
+-GO-
+Update Genlookup set Descr = (select 'Shoper Update Version No:9.0.1.9435' + ' ;system date:' + convert(varchar(20),getdate(),105) + ' ;shoper date:' + (select convert(varchar(20),dt,105) from sysparam where paramcode ='SHOPERSysDt') ) where code = 'P901435' and recid = 299
+-GO-
+INSERT INTO [dbo].VersionDtls VALUES (13,getdate(),'9','1.81','A','P901435','',1,'.','')
+-GO-
+Update VersionDtls Set Vactr = (select intg from sysparam where paramcode = 'VaSysCounter') where VerId=13
+-GO-
+  </s9qScript>
+</s9qsqlblk>
+<s9qsqlblk>
+  <s9qScriptid>S9Q_0181_0_0003</s9qScriptid> 
+  <s9qtitle></s9qtitle> 
+  <s9qpgmtype>I</s9qpgmtype>  
+  <s9qpgmtype>L</s9qpgmtype>  
+  <s9qversion>*</s9qversion> 
+  <s9qenvironment>P</s9qenvironment> 
+  <s9qRunMultiple>0</s9qRunMultiple> 
+  <s9qQryType>DML</s9qQryType> 
+  <s9qScript>
+INSERT [dbo].[ReportDates] ([SNO], [TYPE], [CAPTION], [FORMULA_TYPE], [FROM_DATE_FORMULA], [TO_DATE_FORMULA]) VALUES (17,'T1','Only Yesterday','Q','SELECT CONVERT(CHAR(8),(SELECT Dt FROM Sysparam WHERE ParamCode = ''SHOPERSysDt'')-1,3)','SELECT CONVERT(CHAR(8),(SELECT Dt FROM Sysparam WHERE ParamCode = ''SHOPERSysDt'')-1,3)')
+-GO-
+  </s9qScript>
+</s9qsqlblk>

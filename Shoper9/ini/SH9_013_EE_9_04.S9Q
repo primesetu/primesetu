@@ -1,0 +1,439 @@
+<s9qsqlblk>
+  <s9qScriptid>S9Q_013_9_0010</s9qScriptid> 
+  <s9qtitle>Catalogue Module: Replace NULL value with Blank/Space Scripts</s9qtitle> 
+  <s9qpgmtype>D</s9qpgmtype> 
+  <s9qversion>*</s9qversion> 
+  <s9qenvironment>P</s9qenvironment> 
+  <s9qRunMultiple>0</s9qRunMultiple> 
+  <s9qQryType>DML</s9qQryType> 
+  <s9qScript>
+
+Update dbo.Itemmaster Set Class1Cd='NA'  Where  Class1Cd is NULL
+-GO-
+Update dbo.Itemmaster Set Class2Cd='NA'  Where  Class2Cd is NULL
+-GO-
+Update dbo.Itemmaster Set SubClass1Cd='NA'  Where  SubClass1Cd is NULL
+-GO-
+Update dbo.Itemmaster Set SubClass2Cd='NA'  Where  SubClass2Cd is NULL
+-GO-
+Update dbo.Itemmaster Set SizeCd='NA'  Where  SizeCd is NULL
+-GO-
+Update dbo.Itemmaster Set ItemDesc='NA'  Where  ItemDesc is NULL
+-GO-
+update dbo.SalesTaxCat Set TaxRevisionId='0'  Where  TaxRevisionId is null or TaxRevisionId = ''
+-GO-
+Update dbo.Class12Combo Set PrefVendorId=''  Where  PrefVendorId is NULL
+-GO-
+Update dbo.Class12Combo Set AltVendorId1=''  Where  AltVendorId1 is NULL
+-GO-
+Update dbo.Class12Combo Set AltVendorId2=''  Where  AltVendorId2 is NULL
+-GO-
+Update dbo.Class12Combo Set AltVendorId3=''  Where  AltVendorId3 is NULL
+-GO-
+Update dbo.Class12Combo Set SuperClass1=''  Where  SuperClass1 is NULL
+-GO-
+Update dbo.Class12Combo Set SuperClass2=''  Where  SuperClass2 is NULL
+-GO-
+Update dbo.SizeCat Set SizeGroupId='NA'  Where  SizeGroupId is NULL
+-GO-
+Update dbo.SizeCat Set ConvSizeCd='NA'  Where  ConvSizeCd is NULL
+-GO-
+Update dbo.SalesTaxCat Set TaxDesc=''  Where  TaxDesc is NULL
+-GO-
+Update dbo.SalesTaxCat Set T1Name=''  Where  T1Name is NULL
+-GO-
+Update dbo.SalesTaxCat Set T1Descr=''  Where  T1Descr is NULL
+-GO-
+Update dbo.SalesTaxCat Set T1Type=''  Where  T1Type is NULL
+-GO-
+Update dbo.SalesTaxCat Set T1DerivedFormula=''  Where  T1DerivedFormula is NULL
+-GO-
+Update dbo.SalesTaxCat Set T1CompOn=''  Where  T1CompOn is NULL
+-GO-
+Update dbo.SalesTaxCat Set T2Name=''  Where  T2Name is NULL
+-GO-
+Update dbo.SalesTaxCat Set T2Descr=''  Where  T2Descr is NULL
+-GO-
+Update dbo.SalesTaxCat Set T2Type=''  Where  T2Type is NULL
+-GO-
+Update dbo.SalesTaxCat Set T2DerivedFormula=''  Where  T2DerivedFormula is NULL
+-GO-
+Update dbo.SalesTaxCat Set T2CompOn=''  Where  T2CompOn is NULL
+-GO-
+Update dbo.SalesTaxCat Set T3Name=''  Where  T3Name is NULL
+-GO-
+Update dbo.SalesTaxCat Set T3Descr=''  Where  T3Descr is NULL
+-GO-
+Update dbo.SalesTaxCat Set T3Type=''  Where  T3Type is NULL
+-GO-
+Update dbo.SalesTaxCat Set T3DerivedFormula=''  Where  T3DerivedFormula is NULL
+-GO-
+Update dbo.SalesTaxCat Set T3CompOn=''  Where  T3CompOn is NULL
+-GO-
+Update dbo.SalesTaxCat Set T4Name=''  Where  T4Name is NULL
+-GO-
+Update dbo.SalesTaxCat Set T4Descr=''  Where  T4Descr is NULL
+-GO-
+Update dbo.SalesTaxCat Set T4Type=''  Where  T4Type is NULL
+-GO-
+Update dbo.SalesTaxCat Set T4DerivedFormula=''  Where  T4DerivedFormula is NULL
+-GO-
+Update dbo.SalesTaxCat Set T4CompOn=''  Where  T4CompOn is NULL
+-GO-
+Update dbo.SalesTaxCat Set T5Name=''  Where  T5Name is NULL
+-GO-
+Update dbo.SalesTaxCat Set T5Descr=''  Where  T5Descr is NULL
+-GO-
+Update dbo.SalesTaxCat Set T5Type=''  Where  T5Type is NULL
+-GO-
+Update dbo.SalesTaxCat Set T5DerivedFormula=''  Where  T5DerivedFormula is NULL
+-GO-
+Update dbo.SalesTaxCat Set T5CompOn=''  Where  T5CompOn is NULL
+-GO-
+Update dbo.SalesTaxCat Set PreTaxFormName=''  Where  PreTaxFormName is NULL
+-GO-
+Update dbo.SalesTaxCat Set PostTaxFormName=''  Where  PostTaxFormName is NULL
+-GO-
+UPDATE dbo.CUSTOMERS SET CUSTCLASS1 = '.'  Where  CUSTCLASS1 IS NULL
+-GO-
+UPDATE dbo.CUSTOMERS SET CUSTCLASS2 = '.'  Where  CUSTCLASS2 IS NULL
+-GO-
+UPDATE dbo.CUSTOMERS SET CUSTCLASS3 = '.'  Where  CUSTCLASS3 IS NULL
+-GO-
+UPDATE dbo.CUSTOMERS SET CUSTCLASS4 = '.'  Where  CUSTCLASS4 IS NULL
+-GO-
+UPDATE dbo.CUSTOMERS SET CUSTCLASS5 = '.'  Where  CUSTCLASS5 IS NULL
+-GO-
+UPDATE dbo.CUSTOMERS SET CUSTPROF1 = '.'  Where  CUSTPROF1 IS NULL
+-GO-
+UPDATE dbo.CUSTOMERS SET CUSTPROF2 = '.'  Where  CUSTPROF2 IS NULL
+-GO-
+UPDATE dbo.CUSTOMERS SET CUSTPROF3 = '.'  Where  CUSTPROF3 IS NULL
+-GO-
+UPDATE dbo.CUSTOMERS SET CUSTPROF4 = '.'  Where  CUSTPROF4 IS NULL
+-GO-
+UPDATE dbo.CUSTOMERS SET CUSTPROF5 = '.'  Where  CUSTPROF5 IS NULL
+-GO-
+UPDATE dbo.CUSTOMERS SET SHOPERENV = 'R-Y'  Where  SHOPERENV IS NULL
+-GO-
+UPDATE dbo.CUSTOMERS SET ATTACHEDTOCD = 'NA'  Where  ATTACHEDTOCD IS NULL
+-GO-
+UPDATE dbo.CUSTOMERS SET DESTTAXTYPE = '0'  Where  DESTTAXTYPE IS NULL
+-GO-
+UPDATE dbo.CUSTOMERS SET LOYALTYPGMID = 'NA'  Where   LOYALTYPGMID IS NULL
+-GO-
+UPDATE dbo.CUSTOMERS SET LOYALTYPGMCD = 'NA'  Where  LOYALTYPGMCD IS NULL
+-GO-
+UPDATE dbo.CUSTOMERS SET SHOPERDELIMITER = ''  Where  SHOPERDELIMITER IS NULL
+-GO-
+UPDATE dbo.CUSTOMERS SET PRESALETAXFORMNM = ''  Where   PRESALETAXFORMNM IS NULL
+-GO-
+UPDATE dbo.CUSTOMERS SET POSTSALETAXFORMNM = ''  Where  POSTSALETAXFORMNM IS NULL
+-GO-
+UPDATE dbo.CUSTOMERS SET SHOPERCOMP = '999'  Where  SHOPERCOMP IS NULL
+-GO-
+UPDATE dbo.CUSTOMERS SET SHOPERVER = 7  Where  SHOPERVER IS NULL
+-GO-
+UPDATE dbo.SUBCLASS1CAT SET SUBCLASS1DESC = SUBCLASS1CD  Where  (SUBCLASS1DESC IS NULL OR SUBCLASS1DESC = '')
+-GO-
+UPDATE dbo.SUBCLASS2CAT SET SUBCLASS2DESC = SUBCLASS2CD  Where  (SUBCLASS2DESC IS NULL OR SUBCLASS2DESC = '')
+
+  </s9qScript>
+</s9qsqlblk>
+
+
+<s9qsqlblk>
+  <s9qScriptid>S9Q_013_9_0011</s9qScriptid> 
+  <s9qtitle>Catalogue Module: Fix SalesTaxCat and PromoMnHeader Scripts</s9qtitle> 
+  <s9qpgmtype>D</s9qpgmtype> 
+  <s9qversion>*</s9qversion> 
+  <s9qenvironment>P</s9qenvironment> 
+  <s9qRunMultiple>0</s9qRunMultiple> 
+  <s9qQryType>DML</s9qQryType> 
+  <s9qScript>
+	
+UPDATE dbo.SalesTaxCat set T1Type='F', T1CompOn='P1#VALUE AFTER DISCOUNT'
+-GO-
+UPDATE dbo.SalesTaxCat set T2Type='F', T2CompOn='T1#TAX COMPONENT1'  Where  T2COMPON='1'
+-GO-
+UPDATE dbo.SalesTaxCat set T3Type='F', T3CompOn='T1#TAX COMPONENT1'  Where  T3COMPON='1'
+-GO-
+UPDATE dbo.SalesTaxCat set T3Type='F', T3CompOn='T2#TAX COMPONENT2'  Where  T3COMPON='2'
+-GO-
+UPDATE dbo.SalesTaxCat set T4Type='F', T4CompOn='T1#TAX COMPONENT1'  Where  T4COMPON='1'
+-GO-
+UPDATE dbo.SalesTaxCat set T4Type='F', T4CompOn='T2#TAX COMPONENT2'  Where  T4COMPON='2'
+-GO-
+UPDATE dbo.SalesTaxCat set T4Type='F', T4CompOn='T3#TAX COMPONENT3'  Where  T4COMPON='3'
+-GO-
+UPDATE dbo.SalesTaxCat set T5Type='F', T5CompOn='T1#TAX COMPONENT1'  Where  T5COMPON='1'
+-GO-
+UPDATE dbo.SalesTaxCat set T5Type='F', T5CompOn='T2#TAX COMPONENT2'  Where  T5COMPON='2'
+-GO-
+UPDATE dbo.SalesTaxCat set T5Type='F', T5CompOn='T3#TAX COMPONENT3'  Where  T5COMPON='3'
+-GO-
+UPDATE dbo.SalesTaxCat set T5Type='F', T5CompOn='T4#TAX COMPONENT4'  Where  T5COMPON='4'
+-GO-
+delete from dbo.salesfactors where validityENDdt < (select dt from dbo.sysparam where paramcode='SHOPERSysDt')
+-GO-
+Update dbo.SalesFactors set AppPt=3  Where  type in (7,6) and Apppt=1
+-GO-
+update dbo.salesfactors set stockno = null  Where  stockno ='-N..A-'
+-GO-
+UPDATE dbo.SIZECAT SET SIZEGROUPID = A.SIZEGROUP FROM dbo.CLASS12COMBO A,dbo.SIZECAT B WHERE A.CLASS1CD = B.CLASS1CD AND A.CLASS2CD = B.CLASS2CD AND A.SIZEGROUP <> B.SIZEGROUPID
+-GO-
+Update dbo.PosPaymodes set ISEnabled=0  Where  PayModeType=3
+-GO-
+Update dbo.PosPaymodes set ISEnabled=0  Where  PayModeType=9 
+-GO-
+update dbo.PromoMnHeader  set   DiscRateAmtInd = (CASE WHEN A.ITEMDISCPERCENT = 0 AND A.ITEMDISCAMOUNT = 0 then 1 when A.ITEMDISCPERCENT > 0 AND A.ITEMDISCAMOUNT = 0 then 1 when A.ITEMDISCPERCENT = 0 AND A.ITEMDISCAMOUNT > 0 then 2 end) from dbo.PROMOMNITEMLVLDISCDTLS As A where PromoMnHeader.SalesPromoCode = A.SalesPromoCode and PromoMnHeader.DefinitionType=1 and PromoMnHeader.DefinitionLevel=1 and (PromoMnHeader.DiscRateAmtInd Is Null or PromoMnHeader.DiscRateAmtInd =0)
+-GO-
+update dbo.PromoMnHeader  set   DiscRateAmtInd = (CASE WHEN A.BILLDISCPERCENT = 0 AND A.BILLDISCAMOUNT = 0 then 1 when A.BILLDISCPERCENT > 0 AND A.BILLDISCAMOUNT = 0 then 1 when A.BILLDISCPERCENT = 0 AND A.BILLDISCAMOUNT > 0 then 2 end) from dbo.PROMOMNBILLLVLDISCDTLS As A where PromoMnHeader.SalesPromoCode = A.SalesPromoCode and PromoMnHeader.DefinitionType=1 and PromoMnHeader.DefinitionLevel=2 and (PromoMnHeader.DiscRateAmtInd Is Null or PromoMnHeader.DiscRateAmtInd =0)
+-GO-
+update dbo.PromoMnHeader  set  DiscRateAmtInd = 0 where DefinitionType=2 and (PromoMnHeader.DiscRateAmtInd Is Null or PromoMnHeader.DiscRateAmtInd =0)
+-GO-
+update dbo.PromoMnHeader  set   DiscRateAmtInd = 0 where DefinitionType=1 and DefinitionLevel=1 and ItemLvlDiscountType In (2,3,4,5) and (PromoMnHeader.DiscRateAmtInd Is Null or PromoMnHeader.DiscRateAmtInd =0)
+-GO-
+update dbo.PromoMnHeader  set   DiscRateAmtInd = 0 where DefinitionType=1 and DefinitionLevel=2 and BillLvlDiscountType=0 and (PromoMnHeader.DiscRateAmtInd Is Null or PromoMnHeader.DiscRateAmtInd =0)
+-GO-
+Update dbo.GenLookup Set  Flag ='1' Where RecId = 9050 and Code ='4' 
+-GO-
+update dbo.genlookup set  descr = 'Buy X Get Discount On (X+1)th' where recid=9050 and code ='4'
+
+</s9qScript>
+</s9qsqlblk>
+
+
+<s9qsqlblk>
+  <s9qScriptid>S9Q_013_9_0012</s9qScriptid> 
+  <s9qtitle>Catalogue Module: Update Genlookup For P901128 Build</s9qtitle> 
+  <s9qpgmtype>D</s9qpgmtype> 
+  <s9qversion>*</s9qversion> 
+  <s9qenvironment>P</s9qenvironment> 
+  <s9qRunMultiple>0</s9qRunMultiple> 
+  <s9qQryType>DML</s9qQryType> 
+  <s9qScript>
+
+Begin Transaction
+Insert into dbo.Genlookup (recid,code,descr) values (299,'P901128','Shoper Update Version No:')
+Update dbo.Genlookup set Descr = (select 'Shoper Update Version No:9.0.1.9128' + ' ;system date:' + convert(varchar(20),getdate(),105) + ' ;shoper date:' + (select convert(varchar(20),dt,105) from dbo.sysparam where paramcode ='SHOPERSysDt') ) where code = 'P901128' and recid = 299
+Update dbo.Genlookup Set Vactr=(select intg from dbo.sysparam where paramcode = 'VaSysCounter') where code = 'P901128' and recid = 299
+Commit Transaction
+</s9qScript>
+</s9qsqlblk>
+
+
+<s9qsqlblk>
+  <s9qScriptid>S9Q_013_9_0013</s9qScriptid> 
+  <s9qtitle>Catalogue Module: PgmWiseFeatureDtls Scripts</s9qtitle> 
+  <s9qpgmtype>D</s9qpgmtype> 
+  <s9qversion>*</s9qversion> 
+  <s9qenvironment>P</s9qenvironment> 
+  <s9qRunMultiple>0</s9qRunMultiple> 
+  <s9qQryType>DML</s9qQryType> 
+  <s9qScript>
+Insert Into dbo.PgmWiseFeatureDtls Values(1,'SR430300.EXE',1,'Introduced Sales Promotions First Time','',1,'.','')
+-GO-
+Insert Into dbo.PgmWiseFeatureDtls Values(1,'SR130000.EXE',2,'Introduced Sales Promotions First Time','',1,'.','')
+-GO-
+Insert Into dbo.PgmWiseFeatureDtls Values(2,'SR430300.EXE',1,'Introduced AND condition, Item Level Disc Type 4 and Apply Disc On Lowest/Highest Priced Item','',1,'.','')
+-GO-
+Insert Into dbo.PgmWiseFeatureDtls Values(2,'SR130000.EXE',2,'Introduced AND condition, Item Level Disc Type 4 and Apply Disc On Lowest/Highest Priced Item','',1,'.','')
+-GO-
+Insert Into dbo.PgmWiseFeatureDtls Values(3,'SR430300.EXE',1,'Introduced AND condition, Item Level Offer Type With Buy and Get Items Are Different','',1,'.','')
+-GO-
+Insert Into dbo.PgmWiseFeatureDtls Values(3,'SR130000.EXE',2,'Introduced AND condition, Item Level Offer Type With Buy and Get Items Are Different','',1,'.','')
+-GO-
+Insert into dbo.sysparamextd ([ID], ParamCode, Fixed, Changed, Category, CatDescr, DispOrder) values ('SR4-9111-0000333','LowestHighestPricedItem','Variable',0,'11. Billing','This Gives Billing Parameters',28)
+-GO-
+Insert into dbo.sysparam ([ID],descr,paramcode,Intg,opt) values ('SR4-9111-0000333','Catalogue – For Item Level Fixed Discounts/Offers – Default behaviour for Lowest/Highest Priced Item','LowestHighestPricedItem',1,'I')
+-GO-
+Insert Into dbo.Genlookup Values(9060,'2','Last Piece Discount','1',2,'super',1,'.','')  
+
+</s9qScript>
+</s9qsqlblk>
+
+<s9qsqlblk>
+  <s9qScriptid>S9Q_013_9_0014</s9qScriptid> 
+  <s9qtitle>Catalogue Module: Set Vendor Items</s9qtitle> 
+  <s9qpgmtype>D</s9qpgmtype> 
+  <s9qversion>*</s9qversion> 
+  <s9qenvironment>P</s9qenvironment> 
+  <s9qRunMultiple>0</s9qRunMultiple> 
+  <s9qQryType>DML</s9qQryType> 
+  <s9qScript>
+-- To Setup All Vendors Will Supply All Product/Brand Combinations
+Begin Transaction
+if exists (select * from sysobjects where id = object_id(N'[TmpVendorItems]') and OBJECTPROPERTY(id, N'IsTable') = 1) drop table [TmpVendorItems]
+
+CREATE TABLE TmpVendorItems ([VendCd] [varchar] (16) NOT NULL, [RecNo] [int] NOT NULL,      [ItemClass1] [varchar] (16) NULL, [ItemClass2] [varchar] (16) NULL,     [PrefOrAlt] [varchar] (2) NULL,     [VAUid] [varchar] (32) NULL, [VActr] [int] NULL, [VATermId] [varchar] (32) NULL, [VACompCode] [varchar] (16) NULL, Ctr Int Identity(1,1))
+
+Insert into TmpVendorItems (VendCd,RecNo,ItemClass1,ItemClass2,VAUid,VACtr,VATermId,VACompCode) Select Distinct Code,1,'<All>','<All>','Super',(Select Intg From dbo.SysParam Where ParamCode ='VaSysCounter'),'.',(Select Txt From dbo.SysParam Where ParamCode ='CompanyCode') From dbo.Vendors
+
+Delete From dbo.VendorItems
+
+Insert Into dbo.VendorItems (VendCd, RecNo, ItemClass1, ItemClass2, PrefOrAlt,VAUid,VACtr,VATermId,VACompCode) Select VendCd, Ctr, ItemClass1, ItemClass2, PrefOrAlt,VAUid,VACtr,VATermId,VACompCode from TmpVendorItems
+
+if exists (select * from sysobjects where id = object_id(N'[TmpVendorItems]') and OBJECTPROPERTY(id, N'IsTable') = 1) drop table [TmpVendorItems]
+
+Commit Transaction	
+
+  </s9qScript>
+</s9qsqlblk>
+
+
+<s9qsqlblk>
+  <s9qScriptid>S9Q_013_9_0015</s9qScriptid> 
+  <s9qtitle>Catalogue Module: Using REPLACE Function To Remove Spaces</s9qtitle> 
+  <s9qpgmtype>D</s9qpgmtype> 
+  <s9qversion>*</s9qversion> 
+  <s9qenvironment>P</s9qenvironment> 
+  <s9qRunMultiple>0</s9qRunMultiple> 
+  <s9qQryType>DML</s9qQryType> 
+
+  <s9qScript>
+UPDATE dbo.Itemmaster SET ItemDesc = REPLACE(ItemDesc, CHAR(13), '')
+-GO-
+UPDATE dbo.SubClass1Cat SET SubClass1Desc = REPLACE(SubClass1Desc, CHAR(13), '')
+-GO-
+UPDATE dbo.SubClass2Cat SET SubClass2Desc = REPLACE(SubClass2Desc, CHAR(13), '')
+-GO-
+UPDATE dbo.StkTrnHdr SET AccDocNo = REPLACE(AccDocNo, CHAR(13), '')
+-GO-
+UPDATE dbo.Genlookup SET Code = REPLACE(Code, CHAR(13), ''), Descr = REPLACE(Descr, CHAR(13), '')
+-GO-
+UPDATE dbo.MailingList SET StreetAddr = REPLACE(StreetAddr, CHAR(13), '')
+-GO-
+UPDATE dbo.Vendors SET Nm = REPLACE(Nm, CHAR(13), '')
+-GO-
+UPDATE dbo.Customers SET Nm = REPLACE(Nm, CHAR(13), '')
+-GO-
+UPDATE dbo.Itemmaster SET ItemDesc = REPLACE(ItemDesc, CHAR(10), '')
+-GO-
+UPDATE dbo.SubClass1Cat SET SubClass1Desc = REPLACE(SubClass1Desc, CHAR(10), '')
+-GO-
+UPDATE dbo.SubClass2Cat SET SubClass2Desc = REPLACE(SubClass2Desc, CHAR(10), '')
+-GO-
+UPDATE dbo.StkTrnHdr SET AccDocNo = REPLACE(AccDocNo, CHAR(10), '')
+-GO-
+UPDATE dbo.Genlookup SET Code = REPLACE(Code, CHAR(10), ''), Descr = REPLACE(Descr, CHAR(10), '')
+-GO-
+UPDATE dbo.MailingList SET StreetAddr = REPLACE(StreetAddr, CHAR(10), '')
+-GO-
+UPDATE dbo.Vendors SET Nm = REPLACE(Nm, CHAR(10), '')
+-GO-
+UPDATE dbo.Customers SET Nm = REPLACE(Nm, CHAR(10), '')
+
+  </s9qScript>
+
+</s9qsqlblk>
+
+
+<s9qsqlblk>
+  <s9qScriptid>S9Q_013_9_0016</s9qScriptid> 
+  <s9qtitle>Catalogue Module: Sales Factors To Sales Promo Conversion</s9qtitle> 
+  <s9qpgmtype>D</s9qpgmtype> 
+  <s9qversion>*</s9qversion> 
+  <s9qenvironment>P</s9qenvironment> 
+  <s9qRunMultiple>0</s9qRunMultiple> 
+  <s9qQryType>EXE</s9qQryType> 
+
+  <s9qScript><APPATH>\SR433200.exe</s9qScript>
+
+</s9qsqlblk>
+
+<s9qsqlblk>
+  <s9qScriptid>S9Q_013_9_0017</s9qScriptid> 
+  <s9qtitle>Catalogue Module: Update JwlCaratage In Item Master</s9qtitle> 
+  <s9qpgmtype>D</s9qpgmtype> 
+  <s9qversion>*</s9qversion> 
+  <s9qenvironment>P</s9qenvironment> 
+  <s9qRunMultiple>0</s9qRunMultiple> 
+  <s9qQryType>DML</s9qQryType> 
+
+  <s9qScript>
+update dbo.Itemmaster set JwlCaratage = 0 Where JwlCaratage <> 0
+  </s9qScript>
+
+</s9qsqlblk>
+
+<s9qsqlblk>
+  <s9qScriptid>S9Q_013_9_0032</s9qScriptid> 
+  <s9qtitle>Catalogue Module: Sales Tax Revision Data Modifications </s9qtitle> 
+  <s9qpgmtype>D</s9qpgmtype>
+  <s9qversion>*</s9qversion> 
+  <s9qenvironment>P</s9qenvironment> 
+  <s9qRunMultiple>0</s9qRunMultiple> 
+  <s9qQryType>DML</s9qQryType> 
+  <s9qScript>
+
+Update [dbo].[SalesTaxCat] Set TaxRevisionId = 0, ShowRoomCode ='0'
+-GO-
+Update [dbo].[SalesTaxCat] Set EffectiveDate = '2010-04-01',AppliedDate='2010-04-01'
+-GO-
+INSERT INTO [dbo].VersionDtls VALUES (4,getdate(),'9','1.3','A','P901130','',1,'.','')
+-GO-
+Update [dbo].VersionDtls Set Vactr = (select intg from [dbo].sysparam where paramcode = 'VaSysCounter') where VerId=4
+-GO-
+INSERT INTO [dbo].VersionwiseTblsScript(VerID,SrlNo,TblScript,VAUid,VActr,VATermId,VACompCode) VALUES (4,9,'Alter Table [dbo].[SalesTaxCat] Add EffectiveDate datetime','',1,'.','')
+-GO-
+INSERT INTO [dbo].VersionwiseTblsScript(VerID,SrlNo,TblScript,VAUid,VActr,VATermId,VACompCode) VALUES (4,10,'Alter Table [dbo].[SalesTaxCat] Add AppliedDate datetime','',1,'.','')
+-GO-
+INSERT INTO [dbo].VersionwiseTblsScript(VerID,SrlNo,TblScript,VAUid,VActr,VATermId,VACompCode) VALUES (4,11,'Alter Table [dbo].[SalesTaxCat] Add DateInsert datetime','',1,'.','')
+-GO-
+INSERT INTO [dbo].VersionwiseTblsScript(VerID,SrlNo,TblScript,VAUid,VActr,VATermId,VACompCode) VALUES (4,12,'Alter Table [dbo].[SalesTaxCat] Add ShowRoomCode varchar(32) NULL','',1,'.','')
+-GO-
+INSERT INTO [dbo].VersionwiseTblsScript(VerID,SrlNo,TblScript,VAUid,VActr,VATermId,VACompCode) VALUES (4,13,'Alter Table [dbo].[SalesTaxRevision] Add DateInsert datetime','',1,'.','')
+-GO-
+INSERT INTO [dbo].VersionwiseTblsScript(VerID,SrlNo,TblScript,VAUid,VActr,VATermId,VACompCode) VALUES (4,14,'Alter Table [dbo].[SalesTaxRevision] Add ShowRoomCode varchar(32) NULL','',1,'.','')
+-GO-
+INSERT INTO [dbo].VersionwiseTblsScript(VerID,SrlNo,TblScript,VAUid,VActr,VATermId,VACompCode) VALUES (4,15,'CREATE TABLE [dbo].[SalesTaxRevisionHistory] ([TaxRevisionId] [int] NOT NULL,[DestTaxType][varchar](16) NOT NULL,[ProdTaxType] [varchar](16) NOT NULL,[SrcTaxType][varchar] (16) NOT NULL,[TaxDesc] [varchar](50) NULL,[CompCnt][int] NULL,[T1Name] [varchar](25) NULL,[T1Descr] [varchar](50) NULL,[T1Type] [varchar] (1) NULL,[T1DerivedFormula] [varchar] (256) NULL,[T1CompOn] [varchar](50) NULL,[T1Rate] [money] NULL,[T1TaxInclusive] [bit] NULL ,[T1TaxPrintBill] [bit] NULL ,[T2Name] [varchar] (25)   NULL ,[T2Descr] [varchar] (50)   NULL ,[T2Type] [varchar] (1)   NULL ,[T2DerivedFormula] [varchar] (256)   NULL ,[T2CompOn] [varchar] (50)   NULL ,[T2Rate] [money] NULL ,[T2TaxInclusive] [bit] NULL ,	[T2TaxPrintBill] [bit] NULL ,[T3Name] [varchar] (25)   NULL ,[T3Descr] [varchar] (50)   NULL ,[T3Type] [varchar] (1)   NULL ,[T3DerivedFormula] [varchar] (256)   NULL ,[T3CompOn] [varchar] (50)   NULL ,[T3Rate] [money] NULL ,[T3TaxInclusive] [bit] NULL ,[T3TaxPrintBill] [bit] NULL ,[T4Name] [varchar] (25)   NULL ,[T4Descr] [varchar] (50)   NULL ,[T4Type] [varchar] (1)   NULL ,[T4DerivedFormula] [varchar] (256)   NULL ,[T4CompOn] [varchar] (50)   NULL ,[T4Rate] [money] NULL ,[T4TaxInclusive] [bit] NULL ,[T4TaxPrintBill] [bit] NULL ,[T5Name] [varchar] (25)   NULL ,[T5Descr] [varchar] (50)   NULL ,[T5Type] [varchar] (1)   NULL ,[T5DerivedFormula] [varchar] (256)   NULL ,[T5CompOn] [varchar] (50)   NULL ,[T5Rate] [money] NULL ,[T5TaxInclusive] [bit] NULL ,[T5TaxPrintBill] [bit] NULL ,[HasPreTaxForm] [bit] NULL ,[PreTaxFormName] [varchar] (150)   NULL ,[HasPostTaxForm] [bit] NULL ,[PostTaxFormName] [varchar] (150)   NULL ,[EffectiveDate] [datetime] NULL ,[AppliedDate] [datetime] NULL ,[DateInsert] [datetime] NULL ,[ShowRoomCode] [varchar] (32) NULL,	[VAUid] [varchar] (32)   NULL ,	[VActr] [int] NULL ,	[VATermId] [varchar] (32)   NULL ,	[VACompCode] [varchar] (16)   NULL )','',1,'.','')
+-GO-
+INSERT INTO [dbo].VersionwiseTblsScript(VerID,SrlNo,TblScript,VAUid,VActr,VATermId,VACompCode) VALUES (4,16,'ALTER TABLE [dbo].[SalesTaxRevisionHistory] WITH NOCHECK ADD CONSTRAINT [PK_SalesTaxRevisionHistory] PRIMARY KEY  CLUSTERED ([TaxRevisionId],[ProdTaxType],[SrcTaxType],[DestTaxType]) ','',1,'.','')
+-GO-
+INSERT INTO [dbo].VersionwiseTblsScript(VerID,SrlNo,TblScript,VAUid,VActr,VATermId,VACompCode) VALUES (4,17,'Drop table [dbo].[BakSalesTaxCat]','',1,'.','')
+-GO-
+INSERT INTO [dbo].VersionwiseTblsScript(VerID,SrlNo,TblScript,VAUid,VActr,VATermId,VACompCode) VALUES (4,18,'CREATE TABLE [dbo].[BakSalesTaxCat]([DestTaxType] [varchar](16) NOT NULL,[ProdTaxType] [varchar](16) NOT NULL,[SrcTaxType] [varchar](16) NOT NULL,[TaxDesc] [varchar](50) NULL,[CompCnt] [int] NULL,[T1Name] [varchar](25) NULL,[T1Descr] [varchar](50) NULL,[T1Type] [varchar](1) NULL,[T1DerivedFormula] [varchar](256) NULL,[T1CompOn] [varchar](50)  NULL,[T1Rate] [money] NULL,[T1TaxInclusive] [bit] NULL,[T1TaxPrintBill] [bit] NULL,[T2Name] [varchar](25) NULL,[T2Descr] [varchar](50) NULL,[T2Type] [varchar](1) NULL,[T2DerivedFormula] [varchar](256) NULL,[T2CompOn] [varchar](50) NULL,[T2Rate] [money] NULL,[T2TaxInclusive] [bit] NULL,[T2TaxPrintBill] [bit] NULL,[T3Name] [varchar](25) NULL,[T3Descr] [varchar](50) NULL,[T3Type] [varchar](1) NULL,[T3DerivedFormula] [varchar](256) NULL,[T3CompOn] [varchar](50) NULL,[T3Rate] [money] NULL,[T3TaxInclusive] [bit] NULL,[T3TaxPrintBill] [bit] NULL,[T4Name] [varchar](25) NULL,[T4Descr] [varchar](50) NULL,[T4Type] [varchar](1) NULL,[T4DerivedFormula] [varchar](256) NULL,[T4CompOn] [varchar](50) NULL,[T4Rate] [money] NULL,[T4TaxInclusive] [bit] NULL,[T4TaxPrintBill] [bit] NULL,[T5Name] [varchar](25) NULL,[T5Descr] [varchar](50) NULL,[T5Type] [varchar](1) NULL,[T5DerivedFormula] [varchar](256) NULL,[T5CompOn] [varchar](50) NULL,[T5Rate] [money] NULL,[T5TaxInclusive] [bit] NULL,[T5TaxPrintBill] [bit] NULL,[HasPreTaxForm] [bit] NULL,[PreTaxFormName] [varchar](150) NULL,[HasPostTaxForm] [bit] NULL,[PostTaxFormName] [varchar](150) NULL,[VAUid] [varchar](32) NULL,[VActr] [int] NULL,[VATermId] [varchar](32) NULL,[VACompCode] [varchar](16) NULL,[TaxRevisionId] [int] NULL,[EffectiveDate] [datetime] NULL,[AppliedDate] [datetime] NULL,[DateInsert] [datetime] NULL,[ShowRoomCode] [varchar](32) NULL,[UpdFlag] [varchar](1) NULL)','',1,'.','')
+-GO-
+INSERT INTO [dbo].VersionwiseTblsScript(VerID,SrlNo,TblScript,VAUid,VActr,VATermId,VACompCode) VALUES (4,19,'Drop table [dbo].[BakSalesTaxRevision]','',1,'.','')
+-GO-
+INSERT INTO [dbo].VersionwiseTblsScript(VerID,SrlNo,TblScript,VAUid,VActr,VATermId,VACompCode) VALUES (4,20,'CREATE TABLE [dbo].[BakSalesTaxRevision]([TaxRevisionId] [int] NOT NULL,[DestTaxType] [varchar](16)NOT NULL,[ProdTaxType] [varchar](16)NOT NULL,[SrcTaxType] [varchar](16) NOT NULL,[TaxDesc] [varchar](50)NULL,[CompCnt] [int] NULL,[T1Name] [varchar](25) NULL,[T1Descr] [varchar](50)NULL,[T1Type] [varchar](1)NULL,[T1DerivedFormula] [varchar](256) NULL,[T1CompOn] [varchar](50) NULL,[T1Rate] [money] NULL,[T1TaxInclusive] [bit] NULL,[T1TaxPrintBill] [bit] NULL,[T2Name] [varchar](25) NULL,[T2Descr] [varchar](50) NULL,[T2Type] [varchar](1) NULL,[T2DerivedFormula] [varchar](256) NULL,[T2CompOn] [varchar](50) NULL,[T2Rate] [money] NULL,[T2TaxInclusive] [bit] NULL,[T2TaxPrintBill] [bit] NULL,[T3Name] [varchar](25) NULL,[T3Descr] [varchar](50)NULL,[T3Type] [varchar](1)NULL,[T3DerivedFormula] [varchar](256) NULL,[T3CompOn] [varchar](50) NULL,[T3Rate] [money] NULL,[T3TaxInclusive] [bit] NULL,[T3TaxPrintBill] [bit] NULL,[T4Name] [varchar](25) NULL,[T4Descr] [varchar](50) NULL,[T4Type] [varchar](1)NULL,[T4DerivedFormula] [varchar](256) NULL,[T4CompOn] [varchar](50) NULL,[T4Rate] [money] NULL,[T4TaxInclusive] [bit] NULL,[T4TaxPrintBill] [bit] NULL,[T5Name] [varchar](25) NULL,[T5Descr] [varchar](50) NULL,[T5Type] [varchar](1) NULL,[T5DerivedFormula] [varchar](256) NULL,[T5CompOn] [varchar](50)NULL,[T5Rate] [money] NULL,[T5TaxInclusive] [bit] NULL,[T5TaxPrintBill] [bit] NULL,[HasPreTaxForm] [bit] NULL,[PreTaxFormName] [varchar](150)NULL,[HasPostTaxForm] [bit] NULL,[PostTaxFormName] [varchar](150)  NULL,[EffectiveDate] [datetime] NULL,[AppliedDate] [datetime] NULL,[VAUid] [varchar](32) NULL,[VActr] [int] NULL,[VATermId] [varchar](32) NULL,[VACompCode] [varchar](16) NULL,[DateInsert] [datetime] NULL,[ShowRoomCode] [varchar](32) NULL,[UpdFlag] [varchar](1) NULL) ','',1,'.','')
+-GO-
+INSERT INTO [dbo].VersionwiseTblsScript(VerID,SrlNo,TblScript,VAUid,VActr,VATermId,VACompCode) VALUES (4,21,'Drop table [dbo].[BakSalesTaxRevisionHistory]','',1,'.','')
+-GO-
+INSERT INTO [dbo].VersionwiseTblsScript(VerID,SrlNo,TblScript,VAUid,VActr,VATermId,VACompCode) VALUES (4,22,'CREATE TABLE [dbo].[BakSalesTaxRevisionHistory]([TaxRevisionId] [int] NOT NULL,[DestTaxType] [varchar](16)NOT NULL,[ProdTaxType] [varchar](16)NOT NULL,[SrcTaxType] [varchar](16)NOT NULL,[TaxDesc] [varchar](50) NULL,[CompCnt] [int] NULL,[T1Name] [varchar](25) NULL,[T1Descr] [varchar](50) NULL,[T1Type] [varchar](1)NULL,[T1DerivedFormula] [varchar](256) NULL,[T1CompOn] [varchar](50) NULL,[T1Rate] [money] NULL,[T1TaxInclusive] [bit] NULL,[T1TaxPrintBill] [bit] NULL,[T2Name] [varchar](25) NULL,[T2Descr] [varchar](50) NULL,[T2Type] [varchar](1) NULL,[T2DerivedFormula] [varchar](256) NULL,[T2CompOn] [varchar](50) NULL,[T2Rate] [money] NULL,[T2TaxInclusive] [bit] NULL,[T2TaxPrintBill] [bit] NULL,[T3Name] [varchar](25) NULL,[T3Descr] [varchar](50) NULL,[T3Type] [varchar](1) NULL,[T3DerivedFormula] [varchar](256) NULL,[T3CompOn] [varchar](50) NULL,[T3Rate] [money] NULL,[T3TaxInclusive] [bit] NULL,[T3TaxPrintBill] [bit] NULL,[T4Name] [varchar](25) NULL,[T4Descr] [varchar](50) NULL,[T4Type] [varchar](1)  NULL,[T4DerivedFormula] [varchar](256)NULL,[T4CompOn] [varchar](50) NULL,[T4Rate] [money] NULL,[T4TaxInclusive] [bit] NULL,[T4TaxPrintBill] [bit] NULL,[T5Name] [varchar](25) NULL,[T5Descr] [varchar](50) NULL,[T5Type] [varchar](1)NULL,[T5DerivedFormula] [varchar](256) NULL,[T5CompOn] [varchar](50) NULL,[T5Rate] [money] NULL,[T5TaxInclusive] [bit] NULL,[T5TaxPrintBill] [bit] NULL,[HasPreTaxForm] [bit] NULL,[PreTaxFormName] [varchar](150) NULL,[HasPostTaxForm] [bit] NULL,[PostTaxFormName] [varchar](150) NULL,[EffectiveDate] [datetime] NULL,	[AppliedDate] [datetime] NULL,[DateInsert] [datetime] NULL,[ShowRoomCode] [varchar](32)  NULL,[VAUid] [varchar](32) NULL,[VActr] [int] NULL,[VATermId] [varchar](32) NULL,[VACompCode] [varchar](16)  NULL,[UpdFlag] [varchar](1)  NULL)','',1,'.','')
+-GO-
+INSERT INTO [dbo].SALESTAXREVISIONHISTORY (TaxRevisionId,ShowRoomCode,DestTaxType,ProdTaxType,SrcTaxType,TaxDesc,CompCnt,T1Name,T1Descr,T1Type,T1DerivedFormula,T1CompOn,T1Rate,T1TaxInclusive,T1TaxPrintBill,T2Name,T2Descr,T2Type,T2DerivedFormula,T2CompOn,T2Rate,T2TaxInclusive,T2TaxPrintBill,T3Name,T3Descr,T3Type,T3DerivedFormula,T3CompOn,T3Rate,T3TaxInclusive,T3TaxPrintBill,T4Name,T4Descr,T4Type,T4DerivedFormula,T4CompOn,T4Rate,T4TaxInclusive,T4TaxPrintBill,T5Name,T5Descr,T5Type,T5DerivedFormula,T5CompOn,T5Rate,T5TaxInclusive,T5TaxPrintBill,HasPreTaxForm,PreTaxFormName,HasPostTaxForm,PostTaxFormName,DateInsert,EffectiveDate,AppliedDate,VAUid,VActr,VATermId,VACompCode) SELECT TaxRevisionId,ShowRoomCode,DestTaxType,ProdTaxType,SrcTaxType,TaxDesc,CompCnt,T1Name,T1Descr,T1Type,T1DerivedFormula,T1CompOn,T1Rate,T1TaxInclusive,T1TaxPrintBill,T2Name,T2Descr,T2Type,T2DerivedFormula,T2CompOn,T2Rate,T2TaxInclusive,T2TaxPrintBill,T3Name,T3Descr,T3Type,T3DerivedFormula,T3CompOn,T3Rate,T3TaxInclusive,T3TaxPrintBill,T4Name,T4Descr,T4Type,T4DerivedFormula,T4CompOn,T4Rate,T4TaxInclusive,T4TaxPrintBill,T5Name,T5Descr,T5Type,T5DerivedFormula,T5CompOn,T5Rate,T5TaxInclusive,T5TaxPrintBill,HasPreTaxForm,PreTaxFormName,HasPostTaxForm,PostTaxFormName,DateInsert,EffectiveDate,AppliedDate,VAUid,VActr,VATermId,VACompCode FROM [dbo].SALESTAXCAT
+-GO-
+Update [dbo].VersionwiseTblsScript Set Vactr = (select intg from [dbo].sysparam where paramcode = 'VaSysCounter') where VerId=4
+
+  </s9qScript>	
+</s9qsqlblk>
+
+
+<s9qsqlblk>
+  <s9qScriptid>S9Q_013_9_0033</s9qScriptid> 
+  <s9qtitle>Catalogue Module: Scripts Present In SPFix.EXE </s9qtitle> 
+  <s9qpgmtype>D</s9qpgmtype> 
+  <s9qversion>*</s9qversion> 
+  <s9qenvironment>P</s9qenvironment> 
+  <s9qRunMultiple>0</s9qRunMultiple> 
+  <s9qQryType>EXE</s9qQryType> 
+
+	<s9qScript><APPATH>\SPFix.Exe</s9qScript>
+
+</s9qsqlblk>
+
+
+<s9qsqlblk>
+  <s9qScriptid>S9Q_013_9_0034</s9qScriptid> 
+  <s9qtitle>Catalogue Module: Scripts Present In P900129.EXE</s9qtitle> 
+  <s9qpgmtype>D</s9qpgmtype> 
+  <s9qversion>*</s9qversion> 
+  <s9qenvironment>P</s9qenvironment> 
+  <s9qRunMultiple>0</s9qRunMultiple> 
+  <s9qQryType>EXE</s9qQryType> 
+
+	<s9qScript><APPATH>\P900129.exe</s9qScript>
+
+</s9qsqlblk>

@@ -10,6 +10,7 @@
 # ============================================================ #
 
 import asyncio
+from sqlalchemy import text
 from sqlalchemy.ext.asyncio import AsyncSession
 from database import AsyncSessionLocal, engine, Base
 from models import Product, Till
@@ -19,6 +20,12 @@ async def seed():
         await conn.run_sync(Base.metadata.create_all)
 
     async with AsyncSessionLocal() as session:
+        # Seed Tills
+        tills = [
+            Till(name="Main Counter 1", code="POS-01", status="open", cash_collected=12500.0),
+            Till(name="Express Lane 2", code="POS-02", status="closed", cash_collected=0.0),
+        ]
+
         # Seed Products
         products = [
             Product(sku="SKU-0112", name="Parle-G 100g", barcode="8901496100106", mrp=10.0, stock_qty=4, category="Grocery"),
@@ -28,17 +35,40 @@ async def seed():
             Product(sku="SKU-0445", name="Fortune Oil 5L", barcode="8901499010401", mrp=840.0, stock_qty=88, category="Grocery"),
         ]
         
-        # Seed Tills
-        tills = [
-            Till(name="Till 1 — Entrance", code="T1", status="open", cash_collected=28400.0),
-            Till(name="Till 2 — Main Counter", code="T2", status="open", cash_collected=42800.0),
-            Till(name="Till 3 — Express", code="T3", status="locked", cash_collected=18200.0),
-        ]
+        # Idempotent Seed for Products
+        for p in products:
+            await session.execute(text("""
+                INSERT INTO inventory (sku, name, barcode, mrp, stock_qty, category)
+                VALUES (:sku, :name, :barcode, :mrp, :stock_qty, :category)
+                ON CONFLICT (sku) DO UPDATE SET
+                    stock_qty = EXCLUDED.stock_qty,
+                    mrp = EXCLUDED.mrp;
+            """), {
+                "sku": p.sku,
+                "name": p.name,
+                "barcode": p.barcode,
+                "mrp": p.mrp,
+                "stock_qty": p.stock_qty,
+                "category": p.category
+            })
+        
+        # Idempotent Seed for Tills
+        for t in tills:
+            await session.execute(text("""
+                INSERT INTO tills (name, code, status, cash_collected)
+                VALUES (:name, :code, :status, :cash_collected)
+                ON CONFLICT (code) DO UPDATE SET
+                    status = EXCLUDED.status,
+                    cash_collected = EXCLUDED.cash_collected;
+            """), {
+                "name": t.name,
+                "code": t.code,
+                "status": t.status,
+                "cash_collected": t.cash_collected
+            })
 
-        session.add_all(products)
-        session.add_all(tills)
         await session.commit()
-        print("Sovereign Database Seeded Successfully.")
+        print("Sovereign Database Refreshed with Demo Data.")
 
 if __name__ == "__main__":
     asyncio.run(seed())

@@ -1,0 +1,63 @@
+<s9qsqlblk>
+  <s9qScriptid>S9Q_019_5_0001</s9qScriptid> 
+  <s9qtitle></s9qtitle> 
+  <s9qpgmtype>I</s9qpgmtype>  
+  <s9qpgmtype>L</s9qpgmtype>  
+  <s9qversion>*</s9qversion> 
+  <s9qenvironment>P</s9qenvironment> 
+  <s9qRunMultiple>1</s9qRunMultiple> 
+  <s9qQryType>DML</s9qQryType> 
+  <s9qScript>
+
+INSERT INTO [dbo].[SysParam] ([Id], [Descr], [ParamCode], [Boolean], [Intg], [Txt], [Dt], [Sng], [Cur], [Opt], [VAUid], [VActr], [VATermId], [VACompCode] )  VALUES ( 'SR1-0901-0000417', 'Send Additional Sync information to HO', 'SendAddnlDataToHO', 0, 0, NULL, NULL, 0, 0.0000, 'B', 'super', 1, '.', '' )
+-GO-
+Insert into SysparamExtd ([ID],[ParamCode],[Fixed],[Changed],[Category],[CatDescr],[DispOrder]) Values ('SR1-0901-0000417','SendAddnlDataToHO','Variable','0','17. House Keeping','This Gives House Keeping Parameters','52')
+-GO-
+Update SysParam Set Vactr = (select intg from sysparam where paramcode = 'VaSysCounter') Where Id = 'SR1-0901-0000417'
+-GO-
+Update SysparamExtd Set Vactr = (select intg from sysparam where paramcode = 'VaSysCounter') Where Id = 'SR1-0901-0000417'
+-GO-
+Alter table DBO.[DataSyncConfig] add IncrDownload varchar(1) 
+-GO-
+Alter table DBO.[DataSyncConfig] add IncrDownloadFromDt datetime
+-GO-
+Alter table DBO.[BakDataSyncConfig] drop column UpdFlag
+-GO-
+Alter table DBO.[BakDataSyncConfig] add IncrDownload varchar(1)
+-GO-
+Alter table DBO.[BakDataSyncConfig] add IncrDownloadFromDt datetime
+-GO-
+Alter table DBO.[BakDataSyncConfig] add UpdFlag varchar(1)
+-GO-
+Create table ShrmScriptExtd(ScriptBlockId int,DistCenter Varchar(16),GLCountry Varchar(16),GLZone Varchar(16),GLState Varchar(16),GLCity Varchar(16),ShowroomCode Varchar(16),DateInsert DateTime)
+-GO-
+Create table ShrmScript(ScriptBlockId int NOT NULL,SrlNo int NOT NULL,Script Varchar(4000),DateInsert DateTime,ExecutedShoperDate DateTime,ExecutedSystemDate DateTime,IsExecuted varchar(1),MinPOSVerId int,ExecuteBeforeImport int,VAUid Varchar(32),VActr	int,VATermId Varchar(32),VACompCode	Varchar(32))
+-GO-
+ALTER TABLE [ShrmScript] ADD CONSTRAINT [PK_ShrmScript] PRIMARY KEY  CLUSTERED ([ScriptBlockId],[SrlNo]	)  ON [PRIMARY] 
+-GO-
+Create table BakShrmScript(ScriptBlockId int,SrlNo int ,Script Varchar(4000),DateInsert DateTime,ExecutedShoperDate DateTime,ExecutedSystemDate DateTime,IsExecuted varchar(1),MinPOSVerId int,ExecuteBeforeImport int,VAUid Varchar(32),VActr	int,VATermId Varchar(32),VACompCode	Varchar(32),UpdFlag Varchar(1))
+-GO-
+Insert Into VersionwiseTblsScript (VerID,SrlNo,TblScript) Values (14,1,'Alter table DBO.[DataSyncConfig] add IncrDownload varchar(1)')
+-GO-
+Insert Into VersionwiseTblsScript (VerID,SrlNo,TblScript) Values (14,2,'Alter table DBO.[DataSyncConfig] add IncrDownloadFromDt datetime')
+-GO-
+Insert Into VersionwiseTblsScript (VerID,SrlNo,TblScript) Values (14,3,'Alter table DBO.[BakDataSyncConfig] drop column UpdFlag')
+-GO-
+Insert Into VersionwiseTblsScript (VerID,SrlNo,TblScript) Values (14,4,'Alter table DBO.[BakDataSyncConfig] add IncrDownload varchar(1)')
+-GO-
+Insert Into VersionwiseTblsScript (VerID,SrlNo,TblScript) Values (14,5,'Alter table DBO.[BakDataSyncConfig] add IncrDownloadFromDt datetime')
+-GO-
+Insert Into VersionwiseTblsScript (VerID,SrlNo,TblScript) Values (14,6,'Alter table DBO.[BakDataSyncConfig] add UpdFlag varchar(1)')
+-GO-
+Insert Into VersionwiseTblsScript (VerID,SrlNo,TblScript) Values (14,7,'Create Table [DBO].ShrmScript(ScriptBlockId int NOT NULL,SrlNo int NOT NULL,Script Varchar(4000),DateInsert DateTime,ExecutedShoperDate DateTime,ExecutedSystemDate DateTime,IsExecuted varchar(1),MinPOSVerId int,ExecuteBeforeImport int,VAUid Varchar(32),VActr int,VATermId Varchar(32),VACompCode Varchar(32))')
+-GO-
+Insert Into VersionwiseTblsScript (VerID,SrlNo,TblScript) Values (14,8,'Alter Table [DBO].ShrmScript ADD CONSTRAINT [PK_ShrmScript] PRIMARY KEY  CLUSTERED ([ScriptBlockId],[SrlNo])') 
+-GO-
+Insert Into VersionwiseTblsScript (VerID,SrlNo,TblScript) Values (14,9,'Create Table [DBO].BakShrmScript(ScriptBlockId int,SrlNo int ,Script Varchar(4000),DateInsert DateTime,ExecutedShoperDate DateTime,ExecutedSystemDate DateTime,IsExecuted varchar(1),MinPOSVerId int,ExecuteBeforeImport int,VAUid Varchar(32),VActr int,VATermId Varchar(32),VACompCode Varchar(32),UpdFlag Varchar(1))')
+-GO-
+Update VersionwiseTblsScript Set Vactr = (select intg from sysparam where paramcode = 'VaSysCounter') where VerId=14
+-GO-
+update sysparam set txt=txt + '#PurgeLogDtls' where paramcode='TempTableToSkipFromAST2' and txt not like '%PurgeLogDtls%'
+-GO-
+</s9qScript>		
+</s9qsqlblk>

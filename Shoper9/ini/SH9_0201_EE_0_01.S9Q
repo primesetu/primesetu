@@ -1,0 +1,24 @@
+<s9qsqlblk>
+  <s9qScriptid>S9Q_0201_0_0002</s9qScriptid> 
+  <s9qtitle>Application DB Scripts for Hot Fix 574</s9qtitle> 
+  <s9qpgmtype>I</s9qpgmtype>  
+  <s9qpgmtype>L</s9qpgmtype>  
+  <s9qversion>*</s9qversion> 
+  <s9qenvironment>P</s9qenvironment> 
+  <s9qRunMultiple>1</s9qRunMultiple> 
+  <s9qQryType>DML</s9qQryType> 
+  <s9qScript>
+Update GenLookUp Set Flag = 0 Where Recid = 14400 and Code = 'SR526500+PostInternalSISComponents+1' and Descr = 'SR543100.ClsSISComponent'
+-GO-
+Update GenLookUp Set Flag = 0 Where Recid = 14400 and Code = 'SR526500+PostInternalZipComponents+1' and Descr = 'SR543100.ClsZipComponent'
+-GO-
+INSERT INTO Genlookup (recid,code,descr) values (299,'P901574','Shoper Update Version No:')
+-GO-
+Update Genlookup set Descr = (select 'Shoper Update Version No:9.0.1.9574' + ' ;system date:' + convert(varchar(20),getdate(),105) + ' ;shoper date:' + (select convert(varchar(20),dt,105) from sysparam where paramcode ='SHOPERSysDt') ) where code = 'P901574' and recid = 299
+-GO-
+INSERT INTO [dbo].VersionDtls VALUES (17,getdate(),'9','2.01','A','P901574','',1,'.','')
+-GO-
+Update VersionDtls Set Vactr = (select intg from sysparam where paramcode = 'VaSysCounter') where VerId=17
+-GO-
+  </s9qScript>
+</s9qsqlblk>

@@ -1,0 +1,612 @@
+<s9qsqlblk>
+<s9qScriptid>S9Q_014_6_0008</s9qScriptid>
+<s9qtitle>Print Engine Script Files</s9qtitle>
+<s9qpgmtype>L</s9qpgmtype>
+<s9qpgmtype>I</s9qpgmtype>
+<s9qversion>*</s9qversion>
+<s9qenvironment>P</s9qenvironment>
+<s9qRunMultiple>1</s9qRunMultiple>
+<s9qQryType>DML</s9qQryType>
+<s9qScript>
+Drop Table [dbo].[BusinessHandlerDtls]
+-GO-
+Drop Table [dbo].[BusinessRendererDtls]
+-GO-
+Drop Table [dbo].[DefaultRenderer]
+-GO-
+Drop Table [dbo].[ConfigSettingsDtls]
+-GO-
+Drop Table [dbo].[PrnSettingsDtls]
+-GO-
+Drop Table [dbo].[PrinterLookup]
+-GO-
+Drop Table [dbo].[PrintBusinessHandlerMaster]
+-GO-
+Drop Table [dbo].[PrintRendererMaster]
+-GO-
+Drop Table [dbo].[PrintLinkDefTrnRenderer]
+-GO-
+Drop Table [dbo].[PrintConfigSettingMaster]
+-GO-
+Drop Table [dbo].[PrintConfigSetting]
+-GO-
+CREATE TABLE [dbo].[PrintBusinessHandlerMaster](
+	[NodeID] [varchar](16) NOT NULL,
+	[TrnTypeIdentifier] [int] NOT NULL,
+	[TrnTypeIDCaption] [varchar](256) NOT NULL,
+	[TrnTypeGroup] [varchar](256) NOT NULL,
+	[BHLibFilePath] [varchar](256) NOT NULL,
+	[BHClassName] [varchar](256) NOT NULL,
+	[BHCaption] [varchar](256) NOT NULL,
+	[BHType] [Varchar](8) NOT NULL,
+	[LinkedDefRenID] [varchar](16) NOT NULL,
+	[PrintPreference] [int] NOT NULL,
+	[IsActive] [int] NOT NULL,
+	[BHExecutionOrder] [int] NOT NULL,
+	[Remarks] [varchar](256) NULL,
+	[VAUId] [varchar](256) NULL,
+	[VACtr] [int] NULL CONSTRAINT [DF_PrintBusinessHandlerMaster_VACtr]  DEFAULT ((0)),
+	[VATermId] [varchar](256) NULL,
+	[VACompCode] [varchar](256) NULL,
+	[ShoperDBVer] [int] NULL CONSTRAINT [DF_PrintBusinessHandlerMaster_SHOPERDBVER]  DEFAULT ((730))
+) ON [PRIMARY]
+-GO-
+Alter TABLE [dbo].[PrintBusinessHandlerMaster] WITH NOCHECK ADD
+ CONSTRAINT [PK_PrintBusinessHandlerMaster] PRIMARY KEY CLUSTERED
+(
+	[NodeID],
+	[TrnTypeIdentifier],
+	[BHLibFilePath],
+	[BHClassName],
+	[LinkedDefRenID]
+) ON [PRIMARY]
+-GO-
+CREATE TABLE [dbo].[PrintRendererMaster](
+	[RenHandlerID] [varchar](16) NOT NULL,
+	[RenLibFilePath] [varchar](256) NOT NULL,
+	[RenClassName] [varchar](256) NOT NULL,
+	[RenCaption] [varchar](256) NOT NULL,
+	[RenType] [Varchar](8) NOT NULL,
+	[IsActive] [int] NOT NULL,
+	[Remarks] [varchar](256) NULL,
+	[VAUId] [varchar](256) NULL,
+	[VACtr] [int] NULL CONSTRAINT [DF_PrintRendererMaster_VACtr]  DEFAULT ((0)),
+	[VATermId] [varchar](256) NULL,
+	[VACompCode] [varchar](256) NULL,
+	[ShoperDBVer] [int] NULL CONSTRAINT [DF_PrintRendererMaster_SHOPERDBVER]  DEFAULT ((730))
+) ON [PRIMARY]
+-GO-
+Alter TABLE [dbo].[PrintRendererMaster] WITH NOCHECK ADD
+ CONSTRAINT [PK_PrintRendererMaster] PRIMARY KEY CLUSTERED
+(
+	[RenHandlerID]
+) ON [PRIMARY]
+-GO-
+CREATE TABLE [dbo].[PrintLinkDefTrnRenderer](
+	[LinkedDefRenID] [varchar](16) NOT NULL,
+	[RenExecutionOrder] [int] NOT NULL,
+	[ConfigSettingID] [varchar](16) NOT NULL,
+	[RenHandlerID] [varchar](16) NOT NULL,
+	[IsActive] [int] NOT NULL,
+	[VAUId] [varchar](256) NULL,
+	[VACtr] [int] NULL CONSTRAINT [DF_PrintLinkDefTrnRenderer_VACtr]  DEFAULT ((0)),
+	[VATermId] [varchar](256) NULL,
+	[VACompCode] [varchar](256) NULL,
+	[ShoperDBVer] [int] NULL CONSTRAINT [DF_PrintLinkDefTrnRenderer_ShoperDBVer]  DEFAULT ((730))
+) ON [PRIMARY]
+-GO-
+Alter TABLE [dbo].[PrintLinkDefTrnRenderer] WITH NOCHECK ADD
+ CONSTRAINT [PK_PrintLinkDefTrnRenderer] PRIMARY KEY CLUSTERED
+(
+	[LinkedDefRenID],
+ 	[RenExecutionOrder]
+) ON [PRIMARY]
+-GO-
+CREATE TABLE [dbo].[PrintConfigSettingMaster](	
+	[ConfigSettingID] [varchar](16) NOT NULL,
+	[ConfigSettingName] [varchar](256) NOT NULL,
+	[IsActive] [int] NOT NULL,
+	[Remarks] [varchar](256) NULL,
+	[VAUId] [varchar](256) NULL,
+	[VACtr] [int] NULL CONSTRAINT [DF_PrintConfigSettingMaster_VACtr]  DEFAULT ((0)),
+	[VATermId] [varchar](256) NULL,
+	[VACompCode] [varchar](256) NULL,
+	[ShoperDBVer] [int] NULL CONSTRAINT [DF_PrintConfigSettingMaster_ShoperDBVer]  DEFAULT ((730))
+) ON [PRIMARY]
+-GO-
+Alter TABLE [dbo].[PrintConfigSettingMaster] WITH NOCHECK ADD
+ CONSTRAINT [PK_PrintConfigSettingMaster] PRIMARY KEY CLUSTERED
+(										
+	[ConfigSettingID]
+) ON [PRIMARY]
+-GO-
+CREATE TABLE [dbo].[PrintConfigSetting](
+	[ConfigSettingID] [varchar](16) NOT NULL,
+	[ConfigParamID] [varchar](256) NOT NULL,
+	[ConfigParamDesc] [varchar](256) NOT NULL,
+	[ConfigParamValue] [varchar](256) NOT NULL,
+	[ConfigParamDataType] [varchar](8) NOT NULL,
+	[IsActive] [int] NOT NULL,
+	[Remarks] [varchar](256) NULL,
+	[VAUId] [varchar](256) NULL,
+	[VACtr] [int] NULL CONSTRAINT [DF_PrintConfigSetting_VACtr]  DEFAULT ((0)),
+	[VATermId] [varchar](256) NULL,
+	[VACompCode] [varchar](256) NULL,
+	[ShoperDBVer] [int] NULL CONSTRAINT [DF_PrintConfigSetting_ShoperDBVer]  DEFAULT ((730))
+) ON [PRIMARY]
+-GO-
+Alter TABLE [dbo].[PrintConfigSetting] WITH NOCHECK ADD
+ CONSTRAINT [PK_PrintConfigSetting] PRIMARY KEY CLUSTERED
+(
+	[ConfigSettingID],
+	[ConfigParamID]
+) ON [PRIMARY]
+-GO-
+Insert into [dbo].[PrintBusinessHandlerMaster]
+(
+	[NodeID],[TrnTypeIdentifier],[TrnTypeIDCaption],[TrnTypeGroup],[BHLibFilePath],[BHClassName],[BHCaption],[BHType],[LinkedDefRenID],
+	[PrintPreference],[IsActive],[BHExecutionOrder],[Remarks]
+) 
+Values
+(
+	'<<ALLNODES>>',2100,'Shoper Sales Transaction','Sales','<<APPPATH>>\SN500200.dll','PrintingEngine.ClsSalesBusHandler',
+	'Shoper Sales 2100 Business Logic','D','L0001',1,1,1,'Shoper default sales'
+)
+-GO-
+Insert into [dbo].[PrintBusinessHandlerMaster]
+(
+	[NodeID],[TrnTypeIdentifier],[TrnTypeIDCaption],[TrnTypeGroup],[BHLibFilePath],[BHClassName],[BHCaption],[BHType],[LinkedDefRenID],
+	[PrintPreference],[IsActive],[BHExecutionOrder],[Remarks]
+) 
+Values
+(
+	'<<ALLNODES>>',1300,'Shoper Sales Return Transaction','Sales','<<APPPATH>>\SN500200.dll','PrintingEngine.ClsSalesBusHandler',
+	'Shoper Sales Return 1300 Business Logic','D','L0001',1,1,1,'Shoper default sales return'
+)
+-GO-
+Insert into [dbo].[PrintBusinessHandlerMaster]
+(
+	[NodeID],[TrnTypeIdentifier],[TrnTypeIDCaption],[TrnTypeGroup],[BHLibFilePath],[BHClassName],[BHCaption],[BHType],[LinkedDefRenID],
+	[PrintPreference],[IsActive],[BHExecutionOrder],[Remarks]
+) 
+Values
+(
+	'<<ALLNODES>>',1600,'Shoper void sales Transaction','Sales','<<APPPATH>>\SN500200.dll','PrintingEngine.ClsSalesBusHandler',
+	'Shoper Void sales 1600 Business Logic','D','L0001',1,1,1,'Shoper default void sales'
+)
+-GO-
+Insert into [dbo].[PrintBusinessHandlerMaster]
+(
+	[NodeID],[TrnTypeIdentifier],[TrnTypeIDCaption],[TrnTypeGroup],[BHLibFilePath],[BHClassName],[BHCaption],[BHType],[LinkedDefRenID],
+	[PrintPreference],[IsActive],[BHExecutionOrder],[Remarks]
+) 
+Values
+(
+	'<<ALLNODES>>',2200,'Shoper Transfer Out Transaction','Outward','<<APPPATH>>\SN500200.dll','PrintingEngine.OutwardAuditTrialBusHandler',
+	'Shoper Transfer Out 2200 Business Logic','D','L0002',1,1,1,'Shoper default Transfer Out'
+)
+-GO-
+Insert into [dbo].[PrintBusinessHandlerMaster]
+(
+	[NodeID],[TrnTypeIdentifier],[TrnTypeIDCaption],[TrnTypeGroup],[BHLibFilePath],[BHClassName],[BHCaption],[BHType],[LinkedDefRenID],
+	[PrintPreference],[IsActive],[BHExecutionOrder],[Remarks]
+) 
+Values
+(
+	'<<ALLNODES>>',2300,'Shoper Purchase Return Transaction','Outward','<<APPPATH>>\SN500200.dll','PrintingEngine.OutwardAuditTrialBusHandler',
+	'Shoper Purchase Return 2300 Business Logic','D','L0002',1,1,1,'Shoper default Purchase Return'
+)
+-GO-
+Insert into [dbo].[PrintBusinessHandlerMaster]
+(
+	[NodeID],[TrnTypeIdentifier],[TrnTypeIDCaption],[TrnTypeGroup],[BHLibFilePath],[BHClassName],[BHCaption],[BHType],[LinkedDefRenID],
+	[PrintPreference],[IsActive],[BHExecutionOrder],[Remarks]
+) 
+Values
+(
+	'<<ALLNODES>>',2500,'Shoper Misc Issues Transaction','Outward','<<APPPATH>>\SN500200.dll','PrintingEngine.OutwardAuditTrialBusHandler',
+	'Shoper Misc Issues 2500 Business Logic','D','L0002',1,1,1,'Shoper default Misc Issues'
+)
+-GO-
+Insert into [dbo].[PrintBusinessHandlerMaster]
+(
+	[NodeID],[TrnTypeIdentifier],[TrnTypeIDCaption],[TrnTypeGroup],[BHLibFilePath],[BHClassName],[BHCaption],[BHType],[LinkedDefRenID],
+	[PrintPreference],[IsActive],[BHExecutionOrder],[Remarks]
+) 
+Values
+(
+	'<<ALLNODES>>',1100,'Shoper Purchase Transaction','Inward','<<APPPATH>>\SN500200.dll','PrintingEngine.InwardAuditTrialBusHandler',
+	'Shoper Purchase 1100 Business Logic','D','L0003',1,1,1,'Shoper default Purchase'
+)
+-GO-
+Insert into [dbo].[PrintBusinessHandlerMaster]
+(
+	[NodeID],[TrnTypeIdentifier],[TrnTypeIDCaption],[TrnTypeGroup],[BHLibFilePath],[BHClassName],[BHCaption],[BHType],[LinkedDefRenID],
+	[PrintPreference],[IsActive],[BHExecutionOrder],[Remarks]
+) 
+Values
+(
+	'<<ALLNODES>>',1200,'Shoper Transfer In Transaction','Inward','<<APPPATH>>\SN500200.dll','PrintingEngine.InwardAuditTrialBusHandler',
+	'Shoper Transfer In 1200 Business Logic','D','L0003',1,1,1,'Shoper default Transfer In'
+)
+-GO-
+Insert into [dbo].[PrintBusinessHandlerMaster]
+(
+	[NodeID],[TrnTypeIdentifier],[TrnTypeIDCaption],[TrnTypeGroup],[BHLibFilePath],[BHClassName],[BHCaption],[BHType],[LinkedDefRenID],
+	[PrintPreference],[IsActive],[BHExecutionOrder],[Remarks]
+) 
+Values
+(
+	'<<ALLNODES>>',1500,'Shoper Misc Receipt Transaction','Inward','<<APPPATH>>\SN500200.dll','PrintingEngine.InwardAuditTrialBusHandler',
+	'Shoper Misc Receipt 1500 Business Logic','D','L0003',1,1,1,'Shoper default Misc Receipt'
+)
+-GO-
+Insert into [dbo].[PrintBusinessHandlerMaster]
+(
+	[NodeID],[TrnTypeIdentifier],[TrnTypeIDCaption],[TrnTypeGroup],[BHLibFilePath],[BHClassName],[BHCaption],[BHType],[LinkedDefRenID],
+	[PrintPreference],[IsActive],[BHExecutionOrder],[Remarks]
+) 
+Values
+(
+	'<<ALLNODES>>',9100,'Shoper Slips Suspension Tranasaction','Slips','<<APPPATH>>\SN500200.dll','PrintingEngine.SlipsPrintingBusHandler',
+	'Shoper Slips Suspension 9100 Business Logic','D','L0004',0,0,1,'Shoper default Slips Suspension'
+)
+-GO-
+Insert into [dbo].[PrintBusinessHandlerMaster]
+(
+	[NodeID],[TrnTypeIdentifier],[TrnTypeIDCaption],[TrnTypeGroup],[BHLibFilePath],[BHClassName],[BHCaption],[BHType],[LinkedDefRenID],
+	[PrintPreference],[IsActive],[BHExecutionOrder],[Remarks]
+) 
+Values
+(
+	'<<ALLNODES>>',9200,'Shoper Slips Sales Advice Tranasaction','Slips','<<APPPATH>>\SN500200.dll','PrintingEngine.SlipsPrintingBusHandler',
+	'Shoper Slips Sales Advice 9200 Business Logic','D','L0004',1,1,1,'Shoper default Slips Sales Advice'
+)
+-GO-
+Insert into [dbo].[PrintBusinessHandlerMaster]
+(
+	[NodeID],[TrnTypeIdentifier],[TrnTypeIDCaption],[TrnTypeGroup],[BHLibFilePath],[BHClassName],[BHCaption],[BHType],[LinkedDefRenID],
+	[PrintPreference],[IsActive],[BHExecutionOrder],[Remarks]
+) 
+Values
+(
+	'<<ALLNODES>>',9300,'Shoper Slips Service Order Tranasaction','Slips','<<APPPATH>>\SN500200.dll','PrintingEngine.SlipsPrintingBusHandler',
+	'Shoper Slips Service Order 9300 Business Logic','D','L0004',1,1,1,'Shoper default Slips Service Order'
+)
+-GO-
+Insert into [dbo].[PrintBusinessHandlerMaster]
+(
+	[NodeID],[TrnTypeIdentifier],[TrnTypeIDCaption],[TrnTypeGroup],[BHLibFilePath],[BHClassName],[BHCaption],[BHType],[LinkedDefRenID],
+	[PrintPreference],[IsActive],[BHExecutionOrder],[Remarks]
+) 
+Values
+(
+	'<<ALLNODES>>',9400,'Shoper Slips Bridal Registry Tranasaction','Slips','<<APPPATH>>\SN500200.dll','PrintingEngine.SlipsPrintingBusHandler',
+	'Shoper Slips Bridal Registry 9400 Business Logic','D','L0004',0,0,1,'Shoper default Slips Bridal Registry'
+)
+-GO-
+Insert into [dbo].[PrintBusinessHandlerMaster]
+(
+	[NodeID],[TrnTypeIdentifier],[TrnTypeIDCaption],[TrnTypeGroup],[BHLibFilePath],[BHClassName],[BHCaption],[BHType],[LinkedDefRenID],
+	[PrintPreference],[IsActive],[BHExecutionOrder],[Remarks]
+) 
+Values
+(
+	'<<ALLNODES>>',9500,'Shoper Slips Approval Issue Tranasaction','Slips','<<APPPATH>>\SN500200.dll','PrintingEngine.SlipsPrintingBusHandler',
+	'Shoper Slips Approval Issue 9500 Business Logic','D','L0004',1,1,1,'Shoper default Slips Approval Issue'
+)
+-GO-
+Insert into [dbo].[PrintBusinessHandlerMaster]
+(
+	[NodeID],[TrnTypeIdentifier],[TrnTypeIDCaption],[TrnTypeGroup],[BHLibFilePath],[BHClassName],[BHCaption],[BHType],[LinkedDefRenID],
+	[PrintPreference],[IsActive],[BHExecutionOrder],[Remarks]
+) 
+Values
+(
+	'<<ALLNODES>>',9600,'Shoper Slips Approval Receipt Tranasaction','Slips','<<APPPATH>>\SN500200.dll','PrintingEngine.SlipsPrintingBusHandler',
+	'Shoper Slips Approval Receipt 9600 Business Logic','D','L0004',1,1,1,'Shoper default Slips Approval Receipt'
+)
+-GO-
+Insert into [dbo].[PrintBusinessHandlerMaster]
+(
+	[NodeID],[TrnTypeIdentifier],[TrnTypeIDCaption],[TrnTypeGroup],[BHLibFilePath],[BHClassName],[BHCaption],[BHType],[LinkedDefRenID],
+	[PrintPreference],[IsActive],[BHExecutionOrder],[Remarks]
+) 
+Values
+(
+	'<<ALLNODES>>',9700,'Shoper Slips Sales Order Tranasaction','Slips','<<APPPATH>>\SN500200.dll','PrintingEngine.SlipsPrintingBusHandler',
+	'Shoper Slips Sales Order 9700 Business Logic','D','L0004',1,1,1,'Shoper default Slips Sales Order'
+)
+-GO-
+Insert into [dbo].[PrintBusinessHandlerMaster]
+(
+	[NodeID],[TrnTypeIdentifier],[TrnTypeIDCaption],[TrnTypeGroup],[BHLibFilePath],[BHClassName],[BHCaption],[BHType],[LinkedDefRenID],
+	[PrintPreference],[IsActive],[BHExecutionOrder],[Remarks]
+) 
+Values
+(
+	'<<ALLNODES>>',9800,'Shoper Slips Sales Issue DC Tranasaction','Slips','<<APPPATH>>\SN500200.dll','PrintingEngine.SlipsPrintingBusHandler',
+	'Shoper Slips Sales Issue DC 9800 Business Logic','D','L0004',1,1,1,'Shoper default Slips Sales Issue DC'
+)
+-GO-
+Insert into [dbo].[PrintBusinessHandlerMaster]
+(
+	[NodeID],[TrnTypeIdentifier],[TrnTypeIDCaption],[TrnTypeGroup],[BHLibFilePath],[BHClassName],[BHCaption],[BHType],[LinkedDefRenID],
+	[PrintPreference],[IsActive],[BHExecutionOrder],[Remarks]
+) 
+Values
+(
+	'<<ALLNODES>>',9900,'Shoper Slips Approval Issue DC Tranasaction','Slips','<<APPPATH>>\SN500200.dll','PrintingEngine.SlipsPrintingBusHandler',
+	'Shoper Slips Approval Issue DC 9900 Business Logic','D','L0004',1,1,1,'Shoper default Slips Approval Issue DC'
+)
+-GO-
+Insert into [dbo].[PrintBusinessHandlerMaster]
+(
+	[NodeID],[TrnTypeIdentifier],[TrnTypeIDCaption],[TrnTypeGroup],[BHLibFilePath],[BHClassName],[BHCaption],[BHType],[LinkedDefRenID],
+	[PrintPreference],[IsActive],[BHExecutionOrder],[Remarks]
+) 
+Values
+(
+	'<<ALLNODES>>',6000,'Shoper PayIn Slip Transaction','PayIn Slip','<<APPPATH>>\SN500200.dll','PrintingEngine.PayinSlipBusHandler',
+	'Shoper PayIn Slip 6000 Business Logic','D','L0005',1,1,1,'Shoper default PayIn Slip'
+)
+-GO-
+Insert into [dbo].[PrintBusinessHandlerMaster]
+(
+	[NodeID],[TrnTypeIdentifier],[TrnTypeIDCaption],[TrnTypeGroup],[BHLibFilePath],[BHClassName],[BHCaption],[BHType],[LinkedDefRenID],
+	[PrintPreference],[IsActive],[BHExecutionOrder],[Remarks]
+) 
+Values
+(
+	'<<ALLNODES>>',6100,'Shoper Cash Receipt and Payout Transaction','Cash Receipt/Payout','<<APPPATH>>\SN500200.dll','PrintingEngine.CashReceiptPayoutBusHandler',
+	'Shoper Cash Receipt and Payout 6100 Business Logic','D','L0006',1,1,1,'Shoper default Cash Receipt and Payout'
+)
+-GO-
+Insert Into [dbo].[PrintRendererMaster]
+(
+	[RenHandlerID],[RenLibFilePath],[RenClassName],[RenCaption],[RenType],[IsActive],[Remarks]
+)
+Values
+(
+	'R0001','<<APPPATH>>\SN500200.dll','PrintingEngine.SalesGenPrintRenderer','Shoper Sales Gen Printing Renderer','D',1,'Shoper default Genprinitng renderer for sales'
+)
+-GO-
+Insert Into [dbo].[PrintRendererMaster]
+(
+	[RenHandlerID],[RenLibFilePath],[RenClassName],[RenCaption],[RenType],[IsActive],[Remarks]
+)
+Values
+(
+	'R0002','<<APPPATH>>\SN500200.dll','PrintingEngine.OutwardAuditTrialRenderer','Shoper Outward Printing Renderer','D',1,'Shoper default renderer for outward'
+)
+-GO-
+Insert Into [dbo].[PrintRendererMaster]
+(
+	[RenHandlerID],[RenLibFilePath],[RenClassName],[RenCaption],[RenType],[IsActive],[Remarks]
+)
+Values
+(
+	'R0003','<<APPPATH>>\SN500200.dll','PrintingEngine.InwardAuditTrialRenderer','Shoper Inward Printing Renderer','D',1,'Shoper default renderer for Inward'
+)
+-GO-
+Insert Into [dbo].[PrintRendererMaster]
+(
+	[RenHandlerID],[RenLibFilePath],[RenClassName],[RenCaption],[RenType],[IsActive],[Remarks]
+)
+Values
+(
+	'R0004','<<APPPATH>>\SN500200.dll','PrintingEngine.SlipsPrintingRenderer','Shoper Slips Printing Renderer','D',1,'Shoper default renderer for Slips'
+)
+-GO-
+Insert Into [dbo].[PrintRendererMaster]
+(
+	[RenHandlerID],[RenLibFilePath],[RenClassName],[RenCaption],[RenType],[IsActive],[Remarks]
+)
+Values
+(
+	'R0005','<<APPPATH>>\SN500200.dll','PrintingEngine.PayinSlipPrintingRenderer','Shoper Payin Slips Printing Renderer','D',1,'Shoper default renderer for PayIn slips'
+)
+-GO-
+Insert Into [dbo].[PrintRendererMaster]
+(
+	[RenHandlerID],[RenLibFilePath],[RenClassName],[RenCaption],[RenType],[IsActive],[Remarks]
+)
+Values
+(
+	'R0006','<<APPPATH>>\SN500200.dll','PrintingEngine.CashReceiptPayoutPrintingRenderer','Shoper Cash Receipt Printing Renderer','D',1,'Shoper default renderer for Cash Receipt'
+)
+-GO-
+Insert into [dbo].[PrintLinkDefTrnRenderer]
+(
+	[LinkedDefRenID],[RenExecutionOrder],[ConfigSettingID],[RenHandlerID],[IsActive]
+)
+Values
+(
+	'L0001',1,'S0001','R0001',1
+)
+-GO-
+
+Insert into [dbo].[PrintLinkDefTrnRenderer]
+(
+	[LinkedDefRenID],[RenExecutionOrder],[ConfigSettingID],[RenHandlerID],[IsActive]
+)
+Values
+(
+	'L0002',1,'S0001','R0002',1
+)
+-GO-
+Insert into [dbo].[PrintLinkDefTrnRenderer]
+(
+	[LinkedDefRenID],[RenExecutionOrder],[ConfigSettingID],[RenHandlerID],[IsActive]
+)
+Values
+(
+	'L0003',1,'S0001','R0003',1
+)
+-GO-
+Insert into [dbo].[PrintLinkDefTrnRenderer]
+(
+	[LinkedDefRenID],[RenExecutionOrder],[ConfigSettingID],[RenHandlerID],[IsActive]
+)
+Values
+(
+	'L0004',1,'S0001','R0004',1
+)
+-GO-
+Insert into [dbo].[PrintLinkDefTrnRenderer]
+(
+	[LinkedDefRenID],[RenExecutionOrder],[ConfigSettingID],[RenHandlerID],[IsActive]
+)
+Values
+(
+	'L0005',1,'S0001','R0005',1
+)
+-GO-
+Insert into [dbo].[PrintLinkDefTrnRenderer]
+(
+	[LinkedDefRenID],[RenExecutionOrder],[ConfigSettingID],[RenHandlerID],[IsActive]
+)
+Values
+(
+	'L0006',1,'S0001','R0006',1
+)
+-GO-
+Insert into [dbo].[PrintConfigSettingMaster]
+(
+	[ConfigSettingID],[ConfigSettingName],[IsActive],[Remarks]
+)
+Values
+(
+	'S0001','Shoper Configuration Settings','1','default configuration shoper setting'
+)
+-GO-
+Insert into [dbo].[PrintConfigSetting] 
+([ConfigSettingID],[ConfigParamID],[ConfigParamDesc],[ConfigParamValue],[ConfigParamDataType],[IsActive],[Remarks])
+Values ('S0001','PrintingOption','Type of printing Option/Methodology to be used','2','I','1','Default Shoper Config Settings')
+-GO-
+Insert into [dbo].[PrintConfigSetting] 
+([ConfigSettingID],[ConfigParamID],[ConfigParamDesc],[ConfigParamValue],[ConfigParamDataType],[IsActive],[Remarks])
+Values ('S0001','PrinterName','Printer/Output Device to which printing is done','<<PROMPT>>','T','1','Default Shoper Config Settings')
+-GO-
+Insert into [dbo].[PrintConfigSetting]
+([ConfigSettingID],[ConfigParamID],[ConfigParamDesc],[ConfigParamValue],[ConfigParamDataType],[IsActive],[Remarks]) 
+Values ('S0001','NoOfCopies','No of Copies to be Printed','N#1','T',1,'Set wheather to prompt and set wheather to print No. of copies')
+-GO-
+--Updating genlookup 320 entry if default bill formtype21 descr has been changed to include custom value
+-- createing new billformtype and genlookup entries
+DECLARE @DEFAULT_DESCR VARCHAR(256)
+DECLARE @DESCR VARCHAR(256)
+
+IF EXISTS( SELECT * FROM GENLOOKUP WHERE RECID=320 AND CODE LIKE '21+01%' AND DESCR<>'SR525700.GeneralPrinting')
+BEGIN
+SET @DEFAULT_DESCR='SR525700.GeneralPrinting';
+SET @DESCR=(SELECT DESCR FROM GENLOOKUP WHERE RECID=320 AND CODE LIKE '21+01%')
+
+UPDATE GENLOOKUP SET DESCR=@DEFAULT_DESCR WHERE RECID=320 AND CODE ='21+01';
+
+IF NOT EXISTS( SELECT * FROM GENLOOKUP WHERE RECID=320 AND CODE='21+02')
+INSERT INTO GENLOOKUP (RECID,CODE,DESCR) VALUES(320,'21+02','99');
+
+IF NOT EXISTS( SELECT * FROM GENLOOKUP WHERE RECID=320 AND CODE='21+03')
+INSERT INTO GENLOOKUP (RECID,CODE,DESCR) VALUES(320,'21+03','N');
+
+IF NOT EXISTS( SELECT * FROM GENLOOKUP WHERE RECID=320 AND CODE='21+04')
+INSERT INTO GENLOOKUP (RECID,CODE,DESCR) VALUES(320,'21+04','Y#GENERALIZEDPRINTING');
+
+IF NOT EXISTS( SELECT * FROM GENLOOKUP WHERE RECID=320 AND CODE='90+01')
+INSERT INTO GENLOOKUP (RECID,CODE,DESCR) VALUES(320,'90+01',''+@DESCR+'');
+
+IF NOT EXISTS( SELECT * FROM GENLOOKUP WHERE RECID=320 AND CODE='90+02')
+INSERT INTO GENLOOKUP (RECID,CODE,DESCR) VALUES(320,'90+02','99');
+
+IF NOT EXISTS( SELECT * FROM GENLOOKUP WHERE RECID=320 AND CODE='90+03')
+INSERT INTO GENLOOKUP (RECID,CODE,DESCR) VALUES(320,'90+03','N');
+
+IF NOT EXISTS( SELECT * FROM GENLOOKUP WHERE RECID=320 AND CODE='90+04')
+INSERT INTO GENLOOKUP (RECID,CODE,DESCR) VALUES(320,'90+04','Y#CUSTOMPRINTWRAPPER');
+
+UPDATE SYSPARAM SET INTG=90 WHERE PARAMCODE='BILLFORMTYPE' AND INTG = 21;
+END    
+-GO-
+UPDATE PRINTCONFIGSETTING SET CONFIGPARAMVALUE = (SELECT TXT FROM SYSPARAM WHERE PARAMCODE LIKE 'NoOfCopies') where configsettingid='S0001' and configparamid='NoOfCopies'
+-GO-
+update PrintBusinessHandlerMaster set printpreference = (select cast(Boolean As int) from sysparam where paramcode='POSPrintingON') where TrnTypeGroup='Sales'
+-GO-
+update PrintBusinessHandlerMaster set printpreference = (select cast(Boolean As int) from sysparam where paramcode='SlipPrintingOnOff') where TrnTypeGroup='Slips'
+-GO-
+Insert into genlookup (recid,code,descr) values(320,'50+01','SR535300.ClsPrintingInterface')
+-GO-
+Insert into genlookup (recid,code,descr) values(320,'50+02','99')
+-GO-
+Insert into genlookup (recid,code,descr) values(320,'50+03','N')
+-GO-
+Insert into genlookup (recid,code,descr) values(320,'50+04','Y#PrintEngine-Sales')
+-GO-
+Insert into genlookup (recid,code,descr) values(920,'50+01','SR535300.ClsPrintingInterface')
+-GO-
+Insert into genlookup (recid,code,descr) values(920,'50+02','99')
+-GO-
+Insert into genlookup (recid,code,descr) values(920,'50+03','N')
+-GO-
+Insert into genlookup (recid,code,descr) values(920,'50+04','Y#PrintEngine-GOR')
+-GO-
+Insert into genlookup (recid,code,descr) values(930,'50+01','SR535300.ClsPrintingInterface')
+-GO-
+Insert into genlookup (recid,code,descr) values(930,'50+02','99')
+-GO-
+Insert into genlookup (recid,code,descr) values(930,'50+03','N')
+-GO-
+Insert into genlookup (recid,code,descr) values(930,'50+04','Y#PrintEngine-GIR')
+-GO-
+Insert into Genlookup (Recid,Code,Descr) values(940,'50+01','SR535300.ClsPrintingInterface')
+-GO-
+Insert into Genlookup (Recid,Code,Descr) values(940,'50+02','99')
+-GO-
+Insert into Genlookup (Recid,Code,Descr) values(940,'50+03','N')
+-GO-
+Insert into Genlookup (Recid,Code,Descr) values(940,'50+04','Y#PrintEngine-Payin')
+-GO-
+Insert into Genlookup (Recid,Code,Descr) values(980,'50+01','SR535300.ClsPrintingInterface')
+-GO-
+Insert into Genlookup (Recid,Code,Descr) values(980,'50+02','99')
+-GO-
+Insert into Genlookup (Recid,Code,Descr) values(980,'50+03','N')
+-GO-
+Insert into Genlookup (Recid,Code,Descr) values(980,'50+04','Y#PrintEngine-CashRcptPayout')
+-GO-
+Insert into Genlookup (Recid,Code,Descr) values(970,'50+01','SR535300.ClsPrintingInterface')
+-GO-
+Insert into Genlookup (Recid,Code,Descr) values(970,'50+02','99')
+-GO-
+Insert into Genlookup (Recid,Code,Descr) values(970,'50+03','N')
+-GO-
+Insert into Genlookup (Recid,Code,Descr) values(970,'50+04','Y#PrintEngine-Slips')
+-GO-
+Update Sysparam Set Intg=50 where paramcode='BillFormType' and Intg=21
+-GO-
+INSERT INTO [Sysparam] ([Id], [Descr], [ParamCode], [Boolean], [Opt]) VALUES ('SR7-0901-0000328', 'Generate printing log for Print Engine', 'GeneratePrintingLogForPrintEngine', 0, 'B')
+-GO-
+Insert into SysparamExtd ([ID],[ParamCode],[Fixed],[Changed],[Category],[CatDescr],[DispOrder]) Values ('SR7-0901-0000328','GeneratePrintingLogForPrintEngine','Variable','0','17. House Keeping','This Gives Bill - Printing Parameters','48')
+-GO-
+Update sysparamextd set Fixed='Variable' where paramcode='BillformType' and paramcode in (select paramcode from sysparam where paramcode='billformtype' and intg=50)
+-GO-
+Update sysparamextd set Fixed='Hidden' where paramcode='NoOfCopies' and paramcode in (select paramcode from sysparam where paramcode='NoOfCopies' and intg=50)
+-GO-
+Update Genlookup set Descr = (select 'Shoper Update Version No:9.0.1.9193' + ' ;system date:' + convert(varchar(20),getdate(),105) + ' ;shoper date:' + (select convert(varchar(20),dt,105) from sysparam where paramcode ='SHOPERSysDt') ) where code = 'P901193' and recid = 299
+-GO-
+Update genlookup Set Vactr = (select intg from sysparam where paramcode = 'VaSysCounter') where Recid=299 and Code='P901193'
+-GO-
+</s9qScript>
+</s9qsqlblk>
+
+<s9qsqlblk>
+  <s9qScriptID>S9Q_014_6_0009</s9qScriptID>
+  <s9qtitle>PE files registering EXE</s9qtitle>
+  <s9qpgmtype>L</s9qpgmtype>
+  <s9qpgmtype>I</s9qpgmtype>
+  <s9qversion>*</s9qversion>
+  <s9qenvironment>P</s9qenvironment>
+  <s9qRunMultiple>1</s9qRunMultiple>
+  <s9qQryType>EXE</s9qQryType>
+  <s9qScript><APPATH>\ExecRegBatchForPE.exe</s9qScript>
+</s9qsqlblk>

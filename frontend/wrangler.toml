@@ -1,0 +1,12 @@
+# PrimeSetu Cloudflare Pages Configuration
+# Project: PrimeSetu Retail OS
+
+[pages_build_config]
+build_command = "npm run build"
+build_output_directory = "dist"
+
+[env]
+NODE_VERSION = "20"
+VITE_SUPABASE_URL = "YOUR_SUPABASE_URL"
+VITE_SUPABASE_ANON_KEY = "YOUR_SUPABASE_ANON_KEY"
+VITE_BACKEND_URL = "YOUR_CLOUDFLARE_TUNNEL_URL"

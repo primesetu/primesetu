@@ -1,141 +1,98 @@
 /* ============================================================
  * PrimeSetu — Shoper9-Based Retail OS
  * Zero Cloud · Sovereign · AI-Governed
- * ============================================================
- * System Architect   :  Jawahar R. M.
- * Organisation       :  AITDL Network
- * Project            :  PrimeSetu
- * © 2026 — All Rights Reserved
- * "Memory, Not Code."
  * ============================================================ */
-import { useState } from 'react'
-import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
-import { apiClient } from '@/api/client'
-
-interface Alert {
-  id: number
-  title: string
-  message: string
-  category: string
-  priority: string
-  is_read: boolean
-  created_at: string
-}
+import React, { useState } from 'react';
+import { Building2, Bell, Zap, Filter, ArrowRight, ShieldAlert, Globe, MessageSquare } from 'lucide-react';
+import { motion } from 'framer-motion';
 
 export default function AlertsModule() {
-  const queryClient = useQueryClient()
-  const [filter, setFilter] = useState('all')
+  const [filter, setFilter] = useState('ALL');
 
-  const { data: alerts, isLoading } = useQuery<Alert[]>({
-    queryKey: ['alerts'],
-    queryFn: async () => {
-      const resp = await apiClient.get('/alerts')
-      return resp.data
-    }
-  })
-
-  const markRead = useMutation({
-    mutationFn: async (id: number) => {
-      await apiClient.patch(`/alerts/${id}/read`)
-    },
-    onSuccess: () => queryClient.invalidateQueries({ queryKey: ['alerts'] })
-  })
-
-  const filteredAlerts = alerts?.filter(a => filter === 'all' || a.priority === filter)
+  const alerts = [
+    { id: 1, type: 'STOCK', node: 'HO (MUMBAI)', msg: 'New Spring Collection prices synchronized. Update labels.', time: '12m ago', priority: 'HIGH' },
+    { id: 2, type: 'INTEL', node: 'STORE-X02 (DELHI)', msg: 'High demand for Nike Air Max observed. Stock re-routing suggested.', time: '1h ago', priority: 'MEDIUM' },
+    { id: 3, type: 'SECURITY', node: 'GATEWAY-V01', msg: 'Multiple failed login attempts detected at Terminal T3.', time: '3h ago', priority: 'CRITICAL' },
+    { id: 4, type: 'SYSTEM', node: 'LOCAL NODE', msg: 'Daily backup successful. 42.5MB synced to Sovereign Vault.', time: '5h ago', priority: 'LOW' },
+  ];
 
   return (
-    <div className="grid grid-cols-12 gap-8 animate-in slide-in-from-top-4 duration-500">
-      {/* Main Feed */}
-      <div className="col-span-8 space-y-6">
-        <div className="flex items-center justify-between">
-          <div>
-            <h1 className="font-serif text-2xl font-black text-navy">Alerts Centre</h1>
-            <p className="text-xs text-muted uppercase tracking-widest font-bold">Operational Awareness Engine</p>
+    <div className="p-6 space-y-8">
+      <div className="flex items-center justify-between">
+        <div>
+          <h1 className="text-3xl font-serif font-black text-navy flex items-center gap-4">
+            <Building2 className="w-10 h-10 text-cyan-500" />
+            Chain Store Intel
+          </h1>
+          <p className="text-xs text-muted font-bold uppercase tracking-widest mt-2">Bi-Directional Node Intelligence</p>
+        </div>
+        <button className="bg-navy text-white px-8 py-3 rounded-2xl font-black text-[10px] uppercase tracking-widest shadow-xl hover:bg-navy/90 transition-all flex items-center gap-2">
+          <Bell className="w-4 h-4 text-cyan-400" /> BROADCAST ALERT
+        </button>
+      </div>
+
+      <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
+        <div className="lg:col-span-1 space-y-4">
+          <div className="glass p-6 rounded-[2rem] shadow-lg border border-white">
+            <h4 className="text-[10px] font-black text-muted uppercase tracking-[0.2em] mb-6">Intelligence Filters</h4>
+            <div className="space-y-2">
+              {['ALL', 'CRITICAL', 'HO_UPDATES', 'STORE_FEEDS'].map((f) => (
+                <button 
+                  key={f}
+                  onClick={() => setFilter(f)}
+                  className={`w-full text-left px-5 py-3 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all ${
+                    filter === f ? 'bg-navy text-white shadow-md' : 'hover:bg-cream/50 text-gray-500'
+                  }`}
+                >
+                  {f.replace('_', ' ')}
+                </button>
+              ))}
+            </div>
           </div>
-          <div className="flex bg-cream p-1 rounded-xl border border-border">
-            {['all', 'high', 'medium'].map(f => (
-              <button
-                key={f}
-                onClick={() => setFilter(f)}
-                className={`px-4 py-1.5 rounded-lg text-[10px] font-black uppercase tracking-widest transition-all ${filter === f ? 'bg-navy text-white shadow-md' : 'text-muted hover:text-navy'}`}
-              >
-                {f}
-              </button>
-            ))}
+
+          <div className="bg-[#1a2340] p-6 rounded-[2rem] text-white shadow-2xl relative overflow-hidden">
+            <div className="absolute top-0 right-0 p-8 opacity-10"><Globe className="w-32 h-32" /></div>
+            <div className="text-[9px] font-black text-cyan-400 uppercase tracking-widest mb-2">Network Status</div>
+            <div className="text-xl font-serif font-black mb-4">12 Active Nodes</div>
+            <p className="text-[9px] text-white/40 leading-relaxed font-bold uppercase">Sovereign Bridge latency: 42ms. All store terminals are synchronized.</p>
           </div>
         </div>
 
-        <div className="space-y-4">
-          {isLoading ? (
-            <div className="py-20 text-center text-muted italic">Scanning sovereign network...</div>
-          ) : filteredAlerts?.length === 0 ? (
-            <div className="bg-white border-2 border-dashed border-border rounded-3xl py-24 flex flex-col items-center justify-center gap-4">
-              <span className="text-5xl grayscale opacity-20">🛡️</span>
-              <p className="font-serif italic text-muted">Sovereign OS is secure. No active alerts.</p>
-            </div>
-          ) : filteredAlerts?.map(alert => (
-            <div 
-              key={alert.id} 
-              className={`bg-white border rounded-2xl p-5 flex gap-5 transition-all group hover:border-saffron/30 ${alert.is_read ? 'opacity-60 border-border/50' : 'border-border shadow-sm border-l-4 border-l-saffron'}`}
+        <div className="lg:col-span-3 space-y-4">
+          {alerts.map((alert) => (
+            <motion.div 
+              key={alert.id}
+              initial={{ opacity: 0, x: 10 }}
+              animate={{ opacity: 1, x: 0 }}
+              className="glass p-6 rounded-[2.5rem] shadow-xl border border-white flex items-center gap-6 relative group"
             >
-              <div className={`w-12 h-12 rounded-xl flex items-center justify-center text-xl shrink-0 ${alert.priority === 'high' ? 'bg-red-50 text-red-500' : 'bg-cream text-navy'}`}>
-                {alert.category === 'inventory' ? '📦' : alert.category === 'security' ? '🔒' : '⚙️'}
+              <div className={`w-14 h-14 rounded-2xl flex items-center justify-center shrink-0 ${
+                alert.priority === 'CRITICAL' ? 'bg-rose-50 text-rose-500' :
+                alert.priority === 'HIGH' ? 'bg-amber-50 text-amber-500' : 'bg-cyan-50 text-cyan-500'
+              }`}>
+                {alert.priority === 'CRITICAL' ? <ShieldAlert className="w-7 h-7" /> : <MessageSquare className="w-7 h-7" />}
               </div>
-              <div className="flex-1 space-y-1">
-                <div className="flex justify-between items-start">
-                  <h3 className={`font-bold text-navy ${alert.is_read ? 'font-medium' : ''}`}>{alert.title}</h3>
-                  <span className="text-[9px] text-muted font-bold uppercase tracking-widest">{new Date(alert.created_at).toLocaleTimeString()}</span>
-                </div>
-                <p className="text-sm text-muted leading-relaxed">{alert.message}</p>
-                <div className="pt-2 flex items-center gap-4">
-                  <span className={`text-[8px] font-black uppercase tracking-widest px-2 py-0.5 rounded ${alert.priority === 'high' ? 'bg-red-500 text-white' : 'bg-navy/10 text-navy'}`}>
-                    {alert.priority} Priority
+
+              <div className="flex-1">
+                <div className="flex items-center gap-3 mb-1">
+                  <span className={`text-[8px] font-black px-2 py-0.5 rounded-sm uppercase tracking-widest ${
+                    alert.priority === 'CRITICAL' ? 'bg-rose-500 text-white' : 'bg-navy text-white'
+                  }`}>
+                    {alert.priority}
                   </span>
-                  {!alert.is_read && (
-                    <button 
-                      onClick={() => markRead.mutate(alert.id)}
-                      className="text-[9px] font-black text-saffron uppercase tracking-widest hover:underline"
-                    >
-                      Mark as Read
-                    </button>
-                  )}
+                  <span className="text-[10px] font-black text-navy uppercase tracking-tight">{alert.node}</span>
+                  <span className="text-[9px] text-muted font-bold ml-auto">{alert.time}</span>
                 </div>
+                <p className="text-sm font-bold text-gray-600 leading-tight">{alert.msg}</p>
               </div>
-            </div>
+
+              <button className="opacity-0 group-hover:opacity-100 p-4 bg-navy text-white rounded-2xl transition-all shadow-xl">
+                <ArrowRight className="w-5 h-5" />
+              </button>
+            </motion.div>
           ))}
         </div>
       </div>
-
-      {/* Side Stats */}
-      <div className="col-span-4 space-y-6">
-        <div className="bg-navy rounded-3xl p-8 text-white">
-          <h3 className="font-serif text-xl font-bold mb-6">Network Health</h3>
-          <div className="space-y-6">
-            <HealthItem label="Database" status="Operational" color="bg-green-400" />
-            <HealthItem label="Auth Engine" status="Secured" color="bg-green-400" />
-            <HealthItem label="Inventory Sync" status="Real-time" color="bg-saffron" />
-            <HealthItem label="Terminal T1" status="Online" color="bg-green-400" />
-          </div>
-          <div className="mt-8 pt-8 border-t border-white/10">
-            <div className="bg-white/5 rounded-2xl p-4 border border-white/10">
-              <p className="text-[10px] text-white/40 uppercase font-black tracking-widest mb-1">Last System Audit</p>
-              <p className="text-xs font-bold">2 mins ago • Clean</p>
-            </div>
-          </div>
-        </div>
-      </div>
     </div>
-  )
-}
-
-function HealthItem({ label, status, color }: any) {
-  return (
-    <div className="flex items-center justify-between">
-      <span className="text-xs text-white/60 font-medium">{label}</span>
-      <div className="flex items-center gap-2">
-        <span className="text-[10px] font-bold">{status}</span>
-        <div className={`w-1.5 h-1.5 rounded-full ${color}`}></div>
-      </div>
-    </div>
-  )
+  );
 }

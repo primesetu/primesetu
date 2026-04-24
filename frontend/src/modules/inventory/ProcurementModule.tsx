@@ -128,6 +128,77 @@ export default function ProcurementModule() {
           </motion.div>
         )}
 
+        {activeTab === 'PURCHASE' && (
+          <motion.div key="pur" initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -10 }} className="space-y-8">
+             <div className="glass p-12 rounded-[3rem] shadow-2xl relative overflow-hidden flex flex-col items-center text-center">
+                <div className="w-20 h-20 bg-navy text-gold rounded-[2rem] flex items-center justify-center mb-6 shadow-xl">
+                   <ShoppingBag className="w-10 h-10" />
+                </div>
+                <h2 className="text-3xl font-serif font-black text-navy mb-4 uppercase">Goods Inward Entry (GRN)</h2>
+                <p className="text-sm text-muted max-w-md mb-10 leading-relaxed uppercase tracking-tighter font-bold">Record stock arrival from vendors or HO. Link with existing Purchase Orders for automated reconciliation.</p>
+                
+                <div className="w-full max-w-2xl flex gap-4">
+                   <input 
+                     type="text" 
+                     placeholder="Enter PO Number or Scan Packing Slip..."
+                     className="flex-1 bg-cream/30 border-4 border-navy/5 rounded-[2rem] px-10 py-6 text-xl font-black text-navy outline-none focus:border-gold transition-all"
+                   />
+                   <button className="bg-navy text-white px-10 rounded-[2rem] font-black text-[10px] uppercase tracking-widest hover:bg-gold hover:text-navy transition-all shadow-xl">
+                     Fetch PO
+                   </button>
+                </div>
+             </div>
+
+             <div className="glass rounded-[3rem] overflow-hidden shadow-2xl">
+                <div className="bg-[#1a2340] px-10 py-6 text-white flex justify-between items-center">
+                   <h3 className="font-serif font-black uppercase tracking-tight">Recent Goods Inwards (Last 7 Days)</h3>
+                   <span className="text-[10px] font-black text-white/40 uppercase tracking-widest">Store Node: X01</span>
+                </div>
+                <div className="p-10 text-center py-20">
+                   <div className="text-muted font-black text-xs uppercase tracking-[0.2em] opacity-40">No recent inwards recorded for this node.</div>
+                </div>
+             </div>
+
+             <div className="glass rounded-[3rem] overflow-hidden shadow-2xl">
+                <div className="bg-[#1a2340] px-10 py-6 text-white flex justify-between items-center">
+                   <h3 className="font-serif font-black uppercase tracking-tight">Active / Pending Purchase Orders</h3>
+                   <span className="text-[10px] font-black text-white/40 uppercase tracking-widest">Global Supply Chain Audit</span>
+                </div>
+                <table className="w-full text-left">
+                   <thead className="bg-cream/30 text-[9px] font-black uppercase tracking-widest text-muted border-b border-border">
+                     <tr>
+                       <th className="px-10 py-5">Order Date</th>
+                       <th className="px-6 py-5">PO Number</th>
+                       <th className="px-6 py-5">Vendor</th>
+                       <th className="px-6 py-5 text-center">Items</th>
+                       <th className="px-6 py-5 text-right">Order Value</th>
+                       <th className="px-10 py-5 text-center">Status</th>
+                     </tr>
+                   </thead>
+                   <tbody className="divide-y divide-border/50 font-mono text-xs">
+                     {[
+                       { date: '2026-04-20', no: 'PO-2026-882', vendor: 'Nexus Lifestyle', qty: 42, val: 54000, status: 'PARTIAL' },
+                       { date: '2026-04-22', no: 'PO-2026-901', vendor: 'Citywalk Intl', qty: 156, val: 214000, status: 'ISSUED' }
+                     ].map((po, i) => (
+                       <tr key={i} className="hover:bg-cream/5 transition-colors">
+                         <td className="px-10 py-6 text-gray-500">{po.date}</td>
+                         <td className="px-6 py-6 font-black text-navy">{po.no}</td>
+                         <td className="px-6 py-6 font-black text-navy/60 uppercase">{po.vendor}</td>
+                         <td className="px-6 py-6 text-center font-bold">{po.qty}</td>
+                         <td className="px-6 py-6 text-right font-black text-navy">₹{po.val.toLocaleString()}</td>
+                         <td className="px-10 py-6 text-center">
+                            <span className={`px-4 py-2 rounded-full text-[9px] font-black uppercase tracking-widest ${po.status === 'ISSUED' ? 'bg-blue-50 text-blue-600' : 'bg-amber-50 text-amber-600'}`}>
+                              {po.status}
+                            </span>
+                         </td>
+                       </tr>
+                     ))}
+                   </tbody>
+                </table>
+             </div>
+          </motion.div>
+        )}
+
         {activeTab === 'ADVANCE' && (
           <motion.div key="adv" initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -10 }} className="space-y-8">
              <div className="glass p-12 rounded-[3rem] shadow-2xl relative overflow-hidden flex flex-col md:flex-row gap-12 items-center">

@@ -16,7 +16,7 @@ import {
   BookOpen, Tag, Users, Truck, BarChart3, TrendingUp, FileText,
   Settings, Globe, Lock, ChevronDown, Zap, Search, HelpCircle,
   CreditCard, Boxes, ClipboardList, Receipt, UserSquare2,
-  Percent, Building2, AlertTriangle, Database, Command, Trophy
+  Percent, Building2, AlertTriangle, Database, Command, Trophy, History
 } from 'lucide-react'
 import { useStore } from '@/hooks/useStore'
 import { supabase } from '@/lib/supabase'
@@ -68,7 +68,8 @@ const MENU: MenuGroup[] = [
     items: [
       { id: 'inventory',   label: 'Stock Take (PST)',  icon: ClipboardList,  shortcut: 'F9', tallyKey: 'S', roles: ['OWNER','MANAGER'] },
       { id: 'procurement', label: 'Goods Inwards',     icon: ShoppingBag,    tallyKey: 'G', roles: ['OWNER','MANAGER'] },
-      { id: 'barcode',     label: 'Barcode & Labels',  icon: Tag,            tallyKey: 'L', roles: ['OWNER','MANAGER'], badge: 'soon' },
+      { id: 'movement',    label: 'Stock Movement',    icon: History,        tallyKey: 'M', roles: ['OWNER','MANAGER'] },
+      { id: 'barcode',     label: 'Barcode & Labels',  icon: Tag,            tallyKey: 'L', roles: ['OWNER','MANAGER'] },
     ]
   },
   {
@@ -95,8 +96,8 @@ const MENU: MenuGroup[] = [
     items: [
       { id: 'analytics',  label: 'MIS Reports',        icon: TrendingUp,   shortcut: 'F3', tallyKey: 'M', roles: ['OWNER'] },
       { id: 'salesrep',   label: 'Daily Sales Book',   icon: Receipt,      tallyKey: 'D', roles: ['OWNER','MANAGER'] },
-      { id: 'stockrep',   label: 'Stock Reports',      icon: FileText,     tallyKey: 'S', roles: ['OWNER','MANAGER'], badge: 'soon' },
-      { id: 'taxrep',     label: 'Tax Register',       icon: CreditCard,   tallyKey: 'T', roles: ['OWNER'],           badge: 'soon' },
+      { id: 'stockrep',   label: 'Stock Reports',      icon: FileText,     tallyKey: 'S', roles: ['OWNER','MANAGER'] },
+      { id: 'taxrep',     label: 'Tax Register',       icon: CreditCard,   tallyKey: 'T', roles: ['OWNER'] },
     ]
   },
   {
@@ -107,7 +108,7 @@ const MENU: MenuGroup[] = [
     tallyKey: 'H',
     items: [
       { id: 'ho',         label: 'Corporate Sync',    icon: Globe,        tallyKey: 'C', roles: ['OWNER','MANAGER'] },
-      { id: 'alerts',     label: 'Chain Store Intel',  icon: Building2,   tallyKey: 'I', roles: ['OWNER'],           badge: 'soon' },
+      { id: 'alerts',     label: 'Chain Store Intel',  icon: Building2,   tallyKey: 'I', roles: ['OWNER'] },
     ]
   },
   {
@@ -118,8 +119,8 @@ const MENU: MenuGroup[] = [
     tallyKey: 'U',
     items: [
       { id: 'settings',   label: 'System Config',     icon: Settings,     shortcut: 'F10', tallyKey: 'S', roles: ['OWNER'] },
-      { id: 'security',   label: 'Security & Users',  icon: AlertTriangle,tallyKey: 'E', roles: ['OWNER'],           badge: 'soon' },
-      { id: 'housekeep',  label: 'Housekeeping',      icon: Database,     tallyKey: 'K', roles: ['OWNER'],           badge: 'soon' },
+      { id: 'security',   label: 'Security & Users',  icon: AlertTriangle,tallyKey: 'E', roles: ['OWNER'] },
+      { id: 'housekeep',  label: 'Housekeeping',      icon: Database,     tallyKey: 'K', roles: ['OWNER'] },
     ]
   }
 ]

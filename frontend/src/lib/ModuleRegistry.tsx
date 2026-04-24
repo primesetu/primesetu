@@ -44,6 +44,12 @@ import DailySalesBook from '../modules/analytics/DailySalesBook'
 import VendorMaster from '../modules/catalogue/VendorMaster'
 import PersonnelMaster from '../modules/catalogue/PersonnelMaster'
 import LoyaltyModule from '../modules/catalogue/LoyaltyModule'
+import StockReports from '../modules/analytics/StockReports'
+import TaxRegister from '../modules/analytics/TaxRegister'
+import AlertsModule from '../modules/alerts/AlertsModule'
+import SecurityModule from '../modules/settings/SecurityModule'
+import HousekeepingModule from '../modules/settings/HousekeepingModule'
+import StockMovement from '../modules/inventory/StockMovement'
 
 export interface ModuleDefinition {
   id: string
@@ -104,6 +110,15 @@ export const MODULE_REGISTRY: ModuleDefinition[] = [
     roles: ['OWNER', 'MANAGER'],
     showInSidebar: true,
     description: 'Purchase orders and vendor management'
+  },
+  {
+    id: 'movement',
+    label: 'Stock Movement',
+    icon: History,
+    component: <StockMovement />,
+    roles: ['OWNER', 'MANAGER'],
+    showInSidebar: false,
+    description: 'Historical inventory flow audit'
   },
   {
     id: 'dayend',
@@ -214,7 +229,7 @@ export const MODULE_REGISTRY: ModuleDefinition[] = [
     id: 'stockrep',
     label: 'Stock Reports',
     icon: BarChart3,
-    component: <ComingSoon moduleName="Stock Reports" />,
+    component: <StockReports />,
     roles: ['OWNER', 'MANAGER'],
     showInSidebar: false,
   },
@@ -222,7 +237,7 @@ export const MODULE_REGISTRY: ModuleDefinition[] = [
     id: 'taxrep',
     label: 'Tax Register',
     icon: BarChart3,
-    component: <ComingSoon moduleName="Tax Register" />,
+    component: <TaxRegister />,
     roles: ['OWNER'],
     showInSidebar: false,
   },
@@ -230,7 +245,7 @@ export const MODULE_REGISTRY: ModuleDefinition[] = [
     id: 'alerts',
     label: 'Chain Store Intel',
     icon: Globe,
-    component: <ComingSoon moduleName="Chain Store Intel" />,
+    component: <AlertsModule />,
     roles: ['OWNER'],
     showInSidebar: false,
   },
@@ -238,7 +253,7 @@ export const MODULE_REGISTRY: ModuleDefinition[] = [
     id: 'security',
     label: 'Security & Users',
     icon: Settings,
-    component: <ComingSoon moduleName="Security & Users" />,
+    component: <SecurityModule />,
     roles: ['OWNER'],
     showInSidebar: false,
   },
@@ -246,7 +261,7 @@ export const MODULE_REGISTRY: ModuleDefinition[] = [
     id: 'housekeep',
     label: 'Housekeeping',
     icon: Settings,
-    component: <ComingSoon moduleName="Housekeeping" />,
+    component: <HousekeepingModule />,
     roles: ['OWNER'],
     showInSidebar: false,
   }

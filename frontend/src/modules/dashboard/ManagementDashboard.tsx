@@ -134,8 +134,8 @@ export default function ManagementDashboard() {
               <option>30-Day Sovereign Audit</option>
             </select>
           </div>
-          <div className="h-[320px] w-full">
-            <ResponsiveContainer width="100%" height="100%">
+          <div className="h-[320px] w-full min-w-0">
+            <ResponsiveContainer width="100%" height="100%" minWidth={0}>
               <LineChart data={salesData}>
                 <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#eee" />
                 <XAxis dataKey="day" axisLine={false} tickLine={false} tick={{ fontSize: 11, fontWeight: 900, fill: '#A8A196' }} />
@@ -160,9 +160,9 @@ export default function ManagementDashboard() {
         {/* Brand Loyalty Matrix */}
         <div className="glass rounded-[3.5rem] p-12 shadow-2xl flex flex-col min-h-[500px]">
           <h3 className="text-2xl font-serif font-black text-navy mb-12 uppercase tracking-tight">Brand Matrix</h3>
-          <div className="flex-1 flex flex-col items-center justify-center">
-            <div className="h-[220px] w-full">
-              <ResponsiveContainer width="100%" height="100%">
+          <div className="flex-1 flex flex-col items-center justify-center min-w-0">
+            <div className="h-[220px] w-full min-w-0">
+              <ResponsiveContainer width="100%" height="100%" minWidth={0}>
                 <PieChart>
                   <Pie
                     data={brandData}

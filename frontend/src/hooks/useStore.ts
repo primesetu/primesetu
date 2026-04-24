@@ -21,14 +21,17 @@ export function useStore() {
       const { data: { user } } = await supabase.auth.getUser()
       if (!user) return setLoading(false)
 
-      const { data, error } = await supabase
-        .from('users')
-        .select('store_id, stores(*)')
-        .eq('id', user.id)
+      // Sovereign Optimization: Use metadata instead of a DB query to fix 404 on 'users' table
+      const storeId = user.user_metadata?.store_id || 'X01'
+      
+      const { data: storeData, error } = await supabase
+        .from('stores')
+        .select('*')
+        .eq('id', storeId)
         .single()
 
       if (error) console.error('[PrimeSetu] useStore:', error.message)
-      else setStore(((data as any)?.stores as unknown as Store) ?? null)
+      else setStore(storeData as unknown as Store)
       setLoading(false)
     }
     load()

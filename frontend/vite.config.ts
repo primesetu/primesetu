@@ -18,13 +18,13 @@ export default defineConfig({
     react(),
     VitePWA({
       registerType: 'autoUpdate',
-      injectRegister: 'auto',
+      injectRegister: 'script',
       devOptions: {
-        enabled: true // Enables PWA testing even in npm run dev
+        enabled: true
       },
       workbox: {
         globPatterns: ['**/*.{js,css,html,ico,png,svg}'],
-        maximumFileSizeToCacheInBytes: 5000000 // 5MB to handle larger chunks without warning
+        maximumFileSizeToCacheInBytes: 5000000
       },
       manifest: {
         name: "PrimeSetu Sovereign Retail OS",
@@ -37,14 +37,9 @@ export default defineConfig({
         orientation: "landscape",
         icons: [
           {
-            src: "/vite.svg", // Fallback icon since we haven't provided custom PNGs yet
-            sizes: "192x192",
-            type: "image/svg+xml"
-          },
-          {
-            src: "/vite.svg",
+            src: "/icon.png",
             sizes: "512x512",
-            type: "image/svg+xml",
+            type: "image/png",
             purpose: "any maskable"
           }
         ]

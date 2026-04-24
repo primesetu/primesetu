@@ -5,7 +5,9 @@
   "main": "main.py",
   "scripts": {
     "dev": "python -m uvicorn backend.app.main:app --reload --port 8000",
-    "start": "python -m uvicorn backend.app.main:app --port 8000"
+    "start": "python -m uvicorn backend.app.main:app --port 8000",
+    "deploy": "wrangler deploy",
+    "preview": "wrangler dev"
   },
   "keywords": [
     "primesetu",
@@ -14,5 +16,8 @@
     "sovereign-os"
   ],
   "author": "Jawahar R. M.",
-  "license": "All Rights Reserved"
+  "license": "All Rights Reserved",
+  "devDependencies": {
+    "wrangler": "^4.85.0"
+  }
 }

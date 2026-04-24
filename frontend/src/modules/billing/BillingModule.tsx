@@ -14,7 +14,7 @@ import {
   FilePlus2, RotateCcw, Banknote, CreditCard, Smartphone,
   Pause, Printer, CheckCircle2, ScanBarcode, Trash2,
   Calculator, User, Clock, ChevronRight, Zap, Search,
-  Gift, Tag, UserCheck, Plus, Minus, X
+  Gift, Tag, UserCheck, Plus, Minus, X, AlertTriangle
 } from 'lucide-react'
 import { api } from '@/api/client'
 import DayEndModule from './DayEndModule'
@@ -23,6 +23,7 @@ import ThermalReceipt from './ThermalReceipt'
 import ReturnsDrawer from './ReturnsDrawer'
 import { useHotkeys } from 'react-hotkeys-hook'
 import { offlineService } from '@/api/offline'
+import { useLanguage } from '@/hooks/useLanguage'
 
 interface CartItem {
   id: string; code: string; name: string; brand: string; category: string
@@ -38,6 +39,7 @@ const now = () => {
 }
 
 export default function BillingModule() {
+  const { t } = useLanguage()
   const [q, setQ] = useState('')
   const [cart, setCart] = useState<CartItem[]>([])
   const [payLines, setPayLines] = useState<PayLine[]>([{ mode: 'CASH', amount: 0 }])
@@ -55,6 +57,7 @@ export default function BillingModule() {
   const [currentTime, setCurrentTime] = useState(now())
   const [isOnline, setIsOnline] = useState(navigator.onLine)
   const [offlineCount, setOfflineCount] = useState(0)
+  const [sendSms, setSendSms] = useState(true)
   const searchRef = useRef<HTMLInputElement>(null)
 
   useEffect(() => { const t = setInterval(() => setCurrentTime(now()), 30000); return () => clearInterval(t) }, [])
@@ -135,7 +138,7 @@ export default function BillingModule() {
     if (!cart.length || processing) return
     setProcessing(true)
     const billData = {
-      customer_mobile: customerMobile,
+      customer_mobile: sendSms ? customerMobile : '',
       type: 'Sales',
       items: cart.map(i => ({ product_id: i.id, qty: i.qty, unit_price: i.mrp, discount_per: i.discount_per, tax_per: i.tax_rate })),
       payments: payLines.filter(p => p.amount > 0)
@@ -272,12 +275,12 @@ export default function BillingModule() {
           <div className="flex items-center gap-4">
             {!isOnline && (
               <div className="flex items-center gap-2 px-3 py-1 bg-rose-500 text-white rounded-full text-[10px] font-black animate-pulse">
-                <AlertTriangle className="w-3 h-3" /> TERMINAL ISOLATED
+                <AlertTriangle className="w-3 h-3" /> {t('isolated')}
               </div>
             )}
             {offlineCount > 0 && (
               <div className="flex items-center gap-2 px-3 py-1 bg-amber-500 text-white rounded-full text-[10px] font-black">
-                <Clock className="w-3 h-3" /> {offlineCount} PENDING SYNC
+                <Clock className="w-3 h-3" /> {offlineCount} {t('syncing')}
               </div>
             )}
             <div className="flex items-center gap-2 px-3 py-1 bg-white/10 rounded-full border border-white/10 text-[10px] font-bold">
@@ -432,7 +435,7 @@ export default function BillingModule() {
           {/* Net Payable */}
           <div className="bg-[#1a2340] rounded-2xl p-4 text-white text-center shadow-lg border-b-4 border-amber-400 relative overflow-hidden">
             <div className="absolute inset-0 bg-gradient-to-br from-amber-400/5 to-transparent" />
-            <div className="text-[9px] font-black text-amber-400 uppercase tracking-[0.3em] mb-1">Net Payable</div>
+            <div className="text-[9px] font-black text-amber-400 uppercase tracking-[0.3em] mb-1">{t('payable')}</div>
             <div className="text-4xl font-black font-mono">₹{net_payable.toLocaleString()}</div>
             {disc_total > 0 && <div className="text-[10px] text-emerald-400 font-bold mt-1">Saves ₹{Math.round(disc_total).toLocaleString()}</div>}
             {salesperson && <div className="text-[9px] text-white/40 mt-1 font-mono">SP: {salesperson}</div>}
@@ -508,7 +511,34 @@ export default function BillingModule() {
             ))}
           </div>
 
-          {/* Suspend */}
+          {/* Customer & Digital Receipt */}
+          <div className="bg-white rounded-xl p-3 border border-gray-200 shadow-sm space-y-3">
+            <div className="space-y-1">
+              <label className="text-[9px] font-black text-gray-400 uppercase tracking-widest">Customer Mobile [Alt+M]</label>
+              <div className="relative">
+                <Smartphone className="absolute left-3 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-gray-300" />
+                <input id="cust-mobile" type="tel" value={customerMobile} 
+                  onChange={e => setCustomerMobile(e.target.value)}
+                  placeholder="9876543210"
+                  className="w-full pl-9 pr-3 py-2 bg-gray-50 border border-gray-200 rounded-lg text-sm font-bold outline-none focus:border-amber-400"
+                />
+              </div>
+            </div>
+            
+            <button onClick={() => setSendSms(!sendSms)}
+              className={`w-full flex items-center justify-between p-2 rounded-lg border transition-all ${
+                sendSms ? 'bg-emerald-50 border-emerald-200 text-emerald-700' : 'bg-gray-50 border-gray-200 text-gray-400'
+              }`}>
+              <div className="flex items-center gap-2">
+                <Zap className={`w-3.5 h-3.5 ${sendSms ? 'text-emerald-500 fill-emerald-500' : ''}`} />
+                <span className="text-[10px] font-black uppercase tracking-tight">Digital Receipt</span>
+              </div>
+              <div className={`w-8 h-4 rounded-full relative transition-colors ${sendSms ? 'bg-emerald-500' : 'bg-gray-300'}`}>
+                <div className={`absolute top-0.5 w-3 h-3 bg-white rounded-full transition-transform ${sendSms ? (4.5 * 4) + 'px' : (0.5 * 4) + 'px'}`} />
+              </div>
+            </button>
+          </div>
+
           <button onClick={handleSuspend} disabled={!cart.length}
             className="flex items-center justify-center gap-2 bg-white border-2 border-gray-200 hover:border-orange-300 hover:bg-orange-50 text-gray-500 hover:text-orange-600 rounded-xl py-2.5 text-[11px] font-black uppercase tracking-widest transition-all disabled:opacity-30">
             <Pause className="w-4 h-4" />
@@ -520,7 +550,7 @@ export default function BillingModule() {
             className="bg-amber-400 hover:bg-amber-500 disabled:opacity-30 text-navy font-black rounded-2xl shadow-xl text-base uppercase tracking-wider flex items-center justify-center gap-2 transition-all hover:scale-[1.01] active:scale-[0.99] border-b-4 border-amber-600 py-4">
             {processing
               ? <div className="w-5 h-5 border-2 border-navy border-t-transparent rounded-full animate-spin" />
-              : <><CheckCircle2 className="w-5 h-5" />Settle Bill [F10]<ChevronRight className="w-4 h-4" /></>}
+              : <><CheckCircle2 className="w-5 h-5" />{t('settle')} [F10]<ChevronRight className="w-4 h-4" /></>}
           </button>
 
           {/* Legend */}

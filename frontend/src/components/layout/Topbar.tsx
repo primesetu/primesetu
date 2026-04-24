@@ -20,6 +20,8 @@ import {
 } from 'lucide-react'
 import { useStore } from '@/hooks/useStore'
 import { supabase } from '@/lib/supabase'
+import { useLanguage } from '@/hooks/useLanguage'
+import { LANGUAGES } from '@/lib/i18n'
 import logo from '@/assets/logo.png'
 
 interface MenuItem {
@@ -130,6 +132,7 @@ interface TopBarProps {
 
 export default function TopBar({ activeTab, setActiveTab, userRole = 'OWNER', openCommandBar }: TopBarProps) {
   const { store } = useStore()
+  const { language, setLanguage, t } = useLanguage()
   const [openDropdown, setOpenDropdown] = useState<string | null>(null)
   const menuRef = useRef<HTMLDivElement>(null)
 
@@ -302,8 +305,17 @@ export default function TopBar({ activeTab, setActiveTab, userRole = 'OWNER', op
         <kbd className="text-[9px] font-black font-mono bg-gray-100 px-1 rounded border border-gray-200 text-gray-400">Alt+G</kbd>
       </button>
 
-      {/* Status & Help */}
+      {/* Language & Help */}
       <div className="flex items-center gap-3 border-l border-[#d1cbbd] pl-4 h-full">
+        <select 
+          value={language} 
+          onChange={(e) => setLanguage(e.target.value as any)}
+          className="bg-transparent text-[10px] font-black uppercase tracking-widest text-[#1a2340] outline-none cursor-pointer hover:bg-white px-2 py-1 rounded"
+        >
+          {Object.entries(LANGUAGES).map(([code, name]) => (
+            <option key={code} value={code}>{name.split(' (')[0]}</option>
+          ))}
+        </select>
         <button className="text-gray-400 hover:text-[#1a2340] transition-colors"><HelpCircle className="w-4 h-4"/></button>
         <div className="text-[10px] font-black uppercase tracking-widest text-emerald-600 bg-emerald-100 px-2 py-0.5 rounded-sm">
           Node Active

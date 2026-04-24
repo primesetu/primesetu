@@ -9,7 +9,7 @@
 # * "Memory, Not Code."
 # ============================================================ #
 
-from fastapi import APIRouter, Depends, HTTPException
+from fastapi import APIRouter, Depends, HTTPException, BackgroundTasks
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import select, func
 from backend.app.core.database import get_db
@@ -20,6 +20,7 @@ import random
 import string
 import uuid
 from datetime import datetime
+from backend.app.services.messenger import SovereignMessenger
 
 from backend.app.core.security import get_current_user, UserContext
 
@@ -47,6 +48,7 @@ async def adjust_inventory(db: AsyncSession, store_id: str, product_id: uuid.UUI
 @router.post("/finalize", response_model=BillResponse)
 async def finalize_bill(
     bill_data: BillCreate, 
+    background_tasks: BackgroundTasks,
     db: AsyncSession = Depends(get_db),
     current_user: UserContext = Depends(get_current_user)
 ):
@@ -98,7 +100,18 @@ async def finalize_bill(
         transaction.tax_total = total_net - transaction.subtotal
         
         await db.commit()
-        return BillResponse(status="success", bill_number=bill_no, transaction_id=transaction.id, total=total_net)
+        
+        response_data = BillResponse(status="success", bill_number=bill_no, transaction_id=transaction.id, total=total_net)
+        
+        # Dispatch digital receipt if mobile provided
+        if bill_data.customer_mobile:
+            background_tasks.add_task(
+                SovereignMessenger.send_digital_receipt, 
+                bill_data.customer_mobile, 
+                {"bill_number": bill_no, "total": total_net}
+            )
+            
+        return response_data
     except Exception as e:
         await db.rollback()
         raise HTTPException(status_code=500, detail=f"Billing Failure: {str(e)}")

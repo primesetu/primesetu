@@ -20,6 +20,7 @@ import {
 } from 'lucide-react'
 import { useStore } from '@/hooks/useStore'
 import { supabase } from '@/lib/supabase'
+import logo from '@/assets/logo.png'
 
 interface MenuItem {
   id: string
@@ -209,9 +210,10 @@ export default function TopBar({ activeTab, setActiveTab, userRole = 'OWNER', op
       
       {/* TallyPrime Style Logo / Corner */}
       <div className="flex items-center gap-2 pr-4 mr-2 border-r border-[#d1cbbd] shrink-0 h-full">
-        <Zap className="w-4 h-4 text-amber-500 fill-amber-500" />
-        <div className="font-serif text-sm font-black tracking-tighter leading-none">
-          PrimeSetu
+        <img src={logo} alt="PrimeSetu" className="w-5 h-5 object-contain" />
+        <div className="font-serif text-sm font-black tracking-tighter leading-none flex flex-col">
+          <span>PrimeSetu</span>
+          <span className="text-[7px] text-amber-600 uppercase tracking-tighter font-sans">Simple but Branded</span>
         </div>
       </div>
 

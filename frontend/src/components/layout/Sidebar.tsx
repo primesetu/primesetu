@@ -9,76 +9,46 @@
  * "Memory, Not Code."
  * ============================================================ */
 
-import React from 'react';
-import { useHotkeys } from 'react-hotkeys-hook';
-import { ICON_MAP } from '../../lib/ModuleRegistry';
+import React, { useState } from 'react';
+import { 
+  ChevronDown, 
+  ChevronRight, 
+  Menu,
+  ChevronLeft,
+  LayoutDashboard
+} from 'lucide-react';
+import { motion, AnimatePresence } from 'framer-motion';
 import { useMenu } from '../../hooks/useMenu';
+import { ICON_MAP } from '../../lib/ModuleRegistry';
+import { useHotkeys } from 'react-hotkeys-hook';
 import { MenuItem } from '../../api/menuService';
+import { clsx, type ClassValue } from 'clsx';
+import { twMerge } from 'tailwind-merge';
+
+function cn(...inputs: ClassValue[]) {
+  return twMerge(clsx(inputs));
+}
 
 interface SidebarProps {
   activeTab: string;
   setActiveTab: (id: string) => void;
   userRole?: string;
   nodeType?: string;
+  isCollapsed: boolean;
+  setIsCollapsed: (val: boolean) => void;
 }
 
-/**
- * SidebarItem Component
- * Handles individual menu rendering and hotkey registration.
- */
-const SidebarItem: React.FC<{
-  item: MenuItem;
-  isActive: boolean;
-  onSelect: (id: string) => void;
-}> = ({ item, isActive, onSelect }) => {
-  
-  // Rule 4: Terminal Mode Hotkeys (Keyboard First)
-  useHotkeys(item.shortcut || '', () => onSelect(item.id), {
-    enabled: !!item.shortcut,
-    preventDefault: true,
-    enableOnFormTags: false
-  });
-
-  const Icon = ICON_MAP[item.id] || ICON_MAP['dashboard'];
-
-  return (
-    <div 
-      onClick={() => onSelect(item.id)}
-      className={`
-        group flex items-center gap-2.5 px-5 py-2.5 cursor-pointer transition-all border-l-[3px]
-        ${isActive 
-          ? 'bg-[var(--saffron)]/15 text-white border-[var(--saffron)] font-medium' 
-          : 'text-white/50 border-transparent hover:bg-white/5 hover:text-white/85 hover:border-white/20'
-        }
-      `}
-    >
-      <span className={`text-[15px] w-5 flex items-center justify-center ${isActive ? 'text-[var(--gold)]' : 'text-inherit opacity-40 group-hover:opacity-100'}`}>
-        <Icon size={16} />
-      </span>
-      <span className="text-[12.5px]">
-        {item.label}
-      </span>
-      {item.shortcut && (
-        <span className="ml-auto text-[9px] font-bold bg-white/5 text-white/30 px-1.5 py-0.5 rounded opacity-0 group-hover:opacity-100 transition-opacity">
-          {item.shortcut}
-        </span>
-      )}
-    </div>
-  );
-};
-
-const Sidebar: React.FC<SidebarProps> = ({ activeTab, setActiveTab, userRole = 'CASHIER', nodeType = 'RETAIL' }) => {
+const Sidebar: React.FC<SidebarProps> = ({ 
+  activeTab, 
+  setActiveTab, 
+  userRole = 'CASHIER', 
+  nodeType = 'RETAIL',
+  isCollapsed,
+  setIsCollapsed
+}) => {
   const { menu: modules, loading } = useMenu();
+  const [expandedCategories, setExpandedCategories] = useState<string[]>(['POS', 'WAREHOUSE']);
 
-  if (loading) {
-    return (
-      <aside className="sidebar w-[var(--sw)] bg-[var(--navy)] min-h-screen fixed left-0 top-0 flex flex-col z-[100] items-center justify-center">
-        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-[var(--gold)]"></div>
-      </aside>
-    );
-  }
-
-  // Categories from Sovereign Protocol
   const categories = [
     { id: 'POS', label: 'POS Operations' },
     { id: 'WAREHOUSE', label: 'Warehouse & Stock' },
@@ -87,31 +57,122 @@ const Sidebar: React.FC<SidebarProps> = ({ activeTab, setActiveTab, userRole = '
     { id: 'SYSTEM', label: 'System Admin' },
   ];
 
-  return (
-    <aside className="sidebar w-[var(--sw)] bg-[var(--navy)] min-h-screen fixed left-0 top-0 flex flex-col z-[100] overflow-y-auto">
-      <div className="sb-logo p-[22px_20px_18px] border-b border-white/5 flex items-center gap-2.5">
-        <svg width="30" height="30" viewBox="0 0 64 64" fill="none">
-          <path d="M8 44 Q32 14 56 44" stroke="#F9B942" strokeWidth="5.5" strokeLinecap="round" fill="none"/>
-          <line x1="20" y1="30" x2="20" y2="44" stroke="rgba(255,255,255,0.65)" strokeWidth="3" strokeLinecap="round"/>
-          <line x1="32" y1="22" x2="32" y2="44" stroke="rgba(255,255,255,0.65)" strokeWidth="3" strokeLinecap="round"/>
-          <line x1="44" y1="30" x2="44" y2="44" stroke="rgba(255,255,255,0.65)" strokeWidth="3" strokeLinecap="round"/>
-          <line x1="6" y1="44" x2="58" y2="44" stroke="white" strokeWidth="4" strokeLinecap="round"/>
-          <circle cx="32" cy="10" r="4" fill="#F4840A"/>
-        </svg>
-        <div>
-          <div className="font-serif text-[20px] font-black text-white tracking-tighter">
-            Prime<span className="text-[var(--gold)]">Setu</span>
-          </div>
-          <div className="text-[9px] tracking-[2px] uppercase text-white/30 -mt-1 font-semibold">
-            Retail Enterprise
-          </div>
+  const toggleCategory = (id: string) => {
+    if (isCollapsed) return;
+    setExpandedCategories(prev => 
+      prev.includes(id) ? prev.filter(c => c !== id) : [...prev, id]
+    );
+  };
+
+  // ------------------------------------------------------------
+  // Sidebar Item Component
+  // ------------------------------------------------------------
+  const SidebarItem = ({ item, isActive, onSelect }: { 
+    item: MenuItem; 
+    isActive: boolean; 
+    onSelect: (id: string) => void 
+  }) => {
+    // FIX: Using item.module for icon mapping
+    const Icon = ICON_MAP[item.module] || LayoutDashboard;
+    
+    useHotkeys(item.shortcut || '', (e) => {
+      e.preventDefault();
+      onSelect(item.id);
+    }, { enabled: !!item.shortcut });
+
+    return (
+      <button
+        onClick={() => onSelect(item.id)}
+        className={cn(
+          "group relative flex items-center w-full px-5 py-2.5 transition-all duration-200 border-l-[3px]",
+          isActive 
+            ? "bg-[var(--saffron)]/15 border-[var(--saffron)] text-white" 
+            : "border-transparent text-white/50 hover:bg-white/5 hover:text-white"
+        )}
+        title={isCollapsed ? item.label : ''}
+      >
+        <div className={cn(
+          "flex items-center justify-center transition-all duration-300",
+          isCollapsed ? "w-full" : "w-5 mr-3"
+        )}>
+          <Icon size={16} className={isActive ? 'text-[var(--gold)]' : 'text-inherit opacity-60'} />
         </div>
+        
+        {!isCollapsed && (
+          <motion.div 
+            initial={{ opacity: 0, x: -10 }}
+            animate={{ opacity: 1, x: 0 }}
+            className="flex-1 flex items-center justify-between overflow-hidden"
+          >
+            <span className="text-[12.5px] font-medium truncate">{item.label}</span>
+            {item.shortcut && (
+              <span className="text-[9px] font-bold bg-white/5 text-white/30 px-1.5 py-0.5 rounded opacity-0 group-hover:opacity-100 transition-opacity">
+                {item.shortcut}
+              </span>
+            )}
+          </motion.div>
+        )}
+
+        {/* Tooltip for collapsed state */}
+        {isCollapsed && (
+          <div className="fixed left-20 px-3 py-1.5 bg-gray-900 text-white text-[11px] rounded opacity-0 group-hover:opacity-100 pointer-events-none transition-opacity whitespace-nowrap z-[200] shadow-xl border border-white/10 font-medium">
+            {item.label} {item.shortcut && `(${item.shortcut})`}
+          </div>
+        )}
+      </button>
+    );
+  };
+
+  if (loading) {
+    return (
+      <aside className="w-[var(--sw)] bg-[var(--navy)] min-h-screen fixed left-0 top-0 flex flex-col z-[100] items-center justify-center transition-all duration-300">
+        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-[var(--gold)]"></div>
+      </aside>
+    );
+  }
+
+  return (
+    <motion.aside 
+      initial={false}
+      animate={{ width: isCollapsed ? 72 : 280 }}
+      transition={{ type: "spring", stiffness: 300, damping: 30 }}
+      className="fixed top-0 left-0 bottom-0 flex flex-col bg-[var(--navy)] z-[100] overflow-hidden border-r border-white/5 shadow-2xl"
+    >
+      {/* Header / Toggle */}
+      <div className="flex items-center justify-between h-[72px] px-5 border-b border-white/5 shrink-0">
+        {!isCollapsed && (
+          <motion.div 
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            className="flex items-center gap-2.5"
+          >
+            <svg width="30" height="30" viewBox="0 0 64 64" fill="none">
+              <path d="M8 44 Q32 14 56 44" stroke="#F9B942" strokeWidth="5.5" strokeLinecap="round" fill="none"/>
+              <circle cx="32" cy="10" r="4" fill="#F4840A"/>
+            </svg>
+            <div className="font-serif text-[18px] font-black text-white tracking-tighter">
+              Prime<span className="text-[var(--gold)]">Setu</span>
+            </div>
+          </motion.div>
+        )}
+        <button 
+          onClick={() => setIsCollapsed(!isCollapsed)}
+          className={cn(
+            "p-1.5 rounded-lg hover:bg-white/10 text-white/60 hover:text-white transition-colors",
+            isCollapsed && "mx-auto"
+          )}
+        >
+          {isCollapsed ? <Menu size={18} /> : <ChevronLeft size={18} />}
+        </button>
       </div>
 
-      <div className="flex-1 py-4">
-        {/* Render "Overview" first */}
+      {/* Navigation Pulse */}
+      <div className="flex-1 overflow-y-auto py-4 custom-scrollbar">
+        {/* Core Section */}
         <div className="mb-6">
-          <div className="text-[9px] font-bold tracking-[3px] uppercase text-white/25 px-5 mb-2">Overview</div>
+          {!isCollapsed && (
+            <div className="text-[9px] font-bold tracking-[3px] uppercase text-white/25 px-5 mb-2">Overview</div>
+          )}
           {modules
             .filter(m => m.id === 'dashboard' || m.module === 'dashboard')
             .map(m => (
@@ -125,6 +186,7 @@ const Sidebar: React.FC<SidebarProps> = ({ activeTab, setActiveTab, userRole = '
           }
         </div>
 
+        {/* Collapsible Categories */}
         {categories.map(cat => {
           const modulesInCat = modules.filter(m => 
             m.id !== 'dashboard' && 
@@ -132,41 +194,72 @@ const Sidebar: React.FC<SidebarProps> = ({ activeTab, setActiveTab, userRole = '
           );
           
           if (modulesInCat.length === 0) return null;
+          const isExpanded = expandedCategories.includes(cat.id);
 
           return (
-            <div key={cat.id} className="mb-6">
-              <div className="text-[9px] font-bold tracking-[3px] uppercase text-white/25 px-5 mb-2">
-                {cat.label}
-              </div>
-              <nav className="flex flex-col">
-                {modulesInCat.map(item => (
-                  <SidebarItem 
-                    key={item.id} 
-                    item={item} 
-                    isActive={activeTab === item.id} 
-                    onSelect={setActiveTab} 
-                  />
-                ))}
-              </nav>
+            <div key={cat.id} className="mb-4">
+              <button 
+                onClick={() => toggleCategory(cat.id)}
+                className={cn(
+                  "w-full flex items-center justify-between px-5 py-1 group transition-colors",
+                  isCollapsed ? "justify-center" : "hover:bg-white/5"
+                )}
+              >
+                {!isCollapsed && (
+                  <>
+                    <span className="text-[9px] font-bold tracking-[3px] uppercase text-white/25 group-hover:text-white/40">
+                      {cat.label}
+                    </span>
+                    <div className="text-white/20 group-hover:text-white/40">
+                      {isExpanded ? <ChevronDown size={12} /> : <ChevronRight size={12} />}
+                    </div>
+                  </>
+                )}
+                {isCollapsed && <div className="h-px w-6 bg-white/10" />}
+              </button>
+
+              <AnimatePresence initial={false}>
+                {(isExpanded || isCollapsed) && (
+                  <motion.nav 
+                    initial={isCollapsed ? { height: 'auto' } : { height: 0, opacity: 0 }}
+                    animate={{ height: 'auto', opacity: 1 }}
+                    exit={{ height: 0, opacity: 0 }}
+                    transition={{ duration: 0.2, ease: "easeInOut" }}
+                    className="flex flex-col overflow-hidden"
+                  >
+                    {modulesInCat.map(item => (
+                      <SidebarItem 
+                        key={item.id} 
+                        item={item} 
+                        isActive={activeTab === item.id} 
+                        onSelect={setActiveTab} 
+                      />
+                    ))}
+                  </motion.nav>
+                )}
+              </AnimatePresence>
             </div>
           );
         })}
       </div>
 
-      <div className="sb-bottom mt-auto border-t border-white/5 p-[14px_20px] flex items-center gap-2.5 cursor-pointer hover:bg-white/5 transition-all">
-        <div className="w-8 h-8 bg-gradient-to-br from-[var(--saffron)] to-[var(--gold)] rounded-full flex items-center justify-center text-[12px] font-bold text-white">
+      {/* Footer / Status */}
+      <div className="mt-auto border-t border-white/5 p-[14px_20px] flex items-center gap-3 bg-white/[0.01] shrink-0">
+        <div className="w-8 h-8 bg-gradient-to-br from-[var(--saffron)] to-[var(--gold)] rounded-full flex items-center justify-center text-[12px] font-bold text-white shrink-0 shadow-lg shadow-orange-500/10">
           {userRole?.[0] || 'U'}
         </div>
-        <div>
-          <div className="text-[12px] font-medium text-white leading-none">
-            {nodeType} NODE
-          </div>
-          <div className="text-[10px] text-white/40 mt-1 uppercase tracking-wider">
-            {userRole} · Sovereign
-          </div>
-        </div>
+        {!isCollapsed && (
+          <motion.div 
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            className="flex-1 overflow-hidden"
+          >
+            <div className="text-[11px] font-bold text-white tracking-tight truncate uppercase">{nodeType} NODE</div>
+            <div className="text-[9px] text-white/40 uppercase tracking-widest truncate">{userRole} · Sovereign</div>
+          </motion.div>
+        )}
       </div>
-    </aside>
+    </motion.aside>
   );
 };
 

@@ -100,6 +100,12 @@ export const COMPONENT_MAP: Record<string, React.ReactNode> = {
   'security': <ComingSoon />,
   'housekeep': <ComingSoon />,
   'hsn': <ComingSoon />,
+  'grn': <ComingSoon />,
+  'transfer': <ComingSoon />,
+  'vouchers': <ComingSoon />,
+  'promotions': <ComingSoon />,
+  'reconcile': <ComingSoon />,
+  'tally': <ComingSoon />,
 };
 
 /**
@@ -133,5 +139,11 @@ export const ICON_MAP: Record<string, any> = {
   'security': Settings,
   'housekeep': Settings,
   'hsn': LayoutDashboard,
+  'grn': Truck,
+  'transfer': RotateCcw,
+  'vouchers': Trophy,
+  'promotions': Trophy,
+  'reconcile': History,
+  'tally': DollarSign,
 };
 

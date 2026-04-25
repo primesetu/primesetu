@@ -42,6 +42,7 @@ const PrimeSetuOS: React.FC = () => {
   const { language, setLanguage } = useLanguage();
   const [activeTab, setActiveTab] = useState('dashboard');
   const { menu: dynamicMenu, findModule } = useMenu();
+  const [isCollapsed, setIsCollapsed] = useState(false);
   const [isCommandBarOpen, setIsCommandBarOpen] = useState(false);
   const [isOnline, setIsOnline] = useState(navigator.onLine);
   const [pendingSyncs, setPendingSyncs] = useState(0);
@@ -146,14 +147,19 @@ const PrimeSetuOS: React.FC = () => {
   }
 
   return (
-    <div className="flex min-h-screen bg-cream">
+    <div 
+      className="flex min-h-screen bg-cream"
+      style={{ '--sw': isCollapsed ? '72px' : '280px' } as React.CSSProperties}
+    >
       <Sidebar 
         activeTab={activeTab} 
         setActiveTab={setActiveTab} 
         userRole={user?.role} 
+        isCollapsed={isCollapsed}
+        setIsCollapsed={setIsCollapsed}
       />
       
-      <div className="main flex-1 ml-[var(--sw)] mr-[var(--fw)] flex flex-col relative">
+      <div className="main flex-1 ml-[var(--sw)] mr-[var(--fw)] flex flex-col relative transition-all duration-300">
         <CommandBar 
           isOpen={isCommandBarOpen} 
           onClose={() => setIsCommandBarOpen(false)} 

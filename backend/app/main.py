@@ -38,7 +38,7 @@ app = FastAPI(
 )
 
 # CORS Configuration
-ALLOWED_ORIGIN_REGEX = r"https?://(localhost|127\.0\.0\.1|.*\.primesetu\.pages\.dev|.*\.github\.io|patrick-books-databases-activated\.trycloudflare\.com)(:\d+)?"
+ALLOWED_ORIGIN_REGEX = r"https?://(localhost|127\.0\.0\.1|.*\.primesetu\.pages\.dev|.*\.github\.io|primesetu-api\.onrender\.com)(:\d+)?"
 
 app.add_middleware(
     CORSMiddleware,

@@ -97,7 +97,7 @@ export const COMPONENT_MAP: Record<string, React.ReactNode> = {
   'vendors': <ComingSoon />,
   'personnel': <ComingSoon />,
   'loyalty': <ComingSoon />,
-  'barcode': <BarcodeStudio />,
+  'barcode': <BarcodeStudio onClose={() => {}} />,
   'schemes': <SchemesModule />,
   'salesrep': <ComingSoon />,
   'stockrep': <ComingSoon />,

@@ -60,7 +60,7 @@ interface LabelTemplate {
 
 const DEFAULT_PRN = '^XA^FO50,50^ADN,36,20^FD{NAME}^FS^FO50,100^B3N,N,100,Y,N^FD{CODE}^FS^XZ';
 
-export default function BarcodeStudio() {
+export default function BarcodeStudio({ onClose, initialItems }: { onClose: () => void, initialItems?: any[] }) {
   const [queue, setQueue] = useState<PrintItem[]>([]);
   const [search, setSearch] = useState('');
   const [results, setResults] = useState<any[]>([]);
@@ -96,7 +96,14 @@ export default function BarcodeStudio() {
       localStorage.removeItem('primesetu_pending_print');
       alert(`Imported ${items.length} labels from Procurement!`);
     }
-  }, []);
+
+    if (initialItems) {
+      const mapped = initialItems.map(i => ({
+        id: i.id, code: i.code, name: i.name, mrp: i.mrp, brand: i.brand, size: i.size || 'N/A', qty: 1
+      }));
+      setQueue(prev => [...prev, ...mapped]);
+    }
+  }, [initialItems]);
 
   const saveTemplates = (newTemplates: LabelTemplate[]) => {
     setTemplates(newTemplates);

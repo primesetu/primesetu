@@ -13,7 +13,7 @@ interface Props {
   onReturn: (bill: any) => void;
 }
 
-export default function ReturnsDrawer({ onClose }: Props) {
+export default function ReturnsDrawer({ onClose, onReturn }: Props) {
   const [search, setSearch] = useState('');
   const [searched, setSearched] = useState(false);
   const [selectedItems, setSelectedItems] = useState<any[]>([]);

@@ -62,6 +62,12 @@ export const api = {
     universalSearch: (q: string) => apiClient.get('/catalogue/universal-search', { params: { q } }).then(r => r.data),
     getPartnerMatrix: (id: string) => apiClient.get(`/catalogue/partners/${id}/matrix`).then(r => r.data),
   },
+  customers: {
+    list: () => apiClient.get('/catalogue/partners?type=CUSTOMER').then(r => r.data),
+  },
+  vendors: {
+    list: () => apiClient.get('/catalogue/partners?type=VENDOR').then(r => r.data),
+  },
   billing: {
     finalize: (data: any) => apiClient.post('/bills/finalize', data).then(r => r.data),
     suspend: (data: any) => apiClient.post('/bills/suspend', data).then(r => r.data),

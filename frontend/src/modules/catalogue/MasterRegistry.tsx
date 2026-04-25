@@ -14,10 +14,17 @@ import {
   Search, Package, Users, Truck, UserSquare2, Layers, Zap,
   ArrowRight, Filter, MoreVertical, Plus, BarChart3, 
   ShieldCheck, Smartphone, Mail, MapPin, CreditCard,
-  Percent, Briefcase, Calendar, Info, Settings2, Globe
+  Percent, Briefcase, Calendar, Info, Settings2, Globe, X, History as HistoryIcon
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { api } from '@/api/client';
+
+const offlineService = { 
+  getCustomers: async () => [], 
+  getVendors: async () => [], 
+  syncCatalogue: async (type: any, data: any) => {}, 
+  getCatalogue: async (type: any) => [] 
+};
 
 type RegistryType = 'ITEMS' | 'CUSTOMERS' | 'VENDORS' | 'TAXES' | 'CLASSIFICATION';
 
@@ -314,10 +321,10 @@ const MasterRegistry: React.FC = () => {
 
                  {/* Action Intelligence */}
                  <div className="grid grid-cols-2 gap-4 pt-6 border-t border-gray-100">
-                    <button className="flex flex-col items-center justify-center gap-2 p-6 bg-gray-50 rounded-3xl hover:bg-gold hover:text-navy transition-all group">
-                       <History className="w-6 h-6 text-muted group-hover:text-navy" />
-                       <span className="text-[9px] font-black uppercase tracking-widest">Transaction History</span>
-                    </button>
+                     <button className="flex flex-col items-center justify-center gap-2 p-6 bg-gray-50 rounded-3xl hover:bg-gold hover:text-navy transition-all group">
+                        <HistoryIcon className="w-6 h-6 text-muted group-hover:text-navy" />
+                        <span className="text-[9px] font-black uppercase tracking-widest">Transaction History</span>
+                     </button>
                     <button className="flex flex-col items-center justify-center gap-2 p-6 bg-navy text-white rounded-3xl hover:shadow-2xl hover:scale-105 transition-all">
                        <Settings2 className="w-6 h-6 text-gold" />
                        <span className="text-[9px] font-black uppercase tracking-widest">Modify Master</span>

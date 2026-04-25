@@ -14,7 +14,8 @@ import {
   FilePlus2, RotateCcw, Banknote, CreditCard, Smartphone,
   Pause, Printer, CheckCircle2, ScanBarcode, Trash2,
   Calculator, User, Clock, ChevronRight, Zap, Search,
-  Gift, Tag, UserCheck, Plus, Minus, X, AlertTriangle
+  Gift, Tag, UserCheck, Plus, Minus, X, AlertTriangle,
+  FileText
 } from 'lucide-react'
 import { api } from '@/api/client'
 import DayEndModule from './DayEndModule'
@@ -289,7 +290,7 @@ export default function BillingModule() {
         {showSuspended && (
            <motion.div initial={{ x: '100%' }} animate={{ x: 0 }} exit={{ x: '100%' }} transition={{ type: 'spring', damping: 25, stiffness: 200 }} className="absolute right-0 top-0 bottom-0 w-[400px] z-[250] bg-navy shadow-2xl border-l-4 border-saffron">
              <SuspendedBillsBrowser 
-                onRecall={(items, mobile) => { setCart(items); setCustomerMobile(mobile); setShowSuspended(false) }} 
+                onRecall={(items: any, mobile: string) => { setCart(items as any); setCustomerMobile(mobile); setShowSuspended(false) }} 
                 onClose={() => setShowSuspended(false)} 
              />
            </motion.div>
@@ -305,7 +306,7 @@ export default function BillingModule() {
         {showSlips && (
            <motion.div initial={{ x: '100%' }} animate={{ x: 0 }} exit={{ x: '100%' }} transition={{ type: 'spring', damping: 25, stiffness: 200 }} className="absolute right-0 top-0 bottom-0 w-[400px] z-[250] bg-navy shadow-2xl border-l-4 border-amber-400">
              <SalesSlipsBrowser 
-                onRecall={(items, mobile) => { setCart(items); setCustomerMobile(mobile); setShowSlips(false) }} 
+                onRecall={(items: any, mobile: string) => { setCart(items as any); setCustomerMobile(mobile); setShowSlips(false) }} 
                 onClose={() => setShowSlips(false)} 
              />
            </motion.div>

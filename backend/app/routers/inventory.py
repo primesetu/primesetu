@@ -12,7 +12,7 @@
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.ext.asyncio import AsyncSession
 from app.core.database import get_db
-from app.models.base import Product, Inventory, Transaction, TransactionItem, PurchaseOrder, PurchaseOrderItem
+from app.models.base import Product, Inventory, Transaction, TransactionItem, PurchaseOrder, PurchaseOrderItem, AuditSession, AuditEntry
 from app.schemas.common import ProductRead, ProductCreate, PredictiveStats
 from pydantic import BaseModel
 from typing import List, Dict, Any, Optional
@@ -70,66 +70,163 @@ async def create_purchase_order(data: POCreate, db: AsyncSession = Depends(get_d
         await db.rollback()
         raise HTTPException(status_code=500, detail=f"PO Creation Failed: {str(e)}")
 
-@router.post("/audit/pst", status_code=201)
-async def physical_stock_audit(data: List[PSTEntry], db: AsyncSession = Depends(get_db), current_user: UserContext = Depends(get_current_user)):
-    """
-    Physical Stock Audit (PST) Reconciliation.
-    Compares physical count with system stock and generates adjustment transactions.
-    Crucial for Shoper9 parity inventory integrity.
-    """
+@router.post("/audit/sessions", status_code=201)
+async def create_audit_session(db: AsyncSession = Depends(get_db), current_user: UserContext = Depends(get_current_user)):
+    """Start a new Physical Stock Audit Session."""
+    session = AuditSession(
+        id=uuid.uuid4(),
+        store_id=current_user.store_id,
+        started_by=current_user.user_id,
+        status="Open"
+    )
+    db.add(session)
+    await db.commit()
+    return session
+
+@router.get("/audit/sessions")
+async def list_audit_sessions(db: AsyncSession = Depends(get_db), current_user: UserContext = Depends(get_current_user)):
+    """List all audit sessions for the current store."""
+    result = await db.execute(
+        select(AuditSession)
+        .where(AuditSession.store_id == current_user.store_id)
+        .order_by(AuditSession.created_at.desc())
+    )
+    return result.scalars().all()
+
+@router.get("/audit/sessions/{session_id}")
+async def get_audit_session(session_id: uuid.UUID, db: AsyncSession = Depends(get_db)):
+    """Get audit session details with entries."""
+    stmt = select(AuditSession).where(AuditSession.id == session_id)
+    session = (await db.execute(stmt)).scalar_one_or_none()
+    if not session: raise HTTPException(status_code=404, detail="Audit Session not found")
+    
+    # Load entries with product info
+    entries_stmt = (
+        select(AuditEntry, Product.name, Product.code)
+        .join(Product, AuditEntry.product_id == Product.id)
+        .where(AuditEntry.session_id == session_id)
+    )
+    entries_res = (await db.execute(entries_stmt)).all()
+    
+    entries = []
+    for e, name, code in entries_res:
+        entries.append({
+            "id": e.id,
+            "product_id": e.product_id,
+            "product_name": name,
+            "product_code": code,
+            "book_qty": e.book_qty,
+            "physical_qty": e.physical_qty,
+            "scanned_at": e.scanned_at
+        })
+    
+    return {
+        "id": session.id,
+        "status": session.status,
+        "created_at": session.created_at,
+        "entries": entries
+    }
+
+@router.post("/audit/sessions/{session_id}/entries")
+async def upsert_audit_entry(session_id: uuid.UUID, data: PSTEntry, db: AsyncSession = Depends(get_db)):
+    """Add or update a physical count entry in an active session."""
+    # Check session
+    session = await db.get(AuditSession, session_id)
+    if not session or session.status != "Open":
+        raise HTTPException(status_code=400, detail="Audit session is not open or invalid")
+
+    # Fetch book stock
+    inv_stmt = select(Inventory.quantity).where(
+        Inventory.product_id == data.product_id,
+        Inventory.store_id == session.store_id
+    )
+    book_qty = await db.scalar(inv_stmt) or 0.0
+
+    # Check for existing entry for this product in this session
+    entry_stmt = select(AuditEntry).where(
+        AuditEntry.session_id == session_id,
+        AuditEntry.product_id == data.product_id
+    )
+    existing = (await db.execute(entry_stmt)).scalar_one_or_none()
+
+    if existing:
+        existing.physical_qty = data.physical_qty
+        existing.scanned_at = datetime.now()
+    else:
+        new_entry = AuditEntry(
+            id=uuid.uuid4(),
+            session_id=session_id,
+            product_id=data.product_id,
+            book_qty=book_qty,
+            physical_qty=data.physical_qty
+        )
+        db.add(new_entry)
+    
+    await db.commit()
+    return {"status": "success"}
+
+@router.post("/audit/sessions/{session_id}/finalize")
+async def finalize_audit_session(session_id: uuid.UUID, db: AsyncSession = Depends(get_db), current_user: UserContext = Depends(get_current_user)):
+    """Commit the audit, update stock, and generate adjustment transaction."""
+    session = await db.get(AuditSession, session_id)
+    if not session or session.status != "Open":
+        raise HTTPException(status_code=400, detail="Audit session is not open or invalid")
+
     try:
-        adjustment_no = f"ADJ-PST-{''.join(random.choices(string.digits, k=6))}"
-        
+        adjustment_no = f"ADJ-PST-{session_id.hex[:6].upper()}"
         transaction = Transaction(
             id=uuid.uuid4(),
             bill_no=adjustment_no,
-            store_id=current_user.store_id,
+            store_id=session.store_id,
             type="AuditAdjustment",
             status="Finalized"
         )
         db.add(transaction)
         await db.flush()
 
-        for entry in data:
-            # 1. Fetch current inventory record
-            stmt = select(Inventory).where(
-                Inventory.product_id == entry.product_id, 
-                Inventory.store_id == current_user.store_id
-            )
-            inv = (await db.execute(stmt)).scalar_one_or_none()
-            
-            system_qty = inv.quantity if inv else 0
-            variance = entry.physical_qty - system_qty
+        stmt = select(AuditEntry).where(AuditEntry.session_id == session_id)
+        entries = (await db.execute(stmt)).scalars().all()
+
+        for entry in entries:
+            variance = entry.physical_qty - entry.book_qty
             
             if variance != 0:
-                # 2. Reconcile inventory to match physical reality
+                # Update Inventory
+                inv_stmt = select(Inventory).where(
+                    Inventory.product_id == entry.product_id,
+                    Inventory.store_id == session.store_id
+                )
+                inv = (await db.execute(inv_stmt)).scalar_one_or_none()
+                
                 if inv:
                     inv.quantity = entry.physical_qty
                 else:
                     new_inv = Inventory(
                         id=uuid.uuid4(),
-                        product_id=entry.product_id, 
-                        store_id=current_user.store_id, 
+                        product_id=entry.product_id,
+                        store_id=session.store_id,
                         quantity=entry.physical_qty
                     )
                     db.add(new_inv)
-                
-                # 3. Create adjustment detail record
-                item = TransactionItem(
+
+                # Adjustment Record
+                db.add(TransactionItem(
                     id=uuid.uuid4(),
                     transaction_id=transaction.id,
                     product_id=entry.product_id,
-                    qty=variance, 
+                    qty=variance,
                     mrp=0,
                     net_amount=0
-                )
-                db.add(item)
+                ))
+        
+        session.status = "Finalized"
+        session.finalized_at = datetime.now()
         
         await db.commit()
         return {"status": "success", "adjustment_no": adjustment_no}
     except Exception as e:
         await db.rollback()
-        raise HTTPException(status_code=500, detail=f"Audit Failed: {str(e)}")
+        raise HTTPException(status_code=500, detail=str(e))
 
 @router.get("/", response_model=List[ProductRead])
 async def list_products(

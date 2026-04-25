@@ -303,3 +303,27 @@ class SyncPacket(Base):
     status: Mapped[str] = mapped_column(String, default="PENDING") # PENDING, SYNCED
     created_at: Mapped[datetime] = mapped_column(DateTime, server_default=text("now()"))
     synced_at: Mapped[datetime] = mapped_column(DateTime, nullable=True)
+
+class AuditSession(Base):
+    __tablename__ = "audit_sessions"
+
+    id: Mapped[uuid.UUID] = mapped_column(primary_key=True, server_default=text("gen_random_uuid()"))
+    store_id: Mapped[str] = mapped_column(ForeignKey("stores.id"))
+    started_by: Mapped[str] = mapped_column(String)
+    status: Mapped[str] = mapped_column(String, default="Open") # Open, Finalized, Cancelled
+    created_at: Mapped[datetime] = mapped_column(DateTime, server_default=text("now()"))
+    finalized_at: Mapped[datetime] = mapped_column(DateTime, nullable=True)
+    
+    entries: Mapped[List["AuditEntry"]] = relationship("AuditEntry", back_populates="session", cascade="all, delete-orphan")
+
+class AuditEntry(Base):
+    __tablename__ = "audit_entries"
+
+    id: Mapped[uuid.UUID] = mapped_column(primary_key=True, server_default=text("gen_random_uuid()"))
+    session_id: Mapped[uuid.UUID] = mapped_column(ForeignKey("audit_sessions.id", ondelete="CASCADE"))
+    product_id: Mapped[uuid.UUID] = mapped_column(ForeignKey("products.id"))
+    book_qty: Mapped[float] = mapped_column(Numeric(12, 3))
+    physical_qty: Mapped[float] = mapped_column(Numeric(12, 3))
+    scanned_at: Mapped[datetime] = mapped_column(DateTime, server_default=text("now()"))
+
+    session: Mapped["AuditSession"] = relationship("AuditSession", back_populates="entries")

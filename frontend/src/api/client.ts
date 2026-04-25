@@ -50,6 +50,11 @@ export const api = {
     getAlerts: () => apiClient.get('/inventory/alerts').then(r => r.data),
     getPredictiveStats: () => apiClient.get('/inventory/predictive/aggregate').then(r => r.data),
     getStockPrediction: (id: string) => apiClient.get(`/inventory/predictive/${id}`).then(r => r.data),
+    createAuditSession: () => apiClient.post('/inventory/audit/sessions').then(r => r.data),
+    listAuditSessions: () => apiClient.get('/inventory/audit/sessions').then(r => r.data),
+    getAuditSession: (id: string) => apiClient.get(`/inventory/audit/sessions/${id}`).then(r => r.data),
+    addAuditEntry: (sessionId: string, data: any) => apiClient.post(`/inventory/audit/sessions/${sessionId}/entries`, data).then(r => r.data),
+    finalizeAuditSession: (sessionId: string) => apiClient.post(`/inventory/audit/sessions/${sessionId}/finalize`).then(r => r.data),
   },
   catalogue: {
     getPartners: (type?: string, q?: string) => apiClient.get('/catalogue/partners', { params: { type, q } }).then(r => r.data),

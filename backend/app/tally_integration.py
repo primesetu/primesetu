@@ -11,9 +11,9 @@
 import xml.etree.ElementTree as ET
 from xml.dom import minidom
 from datetime import date
-from models import Transaction
+from app.models import Bill
 
-def generate_tally_xml(transactions: list[Transaction], company_name: str) -> str:
+def generate_tally_xml(transactions: list[Bill], company_name: str) -> str:
     """
     Generates Tally XML (TallyMessage/Voucher) for PrimeSetu Sales Transactions.
     Ensures structural compliance for Tally Prime import.

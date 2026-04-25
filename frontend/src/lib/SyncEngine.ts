@@ -32,7 +32,7 @@ class SyncEngine {
    */
   async queueTransaction(type: SyncPacket['type'], payload: any) {
     const packet: SyncPacket = {
-      id: crypto.randomUUID(),
+      id: typeof crypto.randomUUID === 'function' ? crypto.randomUUID() : Math.random().toString(36).substring(2) + Date.now().toString(36),
       type,
       payload,
       timestamp: new Date().toISOString(),

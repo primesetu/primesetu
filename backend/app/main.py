@@ -38,9 +38,17 @@ app = FastAPI(
 )
 
 # CORS Configuration
+ALLOWED_ORIGINS = [
+    "http://localhost:5173",
+    "http://127.0.0.1:5173",
+    "https://6bb31077.primesetu.pages.dev",
+    "https://primesetu.pages.dev",
+    "https://patrick-books-databases-activated.trycloudflare.com",
+]
+
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"], # For testing stability, reset to specific list after confirmation
+    allow_origins=ALLOWED_ORIGINS,
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],

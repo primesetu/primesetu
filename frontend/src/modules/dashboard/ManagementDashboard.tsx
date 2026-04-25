@@ -134,23 +134,23 @@ export default function ManagementDashboard() {
               <option>30-Day Sovereign Audit</option>
             </select>
           </div>
-          <div className="h-[350px] w-full min-w-0" style={{ minHeight: '350px' }}>
-            <ResponsiveContainer width="100%" height="100%" minWidth={0} minHeight={350}>
+          <div className="h-[350px] w-full min-w-0 overflow-hidden" style={{ minHeight: '350px', position: 'relative' }}>
+            <ResponsiveContainer width="100%" height={350} debounce={100}>
               <LineChart data={salesData}>
                 <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#eee" />
                 <XAxis dataKey="day" axisLine={false} tickLine={false} tick={{ fontSize: 11, fontWeight: 900, fill: '#A8A196' }} />
                 <YAxis hide />
                 <Tooltip 
-                  contentStyle={{ borderRadius: '24px', border: 'none', boxShadow: '0 30px 60px rgba(0,0,0,0.12)', padding: '20px' }}
-                  itemStyle={{ fontSize: '14px', fontWeight: '900', color: '#001F3F' }}
+                   contentStyle={{ borderRadius: '24px', border: 'none', boxShadow: '0 30px 60px rgba(0,0,0,0.12)', padding: '20px' }}
+                   itemStyle={{ fontSize: '14px', fontWeight: '900', color: '#001F3F' }}
                 />
                 <Line 
-                  type="monotone" 
-                  dataKey="sales" 
-                  stroke="#001F3F" 
-                  strokeWidth={5} 
-                  dot={{ r: 7, fill: '#D4AF37', strokeWidth: 4, stroke: '#fff' }}
-                  activeDot={{ r: 10, strokeWidth: 0, fill: '#001F3F' }}
+                   type="monotone" 
+                   dataKey="sales" 
+                   stroke="#001F3F" 
+                   strokeWidth={5} 
+                   dot={{ r: 7, fill: '#D4AF37', strokeWidth: 4, stroke: '#fff' }}
+                   activeDot={{ r: 10, strokeWidth: 0, fill: '#001F3F' }}
                 />
               </LineChart>
             </ResponsiveContainer>
@@ -161,8 +161,8 @@ export default function ManagementDashboard() {
         <div className="glass rounded-[3.5rem] p-12 shadow-2xl flex flex-col min-h-[500px]">
           <h3 className="text-2xl font-serif font-black text-navy mb-12 uppercase tracking-tight">Brand Matrix</h3>
           <div className="flex-1 flex flex-col items-center justify-center min-w-0">
-            <div className="h-[220px] w-full min-w-0">
-              <ResponsiveContainer width="100%" height="100%" minWidth={0}>
+            <div className="h-[220px] w-full min-w-0 overflow-hidden" style={{ position: 'relative' }}>
+              <ResponsiveContainer width="100%" height={220} debounce={100}>
                 <PieChart>
                   <Pie
                     data={brandData}

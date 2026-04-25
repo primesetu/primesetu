@@ -199,16 +199,26 @@ export function GlobalF2SearchOverlay() {
     if (!targetEl) { closeSearch(); return }
     const tag = targetEl.tagName.toLowerCase()
     if (tag === 'input' || tag === 'textarea') {
-      // Fill the field with the most relevant value
-      const nativeInputValueSetter = Object.getOwnPropertyDescriptor(window.HTMLInputElement.prototype, 'value')?.set
-      const bestValue =
-        row.mobile ?? row.code ?? row.name ?? row.bill_no ?? ''
-      nativeInputValueSetter?.call(targetEl, bestValue)
-      targetEl.dispatchEvent(new Event('input', { bubbles: true }))
-      targetEl.focus()
+      try {
+        const nativeInputValueSetter = Object.getOwnPropertyDescriptor(window.HTMLInputElement.prototype, 'value')?.set
+        const bestValue = row.mobile ?? row.code ?? row.name ?? row.bill_no ?? ''
+        nativeInputValueSetter?.call(targetEl, bestValue)
+        if (typeof Event !== 'undefined') {
+          targetEl.dispatchEvent(new Event('input', { bubbles: true }))
+        }
+        targetEl.focus()
+      } catch (e) {
+        console.warn('[PrimeSetu] F2 event dispatch skipped:', e)
+      }
     }
     // Dispatch a custom event so modules can handle selection
-    targetEl.dispatchEvent(new CustomEvent('f2-select', { detail: row, bubbles: true }))
+    try {
+      if (typeof CustomEvent !== 'undefined') {
+        targetEl.dispatchEvent(new CustomEvent('f2-select', { detail: row, bubbles: true }))
+      }
+    } catch (e) {
+      console.warn('[PrimeSetu] F2 custom event dispatch skipped:', e)
+    }
     closeSearch()
   }
 

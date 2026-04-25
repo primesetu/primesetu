@@ -17,14 +17,16 @@ export default defineConfig({
   plugins: [
     react(),
     VitePWA({
-      registerType: 'prompt',
-      injectRegister: 'script',
+      registerType: 'autoUpdate',
+      injectRegister: 'auto',
       devOptions: {
-        enabled: true
+        enabled: false
       },
       workbox: {
         globPatterns: ['**/*.{js,css,html,ico,png,svg}'],
-        maximumFileSizeToCacheInBytes: 5000000
+        maximumFileSizeToCacheInBytes: 5000000,
+        skipWaiting: true,
+        clientsClaim: true,
       },
       manifest: {
         name: "PrimeSetu Sovereign Retail OS",

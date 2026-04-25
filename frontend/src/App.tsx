@@ -133,16 +133,16 @@ const PrimeSetuOS: React.FC = () => {
       />
 
       {/* Main Content Area */}
-      <main className="pt-16 pb-8 min-h-screen">
+      <main className="pt-24 pb-12 min-h-screen">
         {/* Dynamic Content with Animation */}
-        <div className="max-w-7xl mx-auto">
+        <div className="max-w-[1600px] mx-auto px-10">
           <AnimatePresence mode="wait">
             <motion.div
               key={activeTab}
-              initial={{ opacity: 0, y: 10 }}
+              initial={{ opacity: 0, y: 15 }}
               animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: -10 }}
-              transition={{ duration: 0.3 }}
+              exit={{ opacity: 0, y: -15 }}
+              transition={{ duration: 0.4, ease: "easeOut" }}
             >
               {renderContent()}
             </motion.div>

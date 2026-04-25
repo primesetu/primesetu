@@ -23,18 +23,12 @@ import uvicorn
 app = FastAPI(title="PrimeSetu — Sovereign Retail OS")
 
 # Configure CORS for Sovereign Node
-ALLOWED_ORIGINS = [
-    "http://localhost:5173",
-    "http://127.0.0.1:5173",
-    "https://6bb31077.primesetu.pages.dev",
-    "https://primesetu.pages.dev",
-    "https://patrick-books-databases-activated.trycloudflare.com",
-]
+ALLOWED_ORIGIN_REGEX = r"https?://(localhost|127\.0\.0\.1|.*\.primesetu\.pages\.dev|patrick-books-databases-activated\.trycloudflare\.com)(:\d+)?"
 
 print("[PrimeSetu] Initializing CORS Middleware...")
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=ALLOWED_ORIGINS,
+    allow_origin_regex=ALLOWED_ORIGIN_REGEX,
     allow_credentials=True,
     allow_methods=["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
     allow_headers=["*"],

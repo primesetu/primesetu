@@ -16,6 +16,16 @@ import { F2SearchProvider, GlobalF2SearchOverlay } from './contexts/F2SearchCont
 import App from './App'
 import './index.css'
 
+// Unregister all stale Service Workers (PWA removed — POS requires live connectivity)
+if ('serviceWorker' in navigator) {
+  navigator.serviceWorker.getRegistrations().then((registrations) => {
+    for (const registration of registrations) {
+      registration.unregister()
+      console.log('[PrimeSetu] Stale SW unregistered:', registration.scope)
+    }
+  })
+}
+
 const queryClient = new QueryClient({
   defaultOptions: {
     queries: {

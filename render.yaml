@@ -1,0 +1,29 @@
+# ============================================================
+# PrimeSetu — Shoper9-Based Retail OS
+# Zero Cloud · Sovereign · AI-Governed
+# System Architect   :  Jawahar R. M. | © 2026
+# "Memory, Not Code."
+# ============================================================
+
+services:
+  - type: web
+    name: primesetu-api
+    runtime: python
+    rootDir: backend
+    buildCommand: pip install -r requirements.txt
+    startCommand: uvicorn app.main:app --host 0.0.0.0 --port $PORT
+    plan: free
+    region: singapore
+    envVars:
+      - key: ENVIRONMENT
+        value: production
+      - key: DATABASE_URL
+        sync: false
+      - key: SUPABASE_URL
+        sync: false
+      - key: SUPABASE_SERVICE_ROLE_KEY
+        sync: false
+      - key: JWT_SECRET
+        sync: false
+      - key: ANTHROPIC_API_KEY
+        sync: false

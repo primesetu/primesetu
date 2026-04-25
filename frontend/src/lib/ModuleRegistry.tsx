@@ -24,7 +24,8 @@ import {
   Trophy,
   History,
   Monitor,
-  DollarSign
+  DollarSign,
+  Printer
 } from 'lucide-react'
 
 // Module Lazy/Dynamic Imports (Simplified for now)
@@ -56,6 +57,7 @@ import SecurityModule from '../modules/settings/SecurityModule'
 import HousekeepingModule from '../modules/settings/HousekeepingModule'
 import StockMovement from '../modules/inventory/StockMovement'
 import HSNManager from '../modules/catalogue/HSNManager'
+import PrintTemplateCenter from '../modules/settings/PrintTemplateCenter'
 
 export interface ModuleDefinition {
   id: string
@@ -78,12 +80,12 @@ export const COMPONENT_MAP: Record<string, React.ReactNode> = {
   'sales': <BillingModule />,
   'returns': <ComingSoon />,
   'inventory': <InventoryModule />,
-  'procurement': <ComingSoon />,
-  'movement': <ComingSoon />,
+  'procurement': <ProcurementModule />,
+  'movement': <StockMovement />,
   'dayend': <DayEndModule onClose={() => {}} />,
-  'tills': <ComingSoon />,
-  'price': <ComingSoon />,
-  'registry': <ItemMaster />,
+  'tills': <TillManagement />,
+  'price': <PriceManagement />,
+  'registry': <MasterRegistry />,
   'ho': <HOSyncModule />,
   'analytics': <AnalyticsModule />,
   'settings': <ConfigModule />,
@@ -91,7 +93,7 @@ export const COMPONENT_MAP: Record<string, React.ReactNode> = {
   'vendors': <ComingSoon />,
   'personnel': <ComingSoon />,
   'loyalty': <ComingSoon />,
-  'barcode': <ComingSoon />,
+  'barcode': <BarcodeStudio />,
   'schemes': <SchemesModule />,
   'salesrep': <ComingSoon />,
   'stockrep': <ComingSoon />,
@@ -106,6 +108,7 @@ export const COMPONENT_MAP: Record<string, React.ReactNode> = {
   'promotions': <ComingSoon />,
   'reconcile': <ComingSoon />,
   'tally': <ComingSoon />,
+  'print': <PrintTemplateCenter />,
 };
 
 /**
@@ -145,5 +148,6 @@ export const ICON_MAP: Record<string, any> = {
   'promotions': Trophy,
   'reconcile': History,
   'tally': DollarSign,
+  'print': Printer,
 };
 

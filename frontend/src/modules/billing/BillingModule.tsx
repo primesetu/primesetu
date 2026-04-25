@@ -20,6 +20,8 @@ import { api } from '@/api/client'
 import DayEndModule from './DayEndModule'
 import SuspendedBillsBrowser from './SuspendedBillsBrowser'
 import ThermalReceipt from './ThermalReceipt'
+import TaxInvoiceA4 from './TaxInvoiceA4'
+import CreditNoteA4 from './CreditNoteA4'
 import ReturnsDrawer from './ReturnsDrawer'
 import { useHotkeys } from 'react-hotkeys-hook'
 import { offlineService } from '@/api/offline'
@@ -28,6 +30,7 @@ import { useLanguage } from '@/hooks/useLanguage'
 interface CartItem {
   id: string; code: string; name: string; brand: string; category: string
   mrp: number; cost_price: number; qty: number; discount_per: number; tax_rate: number
+  is_tax_inclusive?: boolean; stocks?: { store_id: string; quantity: number }[]
 }
 
 type PayMode = 'CASH' | 'UPI' | 'CARD' | 'GV' | 'COUPON'
@@ -117,29 +120,63 @@ export default function BillingModule() {
   }, [q])
 
   const addToCart = (p: any) => {
+    // SOVEREIGN STOCK GUARD: Only block if stock data is available AND exhausted
+    const storeStock = p.stocks?.find((s: any) => s.store_id === 'X01')?.quantity;
+    
     setCart(prev => {
       const ex = prev.find(i => i.id === p.id)
+      const currentQty = ex ? ex.qty : 0;
+      
+      // Only enforce guard if stock data actually exists from the API
+      if (storeStock !== undefined && currentQty + 1 > storeStock) {
+        alert(`STOCK ALERT: Only ${storeStock} units available in X01 store.`);
+        return prev;
+      }
+
       if (ex) return prev.map(i => i.id === p.id ? { ...i, qty: i.qty + 1 } : i)
-      return [...prev, { ...p, qty: 1, discount_per: 0, tax_rate: p.tax_rate ?? 18 }]
+      return [...prev, { ...p, qty: 1, discount_per: 0, tax_rate: p.tax_rate ?? 18, is_tax_inclusive: p.is_tax_inclusive ?? true }]
     })
   }
 
-  const updateItem = (id: string, updates: Partial<CartItem>) =>
-    setCart(prev => prev.map(i => i.id === id ? { ...i, ...updates } : i))
+  const updateItem = (id: string, updates: Partial<CartItem>) => {
+    setCart(prev => prev.map(i => {
+      if (i.id === id) {
+        // Only run stock guard when qty is being changed
+        if (updates.qty !== undefined) {
+          const storeStock = i.stocks?.find((s: any) => s.store_id === 'X01')?.quantity;
+          // Only block if stock data exists from API AND would be exceeded
+          if (storeStock !== undefined && updates.qty > storeStock) {
+            alert(`STOCK ALERT: Only ${storeStock} units available.`);
+            return i;
+          }
+        }
+        return { ...i, ...updates };
+      }
+      return i;
+    }))
+  }
 
   const removeItem = (id: string) => setCart(prev => prev.filter(i => i.id !== id))
 
-  // Totals (Shoper9 style: GST inclusive)
-  const subtotal = cart.reduce((a, i) => a + i.mrp * i.qty, 0)
-  const disc_total = cart.reduce((a, i) => a + i.mrp * i.qty * (i.discount_per / 100), 0)
-  const taxable = subtotal - disc_total
-  const tax_total = cart.reduce((a, i) => {
+  // Totals (Shoper9 style: Dual Tax Support)
+  const tax_summary = cart.reduce((acc, i) => {
     const net = i.mrp * i.qty * (1 - i.discount_per / 100)
     const rate = i.tax_rate / 100
-    return a + net - net / (1 + rate)
-  }, 0)
-  const net_payable = Math.round(taxable)
-  const roundoff = net_payable - taxable
+    const is_inclusive = i.is_tax_inclusive ?? true; // Default to inclusive as per Shoper9 standard
+    
+    const tax_amt = is_inclusive ? (net - net / (1 + rate)) : (net * rate);
+    const taxable_amt = is_inclusive ? (net - tax_amt) : net;
+    
+    return {
+      taxable: acc.taxable + taxable_amt,
+      tax: acc.tax + tax_amt
+    }
+  }, { taxable: 0, tax: 0 })
+
+  const net_payable = Math.round(tax_summary.taxable + tax_summary.tax)
+  const roundoff = net_payable - (tax_summary.taxable + tax_summary.tax)
+  const taxable = tax_summary.taxable
+  const tax_total = tax_summary.tax
 
   const handleFinalize = async () => {
     if (!cart.length || processing) return
@@ -196,7 +233,7 @@ export default function BillingModule() {
   useHotkeys('alt+2', (e) => { e.preventDefault(); setShowReturns(v => !v) }, { enableOnFormTags: true })
   useHotkeys('alt+m', (e) => { e.preventDefault(); document.getElementById('cust-mobile')?.focus() }, { enableOnFormTags: true })
   useHotkeys('ctrl+d', (e) => { e.preventDefault(); setCart(p => p.slice(0,-1)) }, { enableOnFormTags: true })
-  useHotkeys('escape', (e) => { setQ(''); setShowTotals(false); setShowSettle(false) }, { enableOnFormTags: true })
+  useHotkeys('escape', (e) => { e.preventDefault(); setQ(''); setShowTotals(false); setShowSettle(false) }, { enableOnFormTags: true })
 
   const PAY_ICONS: Record<PayMode, JSX.Element> = {
     CASH:   <Banknote className="w-4 h-4" />,
@@ -218,6 +255,8 @@ export default function BillingModule() {
   return (
     <div className="flex flex-col h-screen bg-[#f0ede8] font-sans overflow-hidden relative">
       <ThermalReceipt bill={billToPrint} onPrinted={() => setBillToPrint(null)} />
+      <TaxInvoiceA4 bill={billToPrint} onPrinted={() => setBillToPrint(null)} />
+      <CreditNoteA4 bill={billToPrint?.type === 'Return' ? billToPrint : null} onPrinted={() => setBillToPrint(null)} />
 
       {/* ─── Overlays ─── */}
       <AnimatePresence>
@@ -231,7 +270,10 @@ export default function BillingModule() {
         )}
         {showReturns && (
            <motion.div initial={{ x: '100%' }} animate={{ x: 0 }} exit={{ x: '100%' }} transition={{ type: 'spring', damping: 25, stiffness: 200 }} className="absolute right-0 top-0 bottom-0 w-[400px] z-[250] bg-navy shadow-2xl border-l-4 border-rose-500">
-             <ReturnsDrawer onClose={() => setShowReturns(false)} />
+             <ReturnsDrawer 
+                onReturn={(bill) => { setBillToPrint(bill); setShowReturns(false); }}
+                onClose={() => setShowReturns(false)} 
+              />
            </motion.div>
         )}
         {showDayEnd && <DayEndModule onClose={() => setShowDayEnd(false)} />}
@@ -311,7 +353,13 @@ export default function BillingModule() {
           { icon: <Banknote className="w-4 h-4" />, label: 'Exact Cash', key: 'F7', action: () => { setPayLines([{ mode: 'CASH', amount: net_payable }]); handleFinalize() } },
           { icon: <CreditCard className="w-4 h-4" />, label: 'Settlement', key: 'F8', action: () => setShowSettle(true) },
           { icon: <Pause className="w-4 h-4" />, label: 'Suspend', key: 'F12', action: handleSuspend },
-          { icon: <Printer className="w-4 h-4" />, label: 'Reprint', key: 'Alt+6', action: () => {} },
+          { icon: <Printer className="w-4 h-4" />, label: 'Reprint', key: 'Alt+6', action: () => {
+            if (lastBill) {
+              setBillToPrint({ ...lastBill, is_duplicate: true })
+            } else {
+              alert('No bill to reprint. Complete a transaction first.')
+            }
+          } },
         ].map(btn => (
           <button key={btn.label} onClick={btn.action}
             className="flex flex-col items-center px-3 py-1.5 rounded-lg text-white/60 hover:text-white hover:bg-white/10 transition-all gap-0.5 min-w-[60px]">
@@ -338,22 +386,42 @@ export default function BillingModule() {
         <div className="relative flex-[3]">
           <ScanBarcode className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-300" />
           <input ref={searchRef} autoFocus value={q} onChange={e => setQ(e.target.value)}
+            id="item-search"
             data-f2="items"
             placeholder="Scan barcode / search item code or name [F2]..."
-            className="w-full bg-white border-2 border-gray-200 focus:border-amber-400 rounded-xl pl-9 pr-4 py-2.5 text-sm font-mono outline-none transition-all shadow-sm"
+            className="w-full bg-white border-2 border-gray-200 focus:border-amber-400 rounded-xl pl-9 pr-10 py-2.5 text-sm font-mono outline-none transition-all shadow-sm"
           />
+          <button 
+            onClick={() => { searchRef.current?.focus(); window.dispatchEvent(new KeyboardEvent('keydown', { key: 'f2', bubbles: true })) }}
+            className="absolute right-3 top-1/2 -translate-y-1/2 p-1.5 hover:bg-amber-100 rounded-lg text-amber-500 transition-all"
+          >
+            <Search className="w-4 h-4" />
+          </button>
         </div>
         <div className="relative flex-1">
           <User className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-300" />
           <input id="cust-mobile" value={customerMobile} onChange={e => setCustomerMobile(e.target.value)}
-            data-f2="customers" placeholder="Customer Mobile [Alt+M / F2]"
-            className="w-full bg-white border-2 border-gray-200 focus:border-amber-400 rounded-xl pl-9 pr-4 py-2.5 text-sm font-mono outline-none transition-all shadow-sm" />
+            data-f2="customers" placeholder="Customer Mobile [F2]"
+            className="w-full bg-white border-2 border-gray-200 focus:border-amber-400 rounded-xl pl-9 pr-10 py-2.5 text-sm font-mono outline-none transition-all shadow-sm" />
+          <button 
+            onClick={() => { document.getElementById('cust-mobile')?.focus(); window.dispatchEvent(new KeyboardEvent('keydown', { key: 'f2', bubbles: true })) }}
+            className="absolute right-3 top-1/2 -translate-y-1/2 p-1.5 hover:bg-amber-100 rounded-lg text-amber-500 transition-all"
+          >
+            <Search className="w-3.5 h-3.5" />
+          </button>
         </div>
         <div className="relative flex-1">
           <UserCheck className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-300" />
-          <input value={salesperson} onChange={e => setSalesperson(e.target.value)}
-            placeholder="Salesperson"
-            className="w-full bg-white border-2 border-gray-200 focus:border-amber-400 rounded-xl pl-9 pr-4 py-2.5 text-sm font-mono outline-none transition-all shadow-sm" />
+          <input id="sales-person" value={salesperson} onChange={e => setSalesperson(e.target.value)}
+            data-f2="salesperson"
+            placeholder="Salesperson [F2]"
+            className="w-full bg-white border-2 border-gray-200 focus:border-amber-400 rounded-xl pl-9 pr-10 py-2.5 text-sm font-mono outline-none transition-all shadow-sm" />
+          <button 
+            onClick={() => { document.getElementById('sales-person')?.focus(); window.dispatchEvent(new KeyboardEvent('keydown', { key: 'f2', bubbles: true })) }}
+            className="absolute right-3 top-1/2 -translate-y-1/2 p-1.5 hover:bg-amber-100 rounded-lg text-amber-500 transition-all"
+          >
+            <Search className="w-3.5 h-3.5" />
+          </button>
         </div>
       </div>
 

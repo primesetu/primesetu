@@ -28,19 +28,24 @@ export default function ThermalReceipt({ bill, onPrinted }: { bill: any, onPrint
       `}} />
       
       <div className="text-center mb-4">
-        <h2 className="text-lg font-black uppercase mb-1">Citywalk Shoes</h2>
-        <p className="text-[10px]">PrimeSetu Global Retail</p>
-        <p className="text-[10px]">Connaught Place, New Delhi</p>
-        <p className="text-[10px]">GSTIN: 07AABCU9603R1Z2</p>
-        <p className="text-[10px] mt-1 font-bold">Ph: +91 9876543210</p>
+        <h2 className="text-lg font-black uppercase mb-1">{bill.store_name || 'PrimeSetu Retail'}</h2>
+        <p className="text-[10px]">{bill.store_site || 'Verified Sovereign Node'}</p>
+        <p className="text-[10px]">{bill.store_address || 'Sovereign Network PST'}</p>
+        <p className="text-[10px]">GSTIN: {bill.store_gstin || '07AABCU9603R1Z2'}</p>
+        <p className="text-[10px] mt-1 font-bold">Ph: {bill.store_phone || '+91 0000000000'}</p>
       </div>
 
-      <div className="border-t border-b border-black border-dashed py-2 mb-2">
-        <div className="flex justify-between">
+      <div className="border-t border-b border-black border-dashed py-2 mb-2 relative">
+        {bill.is_duplicate && (
+          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 -rotate-12 border-2 border-black/20 text-black/20 text-[20px] font-black px-4 py-1 z-0 pointer-events-none uppercase">
+            Duplicate
+          </div>
+        )}
+        <div className="flex justify-between relative z-10">
           <span>Bill: {bill.bill_number}</span>
           <span>Date: {new Date(bill.created_at).toLocaleDateString()}</span>
         </div>
-        <div className="flex justify-between">
+        <div className="flex justify-between relative z-10">
           <span>Cashier: {bill.created_by || 'ADMIN'}</span>
           <span>Time: {new Date(bill.created_at).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})}</span>
         </div>
@@ -81,9 +86,18 @@ export default function ThermalReceipt({ bill, onPrinted }: { bill: any, onPrint
           <span>{bill.items?.reduce((a:any, i:any) => a + i.qty, 0) || 0}</span>
         </div>
         <div className="flex justify-between text-[10px]">
-          <span>Includes GST</span>
-          <span>Rs. {bill.items?.reduce((a:any, i:any) => a + (i.unit_price * i.qty * (i.tax_per/100)), 0).toFixed(2) || '0.00'}</span>
+          <span>Taxable Value</span>
+          <span>Rs. {(bill.items?.reduce((a:any, i:any) => {
+            const net = i.unit_price * i.qty * (1 - (i.discount_per||0)/100);
+            const rate = (i.tax_per||0)/100;
+            return a + (net / (1 + rate));
+          }, 0)).toFixed(2)}</span>
         </div>
+        {bill.items?.reduce((a:any, i:any) => a + (i.unit_price * i.qty * (i.discount_per||0)/100), 0) > 0 && (
+          <div className="bg-black text-white px-2 py-1 mt-2 text-center text-[11px] font-black uppercase tracking-widest">
+            *** YOU SAVED RS. {(bill.items?.reduce((a:any, i:any) => a + (i.unit_price * i.qty * (i.discount_per||0)/100), 0)).toFixed(2)} ***
+          </div>
+        )}
       </div>
 
       <div className="text-center text-[10px] mt-6 border-t border-black border-dashed pt-2">

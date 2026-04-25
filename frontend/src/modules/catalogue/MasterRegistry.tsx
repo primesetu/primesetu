@@ -11,23 +11,15 @@
 
 import React, { useState, useEffect } from 'react';
 import { 
-  Search, 
-  Package, 
-  Users, 
-  Truck, 
-  UserSquare2, 
-  Layers, 
-  Zap,
-  ArrowRight,
-  Filter,
-  MoreVertical,
-  Plus,
-  BarChart3
+  Search, Package, Users, Truck, UserSquare2, Layers, Zap,
+  ArrowRight, Filter, MoreVertical, Plus, BarChart3, 
+  ShieldCheck, Smartphone, Mail, MapPin, CreditCard,
+  Percent, Briefcase, Calendar, Info, Settings2, Globe
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { api } from '@/api/client';
 
-type RegistryType = 'ITEMS' | 'CUSTOMERS' | 'VENDORS' | 'PERSONNEL' | 'SYSTEM';
+type RegistryType = 'ITEMS' | 'CUSTOMERS' | 'VENDORS' | 'TAXES' | 'CLASSIFICATION';
 
 interface RegistryEntity {
   id: string;
@@ -35,337 +27,302 @@ interface RegistryEntity {
   code?: string;
   mobile?: string;
   category?: string;
+  // Item specific
   stock?: number;
   price?: number;
-  velocity?: string;
+  hsn?: string;
+  size_group?: string;
+  // Customer specific
+  loyalty_tier?: string;
   points?: number;
-  status?: string;
-  pending_po?: number;
+  tax_type?: 'LOCAL' | 'CENTRAL';
+  dob?: string;
+  class_1?: string; // e.g. Religion
+  class_2?: string; // e.g. Age Group
+  // Vendor specific
+  tax_behavior?: 'INCLUSIVE' | 'EXCLUSIVE';
+  partial_supply?: boolean;
   terms?: string;
-  target?: string;
-  achieved?: string;
-  values?: string;
-}
-
-interface MatrixData {
-  insights: Array<{ label: string; value: string; trend: 'up' | 'down' | 'stable' | 'none' }>;
-  associations: Array<{ label: string; value: string }>;
 }
 
 const MasterRegistry: React.FC = () => {
   const [activeRegistry, setActiveRegistry] = useState<RegistryType>('ITEMS');
-  const [loading, setLoading] = useState(true)
+  const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState('');
-  const [items, setItems] = useState<any[]>([]);
   const [selectedEntity, setSelectedEntity] = useState<RegistryEntity | null>(null);
-  const [matrix, setMatrix] = useState<MatrixData | null>(null);
+
+  const registries = [
+    { id: 'ITEMS', icon: Package, label: 'Items & Matrix', count: 1240 },
+    { id: 'CUSTOMERS', icon: Users, label: 'Customer CRM', count: 8420 },
+    { id: 'VENDORS', icon: Truck, label: 'Vendor Network', count: 124 },
+    { id: 'TAXES', icon: Percent, label: 'Tax Catalogue', count: 8 },
+    { id: 'CLASSIFICATION', icon: Layers, label: 'Master DNA', count: 32 },
+  ];
+
+  const [registryData, setRegistryData] = useState<Record<RegistryType, RegistryEntity[]>>({
+    ITEMS: [], CUSTOMERS: [], VENDORS: [], TAXES: [], CLASSIFICATION: []
+  });
 
   useEffect(() => {
-    fetchItems();
+    fetchRegistryData();
   }, [activeRegistry]);
 
-  const fetchItems = async () => {
-    if (activeRegistry !== 'ITEMS') return;
+  const fetchRegistryData = async () => {
     setLoading(true);
     try {
-      const data = await api.inventory.list();
-      setItems(data);
+      // Sovereign Fetch: Try Network first
+      let data: any[] = [];
+      if (activeRegistry === 'ITEMS') data = await api.inventory.list();
+      else if (activeRegistry === 'CUSTOMERS') data = await api.customers.list();
+      else if (activeRegistry === 'VENDORS') data = await api.vendors.list();
+      
+      if (data.length > 0) {
+        setRegistryData(prev => ({ ...prev, [activeRegistry]: data }));
+        // Sync to idb for offline fallback
+        await offlineService.syncCatalogue(activeRegistry, data);
+      }
     } catch (error) {
-      console.error('[PrimeSetu] Registry fetch failed:', error);
+      console.warn(`[PrimeSetu] Backend unreachable for ${activeRegistry}. Falling back to idb.`);
+      const localData = await offlineService.getCatalogue(activeRegistry);
+      setRegistryData(prev => ({ ...prev, [activeRegistry]: localData }));
     } finally {
       setLoading(false);
     }
   };
 
-  useEffect(() => {
-    const fetchPrediction = async () => {
-      if (!selectedEntity || activeRegistry !== 'ITEMS') return;
-      
-      try {
-        const pred = await api.inventory.getStockPrediction(selectedEntity.id);
-        setMatrix({
-          insights: [
-            { label: 'Days of Cover', value: `${pred.days_of_cover} Days`, trend: pred.status === 'CRITICAL' ? 'down' : 'stable' },
-            { label: 'Avg Daily Sales', value: `${pred.avg_daily_sales} Pcs`, trend: 'none' }
-          ],
-          associations: [
-            { label: 'Suggested Reorder', value: `${pred.suggested_reorder} Units` },
-            { label: 'Current Inventory', value: `${pred.current_stock} Units` },
-            { label: 'Forecast Status', value: pred.status }
-          ]
-        });
-      } catch (error) {
-        // Fallback for demo
-        setMatrix({
-          insights: [
-            { label: 'Days of Cover', value: '14.2 Days', trend: 'stable' },
-            { label: 'Avg Daily Sales', value: '4.2 Pcs', trend: 'none' }
-          ],
-          associations: [
-            { label: 'Suggested Reorder', value: '140 Units' },
-            { label: 'Current Inventory', value: '132 Units' },
-            { label: 'Forecast Status', value: 'HEALTHY' }
-          ]
-        });
-      }
-    };
+  // ── Shoper 9 Analysis Driven Mock Data (Fallback if both fail) ─────────────
+  const displayData = registryData;
 
-    if (selectedEntity && activeRegistry === 'CUSTOMERS') {
-      setMatrix({
-        insights: [
-          { label: 'Purchase Frequency', value: '82%', trend: 'up' },
-          { label: 'Confidence Score', value: '98%', trend: 'stable' }
-        ],
-        associations: [
-          { label: 'Preferred Category', value: 'Footwear' },
-          { label: 'Brand Affinity', value: 'Nike' },
-          { label: 'Last Visited', value: '2 days ago' }
-        ]
-      });
-    } else if (selectedEntity && activeRegistry === 'ITEMS') {
-      fetchPrediction();
-    } else {
-      setMatrix(null);
-    }
-  }, [selectedEntity, activeRegistry]);
-
-  const registries = [
-    { id: 'ITEMS', icon: Package, label: 'Items & Matrix', count: 1240 },
-    { id: 'CUSTOMERS', icon: Users, label: 'Customer Base', count: 8420 },
-    { id: 'VENDORS', icon: Truck, label: 'Vendor Network', count: 124 },
-    { id: 'PERSONNEL', icon: UserSquare2, label: 'Sales Personnel', count: 42 },
-    { id: 'SYSTEM', icon: Layers, label: 'System Lookups', count: 15 },
-  ];
-
-  // Dummy data for other registries
-  const displayData = {
-    ITEMS: items.length > 0 ? items : [
-      { id: '1', code: 'NEX-SH-001', name: 'Puma RS-X Gradient', stock: 132, price: 7999, velocity: 'High' },
-      { id: '2', code: 'NEX-SH-042', name: 'Nike Air Max 270', stock: 54, price: 12999, velocity: 'Medium' },
-    ],
-    CUSTOMERS: [
-      { id: 'c1', name: 'Amit Sharma', mobile: '9845012345', points: 1240, status: 'Elite' },
-      { id: 'c2', name: 'Priya Verma', mobile: '9123456789', points: 450, status: 'Regular' },
-    ],
-    VENDORS: [
-      { id: 'v1', name: 'Puma India', code: 'VEN-001', pending_po: 3, terms: 'Net-30' },
-    ],
-    PERSONNEL: [
-      { id: 's1', name: 'Rajesh Kumar', code: 'SP-01', target: '₹2.5L', achieved: '₹1.8L' },
-    ],
-    SYSTEM: [
-      { id: 'l1', name: 'Size Group: Footwear (UK)', category: 'Sizes', values: '6, 7, 8, 9, 10, 11' },
-      { id: 'l2', name: 'Tax: GST 18%', category: 'Tax', values: 'SGST 9%, CGST 9%' },
-    ]
-  };
+  const filteredData = displayData[activeRegistry].filter(item => 
+    item.name.toLowerCase().includes(search.toLowerCase()) || 
+    item.code?.toLowerCase().includes(search.toLowerCase()) ||
+    item.mobile?.includes(search)
+  );
 
   return (
-    <div className="flex flex-col gap-6 animate-in fade-in duration-500">
-      {/* Smart Command Header */}
-      <div className="glass p-8 rounded-[2.5rem] shadow-2xl relative overflow-hidden">
-        <div className="absolute top-0 right-0 w-64 h-64 bg-gold/5 blur-[100px] rounded-full"></div>
-        
-        <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-6 relative z-10">
+    <div className="flex flex-col gap-8 animate-in fade-in duration-700">
+      
+      {/* Sovereign Command Header */}
+      <div className="glass p-10 rounded-[3.5rem] shadow-2xl relative overflow-hidden">
+        <div className="absolute top-0 right-0 w-80 h-80 bg-gold/5 blur-[120px] rounded-full"></div>
+        <div className="flex flex-col lg:flex-row justify-between items-start lg:items-center gap-8 relative z-10">
           <div>
-            <h1 className="text-3xl font-serif font-black text-navy">Master Registry</h1>
-            <p className="text-[10px] text-muted font-bold uppercase tracking-[0.2em] mt-1">Unified Sovereign Catalogue Engine</p>
+            <div className="flex items-center gap-3 mb-2">
+               <div className="px-3 py-1 bg-navy text-gold text-[9px] font-black uppercase tracking-widest rounded-md">Master Catalogue</div>
+               <div className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></div>
+            </div>
+            <h1 className="text-4xl font-serif font-black text-navy uppercase tracking-tight">Sovereign Registry</h1>
+            <p className="text-xs text-muted font-bold uppercase tracking-widest mt-2 flex items-center gap-2 italic">
+               <Globe className="w-3.5 h-3.5 text-emerald-500" /> Deep Analysis Mapping: Shoper 9 Protocol
+            </p>
           </div>
           
-          <div className="flex-1 max-w-2xl w-full relative">
-            <Search className="absolute left-6 top-1/2 -translate-y-1/2 w-5 h-5 text-muted/50" />
-            <input 
-              type="text" 
-              placeholder={`Search ${activeRegistry.toLowerCase()} or use commands (e.g. "new item", "tax config")...`}
-              value={search}
-              onChange={(e) => setSearch(e.target.value)}
-              className="w-full bg-cream/30 border border-border/50 rounded-2xl pl-16 pr-6 py-5 text-sm font-bold focus:border-gold focus:bg-white outline-none transition-all shadow-inner"
-            />
-            <div className="absolute right-4 top-1/2 -translate-y-1/2 flex gap-2">
-              <kbd className="px-2 py-1 bg-navy/5 rounded-md text-[10px] font-black text-navy/40">CTRL</kbd>
-              <kbd className="px-2 py-1 bg-navy/5 rounded-md text-[10px] font-black text-navy/40">K</kbd>
-            </div>
+          <div className="flex-1 max-w-2xl w-full relative group">
+            <Search className="absolute left-6 top-1/2 -translate-y-1/2 w-5 h-5 text-muted group-hover:text-gold transition-colors" />
+            <input type="text" placeholder={`Deep search in ${activeRegistry.toLowerCase()} registry...`}
+              value={search} onChange={(e) => setSearch(e.target.value)}
+              className="w-full bg-white/50 border border-gray-100 rounded-[2rem] pl-16 pr-6 py-6 text-sm font-bold focus:border-gold focus:bg-white outline-none transition-all shadow-inner" />
           </div>
 
-          <button className="bg-navy text-white px-8 py-5 rounded-2xl font-black text-xs tracking-widest hover:bg-navy/90 transition-all shadow-xl flex items-center gap-3">
-            <Plus className="w-4 h-4 text-gold" />
-            ADD NEW
+          <button className="bg-navy text-white px-10 py-6 rounded-3xl font-black text-xs tracking-[0.2em] hover:bg-gold hover:text-navy transition-all shadow-2xl flex items-center gap-4 group">
+            <Plus className="w-5 h-5 text-gold group-hover:text-navy" />
+            CREATE MASTER
           </button>
         </div>
       </div>
 
-      <div className="flex gap-8 h-[calc(100vh-280px)]">
-        {/* Registry Sidebar */}
-        <aside className="w-72 flex flex-col gap-3">
+      <div className="flex gap-10 h-[calc(100vh-320px)]">
+        {/* Registry Selection Rail */}
+        <aside className="w-80 flex flex-col gap-4">
           {registries.map((reg) => (
-            <button
-              key={reg.id}
-              onClick={() => setActiveRegistry(reg.id as RegistryType)}
-              className={`p-6 rounded-[2rem] flex flex-col gap-4 transition-all duration-500 text-left border ${
-                activeRegistry === reg.id 
-                ? 'bg-navy text-white shadow-2xl shadow-navy/20 border-navy' 
-                : 'bg-white border-border/50 hover:border-gold/50 group'
-              }`}
-            >
+            <button key={reg.id} onClick={() => { setActiveRegistry(reg.id as RegistryType); setSelectedEntity(null); }}
+              className={`p-6 rounded-[2.5rem] flex flex-col gap-4 transition-all duration-500 text-left border-2 ${
+                activeRegistry === reg.id ? 'bg-navy border-navy text-white shadow-2xl scale-105' : 'bg-white border-transparent text-gray-400 hover:border-gray-100 hover:bg-cream/20'
+              }`}>
               <div className="flex justify-between items-start">
-                <div className={`p-3 rounded-xl ${activeRegistry === reg.id ? 'bg-gold/10' : 'bg-cream'}`}>
-                  <reg.icon className={`w-6 h-6 ${activeRegistry === reg.id ? 'text-gold' : 'text-navy group-hover:text-gold transition-colors'}`} />
+                <div className={`p-4 rounded-2xl ${activeRegistry === reg.id ? 'bg-gold/10 text-gold' : 'bg-gray-50 text-gray-400'}`}>
+                   <reg.icon size={24} />
                 </div>
-                <span className={`text-[10px] font-black tracking-widest ${activeRegistry === reg.id ? 'text-gold' : 'text-muted'}`}>
-                  {reg.count}
-                </span>
+                <div className={`text-[10px] font-black px-3 py-1 rounded-full ${activeRegistry === reg.id ? 'bg-white/10 text-gold' : 'bg-gray-100'}`}>{reg.count}</div>
               </div>
               <div>
-                <h3 className="font-serif font-black text-lg">{reg.label}</h3>
-                <p className={`text-[9px] font-bold uppercase tracking-widest ${activeRegistry === reg.id ? 'text-white/40' : 'text-muted'}`}>
-                  Manage Registry Data
-                </p>
+                <h3 className="font-serif font-black text-xl tracking-tight">{reg.label}</h3>
+                <p className={`text-[9px] font-black uppercase tracking-widest mt-1 ${activeRegistry === reg.id ? 'text-white/40' : 'text-muted'}`}>Shoper Protocol Registry</p>
               </div>
             </button>
           ))}
-
-          <div className="mt-auto glass p-6 rounded-[2rem] bg-gold/5 border-gold/10">
-            <div className="flex items-center gap-3 mb-3">
-              <Zap className="w-4 h-4 text-gold fill-gold" />
-              <span className="text-[10px] font-black text-navy uppercase tracking-widest">AI Audit</span>
-            </div>
-            <p className="text-[10px] text-navy/60 font-medium leading-relaxed">
-              Detected 12 duplicate customers and 4 missing HSN codes.
-            </p>
-            <button className="mt-4 text-[10px] font-black text-gold uppercase tracking-widest flex items-center gap-2 hover:gap-3 transition-all">
-              Clean Registry <ArrowRight className="w-3 h-3" />
-            </button>
-          </div>
         </aside>
 
-        {/* Registry Content Area */}
-        <main className="flex-1 glass rounded-[3rem] shadow-2xl flex flex-col overflow-hidden">
-          <div className="bg-navy px-10 py-6 flex items-center justify-between">
-            <div className="flex items-center gap-4">
-              <div className="w-2 h-2 rounded-full bg-gold animate-pulse"></div>
-              <h2 className="text-white font-serif font-black text-xl">{registries.find(r => r.id === activeRegistry)?.label}</h2>
-            </div>
-            <div className="flex gap-4">
-              <button className="p-2.5 bg-white/5 rounded-xl hover:bg-white/10 text-white/60 transition-all">
-                <Filter className="w-4 h-4" />
-              </button>
-              <button className="p-2.5 bg-white/5 rounded-xl hover:bg-white/10 text-white/60 transition-all">
-                <BarChart3 className="w-4 h-4" />
-              </button>
-            </div>
+        {/* Dynamic Registry Table */}
+        <main className="flex-1 glass rounded-[3.5rem] shadow-2xl flex flex-col overflow-hidden relative">
+          <div className="bg-navy px-10 py-8 flex items-center justify-between border-b border-white/5">
+             <div className="flex items-center gap-4">
+                <div className="w-12 h-12 bg-white/5 rounded-2xl flex items-center justify-center text-gold">
+                   {registries.find(r => r.id === activeRegistry)?.icon && React.createElement(registries.find(r => r.id === activeRegistry)!.icon, { size: 24 })}
+                </div>
+                <div>
+                   <h2 className="text-white font-serif font-black text-2xl uppercase tracking-tight">{activeRegistry} Catalogue</h2>
+                   <p className="text-[10px] text-white/40 font-black uppercase tracking-widest">Viewing Record Buffer</p>
+                </div>
+             </div>
+             <div className="flex gap-4">
+                <button className="p-4 bg-white/5 rounded-2xl hover:bg-white/10 text-white/60 transition-all"><Filter size={20} /></button>
+                <button className="p-4 bg-white/5 rounded-2xl hover:bg-white/10 text-white/60 transition-all"><Settings2 size={20} /></button>
+             </div>
           </div>
 
-          <div className="flex-1 overflow-auto p-2">
-            <table className="w-full">
-              <thead className="sticky top-0 bg-white/80 backdrop-blur-md text-[10px] uppercase font-black tracking-widest text-muted border-b border-border/50 z-10">
-                <tr>
-                  <th className="pl-10 py-6 text-left">Code / Identifier</th>
-                  <th className="px-6 py-6 text-left">Name / Description</th>
-                  <th className="px-6 py-6 text-right">Primary Attribute</th>
-                  <th className="px-6 py-6 text-center">Status</th>
-                  <th className="pr-10 py-6"></th>
-                </tr>
-              </thead>
-              <tbody className="divide-y divide-border/30">
-                {displayData[activeRegistry].map((item) => (
-                  <tr 
-                    key={item.id} 
-                    onClick={() => setSelectedEntity(item as RegistryEntity)}
-                    className={`group cursor-pointer transition-all ${selectedEntity?.id === item.id ? 'bg-gold/5' : 'hover:bg-cream/30'}`}
-                  >
-                    <td className="pl-10 py-8">
-                      <span className="text-[10px] font-black text-muted uppercase tracking-tighter bg-cream px-3 py-1.5 rounded-lg">
-                        {item.code || item.mobile || item.category}
-                      </span>
-                    </td>
-                    <td className="px-6 py-8">
-                      <div className="font-black text-navy text-lg group-hover:text-gold transition-colors">{item.name}</div>
-                      <div className="text-[10px] text-muted font-bold uppercase tracking-widest mt-1">Updated 2 days ago</div>
-                    </td>
-                    <td className="px-6 py-8 text-right">
-                      <div className="font-black text-navy">
-                        {item.price ? `₹${item.price}` : item.points ? `${item.points} Pts` : item.values || item.achieved}
-                      </div>
-                      <div className="text-[9px] text-muted font-bold uppercase tracking-widest mt-1">
-                        {item.stock ? `Stock: ${item.stock}` : item.status ? `Tier: ${item.status}` : 'Current Value'}
-                      </div>
-                    </td>
-                    <td className="px-6 py-8 text-center">
-                      <span className={`px-4 py-2 rounded-full text-[9px] font-black uppercase tracking-widest ${
-                        item.velocity === 'High' || item.status === 'Elite' ? 'bg-emerald-50 text-emerald-600' : 'bg-gold/10 text-gold'
-                      }`}>
-                        {item.velocity || item.status || item.terms || 'Active'}
-                      </span>
-                    </td>
-                    <td className="pr-10 py-8 text-right">
-                      <button className="p-2 rounded-lg hover:bg-navy/5 text-muted opacity-0 group-hover:opacity-100 transition-all">
-                        <MoreVertical className="w-5 h-5" />
-                      </button>
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
+          <div className="flex-1 overflow-auto">
+             <table className="w-full text-left">
+                <thead className="sticky top-0 bg-white/95 backdrop-blur-md text-[10px] font-black uppercase tracking-widest text-gray-400 border-b border-gray-100 z-10">
+                   <tr>
+                      <th className="pl-12 py-6">ID / Code</th>
+                      <th className="px-6 py-6">Master Name</th>
+                      <th className="px-6 py-6 text-right">Primary DNA</th>
+                      <th className="px-6 py-6 text-center">Protocol Status</th>
+                      <th className="pr-12 py-6"></th>
+                   </tr>
+                </thead>
+                <tbody className="divide-y divide-gray-50">
+                   {filteredData.map(item => (
+                     <tr key={item.id} onClick={() => setSelectedEntity(item)}
+                       className={`group cursor-pointer transition-all ${selectedEntity?.id === item.id ? 'bg-gold/5' : 'hover:bg-cream/10'}`}>
+                        <td className="pl-12 py-8">
+                           <span className="font-mono text-[11px] font-black text-navy px-4 py-2 bg-gray-100 rounded-xl group-hover:bg-white transition-all">
+                              {item.code || item.mobile}
+                           </span>
+                        </td>
+                        <td className="px-6 py-8">
+                           <div className="text-lg font-black text-navy group-hover:text-gold transition-colors">{item.name}</div>
+                           <div className="text-[10px] font-black text-muted uppercase tracking-widest mt-1">
+                              {item.category || item.loyalty_tier || item.tax_behavior} Registry
+                           </div>
+                        </td>
+                        <td className="px-6 py-8 text-right">
+                           <div className="text-lg font-black text-navy">
+                              {item.price ? `₹${item.price.toLocaleString()}` : item.points ? `${item.points} Pts` : item.terms}
+                           </div>
+                           <div className="text-[10px] font-bold text-muted uppercase tracking-widest mt-1">
+                              {item.stock !== undefined ? `In-Stock: ${item.stock}` : item.tax_type || item.category || 'Standard Value'}
+                           </div>
+                        </td>
+                        <td className="px-6 py-8 text-center">
+                           <div className="flex items-center justify-center gap-2">
+                              <ShieldCheck className="w-4 h-4 text-emerald-500" />
+                              <span className="text-[10px] font-black uppercase tracking-widest text-emerald-600">Verified</span>
+                           </div>
+                        </td>
+                        <td className="pr-12 py-8 text-right">
+                           <button className="p-3 text-gray-300 hover:text-navy transition-all"><MoreVertical size={20} /></button>
+                        </td>
+                     </tr>
+                   ))}
+                </tbody>
+             </table>
           </div>
         </main>
 
-        {/* Smart Relationship Matrix */}
+        {/* Sovereign Relationship Matrix (Side Panel) */}
         <AnimatePresence>
           {selectedEntity && (
-            <motion.aside 
-              initial={{ x: 300, opacity: 0 }}
-              animate={{ x: 0, opacity: 1 }}
-              exit={{ x: 300, opacity: 0 }}
-              className="w-96 glass rounded-[3rem] shadow-2xl p-8 border-l border-gold/10 bg-white/80"
-            >
-              <div className="flex justify-between items-start mb-8">
-                <div className="p-4 bg-navy rounded-2xl">
-                  <Zap className="w-6 h-6 text-gold" />
-                </div>
-                <button 
-                  onClick={() => setSelectedEntity(null)}
-                  className="text-[10px] font-black text-muted uppercase tracking-widest hover:text-navy transition-colors"
-                >
-                  Close
-                </button>
+            <motion.aside initial={{ x: 400, opacity: 0 }} animate={{ x: 0, opacity: 1 }} exit={{ x: 400, opacity: 0 }}
+              className="w-[450px] glass rounded-[3.5rem] shadow-2xl flex flex-col overflow-hidden border-l border-white/20">
+              
+              <div className="bg-navy p-10 text-white relative overflow-hidden">
+                 <div className="absolute top-0 right-0 p-10 opacity-10"><Zap size={120} strokeWidth={0.5} /></div>
+                 <button onClick={() => setSelectedEntity(null)} className="absolute top-8 right-8 p-3 bg-white/5 rounded-xl hover:bg-white/10 transition-all text-white/40"><X size={20} /></button>
+                 
+                 <div className="p-4 bg-gold text-navy rounded-2xl w-14 h-14 flex items-center justify-center mb-6 shadow-2xl shadow-gold/20">
+                    <Zap size={28} />
+                 </div>
+                 <h2 className="text-3xl font-serif font-black uppercase leading-tight">{selectedEntity.name}</h2>
+                 <p className="text-[10px] font-black text-gold uppercase tracking-[0.3em] mt-3">Sovereign Matrix Entry</p>
               </div>
 
-              <h2 className="text-2xl font-serif font-black text-navy mb-1">{selectedEntity.name}</h2>
-              <p className="text-[10px] text-muted font-bold uppercase tracking-[0.2em] mb-10">Relationship Matrix</p>
+              <div className="flex-1 overflow-auto p-10 space-y-10">
+                 
+                 {/* Identity DNA */}
+                 <section className="space-y-4">
+                    <h4 className="text-[10px] font-black text-navy/30 uppercase tracking-[0.2em] flex items-center gap-2">
+                       <ShieldCheck size={14} /> Identity DNA
+                    </h4>
+                    <div className="grid grid-cols-2 gap-4">
+                       {[
+                         { label: 'Code', value: selectedEntity.code || 'N/A', icon: Info },
+                         { label: 'Category', value: selectedEntity.category || activeRegistry, icon: Layers },
+                         { label: 'Mobile', value: selectedEntity.mobile || 'Private', icon: Smartphone },
+                         { label: 'Tax Map', value: selectedEntity.tax_type || selectedEntity.tax_behavior || 'Local-Incl', icon: Percent },
+                       ].map(dna => (
+                         <div key={dna.label} className="bg-gray-50 p-5 rounded-3xl border border-gray-100 group hover:border-gold/30 transition-all">
+                            <div className="flex items-center gap-3 mb-2">
+                               <dna.icon size={12} className="text-muted" />
+                               <span className="text-[9px] font-black text-muted uppercase tracking-widest">{dna.label}</span>
+                            </div>
+                            <div className="text-sm font-black text-navy truncate">{dna.value}</div>
+                         </div>
+                       ))}
+                    </div>
+                 </section>
 
-              <div className="space-y-8">
-                <div className="space-y-4">
-                  <h3 className="text-[10px] font-black text-navy/40 uppercase tracking-widest">Key Insights</h3>
-                  <div className="grid grid-cols-2 gap-4">
-                    {matrix?.insights.map((insight: any, i: number) => (
-                      <div key={i} className="bg-cream p-4 rounded-2xl border border-border/50">
-                        <div className="text-xs font-black text-navy mb-1">{insight.value}</div>
-                        <div className="text-[9px] text-muted font-bold uppercase">{insight.label}</div>
-                      </div>
-                    ))}
-                  </div>
-                </div>
+                 {/* Shoper 9 Deep Mapping (Context Dependent) */}
+                 <section className="space-y-4">
+                    <h4 className="text-[10px] font-black text-navy/30 uppercase tracking-[0.2em] flex items-center gap-2">
+                       <Zap size={14} /> Shoper 9 Protocols
+                    </h4>
+                    <div className="bg-white rounded-3xl border border-gray-100 p-6 shadow-sm space-y-6">
+                       {activeRegistry === 'CUSTOMERS' && (
+                         <>
+                            <div className="flex justify-between items-center pb-4 border-b border-gray-50">
+                               <div className="flex items-center gap-3"><Calendar size={16} className="text-rose-500" /><span className="text-[11px] font-bold text-navy">Birthday / Anniv</span></div>
+                               <span className="text-xs font-black text-rose-500 uppercase">{selectedEntity.dob || 'NOT SET'}</span>
+                            </div>
+                            <div className="flex justify-between items-center pb-4 border-b border-gray-50 text-indigo-600">
+                               <div className="flex items-center gap-3"><Users size={16} /><span className="text-[11px] font-bold">Class 1 (Religion)</span></div>
+                               <span className="text-xs font-black uppercase">{selectedEntity.class_1 || 'General'}</span>
+                            </div>
+                            <div className="flex justify-between items-center">
+                               <div className="flex items-center gap-3 text-indigo-600"><Users size={16} /><span className="text-[11px] font-bold">Class 2 (Age)</span></div>
+                               <span className="text-xs font-black uppercase">{selectedEntity.class_2 || 'All'}</span>
+                            </div>
+                         </>
+                       )}
+                       {activeRegistry === 'VENDORS' && (
+                         <>
+                            <div className="flex justify-between items-center pb-4 border-b border-gray-50">
+                               <div className="flex items-center gap-3"><Percent size={16} className="text-amber-500" /><span className="text-[11px] font-bold text-navy">Tax Behavior</span></div>
+                               <span className="text-xs font-black text-amber-500 uppercase">{selectedEntity.tax_behavior}</span>
+                            </div>
+                            <div className="flex justify-between items-center">
+                               <div className="flex items-center gap-3 text-emerald-600"><Truck size={16} /><span className="text-[11px] font-bold">Partial Supply PO</span></div>
+                               <span className="text-xs font-black uppercase">{selectedEntity.partial_supply ? 'ALLOWED' : 'RESTRICTED'}</span>
+                            </div>
+                         </>
+                       )}
+                       {activeRegistry === 'ITEMS' && (
+                         <>
+                            <div className="flex justify-between items-center pb-4 border-b border-gray-50">
+                               <div className="flex items-center gap-3"><Package size={16} className="text-indigo-500" /><span className="text-[11px] font-bold text-navy">HSN / SAC Code</span></div>
+                               <span className="text-xs font-black text-indigo-500 uppercase">{selectedEntity.hsn}</span>
+                            </div>
+                            <div className="flex justify-between items-center">
+                               <div className="flex items-center gap-3 text-indigo-600"><Layers size={16} /><span className="text-[11px] font-bold">Size Mapping Group</span></div>
+                               <span className="text-xs font-black uppercase">{selectedEntity.size_group}</span>
+                            </div>
+                         </>
+                       )}
+                    </div>
+                 </section>
 
-                <div className="space-y-4">
-                  <h3 className="text-[10px] font-black text-navy/40 uppercase tracking-widest">Associations</h3>
-                  <div className="space-y-3">
-                    {matrix?.associations.map((assoc: any, i: number) => (
-                      <div key={i} className="flex items-center gap-4 group">
-                        <div className="w-1.5 h-1.5 rounded-full bg-gold"></div>
-                        <div className="flex-1">
-                          <div className="text-xs font-bold text-navy group-hover:text-gold transition-colors">{assoc.label}</div>
-                          <div className="text-[9px] text-muted">{assoc.value}</div>
-                        </div>
-                        <ArrowRight className="w-4 h-4 text-muted group-hover:text-gold group-hover:translate-x-1 transition-all" />
-                      </div>
-                    ))}
-                  </div>
-                </div>
-
-                <div className="pt-6 border-t border-border/50">
-                  <button className="w-full bg-navy text-white py-4 rounded-2xl font-black text-[10px] uppercase tracking-[0.2em] hover:bg-navy/90 transition-all flex items-center justify-center gap-3">
-                    VIEW FULL PROFILE
-                  </button>
-                </div>
+                 {/* Action Intelligence */}
+                 <div className="grid grid-cols-2 gap-4 pt-6 border-t border-gray-100">
+                    <button className="flex flex-col items-center justify-center gap-2 p-6 bg-gray-50 rounded-3xl hover:bg-gold hover:text-navy transition-all group">
+                       <History className="w-6 h-6 text-muted group-hover:text-navy" />
+                       <span className="text-[9px] font-black uppercase tracking-widest">Transaction History</span>
+                    </button>
+                    <button className="flex flex-col items-center justify-center gap-2 p-6 bg-navy text-white rounded-3xl hover:shadow-2xl hover:scale-105 transition-all">
+                       <Settings2 className="w-6 h-6 text-gold" />
+                       <span className="text-[9px] font-black uppercase tracking-widest">Modify Master</span>
+                    </button>
+                 </div>
               </div>
             </motion.aside>
           )}

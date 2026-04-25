@@ -10,6 +10,7 @@ import { api } from '@/api/client';
 
 interface Props {
   onClose: () => void;
+  onReturn: (bill: any) => void;
 }
 
 export default function ReturnsDrawer({ onClose }: Props) {
@@ -49,10 +50,21 @@ export default function ReturnsDrawer({ onClose }: Props) {
   };
 
   const handleIssueCreditNote = () => {
-    if (!selectedItems.length) return;
+    if (!selectedItems.length || !bill) return;
     const value = selectedItems.reduce((acc, item) => acc + (item.qty * item.unit_price * (1 - item.discount_per / 100)), 0);
-    const cn_id = `CN-${Math.floor(Math.random() * 100000)}`;
-    alert(`CREDIT NOTE GENERATED!\n\nID: ${cn_id}\nValue: ₹${value.toFixed(2)}\nCustomer: ${bill?.customer_mobile}\n\nPrint this receipt and hand it to the customer.`);
+    
+    // Construct Return Bill Object for Printing
+    const returnBill = {
+      ...bill,
+      type: 'Return',
+      bill_number: `CN-${bill.bill_number}`,
+      original_bill_no: bill.bill_number,
+      items: selectedItems.map(item => ({ ...item })), // Pass items as they are, CreditNoteA4 handles the '-' display
+      total: value,
+      return_reason: 'Size/Quality Return'
+    };
+
+    onReturn(returnBill);
     onClose();
   };
 

@@ -156,7 +156,32 @@ export default function ConfigModule() {
       {activeSubTab === 'tax' && <TaxMaster onClose={() => setActiveSubTab('params')} />}
       
       {activeSubTab === 'integrations' && (
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-10">
+        <div className="space-y-10">
+          <div className="glass rounded-[3rem] p-12 shadow-2xl relative overflow-hidden border-b-8 border-b-navy">
+             <div className="flex justify-between items-start mb-10">
+                <div>
+                   <h3 className="text-2xl font-serif font-black text-navy mb-2">Sovereign Store Identity</h3>
+                   <p className="text-xs text-muted font-bold uppercase tracking-widest italic">PST Node PST-X01 Active</p>
+                </div>
+                <div className="px-4 py-2 bg-emerald-50 text-emerald-700 text-[9px] font-black uppercase rounded-lg border border-emerald-100">Verified Identity</div>
+             </div>
+             
+             <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <div className="space-y-2">
+                   <label className="text-[10px] font-black text-navy uppercase tracking-widest ml-2">Store ID</label>
+                   <input defaultValue="ST-001" className="w-full bg-cream/30 border border-border rounded-2xl p-5 text-sm font-black outline-none focus:border-navy" />
+                </div>
+                <div className="space-y-2">
+                   <label className="text-[10px] font-black text-navy uppercase tracking-widest ml-2">Site Code</label>
+                   <input defaultValue="SITE-BANGALORE-MAIN" className="w-full bg-cream/30 border border-border rounded-2xl p-5 text-sm font-black outline-none focus:border-navy" />
+                </div>
+                <div className="flex items-end pb-1">
+                   <button className="w-full bg-navy text-white p-5 rounded-2xl text-[10px] font-black uppercase tracking-widest hover:bg-gold hover:text-navy transition-all shadow-xl">Update Node Config</button>
+                </div>
+             </div>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-10">
           <div className="glass rounded-[3rem] p-12 shadow-2xl relative overflow-hidden border-b-8 border-b-emerald-500">
             <div className="text-4xl mb-6">📊</div>
             <h3 className="text-2xl font-serif font-black text-navy mb-4">Tally.ERP 9 Bridge</h3>
@@ -210,6 +235,7 @@ export default function ConfigModule() {
               UPLOAD PDT (.CSV)
             </label>
           </div>
+        </div>
         </div>
       )}
     </div>

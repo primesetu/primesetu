@@ -84,6 +84,16 @@ export default function InventoryModule() {
     setTransferData({ id: '', qty: 0 })
   }
 
+  const filteredItems = items.filter(i => {
+    const matchesSearch = i.name.toLowerCase().includes(search.toLowerCase()) || 
+                         i.code.toLowerCase().includes(search.toLowerCase()) ||
+                         i.brand.toLowerCase().includes(search.toLowerCase())
+    
+    if (filter === 'LOW STOCK') return matchesSearch && (i.wh1_qty + i.x01_qty < i.min_stock)
+    if (filter === 'ALL') return matchesSearch
+    return matchesSearch && i.category.toUpperCase() === filter.toUpperCase()
+  })
+
   return (
     <div className="flex flex-col gap-8 animate-in fade-in slide-in-from-bottom-4 duration-700 relative">
       {/* Bulk Importer Overlay */}
@@ -241,7 +251,7 @@ export default function InventoryModule() {
               </tr>
             </thead>
             <tbody className="divide-y divide-border/50">
-              {items.map((item) => {
+              {filteredItems.map((item) => {
                 const total = item.wh1_qty + item.x01_qty
                 const isLow = total < item.min_stock
                 return (

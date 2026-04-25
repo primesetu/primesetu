@@ -60,7 +60,7 @@ export default function TransactionsModule() {
                     type="text" 
                     value={searchInvoice}
                     onChange={(e) => setSearchInvoice(e.target.value)}
-                    placeholder="e.g. RET-10245"
+                    placeholder="INV NO / MOBILE NO (e.g. 98765...)"
                     className="flex-1 bg-cream/30 border-4 border-navy/5 rounded-[2rem] px-10 py-6 text-2xl font-black text-navy outline-none focus:border-gold transition-all"
                   />
                   <button 

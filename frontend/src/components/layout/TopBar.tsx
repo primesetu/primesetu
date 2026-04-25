@@ -19,9 +19,16 @@ interface TopBarProps {
   userRole?: string;
   nodeType?: 'RETAIL' | 'HO' | 'WAREHOUSE';
   setNodeType?: (type: 'RETAIL' | 'HO' | 'WAREHOUSE') => void;
+  setIsCommandBarOpen?: (val: boolean) => void;
 }
 
-export default function TopBar({ activeTab, userRole = 'CASHIER', nodeType = 'RETAIL', setNodeType }: TopBarProps) {
+export default function TopBar({ 
+  activeTab, 
+  userRole = 'CASHIER', 
+  nodeType = 'RETAIL', 
+  setNodeType,
+  setIsCommandBarOpen
+}: TopBarProps) {
   const { findModule } = useMenu();
   const activeModule = findModule(activeTab);
   
@@ -61,9 +68,12 @@ export default function TopBar({ activeTab, userRole = 'CASHIER', nodeType = 'RE
         </div>
       )}
 
-      <div className="search flex items-center gap-2 bg-cream border border-border rounded-lg p-[7px_12px] text-[12px] text-muted w-[210px] cursor-pointer hover:border-saffron transition-all">
+      <div 
+        onClick={() => setIsCommandBarOpen?.(true)}
+        className="search flex items-center gap-2 bg-cream border border-border rounded-lg p-[7px_12px] text-[12px] text-muted w-[210px] cursor-pointer hover:border-saffron transition-all"
+      >
         <Search className="w-3.5 h-3.5" />
-        <span>Search SKU, invoice…</span>
+        <span>Global Search... <span className="ml-2 opacity-30 text-[10px]">F3</span></span>
       </div>
 
       <div className="relative group">

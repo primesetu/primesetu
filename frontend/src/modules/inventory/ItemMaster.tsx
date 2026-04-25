@@ -280,7 +280,11 @@ export default function ItemMaster() {
       </button>
     )
     if (fld.type === 'select') return (
-      <select value={form[fld.key]||''} onChange={e => setField(fld.key, e.target.value)}
+      <select 
+        id={fld.key}
+        name={fld.key}
+        value={form[fld.key]||''} 
+        onChange={e => setField(fld.key, e.target.value)}
         className={`w-full border-2 rounded-xl px-3 py-2.5 text-sm outline-none transition-all ${err ? 'border-red-300 bg-red-50' : 'border-gray-200 focus:border-amber-400'}`}>
         <option value="">— Select —</option>
         {(fld.options||[]).map(o => <option key={o}>{o}</option>)}
@@ -289,8 +293,21 @@ export default function ItemMaster() {
       </select>
     )
     return (
-      <input type={fld.type === 'number' ? 'number' : 'text'} value={form[fld.key]??''} onChange={e => setField(fld.key, e.target.value)}
-        className={`w-full border-2 rounded-xl px-3 py-2.5 text-sm outline-none transition-all ${err ? 'border-red-300 bg-red-50' : 'border-gray-200 focus:border-amber-400'}`}/>
+      <div className="relative group/field">
+        <input 
+          id={fld.key}
+          name={fld.key}
+          type={fld.type === 'number' ? 'number' : 'text'} 
+          value={form[fld.key]??''} 
+          onChange={e => setField(fld.key, e.target.value)}
+          className={`w-full border-2 rounded-xl pl-3 pr-10 py-2.5 text-sm outline-none transition-all ${err ? 'border-red-300 bg-red-50' : 'border-gray-200 focus:border-amber-400'}`}/>
+        <button 
+          onClick={() => { document.getElementById(fld.key)?.focus(); window.dispatchEvent(new KeyboardEvent('keydown', { key: 'f2', bubbles: true })) }}
+          className="absolute right-2 top-1/2 -translate-y-1/2 p-1.5 hover:bg-amber-100 rounded-lg text-amber-500 opacity-0 group-hover/field:opacity-100 focus-within:opacity-100 transition-all"
+        >
+          <Search className="w-3.5 h-3.5" />
+        </button>
+      </div>
     )
   }
 
@@ -312,15 +329,32 @@ export default function ItemMaster() {
       </button>
     )
     if (cf.type === 'select') return (
-      <select value={val||''} onChange={e => setField(cf.id, e.target.value)}
+      <select 
+        id={cf.id}
+        name={cf.id}
+        value={val||''} 
+        onChange={e => setField(cf.id, e.target.value)}
         className={`w-full border-2 rounded-xl px-3 py-2.5 text-sm outline-none transition-all ${errors[cf.id] ? 'border-red-300 bg-red-50' : 'border-gray-200 focus:border-amber-400'}`}>
         <option value="">— Select —</option>
         {cf.options.map(o => <option key={o}>{o}</option>)}
       </select>
     )
     return (
-      <input type={cf.type==='number' ? 'number' : 'text'} value={val ?? ''} onChange={e => setField(cf.id, e.target.value)}
-        className={`w-full border-2 rounded-xl px-3 py-2.5 text-sm outline-none transition-all ${errors[cf.id] ? 'border-red-300 bg-red-50' : 'border-gray-200 focus:border-amber-400'}`}/>
+      <div className="relative group/field">
+        <input 
+          id={cf.id}
+          name={cf.id}
+          type={cf.type==='number' ? 'number' : 'text'} 
+          value={val ?? ''} 
+          onChange={e => setField(cf.id, e.target.value)}
+          className={`w-full border-2 rounded-xl pl-3 pr-10 py-2.5 text-sm outline-none transition-all ${errors[cf.id] ? 'border-red-300 bg-red-50' : 'border-gray-200 focus:border-amber-400'}`}/>
+        <button 
+          onClick={() => { document.getElementById(cf.id)?.focus(); window.dispatchEvent(new KeyboardEvent('keydown', { key: 'f2', bubbles: true })) }}
+          className="absolute right-2 top-1/2 -translate-y-1/2 p-1.5 hover:bg-amber-100 rounded-lg text-amber-500 opacity-0 group-hover/field:opacity-100 focus-within:opacity-100 transition-all"
+        >
+          <Search className="w-3.5 h-3.5" />
+        </button>
+      </div>
     )
   }
 
@@ -416,7 +450,7 @@ export default function ItemMaster() {
         </button>
         <button onClick={newItem}
           className="flex items-center gap-2 bg-amber-400 hover:bg-amber-500 text-[#1a2340] font-black text-xs uppercase px-4 py-2 rounded-xl shadow-md border-b-2 border-amber-600 transition-all">
-          <Plus className="w-4 h-4"/> Add Item [F3]
+          <Plus className="w-4 h-4"/> Add Item [F4]
         </button>
       </div>
 

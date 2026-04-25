@@ -21,6 +21,7 @@ import {
   RotateCcw,
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
+import { useHotkeys } from 'react-hotkeys-hook';
 
 import { COMPONENT_MAP } from './lib/ModuleRegistry';
 import { useMenu } from './hooks/useMenu';
@@ -44,11 +45,73 @@ const PrimeSetuOS: React.FC = () => {
   const { menu: dynamicMenu, findModule } = useMenu();
   const [isCollapsed, setIsCollapsed] = useState(false);
   const [isCommandBarOpen, setIsCommandBarOpen] = useState(false);
+  const [searchContext, setSearchContext] = useState<string | null>(null);
   const [isOnline, setIsOnline] = useState(navigator.onLine);
   const [pendingSyncs, setPendingSyncs] = useState(0);
   const [user, setUser] = useState<{ name: string, role: string, store_id?: string } | null>(null);
   const [selectedInstance, setSelectedInstance] = useState('X01');
   const [nodeType, setNodeType] = useState<'RETAIL' | 'HO' | 'WAREHOUSE'>('RETAIL');
+
+  // SOVEREIGN SHORTCUT GUARD - Protecting against accidental refresh/loss
+  useEffect(() => {
+    const handleSovereignGuard = (e: KeyboardEvent) => {
+      // Block F5, Ctrl+R, Ctrl+Shift+R (Refresh)
+      if (e.key === 'F5' || (e.ctrlKey && e.key === 'r') || (e.ctrlKey && e.shiftKey && e.key === 'R')) {
+        e.preventDefault();
+        console.log('[PrimeSetu] Sovereign Guard: Blocked accidental refresh.');
+      }
+      
+      // Block Ctrl+W (Close Tab) - Note: Browsers often block this override, but we try
+      if (e.ctrlKey && e.key === 'w') {
+        e.preventDefault();
+      }
+    };
+
+    const handleBeforeUnload = (e: BeforeUnloadEvent) => {
+      // Always warn if in active session
+      e.preventDefault();
+      e.returnValue = ''; // Standard browser warning
+    };
+
+    window.addEventListener('keydown', handleSovereignGuard);
+    window.addEventListener('beforeunload', handleBeforeUnload);
+    return () => {
+      window.removeEventListener('keydown', handleSovereignGuard);
+      window.removeEventListener('beforeunload', handleBeforeUnload);
+    };
+  }, []);
+
+  // CONTEXTUAL ZOOM (F2) - Sovereign Auto-Attach Logic
+  useHotkeys('f2', (e) => {
+    e.preventDefault();
+    const activeEl = document.activeElement as HTMLElement;
+    if (!activeEl || activeEl.tagName !== 'INPUT') return;
+
+    // Smart context detection (Priority: data-f2 > id > name)
+    const context = activeEl.getAttribute('data-f2') || 
+                   activeEl.id || 
+                   activeEl.getAttribute('name');
+
+    if (context) {
+      // Clean up common prefixes/suffixes
+      const cleanContext = context.replace(/input|field|search|-/gi, '').toLowerCase();
+      setSearchContext(cleanContext || 'generic');
+      setIsCommandBarOpen(true);
+    }
+  }, { 
+    enableOnFormTags: true,
+    preventDefault: true 
+  });
+
+  // GLOBAL NAVIGATION (F3 / Ctrl+K)
+  useHotkeys('f3, ctrl+k, cmd+k', (e) => {
+    e.preventDefault();
+    setSearchContext(null);
+    setIsCommandBarOpen(true);
+  }, { 
+    enableOnFormTags: true,
+    preventDefault: true 
+  });
 
   const handleLogin = (role: string) => {
     setActiveTab(role === 'CASHIER' ? 'sales' : 'dashboard');
@@ -81,6 +144,9 @@ const PrimeSetuOS: React.FC = () => {
         });
         if (supaUser.user_metadata?.store_id) setSelectedInstance(supaUser.user_metadata.store_id);
       } else {
+        // SOVEREIGN PURGE: Clear session-specific local data on logout
+        localStorage.removeItem('primesetu_pending_print');
+        localStorage.removeItem('primesetu_last_catalogue_sync');
         setUser(null);
       }
     });
@@ -162,8 +228,12 @@ const PrimeSetuOS: React.FC = () => {
       <div className="main flex-1 ml-[var(--sw)] mr-[var(--fw)] flex flex-col relative transition-all duration-300">
         <CommandBar 
           isOpen={isCommandBarOpen} 
-          onClose={() => setIsCommandBarOpen(false)} 
+          onClose={() => {
+            setIsCommandBarOpen(false);
+            setSearchContext(null);
+          }} 
           onNavigate={(tab) => setActiveTab(tab)}
+          initialContext={searchContext}
         />
         <TopBar 
           activeTab={activeTab} 
@@ -171,6 +241,7 @@ const PrimeSetuOS: React.FC = () => {
           userRole={user?.role}
           nodeType={nodeType}
           setNodeType={setNodeType}
+          setIsCommandBarOpen={setIsCommandBarOpen}
         />
 
         <FunctionBar activeTab={activeTab} />

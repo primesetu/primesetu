@@ -131,12 +131,19 @@ export default function ManagementDashboard() {
           <div className="h-[380px] w-full relative">
             <ResponsiveContainer width="100%" height={380}>
               <LineChart data={salesData}>
+                <defs>
+                  <linearGradient id="colorSales" x1="0" y1="0" x2="0" y2="1">
+                    <stop offset="5%" stopColor="#0D1B3E" stopOpacity={0.1}/>
+                    <stop offset="95%" stopColor="#0D1B3E" stopOpacity={0}/>
+                  </linearGradient>
+                </defs>
                 <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#E8E4DC" />
                 <XAxis dataKey="day" axisLine={false} tickLine={false} tick={{ fontSize: 11, fontWeight: 900, fill: '#8A8FA8' }} />
                 <YAxis hide />
                 <Tooltip 
                    contentStyle={{ borderRadius: '24px', border: 'none', boxShadow: '0 40px 80px rgba(0,0,0,0.15)', padding: '24px', backgroundColor: '#0D1B3E', color: '#fff' }}
                    itemStyle={{ fontSize: '14px', fontWeight: '900', color: '#F9B942' }}
+                   cursor={{ stroke: '#F9B942', strokeWidth: 2, strokeDasharray: '5 5' }}
                 />
                 <Line 
                    type="monotone" 
@@ -145,6 +152,7 @@ export default function ManagementDashboard() {
                    strokeWidth={6} 
                    dot={{ r: 8, fill: '#F9B942', strokeWidth: 5, stroke: '#fff' }}
                    activeDot={{ r: 12, strokeWidth: 0, fill: '#0D1B3E' }}
+                   fill="url(#colorSales)"
                 />
               </LineChart>
             </ResponsiveContainer>

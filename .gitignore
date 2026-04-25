@@ -18,3 +18,5 @@ __pycache__/
 .agents/
 .vscode/
 scratch/
+
+skills/

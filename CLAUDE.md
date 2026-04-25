@@ -30,7 +30,7 @@ Before generating ANY output you MUST:
 | API Phase 2+ | Python 3.12 + FastAPI + SQLAlchemy 2 async |
 | Edge Logic | Supabase Edge Functions (Deno/TypeScript) |
 | AI Pipeline | gap-engine → enforcer → validator → critic → improver → loop |
-| Hosting | Cloudflare Pages + Cloudflare R2 |
+| Hosting | Cloudflare Pages (Frontend) + Render (Backend) |
 | CI/CD | GitHub Actions |
 | IDE | Antigravity VSCode OSS 1.107.0 / Windows 11 |
 

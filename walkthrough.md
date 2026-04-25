@@ -44,6 +44,13 @@ A professional-grade navigation suite was added.
 - **Shortcut**: `Ctrl+K` opens the Sovereign Command Bar.
 - **Functionality**: Fuzzy search for modules and quick-action shortcuts (F1-F10).
 
+## 7. Infrastructure Stability (Phase 6)
+Resolved critical production runtime errors and established a stable hosting architecture.
+- **Backend**: FastAPI migrated to **Render.com** (with Python 3.12.3 pinning and `render.yaml` orchestration).
+- **Frontend**: Hosted on **Cloudflare Pages** with automated CI/CD.
+- **Hydration Fix**: Completely removed `VitePWA` and un-registered legacy Service Workers to solve the persistent `Illegal constructor` error during React hydration.
+- **Security Guard**: Added a robust `MessageChannel` polyfill in `index.html` to handle restricted browser environments (like PWAs or secure corporate proxies).
+
 ---
 
 ### Verification Checklist
@@ -53,3 +60,5 @@ A professional-grade navigation suite was added.
 - [x] DOC calculation updates after stock changes.
 - [x] Sidebar labels update on language switch.
 - [x] Command Bar jump works for all 6 modules.
+- [x] Production Dashboard loads without "Illegal constructor" error.
+- [x] Cross-origin requests succeed between Cloudflare and Render.

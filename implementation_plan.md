@@ -97,6 +97,17 @@
   - Real-time weather/event overlay to explain sales spikes (Phase 5+).
 
 ## 11. Verification Plan (Phase 5)
-- **Test Case 11**: View a product in Registry → Verify "Days of Cover" prediction is displayed.
-- **Test Case 12**: Change system language to "Hindi" → Verify all labels (Billing/Catalogue) update.
-- **Test Case 13**: Perform a high-speed scan → Verify micro-animations are smooth (60fps).
+- [x] **Test Case 11**: View a product in Registry → Verify "Days of Cover" prediction is displayed.
+- [x] **Test Case 12**: Change system language to "Hindi" → Verify all labels (Billing/Catalogue) update.
+- [x] **Test Case 13**: Perform a high-speed scan → Verify micro-animations are smooth (60fps).
+
+## 12. Phase 6 — Infrastructure Stability & Production Deployment (COMPLETED)
+- **Objective**: Stabilize the production environment and resolve runtime hydration/constructor errors.
+- **Backend Migration**: Moved from local tunnels to **Render.com** (Stable FastAPI hosting).
+- **PWA Elimination**: Removed `VitePWA` to prevent Service Worker hydration conflicts causing "Illegal constructor" errors.
+- **Security Hardening**:
+  - Implemented `MessageChannel` polyfill in `index.html` for restricted browser contexts.
+  - Configured strict CSP via Cloudflare `_headers`.
+- **CI/CD Stabilization**:
+  - Pinned `Python 3.12.3` on Render to avoid `pydantic-core` build failures.
+  - Standardized dependency versions (`framer-motion`, `lucide-react`) for production minification safety.

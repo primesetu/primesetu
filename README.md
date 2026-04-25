@@ -49,8 +49,8 @@
 
 | Layer | Technology | Role |
 | :--- | :--- | :--- |
-| **Frontend** | React 18 + TypeScript | Sovereign Terminal UI |
-| **Backend** | Python 3.12 + FastAPI | Asynchronous Business Logic |
+| **Frontend** | React 18 + TypeScript | Sovereign Terminal UI (Cloudflare Pages) |
+| **Backend** | Python 3.12 + FastAPI | Asynchronous Business Logic (Render.com) |
 | **Database** | PostgreSQL (Supabase) | Atomic Data Persistence |
 | **Security** | JWT + Supabase Auth | RBAC & Identity Management |
 | **Styling** | Vanilla CSS + Framer Motion | Premium Aesthetics & Micro-animations |
@@ -75,13 +75,10 @@ pip install -r requirements.txt
 uvicorn app.main:app --reload
 ```
 
-### 3. Frontend Setup
-```bash
-cd frontend
-npm install
-# Configure .env.local with VITE_API_URL and VITE_SUPABASE keys
-npm run dev
-```
+### 3. Production Deployment
+*   **Backend:** Automatic via `render.yaml` on Render.com.
+*   **Frontend:** Automatic via Cloudflare Pages (connects to Render API).
+*   **Database:** Persistent Supabase PostgreSQL instance.
 
 ---
 

@@ -17,8 +17,9 @@
 [![React](https://img.shields.io/badge/React-20232A?style=for-the-badge&logo=react&logoColor=61DAFB)](https://reactjs.org/)
 [![FastAPI](https://img.shields.io/badge/FastAPI-005571?style=for-the-badge&logo=fastapi&logoColor=white)](https://fastapi.tiangolo.com/)
 [![Supabase](https://img.shields.io/badge/Supabase-3ECF8E?style=for-the-badge&logo=supabase&logoColor=white)](https://supabase.io/)
+[![PWA](https://img.shields.io/badge/PWA-Ready-orange?style=for-the-badge)](https://web.dev/progressive-web-apps/)
 
-**PrimeSetu** is a high-performance, institutional-grade Retail Operating System designed to achieve 100% operational parity with legacy systems like Shoper9, while providing modern "Zero Cloud" data sovereignty and AI-governed intelligence.
+**PrimeSetu** is an institutional-grade Retail Operating System designed to achieve 100% operational parity with Shoper9. It combines modern aesthetics with "Zero Cloud" data sovereignty, providing a high-speed, AI-governed environment for high-volume retail.
 
 ---
 
@@ -27,21 +28,21 @@
 ### 1. ⌨️ Frontline "Fast-Billing" Engine
 *   **Terminal Mode:** 100% keyboard-driven interface using Shoper9 muscle-memory hotkeys (`F2`, `F5`, `F8`, `F10`, `Alt+1`).
 *   **Queue Management:** Instant "Suspend/Recall" logic for high-volume environments.
-*   **Forensic Returns:** Ledger-linked return system with automated Credit Note (CN) issuance and tax reconciliation.
+*   **Sovereign Shortcut Guard:** Native browser protection against accidental navigation during POS operations.
 
-### 2. 🖨️ Native Hardware Integration
-*   **Thermal Precision:** Print-optimized `ESC/POS` receipt generation for 80mm thermal printers.
-*   **Zero-UI Printing:** Seamless background printing using browser-native `@media print` directives for latency-free checkout.
-
-### 3. 📊 MIS Intelligence & Audit
-*   **Institutional Analytics:** Real-time Gross Revenue, Stock Valuation, and Category-wise distribution.
-*   **7-Day Trailing Trends:** Daily revenue monitoring grouped by sovereign date signatures.
-*   **Audit-Ready:** Every transaction is cryptographically tied to a store node and user session.
-
-### 4. 🌉 Corporate Bridges
-*   **Tally.ERP 9 / TallyPrime:** Native XML voucher generation for seamless accounting synchronization.
+### 2. 📑 Advanced Inventory & Reconciliation
+*   **Day-End (EOD) Module:** Automated reconciliation of cash, card, and digital payments with institutional audit trails.
+*   **Post-Audit Adjustments:** Seamless inventory correction and bill-reprint functionalities with forensic logging.
 *   **PDT Integration:** High-speed bulk inventory import via Portable Data Terminals.
-*   **HO Telemetry:** Secure, JWT-authorized synchronization with Corporate Head Office (HQ).
+
+### 3. 📊 MIS & Profitability Intelligence
+*   **Real-Time Margin Tracking:** Live profitability analysis at the bill level.
+*   **7-Day Trailing Trends:** Revenue monitoring grouped by sovereign date signatures.
+*   **HQ Pulse Engine:** Live heartbeat synchronization with Corporate Head Office for multi-store telemetry.
+
+### 4. 🌉 Institutional Bridges
+*   **Tally.ERP 9 / TallyPrime:** Native XML voucher generation for seamless accounting.
+*   **Native Hardware:** Thermal precision `ESC/POS` printing with zero-latency background execution.
 
 ---
 
@@ -49,44 +50,52 @@
 
 | Layer | Technology | Role |
 | :--- | :--- | :--- |
-| **Frontend** | React 18 + TypeScript | Sovereign Terminal UI (Cloudflare Pages) |
-| **Backend** | Python 3.12 + FastAPI | Asynchronous Business Logic (Render.com) |
-| **Database** | PostgreSQL (Supabase) | Atomic Data Persistence |
-| **Security** | JWT + Supabase Auth | RBAC & Identity Management |
-| **Styling** | Vanilla CSS + Framer Motion | Premium Aesthetics & Micro-animations |
-| **Shortcuts** | `react-hotkeys-hook` | Keyboard-Only Efficiency |
+| **Frontend** | React 18 + TS + Tailwind | Sovereign Terminal UI (PWA Ready) |
+| **Backend** | Python 3.12 + FastAPI | Async Business Logic & Tally Integration |
+| **Database** | PostgreSQL (Supabase) | Atomic Data Persistence with RLS |
+| **Offline** | IndexedDB (`idb`) | Sovereign Fallback for Network Instability |
+| **Shortcuts** | `react-hotkeys-hook` | POS "Muscle Memory" Keyboard Logic |
+| **Analytics** | Recharts | Institutional MIS Visualizations |
 
 ---
 
 ## ⚙️ Quick Start
 
 ### 1. Prerequisites
-*   Node.js (LTS)
-*   Python 3.12+
-*   Supabase Account (for DB/Auth)
+*   **Node.js** (LTS) & **Python 3.12+**
+*   **Supabase** Account (for Database & Auth)
 
-### 2. Backend Setup
+### 2. Unified Development Environment
+PrimeSetu uses a unified command to launch both the Sovereign Frontend and the FastAPI Backend:
+
 ```bash
+# Install dependencies (Root)
+npm install
+
+# Install Backend dependencies
 cd backend
 python -m venv venv
-source venv/bin/activate  # venv\Scripts\activate on Windows
+source venv/bin/activate # venv\Scripts\activate on Windows
 pip install -r requirements.txt
-# Configure .env with SUPABASE_URL, SUPABASE_KEY, and JWT_SECRET
-uvicorn app.main:app --reload
+cd ..
+
+# Launch Integrated Environment
+npm run dev
 ```
 
-### 3. Production Deployment
-*   **Backend:** Automatic via `render.yaml` on Render.com.
-*   **Frontend:** Automatic via Cloudflare Pages (connects to Render API).
-*   **Database:** Persistent Supabase PostgreSQL instance.
+### 3. Environment Configuration (`.env`)
+Ensure your `.env` file in the root/backend contains:
+*   `SUPABASE_URL`: Your Supabase project URL.
+*   `SUPABASE_KEY`: Your Supabase Anon/Service Key.
+*   `JWT_SECRET`: Secret for backend verification.
 
 ---
 
 ## 📜 AI Protocol & Governance
 PrimeSetu is built under strict **AI-Governed Development Protocols**. Every contribution must adhere to:
-*   `AGENTS.md` (Role Definition)
-*   `aiprotocol.md` (Structural Rules)
-*   `AI_GUIDELINES.md` (Coding Standards)
+*   `AGENTS.md` (Sovereign Role Definitions)
+*   `aiprotocol.md` (Structural Laws)
+*   `AI_GUIDELINES.md` (Zero-Defect Coding Standards)
 
 **© 2026 AITDL Network · All Rights Reserved**  
 *"Memory, Not Code."*

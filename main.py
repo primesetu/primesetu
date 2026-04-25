@@ -311,5 +311,26 @@ async def update_settings(settings_data: dict, db: AsyncSession = Depends(get_db
         await db.refresh(store)
     return store
 
+@app.get("/api/v1/tally/export")
+async def export_tally_xml(db: AsyncSession = Depends(get_db)):
+    from models import Bill, Store
+    from tally_integration import generate_tally_xml
+    from fastapi.responses import Response
+
+    # Fetch store details for company name
+    store_result = await db.execute(select(Store).limit(1))
+    store = store_result.scalar()
+    company_name = store.name if store else "PrimeSetu Retail"
+
+    # Fetch today's transactions
+    from datetime import date
+    result = await db.execute(select(Bill).where(func.date(Bill.created_at) == date.today()))
+    bills = result.scalars().all()
+
+    # Generate XML
+    xml_data = generate_tally_xml(bills, company_name)
+    
+    return Response(content=xml_data, media_type="application/xml")
+
 if __name__ == "__main__":
     uvicorn.run("main:app", host="0.0.0.0", port=8000, reload=True)

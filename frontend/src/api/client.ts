@@ -72,7 +72,7 @@ export const api = {
     receiveAdvance: (data: any) => apiClient.post('/accounts/advances', data).then(r => r.data),
   },
   integration: {
-    exportTally: (start_date?: string, end_date?: string) => apiClient.get('/integration/tally-export', { params: { start_date, end_date } }).then(r => r.data),
+    exportTally: (start_date?: string, end_date?: string) => apiClient.get('/tally/export', { params: { start_date, end_date } }).then(r => r.data),
     importPDT: (file: File) => {
       const formData = new FormData()
       formData.append('file', file)
@@ -91,5 +91,12 @@ export const api = {
   },
   reports: {
     getSalesByAttribute: (attr: string) => apiClient.get(`/reports/sales-by-attribute?attribute=${attr}`).then(r => r.data),
+  },
+  tills: {
+    list: () => apiClient.get('/tills').then(r => r.data),
+    create: (data: any) => apiClient.post('/tills', data).then(r => r.data),
+    open: (id: string, data: any) => apiClient.post(`/tills/${id}/open`, data).then(r => r.data),
+    close: (id: string) => apiClient.post(`/tills/${id}/close`).then(r => r.data),
+    lift: (id: string, data: any) => apiClient.post(`/tills/${id}/lift`, data).then(r => r.data),
   }
 }

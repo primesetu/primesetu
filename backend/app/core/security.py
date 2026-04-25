@@ -23,7 +23,10 @@ from app.core.config import settings
 load_dotenv()
 
 ALGORITHM = "HS256"
-oauth2_scheme = OAuth2PasswordBearer(tokenUrl="token")
+
+# CRITICAL FIX: Set auto_error=False to allow custom bypass logic 
+# and avoid automatic 401s when the Authorization header is missing.
+oauth2_scheme = OAuth2PasswordBearer(tokenUrl="token", auto_error=False)
 
 class UserContext(BaseModel):
     user_id: str
@@ -31,33 +34,48 @@ class UserContext(BaseModel):
     role: str = "CASHIER"
     store_id: str = "X01"
 
-async def get_current_user(token: str = Depends(oauth2_scheme)) -> UserContext:
+async def get_current_user(token: Optional[str] = Depends(oauth2_scheme)) -> UserContext:
     """
     Decodes the Supabase JWT and returns the user context.
-    Uses a dual-method verification to handle both plain-string and base64-encoded secrets.
+    IN DEVELOPMENT: Bypasses strict verification to unblock UI/UX testing.
     """
+    # ------------------------------------------------------------
+    # SOVEREIGN BYPASS (Local Development Only)
+    # ------------------------------------------------------------
+    if settings.environment == "development":
+        return UserContext(
+            user_id="local-sovereign-admin",
+            email="admin@primesetu.io",
+            role="OWNER",
+            store_id="X01"
+        )
+    # ------------------------------------------------------------
+
     credentials_exception = HTTPException(
         status_code=status.HTTP_401_UNAUTHORIZED,
         detail="Sovereign Auth Failed: Could not validate credentials",
         headers={"WWW-Authenticate": "Bearer"},
     )
     
+    if not token:
+        # If no token and not in dev mode, it's a 401
+        raise credentials_exception
+
     try:
         if not settings.jwt_secret:
             raise HTTPException(status_code=500, detail="JWT_SECRET not configured on server")
             
         payload = None
         
-        # Method A: Try with Plain String Secret (Default Supabase Behavior)
+        # Try Method A: Plain String
         try:
             payload = jwt.decode(token, settings.jwt_secret, algorithms=[ALGORITHM], options={"verify_aud": False})
         except JWTError:
-            # Method B: Try with Base64 Decoded Secret (If secret is binary-encoded)
+            # Try Method B: Base64 Decoded
             try:
                 decoded_secret = base64.b64decode(settings.jwt_secret)
                 payload = jwt.decode(token, decoded_secret, algorithms=[ALGORITHM], options={"verify_aud": False})
             except Exception:
-                # If both fail, original exception will be caught by outer block
                 pass
 
         if not payload:
@@ -67,7 +85,6 @@ async def get_current_user(token: str = Depends(oauth2_scheme)) -> UserContext:
         if user_id is None:
             raise credentials_exception
             
-        # Supabase stores metadata in 'user_metadata' or 'app_metadata'
         user_metadata = payload.get("user_metadata", {})
         role = user_metadata.get("role", "CASHIER")
         store_id = user_metadata.get("store_id", "X01") 
@@ -79,7 +96,6 @@ async def get_current_user(token: str = Depends(oauth2_scheme)) -> UserContext:
             store_id=store_id
         )
     except Exception as e:
-        # Return detailed error in Phase 2 for debugging
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED, 
             detail=f"Sovereign Auth Error: {str(e)}"

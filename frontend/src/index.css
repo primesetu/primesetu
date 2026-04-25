@@ -5,37 +5,47 @@
 @layer base {
   :root {
     --navy:      #0D1B3E;
-    --navylight: #162248;
+    --navy2:     #162248;
+    --navy3:     #1E2F5C;
     --saffron:   #F4840A;
     --gold:      #F9B942;
-    --cream:     #FDFCF9; /* Classic Tally Background */
+    --cream:     #FAF7F2; /* Refined Classic Cream */
+    --white:     #FFFFFF;
     --muted:     #8A8FA8;
-    --border:    #D1CBBD; /* Traditional Paper Border */
+    --border:    #E8E4DC;
+    --green:     #27AE60;
+    --red:       #E74C3C;
+    --blue:      #2980B9;
+    --sw:        252px; /* Sidebar Width */
+    --fw:        120px; /* Function Key Bar Width */
   }
+
   body {
     background-color: var(--cream);
     color: var(--navy);
     font-family: 'DM Sans', sans-serif;
+    font-size: 13px;
     -webkit-font-smoothing: antialiased;
-    
-    /* Native App Feel: Disable text selection */
     user-select: none;
     -webkit-user-select: none;
     overflow-x: hidden;
   }
 
-  /* Allow text selection only inside inputs */
+  /* Custom Typography */
+  h1, h2, h3, .serif {
+    font-family: 'Playfair Display', serif;
+  }
+
   input, textarea {
     user-select: text;
     -webkit-user-select: text;
   }
 
-  /* Native App Feel: Disable image and link dragging */
   img, a {
     -webkit-user-drag: none;
   }
 
-  /* Native App Feel: Sleek Scrollbars */
+  /* Sleek Scrollbars */
   ::-webkit-scrollbar {
     width: 6px;
     height: 6px;
@@ -52,55 +62,39 @@
   }
 }
 
+@layer components {
+  .btn-primary {
+    @apply bg-saffron text-white border-none rounded-lg px-5 py-2.5 text-[12.5px] font-semibold transition-all hover:bg-[#D9720A] active:scale-95;
+  }
+  .btn-sec {
+    @apply bg-cream text-navy border border-border rounded-lg px-5 py-2.5 text-[12.5px] font-medium transition-all hover:bg-navy hover:text-white hover:border-navy;
+  }
+  .finput {
+    @apply bg-cream border border-border rounded-lg px-3 py-2 text-[12.5px] text-navy outline-none transition-all focus:border-saffron focus:bg-white;
+  }
+  .fselect {
+    @apply bg-cream border border-border rounded-lg px-3 py-2 text-[12.5px] text-navy outline-none cursor-pointer hover:border-saffron;
+  }
+}
+
 @layer utilities {
-  .glass {
-    background: rgba(255, 255, 255, 0.75);
-    backdrop-filter: blur(25px);
-    -webkit-backdrop-filter: blur(25px);
-    border: 1px solid var(--border);
+  .shoper-panel {
+    @apply bg-white rounded-2xl border border-border overflow-hidden mb-4 shadow-sm;
   }
-  .glass-dark {
-    background: rgba(13, 27, 62, 0.9);
-    backdrop-filter: blur(25px);
-    -webkit-backdrop-filter: blur(25px);
-    border: 1px solid rgba(255, 255, 255, 0.05);
-  }
-  
-  /* Shoper 9 Style Matrix Grid */
-  .matrix-input {
-    @apply bg-white border-2 border-[#D1CBBD] rounded-xl p-4 text-center font-black text-navy 
-           focus:ring-8 ring-gold/10 border-gold/0 focus:border-gold outline-none transition-all duration-300;
-  }
-
-  /* F-Key Shortcut Badge */
-  .f-key {
-    @apply bg-navy/5 border border-navy/10 px-2 py-0.5 rounded font-mono text-[9px] 
-           font-black text-navy/40 transition-all duration-200 group-hover:bg-gold group-hover:text-navy;
-  }
-
-  /* High-Density Professional Card */
   .shoper-card {
-    @apply bg-white border-2 border-[#D1CBBD]/40 rounded-[2.5rem] p-10 shadow-sm 
-           hover:shadow-[0_40px_80px_rgba(13,27,62,0.1)] hover:border-gold transition-all duration-500;
+    @apply bg-white rounded-2xl p-[18px] border border-border relative overflow-hidden transition-all hover:-translate-y-0.5 hover:shadow-lg cursor-pointer;
   }
-
-  .card-premium {
-    border-radius: 2.5rem;
-    padding: 2.5rem;
-    transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+  .klabel {
+    @apply text-[10px] font-semibold uppercase tracking-widest text-muted;
   }
-  .card-premium:hover {
-    transform: translateY(-6px);
-    box-shadow: 0 35px 70px -15px rgba(13, 27, 62, 0.3);
+  .kval {
+    @apply font-serif text-[26px] font-bold leading-none mb-1.5;
   }
-  .shimmer {
-    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
-    background-size: 200% 100%;
-    animation: shimmer 2s infinite;
+  .tbl-header {
+    @apply text-[9.5px] font-semibold uppercase tracking-widest text-muted border-b border-border pb-2.5 text-left;
+  }
+  .tbl-cell {
+    @apply py-2.5 text-[12.5px] border-b border-border align-middle;
   }
 }
 
-@keyframes shimmer {
-  0% { background-position: -200% 0; }
-  100% { background-position: 200% 0; }
-}

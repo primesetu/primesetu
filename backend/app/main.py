@@ -28,14 +28,17 @@ from sqlalchemy import select, func
 from app.core.database import get_db
 from app.models.base import Product, Inventory
 from app.schemas.common import DashboardStats, PredictiveStats
-from app.routers import billing, schemes, alerts, ho, inventory, catalogue, reports, integration, accounts
+from app.routers import billing, schemes, alerts, ho, inventory, catalogue, reports, integration, accounts, tills, menu
 from app.core.security import get_current_user, UserContext
+from app.core.config import settings
 
 app = FastAPI(
     title="PrimeSetu API",
     description="Shoper9-Based Retail OS - Phase 2 FastAPI Backend",
     version="0.1.0",
 )
+
+print(f"DEBUG: Environment is {settings.environment}")
 
 # CORS Configuration
 ALLOWED_ORIGIN_REGEX = r"https?://(localhost|127\.0\.0\.1|.*\.primesetu\.pages\.dev|.*\.github\.io|primesetu-api\.onrender\.com)(:\d+)?"
@@ -66,6 +69,8 @@ app.include_router(catalogue.router,  prefix="/api/v1/catalogue", tags=["Catalog
 app.include_router(reports.router,    prefix="/api/v1/reports",   tags=["Reports"])
 app.include_router(integration.router, prefix="/api/v1/integration", tags=["Integration"])
 app.include_router(accounts.router,    prefix="/api/v1/accounts",   tags=["Accounts"])
+app.include_router(tills.router,       prefix="/api/v1/tills",      tags=["Tills"])
+app.include_router(menu.router,        prefix="/api/v1/menu",       tags=["Menu"])
 
 @app.get("/")
 async def root():

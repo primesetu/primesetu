@@ -193,11 +193,7 @@ export default function HOSyncModule() {
               </tr>
             </thead>
             <tbody className="divide-y divide-border/50 text-[10px] font-black text-navy uppercase tracking-tighter">
-              {[
-                { id: 'PKT-9921', type: 'SALES_BILL', origin: 'BILLING-NODE-01', size: '2.4KB' },
-                { id: 'PKT-9922', type: 'AUDIT_LOG', origin: 'SYSTEM-AUDIT', size: '0.8KB' },
-                { id: 'PKT-9923', type: 'CANCELLATION', origin: 'MANAGER-CORE', size: '1.2KB' }
-              ].map(pkt => (
+              {syncStatus?.packets?.map((pkt: any) => (
                 <tr key={pkt.id} className="hover:bg-cream/20 transition-colors">
                   <td className="px-6 py-4 font-mono">{pkt.id}</td>
                   <td className="px-6 py-4">{pkt.type}</td>
@@ -208,6 +204,13 @@ export default function HOSyncModule() {
                   </td>
                 </tr>
               ))}
+              {(!syncStatus?.packets || syncStatus.packets.length === 0) && (
+                <tr>
+                  <td colSpan={5} className="px-6 py-10 text-center text-muted">
+                    No pending packets in the Sovereign Vault. All data is synchronized.
+                  </td>
+                </tr>
+              )}
             </tbody>
           </table>
         </div>

@@ -11,9 +11,9 @@
 
 from fastapi import APIRouter, Depends, HTTPException, BackgroundTasks
 from sqlalchemy.ext.asyncio import AsyncSession
-from sqlalchemy import select, func
+from sqlalchemy import select, func, update
 from app.core.database import get_db
-from app.models.base import Transaction, TransactionItem, Product, Inventory, SalesSlip, SalesSlipItem
+from app.models.base import Transaction, TransactionItem, Product, Inventory, SalesSlip, SalesSlipItem, Till, SyncPacket
 from app.schemas.billing import BillCreate, BillResponse, SlipCreate, SlipResponse
 from typing import List, Optional
 import random
@@ -64,6 +64,7 @@ async def finalize_bill(
             id=uuid.uuid4(),
             bill_no=bill_no,
             store_id=current_user.store_id,
+            till_id=bill_data.till_id,
             type=bill_data.type,
             payments=[p.dict() for p in bill_data.payments] if bill_data.payments else None,
             status="Finalized",
@@ -99,8 +100,31 @@ async def finalize_bill(
         transaction.subtotal = total_net / 1.18 # Assume 18% inclusive for demo
         transaction.tax_total = total_net - transaction.subtotal
         
+        # 3. Update Till Cash if applicable
+        if bill_data.till_id and bill_data.payments:
+            cash_payment = sum(p.amount for p in bill_data.payments if p.mode.upper() == "CASH")
+            if cash_payment > 0:
+                stmt = update(Till).where(Till.id == bill_data.till_id).values(cash_collected=Till.cash_collected + cash_payment)
+                await db.execute(stmt)
+
         await db.commit()
         
+        # 4. Enqueue SyncPacket for Head Office Push
+        sync_payload = {
+            "bill_no": bill_no,
+            "total": float(total_net),
+            "till_id": str(bill_data.till_id) if bill_data.till_id else None,
+            "items": [{"product_id": str(i.product_id), "qty": i.qty} for i in bill_data.items]
+        }
+        sync_packet = SyncPacket(
+            store_id=current_user.store_id,
+            entity_type="SALES_BILL",
+            entity_id=str(transaction.id),
+            payload=sync_payload
+        )
+        db.add(sync_packet)
+        await db.commit()
+
         response_data = BillResponse(status="success", bill_number=bill_no, transaction_id=transaction.id, total=total_net)
         
         # Dispatch digital receipt if mobile provided

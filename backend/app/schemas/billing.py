@@ -30,6 +30,7 @@ class BillCreate(BaseModel):
     items: List[BillItemCreate]
     payments: Optional[List[PaymentModeDetail]] = None
     type: str = "Sales" # Sales, SalesReturn
+    till_id: Optional[uuid.UUID] = None
     original_invoice_id: Optional[uuid.UUID] = None
     suspended_reason: Optional[str] = None
 

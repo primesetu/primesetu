@@ -12,6 +12,9 @@
 # CLAUDE.md — PrimeSetu Sovereign Identity Manifest
 > Protocol Version: 1.0.0 | Effective: 2026
 
+> [!IMPORTANT]  
+> **MANDATORY CROSS-REFERENCE**  
+> This file (`CLAUDE.md`) is only the identity manifest. To successfully operate in this repository, you MUST concurrently load and obey the rules defined in `AGENTS.md`, `aiprotocol.md`, and `AI_GUIDELINES.md`. Ignoring these files is a violation of the PrimeSetu Sovereign Protocol.
 ## IDENTITY LOCK
 You are operating inside the PrimeSetu ecosystem — a Shoper9-based Retail OS.
 Before generating ANY output you MUST:

@@ -12,7 +12,8 @@ import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Search, X } from 'lucide-react';
 
-import { MODULE_REGISTRY } from '../lib/ModuleRegistry';
+import { ICON_MAP } from '../lib/ModuleRegistry';
+import { fetchMenu, MenuItem } from '../api/menuService';
 
 interface CommandBarProps {
   isOpen: boolean;
@@ -22,8 +23,29 @@ interface CommandBarProps {
 
 export default function CommandBar({ isOpen, onClose, onNavigate }: CommandBarProps) {
   const [query, setQuery] = useState('');
+  const [commands, setCommands] = useState<any[]>([]);
 
   useEffect(() => {
+    // Flatten recursive menu into a searchable list
+    fetchMenu().then(menu => {
+      const flattened: any[] = [];
+      const traverse = (items: MenuItem[]) => {
+        items.forEach(item => {
+          flattened.push({
+            id: item.id,
+            label: item.label,
+            icon: ICON_MAP[item.id] || ICON_MAP['dashboard'],
+            shortcut: item.shortcut || '',
+            tab: item.id,
+            description: `Jump to ${item.label}`
+          });
+          if (item.children) traverse(item.children);
+        });
+      };
+      traverse(menu);
+      setCommands(flattened);
+    });
+
     const handleKeyDown = (e: KeyboardEvent) => {
       if (e.key === 'k' && (e.metaKey || e.ctrlKey)) {
         e.preventDefault();
@@ -33,16 +55,7 @@ export default function CommandBar({ isOpen, onClose, onNavigate }: CommandBarPr
     };
     window.addEventListener('keydown', handleKeyDown);
     return () => window.removeEventListener('keydown', handleKeyDown);
-  }, [onClose]);
-
-  const commands = MODULE_REGISTRY.map(m => ({
-    id: m.id,
-    label: m.label,
-    icon: m.icon,
-    shortcut: m.shortcut || '',
-    tab: m.id,
-    description: m.description || 'Jump to module'
-  }));
+  }, [onClose, isOpen]); // Re-fetch on open to ensure cache sync
 
   if (!isOpen) return null;
 

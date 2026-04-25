@@ -110,4 +110,24 @@
   - Configured strict CSP via Cloudflare `_headers`.
 - **CI/CD Stabilization**:
   - Pinned `Python 3.12.3` on Render to avoid `pydantic-core` build failures.
-  - Standardized dependency versions (`framer-motion`, `lucide-react`) for production minification safety.
+- Standardized dependency versions (`framer-motion`, `lucide-react`) for production minification safety.
+
+## 13. Phase 7 — Comprehensive Operational Parity (IN PROGRESS)
+- **Objective**: Implement missing high-efficiency retail modules identified in the Shoper 9 prototype.
+- **Module 1: Till Management**
+  - **Backend**: Add `Till` model and `/api/v1/tills` router.
+  - **Frontend**: Implement `TillManagement` screen with status board and cash lift logic.
+- **Module 2: Price Management**
+  - **Backend**: Support multiple price levels (MRP, Wholesale, Staff).
+  - **Frontend**: Implement `PriceManagement` screen for bulk list views.
+- **Module 3: GTIN / GS1 Service**
+  - **Backend**: Implement GTIN generation and validation logic.
+  - **Frontend**: Implement `GTINStudio` module for barcode management.
+- **Module 4: Institutional MIS & Alerts**
+  - **Backend**: Detailed sales/inventory/tax reports logic in `reports.py`.
+  - **Frontend**: Implement `MISReports` and `AlertsCentre` modules.
+
+## 14. Verification Plan (Phase 7)
+- [ ] **Test Case 14**: Open a Till → Perform sales → Verify cash collected updates in Till Board.
+- [ ] **Test Case 15**: Change product price in Price Management → Verify update reflects in Billing cart.
+- [ ] **Test Case 16**: Generate GTIN for a new SKU → Verify compliance with GS1 EAN-13 pattern.

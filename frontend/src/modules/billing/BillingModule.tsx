@@ -58,6 +58,7 @@ export default function BillingModule() {
   const [isOnline, setIsOnline] = useState(navigator.onLine)
   const [offlineCount, setOfflineCount] = useState(0)
   const [sendSms, setSendSms] = useState(true)
+  const [activeTill, setActiveTill] = useState<any>(null)
   const searchRef = useRef<HTMLInputElement>(null)
 
   useEffect(() => { const t = setInterval(() => setCurrentTime(now()), 30000); return () => clearInterval(t) }, [])
@@ -70,6 +71,12 @@ export default function BillingModule() {
     
     // Check for existing offline data
     offlineService.getQueueCount().then(setOfflineCount)
+
+    // Fetch active till for terminal
+    api.tills.list().then(tills => {
+      const openTill = tills.find((t: any) => t.status === 'Open')
+      if (openTill) setActiveTill(openTill)
+    }).catch(console.error)
 
     return () => {
       window.removeEventListener('online', handleOnline)
@@ -140,6 +147,7 @@ export default function BillingModule() {
     const billData = {
       customer_mobile: sendSms ? customerMobile : '',
       type: 'Sales',
+      till_id: activeTill?.id,
       items: cart.map(i => ({ product_id: i.id, qty: i.qty, unit_price: i.mrp, discount_per: i.discount_per, tax_per: i.tax_rate })),
       payments: payLines.filter(p => p.amount > 0)
     }

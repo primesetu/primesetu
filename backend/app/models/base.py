@@ -55,6 +55,8 @@ class Product(Base):
     size: Mapped[str] = mapped_column(String, nullable=True)
     color: Mapped[str] = mapped_column(String, nullable=True)
     mrp: Mapped[float] = mapped_column(Numeric(15, 2), default=0.0)
+    wholesale_price: Mapped[float] = mapped_column(Numeric(15, 2), default=0.0)
+    staff_price: Mapped[float] = mapped_column(Numeric(15, 2), default=0.0)
     cost_price: Mapped[float] = mapped_column(Numeric(15, 2), default=0.0)
     tax_rate: Mapped[float] = mapped_column(Numeric(5, 2), default=18.0)
     is_tax_inclusive: Mapped[bool] = mapped_column(Boolean, default=True) # Shoper 9 Style
@@ -92,12 +94,27 @@ class Customer(Base):
     loyalty_points: Mapped[int] = mapped_column(Integer, default=0)
     created_at: Mapped[datetime] = mapped_column(DateTime, server_default=text("now()"))
 
+class Till(Base):
+    __tablename__ = "tills"
+
+    id: Mapped[uuid.UUID] = mapped_column(primary_key=True, server_default=text("gen_random_uuid()"))
+    store_id: Mapped[str] = mapped_column(ForeignKey("stores.id"))
+    name: Mapped[str] = mapped_column(String)
+    code: Mapped[str] = mapped_column(String, unique=True)
+    status: Mapped[str] = mapped_column(String, default="Closed") # Open, Closed, Locked, Idle
+    current_cashier_id: Mapped[str] = mapped_column(String, nullable=True) # References auth.users or Partner
+    cash_collected: Mapped[float] = mapped_column(Numeric(15, 2), default=0.0)
+    last_opening_at: Mapped[datetime] = mapped_column(DateTime, nullable=True)
+    last_closing_at: Mapped[datetime] = mapped_column(DateTime, nullable=True)
+    created_at: Mapped[datetime] = mapped_column(DateTime, server_default=text("now()"))
+
 class Transaction(Base):
     __tablename__ = "transactions"
 
     id: Mapped[uuid.UUID] = mapped_column(primary_key=True, server_default=text("gen_random_uuid()"))
     bill_no: Mapped[str] = mapped_column(String, unique=True, nullable=True) # Optional if suspended/draft
     store_id: Mapped[str] = mapped_column(ForeignKey("stores.id"))
+    till_id: Mapped[uuid.UUID] = mapped_column(ForeignKey("tills.id"), nullable=True)
     customer_id: Mapped[uuid.UUID] = mapped_column(ForeignKey("customers.id"), nullable=True)
     type: Mapped[str] = mapped_column(String) # Sales, Purchase, SalesReturn, PurchaseReturn
     
@@ -113,6 +130,8 @@ class Transaction(Base):
     suspended_reason: Mapped[str] = mapped_column(String, nullable=True)
     created_at: Mapped[datetime] = mapped_column(DateTime, server_default=text("now()"))
     updated_at: Mapped[datetime] = mapped_column(DateTime, server_default=text("now()"), onupdate=text("now()"))
+
+
 
     items: Mapped[List["TransactionItem"]] = relationship("TransactionItem", back_populates="transaction", cascade="all, delete-orphan")
 
@@ -272,3 +291,15 @@ class Alert(Base):
     priority: Mapped[str] = mapped_column(String(20)) # high, medium, low
     is_read: Mapped[bool] = mapped_column(Boolean, default=False)
     created_at: Mapped[datetime] = mapped_column(DateTime, server_default=text("now()"))
+
+class SyncPacket(Base):
+    __tablename__ = "sync_packets"
+
+    id: Mapped[str] = mapped_column(String, primary_key=True, default=lambda: f"PKT-{uuid.uuid4().hex[:8].upper()}")
+    store_id: Mapped[str] = mapped_column(String, index=True)
+    entity_type: Mapped[str] = mapped_column(String) # e.g. SALES_BILL, MASTER_PRODUCT
+    entity_id: Mapped[str] = mapped_column(String)
+    payload: Mapped[Dict[str, Any]] = mapped_column(JSON)
+    status: Mapped[str] = mapped_column(String, default="PENDING") # PENDING, SYNCED
+    created_at: Mapped[datetime] = mapped_column(DateTime, server_default=text("now()"))
+    synced_at: Mapped[datetime] = mapped_column(DateTime, nullable=True)

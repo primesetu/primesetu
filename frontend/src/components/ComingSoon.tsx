@@ -6,7 +6,7 @@ import React from 'react';
 import { motion } from 'framer-motion';
 import { Zap, Construction, ShieldAlert } from 'lucide-react';
 
-export default function ComingSoon({ moduleName }: { moduleName: string }) {
+export default function ComingSoon({ moduleName = 'Module' }: { moduleName?: string }) {
   return (
     <div className="flex flex-col items-center justify-center min-h-[60vh] text-center p-8">
       <motion.div

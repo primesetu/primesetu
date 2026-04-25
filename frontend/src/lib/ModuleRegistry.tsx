@@ -21,7 +21,8 @@ import {
   Truck,
   UserSquare2,
   Construction,
-  Trophy
+  Trophy,
+  History
 } from 'lucide-react'
 
 // Module Lazy/Dynamic Imports (Simplified for now)

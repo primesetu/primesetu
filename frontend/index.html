@@ -14,12 +14,17 @@
       // Safety guard: React DOM scheduler uses new MessageChannel() internally.
       // Ensure it is a valid constructor before React loads.
       if (typeof MessageChannel === 'undefined' || typeof MessageChannel !== 'function') {
-        window.MessageChannel = class MessageChannel {
-          constructor() {
-            var ch = new BroadcastChannel('__mc_polyfill__');
-            this.port1 = { onmessage: null, postMessage: function(d) { ch.dispatchEvent(new MessageEvent('message', { data: d })); } };
-            this.port2 = { onmessage: null, postMessage: function(d) { ch.dispatchEvent(new MessageEvent('message', { data: d })); } };
-          }
+        window.MessageChannel = function MessageChannel() {
+          var self = this;
+          this.port1 = { onmessage: null };
+          this.port2 = { 
+            onmessage: null, 
+            postMessage: function(data) { 
+              setTimeout(function() { 
+                if (self.port1.onmessage) self.port1.onmessage({ data: data }); 
+              }, 0); 
+            } 
+          };
         };
       }
     </script>

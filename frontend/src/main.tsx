@@ -26,19 +26,6 @@ if ('serviceWorker' in navigator) {
   })
 }
 
-// Safety guard: React DOM scheduler uses new MessageChannel() internally.
-// Ensure it is a valid constructor in this browser context.
-if (typeof MessageChannel === 'undefined' || typeof MessageChannel !== 'function') {
-  (window as any).MessageChannel = class MessageChannel {
-    port1: any; port2: any
-    constructor() {
-      const ch = new BroadcastChannel('__mc_polyfill__')
-      this.port1 = { onmessage: null, postMessage: (d: any) => ch.dispatchEvent(new MessageEvent('message', { data: d })) }
-      this.port2 = { onmessage: null, postMessage: (d: any) => ch.dispatchEvent(new MessageEvent('message', { data: d })) }
-    }
-  }
-}
-
 const queryClient = new QueryClient({
   defaultOptions: {
     queries: {

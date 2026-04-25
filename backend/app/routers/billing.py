@@ -319,3 +319,120 @@ async def get_day_end_summary(
         "store_id": current_user.store_id,
         "date": datetime.now().strftime("%Y-%m-%d")
     }
+
+@router.post("/slips", response_model=SlipResponse)
+async def create_sales_slip(
+    slip_data: SlipCreate,
+    db: AsyncSession = Depends(get_db),
+    current_user: UserContext = Depends(get_current_user)
+):
+    """
+    Generate a temporary Sales Slip (F6). 
+    Used for picking/pre-billing without committing to the ledger.
+    """
+    try:
+        slip_no = f"SLP-{datetime.now().strftime('%y%m%d')}-{''.join(random.choices(string.ascii_uppercase + string.digits, k=4))}"
+        
+        total_amount = sum(i.qty * i.unit_price * (1 - i.discount_per / 100) for i in slip_data.items)
+        
+        slip = SalesSlip(
+            id=uuid.uuid4(),
+            slip_no=slip_no,
+            store_id=current_user.store_id,
+            customer_mobile=slip_data.customer_mobile,
+            total_amount=total_amount,
+            is_active=True,
+            is_converted=False
+        )
+        db.add(slip)
+        await db.flush()
+
+        for item in slip_data.items:
+            db.add(SalesSlipItem(
+                id=uuid.uuid4(),
+                slip_id=slip.id,
+                product_id=item.product_id,
+                qty=item.qty,
+                mrp=item.unit_price,
+                net_amount=item.qty * item.unit_price * (1 - item.discount_per / 100)
+            ))
+
+        await db.commit()
+        return SlipResponse(status="success", slip_no=slip_no, slip_id=slip.id, total=total_amount)
+    except Exception as e:
+        await db.rollback()
+        raise HTTPException(status_code=500, detail=str(e))
+
+@router.get("/slips")
+async def get_active_slips(
+    db: AsyncSession = Depends(get_db),
+    current_user: UserContext = Depends(get_current_user)
+):
+    """List all unconverted sales slips for the current store."""
+    from sqlalchemy.orm import selectinload
+    stmt = (
+        select(SalesSlip)
+        .options(selectinload(SalesSlip.items).selectinload(SalesSlipItem.product))
+        .where(SalesSlip.store_id == current_user.store_id)
+        .where(SalesSlip.is_active == True)
+        .where(SalesSlip.is_converted == False)
+        .order_by(SalesSlip.created_at.desc())
+    )
+    result = await db.execute(stmt)
+    slips = result.scalars().all()
+    
+    return [
+        {
+            "id": str(s.id),
+            "slip_no": s.slip_no,
+            "total_amount": float(s.total_amount),
+            "created_at": s.created_at.isoformat(),
+            "customer_mobile": s.customer_mobile,
+            "items": [
+                {
+                    "id": str(item.product.id),
+                    "code": item.product.code,
+                    "name": item.product.name,
+                    "brand": item.product.brand,
+                    "category": item.product.category,
+                    "qty": float(item.qty),
+                    "mrp": float(item.mrp),
+                    "discount_per": 0.0, # Slips usually don't store line disc_per in this schema
+                    "tax_rate": float(item.product.tax_rate)
+                } for item in s.items if item.product
+            ]
+        }
+        for s in slips
+    ]
+
+@router.delete("/slips/{slip_id}")
+async def delete_sales_slip(
+    slip_id: str,
+    db: AsyncSession = Depends(get_db),
+    current_user: UserContext = Depends(get_current_user)
+):
+    """Discard a sales slip."""
+    stmt = select(SalesSlip).where(SalesSlip.id == slip_id, SalesSlip.store_id == current_user.store_id)
+    slip = (await db.execute(stmt)).scalar_one_or_none()
+    if not slip:
+        raise HTTPException(status_code=404, detail="Slip not found")
+    
+    await db.delete(slip)
+    await db.commit()
+    return {"status": "success", "message": "Slip deleted"}
+
+@router.post("/slips/{slip_id}/convert")
+async def convert_sales_slip(
+    slip_id: str,
+    db: AsyncSession = Depends(get_db),
+    current_user: UserContext = Depends(get_current_user)
+):
+    """Mark a slip as converted so it doesn't appear in the browser."""
+    stmt = select(SalesSlip).where(SalesSlip.id == slip_id, SalesSlip.store_id == current_user.store_id)
+    slip = (await db.execute(stmt)).scalar_one_or_none()
+    if not slip:
+        raise HTTPException(status_code=404, detail="Slip not found")
+    
+    slip.is_converted = True
+    await db.commit()
+    return {"status": "success", "message": "Slip converted"}

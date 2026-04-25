@@ -65,6 +65,10 @@ export const api = {
     deleteSuspended: (id: string) => apiClient.delete(`/bills/suspended/${id}`).then(r => r.data),
     getDayEnd: () => apiClient.get('/bills/day-end-summary').then(r => r.data),
     getBill: (billNo: string) => apiClient.get(`/bills/search/${billNo}`).then(r => r.data),
+    getSlips: () => apiClient.get('/bills/slips').then(r => r.data),
+    createSlip: (data: any) => apiClient.post('/bills/slips', data).then(r => r.data),
+    deleteSlip: (id: string) => apiClient.delete(`/bills/slips/${id}`).then(r => r.data),
+    convertSlip: (id: string) => apiClient.post(`/bills/slips/${id}/convert`).then(r => r.data),
   },
   accounts: {
     issueCreditNote: (data: any) => apiClient.post('/accounts/credit-notes', data).then(r => r.data),

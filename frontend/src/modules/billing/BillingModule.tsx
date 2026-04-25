@@ -23,6 +23,7 @@ import ThermalReceipt from './ThermalReceipt'
 import TaxInvoiceA4 from './TaxInvoiceA4'
 import CreditNoteA4 from './CreditNoteA4'
 import ReturnsDrawer from './ReturnsDrawer'
+import SalesSlipsBrowser from './SalesSlipsBrowser'
 import { useHotkeys } from 'react-hotkeys-hook'
 import { offlineService } from '@/api/offline'
 import { useLanguage } from '@/hooks/useLanguage'
@@ -55,6 +56,7 @@ export default function BillingModule() {
   const [showSettle, setShowSettle] = useState(false)
   const [showSuspended, setShowSuspended] = useState(false)
   const [showReturns, setShowReturns] = useState(false)
+  const [showSlips, setShowSlips] = useState(false)
   const [billToPrint, setBillToPrint] = useState<any>(null)
   const [billPrefix] = useState('B')
   const [currentTime, setCurrentTime] = useState(now())
@@ -173,6 +175,8 @@ export default function BillingModule() {
     }
   }, { taxable: 0, tax: 0 })
 
+  const subtotal = cart.reduce((s, i) => s + i.mrp * i.qty, 0)
+  const disc_total = cart.reduce((s, i) => s + i.mrp * i.qty * (i.discount_per / 100), 0)
   const net_payable = Math.round(tax_summary.taxable + tax_summary.tax)
   const roundoff = net_payable - (tax_summary.taxable + tax_summary.tax)
   const taxable = tax_summary.taxable
@@ -222,9 +226,31 @@ export default function BillingModule() {
     finally { setProcessing(false) }
   }
 
+  const handleCreateSlip = async () => {
+    if (!cart.length) return
+    setProcessing(true)
+    try {
+      await api.billing.createSlip({ 
+        customer_mobile: customerMobile, 
+        items: cart.map(i => ({ 
+          product_id: i.id, 
+          qty: i.qty, 
+          unit_price: i.mrp,
+          discount_per: i.discount_per 
+        })) 
+      })
+      setCart([]); setCustomerMobile('')
+    } catch (err) {
+      console.error('Slip creation failed:', err)
+    } finally { setProcessing(false) }
+  }
+
   // Sovereign Shortcuts via react-hotkeys-hook
+  useHotkeys('f4', (e) => { e.preventDefault(); setShowSuspended(v => !v) }, { enableOnFormTags: true })
   useHotkeys('f5', (e) => { e.preventDefault(); setShowSuspended(v => !v) }, { enableOnFormTags: true })
-  useHotkeys('f6, f9', (e) => { e.preventDefault(); setShowTotals(v => !v) }, { enableOnFormTags: true })
+  useHotkeys('f6', (e) => { e.preventDefault(); setShowSlips(v => !v) }, { enableOnFormTags: true })
+  useHotkeys('shift+f6', (e) => { e.preventDefault(); handleCreateSlip() }, { enableOnFormTags: true })
+  useHotkeys('f9', (e) => { e.preventDefault(); setShowTotals(v => !v) }, { enableOnFormTags: true })
   useHotkeys('f7', (e) => { e.preventDefault(); setPayLines([{ mode: 'CASH', amount: net_payable }]); setShowSettle(true) }, { enableOnFormTags: true })
   useHotkeys('f8', (e) => { e.preventDefault(); setShowSettle(v => !v) }, { enableOnFormTags: true })
   useHotkeys('f10', (e) => { e.preventDefault(); setShowSettle(true) }, { enableOnFormTags: true })
@@ -274,6 +300,14 @@ export default function BillingModule() {
                 onReturn={(bill) => { setBillToPrint(bill); setShowReturns(false); }}
                 onClose={() => setShowReturns(false)} 
               />
+           </motion.div>
+        )}
+        {showSlips && (
+           <motion.div initial={{ x: '100%' }} animate={{ x: 0 }} exit={{ x: '100%' }} transition={{ type: 'spring', damping: 25, stiffness: 200 }} className="absolute right-0 top-0 bottom-0 w-[400px] z-[250] bg-navy shadow-2xl border-l-4 border-amber-400">
+             <SalesSlipsBrowser 
+                onRecall={(items, mobile) => { setCart(items); setCustomerMobile(mobile); setShowSlips(false) }} 
+                onClose={() => setShowSlips(false)} 
+             />
            </motion.div>
         )}
         {showDayEnd && <DayEndModule onClose={() => setShowDayEnd(false)} />}
@@ -352,7 +386,9 @@ export default function BillingModule() {
           { icon: <Calculator className="w-4 h-4" />, label: 'Totals', key: 'F9', action: () => setShowTotals(v => !v) },
           { icon: <Banknote className="w-4 h-4" />, label: 'Exact Cash', key: 'F7', action: () => { setPayLines([{ mode: 'CASH', amount: net_payable }]); handleFinalize() } },
           { icon: <CreditCard className="w-4 h-4" />, label: 'Settlement', key: 'F8', action: () => setShowSettle(true) },
+          { icon: <FileText className="w-4 h-4" />, label: 'Sales Slips', key: 'F6', action: () => setShowSlips(true) },
           { icon: <Pause className="w-4 h-4" />, label: 'Suspend', key: 'F12', action: handleSuspend },
+          { icon: <Clock className="w-4 h-4" />, label: 'Recall [F4]', key: 'F4', action: () => setShowSuspended(v => !v) },
           { icon: <Printer className="w-4 h-4" />, label: 'Reprint', key: 'Alt+6', action: () => {
             if (lastBill) {
               setBillToPrint({ ...lastBill, is_duplicate: true })
@@ -615,6 +651,12 @@ export default function BillingModule() {
             </button>
           </div>
 
+          <button onClick={handleCreateSlip} disabled={!cart.length}
+            className="flex items-center justify-center gap-2 bg-white border-2 border-gray-200 hover:border-amber-300 hover:bg-amber-50 text-gray-500 hover:text-amber-600 rounded-xl py-2.5 text-[11px] font-black uppercase tracking-widest transition-all disabled:opacity-30">
+            <FileText className="w-4 h-4" />
+            Save as Slip [S+F6]
+          </button>
+
           <button onClick={handleSuspend} disabled={!cart.length}
             className="flex items-center justify-center gap-2 bg-white border-2 border-gray-200 hover:border-orange-300 hover:bg-orange-50 text-gray-500 hover:text-orange-600 rounded-xl py-2.5 text-[11px] font-black uppercase tracking-widest transition-all disabled:opacity-30">
             <Pause className="w-4 h-4" />
@@ -631,7 +673,7 @@ export default function BillingModule() {
 
           {/* Legend */}
           <div className="bg-white/60 rounded-xl p-2.5 text-[9px] text-gray-400 font-mono border border-gray-100 leading-relaxed">
-            {[['F2','Item Search'],['F5','Suspended Queue'],['F7','Exact Cash'],['F8','Settlement'],['F9','Totals'],['F10','Settle'],['F12','Suspend'],['Ctrl+D','Del Last'],['Alt+1','New'],['Alt+2','Return']].map(([k,v]) => (
+            {[['F2','Item Search'],['F4','Recall Bill'],['F5','Suspended Queue'],['F6','Sales Slips'],['F7','Exact Cash'],['F8','Settlement'],['F9','Totals'],['F10','Settle'],['F12','Suspend'],['Ctrl+D','Del Last'],['Alt+1','New'],['Alt+2','Return']].map(([k,v]) => (
               <div key={k} className="flex justify-between"><span className="text-amber-500">{k}</span><span>{v}</span></div>
             ))}
           </div>

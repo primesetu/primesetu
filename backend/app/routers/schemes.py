@@ -12,9 +12,9 @@
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import select
-from backend.app.core.database import get_db
-from backend.app.models.base import Scheme
-from backend.app.schemas.schemes import SchemeRead, SchemeCreate
+from app.core.database import get_db
+from app.models.base import Scheme
+from app.schemas.schemes import SchemeRead, SchemeCreate
 from typing import List
 import uuid
 

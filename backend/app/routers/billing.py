@@ -12,17 +12,17 @@
 from fastapi import APIRouter, Depends, HTTPException, BackgroundTasks
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import select, func
-from backend.app.core.database import get_db
-from backend.app.models.base import Transaction, TransactionItem, Product, Inventory, SalesSlip, SalesSlipItem
-from backend.app.schemas.billing import BillCreate, BillResponse, SlipCreate, SlipResponse
+from app.core.database import get_db
+from app.models.base import Transaction, TransactionItem, Product, Inventory, SalesSlip, SalesSlipItem
+from app.schemas.billing import BillCreate, BillResponse, SlipCreate, SlipResponse
 from typing import List, Optional
 import random
 import string
 import uuid
 from datetime import datetime
-from backend.app.services.messenger import SovereignMessenger
+from app.services.messenger import SovereignMessenger
 
-from backend.app.core.security import get_current_user, UserContext
+from app.core.security import get_current_user, UserContext
 
 router = APIRouter()
 

@@ -21,7 +21,7 @@ from dotenv import load_dotenv
 load_dotenv()
 
 import base64
-from backend.app.core.config import settings
+from app.core.config import settings
 
 # Configuration
 # Supabase JWT secrets are often Base64 encoded binary keys.

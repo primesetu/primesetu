@@ -12,7 +12,7 @@
 from __future__ import annotations
 from sqlalchemy import String, Integer, Numeric, Boolean, DateTime, text, ForeignKey, JSON
 from sqlalchemy.orm import Mapped, mapped_column, relationship
-from backend.app.core.database import Base
+from app.core.database import Base
 from datetime import datetime
 from typing import List, Dict, Any
 import uuid

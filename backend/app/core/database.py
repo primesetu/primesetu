@@ -11,7 +11,7 @@
 
 from sqlalchemy.ext.asyncio import create_async_engine, AsyncSession, async_sessionmaker
 from sqlalchemy.orm import DeclarativeBase
-from backend.app.core.config import settings
+from app.core.config import settings
 
 # High-performance Async Engine for Supabase
 engine = create_async_engine(

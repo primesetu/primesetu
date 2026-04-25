@@ -25,11 +25,11 @@ from fastapi import FastAPI, Depends
 from fastapi.middleware.cors import CORSMiddleware
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import select, func
-from backend.app.core.database import get_db
-from backend.app.models.base import Product, Inventory
-from backend.app.schemas.common import DashboardStats, PredictiveStats
-from backend.app.routers import billing, schemes, alerts, ho, inventory, catalogue, reports, integration, accounts
-from backend.app.core.security import get_current_user, UserContext
+from app.core.database import get_db
+from app.models.base import Product, Inventory
+from app.schemas.common import DashboardStats, PredictiveStats
+from app.routers import billing, schemes, alerts, ho, inventory, catalogue, reports, integration, accounts
+from app.core.security import get_current_user, UserContext
 
 app = FastAPI(
     title="PrimeSetu API",
@@ -97,4 +97,4 @@ async def get_dashboard_stats(
 
 if __name__ == "__main__":
     import uvicorn
-    uvicorn.run("backend.app.main:app", host="0.0.0.0", port=8000, reload=True)
+    uvicorn.run("app.main:app", host="0.0.0.0", port=8000, reload=True)

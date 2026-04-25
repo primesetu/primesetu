@@ -11,9 +11,9 @@
 
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.ext.asyncio import AsyncSession
-from backend.app.core.database import get_db
-from backend.app.models.base import Product, Inventory, Transaction, TransactionItem, PurchaseOrder, PurchaseOrderItem
-from backend.app.schemas.common import ProductRead, ProductCreate, PredictiveStats
+from app.core.database import get_db
+from app.models.base import Product, Inventory, Transaction, TransactionItem, PurchaseOrder, PurchaseOrderItem
+from app.schemas.common import ProductRead, ProductCreate, PredictiveStats
 from pydantic import BaseModel
 from typing import List, Dict, Any, Optional
 import uuid
@@ -21,7 +21,7 @@ import random
 import string
 from sqlalchemy import select, or_, func
 
-from backend.app.core.security import get_current_user, UserContext
+from app.core.security import get_current_user, UserContext
 
 router = APIRouter()
 

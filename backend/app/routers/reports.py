@@ -12,11 +12,11 @@
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import select, func
-from backend.app.core.database import get_db
-from backend.app.models.base import Transaction, TransactionItem, Product, Inventory
-from backend.app.core.security import get_current_user, UserContext
+from app.core.database import get_db
+from app.models.base import Transaction, TransactionItem, Product, Inventory
+from app.core.security import get_current_user, UserContext
 from typing import List, Dict, Any, Optional
-from backend.app.services.compliance import ComplianceEngine
+from app.services.compliance import ComplianceEngine
 from fastapi.responses import JSONResponse
 import json
 from datetime import datetime, timedelta

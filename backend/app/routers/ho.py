@@ -12,7 +12,7 @@
 from fastapi import APIRouter, Depends
 import random
 from datetime import datetime
-from backend.app.core.security import get_current_user, UserContext
+from app.core.security import get_current_user, UserContext
 
 router = APIRouter()
 

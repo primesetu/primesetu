@@ -1,0 +1,13 @@
+# PrimeSetu - Cloudflare Python Worker Configuration
+name = "primesetu-api"
+main = "app/main.py"
+compatibility_date = "2024-04-03"
+
+[vars]
+# These will be overridden by secrets in production
+ENVIRONMENT = "production"
+SUPABASE_URL = "YOUR_SUPABASE_URL"
+
+# Python Workers configuration
+[python]
+# Cloudflare automatically handles the FastAPI entry point if it's named 'app'

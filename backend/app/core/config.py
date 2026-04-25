@@ -1,4 +1,4 @@
-﻿# ============================================================
+# ============================================================
 # PrimeSetu â€” Shoper9-Based Retail OS
 # Zero Cloud Â. Sovereign Â. AI-Governed
 # System Architect   :  Jawahar R. M. | Â(c) 2026
@@ -16,5 +16,6 @@ class Settings(BaseSettings):
 
     class Config:
         env_file = ".env"
+        extra = "ignore"
 
 settings = Settings()  # type: ignore

@@ -13,8 +13,8 @@ import { supabase } from '@/lib/supabase'
 
 const getBaseUrl = () => {
   if (import.meta.env.VITE_BACKEND_URL) return import.meta.env.VITE_BACKEND_URL
-  // Fallback for local development
-  return 'http://localhost:8000'
+  // Fallback to Production Render Backend
+  return 'https://primesetu-api.onrender.com'
 }
 
 const BASE_URL = getBaseUrl()

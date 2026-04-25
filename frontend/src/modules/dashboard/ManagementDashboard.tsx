@@ -11,7 +11,7 @@
 import { useState, useEffect } from 'react'
 import { motion } from 'framer-motion'
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, PieChart, Pie, Cell } from 'recharts'
-import { TrendingUp, Package, DollarSign, AlertCircle, ArrowUpRight, ArrowDownRight, RefreshCcw, Database, ShieldCheck, Zap } from 'lucide-react'
+import { TrendingUp, Package, DollarSign, AlertCircle, ArrowUpRight, ArrowDownRight, RefreshCcw, Database, ShieldCheck, Zap, Receipt } from 'lucide-react'
 import { api } from '@/api/client'
 import { syncEngine } from '@/lib/SyncEngine'
 

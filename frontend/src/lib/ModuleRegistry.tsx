@@ -25,7 +25,9 @@ import {
   History,
   Monitor,
   DollarSign,
-  Printer
+  Printer,
+  FileText,
+  Store
 } from 'lucide-react'
 
 // Module Lazy/Dynamic Imports (Simplified for now)
@@ -58,6 +60,8 @@ import HousekeepingModule from '../modules/settings/HousekeepingModule'
 import StockMovement from '../modules/inventory/StockMovement'
 import HSNManager from '../modules/catalogue/HSNManager'
 import PrintTemplateCenter from '../modules/settings/PrintTemplateCenter'
+import StoreOnboarding from '../modules/onboarding/StoreOnboarding'
+import CompliancePanel from '../modules/compliance/CompliancePanel'
 
 export interface ModuleDefinition {
   id: string
@@ -109,6 +113,8 @@ export const COMPONENT_MAP: Record<string, React.ReactNode> = {
   'reconcile': <ComingSoon />,
   'tally': <ComingSoon />,
   'print': <PrintTemplateCenter />,
+  'onboarding': <StoreOnboarding />,
+  'gstr1': <CompliancePanel />,
 };
 
 /**
@@ -149,5 +155,7 @@ export const ICON_MAP: Record<string, any> = {
   'reconcile': History,
   'tally': DollarSign,
   'print': Printer,
+  'onboarding': Store,
+  'gstr1': FileText,
 };
 

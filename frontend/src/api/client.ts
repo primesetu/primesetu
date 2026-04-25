@@ -98,5 +98,8 @@ export const api = {
     open: (id: string, data: any) => apiClient.post(`/tills/${id}/open`, data).then(r => r.data),
     close: (id: string) => apiClient.post(`/tills/${id}/close`).then(r => r.data),
     lift: (id: string, data: any) => apiClient.post(`/tills/${id}/lift`, data).then(r => r.data),
+  },
+  onboarding: {
+    registerStore: (data: any) => apiClient.post('/onboarding/store', data).then(r => r.data),
   }
 }

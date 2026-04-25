@@ -46,8 +46,10 @@ app.add_middleware(
 )
 
 from app.routers import onboarding
+from app.routers.gstr1 import router as gstr1_router
 
 app.include_router(onboarding.router)
+app.include_router(gstr1_router)
 
 # ── Startup ───────────────────────────────────────────────────────────────────
 @app.on_event("startup")

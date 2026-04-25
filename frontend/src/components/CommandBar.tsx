@@ -79,6 +79,28 @@ export default function CommandBar({ isOpen, onClose, onNavigate, initialContext
         });
       };
       traverse(menu);
+      
+      // Inject System Commands
+      flattened.push({
+        id: 'onboarding',
+        type: 'command',
+        label: 'Store Onboarding (Phase 3)',
+        icon: ICON_MAP['onboarding'],
+        shortcut: 'Shift+O',
+        tab: 'onboarding',
+        description: 'Register a new store unit atomically'
+      });
+
+      flattened.push({
+        id: 'gstr1',
+        type: 'command',
+        label: 'GSTR-1 Compliance Export',
+        icon: ICON_MAP['gstr1'],
+        shortcut: 'Ctrl+G',
+        tab: 'gstr1',
+        description: 'Generate B2B/B2CS tax return for filing'
+      });
+
       setCommands(flattened);
     });
 

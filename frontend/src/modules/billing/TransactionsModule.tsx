@@ -11,6 +11,7 @@
 import { useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { RotateCcw, PackageX, Ticket, Search, CheckCircle2 } from 'lucide-react'
+import { formatCurrency, formatDecimal } from '@/utils/currency'
 
 export default function TransactionsModule() {
   const [activeTab, setActiveTab] = useState<'SALES_RETURN' | 'PURCHASE_RETURN' | 'CREDIT_NOTES'>('SALES_RETURN')
@@ -85,7 +86,7 @@ export default function TransactionsModule() {
                    </div>
                    <div className="text-right">
                       <div className="text-[9px] font-black uppercase tracking-widest opacity-60">Bill Value</div>
-                      <div className="text-3xl font-serif font-black">₹4,500</div>
+                      <div className="text-3xl font-serif font-black">{formatCurrency(450000)}</div>
                    </div>
                 </div>
 
@@ -102,19 +103,19 @@ export default function TransactionsModule() {
                     </thead>
                     <tbody className="divide-y divide-border/50">
                       {[
-                        { name: 'Puma RS-X Bold', size: '10', price: 2499 },
-                        { name: 'Nexus Cotton Tee', size: 'L', price: 999 }
+                        { name: 'Puma RS-X Bold', size: '10', price: 249900 },
+                        { name: 'Nexus Cotton Tee', size: 'L', price: 99900 }
                       ].map((item, i) => (
                         <tr key={i} className="hover:bg-cream/10 transition-colors">
                           <td className="py-6">
                             <div className="font-bold text-navy">{item.name}</div>
-                            <div className="text-[10px] font-black text-muted uppercase tracking-tighter">Size: {item.size} | MRP: ₹{item.price}</div>
+                            <div className="text-[10px] font-black text-muted uppercase tracking-tighter">Size: {item.size} | MRP: {formatCurrency(item.price)}</div>
                           </td>
                           <td className="py-6 text-center font-bold">1</td>
                           <td className="py-6 text-center">
                             <input type="number" defaultValue="1" className="w-16 bg-cream/50 border border-border rounded-lg px-2 py-1 text-center font-black" />
                           </td>
-                          <td className="py-6 text-right font-black">₹{item.price}</td>
+                          <td className="py-6 text-right font-black">{formatCurrency(item.price)}</td>
                           <td className="py-6 text-center">
                              <button className="text-[9px] font-black uppercase tracking-widest text-rose-500 hover:bg-rose-50 px-4 py-2 rounded-lg transition-all">Remove</button>
                           </td>
@@ -132,7 +133,7 @@ export default function TransactionsModule() {
                       </div>
                       <div>
                         <div className="text-[9px] font-black text-muted uppercase tracking-widest mb-1">Total Refund</div>
-                        <div className="text-2xl font-serif font-black text-emerald-600">₹3,498</div>
+                        <div className="text-2xl font-serif font-black text-emerald-600">{formatCurrency(349800)}</div>
                       </div>
                    </div>
                    <div className="flex gap-4">
@@ -154,7 +155,7 @@ export default function TransactionsModule() {
              <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
                 {[
                   { label: 'Active Notes', value: '42', color: 'text-emerald-500' },
-                  { label: 'Total Liability', value: '₹1.24L', color: 'text-rose-500' },
+                  { label: 'Total Liability', value: formatCurrency(12400000), color: 'text-rose-500' },
                   { label: 'Expired (30d)', value: '12', color: 'text-muted' }
                 ].map((stat, i) => (
                   <div key={i} className="glass p-10 rounded-[3rem] shadow-xl">
@@ -183,15 +184,15 @@ export default function TransactionsModule() {
                       </thead>
                       <tbody className="divide-y divide-border/50 font-mono text-xs">
                         {[
-                          { no: 'CN-2026-001', cust: 'A.K. Sharma', date: '2026-04-01', exp: '2026-07-01', val: 1200, status: 'ACTIVE' },
-                          { no: 'CN-2026-002', cust: 'Mehul Jani', date: '2026-04-12', exp: '2026-07-12', val: 450, status: 'EXPIRED' }
+                          { no: 'CN-2026-001', cust: 'A.K. Sharma', date: '2026-04-01', exp: '2026-07-01', val: 120000, status: 'ACTIVE' },
+                          { no: 'CN-2026-002', cust: 'Mehul Jani', date: '2026-04-12', exp: '2026-07-12', val: 45000, status: 'EXPIRED' }
                         ].map((cn, i) => (
                           <tr key={i} className="hover:bg-cream/5 transition-colors">
                             <td className="px-10 py-6 font-black text-navy">{cn.no}</td>
                             <td className="px-6 py-6 font-black text-navy/60">{cn.cust}</td>
                             <td className="px-6 py-6">{cn.date}</td>
                             <td className="px-6 py-6 text-rose-500/60">{cn.exp}</td>
-                            <td className="px-6 py-6 text-right font-black text-navy text-lg">₹{cn.val}</td>
+                            <td className="px-6 py-6 text-right font-black text-navy text-lg">{formatCurrency(cn.val)}</td>
                             <td className="px-10 py-6 text-center">
                                <span className={`px-4 py-2 rounded-full text-[9px] font-black uppercase tracking-widest ${cn.status === 'ACTIVE' ? 'bg-emerald-50 text-emerald-600' : 'bg-rose-50 text-rose-600'}`}>
                                  {cn.status}

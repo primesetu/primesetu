@@ -10,20 +10,20 @@
 # ============================================================ #
 
 import uuid
-from pydantic import BaseModel
+from pydantic import BaseModel, Field
 from typing import List, Optional
 from datetime import datetime
 
 class PaymentModeDetail(BaseModel):
     mode: str
-    amount: float
+    amount: int = Field(..., description="Amount in paise (integer)")
     ref_no: Optional[str] = None
 
 class BillItemCreate(BaseModel):
     product_id: uuid.UUID
-    qty: float
-    unit_price: float
-    discount_per: float = 0.0
+    qty: float = Field(..., description="Quantity (decimal supported)")
+    unit_price: int = Field(..., description="Unit price in paise (integer)")
+    discount_per: int = Field(0, description="Discount percentage as integer")
 
 class BillCreate(BaseModel):
     customer_mobile: Optional[str] = None
@@ -38,7 +38,7 @@ class BillResponse(BaseModel):
     status: str
     bill_number: Optional[str] = None
     transaction_id: uuid.UUID
-    total: float
+    total: int = Field(..., description="Total amount in paise (integer)")
 
 class SlipCreate(BaseModel):
     customer_mobile: Optional[str] = None
@@ -48,4 +48,4 @@ class SlipResponse(BaseModel):
     status: str
     slip_no: str
     slip_id: uuid.UUID
-    total: float
+    total: int = Field(..., description="Total amount in paise (integer)")

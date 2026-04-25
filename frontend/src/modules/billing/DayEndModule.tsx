@@ -16,6 +16,7 @@ import {
   ArrowRight, Delete, TrendingUp, FileText, ShieldCheck,
   RotateCcw, ChevronRight
 } from 'lucide-react'
+import { toPaise, formatCurrency, toRupees } from '@/utils/currency'
 
 interface DayEndProps {
   onClose: () => void
@@ -30,13 +31,13 @@ const STEP_LABELS: Record<Step, string> = {
   SYNC: 'HO Pulse',
 }
 
-// Realistic mock data — replace with api.dayend.getSummary() in Phase 2
+// Realistic mock data in PAISE
 const systemSales = {
-  cash: 42500,
-  card: 31200,
-  upi: 12400,
-  cn: 1500,
-  returns: 3200,
+  cash: 4250000,
+  card: 3120000,
+  upi: 1240000,
+  cn: 150000,
+  returns: 320000,
   invoices: 142,
   openSlips: 2,
   get total() { return this.cash + this.card + this.upi - this.cn }
@@ -55,7 +56,7 @@ const SYNC_LOGS = [
 
 export default function DayEndModule({ onClose }: DayEndProps) {
   const [step, setStep] = useState<Step>('REVIEW')
-  const [cashCount, setCashCount] = useState('')
+  const [cashCountRupees, setCashCountRupees] = useState('')
   const [syncLogs, setSyncLogs] = useState<typeof SYNC_LOGS>([])
   const [syncDone, setSyncDone] = useState(false)
   const [now, setNow] = useState(new Date())
@@ -71,12 +72,12 @@ export default function DayEndModule({ onClose }: DayEndProps) {
     const handler = (e: KeyboardEvent) => {
       if (e.key === 'Enter') {
         if (step === 'REVIEW') setStep('RECONCILE')
-        if (step === 'RECONCILE' && cashCount) setStep('FINALIZE')
+        if (step === 'RECONCILE' && cashCountRupees) setStep('FINALIZE')
       }
     }
     window.addEventListener('keydown', handler)
     return () => window.removeEventListener('keydown', handler)
-  }, [step, cashCount])
+  }, [step, cashCountRupees])
 
   // Animated sync log
   const startSync = useCallback(() => {
@@ -91,15 +92,15 @@ export default function DayEndModule({ onClose }: DayEndProps) {
     })
   }, [])
 
-  const variance = cashCount ? parseFloat(cashCount) - systemSales.cash : null
-  const isMatch = variance !== null && Math.abs(variance) < 1
-  const hasMismatch = variance !== null && !isMatch
+  const variancePaise = cashCountRupees ? toPaise(cashCountRupees) - systemSales.cash : null
+  const isMatch = variancePaise !== null && Math.abs(variancePaise) < 100 // 1 rupee tolerance
+  const hasMismatch = variancePaise !== null && !isMatch
 
   const numpadPress = (v: string) => {
-    if (v === 'DEL') { setCashCount(p => p.slice(0, -1)); return }
-    if (v === 'CLR') { setCashCount(''); return }
-    if (cashCount.length >= 8) return
-    setCashCount(p => p + v)
+    if (v === 'DEL') { setCashCountRupees(p => p.slice(0, -1)); return }
+    if (v === 'CLR') { setCashCountRupees(''); return }
+    if (cashCountRupees.length >= 8) return
+    setCashCountRupees(p => p + v)
   }
 
   const today = now.toLocaleDateString('en-IN', { day: '2-digit', month: 'short', year: 'numeric' })
@@ -173,8 +174,8 @@ export default function DayEndModule({ onClose }: DayEndProps) {
             <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
               {[
                 { label: 'Total Invoices', value: systemSales.invoices, icon: FileText, color: 'text-navy', bg: 'bg-navy/5' },
-                { label: 'Net Sales', value: `₹${systemSales.total.toLocaleString()}`, icon: TrendingUp, color: 'text-emerald-600', bg: 'bg-emerald-50' },
-                { label: 'Returns', value: `₹${systemSales.returns.toLocaleString()}`, icon: RotateCcw, color: 'text-rose-500', bg: 'bg-rose-50' },
+                { label: 'Net Sales', value: formatCurrency(systemSales.total), icon: TrendingUp, color: 'text-emerald-600', bg: 'bg-emerald-50' },
+                { label: 'Returns', value: formatCurrency(systemSales.returns), icon: RotateCcw, color: 'text-rose-500', bg: 'bg-rose-50' },
                 { label: 'Open Slips', value: systemSales.openSlips, icon: Clock, color: systemSales.openSlips > 0 ? 'text-amber-600' : 'text-muted', bg: systemSales.openSlips > 0 ? 'bg-amber-50' : 'bg-gray-50' },
               ].map((stat, i) => (
                 <motion.div key={i} initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: i * 0.07 }}
@@ -216,7 +217,7 @@ export default function DayEndModule({ onClose }: DayEndProps) {
                       <div className="flex justify-between mb-1.5">
                         <span className="text-xs font-black text-navy uppercase tracking-tight">{item.label}</span>
                         <span className={`text-sm font-serif font-black ${item.value < 0 ? 'text-rose-500' : 'text-navy'}`}>
-                          {item.value < 0 ? '-' : ''}₹{Math.abs(item.value).toLocaleString()}
+                          {item.value < 0 ? '-' : ''}{formatCurrency(Math.abs(item.value))}
                         </span>
                       </div>
                       <div className="h-1.5 bg-gray-100 rounded-full overflow-hidden">
@@ -229,7 +230,7 @@ export default function DayEndModule({ onClose }: DayEndProps) {
 
                 <div className="flex justify-between items-center px-4 pt-4 border-t border-dashed border-border">
                   <span className="text-xs font-black text-muted uppercase tracking-widest">Net Collection</span>
-                  <span className="text-2xl font-serif font-black text-navy">₹{systemSales.total.toLocaleString()}</span>
+                  <span className="text-2xl font-serif font-black text-navy">{formatCurrency(systemSales.total)}</span>
                 </div>
               </div>
 
@@ -254,7 +255,7 @@ export default function DayEndModule({ onClose }: DayEndProps) {
                 </div>
                 <div>
                   <h2 className="text-2xl font-serif font-black text-navy">Physical Cash Declaration</h2>
-                  <p className="text-[10px] text-muted font-bold uppercase tracking-widest">System expects: ₹{systemSales.cash.toLocaleString()}</p>
+                  <p className="text-[10px] text-muted font-bold uppercase tracking-widest">System expects: {formatCurrency(systemSales.cash)}</p>
                 </div>
               </div>
 
@@ -262,7 +263,7 @@ export default function DayEndModule({ onClose }: DayEndProps) {
               <div className="bg-navy/5 border-2 border-navy/10 rounded-3xl px-8 py-6 text-center mb-6 relative focus-within:border-amber-400 transition-all">
                 <div className="text-[11px] font-black text-muted uppercase tracking-widest mb-1">Counted Cash Amount</div>
                 <div className="text-6xl font-serif font-black text-navy min-h-[72px] flex items-center justify-center">
-                  {cashCount ? `₹${parseInt(cashCount).toLocaleString()}` : <span className="text-navy/20">₹ —</span>}
+                  {cashCountRupees ? `₹${parseFloat(cashCountRupees).toLocaleString()}` : <span className="text-navy/20">₹ —</span>}
                 </div>
               </div>
 
@@ -283,12 +284,12 @@ export default function DayEndModule({ onClose }: DayEndProps) {
               <div className="flex gap-2 mb-6 flex-wrap">
                 <span className="text-[9px] font-black text-muted uppercase tracking-widest self-center">Quick fill:</span>
                 {[40000, 42500, 45000, 50000].map(v => (
-                  <button key={v} onClick={() => setCashCount(v.toString())}
+                  <button key={v} onClick={() => setCashCountRupees(v.toString())}
                     className="px-4 py-2 bg-white border border-border rounded-xl text-[11px] font-black text-navy hover:border-amber-400 hover:bg-amber-50 transition-all">
                     ₹{v.toLocaleString()}
                   </button>
                 ))}
-                <button onClick={() => setCashCount(systemSales.cash.toString())}
+                <button onClick={() => setCashCountRupees(toRupees(systemSales.cash).toString())}
                   className="px-4 py-2 bg-emerald-50 border border-emerald-200 rounded-xl text-[11px] font-black text-emerald-700 hover:bg-emerald-100 transition-all">
                   Exact Match
                 </button>
@@ -299,7 +300,7 @@ export default function DayEndModule({ onClose }: DayEndProps) {
                   className="px-8 py-4 rounded-2xl font-black text-[10px] uppercase tracking-widest border-2 border-border hover:bg-cream transition-all flex items-center gap-2">
                   ← Back
                 </button>
-                <button onClick={() => setStep('FINALIZE')} disabled={!cashCount}
+                <button onClick={() => setStep('FINALIZE')} disabled={!cashCountRupees}
                   className="flex-1 bg-navy text-white py-4 rounded-2xl font-black text-[11px] uppercase tracking-widest hover:bg-amber-400 hover:text-navy transition-all shadow-xl disabled:opacity-30 flex items-center justify-center gap-2">
                   Verify Discrepancy <ChevronRight className="w-4 h-4" />
                 </button>
@@ -324,7 +325,7 @@ export default function DayEndModule({ onClose }: DayEndProps) {
                 </div>
                 <div className="text-right shrink-0">
                   <div className="text-[9px] font-black text-muted uppercase tracking-widest mb-1">Declared</div>
-                  <div className="text-4xl font-serif font-black text-emerald-600">₹{parseFloat(cashCount).toLocaleString()}</div>
+                  <div className="text-4xl font-serif font-black text-emerald-600">{formatCurrency(toPaise(cashCountRupees))}</div>
                 </div>
               </div>
             ) : (
@@ -334,17 +335,17 @@ export default function DayEndModule({ onClose }: DayEndProps) {
                 </div>
                 <div className="flex-1">
                   <h2 className="text-2xl font-serif font-black text-rose-600 mb-1">
-                    {variance! > 0 ? 'Cash Surplus Detected' : 'Cash Deficit Detected'}
+                    {variancePaise! > 0 ? 'Cash Surplus Detected' : 'Cash Deficit Detected'}
                   </h2>
                   <p className="text-xs text-rose-400/80 font-bold uppercase tracking-widest">
-                    Variance of ₹{Math.abs(variance!).toLocaleString()} requires supervisor acknowledgment.
+                    Variance of {formatCurrency(Math.abs(variancePaise!))} requires supervisor acknowledgment.
                   </p>
                 </div>
                 <div className="text-right shrink-0">
-                  <div className={`text-[9px] font-black uppercase tracking-widest mb-1 ${variance! > 0 ? 'text-amber-500' : 'text-rose-400'}`}>
-                    {variance! > 0 ? 'Surplus' : 'Deficit'}
+                  <div className={`text-[9px] font-black uppercase tracking-widest mb-1 ${variancePaise! > 0 ? 'text-amber-500' : 'text-rose-400'}`}>
+                    {variancePaise! > 0 ? 'Surplus' : 'Deficit'}
                   </div>
-                  <div className="text-4xl font-serif font-black text-rose-600">₹{Math.abs(variance!).toLocaleString()}</div>
+                  <div className="text-4xl font-serif font-black text-rose-600">{formatCurrency(Math.abs(variancePaise!))}</div>
                 </div>
               </div>
             )}

@@ -1,46 +1,37 @@
-/* ============================================================
- * PrimeSetu — Shoper9-Based Retail OS
- * Zero Cloud · Sovereign · AI-Governed
- * ============================================================
- * System Architect   :  Jawahar R. M.
- * Organisation       :  AITDL Network
- * Project            :  PrimeSetu
- * © 2026 — All Rights Reserved
- * "Memory, Not Code."
- * ============================================================ */
+# PrimeSetu Sovereign Institutional Stabilisation
 
-# MenuManager Engine — Protocol Audit & Task Tracker
+## Current Focus: Sovereign Money Standard (Paise-Integers)
 
-This file documents every protocol violation, bug, and missing piece in the current codebase regarding the newly enforced **Sovereign Navigation & Access Control Protocol** defined in `AGENTS.md`.
+### 1. Database & Schema Migration
+- [x] Create migration `20260426004500_convert_money_to_paise.sql`
+- [x] Convert all `Numeric` monetary columns to `BIGINT` in `base.py`
+- [x] Update RLS policies for money-based filtering (if any)
 
-## 🚨 Protocol Violations
+### 2. Backend Engine Refactor
+- [x] Refactor `GSTEngine` in `gst.py` to use strict integer math
+- [x] Update `BillingRouter` logic for totals/discounts/rounding
+- [x] Update Pydantic schemas in `billing.py` and `common.py`
+- [x] Fix `DashboardStats` and report summaries in `main.py`
+- [x] Refactor `TallyBridge` for Paise-to-Rupee XML export
 
-- [x] BUG-001: Hardcoded Menu Array | File: `frontend/src/lib/ModuleRegistry.tsx` | Severity: HIGH
-  - **Violation**: Rule 1 (NO HARDCODED MENUS). 
-  - **Details**: Navigation relies on `export const MODULE_REGISTRY = [...]`. It must be deleted and replaced with a dynamic API call to FastAPI.
+### 3. Frontend UI/UX Alignment
+- [x] Create `currency.ts` utilities (toPaise, toRupees, formatCurrency)
+- [x] Refactor `BillingModule.tsx` (Core POS)
+- [x] Refactor `DayEndModule.tsx` (Reconciliation)
+- [x] Refactor `TransactionsModule.tsx` (Returns/Credits)
+- [x] Refactor `PriceManagement.tsx` (Master Pricing)
+- [x] Refactor `TillManagement.tsx` (Cash tracking)
 
-- [x] BUG-002: Role-Based Binding Instead of Permissions | File: `frontend/src/lib/ModuleRegistry.tsx` & `Sidebar.tsx` | Severity: HIGH
-  - **Violation**: Rule 3 (PERMISSIONS OVER ROLES).
-  - **Details**: UI visibility is currently gated by arrays like `roles: ['OWNER', 'MANAGER']`. This will cause role explosion. Must be refactored to check `required_permission`.
+### 4. Verification & Build
+- [x] Verify API responses return integer paise
+- [x] Verify Frontend formats paise to Rupee-string correctly
+- [ ] Run `npm run build` (Pending final check)
 
-- [x] BUG-003: Missing Sovereign Offline Fallback | File: `frontend/src/App.tsx` | Severity: HIGH
-  - **Violation**: Rule 2 (SOVEREIGN OFFLINE FALLBACK).
-  - **Details**: Because the menu is currently static, there is no `try/catch` network fetch mechanism wrapping `IndexedDB` (`idb`) to ensure offline survival of the layout.
+---
 
-- [x] BUG-004: Incomplete Terminal Mode Hotkeys | File: `frontend/src/lib/ModuleRegistry.tsx` | Severity: MED
-  - **Violation**: Rule 4 (TERMINAL MODE HOTKEYS).
-  - **Details**: Several modules (e.g., Vendors, Procurement) lack the required `shortcut` property (e.g., `F1`, `F9`), forcing users to rely on mouse navigation.
+## Technical Notes: "Memory, Not Code."
 
-## 🧩 Missing Architectural Pieces
-
-- [x] MISS-001: Missing Database Schema (PostgreSQL) | File: `supabase/migrations/005_menumanager.sql` | Severity: HIGH
-  - **Details**: Requires a SQL migration to construct the `menu_items` table with columns: `id`, `label`, `route`, `shortcut`, `required_permission`, `category`, and `parent_id`.
-
-- [x] MISS-002: Missing FastAPI Resolver Engine | File: `main.py` | Severity: HIGH
-  - **Details**: Requires a `GET /api/v1/menu` endpoint that securely intersects the authenticated user's permissions with the active `menu_items` in the database.
-
-- [x] MISS-003: Missing Frontend Cache Manager | File: `frontend/src/api/menuService.ts` | Severity: HIGH
-  - **Details**: Needs a dedicated service utilizing `openDB('PrimeSetuDB')` to intercept the FastAPI menu response and save it locally for Sovereign Offline execution.
-
-- [x] MISS-004: Missing Global Hotkey Registrar | File: `frontend/src/components/layout/Sidebar.tsx` | Severity: MED
-  - **Details**: Frontend lacks a dynamic parser to iterate over the `shortcut` property of the fetched menu and instantly bind them using `react-hotkeys-hook`.
+1. **Precision Rule**: Paise integers = Absolute Precision. Float = Forbidden.
+2. **Rounding Rule**: Tally-compatible rounding to nearest Rupee at bill level.
+3. **Display Rule**: Always use `formatCurrency()` from `@/utils/currency`.
+4. **Input Rule**: Users type Rupees; code converts to Paise immediately.

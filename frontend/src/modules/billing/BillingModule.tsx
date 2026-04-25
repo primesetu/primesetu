@@ -28,6 +28,7 @@ import SalesSlipsBrowser from './SalesSlipsBrowser'
 import { useHotkeys } from 'react-hotkeys-hook'
 import { offlineService } from '@/api/offline'
 import { useLanguage } from '@/hooks/useLanguage'
+import { toPaise, formatCurrency, formatDecimal, toRupees } from '@/utils/currency'
 
 interface CartItem {
   id: string; code: string; name: string; brand: string; category: string
@@ -123,14 +124,12 @@ export default function BillingModule() {
   }, [q])
 
   const addToCart = (p: any) => {
-    // SOVEREIGN STOCK GUARD: Only block if stock data is available AND exhausted
     const storeStock = p.stocks?.find((s: any) => s.store_id === 'X01')?.quantity;
     
     setCart(prev => {
       const ex = prev.find(i => i.id === p.id)
       const currentQty = ex ? ex.qty : 0;
       
-      // Only enforce guard if stock data actually exists from the API
       if (storeStock !== undefined && currentQty + 1 > storeStock) {
         alert(`STOCK ALERT: Only ${storeStock} units available in X01 store.`);
         return prev;
@@ -144,10 +143,8 @@ export default function BillingModule() {
   const updateItem = (id: string, updates: Partial<CartItem>) => {
     setCart(prev => prev.map(i => {
       if (i.id === id) {
-        // Only run stock guard when qty is being changed
         if (updates.qty !== undefined) {
           const storeStock = i.stocks?.find((s: any) => s.store_id === 'X01')?.quantity;
-          // Only block if stock data exists from API AND would be exceeded
           if (storeStock !== undefined && updates.qty > storeStock) {
             alert(`STOCK ALERT: Only ${storeStock} units available.`);
             return i;
@@ -161,14 +158,14 @@ export default function BillingModule() {
 
   const removeItem = (id: string) => setCart(prev => prev.filter(i => i.id !== id))
 
-  // Totals (Shoper9 style: Dual Tax Support)
+  // Totals in PAISE
   const tax_summary = cart.reduce((acc, i) => {
-    const net = i.mrp * i.qty * (1 - i.discount_per / 100)
+    const netPaise = Math.round(i.mrp * i.qty * (1 - i.discount_per / 100))
     const rate = i.tax_rate / 100
-    const is_inclusive = i.is_tax_inclusive ?? true; // Default to inclusive as per Shoper9 standard
+    const is_inclusive = i.is_tax_inclusive ?? true;
     
-    const tax_amt = is_inclusive ? (net - net / (1 + rate)) : (net * rate);
-    const taxable_amt = is_inclusive ? (net - tax_amt) : net;
+    const tax_amt = is_inclusive ? (netPaise - netPaise / (1 + rate)) : (netPaise * rate);
+    const taxable_amt = is_inclusive ? (netPaise - tax_amt) : netPaise;
     
     return {
       taxable: acc.taxable + taxable_amt,
@@ -176,12 +173,12 @@ export default function BillingModule() {
     }
   }, { taxable: 0, tax: 0 })
 
-  const subtotal = cart.reduce((s, i) => s + i.mrp * i.qty, 0)
-  const disc_total = cart.reduce((s, i) => s + i.mrp * i.qty * (i.discount_per / 100), 0)
-  const net_payable = Math.round(tax_summary.taxable + tax_summary.tax)
-  const roundoff = net_payable - (tax_summary.taxable + tax_summary.tax)
-  const taxable = tax_summary.taxable
-  const tax_total = tax_summary.tax
+  const subtotalPaise = cart.reduce((s, i) => s + i.mrp * i.qty, 0)
+  const discTotalPaise = cart.reduce((s, i) => s + Math.round(i.mrp * i.qty * (i.discount_per / 100)), 0)
+  const netPayablePaise = Math.round(tax_summary.taxable + tax_summary.tax)
+  const roundoffPaise = netPayablePaise - (tax_summary.taxable + tax_summary.tax)
+  const taxablePaise = tax_summary.taxable
+  const taxTotalPaise = tax_summary.tax
 
   const handleFinalize = async () => {
     if (!cart.length || processing) return
@@ -191,7 +188,7 @@ export default function BillingModule() {
       type: 'Sales',
       till_id: activeTill?.id,
       items: cart.map(i => ({ product_id: i.id, qty: i.qty, unit_price: i.mrp, discount_per: i.discount_per, tax_per: i.tax_rate })),
-      payments: payLines.filter(p => p.amount > 0)
+      payments: payLines.filter(p => p.amount > 0).map(p => ({ ...p, amount: toPaise(p.amount) }))
     }
 
     try {
@@ -204,12 +201,10 @@ export default function BillingModule() {
       setTimeout(() => setLastBill(null), 6000)
     } catch (err) { 
       console.warn('[PrimeSetu] Network Failure. Entering Isolation Protocol.')
-      // Queue transaction offline
       await offlineService.queueTransaction(billData)
       setOfflineCount(prev => prev + 1)
       
-      // Still allow "Success" UI for cashier flow continuity
-      const mockResult = { status: 'queued', bill_number: 'OFFLINE-'+Date.now(), total: net_payable }
+      const mockResult = { status: 'queued', bill_number: 'OFFLINE-'+Date.now(), total: netPayablePaise }
       setLastBill(mockResult); setBillToPrint(mockResult)
       setCart([]); setCustomerMobile(''); setSalesperson('')
       setPayLines([{ mode: 'CASH', amount: 0 }]); setShowSettle(false)
@@ -246,13 +241,12 @@ export default function BillingModule() {
     } finally { setProcessing(false) }
   }
 
-  // Sovereign Shortcuts via react-hotkeys-hook
   useHotkeys('f4', (e) => { e.preventDefault(); setShowSuspended(v => !v) }, { enableOnFormTags: true })
   useHotkeys('f5', (e) => { e.preventDefault(); setShowSuspended(v => !v) }, { enableOnFormTags: true })
   useHotkeys('f6', (e) => { e.preventDefault(); setShowSlips(v => !v) }, { enableOnFormTags: true })
   useHotkeys('shift+f6', (e) => { e.preventDefault(); handleCreateSlip() }, { enableOnFormTags: true })
   useHotkeys('f9', (e) => { e.preventDefault(); setShowTotals(v => !v) }, { enableOnFormTags: true })
-  useHotkeys('f7', (e) => { e.preventDefault(); setPayLines([{ mode: 'CASH', amount: net_payable }]); setShowSettle(true) }, { enableOnFormTags: true })
+  useHotkeys('f7', (e) => { e.preventDefault(); setPayLines([{ mode: 'CASH', amount: toRupees(netPayablePaise) }]); setShowSettle(true) }, { enableOnFormTags: true })
   useHotkeys('f8', (e) => { e.preventDefault(); setShowSettle(v => !v) }, { enableOnFormTags: true })
   useHotkeys('f10', (e) => { e.preventDefault(); setShowSettle(true) }, { enableOnFormTags: true })
   useHotkeys('f12', (e) => { e.preventDefault(); handleSuspend() }, { enableOnFormTags: true })
@@ -269,15 +263,8 @@ export default function BillingModule() {
     GV:     <Gift className="w-4 h-4" />,
     COUPON: <Tag className="w-4 h-4" />,
   }
-  const PAY_COLORS: Record<PayMode, string> = {
-    CASH: 'bg-emerald-50 border-emerald-300 text-emerald-700',
-    UPI: 'bg-purple-50 border-purple-300 text-purple-700',
-    CARD: 'bg-blue-50 border-blue-300 text-blue-700',
-    GV: 'bg-rose-50 border-rose-300 text-rose-700',
-    COUPON: 'bg-amber-50 border-amber-300 text-amber-700',
-  }
-  const paidTotal = payLines.reduce((s, p) => s + p.amount, 0)
-  const balance = net_payable - paidTotal
+  const paidTotalRupees = payLines.reduce((s, p) => s + p.amount, 0)
+  const balanceRupees = toRupees(netPayablePaise) - paidTotalRupees
 
   return (
     <div className="flex flex-col h-screen bg-[#f0ede8] font-sans overflow-hidden relative">
@@ -318,7 +305,7 @@ export default function BillingModule() {
             <CheckCircle2 className="w-8 h-8" />
             <div>
               <div className="text-[10px] font-bold uppercase tracking-widest opacity-70">Bill Settled</div>
-              <div className="text-xl font-black">{lastBill.bill_number} &nbsp;·&nbsp; ₹{Math.round(lastBill.total).toLocaleString()}</div>
+              <div className="text-xl font-black">{lastBill.bill_number} &nbsp;·&nbsp; {formatCurrency(lastBill.total)}</div>
             </div>
           </motion.div>
         )}
@@ -331,11 +318,11 @@ export default function BillingModule() {
             <div className="bg-white rounded-3xl p-8 shadow-2xl w-96 border-2 border-navy/10" onClick={e => e.stopPropagation()}>
               <div className="text-center text-xs font-black text-navy uppercase tracking-[0.3em] mb-6">Bill Totals [F9]</div>
               {[
-                ['Gross MRP', `₹${subtotal.toLocaleString()}`],
-                ['Discount', `-₹${Math.round(disc_total).toLocaleString()}`],
-                ['Taxable Value', `₹${Math.round(taxable - tax_total).toLocaleString()}`],
-                ['GST / Tax', `₹${Math.round(tax_total).toLocaleString()}`],
-                ['Round Off', `₹${roundoff.toFixed(2)}`],
+                ['Gross MRP', formatCurrency(subtotalPaise)],
+                ['Discount', `-${formatCurrency(discTotalPaise)}`],
+                ['Taxable Value', formatCurrency(taxablePaise - taxTotalPaise)],
+                ['GST / Tax', formatCurrency(taxTotalPaise)],
+                ['Round Off', formatCurrency(roundoffPaise)],
               ].map(([l, v]) => (
                 <div key={l} className="flex justify-between py-2 border-b border-gray-100 text-sm">
                   <span className="text-gray-500 font-medium">{l}</span>
@@ -344,7 +331,7 @@ export default function BillingModule() {
               ))}
               <div className="flex justify-between pt-4 text-2xl font-black">
                 <span className="text-navy">Net Payable</span>
-                <span className="text-emerald-600">₹{net_payable.toLocaleString()}</span>
+                <span className="text-emerald-600">{formatCurrency(netPayablePaise)}</span>
               </div>
               <button onClick={() => setShowTotals(false)} className="mt-6 w-full bg-navy text-white py-3 rounded-xl text-xs font-black uppercase tracking-widest">Close [Esc]</button>
             </div>
@@ -353,10 +340,8 @@ export default function BillingModule() {
 
       </AnimatePresence>
 
-
       {/* ─── Shoper9 Toolbar ─── */}
       <div className="flex items-center gap-1 bg-[#1a2340] px-3 py-2 shrink-0">
-        {/* Logo */}
           <div className="flex items-center gap-4">
             {!isOnline && (
               <div className="flex items-center gap-2 px-3 py-1 bg-rose-500 text-white rounded-full text-[10px] font-black animate-pulse">
@@ -379,13 +364,12 @@ export default function BillingModule() {
           <span className="text-white font-black text-sm tracking-tight">PrimeSetu POS</span>
         </div>
 
-        {/* Action buttons */}
         {[
           { icon: <FilePlus2 className="w-4 h-4" />, label: 'New Bill', key: 'Alt+1', action: () => { setCart([]); setCustomerMobile(''); setQ(''); searchRef.current?.focus() } },
           { icon: <Search className="w-4 h-4" />, label: 'Item Search', key: 'F2', action: () => searchRef.current?.focus() },
           { icon: <RotateCcw className="w-4 h-4" />, label: 'Return', key: 'Alt+2', action: () => setShowReturns(true) },
           { icon: <Calculator className="w-4 h-4" />, label: 'Totals', key: 'F9', action: () => setShowTotals(v => !v) },
-          { icon: <Banknote className="w-4 h-4" />, label: 'Exact Cash', key: 'F7', action: () => { setPayLines([{ mode: 'CASH', amount: net_payable }]); handleFinalize() } },
+          { icon: <Banknote className="w-4 h-4" />, label: 'Exact Cash', key: 'F7', action: () => { setPayLines([{ mode: 'CASH', amount: toRupees(netPayablePaise) }]); setShowSettle(true) } },
           { icon: <CreditCard className="w-4 h-4" />, label: 'Settlement', key: 'F8', action: () => setShowSettle(true) },
           { icon: <FileText className="w-4 h-4" />, label: 'Sales Slips', key: 'F6', action: () => setShowSlips(true) },
           { icon: <Pause className="w-4 h-4" />, label: 'Suspend', key: 'F12', action: handleSuspend },
@@ -464,10 +448,7 @@ export default function BillingModule() {
 
       {/* ─── Main Content ─── */}
       <div className="flex gap-2 px-3 pb-2 pt-2 flex-1 overflow-hidden">
-
-        {/* ─── Bill Details Grid ─── */}
         <div className="flex-1 flex flex-col bg-white rounded-2xl shadow-sm border border-gray-200 overflow-hidden">
-          {/* Grid Header */}
           <div className="grid bg-[#1a2340] text-white text-[10px] font-black uppercase tracking-widest"
             style={{ gridTemplateColumns: '40px 90px 1fr 80px 90px 70px 80px 100px 36px' }}>
             {['#','Code','Item Name','Qty','MRP','Disc%','GST%','Net Amt',''].map(h => (
@@ -475,7 +456,6 @@ export default function BillingModule() {
             ))}
           </div>
 
-          {/* Grid Body */}
           <div className="flex-1 overflow-x-auto bg-gray-50/50">
             <div className="min-w-[800px] h-full flex flex-col">
               {cart.length === 0 ? (
@@ -486,7 +466,7 @@ export default function BillingModule() {
               ) : (
                 <div className="flex-1 overflow-y-auto">
                   {cart.map((item, idx) => {
-              const lineNet = item.mrp * item.qty * (1 - item.discount_per / 100)
+              const lineNetPaise = Math.round(item.mrp * item.qty * (1 - item.discount_per / 100))
               return (
                 <motion.div key={item.id} layout initial={{ opacity: 0, x: -10 }} animate={{ opacity: 1, x: 0 }}
                   className={`grid items-center border-b border-gray-50 hover:bg-amber-50 transition-colors group ${idx % 2 === 0 ? 'bg-white' : 'bg-gray-50/60'}`}
@@ -504,7 +484,7 @@ export default function BillingModule() {
                     <button onClick={() => updateItem(item.id, { qty: item.qty + 1 })}
                       className="w-5 h-5 bg-gray-100 hover:bg-amber-200 rounded text-xs font-black transition-colors flex items-center justify-center">+</button>
                   </div>
-                  <div className="px-2 py-3 text-center font-mono text-sm text-gray-600">₹{item.mrp.toLocaleString()}</div>
+                  <div className="px-2 py-3 text-center font-mono text-sm text-gray-600">{formatDecimal(item.mrp)}</div>
                   <div className="px-2 py-3 flex items-center justify-center">
                     <input type="number" value={item.discount_per} min={0} max={100}
                       onChange={e => updateItem(item.id, { discount_per: Math.min(100, Math.max(0, Number(e.target.value))) })}
@@ -512,7 +492,7 @@ export default function BillingModule() {
                     />
                   </div>
                   <div className="px-2 py-3 text-center text-[11px] text-gray-400 font-bold">{item.tax_rate}%</div>
-                  <div className="px-2 py-3 text-center font-black text-navy text-sm">₹{Math.round(lineNet).toLocaleString()}</div>
+                  <div className="px-2 py-3 text-center font-black text-navy text-sm">{formatCurrency(lineNetPaise)}</div>
                   <div className="px-2 py-3 flex items-center justify-center">
                     <button onClick={() => removeItem(item.id)} className="opacity-0 group-hover:opacity-100 text-red-400 hover:text-red-600 transition-all">
                       <Trash2 className="w-4 h-4" />
@@ -526,13 +506,12 @@ export default function BillingModule() {
             </div>
           </div>
 
-          {/* Bill Footer Summary */}
           <div className="border-t-2 border-gray-100 bg-gray-50 px-4 py-3 grid grid-cols-4 gap-4 shrink-0">
             {[
               { label: 'Items', value: cart.reduce((a, i) => a + i.qty, 0) },
-              { label: 'Gross MRP', value: `₹${subtotal.toLocaleString()}` },
-              { label: 'Discount', value: `-₹${Math.round(disc_total).toLocaleString()}` },
-              { label: 'GST', value: `₹${Math.round(tax_total).toLocaleString()}` },
+              { label: 'Gross MRP', value: formatCurrency(subtotalPaise) },
+              { label: 'Discount', value: `-${formatCurrency(discTotalPaise)}` },
+              { label: 'GST', value: formatCurrency(taxTotalPaise) },
             ].map(({ label, value }) => (
               <div key={label} className="text-center">
                 <div className="text-[9px] font-black text-gray-400 uppercase tracking-widest">{label}</div>
@@ -542,24 +521,20 @@ export default function BillingModule() {
           </div>
         </div>
 
-        {/* ─── Settlement Panel ─── */}
         <div className="w-72 flex flex-col gap-2 shrink-0">
-
-          {/* Net Payable */}
           <div className="bg-[#1a2340] rounded-2xl p-4 text-white text-center shadow-lg border-b-4 border-amber-400 relative overflow-hidden">
             <div className="absolute inset-0 bg-gradient-to-br from-amber-400/5 to-transparent" />
             <div className="text-[9px] font-black text-amber-400 uppercase tracking-[0.3em] mb-1">{t('payable')}</div>
-            <div className="text-4xl font-black font-mono">₹{net_payable.toLocaleString()}</div>
-            {disc_total > 0 && <div className="text-[10px] text-emerald-400 font-bold mt-1">Saves ₹{Math.round(disc_total).toLocaleString()}</div>}
+            <div className="text-4xl font-black font-mono">{formatCurrency(netPayablePaise)}</div>
+            {discTotalPaise > 0 && <div className="text-[10px] text-emerald-400 font-bold mt-1">Saves {formatCurrency(discTotalPaise)}</div>}
             {salesperson && <div className="text-[9px] text-white/40 mt-1 font-mono">SP: {salesperson}</div>}
           </div>
 
-          {/* Breakup */}
           <div className="bg-white rounded-xl p-3 border border-gray-200 shadow-sm text-xs space-y-1.5">
             {[
-              ['Subtotal', `₹${Math.round(taxable - tax_total).toLocaleString()}`],
-              ['GST', `₹${Math.round(tax_total).toLocaleString()}`],
-              ['Round Off', `${roundoff >= 0 ? '+' : ''}₹${roundoff.toFixed(2)}`],
+              ['Subtotal', formatCurrency(taxablePaise - taxTotalPaise)],
+              ['GST', formatCurrency(taxTotalPaise)],
+              ['Round Off', formatCurrency(roundoffPaise)],
             ].map(([l, v]) => (
               <div key={l} className="flex justify-between">
                 <span className="text-gray-400">{l}</span>
@@ -568,7 +543,6 @@ export default function BillingModule() {
             ))}
           </div>
 
-          {/* Split Payment Lines */}
           <div className="bg-white rounded-xl p-3 border border-gray-200 shadow-sm space-y-2">
             <div className="flex items-center justify-between">
               <span className="text-[9px] font-black text-gray-400 uppercase tracking-widest">Split Payment [F8]</span>
@@ -601,20 +575,18 @@ export default function BillingModule() {
                 )}
               </div>
             ))}
-            {/* Balance Indicator */}
-            <div className={`flex justify-between text-xs font-black pt-1 border-t border-dashed ${balance > 0 ? 'text-red-500 border-red-200' : balance < 0 ? 'text-emerald-500 border-emerald-200' : 'text-gray-400 border-gray-200'}`}>
-              <span>{balance > 0 ? 'Balance Due' : balance < 0 ? 'Change Back' : 'Exact'}</span>
-              <span>₹{Math.abs(balance).toLocaleString()}</span>
+            <div className={`flex justify-between text-xs font-black pt-1 border-t border-dashed ${balanceRupees > 0.01 ? 'text-red-500 border-red-200' : balanceRupees < -0.01 ? 'text-emerald-500 border-emerald-200' : 'text-gray-400 border-gray-200'}`}>
+              <span>{balanceRupees > 0.01 ? 'Balance Due' : balanceRupees < -0.01 ? 'Change Back' : 'Exact'}</span>
+              <span>₹{Math.abs(balanceRupees).toFixed(2)}</span>
             </div>
           </div>
 
-          {/* Quick-fill all modes */}
           <div className="grid grid-cols-5 gap-1">
             {(['CASH','UPI','CARD','GV','COUPON'] as PayMode[]).map(m => (
               <button key={m} title={m}
-                onClick={() => setPayLines([{ mode: m, amount: net_payable }])}
+                onClick={() => setPayLines([{ mode: m, amount: toRupees(netPayablePaise) }])}
                 className={`flex flex-col items-center gap-0.5 py-2 rounded-xl text-[9px] font-black border-2 transition-all ${
-                  payLines.length === 1 && payLines[0].mode === m && payLines[0].amount === net_payable
+                  payLines.length === 1 && payLines[0].mode === m && Math.abs(payLines[0].amount - toRupees(netPayablePaise)) < 0.01
                     ? 'bg-amber-400 text-navy border-amber-400'
                     : 'bg-white text-gray-400 border-gray-100 hover:border-amber-300'
                 }`}>
@@ -624,7 +596,6 @@ export default function BillingModule() {
             ))}
           </div>
 
-          {/* Customer & Digital Receipt */}
           <div className="bg-white rounded-xl p-3 border border-gray-200 shadow-sm space-y-3">
             <div className="space-y-1">
               <label className="text-[9px] font-black text-gray-400 uppercase tracking-widest">Customer Mobile [Alt+M]</label>
@@ -647,7 +618,7 @@ export default function BillingModule() {
                 <span className="text-[10px] font-black uppercase tracking-tight">Digital Receipt</span>
               </div>
               <div className={`w-8 h-4 rounded-full relative transition-colors ${sendSms ? 'bg-emerald-500' : 'bg-gray-300'}`}>
-                <div className={`absolute top-0.5 w-3 h-3 bg-white rounded-full transition-transform ${sendSms ? (4.5 * 4) + 'px' : (0.5 * 4) + 'px'}`} />
+                <div className={`absolute top-0.5 w-3 h-3 bg-white rounded-full transition-transform ${sendSms ? 'translate-x-4' : 'translate-x-0'}`} />
               </div>
             </button>
           </div>
@@ -664,15 +635,13 @@ export default function BillingModule() {
             Suspend [F12]
           </button>
 
-          {/* Settle */}
-          <button onClick={handleFinalize} disabled={processing || !cart.length || balance > 0.5}
+          <button onClick={handleFinalize} disabled={processing || !cart.length || balanceRupees > 0.05}
             className="bg-amber-400 hover:bg-amber-500 disabled:opacity-30 text-navy font-black rounded-2xl shadow-xl text-base uppercase tracking-wider flex items-center justify-center gap-2 transition-all hover:scale-[1.01] active:scale-[0.99] border-b-4 border-amber-600 py-4">
             {processing
               ? <div className="w-5 h-5 border-2 border-navy border-t-transparent rounded-full animate-spin" />
               : <><CheckCircle2 className="w-5 h-5" />{t('settle')} [F10]<ChevronRight className="w-4 h-4" /></>}
           </button>
 
-          {/* Legend */}
           <div className="bg-white/60 rounded-xl p-2.5 text-[9px] text-gray-400 font-mono border border-gray-100 leading-relaxed">
             {[['F2','Item Search'],['F4','Recall Bill'],['F5','Suspended Queue'],['F6','Sales Slips'],['F7','Exact Cash'],['F8','Settlement'],['F9','Totals'],['F10','Settle'],['F12','Suspend'],['Ctrl+D','Del Last'],['Alt+1','New'],['Alt+2','Return']].map(([k,v]) => (
               <div key={k} className="flex justify-between"><span className="text-amber-500">{k}</span><span>{v}</span></div>

@@ -23,15 +23,16 @@ import {
   FileSpreadsheet,
   History
 } from 'lucide-react'
+import { toPaise, toRupees, formatCurrency } from '@/utils/currency'
 
 interface Product {
   id: string
   code: string
   name: string
   brand?: string
-  mrp: number
-  wholesale_price: number
-  staff_price: number
+  mrp: number // In Paise
+  wholesale_price: number // In Paise
+  staff_price: number // In Paise
   updated_at?: string
 }
 
@@ -39,15 +40,23 @@ export default function PriceManagement() {
   const queryClient = useQueryClient()
   const [search, setSearch] = useState('')
   const [editingId, setEditingId] = useState<string | null>(null)
-  const [editValues, setEditValues] = useState<Partial<Product>>({})
+  const [editValuesRupees, setEditValuesRupees] = useState<any>({})
 
   const { data: products, isLoading } = useQuery<Product[]>({
     queryKey: ['products', search],
-    queryFn: () => api.inventory.list() // In a real app, pass search filter to API
+    queryFn: () => api.inventory.list()
   })
 
   const updateMutation = useMutation({
-    mutationFn: ({ id, data }: { id: string, data: any }) => api.inventory.update(id, data),
+    mutationFn: ({ id, data }: { id: string, data: any }) => {
+      // Convert Rupee inputs back to Paise for API
+      const payload = {
+        mrp: toPaise(data.mrp),
+        wholesale_price: toPaise(data.wholesale_price),
+        staff_price: toPaise(data.staff_price)
+      }
+      return api.inventory.update(id, payload)
+    },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['products'] })
       setEditingId(null)
@@ -56,10 +65,10 @@ export default function PriceManagement() {
 
   const startEditing = (p: Product) => {
     setEditingId(p.id)
-    setEditValues({
-      mrp: p.mrp,
-      wholesale_price: p.wholesale_price,
-      staff_price: p.staff_price
+    setEditValuesRupees({
+      mrp: toRupees(p.mrp),
+      wholesale_price: toRupees(p.wholesale_price),
+      staff_price: toRupees(p.staff_price)
     })
   }
 
@@ -70,7 +79,6 @@ export default function PriceManagement() {
 
   return (
     <div className="space-y-6 animate-in slide-in-from-right-4 duration-500">
-      {/* Header */}
       <div className="flex justify-between items-center">
         <div>
           <h1 className="text-3xl font-serif font-black text-navy uppercase tracking-tight">Price Management Master</h1>
@@ -86,7 +94,6 @@ export default function PriceManagement() {
         </div>
       </div>
 
-      {/* Toolbar */}
       <div className="bg-white p-4 rounded-3xl border border-border shadow-sm flex items-center gap-6">
         <div className="relative flex-1">
           <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-muted" />
@@ -104,15 +111,14 @@ export default function PriceManagement() {
         </div>
       </div>
 
-      {/* Price Table */}
       <div className="glass rounded-[3rem] overflow-hidden shadow-xl border border-white/20">
         <table className="w-full text-left">
           <thead>
             <tr className="bg-navy text-white">
               <th className="px-8 py-6 text-[10px] font-black uppercase tracking-widest">SKU Detail</th>
-              <th className="px-6 py-6 text-[10px] font-black uppercase tracking-widest text-center">MRP (₹)</th>
-              <th className="px-6 py-6 text-[10px] font-black uppercase tracking-widest text-center">Wholesale (₹)</th>
-              <th className="px-6 py-6 text-[10px] font-black uppercase tracking-widest text-center">Staff Price (₹)</th>
+              <th className="px-6 py-6 text-[10px] font-black uppercase tracking-widest text-center">MRP</th>
+              <th className="px-6 py-6 text-[10px] font-black uppercase tracking-widest text-center">Wholesale</th>
+              <th className="px-6 py-6 text-[10px] font-black uppercase tracking-widest text-center">Staff Price</th>
               <th className="px-6 py-6 text-[10px] font-black uppercase tracking-widest text-right">Actions</th>
             </tr>
           </thead>
@@ -133,36 +139,36 @@ export default function PriceManagement() {
                   {editingId === p.id ? (
                     <input 
                       type="number" 
-                      value={editValues.mrp}
-                      onChange={e => setEditValues({...editValues, mrp: parseFloat(e.target.value)})}
-                      className="w-24 px-3 py-2 bg-white border border-saffron rounded-lg text-sm text-center outline-none"
+                      value={editValuesRupees.mrp}
+                      onChange={e => setEditValuesRupees({...editValuesRupees, mrp: e.target.value})}
+                      className="w-24 px-3 py-2 bg-white border border-saffron rounded-lg text-sm text-center outline-none font-bold"
                     />
                   ) : (
-                    <span className="font-serif font-black text-navy text-lg">₹{p.mrp.toLocaleString()}</span>
+                    <span className="font-serif font-black text-navy text-lg">{formatCurrency(p.mrp)}</span>
                   )}
                 </td>
                 <td className="px-6 py-6 text-center">
                   {editingId === p.id ? (
                     <input 
                       type="number" 
-                      value={editValues.wholesale_price}
-                      onChange={e => setEditValues({...editValues, wholesale_price: parseFloat(e.target.value)})}
-                      className="w-24 px-3 py-2 bg-white border border-saffron rounded-lg text-sm text-center outline-none"
+                      value={editValuesRupees.wholesale_price}
+                      onChange={e => setEditValuesRupees({...editValuesRupees, wholesale_price: e.target.value})}
+                      className="w-24 px-3 py-2 bg-white border border-saffron rounded-lg text-sm text-center outline-none font-bold"
                     />
                   ) : (
-                    <span className="font-bold text-emerald-600 text-sm">₹{p.wholesale_price.toLocaleString()}</span>
+                    <span className="font-bold text-emerald-600 text-sm">{formatCurrency(p.wholesale_price)}</span>
                   )}
                 </td>
                 <td className="px-6 py-6 text-center">
                   {editingId === p.id ? (
                     <input 
                       type="number" 
-                      value={editValues.staff_price}
-                      onChange={e => setEditValues({...editValues, staff_price: parseFloat(e.target.value)})}
-                      className="w-24 px-3 py-2 bg-white border border-saffron rounded-lg text-sm text-center outline-none"
+                      value={editValuesRupees.staff_price}
+                      onChange={e => setEditValuesRupees({...editValuesRupees, staff_price: e.target.value})}
+                      className="w-24 px-3 py-2 bg-white border border-saffron rounded-lg text-sm text-center outline-none font-bold"
                     />
                   ) : (
-                    <span className="font-bold text-indigo-600 text-sm">₹{p.staff_price.toLocaleString()}</span>
+                    <span className="font-bold text-indigo-600 text-sm">{formatCurrency(p.staff_price)}</span>
                   )}
                 </td>
                 <td className="px-8 py-6 text-right">
@@ -175,7 +181,7 @@ export default function PriceManagement() {
                         <X className="w-4 h-4" />
                       </button>
                       <button 
-                        onClick={() => updateMutation.mutate({ id: p.id, data: editValues })}
+                        onClick={() => updateMutation.mutate({ id: p.id, data: editValuesRupees })}
                         className="p-2 rounded-lg bg-emerald-50 text-emerald-600 hover:bg-emerald-600 hover:text-white transition-all"
                       >
                         <Check className="w-4 h-4" />
@@ -196,7 +202,6 @@ export default function PriceManagement() {
         </table>
       </div>
 
-      {/* Summary Footer */}
       <div className="grid grid-cols-3 gap-6">
         {[
           { label: 'Active Price Lists', value: '4 (Retail, WS, Staff, E-Com)', color: 'border-navy' },

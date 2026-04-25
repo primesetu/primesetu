@@ -21,6 +21,7 @@ import string
 import uuid
 from datetime import datetime
 from app.services.messenger import SovereignMessenger
+from decimal import Decimal, ROUND_HALF_UP
 
 from app.core.security import get_current_user, UserContext
 
@@ -38,7 +39,6 @@ async def adjust_inventory(db: AsyncSession, store_id: str, product_id: uuid.UUI
         inv = Inventory(id=uuid.uuid4(), product_id=product_id, store_id=store_id, quantity=0)
         db.add(inv)
     
-    from decimal import Decimal
     qty_dec = Decimal(str(qty))
     if tx_type == "Sales":
         inv.quantity -= qty_dec
@@ -54,7 +54,7 @@ async def finalize_bill(
 ):
     """
     Commit a transaction to the Sovereign Ledger.
-    Handles inventory adjustment and multi-mode payment staging.
+    Sovereign Protocol: All math in INTEGER PAISE.
     """
     try:
         prefix = "B-" if bill_data.type == "Sales" else "SR-"
@@ -68,14 +68,16 @@ async def finalize_bill(
             type=bill_data.type,
             payments=[p.dict() for p in bill_data.payments] if bill_data.payments else None,
             status="Finalized",
-            subtotal=0.0,
-            net_payable=0.0,
-            tax_total=0.0
+            subtotal=0,
+            net_payable=0,
+            tax_total=0
         )
         db.add(transaction)
         await db.flush()
 
-        total_net = 0.0
+        total_net_paise = 0
+        total_tax_paise = 0
+        
         for item_in in bill_data.items:
             product = await db.get(Product, item_in.product_id)
             if not product:
@@ -84,21 +86,31 @@ async def finalize_bill(
             # 1. Update Stock levels
             await adjust_inventory(db, current_user.store_id, product.id, item_in.qty, bill_data.type)
             
-            # 2. Record Line Item
-            item_net = item_in.qty * item_in.unit_price
+            # 2. Record Line Item (Integer math)
+            # Rounding: (Qty * Price) rounded to nearest paise
+            line_total_paise = int(Decimal(str(item_in.qty * item_in.unit_price)).quantize(Decimal('1'), rounding=ROUND_HALF_UP))
+            
+            # GST Calculation (Back-calc from inclusive price)
+            # Formula: (Total * Rate) / (100 + Rate)
+            tax_rate = int(product.tax_rate)
+            line_tax_paise = (line_total_paise * tax_rate) // (100 + tax_rate)
+            
             db.add(TransactionItem(
                 id=uuid.uuid4(),
                 transaction_id=transaction.id,
                 product_id=product.id,
                 qty=item_in.qty,
                 mrp=product.mrp,
-                net_amount=item_net
+                tax_amount=line_tax_paise,
+                net_amount=line_total_paise
             ))
-            total_net += item_net
+            
+            total_net_paise += line_total_paise
+            total_tax_paise += line_tax_paise
 
-        transaction.net_payable = total_net
-        transaction.subtotal = total_net / 1.18 # Assume 18% inclusive for demo
-        transaction.tax_total = total_net - transaction.subtotal
+        transaction.net_payable = total_net_paise
+        transaction.tax_total = total_tax_paise
+        transaction.subtotal = total_net_paise - total_tax_paise
         
         # 3. Update Till Cash if applicable
         if bill_data.till_id and bill_data.payments:
@@ -112,9 +124,9 @@ async def finalize_bill(
         # 4. Enqueue SyncPacket for Head Office Push
         sync_payload = {
             "bill_no": bill_no,
-            "total": float(total_net),
+            "total_paise": total_net_paise,
             "till_id": str(bill_data.till_id) if bill_data.till_id else None,
-            "items": [{"product_id": str(i.product_id), "qty": i.qty} for i in bill_data.items]
+            "items": [{"product_id": str(i.product_id), "qty": i.qty, "net_paise": int(i.qty * i.unit_price)} for i in bill_data.items]
         }
         sync_packet = SyncPacket(
             store_id=current_user.store_id,
@@ -125,14 +137,14 @@ async def finalize_bill(
         db.add(sync_packet)
         await db.commit()
 
-        response_data = BillResponse(status="success", bill_number=bill_no, transaction_id=transaction.id, total=total_net)
+        response_data = BillResponse(status="success", bill_number=bill_no, transaction_id=transaction.id, total=total_net_paise)
         
         # Dispatch digital receipt if mobile provided
         if bill_data.customer_mobile:
             background_tasks.add_task(
                 SovereignMessenger.send_digital_receipt, 
                 bill_data.customer_mobile, 
-                {"bill_number": bill_no, "total": total_net}
+                {"bill_number": bill_no, "total_rupees": total_net_paise / 100.0}
             )
             
         return response_data
@@ -146,28 +158,31 @@ async def suspend_bill(
     db: AsyncSession = Depends(get_db),
     current_user: UserContext = Depends(get_current_user)
 ):
-    """Stage a transaction for later finalization."""
+    """Stage a transaction for later finalization. All values in PAISE."""
     try:
+        total_paise = sum(int(Decimal(str(i.qty * i.unit_price)).quantize(Decimal('1'), rounding=ROUND_HALF_UP)) for i in bill_data.items)
+        
         transaction = Transaction(
             id=uuid.uuid4(),
             store_id=current_user.store_id,
             type="Sales",
             status="Suspended",
             suspended_reason=bill_data.suspended_reason or "Terminal Switch",
-            subtotal=sum(i.qty * i.unit_price for i in bill_data.items),
-            net_payable=sum(i.qty * i.unit_price for i in bill_data.items)
+            subtotal=total_paise, # Simplified for suspension
+            net_payable=total_paise
         )
         db.add(transaction)
         await db.flush()
 
         for item in bill_data.items:
+            line_total = int(Decimal(str(item.qty * item.unit_price)).quantize(Decimal('1'), rounding=ROUND_HALF_UP))
             db.add(TransactionItem(
                 id=uuid.uuid4(),
                 transaction_id=transaction.id,
                 product_id=item.product_id,
                 qty=item.qty,
                 mrp=item.unit_price, 
-                net_amount=item.qty * item.unit_price
+                net_amount=line_total
             ))
 
         await db.commit()
@@ -182,7 +197,7 @@ async def get_bill_by_no(
     db: AsyncSession = Depends(get_db),
     current_user: UserContext = Depends(get_current_user)
 ):
-    """Fetch an original finalized transaction by its bill number (used for returns)."""
+    """Fetch an original finalized transaction by its bill number. Returns PAISE."""
     from sqlalchemy.orm import selectinload
     stmt = (
         select(Transaction)
@@ -199,15 +214,15 @@ async def get_bill_by_no(
     return {
         "id": str(tx.id),
         "bill_number": tx.bill_no,
-        "customer_mobile": None, # Stubbed
+        "customer_mobile": None, 
         "created_at": tx.created_at.isoformat(),
-        "total": float(tx.net_payable),
+        "total": tx.net_payable, # Integer Paise
         "items": [
             {
                 "id": str(item.product.id),
                 "qty": float(item.qty),
-                "unit_price": float(item.mrp),
-                "discount_per": float(item.discount_per),
+                "unit_price": int(item.mrp), # Integer Paise
+                "discount_per": int(item.discount_per),
                 "product": {
                     "name": item.product.name,
                     "code": item.product.code,
@@ -217,13 +232,12 @@ async def get_bill_by_no(
         ]
     }
 
-
 @router.get("/suspended")
 async def get_suspended_bills(
     db: AsyncSession = Depends(get_db),
     current_user: UserContext = Depends(get_current_user)
 ):
-    """Retrieve all suspended bills for the active store terminal."""
+    """Retrieve all suspended bills for the active store terminal. Returns PAISE."""
     from sqlalchemy.orm import selectinload
     stmt = (
         select(Transaction)
@@ -239,9 +253,9 @@ async def get_suspended_bills(
         {
             "id": str(tx.id),
             "suspended_reason": tx.suspended_reason,
-            "net_payable": float(tx.net_payable),
+            "net_payable": tx.net_payable, # Integer Paise
             "created_at": tx.created_at.isoformat(),
-            "customer_mobile": None, # Stubbed
+            "customer_mobile": None,
             "items": [
                 {
                     "id": str(item.product.id),
@@ -250,9 +264,9 @@ async def get_suspended_bills(
                     "brand": item.product.brand,
                     "category": item.product.category,
                     "qty": float(item.qty),
-                    "mrp": float(item.mrp),
-                    "discount_per": float(item.discount_per),
-                    "tax_rate": float(item.product.tax_rate)
+                    "mrp": int(item.mrp),
+                    "discount_per": int(item.discount_per),
+                    "tax_rate": int(item.product.tax_rate)
                 } for item in tx.items if item.product
             ]
         }
@@ -265,7 +279,6 @@ async def delete_suspended_bill(
     db: AsyncSession = Depends(get_db),
     current_user: UserContext = Depends(get_current_user)
 ):
-    """Discard a suspended bill from the queue."""
     stmt = select(Transaction).where(Transaction.id == tx_id, Transaction.store_id == current_user.store_id, Transaction.status == "Suspended")
     tx = (await db.execute(stmt)).scalar_one_or_none()
     if not tx:
@@ -281,8 +294,6 @@ async def recall_suspended_bill(
     db: AsyncSession = Depends(get_db),
     current_user: UserContext = Depends(get_current_user)
 ):
-    """Recall a suspended bill into active cart and remove it from the queue."""
-    # For now, it simply deletes it from the queue since the frontend already has the items payload.
     stmt = select(Transaction).where(Transaction.id == tx_id, Transaction.store_id == current_user.store_id, Transaction.status == "Suspended")
     tx = (await db.execute(stmt)).scalar_one_or_none()
     if not tx:
@@ -292,16 +303,11 @@ async def recall_suspended_bill(
     await db.commit()
     return {"status": "success", "message": "Suspended bill recalled"}
 
-
 @router.get("/day-end-summary")
 async def get_day_end_summary(
     db: AsyncSession = Depends(get_db),
     current_user: UserContext = Depends(get_current_user)
 ):
-    """
-    Sovereign Reconciliation: Fetch today's summary for closure.
-    Aggregates data from the active store node only.
-    """
     stmt = (
         select(
             func.count(Transaction.id).label("bill_count"),
@@ -315,7 +321,7 @@ async def get_day_end_summary(
     
     return {
         "bill_count": res.bill_count or 0,
-        "total_revenue": float(res.total_revenue or 0),
+        "total_revenue": int(res.total_revenue or 0), # Integer Paise
         "store_id": current_user.store_id,
         "date": datetime.now().strftime("%Y-%m-%d")
     }
@@ -326,21 +332,17 @@ async def create_sales_slip(
     db: AsyncSession = Depends(get_db),
     current_user: UserContext = Depends(get_current_user)
 ):
-    """
-    Generate a temporary Sales Slip (F6). 
-    Used for picking/pre-billing without committing to the ledger.
-    """
     try:
         slip_no = f"SLP-{datetime.now().strftime('%y%m%d')}-{''.join(random.choices(string.ascii_uppercase + string.digits, k=4))}"
         
-        total_amount = sum(i.qty * i.unit_price * (1 - i.discount_per / 100) for i in slip_data.items)
+        total_paise = sum(int(Decimal(str(i.qty * i.unit_price * (1 - i.discount_per / 100))).quantize(Decimal('1'), rounding=ROUND_HALF_UP)) for i in slip_data.items)
         
         slip = SalesSlip(
             id=uuid.uuid4(),
             slip_no=slip_no,
             store_id=current_user.store_id,
             customer_mobile=slip_data.customer_mobile,
-            total_amount=total_amount,
+            total_amount=total_paise,
             is_active=True,
             is_converted=False
         )
@@ -348,17 +350,18 @@ async def create_sales_slip(
         await db.flush()
 
         for item in slip_data.items:
+            line_total = int(Decimal(str(item.qty * item.unit_price * (1 - item.discount_per / 100))).quantize(Decimal('1'), rounding=ROUND_HALF_UP))
             db.add(SalesSlipItem(
                 id=uuid.uuid4(),
                 slip_id=slip.id,
                 product_id=item.product_id,
                 qty=item.qty,
                 mrp=item.unit_price,
-                net_amount=item.qty * item.unit_price * (1 - item.discount_per / 100)
+                net_amount=line_total
             ))
 
         await db.commit()
-        return SlipResponse(status="success", slip_no=slip_no, slip_id=slip.id, total=total_amount)
+        return SlipResponse(status="success", slip_no=slip_no, slip_id=slip.id, total=total_paise)
     except Exception as e:
         await db.rollback()
         raise HTTPException(status_code=500, detail=str(e))
@@ -368,7 +371,6 @@ async def get_active_slips(
     db: AsyncSession = Depends(get_db),
     current_user: UserContext = Depends(get_current_user)
 ):
-    """List all unconverted sales slips for the current store."""
     from sqlalchemy.orm import selectinload
     stmt = (
         select(SalesSlip)
@@ -385,7 +387,7 @@ async def get_active_slips(
         {
             "id": str(s.id),
             "slip_no": s.slip_no,
-            "total_amount": float(s.total_amount),
+            "total_amount": s.total_amount, # Integer Paise
             "created_at": s.created_at.isoformat(),
             "customer_mobile": s.customer_mobile,
             "items": [
@@ -396,9 +398,9 @@ async def get_active_slips(
                     "brand": item.product.brand,
                     "category": item.product.category,
                     "qty": float(item.qty),
-                    "mrp": float(item.mrp),
-                    "discount_per": 0.0, # Slips usually don't store line disc_per in this schema
-                    "tax_rate": float(item.product.tax_rate)
+                    "mrp": int(item.mrp),
+                    "discount_per": 0,
+                    "tax_rate": int(item.product.tax_rate)
                 } for item in s.items if item.product
             ]
         }
@@ -411,7 +413,6 @@ async def delete_sales_slip(
     db: AsyncSession = Depends(get_db),
     current_user: UserContext = Depends(get_current_user)
 ):
-    """Discard a sales slip."""
     stmt = select(SalesSlip).where(SalesSlip.id == slip_id, SalesSlip.store_id == current_user.store_id)
     slip = (await db.execute(stmt)).scalar_one_or_none()
     if not slip:
@@ -427,7 +428,6 @@ async def convert_sales_slip(
     db: AsyncSession = Depends(get_db),
     current_user: UserContext = Depends(get_current_user)
 ):
-    """Mark a slip as converted so it doesn't appear in the browser."""
     stmt = select(SalesSlip).where(SalesSlip.id == slip_id, SalesSlip.store_id == current_user.store_id)
     slip = (await db.execute(stmt)).scalar_one_or_none()
     if not slip:

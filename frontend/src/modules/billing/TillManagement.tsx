@@ -26,13 +26,14 @@ import {
   AlertCircle
 } from 'lucide-react'
 import { motion, AnimatePresence } from 'framer-motion'
+import { formatCurrency } from '@/utils/currency'
 
 interface Till {
   id: string
   name: string
   code: string
   status: 'Open' | 'Closed' | 'Locked' | 'Idle'
-  cash_collected: number
+  cash_collected: number // In Paise
   current_cashier_id?: string
   last_opening_at?: string
 }
@@ -48,7 +49,7 @@ export default function TillManagement() {
   })
 
   const createMutation = useMutation({
-    mutationFn: (data: any) => api.tills.create({ ...data, store_id: 'X01' }), // Store ID should be dynamic
+    mutationFn: (data: any) => api.tills.create({ ...data, store_id: 'X01' }),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['tills'] })
       setIsAdding(false)
@@ -78,7 +79,6 @@ export default function TillManagement() {
 
   return (
     <div className="space-y-8 animate-in fade-in duration-500">
-      {/* Header Section */}
       <div className="flex justify-between items-end">
         <div>
           <h1 className="text-3xl font-serif font-black text-navy uppercase tracking-tight">Till Status Board</h1>
@@ -100,7 +100,6 @@ export default function TillManagement() {
         </div>
       </div>
 
-      {/* Tills Grid */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
         {isLoading ? (
           Array(4).fill(0).map((_, i) => (
@@ -137,7 +136,7 @@ export default function TillManagement() {
                 <div className="flex items-center gap-2 text-[10px] font-bold text-muted uppercase">
                   <TrendingUp className="w-3.5 h-3.5" /> Cash in Till
                 </div>
-                <div className="text-lg font-serif font-black text-navy">₹{till.cash_collected.toLocaleString()}</div>
+                <div className="text-lg font-serif font-black text-navy">{formatCurrency(till.cash_collected)}</div>
               </div>
               
               <div className="flex items-center gap-4 px-2">
@@ -176,7 +175,6 @@ export default function TillManagement() {
         ))}
       </div>
 
-      {/* Add Till Modal */}
       <AnimatePresence>
         {isAdding && (
           <div className="fixed inset-0 z-[100] flex items-center justify-center p-6">
@@ -238,7 +236,6 @@ export default function TillManagement() {
         )}
       </AnimatePresence>
 
-      {/* Info Card */}
       <div className="glass p-8 rounded-[3rem] border-l-8 border-gold flex items-center gap-8">
         <div className="w-16 h-16 rounded-[2rem] bg-gold/10 flex items-center justify-center text-gold shrink-0">
           <ShieldCheck className="w-8 h-8" />
@@ -247,7 +244,7 @@ export default function TillManagement() {
           <h4 className="font-serif text-lg font-black text-navy uppercase">Sovereign Compliance Guard</h4>
           <p className="text-sm text-muted font-medium mt-1 leading-relaxed">
             All till operations (lifts, closures, session handovers) are cryptographically signed and logged for institutional audit. 
-            Discrepancies exceeding ₹100 will trigger an automatic Sovereign Alert to the HO Management.
+            Discrepancies exceeding {formatCurrency(10000)} will trigger an automatic Sovereign Alert to the HO Management.
           </p>
         </div>
       </div>

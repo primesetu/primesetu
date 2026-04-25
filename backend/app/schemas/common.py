@@ -1,11 +1,11 @@
 # ============================================================
-# * PrimeSetu â€” Shoper9-Based Retail OS
-# * Zero Cloud Â. Sovereign Â. AI-Governed
+# * PrimeSetu — Shoper9-Based Retail OS
+# * Zero Cloud · Sovereign · AI-Governed
 # ============================================================
 # * System Architect   :  Jawahar R. M.
 # * Organisation       :  AITDL Network
 # * Project            :  PrimeSetu
-# * Â(c) 2026 â€” All Rights Reserved
+# * © 2026 — All Rights Reserved
 # * "Memory, Not Code."
 # ============================================================ #
 
@@ -22,8 +22,8 @@ class ProductBase(BaseModel):
     subcategory: Optional[str] = None
     size: Optional[str] = None
     color: Optional[str] = None
-    mrp: float = 0.0
-    tax_rate: float = 18.0
+    mrp: int = 0  # In Paise
+    tax_rate: float = 18.0 # Tax rates stay float/decimal
     is_tax_inclusive: bool = True
     is_inventory_item: bool = True
     attributes: Dict[str, Any] = {}
@@ -35,32 +35,32 @@ class ProductRead(ProductBase):
     model_config = ConfigDict(from_attributes=True)
 
 class ProductCreate(ProductBase):
-    cost_price: float = 0.0
+    cost_price: int = 0 # In Paise
 
 class TransactionItemBase(BaseModel):
     product_id: uuid.UUID
-    qty: float
-    mrp: float
+    qty: float # Quantity stays float for partial units
+    mrp: int # In Paise
     discount_per: float = 0.0
-    net_amount: float
+    net_amount: int # In Paise
 
 class TransactionCreate(BaseModel):
     store_id: str
     customer_id: Optional[uuid.UUID] = None
     type: str = "Sales"
     payment_mode: str = "CASH"
-    subtotal: float
-    discount_total: float = 0.0
-    tax_total: float = 0.0
-    net_payable: float
+    subtotal: int # In Paise
+    discount_total: int = 0 # In Paise
+    tax_total: int = 0 # In Paise
+    net_payable: int # In Paise
     items: List[TransactionItemBase]
 
 class DashboardStats(BaseModel):
-    today_revenue: float
+    today_revenue: int # In Paise
     active_skus: int
     bills_today: int
     low_stock_alerts: int
-    revenue_change: float
+    revenue_change: float # Percentage change stays float
     sku_change: int
 
 class PredictiveStats(BaseModel):

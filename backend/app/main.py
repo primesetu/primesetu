@@ -114,10 +114,12 @@ async def get_dashboard_stats(
     )
 
     return DashboardStats(
-        today_revenue=Decimal(str(today_revenue or 0)),
+        today_revenue=int(today_revenue or 0),
         active_skus=sku_count or 0,
         bills_today=bills_today or 0,
         low_stock_alerts=low_stock or 0,
+        revenue_change=0.0, # Mocked for now
+        sku_change=0
     )
 
 
@@ -339,10 +341,17 @@ async def get_sales_summary(
     )).mappings().all()
 
     return {
-        "revenue": stats["total_revenue"],
-        "tax_collected": stats["total_tax"],
-        "bills": stats["total_bills"],
-        "daily": list(daily),
+        "revenue": int(stats["total_revenue"]),
+        "tax_collected": int(stats["total_tax"]),
+        "bills": int(stats["total_bills"]),
+        "daily": [
+            {
+                "date": d["date"],
+                "amount": int(d["amount"]),
+                "tax": int(d["tax"]),
+                "bills": int(d["bills"])
+            } for d in daily
+        ],
     }
 
 
@@ -372,10 +381,16 @@ async def get_inventory_valuation(
     )).mappings().all()
 
     return {
-        "mrp_valuation": stats["mrp_value"],
-        "cost_valuation": stats["cost_value"],
-        "total_skus": stats["total_skus"],
-        "by_category": list(by_cat),
+        "mrp_valuation": int(stats["mrp_value"]),
+        "cost_valuation": int(stats["cost_value"]),
+        "total_skus": int(stats["total_skus"]),
+        "by_category": [
+            {
+                "category": c["category"],
+                "mrp_value": int(c["mrp_value"]),
+                "skus": int(c["skus"])
+            } for c in by_cat
+        ],
     }
 
 
@@ -411,17 +426,17 @@ async def get_day_end_summary(
     )).mappings().first()
 
     return DayEndSummary(
-        total_revenue=Decimal(str(stats["total"])),
-        total_bills=stats["count"],
-        total_tax_collected=Decimal(str(stats["total_tax"])),
-        cgst_collected=Decimal(str(stats["cgst"])),
-        sgst_collected=Decimal(str(stats["sgst"])),
-        igst_collected=Decimal(str(stats["igst"])),
-        cash_sales=Decimal(str(stats["cash"])),
-        upi_sales=Decimal(str(stats["upi"])),
-        card_sales=Decimal(str(stats["card"])),
-        credit_sales=Decimal(str(stats["credit"])),
-        cancelled_bills=stats["cancelled"],
+        total_revenue=int(stats["total"]),
+        total_bills=int(stats["count"]),
+        total_tax_collected=int(stats["total_tax"]),
+        cgst_collected=int(stats["cgst"]),
+        sgst_collected=int(stats["sgst"]),
+        igst_collected=int(stats["igst"]),
+        cash_sales=int(stats["cash"]),
+        upi_sales=int(stats["upi"]),
+        card_sales=int(stats["card"]),
+        credit_sales=int(stats["credit"]),
+        cancelled_bills=int(stats["cancelled"]),
     )
 
 
@@ -431,16 +446,29 @@ async def export_tally_xml(
     db: AsyncSession = Depends(get_db),
     current_user: CurrentUser = Depends(require_manager),
 ):
-    from app.tally_integration import generate_tally_xml
+    from app.services.tally_bridge import TallyBridge
     store = await db.scalar(select(Store).where(Store.id == current_user.store_id))
     company_name = store.name if store else "PrimeSetu Retail"
+    
     bills = (await db.execute(
         select(Bill)
         .where(Bill.store_id == current_user.store_id,
                func.date(Bill.created_at) == date.today(),
                Bill.is_cancelled == False)
     )).scalars().all()
-    xml_data = generate_tally_xml(bills, company_name)
+    
+    # Convert ORM objects to dicts for TallyBridge
+    transactions = []
+    for b in bills:
+        transactions.append({
+            'date': b.created_at,
+            'bill_no': b.bill_number,
+            'customer_name': b.customer_name,
+            'net_amount': b.total_amount,
+            'tax_amount': b.total_tax_amount
+        })
+    
+    xml_data = TallyBridge.generate_sales_xml(transactions)
     return Response(content=xml_data, media_type="application/xml")
 
 

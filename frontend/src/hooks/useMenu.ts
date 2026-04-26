@@ -46,9 +46,10 @@ export const useMenu = () => {
    * Finds a module definition by ID within the recursive menu tree.
    */
   const findModule = (id: string, items: MenuItem[] = menu): MenuItem | undefined => {
+    if (!Array.isArray(items)) return undefined;
     for (const item of items) {
       if (item.id === id) return item;
-      if (item.children && item.children.length > 0) {
+      if (item.children && Array.isArray(item.children) && item.children.length > 0) {
         const found = findModule(id, item.children);
         if (found) return found;
       }

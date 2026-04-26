@@ -188,7 +188,7 @@ const POForm: React.FC = () => {
                       onChange={(e) => setVendorId(e.target.value)}
                     >
                       <option value="">Select Partner Registry...</option>
-                      {vendors.map((v: any) => (
+                      {Array.isArray(vendors) && vendors.map((v: any) => (
                         <option key={v.id} value={v.id}>{v.name} ({v.code})</option>
                       ))}
                     </select>

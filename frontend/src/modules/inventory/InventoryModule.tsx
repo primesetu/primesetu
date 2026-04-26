@@ -60,7 +60,8 @@ export default function InventoryModule() {
       const data = await api.inventory.list()
       // Transform data to match the legacy view structure if needed
       // Assuming API returns items with stock levels for different stores
-      setItems(data.map((i: any) => ({
+      const items = Array.isArray(data) ? data : [];
+      setItems(items.map((i: any) => ({
         id: i.id,
         code: i.code,
         name: i.name,

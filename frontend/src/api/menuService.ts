@@ -57,6 +57,10 @@ export const fetchMenu = async (): Promise<MenuItem[]> => {
     const response = await apiClient.get<MenuItem[]>('/menu');
     const liveMenu = response.data;
     
+    if (!Array.isArray(liveMenu)) {
+        throw new Error("Invalid Menu Data");
+    }
+    
     // 2. Sovereign Protocol: Sync local cache on success
     await db.put(STORE_NAME, liveMenu, CACHE_KEY);
     

@@ -91,10 +91,10 @@ export default function ManagementDashboard() {
       {/* 2. DYNAMIC KEY METRICS */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
         {[
-          { label: 'Net Revenue', value: stats ? `₹${stats.today_revenue.toLocaleString()}` : '₹1.24L', icon: DollarSign, color: 'navy', trend: '+14.2%', up: true },
-          { label: 'Bills Issued', value: stats ? stats.bills_today : '42', icon: Receipt, color: 'saffron', trend: 'Live', up: true },
-          { label: 'Active Catalogue', value: stats ? stats.active_skus : '1.2K', icon: Package, color: 'navy', trend: '+38 Today', up: true },
-          { label: 'Risk Alerts', value: stats ? `${stats.low_stock_alerts} Styles` : '08 Alerts', icon: AlertCircle, color: 'rose', trend: 'CRITICAL', up: false },
+          { label: 'Net Revenue', value: (stats && typeof stats.today_revenue === 'number') ? `₹${stats.today_revenue.toLocaleString()}` : '₹0', icon: DollarSign, color: 'navy', trend: '+14.2%', up: true },
+          { label: 'Bills Issued', value: (stats && stats.bills_today) !== undefined ? stats.bills_today : '0', icon: Receipt, color: 'saffron', trend: 'Live', up: true },
+          { label: 'Active Catalogue', value: (stats && stats.active_skus) !== undefined ? stats.active_skus : '0', icon: Package, color: 'navy', trend: '+38 Today', up: true },
+          { label: 'Risk Alerts', value: (stats && stats.low_stock_alerts) !== undefined ? `${stats.low_stock_alerts} Styles` : '0 Alerts', icon: AlertCircle, color: 'rose', trend: 'CRITICAL', up: false },
         ].map((stat, i) => (
           <div key={i} className="shoper-card group cursor-pointer overflow-hidden relative">
             <div className={`absolute top-0 right-0 w-32 h-32 opacity-5 blur-[40px] rounded-full transition-all group-hover:opacity-20 ${stat.color === 'rose' ? 'bg-rose-500' : 'bg-gold'}`}></div>

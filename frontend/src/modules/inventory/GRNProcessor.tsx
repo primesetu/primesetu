@@ -41,6 +41,7 @@ const GRNProcessor: React.FC = () => {
         headers: { 'Authorization': `Bearer ${localStorage.getItem('primesetu_token')}` }
     });
     const allPOs = await res.json();
+    if (!Array.isArray(allPOs)) return [];
     return allPOs.filter((po: any) => po.status !== 'CLOSED' && po.status !== 'CANCELLED');
   }, []);
 
@@ -60,9 +61,10 @@ const GRNProcessor: React.FC = () => {
 
   const selectPO = (po: any) => {
     setSelectedPO(po);
-    setReceivedItems(po.items.map((it: any) => ({
+    const items = Array.isArray(po.items) ? po.items : [];
+    setReceivedItems(items.map((it: any) => ({
       ...it,
-      received_now: it.qty_ordered - it.qty_received
+      received_now: it.qty_ordered - (it.qty_received || 0)
     })));
   };
 

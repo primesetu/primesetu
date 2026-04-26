@@ -179,7 +179,7 @@ const PrimeSetuOS: React.FC = () => {
     const component = COMPONENT_MAP[activeTab] || COMPONENT_MAP['dashboard'];
     
     // Security check: If backend didn't return it, it shouldn't be accessible
-    if (dynamicMenu.length > 0 && !activeModule && activeTab !== 'dashboard') {
+    if (Array.isArray(dynamicMenu) && dynamicMenu.length > 0 && !activeModule && activeTab !== 'dashboard') {
        return (
         <div className="flex flex-col items-center justify-center h-[60vh] gap-6 text-center">
           <div className="w-20 h-20 bg-rose-500/10 rounded-3xl flex items-center justify-center text-rose-500">

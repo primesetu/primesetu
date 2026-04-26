@@ -196,7 +196,7 @@ const ItemForm: React.FC<ItemFormProps> = ({ onClose, editId }) => {
                     onChange={(e) => setFormData({...formData, department_id: e.target.value})}
                   >
                     <option value="">-- SELECT --</option>
-                    {departments.map(d => <option key={d.id} value={d.id}>{d.name}</option>)}
+                    {Array.isArray(departments) && departments.map(d => <option key={d.id} value={d.id}>{d.name}</option>)}
                   </select>
                 </div>
               </div>
@@ -236,7 +236,7 @@ const ItemForm: React.FC<ItemFormProps> = ({ onClose, editId }) => {
                     onChange={(e) => setFormData({...formData, supplier_id: e.target.value})}
                   >
                     <option value="">-- SELECT --</option>
-                    {partners.filter(p => p.partner_type !== 'customer').map(p => (
+                    {Array.isArray(partners) && partners.filter(p => p.partner_type !== 'customer').map(p => (
                       <option key={p.id} value={p.id}>{p.name}</option>
                     ))}
                   </select>
@@ -330,7 +330,7 @@ const ItemForm: React.FC<ItemFormProps> = ({ onClose, editId }) => {
                 onChange={(e) => setFormData({...formData, size_group_id: e.target.value})}
               >
                 <option value="">SELECT SIZE GROUP</option>
-                {sizeGroups.map(g => <option key={g.id} value={g.id}>{g.name}</option>)}
+                {Array.isArray(sizeGroups) && sizeGroups.map(g => <option key={g.id} value={g.id}>{g.name}</option>)}
               </select>
             </div>
 

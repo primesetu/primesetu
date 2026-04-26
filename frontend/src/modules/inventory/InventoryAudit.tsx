@@ -98,7 +98,7 @@ const InventoryAudit: React.FC = () => {
     if (!activeSession) return;
     try {
       const results = await api.inventory.search(barcode);
-      const product = results.find((p: any) => p.code === barcode || p.barcode === barcode);
+      const product = Array.isArray(results) ? results.find((p: any) => p.code === barcode || p.barcode === barcode) : null;
       if (product) {
         addEntryMutation.mutate({ 
           item_id: product.id, 
@@ -185,7 +185,7 @@ const InventoryAudit: React.FC = () => {
                      </tr>
                   </thead>
                   <tbody className="divide-y divide-navy/5">
-                     {audits.map((audit: any) => (
+                     {Array.isArray(audits) && audits.length > 0 ? audits.map((audit: any) => (
                         <tr key={audit.id} className="hover:bg-brand-cream transition-all group">
                            <td className="px-12 py-10">
                               <div className="font-mono font-black text-navy text-base uppercase tracking-tight">{audit.audit_no}</div>
@@ -213,7 +213,13 @@ const InventoryAudit: React.FC = () => {
                                </button>
                            </td>
                         </tr>
-                     ))}
+                     )) : (
+                        <tr>
+                           <td colSpan={5} className="px-12 py-32 text-center text-navy/10 uppercase font-black tracking-[0.5em] text-sm">
+                              {Array.isArray(audits) ? 'No audit history found' : 'Connectivity Error / Unauthorized'}
+                           </td>
+                        </tr>
+                     )}
                   </tbody>
                </table>
             </div>

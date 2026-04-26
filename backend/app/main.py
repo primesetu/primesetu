@@ -34,7 +34,7 @@ app = FastAPI(title="PrimeSetu — Sovereign Retail OS")
 # ── CORS ──────────────────────────────────────────────────────────────────────
 ALLOWED_ORIGIN_REGEX = (
     r"https?://(localhost|127\.0\.0\.1"
-    r"|.*\.primesetu\.pages\.dev"
+    r"|(.*\.)?primesetu\.pages\.dev"
     r"|.*\.github\.io)(:\d+)?"
 )
 app.add_middleware(

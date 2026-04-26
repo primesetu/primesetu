@@ -180,7 +180,7 @@ const GRNProcessor: React.FC = () => {
       {!selectedPO ? (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
           {isLoadingPOs && Array(3).fill(0).map((_, i) => <div key={i} className="h-48 bg-navy/5 rounded-[40px] animate-pulse" />)}
-          {pos.map((po: any) => (
+          {Array.isArray(pos) ? pos.map((po: any) => (
             <div 
               key={po.id} 
               onClick={() => selectPO(po)}
@@ -205,8 +205,12 @@ const GRNProcessor: React.FC = () => {
                  </div>
               </div>
             </div>
-          ))}
-          {pos.length === 0 && !isLoadingPOs && (
+          )) : (
+            <div className="col-span-full py-24 text-center bg-white rounded-[50px] border-2 border-dashed border-navy/10 text-navy/20 uppercase font-black tracking-[0.4em]">
+               Connectivity Error / Unauthorized
+            </div>
+          )}
+          {Array.isArray(pos) && pos.length === 0 && !isLoadingPOs && (
             <div className="col-span-full py-24 text-center bg-white rounded-[50px] border-2 border-dashed border-navy/10 text-navy/20 uppercase font-black tracking-[0.4em]">
                No open purchase orders for inwarding
             </div>

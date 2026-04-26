@@ -120,7 +120,7 @@ export default function BillingModule() {
     const t = setTimeout(async () => {
       try {
         const results = await api.inventory.search(q)
-        const exact = results.find((p: any) => p.code.toLowerCase() === q.toLowerCase())
+        const exact = Array.isArray(results) ? results.find((p: any) => p.code.toLowerCase() === q.toLowerCase()) : null
         if (exact) { addToCart(exact); setQ('') }
       } catch {}
     }, 200)

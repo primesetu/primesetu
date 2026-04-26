@@ -285,7 +285,7 @@ const BarcodeStudio: React.FC<BarcodeStudioProps> = ({ onClose, initialItems = [
               </div>
 
               <div className="space-y-3 max-h-[450px] overflow-y-auto pr-2 custom-scrollbar">
-                 {items.map((item: any) => (
+                 {Array.isArray(items) && items.map((item: any) => (
                     <button 
                       key={item.id}
                       onClick={() => setSelectedItem(item)}
@@ -301,8 +301,10 @@ const BarcodeStudio: React.FC<BarcodeStudioProps> = ({ onClose, initialItems = [
                        <ArrowRight size={16} className={selectedItem?.id === item.id ? 'text-brand-gold' : 'text-navy/10'} />
                     </button>
                  ))}
-                 {items.length === 0 && searchTerm.length > 1 && !isLoading && (
-                    <div className="py-10 text-center text-[10px] font-black text-navy/20 uppercase tracking-widest">No matching items</div>
+                 {(!Array.isArray(items) || (items.length === 0 && searchTerm.length > 1)) && !isLoading && (
+                    <div className="py-10 text-center text-[10px] font-black text-navy/20 uppercase tracking-widest">
+                       {Array.isArray(items) ? 'No matching items' : 'Connectivity Error'}
+                    </div>
                  )}
               </div>
            </div>

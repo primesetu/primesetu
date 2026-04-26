@@ -174,11 +174,7 @@ const ItemMaster: React.FC = () => {
                 Array(5).fill(0).map((_, i) => (
                   <tr key={i} className="animate-pulse"><td colSpan={6} className="px-12 py-10 h-24 bg-navy/5" /></tr>
                 ))
-              ) : items.length === 0 ? (
-                <tr>
-                   <td colSpan={6} className="px-12 py-32 text-center text-navy/10 uppercase font-black tracking-[0.5em] text-sm">No items found in registry</td>
-                </tr>
-              ) : items.map((item: any) => (
+              ) : (Array.isArray(items) && items.length > 0) ? items.map((item: any) => (
                 <tr key={item.id} className="hover:bg-brand-cream transition-all group">
                   <td className="px-12 py-10">
                     <div className="flex items-center gap-4">
@@ -217,7 +213,13 @@ const ItemMaster: React.FC = () => {
                     </div>
                   </td>
                 </tr>
-              ))}
+              )) : (
+                <tr>
+                   <td colSpan={6} className="px-12 py-32 text-center text-navy/10 uppercase font-black tracking-[0.5em] text-sm">
+                      {Array.isArray(items) ? 'No items found in registry' : 'Connectivity Error / Unauthorized'}
+                   </td>
+                </tr>
+              )}
             </tbody>
           </table>
         </div>

@@ -24,7 +24,10 @@ from typing import List
 from datetime import date
 import uvicorn
 
-app = FastAPI(title="PrimeSetu — Sovereign Retail OS")
+app = FastAPI(
+    title="PrimeSetu — Sovereign Retail OS",
+    redirect_slashes=False  # Crucial for CORS stability with frontend pulse
+)
 
 # ── CORS ──────────────────────────────────────────────────────────────────────
 ALLOWED_ORIGIN_REGEX = (
@@ -36,19 +39,21 @@ app.add_middleware(
     CORSMiddleware,
     allow_origin_regex=ALLOWED_ORIGIN_REGEX,
     allow_credentials=True,
-    allow_methods=["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
+    allow_methods=["*"],
     allow_headers=["*"],
 )
 
 from app.routers import (
     onboarding, item_master, customer, barcode, 
     price_group, purchase, inventory, billing, 
-    ho, flexible_reports, users, menu, extensions, finance, schemes, security, reporting
+    ho, flexible_reports, users, menu, extensions, finance, schemes, security, reporting,
+    store, inventory_audit
 )
 from app.routers.gstr1 import router as gstr1_router
 
 # Core & Management
 app.include_router(onboarding.router)
+app.include_router(store.router)
 app.include_router(users.router)
 app.include_router(extensions.router, prefix="/api/v1/extensions")
 
@@ -60,18 +65,19 @@ app.include_router(barcode.router, prefix="/api/v1")
 app.include_router(menu.router, prefix="/api/v1/menu")
 
 # Operational
-app.include_router(billing.router)   # Prefix handled in router
-app.include_router(inventory.router) # Prefix handled in router
-app.include_router(purchase.router)  # Prefix handled in router
-app.include_router(finance.router)   # Prefix handled in router
-app.include_router(schemes.router)   # Prefix handled in router
-app.include_router(security.router)  # Prefix handled in router
-app.include_router(reporting.router) # Prefix handled in router
+app.include_router(billing.router)
+app.include_router(inventory.router)
+app.include_router(inventory_audit.router)
+app.include_router(purchase.router)
+app.include_router(finance.router)
+app.include_router(schemes.router)
+app.include_router(security.router)
+app.include_router(reporting.router)
 
 # Reports & Sync
 app.include_router(ho.router, prefix="/api/v1/ho")
 app.include_router(flexible_reports.router)
-app.include_router(gstr1_router)
+app.include_router(gstr1_router, prefix="/api/v1/accounts") # Align with frontend /accounts/gstr1
 
 @app.on_event("startup")
 async def startup():

@@ -1,13 +1,13 @@
-/* ============================================================
- * PrimeSetu — Shoper9-Based Retail OS
- * Zero Cloud · Sovereign · AI-Governed
- * ============================================================
- * System Architect : Jawahar R Mallah
- * Organisation     : AITDL Network
- * Project          : PrimeSetu
- * © 2026 — All Rights Reserved
- * "Memory, Not Code."
- * ============================================================ */
+# ============================================================
+# PrimeSetu - Shoper9-Based Retail OS
+# Zero Cloud - Sovereign - AI-Governed
+# ============================================================
+# System Architect : Jawahar R Mallah
+# Organisation     : AITDL Network
+# Project          : PrimeSetu
+# (c) 2026 - All Rights Reserved
+# "Memory, Not Code."
+# ============================================================
 
 from fastapi import APIRouter, Depends, HTTPException, Query
 from sqlalchemy.ext.asyncio import AsyncSession
@@ -15,18 +15,34 @@ from sqlalchemy import select, func, desc, and_
 from app.core.database import get_db
 from app.models.base import Transaction, TransactionItem, Item, ItemStock, Customer, Till
 from app.schemas.billing import TransactionRead, TransactionCreate
-from app.core.auth import get_current_user
-from typing import List, Optional
-import uuid
-from decimal import Decimal, ROUND_HALF_UP
+from app.core.security import require_auth, CurrentUser
+from app.core.database import get_db
 
-router = APIRouter()
+router = APIRouter(prefix="/api/v1/billing", tags=["billing"])
+
+@router.get("/history")
+async def get_billing_history(
+    db: AsyncSession = Depends(get_db),
+    current_user: CurrentUser = Depends(require_auth)
+):
+    stmt = select(Transaction).where(Transaction.store_id == current_user.store_id).order_by(desc(Transaction.created_at)).limit(50)
+    result = await db.execute(stmt)
+    return result.scalars().all()
+
+@router.get("/suspended")
+async def get_suspended_bills(
+    db: AsyncSession = Depends(get_db),
+    current_user: CurrentUser = Depends(require_auth)
+):
+    stmt = select(Transaction).where(Transaction.store_id == current_user.store_id, Transaction.status == "Suspended")
+    result = await db.execute(stmt)
+    return result.scalars().all()
 
 @router.post("/finalize", response_model=TransactionRead)
 async def finalize_transaction(
     txn_in: TransactionCreate,
     db: AsyncSession = Depends(get_db),
-    current_user = Depends(get_current_user)
+    current_user = Depends(require_auth)
 ):
     """
     Finalize a sales transaction.
@@ -137,7 +153,7 @@ async def finalize_transaction(
 async def get_transaction_history(
     limit: int = 50,
     db: AsyncSession = Depends(get_db),
-    current_user = Depends(get_current_user)
+    current_user = Depends(require_auth)
 ):
     """Fetch recent finalized transactions for the current store."""
     result = await db.execute(
@@ -151,7 +167,7 @@ async def get_transaction_history(
 @router.get("/day-end/summary")
 async def get_day_end_summary(
     db: AsyncSession = Depends(get_db),
-    current_user = Depends(get_current_user)
+    current_user = Depends(require_auth)
 ):
     """
     Institutional Day-End Summary.
@@ -185,7 +201,7 @@ async def get_day_end_summary(
 @router.post("/day-end/finalize")
 async def finalize_day_end(
     db: AsyncSession = Depends(get_db),
-    current_user = Depends(get_current_user)
+    current_user = Depends(require_auth)
 ):
     """
     Sovereign Seal of Day-End.

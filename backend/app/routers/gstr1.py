@@ -61,6 +61,19 @@ def _compute_gst_split(net_amount: float, tax_rate: float, is_inter_state: bool)
         return {"taxable": taxable, "igst": 0.0, "cgst": half, "sgst": half}
 
 
+# ── Summary Endpoint ──────────────────────────────────────────────────────────
+@router.get("/summary")
+async def get_gstr1_summary(
+    db: AsyncSession = Depends(get_db),
+    current_user: UserContext = Depends(get_current_user)
+):
+    """Returns a quick summary of current month GSTR-1 state."""
+    from datetime import date
+    today = date.today()
+    # Delegate to export logic for the current month
+    return await export_gstr1(today.month, today.year, "json", db, current_user)
+
+
 # ── Main Export Endpoint ──────────────────────────────────────────────────────
 @router.get("/export")
 async def export_gstr1(

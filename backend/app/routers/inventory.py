@@ -28,6 +28,14 @@ from pydantic import BaseModel
 
 router = APIRouter(prefix="/api/v1/inventory", tags=["inventory"])
 
+@router.get("")
+async def list_inventory(
+    db: AsyncSession = Depends(get_db),
+    current_user: CurrentUser = Depends(require_auth)
+):
+    """Alias for stock listing at the root of inventory."""
+    return await get_inventory_status(db, current_user)
+
 class AuditItemEntry(BaseModel):
     item_id: uuid.UUID
     physical_qty: int

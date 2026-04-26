@@ -51,7 +51,7 @@ export default function ManagementDashboard() {
     try {
       const [statsData, predData] = await Promise.all([
         api.dashboard.getStats(),
-        api.inventory.getPredictiveStats()
+        api.inventory.getPredictive()
       ]);
       setStats(statsData);
       setPredictive(predData);

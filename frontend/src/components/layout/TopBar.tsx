@@ -10,8 +10,9 @@
  * ============================================================ */
 
 import React from 'react';
-import { Bell, Settings, Search } from 'lucide-react';
+import { Bell, Settings, Search, Globe } from 'lucide-react';
 import { useMenu } from '@/hooks/useMenu';
+import { useTranslation } from 'react-i18next';
 
 interface TopBarProps {
   activeTab: string;
@@ -29,6 +30,7 @@ export default function TopBar({
   setNodeType,
   setIsCommandBarOpen
 }: TopBarProps) {
+  const { i18n } = useTranslation();
   const { findModule } = useMenu();
   const activeModule = findModule(activeTab);
   
@@ -67,6 +69,24 @@ export default function TopBar({
           ))}
         </div>
       )}
+
+      {/* LANGUAGE SWITCHER */}
+      <div className="flex items-center bg-cream border border-border rounded-xl p-1 gap-1 mr-2">
+        {[
+          { code: 'en', label: 'EN' },
+          { code: 'hi', label: 'HI' }
+        ].map(lang => (
+          <button
+            key={lang.code}
+            onClick={() => i18n.changeLanguage(lang.code)}
+            className={`px-3 py-1.5 text-[10px] font-black rounded-lg transition-all ${
+              i18n.language === lang.code ? 'bg-navy text-white shadow-sm' : 'text-navy/40 hover:bg-navy/10'
+            }`}
+          >
+            {lang.label}
+          </button>
+        ))}
+      </div>
 
       <div 
         onClick={() => setIsCommandBarOpen?.(true)}

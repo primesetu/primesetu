@@ -4,15 +4,15 @@
  * ============================================================ */
 import React, { useEffect } from 'react'
 
-export default function ThermalReceipt({ bill, onPrinted }: { bill: any, onPrinted: () => void }) {
+export default function ThermalReceipt({ bill, onPrinted, autoPrint = true }: { bill: any, onPrinted: () => void, autoPrint?: boolean }) {
   useEffect(() => {
-    if (bill) {
+    if (bill && autoPrint) {
       setTimeout(() => {
         window.print()
         onPrinted()
       }, 500)
     }
-  }, [bill, onPrinted])
+  }, [bill, onPrinted, autoPrint])
 
   if (!bill) return null
 

@@ -48,7 +48,7 @@ export const api = {
     bulkCreate: (data: any[]) => apiClient.post('/products/bulk', data).then(r => r.data),
     search: (q: string) => apiClient.get(`/inventory/search?q=${q}`).then(r => r.data),
     getAlerts: () => apiClient.get('/inventory/alerts').then(r => r.data),
-    getPredictiveStats: () => apiClient.get('/inventory/predictive/aggregate').then(r => r.data),
+    getPredictive: () => apiClient.get('/inventory/predictive').then(r => r.data),
     getStockPrediction: (id: string) => apiClient.get(`/inventory/predictive/${id}`).then(r => r.data),
     createAuditSession: () => apiClient.post('/inventory-audit/').then(r => r.data),
     listAuditSessions: () => apiClient.get('/inventory-audit/').then(r => r.data),

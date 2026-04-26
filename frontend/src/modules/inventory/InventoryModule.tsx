@@ -15,6 +15,7 @@ import PhysicalStockModule from './PhysicalStockModule'
 import BulkItemMaster from './BulkItemMaster'
 import BarcodeStudio from './BarcodeStudio'
 import InwardingModule from './InwardingModule'
+import { PredictiveIntelligence } from './PredictiveIntelligence'
 import { clsx, type ClassValue } from 'clsx'
 import { twMerge } from 'tailwind-merge'
 
@@ -188,6 +189,14 @@ export default function InventoryModule() {
           >
             <span>📋</span> PHYSICAL AUDIT (PST)
           </button>
+        </div>
+      </div>
+
+      {/* Sovereign Predictive Intelligence Layer */}
+      <PredictiveIntelligence />
+
+      {/* Quick Actions & Search */}
+      <div className="bg-white rounded-[2rem] p-4 shadow-xl flex flex-wrap gap-4 items-center">
           <button 
             onClick={() => setIsImporting(true)}
             className="bg-navy text-white px-8 py-4 rounded-2xl font-black text-xs tracking-widest hover:bg-navy/90 transition-all shadow-xl flex items-center gap-2"
@@ -207,7 +216,6 @@ export default function InventoryModule() {
             <span>🔄</span> STOCK TRANSFER
           </button>
         </div>
-      </div>
 
       {/* Control Bar */}
       <div className="glass p-6 rounded-[2rem] flex flex-col md:flex-row gap-6 items-center justify-between shadow-2xl">

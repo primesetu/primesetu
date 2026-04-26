@@ -16,6 +16,7 @@ from app.models.base import Product, Inventory, Transaction, TransactionItem, Pu
 from app.schemas.common import ProductRead, ProductCreate, PredictiveStats
 from pydantic import BaseModel
 from typing import List, Dict, Any, Optional
+from datetime import datetime, timedelta
 import uuid
 import random
 import string
@@ -440,3 +441,72 @@ async def get_product(product_id: uuid.UUID, db: AsyncSession = Depends(get_db))
     if not product:
         raise HTTPException(status_code=404, detail="Product ID invalid or missing")
     return product
+@router.get("/predictive", response_model=PredictiveStats)
+async def get_predictive_inventory_stats(db: AsyncSession = Depends(get_db), current_user: UserContext = Depends(get_current_user)):
+    """
+    Sovereign Predictive Intelligence.
+    Calculates Days of Cover (DoC) and Stockout Forecasts based on 30-day velocity.
+    """
+    store_id = current_user.store_id
+    
+    # 1. Get current inventory count (items with stock > 0)
+    # We'll calculate DoC per product later, but for summary, we count risk SKUs
+    # Let's simplify for the summary stats first.
+    
+    # Calculate average daily sales per SKU for last 30 days
+    # Subquery for 30-day sales velocity
+    thirty_days_ago = datetime.now() - timedelta(days=30)
+    
+    velocity_stmt = (
+        select(
+            TransactionItem.product_id,
+            func.sum(TransactionItem.qty).label("total_sold")
+        )
+        .join(Transaction, Transaction.id == TransactionItem.transaction_id)
+        .where(Transaction.store_id == store_id)
+        .where(Transaction.created_at >= thirty_days_ago)
+        .group_by(TransactionItem.product_id)
+    )
+    
+    velocity_res = await db.execute(velocity_stmt)
+    velocities = {v.product_id: v.total_sold / 30.0 for v in velocity_res.all()}
+    
+    # Get current stock for all items
+    stock_stmt = (
+        select(Product.id, Product.category, Inventory.quantity)
+        .join(Inventory, Inventory.product_id == Product.id)
+        .where(Product.store_id == store_id)
+    )
+    stock_res = await db.execute(stock_stmt)
+    stock_data = stock_res.all()
+    
+    risk_count = 0
+    total_doc = 0.0
+    doc_count = 0
+    category_sales = {}
+    
+    for product_id, category, qty in stock_data:
+        velocity = velocities.get(product_id, 0.0)
+        
+        # Track category performance
+        if category:
+            category_sales[category] = category_sales.get(category, 0.0) + velocity
+            
+        if velocity > 0:
+            doc = qty / velocity
+            total_doc += doc
+            doc_count += 1
+            if doc < 7: # Less than a week of cover
+                risk_count += 1
+        elif qty <= 0:
+            risk_count += 1 # Already out of stock
+            
+    top_cat = max(category_sales, key=category_sales.get) if category_sales else "N/A"
+    avg_doc = total_doc / doc_count if doc_count > 0 else 0.0
+    
+    return PredictiveStats(
+        stockout_forecast_count=risk_count,
+        top_category=top_cat,
+        predicted_days=round(avg_doc, 1)
+    )
+

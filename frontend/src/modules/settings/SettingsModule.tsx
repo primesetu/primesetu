@@ -75,7 +75,41 @@ export default function SettingsModule() {
             </div>
           )}
 
-          {activeTab !== 'store' && (
+          {activeTab === 'terminal' && (
+            <div className="space-y-8">
+              <div>
+                <h2 className="font-serif text-2xl font-black text-navy">Terminal Setup</h2>
+                <p className="text-xs text-muted uppercase tracking-widest font-bold mt-1">Local POS Hardware Configuration</p>
+              </div>
+
+              <div className="grid grid-cols-1 gap-6">
+                <div className="flex items-center justify-between p-6 bg-cream/30 rounded-3xl border border-border">
+                  <div>
+                    <div className="text-sm font-black text-navy uppercase tracking-tight">Auto-fire Print on Finalize</div>
+                    <div className="text-[10px] text-muted font-bold">Skip preview and send directly to system default printer.</div>
+                  </div>
+                  <input 
+                    type="checkbox" 
+                    className="w-6 h-6 accent-saffron cursor-pointer" 
+                    defaultChecked={store?.auto_print}
+                  />
+                </div>
+
+                <Field label="Primary Printer ID" value={store?.printer_id || 'LPT1'} />
+                <Field label="Cash Drawer Port" value={store?.drawer_port || 'COM1'} />
+              </div>
+
+              <div className="pt-8 border-t border-border flex justify-end">
+                <button 
+                  className="bg-navy text-white px-10 py-3.5 rounded-2xl font-black text-[11px] uppercase tracking-[2px] shadow-xl shadow-navy/20 hover:scale-[1.02] active:scale-95 transition-all"
+                >
+                  Save Hardware Config
+                </button>
+              </div>
+            </div>
+          )}
+
+          {activeTab !== 'store' && activeTab !== 'terminal' && (
             <div className="py-20 text-center space-y-4">
               <div className="text-4xl grayscale opacity-20">⚙️</div>
               <p className="font-serif italic text-muted text-lg">"{activeTab}" configurations are managed via Shoper9 Bridge.</p>

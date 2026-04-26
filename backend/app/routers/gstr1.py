@@ -88,7 +88,7 @@ async def export_gstr1(
     from sqlalchemy import extract
     stmt = (
         select(Transaction)
-        .options(selectinload(Transaction.items))
+        .options(selectinload(Transaction.items).selectinload(TransactionItem.product))
         .where(
             Transaction.store_id == store_id,
             Transaction.status == "Finalized",
@@ -104,8 +104,7 @@ async def export_gstr1(
     b2b_invoices = []
     b2cs_aggregate: dict = {}   # key: "state_code|tax_rate"
     hsn_summary: dict = {}      # key: hsn_code
-    doc_count = len(txns)
-
+    
     for tx in txns:
         # Determine if B2B or B2CS
         payments_meta = tx.payments or {}
@@ -120,9 +119,9 @@ async def export_gstr1(
         invoice_cgst = 0.0
         invoice_sgst = 0.0
 
-        for item in tx.items:
-            # Get tax rate from transaction item or default 18%
-            tax_rate = float(getattr(item, 'tax_rate', 18.0))
+        for i, item in enumerate(tx.items):
+            # Get tax rate from item (Shoper9 standard: per line tax)
+            tax_rate = float(item.tax_rate or 18.0)
             net = float(item.net_amount or 0)
             split = _compute_gst_split(net, tax_rate, is_inter_state)
 
@@ -132,21 +131,22 @@ async def export_gstr1(
             invoice_sgst += split["sgst"]
 
             invoice_items.append({
-                "num": str(item.product_id)[:8],
+                "num": i + 1, # Row number in invoice
                 "txval": split["taxable"],
                 "rt": tax_rate,
-                "igst": split["igst"],
-                "cgst": split["cgst"],
-                "sgst": split["sgst"],
+                "iamt": split["igst"],
+                "camt": split["cgst"],
+                "samt": split["sgst"],
             })
 
             # HSN Summary aggregation
-            hsn = "0000"  # Default — real implementation fetches from Product
+            # Use product code or specific HSN attribute if available
+            hsn = getattr(item.product, 'hsn_code', item.product.code[:4]) if item.product else "0000"
             hsn_key = f"{hsn}|{tax_rate}"
             if hsn_key not in hsn_summary:
                 hsn_summary[hsn_key] = {
                     "hsn_sc": hsn,
-                    "desc": "Mixed Items",
+                    "desc": item.product.name[:30] if item.product else "Retail Product",
                     "uqc": "PCS",
                     "qty": 0.0,
                     "val": 0.0,
@@ -173,27 +173,35 @@ async def export_gstr1(
                     "pos": customer_state,
                     "rchrg": "N",
                     "inv_typ": "R",
-                    "itms": invoice_items,
+                    "itms": [{"num": 1, "itm_det": it} for it in invoice_items],
                 }]
             })
         else:
             # B2CS — aggregate by "state|tax_rate"
-            key = f"{store_state}|18.0"  # Simplified; real: per item tax rate
-            if key not in b2cs_aggregate:
-                b2cs_aggregate[key] = {
-                    "sply_ty": "INTRA",
-                    "pos": store_state,
+            b2cs_key = f"{customer_state}|{invoice_items[0]['rt'] if invoice_items else 18.0}"
+            if b2cs_key not in b2cs_aggregate:
+                b2cs_aggregate[b2cs_key] = {
+                    "sply_ty": "INTER" if is_inter_state else "INTRA",
+                    "pos": customer_state,
                     "typ": "OE",
-                    "rt": 18.0,
-                    "txval": 0.0,
-                    "iamt": 0.0,
-                    "camt": 0.0,
-                    "samt": 0.0,
+                    "rt": invoice_items[0]['rt'] if invoice_items else 18.0,
+                    "txval": 0.0, "iamt": 0.0, "camt": 0.0, "samt": 0.0
                 }
-            b2cs_aggregate[key]["txval"] += invoice_taxable
-            b2cs_aggregate[key]["iamt"] += invoice_igst
-            b2cs_aggregate[key]["camt"] += invoice_cgst
-            b2cs_aggregate[key]["samt"] += invoice_sgst
+            b2cs_aggregate[b2cs_key]["txval"] += invoice_taxable
+            b2cs_aggregate[b2cs_key]["iamt"] += invoice_igst
+            b2cs_aggregate[b2cs_key]["camt"] += invoice_cgst
+            b2cs_aggregate[b2cs_key]["samt"] += invoice_sgst
+
+    # Document summary logic
+    total_count = len(txns)
+    cancelled_count = (await db.execute(
+        select(func.count(Transaction.id)).where(
+            Transaction.store_id == store_id,
+            Transaction.status == "Cancelled",
+            extract("month", Transaction.created_at) == month,
+            extract("year", Transaction.created_at) == year,
+        )
+    )).scalar() or 0
 
     # 4. Build final GSTR-1 payload
     payload = {
@@ -210,10 +218,10 @@ async def export_gstr1(
                 "docs": [{
                     "num": 1,
                     "from": "1",
-                    "to": str(doc_count),
-                    "totnum": doc_count,
-                    "cancel": 0,
-                    "net_issue": doc_count,
+                    "to": str(total_count + cancelled_count),
+                    "totnum": total_count + cancelled_count,
+                    "cancel": cancelled_count,
+                    "net_issue": total_count,
                 }]
             }]
         }

@@ -8,11 +8,17 @@
  * © 2026 — All Rights Reserved
  * "Memory, Not Code."
  * ============================================================ */
-
 import React, { useEffect } from 'react';
 import { QrCode, ShieldCheck } from 'lucide-react';
+import { useQuery } from '@tanstack/react-query';
+import { api } from '@/api/client';
 
 export default function TaxInvoiceA4({ bill, onPrinted }: { bill: any, onPrinted: () => void }) {
+  const { data: store } = useQuery({
+    queryKey: ['store-settings'],
+    queryFn: () => api.store.getSettings()
+  });
+
   useEffect(() => {
     if (bill) {
       setTimeout(() => {
@@ -53,11 +59,11 @@ export default function TaxInvoiceA4({ bill, onPrinted }: { bill: any, onPrinted
       {/* Corporate Header */}
       <div className="flex justify-between border-b-2 border-black pb-6 mb-6">
         <div className="space-y-1">
-          <h1 className="text-4xl font-black uppercase tracking-tight leading-none">{bill.store_name || 'PrimeSetu Retail'}</h1>
+          <h1 className="text-4xl font-black uppercase tracking-tight leading-none">{store?.name || 'PrimeSetu Retail'}</h1>
           <p className="text-xs font-black uppercase text-gray-500 tracking-widest">Premium Retail Sovereign Unit</p>
           <div className="mt-4 space-y-0.5 text-xs">
-            <p>{bill.store_address || 'Sovereign Node, India'}</p>
-            <p><strong>GSTIN:</strong> {bill.store_gstin || 'N/A'} | <strong>Ph:</strong> {bill.store_phone || 'N/A'}</p>
+            <p>{store?.address || 'Sovereign Node, India'}</p>
+            <p><strong>GSTIN:</strong> {store?.gstin || 'N/A'} | <strong>Ph:</strong> {store?.phone || 'N/A'}</p>
           </div>
         </div>
         <div className="flex flex-col items-end gap-2">
@@ -215,7 +221,7 @@ export default function TaxInvoiceA4({ bill, onPrinted }: { bill: any, onPrinted
             </div>
             <div className="flex flex-col items-center justify-center border-2 border-dashed border-gray-200 h-32 relative group">
                 <ShieldCheck className="text-gray-100 group-hover:text-emerald-500/20 transition-all absolute" size={60} />
-                <div className="text-[10px] font-black uppercase tracking-widest text-navy relative z-10">{bill.store_name || 'PrimeSetu Retail'}</div>
+                <div className="text-[10px] font-black uppercase tracking-widest text-navy relative z-10">{store?.name || 'PrimeSetu Retail'}</div>
                 <div className="mt-8 text-[9px] font-bold opacity-60 relative z-10">(Authorised Signatory)</div>
                 <div className="absolute bottom-2 right-2 text-[8px] font-mono opacity-20">PrimeSetu Digitally Signed</div>
             </div>

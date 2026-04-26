@@ -9,7 +9,9 @@
  * "Memory, Not Code."
  * ============================================================ */
 
+import React, { useState } from 'react';
 import { useNodeSync } from '@/hooks/useNodeSync';
+import SyncManagerModal from './SyncManagerModal';
 
 interface StatusBarProps {
   activeTab: string;
@@ -17,6 +19,7 @@ interface StatusBarProps {
 
 const StatusBar: React.FC<StatusBarProps> = ({ activeTab }) => {
   const sync = useNodeSync();
+  const [showSync, setShowSync] = useState(false);
 
   const pulseColor = {
     syncing: 'text-amber-400/70',
@@ -58,7 +61,10 @@ const StatusBar: React.FC<StatusBarProps> = ({ activeTab }) => {
 
       <div className="flex items-center gap-10">
         {/* HO Pulse Indicator — live */}
-        <div className="flex items-center gap-3 border-l border-white/10 pl-8">
+        <div 
+          onClick={() => setShowSync(true)}
+          className="flex items-center gap-3 border-l border-white/10 pl-8 cursor-pointer hover:opacity-80 transition-opacity active:scale-95"
+        >
           <div className="flex gap-1 items-end">
             {[1, 2, 3].map(i => (
               <div
@@ -87,9 +93,11 @@ const StatusBar: React.FC<StatusBarProps> = ({ activeTab }) => {
 
         {/* Node identity */}
         <div className="text-white/30 text-xs font-black uppercase tracking-[0.6em] pr-4 border-l border-white/10 pl-8">
-          PST-X01 · NODE v2.0
+          {sync.nodeId || 'PST-X01'} · NODE v2.0
         </div>
       </div>
+
+      {showSync && <SyncManagerModal onClose={() => setShowSync(false)} />}
     </div>
   );
 };

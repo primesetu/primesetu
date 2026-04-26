@@ -16,7 +16,7 @@ import {
   BarChart3, Building2, Users, Receipt
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { apiClient } from '@/api/client';
+import { api } from '@/api/client';
 
 const MONTHS = [
   'January','February','March','April','May','June',
@@ -38,8 +38,8 @@ const CompliancePanel: React.FC = () => {
     setError(null);
     setPreview(null);
     try {
-      const res = await apiClient.get(`/api/v1/gstr1/export?month=${month}&year=${year}&fmt=json`);
-      setPreview(res.data);
+      const data = await api.compliance.getGstr1(month, year);
+      setPreview(data);
     } catch (err: any) {
       setError(err.response?.data?.detail || 'Failed to generate GSTR-1 return. Verify your store GSTIN in settings.');
     } finally {
@@ -50,11 +50,8 @@ const CompliancePanel: React.FC = () => {
   const downloadCSV = async () => {
     setLoading(true);
     try {
-      const res = await apiClient.get(
-        `/api/v1/gstr1/export?month=${month}&year=${year}&fmt=csv`,
-        { responseType: 'blob' }
-      );
-      const url = URL.createObjectURL(new Blob([res.data], { type: 'text/csv' }));
+      const data = await api.compliance.downloadGstr1Csv(month, year);
+      const url = URL.createObjectURL(new Blob([data], { type: 'text/csv' }));
       const link = document.createElement('a');
       link.href = url;
       link.download = `GSTR1_${month.toString().padStart(2,'0')}${year}.csv`;

@@ -9,119 +9,146 @@
  * "Memory, Not Code."
  * ============================================================ */
 import { useQuery } from '@tanstack/react-query'
-import { apiClient } from '@/api/client'
+import { api } from '@/api/client'
+import FlexibleReportDesigner from './FlexibleReportDesigner'
+import { useState } from 'react'
+import { BarChart3, Layout, ChevronRight } from 'lucide-react'
 
 export default function MISModule() {
+  const [mode, setMode] = useState<'dashboard' | 'designer'>('dashboard')
+  
   const { data: sales, isLoading: salesLoading } = useQuery({
     queryKey: ['sales-summary'],
-    queryFn: async () => {
-      const resp = await apiClient.get('/reports/sales-summary')
-      return resp.data
-    }
+    queryFn: () => api.reports.getSalesSummary()
   })
 
   const { data: inventory, isLoading: invLoading } = useQuery({
     queryKey: ['inventory-valuation'],
-    queryFn: async () => {
-      const resp = await apiClient.get('/reports/inventory-valuation')
-      return resp.data
-    }
+    queryFn: () => api.reports.getInventoryValuation()
   })
 
   return (
     <div className="space-y-8 animate-in fade-in zoom-in-95 duration-700">
       {/* Header */}
       <div className="flex items-center justify-between">
-        <div>
-          <h1 className="font-serif text-2xl font-black text-navy">MIS Intelligence</h1>
-          <p className="text-xs text-muted uppercase tracking-widest font-bold">Terminal Performance & Audit</p>
+        <div className="flex items-center gap-6">
+          <div 
+            onClick={() => setMode('dashboard')}
+            className={`cursor-pointer transition-all ${mode === 'dashboard' ? 'opacity-100 scale-110' : 'opacity-30 hover:opacity-60'}`}
+          >
+            <h1 className="font-serif text-3xl font-black text-navy uppercase tracking-tighter">MIS Intelligence</h1>
+            <p className="text-[10px] text-navy/40 uppercase tracking-widest font-black mt-1">Terminal Performance & Audit</p>
+          </div>
+          <ChevronRight size={20} className="text-navy/10" />
+          <div 
+            onClick={() => setMode('designer')}
+            className={`cursor-pointer transition-all ${mode === 'designer' ? 'opacity-100 scale-110' : 'opacity-30 hover:opacity-60'}`}
+          >
+            <h1 className="font-serif text-3xl font-black text-navy uppercase tracking-tighter">Report Designer</h1>
+            <p className="text-[10px] text-navy/40 uppercase tracking-widest font-black mt-1">Flexible Drag-and-Drop</p>
+          </div>
         </div>
-        <div className="flex gap-3">
-          <button className="bg-white border border-border text-navy px-4 py-2 rounded-xl text-xs font-bold hover:bg-cream transition-all">
-            📥 Export PDF
-          </button>
-          <button className="bg-navy text-white px-4 py-2 rounded-xl text-xs font-bold hover:bg-navy/90 transition-all">
-            📅 Last 7 Days
-          </button>
+        
+        <div className="flex gap-4">
+          <div className="flex bg-navy/5 p-1.5 rounded-2xl border border-navy/5">
+             <button 
+               onClick={() => setMode('dashboard')}
+               className={`flex items-center gap-2 px-6 py-2.5 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all ${mode === 'dashboard' ? 'bg-white text-navy shadow-lg shadow-navy/5' : 'text-navy/40 hover:text-navy'}`}
+             >
+                <BarChart3 size={14} /> Dashboard
+             </button>
+             <button 
+               onClick={() => setMode('designer')}
+               className={`flex items-center gap-2 px-6 py-2.5 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all ${mode === 'designer' ? 'bg-white text-navy shadow-lg shadow-navy/5' : 'text-navy/40 hover:text-navy'}`}
+             >
+                <Layout size={14} /> Designer
+             </button>
+          </div>
         </div>
       </div>
 
-      {/* KPI Cards */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-        <KPICard 
-          title="Total Gross Revenue" 
-          value={`₹${sales?.revenue.toLocaleString() || '0'}`} 
-          subtitle={`${sales?.bills || 0} Bills Generated`}
-          icon="💰"
-          loading={salesLoading}
-        />
-        <KPICard 
-          title="Stock Valuation" 
-          value={`₹${inventory?.total_valuation.toLocaleString() || '0'}`} 
-          subtitle={`${inventory?.total_skus || 0} Unique SKUs`}
-          icon="📦"
-          loading={invLoading}
-        />
-        <KPICard 
-          title="Avg Bill Value" 
-          value={`₹${sales?.bills > 0 ? (sales.revenue / sales.bills).toFixed(2) : '0'}`} 
-          subtitle="Customer Ticket Size"
-          icon="🎫"
-          loading={salesLoading}
-        />
-      </div>
+      {mode === 'dashboard' ? (
+        <>
+          {/* KPI Cards */}
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <KPICard 
+              title="Total Gross Revenue" 
+              value={`₹${sales?.revenue.toLocaleString() || '0'}`} 
+              subtitle={`${sales?.bills || 0} Bills Generated`}
+              icon="💰"
+              loading={salesLoading}
+            />
+            <KPICard 
+              title="Stock Valuation" 
+              value={`₹${inventory?.total_valuation.toLocaleString() || '0'}`} 
+              subtitle={`${inventory?.total_skus || 0} Unique SKUs`}
+              icon="📦"
+              loading={invLoading}
+            />
+            <KPICard 
+              title="Avg Bill Value" 
+              value={`₹${sales?.bills > 0 ? (sales.revenue / sales.bills).toFixed(2) : '0'}`} 
+              subtitle="Customer Ticket Size"
+              icon="🎫"
+              loading={salesLoading}
+            />
+          </div>
 
-      <div className="grid grid-cols-12 gap-8">
-        {/* Sales Chart (CSS Bars) */}
-        <div className="col-span-8 bg-white border border-border rounded-2xl p-6 shadow-sm">
-          <h3 className="font-serif font-bold text-navy mb-6">Revenue Trend (Daily)</h3>
-          <div className="h-64 flex items-end justify-between gap-4 px-4 pb-8 border-b border-border relative">
-            {salesLoading ? (
-               <div className="absolute inset-0 flex items-center justify-center bg-white/50 z-10">Loading...</div>
-            ) : sales?.daily?.map((d: any) => (
-              <div key={d.date} className="flex-1 flex flex-col items-center group relative">
-                <div 
-                  className="w-full bg-saffron/20 group-hover:bg-saffron rounded-t-lg transition-all duration-500 relative"
-                  style={{ height: `${(d.amount / sales.revenue) * 200 + 20}px` }}
-                >
-                  <div className="absolute -top-8 left-1/2 -translate-x-1/2 text-[10px] font-black text-navy opacity-0 group-hover:opacity-100 transition-opacity">
-                    ₹{d.amount}
+          <div className="grid grid-cols-12 gap-8">
+            {/* Sales Chart (CSS Bars) */}
+            <div className="col-span-8 bg-white/50 backdrop-blur-xl border border-white/60 rounded-[2.5rem] p-10 shadow-xl shadow-navy/5">
+              <h3 className="font-serif font-black text-navy text-xl uppercase tracking-tighter mb-8">Revenue Trend (Daily)</h3>
+              <div className="h-64 flex items-end justify-between gap-4 px-4 pb-8 border-b border-navy/5 relative">
+                {salesLoading ? (
+                   <div className="absolute inset-0 flex items-center justify-center bg-white/50 z-10">Loading...</div>
+                ) : sales?.daily?.map((d: any) => (
+                  <div key={d.date} className="flex-1 flex flex-col items-center group relative">
+                    <div 
+                      className="w-full bg-navy/10 group-hover:bg-navy rounded-t-2xl transition-all duration-700 relative"
+                      style={{ height: `${(d.amount / sales.revenue) * 200 + 20}px` }}
+                    >
+                      <div className="absolute -top-10 left-1/2 -translate-x-1/2 text-[10px] font-black text-navy opacity-0 group-hover:opacity-100 transition-all bg-white px-3 py-1.5 rounded-xl shadow-xl border border-navy/5">
+                        ₹{d.amount}
+                      </div>
+                    </div>
+                    <div className="absolute top-full mt-4 text-[9px] font-black text-navy/30 uppercase tracking-tighter transform -rotate-45 origin-top-left">
+                      {new Date(d.date).toLocaleDateString('en-IN', { day: '2-digit', month: 'short' })}
+                    </div>
                   </div>
-                </div>
-                <div className="absolute top-full mt-2 text-[9px] font-bold text-muted uppercase tracking-tighter transform -rotate-45 origin-top-left">
-                  {new Date(d.date).toLocaleDateString('en-IN', { day: '2-digit', month: 'short' })}
-                </div>
+                ))}
               </div>
-            ))}
-          </div>
-        </div>
+            </div>
 
-        {/* Category Distribution */}
-        <div className="col-span-4 bg-white border border-border rounded-2xl p-6 shadow-sm">
-          <h3 className="font-serif font-bold text-navy mb-6">Stock by Category</h3>
-          <div className="space-y-4">
-            {inventory?.by_category?.map((c: any) => (
-              <div key={c.category} className="space-y-1.5">
-                <div className="flex justify-between text-[10px] font-bold uppercase tracking-widest text-muted">
-                  <span>{c.category}</span>
-                  <span className="text-navy">₹{c.value.toLocaleString()}</span>
-                </div>
-                <div className="h-2 bg-cream rounded-full overflow-hidden">
-                  <div 
-                    className="h-full bg-navy rounded-full transition-all duration-1000"
-                    style={{ width: `${(c.value / inventory.total_valuation) * 100}%` }}
-                  ></div>
-                </div>
+            {/* Category Distribution */}
+            <div className="col-span-4 bg-white/50 backdrop-blur-xl border border-white/60 rounded-[2.5rem] p-10 shadow-xl shadow-navy/5">
+              <h3 className="font-serif font-black text-navy text-xl uppercase tracking-tighter mb-8">Stock by Category</h3>
+              <div className="space-y-6">
+                {inventory?.by_category?.map((c: any) => (
+                  <div key={c.category} className="space-y-2">
+                    <div className="flex justify-between text-[10px] font-black uppercase tracking-[0.2em] text-navy/40">
+                      <span>{c.category}</span>
+                      <span className="text-navy">₹{c.value.toLocaleString()}</span>
+                    </div>
+                    <div className="h-2 bg-navy/5 rounded-full overflow-hidden">
+                      <div 
+                        className="h-full bg-navy rounded-full transition-all duration-1000"
+                        style={{ width: `${(c.value / (inventory.total_valuation || 1)) * 100}%` }}
+                      ></div>
+                    </div>
+                  </div>
+                ))}
               </div>
-            ))}
+              <div className="mt-12 p-6 bg-navy/[0.03] rounded-3xl border border-navy/5 border-dashed">
+                <p className="text-[10px] text-navy/40 font-bold italic text-center leading-relaxed">
+                  "Data integrity verified by PrimeSetu Sovereign Audit Engine v2.0"
+                </p>
+              </div>
+            </div>
           </div>
-          <div className="mt-10 p-4 bg-cream rounded-xl border border-border border-dashed">
-            <p className="text-[10px] text-muted italic text-center">
-              "Data integrity verified by Sovereign Audit Engine"
-            </p>
-          </div>
-        </div>
-      </div>
+        </>
+      ) : (
+        <FlexibleReportDesigner />
+      )}
     </div>
   )
 }

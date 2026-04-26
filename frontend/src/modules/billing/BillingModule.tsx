@@ -22,9 +22,11 @@ import DayEndModule from './DayEndModule'
 import SuspendedBillsBrowser from './SuspendedBillsBrowser'
 import ThermalReceipt from './ThermalReceipt'
 import TaxInvoiceA4 from './TaxInvoiceA4'
+import TaxInvoiceB2B from './TaxInvoiceB2B'
 import CreditNoteA4 from './CreditNoteA4'
 import ReturnsDrawer from './ReturnsDrawer'
 import SalesSlipsBrowser from './SalesSlipsBrowser'
+import BillHistoryBrowser from './BillHistoryBrowser'
 import { useHotkeys } from 'react-hotkeys-hook'
 import { offlineService } from '@/api/offline'
 import { useLanguage } from '@/hooks/useLanguage'
@@ -57,13 +59,15 @@ export default function BillingModule() {
   const [showTotals, setShowTotals] = useState(false)
   const [showSettle, setShowSettle] = useState(false)
   const [showSuspended, setShowSuspended] = useState(false)
+  const [showSalesSlips, setShowSalesSlips] = useState(false)
+  const [showHistory, setShowHistory] = useState(false)
   const [showReturns, setShowReturns] = useState(false)
-  const [showSlips, setShowSlips] = useState(false)
   const [billToPrint, setBillToPrint] = useState<any>(null)
   const [billPrefix] = useState('B')
   const [currentTime, setCurrentTime] = useState(now())
   const [isOnline, setIsOnline] = useState(navigator.onLine)
   const [offlineCount, setOfflineCount] = useState(0)
+  const [printFormat, setPrintFormat] = useState<'thermal' | 'a4' | 'b2b'>('thermal')
   const [sendSms, setSendSms] = useState(true)
   const [activeTill, setActiveTill] = useState<any>(null)
   const searchRef = useRef<HTMLInputElement>(null)
@@ -184,12 +188,14 @@ export default function BillingModule() {
   useHotkeys('f2', (e) => { e.preventDefault(); searchRef.current?.focus() }, { enableOnFormTags: true })
   useHotkeys('alt+1', (e) => { e.preventDefault(); setCart([]); setCustomerMobile(''); setQ(''); searchRef.current?.focus() }, { enableOnFormTags: true })
   useHotkeys('alt+2', (e) => { e.preventDefault(); setShowReturns(true) }, { enableOnFormTags: true })
-  useHotkeys('f9', (e) => { e.preventDefault(); setShowTotals(v => !v) }, { enableOnFormTags: true })
+  useHotkeys('f4', () => setShowHistory(true), { enableOnFormTags: true })
+  useHotkeys('f5', () => setShowSuspended(true), { enableOnFormTags: true })
+  useHotkeys('f6', () => setShowSalesSlips(true), { enableOnFormTags: true })
   useHotkeys('f7', (e) => { e.preventDefault(); setPayLines([{ mode: 'CASH', amount: toRupees(netPayablePaise) }]); setShowSettle(true) }, { enableOnFormTags: true })
-  useHotkeys('f8', (e) => { e.preventDefault(); setShowSettle(true) }, { enableOnFormTags: true })
-  useHotkeys('f6', (e) => { e.preventDefault(); setShowSlips(true) }, { enableOnFormTags: true })
+  useHotkeys('f8', () => setShowSettle(true), { enableOnFormTags: true })
+  useHotkeys('f9', () => setShowTotals(v => !v), { enableOnFormTags: true })
+  useHotkeys('f10', () => setShowSettle(true), { enableOnFormTags: true })
   useHotkeys('f12', (e) => { e.preventDefault(); handleSuspend() }, { enableOnFormTags: true })
-  useHotkeys('f4', (e) => { e.preventDefault(); setShowSuspended(v => !v) }, { enableOnFormTags: true })
   useHotkeys('alt+6', (e) => { 
     e.preventDefault(); 
     if (lastBill) setBillToPrint({ ...lastBill, is_duplicate: true }); 
@@ -232,7 +238,12 @@ export default function BillingModule() {
     if (!cart.length) return
     setProcessing(true)
     try {
-      await api.billing.suspend({ customer_mobile: customerMobile, type: 'Sales', items: cart.map(i => ({ product_id: i.id, qty: i.qty, unit_price: i.mrp })), suspended_reason: 'Counter Queue' })
+      await api.billing.suspend({ 
+        customer_mobile: customerMobile, 
+        type: 'Sales', 
+        items: cart.map(i => ({ product_id: i.id, qty: i.qty, unit_price: i.mrp })), 
+        suspended_reason: 'Counter Queue' 
+      })
       setCart([]); setCustomerMobile('')
     } catch {}
     finally { setProcessing(false) }
@@ -257,17 +268,9 @@ export default function BillingModule() {
     } finally { setProcessing(false) }
   }
 
-  useHotkeys('f4', (e) => { e.preventDefault(); setShowSuspended(v => !v) }, { enableOnFormTags: true })
-  useHotkeys('f5', (e) => { e.preventDefault(); setShowSuspended(v => !v) }, { enableOnFormTags: true })
-  useHotkeys('f6', (e) => { e.preventDefault(); setShowSlips(v => !v) }, { enableOnFormTags: true })
+  const recallSlip = (items: any, mobile: string) => { setCart(items as any); setCustomerMobile(mobile); setShowSalesSlips(false) }
+
   useHotkeys('shift+f6', (e) => { e.preventDefault(); handleCreateSlip() }, { enableOnFormTags: true })
-  useHotkeys('f9', (e) => { e.preventDefault(); setShowTotals(v => !v) }, { enableOnFormTags: true })
-  useHotkeys('f7', (e) => { e.preventDefault(); setPayLines([{ mode: 'CASH', amount: toRupees(netPayablePaise) }]); setShowSettle(true) }, { enableOnFormTags: true })
-  useHotkeys('f8', (e) => { e.preventDefault(); setShowSettle(v => !v) }, { enableOnFormTags: true })
-  useHotkeys('f10', (e) => { e.preventDefault(); setShowSettle(true) }, { enableOnFormTags: true })
-  useHotkeys('f12', (e) => { e.preventDefault(); handleSuspend() }, { enableOnFormTags: true })
-  useHotkeys('alt+1', (e) => { e.preventDefault(); setCart([]); setCustomerMobile(''); setSalesperson(''); setQ(''); setPayLines([{ mode: 'CASH', amount: 0 }]); setShowSettle(false); searchRef.current?.focus() }, { enableOnFormTags: true })
-  useHotkeys('alt+2', (e) => { e.preventDefault(); setShowReturns(v => !v) }, { enableOnFormTags: true })
   useHotkeys('alt+m', (e) => { e.preventDefault(); document.getElementById('cust-mobile')?.focus() }, { enableOnFormTags: true })
   useHotkeys('ctrl+d', (e) => { e.preventDefault(); setCart(p => p.slice(0,-1)) }, { enableOnFormTags: true })
   useHotkeys('escape', (e) => { e.preventDefault(); setQ(''); setShowTotals(false); setShowSettle(false) }, { enableOnFormTags: true })
@@ -284,8 +287,9 @@ export default function BillingModule() {
 
   return (
     <div className="flex flex-col h-screen bg-[#f0ede8] font-sans overflow-hidden relative">
-      <ThermalReceipt bill={billToPrint} onPrinted={() => setBillToPrint(null)} />
-      <TaxInvoiceA4 bill={billToPrint} onPrinted={() => setBillToPrint(null)} />
+      {printFormat === 'thermal' && <ThermalReceipt bill={billToPrint} onPrinted={() => setBillToPrint(null)} />}
+      {printFormat === 'a4' && <TaxInvoiceA4 bill={billToPrint} onPrinted={() => setBillToPrint(null)} />}
+      {printFormat === 'b2b' && <TaxInvoiceB2B bill={billToPrint} onPrinted={() => setBillToPrint(null)} />}
       <CreditNoteA4 bill={billToPrint?.type === 'Return' ? billToPrint : null} onPrinted={() => setBillToPrint(null)} />
 
       {/* ─── Overlays ─── */}
@@ -306,14 +310,8 @@ export default function BillingModule() {
               />
            </motion.div>
         )}
-        {showSlips && (
-           <motion.div initial={{ x: '100%' }} animate={{ x: 0 }} exit={{ x: '100%' }} transition={{ type: 'spring', damping: 25, stiffness: 200 }} className="absolute right-0 top-0 bottom-0 w-[400px] z-[250] bg-navy shadow-2xl border-l-4 border-amber-400">
-             <SalesSlipsBrowser 
-                onRecall={(items: any, mobile: string) => { setCart(items as any); setCustomerMobile(mobile); setShowSlips(false) }} 
-                onClose={() => setShowSlips(false)} 
-             />
-           </motion.div>
-        )}
+        {showSalesSlips && <SalesSlipsBrowser onRecall={recallSlip} onClose={() => setShowSalesSlips(false)} />}
+        {showHistory && <BillHistoryBrowser onReprint={(b) => setBillToPrint(b)} onClose={() => setShowHistory(false)} />}
         {showDayEnd && <DayEndModule onClose={() => setShowDayEnd(false)} />}
         {lastBill && (
           <motion.div initial={{ y: -80, opacity: 0 }} animate={{ y: 0, opacity: 1 }} exit={{ y: -80, opacity: 0 }}
@@ -387,7 +385,7 @@ export default function BillingModule() {
           { icon: <Calculator className="w-4 h-4" />, label: 'Totals', key: 'F9', action: () => setShowTotals(v => !v) },
           { icon: <Banknote className="w-4 h-4" />, label: 'Exact Cash', key: 'F7', action: () => { setPayLines([{ mode: 'CASH', amount: toRupees(netPayablePaise) }]); setShowSettle(true) } },
           { icon: <CreditCard className="w-4 h-4" />, label: 'Settlement', key: 'F8', action: () => setShowSettle(true) },
-          { icon: <FileText className="w-4 h-4" />, label: 'Sales Slips', key: 'F6', action: () => setShowSlips(true) },
+          { icon: <FileText className="w-4 h-4" />, label: 'Sales Slips', key: 'F6', action: () => setShowSalesSlips(true) },
           { icon: <Pause className="w-4 h-4" />, label: 'Suspend', key: 'F12', action: handleSuspend },
           { icon: <Clock className="w-4 h-4" />, label: 'Recall [F4]', key: 'F4', action: () => setShowSuspended(v => !v) },
           { icon: <Printer className="w-4 h-4" />, label: 'Reprint', key: 'Alt+6', action: () => {
@@ -408,7 +406,8 @@ export default function BillingModule() {
 
         <div className="ml-auto flex items-center gap-4 text-white/40 text-[10px] font-mono">
           <span className="flex items-center gap-1"><Clock className="w-3 h-3" />{currentTime}</span>
-          <span className="text-amber-400 font-bold">X01-RET-01</span>
+          <button onClick={() => setShowSalesSlips(true)} className="text-[9px] bg-white/10 hover:bg-amber-400 hover:text-navy px-3 py-1.5 rounded-lg font-black transition-all">Slips (F6)</button>
+          <button onClick={() => setShowHistory(true)} className="text-[9px] bg-white/10 hover:bg-gold hover:text-navy px-3 py-1.5 rounded-lg font-black transition-all">History (F7)</button>
           <button onClick={() => setShowDayEnd(true)} className="text-[9px] bg-white/10 hover:bg-amber-400 hover:text-navy px-3 py-1.5 rounded-lg font-black transition-all">Day End</button>
         </div>
       </div>
@@ -639,6 +638,22 @@ export default function BillingModule() {
                 <div className={`absolute top-0.5 w-3 h-3 bg-white rounded-full transition-transform ${sendSms ? 'translate-x-4' : 'translate-x-0'}`} />
               </div>
             </button>
+            <div className="pt-2">
+              <label className="text-[9px] font-black text-gray-400 uppercase tracking-widest block mb-2 text-center">Print Layout</label>
+              <div className="flex gap-1 bg-gray-100 p-1 rounded-xl">
+                {(['thermal', 'a4', 'b2b'] as const).map(fmt => (
+                  <button 
+                    key={fmt}
+                    onClick={() => setPrintFormat(fmt)}
+                    className={`flex-1 py-1.5 rounded-lg text-[9px] font-black uppercase transition-all ${
+                      printFormat === fmt ? 'bg-white text-navy shadow-sm border border-gray-200' : 'text-gray-400 hover:text-gray-600'
+                    }`}
+                  >
+                    {fmt}
+                  </button>
+                ))}
+              </div>
+            </div>
           </div>
 
           <button onClick={handleCreateSlip} disabled={!cart.length}
@@ -661,7 +676,7 @@ export default function BillingModule() {
           </button>
 
           <div className="bg-white/60 rounded-xl p-2.5 text-[9px] text-gray-400 font-mono border border-gray-100 leading-relaxed">
-            {[['F2','Item Search'],['F4','Recall Bill'],['F5','Suspended Queue'],['F6','Sales Slips'],['F7','Exact Cash'],['F8','Settlement'],['F9','Totals'],['F10','Settle'],['F12','Suspend'],['Ctrl+D','Del Last'],['Alt+1','New'],['Alt+2','Return']].map(([k,v]) => (
+            {[['F2','Search'],['F4','History'],['F5','Suspended'],['F6','Slips'],['F7','Exact Cash'],['F8','Settle'],['F9','Totals'],['F10','Finalize'],['F12','Suspend'],['Ctrl+D','Del Last'],['Alt+1','New'],['Alt+2','Return']].map(([k,v]) => (
               <div key={k} className="flex justify-between"><span className="text-amber-500">{k}</span><span>{v}</span></div>
             ))}
           </div>

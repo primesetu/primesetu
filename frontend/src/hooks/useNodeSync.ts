@@ -10,6 +10,7 @@
  * ============================================================ */
 
 import { useState, useEffect, useCallback } from 'react';
+import { api } from '@/api/client';
 
 export type SyncStatus = 'online' | 'syncing' | 'offline';
 
@@ -18,10 +19,10 @@ export interface NodeSyncState {
   lastSync: Date | null;
   pendingCount: number;
   latencyMs: number | null;
+  nodeId?: string;
 }
 
-const POLL_INTERVAL_MS = 15_000; // 15s heartbeat
-const API_BASE = import.meta.env.VITE_API_URL || 'http://localhost:8000';
+const HEARTBEAT_INTERVAL_MS = 5_000; // 5s high-fidelity heartbeat
 
 export function useNodeSync(): NodeSyncState {
   const [state, setState] = useState<NodeSyncState>({
@@ -31,37 +32,30 @@ export function useNodeSync(): NodeSyncState {
     latencyMs: null,
   });
 
-  const ping = useCallback(async () => {
+  const checkPulse = useCallback(async () => {
     const t0 = Date.now();
     try {
-      const res = await fetch(`${API_BASE}/api/v1/health`, {
-        signal: AbortSignal.timeout(5000),
-      });
+      const data = await api.ho.getStatus();
       const latencyMs = Date.now() - t0;
 
-      if (res.ok) {
-        const body = await res.json().catch(() => ({}));
-        const pendingCount: number = body?.pending_sync_count ?? 0;
-
-        setState({
-          status: pendingCount > 0 ? 'syncing' : 'online',
-          lastSync: new Date(),
-          pendingCount,
-          latencyMs,
-        });
-      } else {
-        setState(prev => ({ ...prev, status: 'offline', latencyMs: null }));
-      }
-    } catch {
+      setState({
+        status: data.pending_packets > 0 ? 'syncing' : 'online',
+        lastSync: data.last_sync ? new Date(data.last_sync) : new Date(),
+        pendingCount: data.pending_packets || 0,
+        latencyMs,
+        nodeId: data.corporate_node
+      });
+    } catch (err) {
+      console.warn('[PrimeSetu] HO Pulse Failed:', err);
       setState(prev => ({ ...prev, status: 'offline', latencyMs: null }));
     }
   }, []);
 
   useEffect(() => {
-    ping(); // immediate on mount
-    const id = setInterval(ping, POLL_INTERVAL_MS);
+    checkPulse();
+    const id = setInterval(checkPulse, HEARTBEAT_INTERVAL_MS);
     return () => clearInterval(id);
-  }, [ping]);
+  }, [checkPulse]);
 
   return state;
 }

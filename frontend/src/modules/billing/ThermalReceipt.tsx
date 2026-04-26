@@ -3,8 +3,15 @@
  * Zero Cloud · Sovereign · AI-Governed
  * ============================================================ */
 import React, { useEffect } from 'react'
+import { useQuery } from '@tanstack/react-query'
+import { api } from '@/api/client'
 
 export default function ThermalReceipt({ bill, onPrinted, autoPrint = true }: { bill: any, onPrinted: () => void, autoPrint?: boolean }) {
+  const { data: store } = useQuery({
+    queryKey: ['store-settings'],
+    queryFn: () => api.store.getSettings()
+  })
+
   useEffect(() => {
     if (bill && autoPrint) {
       setTimeout(() => {
@@ -28,11 +35,10 @@ export default function ThermalReceipt({ bill, onPrinted, autoPrint = true }: { 
       `}} />
       
       <div className="text-center mb-4">
-        <h2 className="text-lg font-black uppercase mb-1">{bill.store_name || 'PrimeSetu Retail'}</h2>
-        <p className="text-[10px]">{bill.store_site || 'Verified Sovereign Node'}</p>
-        <p className="text-[10px]">{bill.store_address || 'Sovereign Network PST'}</p>
-        <p className="text-[10px]">GSTIN: {bill.store_gstin || '07AABCU9603R1Z2'}</p>
-        <p className="text-[10px] mt-1 font-bold">Ph: {bill.store_phone || '+91 0000000000'}</p>
+        <h2 className="text-lg font-black uppercase mb-1">{store?.name || 'PrimeSetu Retail'}</h2>
+        <p className="text-[10px]">{store?.address || 'Verified Sovereign Node'}</p>
+        <p className="text-[10px]">GSTIN: {store?.gstin || '07AABCU9603R1Z2'}</p>
+        <p className="text-[10px] mt-1 font-bold">Ph: {store?.phone || '+91 0000000000'}</p>
       </div>
 
       <div className="border-t border-b border-black border-dashed py-2 mb-2 relative">

@@ -45,7 +45,7 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-from app.routers import onboarding, item_master, customer, barcode, price_group, procurement, inventory_audit, purchase, users, inventory
+from app.routers import onboarding, item_master, customer, barcode, price_group, procurement, inventory_audit, purchase, users, inventory, billing, ho, flexible_reports
 from app.routers.gstr1 import router as gstr1_router
 
 app.include_router(onboarding.router)
@@ -59,6 +59,9 @@ app.include_router(procurement.router)
 app.include_router(inventory_audit.router)
 app.include_router(users.router)
 app.include_router(inventory.router, prefix="/api/v1/inventory")
+app.include_router(billing.router, prefix="/api/v1/billing")
+app.include_router(ho.router, prefix="/api/v1/ho")
+app.include_router(flexible_reports.router)
 
 # ── Startup ───────────────────────────────────────────────────────────────────
 @app.on_event("startup")

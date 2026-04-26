@@ -20,50 +20,102 @@ import {
 } from 'lucide-react';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { useHotkeys } from 'react-hotkeys-hook';
+import { motion, AnimatePresence } from 'framer-motion';
 
 import { useBarcodeScanner } from '../../hooks/useBarcodeScanner';
+import { api } from '@/api/client';
+import { formatCurrency } from '@/utils/currency';
+import InventoryAuditReport from './InventoryAuditReport';
 
 const InventoryAudit: React.FC = () => {
   const [activeSession, setActiveSession] = useState<any>(null);
   const [searchQuery, setSearchQuery] = useState('');
+  const [viewReport, setViewReport] = useState<any | null>(null);
   const queryClient = useQueryClient();
   const searchInputRef = useRef<HTMLInputElement>(null);
 
   // Queries
-  const { data: audits = [] } = useQuery({
+  const { data: audits = [], isLoading } = useQuery({
     queryKey: ['inventory-audits'],
-    queryFn: async () => {
-       const res = await fetch(`${import.meta.env.VITE_API_URL}/api/v1/inventory-audit/`, {
-          headers: { 'Authorization': `Bearer ${localStorage.getItem('primesetu_token')}` }
-       });
-       return res.json();
+    queryFn: () => api.inventory.listAuditSessions()
+  });
+
+  const createMutation = useMutation({
+    mutationFn: () => api.inventory.createAuditSession(),
+    onSuccess: (data) => {
+      setActiveSession(data);
+      queryClient.invalidateQueries({ queryKey: ['inventory-audits'] });
     }
   });
 
+  const addEntryMutation = useMutation({
+    mutationFn: (data: { item_id: string; size: string; colour: string; physical_qty: number }) => 
+      api.inventory.addAuditEntry(activeSession.id, data),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['audit-session', activeSession?.id] });
+    }
+  });
+
+  const submitMutation = useMutation({
+    mutationFn: (id: string) => api.inventory.submitAudit(id),
+    onSuccess: () => {
+      setActiveSession(null);
+      queryClient.invalidateQueries({ queryKey: ['inventory-audits'] });
+    }
+  });
+
+  const { data: sessionDetails, isLoading: loadingSession } = useQuery({
+    queryKey: ['audit-session', activeSession?.id],
+    queryFn: () => api.inventory.getAuditSession(activeSession.id),
+    enabled: !!activeSession?.id
+  });
+
+  const stats = React.useMemo(() => {
+    if (!sessionDetails?.entries) return { scanned: 0, shortage: 0, surplus: 0 };
+    return sessionDetails.entries.reduce((acc: any, entry: any) => {
+      const v = entry.physical_qty - entry.book_qty;
+      if (v < 0) acc.shortage += Math.abs(v);
+      else if (v > 0) acc.surplus += v;
+      acc.scanned += entry.physical_qty;
+      return acc;
+    }, { scanned: 0, shortage: 0, surplus: 0 });
+  }, [sessionDetails]);
+
   // Hotkeys
   useHotkeys('f3', (e) => { e.preventDefault(); searchInputRef.current?.focus(); }, { enableOnFormTags: true });
-  useHotkeys('f10', (e) => { e.preventDefault(); if (activeSession) { /* trigger final */ } }, { enableOnFormTags: true });
+  useHotkeys('f10', (e) => { e.preventDefault(); if (activeSession) submitMutation.mutate(activeSession.id); }, { enableOnFormTags: true });
   useHotkeys('esc', (e) => { e.preventDefault(); if (activeSession) setActiveSession(null); }, { enableOnFormTags: true });
 
   // Scanner Hook
   useBarcodeScanner((barcode) => {
     if (activeSession) {
       setSearchQuery(barcode);
-      // Logic to add to session
+      handleScan(barcode);
     }
   });
 
-  const startAudit = async () => {
-     const res = await fetch(`${import.meta.env.VITE_API_URL}/api/v1/inventory-audit/`, {
-        method: 'POST',
-        headers: { 
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${localStorage.getItem('primesetu_token')}` 
-        }
-     });
-     const data = await res.json();
-     setActiveSession(data);
+  const handleScan = async (barcode: string) => {
+    if (!activeSession) return;
+    try {
+      const results = await api.inventory.search(barcode);
+      const product = results.find((p: any) => p.code === barcode || p.barcode === barcode);
+      if (product) {
+        addEntryMutation.mutate({ 
+          item_id: product.id, 
+          size: product.size || 'UNI', 
+          colour: product.color || 'NOS',
+          physical_qty: 1 
+        });
+        setSearchQuery('');
+      } else {
+        console.warn('Product not found for barcode:', barcode);
+      }
+    } catch (err) {
+      console.error('Scan failed:', err);
+    }
   };
+
+  const startAudit = () => createMutation.mutate();
 
   return (
     <div className="space-y-6 animate-in fade-in duration-700 pb-20">
@@ -153,9 +205,12 @@ const InventoryAudit: React.FC = () => {
                               -2
                            </td>
                            <td className="px-12 py-10 text-right">
-                              <button className="p-4 bg-navy/5 text-navy rounded-2xl hover:bg-navy hover:text-white transition-all shadow-sm">
-                                 <FileText size={20} />
-                              </button>
+                               <button 
+                                 onClick={() => setViewReport(audit)}
+                                 className="p-4 bg-navy/5 text-navy rounded-2xl hover:bg-navy hover:text-white transition-all shadow-sm"
+                               >
+                                  <FileText size={20} />
+                               </button>
                            </td>
                         </tr>
                      ))}
@@ -200,14 +255,53 @@ const InventoryAudit: React.FC = () => {
                      </div>
                   </div>
 
-                  <div className="space-y-8 min-h-[300px] flex flex-col items-center justify-center">
-                     <div className="w-24 h-24 bg-navy/5 rounded-[2rem] flex items-center justify-center text-navy/10">
-                        <Scan size={48} />
-                     </div>
-                     <div className="text-center">
-                        <div className="text-[12px] font-black text-navy/20 uppercase tracking-[0.5em]">Ready for Verification</div>
-                        <p className="text-[9px] font-bold text-navy/10 uppercase tracking-widest mt-4 italic">Sovereign Stock Engine Active</p>
-                     </div>
+                  <div className="space-y-4 max-h-[500px] overflow-y-auto custom-scrollbar">
+                     {loadingSession ? (
+                        <div className="flex flex-col items-center py-20 gap-4">
+                           <div className="w-10 h-10 border-4 border-navy/10 border-t-navy rounded-full animate-spin" />
+                           <span className="text-[10px] font-black uppercase tracking-widest text-navy/20">Syncing Ledger...</span>
+                        </div>
+                     ) : !sessionDetails?.entries?.length ? (
+                        <div className="flex flex-col items-center py-20 gap-4">
+                           <Scan className="w-12 h-12 text-navy/10" />
+                           <span className="text-[10px] font-black uppercase tracking-widest text-navy/20">No items scanned yet</span>
+                        </div>
+                     ) : (
+                        sessionDetails.entries.map((entry: any, i: number) => {
+                           const v = entry.physical_qty - entry.book_qty;
+                           return (
+                              <motion.div initial={{ opacity: 0, x: -10 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: i * 0.05 }}
+                                 key={entry.id} className="flex items-center justify-between p-6 bg-navy/5 rounded-3xl border border-transparent hover:border-navy/10 transition-all group">
+                                 <div className="flex items-center gap-6">
+                                    <div className="w-12 h-12 bg-white rounded-2xl flex items-center justify-center shadow-sm">
+                                       <FileText className="text-navy/20" size={20} />
+                                    </div>
+                                    <div>
+                                       <div className="font-serif font-black text-navy text-lg uppercase tracking-tight">{entry.product_name}</div>
+                                       <div className="text-[10px] font-black text-navy/30 uppercase tracking-widest mt-1">
+                                          {entry.product_code} • {entry.size} / {entry.colour}
+                                       </div>
+                                    </div>
+                                 </div>
+                                 <div className="flex items-center gap-12">
+                                    <div className="text-right">
+                                       <div className="text-[9px] font-black text-navy/20 uppercase tracking-widest mb-1">Book Qty</div>
+                                       <div className="font-mono font-black text-navy text-base">{entry.book_qty}</div>
+                                    </div>
+                                    <div className="text-right">
+                                       <div className="text-[9px] font-black text-navy/20 uppercase tracking-widest mb-1">Physical</div>
+                                       <div className="font-mono font-black text-navy text-xl">{entry.physical_qty}</div>
+                                    </div>
+                                    <div className={`w-20 text-center px-4 py-2 rounded-xl text-[11px] font-black ${
+                                       v === 0 ? 'bg-navy/5 text-navy/40' : v > 0 ? 'bg-emerald-50 text-emerald-600' : 'bg-rose-50 text-rose-500'
+                                    }`}>
+                                       {v > 0 ? '+' : ''}{v}
+                                    </div>
+                                 </div>
+                              </motion.div>
+                           )
+                        })
+                     )}
                   </div>
                </div>
             </div>
@@ -222,15 +316,15 @@ const InventoryAudit: React.FC = () => {
                   <div className="space-y-8">
                      <div className="flex justify-between items-center py-6 border-b border-navy/5">
                         <span className="text-[11px] font-black text-navy/30 uppercase tracking-widest">Total Scanned</span>
-                        <span className="text-2xl font-serif font-black text-navy">0</span>
+                        <span className="text-2xl font-serif font-black text-navy">{stats.scanned}</span>
                      </div>
                      <div className="flex justify-between items-center py-6 border-b border-navy/5">
                         <span className="text-[11px] font-black text-navy/30 uppercase tracking-widest">Shortages</span>
-                        <span className="text-2xl font-serif font-black text-rose-500">0</span>
+                        <span className="text-2xl font-serif font-black text-rose-500">{stats.shortage}</span>
                      </div>
                      <div className="flex justify-between items-center py-6 border-b border-navy/5">
                         <span className="text-[11px] font-black text-navy/30 uppercase tracking-widest">Surplus</span>
-                        <span className="text-2xl font-serif font-black text-emerald-600">0</span>
+                        <span className="text-2xl font-serif font-black text-emerald-600">{stats.surplus}</span>
                      </div>
                   </div>
 
@@ -243,6 +337,13 @@ const InventoryAudit: React.FC = () => {
                </div>
             </div>
          </div>
+      )}
+
+      {viewReport && (
+        <InventoryAuditReport 
+          audit={viewReport} 
+          onClose={() => setViewReport(null)} 
+        />
       )}
     </div>
   );

@@ -25,7 +25,7 @@
 - Always verify RLS is enabled on every table before querying
 - Always use TypeScript strict mode (no `any` allowed)
 - Always handle Supabase error objects — never swallow silently
-- Always use design tokens from CLAUDE.md for UI work
+- Always use design tokens from aitdl.md for UI work
 
 ## FAILURE CONDITIONS → REGENERATE RESPONSE
 - Missing any of the 5 output sections

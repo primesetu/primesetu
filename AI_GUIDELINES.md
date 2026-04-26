@@ -31,7 +31,7 @@ Every AI change must be human-reviewed before merge.
 > "Memory, Not Code." — Every line is a liability.
 
 ## 6. The Autonomous AI Orchestration Pipeline
-PrimeSetu operates on a highly structured cognitive loop defined in `CLAUDE.md` as the AI Pipeline: `gap-engine → enforcer → validator → critic → improver → loop`. Any AI operating on this codebase must internalize and execute this loop to guarantee zero-defect commits.
+PrimeSetu operates on a highly structured cognitive loop defined in `aitdl.md` as the AI Pipeline: `gap-engine → enforcer → validator → critic → improver → loop`. Any AI operating on this codebase must internalize and execute this loop to guarantee zero-defect commits.
 
 ### The 6-Step Pipeline Definition:
 1. **Gap-Engine**: Scans the codebase to detect deltas between the current state and the required architecture (e.g., missing imports, undefined states, protocol violations).

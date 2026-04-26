@@ -46,4 +46,4 @@ uvicorn app.main:app --reload
 ```
 
 ## AI Protocol
-All development MUST follow: CLAUDE.md → AGENTS.md → aiprotocol.md → AI_GUIDELINES.md
+All development MUST follow: aitdl.md → AGENTS.md → aiprotocol.md → AI_GUIDELINES.md

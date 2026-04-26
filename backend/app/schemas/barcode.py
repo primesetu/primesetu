@@ -35,3 +35,20 @@ class BarcodeGenerateRequest(BaseModel):
     size: Optional[str] = None
     colour: Optional[str] = None
     is_primary: bool = True
+
+class BarcodePrintRequest(BaseModel):
+    barcode: str
+    copies: int = Field(default=1, ge=1, le=100)
+    printer_ip: Optional[str] = None
+    label_profile: Optional[dict] = None
+    custom_template: Optional[str] = None
+
+class BulkImportItem(BaseModel):
+    item_code: str
+    barcode: str
+    barcode_type: str
+    size: Optional[str] = None
+    colour: Optional[str] = None
+
+class BulkImportRequest(BaseModel):
+    items: List[BulkImportItem]

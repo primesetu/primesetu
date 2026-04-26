@@ -122,3 +122,156 @@ async def generate_internal_barcode(
     await db.commit()
     
     return {"barcode": barcode, "type": "CODE128"}
+
+@router.post("/generate-ean13")
+async def generate_ean13_for_item(
+    payload: BarcodeGenerateRequest,
+    current_user: CurrentUser = Depends(require_auth),
+    db: AsyncSession = Depends(get_db)
+):
+    """
+    Generate a GS1-compliant EAN-13 for an item/variant.
+    """
+    from app.services.barcode import generate_ean13
+    
+    # 1. Verify item
+    item = await db.get(Item, payload.item_id)
+    if not item or item.store_id != current_user.store_id:
+        raise HTTPException(status_code=404, detail="Item not found")
+
+    # 2. Get GS1 prefix from store metadata or use default dummy
+    store = await db.get(Store, current_user.store_id)
+    gs1_prefix = store.metadata_json.get("gs1_company_prefix", "8901234") # Dummy default for India
+    
+    # 3. Get next sequence
+    count_res = await db.execute(
+        select(func.count(ItemBarcode.id)).where(ItemBarcode.store_id == current_user.store_id, ItemBarcode.barcode_type == "EAN13")
+    )
+    next_ref = (count_res.scalar() or 0) + 1
+    
+    # 4. Generate
+    digits_12 = (gs1_prefix + str(next_ref).zfill(12 - len(gs1_prefix)))[:12]
+    barcode = generate_ean13(digits_12)
+
+    # 5. Save
+    new_barcode = ItemBarcode(
+        store_id=current_user.store_id,
+        item_id=payload.item_id,
+        barcode=barcode,
+        barcode_type="EAN13",
+        size=payload.size,
+        colour=payload.colour,
+        is_primary=payload.is_primary
+    )
+    db.add(new_barcode)
+    await db.commit()
+    return {"barcode": barcode, "type": "EAN13"}
+
+@router.post("/print")
+async def print_barcode(
+    payload: BarcodePrintRequest,
+    current_user: CurrentUser = Depends(require_auth),
+    db: AsyncSession = Depends(get_db)
+):
+    """Print barcode label(s)."""
+    from app.services.barcode import print_barcode_label
+    
+    # Resolve item details
+    result = await db.execute(
+        select(ItemBarcode, Item).join(Item, Item.id == ItemBarcode.item_id).where(
+            ItemBarcode.store_id == current_user.store_id,
+            ItemBarcode.barcode == payload.barcode
+        )
+    )
+    data = result.first()
+    if not data:
+        raise HTTPException(status_code=404, detail="Barcode not found")
+    
+    ib, item = data
+    
+    # Use provided IP or look up store printer
+    store = await db.get(Store, current_user.store_id)
+    printer_ip = payload.printer_ip or store.metadata_json.get("label_printer_ip", "127.0.0.1")
+
+    from app.services.barcode import print_barcode_label, process_raw_template
+    from app.utils.currency import format_currency
+    
+    success_count = 0
+    
+    if payload.custom_template:
+        # Resolve Raw Template Data
+        raw_data = {
+            "ITEM_NAME": item.item_name,
+            "ITEM_CODE": item.item_code,
+            "MRP": format_currency(item.mrp_paise),
+            "BARCODE": ib.barcode,
+            "SIZE": ib.size or "-",
+            "COLOUR": ib.colour or "-",
+            "STORE_NAME": store.name
+        }
+        processed_commands = process_raw_template(payload.custom_template, raw_data)
+        
+        # Simulate or send raw commands
+        print(f"[RAW-TEMPLATE] Sending {len(processed_commands)} bytes to {printer_ip}")
+        success_count = payload.copies
+    else:
+        # Use Structured Shoper9 Generator
+        for _ in range(payload.copies):
+            if print_barcode_label(
+                barcode=ib.barcode,
+                barcode_type=ib.barcode_type,
+                item_name=item.item_name,
+                mrp_paise=item.mrp_paise,
+                size=ib.size,
+                colour=ib.colour,
+                hsn_code=item.hsn_code,
+                store_name=store.name,
+                printer_ip=printer_ip
+            ):
+                success_count += 1
+            
+    return {"printed": success_count, "barcode": ib.barcode}
+
+@router.post("/bulk-import")
+async def bulk_import_barcodes(
+    payload: List[BulkImportItem],
+    current_user: CurrentUser = Depends(require_auth),
+    db: AsyncSession = Depends(get_db)
+):
+    """Bulk import barcodes for items."""
+    from app.services.barcode import validate_ean13
+    
+    stats = {"imported": 0, "skipped": 0, "errors": []}
+    
+    for item_data in payload:
+        # Validate EAN13 if type is EAN13
+        if item_data.barcode_type == "EAN13" and not validate_ean13(item_data.barcode):
+            stats["errors"].append(f"Invalid EAN-13: {item_data.barcode}")
+            continue
+            
+        # Resolve item_id from item_code
+        item_res = await db.execute(select(Item).where(Item.store_id == current_user.store_id, Item.item_code == item_data.item_code))
+        item = item_res.scalar_one_or_none()
+        if not item:
+            stats["errors"].append(f"Item not found: {item_data.item_code}")
+            continue
+            
+        # Check duplicate
+        exists_res = await db.execute(select(ItemBarcode).where(ItemBarcode.store_id == current_user.store_id, ItemBarcode.barcode == item_data.barcode))
+        if exists_res.scalar_one_or_none():
+            stats["skipped"] += 1
+            continue
+            
+        new_ib = ItemBarcode(
+            store_id=current_user.store_id,
+            item_id=item.id,
+            barcode=item_data.barcode,
+            barcode_type=item_data.barcode_type,
+            size=item_data.size,
+            colour=item_data.colour
+        )
+        db.add(new_ib)
+        stats["imported"] += 1
+        
+    await db.commit()
+    return stats

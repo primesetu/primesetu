@@ -2,7 +2,7 @@
  * PrimeSetu — Shoper9-Based Retail OS
  * Zero Cloud · Sovereign · AI-Governed
  * ============================================================
- * System Architect : Jawahar R. M.
+ * System Architect : Jawahar R Mallah
  * Organisation     : AITDL Network
  * Project          : PrimeSetu
  * © 2026 — All Rights Reserved
@@ -122,7 +122,7 @@ Every new file MUST begin with the AITDL Network standard header:
  * PrimeSetu — Shoper9-Based Retail OS
  * Zero Cloud · Sovereign · AI-Governed
  * ============================================================
- * System Architect : Jawahar R. M.
+ * System Architect : Jawahar R Mallah
  * Organisation     : AITDL Network
  * Project          : PrimeSetu
  * © 2026 — All Rights Reserved

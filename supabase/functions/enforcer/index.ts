@@ -1,7 +1,7 @@
 /* ============================================================
  * PrimeSetu — Shoper9-Based Retail OS
  * Zero Cloud · Sovereign · AI-Governed
- * System Architect   :  Jawahar R. M. | © 2026
+ * System Architect   :  Jawahar R Mallah | © 2026
  * "Memory, Not Code."
  * ============================================================ */
 import { serve } from 'https://deno.land/std@0.177.0/http/server.ts'

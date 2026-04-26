@@ -2,7 +2,7 @@
  * PrimeSetu — Shoper9-Based Retail OS
  * Zero Cloud · Sovereign · AI-Governed
  * ============================================================
- * System Architect   :  Jawahar R. M.
+ * System Architect   :  Jawahar R Mallah
  * Organisation     :  AITDL Network
  * Project            :  PrimeSetu
  * © 2026 — All Rights Reserved
@@ -187,7 +187,10 @@ export default function Login({
               <ShieldCheck size={12} style={{ color: 'var(--text-tertiary)' }} />
               <span className="text-xs" style={{ color: 'var(--text-tertiary)' }}>AES-256</span>
             </div>
-            <span className="text-xs" style={{ color: 'var(--text-tertiary)' }}>AITDL Network</span>
+            <div className="flex flex-col items-end">
+              <span className="text-[10px] font-medium" style={{ color: 'var(--text-tertiary)' }}>Architect: Jawahar R Mallah</span>
+              <span className="text-xs" style={{ color: 'var(--text-tertiary)' }}>AITDL Network</span>
+            </div>
           </div>
         </div>
 

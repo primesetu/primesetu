@@ -45,5 +45,5 @@ The refactoring phase of **PrimeSetu** is complete. The system has transitioned 
 - [x] Production build successful.
 
 **Sovereign Node is now fully operational.**
-*Project Architect: Jawahar R. M.*
+*Project Architect: Jawahar R Mallah*
 *Handover Date: April 2026*

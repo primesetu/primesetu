@@ -1,6 +1,6 @@
 # DESIGN LOCK — PrimeSetu UI System
 > **Version:** 1.0.0 · Locked: 2026-04-27
-> **Authority:** Jawahar R. M. — System Architect, AITDL Network
+> **Authority:** Jawahar R Mallah — System Architect, AITDL Network
 > **Status:** 🔒 LOCKED — No changes without explicit architect approval
 
 ---

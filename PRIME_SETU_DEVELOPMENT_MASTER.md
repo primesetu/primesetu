@@ -11,7 +11,7 @@
  * PrimeSetu — Shoper9-Based Retail OS
  * Zero Cloud · Sovereign · AI-Governed
  * ============================================================
- * System Architect : Jawahar R. M.
+ * System Architect : Jawahar R Mallah
  * Organisation     : AITDL Network
  * Project          : PrimeSetu
  * © 2026 — All Rights Reserved
@@ -131,7 +131,7 @@ Every new file MUST begin with the AITDL Network standard header:
  * PrimeSetu — Shoper9-Based Retail OS
  * Zero Cloud · Sovereign · AI-Governed
  * ============================================================
- * System Architect : Jawahar R. M.
+ * System Architect : Jawahar R Mallah
  * Organisation     : AITDL Network
  * Project          : PrimeSetu
  * © 2026 — All Rights Reserved
@@ -175,7 +175,7 @@ Every new file MUST begin with the AITDL Network standard header:
  * PrimeSetu — Shoper9-Based Retail OS
  * Zero Cloud · Sovereign · AI-Governed
  * ============================================================
- * System Architect : Jawahar R. M.
+ * System Architect : Jawahar R Mallah
  * Organisation     : AITDL Network
  * Project          : PrimeSetu
  * © 2026 — All Rights Reserved
@@ -333,7 +333,7 @@ When two agents work in the same session:
  * PrimeSetu — Shoper9-Based Retail OS
  * Zero Cloud · Sovereign · AI-Governed
  * ============================================================
- * System Architect   :  Jawahar R. M.
+ * System Architect   :  Jawahar R Mallah
  * Organisation       :  AITDL Network
  * Project            :  PrimeSetu
  * © 2026 — All Rights Reserved
@@ -396,7 +396,7 @@ Whenever an AI Agent or Developer is tasked with modifying menus, navigation, or
  * PrimeSetu — Shoper9-Based Retail OS
  * Zero Cloud · Sovereign · AI-Governed
  * ============================================================
- * System Architect   :  Jawahar R. M.
+ * System Architect   :  Jawahar R Mallah
  * Organisation       :  AITDL Network
  * Project            :  PrimeSetu
  * © 2026 — All Rights Reserved
@@ -459,7 +459,7 @@ PrimeSetu operates on a highly structured cognitive loop defined in `aitdl.md` a
  * PrimeSetu — Shoper9-Based Retail OS
  * Zero Cloud · Sovereign · AI-Governed
  * ============================================================
- * System Architect : Jawahar R. M.
+ * System Architect : Jawahar R Mallah
  * Organisation     : AITDL Network
  * Project          : PrimeSetu
  * © 2026 — All Rights Reserved
@@ -1088,7 +1088,7 @@ frontend/src/pages/<ModuleName>/
  * PrimeSetu — Shoper9-Based Retail OS
  * Zero Cloud · Sovereign · AI-Governed
  * ============================================================
- * System Architect : Jawahar R. M.
+ * System Architect : Jawahar R Mallah
  * Organisation     : AITDL Network
  * © 2026 — All Rights Reserved
  * ============================================================ */
@@ -1272,7 +1272,7 @@ type in input fields; hotkeys must work even when an input is focused.
  * PrimeSetu — Shoper9-Based Retail OS
  * Zero Cloud · Sovereign · AI-Governed
  * ============================================================
- * System Architect : Jawahar R. M.
+ * System Architect : Jawahar R Mallah
  * Organisation     : AITDL Network
  * Project          : PrimeSetu
  * © 2026 — All Rights Reserved
@@ -1488,7 +1488,7 @@ Every new file MUST begin with:
  * PrimeSetu — Shoper9-Based Retail OS
  * Zero Cloud · Sovereign · AI-Governed
  * ============================================================
- * System Architect : Jawahar R. M.
+ * System Architect : Jawahar R Mallah
  * Organisation     : AITDL Network
  * Project          : PrimeSetu
  * © 2026 — All Rights Reserved
@@ -1544,7 +1544,7 @@ If the agent becomes repetitive, contradicts earlier decisions, or ignores rules
  * PrimeSetu — Shoper9-Based Retail OS
  * Zero Cloud · Sovereign · AI-Governed
  * ============================================================
- * System Architect : Jawahar R. M.
+ * System Architect : Jawahar R Mallah
  * Organisation     : AITDL Network
  * Project          : PrimeSetu
  * © 2026 — All Rights Reserved

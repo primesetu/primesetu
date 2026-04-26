@@ -1,7 +1,7 @@
 # ============================================================
 # PrimeSetu â€” Shoper9-Based Retail OS
 # Zero Cloud Â. Sovereign Â. AI-Governed
-# System Architect   :  Jawahar R. M. | Â(c) 2026
+# System Architect   :  Jawahar R Mallah | Â(c) 2026
 # "Memory, Not Code."
 # ============================================================
 from pydantic_settings import BaseSettings

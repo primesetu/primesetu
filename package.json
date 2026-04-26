@@ -16,7 +16,7 @@
     "retail",
     "sovereign-os"
   ],
-  "author": "Jawahar R. M.",
+  "author": "Jawahar R Mallah",
   "license": "All Rights Reserved",
   "devDependencies": {
     "concurrently": "^9.2.1"

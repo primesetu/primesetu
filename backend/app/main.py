@@ -14,12 +14,12 @@ from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import FileResponse, Response
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import select, func
-from app.core.database import engine, Base, get_db
-from app.models import (
+from .core.database import engine, Base, get_db
+from .models import (
     Till, Item, Transaction, Store, Alert, Scheme, ItemStock
 )
-from app.schemas.common import DashboardStats
-from app.core.security import CurrentUser, require_auth
+from .schemas.common import DashboardStats
+from .core.security import CurrentUser, require_auth
 from typing import List
 from datetime import date
 import uvicorn
@@ -43,13 +43,13 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-from app.routers import (
+from .routers import (
     onboarding, item_master, customer, barcode, 
     price_group, purchase, inventory, billing, 
     ho, flexible_reports, users, menu, extensions, finance, schemes, security, reporting,
     store, inventory_audit
 )
-from app.routers.gstr1 import router as gstr1_router
+from .routers.gstr1 import router as gstr1_router
 
 # Core & Management
 app.include_router(onboarding.router)

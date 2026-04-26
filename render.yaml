@@ -19,6 +19,8 @@ services:
         value: 3.12.3
       - key: ENVIRONMENT
         value: production
+      - key: PYTHONPATH
+        value: ./backend
       - key: DATABASE_URL
         sync: false
       - key: SUPABASE_URL

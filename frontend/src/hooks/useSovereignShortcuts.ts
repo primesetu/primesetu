@@ -18,6 +18,8 @@ import { useEffect } from 'react';
 export function useSovereignShortcuts() {
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
+      if (!e.key) return;
+
       // 1. Whitelist common interaction keys
       const whitelistedKeys = ['Enter', 'Escape', 'Tab', 'Backspace', 'ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight', 'Delete'];
       if (whitelistedKeys.includes(e.key) && !e.ctrlKey && !e.altKey) {
@@ -31,7 +33,7 @@ export function useSovereignShortcuts() {
       }
 
       // F1 - F12: Functional Shortcuts (Allow)
-      if (e.key.startsWith('F')) {
+      if (e.key && e.key.startsWith('F')) {
         // Prevent default browser F-key actions (like F1 help, F3 search, F5 reload)
         // But allow the event to propagate to our components
         e.preventDefault();

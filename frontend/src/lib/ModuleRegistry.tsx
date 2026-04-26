@@ -3,7 +3,7 @@
  * Zero Cloud · Sovereign · AI-Governed
  * ============================================================
  * System Architect   :  Jawahar R. M.
- * Organisation       :  AITDL Network
+ * Organisation     :  AITDL Network
  * Project            :  PrimeSetu
  * © 2026 — All Rights Reserved
  * "Memory, Not Code."
@@ -27,7 +27,12 @@ import {
   DollarSign,
   Printer,
   FileText,
-  Store
+  Store,
+  ShieldCheck,
+  Zap,
+  BarChart,
+  Tag,
+  AlertCircle
 } from 'lucide-react'
 
 // Module Lazy/Dynamic Imports
@@ -37,7 +42,7 @@ import ComingSoon from '../components/ComingSoon'
 import ManagementDashboard from '../modules/dashboard/ManagementDashboard'
 import BillingModule from '../modules/billing/BillingModule'
 import MasterRegistry from '../modules/catalogue/CatalogRegistry'
-import ItemMaster from '../modules/inventory/ItemMaster'
+import ItemMaster from '../modules/catalogue/ItemMaster'
 import InventoryModule from '../modules/inventory/InventoryModule'
 import AnalyticsModule from '../modules/analytics/AnalyticsModule'
 import ConfigModule from '../modules/settings/ConfigModule'
@@ -46,7 +51,7 @@ import ProcurementModule from '../modules/inventory/ProcurementModule'
 import TransactionsModule from '../modules/billing/TransactionsModule'
 import DayEndModule from '../modules/billing/DayEndModule'
 import ReturnsDashboard from '../modules/billing/ReturnsDashboard'
-import CustomerMaster from '../modules/crm/CustomerMaster'
+import CustomerMaster from '../modules/catalogue/CustomerMaster'
 import BarcodeStudio from '../modules/inventory/BarcodeStudio'
 import SchemesModule from '../modules/schemes/SchemesModule'
 import DailySalesBook from '../modules/analytics/DailySalesBook'
@@ -190,20 +195,20 @@ export const COMPONENT_MAP: Record<string, React.ReactNode> = {
   'analytics': <AnalyticsModule />,
   'settings': <ConfigModule />,
   'customers': <CustomerMaster />,
-  'vendors': <ComingSoon />,
+  'vendors': <VendorMaster />,
   'personnel': <PersonnelMaster />,
-  'loyalty': <ComingSoon />,
+  'loyalty': <LoyaltyModule />,
   'barcode': <BarcodeStudio onClose={() => {}} />,
   'schemes': <SchemesModule />,
   'salesrep': <SalesDrilldownModule />,
-  'stockrep': <ComingSoon />,
+  'stockrep': <StockReports />,
   'taxrep': <TaxRegister />,
   'alerts': <AlertsModule />,
-  'security': <ComingSoon />,
-  'housekeep': <ComingSoon />,
-  'hsn': <ComingSoon />,
+  'security': <SecurityModule />,
+  'housekeep': <HousekeepingModule />,
+  'hsn': <HSNManager />,
   'grn': <GRNProcessor />,
-  'transfer': <ComingSoon />,
+  'transfer': <StockMovement />,
   'vouchers': <FinanceHub />,
   'reconcile': <InventoryAudit />,
   'tally': <FinanceHub />,
@@ -227,22 +232,22 @@ export const ICON_MAP: Record<string, any> = {
   'ho': Globe,
   'analytics': BarChart3,
   'settings': Settings,
-  'customers': Package,
+  'customers': UserSquare2,
   'vendors': Truck,
   'personnel': UserSquare2,
   'loyalty': Trophy,
   'barcode': Package,
-  'schemes': Package,
-  'salesrep': BarChart3,
+  'schemes': Tag,
+  'salesrep': BarChart,
   'stockrep': BarChart3,
-  'taxrep': BarChart3,
-  'alerts': Globe,
-  'security': Settings,
-  'housekeep': Settings,
-  'hsn': LayoutDashboard,
+  'taxrep': FileText,
+  'alerts': AlertCircle,
+  'security': ShieldCheck,
+  'housekeep': Construction,
+  'hsn': Tag,
   'grn': Truck,
-  'transfer': RotateCcw,
-  'vouchers': Trophy,
+  'transfer': History,
+  'vouchers': FileText,
   'promotions': Trophy,
   'reconcile': History,
   'tally': DollarSign,

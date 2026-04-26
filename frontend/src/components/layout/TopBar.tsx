@@ -10,11 +10,12 @@
  * ============================================================ */
 
 import React, { useState } from 'react';
-import { Bell, Settings, Search, ChevronDown, Monitor, Package, Globe, Lock, ShieldCheck } from 'lucide-react';
+import { Bell, Settings, Search, ChevronDown, Monitor, Package, Globe, Lock, ShieldCheck, Palette } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useMenu } from '@/hooks/useMenu';
 import { useTranslation } from 'react-i18next';
 import { MODULES } from '@/lib/ModuleRegistry';
+import { useTheme } from '@/hooks/useTheme';
 
 interface TopBarProps {
   activeTab: string;
@@ -35,6 +36,7 @@ export default function TopBar({
 }: TopBarProps) {
   const { i18n } = useTranslation();
   const { findModule } = useMenu();
+  const { theme, setTheme } = useTheme();
   const activeModule = findModule(activeTab);
   const [openMenu, setOpenMenu] = useState<string | null>(null);
   
@@ -156,6 +158,16 @@ export default function TopBar({
 
         {/* UTILITIES */}
         <div className="flex items-center gap-2">
+          <button 
+            onClick={() => setTheme(theme === 'tesla' ? 'shoper9' : 'tesla')}
+            className="w-10 h-10 rounded-xl bg-cream border border-border flex items-center justify-center hover:bg-navy hover:text-white transition-all group relative"
+            title="Toggle Theme"
+          >
+            <Palette className="w-5 h-5" />
+            <span className="absolute -bottom-8 left-1/2 -translate-x-1/2 bg-navy text-white text-[9px] px-2 py-1 rounded opacity-0 group-hover:opacity-100 whitespace-nowrap transition-opacity">
+              {theme === 'tesla' ? 'Switch to Classic' : 'Switch to Modern'}
+            </span>
+          </button>
           <button className="w-10 h-10 rounded-xl bg-cream border border-border flex items-center justify-center hover:bg-navy hover:text-white transition-all">
             <Bell className="w-5 h-5" />
           </button>

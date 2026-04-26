@@ -8,14 +8,15 @@
  * © 2026 — All Rights Reserved
  * "Memory, Not Code."
  * ============================================================ */
-import { useState, useEffect, useRef } from 'react'
+
+import { useState, useEffect, useRef, useMemo } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import {
   FilePlus2, RotateCcw, Banknote, CreditCard, Smartphone,
   Pause, Printer, CheckCircle2, ScanBarcode, Trash2,
   Calculator, User, Clock, ChevronRight, Zap, Search,
   Gift, Tag, UserCheck, Plus, Minus, X, AlertTriangle,
-  FileText
+  FileText, Wifi, WifiOff, LayoutDashboard, Settings, Package
 } from 'lucide-react'
 import { api } from '@/api/client'
 import DayEndModule from './DayEndModule'
@@ -32,23 +33,37 @@ import { offlineService } from '@/api/offline'
 import { useLanguage } from '@/hooks/useLanguage'
 import { toPaise, formatCurrency, formatDecimal, toRupees } from '@/utils/currency'
 import StyleMatrix from '../catalogue/StyleMatrix'
+import { cn } from '@/lib/utils'
 
+// ── TYPES ──
 interface CartItem {
-  id: string; code: string; name: string; brand: string; category: string
-  mrp: number; cost_price: number; qty: number; discount_per: number; tax_rate: number
-  is_tax_inclusive?: boolean; stocks?: { store_id: string; quantity: number }[]
+  id: string; 
+  code: string; 
+  name: string; 
+  brand: string; 
+  category: string;
+  mrp_paise: number; 
+  cost_paise: number; 
+  qty: number; 
+  discount_per: number; 
+  tax_rate: number;
+  is_tax_inclusive?: boolean; 
+  stocks?: { store_id: string; quantity: number }[];
 }
 
 type PayMode = 'CASH' | 'UPI' | 'CARD' | 'GV' | 'COUPON'
 interface PayLine { mode: PayMode; amount: number; ref?: string }
 
-const now = () => {
+// ── HELPERS ──
+const getNow = () => {
   const d = new Date()
   return `${d.getDate().toString().padStart(2,'0')}/${(d.getMonth()+1).toString().padStart(2,'0')}/${d.getFullYear()}  ${d.toLocaleTimeString('en-IN',{hour:'2-digit',minute:'2-digit'})}`
 }
 
 export default function BillingModule() {
   const { t } = useLanguage()
+  
+  // ── STATE ──
   const [q, setQ] = useState('')
   const [cart, setCart] = useState<CartItem[]>([])
   const [payLines, setPayLines] = useState<PayLine[]>([{ mode: 'CASH', amount: 0 }])
@@ -64,8 +79,7 @@ export default function BillingModule() {
   const [showHistory, setShowHistory] = useState(false)
   const [showReturns, setShowReturns] = useState(false)
   const [billToPrint, setBillToPrint] = useState<any>(null)
-  const [billPrefix] = useState('B')
-  const [currentTime, setCurrentTime] = useState(now())
+  const [currentTime, setCurrentTime] = useState(getNow())
   const [isOnline, setIsOnline] = useState(navigator.onLine)
   const [offlineCount, setOfflineCount] = useState(0)
   const [printFormat, setPrintFormat] = useState<'thermal' | 'a4' | 'b2b'>('thermal')
@@ -73,9 +87,14 @@ export default function BillingModule() {
   const [activeTill, setActiveTill] = useState<any>(null)
   const [showStyleMatrix, setShowStyleMatrix] = useState(false)
   const [selectedStyleCode, setSelectedStyleCode] = useState('')
+  
   const searchRef = useRef<HTMLInputElement>(null)
 
-  useEffect(() => { const t = setInterval(() => setCurrentTime(now()), 30000); return () => clearInterval(t) }, [])
+  // ── EFFECTS ──
+  useEffect(() => { 
+    const interval = setInterval(() => setCurrentTime(getNow()), 30000)
+    return () => clearInterval(interval) 
+  }, [])
   
   useEffect(() => {
     const handleOnline = () => setIsOnline(true)
@@ -83,10 +102,8 @@ export default function BillingModule() {
     window.addEventListener('online', handleOnline)
     window.addEventListener('offline', handleOffline)
     
-    // Check for existing offline data
     offlineService.getQueueCount().then(setOfflineCount)
 
-    // Fetch active till for terminal
     api.tills.list().then(tills => {
       const openTill = tills.find((t: any) => t.status === 'Open')
       if (openTill) setActiveTill(openTill)
@@ -98,7 +115,7 @@ export default function BillingModule() {
     }
   }, [])
 
-  // Background Sync Logic
+  // Offline Sync
   useEffect(() => {
     if (isOnline && offlineCount > 0) {
       const sync = async () => {
@@ -110,7 +127,7 @@ export default function BillingModule() {
             setOfflineCount(prev => prev - 1)
           } catch (err) {
             console.error('[PrimeSetu] Sync Fail:', err)
-            break; // Stop if still failing
+            break
           }
         }
       }
@@ -118,88 +135,117 @@ export default function BillingModule() {
     }
   }, [isOnline, offlineCount])
 
+  // Barcode / Style Lookup
   useEffect(() => {
     if (q.length < 3) return
-    const t = setTimeout(async () => {
+    const timer = setTimeout(async () => {
       try {
         const results = await api.inventory.search(q)
-        // Shoper 9 Logic: Exact barcode match = Add to Cart. Style code match = Show Matrix.
         const exactItem = results.find((p: any) => p.code.toLowerCase() === q.toLowerCase())
         if (exactItem) { 
-          addToCart(exactItem); 
-          setQ(''); 
-          return;
+          handleAddToCart(exactItem)
+          setQ('')
+          return
         }
 
         const isStyle = results.some((p: any) => p.style_code?.toLowerCase() === q.toLowerCase())
         if (isStyle) {
-          setSelectedStyleCode(q.toUpperCase());
-          setShowStyleMatrix(true);
-          setQ('');
+          setSelectedStyleCode(q.toUpperCase())
+          setShowStyleMatrix(true)
+          setQ('')
         }
       } catch {}
     }, 400)
-    return () => clearTimeout(t)
+    return () => clearTimeout(timer)
   }, [q])
 
-  const addToCart = (p: any) => {
-    const storeStock = p.stocks?.find((s: any) => s.store_id === 'X01')?.quantity;
-    
+  // ── LOGIC ──
+  const handleAddToCart = (p: any) => {
+    // Standardize mapping from backend to local cart item
+    const normalizedItem: CartItem = {
+      id: p.id,
+      code: p.code,
+      name: p.name,
+      brand: p.brand || 'Unknown',
+      category: p.category || 'General',
+      mrp_paise: p.mrp_paise || toPaise(p.mrp || 0),
+      cost_paise: p.cost_paise || 0,
+      qty: 1,
+      discount_per: 0,
+      tax_rate: p.tax_rate ?? 18,
+      is_tax_inclusive: p.is_tax_inclusive ?? true,
+      stocks: p.stocks
+    }
+
+    const storeStock = normalizedItem.stocks?.find((s: any) => s.store_id === 'X01')?.quantity
+
     setCart(prev => {
-      const ex = prev.find(i => i.id === p.id)
-      const currentQty = ex ? ex.qty : 0;
+      const existing = prev.find(i => i.id === normalizedItem.id)
+      const currentQty = existing ? existing.qty : 0
       
       if (storeStock !== undefined && currentQty + 1 > storeStock) {
-        alert(`STOCK ALERT: Only ${storeStock} units available in X01 store.`);
-        return prev;
+        alert(`STOCK ALERT: Only ${storeStock} units available in X01 store.`)
+        return prev
       }
 
-      if (ex) return prev.map(i => i.id === p.id ? { ...i, qty: i.qty + 1 } : i)
-      return [...prev, { ...p, qty: 1, discount_per: 0, tax_rate: p.tax_rate ?? 18, is_tax_inclusive: p.is_tax_inclusive ?? true }]
+      if (existing) return prev.map(i => i.id === normalizedItem.id ? { ...i, qty: i.qty + 1 } : i)
+      return [...prev, normalizedItem]
     })
   }
 
-  const updateItem = (id: string, updates: Partial<CartItem>) => {
+  const updateCartItem = (id: string, updates: Partial<CartItem>) => {
     setCart(prev => prev.map(i => {
       if (i.id === id) {
         if (updates.qty !== undefined) {
-          const storeStock = i.stocks?.find((s: any) => s.store_id === 'X01')?.quantity;
+          const storeStock = i.stocks?.find((s: any) => s.store_id === 'X01')?.quantity
           if (storeStock !== undefined && updates.qty > storeStock) {
-            alert(`STOCK ALERT: Only ${storeStock} units available.`);
-            return i;
+            alert(`STOCK ALERT: Only ${storeStock} units available.`)
+            return i
           }
         }
-        return { ...i, ...updates };
+        return { ...i, ...updates }
       }
-      return i;
+      return i
     }))
   }
 
-  const removeItem = (id: string) => setCart(prev => prev.filter(i => i.id !== id))
+  const removeCartItem = (id: string) => setCart(prev => prev.filter(i => i.id !== id))
 
-  // Totals in PAISE
-  const tax_summary = cart.reduce((acc, i) => {
-    const netPaise = Math.round(i.mrp * i.qty * (1 - i.discount_per / 100))
-    const rate = i.tax_rate / 100
-    const is_inclusive = i.is_tax_inclusive ?? true;
-    
-    const tax_amt = is_inclusive ? (netPaise - netPaise / (1 + rate)) : (netPaise * rate);
-    const taxable_amt = is_inclusive ? (netPaise - tax_amt) : netPaise;
-    
-    return {
-      taxable: acc.taxable + taxable_amt,
-      tax: acc.tax + tax_amt
-    }
-  }, { taxable: 0, tax: 0 })
+  // ── CALCULATIONS (PAISE ONLY) ──
+  const totals = useMemo(() => {
+    return cart.reduce((acc, i) => {
+      const lineGrossPaise = i.mrp_paise * i.qty
+      const lineDiscPaise = Math.round(lineGrossPaise * (i.discount_per / 100))
+      const lineNetPaise = lineGrossPaise - lineDiscPaise
+      
+      const taxRate = i.tax_rate / 100
+      const isInclusive = i.is_tax_inclusive ?? true
+      
+      let taxPaise = 0
+      let taxablePaise = 0
+      
+      if (isInclusive) {
+        taxPaise = Math.round(lineNetPaise - (lineNetPaise / (1 + taxRate)))
+        taxablePaise = lineNetPaise - taxPaise
+      } else {
+        taxablePaise = lineNetPaise
+        taxPaise = Math.round(lineNetPaise * taxRate)
+      }
+      
+      return {
+        subtotal: acc.subtotal + lineGrossPaise,
+        discount: acc.discount + lineDiscPaise,
+        taxable: acc.taxable + taxablePaise,
+        tax: acc.tax + taxPaise,
+        net: acc.net + (taxablePaise + taxPaise)
+      }
+    }, { subtotal: 0, discount: 0, taxable: 0, tax: 0, net: 0 })
+  }, [cart])
 
-  const subtotalPaise = cart.reduce((s, i) => s + i.mrp * i.qty, 0)
-  const discTotalPaise = cart.reduce((s, i) => s + Math.round(i.mrp * i.qty * (i.discount_per / 100)), 0)
-  const netPayablePaise = Math.round(tax_summary.taxable + tax_summary.tax)
-  const roundoffPaise = netPayablePaise - (tax_summary.taxable + tax_summary.tax)
-  const taxablePaise = tax_summary.taxable
-  const taxTotalPaise = tax_summary.tax
+  const netPayablePaise = totals.net
+  const roundoffPaise = 0 // Shoper 9 usually rounds at payment stage or maintains paise
 
-  // SOVEREIGN HOTKEY REGISTRY (Dependent on cart totals)
+  // ── SHORTCUTS ──
   useHotkeys('f2', (e) => { e.preventDefault(); searchRef.current?.focus() }, { enableOnFormTags: true })
   useHotkeys('alt+1', (e) => { e.preventDefault(); setCart([]); setCustomerMobile(''); setQ(''); searchRef.current?.focus() }, { enableOnFormTags: true })
   useHotkeys('alt+2', (e) => { e.preventDefault(); setShowReturns(true) }, { enableOnFormTags: true })
@@ -211,42 +257,56 @@ export default function BillingModule() {
   useHotkeys('f9', () => setShowTotals(v => !v), { enableOnFormTags: true })
   useHotkeys('f10', () => setShowSettle(true), { enableOnFormTags: true })
   useHotkeys('f12', (e) => { e.preventDefault(); handleSuspend() }, { enableOnFormTags: true })
-  useHotkeys('alt+6', (e) => { 
-    e.preventDefault(); 
-    if (lastBill) setBillToPrint({ ...lastBill, is_duplicate: true }); 
-    else alert('No bill to reprint. Complete a transaction first.'); 
-  }, { enableOnFormTags: true })
+  useHotkeys('escape', (e) => { e.preventDefault(); setQ(''); setShowTotals(false); setShowSettle(false) }, { enableOnFormTags: true })
 
+  // ── HANDLERS ──
   const handleFinalize = async () => {
     if (!cart.length || processing) return
     setProcessing(true)
+    
     const billData = {
       customer_mobile: sendSms ? customerMobile : '',
       type: 'Sales',
       till_id: activeTill?.id,
-      items: cart.map(i => ({ product_id: i.id, qty: i.qty, unit_price: i.mrp, discount_per: i.discount_per, tax_per: i.tax_rate })),
+      items: cart.map(i => ({ 
+        product_id: i.id, 
+        qty: i.qty, 
+        unit_price: i.mrp_paise, 
+        discount_per: i.discount_per, 
+        tax_per: i.tax_rate 
+      })),
       payments: payLines.filter(p => p.amount > 0).map(p => ({ ...p, amount: toPaise(p.amount) }))
     }
 
     try {
-      if (!isOnline) throw new Error('OFFLINE')
+      if (!isOnline) throw new Error('OFFLINE_MODE')
       
       const result = await api.billing.finalize(billData)
-      setLastBill(result); setBillToPrint(result)
-      setCart([]); setCustomerMobile(''); setSalesperson('')
-      setPayLines([{ mode: 'CASH', amount: 0 }]); setShowSettle(false)
+      setLastBill(result)
+      setBillToPrint(result)
+      resetSession()
       setTimeout(() => setLastBill(null), 6000)
     } catch (err) { 
-      console.warn('[PrimeSetu] Network Failure. Entering Isolation Protocol.')
+      console.warn('[PrimeSetu] Isolation Protocol Engaged. Saving to Local Ledger.')
       await offlineService.queueTransaction(billData)
       setOfflineCount(prev => prev + 1)
       
       const mockResult = { status: 'queued', bill_number: 'OFFLINE-'+Date.now(), total: netPayablePaise }
-      setLastBill(mockResult); setBillToPrint(mockResult)
-      setCart([]); setCustomerMobile(''); setSalesperson('')
-      setPayLines([{ mode: 'CASH', amount: 0 }]); setShowSettle(false)
+      setLastBill(mockResult)
+      setBillToPrint(mockResult)
+      resetSession()
+    } finally { 
+      setProcessing(false) 
     }
-    finally { setProcessing(false) }
+  }
+
+  const resetSession = () => {
+    setCart([])
+    setCustomerMobile('')
+    setSalesperson('')
+    setPayLines([{ mode: 'CASH', amount: 0 }])
+    setShowSettle(false)
+    searchRef.current?.focus()
   }
 
   const handleSuspend = async () => {
@@ -256,12 +316,11 @@ export default function BillingModule() {
       await api.billing.suspend({ 
         customer_mobile: customerMobile, 
         type: 'Sales', 
-        items: cart.map(i => ({ product_id: i.id, qty: i.qty, unit_price: i.mrp })), 
+        items: cart.map(i => ({ product_id: i.id, qty: i.qty, unit_price: i.mrp_paise })), 
         suspended_reason: 'Counter Queue' 
       })
-      setCart([]); setCustomerMobile('')
-    } catch {}
-    finally { setProcessing(false) }
+      resetSession()
+    } catch {} finally { setProcessing(false) }
   }
 
   const handleCreateSlip = async () => {
@@ -273,61 +332,53 @@ export default function BillingModule() {
         items: cart.map(i => ({ 
           product_id: i.id, 
           qty: i.qty, 
-          unit_price: i.mrp,
+          unit_price: i.mrp_paise,
           discount_per: i.discount_per 
         })) 
       })
-      setCart([]); setCustomerMobile('')
+      resetSession()
     } catch (err) {
       console.error('Slip creation failed:', err)
     } finally { setProcessing(false) }
   }
 
-  const recallSlip = (items: any, mobile: string) => { setCart(items as any); setCustomerMobile(mobile); setShowSalesSlips(false) }
-
-  useHotkeys('shift+f6', (e) => { e.preventDefault(); handleCreateSlip() }, { enableOnFormTags: true })
-  useHotkeys('alt+m', (e) => { e.preventDefault(); document.getElementById('cust-mobile')?.focus() }, { enableOnFormTags: true })
-  useHotkeys('ctrl+d', (e) => { e.preventDefault(); setCart(p => p.slice(0,-1)) }, { enableOnFormTags: true })
-  useHotkeys('escape', (e) => { e.preventDefault(); setQ(''); setShowTotals(false); setShowSettle(false) }, { enableOnFormTags: true })
-
-  const PAY_ICONS: Record<PayMode, JSX.Element> = {
-    CASH:   <Banknote className="w-4 h-4" />,
-    UPI:    <Smartphone className="w-4 h-4" />,
-    CARD:   <CreditCard className="w-4 h-4" />,
-    GV:     <Gift className="w-4 h-4" />,
-    COUPON: <Tag className="w-4 h-4" />,
-  }
   const paidTotalRupees = payLines.reduce((s, p) => s + p.amount, 0)
   const balanceRupees = toRupees(netPayablePaise) - paidTotalRupees
 
   return (
     <div className="flex flex-col h-screen bg-[#f0ede8] font-sans overflow-hidden relative">
+      {/* ── PRINTING LAYERS ── */}
       {printFormat === 'thermal' && <ThermalReceipt bill={billToPrint} onPrinted={() => setBillToPrint(null)} />}
       {printFormat === 'a4' && <TaxInvoiceA4 bill={billToPrint} onPrinted={() => setBillToPrint(null)} />}
       {printFormat === 'b2b' && <TaxInvoiceB2B bill={billToPrint} onPrinted={() => setBillToPrint(null)} />}
       <CreditNoteA4 bill={billToPrint?.type === 'Return' ? billToPrint : null} onPrinted={() => setBillToPrint(null)} />
 
-      {/* ─── Overlays ─── */}
+      {/* ── OVERLAYS ── */}
       <AnimatePresence>
         {showSuspended && (
-           <motion.div initial={{ x: '100%' }} animate={{ x: 0 }} exit={{ x: '100%' }} transition={{ type: 'spring', damping: 25, stiffness: 200 }} className="absolute right-0 top-0 bottom-0 w-[400px] z-[250] bg-navy shadow-2xl border-l-4 border-saffron">
+           <motion.div initial={{ x: '100%' }} animate={{ x: 0 }} exit={{ x: '100%' }} className="absolute right-0 top-0 bottom-0 w-[400px] z-[250] bg-navy shadow-2xl border-l-4 border-saffron">
              <SuspendedBillsBrowser 
-                onRecall={(items: any, mobile: string) => { setCart(items as any); setCustomerMobile(mobile); setShowSuspended(false) }} 
+                onRecall={(items: any, mobile: string) => { 
+                  setCart(items.map((i: any) => ({ ...i, mrp_paise: i.unit_price }))); 
+                  setCustomerMobile(mobile); 
+                  setShowSuspended(false); 
+                }} 
                 onClose={() => setShowSuspended(false)} 
              />
            </motion.div>
         )}
         {showReturns && (
-           <motion.div initial={{ x: '100%' }} animate={{ x: 0 }} exit={{ x: '100%' }} transition={{ type: 'spring', damping: 25, stiffness: 200 }} className="absolute right-0 top-0 bottom-0 w-[400px] z-[250] bg-navy shadow-2xl border-l-4 border-rose-500">
+           <motion.div initial={{ x: '100%' }} animate={{ x: 0 }} exit={{ x: '100%' }} className="absolute right-0 top-0 bottom-0 w-[400px] z-[250] bg-navy shadow-2xl border-l-4 border-rose-500">
              <ReturnsDrawer 
                 onReturn={(bill) => { setBillToPrint(bill); setShowReturns(false); }}
                 onClose={() => setShowReturns(false)} 
               />
            </motion.div>
         )}
-        {showSalesSlips && <SalesSlipsBrowser onRecall={recallSlip} onClose={() => setShowSalesSlips(false)} />}
+        {showSalesSlips && <SalesSlipsBrowser onRecall={(items, mobile) => { setCart(items as any); setCustomerMobile(mobile); setShowSalesSlips(false); }} onClose={() => setShowSalesSlips(false)} />}
         {showHistory && <BillHistoryBrowser onReprint={(b) => setBillToPrint(b)} onClose={() => setShowHistory(false)} />}
         {showDayEnd && <DayEndModule onClose={() => setShowDayEnd(false)} />}
+        
         {lastBill && (
           <motion.div initial={{ y: -80, opacity: 0 }} animate={{ y: 0, opacity: 1 }} exit={{ y: -80, opacity: 0 }}
             className="absolute top-4 left-1/2 -translate-x-1/2 z-[200] bg-emerald-600 text-white px-8 py-4 rounded-2xl shadow-2xl flex items-center gap-4 border-2 border-emerald-400">
@@ -339,19 +390,15 @@ export default function BillingModule() {
           </motion.div>
         )}
 
-        {/* F9 Totals Panel */}
         {showTotals && (
-          <motion.div initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }} exit={{ opacity: 0, scale: 0.95 }}
-            className="absolute inset-0 z-[150] flex items-center justify-center bg-black/40 backdrop-blur-sm"
-            onClick={() => setShowTotals(false)}>
-            <div className="bg-white rounded-3xl p-8 shadow-2xl w-96 border-2 border-navy/10" onClick={e => e.stopPropagation()}>
+          <div className="absolute inset-0 z-[150] flex items-center justify-center bg-black/40 backdrop-blur-sm" onClick={() => setShowTotals(false)}>
+            <motion.div initial={{ scale: 0.95 }} animate={{ scale: 1 }} className="bg-white rounded-3xl p-8 shadow-2xl w-96 border-2 border-navy/10" onClick={e => e.stopPropagation()}>
               <div className="text-center text-xs font-black text-navy uppercase tracking-[0.3em] mb-6">Bill Totals [F9]</div>
               {[
-                ['Gross MRP', formatCurrency(subtotalPaise)],
-                ['Discount', `-${formatCurrency(discTotalPaise)}`],
-                ['Taxable Value', formatCurrency(taxablePaise - taxTotalPaise)],
-                ['GST / Tax', formatCurrency(taxTotalPaise)],
-                ['Round Off', formatCurrency(roundoffPaise)],
+                ['Gross Subtotal', formatCurrency(totals.subtotal)],
+                ['Disc. Allowance', `-${formatCurrency(totals.discount)}`],
+                ['Taxable Base', formatCurrency(totals.taxable)],
+                ['Sovereign GST', formatCurrency(totals.tax)],
               ].map(([l, v]) => (
                 <div key={l} className="flex justify-between py-2 border-b border-gray-100 text-sm">
                   <span className="text-gray-500 font-medium">{l}</span>
@@ -360,363 +407,196 @@ export default function BillingModule() {
               ))}
               <div className="flex justify-between pt-4 text-2xl font-black">
                 <span className="text-navy">Net Payable</span>
-                <span className="text-emerald-600">{formatCurrency(netPayablePaise)}</span>
+                <span className="text-emerald-600">{formatCurrency(totals.net)}</span>
               </div>
-              <button onClick={() => setShowTotals(false)} className="mt-6 w-full bg-navy text-white py-3 rounded-xl text-xs font-black uppercase tracking-widest">Close [Esc]</button>
-            </div>
-          </motion.div>
+              <button onClick={() => setShowTotals(false)} className="mt-6 w-full bg-navy text-white py-3 rounded-xl text-xs font-black uppercase tracking-widest">Return to POS</button>
+            </motion.div>
+          </div>
         )}
 
         {showStyleMatrix && (
-          <motion.div 
-            initial={{ opacity: 0, scale: 0.9 }}
-            animate={{ opacity: 1, scale: 1 }}
-            exit={{ opacity: 0, scale: 0.9 }}
-            className="fixed inset-0 z-[200] flex items-center justify-center p-12 bg-navy/60 backdrop-blur-xl"
-          >
-            <div className="w-full max-w-6xl h-full bg-white rounded-[3rem] overflow-hidden shadow-2xl relative">
-              <StyleMatrix 
-                styleCode={selectedStyleCode} 
-                onBack={() => setShowStyleMatrix(false)} 
-              />
-              <button 
-                onClick={() => setShowStyleMatrix(false)}
-                className="absolute top-8 right-8 w-12 h-12 rounded-full bg-navy text-white flex items-center justify-center hover:scale-110 transition-transform z-[210]"
-              >
+          <div className="fixed inset-0 z-[200] flex items-center justify-center p-12 bg-navy/60 backdrop-blur-xl">
+            <motion.div initial={{ scale: 0.9 }} animate={{ scale: 1 }} className="w-full max-w-6xl h-full bg-white rounded-[3rem] overflow-hidden shadow-2xl relative">
+              <StyleMatrix styleCode={selectedStyleCode} onBack={() => setShowStyleMatrix(false)} />
+              <button onClick={() => setShowStyleMatrix(false)} className="absolute top-8 right-8 w-12 h-12 rounded-full bg-navy text-white flex items-center justify-center hover:scale-110 transition-transform z-[210]">
                 <X className="w-6 h-6" />
               </button>
-            </div>
-          </motion.div>
+            </motion.div>
+          </div>
         )}
-
       </AnimatePresence>
 
-      {/* ─── Shoper9 Toolbar ─── */}
-      <div className="flex items-center gap-1 bg-[#1a2340] px-3 py-2 shrink-0">
-          <div className="flex items-center gap-4">
-            {!isOnline && (
-              <div className="flex items-center gap-2 px-3 py-1 bg-rose-500 text-white rounded-full text-[10px] font-black animate-pulse">
-                <AlertTriangle className="w-3 h-3" /> {t('isolated')}
-              </div>
-            )}
-            {offlineCount > 0 && (
-              <div className="flex items-center gap-2 px-3 py-1 bg-amber-500 text-white rounded-full text-[10px] font-black">
-                <Clock className="w-3 h-3" /> {offlineCount} {t('syncing')}
-              </div>
-            )}
-            <div className="flex items-center gap-2 px-3 py-1 bg-white/10 rounded-full border border-white/10 text-[10px] font-bold">
-              <Zap className="w-3 h-3 text-amber-400" /> V2.0.4-SOVEREIGN
-            </div>
+      {/* ── TOOLBAR ── */}
+      <div className="flex items-center gap-1 bg-[#1a2340] px-3 py-2 shrink-0 select-none">
+        <div className="flex items-center gap-2 pr-4 mr-2 border-r border-white/10">
+          <div className="w-8 h-8 bg-brand-gold rounded-xl flex items-center justify-center">
+            <Zap className="w-5 h-5 text-navy fill-navy" />
           </div>
-          <div className="flex items-center gap-2 pr-4 mr-2 border-r border-white/10">
-          <div className="w-7 h-7 bg-amber-400 rounded-lg flex items-center justify-center">
-            <Zap className="w-4 h-4 text-navy fill-navy" />
+          <div className="flex flex-col">
+            <span className="text-white font-black text-xs leading-none tracking-tight">PrimeSetu POS</span>
+            <span className="text-[8px] text-white/30 font-black tracking-widest uppercase">Institutional</span>
           </div>
-          <span className="text-white font-black text-sm tracking-tight">PrimeSetu POS</span>
         </div>
 
         {[
-          { icon: <FilePlus2 className="w-4 h-4" />, label: 'New Bill', key: 'Alt+1', action: () => { setCart([]); setCustomerMobile(''); setQ(''); searchRef.current?.focus() } },
-          { icon: <Search className="w-4 h-4" />, label: 'Item Search', key: 'F2', action: () => searchRef.current?.focus() },
-          { icon: <RotateCcw className="w-4 h-4" />, label: 'Return', key: 'Alt+2', action: () => setShowReturns(true) },
-          { icon: <Calculator className="w-4 h-4" />, label: 'Totals', key: 'F9', action: () => setShowTotals(v => !v) },
-          { icon: <Banknote className="w-4 h-4" />, label: 'Exact Cash', key: 'F7', action: () => { setPayLines([{ mode: 'CASH', amount: toRupees(netPayablePaise) }]); setShowSettle(true) } },
-          { icon: <CreditCard className="w-4 h-4" />, label: 'Settlement', key: 'F8', action: () => setShowSettle(true) },
-          { icon: <FileText className="w-4 h-4" />, label: 'Sales Slips', key: 'F6', action: () => setShowSalesSlips(true) },
-          { icon: <Pause className="w-4 h-4" />, label: 'Suspend', key: 'F12', action: handleSuspend },
-          { icon: <Clock className="w-4 h-4" />, label: 'Recall [F4]', key: 'F4', action: () => setShowSuspended(v => !v) },
-          { icon: <Printer className="w-4 h-4" />, label: 'Reprint', key: 'Alt+6', action: () => {
-            if (lastBill) {
-              setBillToPrint({ ...lastBill, is_duplicate: true })
-            } else {
-              alert('No bill to reprint. Complete a transaction first.')
-            }
-          } },
+          { icon: <FilePlus2 />, label: 'New [Alt+1]', action: () => resetSession() },
+          { icon: <Search />, label: 'Find [F2]', action: () => searchRef.current?.focus() },
+          { icon: <RotateCcw />, label: 'Return', action: () => setShowReturns(true) },
+          { icon: <Calculator />, label: 'Totals [F9]', action: () => setShowTotals(v => !v) },
+          { icon: <Banknote />, label: 'Exact [F7]', action: () => { setPayLines([{ mode: 'CASH', amount: toRupees(netPayablePaise) }]); setShowSettle(true) } },
+          { icon: <CreditCard />, label: 'Settle [F8]', action: () => setShowSettle(true) },
+          { icon: <FileText />, label: 'Slips [F6]', action: () => setShowSalesSlips(true) },
+          { icon: <Pause />, label: 'Hold [F12]', action: handleSuspend },
+          { icon: <Clock />, label: 'Recall [F4]', action: () => setShowSuspended(v => !v) },
         ].map(btn => (
-          <button key={btn.label} onClick={btn.action}
-            className="flex flex-col items-center px-3 py-1.5 rounded-lg text-white/60 hover:text-white hover:bg-white/10 transition-all gap-0.5 min-w-[60px]">
-            {btn.icon}
-            <span className="text-[9px] font-bold leading-tight">{btn.label}</span>
-            <span className="text-[8px] text-amber-400/70 font-mono">{btn.key}</span>
+          <button key={btn.label} onClick={btn.action} className="flex flex-col items-center px-4 py-2 rounded-xl text-white/40 hover:text-white hover:bg-white/5 transition-all group">
+            <div className="w-5 h-5 group-hover:scale-110 transition-transform">{btn.icon}</div>
+            <span className="text-[9px] font-black uppercase tracking-tight mt-1">{btn.label}</span>
           </button>
         ))}
 
-        <div className="ml-auto flex items-center gap-4 text-white/40 text-[10px] font-mono">
-          <span className="flex items-center gap-1"><Clock className="w-3 h-3" />{currentTime}</span>
-          <button onClick={() => setShowSalesSlips(true)} className="text-[9px] bg-white/10 hover:bg-amber-400 hover:text-navy px-3 py-1.5 rounded-lg font-black transition-all">Slips (F6)</button>
-          <button onClick={() => setShowHistory(true)} className="text-[9px] bg-white/10 hover:bg-gold hover:text-navy px-3 py-1.5 rounded-lg font-black transition-all">History (F7)</button>
-          <button onClick={() => setShowDayEnd(true)} className="text-[9px] bg-white/10 hover:bg-amber-400 hover:text-navy px-3 py-1.5 rounded-lg font-black transition-all">Day End</button>
+        <div className="ml-auto flex items-center gap-6 text-white/20 text-[10px] font-black">
+          <div className="flex items-center gap-2 border-r border-white/5 pr-6">
+            {!isOnline ? <span className="text-rose-500 flex items-center gap-1 animate-pulse"><WifiOff size={12}/> ISOLATED</span> : <span className="text-emerald-500 flex items-center gap-1"><Wifi size={12}/> ONLINE</span>}
+            <span>{currentTime}</span>
+          </div>
+          <div className="flex gap-2">
+            <button onClick={() => setShowHistory(true)} className="px-4 py-2 bg-white/5 hover:bg-white/10 rounded-xl transition-all">HISTORY</button>
+            <button onClick={() => setShowDayEnd(true)} className="px-4 py-2 bg-brand-gold text-navy rounded-xl transition-all">DAY END</button>
+          </div>
         </div>
       </div>
 
-      {/* ─── Bill Header ─── */}
-      <div className="flex gap-2 px-3 pt-2 shrink-0">
-        <div className="flex items-center gap-2 bg-white border border-gray-200 rounded-xl px-4 py-2 shadow-sm flex-1">
-          <span className="text-[10px] font-black text-gray-400 uppercase tracking-widest whitespace-nowrap">Bill Prefix</span>
-          <span className="font-black text-navy text-sm">{billPrefix}-</span>
-          <span className="text-[10px] font-bold text-gray-300 ml-1">(Cash Transaction)</span>
+      {/* ── INPUTS ── */}
+      <div className="flex gap-2 px-4 pt-3 shrink-0">
+        <div className="flex-[3] relative">
+          <ScanBarcode className="absolute left-4 top-1/2 -translate-y-1/2 w-6 h-6 text-navy/20" />
+          <input ref={searchRef} autoFocus value={q} onChange={e => setQ(e.target.value)} placeholder="SCAN PRODUCT OR STYLE [F2]..." className="w-full bg-white border-2 border-navy/5 focus:border-brand-gold rounded-2xl pl-12 pr-4 h-16 text-xl font-mono outline-none shadow-sm transition-all" />
         </div>
-        <div className="relative flex-[3]">
-          <ScanBarcode className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
-          <input ref={searchRef} autoFocus value={q} onChange={e => setQ(e.target.value)}
-            id="item-search"
-            data-f2="items"
-            placeholder="Scan barcode / search item code or name [F2]..."
-            className="w-full bg-white border-2 border-gray-200 focus:border-amber-400 rounded-xl pl-10 pr-10 h-touch text-lg font-mono outline-none transition-all shadow-sm"
-          />
-          <button 
-            onClick={() => { searchRef.current?.focus(); window.dispatchEvent(new KeyboardEvent('keydown', { key: 'f2', bubbles: true })) }}
-            className="absolute right-3 top-1/2 -translate-y-1/2 p-2 hover:bg-amber-100 rounded-lg text-amber-500 transition-all"
-          >
-            <Search className="w-5 h-5" />
-          </button>
+        <div className="flex-1 relative">
+          <User className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-navy/20" />
+          <input id="cust-mobile" value={customerMobile} onChange={e => setCustomerMobile(e.target.value)} placeholder="MOBILE [Alt+M]" className="w-full bg-white border-2 border-navy/5 focus:border-brand-gold rounded-2xl pl-12 pr-4 h-16 text-lg font-mono outline-none shadow-sm transition-all" />
         </div>
-        <div className="relative flex-1">
-          <User className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
-          <input id="cust-mobile" value={customerMobile} onChange={e => setCustomerMobile(e.target.value)}
-            data-f2="customers" placeholder="Customer Mobile [F2]"
-            className="w-full bg-white border-2 border-gray-200 focus:border-amber-400 rounded-xl pl-10 pr-10 h-touch text-lg font-mono outline-none transition-all shadow-sm" />
-          <button 
-            onClick={() => { document.getElementById('cust-mobile')?.focus(); window.dispatchEvent(new KeyboardEvent('keydown', { key: 'f2', bubbles: true })) }}
-            className="absolute right-3 top-1/2 -translate-y-1/2 p-2 hover:bg-amber-100 rounded-lg text-amber-500 transition-all"
-          >
-            <Search className="w-5 h-5" />
-          </button>
-        </div>
-        <div className="relative flex-1">
-          <UserCheck className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
-          <input id="sales-person" value={salesperson} onChange={e => setSalesperson(e.target.value)}
-            data-f2="salesperson"
-            placeholder="Salesperson [F2]"
-            className="w-full bg-white border-2 border-gray-200 focus:border-amber-400 rounded-xl pl-10 pr-10 h-touch text-lg font-mono outline-none transition-all shadow-sm" />
-          <button 
-            onClick={() => { document.getElementById('sales-person')?.focus(); window.dispatchEvent(new KeyboardEvent('keydown', { key: 'f2', bubbles: true })) }}
-            className="absolute right-3 top-1/2 -translate-y-1/2 p-1.5 hover:bg-amber-100 rounded-lg text-amber-500 transition-all"
-          >
-            <Search className="w-3.5 h-3.5" />
-          </button>
+        <div className="flex-1 relative">
+          <UserCheck className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-navy/20" />
+          <input value={salesperson} onChange={e => setSalesperson(e.target.value)} placeholder="SALESPERSON" className="w-full bg-white border-2 border-navy/5 focus:border-brand-gold rounded-2xl pl-12 pr-4 h-16 text-lg font-mono outline-none shadow-sm transition-all" />
         </div>
       </div>
 
-      {/* ─── Main Content ─── */}
-      <div className="flex gap-2 px-3 pb-2 pt-2 flex-1 overflow-hidden">
-        <div className="flex-1 flex flex-col bg-white rounded-2xl shadow-sm border border-gray-200 overflow-hidden">
-          <div className="grid bg-[#1a2340] text-white text-[10px] font-black uppercase tracking-widest"
-            style={{ gridTemplateColumns: '40px 90px 1fr 80px 90px 70px 80px 100px 36px' }}>
-            {['#','Code','Item Name','Qty','MRP','Disc%','GST%','Net Amt',''].map(h => (
-              <div key={h} className={`px-2 py-3 ${h === 'Item Name' ? 'text-left' : 'text-center'}`}>{h}</div>
-            ))}
+      {/* ── CART ── */}
+      <div className="flex gap-4 px-4 py-4 flex-1 overflow-hidden">
+        <div className="flex-1 flex flex-col bg-white rounded-3xl shadow-xl border border-navy/5 overflow-hidden">
+          <div className="grid bg-navy text-white text-[10px] font-black uppercase tracking-[0.2em]" style={{ gridTemplateColumns: '50px 120px 1fr 100px 100px 100px 120px 40px' }}>
+            {['#','Code','Product','Price','Qty','Disc%','Net',''].map(h => <div key={h} className="px-6 py-4 text-left">{h}</div>)}
+          </div>
+          
+          <div className="flex-1 overflow-y-auto">
+            <AnimatePresence>
+              {cart.map((item, idx) => {
+                const lineNet = Math.round(item.mrp_paise * item.qty * (1 - item.discount_per / 100))
+                return (
+                  <motion.div key={item.id} layout initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, scale: 0.9 }} className={cn("grid items-center group transition-colors", idx % 2 === 0 ? 'bg-white' : 'bg-navy/[0.02]')} style={{ gridTemplateColumns: '50px 120px 1fr 100px 100px 100px 120px 40px' }}>
+                    <div className="px-6 py-5 text-[11px] font-black text-navy/20">{idx + 1}</div>
+                    <div className="px-6 py-5 font-mono text-xs font-bold text-navy/40">{item.code}</div>
+                    <div className="px-6 py-5">
+                      <div className="font-black text-navy text-sm uppercase tracking-tight">{item.name}</div>
+                      <div className="text-[9px] font-black text-navy/30 uppercase tracking-widest mt-1">{item.brand} \ {item.category}</div>
+                    </div>
+                    <div className="px-6 py-5 font-mono text-sm font-black text-navy">{formatDecimal(item.mrp_paise)}</div>
+                    <div className="px-6 py-5 flex items-center gap-2">
+                       <button onClick={() => updateCartItem(item.id, { qty: Math.max(1, item.qty - 1) })} className="w-6 h-6 bg-navy/5 hover:bg-brand-gold rounded-lg flex items-center justify-center transition-colors"><Minus size={12}/></button>
+                       <span className="w-8 text-center font-black text-navy">{item.qty}</span>
+                       <button onClick={() => updateCartItem(item.id, { qty: item.qty + 1 })} className="w-6 h-6 bg-navy/5 hover:bg-brand-gold rounded-lg flex items-center justify-center transition-colors"><Plus size={12}/></button>
+                    </div>
+                    <div className="px-6 py-5">
+                       <input type="number" value={item.discount_per} onChange={e => updateCartItem(item.id, { discount_per: Number(e.target.value) })} className="w-16 bg-navy/5 border-none rounded-lg p-2 text-xs font-black text-center outline-none focus:ring-2 ring-brand-gold" />
+                    </div>
+                    <div className="px-6 py-5 font-black text-navy text-sm">{formatCurrency(lineNet)}</div>
+                    <div className="px-6 py-5">
+                       <button onClick={() => removeCartItem(item.id)} className="opacity-0 group-hover:opacity-100 text-rose-500 hover:scale-110 transition-all"><Trash2 size={16}/></button>
+                    </div>
+                  </motion.div>
+                )
+              })}
+            </AnimatePresence>
+            {cart.length === 0 && (
+              <div className="h-full flex flex-col items-center justify-center opacity-5 select-none">
+                 <ScanBarcode size={120} strokeWidth={1} />
+                 <span className="text-3xl font-black uppercase tracking-[0.5em] mt-8">Awaiting Input</span>
+              </div>
+            )}
           </div>
 
-          <div className="flex-1 overflow-x-auto bg-gray-50/50">
-            <div className="min-w-[800px] h-full flex flex-col">
-              {cart.length === 0 ? (
-                <div className="flex flex-col items-center justify-center flex-1 opacity-10 gap-4">
-                  <ScanBarcode className="w-24 h-24" strokeWidth={0.8} />
-                  <span className="text-2xl font-black uppercase tracking-widest">Scan Item to Begin</span>
+          <div className="bg-navy p-8 flex justify-between items-end shrink-0">
+             <div className="flex gap-12">
+                <div>
+                   <div className="text-[10px] font-black text-white/20 uppercase tracking-widest mb-2">Cart Value</div>
+                   <div className="text-2xl font-black text-white/40">{formatCurrency(totals.subtotal)}</div>
                 </div>
-              ) : (
-                <div className="flex-1 overflow-y-auto">
-                  <AnimatePresence>
-                  {cart.map((item, idx) => {
-              const lineNetPaise = Math.round(item.mrp * item.qty * (1 - item.discount_per / 100))
-              return (
-                <motion.div key={item.id} layout initial={{ opacity: 0, x: -10 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, scale: 0.95, transition: { duration: 0.2 } }}
-                  className={`grid items-center border-b border-gray-50 hover:bg-amber-50 transition-colors group ${idx % 2 === 0 ? 'bg-white' : 'bg-gray-50/60'}`}
-                  style={{ gridTemplateColumns: '40px 90px 1fr 80px 90px 70px 80px 100px 36px' }}>
-                  <div className="px-2 py-3 text-center text-[11px] font-bold text-gray-400">{idx + 1}</div>
-                  <div className="px-2 py-3 text-center font-mono text-[11px] text-gray-500">{item.code}</div>
-                  <div className="px-2 py-3">
-                    <div className="font-bold text-navy text-sm leading-tight">{item.name}</div>
-                    <div className="text-[10px] text-gray-400 mt-0.5">{item.brand} · {item.category}</div>
-                  </div>
-                  <div className="px-2 py-3 flex items-center justify-center gap-1">
-                    <button onClick={() => updateItem(item.id, { qty: Math.max(1, item.qty - 1) })}
-                      className="w-5 h-5 bg-gray-100 hover:bg-amber-200 rounded text-xs font-black transition-colors flex items-center justify-center">-</button>
-                    <span className="w-8 text-center font-black text-navy text-sm">{item.qty}</span>
-                    <button onClick={() => updateItem(item.id, { qty: item.qty + 1 })}
-                      className="w-5 h-5 bg-gray-100 hover:bg-amber-200 rounded text-xs font-black transition-colors flex items-center justify-center">+</button>
-                  </div>
-                  <div className="px-2 py-3 text-center font-mono text-sm text-gray-600">{formatDecimal(item.mrp)}</div>
-                  <div className="px-2 py-3 flex items-center justify-center">
-                    <input type="number" value={item.discount_per} min={0} max={100}
-                      onChange={e => updateItem(item.id, { discount_per: Math.min(100, Math.max(0, Number(e.target.value))) })}
-                      className="w-12 text-center border border-gray-200 rounded-lg py-1 text-sm font-bold outline-none focus:border-amber-400 bg-transparent"
-                    />
-                  </div>
-                  <div className="px-2 py-3 text-center text-[11px] text-gray-400 font-bold">{item.tax_rate}%</div>
-                  <div className="px-2 py-3 text-center font-black text-navy text-sm">{formatCurrency(lineNetPaise)}</div>
-                  <div className="px-2 py-3 flex items-center justify-center">
-                    <button onClick={() => removeItem(item.id)} className="opacity-0 group-hover:opacity-100 text-red-400 hover:text-red-600 transition-all">
-                      <Trash2 className="w-4 h-4" />
-                    </button>
-                  </div>
-                </motion.div>
-              )
-            })}
-                  </AnimatePresence>
+                <div>
+                   <div className="text-[10px] font-black text-white/20 uppercase tracking-widest mb-2">Institutional Disc</div>
+                   <div className="text-2xl font-black text-rose-400">-{formatCurrency(totals.discount)}</div>
                 </div>
+                <div>
+                   <div className="text-[10px] font-black text-white/20 uppercase tracking-widest mb-2">Tax Component</div>
+                   <div className="text-2xl font-black text-emerald-400/60">{formatCurrency(totals.tax)}</div>
+                </div>
+             </div>
+             <div className="text-right">
+                <div className="text-[11px] font-black text-brand-gold uppercase tracking-[0.3em] mb-2">Amount Due</div>
+                <div className="text-7xl font-black text-white tracking-tighter" style={{ fontFamily: 'var(--font-tesla)' }}>{formatCurrency(netPayablePaise)}</div>
+             </div>
+          </div>
+        </div>
+
+        {/* ── SETTLEMENT PANEL ── */}
+        <div className="w-80 flex flex-col gap-4 shrink-0">
+           <div className="bg-white rounded-3xl p-6 shadow-xl border border-navy/5 flex-1 flex flex-col">
+              <div className="flex items-center justify-between mb-6">
+                 <h3 className="text-xs font-black text-navy uppercase tracking-widest">Settlement</h3>
+                 <button onClick={() => setPayLines(p => [...p, { mode: 'CASH', amount: 0 }])} className="w-8 h-8 bg-navy/5 rounded-full flex items-center justify-center hover:bg-brand-gold transition-colors"><Plus size={16}/></button>
+              </div>
+
+              <div className="space-y-4 flex-1 overflow-y-auto pr-2">
+                 {payLines.map((pl, idx) => (
+                   <div key={idx} className="p-4 bg-navy/5 rounded-2xl space-y-3 relative group">
+                      <select value={pl.mode} onChange={e => setPayLines(prev => prev.map((p,i) => i===idx ? {...p, mode: e.target.value as PayMode} : p))} className="w-full bg-white border-none rounded-xl p-3 text-[10px] font-black uppercase tracking-widest shadow-sm outline-none">
+                         {['CASH','UPI','CARD','GV','COUPON'].map(m => <option key={m}>{m}</option>)}
+                      </select>
+                      <div className="relative">
+                         <span className="absolute left-4 top-1/2 -translate-y-1/2 text-navy/20 font-black">₹</span>
+                         <input type="number" value={pl.amount || ''} onChange={e => setPayLines(prev => prev.map((p,i) => i===idx ? {...p, amount: Number(e.target.value)} : p))} placeholder="0.00" className="w-full bg-white border-none rounded-xl p-3 pl-8 text-sm font-black shadow-sm outline-none" />
+                      </div>
+                      {payLines.length > 1 && (
+                         <button onClick={() => setPayLines(p => p.filter((_,i) => i !== idx))} className="absolute -right-2 -top-2 w-6 h-6 bg-rose-500 text-white rounded-full flex items-center justify-center scale-0 group-hover:scale-100 transition-transform"><X size={12}/></button>
+                      )}
+                   </div>
+                 ))}
+              </div>
+
+              <div className={cn("mt-6 p-6 rounded-2xl text-center transition-all", balanceRupees > 0.01 ? "bg-rose-50 text-rose-600" : "bg-emerald-50 text-emerald-600")}>
+                 <div className="text-[9px] font-black uppercase tracking-widest mb-1">{balanceRupees > 0.01 ? 'Balance Due' : 'Change Back'}</div>
+                 <div className="text-2xl font-black">₹{Math.abs(balanceRupees).toFixed(2)}</div>
+              </div>
+           </div>
+
+           <button 
+             onClick={handleFinalize} 
+             disabled={processing || !cart.length || balanceRupees > 0.05} 
+             className={cn(
+               "w-full py-8 rounded-[2rem] flex flex-col items-center justify-center gap-2 transition-all shadow-2xl relative overflow-hidden",
+               (processing || !cart.length || balanceRupees > 0.05) ? "bg-navy/10 text-navy/20 grayscale" : "bg-brand-gold text-navy hover:scale-105 active:scale-95"
+             )}
+           >
+              {processing ? <div className="w-8 h-8 border-4 border-navy border-t-transparent rounded-full animate-spin" /> : (
+                <>
+                  <div className="text-xl font-black uppercase tracking-tight flex items-center gap-3">
+                    <CheckCircle2 /> Finalize Bill
+                  </div>
+                  <div className="text-[9px] font-black uppercase tracking-[0.4em] opacity-40">Sovereign Commit [F10]</div>
+                </>
               )}
-            </div>
-          </div>
-
-          <div className="border-t-2 border-gray-100 bg-gray-50 px-4 py-3 grid grid-cols-4 gap-4 shrink-0">
-            {[
-              { label: 'Items', value: cart.reduce((a, i) => a + i.qty, 0) },
-              { label: 'Gross MRP', value: formatCurrency(subtotalPaise) },
-              { label: 'Discount', value: `-${formatCurrency(discTotalPaise)}` },
-              { label: 'GST', value: formatCurrency(taxTotalPaise) },
-            ].map(({ label, value }) => (
-              <div key={label} className="text-center">
-                <div className="text-[9px] font-black text-gray-400 uppercase tracking-widest">{label}</div>
-                <div className="text-base font-black text-navy">{value}</div>
-              </div>
-            ))}
-          </div>
-        </div>
-
-        <div className="w-72 flex flex-col gap-2 shrink-0">
-          <div className="bg-[#1a2340] rounded-2xl p-4 text-white text-center shadow-lg border-b-4 border-amber-400 relative overflow-hidden">
-            <div className="absolute inset-0 bg-gradient-to-br from-amber-400/5 to-transparent" />
-            <div className="text-xs font-black text-amber-400 uppercase tracking-[0.3em] mb-1">{t('payable')}</div>
-            <div className="text-5xl font-black font-mono">{formatCurrency(netPayablePaise)}</div>
-            {discTotalPaise > 0 && <div className="text-[10px] text-emerald-400 font-bold mt-1">Saves {formatCurrency(discTotalPaise)}</div>}
-            {salesperson && <div className="text-[9px] text-white/40 mt-1 font-mono">SP: {salesperson}</div>}
-          </div>
-
-          <div className="bg-white rounded-xl p-3 border border-gray-200 shadow-sm text-xs space-y-1.5">
-            {[
-              ['Subtotal', formatCurrency(taxablePaise - taxTotalPaise)],
-              ['GST', formatCurrency(taxTotalPaise)],
-              ['Round Off', formatCurrency(roundoffPaise)],
-            ].map(([l, v]) => (
-              <div key={l} className="flex justify-between">
-                <span className="text-gray-400">{l}</span>
-                <span className="font-bold text-gray-700">{v}</span>
-              </div>
-            ))}
-          </div>
-
-          <div className="bg-white rounded-xl p-3 border border-gray-200 shadow-sm space-y-2">
-            <div className="flex items-center justify-between">
-              <span className="text-[9px] font-black text-gray-400 uppercase tracking-widest">Split Payment [F8]</span>
-              <button onClick={() => setPayLines(p => [...p, { mode: 'CASH', amount: 0 }])}
-                className="text-[9px] font-black text-amber-500 hover:text-amber-700 flex items-center gap-0.5">
-                <Plus className="w-3 h-3" />Add
-              </button>
-            </div>
-            {payLines.map((pl, idx) => (
-              <div key={idx} className="flex items-center gap-1.5">
-                <select value={pl.mode}
-                  onChange={e => setPayLines(prev => prev.map((p,i) => i===idx ? {...p, mode: e.target.value as PayMode} : p))}
-                  className="flex-1 border border-gray-200 rounded-lg py-1.5 px-2 text-[11px] font-black bg-gray-50 outline-none focus:border-amber-400">
-                  {(['CASH','UPI','CARD','GV','COUPON'] as PayMode[]).map(m => <option key={m}>{m}</option>)}
-                </select>
-                <div className="relative flex-1">
-                  <span className="absolute left-2 top-1/2 -translate-y-1/2 text-[11px] text-gray-400 font-bold">₹</span>
-                  <input type="number" value={pl.amount || ''} min={0}
-                    onChange={e => setPayLines(prev => prev.map((p,i) => i===idx ? {...p, amount: Number(e.target.value)} : p))}
-                    className="w-full border border-gray-200 rounded-lg py-1.5 pl-6 pr-2 text-[11px] font-black outline-none focus:border-amber-400 bg-white" />
-                </div>
-                {pl.mode !== 'CASH' && (
-                  <input value={pl.ref || ''} onChange={e => setPayLines(prev => prev.map((p,i) => i===idx ? {...p, ref: e.target.value} : p))}
-                    placeholder="Ref" className="w-14 border border-gray-200 rounded-lg py-1.5 px-2 text-[10px] outline-none focus:border-amber-400" />
-                )}
-                {payLines.length > 1 && (
-                  <button onClick={() => setPayLines(p => p.filter((_,i) => i !== idx))} className="text-red-400 hover:text-red-600">
-                    <X className="w-3.5 h-3.5" />
-                  </button>
-                )}
-              </div>
-            ))}
-            <div className={`flex justify-between text-xs font-black pt-1 border-t border-dashed ${balanceRupees > 0.01 ? 'text-red-500 border-red-200' : balanceRupees < -0.01 ? 'text-emerald-500 border-emerald-200' : 'text-gray-400 border-gray-200'}`}>
-              <span>{balanceRupees > 0.01 ? 'Balance Due' : balanceRupees < -0.01 ? 'Change Back' : 'Exact'}</span>
-              <span>₹{Math.abs(balanceRupees).toFixed(2)}</span>
-            </div>
-          </div>
-
-          <div className="grid grid-cols-5 gap-1">
-            {(['CASH','UPI','CARD','GV','COUPON'] as PayMode[]).map(m => (
-              <button key={m} title={m}
-                onClick={() => setPayLines([{ mode: m, amount: toRupees(netPayablePaise) }])}
-                className={`flex flex-col items-center gap-0.5 py-2 rounded-xl text-[9px] font-black border-2 transition-all ${
-                  payLines.length === 1 && payLines[0].mode === m && Math.abs(payLines[0].amount - toRupees(netPayablePaise)) < 0.01
-                    ? 'bg-amber-400 text-navy border-amber-400'
-                    : 'bg-white text-gray-400 border-gray-100 hover:border-amber-300'
-                }`}>
-                {PAY_ICONS[m]}
-                {m}
-              </button>
-            ))}
-          </div>
-
-          <div className="bg-white rounded-xl p-3 border border-gray-200 shadow-sm space-y-3">
-            <div className="space-y-1">
-              <label className="text-[9px] font-black text-gray-400 uppercase tracking-widest">Customer Mobile [Alt+M]</label>
-              <div className="relative">
-                <Smartphone className="absolute left-3 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-gray-300" />
-                <input id="cust-mobile" type="tel" value={customerMobile} 
-                  onChange={e => setCustomerMobile(e.target.value)}
-                  placeholder="9876543210"
-                  className="w-full pl-9 pr-3 py-2 bg-gray-50 border border-gray-200 rounded-lg text-sm font-bold outline-none focus:border-amber-400"
-                />
-              </div>
-            </div>
-            
-            <button onClick={() => setSendSms(!sendSms)}
-              className={`w-full flex items-center justify-between p-2 rounded-lg border transition-all ${
-                sendSms ? 'bg-emerald-50 border-emerald-200 text-emerald-700' : 'bg-gray-50 border-gray-200 text-gray-400'
-              }`}>
-              <div className="flex items-center gap-2">
-                <Zap className={`w-3.5 h-3.5 ${sendSms ? 'text-emerald-500 fill-emerald-500' : ''}`} />
-                <span className="text-[10px] font-black uppercase tracking-tight">Digital Receipt</span>
-              </div>
-              <div className={`w-8 h-4 rounded-full relative transition-colors ${sendSms ? 'bg-emerald-500' : 'bg-gray-300'}`}>
-                <div className={`absolute top-0.5 w-3 h-3 bg-white rounded-full transition-transform ${sendSms ? 'translate-x-4' : 'translate-x-0'}`} />
-              </div>
-            </button>
-            <div className="pt-2">
-              <label className="text-[9px] font-black text-gray-400 uppercase tracking-widest block mb-2 text-center">Print Layout</label>
-              <div className="flex gap-1 bg-gray-100 p-1 rounded-xl">
-                {(['thermal', 'a4', 'b2b'] as const).map(fmt => (
-                  <button 
-                    key={fmt}
-                    onClick={() => setPrintFormat(fmt)}
-                    className={`flex-1 py-1.5 rounded-lg text-[9px] font-black uppercase transition-all ${
-                      printFormat === fmt ? 'bg-white text-navy shadow-sm border border-gray-200' : 'text-gray-400 hover:text-gray-600'
-                    }`}
-                  >
-                    {fmt}
-                  </button>
-                ))}
-              </div>
-            </div>
-          </div>
-
-          <button onClick={handleCreateSlip} disabled={!cart.length}
-            className="flex items-center justify-center gap-2 bg-white border-2 border-gray-200 hover:border-amber-300 hover:bg-amber-50 text-gray-500 hover:text-amber-600 rounded-xl py-2.5 text-[11px] font-black uppercase tracking-widest transition-all disabled:opacity-30">
-            <FileText className="w-4 h-4" />
-            Save as Slip [S+F6]
-          </button>
-
-          <button onClick={handleSuspend} disabled={!cart.length}
-            className="flex items-center justify-center gap-2 bg-white border-2 border-gray-200 hover:border-orange-300 hover:bg-orange-50 text-gray-500 hover:text-orange-600 rounded-xl py-2.5 text-[11px] font-black uppercase tracking-widest transition-all disabled:opacity-30">
-            <Pause className="w-4 h-4" />
-            Suspend [F12]
-          </button>
-
-          <button onClick={handleFinalize} disabled={processing || !cart.length || balanceRupees > 0.05}
-            className="btn-pay mt-2">
-            {processing
-              ? <div className="w-6 h-6 border-4 border-white border-t-transparent rounded-full animate-spin" />
-              : <><CheckCircle2 className="w-8 h-8" />{t('settle')} [F10]<ChevronRight className="w-6 h-6 opacity-50" /></>}
-          </button>
-
-          <div className="bg-white/60 rounded-xl p-2.5 text-[9px] text-gray-400 font-mono border border-gray-100 leading-relaxed">
-            {[['F2','Search'],['F4','History'],['F5','Suspended'],['F6','Slips'],['F7','Exact Cash'],['F8','Settle'],['F9','Totals'],['F10','Finalize'],['F12','Suspend'],['Ctrl+D','Del Last'],['Alt+1','New'],['Alt+2','Return']].map(([k,v]) => (
-              <div key={k} className="flex justify-between"><span className="text-amber-500">{k}</span><span>{v}</span></div>
-            ))}
-          </div>
+           </button>
         </div>
       </div>
     </div>

@@ -34,6 +34,7 @@ export default function DayEndModule({ onClose }: DayEndModuleProps) {
   const [step, setStep] = useState(1);
   const [summary, setSummary] = useState<any>(null);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
   const [isFinalizing, setIsFinalizing] = useState(false);
 
   useEffect(() => {
@@ -42,11 +43,13 @@ export default function DayEndModule({ onClose }: DayEndModuleProps) {
 
   const fetchSummary = async () => {
     setLoading(true);
+    setError(null);
     try {
       const data = await api.billing.getDayEndSummary();
       setSummary(data);
-    } catch (err) {
+    } catch (err: any) {
       console.error('Failed to fetch Day-End summary');
+      setError(err.message || 'Sovereign Pulse Failed. Ensure backend is running.');
     } finally {
       setLoading(false);
     }
@@ -69,6 +72,27 @@ export default function DayEndModule({ onClose }: DayEndModuleProps) {
       <div className="flex flex-col items-center justify-center p-20 gap-4">
         <RefreshCw className="w-10 h-10 text-brand-gold animate-spin" />
         <span className="text-[10px] font-black uppercase tracking-[0.4em] text-navy/20">Aggregating Global Ledger...</span>
+      </div>
+    );
+  }
+
+  if (error || !summary) {
+    return (
+      <div className="flex flex-col items-center justify-center p-20 gap-6 h-full text-center">
+        <AlertTriangle className="w-16 h-16 text-rose-500" />
+        <div>
+           <h2 className="text-2xl font-black text-navy uppercase tracking-tighter">Connection Lost</h2>
+           <p className="text-[10px] font-bold text-navy/40 uppercase tracking-widest mt-2">{error || "Failed to retrieve Ledger Summary"}</p>
+        </div>
+        <button onClick={fetchSummary} className="tesla-button mt-4">
+           Retry Connection
+        </button>
+        <button 
+          onClick={onClose}
+          className="absolute top-10 right-10 w-12 h-12 rounded-full bg-navy/5 text-navy/40 flex items-center justify-center hover:bg-rose-500 hover:text-white transition-all z-50"
+        >
+          <X className="w-5 h-5" />
+        </button>
       </div>
     );
   }

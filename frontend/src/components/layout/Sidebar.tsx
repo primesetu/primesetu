@@ -16,7 +16,10 @@ import {
   Menu,
   ChevronLeft,
   LayoutDashboard,
-  Box
+  Zap,
+  Globe,
+  ShieldCheck,
+  Power
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useMenu } from '../../hooks/useMenu';
@@ -25,12 +28,7 @@ import { useHotkeys } from 'react-hotkeys-hook';
 import { useLanguage } from '../../hooks/useLanguage';
 import { useNodeSync } from '../../hooks/useNodeSync';
 import { MenuItem } from '../../api/menuService';
-import { clsx, type ClassValue } from 'clsx';
-import { twMerge } from 'tailwind-merge';
-
-function cn(...inputs: ClassValue[]) {
-  return twMerge(clsx(inputs));
-}
+import { cn } from '@/lib/utils';
 
 interface SidebarProps {
   activeTab: string;
@@ -52,31 +50,26 @@ const Sidebar: React.FC<SidebarProps> = ({
   const { language, setLanguage } = useLanguage();
   const { menu: modules, loading } = useMenu();
   const sync = useNodeSync();
-  const [expandedCategories, setExpandedCategories] = useState<string[]>(['POS', 'WAREHOUSE']);
+  const [expandedCategories, setExpandedCategories] = useState<string[]>(['POS', 'CATALOGUE']);
 
-  // Sync pulse colours per ux-operational-intelligence.md
   const syncConfig = {
-    online:  { dot: 'bg-emerald-400', label: 'Synced',   pulse: false },
-    syncing: { dot: 'bg-amber-400',   label: 'Syncing…', pulse: true  },
-    offline: { dot: 'bg-rose-500',    label: 'Offline',  pulse: false },
+    online:  { dot: 'bg-emerald-400', label: 'Synced',   glow: 'shadow-[0_0_15px_rgba(52,211,153,0.5)]' },
+    syncing: { dot: 'bg-brand-gold',  label: 'Syncing…', glow: 'shadow-[0_0_15px_rgba(244,162,97,0.5)]' },
+    offline: { dot: 'bg-rose-500',    label: 'Isolated', glow: 'shadow-[0_0_15px_rgba(244,63,94,0.5)]' },
   }[sync.status];
 
-  // 1. Dynamic Category Resolution (Shoper 9 Mirrored)
   const categories = useMemo(() => {
     const categoryMap: Record<string, string> = {
-      'POS': 'Sales',
-      'WAREHOUSE': 'Stock',
-      'FINANCE': 'Cash',
-      'HO': 'Sync Pulse',
-      'SYSTEM': 'Setup',
-      'CATALOGUE': 'Catalogue'
+      'POS': 'Operations',
+      'WAREHOUSE': 'Inventory',
+      'CATALOGUE': 'Registry',
+      'FINANCE': 'Treasury',
+      'HO': 'Network',
+      'SYSTEM': 'Settings'
     };
 
-    // Extract unique categories from dynamic menu
     const uniqueCats = Array.from(new Set(modules.map(m => m.category).filter(Boolean)));
-    
-    // Sort them as per Shoper 9 importance
-    const order = ['POS', 'CASH', 'WAREHOUSE', 'CATALOGUE', 'FINANCE', 'HO', 'SYSTEM'];
+    const order = ['POS', 'WAREHOUSE', 'CATALOGUE', 'FINANCE', 'HO', 'SYSTEM'];
     uniqueCats.sort((a, b) => order.indexOf(a!) - order.indexOf(b!));
 
     return uniqueCats.map(catId => ({
@@ -85,16 +78,6 @@ const Sidebar: React.FC<SidebarProps> = ({
     }));
   }, [modules]);
 
-  const toggleCategory = (id: string) => {
-    if (isCollapsed) return;
-    setExpandedCategories(prev => 
-      prev.includes(id) ? prev.filter(c => c !== id) : [...prev, id]
-    );
-  };
-
-  // ------------------------------------------------------------
-  // Sidebar Item Component
-  // ------------------------------------------------------------
   const SidebarItem = ({ item, isActive, onSelect }: { 
     item: MenuItem; 
     isActive: boolean; 
@@ -111,158 +94,118 @@ const Sidebar: React.FC<SidebarProps> = ({
       <button
         onClick={() => onSelect(item.id)}
         className={cn(
-          "group relative flex items-center w-full px-5 py-3 transition-all duration-300 border-l-[4px]",
+          "group relative flex items-center w-full px-6 py-4 transition-all duration-500",
           isActive 
-            ? "bg-white/5 border-saffron text-white" 
-            : "border-transparent text-white/40 hover:bg-white/[0.02] hover:text-white"
+            ? "bg-white/[0.03] text-brand-gold" 
+            : "text-white/30 hover:text-white/60 hover:bg-white/[0.01]"
         )}
-        title={isCollapsed ? item.label : ''}
       >
+        {/* Active Indicator Pulse */}
+        {isActive && (
+          <motion.div 
+            layoutId="active-nav-glow"
+            className="absolute left-0 w-1 h-6 bg-brand-gold rounded-r-full shadow-[0_0_15px_rgba(244,162,97,0.8)]"
+          />
+        )}
+
         <div className={cn(
-          "flex items-center justify-center transition-all duration-300",
-          isCollapsed ? "w-full" : "w-5 mr-3"
+          "flex items-center justify-center transition-transform duration-500",
+          isCollapsed ? "w-full" : "w-5 mr-4",
+          isActive && "scale-110"
         )}>
-          <Icon size={16} className={isActive ? 'text-gold' : 'text-inherit opacity-60'} />
+          <Icon size={18} strokeWidth={isActive ? 2.5 : 1.5} />
         </div>
         
         {!isCollapsed && (
-          <motion.div 
-            initial={{ opacity: 0, x: -10 }}
-            animate={{ opacity: 1, x: 0 }}
-            className="flex-1 flex items-center justify-between overflow-hidden"
-          >
-            <span className="text-sm font-black truncate uppercase tracking-wider">{item.label}</span>
+          <div className="flex-1 flex items-center justify-between overflow-hidden">
+            <span className={cn(
+              "text-[11px] font-black uppercase tracking-[0.2em] truncate transition-all",
+              isActive ? "text-white" : "text-inherit"
+            )}>
+              {item.label}
+            </span>
             {item.shortcut && (
-              <span className="text-2xs font-mono font-black bg-white/10 text-white/50 px-1.5 py-0.5 rounded opacity-0 group-hover:opacity-100 transition-opacity">
+              <span className="text-[9px] font-mono font-black bg-white/5 text-white/20 px-1.5 py-0.5 rounded group-hover:text-brand-gold/50 transition-colors">
                 {item.shortcut}
               </span>
             )}
-          </motion.div>
+          </div>
         )}
 
         {isCollapsed && (
-          <div className="fixed left-20 px-3 py-1.5 bg-navy text-white text-xs rounded opacity-0 group-hover:opacity-100 pointer-events-none transition-opacity whitespace-nowrap z-[200] shadow-xl border border-white/10 font-bold uppercase tracking-widest">
-            {item.label} {item.shortcut && `(${item.shortcut})`}
+          <div className="fixed left-20 px-4 py-2 bg-black text-[10px] font-black uppercase tracking-widest text-white rounded-xl opacity-0 group-hover:opacity-100 pointer-events-none transition-all shadow-2xl border border-white/10 z-[300]">
+            {item.label}
           </div>
         )}
       </button>
     );
   };
 
-  if (loading) {
-    return (
-      <aside className="w-20 bg-navy min-h-screen fixed left-0 top-0 flex flex-col z-[100] items-center justify-center">
-        <div className="w-8 h-8 border-2 border-gold border-t-transparent rounded-full animate-spin"></div>
-      </aside>
-    );
-  }
-
   return (
     <motion.aside 
-      initial={false}
-      animate={{ width: isCollapsed ? 72 : 280 }}
-      transition={{ type: "spring", stiffness: 300, damping: 30 }}
-      className="fixed top-0 left-0 bottom-0 flex flex-col z-[100] overflow-hidden border-r border-white/5 shadow-2xl"
-      style={{ backgroundColor: 'var(--navy)', fontFamily: 'var(--font-tesla)' }}
+      animate={{ width: isCollapsed ? 80 : 300 }}
+      className="fixed top-0 left-0 bottom-0 flex flex-col z-[100] bg-[#0a0a0c] border-r border-white/5 shadow-[20px_0_40px_rgba(0,0,0,0.3)] overflow-hidden"
+      style={{ fontFamily: 'var(--font-tesla)' }}
     >
-      {/* Header / Toggle */}
-      <div className="flex items-center justify-between h-[72px] px-5 border-b border-white/5 shrink-0">
-        {!isCollapsed && (
-          <motion.div 
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            className="flex items-center gap-2.5"
-          >
-            <svg width="30" height="30" viewBox="0 0 64 64" fill="none">
-              <path d="M8 44 Q32 14 56 44" stroke="#F9B942" strokeWidth="5.5" strokeLinecap="round" fill="none"/>
-              <circle cx="32" cy="10" r="4" fill="#F4840A"/>
-            </svg>
-            <div className="font-serif text-2xl font-black text-white tracking-tighter">
-              Prime<span className="text-gold">Setu</span>
-            </div>
+      {/* ── HEADER ── */}
+      <div className="h-24 flex items-center px-6 shrink-0 relative group">
+        {!isCollapsed ? (
+          <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="flex items-center gap-4 w-full">
+             <button 
+                onClick={() => setIsCollapsed(true)}
+                className="w-10 h-10 bg-brand-gold rounded-2xl flex items-center justify-center shadow-lg shadow-brand-gold/20 hover:scale-105 transition-transform"
+                title="Collapse Sidebar"
+             >
+                <Menu className="w-5 h-5 text-navy" />
+             </button>
+             <div className="flex flex-col">
+                <span className="text-xl font-black text-white tracking-tighter leading-none">PrimeSetu</span>
+                <span className="text-[8px] font-black text-brand-gold uppercase tracking-[0.4em] mt-1">Sovereign OS</span>
+             </div>
           </motion.div>
+        ) : (
+          <div className="mx-auto w-full flex justify-center">
+             <button 
+                onClick={() => setIsCollapsed(false)}
+                className="w-10 h-10 bg-brand-gold rounded-2xl flex items-center justify-center shadow-lg shadow-brand-gold/20 hover:scale-105 transition-transform"
+                title="Expand Sidebar"
+             >
+                <Menu className="w-5 h-5 text-navy" />
+             </button>
+          </div>
         )}
-        <button 
-          onClick={() => setIsCollapsed(!isCollapsed)}
-          className={cn(
-            "p-1.5 rounded-lg hover:bg-white/10 text-white/60 hover:text-white transition-colors",
-            isCollapsed && "mx-auto"
-          )}
-        >
-          {isCollapsed ? <Menu size={18} /> : <ChevronLeft size={18} />}
-        </button>
       </div>
 
-      {/* Navigation Pulse */}
-      <div className="flex-1 overflow-y-auto py-4 custom-scrollbar">
-        {/* Core Section */}
-        <div className="mb-6">
-          {!isCollapsed && (
-            <div className="text-xs font-black tracking-[3px] uppercase text-white/45 px-5 mb-2">Overview</div>
-          )}
-          {modules
-            .filter(m => m.id === 'dashboard' || m.module === 'dashboard')
-            .map(m => (
-              <SidebarItem 
-                key={m.id} 
-                item={m} 
-                isActive={activeTab === m.id} 
-                onSelect={setActiveTab} 
-              />
-            ))
-          }
+      {/* ── NAVIGATION ── */}
+      <div className="flex-1 overflow-y-auto no-scrollbar py-6">
+        <div className="mb-10">
+          {!isCollapsed && <div className="px-8 text-[9px] font-black text-white/20 uppercase tracking-[0.4em] mb-4">Command Center</div>}
+          {modules.filter(m => m.module === 'dashboard').map(m => (
+            <SidebarItem key={m.id} item={m} isActive={activeTab === m.id} onSelect={setActiveTab} />
+          ))}
         </div>
 
-        {/* Collapsible Categories Resolved Dynamically */}
         {categories.map(cat => {
-          const modulesInCat = modules.filter(m => 
-            m.id !== 'dashboard' && 
-            m.category === cat.id
-          );
-          
-          if (modulesInCat.length === 0) return null;
+          const catModules = modules.filter(m => m.category === cat.id && m.module !== 'dashboard');
+          if (catModules.length === 0) return null;
           const isExpanded = expandedCategories.includes(cat.id);
 
           return (
-            <div key={cat.id} className="mb-4">
-              <button 
-                onClick={() => toggleCategory(cat.id)}
-                className={cn(
-                  "w-full flex items-center justify-between px-5 py-1 group transition-colors",
-                  isCollapsed ? "justify-center" : "hover:bg-white/5"
-                )}
-              >
-                {!isCollapsed && (
-                  <>
-                    <span className="text-[10px] font-black tracking-[4px] uppercase text-white/30 group-hover:text-saffron transition-colors">
-                      {cat.label}
-                    </span>
-                    <div className="text-white/30 group-hover:text-white/60">
-                      {isExpanded ? <ChevronDown size={14} /> : <ChevronRight size={14} />}
-                    </div>
-                  </>
-                )}
-                {isCollapsed && <div className="h-px w-6 bg-white/10" />}
-              </button>
-
-              <AnimatePresence initial={false}>
+            <div key={cat.id} className="mb-8">
+              {!isCollapsed && (
+                <button 
+                  onClick={() => setExpandedCategories(p => p.includes(cat.id) ? p.filter(x => x !== cat.id) : [...p, cat.id])}
+                  className="w-full flex items-center justify-between px-8 py-2 group"
+                >
+                  <span className="text-[9px] font-black text-white/20 uppercase tracking-[0.4em] group-hover:text-brand-gold transition-colors">{cat.label}</span>
+                  <ChevronDown size={12} className={cn("text-white/20 transition-transform", !isExpanded && "-rotate-90")} />
+                </button>
+              )}
+              <AnimatePresence>
                 {(isExpanded || isCollapsed) && (
-                  <motion.nav 
-                    initial={isCollapsed ? { height: 'auto' } : { height: 0, opacity: 0 }}
-                    animate={{ height: 'auto', opacity: 1 }}
-                    exit={{ height: 0, opacity: 0 }}
-                    transition={{ duration: 0.2, ease: "easeInOut" }}
-                    className="flex flex-col overflow-hidden"
-                  >
-                    {modulesInCat.map(item => (
-                      <SidebarItem 
-                        key={item.id} 
-                        item={item} 
-                        isActive={activeTab === item.id} 
-                        onSelect={setActiveTab} 
-                      />
-                    ))}
-                  </motion.nav>
+                  <motion.div initial={{ height: 0, opacity: 0 }} animate={{ height: 'auto', opacity: 1 }} exit={{ height: 0, opacity: 0 }}>
+                    {catModules.map(m => <SidebarItem key={m.id} item={m} isActive={activeTab === m.id} onSelect={setActiveTab} />)}
+                  </motion.div>
                 )}
               </AnimatePresence>
             </div>
@@ -270,89 +213,33 @@ const Sidebar: React.FC<SidebarProps> = ({
         })}
       </div>
 
-      {/* Footer / Status / Language */}
-      <div className="mt-auto border-t border-white/5 flex flex-col bg-white/[0.01] shrink-0">
-
-        {/* HQ Heartbeat Pulse */}
-        <div
-          className={cn(
-            "mx-4 my-3 rounded-2xl px-4 py-2.5 flex items-center gap-3 transition-all",
-            sync.status === 'online'  && "bg-emerald-500/10 border border-emerald-500/20",
-            sync.status === 'syncing' && "bg-amber-500/10 border border-amber-500/20",
-            sync.status === 'offline' && "bg-rose-500/10 border border-rose-500/20",
-          )}
-          title={sync.lastSync ? `Last sync: ${sync.lastSync.toLocaleTimeString()}${sync.pendingCount ? ` · ${sync.pendingCount} pending` : ''}` : 'Never synced'}
-        >
-          <span className={cn(
-            'w-2 h-2 rounded-full shrink-0',
-            syncConfig.dot,
-            syncConfig.pulse && 'animate-pulse'
-          )} />
-          {!isCollapsed && (
-            <div className="flex-1 overflow-hidden">
-              <div className={cn(
-                'text-xs font-black uppercase tracking-widest truncate',
-                sync.status === 'online'  && 'text-emerald-400',
-                sync.status === 'syncing' && 'text-amber-400',
-                sync.status === 'offline' && 'text-rose-400',
-              )}>
-                HQ · {syncConfig.label}
+      {/* ── FOOTER ── */}
+      <div className="mt-auto bg-white/[0.02] border-t border-white/5 p-8 shrink-0">
+         <div className={cn(
+           "flex items-center gap-4 p-4 rounded-2xl border transition-all duration-500",
+           sync.status === 'online' ? "bg-emerald-500/5 border-emerald-500/10" : "bg-rose-500/5 border-rose-500/10"
+         )}>
+            <div className={cn("w-2 h-2 rounded-full", syncConfig.dot, syncConfig.glow)} />
+            {!isCollapsed && (
+              <div className="flex flex-col">
+                <span className={cn("text-[9px] font-black uppercase tracking-widest", sync.status === 'online' ? "text-emerald-400" : "text-rose-400")}>Network: {syncConfig.label}</span>
+                <span className="text-[8px] text-white/20 font-bold uppercase tracking-tight mt-0.5">Node ID: {nodeType}-001</span>
               </div>
-              {sync.latencyMs !== null && (
-                <div className="text-2xs text-white/25 font-bold tracking-wider">
-                  {sync.latencyMs}ms{sync.pendingCount > 0 ? ` · ${sync.pendingCount} queued` : ''}
-                </div>
-              )}
-            </div>
-          )}
-        </div>
+            )}
+         </div>
 
-        {!isCollapsed && (
-          <div className="px-5 py-3 flex gap-2 border-b border-white/5">
-            <button 
-              onClick={() => setLanguage('en')}
-              className={cn(
-                "flex-1 py-1.5 rounded-lg text-xs font-black transition-all",
-                language === 'en' ? "bg-gold text-navy shadow-lg" : "text-white/30 hover:bg-white/5"
-              )}
-            >
-              EN
-            </button>
-            <button 
-              onClick={() => setLanguage('hi')}
-              className={cn(
-                "flex-1 py-1.5 rounded-lg text-xs font-black transition-all",
-                language === 'hi' ? "bg-gold text-navy shadow-lg" : "text-white/30 hover:bg-white/5"
-              )}
-            >
-              हिन्दी
-            </button>
-          </div>
-        )}
-
-        <div className="p-[14px_20px] flex items-center gap-3">
-          <div className="w-10 h-10 bg-gradient-to-br from-saffron to-gold rounded-full flex items-center justify-center text-lg font-black text-white shrink-0 shadow-lg shadow-saffron/10">
-            {userRole?.[0] || 'U'}
-          </div>
-          {!isCollapsed && (
-            <motion.div 
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              className="flex-1 overflow-hidden"
-            >
-              <div className="text-sm font-black text-white tracking-tight truncate uppercase">{nodeType} NODE</div>
-              <div className="text-2xs text-white/40 uppercase tracking-[0.2em] truncate font-bold">{userRole} · Sovereign</div>
-            </motion.div>
-          )}
-          {isCollapsed && (
-            <button 
-              onClick={() => setLanguage(language === 'en' ? 'hi' : 'en')}
-              className="w-10 h-10 rounded-full border border-white/10 flex items-center justify-center text-xs font-black text-white/40 hover:text-white transition-all"
-            >
-              {language === 'en' ? 'HI' : 'EN'}
-            </button>
-          )}
-        </div>
+         {!isCollapsed && (
+           <div className="mt-8 flex items-center justify-between">
+              <div className="flex items-center gap-3">
+                 <div className="w-8 h-8 bg-gradient-to-br from-white/10 to-transparent rounded-full flex items-center justify-center text-[10px] font-black text-white border border-white/10">{userRole[0]}</div>
+                 <div className="flex flex-col">
+                    <span className="text-[10px] font-black text-white uppercase tracking-wider">{userRole}</span>
+                    <span className="text-[8px] text-white/20 font-bold uppercase tracking-tight">Sovereign Guard Active</span>
+                 </div>
+              </div>
+              <button onClick={() => setIsCollapsed(true)} className="p-2 text-white/20 hover:text-brand-gold transition-colors"><Power size={14}/></button>
+           </div>
+         )}
       </div>
     </motion.aside>
   );

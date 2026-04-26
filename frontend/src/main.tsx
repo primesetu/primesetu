@@ -14,6 +14,7 @@ import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { LanguageProvider } from './hooks/useLanguage'
 import { F2SearchProvider, GlobalF2SearchOverlay } from './contexts/F2SearchContext'
 import { BrowserRouter } from 'react-router-dom'
+import { ThemeProvider } from './hooks/useTheme'
 import App from './App'
 import './index.css'
 
@@ -44,10 +45,12 @@ createRoot(document.getElementById('root')!).render(
     <BrowserRouter>
       <QueryClientProvider client={queryClient}>
         <LanguageProvider>
-          <F2SearchProvider>
-            <App />
-            <GlobalF2SearchOverlay />
-          </F2SearchProvider>
+          <ThemeProvider>
+            <F2SearchProvider>
+              <App />
+              <GlobalF2SearchOverlay />
+            </F2SearchProvider>
+          </ThemeProvider>
         </LanguageProvider>
       </QueryClientProvider>
     </BrowserRouter>

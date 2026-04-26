@@ -20,148 +20,153 @@ import {
   ShieldAlert,
   Search,
   LayoutGrid,
-  DollarSign
+  DollarSign,
+  Briefcase,
+  History,
+  Sparkles
 } from 'lucide-react';
-import { useHotkeys } from 'react-hotkeys-hook';
+import { motion, AnimatePresence } from 'framer-motion';
 
-import ItemMaster from '../inventory/ItemMaster';
-import CustomerMaster from '../crm/CustomerMaster';
-import StyleMatrix from './StyleMatrix';
-import PriceGroups from './PriceGroups';
+// Sub-Modules
+import ItemMaster from './ItemMaster';
+import CustomerMaster from './CustomerMaster';
 import VendorMaster from './VendorMaster';
+import PriceGroups from './PriceGroups';
+import StyleMatrix from './StyleMatrix';
 import PriceRevisionCockpit from './PriceRevisionCockpit';
-import { useMenu } from '../../hooks/useMenu';
-import { usePermission } from '../../hooks/usePermission';
-import { ICON_MAP } from '../../lib/ModuleRegistry';
+import PersonnelMaster from './PersonnelMaster';
 
-type RegistryTab = 'items' | 'matrix' | 'customers' | 'vendors' | 'pricing' | 'lookup' | 'pricegroups' | 'revisions';
+type TabId = 'items' | 'matrix' | 'revisions' | 'customers' | 'vendors' | 'pricing' | 'personnel';
 
-const CatalogRegistry: React.FC = () => {
-  const { menu, findModule } = useMenu();
-  const { hasPermission } = usePermission();
-  const [activeTab, setActiveTab] = useState<RegistryTab>('items');
+interface RegistryTab {
+  id: TabId;
+  label: string;
+  icon: React.ElementType;
+  color: string;
+  description: string;
+}
 
-  // Resolve dynamic tabs from DB menu
-  const tabs = useMemo(() => {
-    const registryModule = findModule('registry');
-    if (!registryModule || !registryModule.children) {
-      return [
-        { id: 'items', label: 'Item Master', icon: Package, component: ItemMaster },
-        { id: 'matrix', label: 'Style Matrix', icon: LayoutGrid, component: () => <StyleMatrix styleCode="PUMA-RSX" onBack={() => setActiveTab('items')} /> },
-        { id: 'revisions', label: 'Price Revisions', icon: DollarSign, component: PriceRevisionCockpit },
-        { id: 'customers', label: 'Customer Master', icon: Users, component: CustomerMaster },
-        { id: 'vendors', label: 'Vendor Registry', icon: Users, component: VendorMaster },
-        { id: 'pricegroups', label: 'Price Groups', icon: Tags, component: PriceGroups },
-      ];
+const REGISTRY_TABS: RegistryTab[] = [
+  { id: 'items', label: 'Item Master', icon: Package, color: 'brand-gold', description: 'Core product SKU management & DNA definition.' },
+  { id: 'matrix', label: 'Style Matrix', icon: LayoutGrid, color: 'indigo-500', description: 'High-fidelity Size/Color grid management.' },
+  { id: 'revisions', label: 'Price Cockpit', icon: Sparkles, color: 'emerald-500', description: 'Bulk markups, markdowns & surge pricing.' },
+  { id: 'customers', label: 'Customers', icon: Users, color: 'blue-500', description: 'Institutional CRM & Loyalty tracking.' },
+  { id: 'vendors', label: 'Vendors', icon: Briefcase, color: 'rose-500', description: 'Supply chain partners & procurement logic.' },
+  { id: 'pricing', label: 'Price Groups', icon: DollarSign, color: 'saffron', description: 'Customer-specific price levels & hierarchies.' },
+  { id: 'personnel', label: 'Personnel', icon: ShieldAlert, color: 'navy', description: 'Access control & store associate registry.' },
+];
+
+export default function CatalogRegistry() {
+  const [activeTab, setActiveTab] = useState<TabId>('items');
+  const [viewStyle, setViewStyle] = useState<string | null>(null);
+
+  const renderContent = () => {
+    if (viewStyle) {
+      return <StyleMatrix styleCode={viewStyle} onBack={() => setViewStyle(null)} />;
     }
 
-    const componentMap: Record<string, React.FC> = {
-      'items': ItemMaster,
-      'matrix': () => <StyleMatrix styleCode="PUMA-RSX" onBack={() => setActiveTab('items')} />,
-      'revisions': PriceRevisionCockpit,
-      'customers': CustomerMaster,
-      'vendors': VendorMaster,
-      'pricegroups': PriceGroups,
-      'pricing': PriceGroups
-    };
-
-    return registryModule.children.map(child => ({
-      id: child.id as RegistryTab,
-      label: child.label,
-      icon: ICON_MAP[child.id] || Package,
-      component: componentMap[child.id] || (() => <div className="p-10 text-center text-navy/20 font-black uppercase tracking-widest">Module Mapping Incomplete</div>)
-    }));
-  }, [menu]);
-
-  // Omnisearch Hotkey
-  useHotkeys('ctrl+k', (e) => {
-    e.preventDefault();
-    // Focus logic would go here
-  });
-
-  // Permission Guard
-  if (!hasPermission('catalog.view')) {
-    return (
-      <div className="flex flex-col items-center justify-center h-[60vh] text-center">
-        <ShieldAlert size={48} className="text-rose-500 mb-4" />
-        <h2 className="text-xl font-black text-navy uppercase tracking-tighter">Access Denied</h2>
-        <p className="text-xs text-navy/40 uppercase tracking-widest mt-2">Insufficient permissions to view Master Registry</p>
-      </div>
-    );
-  }
-
-  const ActiveComponent = tabs.find(t => t.id === activeTab)?.component || ItemMaster;
+    switch (activeTab) {
+      case 'items': return <ItemMaster onOpenMatrix={setViewStyle} />;
+      case 'matrix': return <StyleMatrix styleCode="SELECT_STYLE" onBack={() => setActiveTab('items')} />;
+      case 'revisions': return <PriceRevisionCockpit />;
+      case 'customers': return <CustomerMaster />;
+      case 'vendors': return <VendorMaster />;
+      case 'pricing': return <PriceGroups />;
+      case 'personnel': return <PersonnelMaster />;
+      default: return <ItemMaster onOpenMatrix={setViewStyle} />;
+    }
+  };
 
   return (
-    <div className="flex h-full gap-10 animate-in fade-in duration-700">
-      {/* Sidebar Navigation */}
-      <div className="w-80 flex flex-col gap-3">
-        <div className="bg-brand-navy p-8 rounded-[40px] mb-6 shadow-2xl shadow-navy/20 relative overflow-hidden group">
-          <div className="absolute -right-4 -top-4 w-24 h-24 bg-brand-gold/10 rounded-full blur-2xl group-hover:bg-brand-gold/20 transition-all"></div>
-          <div className="flex items-center gap-4 text-white relative z-10">
-            <div className="w-10 h-10 bg-brand-gold/20 rounded-xl flex items-center justify-center">
-              <Database size={22} className="text-brand-gold" />
-            </div>
+    <div className="flex flex-col h-full bg-[#f8f9fa] overflow-hidden">
+      {/* ── UNIFIED HUB HEADER ── */}
+      {!viewStyle && (
+        <div className="px-12 pt-12 pb-8 bg-white border-b border-navy/5 shrink-0">
+          <div className="flex justify-between items-end mb-10">
             <div>
-              <h2 className="text-xl font-serif font-black uppercase tracking-tight leading-none">Registry</h2>
-              <p className="text-[10px] font-mono text-white/30 uppercase tracking-[0.3em] mt-2">Master Data Hub</p>
+              <div className="flex items-center gap-3 mb-4">
+                <div className="px-3 py-1 bg-brand-navy text-brand-gold text-[9px] font-black uppercase tracking-[0.2em] rounded-md">Master Registry</div>
+                <div className="w-1.5 h-1.5 rounded-full bg-brand-gold animate-pulse"></div>
+              </div>
+              <h1 className="text-5xl font-black text-navy tracking-tighter" style={{ fontFamily: 'var(--font-tesla)' }}>Catalogue Hub</h1>
+            </div>
+            
+            <div className="flex gap-4">
+               <div className="flex flex-col items-end">
+                  <span className="text-[10px] font-black text-navy/20 uppercase tracking-widest">Active Store</span>
+                  <span className="text-sm font-black text-navy">PRIME-X01 / MUMBAI</span>
+               </div>
             </div>
           </div>
-        </div>
 
-        <div className="space-y-3">
-          {tabs.map((tab) => {
-            const Icon = tab.icon;
-            const isActive = activeTab === tab.id;
-            return (
-              <button
-                key={tab.id}
-                onClick={() => setActiveTab(tab.id as RegistryTab)}
-                className={`w-full flex items-center justify-between p-5 rounded-[2rem] transition-all group relative overflow-hidden ${
-                  isActive 
-                    ? 'bg-brand-gold text-navy shadow-2xl shadow-brand-gold/30 scale-[1.02]' 
-                    : 'bg-white text-navy/40 hover:bg-brand-cream hover:text-navy border border-navy/5'
-                }`}
-              >
-                <div className="flex items-center gap-4 relative z-10">
-                  <div className={`p-2.5 rounded-xl transition-all ${isActive ? 'bg-navy/10' : 'bg-navy/5 group-hover:bg-white'}`}>
-                    <Icon size={20} className={isActive ? 'text-navy' : 'group-hover:text-brand-gold'} />
+          <div className="flex gap-2 overflow-x-auto no-scrollbar">
+            {REGISTRY_TABS.map((tab) => {
+              const isActive = activeTab === tab.id;
+              const Icon = tab.icon;
+              return (
+                <button
+                  key={tab.id}
+                  onClick={() => setActiveTab(tab.id)}
+                  className={`flex flex-col items-start p-6 min-w-[180px] rounded-[2rem] transition-all duration-500 relative overflow-hidden group border-2 ${
+                    isActive 
+                      ? 'bg-navy border-navy shadow-2xl scale-105 z-10' 
+                      : 'bg-white border-navy/5 hover:border-brand-gold/30 grayscale hover:grayscale-0'
+                  }`}
+                >
+                  <div className={`w-10 h-10 rounded-xl flex items-center justify-center mb-4 transition-transform duration-500 group-hover:scale-110 ${
+                    isActive ? 'bg-brand-gold text-navy' : 'bg-navy/5 text-navy/40'
+                  }`}>
+                    <Icon size={20} />
                   </div>
-                  <span className="text-xs font-black uppercase tracking-widest">{tab.label}</span>
-                </div>
-                <ChevronRight size={18} className={`transition-all ${isActive ? 'translate-x-0 opacity-100' : '-translate-x-2 opacity-0 group-hover:translate-x-0 group-hover:opacity-100'}`} />
-              </button>
-            );
-          })}
+                  <span className={`text-xs font-black uppercase tracking-widest ${isActive ? 'text-white' : 'text-navy/40'}`}>
+                    {tab.label}
+                  </span>
+                  {isActive && (
+                    <motion.div 
+                      layoutId="active-pill"
+                      className="absolute -right-4 -bottom-4 w-16 h-16 bg-white/5 rounded-full"
+                    />
+                  )}
+                </button>
+              );
+            })}
+          </div>
         </div>
+      )}
 
-        <div className="mt-auto bg-white p-8 rounded-[40px] border border-navy/5 shadow-xl">
-          <div className="flex items-center gap-3 text-[10px] font-black text-navy uppercase tracking-[0.3em] mb-6 border-b border-navy/5 pb-4">
-            <LayoutGrid size={16} className="text-brand-gold" /> Hotkeys Registry
-          </div>
-          <div className="space-y-4">
-            <div className="flex justify-between items-center text-[10px] font-mono text-navy/60">
-              <span className="uppercase tracking-widest">Global Search</span>
-              <span className="bg-navy/5 px-3 py-1 rounded-lg border border-navy/10 font-black text-navy">CTRL+K</span>
-            </div>
-            <div className="flex justify-between items-center text-[10px] font-mono text-navy/60">
-              <span className="uppercase tracking-widest">Add Record</span>
-              <span className="bg-navy/5 px-3 py-1 rounded-lg border border-navy/10 font-black text-navy">F4</span>
-            </div>
-            <div className="flex justify-between items-center text-[10px] font-mono text-navy/60">
-              <span className="uppercase tracking-widest">Quick Focus</span>
-              <span className="bg-navy/5 px-3 py-1 rounded-lg border border-navy/10 font-black text-navy">F3</span>
-            </div>
-          </div>
-        </div>
+      {/* ── HUB CONTENT AREA ── */}
+      <div className="flex-1 min-h-0 relative">
+        <AnimatePresence mode="wait">
+          <motion.div
+            key={activeTab + (viewStyle || '')}
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -10 }}
+            transition={{ duration: 0.3 }}
+            className="h-full"
+          >
+            {renderContent()}
+          </motion.div>
+        </AnimatePresence>
       </div>
 
-      {/* Main Content Area */}
-      <div className="flex-1 overflow-y-auto pr-4 scroll-smooth">
-        <ActiveComponent />
+      {/* ── COMMAND BAR (F2) ── */}
+      <div className="h-10 bg-navy shrink-0 flex items-center px-12 justify-between border-t border-white/5">
+         <div className="flex gap-8 items-center h-full">
+            <div className="flex gap-2 items-center text-[9px] font-black text-white/40 uppercase tracking-widest">
+               <span className="text-brand-gold">F2</span> Universal Search
+            </div>
+            <div className="flex gap-2 items-center text-[9px] font-black text-white/40 uppercase tracking-widest">
+               <span className="text-brand-gold">Alt+N</span> New Entry
+            </div>
+            <div className="flex gap-2 items-center text-[9px] font-black text-white/40 uppercase tracking-widest">
+               <span className="text-brand-gold">Ctrl+E</span> Export Fleet
+            </div>
+         </div>
+         <div className="flex items-center gap-4 text-[9px] font-black text-white/20 italic tracking-widest uppercase">
+            Institutional Registry Engine V4.2
+         </div>
       </div>
     </div>
   );
-};
-
-export default CatalogRegistry;
+}

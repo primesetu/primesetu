@@ -41,6 +41,307 @@
 
     /* Typography - Outfit for that modern Tesla feel */
     --font-tesla:  'Outfit', 'Inter', sans-serif;
+  }
+
+  :root[data-theme="shoper9"] {
+    /* ── AUTHENTIC SHOPER 9 / TALLY CLASSIC PALETTE ── */
+    /* Based on Windows XP / Windows 2000 ERP convention */
+    --navy:         #003399;   /* Shoper 9 header blue */
+    --navy-light:   #0044BB;
+    --navy-mid:     #0033AA;
+    --saffron:      #003399;   /* Primary action = header blue */
+    --saffron-dk:   #002277;
+    --gold:         #FFD700;
+    --cream:        #ECE9D8;   /* Windows XP Luna theme background */
+    --white:        #FFFFFF;
+    --glass:        rgba(255,255,255,0.9);
+    --glass-border: #808080;
+
+    /* Classic ERP typography */
+    --font-tesla:   'Tahoma', 'MS Sans Serif', 'Arial', sans-serif;
+
+    /* Layout tokens */
+    --surface:      #FFFFFF;
+    --border:       #808080;
+    --muted:        #6D6D6D;
+
+    /* Classic font scale — Shoper 9 uses 8pt (≈11px) everywhere */
+    --text-2xs:     10px;
+    --text-xs:      11px;
+    --text-sm:      11px;
+    --text-md:      11px;
+    --text-lg:      13px;
+    --text-xl:      14px;
+    --text-2xl:     16px;
+    --text-3xl:     20px;
+    --text-4xl:     28px;
+
+    /* Touch targets: keep 52px min for cashier */
+    --topbar-h:    56px;
+    --hotkeybar-h: 40px;
+    --sidebar-w:   200px;      /* Classic Shoper 9 sidebar is narrower */
+    --sidebar-collapsed: 56px;
+
+    /* Animation: ZERO in classic mode — instant like real Shoper 9 */
+    --duration-instant: 0ms;
+    --duration-fast:    0ms;
+    --duration-normal:  0ms;
+    --duration-slow:    0ms;
+  }
+
+  /* ── SHOPER 9: GLOBAL BODY ── */
+  [data-theme="shoper9"] body {
+    background-color: #ECE9D8;
+    color: #000000;
+    font-family: 'Tahoma', 'MS Sans Serif', Arial, sans-serif !important;
+    font-size: 11px !important;
+    -webkit-font-smoothing: none !important;  /* Classic aliased text */
+    line-height: 1.3;
+  }
+
+  /* ── HEADINGS ── */
+  [data-theme="shoper9"] h1,
+  [data-theme="shoper9"] h2,
+  [data-theme="shoper9"] h3,
+  [data-theme="shoper9"] h4 {
+    font-family: 'Tahoma', Arial, sans-serif !important;
+    color: #000000;
+    font-weight: bold;
+    letter-spacing: 0;
+  }
+  [data-theme="shoper9"] h1 { font-size: 14px; }
+  [data-theme="shoper9"] h2 { font-size: 13px; }
+  [data-theme="shoper9"] h3 { font-size: 11px; }
+
+  /* ── SHOPER 9: BUTTONS ── */
+  /* Classic Windows XP raised 3D button */
+  [data-theme="shoper9"] .btn-primary,
+  [data-theme="shoper9"] button:not([class*="hotkey"]) {
+    background: #D4D0C8 !important;
+    color: #000000 !important;
+    border: 2px outset #D4D0C8 !important;
+    border-radius: 0 !important;
+    height: 26px !important;
+    min-width: 75px !important;
+    font-size: 11px !important;
+    font-family: 'Tahoma', Arial, sans-serif !important;
+    font-weight: normal !important;
+    box-shadow: none !important;
+    padding: 0 10px !important;
+    cursor: default !important;
+    transition: none !important;
+  }
+  [data-theme="shoper9"] .btn-primary:hover,
+  [data-theme="shoper9"] button:not([class*="hotkey"]):hover {
+    background: #D4D0C8 !important;
+    transform: none !important;
+  }
+  [data-theme="shoper9"] .btn-primary:active,
+  [data-theme="shoper9"] button:not([class*="hotkey"]):active {
+    border: 2px inset #D4D0C8 !important;
+    transform: none !important;
+  }
+
+  [data-theme="shoper9"] .btn-pay {
+    background: #003399 !important;
+    color: #FFFFFF !important;
+    border: 2px outset #004499 !important;
+    border-radius: 0 !important;
+    height: 52px !important;
+    font-size: 13px !important;
+    font-family: 'Tahoma', Arial, sans-serif !important;
+    font-weight: bold !important;
+    box-shadow: none !important;
+    letter-spacing: 0 !important;
+    text-transform: none !important;
+  }
+  [data-theme="shoper9"] .btn-pay:active {
+    border: 2px inset #004499 !important;
+  }
+
+  /* ── SHOPER 9: INPUTS ── */
+  [data-theme="shoper9"] .finput,
+  [data-theme="shoper9"] input[type="text"],
+  [data-theme="shoper9"] input[type="number"],
+  [data-theme="shoper9"] input[type="search"],
+  [data-theme="shoper9"] textarea {
+    background: #FFFFFF !important;
+    border: 2px inset #C0C0C0 !important;
+    border-radius: 0 !important;
+    height: 22px !important;
+    font-size: 11px !important;
+    font-family: 'Tahoma', Arial, sans-serif !important;
+    padding: 0 4px !important;
+    color: #000000 !important;
+    box-shadow: none !important;
+    transition: none !important;
+  }
+  [data-theme="shoper9"] .finput:focus,
+  [data-theme="shoper9"] input:focus {
+    border: 2px inset #C0C0C0 !important;
+    box-shadow: none !important;
+    outline: 1px dotted #000 !important;
+  }
+
+  /* ── SHOPER 9: SELECT ── */
+  [data-theme="shoper9"] select,
+  [data-theme="shoper9"] .fselect {
+    background: #FFFFFF !important;
+    border: 2px inset #C0C0C0 !important;
+    border-radius: 0 !important;
+    height: 22px !important;
+    font-size: 11px !important;
+    font-family: 'Tahoma', Arial, sans-serif !important;
+    padding: 0 2px !important;
+    color: #000000 !important;
+  }
+
+  /* ── SHOPER 9: CARDS & PANELS ── */
+  [data-theme="shoper9"] .shoper-panel,
+  [data-theme="shoper9"] .shoper-card,
+  [data-theme="shoper9"] .tesla-card,
+  [data-theme="shoper9"] .tesla-glass {
+    background: #ECE9D8 !important;
+    border: 2px groove #C0C0C0 !important;
+    border-radius: 0 !important;
+    box-shadow: none !important;
+    backdrop-filter: none !important;
+    transition: none !important;
+  }
+  [data-theme="shoper9"] .shoper-card:hover,
+  [data-theme="shoper9"] .tesla-card:hover {
+    transform: none !important;
+    border-color: #808080 !important;
+    box-shadow: none !important;
+  }
+
+  /* White surface panels (like table containers) */
+  [data-theme="shoper9"] [class*="bg-white"],
+  [data-theme="shoper9"] [class*="bg-surface"] {
+    background-color: #ECE9D8 !important;
+  }
+
+  /* ── SHOPER 9: TABLE ── */
+  [data-theme="shoper9"] .tbl-header {
+    background: #D4D0C8 !important;
+    color: #000000 !important;
+    font-family: 'Tahoma', Arial, sans-serif !important;
+    font-size: 11px !important;
+    border-bottom: 2px solid #808080 !important;
+    text-transform: none !important;
+    letter-spacing: 0 !important;
+    font-weight: bold !important;
+  }
+  [data-theme="shoper9"] .tbl-row {
+    border-bottom: 1px solid #C0C0C0 !important;
+    min-height: 20px !important;
+    transition: none !important;
+  }
+  [data-theme="shoper9"] .tbl-row:nth-child(even) {
+    background: #F5F3ED !important;
+  }
+  [data-theme="shoper9"] .tbl-row:hover {
+    background: #0A246A !important;
+    color: #FFFFFF !important;
+  }
+  [data-theme="shoper9"] .tbl-row.selected {
+    background: #0A246A !important;
+    border-left: none !important;
+    color: #FFFFFF !important;
+  }
+  [data-theme="shoper9"] .tbl-cell {
+    font-family: 'Tahoma', Arial, sans-serif !important;
+    font-size: 11px !important;
+    padding: 3px 6px !important;
+    color: inherit !important;
+  }
+
+  /* ── SHOPER 9: BADGES ── */
+  [data-theme="shoper9"] .badge {
+    border-radius: 0 !important;
+    font-size: 10px !important;
+    font-family: 'Tahoma', Arial, sans-serif !important;
+  }
+
+  /* ── SHOPER 9: STATUS AREA / HOTKEY BAR ── */
+  [data-theme="shoper9"] .hotkey-bar,
+  [data-theme="shoper9"] [class*="hotkeybar"] {
+    background: #D4D0C8 !important;
+    border-top: 2px solid #808080 !important;
+    height: 40px !important;
+  }
+
+  /* ── SHOPER 9: PRICE DISPLAY ── */
+  [data-theme="shoper9"] .price-total {
+    font-family: 'Tahoma', monospace !important;
+    color: #000000 !important;
+    font-size: 20px !important;
+  }
+  [data-theme="shoper9"] .price-lg {
+    font-family: 'Tahoma', monospace !important;
+    font-size: 13px !important;
+  }
+
+  /* ── SHOPER 9: REMOVE ROUNDED CORNERS EVERYWHERE ── */
+  [data-theme="shoper9"] * {
+    border-radius: 0 !important;
+  }
+
+  /* ── SHOPER 9: KBD / HOTKEY BADGE ── */
+  [data-theme="shoper9"] .kbd {
+    background: #D4D0C8 !important;
+    color: #000000 !important;
+    border: 1px solid #808080 !important;
+    border-radius: 0 !important;
+    font-family: 'Tahoma', monospace !important;
+    font-size: 10px !important;
+  }
+
+  /* ── SHOPER 9: SCROLLBARS (Windows classic) ── */
+  [data-theme="shoper9"] ::-webkit-scrollbar { width: 16px; height: 16px; }
+  [data-theme="shoper9"] ::-webkit-scrollbar-track { background: #ECE9D8; border: 1px inset #808080; }
+  [data-theme="shoper9"] ::-webkit-scrollbar-thumb {
+    background: #D4D0C8;
+    border: 2px outset #D4D0C8;
+    border-radius: 0 !important;
+  }
+  [data-theme="shoper9"] ::-webkit-scrollbar-button {
+    background: #D4D0C8;
+    border: 2px outset #D4D0C8;
+    display: block;
+    height: 16px;
+  }
+
+  /* ── SHOPER 9: ANIMATIONS DISABLED ── */
+  [data-theme="shoper9"] *,
+  [data-theme="shoper9"] *::before,
+  [data-theme="shoper9"] *::after {
+    animation: none !important;
+    transition: none !important;
+  }
+
+  /* ── SHOPER 9: FOCUS (Windows dotted) ── */
+  [data-theme="shoper9"] :focus-visible {
+    outline: 1px dotted #000000 !important;
+    outline-offset: 0 !important;
+    border-radius: 0 !important;
+  }
+
+  /* Theme Accents (Tesla Design Overrides) */
+  :root[data-accent="gold"] {
+    --saffron:     #F9B942;
+    --saffron-dk:  #D89B24;
+  }
+  :root[data-accent="cream"] {
+    --saffron:     #E5D3B3;
+    --saffron-dk:  #CCB999;
+  }
+  :root[data-accent="crimson"] {
+    --saffron:     #DC2626;
+    --saffron-dk:  #B91C1C;
+  }
+
+  :root {
 
     /* Semantic */
     --muted:       #94A3B8;   /* slate-400 for better readability on dark */

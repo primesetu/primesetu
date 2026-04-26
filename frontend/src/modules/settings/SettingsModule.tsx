@@ -11,6 +11,7 @@
 import { useState } from 'react'
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
 import { apiClient } from '@/api/client'
+import Personalization from './Personalization'
 
 export default function SettingsModule() {
   const queryClient = useQueryClient()
@@ -42,6 +43,9 @@ export default function SettingsModule() {
         <TabButton id="tax" label="Taxation & GST" active={activeTab} onClick={setActiveTab} icon="📄" />
         <TabButton id="terminal" label="Terminal Setup" active={activeTab} onClick={setActiveTab} icon="💻" />
         <TabButton id="security" label="Network Security" active={activeTab} onClick={setActiveTab} icon="🔒" />
+        <div className="pt-2 border-t border-border/50 mt-2">
+          <TabButton id="personalization" label="Personalization" active={activeTab} onClick={setActiveTab} icon="🎨" />
+        </div>
       </div>
 
       {/* Main Form Area */}
@@ -109,7 +113,9 @@ export default function SettingsModule() {
             </div>
           )}
 
-          {activeTab !== 'store' && activeTab !== 'terminal' && (
+          {activeTab === 'personalization' && <Personalization />}
+
+          {activeTab !== 'store' && activeTab !== 'terminal' && activeTab !== 'personalization' && (
             <div className="py-20 text-center space-y-4">
               <div className="text-4xl grayscale opacity-20">⚙️</div>
               <p className="font-serif italic text-muted text-lg">"{activeTab}" configurations are managed via Shoper9 Bridge.</p>

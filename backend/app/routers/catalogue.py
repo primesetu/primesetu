@@ -1,181 +1,177 @@
-# ============================================================
-# * PrimeSetu — Shoper9-Based Retail OS
-# * Zero Cloud · Sovereign · AI-Governed
-# ============================================================
-# * System Architect   :  Jawahar R. M.
-# * Organisation       :  AITDL Network
-# * Project            :  PrimeSetu
-# * © 2026 — All Rights Reserved
-# * "Memory, Not Code."
-# ============================================================ #
+/* ============================================================
+ * PrimeSetu — Shoper9-Based Retail OS
+ * Zero Cloud · Sovereign · AI-Governed
+ * ============================================================
+ * System Architect : Jawahar R. M.
+ * Organisation     : AITDL Network
+ * Project          : PrimeSetu
+ * © 2026 — All Rights Reserved
+ * "Memory, Not Code."
+ * ============================================================ */
 
-from fastapi import APIRouter, Depends, HTTPException
+from fastapi import APIRouter, Depends, HTTPException, Query
 from sqlalchemy.ext.asyncio import AsyncSession
-from sqlalchemy import select, or_
+from sqlalchemy import select, or_, and_, func
 from app.core.database import get_db
-from app.models.base import Partner, GeneralLookup, Product
-from app.schemas.catalogue import PartnerRead, LookupRead, UniversalSearchResponse
-from app.schemas.common import ProductRead
-from app.core.security import get_current_user, UserContext
+from app.models.base import Partner, Item, ItemStock, GeneralLookup, SizeGroup
+from app.core.auth import get_current_user
 from typing import List, Optional
 import uuid
 
 router = APIRouter()
 
-@router.get("/partners", response_model=List[PartnerRead])
-async def get_partners(
+@router.get("/universal-search")
+async def universal_search(
+    q: str,
+    db: AsyncSession = Depends(get_db),
+    current_user = Depends(get_current_user)
+):
+    """
+    Shoper 9 Parity Universal Search.
+    Searches items by code, name, brand, or style code.
+    """
+    query = q.strip().lower()
+    store_id = current_user.store_id
+
+    # Search in Items
+    items_result = await db.execute(
+        select(Item).where(
+            and_(
+                Item.store_id == store_id,
+                or_(
+                    func.lower(Item.item_code).like(f"%{query}%"),
+                    func.lower(Item.item_name).like(f"%{query}%"),
+                    func.lower(Item.brand).like(f"%{query}%")
+                )
+            )
+        ).limit(10)
+    )
+    items = items_result.scalars().all()
+
+    # Search in Partners (Customer/Vendor)
+    partners_result = await db.execute(
+        select(Partner).where(
+            or_(
+                func.lower(Partner.name).like(f"%{query}%"),
+                func.lower(Partner.mobile).like(f"%{query}%"),
+                func.lower(Partner.code).like(f"%{query}%")
+            )
+        ).limit(10)
+    )
+    partners = partners_result.scalars().all()
+
+    return {
+        "items": items,
+        "partners": partners
+    }
+
+@router.get("/partners")
+async def list_partners(
     type: Optional[str] = None,
     q: Optional[str] = None,
     db: AsyncSession = Depends(get_db),
-    current_user: UserContext = Depends(get_current_user)
+    current_user = Depends(get_current_user)
 ):
-    """
-    Retrieve partners (Vendors/Customers/Personnel).
-    Filters results to be relevant to the local store node.
-    """
-    query = select(Partner)
+    """List and filter institutional partners (Customers, Vendors, Salespersons)."""
+    stmt = select(Partner)
     filters = []
     
     if type:
         filters.append(Partner.type == type)
     if q:
-        q_filter = f"%{q}%"
         filters.append(or_(
-            Partner.name.ilike(q_filter),
-            Partner.code.ilike(q_filter),
-            Partner.mobile.ilike(q_filter)
+            func.lower(Partner.name).like(f"%{q.lower()}%"),
+            func.lower(Partner.mobile).like(f"%{q.lower()}%")
         ))
-    
-    if filters:
-        query = query.where(*filters)
-    
-    query = query.limit(100)
-    result = await db.execute(query)
-    return result.scalars().all()
-
-@router.get("/lookups", response_model=List[LookupRead])
-async def get_lookups(
-    category: Optional[str] = None,
-    db: AsyncSession = Depends(get_db)
-):
-    """Retrieve system lookups (Payment modes, size groups, etc.)."""
-    query = select(GeneralLookup)
-    if category:
-        query = query.where(GeneralLookup.category == category)
-    
-    result = await db.execute(query)
-    return result.scalars().all()
-
-@router.get("/universal-search", response_model=UniversalSearchResponse)
-async def universal_search(
-    q: str,
-    db: AsyncSession = Depends(get_db),
-    current_user: UserContext = Depends(get_current_user)
-):
-    """
-    Institutional Universal Search. 
-    Searches across Items, Partners, and System Lookups simultaneously.
-    """
-    q_filter = f"%{q}%"
-    
-    # 1. Items Search
-    products = (await db.execute(
-        select(Product).where(or_(
-            Product.name.ilike(q_filter),
-            Product.code.ilike(q_filter)
-        )).limit(10)
-    )).scalars().all()
-
-    # 2. Partners Search
-    partners = (await db.execute(
-        select(Partner).where(or_(
-            Partner.name.ilike(q_filter),
-            Partner.mobile.ilike(q_filter)
-        )).limit(10)
-    )).scalars().all()
-
-    # 3. Lookups Search
-    lookups = (await db.execute(
-        select(GeneralLookup).where(
-            GeneralLookup.label.ilike(q_filter)
-        ).limit(10)
-    )).scalars().all()
-
-    return {
-        "items": products,
-        "partners": partners,
-        "lookups": lookups
-    }
-
-@router.get("/styles/{style_code}")
-async def get_style_matrix(
-    style_code: str,
-    db: AsyncSession = Depends(get_db),
-    current_user: UserContext = Depends(get_current_user)
-):
-    """
-    Fetch the Size/Color matrix for a specific style group.
-    Groups items by their parent style code.
-    """
-    # In Shoper 9 parity, Style is often stored in AnalCode1 or a specific Style field
-    # For now, we query the Product table where style_code matches
-    query = select(Product).where(Product.style_code == style_code)
-    result = await db.execute(query)
-    variants = result.scalars().all()
-    
-    if not variants:
-        raise HTTPException(status_code=404, detail="Style not found")
         
-    # Build the matrix: Rows (Colors/Sub-styles) x Cols (Sizes)
-    colors = sorted(list(set(v.color for v in variants if v.color)))
-    sizes = sorted(list(set(v.size for v in variants if v.size)))
+    if filters:
+        stmt = stmt.where(and_(*filters))
+        
+    result = await db.execute(stmt.limit(50))
+    return result.scalars().all()
+
+@router.get("/partners/{partner_id}/matrix")
+async def get_partner_matrix(
+    partner_id: uuid.UUID,
+    db: AsyncSession = Depends(get_db),
+    current_user = Depends(get_current_user)
+):
+    """
+    Shoper 9 Style Matrix Resolution.
+    Returns size/color stock and pricing grid for a specific style (mapped via partner context).
+    """
+    # This is a simplified institutional resolution logic
+    # In production, this would resolve via StyleCode -> Item List -> Stock
+    
+    result = await db.execute(
+        select(ItemStock, Item).join(Item).where(
+            and_(
+                Item.store_id == current_user.store_id,
+                Item.supplier_id == partner_id
+            )
+        )
+    )
+    stocks = result.all()
     
     matrix = {}
-    for v in variants:
-        if v.color not in matrix: matrix[v.color] = {}
-        matrix[v.color][v.size] = {
-            "id": v.id,
-            "stock": v.stock_qty,
-            "price": v.retail_price,
-            "code": v.code
+    for s, i in stocks:
+        color = s.colour or "DEFAULT"
+        size = s.size or "UNI"
+        if color not in matrix: matrix[color] = {}
+        matrix[color][size] = {
+            "id": str(s.id),
+            "stock": s.qty_on_hand,
+            "price": i.mrp_paise,
+            "code": i.item_code
         }
         
     return {
-        "style_code": style_code,
-        "name": variants[0].name,
-        "colors": colors,
-        "sizes": sizes,
+        "style_code": "RESOLVED-STYLE",
+        "name": "Institutional Collection",
+        "colors": list(matrix.keys()),
+        "sizes": list(set([sz for c in matrix.values() for sz in c.keys()])),
         "matrix": matrix
     }
+
+@router.get("/lookups")
+async def get_lookups(
+    category: Optional[str] = None,
+    db: AsyncSession = Depends(get_db),
+    current_user = Depends(get_current_user)
+):
+    """Fetch institutional lookups (Colors, Sizes, Seasons, etc)."""
+    stmt = select(GeneralLookup).where(
+        or_(
+            GeneralLookup.store_id == current_user.store_id,
+            GeneralLookup.store_id == None
+        )
+    )
+    if category:
+        stmt = stmt.where(GeneralLookup.category == category)
+        
+    result = await db.execute(stmt.order_by(GeneralLookup.sort_order))
+    return result.scalars().all()
 
 @router.post("/price-revisions/bulk")
 async def bulk_price_revision(
     revisions: List[dict],
-    effective_date: Optional[str] = None,
     db: AsyncSession = Depends(get_db),
-    current_user: UserContext = Depends(get_current_user)
+    current_user = Depends(get_current_user)
 ):
     """
-    Shoper 9 Parity: Bulk Price Revision.
-    Applies new prices to a list of products.
+    Sovereign Price Surge Engine.
+    Bulk updates MRP/Prices for institutional SKU groups.
     """
-    updated_count = 0
+    count = 0
     for rev in revisions:
-        product_id = rev.get("id")
-        new_price = rev.get("new_price")
+        item_id = rev.get('item_id')
+        new_price = rev.get('new_price_paise')
+        if not item_id or not new_price: continue
         
-        if not product_id or new_price is None:
-            continue
+        item = await db.get(Item, item_id)
+        if item and item.store_id == current_user.store_id:
+            item.mrp_paise = new_price
+            count += 1
             
-        # In a full Shoper 9 implementation, we would store this in a 'PriceRevisionHistory' table
-        # and apply it only when current_date >= effective_date.
-        # For now, we update the Product table directly to reflect the 'Sovereign' speed.
-        from app.models.base import Product
-        from sqlalchemy import update
-        
-        stmt = update(Product).where(Product.id == product_id).values(retail_price=new_price)
-        await db.execute(stmt)
-        updated_count += 1
-        
     await db.commit()
-    return {"status": "SUCCESS", "updated_count": updated_count}
+    return {"status": "SUCCESS", "updated_count": count}

@@ -14,12 +14,12 @@ from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import FileResponse, Response
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import select, func
-from .core.database import engine, Base, get_db
-from .models import (
+from app.core.database import engine, Base, get_db
+from app.models import (
     Till, Item, Transaction, Store, Alert, Scheme, ItemStock
 )
-from .schemas.common import DashboardStats
-from .core.security import CurrentUser, require_auth
+from app.schemas.common import DashboardStats
+from app.core.security import CurrentUser, require_auth
 from typing import List
 from datetime import date
 import uvicorn
@@ -43,13 +43,13 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-from .routers import (
+from app.routers import (
     onboarding, item_master, customer, barcode, 
     price_group, purchase, inventory, billing, 
     ho, flexible_reports, users, menu, extensions, finance, schemes, security, reporting,
     store, inventory_audit
 )
-from .routers.gstr1 import router as gstr1_router
+from app.routers.gstr1 import router as gstr1_router
 
 # Core & Management
 app.include_router(onboarding.router)
@@ -87,7 +87,12 @@ async def startup():
 
 @app.get("/")
 async def read_index():
-    return FileResponse("primesetu-shoper9-ui.html")
+    return {
+        "message": "PrimeSetu Sovereign OS - Operational",
+        "version": "1.0.0",
+        "phase": 2,
+        "architect": "Jawahar R Mallah"
+    }
 
 @app.get("/api/v1/health")
 async def health_check(db: AsyncSession = Depends(get_db)):
@@ -96,7 +101,12 @@ async def health_check(db: AsyncSession = Depends(get_db)):
         db_status = "connected"
     except Exception as e:
         db_status = f"error: {e}"
-    return {"status": "online", "database": db_status, "engine": "FastAPI Phase 2 (Async)"}
+    return {
+        "status": "online",
+        "version": "1.0.0",
+        "phase": 2,
+        "database": db_status
+    }
 
 @app.get("/api/v1/dashboard/stats", response_model=DashboardStats)
 async def get_dashboard_stats(

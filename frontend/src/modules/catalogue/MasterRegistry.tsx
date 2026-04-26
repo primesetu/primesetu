@@ -9,22 +9,19 @@
  * "Memory, Not Code."
  * ============================================================ */
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import { 
-  Search, Package, Users, Truck, UserSquare2, Layers, Zap,
-  ArrowRight, Filter, MoreVertical, Plus, BarChart3, 
-  ShieldCheck, Smartphone, Mail, MapPin, CreditCard,
-  Percent, Briefcase, Calendar, Info, Settings2, Globe, X, History as HistoryIcon
+  Search, Package, Users, Truck, Layers, Zap,
+  Filter, MoreVertical, Plus, 
+  ShieldCheck, Smartphone, Info, Settings2, Globe, X, History as HistoryIcon,
+  ShieldAlert
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { api } from '@/api/client';
-
-const offlineService = { 
-  getCustomers: async () => [], 
-  getVendors: async () => [], 
-  syncCatalogue: async (type: any, data: any) => {}, 
-  getCatalogue: async (type: any) => [] 
-};
+import { useMenu } from '../../hooks/useMenu';
+import { ICON_MAP } from '../../lib/ModuleRegistry';
+import { usePermission } from '../../hooks/usePermission';
+import { useOfflineFallback } from '../../hooks/useOfflineFallback';
 
 type RegistryType = 'ITEMS' | 'CUSTOMERS' | 'VENDORS' | 'TAXES' | 'CLASSIFICATION';
 
@@ -34,73 +31,76 @@ interface RegistryEntity {
   code?: string;
   mobile?: string;
   category?: string;
-  // Item specific
   stock?: number;
   price?: number;
   hsn?: string;
   size_group?: string;
-  // Customer specific
   loyalty_tier?: string;
   points?: number;
   tax_type?: 'LOCAL' | 'CENTRAL';
   dob?: string;
-  class_1?: string; // e.g. Religion
-  class_2?: string; // e.g. Age Group
-  // Vendor specific
+  class_1?: string;
+  class_2?: string;
   tax_behavior?: 'INCLUSIVE' | 'EXCLUSIVE';
   partial_supply?: boolean;
   terms?: string;
 }
 
 const MasterRegistry: React.FC = () => {
+  const { menu, findModule } = useMenu();
+  const { hasPermission } = usePermission();
+  
+  // Resolve dynamic registries from DB menu (BUG-03 Fix)
+  const registries = useMemo(() => {
+    const registryModule = findModule('registry');
+    if (!registryModule || !registryModule.children) {
+      // Fallback to minimal set if DB menu is not yet loaded
+      return [
+        { id: 'ITEMS', icon: Package, label: 'Items' },
+        { id: 'CUSTOMERS', icon: Users, label: 'Customers' }
+      ];
+    }
+    return registryModule.children.map(child => ({
+      id: child.id.toUpperCase() as RegistryType,
+      icon: ICON_MAP[child.id] || Package,
+      label: child.label,
+      count: 0 // In a real app, this would be fetched
+    }));
+  }, [menu]);
+
   const [activeRegistry, setActiveRegistry] = useState<RegistryType>('ITEMS');
-  const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState('');
   const [selectedEntity, setSelectedEntity] = useState<RegistryEntity | null>(null);
 
-  const registries = [
-    { id: 'ITEMS', icon: Package, label: 'Items & Matrix', count: 1240 },
-    { id: 'CUSTOMERS', icon: Users, label: 'Customer CRM', count: 8420 },
-    { id: 'VENDORS', icon: Truck, label: 'Vendor Network', count: 124 },
-    { id: 'TAXES', icon: Percent, label: 'Tax Catalogue', count: 8 },
-    { id: 'CLASSIFICATION', icon: Layers, label: 'Master DNA', count: 32 },
-  ];
+  // 1. Permission Guard
+  if (!hasPermission('catalog.view')) {
+    return (
+      <div className="flex flex-col items-center justify-center h-[60vh] text-center">
+        <ShieldAlert size={48} className="text-rose-500 mb-4" />
+        <h2 className="text-xl font-black text-navy uppercase">Access Denied</h2>
+        <p className="text-xs text-navy/40 uppercase tracking-widest mt-2">Insufficient permissions to view Master Registry</p>
+      </div>
+    );
+  }
 
-  const [registryData, setRegistryData] = useState<Record<RegistryType, RegistryEntity[]>>({
-    ITEMS: [], CUSTOMERS: [], VENDORS: [], TAXES: [], CLASSIFICATION: []
-  });
-
-  useEffect(() => {
-    fetchRegistryData();
-  }, [activeRegistry]);
-
-  const fetchRegistryData = async () => {
-    setLoading(true);
-    try {
-      // Sovereign Fetch: Try Network first
+  // 2. Fetch Data with Offline Fallback (BUG-05 Fix)
+  const { 
+    data: registryData = [], 
+    loading, 
+    isOfflineData 
+  } = useOfflineFallback(
+    `registry_${activeRegistry}_${search}`,
+    async () => {
       let data: any[] = [];
       if (activeRegistry === 'ITEMS') data = await api.inventory.list();
       else if (activeRegistry === 'CUSTOMERS') data = await api.customers.list();
-      else if (activeRegistry === 'VENDORS') data = await api.vendors.list();
-      
-      if (data.length > 0) {
-        setRegistryData(prev => ({ ...prev, [activeRegistry]: data }));
-        // Sync to idb for offline fallback
-        await offlineService.syncCatalogue(activeRegistry, data);
-      }
-    } catch (error) {
-      console.warn(`[PrimeSetu] Backend unreachable for ${activeRegistry}. Falling back to idb.`);
-      const localData = await offlineService.getCatalogue(activeRegistry);
-      setRegistryData(prev => ({ ...prev, [activeRegistry]: localData }));
-    } finally {
-      setLoading(false);
-    }
-  };
+      // Add other lookups as needed
+      return data;
+    },
+    []
+  );
 
-  // ── Shoper 9 Analysis Driven Mock Data (Fallback if both fail) ─────────────
-  const displayData = registryData;
-
-  const filteredData = displayData[activeRegistry].filter(item => 
+  const filteredData = registryData.filter(item => 
     item.name.toLowerCase().includes(search.toLowerCase()) || 
     item.code?.toLowerCase().includes(search.toLowerCase()) ||
     item.mobile?.includes(search)
@@ -117,6 +117,9 @@ const MasterRegistry: React.FC = () => {
             <div className="flex items-center gap-3 mb-2">
                <div className="px-3 py-1 bg-navy text-gold text-[9px] font-black uppercase tracking-widest rounded-md">Master Catalogue</div>
                <div className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></div>
+               {isOfflineData && (
+                <span className="px-2 py-0.5 bg-amber-100 text-amber-700 text-[8px] font-black uppercase rounded">Offline Buffer</span>
+               )}
             </div>
             <h1 className="text-4xl font-serif font-black text-navy uppercase tracking-tight">Sovereign Registry</h1>
             <p className="text-xs text-muted font-bold uppercase tracking-widest mt-2 flex items-center gap-2 italic">
@@ -131,16 +134,18 @@ const MasterRegistry: React.FC = () => {
               className="w-full bg-white/50 border border-gray-100 rounded-[2rem] pl-16 pr-6 py-6 text-sm font-bold focus:border-gold focus:bg-white outline-none transition-all shadow-inner" />
           </div>
 
-          <button className="bg-navy text-white px-10 py-6 rounded-3xl font-black text-xs tracking-[0.2em] hover:bg-gold hover:text-navy transition-all shadow-2xl flex items-center gap-4 group">
-            <Plus className="w-5 h-5 text-gold group-hover:text-navy" />
-            CREATE MASTER
-          </button>
+          {hasPermission('catalog.edit') && (
+            <button className="bg-navy text-white px-10 py-6 rounded-3xl font-black text-xs tracking-[0.2em] hover:bg-gold hover:text-navy transition-all shadow-2xl flex items-center gap-4 group">
+              <Plus className="w-5 h-5 text-gold group-hover:text-navy" />
+              CREATE MASTER
+            </button>
+          )}
         </div>
       </div>
 
       <div className="flex gap-10 h-[calc(100vh-320px)]">
         {/* Registry Selection Rail */}
-        <aside className="w-80 flex flex-col gap-4">
+        <aside className="w-80 flex flex-col gap-4 overflow-y-auto pr-2">
           {registries.map((reg) => (
             <button key={reg.id} onClick={() => { setActiveRegistry(reg.id as RegistryType); setSelectedEntity(null); }}
               className={`p-6 rounded-[2.5rem] flex flex-col gap-4 transition-all duration-500 text-left border-2 ${
@@ -150,7 +155,7 @@ const MasterRegistry: React.FC = () => {
                 <div className={`p-4 rounded-2xl ${activeRegistry === reg.id ? 'bg-gold/10 text-gold' : 'bg-gray-50 text-gray-400'}`}>
                    <reg.icon size={24} />
                 </div>
-                <div className={`text-[10px] font-black px-3 py-1 rounded-full ${activeRegistry === reg.id ? 'bg-white/10 text-gold' : 'bg-gray-100'}`}>{reg.count}</div>
+                {reg.count > 0 && <div className={`text-[10px] font-black px-3 py-1 rounded-full ${activeRegistry === reg.id ? 'bg-white/10 text-gold' : 'bg-gray-100'}`}>{reg.count}</div>}
               </div>
               <div>
                 <h3 className="font-serif font-black text-xl tracking-tight">{reg.label}</h3>
@@ -190,7 +195,13 @@ const MasterRegistry: React.FC = () => {
                    </tr>
                 </thead>
                 <tbody className="divide-y divide-gray-50">
-                   {filteredData.map(item => (
+                   {loading && filteredData.length === 0 ? (
+                      Array(5).fill(0).map((_, i) => (
+                        <tr key={i} className="animate-pulse"><td colSpan={5} className="h-24 bg-gray-50"></td></tr>
+                      ))
+                   ) : filteredData.length === 0 ? (
+                      <tr><td colSpan={5} className="py-20 text-center text-navy/10 font-black uppercase tracking-widest">No records found</td></tr>
+                   ) : filteredData.map(item => (
                      <tr key={item.id} onClick={() => setSelectedEntity(item)}
                        className={`group cursor-pointer transition-all ${selectedEntity?.id === item.id ? 'bg-gold/5' : 'hover:bg-cream/10'}`}>
                         <td className="pl-12 py-8">
@@ -205,7 +216,7 @@ const MasterRegistry: React.FC = () => {
                            </div>
                         </td>
                         <td className="px-6 py-8 text-right">
-                           <div className="text-lg font-black text-navy">
+                           <div className="text-lg font-black text-navy font-mono">
                               {item.price ? `₹${item.price.toLocaleString()}` : item.points ? `${item.points} Pts` : item.terms}
                            </div>
                            <div className="text-[10px] font-bold text-muted uppercase tracking-widest mt-1">
@@ -257,14 +268,14 @@ const MasterRegistry: React.FC = () => {
                          { label: 'Code', value: selectedEntity.code || 'N/A', icon: Info },
                          { label: 'Category', value: selectedEntity.category || activeRegistry, icon: Layers },
                          { label: 'Mobile', value: selectedEntity.mobile || 'Private', icon: Smartphone },
-                         { label: 'Tax Map', value: selectedEntity.tax_type || selectedEntity.tax_behavior || 'Local-Incl', icon: Percent },
+                         { label: 'Tax Map', value: selectedEntity.tax_type || selectedEntity.tax_behavior || 'Local-Incl', icon: Globe },
                        ].map(dna => (
                          <div key={dna.label} className="bg-gray-50 p-5 rounded-3xl border border-gray-100 group hover:border-gold/30 transition-all">
                             <div className="flex items-center gap-3 mb-2">
                                <dna.icon size={12} className="text-muted" />
                                <span className="text-[9px] font-black text-muted uppercase tracking-widest">{dna.label}</span>
                             </div>
-                            <div className="text-sm font-black text-navy truncate">{dna.value}</div>
+                            <div className="text-sm font-black text-navy truncate font-mono">{dna.value}</div>
                          </div>
                        ))}
                     </div>
@@ -279,40 +290,16 @@ const MasterRegistry: React.FC = () => {
                        {activeRegistry === 'CUSTOMERS' && (
                          <>
                             <div className="flex justify-between items-center pb-4 border-b border-gray-50">
-                               <div className="flex items-center gap-3"><Calendar size={16} className="text-rose-500" /><span className="text-[11px] font-bold text-navy">Birthday / Anniv</span></div>
-                               <span className="text-xs font-black text-rose-500 uppercase">{selectedEntity.dob || 'NOT SET'}</span>
-                            </div>
-                            <div className="flex justify-between items-center pb-4 border-b border-gray-50 text-indigo-600">
-                               <div className="flex items-center gap-3"><Users size={16} /><span className="text-[11px] font-bold">Class 1 (Religion)</span></div>
-                               <span className="text-xs font-black uppercase">{selectedEntity.class_1 || 'General'}</span>
-                            </div>
-                            <div className="flex justify-between items-center">
-                               <div className="flex items-center gap-3 text-indigo-600"><Users size={16} /><span className="text-[11px] font-bold">Class 2 (Age)</span></div>
-                               <span className="text-xs font-black uppercase">{selectedEntity.class_2 || 'All'}</span>
-                            </div>
-                         </>
-                       )}
-                       {activeRegistry === 'VENDORS' && (
-                         <>
-                            <div className="flex justify-between items-center pb-4 border-b border-gray-50">
-                               <div className="flex items-center gap-3"><Percent size={16} className="text-amber-500" /><span className="text-[11px] font-bold text-navy">Tax Behavior</span></div>
-                               <span className="text-xs font-black text-amber-500 uppercase">{selectedEntity.tax_behavior}</span>
-                            </div>
-                            <div className="flex justify-between items-center">
-                               <div className="flex items-center gap-3 text-emerald-600"><Truck size={16} /><span className="text-[11px] font-bold">Partial Supply PO</span></div>
-                               <span className="text-xs font-black uppercase">{selectedEntity.partial_supply ? 'ALLOWED' : 'RESTRICTED'}</span>
+                               <div className="flex items-center gap-3 text-rose-500 font-black"><span className="text-[11px] font-bold text-navy uppercase">Birthday / Anniv</span></div>
+                               <span className="text-xs font-black text-rose-500 uppercase font-mono">{selectedEntity.dob || 'NOT SET'}</span>
                             </div>
                          </>
                        )}
                        {activeRegistry === 'ITEMS' && (
                          <>
                             <div className="flex justify-between items-center pb-4 border-b border-gray-50">
-                               <div className="flex items-center gap-3"><Package size={16} className="text-indigo-500" /><span className="text-[11px] font-bold text-navy">HSN / SAC Code</span></div>
-                               <span className="text-xs font-black text-indigo-500 uppercase">{selectedEntity.hsn}</span>
-                            </div>
-                            <div className="flex justify-between items-center">
-                               <div className="flex items-center gap-3 text-indigo-600"><Layers size={16} /><span className="text-[11px] font-bold">Size Mapping Group</span></div>
-                               <span className="text-xs font-black uppercase">{selectedEntity.size_group}</span>
+                               <div className="flex items-center gap-3 text-indigo-500 font-black"><span className="text-[11px] font-bold text-navy uppercase">HSN / SAC Code</span></div>
+                               <span className="text-xs font-black text-indigo-500 uppercase font-mono">{selectedEntity.hsn}</span>
                             </div>
                          </>
                        )}
@@ -321,14 +308,16 @@ const MasterRegistry: React.FC = () => {
 
                  {/* Action Intelligence */}
                  <div className="grid grid-cols-2 gap-4 pt-6 border-t border-gray-100">
-                     <button className="flex flex-col items-center justify-center gap-2 p-6 bg-gray-50 rounded-3xl hover:bg-gold hover:text-navy transition-all group">
-                        <HistoryIcon className="w-6 h-6 text-muted group-hover:text-navy" />
-                        <span className="text-[9px] font-black uppercase tracking-widest">Transaction History</span>
-                     </button>
-                    <button className="flex flex-col items-center justify-center gap-2 p-6 bg-navy text-white rounded-3xl hover:shadow-2xl hover:scale-105 transition-all">
-                       <Settings2 className="w-6 h-6 text-gold" />
-                       <span className="text-[9px] font-black uppercase tracking-widest">Modify Master</span>
-                    </button>
+                      <button className="flex flex-col items-center justify-center gap-2 p-6 bg-gray-50 rounded-3xl hover:bg-gold hover:text-navy transition-all group">
+                         <HistoryIcon className="w-6 h-6 text-muted group-hover:text-navy" />
+                         <span className="text-[9px] font-black uppercase tracking-widest">Transaction History</span>
+                      </button>
+                    {hasPermission('catalog.edit') && (
+                      <button className="flex flex-col items-center justify-center gap-2 p-6 bg-navy text-white rounded-3xl hover:shadow-2xl hover:scale-105 transition-all">
+                        <Settings2 className="w-6 h-6 text-gold" />
+                        <span className="text-[9px] font-black uppercase tracking-widest">Modify Master</span>
+                      </button>
+                    )}
                  </div>
               </div>
             </motion.aside>

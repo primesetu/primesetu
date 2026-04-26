@@ -21,6 +21,7 @@ export const toPaise = (rupees: number | string): number => {
 
 /**
  * Converts paise (integer) to rupees (float).
+ * @deprecated Use integer arithmetic for formatting (BUG-07 Fix)
  */
 export const toRupees = (paise: number): number => {
   return paise / 100;
@@ -28,18 +29,28 @@ export const toRupees = (paise: number): number => {
 
 /**
  * Formats paise as a localized currency string (INR).
+ * Sovereign Fix: Uses integer arithmetic to prevent floating point drift.
  */
 export const formatCurrency = (paise: number): string => {
-  return new Intl.NumberFormat('en-IN', {
-    style: 'currency',
-    currency: 'INR',
-    minimumFractionDigits: 2
-  }).format(toRupees(paise));
+  const absPaise = Math.abs(paise);
+  const rupees = Math.floor(absPaise / 100);
+  const cents = absPaise % 100;
+  
+  const formatted = new Intl.NumberFormat('en-IN', {
+    minimumFractionDigits: 0
+  }).format(rupees);
+
+  const result = `₹${formatted}.${cents.toString().padStart(2, '0')}`;
+  return paise < 0 ? `-${result}` : result;
 };
 
 /**
  * Formats paise as a simple decimal string.
  */
 export const formatDecimal = (paise: number): string => {
-  return toRupees(paise).toFixed(2);
+  const absPaise = Math.abs(paise);
+  const rupees = Math.floor(absPaise / 100);
+  const cents = absPaise % 100;
+  const result = `${rupees}.${cents.toString().padStart(2, '0')}`;
+  return paise < 0 ? `-${result}` : result;
 };

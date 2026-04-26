@@ -16,7 +16,7 @@
 ## MANDATORY RULE
 
 Follow `aiprotocol.md` and `AI_GUIDELINES.md` WITHOUT EXCEPTION.
-Before any response: read aiprotocol.md → apply ALL rules → output 5-section format.
+Before any response: read aiprotocol.md → apply ALL rules → load `skills/code-review-and-refine.md` → output 5-section format.
 
 ---
 
@@ -123,6 +123,8 @@ When AGENT-BACKEND or AGENT-FRONTEND produces code, AGENT-QA reviews it in a **f
 **AGENT-QA does NOT:**
 - Rewrite the code — it returns a pass/fail verdict with specific line-level feedback
 - Merge or commit — human review is always the final gate
+
+**Mandatory Self-Review:** Every agent MUST load `skills/code-review-and-refine.md` and run the 4-phase self-review before presenting code in Section 3. AGENT-QA reviews the output AFTER this self-review has already run.
 
 ---
 

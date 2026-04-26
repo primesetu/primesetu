@@ -1,12 +1,7 @@
 /* ============================================================
  * PrimeSetu — Shoper9-Based Retail OS
- * Zero Cloud · Sovereign · AI-Governed
- * ============================================================
- * System Architect : Jawahar R. M.
- * Organisation     : AITDL Network
- * Project          : PrimeSetu
+ * Document : backend/app/services/barcode.py
  * © 2026 — All Rights Reserved
- * "Memory, Not Code."
  * ============================================================ */
 
 def calculate_ean13_check_digit(digits_12: str) -> str:
@@ -34,5 +29,19 @@ def validate_ean13(barcode: str) -> bool:
     """Validate a complete 13-digit EAN-13 barcode."""
     if len(barcode) != 13 or not barcode.isdigit():
         return False
-    expected = calculate_ean13_check_digit(barcode[:12])
-    return barcode[12] == expected
+    try:
+        expected = calculate_ean13_check_digit(barcode[:12])
+        return barcode[12] == expected
+    except:
+        return False
+
+
+def generate_internal_barcode(store_prefix: str, item_seq: int, size_code: str = "") -> str:
+    """
+    Generate a store-internal CODE128 barcode.
+    Format: {store_prefix}{item_seq:06d}{size_code}
+    """
+    if not store_prefix:
+        store_prefix = "PS"
+    base = f"{store_prefix}{item_seq:06d}{size_code}"
+    return base.upper()

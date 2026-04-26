@@ -45,7 +45,7 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-from app.routers import onboarding, item_master, customer, barcode, price_group
+from app.routers import onboarding, item_master, customer, barcode, price_group, procurement, inventory_audit, purchase
 from app.routers.gstr1 import router as gstr1_router
 
 app.include_router(onboarding.router)
@@ -54,6 +54,9 @@ app.include_router(item_master.router, prefix="/api/v1")
 app.include_router(customer.router, prefix="/api/v1")
 app.include_router(barcode.router, prefix="/api/v1")
 app.include_router(price_group.router, prefix="/api/v1")
+app.include_router(purchase.router) # Prefix handled in router
+app.include_router(procurement.router)
+app.include_router(inventory_audit.router)
 
 # ── Startup ───────────────────────────────────────────────────────────────────
 @app.on_event("startup")

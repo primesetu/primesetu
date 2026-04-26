@@ -36,7 +36,7 @@ import PriceManagement from '../modules/billing/PriceManagement'
 import ComingSoon from '../components/ComingSoon'
 import ManagementDashboard from '../modules/dashboard/ManagementDashboard'
 import BillingModule from '../modules/billing/BillingModule'
-import MasterRegistry from '../modules/catalogue/MasterRegistry'
+import MasterRegistry from '../modules/catalogue/CatalogRegistry'
 import ItemMaster from '../modules/inventory/ItemMaster'
 import InventoryModule from '../modules/inventory/InventoryModule'
 import AnalyticsModule from '../modules/analytics/AnalyticsModule'
@@ -45,7 +45,7 @@ import HOSyncModule from '../modules/ho/HOSyncModule'
 import ProcurementModule from '../modules/inventory/ProcurementModule'
 import TransactionsModule from '../modules/billing/TransactionsModule'
 import DayEndModule from '../modules/billing/DayEndModule'
-import CustomerMaster from '../modules/catalogue/CustomerMaster'
+import CustomerMaster from '../modules/crm/CustomerMaster'
 import BarcodeStudio from '../modules/inventory/BarcodeStudio'
 import SchemesModule from '../modules/schemes/SchemesModule'
 import DailySalesBook from '../modules/analytics/DailySalesBook'
@@ -62,6 +62,9 @@ import HSNManager from '../modules/catalogue/HSNManager'
 import PrintTemplateCenter from '../modules/settings/PrintTemplateCenter'
 import StoreOnboarding from '../modules/onboarding/StoreOnboarding'
 import CompliancePanel from '../modules/compliance/CompliancePanel'
+import PriceGroups from '../modules/catalogue/PriceGroups'
+import InventoryAudit from '../modules/inventory/InventoryAudit'
+import GRNProcessor from '../modules/inventory/GRNProcessor'
 
 export interface ModuleDefinition {
   id: string
@@ -93,7 +96,7 @@ export const COMPONENT_MAP: Record<string, React.ReactNode> = {
   'ho': <HOSyncModule />,
   'analytics': <AnalyticsModule />,
   'settings': <ConfigModule />,
-  'customers': <ComingSoon />,
+  'customers': <CustomerMaster />,
   'vendors': <ComingSoon />,
   'personnel': <ComingSoon />,
   'loyalty': <ComingSoon />,
@@ -106,15 +109,16 @@ export const COMPONENT_MAP: Record<string, React.ReactNode> = {
   'security': <ComingSoon />,
   'housekeep': <ComingSoon />,
   'hsn': <ComingSoon />,
-  'grn': <ComingSoon />,
+  'grn': <GRNProcessor />,
   'transfer': <ComingSoon />,
   'vouchers': <ComingSoon />,
   'promotions': <ComingSoon />,
-  'reconcile': <ComingSoon />,
+  'reconcile': <InventoryAudit />,
   'tally': <ComingSoon />,
   'print': <PrintTemplateCenter />,
   'onboarding': <StoreOnboarding />,
   'gstr1': <CompliancePanel />,
+  'pricegroups': <PriceGroups />,
 };
 
 /**
@@ -157,5 +161,6 @@ export const ICON_MAP: Record<string, any> = {
   'print': Printer,
   'onboarding': Store,
   'gstr1': FileText,
+  'pricegroups': DollarSign,
 };
 

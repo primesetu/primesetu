@@ -23,7 +23,7 @@
   body {
     background-color: var(--cream);
     color: var(--navy);
-    font-family: 'DM Sans', sans-serif;
+    font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
     font-size: 13px;
     -webkit-font-smoothing: antialiased;
     user-select: none;
@@ -31,9 +31,13 @@
     overflow-x: hidden;
   }
 
-  /* Custom Typography */
+  /* Custom Typography - Strict Shoper9 Parity */
   h1, h2, h3, .serif {
-    font-family: 'Playfair Display', serif;
+    font-family: ui-serif, Georgia, Cambria, "Times New Roman", Times, serif;
+  }
+
+  code, kbd, pre, .mono, .font-mono {
+    font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
   }
 
   input, textarea {
@@ -97,4 +101,3 @@
     @apply py-2.5 text-[12.5px] border-b border-border align-middle;
   }
 }
-

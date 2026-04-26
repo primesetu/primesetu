@@ -64,6 +64,18 @@ Before generating ANY output:
 
 ---
 
+## MANDATORY SELF-REVIEW (PROTOCOL v2)
+
+| Requirement | Action | Target Skill |
+|-------------|--------|--------------|
+| New Backend Code | Auto-Trigger | `skills/code-review-and-refine.md` |
+| New Frontend UI | Auto-Trigger | `skills/code-review-and-refine.md` |
+| DB Migration | Auto-Trigger | `skills/code-review-and-refine.md` |
+
+> Every code output MUST pass the 4-phase self-review before Section 3 is finalized.
+
+---
+
 ## HOW TO RUN LOCALLY
 
 ### Backend
@@ -234,3 +246,14 @@ If the agent becomes repetitive, contradicts earlier decisions, or ignores rules
 **START A FRESH SESSION.** Re-load this file. Do not attempt to fix a confused session.
 
 > "Memory, Not Code." — Every line is a liability. Build less, build right.
+
+---
+
+## AVAILABLE SKILLS (AUTO-TRIGGER)
+
+<available_skills>
+  <skill name="code-review-and-refine" trigger="code, logic, migration, schema, billing">
+    Mandatory self-review protocol for PrimeSetu. Run this BEFORE presenting any code to ensure 
+    Paise integers, RLS, store isolation, and zero-float compliance.
+  </skill>
+</available_skills>

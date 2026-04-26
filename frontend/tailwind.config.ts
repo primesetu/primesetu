@@ -24,6 +24,11 @@ export default {
         cream:   '#FAF7F2',
         muted:   '#8A8FA8',
         border:  '#E8E4DC',
+        // Sovereign Brand Identity
+        'brand-navy': '#0D1B3E',
+        'brand-gold': '#F9B942',
+        'brand-saffron': '#F4840A',
+        'brand-cream': '#FAF7F2',
       },
       fontFamily: {
         sans:  ['DM Sans', 'sans-serif'],

@@ -1,20 +1,21 @@
-# ============================================================
-# * PrimeSetu — Shoper9-Based Retail OS
-# * Zero Cloud · Sovereign · AI-Governed
-# ============================================================
-# * System Architect   :  Jawahar R. M.
-# * Organisation       :  AITDL Network
-# * Project            :  PrimeSetu
-# * © 2026 — All Rights Reserved
-# * "Memory, Not Code."
-# ============================================================ #
+/* ============================================================
+ * PrimeSetu — Shoper9-Based Retail OS
+ * Zero Cloud · Sovereign · AI-Governed
+ * ============================================================
+ * System Architect   :  Jawahar R. M.
+ * Organisation       :  AITDL Network
+ * Project            :  PrimeSetu
+ * © 2026 — All Rights Reserved
+ * "Memory, Not Code."
+ * ============================================================ #
+ */
 
 from __future__ import annotations
-from sqlalchemy import String, Integer, Numeric, Boolean, DateTime, text, ForeignKey, JSON, BigInteger, ARRAY
+from sqlalchemy import String, Integer, Numeric, Boolean, DateTime, text, ForeignKey, JSON, ARRAY
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 from app.core.database import Base
 from datetime import datetime
-from typing import List, Dict, Any
+from typing import List, Dict, Any, Optional
 import uuid
 
 class Store(Base):
@@ -54,10 +55,10 @@ class Product(Base):
     subcategory: Mapped[str] = mapped_column(String, nullable=True)
     size: Mapped[str] = mapped_column(String, nullable=True)
     color: Mapped[str] = mapped_column(String, nullable=True)
-    mrp: Mapped[int] = mapped_column(BigInteger, default=0)
-    wholesale_price: Mapped[int] = mapped_column(BigInteger, default=0)
-    staff_price: Mapped[int] = mapped_column(BigInteger, default=0)
-    cost_price: Mapped[int] = mapped_column(BigInteger, default=0)
+    mrp: Mapped[int] = mapped_column(Integer, default=0)
+    wholesale_price: Mapped[int] = mapped_column(Integer, default=0)
+    staff_price: Mapped[int] = mapped_column(Integer, default=0)
+    cost_price: Mapped[int] = mapped_column(Integer, default=0)
     tax_rate: Mapped[int] = mapped_column(Integer, default=18)
     is_tax_inclusive: Mapped[bool] = mapped_column(Boolean, default=True) # Shoper 9 Style
     is_inventory_item: Mapped[bool] = mapped_column(Boolean, default=True)
@@ -103,7 +104,7 @@ class Till(Base):
     code: Mapped[str] = mapped_column(String, unique=True)
     status: Mapped[str] = mapped_column(String, default="Closed") # Open, Closed, Locked, Idle
     current_cashier_id: Mapped[str] = mapped_column(String, nullable=True) # References auth.users or Partner
-    cash_collected: Mapped[int] = mapped_column(BigInteger, default=0)
+    cash_collected: Mapped[int] = mapped_column(Integer, default=0)
     last_opening_at: Mapped[datetime] = mapped_column(DateTime, nullable=True)
     last_closing_at: Mapped[datetime] = mapped_column(DateTime, nullable=True)
     created_at: Mapped[datetime] = mapped_column(DateTime, server_default=text("now()"))
@@ -122,10 +123,10 @@ class Transaction(Base):
     # [{"mode": "CASH", "amount": 1000}, {"mode": "CARD", "amount": 500, "ref": "123"}]
     payments: Mapped[Dict[str, Any]] = mapped_column(JSON, nullable=True)
     
-    subtotal: Mapped[int] = mapped_column(BigInteger, default=0)
-    discount_total: Mapped[int] = mapped_column(BigInteger, default=0)
-    tax_total: Mapped[int] = mapped_column(BigInteger, default=0)
-    net_payable: Mapped[int] = mapped_column(BigInteger, default=0)
+    subtotal: Mapped[int] = mapped_column(Integer, default=0)
+    discount_total: Mapped[int] = mapped_column(Integer, default=0)
+    tax_total: Mapped[int] = mapped_column(Integer, default=0)
+    net_payable: Mapped[int] = mapped_column(Integer, default=0)
     status: Mapped[str] = mapped_column(String, default="Finalized") # Finalized, Suspended, Void
     suspended_reason: Mapped[str] = mapped_column(String, nullable=True)
     created_at: Mapped[datetime] = mapped_column(DateTime, server_default=text("now()"))
@@ -140,8 +141,8 @@ class CreditNote(Base):
     note_no: Mapped[str] = mapped_column(String, unique=True)
     customer_id: Mapped[uuid.UUID] = mapped_column(ForeignKey("customers.id"))
     original_transaction_id: Mapped[uuid.UUID] = mapped_column(ForeignKey("transactions.id"), nullable=True)
-    initial_amount: Mapped[int] = mapped_column(BigInteger)
-    balance_amount: Mapped[int] = mapped_column(BigInteger)
+    initial_amount: Mapped[int] = mapped_column(Integer)
+    balance_amount: Mapped[int] = mapped_column(Integer)
     expiry_date: Mapped[datetime] = mapped_column(DateTime, nullable=True)
     status: Mapped[str] = mapped_column(String, default="Active") # Active, Adjusted, Expired
     created_at: Mapped[datetime] = mapped_column(DateTime, server_default=text("now()"))
@@ -153,37 +154,12 @@ class AdvanceDeposit(Base):
     receipt_no: Mapped[str] = mapped_column(String, unique=True)
     customer_id: Mapped[uuid.UUID] = mapped_column(ForeignKey("customers.id"))
     purpose: Mapped[str] = mapped_column(String, nullable=True)
-    initial_amount: Mapped[int] = mapped_column(BigInteger)
-    balance_amount: Mapped[int] = mapped_column(BigInteger)
+    initial_amount: Mapped[int] = mapped_column(Integer)
+    balance_amount: Mapped[int] = mapped_column(Integer)
     status: Mapped[str] = mapped_column(String, default="Active") # Active, Adjusted, Refunded
     created_at: Mapped[datetime] = mapped_column(DateTime, server_default=text("now()"))
 
-class PurchaseOrder(Base):
-    __tablename__ = "purchase_orders"
 
-    id: Mapped[uuid.UUID] = mapped_column(primary_key=True, server_default=text("gen_random_uuid()"))
-    po_no: Mapped[str] = mapped_column(String, unique=True)
-    vendor_id: Mapped[uuid.UUID] = mapped_column(ForeignKey("partners.id"))
-    store_id: Mapped[str] = mapped_column(ForeignKey("stores.id"))
-    expected_delivery: Mapped[datetime] = mapped_column(DateTime, nullable=True)
-    total_qty: Mapped[float] = mapped_column(Numeric(12, 3), default=0.0)
-    total_cost: Mapped[int] = mapped_column(BigInteger, default=0)
-    status: Mapped[str] = mapped_column(String, default="Open") # Open, PartiallyReceived, Closed, Cancelled
-    created_at: Mapped[datetime] = mapped_column(DateTime, server_default=text("now()"))
-
-    items: Mapped[List["PurchaseOrderItem"]] = relationship("PurchaseOrderItem", back_populates="purchase_order", cascade="all, delete-orphan")
-
-class PurchaseOrderItem(Base):
-    __tablename__ = "purchase_order_items"
-
-    id: Mapped[uuid.UUID] = mapped_column(primary_key=True, server_default=text("gen_random_uuid()"))
-    po_id: Mapped[uuid.UUID] = mapped_column(ForeignKey("purchase_orders.id", ondelete="CASCADE"))
-    product_id: Mapped[uuid.UUID] = mapped_column(ForeignKey("products.id"))
-    qty: Mapped[float] = mapped_column(Numeric(12, 3))
-    received_qty: Mapped[float] = mapped_column(Numeric(12, 3), default=0.0)
-    unit_cost: Mapped[int] = mapped_column(BigInteger)
-
-    purchase_order: Mapped["PurchaseOrder"] = relationship("PurchaseOrder", back_populates="items")
 
 class TransactionItem(Base):
     __tablename__ = "transaction_items"
@@ -192,10 +168,10 @@ class TransactionItem(Base):
     transaction_id: Mapped[uuid.UUID] = mapped_column(ForeignKey("transactions.id", ondelete="CASCADE"))
     product_id: Mapped[uuid.UUID] = mapped_column(ForeignKey("products.id"))
     qty: Mapped[float] = mapped_column(Numeric(12, 3))
-    mrp: Mapped[int] = mapped_column(BigInteger)
+    mrp: Mapped[int] = mapped_column(Integer)
     discount_per: Mapped[int] = mapped_column(Integer, default=0)
-    tax_amount: Mapped[int] = mapped_column(BigInteger, default=0)
-    net_amount: Mapped[int] = mapped_column(BigInteger)
+    tax_amount: Mapped[int] = mapped_column(Integer, default=0)
+    net_amount: Mapped[int] = mapped_column(Integer)
 
     transaction: Mapped["Transaction"] = relationship("Transaction", back_populates="items")
 
@@ -206,7 +182,7 @@ class SalesSlip(Base):
     slip_no: Mapped[str] = mapped_column(String, unique=True)
     store_id: Mapped[str] = mapped_column(ForeignKey("stores.id"))
     customer_mobile: Mapped[str] = mapped_column(String, nullable=True)
-    total_amount: Mapped[int] = mapped_column(BigInteger, default=0)
+    total_amount: Mapped[int] = mapped_column(Integer, default=0)
     is_active: Mapped[bool] = mapped_column(Boolean, default=True)
     is_converted: Mapped[bool] = mapped_column(Boolean, default=False)
     converted_transaction_id: Mapped[uuid.UUID] = mapped_column(ForeignKey("transactions.id"), nullable=True)
@@ -221,8 +197,8 @@ class SalesSlipItem(Base):
     slip_id: Mapped[uuid.UUID] = mapped_column(ForeignKey("sales_slips.id", ondelete="CASCADE"))
     product_id: Mapped[uuid.UUID] = mapped_column(ForeignKey("products.id"))
     qty: Mapped[float] = mapped_column(Numeric(12, 3))
-    mrp: Mapped[int] = mapped_column(BigInteger)
-    net_amount: Mapped[int] = mapped_column(BigInteger)
+    mrp: Mapped[int] = mapped_column(Integer)
+    net_amount: Mapped[int] = mapped_column(Integer)
 
     slip: Mapped["SalesSlip"] = relationship("SalesSlip", back_populates="items")
 
@@ -331,29 +307,31 @@ class SyncPacket(Base):
     created_at: Mapped[datetime] = mapped_column(DateTime, server_default=text("now()"))
     synced_at: Mapped[datetime] = mapped_column(DateTime, nullable=True)
 
-class AuditSession(Base):
-    __tablename__ = "audit_sessions"
+class InventoryAudit(Base):
+    __tablename__ = "inventory_audits"
 
     id: Mapped[uuid.UUID] = mapped_column(primary_key=True, server_default=text("gen_random_uuid()"))
-    store_id: Mapped[str] = mapped_column(ForeignKey("stores.id"))
-    started_by: Mapped[str] = mapped_column(String)
-    status: Mapped[str] = mapped_column(String, default="Open") # Open, Finalized, Cancelled
+    audit_no: Mapped[str] = mapped_column(String, unique=True)
+    store_id: Mapped[uuid.UUID] = mapped_column(ForeignKey("stores.id"))
+    status: Mapped[str] = mapped_column(String, default="OPEN") # OPEN, SUBMITTED, CANCELLED
     created_at: Mapped[datetime] = mapped_column(DateTime, server_default=text("now()"))
-    finalized_at: Mapped[datetime] = mapped_column(DateTime, nullable=True)
-    
-    entries: Mapped[List["AuditEntry"]] = relationship("AuditEntry", back_populates="session", cascade="all, delete-orphan")
+    submitted_at: Mapped[Optional[datetime]] = mapped_column(DateTime, nullable=True)
 
-class AuditEntry(Base):
-    __tablename__ = "audit_entries"
+    items: Mapped[List["InventoryAuditItem"]] = relationship("InventoryAuditItem", back_populates="audit", cascade="all, delete-orphan")
+
+class InventoryAuditItem(Base):
+    __tablename__ = "inventory_audit_items"
 
     id: Mapped[uuid.UUID] = mapped_column(primary_key=True, server_default=text("gen_random_uuid()"))
-    session_id: Mapped[uuid.UUID] = mapped_column(ForeignKey("audit_sessions.id", ondelete="CASCADE"))
-    product_id: Mapped[uuid.UUID] = mapped_column(ForeignKey("products.id"))
-    book_qty: Mapped[float] = mapped_column(Numeric(12, 3))
-    physical_qty: Mapped[float] = mapped_column(Numeric(12, 3))
-    scanned_at: Mapped[datetime] = mapped_column(DateTime, server_default=text("now()"))
+    audit_id: Mapped[uuid.UUID] = mapped_column(ForeignKey("inventory_audits.id", ondelete="CASCADE"))
+    item_id: Mapped[uuid.UUID] = mapped_column(ForeignKey("items.id"))
+    size: Mapped[Optional[str]] = mapped_column(String, nullable=True)
+    colour: Mapped[Optional[str]] = mapped_column(String, nullable=True)
+    system_qty: Mapped[int] = mapped_column(Integer, default=0)
+    physical_qty: Mapped[int] = mapped_column(Integer, default=0)
 
-    session: Mapped["AuditSession"] = relationship("AuditSession", back_populates="entries")
+    audit: Mapped["InventoryAudit"] = relationship("InventoryAudit", back_populates="items")
+    item: Mapped["Item"] = relationship("Item")
 
 class Partner(Base):
     __tablename__ = "partners"
@@ -407,7 +385,7 @@ class LoyaltyLedger(Base):
     txn_type: Mapped[str] = mapped_column(String) # earn, redeem, expire, adjust
     points: Mapped[int] = mapped_column(Integer)
     balance: Mapped[int] = mapped_column(Integer)
-    sale_id: Mapped[Optional[uuid.UUID]] = mapped_column(ForeignKey("sales.id", ondelete="SET NULL"), nullable=True)
+    sale_id: Mapped[Optional[uuid.UUID]] = mapped_column(ForeignKey("transactions.id", ondelete="SET NULL"), nullable=True)
     txn_date: Mapped[datetime] = mapped_column(DateTime, server_default=text("CURRENT_DATE"))
     created_at: Mapped[datetime] = mapped_column(DateTime, server_default=text("now()"))
 
@@ -463,6 +441,7 @@ class ItemStock(Base):
     colour: Mapped[str] = mapped_column(String)
     qty_on_hand: Mapped[int] = mapped_column(Integer, default=0)
     qty_reserved: Mapped[int] = mapped_column(Integer, default=0)
+    reorder_level: Mapped[int] = mapped_column(Integer, default=10)
     updated_at: Mapped[datetime] = mapped_column(DateTime, server_default=text("now()"), onupdate=text("now()"))
 
     item: Mapped["Item"] = relationship("Item")

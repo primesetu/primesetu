@@ -3,19 +3,20 @@
  * Zero Cloud · Sovereign · AI-Governed
  * ============================================================
  * System Architect   :  Jawahar R. M.
- * Organisation       :  AITDL Network
+ * Organisation     :  AITDL Network
  * Project            :  PrimeSetu
  * © 2026 — All Rights Reserved
  * "Memory, Not Code."
  * ============================================================ */
 
-import React, { useState } from 'react';
+import React, { useState, useMemo } from 'react';
 import { 
   ChevronDown, 
   ChevronRight, 
   Menu,
   ChevronLeft,
-  LayoutDashboard
+  LayoutDashboard,
+  Box
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useMenu } from '../../hooks/useMenu';
@@ -49,13 +50,24 @@ const Sidebar: React.FC<SidebarProps> = ({
   const { menu: modules, loading } = useMenu();
   const [expandedCategories, setExpandedCategories] = useState<string[]>(['POS', 'WAREHOUSE']);
 
-  const categories = [
-    { id: 'POS', label: 'POS Operations' },
-    { id: 'WAREHOUSE', label: 'Warehouse & Stock' },
-    { id: 'FINANCE', label: 'Finance & Accounts' },
-    { id: 'HO', label: 'Head Office' },
-    { id: 'SYSTEM', label: 'System Admin' },
-  ];
+  // 1. Dynamic Category Resolution (Following "Never Static Arrays" Rule)
+  const categories = useMemo(() => {
+    const categoryMap: Record<string, string> = {
+      'POS': 'POS Operations',
+      'WAREHOUSE': 'Warehouse & Stock',
+      'FINANCE': 'Finance & Accounts',
+      'HO': 'Head Office',
+      'SYSTEM': 'System Admin'
+    };
+
+    // Extract unique categories from dynamic menu
+    const uniqueCats = Array.from(new Set(modules.map(m => m.category).filter(Boolean)));
+    
+    return uniqueCats.map(catId => ({
+      id: catId!,
+      label: categoryMap[catId!] || catId!.toUpperCase()
+    }));
+  }, [modules]);
 
   const toggleCategory = (id: string) => {
     if (isCollapsed) return;
@@ -72,7 +84,6 @@ const Sidebar: React.FC<SidebarProps> = ({
     isActive: boolean; 
     onSelect: (id: string) => void 
   }) => {
-    // FIX: Using item.module for icon mapping
     const Icon = ICON_MAP[item.module] || LayoutDashboard;
     
     useHotkeys(item.shortcut || '', (e) => {
@@ -86,8 +97,8 @@ const Sidebar: React.FC<SidebarProps> = ({
         className={cn(
           "group relative flex items-center w-full px-5 py-2.5 transition-all duration-200 border-l-[3px]",
           isActive 
-            ? "bg-[var(--saffron)]/15 border-[var(--saffron)] text-white" 
-            : "border-transparent text-white/50 hover:bg-white/5 hover:text-white"
+            ? "bg-gold/10 border-gold text-gold" 
+            : "border-transparent text-white/70 hover:bg-white/10 hover:text-white"
         )}
         title={isCollapsed ? item.label : ''}
       >
@@ -95,7 +106,7 @@ const Sidebar: React.FC<SidebarProps> = ({
           "flex items-center justify-center transition-all duration-300",
           isCollapsed ? "w-full" : "w-5 mr-3"
         )}>
-          <Icon size={16} className={isActive ? 'text-[var(--gold)]' : 'text-inherit opacity-60'} />
+          <Icon size={16} className={isActive ? 'text-gold' : 'text-inherit opacity-60'} />
         </div>
         
         {!isCollapsed && (
@@ -104,18 +115,17 @@ const Sidebar: React.FC<SidebarProps> = ({
             animate={{ opacity: 1, x: 0 }}
             className="flex-1 flex items-center justify-between overflow-hidden"
           >
-            <span className="text-[12.5px] font-medium truncate">{item.label}</span>
+            <span className="text-[12.5px] font-black truncate uppercase tracking-wider">{item.label}</span>
             {item.shortcut && (
-              <span className="text-[9px] font-bold bg-white/5 text-white/30 px-1.5 py-0.5 rounded opacity-0 group-hover:opacity-100 transition-opacity">
+              <span className="text-[9px] font-black bg-white/10 text-white/50 px-1.5 py-0.5 rounded opacity-0 group-hover:opacity-100 transition-opacity">
                 {item.shortcut}
               </span>
             )}
           </motion.div>
         )}
 
-        {/* Tooltip for collapsed state */}
         {isCollapsed && (
-          <div className="fixed left-20 px-3 py-1.5 bg-gray-900 text-white text-[11px] rounded opacity-0 group-hover:opacity-100 pointer-events-none transition-opacity whitespace-nowrap z-[200] shadow-xl border border-white/10 font-medium">
+          <div className="fixed left-20 px-3 py-1.5 bg-navy text-white text-[11px] rounded opacity-0 group-hover:opacity-100 pointer-events-none transition-opacity whitespace-nowrap z-[200] shadow-xl border border-white/10 font-bold uppercase tracking-widest">
             {item.label} {item.shortcut && `(${item.shortcut})`}
           </div>
         )}
@@ -125,8 +135,8 @@ const Sidebar: React.FC<SidebarProps> = ({
 
   if (loading) {
     return (
-      <aside className="w-[var(--sw)] bg-[var(--navy)] min-h-screen fixed left-0 top-0 flex flex-col z-[100] items-center justify-center transition-all duration-300">
-        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-[var(--gold)]"></div>
+      <aside className="w-20 bg-navy min-h-screen fixed left-0 top-0 flex flex-col z-[100] items-center justify-center">
+        <div className="w-8 h-8 border-2 border-gold border-t-transparent rounded-full animate-spin"></div>
       </aside>
     );
   }
@@ -136,7 +146,8 @@ const Sidebar: React.FC<SidebarProps> = ({
       initial={false}
       animate={{ width: isCollapsed ? 72 : 280 }}
       transition={{ type: "spring", stiffness: 300, damping: 30 }}
-      className="fixed top-0 left-0 bottom-0 flex flex-col bg-[var(--navy)] z-[100] overflow-hidden border-r border-white/5 shadow-2xl"
+      className="fixed top-0 left-0 bottom-0 flex flex-col bg-navy z-[100] overflow-hidden border-r border-white/5 shadow-2xl"
+      style={{ backgroundColor: '#0D1B3E' }}
     >
       {/* Header / Toggle */}
       <div className="flex items-center justify-between h-[72px] px-5 border-b border-white/5 shrink-0">
@@ -151,7 +162,7 @@ const Sidebar: React.FC<SidebarProps> = ({
               <circle cx="32" cy="10" r="4" fill="#F4840A"/>
             </svg>
             <div className="font-serif text-[18px] font-black text-white tracking-tighter">
-              Prime<span className="text-[var(--gold)]">Setu</span>
+              Prime<span className="text-gold">Setu</span>
             </div>
           </motion.div>
         )}
@@ -171,7 +182,7 @@ const Sidebar: React.FC<SidebarProps> = ({
         {/* Core Section */}
         <div className="mb-6">
           {!isCollapsed && (
-            <div className="text-[9px] font-bold tracking-[3px] uppercase text-white/25 px-5 mb-2">Overview</div>
+            <div className="text-[9px] font-black tracking-[3px] uppercase text-white/45 px-5 mb-2">Overview</div>
           )}
           {modules
             .filter(m => m.id === 'dashboard' || m.module === 'dashboard')
@@ -186,7 +197,7 @@ const Sidebar: React.FC<SidebarProps> = ({
           }
         </div>
 
-        {/* Collapsible Categories */}
+        {/* Collapsible Categories Resolved Dynamically */}
         {categories.map(cat => {
           const modulesInCat = modules.filter(m => 
             m.id !== 'dashboard' && 
@@ -207,10 +218,10 @@ const Sidebar: React.FC<SidebarProps> = ({
               >
                 {!isCollapsed && (
                   <>
-                    <span className="text-[9px] font-bold tracking-[3px] uppercase text-white/25 group-hover:text-white/40">
+                    <span className="text-[9px] font-black tracking-[3px] uppercase text-white/60 group-hover:text-white/80">
                       {cat.label}
                     </span>
-                    <div className="text-white/20 group-hover:text-white/40">
+                    <div className="text-white/30 group-hover:text-white/60">
                       {isExpanded ? <ChevronDown size={12} /> : <ChevronRight size={12} />}
                     </div>
                   </>
@@ -245,7 +256,7 @@ const Sidebar: React.FC<SidebarProps> = ({
 
       {/* Footer / Status */}
       <div className="mt-auto border-t border-white/5 p-[14px_20px] flex items-center gap-3 bg-white/[0.01] shrink-0">
-        <div className="w-8 h-8 bg-gradient-to-br from-[var(--saffron)] to-[var(--gold)] rounded-full flex items-center justify-center text-[12px] font-bold text-white shrink-0 shadow-lg shadow-orange-500/10">
+        <div className="w-8 h-8 bg-gradient-to-br from-saffron to-gold rounded-full flex items-center justify-center text-[12px] font-black text-white shrink-0 shadow-lg shadow-saffron/10">
           {userRole?.[0] || 'U'}
         </div>
         {!isCollapsed && (
@@ -254,8 +265,8 @@ const Sidebar: React.FC<SidebarProps> = ({
             animate={{ opacity: 1 }}
             className="flex-1 overflow-hidden"
           >
-            <div className="text-[11px] font-bold text-white tracking-tight truncate uppercase">{nodeType} NODE</div>
-            <div className="text-[9px] text-white/40 uppercase tracking-widest truncate">{userRole} · Sovereign</div>
+            <div className="text-[11px] font-black text-white tracking-tight truncate uppercase">{nodeType} NODE</div>
+            <div className="text-[9px] text-white/40 uppercase tracking-[0.2em] truncate font-bold">{userRole} · Sovereign</div>
           </motion.div>
         )}
       </div>

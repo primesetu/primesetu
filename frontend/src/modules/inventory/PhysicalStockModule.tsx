@@ -9,12 +9,11 @@
  * "Memory, Not Code."
  * ============================================================ */
 
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { 
-  ClipboardCheck, X, Zap, Barcode, ArrowRight, Printer, 
-  Package, Save, AlertCircle, ShieldCheck, RefreshCw,
-  Search, Loader2, History, CheckCircle2, AlertTriangle
+  ClipboardCheck, X, Zap, Barcode, Save, 
+  Package, Loader2, History, CheckCircle2
 } from 'lucide-react';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { api } from '@/api/client';
@@ -44,12 +43,12 @@ export default function PhysicalStockModule({ onClose }: { onClose: () => void }
   const scanRef = useRef<HTMLInputElement>(null);
 
   // Queries
-  const { data: sessions, isLoading: loadingSessions } = useQuery({
+  const { data: sessions } = useQuery({
     queryKey: ['audit-sessions'],
     queryFn: () => api.inventory.listAuditSessions(),
   });
 
-  const { data: sessionData, isLoading: loadingSession } = useQuery<AuditSession>({
+  const { data: sessionData } = useQuery<AuditSession>({
     queryKey: ['audit-session', activeSessionId],
     queryFn: () => api.inventory.getAuditSession(activeSessionId!),
     enabled: !!activeSessionId,
@@ -66,13 +65,13 @@ export default function PhysicalStockModule({ onClose }: { onClose: () => void }
   });
 
   const entryMutation = useMutation({
-    mutationFn: (data: { product_id: string, physical_qty: number }) => 
+    mutationFn: (data: { item_id: string, physical_qty: number }) => 
       api.inventory.addAuditEntry(activeSessionId!, data),
     onSuccess: () => queryClient.invalidateQueries({ queryKey: ['audit-session', activeSessionId] })
   });
 
   const finalizeMutation = useMutation({
-    mutationFn: () => api.inventory.finalizeAuditSession(activeSessionId!),
+    mutationFn: () => api.inventory.submitAudit(activeSessionId!),
     onSuccess: () => {
       setIsFinalizing(true);
       queryClient.invalidateQueries({ queryKey: ['audit-sessions'] });
@@ -86,17 +85,15 @@ export default function PhysicalStockModule({ onClose }: { onClose: () => void }
     if (!scanInput) return;
 
     try {
-      // 1. Search for product
-      const results = await api.inventory.search(scanInput);
+      const results = await api.catalogue.universalSearch(scanInput);
       const product = results.find((p: any) => p.code === scanInput || p.name.includes(scanInput));
       
       if (product) {
-        // 2. Add or increment entry
         const existing = sessionData?.entries.find(e => e.product_id === product.id);
         const newQty = (existing?.physical_qty || 0) + 1;
         
         entryMutation.mutate({ 
-          product_id: product.id, 
+          item_id: product.id, 
           physical_qty: newQty 
         });
         setScanInput('');
@@ -110,7 +107,7 @@ export default function PhysicalStockModule({ onClose }: { onClose: () => void }
   };
 
   const updateEntryQty = (productId: string, qty: number) => {
-    entryMutation.mutate({ product_id: productId, physical_qty: Math.max(0, qty) });
+    entryMutation.mutate({ item_id: productId, physical_qty: Math.max(0, qty) });
   };
 
   if (isFinalizing) {
@@ -132,7 +129,6 @@ export default function PhysicalStockModule({ onClose }: { onClose: () => void }
       <motion.div initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }}
         className="bg-[#f8f9fc] w-full max-w-6xl h-[85vh] rounded-[3.5rem] shadow-2xl flex flex-col overflow-hidden border border-white/20">
         
-        {/* Header */}
         <div className="bg-navy p-10 text-white flex items-center justify-between border-b-8 border-amber-400">
            <div className="flex items-center gap-8">
               <div className="w-16 h-16 bg-amber-400 rounded-3xl flex items-center justify-center text-navy shadow-2xl transform -rotate-3">
@@ -141,7 +137,7 @@ export default function PhysicalStockModule({ onClose }: { onClose: () => void }
               <div>
                  <h2 className="text-4xl font-serif font-black uppercase tracking-tight">Physical Stock Audit</h2>
                  <p className="text-[10px] font-black text-white/40 uppercase tracking-widest mt-1 italic flex items-center gap-2">
-                    <Zap className="w-3.5 h-3.5 text-amber-400" /> Sovereign Audit Session & Discrepancy Engine
+                    <Zap className="w-3.5 h-3.5 text-amber-400" /> Sovereign Audit Session
                  </p>
               </div>
            </div>
@@ -152,7 +148,6 @@ export default function PhysicalStockModule({ onClose }: { onClose: () => void }
 
         <div className="flex-1 flex flex-col overflow-hidden">
           {!activeSessionId ? (
-            /* Phase 0: Session Selection / Start */
             <div className="flex-1 p-16 flex flex-col items-center justify-center text-center">
               <div className="w-24 h-24 bg-navy/5 text-navy rounded-[2.5rem] flex items-center justify-center mb-8 shadow-inner">
                 <History size={40} />
@@ -161,11 +156,13 @@ export default function PhysicalStockModule({ onClose }: { onClose: () => void }
               <p className="text-muted font-bold text-sm max-w-md uppercase tracking-widest mb-12">Initialize a new session or resume an active count.</p>
               
               <div className="flex gap-6 mb-12 flex-wrap justify-center">
-                {sessions?.filter((s: any) => s.status === 'Open').map((s: any) => (
-                  <button key={s.id} onClick={() => setActiveSessionId(s.id)}
-                    className="px-10 py-5 bg-white border-2 border-amber-400/30 rounded-3xl text-[11px] font-black uppercase tracking-widest text-navy hover:bg-amber-50 transition-all shadow-xl">
-                    Resume: {new Date(s.created_at).toLocaleDateString()}
-                  </button>
+                {sessions?.map((s: any) => (
+                  s.status === 'OPEN' && (
+                    <button key={s.id} onClick={() => setActiveSessionId(s.id)}
+                      className="px-10 py-5 bg-white border-2 border-amber-400/30 rounded-3xl text-[11px] font-black uppercase tracking-widest text-navy hover:bg-amber-50 transition-all shadow-xl">
+                      Resume: {s.audit_no}
+                    </button>
+                  )
                 ))}
                 <button 
                   onClick={() => startMutation.mutate()}
@@ -177,7 +174,6 @@ export default function PhysicalStockModule({ onClose }: { onClose: () => void }
               </div>
             </div>
           ) : (
-            /* Phase 1: Counting */
             <div className="flex flex-col h-full overflow-hidden">
               <div className="bg-white border-b border-gray-100 p-8 flex items-center justify-between shadow-sm z-10">
                 <div className="flex gap-10">
@@ -197,7 +193,7 @@ export default function PhysicalStockModule({ onClose }: { onClose: () => void }
                     <div className="text-[10px] font-black text-gray-400 uppercase tracking-widest mb-2">Audit Session</div>
                     <div className="flex items-center gap-4">
                        <div className="text-3xl font-serif font-black text-navy">
-                         {sessionData?.entries.length || 0} Articles Scanned
+                         {sessionData?.entries?.length || 0} Articles Scanned
                        </div>
                        <div className="px-3 py-1 bg-emerald-100 text-emerald-700 text-[9px] font-black uppercase rounded-lg">Sync Active</div>
                     </div>
@@ -205,7 +201,7 @@ export default function PhysicalStockModule({ onClose }: { onClose: () => void }
                 </div>
                 <div className="flex gap-4">
                   <button onClick={() => finalizeMutation.mutate()} 
-                    disabled={finalizeMutation.isPending || !sessionData?.entries.length}
+                    disabled={finalizeMutation.isPending || !sessionData?.entries?.length}
                     className="bg-navy text-white px-12 py-4 rounded-2xl font-black text-[10px] uppercase tracking-widest shadow-xl flex items-center gap-3 hover:bg-amber-400 hover:text-navy transition-all disabled:opacity-50">
                     {finalizeMutation.isPending ? <Loader2 className="animate-spin" /> : <Save size={18} />} Finalize & Post
                   </button>
@@ -213,7 +209,7 @@ export default function PhysicalStockModule({ onClose }: { onClose: () => void }
               </div>
 
               <div className="flex-1 overflow-auto p-10">
-                {!sessionData?.entries.length ? (
+                {!sessionData?.entries?.length ? (
                   <div className="flex flex-col items-center justify-center h-full text-navy/10 gap-4">
                     <Package size={80} strokeWidth={0.5} />
                     <span className="text-2xl font-black uppercase tracking-widest">No counts recorded yet</span>
@@ -266,7 +262,6 @@ export default function PhysicalStockModule({ onClose }: { onClose: () => void }
           )}
         </div>
 
-        {/* Footer: Session Info */}
         {activeSessionId && (
           <div className="p-10 bg-white border-t border-gray-100 flex items-center justify-between">
              <div className="flex gap-16">
@@ -277,7 +272,7 @@ export default function PhysicalStockModule({ onClose }: { onClose: () => void }
                 <div>
                    <div className="text-[10px] font-black text-gray-400 uppercase tracking-widest mb-2">Total Variance</div>
                    <div className="text-2xl font-serif font-black text-rose-500">
-                     {sessionData?.entries.reduce((acc, e) => acc + Math.abs(e.physical_qty - e.book_qty), 0) || 0} Units
+                     {sessionData?.entries?.reduce((acc, e) => acc + Math.abs(e.physical_qty - e.book_qty), 0) || 0} Units
                    </div>
                 </div>
              </div>

@@ -11,15 +11,14 @@
 
 from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy.ext.asyncio import AsyncSession
-from sqlalchemy import select, text
+from sqlalchemy import select, text, func
 from uuid import UUID
 import random
 
 from app.database import get_db
 from app.core.security import require_auth, CurrentUser
-from app.models.base import ItemBarcode, Item
+from app.models.base import ItemBarcode, Item, Store
 from app.schemas.barcode import BarcodeResponse, BarcodeGenerateRequest
-from app.services.barcode import generate_ean13
 
 router = APIRouter(prefix="/barcodes", tags=["barcode"])
 
@@ -62,15 +61,15 @@ async def scan_barcode(
         )
     return dict(item)
 
-@router.post("/generate-ean13")
-async def generate_ean13_for_item(
+@router.post("/generate-internal")
+async def generate_internal_barcode(
     payload: BarcodeGenerateRequest,
     current_user: CurrentUser = Depends(require_auth),
     db: AsyncSession = Depends(get_db)
 ):
     """
-    Generate a GS1-compliant EAN-13 for an item variant.
-    Uses store prefix + random sequence for internal EANs.
+    Generate an internal CODE128 barcode.
+    Format: {store_prefix}{item_seq:06d}{size_code}
     """
     # 1. Verify item exists
     item = await db.get(Item, payload.item_id)
@@ -93,29 +92,28 @@ async def generate_ean13_for_item(
             detail="Barcode already exists for this variant."
         )
 
-    # 3. Generate internal EAN-13
-    # Format: 890 (India) + StoreSeq(5) + ItemSeq(4) + CheckDigit
-    # For now, simplified random 12-digit base
-    while True:
-        digits_12 = f"890{random.randint(100000000, 999999999)}"
-        barcode = generate_ean13(digits_12)
-        
-        # Check uniqueness
-        dup = await db.execute(
-            select(ItemBarcode).where(
-                ItemBarcode.store_id == current_user.store_id,
-                ItemBarcode.barcode == barcode
-            )
-        )
-        if not dup.scalar_one_or_none():
-            break
+    # 3. Get Store Prefix (default to store_id's first 3 chars if not in metadata)
+    store = await db.get(Store, current_user.store_id)
+    store_prefix = store.metadata_json.get("barcode_prefix", str(store.id)[:3].upper())
 
-    # 4. Save
+    # 4. Get Item Sequence for this store
+    count_res = await db.execute(
+        select(func.count(Item.id)).where(Item.store_id == current_user.store_id)
+    )
+    item_seq = count_res.scalar() or 1
+    
+    # 5. Size Code (First 2 chars of size, or 'XX')
+    size_code = (payload.size[:2].upper() if payload.size else "XX")
+
+    # Final Format: {PREFIX}{000001}{SIZE}
+    barcode = f"{store_prefix}{item_seq:06d}{size_code}"
+
+    # 6. Save
     new_barcode = ItemBarcode(
         store_id=current_user.store_id,
         item_id=payload.item_id,
         barcode=barcode,
-        barcode_type="EAN13",
+        barcode_type="CODE128",
         size=payload.size,
         colour=payload.colour,
         is_primary=payload.is_primary
@@ -123,4 +121,4 @@ async def generate_ean13_for_item(
     db.add(new_barcode)
     await db.commit()
     
-    return {"barcode": barcode, "type": "EAN13"}
+    return {"barcode": barcode, "type": "CODE128"}

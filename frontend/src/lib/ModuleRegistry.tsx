@@ -66,7 +66,7 @@ import CompliancePanel from '../modules/compliance/CompliancePanel'
 import PriceGroups from '../modules/catalogue/PriceGroups'
 import InventoryAudit from '../modules/inventory/InventoryAudit'
 import GRNProcessor from '../modules/inventory/GRNProcessor'
-import TallyExportModule from '../modules/finance/TallyExportModule'
+import FinanceHub from '../modules/accounts/FinanceHub'
 import SalesDrilldownModule from '../modules/analytics/SalesDrilldownModule'
 
 export interface ModuleDefinition {
@@ -147,6 +147,24 @@ export const MODULES: ModuleDefinition[] = [
     category: 'HO'
   },
   {
+    id: 'schemes',
+    label: 'Promotions',
+    icon: Trophy,
+    component: <SchemesModule />,
+    roles: ['OWNER', 'MANAGER'],
+    showInSidebar: true,
+    category: 'POS'
+  },
+  {
+    id: 'finance',
+    label: 'Finance Hub',
+    icon: DollarSign,
+    component: <FinanceHub />,
+    roles: ['OWNER', 'MANAGER'],
+    showInSidebar: true,
+    category: 'FINANCE'
+  },
+  {
     id: 'settings',
     label: 'System Config',
     icon: Settings,
@@ -186,13 +204,12 @@ export const COMPONENT_MAP: Record<string, React.ReactNode> = {
   'hsn': <ComingSoon />,
   'grn': <GRNProcessor />,
   'transfer': <ComingSoon />,
-  'vouchers': <TallyExportModule />,
-  'promotions': <ComingSoon />,
+  'vouchers': <FinanceHub />,
   'reconcile': <InventoryAudit />,
-  'tally': <TallyExportModule />,
+  'tally': <FinanceHub />,
   'print': <PrintTemplateCenter />,
   'onboarding': <StoreOnboarding />,
-  'gstr1': <CompliancePanel />,
+  'gstr1': <FinanceHub />,
   'pricegroups': <PriceGroups />,
 };
 

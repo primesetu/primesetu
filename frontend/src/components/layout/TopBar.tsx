@@ -39,11 +39,11 @@ export default function TopBar({
   const [openMenu, setOpenMenu] = useState<string | null>(null);
   
   const categories = [
-    { id: 'POS', label: 'Bazaar', icon: Monitor, color: 'text-emerald-600' },
-    { id: 'WAREHOUSE', label: 'Khazana', icon: Package, color: 'text-amber-600' },
-    { id: 'FINANCE', label: 'Khatavahi', icon: ShieldCheck, color: 'text-indigo-600' },
-    { id: 'HO', label: 'Sanchalan', icon: Globe, color: 'text-rose-600' },
-    { id: 'SYSTEM', label: 'Sashakt', icon: Lock, color: 'text-slate-600' },
+    { id: 'POS', label: 'Sales', icon: Monitor, color: 'text-emerald-600' },
+    { id: 'WAREHOUSE', label: 'Stock', icon: Package, color: 'text-amber-600' },
+    { id: 'FINANCE', label: 'Cash', icon: ShieldCheck, color: 'text-indigo-600' },
+    { id: 'HO', label: 'Pulse', icon: Globe, color: 'text-rose-600' },
+    { id: 'SYSTEM', label: 'Setup', icon: Lock, color: 'text-slate-600' },
   ];
 
   const today = new Date().toLocaleDateString('en-GB', {
@@ -53,7 +53,7 @@ export default function TopBar({
   });
 
   return (
-    <header className="fixed top-0 left-[var(--sw)] right-0 h-[72px] bg-white border-b-2 border-border z-[100] flex items-center px-6 gap-6 shadow-sm">
+    <header className="fixed top-0 left-[var(--sw)] right-0 h-[72px] bg-white/80 backdrop-blur-md border-b border-navy/5 z-[100] flex items-center px-8 gap-8 transition-all duration-300">
       {/* ── Classic Top Menu System ── */}
       <nav className="flex items-center gap-1 h-full">
         {categories.map((cat) => (
@@ -167,9 +167,9 @@ export default function TopBar({
           </button>
         </div>
 
-        <div className="hidden lg:flex flex-col items-end">
-          <div className="text-[10px] font-black text-navy uppercase tracking-widest leading-none">Voucher Date</div>
-          <div className="text-xs font-bold text-muted mt-1">{today}</div>
+        <div className="hidden lg:flex flex-col items-end border-l border-border pl-6">
+          <div className="text-[10px] font-black text-navy/40 uppercase tracking-[0.2em] leading-none">System Date</div>
+          <div className="text-xs font-black text-navy mt-1 tracking-tighter">{today}</div>
         </div>
       </div>
     </header>

@@ -107,27 +107,75 @@ async def universal_search(
         "lookups": lookups
     }
 
-@router.get("/partners/{partner_id}/matrix")
-async def get_partner_matrix(
-    partner_id: uuid.UUID,
+@router.get("/styles/{style_code}")
+async def get_style_matrix(
+    style_code: str,
     db: AsyncSession = Depends(get_db),
     current_user: UserContext = Depends(get_current_user)
 ):
     """
-    Sovereign Intelligence: Calculates the relationship matrix for a specific partner.
-    Analyzes historical velocity and engagement depth.
+    Fetch the Size/Color matrix for a specific style group.
+    Groups items by their parent style code.
     """
-    # Phase 2 implementation uses deterministic insights based on transaction depth
-    # In a real cluster, this would invoke a stored procedure for performance
+    # In Shoper 9 parity, Style is often stored in AnalCode1 or a specific Style field
+    # For now, we query the Product table where style_code matches
+    query = select(Product).where(Product.style_code == style_code)
+    result = await db.execute(query)
+    variants = result.scalars().all()
+    
+    if not variants:
+        raise HTTPException(status_code=404, detail="Style not found")
+        
+    # Build the matrix: Rows (Colors/Sub-styles) x Cols (Sizes)
+    colors = sorted(list(set(v.color for v in variants if v.color)))
+    sizes = sorted(list(set(v.size for v in variants if v.size)))
+    
+    matrix = {}
+    for v in variants:
+        if v.color not in matrix: matrix[v.color] = {}
+        matrix[v.color][v.size] = {
+            "id": v.id,
+            "stock": v.stock_qty,
+            "price": v.retail_price,
+            "code": v.code
+        }
+        
     return {
-        "insights": [
-            {"label": "Purchase Frequency", "value": "82%", "trend": "up"},
-            {"label": "Avg Transaction", "value": "₹4,200", "trend": "stable"},
-            {"label": "Confidence Level", "value": "Elite", "trend": "none"}
-        ],
-        "associations": [
-            {"label": "Top Category", "value": "Sovereign Footwear"},
-            {"label": "Preferred Brand", "value": "Puma"},
-            {"label": "Last Interaction", "value": "48h ago"}
-        ]
+        "style_code": style_code,
+        "name": variants[0].name,
+        "colors": colors,
+        "sizes": sizes,
+        "matrix": matrix
     }
+
+@router.post("/price-revisions/bulk")
+async def bulk_price_revision(
+    revisions: List[dict],
+    effective_date: Optional[str] = None,
+    db: AsyncSession = Depends(get_db),
+    current_user: UserContext = Depends(get_current_user)
+):
+    """
+    Shoper 9 Parity: Bulk Price Revision.
+    Applies new prices to a list of products.
+    """
+    updated_count = 0
+    for rev in revisions:
+        product_id = rev.get("id")
+        new_price = rev.get("new_price")
+        
+        if not product_id or new_price is None:
+            continue
+            
+        # In a full Shoper 9 implementation, we would store this in a 'PriceRevisionHistory' table
+        # and apply it only when current_date >= effective_date.
+        # For now, we update the Product table directly to reflect the 'Sovereign' speed.
+        from app.models.base import Product
+        from sqlalchemy import update
+        
+        stmt = update(Product).where(Product.id == product_id).values(retail_price=new_price)
+        await db.execute(stmt)
+        updated_count += 1
+        
+    await db.commit()
+    return {"status": "SUCCESS", "updated_count": updated_count}

@@ -2,506 +2,284 @@
  * PrimeSetu — Shoper9-Based Retail OS
  * Zero Cloud · Sovereign · AI-Governed
  * ============================================================
- * System Architect   :  Jawahar R. M.
- * Organisation       :  AITDL Network
- * Project            :  PrimeSetu
- * © 2026 — All Rights Reserved
- * "Memory, Not Code."
+ * Day-End Reconciliation (Shoper 9 SR435700 Parity)
+ * Tesla Style Dashboard
  * ============================================================ */
-import { useState, useEffect, useCallback } from 'react'
-import { motion, AnimatePresence } from 'framer-motion'
-import { useQuery } from '@tanstack/react-query'
-import { api } from '@/api/client'
-import {
-  CheckCircle2, AlertTriangle, Printer,
-  Send, Clock, Wallet, CreditCard, QrCode, Globe, X,
-  ArrowRight, Delete, TrendingUp, FileText, ShieldCheck,
-  RotateCcw, ChevronRight, Loader2
-} from 'lucide-react'
-import { toPaise, formatCurrency, toRupees } from '@/utils/currency'
-import { useReactToPrint } from 'react-to-print'
-import { useRef } from 'react'
-import { DayEndReport } from './DayEndReport'
 
-interface DayEndProps {
-  onClose: () => void
+import React, { useState, useEffect } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
+import { 
+  ShieldCheck, 
+  Lock, 
+  Unlock, 
+  AlertTriangle, 
+  CheckCircle2, 
+  X, 
+  Zap, 
+  Clock, 
+  CreditCard, 
+  Banknote, 
+  Smartphone,
+  ArrowRight,
+  RefreshCw
+} from 'lucide-react';
+import { api } from '@/api/client';
+import { formatCurrency } from '@/utils/currency';
+
+interface DayEndModuleProps {
+  onClose: () => void;
 }
 
-type Step = 'REVIEW' | 'RECONCILE' | 'FINALIZE' | 'SYNC'
-const STEPS: Step[] = ['REVIEW', 'RECONCILE', 'FINALIZE', 'SYNC']
-const STEP_LABELS: Record<Step, string> = {
-  REVIEW: 'Review Sales',
-  RECONCILE: 'Cash Count',
-  FINALIZE: 'Verify',
-  SYNC: 'HO Pulse',
-}
+export default function DayEndModule({ onClose }: DayEndModuleProps) {
+  const [step, setStep] = useState(1);
+  const [summary, setSummary] = useState<any>(null);
+  const [loading, setLoading] = useState(true);
+  const [isFinalizing, setIsFinalizing] = useState(false);
 
-// Live Day-End Stats are fetched from the API via useQuery below.
-
-const SYNC_LOGS = [
-  { ms: 0,    text: 'Packing 142 invoices...', ok: false },
-  { ms: 900,  text: 'Encrypting financial ledger...', ok: false },
-  { ms: 1800, text: 'Connecting HO-SERVER-01...', ok: false },
-  { ms: 2600, text: 'Pulse acknowledged ✓', ok: true },
-  { ms: 3400, text: 'Uploading sales packets (1/2)...', ok: false },
-  { ms: 4200, text: 'Uploading sales packets (2/2)...', ok: false },
-  { ms: 5000, text: 'GST ledger synchronized ✓', ok: true },
-  { ms: 5800, text: 'Session sealed. Store: X01-RET-01 ✓', ok: true },
-]
-
-export default function DayEndModule({ onClose }: DayEndProps) {
-  const [step, setStep] = useState<Step>('REVIEW')
-  const [cashCountRupees, setCashCountRupees] = useState('')
-  const [syncLogs, setSyncLogs] = useState<typeof SYNC_LOGS>([])
-  const [syncDone, setSyncDone] = useState(false)
-  const [now, setNow] = useState(new Date())
-
-  const printRef = useRef<HTMLDivElement>(null)
-  const handlePrint = useReactToPrint({
-    contentRef: printRef,
-  })
-
-  const { data: stats, isLoading } = useQuery({
-    queryKey: ['day-end-summary'],
-    queryFn: () => api.billing.getDayEndSummary()
-  })
-
-  const { data: store } = useQuery({
-    queryKey: ['store-settings'],
-    queryFn: () => api.store.getSettings()
-  })
-
-  const systemSales = stats || {
-    cash: 0, card: 0, upi: 0, cn: 0, returns: 0, 
-    bill_count: 0, invoices: 0, openSlips: 0,
-    total_revenue: 0,
-    get total() { return this.total_revenue }
-  }
-
-  // Live clock
   useEffect(() => {
-    const t = setInterval(() => setNow(new Date()), 1000)
-    return () => clearInterval(t)
-  }, [])
+    fetchSummary();
+  }, []);
 
-  // Enter key to advance steps
-  useEffect(() => {
-    const handler = (e: KeyboardEvent) => {
-      if (e.key === 'Enter') {
-        if (step === 'REVIEW') setStep('RECONCILE')
-        if (step === 'RECONCILE' && cashCountRupees) setStep('FINALIZE')
-      }
-    }
-    window.addEventListener('keydown', handler)
-    return () => window.removeEventListener('keydown', handler)
-  }, [step, cashCountRupees])
-
-  // Real HO Pulse Synchronization
-  const startSync = useCallback(async () => {
-    setStep('SYNC')
-    setSyncLogs([{ ms: 0, text: 'Packing transaction packets...', ok: false }])
-    setSyncDone(false)
-    
+  const fetchSummary = async () => {
+    setLoading(true);
     try {
-      // 1. Pack and Seal locally (Simulated local step)
-      setSyncLogs(prev => [...prev, { ms: 0, text: 'Encrypting financial ledger...', ok: true }])
-      
-      // 2. Trigger Real Pulse
-      setSyncLogs(prev => [...prev, { ms: 0, text: 'Connecting HO-SERVER Pulse...', ok: false }])
-      await api.ho.triggerSync()
-      
-      setSyncLogs(prev => [
-        ...prev, 
-        { ms: 0, text: 'Pulse acknowledged ✓', ok: true },
-        { ms: 0, text: 'GST ledger synchronized ✓', ok: true },
-        { ms: 0, text: 'Session sealed. Node X01-RET-01 ✓', ok: true }
-      ])
-      setSyncDone(true)
+      const data = await api.billing.getDayEndSummary();
+      setSummary(data);
     } catch (err) {
-      setSyncLogs(prev => [...prev, { ms: 0, text: 'Pulse Failed. Retrying in Isolation...', ok: false }])
-      // Fallback to local seal
-      setTimeout(() => setSyncDone(true), 2000)
+      console.error('Failed to fetch Day-End summary');
+    } finally {
+      setLoading(false);
     }
-  }, [])
+  };
 
-  const variancePaise = cashCountRupees ? toPaise(cashCountRupees) - systemSales.cash : null
-  const isMatch = variancePaise !== null && Math.abs(variancePaise) < 100 // 1 rupee tolerance
-  const hasMismatch = variancePaise !== null && !isMatch
+  const handleFinalize = async () => {
+    setIsFinalizing(true);
+    try {
+      await api.billing.finalizeDayEnd();
+      setStep(3); // Success step
+    } catch (err: any) {
+      alert(err.message || 'Day-End Finalization Failed');
+    } finally {
+      setIsFinalizing(false);
+    }
+  };
 
-  const numpadPress = (v: string) => {
-    if (v === 'DEL') { setCashCountRupees(p => p.slice(0, -1)); return }
-    if (v === 'CLR') { setCashCountRupees(''); return }
-    if (cashCountRupees.length >= 8) return
-    setCashCountRupees(p => p + v)
+  if (loading) {
+    return (
+      <div className="flex flex-col items-center justify-center p-20 gap-4">
+        <RefreshCw className="w-10 h-10 text-brand-gold animate-spin" />
+        <span className="text-[10px] font-black uppercase tracking-[0.4em] text-navy/20">Aggregating Global Ledger...</span>
+      </div>
+    );
   }
-
-  const today = now.toLocaleDateString('en-IN', { day: '2-digit', month: 'short', year: 'numeric' })
-  const timeStr = now.toLocaleTimeString('en-IN', { hour: '2-digit', minute: '2-digit', second: '2-digit' })
 
   return (
-    <div className="flex flex-col gap-8 animate-in fade-in slide-in-from-bottom-4 duration-500">
-
-      {/* ── Header ── */}
-      <div className="flex flex-col lg:flex-row justify-between items-start lg:items-center gap-6">
-        <div>
-          <div className="flex items-center gap-3 mb-1">
-            <div className="px-3 py-1 bg-navy text-amber-400 text-[9px] font-black uppercase tracking-[0.2em] rounded-md">
-              Day-End Protocol
-            </div>
-            <div className="flex items-center gap-1.5 text-[10px] font-mono text-muted">
-              <Clock className="w-3 h-3" /> {timeStr}
-            </div>
-          </div>
-          <h1 className="text-4xl font-serif font-black text-navy uppercase">Shift Closure</h1>
-          <p className="text-xs text-muted font-bold uppercase tracking-widest mt-1">
-            Cycle: {today} &nbsp;·&nbsp; Node: X01-RET-01 &nbsp;·&nbsp;
-            <span className="text-amber-500">Status: Open</span>
-          </p>
-        </div>
-
-        <div className="flex items-center gap-3">
-          {/* Progress Stepper */}
-          <div className="flex items-center">
-            {STEPS.map((s, i) => {
-              const idx = STEPS.indexOf(step)
-              const done = i < idx
-              const active = s === step
-              return (
-                <div key={s} className="flex items-center">
-                  <div className={`flex flex-col items-center transition-all`}>
-                    <div className={`w-8 h-8 rounded-full flex items-center justify-center text-[10px] font-black border-2 transition-all
-                      ${done ? 'bg-emerald-500 border-emerald-500 text-white' :
-                        active ? 'bg-navy border-navy text-white scale-110 shadow-lg' :
-                        'bg-white border-border text-muted'}`}>
-                      {done ? <CheckCircle2 className="w-4 h-4" /> : i + 1}
-                    </div>
-                    <span className={`text-[8px] font-black uppercase mt-1 tracking-tighter whitespace-nowrap
-                      ${active ? 'text-navy' : done ? 'text-emerald-500' : 'text-muted/40'}`}>
-                      {STEP_LABELS[s]}
-                    </span>
-                  </div>
-                  {i < STEPS.length - 1 && (
-                    <div className={`w-8 h-0.5 mb-4 transition-all ${done ? 'bg-emerald-400' : 'bg-border'}`} />
-                  )}
-                </div>
-              )
-            })}
-          </div>
-
-          <button onClick={onClose}
-            className="ml-4 w-9 h-9 flex items-center justify-center rounded-xl border-2 border-border hover:bg-rose-50 hover:border-rose-200 hover:text-rose-500 transition-all text-muted">
-            <X className="w-4 h-4" />
-          </button>
-        </div>
+    <div className="flex flex-col h-full bg-white relative overflow-hidden">
+      {/* ── PROGRESS BAR (Tesla Style) ── */}
+      <div className="h-2 flex w-full">
+        <div className={`h-full transition-all duration-700 ${step >= 1 ? 'bg-brand-gold w-1/3' : 'bg-navy/5 w-1/3'}`} />
+        <div className={`h-full transition-all duration-700 ${step >= 2 ? 'bg-brand-gold w-1/3' : 'bg-navy/5 w-1/3'}`} />
+        <div className={`h-full transition-all duration-700 ${step >= 3 ? 'bg-brand-gold w-1/3' : 'bg-navy/5 w-1/3'}`} />
       </div>
 
-      {/* ── Steps ── */}
-      <AnimatePresence mode="wait">
-
-        {/* STEP 1 — REVIEW */}
-        {step === 'REVIEW' && (
-          <motion.div key="review" initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -16 }} className="space-y-8">
-            
-            {isLoading && (
-              <div className="absolute inset-0 z-50 flex items-center justify-center bg-white/50 backdrop-blur-sm rounded-[3rem]">
-                <div className="flex flex-col items-center gap-4">
-                  <Loader2 className="w-12 h-12 text-navy animate-spin" />
-                  <span className="text-[10px] font-black uppercase tracking-widest text-navy">Synthesizing Ledger...</span>
-                </div>
-              </div>
-            )}
-
-            {/* KPI Cards */}
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
-              {[
-                { label: 'Total Invoices', value: systemSales.bill_count, icon: FileText, color: 'text-navy', bg: 'bg-navy/5' },
-                { label: 'Net Sales', value: formatCurrency(systemSales.total_revenue), icon: TrendingUp, color: 'text-emerald-600', bg: 'bg-emerald-50' },
-                { label: 'Returns', value: formatCurrency(systemSales.returns || 0), icon: RotateCcw, color: 'text-rose-500', bg: 'bg-rose-50' },
-                { label: 'Open Slips', value: systemSales.openSlips || 0, icon: Clock, color: (systemSales.openSlips || 0) > 0 ? 'text-amber-600' : 'text-muted', bg: (systemSales.openSlips || 0) > 0 ? 'bg-amber-50' : 'bg-gray-50' },
-              ].map((stat, i) => (
-                <motion.div key={i} initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: i * 0.07 }}
-                  className="glass p-6 rounded-[2rem] shadow-xl relative overflow-hidden group hover:shadow-2xl transition-all">
-                  <div className={`w-10 h-10 ${stat.bg} rounded-xl flex items-center justify-center mb-4`}>
-                    <stat.icon className={`w-5 h-5 ${stat.color}`} />
-                  </div>
-                  <p className="text-[9px] font-black text-muted uppercase tracking-widest mb-1">{stat.label}</p>
-                  <div className={`text-2xl font-serif font-black ${stat.color}`}>{stat.value}</div>
-                </motion.div>
-              ))}
-            </div>
-
-            {/* Collections Summary */}
-            <div className="glass rounded-[2.5rem] overflow-hidden shadow-2xl border border-white/20">
-              <div className="bg-navy px-8 py-6 text-white flex justify-between items-center">
+      <div className="p-12 flex flex-col flex-1 min-h-0">
+        <AnimatePresence mode="wait">
+          {step === 1 && (
+            <motion.div 
+              key="step1"
+              initial={{ opacity: 0, x: 20 }}
+              animate={{ opacity: 1, x: 0 }}
+              exit={{ opacity: 0, x: -20 }}
+              className="flex-1 flex flex-col"
+            >
+              <div className="flex justify-between items-start mb-12">
                 <div>
-                  <h3 className="text-lg font-serif font-black">System Collection Summary</h3>
-                  <p className="text-[10px] font-black text-white/40 uppercase tracking-widest mt-0.5">Aggregated by Payment Mode</p>
+                  <div className="text-[10px] font-black text-brand-gold uppercase tracking-[0.4em] mb-2">Protocol Step 01</div>
+                  <h2 className="text-4xl font-black text-navy tracking-tighter" style={{ fontFamily: 'var(--font-tesla)' }}>Verification Hub</h2>
                 </div>
-                <button onClick={handlePrint}
-                  className="bg-white/10 hover:bg-white/20 p-3 rounded-xl transition-all flex items-center gap-2 text-[10px] font-black uppercase tracking-wider">
-                  <Printer className="w-4 h-4" /> Z-Report
-                </button>
+                <div className="flex items-center gap-3 px-6 py-3 bg-navy/5 rounded-2xl border border-navy/5">
+                  <Clock className="w-4 h-4 text-navy/40" />
+                  <span className="text-xs font-black text-navy">{summary.date}</span>
+                </div>
               </div>
 
-              <div className="p-8 space-y-3">
-                {[
-                  { label: 'Cash', value: systemSales.cash, icon: Wallet, bar: 'bg-emerald-400', pct: (systemSales.cash / (systemSales.total_revenue || 1)) * 100 },
-                  { label: 'Card', value: systemSales.card, icon: CreditCard, bar: 'bg-blue-400', pct: (systemSales.card / (systemSales.total_revenue || 1)) * 100 },
-                  { label: 'UPI / Digital', value: systemSales.upi, icon: QrCode, bar: 'bg-indigo-400', pct: (systemSales.upi / (systemSales.total_revenue || 1)) * 100 },
-                  { label: 'Credit Notes', value: -(systemSales.cn || 0), icon: AlertTriangle, bar: 'bg-rose-400', pct: ((systemSales.cn || 0) / (systemSales.total_revenue || 1)) * 100 },
-                ].map((item, i) => (
-                  <div key={i} className="flex items-center gap-4 p-4 rounded-2xl hover:bg-cream/30 transition-all">
-                    <div className={`w-9 h-9 rounded-xl flex items-center justify-center bg-gray-50`}>
-                      <item.icon className="w-4 h-4 text-navy/50" />
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-12">
+                <div className="tesla-card bg-navy text-white p-10">
+                  <div className="flex items-center gap-4 mb-6">
+                    <div className="w-10 h-10 bg-white/10 rounded-xl flex items-center justify-center">
+                      <Lock className="w-5 h-5 text-brand-gold" />
                     </div>
-                    <div className="flex-1">
-                      <div className="flex justify-between mb-1.5">
-                        <span className="text-xs font-black text-navy uppercase tracking-tight">{item.label}</span>
-                        <span className={`text-sm font-serif font-black ${item.value < 0 ? 'text-rose-500' : 'text-navy'}`}>
-                          {item.value < 0 ? '-' : ''}{formatCurrency(Math.abs(item.value))}
-                        </span>
-                      </div>
-                      <div className="h-1.5 bg-gray-100 rounded-full overflow-hidden">
-                        <motion.div initial={{ width: 0 }} animate={{ width: `${item.pct}%` }} transition={{ delay: 0.2 + i * 0.1, duration: 0.6, ease: 'easeOut' }}
-                          className={`h-full ${item.bar} rounded-full`} />
-                      </div>
-                    </div>
+                    <span className="text-[10px] font-black uppercase tracking-widest text-white/40">Open Tills</span>
                   </div>
-                ))}
-
-                <div className="flex justify-between items-center px-4 pt-4 border-t border-dashed border-border">
-                  <span className="text-xs font-black text-muted uppercase tracking-widest">Net Collection</span>
-                  <span className="text-2xl font-serif font-black text-navy">{formatCurrency(systemSales.total_revenue)}</span>
-                </div>
-              </div>
-
-              <div className="px-8 py-5 bg-amber-50/50 border-t border-border/50 flex items-center justify-between">
-                <p className="text-[10px] font-bold text-muted">Press <kbd className="bg-white border border-border px-1.5 py-0.5 rounded text-navy font-black mx-1">Enter</kbd> to begin physical count</p>
-                <button onClick={() => setStep('RECONCILE')}
-                  className="bg-navy text-white px-10 py-4 rounded-[1.5rem] font-black text-[11px] uppercase tracking-widest hover:bg-amber-400 hover:text-navy transition-all shadow-lg flex items-center gap-2">
-                  Begin Cash Count <ArrowRight className="w-4 h-4" />
-                </button>
-              </div>
-            </div>
-          </motion.div>
-        )}
-
-        {/* STEP 2 — RECONCILE */}
-        {step === 'RECONCILE' && (
-          <motion.div key="recon" initial={{ opacity: 0, scale: 0.97 }} animate={{ opacity: 1, scale: 1 }} exit={{ opacity: 0, scale: 0.97 }} className="max-w-3xl mx-auto w-full space-y-6">
-            <div className="glass p-10 rounded-[3rem] shadow-2xl">
-              <div className="flex items-center gap-4 mb-8">
-                <div className="w-14 h-14 bg-navy text-amber-400 rounded-[1.5rem] flex items-center justify-center shadow-xl">
-                  <Wallet className="w-7 h-7" />
-                </div>
-                <div>
-                  <h2 className="text-2xl font-serif font-black text-navy">Physical Cash Declaration</h2>
-                  <p className="text-[10px] text-muted font-bold uppercase tracking-widest">System expects: {formatCurrency(systemSales.cash)}</p>
-                </div>
-              </div>
-
-              {/* Big display */}
-              <div className="bg-navy/5 border-2 border-navy/10 rounded-3xl px-8 py-6 text-center mb-6 relative focus-within:border-amber-400 transition-all">
-                <div className="text-[11px] font-black text-muted uppercase tracking-widest mb-1">Counted Cash Amount</div>
-                <div className="text-6xl font-serif font-black text-navy min-h-[72px] flex items-center justify-center">
-                  {cashCountRupees ? `₹${parseFloat(cashCountRupees).toLocaleString()}` : <span className="text-navy/20">₹ —</span>}
-                </div>
-              </div>
-
-              {/* Numpad */}
-              <div className="grid grid-cols-3 gap-3 mb-6">
-                {['7','8','9','4','5','6','1','2','3','000','0','DEL'].map(k => (
-                  <button key={k} onClick={() => numpadPress(k)}
-                    className={`py-4 rounded-2xl text-lg font-black transition-all active:scale-95 shadow-sm
-                      ${k === 'DEL' ? 'bg-rose-50 text-rose-500 hover:bg-rose-100 col-span-1' :
-                        k === '000' ? 'bg-amber-50 text-amber-700 hover:bg-amber-100' :
-                        'bg-white border border-border text-navy hover:bg-cream hover:border-amber-300'}`}>
-                    {k === 'DEL' ? <Delete className="w-5 h-5 mx-auto" /> : k}
-                  </button>
-                ))}
-              </div>
-
-              {/* Quick-fill */}
-              <div className="flex gap-2 mb-6 flex-wrap">
-                <span className="text-[9px] font-black text-muted uppercase tracking-widest self-center">Quick fill:</span>
-                {[40000, 42500, 45000, 50000].map(v => (
-                  <button key={v} onClick={() => setCashCountRupees(v.toString())}
-                    className="px-4 py-2 bg-white border border-border rounded-xl text-[11px] font-black text-navy hover:border-amber-400 hover:bg-amber-50 transition-all">
-                    ₹{v.toLocaleString()}
-                  </button>
-                ))}
-                <button onClick={() => setCashCountRupees(toRupees(systemSales.cash).toString())}
-                  className="px-4 py-2 bg-emerald-50 border border-emerald-200 rounded-xl text-[11px] font-black text-emerald-700 hover:bg-emerald-100 transition-all">
-                  Exact Match
-                </button>
-              </div>
-
-              <div className="flex gap-3">
-                <button onClick={() => setStep('REVIEW')}
-                  className="px-8 py-4 rounded-2xl font-black text-[10px] uppercase tracking-widest border-2 border-border hover:bg-cream transition-all flex items-center gap-2">
-                  ← Back
-                </button>
-                <button onClick={() => setStep('FINALIZE')} disabled={!cashCountRupees}
-                  className="flex-1 bg-navy text-white py-4 rounded-2xl font-black text-[11px] uppercase tracking-widest hover:bg-amber-400 hover:text-navy transition-all shadow-xl disabled:opacity-30 flex items-center justify-center gap-2">
-                  Verify Discrepancy <ChevronRight className="w-4 h-4" />
-                </button>
-              </div>
-            </div>
-          </motion.div>
-        )}
-
-        {/* STEP 3 — FINALIZE */}
-        {step === 'FINALIZE' && (
-          <motion.div key="final" initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -12 }} className="space-y-6">
-
-            {/* Variance Banner */}
-            {isMatch ? (
-              <div className="glass p-8 rounded-[2.5rem] shadow-2xl border-4 border-emerald-400/30 flex items-center gap-8">
-                <div className="w-20 h-20 bg-emerald-500 text-white rounded-[2rem] flex items-center justify-center shrink-0 shadow-2xl">
-                  <CheckCircle2 className="w-10 h-10" />
-                </div>
-                <div className="flex-1">
-                  <h2 className="text-2xl font-serif font-black text-emerald-600 mb-1">Reconciliation Perfect</h2>
-                  <p className="text-xs text-muted font-bold uppercase tracking-widest">Physical count matches system records exactly.</p>
-                </div>
-                <div className="text-right shrink-0">
-                  <div className="text-[9px] font-black text-muted uppercase tracking-widest mb-1">Declared</div>
-                  <div className="text-4xl font-serif font-black text-emerald-600">{formatCurrency(toPaise(cashCountRupees))}</div>
-                </div>
-              </div>
-            ) : (
-              <div className="glass p-8 rounded-[2.5rem] shadow-2xl border-4 border-rose-400/30 flex items-center gap-8">
-                <div className="w-20 h-20 bg-rose-500 text-white rounded-[2rem] flex items-center justify-center shrink-0 shadow-2xl">
-                  <AlertTriangle className="w-10 h-10" />
-                </div>
-                <div className="flex-1">
-                  <h2 className="text-2xl font-serif font-black text-rose-600 mb-1">
-                    {variancePaise! > 0 ? 'Cash Surplus Detected' : 'Cash Deficit Detected'}
-                  </h2>
-                  <p className="text-xs text-rose-400/80 font-bold uppercase tracking-widest">
-                    Variance of {formatCurrency(Math.abs(variancePaise!))} requires supervisor acknowledgment.
+                  <div className="text-5xl font-black">{summary.open_tills_count}</div>
+                  <p className="text-[9px] font-bold text-white/20 mt-4 uppercase tracking-widest leading-relaxed">
+                    {summary.open_tills_count === 0 ? 'All terminals secured' : 'Requires manual closure'}
                   </p>
                 </div>
-                <div className="text-right shrink-0">
-                  <div className={`text-[9px] font-black uppercase tracking-widest mb-1 ${variancePaise! > 0 ? 'text-amber-500' : 'text-rose-400'}`}>
-                    {variancePaise! > 0 ? 'Surplus' : 'Deficit'}
+
+                <div className="tesla-card bg-white p-10 border border-navy/5">
+                  <div className="flex items-center gap-4 mb-6">
+                    <div className="w-10 h-10 bg-navy/5 rounded-xl flex items-center justify-center">
+                      <RefreshCw className="w-5 h-5 text-indigo-500" />
+                    </div>
+                    <span className="text-[10px] font-black uppercase tracking-widest text-navy/20">Pending Syncs</span>
                   </div>
-                  <div className="text-4xl font-serif font-black text-rose-600">{formatCurrency(Math.abs(variancePaise!))}</div>
+                  <div className="text-5xl font-black text-navy">{summary.pending_syncs}</div>
+                  <p className="text-[9px] font-bold text-navy/20 mt-4 uppercase tracking-widest leading-relaxed">
+                    Data packets awaiting HO transmission
+                  </p>
+                </div>
+
+                <div className="tesla-card bg-emerald-500 text-white p-10">
+                  <div className="flex items-center gap-4 mb-6">
+                    <div className="w-10 h-10 bg-white/10 rounded-xl flex items-center justify-center">
+                      <Zap className="w-5 h-5" />
+                    </div>
+                    <span className="text-[10px] font-black uppercase tracking-widest text-white/40">Ready State</span>
+                  </div>
+                  <div className="text-5xl font-black">{summary.can_close ? 'YES' : 'NO'}</div>
+                  <p className="text-[9px] font-bold text-white/40 mt-4 uppercase tracking-widest leading-relaxed">
+                    Sovereign validation checks passed
+                  </p>
                 </div>
               </div>
-            )}
 
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              {/* Permanent Actions checklist */}
-              <div className="glass p-8 rounded-[2.5rem] space-y-4">
-                <h4 className="text-[10px] font-black text-muted uppercase tracking-widest mb-4 flex items-center gap-2">
-                  <ShieldCheck className="w-4 h-4 text-emerald-500" /> Permanent Actions
-                </h4>
-                {[
-                  'Void all open sales slips',
-                  `Freeze transaction ledger for ${today}`,
-                  'Generate E-Invoice compliance packets',
-                  'Archive daily barcode print logs',
-                ].map((action, i) => (
-                  <div key={i} className="flex items-center gap-3 text-sm font-bold text-navy/70">
-                    <CheckCircle2 className="w-4 h-4 text-emerald-500 shrink-0" /> {action}
+              <div className="flex-1 bg-navy/5 rounded-[3rem] p-12 border border-navy/5 relative overflow-hidden">
+                <h3 className="text-xs font-black text-navy uppercase tracking-[0.3em] mb-8">Blocker Checklist</h3>
+                <div className="space-y-6">
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center gap-4">
+                      <CheckCircle2 className={summary.open_tills_count === 0 ? "text-emerald-500" : "text-navy/10"} />
+                      <span className="text-sm font-black text-navy">All POS Terminals Closed</span>
+                    </div>
+                    {summary.open_tills_count > 0 && <span className="text-[10px] font-black text-rose-500 uppercase tracking-widest">Action Required</span>}
                   </div>
-                ))}
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center gap-4">
+                      <CheckCircle2 className={summary.pending_syncs === 0 ? "text-emerald-500" : "text-navy/10"} />
+                      <span className="text-sm font-black text-navy">Cloud Sync Completed</span>
+                    </div>
+                    {summary.pending_syncs > 0 && <span className="text-[10px] font-black text-rose-500 uppercase tracking-widest">Awaiting Pulse</span>}
+                  </div>
+                </div>
+                
+                <div className="absolute bottom-0 right-0 p-12">
+                   <button 
+                     disabled={!summary.can_close}
+                     onClick={() => setStep(2)}
+                     className="tesla-button group"
+                   >
+                     Continue to Summary <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
+                   </button>
+                </div>
               </div>
+            </motion.div>
+          )}
 
-              {/* Authorize */}
-              <div className="bg-navy p-8 rounded-[2.5rem] flex flex-col justify-between">
+          {step === 2 && (
+            <motion.div 
+              key="step2"
+              initial={{ opacity: 0, x: 20 }}
+              animate={{ opacity: 1, x: 0 }}
+              exit={{ opacity: 0, x: -20 }}
+              className="flex-1 flex flex-col"
+            >
+              <div className="flex justify-between items-start mb-12">
                 <div>
-                  <h3 className="text-white text-xl font-serif font-black mb-2">Authorize Day-End</h3>
-                  {hasMismatch && (
-                    <div className="bg-rose-500/20 border border-rose-400/30 p-3 rounded-2xl mb-4">
-                      <p className="text-[10px] text-rose-300 font-black uppercase tracking-widest">
-                        ⚠ Mismatch acknowledged — supervisor override required
-                      </p>
-                    </div>
-                  )}
-                </div>
-                <div className="space-y-3">
-                  <button onClick={startSync}
-                    className="w-full bg-amber-400 text-navy py-5 rounded-[1.5rem] font-black text-[11px] tracking-widest hover:scale-105 transition-all shadow-2xl flex items-center justify-center gap-3 uppercase active:scale-95">
-                    Close Session <Send className="w-4 h-4" />
-                  </button>
-                  <button onClick={() => setStep('RECONCILE')}
-                    className="w-full bg-white/10 text-white/60 hover:text-white py-3 rounded-2xl font-black text-[10px] tracking-widest transition-all flex items-center justify-center gap-2 uppercase">
-                    ← Re-count Cash
-                  </button>
-                  <p className="text-[9px] text-white/30 text-center uppercase tracking-widest">This action cannot be undone</p>
+                  <div className="text-[10px] font-black text-brand-gold uppercase tracking-[0.4em] mb-2">Protocol Step 02</div>
+                  <h2 className="text-4xl font-black text-navy tracking-tighter" style={{ fontFamily: 'var(--font-tesla)' }}>Sovereign Ledger Summary</h2>
                 </div>
               </div>
-            </div>
-          </motion.div>
-        )}
 
-        {/* STEP 4 — SYNC */}
-        {step === 'SYNC' && (
-          <motion.div key="sync" initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }} className="max-w-2xl mx-auto w-full">
-            <div className="glass p-12 rounded-[3rem] shadow-2xl text-center">
-
-              {/* Animated globe */}
-              <div className="relative inline-block mb-8">
-                {!syncDone ? (
-                  <>
-                    <div className="w-32 h-32 border-8 border-amber-400/20 border-t-amber-400 rounded-full animate-spin" />
-                    <div className="absolute inset-0 flex items-center justify-center">
-                      <Globe className="w-12 h-12 text-navy animate-pulse" />
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-12 flex-1">
+                <div className="space-y-8">
+                  <div className="tesla-card bg-white p-12 border border-navy/5 h-full">
+                    <h3 className="text-[10px] font-black text-navy/20 uppercase tracking-[0.4em] mb-10">Sales by Mode</h3>
+                    <div className="space-y-6">
+                      {Object.entries(summary.mode_totals).map(([mode, amt]: any) => (
+                        <div key={mode} className="flex items-center justify-between py-4 border-b border-navy/5">
+                           <div className="flex items-center gap-4">
+                             {mode === 'CASH' ? <Banknote className="w-5 h-5 text-emerald-500" /> : 
+                              mode === 'CARD' ? <CreditCard className="w-5 h-5 text-indigo-500" /> : 
+                              <Smartphone className="w-5 h-5 text-brand-gold" />}
+                             <span className="text-sm font-black text-navy uppercase tracking-widest">{mode}</span>
+                           </div>
+                           <span className="text-lg font-black text-navy">{formatCurrency(amt)}</span>
+                        </div>
+                      ))}
                     </div>
-                  </>
-                ) : (
-                  <motion.div initial={{ scale: 0 }} animate={{ scale: 1 }} transition={{ type: 'spring', bounce: 0.5 }}
-                    className="w-32 h-32 bg-emerald-500 rounded-full flex items-center justify-center shadow-2xl">
-                    <CheckCircle2 className="w-16 h-16 text-white" />
-                  </motion.div>
-                )}
-              </div>
+                    <div className="mt-12 pt-8 border-t-4 border-navy flex justify-between items-end">
+                      <span className="text-[10px] font-black text-navy uppercase tracking-widest">Net Revenue</span>
+                      <span className="text-4xl font-black text-navy">{formatCurrency(summary.total_sales_paise)}</span>
+                    </div>
+                  </div>
+                </div>
 
-              <h2 className="text-3xl font-serif font-black text-navy mb-2">
-                {syncDone ? 'Session Sealed ✓' : 'Pulsing to Head Office'}
+                <div className="flex flex-col gap-8">
+                  <div className="tesla-card bg-amber-500 text-white p-12 relative overflow-hidden">
+                     <AlertTriangle className="absolute -right-8 -top-8 w-40 h-40 text-white/10" />
+                     <h3 className="text-xs font-black uppercase tracking-[0.3em] mb-6">Final Warning</h3>
+                     <p className="text-sm font-bold leading-relaxed opacity-90 mb-8">
+                       Executing Day-End will lock the current ledger. All operational dates will move forward. This action is recorded in the Sovereign Audit Log.
+                     </p>
+                     <div className="flex items-center gap-4 px-6 py-4 bg-white/10 rounded-2xl border border-white/10">
+                        <ShieldCheck className="w-6 h-6" />
+                        <span className="text-[10px] font-black uppercase tracking-widest">Sovereign Encryption Active</span>
+                     </div>
+                  </div>
+
+                  <div className="flex-1 flex items-end justify-between gap-6">
+                    <button onClick={() => setStep(1)} className="tesla-button bg-navy/5 text-navy border-transparent flex-1">
+                      Back to Verification
+                    </button>
+                    <button 
+                      onClick={handleFinalize}
+                      disabled={isFinalizing}
+                      className="tesla-button bg-emerald-600 border-emerald-600 flex-[2] relative overflow-hidden"
+                    >
+                      {isFinalizing ? <RefreshCw className="animate-spin" /> : <Lock className="w-5 h-5" />}
+                      EXECUTE DAY-END PROTOCOL
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </motion.div>
+          )}
+
+          {step === 3 && (
+            <motion.div 
+              key="step3"
+              initial={{ opacity: 0, scale: 0.9 }}
+              animate={{ opacity: 1, scale: 1 }}
+              className="flex-1 flex flex-col items-center justify-center text-center p-20"
+            >
+              <div className="w-32 h-32 bg-emerald-500 text-white rounded-[40px] flex items-center justify-center mb-10 shadow-2xl shadow-emerald-500/20 animate-bounce">
+                <CheckCircle2 size={64} />
+              </div>
+              <h2 className="text-5xl font-black text-navy tracking-tighter mb-4" style={{ fontFamily: 'var(--font-tesla)' }}>
+                Sovereign Seal Applied
               </h2>
-              <p className="text-xs text-muted font-bold uppercase tracking-widest mb-8">
-                {syncDone ? `X01-RET-01 · ${today} · Archived` : 'Do not close this window'}
+              <p className="text-[11px] font-black text-navy/40 uppercase tracking-[0.4em] mb-12">
+                Operational Day Secured · Ledger Locked · Next Cycle Initiated
               </p>
-
-              {/* Live log terminal */}
-              <div className="bg-navy rounded-3xl p-6 text-left font-mono text-[11px] space-y-2 min-h-[160px]">
-                {syncLogs.map((log, i) => (
-                  <motion.p key={i} initial={{ opacity: 0, x: -8 }} animate={{ opacity: 1, x: 0 }}
-                    className={log.ok ? 'text-emerald-400 font-black' : 'text-white/50'}>
-                    <span className="text-white/20 mr-2">[{now.toLocaleTimeString('en-IN', { hour: '2-digit', minute: '2-digit', second: '2-digit' })}]</span>
-                    {log.text}
-                  </motion.p>
-                ))}
-                {!syncDone && (
-                  <p className="text-amber-400 animate-pulse">█ processing...</p>
-                )}
-              </div>
-
-              {syncDone && (
-                <motion.button initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.3 }}
-                  onClick={onClose}
-                  className="mt-8 w-full bg-navy text-white py-5 rounded-2xl font-black text-[11px] uppercase tracking-widest hover:bg-amber-400 hover:text-navy transition-all shadow-xl">
-                  Return to Dashboard
-                </motion.button>
-              )}
-            </div>
-          </motion.div>
-        )}
-
-      </AnimatePresence>
-
-      <div className="hidden">
-         <DayEndReport 
-           ref={printRef}
-           stats={systemSales}
-           declaredCash={toPaise(cashCountRupees)}
-           variance={variancePaise || 0}
-           store={store}
-         />
+              
+              <button onClick={onClose} className="tesla-button px-12">
+                Return to Dashboard
+              </button>
+            </motion.div>
+          )}
+        </AnimatePresence>
       </div>
+
+      {/* CLOSE BUTTON */}
+      {step !== 3 && (
+        <button 
+          onClick={onClose}
+          className="absolute top-10 right-10 w-12 h-12 rounded-full bg-navy/5 text-navy/40 flex items-center justify-center hover:bg-rose-500 hover:text-white transition-all z-50"
+        >
+          <X className="w-5 h-5" />
+        </button>
+      )}
     </div>
-  )
+  );
 }

@@ -27,19 +27,24 @@
 ───────────────────────────────────────────── */
 @layer base {
   :root {
-    /* Brand */
-    --navy:        #0D1B3E;
-    --navy-light:  #162248;
-    --navy-mid:    #1E2F5C;
+    /* Tesla-Inspired Premium Palette */
+    --navy:        #080F21;   /* Deeper, more luxurious navy */
+    --navy-light:  #0F1A35;
+    --navy-mid:    #152347;
     --saffron:     #F4840A;
     --saffron-dk:  #D9720A;
     --gold:        #F9B942;
     --cream:       #FAF7F2;
     --white:       #FFFFFF;
+    --glass:       rgba(255, 255, 255, 0.03);
+    --glass-border: rgba(255, 255, 255, 0.08);
+
+    /* Typography - Outfit for that modern Tesla feel */
+    --font-tesla:  'Outfit', 'Inter', sans-serif;
 
     /* Semantic */
-    --muted:       #6B7280;   /* secondary labels */
-    --border:      #E5E0D8;   /* subtle dividers   */
+    --muted:       #94A3B8;   /* slate-400 for better readability on dark */
+    --border:      #E2E8F0;
     --surface:     #FFFFFF;   /* card backgrounds  */
 
     /* Status — colour is meaning, not decoration */
@@ -539,12 +544,45 @@
   /* Truncate with ellipsis */
   .truncate-1 { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 
-  /* Glassmorphism — used in payment overlay, modals */
-  .glass {
-    background: rgba(255,255,255,0.88);
-    backdrop-filter: blur(20px) saturate(180%);
-    -webkit-backdrop-filter: blur(20px) saturate(180%);
-    border: 1px solid rgba(255,255,255,0.5);
+  /* Tesla Glassmorphism - Cockpit Style */
+  .tesla-glass {
+    background: rgba(15, 26, 53, 0.7);
+    backdrop-filter: blur(24px) saturate(180%);
+    -webkit-backdrop-filter: blur(24px) saturate(180%);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+  }
+
+  .tesla-card {
+    @apply relative overflow-hidden rounded-[2rem] p-8 transition-all duration-500;
+    background: linear-gradient(135deg, rgba(255,255,255,0.05) 0%, rgba(255,255,255,0) 100%);
+    border: 1px solid rgba(255,255,255,0.1);
+  }
+
+  .tesla-card:hover {
+    @apply -translate-y-1;
+    border-color: rgba(244, 132, 10, 0.3);
+    background: linear-gradient(135deg, rgba(255,255,255,0.08) 0%, rgba(255,255,255,0.02) 100%);
+    box-shadow: 0 20px 40px rgba(0,0,0,0.4);
+  }
+
+  .tesla-glow {
+    box-shadow: 0 0 20px rgba(244, 132, 10, 0.2);
+  }
+
+  .tesla-button {
+    @apply flex items-center justify-center gap-3 rounded-2xl px-8 py-4 font-black uppercase tracking-widest transition-all duration-300;
+    font-family: var(--font-tesla);
+    background: var(--navy-mid);
+    color: white;
+    border: 1px solid rgba(255,255,255,0.1);
+  }
+
+  .tesla-button:hover {
+    @apply scale-105;
+    background: var(--saffron);
+    box-shadow: 0 10px 30px rgba(244, 132, 10, 0.4);
+    border-color: transparent;
   }
 
   /* Sidebar nav scrollbar hidden but functional */

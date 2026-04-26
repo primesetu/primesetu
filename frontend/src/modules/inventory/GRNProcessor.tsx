@@ -52,10 +52,28 @@ const GRNProcessor: React.FC = () => {
 
   // 3. Scanner Hook
   useBarcodeScanner((barcode) => {
-    if (!selectedPO) {
-       // Search POs by barcode or number
+    if (!selectedPO) return;
+    
+    // Find item by barcode/code in the PO list
+    const itemIndex = receivedItems.findIndex(it => 
+      it.code?.toLowerCase() === barcode.toLowerCase() || 
+      it.barcode?.toLowerCase() === barcode.toLowerCase() ||
+      it.item_id?.toLowerCase() === barcode.toLowerCase()
+    );
+
+    if (itemIndex > -1) {
+      const item = receivedItems[itemIndex];
+      const maxQty = item.qty_ordered - (item.qty_received || 0);
+      
+      if (item.received_now < maxQty) {
+        updateReceivedQty(itemIndex, item.received_now + 1);
+        // Visual feedback (optional: play sound or glow)
+        console.log(`[PrimeSetu] Auto-Added: ${barcode}`);
+      } else {
+        alert(`ITEM OVERFLOW: Ordered ${item.qty_ordered}, already inwarded.`);
+      }
     } else {
-       // Search items within selected PO
+      alert(`ITEM NOT IN PO: ${barcode} is not part of this purchase order.`);
     }
   });
 

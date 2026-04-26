@@ -26,11 +26,13 @@ import { useBarcodeScanner } from '../../hooks/useBarcodeScanner';
 import { api } from '@/api/client';
 import { formatCurrency } from '@/utils/currency';
 import InventoryAuditReport from './InventoryAuditReport';
+import MobileAudit from './MobileAudit';
 
 const InventoryAudit: React.FC = () => {
   const [activeSession, setActiveSession] = useState<any>(null);
   const [searchQuery, setSearchQuery] = useState('');
   const [viewReport, setViewReport] = useState<any | null>(null);
+  const [mobileMode, setMobileMode] = useState(false);
   const queryClient = useQueryClient();
   const searchInputRef = useRef<HTMLInputElement>(null);
 
@@ -139,15 +141,22 @@ const InventoryAudit: React.FC = () => {
           </p>
         </div>
 
-        {!activeSession && (
-           <button 
-             onClick={startAudit}
-             className="bg-brand-navy text-white px-10 py-5 rounded-[2rem] font-black text-[11px] uppercase tracking-widest hover:scale-105 transition-all shadow-2xl active:scale-95 flex items-center gap-4"
-           >
-             <Plus size={20} className="text-brand-gold" />
-             Start New Audit Session
-           </button>
-        )}
+           <div className="flex gap-4">
+             <button 
+               onClick={() => setMobileMode(true)}
+               className="bg-navy/5 text-navy px-8 py-5 rounded-[2rem] font-black text-[11px] uppercase tracking-widest hover:bg-navy/10 transition-all flex items-center gap-4"
+             >
+               <Scan size={20} className="text-brand-gold" />
+               Mobile Handheld Mode
+             </button>
+             <button 
+               onClick={startAudit}
+               className="bg-brand-navy text-white px-10 py-5 rounded-[2rem] font-black text-[11px] uppercase tracking-widest hover:scale-105 transition-all shadow-2xl active:scale-95 flex items-center gap-4"
+             >
+               <Plus size={20} className="text-brand-gold" />
+               Start New Audit Session
+             </button>
+           </div>
       </div>
 
       {!activeSession ? (
@@ -350,6 +359,10 @@ const InventoryAudit: React.FC = () => {
           audit={viewReport} 
           onClose={() => setViewReport(null)} 
         />
+      )}
+
+      {mobileMode && (
+        <MobileAudit onBack={() => setMobileMode(false)} />
       )}
     </div>
   );

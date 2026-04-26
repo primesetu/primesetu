@@ -27,10 +27,10 @@ export default function Dashboard() {
   })
 
   const STATS = [
-    { label: 'Aaj ki Bikri', key: 'today_sales', value: `₹ ${stats?.today_revenue?.toLocaleString() || '0'}`, trend: `${stats?.revenue_change || 0}%`, icon: '📈', color: 'bg-emerald-50 text-emerald-600' },
-    { label: 'Stock ka Khazana', key: 'stock_value', value: `${stats?.active_skus || 0} SKUs`, trend: 'Healthy', icon: '📦', color: 'bg-amber-50 text-amber-600' },
-    { label: 'Aaj ke Bills', key: 'bills_today', value: `${stats?.bills_today || 0}`, trend: 'Active', icon: '🧾', color: 'bg-blue-50 text-blue-600' },
-    { label: 'Low Stock Alerts', key: 'low_stock', value: `${stats?.low_stock_alerts || 0}`, trend: 'Review', icon: '⚠️', color: 'bg-rose-50 text-rose-600' },
+    { label: 'Revenue Pulse', key: 'today_sales', value: `₹ ${stats?.today_revenue?.toLocaleString() || '0'}`, trend: `${stats?.revenue_change || 0}%`, icon: '📈', color: 'bg-emerald-500/10 text-emerald-400' },
+    { label: 'Inventory Integrity', key: 'stock_value', value: `${stats?.active_skus || 0} SKUs`, trend: 'Healthy', icon: '📦', color: 'bg-amber-500/10 text-amber-400' },
+    { label: 'Ticket Velocity', key: 'bills_today', value: `${stats?.bills_today || 0}`, trend: 'Active', icon: '🧾', color: 'bg-blue-500/10 text-blue-400' },
+    { label: 'Risk Monitor', key: 'low_stock', value: `${stats?.low_stock_alerts || 0}`, trend: 'Review', icon: '⚠️', color: 'bg-rose-500/10 text-rose-400' },
   ]
 
   return (
@@ -40,10 +40,10 @@ export default function Dashboard() {
         <div>
           <div className="flex items-center gap-3 text-saffron font-bold text-sm uppercase tracking-[0.2em] mb-2">
             <span className="w-8 h-[2px] bg-saffron"></span>
-            {greeting}, {store?.name || 'Sovereign Owner'}
+            {greeting}, {store?.name || 'Sovereign Node'}
           </div>
-          <h1 className="text-5xl font-serif font-black text-navy leading-tight tracking-tighter">
-            {t('aangan')} <span className="text-navy/20">/ Overview</span>
+          <h1 className="text-5xl font-black text-navy leading-tight tracking-tighter" style={{ fontFamily: 'var(--font-tesla)' }}>
+            Cockpit <span className="text-navy/20">/ Overview</span>
           </h1>
         </div>
         <div className="glass px-6 py-4 rounded-3xl flex items-center gap-4">
@@ -57,21 +57,20 @@ export default function Dashboard() {
       </div>
 
       {/* Stats Grid */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
         {STATS.map((stat, i) => (
-          <div key={i} className="glass card-premium group overflow-hidden relative">
-            <div className={`absolute top-0 right-0 w-32 h-32 ${stat.color} opacity-10 rounded-bl-full -mr-10 -mt-10 transition-transform group-hover:scale-110 duration-700`}></div>
+          <div key={i} className="tesla-card group bg-white shadow-xl hover:shadow-2xl">
             <div className="relative z-10">
-              <div className="flex items-center justify-between mb-6">
-                <div className={`w-12 h-12 rounded-2xl ${stat.color} flex items-center justify-center text-xl shadow-inner`}>
+              <div className="flex items-center justify-between mb-8">
+                <div className={`w-14 h-14 rounded-2xl ${stat.color} flex items-center justify-center text-2xl transition-transform group-hover:scale-110`}>
                   {stat.icon}
                 </div>
-                <div className="text-[10px] font-black px-2 py-1 bg-white/50 rounded-lg text-muted shadow-sm uppercase tracking-tighter">
+                <div className="text-[10px] font-black px-3 py-1.5 bg-navy/5 rounded-full text-navy/60 uppercase tracking-widest">
                   {stat.trend}
                 </div>
               </div>
-              <div className="text-[11px] font-bold text-muted uppercase tracking-widest mb-1">{t(stat.key) || stat.label}</div>
-              <div className="text-3xl font-black text-navy tracking-tighter font-serif">{stat.value}</div>
+              <div className="text-[11px] font-black text-navy/40 uppercase tracking-[0.2em] mb-2">{stat.label}</div>
+              <div className="text-3xl font-black text-navy tracking-tight" style={{ fontFamily: 'var(--font-tesla)' }}>{stat.value}</div>
             </div>
           </div>
         ))}

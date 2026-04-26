@@ -31,6 +31,7 @@ import { useHotkeys } from 'react-hotkeys-hook'
 import { offlineService } from '@/api/offline'
 import { useLanguage } from '@/hooks/useLanguage'
 import { toPaise, formatCurrency, formatDecimal, toRupees } from '@/utils/currency'
+import StyleMatrix from '../catalogue/StyleMatrix'
 
 interface CartItem {
   id: string; code: string; name: string; brand: string; category: string
@@ -70,6 +71,8 @@ export default function BillingModule() {
   const [printFormat, setPrintFormat] = useState<'thermal' | 'a4' | 'b2b'>('thermal')
   const [sendSms, setSendSms] = useState(true)
   const [activeTill, setActiveTill] = useState<any>(null)
+  const [showStyleMatrix, setShowStyleMatrix] = useState(false)
+  const [selectedStyleCode, setSelectedStyleCode] = useState('')
   const searchRef = useRef<HTMLInputElement>(null)
 
   useEffect(() => { const t = setInterval(() => setCurrentTime(now()), 30000); return () => clearInterval(t) }, [])
@@ -120,10 +123,22 @@ export default function BillingModule() {
     const t = setTimeout(async () => {
       try {
         const results = await api.inventory.search(q)
-        const exact = Array.isArray(results) ? results.find((p: any) => p.code.toLowerCase() === q.toLowerCase()) : null
-        if (exact) { addToCart(exact); setQ('') }
+        // Shoper 9 Logic: Exact barcode match = Add to Cart. Style code match = Show Matrix.
+        const exactItem = results.find((p: any) => p.code.toLowerCase() === q.toLowerCase())
+        if (exactItem) { 
+          addToCart(exactItem); 
+          setQ(''); 
+          return;
+        }
+
+        const isStyle = results.some((p: any) => p.style_code?.toLowerCase() === q.toLowerCase())
+        if (isStyle) {
+          setSelectedStyleCode(q.toUpperCase());
+          setShowStyleMatrix(true);
+          setQ('');
+        }
       } catch {}
-    }, 200)
+    }, 400)
     return () => clearTimeout(t)
   }, [q])
 
@@ -348,6 +363,28 @@ export default function BillingModule() {
                 <span className="text-emerald-600">{formatCurrency(netPayablePaise)}</span>
               </div>
               <button onClick={() => setShowTotals(false)} className="mt-6 w-full bg-navy text-white py-3 rounded-xl text-xs font-black uppercase tracking-widest">Close [Esc]</button>
+            </div>
+          </motion.div>
+        )}
+
+        {showStyleMatrix && (
+          <motion.div 
+            initial={{ opacity: 0, scale: 0.9 }}
+            animate={{ opacity: 1, scale: 1 }}
+            exit={{ opacity: 0, scale: 0.9 }}
+            className="fixed inset-0 z-[200] flex items-center justify-center p-12 bg-navy/60 backdrop-blur-xl"
+          >
+            <div className="w-full max-w-6xl h-full bg-white rounded-[3rem] overflow-hidden shadow-2xl relative">
+              <StyleMatrix 
+                styleCode={selectedStyleCode} 
+                onBack={() => setShowStyleMatrix(false)} 
+              />
+              <button 
+                onClick={() => setShowStyleMatrix(false)}
+                className="absolute top-8 right-8 w-12 h-12 rounded-full bg-navy text-white flex items-center justify-center hover:scale-110 transition-transform z-[210]"
+              >
+                <X className="w-6 h-6" />
+              </button>
             </div>
           </motion.div>
         )}

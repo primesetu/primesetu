@@ -70,6 +70,7 @@ export const api = {
     getLookups: (category?: string) => apiClient.get('/catalogue/lookups', { params: { category } }).then(r => r.data),
     universalSearch: (q: string) => apiClient.get('/catalogue/universal-search', { params: { q } }).then(r => r.data),
     getPartnerMatrix: (id: string) => apiClient.get(`/catalogue/partners/${id}/matrix`).then(r => r.data),
+    bulkPriceRevision: (revisions: any[]) => apiClient.post('/catalogue/price-revisions/bulk', revisions).then(r => r.data),
   },
   customers: {
     list: () => apiClient.get('/catalogue/partners?type=CUSTOMER').then(r => r.data),
@@ -80,7 +81,8 @@ export const api = {
   billing: {
     finalize: (data: any) => apiClient.post('/billing/finalize', data).then(r => r.data),
     getHistory: () => apiClient.get('/billing/history').then(r => r.data),
-    getDayEndSummary: () => apiClient.get('/billing/day-end-summary').then(r => r.data),
+    getDayEndSummary: () => apiClient.get('/billing/day-end/summary').then(r => r.data),
+    finalizeDayEnd: () => apiClient.post('/billing/day-end/finalize').then(r => r.data),
     suspend: (data: any) => apiClient.post('/billing/suspend', data).then(r => r.data),
     getSuspended: () => apiClient.get('/billing/suspended').then(r => r.data),
     recallSuspended: (id: string) => apiClient.post(`/billing/suspended/${id}/recall`).then(r => r.data),
@@ -96,6 +98,8 @@ export const api = {
     issueCreditNote: (data: any) => apiClient.post('/accounts/credit-notes', data).then(r => r.data),
     getCustomerCreditNotes: (customerId: string) => apiClient.get(`/accounts/credit-notes/${customerId}`).then(r => r.data),
     receiveAdvance: (data: any) => apiClient.post('/accounts/advances', data).then(r => r.data),
+    getGSTR1Summary: () => apiClient.get('/accounts/gstr1/summary').then(r => r.data),
+    generateTallyXML: () => apiClient.get('/accounts/tally-export/xml').then(r => r.data),
   },
   integration: {
     exportTally: (start_date?: string, end_date?: string) => apiClient.get('/tally/export', { params: { start_date, end_date } }).then(r => r.data),

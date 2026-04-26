@@ -19,18 +19,22 @@ import {
   Tags,
   ShieldAlert,
   Search,
-  LayoutGrid
+  LayoutGrid,
+  DollarSign
 } from 'lucide-react';
 import { useHotkeys } from 'react-hotkeys-hook';
 
 import ItemMaster from '../inventory/ItemMaster';
 import CustomerMaster from '../crm/CustomerMaster';
+import StyleMatrix from './StyleMatrix';
 import PriceGroups from './PriceGroups';
+import VendorMaster from './VendorMaster';
+import PriceRevisionCockpit from './PriceRevisionCockpit';
 import { useMenu } from '../../hooks/useMenu';
 import { usePermission } from '../../hooks/usePermission';
 import { ICON_MAP } from '../../lib/ModuleRegistry';
 
-type RegistryTab = 'items' | 'customers' | 'pricing' | 'lookup' | 'pricegroups';
+type RegistryTab = 'items' | 'matrix' | 'customers' | 'vendors' | 'pricing' | 'lookup' | 'pricegroups' | 'revisions';
 
 const CatalogRegistry: React.FC = () => {
   const { menu, findModule } = useMenu();
@@ -43,14 +47,20 @@ const CatalogRegistry: React.FC = () => {
     if (!registryModule || !registryModule.children) {
       return [
         { id: 'items', label: 'Item Master', icon: Package, component: ItemMaster },
+        { id: 'matrix', label: 'Style Matrix', icon: LayoutGrid, component: () => <StyleMatrix styleCode="PUMA-RSX" onBack={() => setActiveTab('items')} /> },
+        { id: 'revisions', label: 'Price Revisions', icon: DollarSign, component: PriceRevisionCockpit },
         { id: 'customers', label: 'Customer Master', icon: Users, component: CustomerMaster },
+        { id: 'vendors', label: 'Vendor Registry', icon: Users, component: VendorMaster },
         { id: 'pricegroups', label: 'Price Groups', icon: Tags, component: PriceGroups },
       ];
     }
 
     const componentMap: Record<string, React.FC> = {
       'items': ItemMaster,
+      'matrix': () => <StyleMatrix styleCode="PUMA-RSX" onBack={() => setActiveTab('items')} />,
+      'revisions': PriceRevisionCockpit,
       'customers': CustomerMaster,
+      'vendors': VendorMaster,
       'pricegroups': PriceGroups,
       'pricing': PriceGroups
     };

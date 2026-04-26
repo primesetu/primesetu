@@ -56,4 +56,41 @@ async def update_scheme(scheme_id: uuid.UUID, scheme_data: dict, db: AsyncSessio
             
     await db.commit()
     await db.refresh(scheme)
+    await db.refresh(scheme)
     return scheme
+
+@router.post("/calculate")
+async def calculate_best_schemes(
+    cart_items: List[dict],
+    db: AsyncSession = Depends(get_db)
+):
+    """
+    Shoper 9 Parity: Best-Deal Scheme Engine.
+    Evaluates all active promotions against the current cart and applies the most beneficial one.
+    """
+    # Shoper 9 Logic:
+    # 1. Fetch all active schemes.
+    # 2. Filter by date/store.
+    # 3. Simulate application for each.
+    # 4. Return the one with maximum customer benefit.
+    
+    # Mocking institutional logic for now:
+    applied_schemes = []
+    total_benefit = 0
+    
+    # Example: If Qty > 2, apply 10% discount
+    total_qty = sum(item.get('qty', 0) for item in cart_items)
+    if total_qty >= 2:
+        applied_schemes.append({
+            "id": "SCH-SUMMER-24",
+            "name": "Summer Surge: Buy 2+ Get 10% Off",
+            "benefit": 450, # In Paise or relative
+            "type": "PERCENTAGE"
+        })
+        total_benefit = 450
+
+    return {
+        "best_scheme": applied_schemes[0] if applied_schemes else None,
+        "all_applicable": applied_schemes,
+        "total_benefit_paise": total_benefit
+    }

@@ -61,19 +61,24 @@ const Sidebar: React.FC<SidebarProps> = ({
     offline: { dot: 'bg-rose-500',    label: 'Offline',  pulse: false },
   }[sync.status];
 
-  // 1. Dynamic Category Resolution (Following "Never Static Arrays" Rule)
+  // 1. Dynamic Category Resolution (Shoper 9 Mirrored)
   const categories = useMemo(() => {
     const categoryMap: Record<string, string> = {
-      'POS': 'POS Operations',
-      'WAREHOUSE': 'Warehouse & Stock',
-      'FINANCE': 'Finance & Accounts',
-      'HO': 'Head Office',
-      'SYSTEM': 'System Admin'
+      'POS': 'Sales',
+      'WAREHOUSE': 'Stock',
+      'FINANCE': 'Cash',
+      'HO': 'Sync Pulse',
+      'SYSTEM': 'Setup',
+      'CATALOGUE': 'Catalogue'
     };
 
     // Extract unique categories from dynamic menu
     const uniqueCats = Array.from(new Set(modules.map(m => m.category).filter(Boolean)));
     
+    // Sort them as per Shoper 9 importance
+    const order = ['POS', 'CASH', 'WAREHOUSE', 'CATALOGUE', 'FINANCE', 'HO', 'SYSTEM'];
+    uniqueCats.sort((a, b) => order.indexOf(a!) - order.indexOf(b!));
+
     return uniqueCats.map(catId => ({
       id: catId!,
       label: categoryMap[catId!] || catId!.toUpperCase()
@@ -106,10 +111,10 @@ const Sidebar: React.FC<SidebarProps> = ({
       <button
         onClick={() => onSelect(item.id)}
         className={cn(
-          "group relative flex items-center w-full px-5 py-2.5 transition-all duration-200 border-l-[3px]",
+          "group relative flex items-center w-full px-5 py-3 transition-all duration-300 border-l-[4px]",
           isActive 
-            ? "bg-gold/10 border-gold text-gold" 
-            : "border-transparent text-white/70 hover:bg-white/10 hover:text-white"
+            ? "bg-white/5 border-saffron text-white" 
+            : "border-transparent text-white/40 hover:bg-white/[0.02] hover:text-white"
         )}
         title={isCollapsed ? item.label : ''}
       >
@@ -157,8 +162,8 @@ const Sidebar: React.FC<SidebarProps> = ({
       initial={false}
       animate={{ width: isCollapsed ? 72 : 280 }}
       transition={{ type: "spring", stiffness: 300, damping: 30 }}
-      className="fixed top-0 left-0 bottom-0 flex flex-col bg-navy z-[100] overflow-hidden border-r border-white/5 shadow-2xl"
-      style={{ backgroundColor: '#0D1B3E' }}
+      className="fixed top-0 left-0 bottom-0 flex flex-col z-[100] overflow-hidden border-r border-white/5 shadow-2xl"
+      style={{ backgroundColor: 'var(--navy)', fontFamily: 'var(--font-tesla)' }}
     >
       {/* Header / Toggle */}
       <div className="flex items-center justify-between h-[72px] px-5 border-b border-white/5 shrink-0">
@@ -229,7 +234,7 @@ const Sidebar: React.FC<SidebarProps> = ({
               >
                 {!isCollapsed && (
                   <>
-                    <span className="text-xs font-black tracking-[3px] uppercase text-white/60 group-hover:text-white/80">
+                    <span className="text-[10px] font-black tracking-[4px] uppercase text-white/30 group-hover:text-saffron transition-colors">
                       {cat.label}
                     </span>
                     <div className="text-white/30 group-hover:text-white/60">

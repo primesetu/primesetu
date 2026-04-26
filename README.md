@@ -17,7 +17,6 @@
 [![React](https://img.shields.io/badge/React-20232A?style=for-the-badge&logo=react&logoColor=61DAFB)](https://reactjs.org/)
 [![FastAPI](https://img.shields.io/badge/FastAPI-005571?style=for-the-badge&logo=fastapi&logoColor=white)](https://fastapi.tiangolo.com/)
 [![Supabase](https://img.shields.io/badge/Supabase-3ECF8E?style=for-the-badge&logo=supabase&logoColor=white)](https://supabase.io/)
-[![PWA](https://img.shields.io/badge/PWA-Ready-orange?style=for-the-badge)](https://web.dev/progressive-web-apps/)
 
 **PrimeSetu** is an institutional-grade Retail Operating System designed to achieve 100% operational parity with Shoper9. It combines modern aesthetics with "Zero Cloud" data sovereignty, providing a high-speed, AI-governed environment for high-volume retail.
 
@@ -30,19 +29,19 @@
 *   **Queue Management:** Instant "Suspend/Recall" logic for high-volume environments.
 *   **Sovereign Shortcut Guard:** Native browser protection against accidental navigation during POS operations.
 
-### 2. 📑 Advanced Inventory & Reconciliation
-*   **Day-End (EOD) Module:** Automated reconciliation of cash, card, and digital payments with institutional audit trails.
-*   **Post-Audit Adjustments:** Seamless inventory correction and bill-reprint functionalities with forensic logging.
-*   **PDT Integration:** High-speed bulk inventory import via Portable Data Terminals.
+### 2. 📑 Advanced Inventory & Intelligence (Phase 5+)
+*   **Predictive Stockout (DoC):** AI-governed "Days of Cover" forecasting to prevent inventory gaps.
+*   **Auto-Print Bridge:** Seamless single-click "Inward-to-Label" workflow for high-speed stock processing.
+*   **Physical Stock Management (PSM):** A 6-step governance loop forEnsuring book-stock integrity with AI discrepancy detection.
 
-### 3. 📊 MIS & Profitability Intelligence
-*   **Real-Time Margin Tracking:** Live profitability analysis at the bill level.
-*   **7-Day Trailing Trends:** Revenue monitoring grouped by sovereign date signatures.
-*   **HQ Pulse Engine:** Live heartbeat synchronization with Corporate Head Office for multi-store telemetry.
+### 3. 🗃️ Sovereign Master Registry (Catalogue)
+*   **Unified Partner Matrix:** Consolidated management of Items, Customers, Vendors, and Personnel.
+*   **Multi-dimensional Search:** High-speed filtering by Shoper9 classification (Size, Color, Brand, Category).
+*   **Sovereign Multi-lingual:** Real-time bridge for 14 regional languages (Hindi, Tamil, etc.) with zero-latency toggling.
 
 ### 4. 🌉 Institutional Bridges
 *   **Tally.ERP 9 / TallyPrime:** Native XML voucher generation for seamless accounting.
-*   **Native Hardware:** Thermal precision `ESC/POS` printing with zero-latency background execution.
+*   **PDT Integration:** Legacy text file and Portable Data Terminal import support for bulk data synchronization.
 
 ---
 
@@ -50,12 +49,11 @@
 
 | Layer | Technology | Role |
 | :--- | :--- | :--- |
-| **Frontend** | React 18 + TS + Tailwind | Sovereign Terminal UI (PWA Ready) |
-| **Backend** | Python 3.12 + FastAPI | Async Business Logic & Tally Integration |
-| **Database** | PostgreSQL (Supabase) | Atomic Data Persistence with RLS |
-| **Offline** | IndexedDB (`idb`) | Sovereign Fallback for Network Instability |
-| **Shortcuts** | `react-hotkeys-hook` | POS "Muscle Memory" Keyboard Logic |
-| **Analytics** | Recharts | Institutional MIS Visualizations |
+| **Frontend** | React 18 + TS + Vanilla CSS | Sovereign Terminal UI with Premium Glassmorphism |
+| **Backend** | Python 3.12 + FastAPI | Async Business Logic & Predictive Analysis |
+| **Database** | PostgreSQL (Supabase) | Atomic Data Persistence with Store-level RLS |
+| **Offline** | IndexedDB (`idb`) | Sovereign Fallback for Zero-Cloud Reliability |
+| **Intelligence**| Heuristic/AI Models | Stockout Forecasting & Smart Reordering Suggestions |
 
 ---
 

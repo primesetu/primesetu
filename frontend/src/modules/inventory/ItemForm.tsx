@@ -22,11 +22,28 @@ interface ItemFormProps {
   editId?: string | null;
 }
 
+interface Department {
+  id: string;
+  name: string;
+}
+
+interface SizeGroup {
+  id: string;
+  name: string;
+  sizes: string[];
+}
+
+interface Partner {
+  id: string;
+  name: string;
+  partner_type: string;
+}
+
 const ItemForm: React.FC<ItemFormProps> = ({ onClose, editId }) => {
   const queryClient = useQueryClient();
   
   // 1. Master Data Queries
-  const { data: departments = [] } = useQuery({
+  const { data: departments = [] } = useQuery<Department[]>({
     queryKey: ['departments'],
     queryFn: async () => {
       const { data, error } = await supabase.from('departments').select('*').order('name');
@@ -35,7 +52,7 @@ const ItemForm: React.FC<ItemFormProps> = ({ onClose, editId }) => {
     }
   });
 
-  const { data: sizeGroups = [] } = useQuery({
+  const { data: sizeGroups = [] } = useQuery<SizeGroup[]>({
     queryKey: ['size-groups'],
     queryFn: async () => {
       const { data, error } = await supabase.from('size_groups').select('*').order('name');
@@ -44,7 +61,7 @@ const ItemForm: React.FC<ItemFormProps> = ({ onClose, editId }) => {
     }
   });
 
-  const { data: partners = [] } = useQuery({
+  const { data: partners = [] } = useQuery<Partner[]>({
     queryKey: ['partners'],
     queryFn: async () => {
       const { data, error } = await supabase.from('partners').select('*').order('name');

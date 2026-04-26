@@ -16,7 +16,8 @@ import {
   ChevronRight,
   ShieldCheck,
   Zap,
-  ArrowDownLeft
+  ArrowDownLeft,
+  RefreshCw
 } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { useHotkeys } from 'react-hotkeys-hook';
@@ -32,6 +33,7 @@ const GRNProcessor: React.FC = () => {
   const [grnNumber, setGrnNumber] = useState(`GRN/${new Date().getFullYear()}/${Math.floor(Math.random()*9000)+1000}`);
   const [receivedItems, setReceivedItems] = useState<any[]>([]);
   const [isProcessing, setIsProcessing] = useState(false);
+  const [showSuccess, setShowSuccess] = useState(false);
 
   // 1. Fetch Open POs
   const { data: pos = [], loading: isLoadingPOs } = useOfflineFallback('open_pos', async () => {
@@ -99,9 +101,7 @@ const GRNProcessor: React.FC = () => {
 
       if (!res.ok) throw new Error("GRN Processing Failed");
       
-      alert("GRN Processed Successfully! Inventory Updated.");
-      setSelectedPO(null);
-      navigate('/purchase');
+      setShowSuccess(true);
     } catch (err) {
       console.error(err);
       alert("Error processing Goods Receipt");
@@ -109,6 +109,51 @@ const GRNProcessor: React.FC = () => {
       setIsProcessing(false);
     }
   };
+
+  if (showSuccess) {
+    return (
+      <div className="fixed inset-0 z-[200] flex items-center justify-center p-10 bg-navy/60 backdrop-blur-2xl animate-in fade-in duration-500">
+         <div className="bg-white w-full max-w-2xl rounded-[60px] p-16 shadow-2xl border border-white/20 text-center relative overflow-hidden">
+            <div className="absolute top-0 left-0 w-full h-2 bg-emerald-500"></div>
+            
+            <div className="w-24 h-24 bg-emerald-500 text-white rounded-[32px] flex items-center justify-center mx-auto mb-10 shadow-2xl shadow-emerald-500/20 animate-bounce">
+               <CheckCircle2 size={48} />
+            </div>
+
+            <h2 className="text-4xl font-serif font-black text-navy uppercase tracking-tight mb-4">Inwarding Finalized</h2>
+            <p className="text-[10px] font-black text-navy/40 uppercase tracking-[0.4em] mb-12">Registry Synced · Stock Ledger Updated · {grnNumber}</p>
+
+            <div className="grid grid-cols-2 gap-6 mb-12">
+               <div className="p-8 bg-navy/5 rounded-[32px] border border-navy/5">
+                  <div className="text-[9px] font-black text-navy/30 uppercase tracking-widest mb-2">Total Articles</div>
+                  <div className="text-3xl font-mono font-black text-navy">{receivedItems.reduce((acc, it) => acc + (it.received_now || 0), 0)}</div>
+               </div>
+               <div className="p-8 bg-navy/5 rounded-[32px] border border-navy/5">
+                  <div className="text-[9px] font-black text-navy/30 uppercase tracking-widest mb-2">Valuation</div>
+                  <div className="text-xl font-mono font-black text-navy">
+                    {formatCurrency(receivedItems.reduce((acc, it) => acc + (it.received_now * it.unit_cost_paise), 0))}
+                  </div>
+               </div>
+            </div>
+
+            <div className="flex flex-col gap-4">
+               <button 
+                 onClick={() => navigate('/barcode', { state: { items: receivedItems.filter(it => it.received_now > 0) } })}
+                 className="w-full py-6 bg-brand-navy text-brand-gold rounded-[2rem] font-black text-xs uppercase tracking-[0.3em] shadow-2xl hover:scale-105 transition-all flex items-center justify-center gap-4 border-2 border-brand-gold/20"
+               >
+                 <ScanBarcode size={20} /> Generate Barcodes Now
+               </button>
+               <button 
+                 onClick={() => { setSelectedPO(null); setShowSuccess(false); navigate('/purchase'); }}
+                 className="w-full py-6 text-navy/40 font-black text-[10px] uppercase tracking-widest hover:text-navy transition-all"
+               >
+                 Return to Purchase Registry
+               </button>
+            </div>
+         </div>
+      </div>
+    );
+  }
 
   return (
     <div className="space-y-6 animate-in fade-in duration-700 pb-20">

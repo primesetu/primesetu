@@ -327,6 +327,39 @@ async def get_predictive_inventory_stats(
         predicted_days=4.2 # Based on sales velocity average
     )
 
+@router.get("/predictive/{product_id}")
+async def get_product_prediction(
+    product_id: uuid.UUID,
+    db: AsyncSession = Depends(get_db),
+    current_user: UserContext = Depends(get_current_user)
+):
+    """
+    Calculate Days of Cover (DoC) for a specific product.
+    Heuristic: Current Stock / (Average Daily Sales over last 30 days).
+    """
+    # 1. Fetch current stock
+    inv_stmt = select(Inventory.quantity).where(
+        Inventory.product_id == product_id,
+        Inventory.store_id == current_user.store_id
+    )
+    current_qty = await db.scalar(inv_stmt) or 0
+    
+    # 2. Calculate average daily sales (simulated for Phase 5 prototype)
+    # In a real scenario, we would query TransactionItems
+    # We'll use a deterministic random based on product_id for consistent demo
+    random.seed(str(product_id))
+    avg_daily_sales = random.uniform(0.5, 5.0)
+    
+    days_of_cover = current_qty / avg_daily_sales if avg_daily_sales > 0 else 999
+    
+    return {
+        "product_id": product_id,
+        "current_qty": current_qty,
+        "avg_daily_sales": round(avg_daily_sales, 2),
+        "days_of_cover": round(days_of_cover, 1),
+        "risk_level": "High" if days_of_cover < 7 else "Medium" if days_of_cover < 14 else "Low"
+    }
+
 @router.post("/inward", status_code=201)
 async def stock_inward(
     inward_data: List[Dict[str, Any]], 

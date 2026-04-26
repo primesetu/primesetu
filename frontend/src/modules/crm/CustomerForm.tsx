@@ -20,11 +20,17 @@ interface CustomerFormProps {
   editId?: string | null;
 }
 
+interface PriceGroup {
+  id: string;
+  name: string;
+  is_active: boolean;
+}
+
 const CustomerForm: React.FC<CustomerFormProps> = ({ onClose, editId }) => {
   const queryClient = useQueryClient();
   
   // 1. Master Data (Price Groups)
-  const { data: priceGroups = [] } = useQuery({
+  const { data: priceGroups = [] } = useQuery<PriceGroup[]>({
     queryKey: ['price-groups'],
     queryFn: async () => {
       const { data, error } = await supabase.from('customer_price_groups').select('*').eq('is_active', true);

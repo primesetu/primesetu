@@ -25,7 +25,8 @@ import {
   ShieldAlert,
   ChevronRight,
   ArrowRight,
-  Plus
+  Plus,
+  X
 } from 'lucide-react';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { useHotkeys } from 'react-hotkeys-hook';
@@ -36,12 +37,21 @@ import { usePermission } from '../../hooks/usePermission';
 import { useBarcodeScanner } from '../../hooks/useBarcodeScanner';
 import { validateEAN13, calculateEAN13CheckDigit } from '../../utils/barcode';
 
-const BarcodeStudio: React.FC = () => {
+interface BarcodeStudioProps {
+  onClose?: () => void;
+  initialItems?: any[];
+}
+
+import { useLocation } from 'react-router-dom';
+
+const BarcodeStudio: React.FC<BarcodeStudioProps> = ({ onClose, initialItems = [] }) => {
   const queryClient = useQueryClient();
+  const location = useLocation();
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedItem, setSelectedItem] = useState<any>(null);
   const [labelQty, setLabelQty] = useState(1);
-  const [activeView, setActiveView] = useState<'STUDIO' | 'QUEUE' | 'AUDIT'>('STUDIO');
+  const [activeView, setActiveView] = useState<'STUDIO' | 'QUEUE' | 'AUDIT'>(location.state?.items ? 'QUEUE' : 'STUDIO');
+  const [printQueue, setPrintQueue] = useState<any[]>(location.state?.items || []);
   const { hasPermission } = usePermission();
 
   const searchInputRef = useRef<HTMLInputElement>(null);
@@ -285,11 +295,48 @@ const BarcodeStudio: React.FC = () => {
                       <h2 className="text-3xl font-serif font-black text-navy uppercase tracking-tight">Print Queue</h2>
                       <p className="text-[9px] font-black text-navy/40 uppercase tracking-widest mt-2">Active Jobs Pending Transmission</p>
                    </div>
-                   <button className="bg-navy text-white px-10 py-5 rounded-[2rem] font-black text-[11px] uppercase tracking-widest shadow-2xl hover:scale-105 transition-all">
-                      Dispatch All Jobs
+                   <button 
+                     onClick={() => alert("Dispatching labels to printer...")}
+                     disabled={printQueue.length === 0}
+                     className="bg-navy text-white px-10 py-5 rounded-[2rem] font-black text-[11px] uppercase tracking-widest shadow-2xl hover:scale-105 transition-all disabled:opacity-20"
+                   >
+                      Dispatch {printQueue.length} Jobs
                    </button>
                 </div>
-                <div className="py-20 text-center text-navy/10 font-black uppercase tracking-[0.4em]">Queue is currently empty</div>
+                
+                {printQueue.length > 0 ? (
+                  <div className="space-y-4 max-h-[500px] overflow-y-auto pr-4 custom-scrollbar">
+                     {printQueue.map((job, idx) => (
+                       <div key={idx} className="flex items-center justify-between p-6 bg-navy/5 rounded-3xl border border-navy/5 group">
+                          <div className="flex items-center gap-6">
+                             <div className="w-12 h-12 bg-white rounded-2xl flex items-center justify-center text-navy shadow-sm group-hover:bg-brand-gold transition-all">
+                                <Tag size={20} />
+                             </div>
+                             <div>
+                                <div className="text-xs font-black text-navy uppercase">{job.item_name || job.name}</div>
+                                <div className="text-[9px] font-mono text-navy/40 uppercase mt-1">
+                                   {job.item_code || job.code} · {job.size} · {job.colour}
+                                </div>
+                             </div>
+                          </div>
+                          <div className="flex items-center gap-8">
+                             <div className="text-right">
+                                <div className="text-[9px] font-black text-navy/30 uppercase tracking-widest mb-1">Quantity</div>
+                                <div className="text-sm font-mono font-black text-navy">{job.received_now || job.qty || 1}</div>
+                             </div>
+                             <button 
+                               onClick={() => setPrintQueue(printQueue.filter((_, i) => i !== idx))}
+                               className="p-3 text-navy/20 hover:text-rose-500 transition-all"
+                             >
+                                <X size={18} />
+                             </button>
+                          </div>
+                       </div>
+                     ))}
+                  </div>
+                ) : (
+                  <div className="py-20 text-center text-navy/10 font-black uppercase tracking-[0.4em]">Queue is currently empty</div>
+                )}
              </div>
            )}
         </div>

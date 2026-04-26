@@ -22,6 +22,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { useMenu } from '../../hooks/useMenu';
 import { ICON_MAP } from '../../lib/ModuleRegistry';
 import { useHotkeys } from 'react-hotkeys-hook';
+import { useLanguage } from '../../hooks/useLanguage';
 import { MenuItem } from '../../api/menuService';
 import { clsx, type ClassValue } from 'clsx';
 import { twMerge } from 'tailwind-merge';
@@ -47,6 +48,7 @@ const Sidebar: React.FC<SidebarProps> = ({
   isCollapsed,
   setIsCollapsed
 }) => {
+  const { language, setLanguage } = useLanguage();
   const { menu: modules, loading } = useMenu();
   const [expandedCategories, setExpandedCategories] = useState<string[]>(['POS', 'WAREHOUSE']);
 
@@ -254,21 +256,54 @@ const Sidebar: React.FC<SidebarProps> = ({
         })}
       </div>
 
-      {/* Footer / Status */}
-      <div className="mt-auto border-t border-white/5 p-[14px_20px] flex items-center gap-3 bg-white/[0.01] shrink-0">
-        <div className="w-8 h-8 bg-gradient-to-br from-saffron to-gold rounded-full flex items-center justify-center text-[12px] font-black text-white shrink-0 shadow-lg shadow-saffron/10">
-          {userRole?.[0] || 'U'}
-        </div>
+      {/* Footer / Status / Language */}
+      <div className="mt-auto border-t border-white/5 flex flex-col bg-white/[0.01] shrink-0">
         {!isCollapsed && (
-          <motion.div 
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            className="flex-1 overflow-hidden"
-          >
-            <div className="text-[11px] font-black text-white tracking-tight truncate uppercase">{nodeType} NODE</div>
-            <div className="text-[9px] text-white/40 uppercase tracking-[0.2em] truncate font-bold">{userRole} · Sovereign</div>
-          </motion.div>
+          <div className="px-5 py-3 flex gap-2 border-b border-white/5">
+            <button 
+              onClick={() => setLanguage('en')}
+              className={cn(
+                "flex-1 py-1.5 rounded-lg text-[9px] font-black transition-all",
+                language === 'en' ? "bg-gold text-navy shadow-lg" : "text-white/30 hover:bg-white/5"
+              )}
+            >
+              EN
+            </button>
+            <button 
+              onClick={() => setLanguage('hi')}
+              className={cn(
+                "flex-1 py-1.5 rounded-lg text-[9px] font-black transition-all",
+                language === 'hi' ? "bg-gold text-navy shadow-lg" : "text-white/30 hover:bg-white/5"
+              )}
+            >
+              हिन्दी
+            </button>
+          </div>
         )}
+
+        <div className="p-[14px_20px] flex items-center gap-3">
+          <div className="w-8 h-8 bg-gradient-to-br from-saffron to-gold rounded-full flex items-center justify-center text-[12px] font-black text-white shrink-0 shadow-lg shadow-saffron/10">
+            {userRole?.[0] || 'U'}
+          </div>
+          {!isCollapsed && (
+            <motion.div 
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              className="flex-1 overflow-hidden"
+            >
+              <div className="text-[11px] font-black text-white tracking-tight truncate uppercase">{nodeType} NODE</div>
+              <div className="text-[9px] text-white/40 uppercase tracking-[0.2em] truncate font-bold">{userRole} · Sovereign</div>
+            </motion.div>
+          )}
+          {isCollapsed && (
+            <button 
+              onClick={() => setLanguage(language === 'en' ? 'hi' : 'en')}
+              className="w-8 h-8 rounded-full border border-white/10 flex items-center justify-center text-[9px] font-black text-white/40 hover:text-white transition-all"
+            >
+              {language === 'en' ? 'HI' : 'EN'}
+            </button>
+          )}
+        </div>
       </div>
     </motion.aside>
   );

@@ -43,7 +43,7 @@ app.add_middleware(
 from app.routers import (
     onboarding, item_master, customer, barcode, 
     price_group, purchase, inventory, billing, 
-    ho, flexible_reports, users, menu, extensions
+    ho, flexible_reports, users, menu, extensions, finance, schemes, security, reporting
 )
 from app.routers.gstr1 import router as gstr1_router
 
@@ -63,6 +63,10 @@ app.include_router(menu.router, prefix="/api/v1/menu")
 app.include_router(billing.router)   # Prefix handled in router
 app.include_router(inventory.router) # Prefix handled in router
 app.include_router(purchase.router)  # Prefix handled in router
+app.include_router(finance.router)   # Prefix handled in router
+app.include_router(schemes.router)   # Prefix handled in router
+app.include_router(security.router)  # Prefix handled in router
+app.include_router(reporting.router) # Prefix handled in router
 
 # Reports & Sync
 app.include_router(ho.router, prefix="/api/v1/ho")

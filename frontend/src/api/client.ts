@@ -125,16 +125,27 @@ export const api = {
     getInventoryValuation: () => apiClient.get('/reports/inventory-valuation').then(r => r.data),
     generateFlexibleReport: (config: any) => apiClient.post('/reports/flexible/', config).then(r => r.data),
   },
+  reporting_engine: {
+    listTemplates: () => apiClient.get('/reporting/templates').then(r => r.data),
+    createTemplate: (data: any) => apiClient.post('/reporting/templates', data).then(r => r.data),
+    listConfigs: () => apiClient.get('/reporting/configs').then(r => r.data),
+    createConfig: (data: any) => apiClient.post('/reporting/configs', data).then(r => r.data),
+  },
   compliance: {
     getGstr1: (month: number, year: number) => apiClient.get('/gstr1/export', { params: { month, year, fmt: 'json' } }).then(r => r.data),
     downloadGstr1Csv: (month: number, year: number) => apiClient.get('/gstr1/export', { params: { month, year, fmt: 'csv' }, responseType: 'blob' }).then(r => r.data),
   },
   tills: {
-    list: () => apiClient.get('/tills').then(r => r.data),
-    create: (data: any) => apiClient.post('/tills', data).then(r => r.data),
-    open: (id: string, data: any) => apiClient.post(`/tills/${id}/open`, data).then(r => r.data),
-    close: (id: string) => apiClient.post(`/tills/${id}/close`).then(r => r.data),
-    lift: (id: string, data: any) => apiClient.post(`/tills/${id}/lift`, data).then(r => r.data),
+    list: () => apiClient.get('/finance/till').then(r => r.data),
+    create: (data: any) => apiClient.post('/finance/till', data).then(r => r.data),
+    open: (id: string, data: any) => apiClient.post(`/finance/till/${id}/open`, data).then(r => r.data),
+    close: (id: string) => apiClient.post(`/finance/till/${id}/close`).then(r => r.data),
+    lift: (id: string, data: any) => apiClient.post(`/finance/till/${id}/lift`, data).then(r => r.data),
+  },
+  security: {
+    listGroups: () => apiClient.get('/security/groups').then(r => r.data),
+    createGroup: (data: any) => apiClient.post('/security/groups', data).then(r => r.data),
+    assignUser: (data: {user_id: string, group_id: string}) => apiClient.post('/security/assign', data).then(r => r.data),
   },
   store: {
     getSettings: () => apiClient.get('/store/settings').then(r => r.data),

@@ -290,7 +290,7 @@ async def get_inventory_alerts(
     return [{"product": p.name, "code": p.code, "qty": i.quantity, "min": i.min_stock} for p, i in result.all()]
 
 @router.get("/predictive/aggregate", response_model=PredictiveStats)
-async def get_predictive_inventory_stats(
+async def get_predictive_inventory_aggregate(
     db: AsyncSession = Depends(get_db),
     current_user: UserContext = Depends(get_current_user)
 ):
@@ -475,7 +475,7 @@ async def get_predictive_inventory_stats(db: AsyncSession = Depends(get_db), cur
     stock_stmt = (
         select(Product.id, Product.category, Inventory.quantity)
         .join(Inventory, Inventory.product_id == Product.id)
-        .where(Product.store_id == store_id)
+        .where(Inventory.store_id == store_id)
     )
     stock_res = await db.execute(stock_stmt)
     stock_data = stock_res.all()

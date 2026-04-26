@@ -9,6 +9,10 @@
  * "Memory, Not Code."
  * ============================================================ */
 
+import i18n from 'i18next';
+import { initReactI18next } from 'react-i18next';
+import LanguageDetector from 'i18next-browser-languagedetector';
+
 export type SupportedLanguage = 
   | 'en' | 'hi' | 'mr' | 'gu' | 'pa' 
   | 'ta' | 'kn' | 'te' | 'ml' | 'bn' 
@@ -123,3 +127,30 @@ export const DICTIONARY: Record<string, Record<SupportedLanguage, string>> = {
     or: 'ଟର୍ମିନାଲ୍ ଅଲଗା', mn: 'টার্মিনাল লোইথোকপা', as: 'টাৰ্মিনেল বিচ্ছিন্ন', bho: 'टर्मिनल अलग बा'
   }
 }
+
+// Convert Sovereign Dictionary to i18next resources
+const resources: any = {};
+Object.keys(LANGUAGES).forEach(lang => {
+  resources[lang] = { translation: {} };
+});
+
+Object.entries(DICTIONARY).forEach(([key, values]) => {
+  Object.entries(values).forEach(([lang, translation]) => {
+    if (resources[lang]) {
+      resources[lang].translation[key] = translation;
+    }
+  });
+});
+
+i18n
+  .use(LanguageDetector)
+  .use(initReactI18next)
+  .init({
+    resources,
+    fallbackLng: 'en',
+    interpolation: {
+      escapeValue: false,
+    },
+  });
+
+export default i18n;

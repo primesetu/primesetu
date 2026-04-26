@@ -140,3 +140,8 @@ def require_role(*allowed_roles: str):
 require_cashier = require_auth                           # any logged-in user
 require_manager = require_role("manager", "admin")
 require_admin   = require_role("admin")
+
+# ── Phase 2 Legacy Aliases ───────────────────────────────────────────────────
+UserContext = CurrentUser
+get_current_user = require_auth
+verify_role = require_role

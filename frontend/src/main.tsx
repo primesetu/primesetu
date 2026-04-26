@@ -13,8 +13,12 @@ import { createRoot } from 'react-dom/client'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { LanguageProvider } from './hooks/useLanguage'
 import { F2SearchProvider, GlobalF2SearchOverlay } from './contexts/F2SearchContext'
+import { BrowserRouter } from 'react-router-dom'
 import App from './App'
 import './index.css'
+
+// Initialize i18n
+import './lib/i18n'
 
 // Unregister all stale Service Workers (PWA removed — POS requires live connectivity)
 if ('serviceWorker' in navigator) {
@@ -37,13 +41,15 @@ const queryClient = new QueryClient({
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
-    <QueryClientProvider client={queryClient}>
-      <LanguageProvider>
-        <F2SearchProvider>
-          <App />
-          <GlobalF2SearchOverlay />
-        </F2SearchProvider>
-      </LanguageProvider>
-    </QueryClientProvider>
+    <BrowserRouter>
+      <QueryClientProvider client={queryClient}>
+        <LanguageProvider>
+          <F2SearchProvider>
+            <App />
+            <GlobalF2SearchOverlay />
+          </F2SearchProvider>
+        </LanguageProvider>
+      </QueryClientProvider>
+    </BrowserRouter>
   </StrictMode>,
 )

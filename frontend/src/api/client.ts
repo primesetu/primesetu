@@ -55,6 +55,9 @@ export const api = {
     getAuditSession: (id: string) => apiClient.get(`/inventory-audit/${id}`).then(r => r.data),
     addAuditEntry: (auditId: string, data: any) => apiClient.post(`/inventory-audit/${auditId}/entries`, data).then(r => r.data),
     submitAudit: (id: string) => apiClient.post(`/inventory-audit/${id}/submit`).then(r => r.data),
+    generateInternal: (itemId: string) => apiClient.post('/barcodes/generate-internal', { item_id: itemId, is_primary: true, barcode_type: 'CODE128' }).then(r => r.data),
+    generateEAN13: (itemId: string) => apiClient.post('/barcodes/generate-ean13', { item_id: itemId, is_primary: true, barcode_type: 'EAN13' }).then(r => r.data),
+    printBarcode: (data: any) => apiClient.post('/barcodes/print', data).then(r => r.data),
   },
   procurement: {
     getSuggestions: () => apiClient.get('/procurement/reorder-suggestions').then(r => r.data),

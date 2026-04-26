@@ -18,7 +18,7 @@ import random
 from app.database import get_db
 from app.core.security import require_auth, CurrentUser
 from app.models.base import ItemBarcode, Item, Store
-from app.schemas.barcode import BarcodeResponse, BarcodeGenerateRequest
+from app.schemas.barcode import BarcodeResponse, BarcodeGenerateRequest, BarcodePrintRequest, BulkImportItem
 
 router = APIRouter(prefix="/barcodes", tags=["barcode"])
 

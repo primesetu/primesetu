@@ -36,6 +36,7 @@ import { formatCurrency } from '../../utils/currency';
 import { usePermission } from '../../hooks/usePermission';
 import { useBarcodeScanner } from '../../hooks/useBarcodeScanner';
 import { validateEAN13, calculateEAN13CheckDigit } from '../../utils/barcode';
+import { api } from '../../api/client';
 
 interface BarcodeStudioProps {
   onClose?: () => void;
@@ -80,12 +81,7 @@ const BarcodeStudio: React.FC<BarcodeStudioProps> = ({ onClose, initialItems = [
   // 2. Fetch Items
   const { data: items = [], isLoading } = useQuery({
     queryKey: ['items-barcode', searchTerm],
-    queryFn: async () => {
-      const res = await fetch(`${import.meta.env.VITE_API_URL}/api/v1/items/?search=${searchTerm}`, {
-        headers: { 'Authorization': `Bearer ${localStorage.getItem('primesetu_token')}` }
-      });
-      return res.json();
-    },
+    queryFn: () => api.inventory.search(searchTerm),
     enabled: searchTerm.length > 1
   });
 
@@ -101,52 +97,22 @@ const BarcodeStudio: React.FC<BarcodeStudioProps> = ({ onClose, initialItems = [
   useHotkeys('f6', (e) => { e.preventDefault(); setActiveView('QUEUE'); }, { enableOnFormTags: true });
 
   const generateInternal = useMutation({
-    mutationFn: async (itemId: string) => {
-       const res = await fetch(`${import.meta.env.VITE_API_URL}/api/v1/barcodes/generate-internal`, {
-          method: 'POST',
-          headers: { 
-            'Content-Type': 'application/json',
-            'Authorization': `Bearer ${localStorage.getItem('primesetu_token')}` 
-          },
-          body: JSON.stringify({ item_id: itemId, is_primary: true, barcode_type: 'CODE128' })
-       });
-       return res.json();
-    },
+    mutationFn: (itemId: string) => api.inventory.generateInternal?.(itemId) || Promise.reject('Not implemented'),
     onSuccess: () => queryClient.invalidateQueries({ queryKey: ['items-barcode'] })
   });
 
   const generateEan13 = useMutation({
-    mutationFn: async (itemId: string) => {
-       const res = await fetch(`${import.meta.env.VITE_API_URL}/api/v1/barcodes/generate-ean13`, {
-          method: 'POST',
-          headers: { 
-            'Content-Type': 'application/json',
-            'Authorization': `Bearer ${localStorage.getItem('primesetu_token')}` 
-          },
-          body: JSON.stringify({ item_id: itemId, is_primary: true, barcode_type: 'EAN13' })
-       });
-       return res.json();
-    },
+    mutationFn: (itemId: string) => api.inventory.generateEAN13?.(itemId) || Promise.reject('Not implemented'),
     onSuccess: () => queryClient.invalidateQueries({ queryKey: ['items-barcode'] })
   });
 
   const printLabel = useMutation({
-    mutationFn: async ({ barcode, copies }: { barcode: string, copies: number }) => {
-       const res = await fetch(`${import.meta.env.VITE_API_URL}/api/v1/barcodes/print`, {
-          method: 'POST',
-          headers: { 
-            'Content-Type': 'application/json',
-            'Authorization': `Bearer ${localStorage.getItem('primesetu_token')}` 
-          },
-          body: JSON.stringify({ 
-            barcode, 
-            copies,
-            label_profile: labelProfile,
-            custom_template: useCustomTemplate ? customTemplate : null
-          })
-       });
-       return res.json();
-    }
+    mutationFn: (payload: { barcode: string, copies: number }) => 
+      api.inventory.printBarcode?.({
+        ...payload,
+        label_profile: labelProfile,
+        custom_template: useCustomTemplate ? customTemplate : null
+      }) || Promise.reject('Not implemented')
   });
 
   const bulkImport = useMutation({

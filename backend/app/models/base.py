@@ -10,7 +10,7 @@
 # ============================================================ #
 
 from __future__ import annotations
-from sqlalchemy import String, Integer, Numeric, Boolean, DateTime, text, ForeignKey, JSON, BigInteger
+from sqlalchemy import String, Integer, Numeric, Boolean, DateTime, text, ForeignKey, JSON, BigInteger, ARRAY
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 from app.core.database import Base
 from datetime import datetime
@@ -226,32 +226,61 @@ class SalesSlipItem(Base):
 
     slip: Mapped["SalesSlip"] = relationship("SalesSlip", back_populates="items")
 
-class Partner(Base):
-    __tablename__ = "partners"
+
+class GeneralLookup(Base):
+    __tablename__ = "general_lookup"
 
     id: Mapped[uuid.UUID] = mapped_column(primary_key=True, server_default=text("gen_random_uuid()"))
-    type: Mapped[str] = mapped_column(String) # VENDOR, CUSTOMER, PERSONNEL
-    code: Mapped[str] = mapped_column(String, unique=True)
+    store_id: Mapped[Optional[uuid.UUID]] = mapped_column(ForeignKey("stores.id", ondelete="CASCADE"), nullable=True)
+    category: Mapped[str] = mapped_column(String) # payment_mode, colour, season, size_group, tax_category
+    code: Mapped[str] = mapped_column(String)
+    label: Mapped[str] = mapped_column(String)
+    sort_order: Mapped[int] = mapped_column(Integer, default=0)
+    is_active: Mapped[bool] = mapped_column(Boolean, default=True)
+    meta: Mapped[Optional[Dict[str, Any]]] = mapped_column(JSON, nullable=True)
+
+    store: Mapped[Optional["Store"]] = relationship("Store")
+
+class SizeGroup(Base):
+    __tablename__ = "size_groups"
+
+    id: Mapped[uuid.UUID] = mapped_column(primary_key=True, server_default=text("gen_random_uuid()"))
+    store_id: Mapped[uuid.UUID] = mapped_column(ForeignKey("stores.id", ondelete="CASCADE"), nullable=False)
     name: Mapped[str] = mapped_column(String)
-    mobile: Mapped[str] = mapped_column(String, nullable=True)
-    email: Mapped[str] = mapped_column(String, nullable=True)
-    address: Mapped[str] = mapped_column(String, nullable=True)
-    gst_no: Mapped[str] = mapped_column(String, nullable=True)
-    credit_limit: Mapped[int] = mapped_column(BigInteger, default=0)
-    loyalty_points: Mapped[int] = mapped_column(Integer, default=0)
+    sizes: Mapped[List[str]] = mapped_column(ARRAY(String)) # Stored as TEXT[] in DB
+    created_at: Mapped[datetime] = mapped_column(DateTime, server_default=text("now()"))
+
+    store: Mapped["Store"] = relationship("Store")
+
+class Department(Base):
+    __tablename__ = "departments"
+
+    id: Mapped[uuid.UUID] = mapped_column(primary_key=True, server_default=text("gen_random_uuid()"))
+    store_id: Mapped[uuid.UUID] = mapped_column(ForeignKey("stores.id", ondelete="CASCADE"), nullable=False)
+    name: Mapped[str] = mapped_column(String)
+    code: Mapped[str] = mapped_column(String)
+    parent_id: Mapped[Optional[uuid.UUID]] = mapped_column(ForeignKey("departments.id", ondelete="SET NULL"), nullable=True)
+    level: Mapped[int] = mapped_column(Integer) # 1, 2, 3
+    created_at: Mapped[datetime] = mapped_column(DateTime, server_default=text("now()"))
+
+    store: Mapped["Store"] = relationship("Store")
+    parent: Mapped[Optional["Department"]] = relationship("Department", remote_side=[id], back_populates="children")
+    children: Mapped[List["Department"]] = relationship("Department", back_populates="parent")
+
+class CustomerPriceGroup(Base):
+    __tablename__ = "customer_price_groups"
+
+    id: Mapped[uuid.UUID] = mapped_column(primary_key=True, server_default=text("gen_random_uuid()"))
+    store_id: Mapped[uuid.UUID] = mapped_column(ForeignKey("stores.id", ondelete="CASCADE"), nullable=False)
+    name: Mapped[str] = mapped_column(String)
+    code: Mapped[str] = mapped_column(String)
+    price_level: Mapped[Optional[str]] = mapped_column(String, nullable=True) # mrp, wholesale, staff, custom_1, custom_2
+    discount_pct: Mapped[float] = mapped_column(Numeric(5, 2), default=0.0)
+    is_taxable: Mapped[bool] = mapped_column(Boolean, default=True)
     is_active: Mapped[bool] = mapped_column(Boolean, default=True)
     created_at: Mapped[datetime] = mapped_column(DateTime, server_default=text("now()"))
 
-class GeneralLookup(Base):
-    __tablename__ = "general_lookups"
-
-    id: Mapped[uuid.UUID] = mapped_column(primary_key=True, server_default=text("gen_random_uuid()"))
-    category: Mapped[str] = mapped_column(String) # CATEGORY, BRAND, SIZE_GROUP, PAYMENT_MODE, TAX_SLOT
-    code: Mapped[str] = mapped_column(String)
-    name: Mapped[str] = mapped_column(String)
-    value: Mapped[str] = mapped_column(String, nullable=True) # JSON or simple value
-    is_system: Mapped[bool] = mapped_column(Boolean, default=False)
-    is_active: Mapped[bool] = mapped_column(Boolean, default=True)
+    store: Mapped["Store"] = relationship("Store")
 
 class TaxMaster(Base):
     __tablename__ = "tax_masters"
@@ -325,3 +354,131 @@ class AuditEntry(Base):
     scanned_at: Mapped[datetime] = mapped_column(DateTime, server_default=text("now()"))
 
     session: Mapped["AuditSession"] = relationship("AuditSession", back_populates="entries")
+
+class Partner(Base):
+    __tablename__ = "partners"
+
+    id: Mapped[uuid.UUID] = mapped_column(primary_key=True, server_default=text("gen_random_uuid()"))
+    store_id: Mapped[uuid.UUID] = mapped_column(ForeignKey("stores.id", ondelete="CASCADE"), nullable=False)
+    partner_type: Mapped[str] = mapped_column(String) # customer, vendor, salesperson, both
+    code: Mapped[str] = mapped_column(String)
+    name: Mapped[str] = mapped_column(String)
+    phone: Mapped[Optional[str]] = mapped_column(String, nullable=True)
+    email: Mapped[Optional[str]] = mapped_column(String, nullable=True)
+    gstin: Mapped[Optional[str]] = mapped_column(String, nullable=True)
+    address_line1: Mapped[Optional[str]] = mapped_column(String, nullable=True)
+    address_line2: Mapped[Optional[str]] = mapped_column(String, nullable=True)
+    city: Mapped[Optional[str]] = mapped_column(String, nullable=True)
+    state_code: Mapped[Optional[str]] = mapped_column(String, nullable=True)
+    pincode: Mapped[Optional[str]] = mapped_column(String, nullable=True)
+    credit_limit_paise: Mapped[int] = mapped_column(Integer, default=0)
+    credit_days: Mapped[int] = mapped_column(Integer, default=0)
+    price_group_id: Mapped[Optional[uuid.UUID]] = mapped_column(ForeignKey("customer_price_groups.id", ondelete="SET NULL"), nullable=True)
+    loyalty_points: Mapped[int] = mapped_column(Integer, default=0)
+    is_active: Mapped[bool] = mapped_column(Boolean, default=True)
+    created_at: Mapped[datetime] = mapped_column(DateTime, server_default=text("now()"))
+    updated_at: Mapped[datetime] = mapped_column(DateTime, server_default=text("now()"), onupdate=text("now()"))
+
+    store: Mapped["Store"] = relationship("Store")
+    price_group: Mapped[Optional["CustomerPriceGroup"]] = relationship("CustomerPriceGroup")
+
+class CustomerLedger(Base):
+    __tablename__ = "customer_ledger"
+
+    id: Mapped[uuid.UUID] = mapped_column(primary_key=True, server_default=text("gen_random_uuid()"))
+    store_id: Mapped[uuid.UUID] = mapped_column(ForeignKey("stores.id", ondelete="CASCADE"), nullable=False)
+    partner_id: Mapped[uuid.UUID] = mapped_column(ForeignKey("partners.id", ondelete="CASCADE"), nullable=False)
+    txn_type: Mapped[str] = mapped_column(String) # invoice, payment, credit_note, adjustment
+    txn_ref: Mapped[str] = mapped_column(String)
+    amount_paise: Mapped[int] = mapped_column(Integer)
+    balance_paise: Mapped[int] = mapped_column(Integer)
+    txn_date: Mapped[datetime] = mapped_column(DateTime, server_default=text("CURRENT_DATE"))
+    notes: Mapped[Optional[str]] = mapped_column(String, nullable=True)
+    created_at: Mapped[datetime] = mapped_column(DateTime, server_default=text("now()"))
+
+    partner: Mapped["Partner"] = relationship("Partner")
+
+class LoyaltyLedger(Base):
+    __tablename__ = "loyalty_ledger"
+
+    id: Mapped[uuid.UUID] = mapped_column(primary_key=True, server_default=text("gen_random_uuid()"))
+    store_id: Mapped[uuid.UUID] = mapped_column(ForeignKey("stores.id", ondelete="CASCADE"), nullable=False)
+    partner_id: Mapped[uuid.UUID] = mapped_column(ForeignKey("partners.id", ondelete="CASCADE"), nullable=False)
+    txn_type: Mapped[str] = mapped_column(String) # earn, redeem, expire, adjust
+    points: Mapped[int] = mapped_column(Integer)
+    balance: Mapped[int] = mapped_column(Integer)
+    sale_id: Mapped[Optional[uuid.UUID]] = mapped_column(ForeignKey("sales.id", ondelete="SET NULL"), nullable=True)
+    txn_date: Mapped[datetime] = mapped_column(DateTime, server_default=text("CURRENT_DATE"))
+    created_at: Mapped[datetime] = mapped_column(DateTime, server_default=text("now()"))
+
+    partner: Mapped["Partner"] = relationship("Partner")
+
+class Item(Base):
+    __tablename__ = "items"
+
+    id: Mapped[uuid.UUID] = mapped_column(primary_key=True, server_default=text("gen_random_uuid()"))
+    store_id: Mapped[uuid.UUID] = mapped_column(ForeignKey("stores.id", ondelete="CASCADE"), nullable=False)
+    item_code: Mapped[str] = mapped_column(String)
+    item_name: Mapped[str] = mapped_column(String(40))
+    department_id: Mapped[uuid.UUID] = mapped_column(ForeignKey("departments.id"), nullable=False)
+    brand: Mapped[Optional[str]] = mapped_column(String, nullable=True)
+    supplier_id: Mapped[Optional[uuid.UUID]] = mapped_column(ForeignKey("partners.id", ondelete="SET NULL"), nullable=True)
+    size_group_id: Mapped[Optional[uuid.UUID]] = mapped_column(ForeignKey("size_groups.id", ondelete="SET NULL"), nullable=True)
+    colour: Mapped[Optional[str]] = mapped_column(String, nullable=True)
+    colour_code: Mapped[Optional[str]] = mapped_column(String, nullable=True)
+    mrp_paise: Mapped[int] = mapped_column(Integer)
+    cost_paise: Mapped[Optional[int]] = mapped_column(Integer, nullable=True)
+    gst_rate: Mapped[int] = mapped_column(Integer) # 0, 5, 12, 18, 28
+    hsn_code: Mapped[str] = mapped_column(String)
+    is_active: Mapped[bool] = mapped_column(Boolean, default=True)
+    created_at: Mapped[datetime] = mapped_column(DateTime, server_default=text("now()"))
+    updated_at: Mapped[datetime] = mapped_column(DateTime, server_default=text("now()"), onupdate=text("now()"))
+
+    store: Mapped["Store"] = relationship("Store")
+    department: Mapped["Department"] = relationship("Department")
+    supplier: Mapped[Optional["Partner"]] = relationship("Partner")
+    size_group: Mapped[Optional["SizeGroup"]] = relationship("SizeGroup")
+
+class ItemPriceLevel(Base):
+    __tablename__ = "item_price_levels"
+
+    id: Mapped[uuid.UUID] = mapped_column(primary_key=True, server_default=text("gen_random_uuid()"))
+    item_id: Mapped[uuid.UUID] = mapped_column(ForeignKey("items.id", ondelete="CASCADE"), nullable=False)
+    store_id: Mapped[uuid.UUID] = mapped_column(ForeignKey("stores.id", ondelete="CASCADE"), nullable=False)
+    price_level: Mapped[str] = mapped_column(String) # mrp, wholesale, staff, custom_1, custom_2
+    price_paise: Mapped[int] = mapped_column(Integer)
+    valid_from: Mapped[datetime] = mapped_column(DateTime, server_default=text("CURRENT_DATE"))
+    valid_to: Mapped[Optional[datetime]] = mapped_column(DateTime, nullable=True)
+    created_at: Mapped[datetime] = mapped_column(DateTime, server_default=text("now()"))
+
+    item: Mapped["Item"] = relationship("Item")
+
+class ItemStock(Base):
+    __tablename__ = "item_stock"
+
+    id: Mapped[uuid.UUID] = mapped_column(primary_key=True, server_default=text("gen_random_uuid()"))
+    item_id: Mapped[uuid.UUID] = mapped_column(ForeignKey("items.id", ondelete="CASCADE"), nullable=False)
+    store_id: Mapped[uuid.UUID] = mapped_column(ForeignKey("stores.id", ondelete="CASCADE"), nullable=False)
+    size: Mapped[str] = mapped_column(String)
+    colour: Mapped[str] = mapped_column(String)
+    qty_on_hand: Mapped[int] = mapped_column(Integer, default=0)
+    qty_reserved: Mapped[int] = mapped_column(Integer, default=0)
+    updated_at: Mapped[datetime] = mapped_column(DateTime, server_default=text("now()"), onupdate=text("now()"))
+
+    item: Mapped["Item"] = relationship("Item")
+
+class ItemBarcode(Base):
+    __tablename__ = "item_barcodes"
+
+    id: Mapped[uuid.UUID] = mapped_column(primary_key=True, server_default=text("gen_random_uuid()"))
+    store_id: Mapped[uuid.UUID] = mapped_column(ForeignKey("stores.id", ondelete="CASCADE"), nullable=False)
+    item_id: Mapped[uuid.UUID] = mapped_column(ForeignKey("items.id", ondelete="CASCADE"), nullable=False)
+    barcode: Mapped[str] = mapped_column(String)
+    barcode_type: Mapped[str] = mapped_column(String) # EAN13, CODE128, QR, INTERNAL
+    size: Mapped[Optional[str]] = mapped_column(String, nullable=True)
+    colour: Mapped[Optional[str]] = mapped_column(String, nullable=True)
+    is_primary: Mapped[bool] = mapped_column(Boolean, default=False)
+    is_active: Mapped[bool] = mapped_column(Boolean, default=True)
+    created_at: Mapped[datetime] = mapped_column(DateTime, server_default=text("now()"))
+
+    item: Mapped["Item"] = relationship("Item")

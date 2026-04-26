@@ -1,4 +1,4 @@
-﻿# ============================================================
+# ============================================================
 # * PrimeSetu â€” Shoper9-Based Retail OS
 # * Zero Cloud Â. Sovereign Â. AI-Governed
 # ============================================================
@@ -33,13 +33,14 @@ class PartnerRead(PartnerBase):
 class LookupBase(BaseModel):
     category: str
     code: str
-    name: str
-    value: Optional[str] = None
+    label: str
+    sort_order: int = 0
     is_active: bool = True
+    meta: Optional[Dict[str, Any]] = None
 
 class LookupRead(LookupBase):
     id: uuid.UUID
-    is_system: bool
+    store_id: Optional[uuid.UUID] = None
     model_config = ConfigDict(from_attributes=True)
 
 class UniversalSearchResponse(BaseModel):

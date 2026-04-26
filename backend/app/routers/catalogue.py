@@ -97,7 +97,7 @@ async def universal_search(
     # 3. Lookups Search
     lookups = (await db.execute(
         select(GeneralLookup).where(
-            GeneralLookup.name.ilike(q_filter)
+            GeneralLookup.label.ilike(q_filter)
         ).limit(10)
     )).scalars().all()
 

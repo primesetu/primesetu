@@ -1,14 +1,8 @@
 /* ============================================================
- * PrimeSetu — Shoper9-Based Retail OS
- * Zero Cloud · Sovereign · AI-Governed
- * ============================================================
- * System Architect   :  Jawahar R. M.
- * Organisation       :  AITDL Network
- * Project            :  PrimeSetu
- * © 2026 — All Rights Reserved
- * "Memory, Not Code."
+ * PrimeSetu — TopBar Component
+ * Design: Stripe/Notion-inspired minimal topbar
+ * © 2026 AITDL Network
  * ============================================================ */
-
 import React, { useState } from 'react';
 import { Bell, Settings, Search, ChevronDown, Monitor, Package, Globe, Lock, ShieldCheck, Palette, Menu } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
@@ -26,11 +20,11 @@ interface TopBarProps {
   setIsCommandBarOpen?: (val: boolean) => void;
 }
 
-export default function TopBar({ 
-  activeTab, 
+export default function TopBar({
+  activeTab,
   setActiveTab,
-  userRole = 'CASHIER', 
-  nodeType = 'RETAIL', 
+  userRole = 'CASHIER',
+  nodeType = 'RETAIL',
   setNodeType,
   setIsCommandBarOpen
 }: TopBarProps) {
@@ -39,82 +33,89 @@ export default function TopBar({
   const { theme, setTheme } = useTheme();
   const activeModule = findModule(activeTab);
   const [openMenu, setOpenMenu] = useState<string | null>(null);
-  
+
   const categories = [
-    { id: 'POS', label: 'Sales', icon: Monitor, color: 'text-emerald-600' },
-    { id: 'WAREHOUSE', label: 'Stock', icon: Package, color: 'text-amber-600' },
-    { id: 'FINANCE', label: 'Cash', icon: ShieldCheck, color: 'text-indigo-600' },
-    { id: 'HO', label: 'Pulse', icon: Globe, color: 'text-rose-600' },
-    { id: 'SYSTEM', label: 'Setup', icon: Lock, color: 'text-slate-600' },
+    { id: 'POS',       label: 'Sales',   icon: Monitor,     },
+    { id: 'WAREHOUSE', label: 'Stock',   icon: Package,     },
+    { id: 'FINANCE',   label: 'Finance', icon: ShieldCheck, },
+    { id: 'HO',        label: 'Network', icon: Globe,       },
+    { id: 'SYSTEM',    label: 'Setup',   icon: Lock,        },
   ];
 
-  const today = new Date().toLocaleDateString('en-GB', {
-    day: '2-digit',
-    month: 'short',
-    year: 'numeric'
-  });
-
   return (
-    <header className="fixed top-0 left-[var(--sw)] right-0 h-[72px] bg-white/90 backdrop-blur-md border-b border-navy/10 z-[100] flex items-center px-8 gap-8 transition-all duration-300">
-      {/* ── Menu Toggle & Top Menu System ── */}
-      <nav className="flex items-center gap-1 h-full">
-        <button 
-          onClick={() => {
-            const toggleEvent = new CustomEvent('toggleSidebar');
-            window.dispatchEvent(toggleEvent);
-          }}
-          className="mr-4 p-2 hover:bg-navy/5 rounded-full transition-colors hidden md:block"
-        >
-          <Menu className="w-5 h-5 text-navy" />
-        </button>
-        {categories.map((cat) => (
-          <div 
-            key={cat.id} 
-            className="relative h-full flex items-center"
+    <header
+      className="fixed top-0 left-[var(--sw)] right-0 z-[100] flex items-center px-4 gap-4 transition-all duration-200"
+      style={{
+        height: 'var(--topbar-h)',
+        background: 'var(--bg-base)',
+        borderBottom: '1px solid var(--border-subtle)',
+      }}
+    >
+      {/* ── Hamburger toggle ── */}
+      <button
+        onClick={() => window.dispatchEvent(new CustomEvent('toggleSidebar'))}
+        className="p-2 rounded-md transition-colors hover:bg-[var(--bg-float)] text-[var(--text-tertiary)] hover:text-[var(--text-primary)] shrink-0"
+        title="Toggle Sidebar"
+      >
+        <Menu size={16} />
+      </button>
+
+      {/* ── Top menu nav ── */}
+      <nav className="flex items-center gap-0.5">
+        {categories.map(cat => (
+          <div
+            key={cat.id}
+            className="relative"
             onMouseEnter={() => setOpenMenu(cat.id)}
             onMouseLeave={() => setOpenMenu(null)}
           >
             <button
-              className={`flex items-center gap-2 px-4 py-2 rounded-xl text-[11px] font-black uppercase tracking-widest transition-all ${
-                openMenu === cat.id ? 'bg-navy text-white shadow-lg' : 'text-navy hover:bg-navy/5'
+              className={`flex items-center gap-1.5 px-3 py-1.5 rounded-md text-xs font-medium transition-colors ${
+                openMenu === cat.id
+                  ? 'bg-[var(--bg-float)] text-[var(--text-primary)]'
+                  : 'text-[var(--text-secondary)] hover:text-[var(--text-primary)] hover:bg-[var(--bg-float)]'
               }`}
             >
-              <cat.icon className="w-4 h-4" />
+              <cat.icon size={13} />
               {cat.label}
-              <ChevronDown className={`w-3 h-3 transition-transform duration-300 ${openMenu === cat.id ? 'rotate-180' : ''}`} />
+              <ChevronDown size={11} className={`transition-transform duration-150 ${openMenu === cat.id ? 'rotate-180' : ''}`} />
             </button>
 
             <AnimatePresence>
               {openMenu === cat.id && (
                 <motion.div
-                  initial={{ opacity: 0, y: 10, scale: 0.95 }}
+                  initial={{ opacity: 0, y: 6, scale: 0.97 }}
                   animate={{ opacity: 1, y: 0, scale: 1 }}
-                  exit={{ opacity: 0, y: 10, scale: 0.95 }}
-                  className="absolute top-[80%] left-0 w-64 bg-white border-2 border-border rounded-2xl shadow-2xl overflow-hidden py-2 z-[110]"
+                  exit={{ opacity: 0, y: 6, scale: 0.97 }}
+                  transition={{ duration: 0.12, ease: [0.16, 1, 0.3, 1] }}
+                  className="absolute top-full left-0 mt-1 w-56 rounded-xl overflow-hidden py-1 z-[200]"
+                  style={{ background: 'var(--bg-overlay)', border: '1px solid var(--border-default)', boxShadow: '0 16px 40px rgba(0,0,0,0.5)' }}
                 >
-                  <div className={`px-4 py-2 mb-2 border-b border-border/50 bg-cream/30 ${cat.color} font-black text-[9px] uppercase tracking-tighter`}>
-                    {cat.id} Modules
+                  <div className="px-3 py-2 mb-1" style={{ borderBottom: '1px solid var(--border-subtle)' }}>
+                    <span className="text-[11px] font-medium uppercase tracking-wider text-[var(--text-tertiary)]">
+                      {cat.label}
+                    </span>
                   </div>
                   {MODULES.filter(m => m.category === cat.id).map(module => (
                     <button
                       key={module.id}
-                      onClick={() => {
-                        setActiveTab(module.id);
-                        setOpenMenu(null);
-                      }}
-                      className="w-full flex items-center gap-3 px-4 py-3 text-left hover:bg-saffron/10 group transition-colors"
+                      onClick={() => { setActiveTab(module.id); setOpenMenu(null); }}
+                      className="w-full flex items-center gap-3 px-3 py-2 text-left transition-colors hover:bg-[var(--bg-float)] group"
                     >
-                      <div className="w-8 h-8 rounded-lg bg-navy/5 flex items-center justify-center group-hover:bg-navy group-hover:text-gold transition-all">
-                        <module.icon className="w-4 h-4" />
+                      <div className="w-7 h-7 rounded-md flex items-center justify-center shrink-0"
+                           style={{ background: 'var(--bg-float)' }}>
+                        <module.icon size={13} className="text-[var(--text-secondary)] group-hover:text-[var(--accent-light)]" />
                       </div>
-                      <div className="flex flex-col">
-                        <span className="text-xs font-black text-navy uppercase tracking-wider">{module.label}</span>
-                        {module.shortcut && <span className="text-[9px] font-bold text-muted">{module.shortcut}</span>}
+                      <div>
+                        <div className="text-sm font-medium text-[var(--text-primary)] leading-tight">{module.label}</div>
+                        {module.shortcut && (
+                          <div className="text-[10px] font-mono text-[var(--text-tertiary)]">{module.shortcut}</div>
+                        )}
                       </div>
                     </button>
                   ))}
                   {MODULES.filter(m => m.category === cat.id).length === 0 && (
-                    <div className="px-4 py-8 text-center text-[10px] font-bold text-muted uppercase italic">No modules assigned</div>
+                    <div className="px-3 py-4 text-center text-xs text-[var(--text-tertiary)]">No modules</div>
                   )}
                 </motion.div>
               )}
@@ -123,30 +124,63 @@ export default function TopBar({
         ))}
       </nav>
 
-      <div className="h-8 w-px bg-border mx-2" />
+      {/* ── Divider ── */}
+      <div className="w-px h-4 shrink-0" style={{ background: 'var(--border-default)' }} />
 
-      {/* ── Dynamic Breadcrumb Path ── */}
-      <div className="flex-1 flex flex-col">
-        <div className="flex items-center gap-2 text-[10px] font-black text-muted uppercase tracking-widest">
-          <span>PrimeSetu</span>
-          <span className="opacity-30">/</span>
-          <span className="text-navy">{categories.find(c => c.id === activeModule?.category)?.label || 'System'}</span>
-        </div>
-        <h2 className="text-xl font-serif font-black text-navy leading-tight truncate max-w-[200px]">
+      {/* ── Breadcrumb ── */}
+      <div className="flex items-center gap-1.5 text-xs overflow-hidden flex-1">
+        <span className="text-[var(--text-tertiary)] shrink-0">PrimeSetu</span>
+        <span className="text-[var(--border-default)]">/</span>
+        <span className="text-[var(--text-primary)] font-medium truncate">
           {activeModule?.label || 'Dashboard'}
-        </h2>
+        </span>
       </div>
 
-      <div className="flex items-center gap-4">
-        {/* NODE TOPOLOGY SWITCHER */}
+      {/* ── Right actions ── */}
+      <div className="flex items-center gap-1 shrink-0">
+        {/* Search */}
+        <button
+          onClick={() => setIsCommandBarOpen?.(true)}
+          className="flex items-center gap-2 px-3 py-1.5 rounded-md text-xs font-medium transition-colors text-[var(--text-tertiary)] hover:text-[var(--text-primary)] hover:bg-[var(--bg-float)] border border-transparent hover:border-[var(--border-default)]"
+        >
+          <Search size={13} />
+          <span className="hidden md:inline">Search</span>
+          <span className="font-mono text-[10px] px-1 py-0.5 rounded" style={{ background: 'var(--bg-float)', border: '1px solid var(--border-subtle)' }}>F3</span>
+        </button>
+
+        {/* Theme toggle */}
+        <button
+          onClick={() => setTheme(theme === 'tesla' ? 'shoper9' : 'tesla')}
+          className="p-2 rounded-md transition-colors text-[var(--text-tertiary)] hover:text-[var(--text-primary)] hover:bg-[var(--bg-float)]"
+          title={theme === 'tesla' ? 'Switch to Classic' : 'Switch to Modern'}
+        >
+          <Palette size={15} />
+        </button>
+
+        <button
+          className="p-2 rounded-md transition-colors text-[var(--text-tertiary)] hover:text-[var(--text-primary)] hover:bg-[var(--bg-float)]"
+        >
+          <Bell size={15} />
+        </button>
+
+        <button
+          onClick={() => setActiveTab('settings')}
+          className="p-2 rounded-md transition-colors text-[var(--text-tertiary)] hover:text-[var(--text-primary)] hover:bg-[var(--bg-float)]"
+        >
+          <Settings size={15} />
+        </button>
+
+        {/* Node type (owners only) */}
         {userRole === 'OWNER' && setNodeType && (
-          <div className="hidden xl:flex items-center bg-navy/5 border border-navy/10 rounded-xl p-1 gap-1">
-            {(['RETAIL', 'WAREHOUSE', 'HO'] as const).map(type => (
+          <div className="flex items-center rounded-md p-0.5 gap-0.5 ml-1" style={{ background: 'var(--bg-float)', border: '1px solid var(--border-subtle)' }}>
+            {(['RETAIL', 'HO', 'WAREHOUSE'] as const).map(type => (
               <button
                 key={type}
                 onClick={() => setNodeType(type)}
-                className={`px-3 py-1.5 text-[9px] font-black uppercase tracking-widest rounded-lg transition-all ${
-                  nodeType === type ? 'bg-navy text-white shadow-md' : 'text-navy/50 hover:bg-navy/10'
+                className={`px-2 py-1 text-[10px] font-medium rounded transition-all ${
+                  nodeType === type
+                    ? 'bg-[var(--accent)] text-white'
+                    : 'text-[var(--text-tertiary)] hover:text-[var(--text-primary)]'
                 }`}
               >
                 {type}
@@ -154,44 +188,6 @@ export default function TopBar({
             ))}
           </div>
         )}
-
-        {/* SEARCH BAR (F3) */}
-        <div 
-          onClick={() => setIsCommandBarOpen?.(true)}
-          className="hidden md:flex items-center gap-3 bg-cream border-2 border-border rounded-xl px-4 py-2 text-xs font-bold text-muted cursor-pointer hover:border-navy transition-all group w-[220px]"
-        >
-          <Search className="w-4 h-4 group-hover:text-navy" />
-          <span>Quick Find...</span>
-          <span className="ml-auto font-mono bg-border text-[9px] px-1.5 py-0.5 rounded">F3</span>
-        </div>
-
-        {/* UTILITIES */}
-        <div className="flex items-center gap-2">
-          <button 
-            onClick={() => setTheme(theme === 'tesla' ? 'shoper9' : 'tesla')}
-            className="w-10 h-10 rounded-xl bg-cream border border-border flex items-center justify-center hover:bg-navy hover:text-white transition-all group relative"
-            title="Toggle Theme"
-          >
-            <Palette className="w-5 h-5" />
-            <span className="absolute -bottom-8 left-1/2 -translate-x-1/2 bg-navy text-white text-[9px] px-2 py-1 rounded opacity-0 group-hover:opacity-100 whitespace-nowrap transition-opacity">
-              {theme === 'tesla' ? 'Switch to Classic' : 'Switch to Modern'}
-            </span>
-          </button>
-          <button className="w-10 h-10 rounded-xl bg-cream border border-border flex items-center justify-center hover:bg-navy hover:text-white transition-all">
-            <Bell className="w-5 h-5" />
-          </button>
-          <button 
-            onClick={() => setActiveTab('settings')}
-            className="w-10 h-10 rounded-xl bg-cream border border-border flex items-center justify-center hover:bg-navy hover:text-white transition-all"
-          >
-            <Settings className="w-5 h-5" />
-          </button>
-        </div>
-
-        <div className="hidden lg:flex flex-col items-end border-l border-border pl-6">
-          <div className="text-[10px] font-black text-navy/40 uppercase tracking-[0.2em] leading-none">System Date</div>
-          <div className="text-xs font-black text-navy mt-1 tracking-tighter">{today}</div>
-        </div>
       </div>
     </header>
   );

@@ -1,0 +1,112 @@
+#!/bin/sh
+# ============================================================
+# PrimeSetu — Pre-commit Design Lock Hook
+# © 2026 AITDL Network — All Rights Reserved
+# ============================================================
+# This hook blocks commits that modify LOCKED design files
+# without explicit unlock. See DESIGN_LOCK.md for rules.
+# ============================================================
+
+RED='\033[0;31m'
+YELLOW='\033[1;33m'
+GREEN='\033[0;32m'
+NC='\033[0m' # No Color
+
+echo ""
+echo "🔒 PrimeSetu Design Lock — Pre-commit Check"
+echo "─────────────────────────────────────────────"
+
+# ── LOCKED FILES ──
+LOCKED_FILES=(
+  "frontend/src/index.css"
+  "frontend/tailwind.config.ts"
+)
+
+BLOCKED=0
+
+for FILE in "${LOCKED_FILES[@]}"; do
+  if git diff --cached --name-only | grep -q "^$FILE$"; then
+    echo ""
+    echo "${RED}❌ DESIGN LOCK VIOLATION${NC}"
+    echo "   File: ${YELLOW}$FILE${NC}"
+    echo "   This file is LOCKED by the PrimeSetu Design System."
+    echo "   See DESIGN_LOCK.md for the approval process."
+    BLOCKED=1
+  fi
+done
+
+# ── BANNED PATTERN CHECK (frontend src files only) ──
+STAGED_TSX=$(git diff --cached --name-only | grep "frontend/src" | grep -E "\.(tsx|ts|css)$")
+
+if [ -n "$STAGED_TSX" ]; then
+  # Check for banned patterns
+  BANNED_FOUND=0
+
+  while IFS= read -r file; do
+    # Skip locked files (already handled above)
+    [[ "$file" == "frontend/src/index.css" ]] && continue
+
+    STAGED_CONTENT=$(git show ":$file" 2>/dev/null)
+
+    # Check for emojis used as icons
+    if echo "$STAGED_CONTENT" | grep -qP '[\x{1F300}-\x{1F9FF}]' 2>/dev/null; then
+      echo "${RED}❌ BANNED: Emoji icon detected in $file${NC}"
+      echo "   Use Lucide React icons instead. See DESIGN_LOCK.md"
+      BANNED_FOUND=1
+    fi
+
+    # Check for font-black
+    if echo "$STAGED_CONTENT" | grep -q '"font-black"'; then
+      echo "${RED}❌ BANNED: font-black (weight 900) in $file${NC}"
+      echo "   Use font-semibold (600) max. See DESIGN_LOCK.md"
+      BANNED_FOUND=1
+    fi
+
+    # Check for bg-white in JSX
+    if echo "$STAGED_CONTENT" | grep -qE 'className=.*"[^"]*bg-white[^"]*"'; then
+      echo "${RED}❌ BANNED: bg-white hardcode in $file${NC}"
+      echo "   Use var(--bg-overlay) or surface-* classes. See DESIGN_LOCK.md"
+      BANNED_FOUND=1
+    fi
+
+    # Check for text-black
+    if echo "$STAGED_CONTENT" | grep -qE 'className=.*"[^"]*text-black[^"]*"'; then
+      echo "${RED}❌ BANNED: text-black in $file${NC}"
+      echo "   Use var(--text-primary). See DESIGN_LOCK.md"
+      BANNED_FOUND=1
+    fi
+
+    # Check for bg-navy (old token)
+    if echo "$STAGED_CONTENT" | grep -qE 'className=.*"[^"]*bg-navy[^"]*"'; then
+      echo "${YELLOW}⚠️  DEPRECATED: bg-navy used in $file${NC}"
+      echo "   Use var(--bg-elevated) or bg-elevated. See DESIGN_LOCK.md"
+      BANNED_FOUND=1
+    fi
+
+    # Check for bg-brand-gold (old token)
+    if echo "$STAGED_CONTENT" | grep -qE 'className=.*"[^"]*bg-brand-gold[^"]*"'; then
+      echo "${YELLOW}⚠️  DEPRECATED: bg-brand-gold in $file${NC}"
+      echo "   Use var(--accent) or btn-primary. See DESIGN_LOCK.md"
+      BANNED_FOUND=1
+    fi
+
+  done <<< "$STAGED_TSX"
+
+  if [ $BANNED_FOUND -eq 1 ]; then
+    BLOCKED=1
+  fi
+fi
+
+# ── RESULT ──
+echo ""
+if [ $BLOCKED -eq 1 ]; then
+  echo "${RED}🚫 COMMIT BLOCKED — Design Lock Violations Found${NC}"
+  echo "   Fix violations or contact architect for unlock."
+  echo "   Reference: DESIGN_LOCK.md"
+  echo ""
+  exit 1
+else
+  echo "${GREEN}✅ Design Lock — All checks passed${NC}"
+  echo ""
+  exit 0
+fi

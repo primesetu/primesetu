@@ -1,26 +1,10 @@
 /* ============================================================
- * PrimeSetu — Shoper9-Based Retail OS
- * Zero Cloud · Sovereign · AI-Governed
- * ============================================================
- * System Architect   :  Jawahar R. M.
- * Organisation     :  AITDL Network
- * Project            :  PrimeSetu
- * © 2026 — All Rights Reserved
- * "Memory, Not Code."
+ * PrimeSetu — Sidebar Component
+ * Design: Linear-inspired dark sidebar
+ * © 2026 AITDL Network
  * ============================================================ */
-
 import React, { useState, useMemo } from 'react';
-import { 
-  ChevronDown, 
-  ChevronRight, 
-  Menu,
-  ChevronLeft,
-  LayoutDashboard,
-  Zap,
-  Globe,
-  ShieldCheck,
-  Power
-} from 'lucide-react';
+import { ChevronDown, LayoutDashboard, Power } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useMenu } from '../../hooks/useMenu';
 import { ICON_MAP } from '../../lib/ModuleRegistry';
@@ -39,167 +23,131 @@ interface SidebarProps {
   setIsCollapsed: (val: boolean) => void;
 }
 
-const Sidebar: React.FC<SidebarProps> = ({ 
-  activeTab, 
-  setActiveTab, 
-  userRole = 'CASHIER', 
-  nodeType = 'RETAIL',
+const Sidebar: React.FC<SidebarProps> = ({
+  activeTab,
+  setActiveTab,
+  userRole = 'CASHIER',
   isCollapsed,
   setIsCollapsed
 }) => {
-  const { language, setLanguage } = useLanguage();
-  const { menu: modules, loading } = useMenu();
+  const { menu: modules } = useMenu();
   const sync = useNodeSync();
   const [expandedCategories, setExpandedCategories] = useState<string[]>(['POS', 'CATALOGUE']);
 
-  const syncConfig = {
-    online:  { dot: 'bg-emerald-400', label: 'Synced',   glow: 'shadow-[0_0_15px_rgba(52,211,153,0.5)]' },
-    syncing: { dot: 'bg-brand-gold',  label: 'Syncing…', glow: 'shadow-[0_0_15px_rgba(244,162,97,0.5)]' },
-    offline: { dot: 'bg-rose-500',    label: 'Isolated', glow: 'shadow-[0_0_15px_rgba(244,63,94,0.5)]' },
-  }[sync.status];
+  const syncDot = sync.status === 'online' ? '#22C55E' : sync.status === 'syncing' ? '#F59E0B' : '#EF4444';
+  const syncLabel = sync.status === 'online' ? 'Synced' : sync.status === 'syncing' ? 'Syncing…' : 'Offline';
 
+  const categoryMap: Record<string, string> = {
+    'POS': 'Operations', 'WAREHOUSE': 'Inventory',
+    'CATALOGUE': 'Catalogue', 'FINANCE': 'Finance',
+    'HO': 'Network', 'SYSTEM': 'Settings'
+  };
+  const catOrder = ['POS', 'WAREHOUSE', 'CATALOGUE', 'FINANCE', 'HO', 'SYSTEM'];
   const categories = useMemo(() => {
-    const categoryMap: Record<string, string> = {
-      'POS': 'Operations',
-      'WAREHOUSE': 'Inventory',
-      'CATALOGUE': 'Registry',
-      'FINANCE': 'Treasury',
-      'HO': 'Network',
-      'SYSTEM': 'Settings'
-    };
-
-    const uniqueCats = Array.from(new Set(modules.map(m => m.category).filter(Boolean)));
-    const order = ['POS', 'WAREHOUSE', 'CATALOGUE', 'FINANCE', 'HO', 'SYSTEM'];
-    uniqueCats.sort((a, b) => order.indexOf(a!) - order.indexOf(b!));
-
-    return uniqueCats.map(catId => ({
-      id: catId!,
-      label: categoryMap[catId!] || catId!.toUpperCase()
-    }));
+    const unique = Array.from(new Set(modules.map(m => m.category).filter(Boolean)));
+    unique.sort((a, b) => catOrder.indexOf(a!) - catOrder.indexOf(b!));
+    return unique.map(id => ({ id: id!, label: categoryMap[id!] || id! }));
   }, [modules]);
 
-  const SidebarItem = ({ item, isActive, onSelect }: { 
-    item: MenuItem; 
-    isActive: boolean; 
-    onSelect: (id: string) => void 
+  const SidebarItem = ({ item, isActive, onSelect }: {
+    item: MenuItem; isActive: boolean; onSelect: (id: string) => void;
   }) => {
     const Icon = ICON_MAP[item.module] || LayoutDashboard;
-    
-    useHotkeys(item.shortcut || '', (e) => {
-      e.preventDefault();
-      onSelect(item.id);
-    }, { enabled: !!item.shortcut });
+    useHotkeys(item.shortcut || '', (e) => { e.preventDefault(); onSelect(item.id); }, { enabled: !!item.shortcut });
 
     return (
       <button
         onClick={() => onSelect(item.id)}
+        title={item.label}
         className={cn(
-          "group relative flex items-center w-full px-6 py-4 transition-all duration-300",
-          isActive 
-            ? "bg-white text-black font-semibold" 
-            : "text-white/40 hover:text-white hover:bg-white/5"
+          "relative group flex items-center w-full gap-3 px-3 py-2 rounded-lg transition-colors duration-100 text-left",
+          isActive
+            ? "bg-[var(--accent-bg)] text-[var(--accent-light)]"
+            : "text-[var(--text-secondary)] hover:bg-[var(--bg-float)] hover:text-[var(--text-primary)]"
         )}
+        style={{ margin: '1px 0' }}
       >
-        <div className={cn(
-          "flex items-center justify-center transition-transform duration-300",
-          isCollapsed ? "w-full" : "w-5 mr-4",
-          isActive && "scale-105"
-        )}>
-          <Icon size={18} strokeWidth={isActive ? 2 : 1.5} />
-        </div>
-        
-        {!isCollapsed && (
-          <div className="flex-1 flex items-center justify-between overflow-hidden">
-            <span className={cn(
-              "text-xs uppercase tracking-widest truncate transition-all",
-              isActive ? "text-black font-bold" : "text-inherit"
-            )}>
-              {item.label}
-            </span>
-            {item.shortcut && (
-              <span className={cn(
-                "text-[9px] font-mono font-bold px-1.5 py-0.5 rounded transition-colors",
-                isActive ? "bg-black/10 text-black/60" : "bg-white/5 text-white/30 group-hover:text-white/70"
-              )}>
-                {item.shortcut}
-              </span>
-            )}
-          </div>
+        {/* Active left bar */}
+        {isActive && (
+          <motion.div
+            layoutId="sidebar-active"
+            className="absolute left-0 top-1/2 -translate-y-1/2 w-0.5 h-4 rounded-full bg-[var(--accent)]"
+          />
         )}
 
-        {isCollapsed && (
-          <div className="fixed left-20 px-4 py-2 bg-white text-[10px] font-bold uppercase tracking-widest text-black rounded shadow-xl opacity-0 group-hover:opacity-100 pointer-events-none transition-all z-[300]">
-            {item.label}
-          </div>
+        <Icon size={16} strokeWidth={isActive ? 2 : 1.5} className="shrink-0" />
+
+        <span className="flex-1 text-sm font-medium truncate leading-none">
+          {item.label}
+        </span>
+
+        {item.shortcut && (
+          <span className="text-[10px] font-mono opacity-0 group-hover:opacity-100 transition-opacity px-1 py-0.5 rounded bg-[var(--bg-base)] text-[var(--text-tertiary)] border border-[var(--border-subtle)]">
+            {item.shortcut}
+          </span>
         )}
       </button>
     );
   };
 
   return (
-    <motion.aside 
-      animate={{ width: isCollapsed ? 0 : 280 }}
-      className="fixed top-0 left-0 bottom-0 flex flex-col z-[100] bg-black border-r border-white/10 shadow-[20px_0_40px_rgba(0,0,0,0.3)] overflow-hidden"
-      style={{ fontFamily: 'var(--font-tesla)' }}
+    <motion.aside
+      animate={{ width: isCollapsed ? 0 : 256 }}
+      transition={{ duration: 0.2, ease: [0.16, 1, 0.3, 1] }}
+      className="fixed top-0 left-0 bottom-0 flex flex-col z-[100] overflow-hidden"
+      style={{ background: 'var(--bg-elevated)', borderRight: '1px solid var(--border-subtle)' }}
     >
-      {/* ── HEADER ── */}
-      <div className="h-24 flex items-center px-6 shrink-0 relative group">
-        {!isCollapsed ? (
-          <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="flex items-center gap-4 w-full">
-             <button 
-                onClick={() => setIsCollapsed(true)}
-                className="w-10 h-10 bg-brand-gold rounded-2xl flex items-center justify-center shadow-lg shadow-brand-gold/20 hover:scale-105 transition-transform"
-                title="Collapse Sidebar"
-             >
-                <Menu className="w-5 h-5 text-navy" />
-             </button>
-             <div className="flex flex-col">
-                <span className="text-xl font-black text-white tracking-tighter leading-none">PrimeSetu</span>
-                <span className="text-[8px] font-black text-brand-gold uppercase tracking-[0.4em] mt-1">Sovereign OS</span>
-             </div>
-          </motion.div>
-        ) : (
-          <div className="mx-auto w-full flex justify-center">
-             <button 
-                onClick={() => setIsCollapsed(false)}
-                className="w-10 h-10 bg-brand-gold rounded-2xl flex items-center justify-center shadow-lg shadow-brand-gold/20 hover:scale-105 transition-transform"
-                title="Expand Sidebar"
-             >
-                <Menu className="w-5 h-5 text-navy" />
-             </button>
-          </div>
-        )}
+      {/* ── HEADER / LOGO ── */}
+      <div className="h-[52px] flex items-center px-4 shrink-0 gap-3" style={{ borderBottom: '1px solid var(--border-subtle)' }}>
+        <div className="w-6 h-6 rounded-md bg-[var(--accent)] flex items-center justify-center shrink-0">
+          <span className="text-white text-[10px] font-bold">P</span>
+        </div>
+        <div className="flex flex-col overflow-hidden">
+          <span className="text-sm font-semibold text-[var(--text-primary)] leading-tight tracking-tight whitespace-nowrap">PrimeSetu</span>
+          <span className="text-[10px] text-[var(--text-tertiary)] whitespace-nowrap">Sovereign OS</span>
+        </div>
       </div>
 
       {/* ── NAVIGATION ── */}
-      <div className="flex-1 overflow-y-auto no-scrollbar py-6">
-        <div className="mb-10">
-          {!isCollapsed && <div className="px-8 text-[9px] font-black text-white/20 uppercase tracking-[0.4em] mb-4">Command Center</div>}
-          {modules.filter(m => m.module === 'dashboard').map(m => (
-            <SidebarItem key={m.id} item={m} isActive={activeTab === m.id} onSelect={setActiveTab} />
-          ))}
-        </div>
+      <div className="flex-1 overflow-y-auto no-scrollbar px-2 py-3">
 
+        {/* Dashboard */}
+        {modules.filter(m => m.module === 'dashboard').map(m => (
+          <SidebarItem key={m.id} item={m} isActive={activeTab === m.id} onSelect={setActiveTab} />
+        ))}
+
+        <div className="my-3" style={{ height: '1px', background: 'var(--border-subtle)' }} />
+
+        {/* Categories */}
         {categories.map(cat => {
           const catModules = modules.filter(m => m.category === cat.id && m.module !== 'dashboard');
-          if (catModules.length === 0) return null;
+          if (!catModules.length) return null;
           const isExpanded = expandedCategories.includes(cat.id);
 
           return (
-            <div key={cat.id} className="mb-8">
-              {!isCollapsed && (
-                <button 
-                  onClick={() => setExpandedCategories(p => p.includes(cat.id) ? p.filter(x => x !== cat.id) : [...p, cat.id])}
-                  className="w-full flex items-center justify-between px-8 py-2 group"
-                >
-                  <span className="text-[9px] font-black text-white/20 uppercase tracking-[0.4em] group-hover:text-brand-gold transition-colors">{cat.label}</span>
-                  <ChevronDown size={12} className={cn("text-white/20 transition-transform", !isExpanded && "-rotate-90")} />
-                </button>
-              )}
+            <div key={cat.id} className="mb-1">
+              <button
+                onClick={() => setExpandedCategories(p => p.includes(cat.id) ? p.filter(x => x !== cat.id) : [...p, cat.id])}
+                className="w-full flex items-center justify-between px-2 py-1.5 group"
+              >
+                <span className="text-[11px] font-medium uppercase tracking-wider text-[var(--text-tertiary)] group-hover:text-[var(--text-secondary)] transition-colors">
+                  {cat.label}
+                </span>
+                <ChevronDown size={12} className={cn("text-[var(--text-tertiary)] transition-transform duration-150", !isExpanded && "-rotate-90")} />
+              </button>
+
               <AnimatePresence>
-                {(isExpanded || isCollapsed) && (
-                  <motion.div initial={{ height: 0, opacity: 0 }} animate={{ height: 'auto', opacity: 1 }} exit={{ height: 0, opacity: 0 }}>
-                    {catModules.map(m => <SidebarItem key={m.id} item={m} isActive={activeTab === m.id} onSelect={setActiveTab} />)}
+                {isExpanded && (
+                  <motion.div
+                    initial={{ height: 0, opacity: 0 }}
+                    animate={{ height: 'auto', opacity: 1 }}
+                    exit={{ height: 0, opacity: 0 }}
+                    transition={{ duration: 0.15 }}
+                    className="overflow-hidden"
+                  >
+                    {catModules.map(m => (
+                      <SidebarItem key={m.id} item={m} isActive={activeTab === m.id} onSelect={setActiveTab} />
+                    ))}
                   </motion.div>
                 )}
               </AnimatePresence>
@@ -208,33 +156,24 @@ const Sidebar: React.FC<SidebarProps> = ({
         })}
       </div>
 
-      {/* ── FOOTER ── */}
-      <div className="mt-auto bg-white/[0.02] border-t border-white/5 p-8 shrink-0">
-         <div className={cn(
-           "flex items-center gap-4 p-4 rounded-2xl border transition-all duration-500",
-           sync.status === 'online' ? "bg-emerald-500/5 border-emerald-500/10" : "bg-rose-500/5 border-rose-500/10"
-         )}>
-            <div className={cn("w-2 h-2 rounded-full", syncConfig.dot, syncConfig.glow)} />
-            {!isCollapsed && (
-              <div className="flex flex-col">
-                <span className={cn("text-[9px] font-black uppercase tracking-widest", sync.status === 'online' ? "text-emerald-400" : "text-rose-400")}>Network: {syncConfig.label}</span>
-                <span className="text-[8px] text-white/20 font-bold uppercase tracking-tight mt-0.5">Node ID: {nodeType}-001</span>
-              </div>
-            )}
-         </div>
+      {/* ── FOOTER / USER ── */}
+      <div className="px-3 py-3 shrink-0" style={{ borderTop: '1px solid var(--border-subtle)' }}>
+        {/* Sync status */}
+        <div className="flex items-center gap-2 px-2 py-2 mb-2">
+          <div className="w-1.5 h-1.5 rounded-full shrink-0" style={{ background: syncDot }} />
+          <span className="text-xs text-[var(--text-tertiary)] font-medium">{syncLabel}</span>
+        </div>
 
-         {!isCollapsed && (
-           <div className="mt-8 flex items-center justify-between">
-              <div className="flex items-center gap-3">
-                 <div className="w-8 h-8 bg-gradient-to-br from-white/10 to-transparent rounded-full flex items-center justify-center text-[10px] font-black text-white border border-white/10">{userRole[0]}</div>
-                 <div className="flex flex-col">
-                    <span className="text-[10px] font-black text-white uppercase tracking-wider">{userRole}</span>
-                    <span className="text-[8px] text-white/20 font-bold uppercase tracking-tight">Sovereign Guard Active</span>
-                 </div>
-              </div>
-              <button onClick={() => setIsCollapsed(true)} className="p-2 text-white/20 hover:text-brand-gold transition-colors"><Power size={14}/></button>
-           </div>
-         )}
+        {/* User row */}
+        <div className="flex items-center gap-3 px-2 py-2 rounded-lg hover:bg-[var(--bg-float)] transition-colors cursor-pointer group">
+          <div className="w-7 h-7 rounded-full bg-[var(--accent-bg)] border border-[var(--accent-border)] flex items-center justify-center shrink-0">
+            <span className="text-xs font-semibold text-[var(--accent-light)]">{(userRole || 'U')[0]}</span>
+          </div>
+          <div className="flex-1 overflow-hidden">
+            <div className="text-sm font-medium text-[var(--text-primary)] truncate leading-tight">{userRole}</div>
+            <div className="text-[10px] text-[var(--text-tertiary)] truncate">Sovereign Guard Active</div>
+          </div>
+        </div>
       </div>
     </motion.aside>
   );

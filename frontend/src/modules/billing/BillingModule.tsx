@@ -346,7 +346,7 @@ export default function BillingModule() {
   const balanceRupees = toRupees(netPayablePaise) - paidTotalRupees
 
   return (
-    <div className="flex flex-col h-screen bg-[#f0ede8] font-sans overflow-hidden relative">
+    <div className="flex flex-col h-screen font-sans overflow-hidden relative" style={{ background: 'var(--bg-base)' }}>
       {/* ── PRINTING LAYERS ── */}
       {printFormat === 'thermal' && <ThermalReceipt bill={billToPrint} onPrinted={() => setBillToPrint(null)} />}
       {printFormat === 'a4' && <TaxInvoiceA4 bill={billToPrint} onPrinted={() => setBillToPrint(null)} />}
@@ -356,7 +356,7 @@ export default function BillingModule() {
       {/* ── OVERLAYS ── */}
       <AnimatePresence>
         {showSuspended && (
-           <motion.div initial={{ x: '100%' }} animate={{ x: 0 }} exit={{ x: '100%' }} className="absolute right-0 top-0 bottom-0 w-[400px] z-[250] bg-navy shadow-2xl border-l-4 border-saffron">
+          <motion.div initial={{ x: '100%' }} animate={{ x: 0 }} exit={{ x: '100%' }} className="absolute right-0 top-0 bottom-0 w-[400px] z-[250] shadow-2xl" style={{ background: 'var(--bg-elevated)', borderLeft: '1px solid var(--border-default)' }}>
              <SuspendedBillsBrowser 
                 onRecall={(items: any, mobile: string) => { 
                   setCart(items.map((i: any) => ({ ...i, mrp_paise: i.unit_price }))); 
@@ -368,7 +368,7 @@ export default function BillingModule() {
            </motion.div>
         )}
         {showReturns && (
-           <motion.div initial={{ x: '100%' }} animate={{ x: 0 }} exit={{ x: '100%' }} className="absolute right-0 top-0 bottom-0 w-[400px] z-[250] bg-navy shadow-2xl border-l-4 border-rose-500">
+           <motion.div initial={{ x: '100%' }} animate={{ x: 0 }} exit={{ x: '100%' }} className="absolute right-0 top-0 bottom-0 w-[400px] z-[250] shadow-2xl" style={{ background: 'var(--bg-elevated)', borderLeft: '1px solid var(--red)' }}>
              <ReturnsDrawer 
                 onReturn={(bill) => { setBillToPrint(bill); setShowReturns(false); }}
                 onClose={() => setShowReturns(false)} 
@@ -391,25 +391,25 @@ export default function BillingModule() {
         )}
 
         {showTotals && (
-          <div className="absolute inset-0 z-[150] flex items-center justify-center bg-black/40 backdrop-blur-sm" onClick={() => setShowTotals(false)}>
-            <motion.div initial={{ scale: 0.95 }} animate={{ scale: 1 }} className="bg-white rounded-3xl p-8 shadow-2xl w-96 border-2 border-navy/10" onClick={e => e.stopPropagation()}>
-              <div className="text-center text-xs font-black text-navy uppercase tracking-[0.3em] mb-6">Bill Totals [F9]</div>
+          <div className="absolute inset-0 z-[150] flex items-center justify-center" style={{ background: 'rgba(0,0,0,0.6)', backdropFilter: 'blur(4px)' }} onClick={() => setShowTotals(false)}>
+            <motion.div initial={{ scale: 0.97 }} animate={{ scale: 1 }} className="rounded-xl p-6 shadow-2xl w-80" style={{ background: 'var(--bg-overlay)', border: '1px solid var(--border-default)' }} onClick={e => e.stopPropagation()}>
+              <div className="text-xs font-medium uppercase tracking-wider mb-4" style={{ color: 'var(--text-tertiary)' }}>Bill Totals [F9]</div>
               {[
                 ['Gross Subtotal', formatCurrency(totals.subtotal)],
                 ['Disc. Allowance', `-${formatCurrency(totals.discount)}`],
                 ['Taxable Base', formatCurrency(totals.taxable)],
-                ['Sovereign GST', formatCurrency(totals.tax)],
+                ['GST', formatCurrency(totals.tax)],
               ].map(([l, v]) => (
-                <div key={l} className="flex justify-between py-2 border-b border-gray-100 text-sm">
-                  <span className="text-gray-500 font-medium">{l}</span>
-                  <span className="font-black text-navy">{v}</span>
+                <div key={l} className="flex justify-between py-2.5 text-sm" style={{ borderBottom: '1px solid var(--border-subtle)' }}>
+                  <span style={{ color: 'var(--text-secondary)' }}>{l}</span>
+                  <span className="font-semibold font-mono" style={{ color: 'var(--text-primary)' }}>{v}</span>
                 </div>
               ))}
-              <div className="flex justify-between pt-4 text-2xl font-black">
-                <span className="text-navy">Net Payable</span>
-                <span className="text-emerald-600">{formatCurrency(totals.net)}</span>
+              <div className="flex justify-between pt-4 text-lg font-semibold">
+                <span style={{ color: 'var(--text-secondary)' }}>Net Payable</span>
+                <span className="font-mono" style={{ color: 'var(--green)' }}>{formatCurrency(totals.net)}</span>
               </div>
-              <button onClick={() => setShowTotals(false)} className="mt-6 w-full bg-navy text-white py-3 rounded-xl text-xs font-black uppercase tracking-widest">Return to POS</button>
+              <button onClick={() => setShowTotals(false)} className="mt-5 w-full py-2.5 rounded-lg text-sm font-medium transition-colors" style={{ background: 'var(--bg-float)', color: 'var(--text-primary)', border: '1px solid var(--border-default)' }}>Return to POS</button>
             </motion.div>
           </div>
         )}
@@ -427,67 +427,81 @@ export default function BillingModule() {
       </AnimatePresence>
 
       {/* ── TOOLBAR ── */}
-      <div className="flex items-center gap-1 bg-[#1a2340] px-3 py-2 shrink-0 select-none">
-        <div className="flex items-center gap-2 pr-4 mr-2 border-r border-white/10">
-          <div className="w-8 h-8 bg-brand-gold rounded-xl flex items-center justify-center">
-            <Zap className="w-5 h-5 text-navy fill-navy" />
+      <div className="flex items-center gap-1 px-3 py-2 shrink-0 select-none" style={{ background: 'var(--bg-elevated)', borderBottom: '1px solid var(--border-subtle)' }}>
+        <div className="flex items-center gap-2 pr-4 mr-2" style={{ borderRight: '1px solid var(--border-subtle)' }}>
+          <div className="w-7 h-7 rounded-lg flex items-center justify-center" style={{ background: 'var(--accent-bg)', border: '1px solid var(--accent-border)' }}>
+            <Zap className="w-4 h-4" style={{ color: 'var(--accent-light)' }} />
           </div>
           <div className="flex flex-col">
-            <span className="text-white font-black text-xs leading-none tracking-tight">PrimeSetu POS</span>
-            <span className="text-[8px] text-white/30 font-black tracking-widest uppercase">Institutional</span>
+            <span className="font-semibold text-xs leading-none" style={{ color: 'var(--text-primary)' }}>PrimeSetu POS</span>
+            <span className="text-[9px] font-medium uppercase tracking-widest" style={{ color: 'var(--text-tertiary)' }}>Institutional</span>
           </div>
         </div>
 
         {[
-          { icon: <FilePlus2 />, label: 'New [Alt+1]', action: () => resetSession() },
-          { icon: <Search />, label: 'Find [F2]', action: () => searchRef.current?.focus() },
-          { icon: <RotateCcw />, label: 'Return', action: () => setShowReturns(true) },
-          { icon: <Calculator />, label: 'Totals [F9]', action: () => setShowTotals(v => !v) },
-          { icon: <Banknote />, label: 'Exact [F7]', action: () => { setPayLines([{ mode: 'CASH', amount: toRupees(netPayablePaise) }]); setShowSettle(true) } },
-          { icon: <CreditCard />, label: 'Settle [F8]', action: () => setShowSettle(true) },
-          { icon: <FileText />, label: 'Slips [F6]', action: () => setShowSalesSlips(true) },
-          { icon: <Pause />, label: 'Hold [F12]', action: handleSuspend },
-          { icon: <Clock />, label: 'Recall [F4]', action: () => setShowSuspended(v => !v) },
+          { icon: <FilePlus2 size={14}/>, label: 'New', sub: 'Alt+1', action: () => resetSession() },
+          { icon: <Search size={14}/>, label: 'Find', sub: 'F2', action: () => searchRef.current?.focus() },
+          { icon: <RotateCcw size={14}/>, label: 'Return', sub: '', action: () => setShowReturns(true) },
+          { icon: <Calculator size={14}/>, label: 'Totals', sub: 'F9', action: () => setShowTotals(v => !v) },
+          { icon: <Banknote size={14}/>, label: 'Exact', sub: 'F7', action: () => { setPayLines([{ mode: 'CASH', amount: toRupees(netPayablePaise) }]); setShowSettle(true) } },
+          { icon: <CreditCard size={14}/>, label: 'Settle', sub: 'F8', action: () => setShowSettle(true) },
+          { icon: <FileText size={14}/>, label: 'Slips', sub: 'F6', action: () => setShowSalesSlips(true) },
+          { icon: <Pause size={14}/>, label: 'Hold', sub: 'F12', action: handleSuspend },
+          { icon: <Clock size={14}/>, label: 'Recall', sub: 'F5', action: () => setShowSuspended(v => !v) },
         ].map(btn => (
-          <button key={btn.label} onClick={btn.action} className="flex flex-col items-center px-4 py-2 rounded-xl text-white/40 hover:text-white hover:bg-white/5 transition-all group">
-            <div className="w-5 h-5 group-hover:scale-110 transition-transform">{btn.icon}</div>
-            <span className="text-[9px] font-black uppercase tracking-tight mt-1">{btn.label}</span>
+          <button key={btn.label} onClick={btn.action}
+            className="flex flex-col items-center px-3 py-1.5 rounded-md transition-colors group"
+            style={{ color: 'var(--text-tertiary)' }}
+            onMouseEnter={e => (e.currentTarget.style.background = 'var(--bg-float)', e.currentTarget.style.color = 'var(--text-primary)')}
+            onMouseLeave={e => (e.currentTarget.style.background = 'transparent', e.currentTarget.style.color = 'var(--text-tertiary)')}
+          >
+            <div className="mb-0.5">{btn.icon}</div>
+            <span className="text-[8px] font-medium uppercase tracking-tight">{btn.label}</span>
+            {btn.sub && <span className="text-[7px] font-mono" style={{ color: 'var(--text-tertiary)' }}>{btn.sub}</span>}
           </button>
         ))}
 
-        <div className="ml-auto flex items-center gap-6 text-white/20 text-[10px] font-black">
-          <div className="flex items-center gap-2 border-r border-white/5 pr-6">
-            {!isOnline ? <span className="text-rose-500 flex items-center gap-1 animate-pulse"><WifiOff size={12}/> ISOLATED</span> : <span className="text-emerald-500 flex items-center gap-1"><Wifi size={12}/> ONLINE</span>}
-            <span>{currentTime}</span>
+        <div className="ml-auto flex items-center gap-4 text-[10px] font-medium">
+          <div className="flex items-center gap-2">
+            {!isOnline
+              ? <span className="flex items-center gap-1" style={{ color: 'var(--red)' }}><WifiOff size={11}/> Isolated</span>
+              : <span className="flex items-center gap-1" style={{ color: 'var(--green)' }}><Wifi size={11}/> Online</span>}
+            <span style={{ color: 'var(--text-tertiary)' }}>{currentTime}</span>
           </div>
           <div className="flex gap-2">
-            <button onClick={() => setShowHistory(true)} className="px-4 py-2 bg-white/5 hover:bg-white/10 rounded-xl transition-all">HISTORY</button>
-            <button onClick={() => setShowDayEnd(true)} className="px-4 py-2 bg-brand-gold text-navy rounded-xl transition-all">DAY END</button>
+            <button onClick={() => setShowHistory(true)} className="px-3 py-1.5 rounded-md text-xs font-medium transition-colors"
+              style={{ background: 'var(--bg-float)', color: 'var(--text-secondary)', border: '1px solid var(--border-subtle)' }}>
+              History
+            </button>
+            <button onClick={() => setShowDayEnd(true)} className="px-3 py-1.5 rounded-md text-xs font-medium transition-colors"
+              style={{ background: 'var(--amber-bg)', color: 'var(--amber)', border: '1px solid rgba(245,158,11,0.2)' }}>
+              Day End
+            </button>
           </div>
         </div>
       </div>
 
       {/* ── INPUTS ── */}
-      <div className="flex gap-2 px-4 pt-3 shrink-0">
+      <div className="flex gap-2 px-3 pt-2 pb-2 shrink-0" style={{ borderBottom: '1px solid var(--border-subtle)' }}>
         <div className="flex-[3] relative">
-          <ScanBarcode className="absolute left-4 top-1/2 -translate-y-1/2 w-6 h-6 text-navy/20" />
-          <input ref={searchRef} autoFocus value={q} onChange={e => setQ(e.target.value)} placeholder="SCAN PRODUCT OR STYLE [F2]..." className="w-full bg-white border-2 border-navy/5 focus:border-brand-gold rounded-2xl pl-12 pr-4 h-16 text-xl font-mono outline-none shadow-sm transition-all" />
+          <ScanBarcode size={16} className="absolute left-3 top-1/2 -translate-y-1/2" style={{ color: 'var(--text-tertiary)' }} />
+          <input ref={searchRef} autoFocus value={q} onChange={e => setQ(e.target.value)} placeholder="Scan barcode or style code... [F2]" className="finput-lg pl-9 font-mono text-sm" />
         </div>
         <div className="flex-1 relative">
-          <User className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-navy/20" />
-          <input id="cust-mobile" value={customerMobile} onChange={e => setCustomerMobile(e.target.value)} placeholder="MOBILE [Alt+M]" className="w-full bg-white border-2 border-navy/5 focus:border-brand-gold rounded-2xl pl-12 pr-4 h-16 text-lg font-mono outline-none shadow-sm transition-all" />
+          <User size={14} className="absolute left-3 top-1/2 -translate-y-1/2" style={{ color: 'var(--text-tertiary)' }} />
+          <input id="cust-mobile" value={customerMobile} onChange={e => setCustomerMobile(e.target.value)} placeholder="Customer mobile" className="finput-lg pl-9 font-mono text-sm" />
         </div>
         <div className="flex-1 relative">
-          <UserCheck className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-navy/20" />
-          <input value={salesperson} onChange={e => setSalesperson(e.target.value)} placeholder="SALESPERSON" className="w-full bg-white border-2 border-navy/5 focus:border-brand-gold rounded-2xl pl-12 pr-4 h-16 text-lg font-mono outline-none shadow-sm transition-all" />
+          <UserCheck size={14} className="absolute left-3 top-1/2 -translate-y-1/2" style={{ color: 'var(--text-tertiary)' }} />
+          <input value={salesperson} onChange={e => setSalesperson(e.target.value)} placeholder="Salesperson" className="finput-lg pl-9 text-sm" />
         </div>
       </div>
 
       {/* ── CART ── */}
       <div className="flex gap-4 px-4 py-4 flex-1 overflow-hidden">
-        <div className="flex-1 flex flex-col bg-white rounded-3xl shadow-xl border border-navy/5 overflow-hidden">
-          <div className="grid bg-navy text-white text-[10px] font-black uppercase tracking-[0.2em]" style={{ gridTemplateColumns: '50px 120px 1fr 100px 100px 100px 120px 40px' }}>
-            {['#','Code','Product','Price','Qty','Disc%','Net',''].map(h => <div key={h} className="px-6 py-4 text-left">{h}</div>)}
+        <div className="flex-1 flex flex-col overflow-hidden rounded-xl" style={{ background: 'var(--bg-overlay)', border: '1px solid var(--border-subtle)' }}>
+          <div className="grid text-[10px] font-medium uppercase tracking-wider" style={{ gridTemplateColumns: '44px 110px 1fr 100px 100px 90px 110px 36px', background: 'var(--bg-elevated)', borderBottom: '1px solid var(--border-subtle)', color: 'var(--text-tertiary)' }}>
+            {['#','Code','Product','Price','Qty','Disc%','Net',''].map(h => <div key={h} className="px-4 py-3 text-left">{h}</div>)}
           </div>
           
           <div className="flex-1 overflow-y-auto">
@@ -495,25 +509,27 @@ export default function BillingModule() {
               {cart.map((item, idx) => {
                 const lineNet = Math.round(item.mrp_paise * item.qty * (1 - item.discount_per / 100))
                 return (
-                  <motion.div key={item.id} layout initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, scale: 0.9 }} className={cn("grid items-center group transition-colors", idx % 2 === 0 ? 'bg-white' : 'bg-navy/[0.02]')} style={{ gridTemplateColumns: '50px 120px 1fr 100px 100px 100px 120px 40px' }}>
-                    <div className="px-6 py-5 text-[11px] font-black text-navy/20">{idx + 1}</div>
-                    <div className="px-6 py-5 font-mono text-xs font-bold text-navy/40">{item.code}</div>
-                    <div className="px-6 py-5">
-                      <div className="font-black text-navy text-sm uppercase tracking-tight">{item.name}</div>
-                      <div className="text-[9px] font-black text-navy/30 uppercase tracking-widest mt-1">{item.brand} \ {item.category}</div>
+                  <motion.div key={item.id} layout initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0 }} className="grid items-center group transition-colors" style={{ gridTemplateColumns: '44px 110px 1fr 100px 100px 90px 110px 36px', borderBottom: '1px solid var(--border-subtle)' }}
+                    onMouseEnter={e => (e.currentTarget.style.background = 'var(--bg-float)')}
+                    onMouseLeave={e => (e.currentTarget.style.background = 'transparent')}>
+                    <div className="px-4 py-3 text-xs font-mono" style={{ color: 'var(--text-tertiary)' }}>{idx + 1}</div>
+                    <div className="px-4 py-3 font-mono text-xs" style={{ color: 'var(--text-tertiary)' }}>{item.code}</div>
+                    <div className="px-4 py-3">
+                      <div className="text-sm font-medium" style={{ color: 'var(--text-primary)' }}>{item.name}</div>
+                      <div className="text-xs mt-0.5" style={{ color: 'var(--text-tertiary)' }}>{item.brand} · {item.category}</div>
                     </div>
-                    <div className="px-6 py-5 font-mono text-sm font-black text-navy">{formatDecimal(item.mrp_paise)}</div>
-                    <div className="px-6 py-5 flex items-center gap-2">
-                       <button onClick={() => updateCartItem(item.id, { qty: Math.max(1, item.qty - 1) })} className="w-6 h-6 bg-navy/5 hover:bg-brand-gold rounded-lg flex items-center justify-center transition-colors"><Minus size={12}/></button>
-                       <span className="w-8 text-center font-black text-navy">{item.qty}</span>
-                       <button onClick={() => updateCartItem(item.id, { qty: item.qty + 1 })} className="w-6 h-6 bg-navy/5 hover:bg-brand-gold rounded-lg flex items-center justify-center transition-colors"><Plus size={12}/></button>
+                    <div className="px-4 py-3 font-mono text-sm font-medium" style={{ color: 'var(--text-secondary)' }}>{formatDecimal(item.mrp_paise)}</div>
+                    <div className="px-4 py-3 flex items-center gap-1.5">
+                       <button onClick={() => updateCartItem(item.id, { qty: Math.max(1, item.qty - 1) })} className="w-5 h-5 rounded flex items-center justify-center transition-colors" style={{ background: 'var(--bg-float)', color: 'var(--text-secondary)' }}><Minus size={10}/></button>
+                       <span className="w-6 text-center text-sm font-semibold" style={{ color: 'var(--text-primary)', fontFamily: 'monospace' }}>{item.qty}</span>
+                       <button onClick={() => updateCartItem(item.id, { qty: item.qty + 1 })} className="w-5 h-5 rounded flex items-center justify-center transition-colors" style={{ background: 'var(--bg-float)', color: 'var(--text-secondary)' }}><Plus size={10}/></button>
                     </div>
-                    <div className="px-6 py-5">
-                       <input type="number" value={item.discount_per} onChange={e => updateCartItem(item.id, { discount_per: Number(e.target.value) })} className="w-16 bg-navy/5 border-none rounded-lg p-2 text-xs font-black text-center outline-none focus:ring-2 ring-brand-gold" />
+                    <div className="px-4 py-3">
+                       <input type="number" value={item.discount_per} onChange={e => updateCartItem(item.id, { discount_per: Number(e.target.value) })} className="w-14 text-xs text-center rounded p-1.5 outline-none" style={{ background: 'var(--bg-float)', color: 'var(--text-primary)', border: '1px solid var(--border-subtle)' }} />
                     </div>
-                    <div className="px-6 py-5 font-black text-navy text-sm">{formatCurrency(lineNet)}</div>
-                    <div className="px-6 py-5">
-                       <button onClick={() => removeCartItem(item.id)} className="opacity-0 group-hover:opacity-100 text-rose-500 hover:scale-110 transition-all"><Trash2 size={16}/></button>
+                    <div className="px-4 py-3 font-mono text-sm font-semibold" style={{ color: 'var(--text-primary)' }}>{formatCurrency(lineNet)}</div>
+                    <div className="px-4 py-3">
+                       <button onClick={() => removeCartItem(item.id)} className="opacity-0 group-hover:opacity-100 transition-opacity" style={{ color: 'var(--red)' }}><Trash2 size={14}/></button>
                     </div>
                   </motion.div>
                 )
@@ -527,73 +543,69 @@ export default function BillingModule() {
             )}
           </div>
 
-          <div className="bg-navy p-8 flex justify-between items-end shrink-0">
-             <div className="flex gap-12">
+          <div className="p-4 flex justify-between items-end shrink-0" style={{ background: 'var(--bg-elevated)', borderTop: '1px solid var(--border-subtle)' }}>
+             <div className="flex gap-8">
                 <div>
-                   <div className="text-[10px] font-black text-white/20 uppercase tracking-widest mb-2">Cart Value</div>
-                   <div className="text-2xl font-black text-white/40">{formatCurrency(totals.subtotal)}</div>
+                   <div className="text-[10px] font-medium uppercase tracking-wider mb-1" style={{ color: 'var(--text-tertiary)' }}>Cart Value</div>
+                   <div className="text-lg font-semibold font-mono" style={{ color: 'var(--text-secondary)' }}>{formatCurrency(totals.subtotal)}</div>
                 </div>
                 <div>
-                   <div className="text-[10px] font-black text-white/20 uppercase tracking-widest mb-2">Institutional Disc</div>
-                   <div className="text-2xl font-black text-rose-400">-{formatCurrency(totals.discount)}</div>
+                   <div className="text-[10px] font-medium uppercase tracking-wider mb-1" style={{ color: 'var(--text-tertiary)' }}>Discount</div>
+                   <div className="text-lg font-semibold font-mono" style={{ color: 'var(--red)' }}>-{formatCurrency(totals.discount)}</div>
                 </div>
                 <div>
-                   <div className="text-[10px] font-black text-white/20 uppercase tracking-widest mb-2">Tax Component</div>
-                   <div className="text-2xl font-black text-emerald-400/60">{formatCurrency(totals.tax)}</div>
+                   <div className="text-[10px] font-medium uppercase tracking-wider mb-1" style={{ color: 'var(--text-tertiary)' }}>GST</div>
+                   <div className="text-lg font-semibold font-mono" style={{ color: 'var(--text-secondary)' }}>{formatCurrency(totals.tax)}</div>
                 </div>
              </div>
              <div className="text-right">
-                <div className="text-[11px] font-black text-brand-gold uppercase tracking-[0.3em] mb-2">Amount Due</div>
-                <div className="text-7xl font-black text-white tracking-tighter" style={{ fontFamily: 'var(--font-tesla)' }}>{formatCurrency(netPayablePaise)}</div>
+                <div className="text-[10px] font-medium uppercase tracking-wider mb-1" style={{ color: 'var(--text-tertiary)' }}>Amount Due</div>
+                <div className="text-4xl font-semibold font-mono tracking-tight" style={{ color: 'var(--text-primary)', letterSpacing: '-0.02em' }}>{formatCurrency(netPayablePaise)}</div>
              </div>
           </div>
         </div>
 
         {/* ── SETTLEMENT PANEL ── */}
-        <div className="w-80 flex flex-col gap-4 shrink-0">
-           <div className="bg-white rounded-3xl p-6 shadow-xl border border-navy/5 flex-1 flex flex-col">
-              <div className="flex items-center justify-between mb-6">
-                 <h3 className="text-xs font-black text-navy uppercase tracking-widest">Settlement</h3>
-                 <button onClick={() => setPayLines(p => [...p, { mode: 'CASH', amount: 0 }])} className="w-8 h-8 bg-navy/5 rounded-full flex items-center justify-center hover:bg-brand-gold transition-colors"><Plus size={16}/></button>
+        <div className="w-72 flex flex-col gap-3 shrink-0">
+           <div className="rounded-xl p-4 flex-1 flex flex-col" style={{ background: 'var(--bg-overlay)', border: '1px solid var(--border-subtle)' }}>
+              <div className="flex items-center justify-between mb-4">
+                 <h3 className="text-xs font-medium uppercase tracking-wider" style={{ color: 'var(--text-tertiary)' }}>Payment</h3>
+                 <button onClick={() => setPayLines(p => [...p, { mode: 'CASH', amount: 0 }])} className="w-6 h-6 rounded flex items-center justify-center transition-colors" style={{ background: 'var(--bg-float)', color: 'var(--text-secondary)' }}><Plus size={12}/></button>
               </div>
 
-              <div className="space-y-4 flex-1 overflow-y-auto pr-2">
+              <div className="space-y-2 flex-1 overflow-y-auto">
                  {payLines.map((pl, idx) => (
-                   <div key={idx} className="p-4 bg-navy/5 rounded-2xl space-y-3 relative group">
-                      <select value={pl.mode} onChange={e => setPayLines(prev => prev.map((p,i) => i===idx ? {...p, mode: e.target.value as PayMode} : p))} className="w-full bg-white border-none rounded-xl p-3 text-[10px] font-black uppercase tracking-widest shadow-sm outline-none">
+                   <div key={idx} className="p-3 rounded-lg space-y-2 relative group" style={{ background: 'var(--bg-float)' }}>
+                      <select value={pl.mode} onChange={e => setPayLines(prev => prev.map((p,i) => i===idx ? {...p, mode: e.target.value as PayMode} : p))} className="fselect" style={{ height: '32px', fontSize: '12px' }}>
                          {['CASH','UPI','CARD','GV','COUPON'].map(m => <option key={m}>{m}</option>)}
                       </select>
                       <div className="relative">
-                         <span className="absolute left-4 top-1/2 -translate-y-1/2 text-navy/20 font-black">₹</span>
-                         <input type="number" value={pl.amount || ''} onChange={e => setPayLines(prev => prev.map((p,i) => i===idx ? {...p, amount: Number(e.target.value)} : p))} placeholder="0.00" className="w-full bg-white border-none rounded-xl p-3 pl-8 text-sm font-black shadow-sm outline-none" />
+                         <span className="absolute left-3 top-1/2 -translate-y-1/2 text-sm font-medium" style={{ color: 'var(--text-tertiary)' }}>₹</span>
+                         <input type="number" value={pl.amount || ''} onChange={e => setPayLines(prev => prev.map((p,i) => i===idx ? {...p, amount: Number(e.target.value)} : p))} placeholder="0.00" className="finput pl-7" style={{ height: '32px' }} />
                       </div>
                       {payLines.length > 1 && (
-                         <button onClick={() => setPayLines(p => p.filter((_,i) => i !== idx))} className="absolute -right-2 -top-2 w-6 h-6 bg-rose-500 text-white rounded-full flex items-center justify-center scale-0 group-hover:scale-100 transition-transform"><X size={12}/></button>
+                         <button onClick={() => setPayLines(p => p.filter((_,i) => i !== idx))} className="absolute -right-1.5 -top-1.5 w-5 h-5 rounded-full flex items-center justify-center scale-0 group-hover:scale-100 transition-transform" style={{ background: 'var(--red)', color: '#fff' }}><X size={10}/></button>
                       )}
                    </div>
                  ))}
               </div>
 
-              <div className={cn("mt-6 p-6 rounded-2xl text-center transition-all", balanceRupees > 0.01 ? "bg-rose-50 text-rose-600" : "bg-emerald-50 text-emerald-600")}>
-                 <div className="text-[9px] font-black uppercase tracking-widest mb-1">{balanceRupees > 0.01 ? 'Balance Due' : 'Change Back'}</div>
-                 <div className="text-2xl font-black">₹{Math.abs(balanceRupees).toFixed(2)}</div>
+              <div className="mt-4 p-4 rounded-lg text-center transition-all" style={{ background: balanceRupees > 0.01 ? 'var(--red-bg)' : 'var(--green-bg)', color: balanceRupees > 0.01 ? 'var(--red)' : 'var(--green)' }}>
+                 <div className="text-[10px] font-medium uppercase tracking-wider mb-1">{balanceRupees > 0.01 ? 'Balance Due' : 'Change Back'}</div>
+                 <div className="text-xl font-semibold font-mono">₹{Math.abs(balanceRupees).toFixed(2)}</div>
               </div>
            </div>
 
-           <button 
-             onClick={handleFinalize} 
-             disabled={processing || !cart.length || balanceRupees > 0.05} 
-             className={cn(
-               "w-full py-8 rounded-[2rem] flex flex-col items-center justify-center gap-2 transition-all shadow-2xl relative overflow-hidden",
-               (processing || !cart.length || balanceRupees > 0.05) ? "bg-navy/10 text-navy/20 grayscale" : "bg-brand-gold text-navy hover:scale-105 active:scale-95"
-             )}
+           <button
+             onClick={handleFinalize}
+             disabled={processing || !cart.length || balanceRupees > 0.05}
+             className="w-full rounded-xl flex flex-col items-center justify-center gap-1 transition-all disabled:opacity-40 disabled:cursor-not-allowed"
+             style={{ height: '72px', background: 'var(--pos-cta)', color: '#fff' }}
            >
-              {processing ? <div className="w-8 h-8 border-4 border-navy border-t-transparent rounded-full animate-spin" /> : (
+              {processing ? <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin" /> : (
                 <>
-                  <div className="text-xl font-black uppercase tracking-tight flex items-center gap-3">
-                    <CheckCircle2 /> Finalize Bill
-                  </div>
-                  <div className="text-[9px] font-black uppercase tracking-[0.4em] opacity-40">Sovereign Commit [F10]</div>
+                  <div className="text-base font-semibold flex items-center gap-2"><CheckCircle2 size={16}/> Finalize Bill</div>
+                  <div className="text-[10px] font-medium opacity-60 uppercase tracking-wider">F10</div>
                 </>
               )}
            </button>

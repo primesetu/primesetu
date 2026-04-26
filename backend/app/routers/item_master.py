@@ -1,13 +1,13 @@
-/* ============================================================
- * PrimeSetu — Shoper9-Based Retail OS
- * Zero Cloud · Sovereign · AI-Governed
- * ============================================================
- * System Architect : Jawahar R. M.
- * Organisation     : AITDL Network
- * Project          : PrimeSetu
- * © 2026 — All Rights Reserved
- * "Memory, Not Code."
- * ============================================================ */
+# ============================================================
+# PrimeSetu - Shoper9-Based Retail OS
+# Zero Cloud - Sovereign - AI-Governed
+# ============================================================
+# System Architect : Jawahar R. M.
+# Organisation     : AITDL Network
+# Project          : PrimeSetu
+# (c) 2026 - All Rights Reserved
+# "Memory, Not Code."
+# ============================================================
 
 from fastapi import APIRouter, Depends, HTTPException, status, Query
 from sqlalchemy.ext.asyncio import AsyncSession
@@ -16,9 +16,9 @@ from typing import List, Optional
 from uuid import UUID
 from datetime import date, datetime
 
-from app.database import get_db
+from app.core.database import get_db
 from app.core.security import require_auth, CurrentUser
-from app.models.base import Item, ItemPriceLevel, ItemStock, SizeGroup
+from app.models import Item, ItemPriceLevel, ItemStock, SizeGroup
 from app.schemas.item_master import (
     ItemCreate, ItemResponse, PriceLevelUpdate, 
     StockMatrixEntry, StockMatrixResponse

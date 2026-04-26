@@ -9,7 +9,7 @@
 # * "Memory, Not Code."
 # ============================================================ #
 
-from pydantic import BaseModel, ConfigDict
+from pydantic import BaseModel, ConfigDict, Field
 from typing import List, Optional, Dict, Any
 from datetime import datetime
 import uuid
@@ -67,3 +67,14 @@ class PredictiveStats(BaseModel):
     stockout_forecast_count: int
     top_category: str
     predicted_days: float
+
+class StoreRegistrationRequest(BaseModel):
+    store_name: str = Field(..., max_length=200)
+    store_code: str = Field(..., max_length=20)
+    address: Optional[str] = None
+    gstin: Optional[str] = None
+    phone: Optional[str] = None
+    state_code: Optional[str] = Field(None, max_length=2)
+    admin_email: str = Field(..., max_length=200)
+    admin_password: str = Field(..., min_length=6)
+    admin_full_name: str = Field(..., max_length=200)

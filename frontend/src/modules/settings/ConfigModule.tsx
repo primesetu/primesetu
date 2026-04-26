@@ -13,7 +13,7 @@ import TaxMaster from './TaxMaster'
 import { api } from '@/api/client'
 
 export default function ConfigModule() {
-  const [activeSubTab, setActiveSubTab] = useState<'params' | 'classification' | 'brands' | 'tax' | 'integrations'>('params')
+  const [activeSubTab, setActiveSubTab] = useState<'params' | 'classification' | 'brands' | 'tax' | 'integrations' | 'labels'>('params')
   const [params, setParams] = useState([
     { id: 1, code: 'MRP_INCL_TAX', desc: 'Is MRP inclusive of tax by default?', value: true, type: 'bool' },
     { id: 2, code: 'AUTO_ROUND_OFF', desc: 'Enable automatic round-off of bills?', value: true, type: 'bool' },
@@ -44,12 +44,13 @@ export default function ConfigModule() {
             { id: 'classification', label: 'Item DNA' },
             { id: 'brands', label: 'Catalogue' },
             { id: 'tax', label: 'Tax Master' },
+            { id: 'labels', label: 'Label Management' },
             { id: 'integrations', label: 'Corporate Bridge' },
           ].map(tab => (
             <button 
               key={tab.id}
               onClick={() => setActiveSubTab(tab.id as any)}
-              className={`px-8 py-3 rounded-xl text-[10px] font-black tracking-widest transition-all ${activeSubTab === tab.id ? 'bg-navy text-white shadow-lg' : 'text-muted hover:text-navy'}`}
+              className={`px-6 py-3 rounded-xl text-[10px] font-black tracking-widest transition-all ${activeSubTab === tab.id ? 'bg-navy text-white shadow-lg' : 'text-muted hover:text-navy'}`}
             >
               {tab.label}
             </button>
@@ -236,6 +237,56 @@ export default function ConfigModule() {
             </label>
           </div>
         </div>
+        </div>
+      )}
+      {activeSubTab === 'labels' && (
+        <div className="glass rounded-[3rem] p-12 shadow-2xl">
+          <div className="flex items-center gap-4 mb-10">
+            <div className="w-12 h-12 bg-navy rounded-2xl flex items-center justify-center text-xl shadow-lg">🏷️</div>
+            <div>
+              <h3 className="text-2xl font-serif font-black text-navy">Label Management</h3>
+              <p className="text-[10px] text-muted font-bold uppercase tracking-widest mt-1">Override Institutional Shoper 9 Defaults</p>
+            </div>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+            {[
+              { key: 'billing', current: 'Billing (POS)', default: 'Sales' },
+              { key: 'inward', current: 'Inward (GRN)', default: 'Procurement' },
+              { key: 'outward', current: 'Outward (Returns)', default: 'Stock Movement' },
+              { key: 'masters', current: 'Masters (Registry)', default: 'Catalogue' },
+              { key: 'audit', current: 'Audit / Reconcile', default: 'Stock Reconciliation' },
+              { key: 'khazana', current: 'Khazana', default: 'Inventory' },
+            ].map(label => (
+              <div key={label.key} className="p-6 rounded-3xl bg-cream/30 border border-border group hover:bg-white transition-all">
+                <div className="flex justify-between items-center mb-4">
+                  <span className="text-[10px] font-black text-navy/40 uppercase tracking-widest">{label.key}</span>
+                  <span className="text-[9px] font-black text-emerald-600 bg-emerald-50 px-2 py-1 rounded-md uppercase">Shoper 9 Preset</span>
+                </div>
+                <div className="space-y-4">
+                  <div className="space-y-1">
+                    <label className="text-[10px] font-bold text-muted uppercase tracking-tighter">Current Label</label>
+                    <input 
+                      type="text" 
+                      defaultValue={label.current}
+                      className="w-full bg-white border border-border rounded-xl p-4 text-sm font-black text-navy outline-none focus:border-navy"
+                    />
+                  </div>
+                  <p className="text-[10px] text-muted font-medium italic">Global Default: {label.default}</p>
+                </div>
+              </div>
+            ))}
+          </div>
+
+          <div className="mt-12 p-8 bg-navy rounded-[2rem] text-white flex justify-between items-center">
+            <div>
+              <h4 className="text-lg font-serif font-black text-gold">Sovereign Dictionary Sync</h4>
+              <p className="text-xs text-white/50 font-medium">Updates will propagate to all terminals on next restart.</p>
+            </div>
+            <button className="bg-gold text-navy px-10 py-4 rounded-2xl text-[10px] font-black uppercase tracking-widest hover:scale-105 transition-all shadow-2xl">
+              SAVE & PUSH UPDATES
+            </button>
+          </div>
         </div>
       )}
     </div>

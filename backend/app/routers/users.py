@@ -1,21 +1,33 @@
+# ============================================================
+# PrimeSetu - Shoper9-Based Retail OS
+# Zero Cloud · Sovereign · AI-Governed
+# ============================================================
+# System Architect   :  Jawahar R. M.
+# Organisation       :  AITDL Network
+# Project            :  PrimeSetu
+# © 2026 — All Rights Reserved
+# "Memory, Not Code."
+# ============================================================ #
+
 from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy.ext.asyncio import AsyncSession
-from sqlalchemy.future import select
+from sqlalchemy import select
 from typing import List
+import uuid
 import httpx
 
 from app.core.database import get_db
 from app.core.config import settings
-from app.core.security import get_current_user, UserContext, require_role, require_manager, require_admin
+from app.core.security import require_auth, CurrentUser, require_manager
 from app.models import User
-from app.schemas import UserCreate, UserUpdate, UserResponse
+from app.schemas.users import UserCreate, UserUpdate, UserResponse
 
 router = APIRouter(prefix="/api/v1/users", tags=["users"])
 
 @router.get("/", response_model=List[UserResponse])
 async def list_users(
     db: AsyncSession = Depends(get_db),
-    current_user: UserContext = Depends(require_manager)
+    current_user: CurrentUser = Depends(require_manager)
 ):
     """
     List all users belonging to the current user's store.
@@ -30,7 +42,7 @@ async def list_users(
 async def create_user(
     payload: UserCreate,
     db: AsyncSession = Depends(get_db),
-    current_user: UserContext = Depends(require_manager)
+    current_user: CurrentUser = Depends(require_manager)
 ):
     """
     Creates a new personnel/staff user.
@@ -54,7 +66,7 @@ async def create_user(
                 "password": payload.password,
                 "email_confirm": True,
                 "user_metadata": {
-                    "store_id": current_user.store_id,
+                    "store_id": str(current_user.store_id),
                     "role": payload.role,
                     "full_name": payload.full_name
                 }
@@ -84,10 +96,10 @@ async def create_user(
 
 @router.put("/{user_id}", response_model=UserResponse)
 async def update_user(
-    user_id: str,
+    user_id: uuid.UUID,
     payload: UserUpdate,
     db: AsyncSession = Depends(get_db),
-    current_user: UserContext = Depends(require_manager)
+    current_user: CurrentUser = Depends(require_manager)
 ):
     """
     Update personnel details. Can activate/deactivate or change roles.
@@ -120,15 +132,12 @@ async def update_user(
     if payload.active is not None:
         user.active = payload.active
 
-    # Update metadata in Supabase if role/name changed, or suspend user if deactivated
+    # Update metadata in Supabase if role/name changed
     async with httpx.AsyncClient() as client:
         sb_payload = {}
         if update_meta:
             sb_payload["user_metadata"] = new_meta
             
-        # Optional: You can ban users in supabase using `ban_duration` or just rely on the active=False flag
-        # For simplicity, we just rely on DB `active` flag for API calls. If they login, we can deny access middleware.
-        
         if sb_payload:
             response = await client.put(
                 f"{settings.supabase_url}/auth/v1/admin/users/{user_id}",

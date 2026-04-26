@@ -1,8 +1,8 @@
-/* ============================================================
- * PrimeSetu — Shoper9-Based Retail OS
- * Document : backend/app/schemas/purchase.py
- * © 2026 — All Rights Reserved
- * ============================================================ */
+# ============================================================
+# PrimeSetu - Shoper9-Based Retail OS
+# Document : backend/app/schemas/purchase.py
+# (c) 2026 - All Rights Reserved
+# ============================================================
 
 from pydantic import BaseModel, ConfigDict
 from uuid import UUID

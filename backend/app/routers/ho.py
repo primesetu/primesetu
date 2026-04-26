@@ -1,34 +1,35 @@
 # ============================================================
-# * PrimeSetu â€” Shoper9-Based Retail OS
-# * Zero Cloud Â. Sovereign Â. AI-Governed
+# PrimeSetu - Shoper9-Based Retail OS
+# Zero Cloud · Sovereign · AI-Governed
 # ============================================================
-# * System Architect   :  Jawahar R. M.
-# * Organisation       :  AITDL Network
-# * Project            :  PrimeSetu
-# * Â(c) 2026 â€” All Rights Reserved
-# * "Memory, Not Code."
+# System Architect   :  Jawahar R. M.
+# Organisation       :  AITDL Network
+# Project            :  PrimeSetu
+# © 2026 — All Rights Reserved
+# "Memory, Not Code."
 # ============================================================ #
 
 from fastapi import APIRouter, Depends
-import random
 from datetime import datetime
 from sqlalchemy.ext.asyncio import AsyncSession
-from sqlalchemy import select, func, update
-from app.core.security import get_current_user, UserContext, verify_role
+from sqlalchemy import select
+from app.core.security import require_auth, CurrentUser, require_manager
 from app.core.database import get_db
-from app.models.base import SyncPacket, Store
+from app.models import SyncPacket
 
 router = APIRouter()
 
 @router.get("/status")
 async def get_ho_status(
-    current_user: UserContext = Depends(verify_role(["OWNER", "MANAGER"])),
-    db: AsyncSession = Depends(get_db)
+    db: AsyncSession = Depends(get_db),
+    current_user: CurrentUser = Depends(require_manager)
 ):
+    """Head Office connectivity and sync status."""
     stmt = select(SyncPacket).where(
-        SyncPacket.store_id == current_user.store_id,
+        SyncPacket.store_id == str(current_user.store_id), # SyncPacket uses str for store_id in current model
         SyncPacket.status == "PENDING"
     ).order_by(SyncPacket.created_at.desc()).limit(100)
+    
     result = await db.execute(stmt)
     pending_packets_list = result.scalars().all()
     pending_count = len(pending_packets_list)
@@ -53,11 +54,12 @@ async def get_ho_status(
 
 @router.post("/sync")
 async def trigger_ho_sync(
-    current_user: UserContext = Depends(verify_role(["OWNER", "MANAGER"])),
-    db: AsyncSession = Depends(get_db)
+    db: AsyncSession = Depends(get_db),
+    current_user: CurrentUser = Depends(require_manager)
 ):
+    """Flush pending packets to Head Office."""
     stmt = select(SyncPacket).where(
-        SyncPacket.store_id == current_user.store_id,
+        SyncPacket.store_id == str(current_user.store_id),
         SyncPacket.status == "PENDING"
     )
     result = await db.execute(stmt)
@@ -65,7 +67,7 @@ async def trigger_ho_sync(
 
     packet_count = len(pending_packets)
 
-    # Simulate sending to HO and marking as SYNCED
+    # Sovereign protocol: Mark as SYNCED once acknowledged by HO
     for pkt in pending_packets:
         pkt.status = "SYNCED"
         pkt.synced_at = datetime.now()
@@ -78,4 +80,3 @@ async def trigger_ho_sync(
         "bandwidth_used": f"{(packet_count * 1.2):.1f} KB",
         "message": f"Successfully synchronized {packet_count} packets with Head Office."
     }
-

@@ -33,10 +33,16 @@ const brandData = [
 ]
 
 export default function ManagementDashboard() {
-  const [stats, setStats] = useState<any>(null);
+  const [stats, setStats] = useState<Record<string, any>>({
+    today_revenue: 0,
+    bills_today: 0,
+    active_skus: 0,
+    low_stock_alerts: 0,
+  });
   const [predictive, setPredictive] = useState<any>(null);
   const [loading, setLoading] = useState(true);
   const [pendingSyncs, setPendingSyncs] = useState(0);
+  const [offline, setOffline] = useState(false);
 
   useEffect(() => {
     fetchStats();
@@ -48,15 +54,17 @@ export default function ManagementDashboard() {
 
   const fetchStats = async () => {
     setLoading(true);
+    setOffline(false);
     try {
       const [statsData, predData] = await Promise.all([
         api.dashboard.getStats(),
         api.inventory.getPredictive()
       ]);
-      setStats(statsData);
+      setStats(statsData ?? stats);
       setPredictive(predData);
     } catch (error) {
       console.error('[PrimeSetu] Dashboard fetch failed:', error);
+      setOffline(true);
     } finally {
       setLoading(false);
     }
@@ -90,11 +98,16 @@ export default function ManagementDashboard() {
 
       {/* 2. DYNAMIC KEY METRICS */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+        {offline && (
+          <div className="col-span-4 text-center py-3 px-6 bg-amber-50 border border-amber-200 rounded-2xl text-amber-700 text-[11px] font-black uppercase tracking-widest">
+            ⚡ Sovereign Offline Mode — Displaying cached data
+          </div>
+        )}
         {[
-          { label: 'Net Revenue', value: (stats && typeof stats.today_revenue === 'number') ? `₹${stats.today_revenue.toLocaleString()}` : '₹0', icon: DollarSign, color: 'navy', trend: '+14.2%', up: true },
-          { label: 'Bills Issued', value: (stats && stats.bills_today) !== undefined ? stats.bills_today : '0', icon: Receipt, color: 'saffron', trend: 'Live', up: true },
-          { label: 'Active Catalogue', value: (stats && stats.active_skus) !== undefined ? stats.active_skus : '0', icon: Package, color: 'navy', trend: '+38 Today', up: true },
-          { label: 'Risk Alerts', value: (stats && stats.low_stock_alerts) !== undefined ? `${stats.low_stock_alerts} Styles` : '0 Alerts', icon: AlertCircle, color: 'rose', trend: 'CRITICAL', up: false },
+          { label: 'Net Revenue', value: typeof stats?.today_revenue === 'number' ? `₹${stats.today_revenue.toLocaleString()}` : '₹0', icon: DollarSign, color: 'navy', trend: '+14.2%', up: true },
+          { label: 'Bills Issued', value: stats?.bills_today ?? 0, icon: Receipt, color: 'saffron', trend: 'Live', up: true },
+          { label: 'Active Catalogue', value: stats?.active_skus ?? 0, icon: Package, color: 'navy', trend: '+38 Today', up: true },
+          { label: 'Risk Alerts', value: stats?.low_stock_alerts != null ? `${stats.low_stock_alerts} Styles` : '0 Alerts', icon: AlertCircle, color: 'rose', trend: 'CRITICAL', up: false },
         ].map((stat, i) => (
           <div key={i} className="shoper-card group cursor-pointer overflow-hidden relative">
             <div className={`absolute top-0 right-0 w-32 h-32 opacity-5 blur-[40px] rounded-full transition-all group-hover:opacity-20 ${stat.color === 'rose' ? 'bg-rose-500' : 'bg-gold'}`}></div>

@@ -1,8 +1,8 @@
-/* ============================================================
- * PrimeSetu — Shoper9-Based Retail OS
- * Document : backend/app/services/barcode.py
- * © 2026 — All Rights Reserved
- * ============================================================ */
+# ============================================================
+# PrimeSetu - Shoper9-Based Retail OS
+# Document : backend/app/services/barcode.py
+# (c) 2026 - All Rights Reserved
+# ============================================================
 
 def calculate_ean13_check_digit(digits_12: str) -> str:
     """

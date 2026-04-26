@@ -30,6 +30,7 @@ from dataclasses import dataclass
 from typing import Optional
 from fastapi import Depends, HTTPException, status
 from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
+from app.core.config import settings
 
 # ── Bearer token extractor ────────────────────────────────────────────────────
 _bearer = HTTPBearer(auto_error=True)
@@ -56,7 +57,8 @@ def _decode_token(token: str) -> dict:
         user_metadata → { store_id, role, full_name }
         exp          → expiry (verified automatically)
     """
-    secret = os.environ.get("SUPABASE_JWT_SECRET")
+    # Prefer settings (loaded from .env via pydantic), fallback to raw env
+    secret = settings.supabase_jwt_secret or os.environ.get("SUPABASE_JWT_SECRET") or settings.jwt_secret
     if not secret:
         raise RuntimeError("[PrimeSetu] SUPABASE_JWT_SECRET is not set in environment.")
 

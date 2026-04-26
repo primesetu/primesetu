@@ -7,14 +7,14 @@
 # Project            :  PrimeSetu
 # © 2026 — All Rights Reserved
 # "Memory, Not Code."
-# ============================================================
+# ============================================================ #
 
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import select, func, extract
 from app.core.database import get_db
-from app.core.security import get_current_user, UserContext
-from app.models.base import Transaction, TransactionItem, Product
+from app.core.security import require_auth, CurrentUser
+from app.models import Transaction, TransactionItem, Item, Department
 from pydantic import BaseModel
 from typing import List, Dict, Any, Optional
 
@@ -30,7 +30,7 @@ class FlexibleReportRequest(BaseModel):
 async def generate_flexible_report(
     req: FlexibleReportRequest,
     db: AsyncSession = Depends(get_db),
-    current_user: UserContext = Depends(get_current_user)
+    current_user: CurrentUser = Depends(require_auth)
 ):
     """
     Flexible Report Designer Engine: Dynamic Pivot Aggregation.
@@ -40,11 +40,9 @@ async def generate_flexible_report(
     
     # Map dimension names to model attributes
     DIMENSION_MAP = {
-        "brand": Product.brand,
-        "category": Product.category,
-        "subcategory": Product.subcategory,
-        "size": Product.size,
-        "color": Product.color,
+        "brand": Item.brand,
+        "department": Department.name,
+        "hsn": Item.hsn_code,
         "store": Transaction.store_id,
         "month": extract("month", Transaction.created_at),
         "year": extract("year", Transaction.created_at),
@@ -77,8 +75,9 @@ async def generate_flexible_report(
     # Construct Dynamic Query
     stmt = (
         select(*(group_fields + agg_fields))
-        .join(TransactionItem, TransactionItem.product_id == Product.id)
+        .join(TransactionItem, TransactionItem.product_id == Item.id)
         .join(Transaction, Transaction.id == TransactionItem.transaction_id)
+        .join(Department, Department.id == Item.department_id)
         .where(Transaction.store_id == store_id)
         .where(Transaction.status == "Finalized")
     )

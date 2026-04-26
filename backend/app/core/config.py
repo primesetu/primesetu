@@ -11,7 +11,8 @@ class Settings(BaseSettings):
     supabase_url: str
     supabase_service_role_key: str
     jwt_secret: str
-    anthropic_api_key: str
+    supabase_jwt_secret: str = ""   # Alias loaded from SUPABASE_JWT_SECRET in .env
+    anthropic_api_key: str = ""
     environment: str = "development"
 
     class Config:

@@ -30,7 +30,7 @@ from sqlalchemy import select, func
 from sqlalchemy.orm import selectinload
 from app.core.database import get_db
 from app.core.security import get_current_user, UserContext
-from app.models.base import Transaction, TransactionItem, Product, Store
+from app.models.base import Transaction, TransactionItem, Item, Store
 from datetime import datetime
 from typing import Optional
 import csv
@@ -88,7 +88,7 @@ async def export_gstr1(
     from sqlalchemy import extract
     stmt = (
         select(Transaction)
-        .options(selectinload(Transaction.items).selectinload(TransactionItem.product))
+        .options(selectinload(Transaction.items).selectinload(TransactionItem.item))
         .where(
             Transaction.store_id == store_id,
             Transaction.status == "Finalized",
@@ -140,13 +140,13 @@ async def export_gstr1(
             })
 
             # HSN Summary aggregation
-            # Use product code or specific HSN attribute if available
-            hsn = getattr(item.product, 'hsn_code', item.product.code[:4]) if item.product else "0000"
+            # Use item code or specific HSN attribute if available
+            hsn = getattr(item.item, 'hsn_code', item.item.item_code[:4]) if item.item else "0000"
             hsn_key = f"{hsn}|{tax_rate}"
             if hsn_key not in hsn_summary:
                 hsn_summary[hsn_key] = {
                     "hsn_sc": hsn,
-                    "desc": item.product.name[:30] if item.product else "Retail Product",
+                    "desc": item.item.item_name[:30] if item.item else "Retail Product",
                     "uqc": "PCS",
                     "qty": 0.0,
                     "val": 0.0,

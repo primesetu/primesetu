@@ -84,12 +84,13 @@ def test_tally_rounding_logic():
     
     totals = GSTEngine.compute_bill([line], store_state="27", customer_gstin=None)
     
-    # Raw Total: 9990 + 1798 = 11788
-    # Rounded to nearest 100: 11800
-    assert totals.taxable_amount == 9990
-    assert totals.total_tax_amount == 1798
-    assert totals.total_amount == 11800
-    assert totals.round_off == 12
+    # Raw Total: 9990 + 1798.20 = 11788.20
+    # Rounded to nearest whole rupee: 11788 (round(11788.20) = 11788)
+    # Round-off: 11788 - 11788.20 = -0.20
+    assert totals.taxable_amount == Decimal("9990")
+    assert totals.total_tax_amount == Decimal("1798.20")
+    assert totals.total_amount == Decimal("11788")
+    assert totals.round_off == Decimal("-0.20")
 
 def test_discount_first_calculation():
     """

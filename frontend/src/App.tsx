@@ -248,7 +248,7 @@ const PrimeSetuOS: React.FC = () => {
         <StatusBar activeTab={activeTab} />
 
         {/* Main Content Area */}
-        <main className="flex-1 p-[96px_32px_32px] animate-fadeUp">
+        <main className="flex-1 p-[104px_32px_32px] animate-fadeUp">
           <AnimatePresence mode="wait">
             <motion.div
               key={activeTab}

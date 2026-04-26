@@ -58,7 +58,7 @@ async def onboard_store(
                 "password": payload.admin_password,
                 "email_confirm": True,
                 "user_metadata": {
-                    "store_id": store_id,
+                    "store_id": str(store_id),
                     "role": "admin",
                     "full_name": payload.admin_full_name
                 }

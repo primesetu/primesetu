@@ -12,8 +12,9 @@
 """
 gst.py — GST calculation engine (Sovereign Money Standard)
 
-All monetary inputs and outputs are INTEGERS (PAISE).
-Internal math uses Decimal for precision, then rounds to nearest Paise.
+All monetary inputs/outputs are Decimal.
+Internal math uses Decimal for precision.
+Round-off to nearest whole rupee is applied at bill total level.
 """
 
 from dataclasses import dataclass, field
@@ -23,45 +24,46 @@ from typing import Optional, List
 # ── Valid GST slabs ───────────────────────────────────────────────────────────
 VALID_GST_RATES = {Decimal("0"), Decimal("5"), Decimal("12"), Decimal("18"), Decimal("28")}
 
-# ── Input / output types (All money in PAISE) ─────────────────────────────────
+# ── Input types ───────────────────────────────────────────────────────────────
 @dataclass
 class BillLineInput:
     product_id: int
-    qty: float                  # Quantity remains float for partial units
-    unit_price: int             # In Paise
-    mrp_at_billing: int         # In Paise
-    gst_rate: Decimal           # e.g. Decimal("18")
+    qty: float                          # Quantity — float allows partial units
+    unit_price: Decimal                 # Monetary value (Decimal)
+    mrp_at_billing: Decimal             # Monetary value (Decimal)
+    gst_rate: Decimal                   # e.g. Decimal("18")
     hsn_code: Optional[str]
-    discount_amount: int = 0    # In Paise
+    discount_amount: Decimal = Decimal("0")
 
 
+# ── Output types ──────────────────────────────────────────────────────────────
 @dataclass
 class BillLineResult:
     product_id: int
     qty: float
-    unit_price: int
-    mrp_at_billing: int
-    discount_amount: int
+    unit_price: Decimal
+    mrp_at_billing: Decimal
+    discount_amount: Decimal
     hsn_code: Optional[str]
     gst_rate: Decimal
-    taxable_amount: int         # In Paise
-    cgst_amount: int
-    sgst_amount: int
-    igst_amount: int
-    line_total: int             # In Paise
+    taxable_amount: Decimal
+    cgst_amount: Decimal
+    sgst_amount: Decimal
+    igst_amount: Decimal
+    line_total: Decimal
 
 
 @dataclass
 class BillTotals:
-    subtotal_amount: int        # In Paise
-    total_discount: int
-    taxable_amount: int
-    cgst_amount: int
-    sgst_amount: int
-    igst_amount: int
-    total_tax_amount: int
-    round_off: int              # Difference due to rounding to nearest Rupee (100 Paise)
-    total_amount: int           # Payable grand total (rounded to 100-paise boundary)
+    subtotal_amount: Decimal
+    total_discount: Decimal
+    taxable_amount: Decimal
+    cgst_amount: Decimal
+    sgst_amount: Decimal
+    igst_amount: Decimal
+    total_tax_amount: Decimal
+    round_off: Decimal           # Difference due to rounding to nearest Rupee
+    total_amount: Decimal        # Payable grand total (rounded to nearest rupee)
     is_igst: bool
     lines: List[BillLineResult] = field(default_factory=list)
 
@@ -70,63 +72,53 @@ class BillTotals:
 class GSTEngine:
     """
     Stateless GST computation engine for the Sovereign Node.
+    All money is Decimal; round-off applied only at bill-total level.
     """
 
     @staticmethod
     def _is_interstate(store_state: Optional[str], customer_gstin: Optional[str]) -> bool:
         if not customer_gstin or not store_state:
             return False
-        customer_state = customer_gstin[:2]
-        return customer_state != store_state
+        return customer_gstin[:2] != store_state
 
     @staticmethod
-    def _round_paise(value: Decimal) -> int:
-        """Rounds a decimal value to the nearest integer Paisa."""
-        return int(value.quantize(Decimal("1"), rounding=ROUND_HALF_UP))
-
-    @staticmethod
-    def _split_gst(taxable_paise: int, rate: Decimal, is_igst: bool):
-        """Return (cgst, sgst, igst) in PAISE."""
-        total_tax_decimal = Decimal(taxable_paise) * rate / Decimal("100")
-        total_tax_paise = GSTEngine._round_paise(total_tax_decimal)
-        
-        if is_igst:
-            return 0, 0, total_tax_paise
-            
-        half_paise = total_tax_paise // 2
-        # The other half absorbs any rounding oddity
-        other_half_paise = total_tax_paise - half_paise
-        return half_paise, other_half_paise, 0
+    def _round2(value: Decimal) -> Decimal:
+        """Rounds to 2 decimal places (nearest paisa)."""
+        return value.quantize(Decimal("0.01"), rounding=ROUND_HALF_UP)
 
     @classmethod
-    def compute_line(
-        cls,
-        line: BillLineInput,
-        is_igst: bool,
-    ) -> BillLineResult:
-        if line.gst_rate not in VALID_GST_RATES:
-            raise ValueError(f"[GST] Invalid rate {line.gst_rate}")
+    def _split_gst(cls, taxable: Decimal, rate: Decimal, is_igst: bool):
+        """Return (cgst, sgst, igst) as Decimal."""
+        total_tax = cls._round2(taxable * rate / Decimal("100"))
+        if is_igst:
+            return Decimal("0"), Decimal("0"), total_tax
+        half = cls._round2(total_tax / Decimal("2"))
+        return half, total_tax - half, Decimal("0")
 
-        # Gross = Unit Price * Qty
-        gross_paise = cls._round_paise(Decimal(line.unit_price) * Decimal(str(line.qty)))
-        taxable_paise = gross_paise - line.discount_amount
-        
-        cgst, sgst, igst = cls._split_gst(taxable_paise, line.gst_rate, is_igst)
-        line_total_paise = taxable_paise + cgst + sgst + igst
+    @classmethod
+    def compute_line(cls, line: BillLineInput, is_igst: bool) -> BillLineResult:
+        # Normalise for set lookup (strips trailing zeros)
+        if line.gst_rate.normalize() not in {r.normalize() for r in VALID_GST_RATES}:
+            raise ValueError("Invalid GST rate")
+
+        gross    = cls._round2(Decimal(str(line.unit_price)) * Decimal(str(line.qty)))
+        discount = Decimal(str(line.discount_amount))
+        taxable  = gross - discount
+        cgst, sgst, igst = cls._split_gst(taxable, line.gst_rate, is_igst)
 
         return BillLineResult(
             product_id      = line.product_id,
             qty             = line.qty,
-            unit_price      = line.unit_price,
-            mrp_at_billing  = line.mrp_at_billing,
-            discount_amount = line.discount_amount,
+            unit_price      = Decimal(str(line.unit_price)),
+            mrp_at_billing  = Decimal(str(line.mrp_at_billing)),
+            discount_amount = discount,
             hsn_code        = line.hsn_code,
             gst_rate        = line.gst_rate,
-            taxable_amount  = taxable_paise,
+            taxable_amount  = taxable,
             cgst_amount     = cgst,
             sgst_amount     = sgst,
             igst_amount     = igst,
-            line_total      = line_total_paise,
+            line_total      = taxable + cgst + sgst + igst,
         )
 
     @classmethod
@@ -137,47 +129,50 @@ class GSTEngine:
         customer_gstin: Optional[str] = None,
     ) -> BillTotals:
         if not lines:
-            raise ValueError("Empty bill")
+            raise ValueError("empty bill")
 
-        is_igst = cls._is_interstate(store_state, customer_gstin)
+        is_igst        = cls._is_interstate(store_state, customer_gstin)
         computed_lines = [cls.compute_line(line, is_igst) for line in lines]
 
-        subtotal_paise = sum(cls._round_paise(Decimal(l.unit_price) * Decimal(str(l.qty))) for l in lines)
-        total_discount_paise = sum(l.discount_amount for l in computed_lines)
-        taxable_paise = sum(l.taxable_amount for l in computed_lines)
-        cgst_paise = sum(l.cgst_amount for l in computed_lines)
-        sgst_paise = sum(l.sgst_amount for l in computed_lines)
-        igst_paise = sum(l.igst_amount for l in computed_lines)
-        total_tax_paise = cgst_paise + sgst_paise + igst_paise
-        raw_total_paise = taxable_paise + total_tax_paise
+        subtotal       = sum(cls._round2(Decimal(str(l.unit_price)) * Decimal(str(l.qty))) for l in lines)
+        total_discount = sum(l.discount_amount for l in computed_lines)
+        taxable        = sum(l.taxable_amount  for l in computed_lines)
+        cgst           = sum(l.cgst_amount     for l in computed_lines)
+        sgst           = sum(l.sgst_amount     for l in computed_lines)
+        igst           = sum(l.igst_amount     for l in computed_lines)
+        total_tax      = cgst + sgst + igst
+        raw_total      = taxable + total_tax
 
-        # Round off to nearest Rupee (100 Paise)
-        # Formula: round(raw_total / 100) * 100
-        rounded_total_paise = int(round(raw_total_paise / 100.0) * 100)
-        round_off_paise = rounded_total_paise - raw_total_paise
+        # Round off to nearest whole rupee
+        rounded_total  = Decimal(str(round(float(raw_total))))
+        round_off      = rounded_total - raw_total
 
         return BillTotals(
-            subtotal_amount  = subtotal_paise,
-            total_discount   = total_discount_paise,
-            taxable_amount   = taxable_paise,
-            cgst_amount      = cgst_paise,
-            sgst_amount      = sgst_paise,
-            igst_amount      = igst_paise,
-            total_tax_amount = total_tax_paise,
-            round_off        = round_off_paise,
-            total_amount     = rounded_total_paise,
+            subtotal_amount  = subtotal,
+            total_discount   = total_discount,
+            taxable_amount   = taxable,
+            cgst_amount      = cgst,
+            sgst_amount      = sgst,
+            igst_amount      = igst,
+            total_tax_amount = total_tax,
+            round_off        = round_off,
+            total_amount     = rounded_total,
             is_igst          = is_igst,
             lines            = computed_lines,
         )
 
 
+# ── Validators ────────────────────────────────────────────────────────────────
 def validate_hsn(hsn_code: Optional[str]) -> bool:
-    if not hsn_code: return False
+    if not hsn_code:
+        return False
     return hsn_code.isdigit() and len(hsn_code) in (4, 6, 8)
 
 
 def validate_gstin(gstin: Optional[str]) -> bool:
     import re
-    if not gstin: return False
+    if not gstin:
+        return False
+    # Must be uppercase to pass; we do NOT auto-uppercase
     pattern = r"^[0-3][0-9][A-Z]{5}[0-9]{4}[A-Z][1-9A-Z]Z[0-9A-Z]$"
-    return bool(re.match(pattern, gstin.upper()))
+    return bool(re.match(pattern, gstin))

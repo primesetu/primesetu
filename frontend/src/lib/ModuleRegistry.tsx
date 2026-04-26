@@ -30,7 +30,7 @@ import {
   Store
 } from 'lucide-react'
 
-// Module Lazy/Dynamic Imports (Simplified for now)
+// Module Lazy/Dynamic Imports
 import TillManagement from '../modules/billing/TillManagement'
 import PriceManagement from '../modules/billing/PriceManagement'
 import ComingSoon from '../components/ComingSoon'
@@ -81,10 +81,82 @@ export interface ModuleDefinition {
   category: 'POS' | 'WAREHOUSE' | 'FINANCE' | 'HO' | 'SYSTEM'
 }
 
-/**
- * COMPONENT_MAP
- * Maps dynamic module IDs to their respective React components.
- */
+export const MODULES: ModuleDefinition[] = [
+  {
+    id: 'dashboard',
+    label: 'Dashboard',
+    icon: LayoutDashboard,
+    component: <ManagementDashboard />,
+    roles: ['OWNER', 'MANAGER'],
+    showInSidebar: true,
+    category: 'POS'
+  },
+  {
+    id: 'sales',
+    label: 'Billing (POS)',
+    icon: ShoppingCart,
+    component: <BillingModule />,
+    roles: ['OWNER', 'MANAGER', 'CASHIER'],
+    shortcut: 'F1',
+    showInSidebar: true,
+    category: 'POS'
+  },
+  {
+    id: 'grn',
+    label: 'Inward (GRN)',
+    icon: Truck,
+    component: <GRNProcessor />,
+    roles: ['OWNER', 'MANAGER'],
+    showInSidebar: true,
+    category: 'WAREHOUSE'
+  },
+  {
+    id: 'returns',
+    label: 'Outward (Returns)',
+    icon: RotateCcw,
+    component: <ReturnsDashboard />,
+    roles: ['OWNER', 'MANAGER', 'CASHIER'],
+    showInSidebar: true,
+    category: 'POS'
+  },
+  {
+    id: 'registry',
+    label: 'Masters (Registry)',
+    icon: Package,
+    component: <MasterRegistry />,
+    roles: ['OWNER', 'MANAGER'],
+    showInSidebar: true,
+    category: 'FINANCE'
+  },
+  {
+    id: 'reconcile',
+    label: 'Audit / Reconcile',
+    icon: History,
+    component: <InventoryAudit />,
+    roles: ['OWNER', 'MANAGER'],
+    showInSidebar: true,
+    category: 'WAREHOUSE'
+  },
+  {
+    id: 'ho',
+    label: 'Sync (HO)',
+    icon: Globe,
+    component: <HOSyncModule />,
+    roles: ['OWNER'],
+    showInSidebar: true,
+    category: 'HO'
+  },
+  {
+    id: 'settings',
+    label: 'System Config',
+    icon: Settings,
+    component: <ConfigModule />,
+    roles: ['OWNER'],
+    showInSidebar: true,
+    category: 'SYSTEM'
+  }
+];
+
 export const COMPONENT_MAP: Record<string, React.ReactNode> = {
   'dashboard': <ManagementDashboard />,
   'sales': <BillingModule />,
@@ -124,10 +196,6 @@ export const COMPONENT_MAP: Record<string, React.ReactNode> = {
   'pricegroups': <PriceGroups />,
 };
 
-/**
- * ICON_MAP
- * Maps dynamic module IDs to their respective Lucide icons.
- */
 export const ICON_MAP: Record<string, any> = {
   'dashboard': LayoutDashboard,
   'sales': ShoppingCart,
@@ -166,4 +234,3 @@ export const ICON_MAP: Record<string, any> = {
   'gstr1': FileText,
   'pricegroups': DollarSign,
 };
-

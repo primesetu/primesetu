@@ -122,5 +122,10 @@ export const api = {
   },
   onboarding: {
     registerStore: (data: any) => apiClient.post('/onboarding/store', data).then(r => r.data),
+  },
+  users: {
+    list: () => apiClient.get('/users/').then(r => r.data),
+    create: (data: any) => apiClient.post('/users/', data).then(r => r.data),
+    update: (id: string, data: any) => apiClient.put(`/users/${id}`, data).then(r => r.data),
   }
 }

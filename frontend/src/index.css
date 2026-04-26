@@ -1,103 +1,606 @@
+/* ============================================================
+ * PrimeSetu — Shoper9-Based Retail OS
+ * Zero Cloud · Sovereign · AI-Governed
+ * ============================================================
+ * System Architect : Jawahar R. M.
+ * Organisation     : AITDL Network
+ * © 2026 — All Rights Reserved
+ * "Memory, Not Code."
+ * ============================================================
+ *
+ * DESIGN PHILOSOPHY:
+ * This POS is used by cashiers who may have ZERO computer literacy.
+ * Every decision prioritises:
+ *   1. Legibility at 60–80cm distance
+ *   2. One obvious action at a time
+ *   3. Colour = unambiguous meaning (never decoration)
+ *   4. Touch targets ≥ 52px (cashier can't miss)
+ *   5. Font-mono for ALL numbers (alignment = trust)
+ * ============================================================ */
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
+/* ─────────────────────────────────────────────
+   1. DESIGN TOKENS — Single Source of Truth
+───────────────────────────────────────────── */
 @layer base {
   :root {
-    --navy:      #0D1B3E;
-    --navy2:     #162248;
-    --navy3:     #1E2F5C;
-    --saffron:   #F4840A;
-    --gold:      #F9B942;
-    --cream:     #FAF7F2; /* Refined Classic Cream */
-    --white:     #FFFFFF;
-    --muted:     #8A8FA8;
-    --border:    #E8E4DC;
-    --green:     #27AE60;
-    --red:       #E74C3C;
-    --blue:      #2980B9;
-    --sw:        252px; /* Sidebar Width */
-    --fw:        120px; /* Function Key Bar Width */
+    /* Brand */
+    --navy:        #0D1B3E;
+    --navy-light:  #162248;
+    --navy-mid:    #1E2F5C;
+    --saffron:     #F4840A;
+    --saffron-dk:  #D9720A;
+    --gold:        #F9B942;
+    --cream:       #FAF7F2;
+    --white:       #FFFFFF;
+
+    /* Semantic */
+    --muted:       #6B7280;   /* secondary labels */
+    --border:      #E5E0D8;   /* subtle dividers   */
+    --surface:     #FFFFFF;   /* card backgrounds  */
+
+    /* Status — colour is meaning, not decoration */
+    --status-ok:      #16A34A;  /* text */
+    --status-ok-bg:   #DCFCE7;
+    --status-warn:    #D97706;  /* text */
+    --status-warn-bg: #FEF3C7;
+    --status-err:     #DC2626;  /* text */
+    --status-err-bg:  #FEE2E2;
+    --status-info:    #2563EB;  /* text */
+    --status-info-bg: #DBEAFE;
+
+    /* Stock intelligence (DoC) */
+    --doc-critical-bg:  #FFF1F2;
+    --doc-critical-txt: #BE123C;
+    --doc-warn-bg:      #FFFBEB;
+    --doc-warn-txt:     #B45309;
+    --doc-ok-bg:        #F0FDF4;
+    --doc-ok-txt:       #15803D;
+
+    /* Layout */
+    --sidebar-w:   280px;
+    --sidebar-collapsed: 72px;
+    --topbar-h:    56px;
+    --hotkeybar-h: 56px;
+
+    /* Typography scale — POS reading distance: 60–80cm
+       NEVER go below 13px for anything a cashier reads */
+    --text-2xs:  11px;   /* hotkey badges only      */
+    --text-xs:   13px;   /* secondary labels min     */
+    --text-sm:   14px;   /* table cells              */
+    --text-md:   15px;   /* body / form fields       */
+    --text-lg:   17px;   /* item names in cart       */
+    --text-xl:   20px;   /* section headings         */
+    --text-2xl:  24px;   /* page titles              */
+    --text-3xl:  32px;   /* TOTAL amount             */
+    --text-4xl:  44px;   /* payment confirm          */
+
+    /* Animation — POS: speed over beauty */
+    --duration-instant:  80ms;
+    --duration-fast:    150ms;
+    --duration-normal:  250ms;
+    --duration-slow:    400ms;
+    --ease-pos:         cubic-bezier(0.2, 0, 0, 1);
+  }
+}
+
+/* ─────────────────────────────────────────────
+   2. GLOBAL RESET & BASE
+───────────────────────────────────────────── */
+@layer base {
+  *, *::before, *::after {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+  }
+
+  html {
+    -webkit-text-size-adjust: 100%;
+    scroll-behavior: smooth;
   }
 
   body {
     background-color: var(--cream);
     color: var(--navy);
-    font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
-    font-size: 13px;
+    /* Inter: proven most readable font for mixed-literacy audiences */
+    font-family: 'Inter', 'Noto Sans Devanagari', system-ui, -apple-system, sans-serif;
+    font-size: var(--text-md);
+    font-feature-settings: 'cv02', 'cv03', 'cv04', 'cv11'; /* Inter optical features */
+    line-height: 1.5;
     -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
     user-select: none;
     -webkit-user-select: none;
     overflow-x: hidden;
   }
 
-  /* Custom Typography - Strict Shoper9 Parity */
-  h1, h2, h3, .serif {
-    font-family: ui-serif, Georgia, Cambria, "Times New Roman", Times, serif;
-  }
-
-  code, kbd, pre, .mono, .font-mono {
-    font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
-  }
-
-  input, textarea {
+  /* Allow text selection in inputs ONLY */
+  input, textarea, [contenteditable] {
     user-select: text;
     -webkit-user-select: text;
   }
 
-  img, a {
-    -webkit-user-drag: none;
+  /* Prevent drag on images and links */
+  img, a { -webkit-user-drag: none; }
+
+  /* ── Focus visible: critical for keyboard-first POS ── */
+  :focus-visible {
+    outline: 2.5px solid var(--saffron);
+    outline-offset: 2px;
+    border-radius: 4px;
+  }
+  :focus:not(:focus-visible) { outline: none; }
+
+  /* ── Headings: Inter bold, not serif (readability) ── */
+  h1, h2, h3, h4, h5, h6 {
+    font-family: 'Inter', sans-serif;
+    font-weight: 700;
+    line-height: 1.25;
+    color: var(--navy);
+    letter-spacing: -0.01em;
+  }
+  h1 { font-size: var(--text-2xl); }
+  h2 { font-size: var(--text-xl); }
+  h3 { font-size: var(--text-lg); }
+
+  /* ── Monospace: ALL numbers live here — non-negotiable ── */
+  code, kbd, pre,
+  .mono, .font-mono,
+  [data-type="price"],
+  [data-type="qty"],
+  [data-type="barcode"],
+  [data-type="code"] {
+    font-family: 'JetBrains Mono', 'Fira Code', ui-monospace, monospace;
+    font-variant-numeric: tabular-nums;  /* aligns columns perfectly */
+    font-feature-settings: 'zero' 1;    /* slashed zero — 0 vs O clarity */
   }
 
-  /* Sleek Scrollbars */
-  ::-webkit-scrollbar {
-    width: 6px;
-    height: 6px;
-  }
-  ::-webkit-scrollbar-track {
-    background: transparent;
-  }
+  /* Prettier scrollbars everywhere */
+  ::-webkit-scrollbar { width: 5px; height: 5px; }
+  ::-webkit-scrollbar-track { background: transparent; }
   ::-webkit-scrollbar-thumb {
-    background: #cbd5e1;
-    border-radius: 3px;
+    background: var(--border);
+    border-radius: 99px;
+    transition: background var(--duration-fast);
   }
-  ::-webkit-scrollbar-thumb:hover {
-    background: #94a3b8;
-  }
+  ::-webkit-scrollbar-thumb:hover { background: var(--muted); }
 }
 
+
+/* ─────────────────────────────────────────────
+   3. COMPONENT LIBRARY
+   Rules: explicit pixel sizes, visible targets,
+   saffron = primary action, cream = secondary
+───────────────────────────────────────────── */
 @layer components {
-  .btn-primary {
-    @apply bg-saffron text-white border-none rounded-lg px-5 py-2.5 text-[12.5px] font-semibold transition-all hover:bg-[#D9720A] active:scale-95;
-  }
-  .btn-sec {
-    @apply bg-cream text-navy border border-border rounded-lg px-5 py-2.5 text-[12.5px] font-medium transition-all hover:bg-navy hover:text-white hover:border-navy;
-  }
-  .finput {
-    @apply bg-cream border border-border rounded-lg px-3 py-2 text-[12.5px] text-navy outline-none transition-all focus:border-saffron focus:bg-white;
-  }
-  .fselect {
-    @apply bg-cream border border-border rounded-lg px-3 py-2 text-[12.5px] text-navy outline-none cursor-pointer hover:border-saffron;
-  }
-}
 
-@layer utilities {
+  /* ── BUTTONS ──────────────────────────────── */
+
+  /* Primary: The ONE next action. Saffron, impossible to miss. */
+  .btn-primary {
+    @apply inline-flex items-center justify-center gap-2
+           bg-saffron text-white
+           font-bold tracking-wide
+           rounded-xl px-6
+           border-none cursor-pointer select-none
+           transition-all;
+    font-size: var(--text-md);
+    height: 52px;                    /* ≥ 52px: cashier can't miss */
+    min-width: 120px;
+    box-shadow: 0 4px 14px rgba(244,132,10,0.35);
+    transition-duration: var(--duration-fast);
+  }
+  .btn-primary:hover  { background: var(--saffron-dk); transform: translateY(-1px); box-shadow: 0 6px 20px rgba(244,132,10,0.4); }
+  .btn-primary:active { transform: scale(0.97); box-shadow: none; }
+
+  /* Secondary: Quiet. Visible but not competing. */
+  .btn-sec {
+    @apply inline-flex items-center justify-center gap-2
+           bg-white text-navy
+           font-semibold
+           rounded-xl px-6
+           cursor-pointer select-none
+           transition-all;
+    font-size: var(--text-md);
+    height: 52px;
+    min-width: 100px;
+    border: 1.5px solid var(--border);
+    transition-duration: var(--duration-fast);
+  }
+  .btn-sec:hover  { border-color: var(--navy); background: var(--cream); }
+  .btn-sec:active { transform: scale(0.97); }
+
+  /* Danger: Red, used ONLY for destructive actions (void, delete) */
+  .btn-danger {
+    @apply inline-flex items-center justify-center gap-2
+           font-bold rounded-xl px-6 cursor-pointer select-none transition-all;
+    font-size: var(--text-md);
+    height: 52px;
+    color: #DC2626;
+    background: #FEE2E2;
+    border: 1.5px solid #FECACA;
+    transition-duration: var(--duration-fast);
+  }
+  .btn-danger:hover  { background: #DC2626; color: white; }
+  .btn-danger:active { transform: scale(0.97); }
+
+  /* Ghost: Icon buttons, toolbar items */
+  .btn-ghost {
+    @apply inline-flex items-center justify-center gap-1.5
+           rounded-lg px-3 cursor-pointer select-none transition-all text-muted;
+    height: 36px;
+    font-size: var(--text-xs);
+    font-weight: 600;
+    transition-duration: var(--duration-instant);
+  }
+  .btn-ghost:hover { background: rgba(13,27,62,0.06); color: var(--navy); }
+
+  /* PAY button: The biggest, most unmissable element on billing screen */
+  .btn-pay {
+    @apply w-full inline-flex items-center justify-center gap-3
+           bg-saffron text-white font-black rounded-2xl cursor-pointer
+           tracking-wider uppercase;
+    font-size: var(--text-xl);
+    height: 72px;
+    letter-spacing: 0.08em;
+    box-shadow: 0 8px 24px rgba(244,132,10,0.4);
+    transition: all var(--duration-fast) var(--ease-pos);
+  }
+  .btn-pay:hover  { background: var(--saffron-dk); box-shadow: 0 12px 32px rgba(244,132,10,0.5); transform: translateY(-2px); }
+  .btn-pay:active { transform: scale(0.98); }
+
+  /* ── INPUTS ──────────────────────────────── */
+
+  .finput {
+    @apply block w-full bg-white rounded-xl text-navy outline-none transition-all;
+    font-family: 'Inter', sans-serif;
+    font-size: var(--text-md);
+    font-weight: 500;
+    height: 52px;
+    padding: 0 14px;
+    border: 1.5px solid var(--border);
+    transition-duration: var(--duration-fast);
+    caret-color: var(--saffron);
+  }
+  .finput:focus         { border-color: var(--saffron); box-shadow: 0 0 0 3px rgba(244,132,10,0.12); }
+  .finput::placeholder  { color: var(--muted); font-weight: 400; }
+  .finput:disabled      { background: var(--cream); opacity: 0.6; cursor: not-allowed; }
+
+  .fselect {
+    @apply block w-full bg-white rounded-xl text-navy outline-none cursor-pointer;
+    font-family: 'Inter', sans-serif;
+    font-size: var(--text-md);
+    font-weight: 500;
+    height: 52px;
+    padding: 0 14px;
+    border: 1.5px solid var(--border);
+    transition: border-color var(--duration-fast), box-shadow var(--duration-fast);
+    appearance: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%236B7280' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 14px center;
+    padding-right: 40px;
+  }
+  .fselect:focus { border-color: var(--saffron); box-shadow: 0 0 0 3px rgba(244,132,10,0.12); }
+
+  /* Label above inputs — always uppercase, muted, small */
+  .flabel {
+    display: block;
+    font-family: 'Inter', sans-serif;
+    font-size: var(--text-2xs);
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--muted);
+    margin-bottom: 6px;
+  }
+
+  /* ── CARDS & PANELS ───────────────────────── */
+
   .shoper-panel {
-    @apply bg-white rounded-2xl border border-border overflow-hidden mb-4 shadow-sm;
+    @apply bg-white rounded-2xl border overflow-hidden mb-4;
+    border-color: var(--border);
+    box-shadow: 0 1px 4px rgba(13,27,62,0.04), 0 4px 16px rgba(13,27,62,0.04);
   }
+
   .shoper-card {
-    @apply bg-white rounded-2xl p-[18px] border border-border relative overflow-hidden transition-all hover:-translate-y-0.5 hover:shadow-lg cursor-pointer;
+    @apply bg-white rounded-2xl p-5 border relative overflow-hidden
+           transition-all cursor-pointer;
+    border-color: var(--border);
+    box-shadow: 0 1px 3px rgba(13,27,62,0.06);
+    transition-duration: var(--duration-fast);
   }
+  .shoper-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 24px rgba(13,27,62,0.1);
+    border-color: rgba(244,132,10,0.3);
+  }
+
+  /* KPI card metric display */
   .klabel {
-    @apply text-[10px] font-semibold uppercase tracking-widest text-muted;
+    font-family: 'Inter', sans-serif;
+    font-size: var(--text-2xs);
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    color: var(--muted);
+    margin-bottom: 4px;
   }
   .kval {
-    @apply font-serif text-[26px] font-bold leading-none mb-1.5;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: var(--text-3xl);
+    font-weight: 700;
+    line-height: 1;
+    color: var(--navy);
+    font-variant-numeric: tabular-nums;
   }
+
+  /* ── TABLES ───────────────────────────────── */
+
   .tbl-header {
-    @apply text-[9.5px] font-semibold uppercase tracking-widest text-muted border-b border-border pb-2.5 text-left;
+    font-family: 'Inter', sans-serif;
+    font-size: var(--text-2xs);
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--muted);
+    padding-bottom: 10px;
+    border-bottom: 1.5px solid var(--border);
+    text-align: left;
   }
+
+  /* Row min 52px — cashier must be able to click without precision */
+  .tbl-row {
+    @apply transition-colors cursor-pointer;
+    min-height: 52px;
+    border-bottom: 1px solid var(--border);
+    transition-duration: var(--duration-instant);
+  }
+  .tbl-row:hover { background: rgba(249,185,66,0.05); }
+  .tbl-row.selected { background: rgba(249,185,66,0.12); border-left: 3px solid var(--saffron); }
+  .tbl-row.voided { opacity: 0.5; text-decoration: line-through; }
+
   .tbl-cell {
-    @apply py-2.5 text-[12.5px] border-b border-border align-middle;
+    font-family: 'Inter', sans-serif;
+    font-size: var(--text-sm);
+    color: var(--navy);
+    padding: 14px 10px;
+    vertical-align: middle;
+    border-bottom: 1px solid var(--border);
+  }
+  .tbl-cell.mono {
+    font-family: 'JetBrains Mono', monospace;
+    font-variant-numeric: tabular-nums;
+  }
+
+  /* ── STATUS BADGES ────────────────────────── */
+
+  .badge {
+    @apply inline-flex items-center gap-1 rounded-full font-bold;
+    font-family: 'Inter', sans-serif;
+    font-size: var(--text-2xs);
+    padding: 3px 10px;
+    text-transform: uppercase;
+    letter-spacing: 0.07em;
+  }
+  .badge-ok      { background: var(--status-ok-bg);   color: var(--status-ok); }
+  .badge-warn    { background: var(--status-warn-bg);  color: var(--status-warn); }
+  .badge-err     { background: var(--status-err-bg);   color: var(--status-err); }
+  .badge-info    { background: var(--status-info-bg);  color: var(--status-info); }
+  .badge-muted   { background: rgba(13,27,62,0.06);   color: var(--muted); }
+
+  /* DoC (Days of Cover) intelligence badges */
+  .badge-doc-critical { background: var(--doc-critical-bg); color: var(--doc-critical-txt); }
+  .badge-doc-warn     { background: var(--doc-warn-bg);     color: var(--doc-warn-txt); }
+  .badge-doc-ok       { background: var(--doc-ok-bg);       color: var(--doc-ok-txt); }
+
+  /* Hotkey badge: appears in bottom bar and on hover */
+  .kbd {
+    @apply inline-flex items-center justify-center rounded;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: var(--text-2xs);
+    font-weight: 700;
+    padding: 2px 6px;
+    background: rgba(255,255,255,0.12);
+    color: rgba(255,255,255,0.7);
+    border: 1px solid rgba(255,255,255,0.15);
+  }
+
+  /* ── PAGE HEADER ─────────────────────────── */
+
+  .page-header {
+    @apply flex items-center justify-between;
+    padding: 20px 24px 16px;
+    border-bottom: 1.5px solid var(--border);
+    background: var(--white);
+  }
+  .page-title {
+    font-family: 'Inter', sans-serif;
+    font-size: var(--text-xl);
+    font-weight: 800;
+    color: var(--navy);
+    letter-spacing: -0.02em;
+    line-height: 1.2;
+  }
+  .page-subtitle {
+    font-family: 'Inter', sans-serif;
+    font-size: var(--text-xs);
+    color: var(--muted);
+    font-weight: 500;
+    margin-top: 2px;
+  }
+
+  /* ── SECTION LABELS ─────────────────────── */
+
+  .section-label {
+    font-family: 'Inter', sans-serif;
+    font-size: var(--text-2xs);
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 0.14em;
+    color: var(--muted);
+  }
+
+  /* ── PRICE DISPLAY ───────────────────────── */
+
+  /* Large total — biggest text on screen, customer-facing */
+  .price-total {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: var(--text-3xl);
+    font-weight: 700;
+    color: var(--navy);
+    font-variant-numeric: tabular-nums;
+    letter-spacing: -0.01em;
+  }
+  .price-lg {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: var(--text-xl);
+    font-weight: 600;
+    font-variant-numeric: tabular-nums;
+  }
+  .price-sm {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: var(--text-sm);
+    font-weight: 500;
+    font-variant-numeric: tabular-nums;
+  }
+  .price-strikethrough {
+    text-decoration: line-through;
+    color: var(--muted);
+    font-size: var(--text-xs);
+  }
+
+  /* ── TOASTS / NOTIFICATIONS ─────────────── */
+
+  .toast {
+    @apply flex items-start gap-3 rounded-2xl p-4 shadow-xl;
+    font-family: 'Inter', sans-serif;
+    font-size: var(--text-sm);
+    font-weight: 500;
+    max-width: 360px;
+    animation: slideInRight var(--duration-normal) var(--ease-pos);
+  }
+  .toast-ok   { background: var(--status-ok-bg);   color: var(--status-ok); border: 1px solid #BBF7D0; }
+  .toast-err  { background: var(--status-err-bg);  color: var(--status-err); border: 1px solid #FECACA; }
+  .toast-warn { background: var(--status-warn-bg); color: var(--status-warn); border: 1px solid #FDE68A; }
+
+  /* ── OFFLINE BANNER ──────────────────────── */
+
+  .offline-banner {
+    @apply flex items-center gap-2 px-4 w-full;
+    height: 36px;
+    background: var(--saffron);
+    color: white;
+    font-family: 'Inter', sans-serif;
+    font-size: var(--text-xs);
+    font-weight: 700;
+    letter-spacing: 0.03em;
+    animation: slideDown var(--duration-normal) var(--ease-pos);
+  }
+
+  /* ── SKELETON LOADERS ────────────────────── */
+
+  .skeleton {
+    @apply rounded-xl;
+    background: linear-gradient(90deg,
+      rgba(13,27,62,0.04) 25%,
+      rgba(13,27,62,0.08) 50%,
+      rgba(13,27,62,0.04) 75%
+    );
+    background-size: 200% 100%;
+    animation: shimmer 1.4s ease-in-out infinite;
+  }
+}
+
+
+/* ─────────────────────────────────────────────
+   4. UTILITIES
+───────────────────────────────────────────── */
+@layer utilities {
+
+  /* Scrollable area that doesn't break layout */
+  .scroll-area {
+    overflow-y: auto;
+    overflow-x: hidden;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  /* Full-screen layout helpers */
+  .h-screen-safe { height: 100dvh; }
+  .screen-fill   { @apply flex flex-col overflow-hidden; height: 100dvh; }
+
+  /* Number formatting utilities */
+  .tabular-nums { font-variant-numeric: tabular-nums; }
+
+  /* Truncate with ellipsis */
+  .truncate-1 { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+
+  /* Glassmorphism — used in payment overlay, modals */
+  .glass {
+    background: rgba(255,255,255,0.88);
+    backdrop-filter: blur(20px) saturate(180%);
+    -webkit-backdrop-filter: blur(20px) saturate(180%);
+    border: 1px solid rgba(255,255,255,0.5);
+  }
+
+  /* Sidebar nav scrollbar hidden but functional */
+  .custom-scrollbar { scrollbar-width: thin; scrollbar-color: rgba(255,255,255,0.1) transparent; }
+  .custom-scrollbar::-webkit-scrollbar { width: 4px; }
+  .custom-scrollbar::-webkit-scrollbar-track { background: transparent; }
+  .custom-scrollbar::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.1); border-radius: 99px; }
+}
+
+
+/* ─────────────────────────────────────────────
+   5. ANIMATIONS
+   Rule: ≤ 150ms for micro-interactions
+         ≤ 300ms for panels/overlays
+         ≤ 500ms for page transitions
+───────────────────────────────────────────── */
+@keyframes shimmer {
+  0%   { background-position: -200% 0; }
+  100% { background-position:  200% 0; }
+}
+
+@keyframes slideInRight {
+  from { opacity: 0; transform: translateX(24px); }
+  to   { opacity: 1; transform: translateX(0); }
+}
+
+@keyframes slideDown {
+  from { opacity: 0; transform: translateY(-100%); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+@keyframes scaleIn {
+  from { opacity: 0; transform: scale(0.95); }
+  to   { opacity: 1; transform: scale(1); }
+}
+
+/* POS micro-interactions */
+@keyframes scan-flash {
+  0%, 100% { background: transparent; }
+  50%       { background: rgba(249,185,66,0.2); }
+}
+
+@keyframes pay-pulse {
+  0%, 100% { box-shadow: 0 8px 24px rgba(244,132,10,0.4); }
+  50%       { box-shadow: 0 12px 40px rgba(244,132,10,0.6); }
+}
+
+/* Respect prefers-reduced-motion */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
   }
 }

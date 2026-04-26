@@ -45,6 +45,7 @@ import HOSyncModule from '../modules/ho/HOSyncModule'
 import ProcurementModule from '../modules/inventory/ProcurementModule'
 import TransactionsModule from '../modules/billing/TransactionsModule'
 import DayEndModule from '../modules/billing/DayEndModule'
+import ReturnsDashboard from '../modules/billing/ReturnsDashboard'
 import CustomerMaster from '../modules/crm/CustomerMaster'
 import BarcodeStudio from '../modules/inventory/BarcodeStudio'
 import SchemesModule from '../modules/schemes/SchemesModule'
@@ -65,6 +66,8 @@ import CompliancePanel from '../modules/compliance/CompliancePanel'
 import PriceGroups from '../modules/catalogue/PriceGroups'
 import InventoryAudit from '../modules/inventory/InventoryAudit'
 import GRNProcessor from '../modules/inventory/GRNProcessor'
+import TallyExportModule from '../modules/finance/TallyExportModule'
+import SalesDrilldownModule from '../modules/analytics/SalesDrilldownModule'
 
 export interface ModuleDefinition {
   id: string
@@ -85,7 +88,7 @@ export interface ModuleDefinition {
 export const COMPONENT_MAP: Record<string, React.ReactNode> = {
   'dashboard': <ManagementDashboard />,
   'sales': <BillingModule />,
-  'returns': <ComingSoon />,
+  'returns': <ReturnsDashboard />,
   'inventory': <InventoryModule />,
   'procurement': <ProcurementModule />,
   'movement': <StockMovement />,
@@ -98,23 +101,23 @@ export const COMPONENT_MAP: Record<string, React.ReactNode> = {
   'settings': <ConfigModule />,
   'customers': <CustomerMaster />,
   'vendors': <ComingSoon />,
-  'personnel': <ComingSoon />,
+  'personnel': <PersonnelMaster />,
   'loyalty': <ComingSoon />,
   'barcode': <BarcodeStudio onClose={() => {}} />,
   'schemes': <SchemesModule />,
-  'salesrep': <ComingSoon />,
+  'salesrep': <SalesDrilldownModule />,
   'stockrep': <ComingSoon />,
-  'taxrep': <ComingSoon />,
+  'taxrep': <TaxRegister />,
   'alerts': <AlertsModule />,
   'security': <ComingSoon />,
   'housekeep': <ComingSoon />,
   'hsn': <ComingSoon />,
   'grn': <GRNProcessor />,
   'transfer': <ComingSoon />,
-  'vouchers': <ComingSoon />,
+  'vouchers': <TallyExportModule />,
   'promotions': <ComingSoon />,
   'reconcile': <InventoryAudit />,
-  'tally': <ComingSoon />,
+  'tally': <TallyExportModule />,
   'print': <PrintTemplateCenter />,
   'onboarding': <StoreOnboarding />,
   'gstr1': <CompliancePanel />,

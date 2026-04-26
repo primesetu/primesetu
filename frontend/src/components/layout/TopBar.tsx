@@ -39,12 +39,12 @@ export default function TopBar({
   });
 
   return (
-    <header className="fixed top-0 left-[var(--sw)] right-0 h-[58px] bg-white border-b border-border z-50 flex items-center px-7 gap-3">
+    <header className="fixed top-0 left-[var(--sw)] right-0 h-[64px] bg-white border-b border-border z-50 flex items-center px-8 gap-4">
       <div className="flex flex-col">
-        <span className="font-serif text-[18px] font-bold text-navy leading-none">
+        <span className="font-serif text-2xl font-bold text-navy leading-none">
           {activeModule?.label || 'Dashboard'}
         </span>
-        <span className="text-[11px] text-muted mt-0.5 font-medium uppercase tracking-widest">
+        <span className="text-xs text-muted mt-1 font-semibold uppercase tracking-widest">
           {activeModule?.id === 'dashboard' ? 'Sovereign Awareness' : (activeModule?.module || 'System Module')}
         </span>
       </div>
@@ -58,7 +58,7 @@ export default function TopBar({
             <button
               key={type}
               onClick={() => setNodeType(type)}
-              className={`px-3 py-1.5 text-[10px] font-black uppercase tracking-widest rounded-lg transition-all ${
+              className={`px-4 py-2 text-xs font-black uppercase tracking-widest rounded-lg transition-all ${
                 nodeType === type ? 'bg-navy text-white shadow-md' : 'text-navy/50 hover:bg-navy/10'
               }`}
             >
@@ -70,24 +70,24 @@ export default function TopBar({
 
       <div 
         onClick={() => setIsCommandBarOpen?.(true)}
-        className="search flex items-center gap-2 bg-cream border border-border rounded-lg p-[7px_12px] text-[12px] text-muted w-[210px] cursor-pointer hover:border-saffron transition-all"
+        className="search flex items-center gap-2 bg-cream border border-border rounded-xl p-[10px_16px] text-sm font-medium text-muted w-[280px] cursor-pointer hover:border-saffron transition-all"
       >
-        <Search className="w-3.5 h-3.5" />
-        <span>Global Search... <span className="ml-2 opacity-30 text-[10px]">F3</span></span>
+        <Search className="w-4 h-4" />
+        <span>Global Search... <span className="ml-2 font-mono bg-border/50 text-navy/60 px-1.5 py-0.5 rounded text-xs">F3</span></span>
       </div>
 
       <div className="relative group">
-        <div className="w-[34px] h-[34px] rounded-lg bg-cream border border-border flex items-center justify-center cursor-pointer transition-all hover:bg-navy hover:text-white">
-          <Bell className="w-4 h-4" />
-          <div className="absolute top-1.5 right-1.5 w-1.5 h-1.5 bg-saffron rounded-full border-2 border-white"></div>
+        <div className="w-[42px] h-[42px] rounded-xl bg-cream border border-border flex items-center justify-center cursor-pointer transition-all hover:bg-navy hover:text-white">
+          <Bell className="w-5 h-5" />
+          <div className="absolute top-2 right-2 w-2 h-2 bg-saffron rounded-full border-2 border-white"></div>
         </div>
       </div>
 
-      <div className="w-[34px] h-[34px] rounded-lg bg-cream border border-border flex items-center justify-center cursor-pointer transition-all hover:bg-navy hover:text-white">
-        <Settings className="w-4 h-4" />
+      <div className="w-[42px] h-[42px] rounded-xl bg-cream border border-border flex items-center justify-center cursor-pointer transition-all hover:bg-navy hover:text-white">
+        <Settings className="w-5 h-5" />
       </div>
 
-      <div className="bg-navy text-gold text-[10px] font-semibold p-[5px_12px] rounded-full tracking-wider">
+      <div className="bg-navy text-gold text-xs font-mono font-semibold px-4 py-2 rounded-full tracking-wider">
         {today}
       </div>
     </header>

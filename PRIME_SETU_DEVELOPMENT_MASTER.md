@@ -608,313 +608,6 @@ When two agents work in the same session:
 
 
 --------------------------------------------------------------------------------
-## SKILL: CLAUDE-patch.md
---------------------------------------------------------------------------------
-
-/* ============================================================
- * CLAUDE.md PATCH — Add to your existing CLAUDE.md
- * Add Section A inside CLAUDE.md (after SOVEREIGN STACK section)
- * Add Section B inside your available_skills XML block
- * ============================================================ */
-
-/* ============================================================
- * SECTION A — Paste inside CLAUDE.md
- * Location: After the "SOVEREIGN STACK" table, before "HOW TO RUN LOCALLY"
- * ============================================================ */
-
----
-
-## SKILL AUTO-LOAD RULES
-
-These skills load automatically based on task context.
-Do NOT wait to be asked — load proactively.
-
-| When you are about to... | Must load |
-|--------------------------|-----------|
-| Write any Python / FastAPI / SQLAlchemy code | `skills/code-review-and-refine.md` |
-| Write any TSX / React component or hook | `skills/code-review-and-refine.md` |
-| Write any SQL migration or RLS policy | `skills/code-review-and-refine.md` |
-| Fix a bug reported by the user | `skills/code-review-and-refine.md` |
-| Output Section 3 (Code) of any response | `skills/code-review-and-refine.md` |
-| Work on billing, pricing, GST, loyalty logic | `skills/code-review-and-refine.md` |
-| Work on Shoper9 parity modules (Phase 4) | `skills/shoper9-module-index.md` + `skills/code-review-and-refine.md` |
-| Work on any UI component | `skills/ux-index.md` + `skills/code-review-and-refine.md` |
-
-**Golden Rule:** If task produces code → `code-review-and-refine.md` runs. No exceptions.
-
----
-
-
-/* ============================================================
- * SECTION B — Paste inside your available_skills XML
- * Add this <skill> block alongside your existing skill entries
- * ============================================================ */
-
-<skill>
-<name>
-code-review-and-refine
-</name>
-<description>
-ALWAYS load this skill before writing any code output — this is mandatory, not optional.
-Auto-triggers on: any FastAPI endpoint, SQLAlchemy model, Pydantic schema, React component,
-TypeScript hook, SQL migration, RLS policy, bug fix, or any Section 3 (Code) output.
-Also triggers when user says: fix, bug, broken, error, wrong, not working, refine, review.
-Runs a 4-phase self-review to catch: paise float bugs, store_id body leaks, missing RLS,
-N+1 queries, any TypeScript types, missing await in async, Shoper9 hotkey violations,
-hardcoded hex colours, permission-vs-role UI errors, and 12 other common AI code bugs.
-Agent fixes all BLOCKING issues before presenting output. Reports results in Section 5.
-</description>
-<location>
-skills/code-review-and-refine.md
-</location>
-</skill>
-
-
-
---------------------------------------------------------------------------------
-## SKILL: CLAUDE.md
---------------------------------------------------------------------------------
-
-/* ============================================================
- * PrimeSetu — Shoper9-Based Retail OS
- * Zero Cloud · Sovereign · AI-Governed
- * ============================================================
- * System Architect : Jawahar R. M.
- * Organisation     : AITDL Network
- * Project          : PrimeSetu
- * © 2026 — All Rights Reserved
- * "Memory, Not Code."
- * ============================================================ */
-
-# CLAUDE.md — PrimeSetu Sovereign Identity Manifest
-> Protocol Version: 2.0.0 | Effective: April 2026
-
-> [!IMPORTANT]
-> **MANDATORY CROSS-REFERENCE**
-> This file is the identity manifest AND the operational runbook.
-> You MUST also load: `AGENTS.md`, `aiprotocol.md`, `AI_GUIDELINES.md`.
-> You MUST read the relevant skill file in `skills/` before any feature task.
-
----
-
-## IDENTITY LOCK
-
-You are operating inside **PrimeSetu** — a Shoper9-parity Retail OS for Indian specialty retail (apparel, footwear, textile). It replaces Shoper9's legacy Windows client with a modern browser-based terminal that cashiers can operate with zero retraining.
-
-Before generating ANY output:
-1. Internalize this file completely
-2. Load and apply `AGENTS.md`
-3. Load and apply `aiprotocol.md`
-4. Confirm all rules from `AI_GUIDELINES.md` are active
-5. Load the relevant `skills/*.md` for the task at hand
-
----
-
-## CURRENT PHASE STATUS
-
-**Active Phase: PHASE 2** (as of commit ~52, April 2026)
-
-| Phase | Status | What it means |
-|-------|--------|---------------|
-| Phase 1 | ✅ COMPLETE | Supabase PostgREST + Edge Functions. No Python. |
-| Phase 2 | 🔄 ACTIVE | FastAPI + SQLAlchemy 2 async replaces PostgREST for complex logic. Same DB schema — zero migration needed. |
-| Phase 3 | ⏳ PENDING | HO Telemetry, multi-store sync, PDT integration |
-
-> Do NOT write Phase 1 PostgREST patterns for new features. Phase 2 FastAPI is the standard.
-
----
-
-## SOVEREIGN STACK (NON-NEGOTIABLE)
-
-| Layer | Technology | Notes |
-|-------|-----------|-------|
-| Frontend | React 18 + Vite + TypeScript + Tailwind | Strict mode. No `any`. |
-| Database | Supabase PostgreSQL | Cloud, direct. No Docker. RLS always on. |
-| Auth | Supabase Auth | JWT + RBAC per store. Never expose `service_role` to frontend. |
-| API | Python 3.12 + FastAPI + SQLAlchemy 2 async | Phase 2 active |
-| Edge Logic | Supabase Edge Functions (Deno/TypeScript) | For lightweight serverless tasks only |
-| AI Pipeline | gap-engine → enforcer → validator → critic → improver → loop | See AI_GUIDELINES.md |
-| Hosting | Cloudflare Pages (Frontend) + Render (Backend) | render.yaml is source of truth for backend deploy |
-| CI/CD | GitHub Actions | `.github/workflows/` |
-| Dev OS | Windows 11 + Antigravity VSCode OSS 1.107.0 | Path separators matter in scripts |
-| Offline | IndexedDB via `idb` library | Fallback for all structural UI data |
-
----
-
-## HOW TO RUN LOCALLY
-
-### Backend
-```bash
-cd backend
-python -m venv venv
-venv\Scripts\activate          # Windows
-# source venv/bin/activate     # Mac/Linux
-pip install -r requirements.txt
-cp ../.env.example .env        # then fill in SUPABASE_URL, SUPABASE_KEY, JWT_SECRET
-uvicorn app.main:app --reload --port 8000
-```
-Backend runs at: `http://localhost:8000`
-API docs at: `http://localhost:8000/docs`
-
-### Frontend
-```bash
-cd frontend
-npm install
-cp .env.example .env.local     # fill in VITE_SUPABASE_URL, VITE_SUPABASE_ANON_KEY, VITE_API_URL
-npm run dev
-```
-Frontend runs at: `http://localhost:5173`
-
-### Before any commit
-```bash
-cd frontend && npm run build   # must produce 0 TypeScript errors
-```
-
----
-
-## FOLDER STRUCTURE
-
-```
-primesetu/
-├── backend/          # FastAPI app (Phase 2)
-│   └── app/
-│       ├── main.py
-│       ├── routers/  # one file per domain (billing, inventory, reports...)
-│       ├── models/   # SQLAlchemy 2 async models
-│       └── schemas/  # Pydantic v2 request/response shapes
-├── frontend/         # React 18 + Vite + TypeScript
-│   └── src/
-│       ├── pages/    # one folder per module
-│       ├── components/
-│       ├── hooks/    # React Query hooks — all API calls go here
-│       └── lib/      # supabase client, utils
-├── supabase/         # migrations + RLS policies
-│   └── migrations/
-├── skills/           # AI task templates — READ BEFORE CODING
-├── docs/             # architecture decisions
-├── .github/workflows/
-├── CLAUDE.md         # ← you are here
-├── AGENTS.md
-├── aiprotocol.md
-└── AI_GUIDELINES.md
-```
-
----
-
-## BANNED (ZERO EXCEPTIONS)
-
-- `firebase` / `firestore` — ever
-- `service_role` key on the frontend — ever
-- `localStorage` / `sessionStorage` for auth tokens
-- Any ORM other than SQLAlchemy 2 async (Phase 2+)
-- Hardcoded `store_id` — always derive from Supabase auth context
-- Direct DB mutations without RLS policies verified active
-- `any` type in TypeScript
-- Static menu arrays in React — all navigation is DB-driven
-- Role-based UI bindings (`if role === 'admin'`) — use permissions instead
-
----
-
-## DESIGN TOKENS
-
-```
-Navy:   #0D1B3E  (primary brand)
-Saffron:#F4840A  (CTAs, hotkey badges)
-Gold:   #F9B942  (highlights, success)
-Cream:  #FAF7F2  (background)
-```
-
-Always use Tailwind tokens — never hardcode hex in `.tsx` components.
-Token names: `brand-navy`, `brand-saffron`, `brand-gold`, `brand-cream`.
-
----
-
-## GOLDEN RULE OF MUTATION
-
-Every Supabase insert/update/delete MUST be followed by:
-```typescript
-const { error } = await supabase.from('table').upsert(data)
-if (error) throw new Error(`[PrimeSetu] Mutation failed: ${error.message}`)
-```
-
----
-
-## MANDATORY OUTPUT FORMAT
-
-Every AI response MUST contain all 5 sections. A response missing ANY section is INVALID and must be regenerated.
-
-```
-### 1. Understanding
-[Restate what was asked and confirm the relevant context from codebase]
-
-### 2. Plan
-[Step-by-step approach before writing a single line of code]
-
-### 3. Code
-[The actual implementation]
-
-### 4. Test Cases
-[At minimum: happy path, error path, edge case]
-
-### 5. Notes
-[Assumptions made, follow-up tasks, risks]
-```
-
----
-
-## FILE SIGNATURE (ALL NEW FILES)
-
-Every new file MUST begin with:
-```
-/* ============================================================
- * PrimeSetu — Shoper9-Based Retail OS
- * Zero Cloud · Sovereign · AI-Governed
- * ============================================================
- * System Architect : Jawahar R. M.
- * Organisation     : AITDL Network
- * Project          : PrimeSetu
- * © 2026 — All Rights Reserved
- * "Memory, Not Code."
- * ============================================================ */
-```
-
----
-
-## SHOPER9 PARITY REFERENCE
-
-The gold standard is `primesetu-shoper9-ui.html` in the root. Every UI change must be validated against it visually. Key parity requirements:
-
-| Feature | Shoper9 key | PrimeSetu status |
-|---------|------------|-----------------|
-| New bill | F2 | ✅ |
-| Suspend bill | F5 | ✅ |
-| Recall bill | F8 | ✅ |
-| Payment | F10 | ✅ |
-| Dept. sale | Alt+1 | ✅ |
-| Return/CN | — | ✅ Phase 2 |
-| Stock query | — | ⏳ Phase 3 |
-
----
-
-## GST / COMPLIANCE RULES
-
-- All tax amounts are stored as `paise` (integer), never floats
-- GST rates: 0%, 5%, 12%, 18%, 28% — no other values accepted
-- Every invoice must carry: GSTIN of store, HSN code per line item, CGST+SGST breakdown (intrastate) or IGST (interstate)
-- Tally XML sync: see `skills/tally-voucher.md`
-
----
-
-## WHEN CONTEXT WINDOW GETS STALE
-
-If the agent becomes repetitive, contradicts earlier decisions, or ignores rules:
-**START A FRESH SESSION.** Re-load this file. Do not attempt to fix a confused session.
-
-> "Memory, Not Code." — Every line is a liability. Build less, build right.
-
-
-
---------------------------------------------------------------------------------
 ## SKILL: add-api-endpoint.md
 --------------------------------------------------------------------------------
 
@@ -1572,6 +1265,278 @@ type in input fields; hotkeys must work even when an input is focused.
 
 
 --------------------------------------------------------------------------------
+## SKILL: aitdl.md
+--------------------------------------------------------------------------------
+
+/* ============================================================
+ * PrimeSetu — Shoper9-Based Retail OS
+ * Zero Cloud · Sovereign · AI-Governed
+ * ============================================================
+ * System Architect : Jawahar R. M.
+ * Organisation     : AITDL Network
+ * Project          : PrimeSetu
+ * © 2026 — All Rights Reserved
+ * "Memory, Not Code."
+ * ============================================================ */
+
+# aitdl.md — PrimeSetu Sovereign Identity Manifest
+> Protocol Version: 2.1.0 | Effective: April 2026
+
+> [!IMPORTANT]
+> **MANDATORY CROSS-REFERENCE**
+> This file is the identity manifest AND the operational runbook for the `skills/` directory.
+> You MUST also load: `AGENTS.md`, `aiprotocol.md`, `AI_GUIDELINES.md`.
+> You MUST read the relevant skill file in `skills/` before any feature task.
+
+---
+
+## IDENTITY LOCK
+
+You are operating inside **PrimeSetu** — an AITDL Network flagship Retail OS achieving 100% Shoper9-parity for Indian specialty retail (apparel, footwear, textile). It replaces Shoper9's legacy Windows client with a modern browser-based terminal that cashiers can operate with zero retraining.
+
+Before generating ANY output:
+1. Internalize this file completely
+2. Load and apply `AGENTS.md`
+3. Load and apply `aiprotocol.md`
+4. Confirm all rules from `AI_GUIDELINES.md` are active
+5. Load the relevant `skills/*.md` for the task at hand
+
+---
+
+## CURRENT PHASE STATUS
+
+**Active Phase: PHASE 5** (Operational Intelligence & Predictive Logic)
+
+| Phase | Status | What it means |
+|-------|--------|---------------|
+| Phase 1 | ✅ COMPLETE | PostgREST + Edge Functions. No Python. |
+| Phase 2 | ✅ COMPLETE | FastAPI + SQLAlchemy 2 async replaces PostgREST for complex logic. |
+| Phase 3 | ✅ COMPLETE | Inventory Master, GRN, Physical Audit & Barcode Studio. |
+| Phase 4 | ✅ COMPLETE | Sovereign Catalogue, Partners Matrix, Price Groups. |
+| Phase 5 | 🔄 ACTIVE | Predictive Stockout (DoC), HQ Heartbeat, Auto-Print Bridge, Multi-lingual. |
+| Phase 6 | ⏳ PENDING | HO Synchronization Pulse, Cashier Performance Analytics. |
+
+> Do NOT write Phase 1 PostgREST patterns for new features. Phase 2+ FastAPI is the standard.
+
+---
+
+## SOVEREIGN STACK (NON-NEGOTIABLE)
+
+| Layer | Technology | Notes |
+|-------|-----------|-------|
+| Frontend | React 18 + Vite + TypeScript + Tailwind | Strict mode. No `any`. |
+| Database | Supabase PostgreSQL | Cloud, direct. No Docker. RLS always on. |
+| Auth | Supabase Auth | JWT + RBAC per store. Never expose `service_role` to frontend. |
+| API | Python 3.12 + FastAPI + SQLAlchemy 2 async | Phase 2+ standard |
+| Intelligence | Heuristic models (DoC, Scan Velocity) | See `skills/ux-operational-intelligence.md` |
+| Hosting | Cloudflare Pages (Frontend) + Render (Backend) | render.yaml is source of truth |
+| CI/CD | GitHub Actions | `.github/workflows/` |
+| Dev OS | Windows 11 + Antigravity VSCode OSS | Path separators matter in scripts |
+| Offline | IndexedDB via `idb` library | Fallback for ALL structural UI data |
+
+---
+
+## HOW TO RUN LOCALLY
+
+### Backend
+```bash
+cd backend
+python -m venv venv
+venv\Scripts\activate          # Windows
+pip install -r requirements.txt
+cp ../.env.example .env        # fill SUPABASE_URL, SUPABASE_KEY, JWT_SECRET
+uvicorn app.main:app --reload --port 8000
+```
+Backend: `http://localhost:8000` | Docs: `http://localhost:8000/docs`
+
+### Frontend
+```bash
+cd frontend
+npm install
+cp .env.example .env.local     # fill VITE_SUPABASE_URL, VITE_SUPABASE_ANON_KEY, VITE_API_URL
+npm run dev
+```
+Frontend: `http://localhost:5173`
+
+### Before any commit
+```bash
+cd frontend && npm run build   # must produce 0 TypeScript errors
+```
+
+---
+
+## FOLDER STRUCTURE
+
+```
+primesetu/
+├── backend/          # FastAPI app (Phase 2+)
+│   └── app/
+│       ├── main.py
+│       ├── routers/  # one file per domain
+│       ├── models/   # SQLAlchemy 2 async models
+│       └── schemas/  # Pydantic v2 shapes
+├── frontend/         # React 18 + Vite + TypeScript
+│   └── src/
+│       ├── modules/  # one folder per module
+│       ├── components/
+│       ├── hooks/    # React Query + custom hooks
+│       └── lib/      # supabase client, utils, i18n
+├── supabase/         # migrations + RLS policies
+│   └── migrations/
+├── skills/           # AI task templates — READ BEFORE CODING
+│   ├── aitdl.md      # ← you are here
+│   ├── ux-operational-intelligence.md
+│   ├── code-review-and-refine.md
+│   └── …(20 skills total)
+├── docs/             # architecture decisions
+├── .github/workflows/
+├── aitdl.md          # Root identity manifest
+├── AGENTS.md
+├── aiprotocol.md
+└── AI_GUIDELINES.md
+```
+
+---
+
+## BANNED (ZERO EXCEPTIONS)
+
+- `firebase` / `firestore` — ever
+- `service_role` key on the frontend — ever
+- `localStorage` / `sessionStorage` for auth tokens
+- Any ORM other than SQLAlchemy 2 async (Phase 2+)
+- Hardcoded `store_id` — always derive from Supabase auth context
+- Direct DB mutations without RLS policies verified active
+- `any` type in TypeScript
+- Static menu arrays in React — all navigation is DB-driven
+- Role-based UI bindings (`if role === 'admin'`) — use permissions instead
+- Float for any monetary value — always `INTEGER` (paise)
+
+---
+
+## SKILL AUTO-LOAD RULES
+
+These skills load automatically based on task context — do NOT wait to be asked.
+
+| When you are about to… | Must load |
+|------------------------|-----------|
+| Write any Python / FastAPI / SQLAlchemy code | `skills/code-review-and-refine.md` |
+| Write any TSX / React component or hook | `skills/code-review-and-refine.md` |
+| Write any SQL migration or RLS policy | `skills/code-review-and-refine.md` |
+| Fix a bug reported by the user | `skills/code-review-and-refine.md` |
+| Output Section 3 (Code) of any response | `skills/code-review-and-refine.md` |
+| Work on billing, pricing, GST, loyalty logic | `skills/code-review-and-refine.md` |
+| Work on Shoper9 parity modules | `skills/shoper9-module-index.md` + `skills/code-review-and-refine.md` |
+| Work on any UI component | `skills/ux-index.md` + `skills/code-review-and-refine.md` |
+| Work on predictive / intelligence features | `skills/ux-operational-intelligence.md` + `skills/code-review-and-refine.md` |
+
+**Golden Rule:** If the task produces code → `code-review-and-refine.md` runs. No exceptions.
+
+---
+
+## DESIGN TOKENS
+
+```
+Navy:    #0D1B3E  (primary brand, sidebar, headers)
+Saffron: #F4840A  (CTAs, hotkey badges, alerts)
+Gold:    #F9B942  (highlights, success, selected rows)
+Cream:   #FAF7F2  (page backgrounds)
+```
+
+Always use Tailwind tokens — never hardcode hex in `.tsx` components.
+Token names: `navy`, `saffron`, `gold`, `cream`.
+
+---
+
+## GOLDEN RULE OF MUTATION
+
+Every Supabase insert/update/delete MUST be followed by:
+```typescript
+const { error } = await supabase.from('table').upsert(data)
+if (error) throw new Error(`[PrimeSetu] Mutation failed: ${error.message}`)
+```
+
+---
+
+## MANDATORY OUTPUT FORMAT
+
+Every AI response MUST contain all 5 sections:
+
+```
+### 1. Understanding
+[Restate what was asked and confirm relevant context from codebase]
+
+### 2. Plan
+[Step-by-step approach before writing a single line of code]
+
+### 3. Code
+[The actual implementation]
+
+### 4. Test Cases
+[At minimum: happy path, error path, edge case]
+
+### 5. Notes
+[Assumptions made, follow-up tasks, risks]
+```
+
+---
+
+## FILE SIGNATURE (ALL NEW FILES)
+
+Every new file MUST begin with:
+```
+/* ============================================================
+ * PrimeSetu — Shoper9-Based Retail OS
+ * Zero Cloud · Sovereign · AI-Governed
+ * ============================================================
+ * System Architect : Jawahar R. M.
+ * Organisation     : AITDL Network
+ * Project          : PrimeSetu
+ * © 2026 — All Rights Reserved
+ * "Memory, Not Code."
+ * ============================================================ */
+```
+
+---
+
+## SHOPER9 PARITY REFERENCE
+
+The gold standard is `primesetu-shoper9-ui.html` in the root. Every UI change must be validated against it visually.
+
+| Feature | Shoper9 key | PrimeSetu status |
+|---------|------------|-----------------|
+| New bill | F2 | ✅ |
+| Suspend bill | F5 | ✅ |
+| Recall bill | F8 | ✅ |
+| Payment | F10 | ✅ |
+| Dept. sale | Alt+1 | ✅ |
+| Return/CN | — | ✅ Phase 2 |
+| Stock query | Alt+S | ✅ Phase 5 |
+| Barcode print | — | ✅ Phase 5 |
+| HQ Sync Pulse | — | ✅ Phase 5 |
+
+---
+
+## GST / COMPLIANCE RULES
+
+- All tax amounts stored as `paise` (integer), never floats
+- GST rates: 0%, 5%, 12%, 18%, 28% — no other values accepted
+- Every invoice must carry: GSTIN of store, HSN code per line item, CGST+SGST (intrastate) or IGST (interstate)
+- Tally XML sync: see `skills/tally-voucher.md`
+
+---
+
+## WHEN CONTEXT WINDOW GETS STALE
+
+If the agent becomes repetitive, contradicts earlier decisions, or ignores rules:
+**START A FRESH SESSION.** Re-load this file. Do not attempt to fix a confused session.
+
+> "Memory, Not Code." — Every line is a liability. Build less, build right.
+
+**© 2026 AITDL Network · All Rights Reserved**
+
+
+
+--------------------------------------------------------------------------------
 ## SKILL: code-review-and-refine.md
 --------------------------------------------------------------------------------
 
@@ -1815,7 +1780,7 @@ Before any UI output, validate against `primesetu-shoper9-ui.html`:
 - [ ] This skill was loaded before Section 3 code was written
 - [ ] All 🔴 BLOCKING items checked — none skipped
 - [ ] Self-review result documented in Section 5
-- [ ] No new items from CLAUDE.md banned list introduced
+- [ ] No new items from aitdl.md banned list introduced
 - [ ] If frontend changed: `npm run build` will pass with 0 TypeScript errors
 
 
@@ -1864,7 +1829,7 @@ IMPORTANT and NIT issues: fix if trivial, else note in Section 5 (Notes).
 
 ## Phase 1 — PrimeSetu Non-Negotiables (check FIRST, always)
 
-These are project-wide rules from CLAUDE.md and AGENTS.md.
+These are project-wide rules from aitdl.md and AGENTS.md.
 A violation here is always 🔴 BLOCKING.
 
 ### Money
@@ -3616,8 +3581,9 @@ Read this file, then load the specific skill file for your task.
 | Catalog, departments, universal search, GeneralLookup, Partner model | `skills/shoper9-catalog.md` |
 | Customers, loyalty points, credit, account ledger, GSTIN | `skills/shoper9-customer.md` |
 | Price groups, wholesale pricing, staff pricing, discount % | `skills/shoper9-customer-price-group.md` |
-| Barcodes, EAN-13, GTIN, scanner, label printing, PDT import | `skills/shoper9-barcode.md` |
-| Billing terminal, cart, F2/F5/F8/F10 hotkeys, payment | `skills/add-react-page.md` + `skills/tally-voucher.md` |
+| Barcodes, EAN-13, GTIN, scanner, label printing, PDT import, Auto-Print Bridge | `skills/shoper9-barcode.md` |
+| Billing terminal, cart, F2/F5/F8/F10 hotkeys, payment | `skills/ux-billing-terminal.md` + `skills/tally-voucher.md` |
+| Predictive stockout, DoC, HQ Sync Pulse, Cashier metrics | `skills/ux-operational-intelligence.md` |
 | New FastAPI endpoint | `skills/add-api-endpoint.md` |
 | New DB table / migration | `skills/add-db-migration.md` |
 | New React page | `skills/add-react-page.md` |
@@ -3628,18 +3594,23 @@ Read this file, then load the specific skill file for your task.
 
 | Module | DB Schema | Backend API | Frontend | Phase |
 |--------|-----------|------------|----------|-------|
-| Billing Terminal | ✅ | ✅ | ✅ | 2 Active |
-| Item Master | 🔄 Skill defined | 🔄 Skill defined | ⏳ | 4 |
-| Catalog / Master Registry | 🔄 Skill defined | 🔄 Skill defined | ⏳ | 4 |
-| Customer Master | 🔄 Skill defined | 🔄 Skill defined | ⏳ | 4 |
-| Customer Price Groups | 🔄 Skill defined | 🔄 Skill defined | ⏳ | 4 |
-| Barcode / GTIN Studio | 🔄 Skill defined | 🔄 Skill defined | ⏳ | 7 |
-| Tally Bridge | ✅ | ✅ | ⏳ | 3 |
-| Till Management | ⏳ | ⏳ | ⏳ | 7 |
-| MIS Reports | ⏳ | ⏳ | ⏳ | 7 |
-| PDT Integration | ⏳ | ⏳ | ⏳ | 7 |
-| Multi-store HO Sync | ⏳ | ⏳ | ⏳ | 3 |
-| Predictive / DOC | ✅ logic | ⏳ | ✅ Dashboard | 5 |
+| Billing Terminal | ✅ | ✅ | ✅ | 2 ✅ DONE |
+| Item Master | ✅ | ✅ | ✅ | 3 ✅ DONE |
+| GRN / Stock Inward | ✅ | ✅ | ✅ | 3 ✅ DONE |
+| Physical Stock Audit | ✅ | ✅ | ✅ | 3 ✅ DONE |
+| Barcode / GTIN Studio + Auto-Print | ✅ | ✅ | ✅ | 3 ✅ DONE |
+| Catalog / Master Registry | ✅ | ✅ | ✅ | 4 ✅ DONE |
+| Customer Master | ✅ | ✅ | ✅ | 4 ✅ DONE |
+| Customer Price Groups | ✅ | ✅ | ✅ | 4 ✅ DONE |
+| Tally Bridge | ✅ | ✅ | ⏳ print | 3 ✅ DONE |
+| Predictive Stockout (DoC) | ✅ | ✅ | ✅ | 5 ✅ DONE |
+| HQ Heartbeat (Sync Pulse) | N/A | ✅ /health | ✅ Sidebar | 5 ✅ DONE |
+| Multi-lingual (EN/HI) | N/A | N/A | ✅ useLanguage | 5 ✅ DONE |
+| Cashier Performance Dashboard | ⏳ | ⏳ | ⏳ | 6 ⏳ PENDING |
+| Till Management | ⏳ | ⏳ | ⏳ | 6 ⏳ PENDING |
+| MIS Reports (drill-down) | ⏳ | ⏳ | ⏳ | 6 ⏳ PENDING |
+| PDT Integration | ⏳ | ⏳ | ⏳ | 7 ⏳ PENDING |
+| Multi-store HO Sync | ⏳ | ⏳ | ⏳ | 7 ⏳ PENDING |
 
 ---
 
@@ -5151,6 +5122,8 @@ Read this file, then load the specific UX skill for your task.
 | Item Master, Customer, Catalog, Reports, Config | `skills/ux-backoffice-patterns.md` |
 | New React page (any module) | `skills/add-react-page.md` + `skills/ux-design-system.md` |
 | Shoper9 module (Item/Customer/Barcode/Catalog) | `skills/shoper9-module-index.md` |
+| Predictive stockout, HQ Sync Pulse, DoC, Node health | `skills/ux-operational-intelligence.md` |
+| Language toggle, i18n, regional labels | `skills/ux-operational-intelligence.md` + `skills/ux-design-system.md` |
 
 **The minimum for ANY UI task: load `ux-design-system.md` first, always.**
 
@@ -5285,25 +5258,98 @@ which can have 50,000+ rows.
 
 ---
 
-## Suggested future UX improvements (not yet in skills)
+## Phase 5 UX — Status Tracker
 
-These are identified gaps worth building skills for in Phase 5+:
+| Improvement | Status | Skill |
+|-------------|--------|-------|
+| Predictive Stockout (DoC) | ✅ LIVE — `InventoryModule.tsx` | `ux-operational-intelligence.md` |
+| HQ Heartbeat (Sync Pulse) | ✅ LIVE — `useNodeSync` + Sidebar | `ux-operational-intelligence.md` |
+| Multi-lingual toggle (EN/HI) | ✅ LIVE — `useLanguage` + Sidebar | `ux-operational-intelligence.md` |
+| Auto-Print Bridge (GRN→Barcode) | ✅ LIVE — `GRNProcessor` + `BarcodeStudio` | `shoper9-barcode.md` |
+| Touch / Tablet mode | ⏳ Phase 6 | TBD |
+| Dark mode (night shift) | ⏳ Phase 6 | TBD |
+| Cashier performance dashboard | ⏳ Phase 6 | `ux-operational-intelligence.md` |
+| Customer-facing display (2nd screen) | ⏳ Phase 7 | TBD |
+| Accessibility audit (ARIA) | ⏳ Phase 7 | TBD |
+| Print preview (thermal) | ⏳ Phase 7 | TBD |
 
-1. **Touch/tablet mode** — Phase 5 mobile POS. Larger tap targets (56px min),
-   swipe to void, pinch-zoom on stock matrix.
 
-2. **Dark mode** — For night shift retail. Navy becomes the background,
-   cream becomes text. Token-based system makes this achievable.
 
-3. **Accessibility audit** — Screen reader support (ARIA labels on all
-   interactive elements, particularly the hotkey bar).
+--------------------------------------------------------------------------------
+## SKILL: ux-operational-intelligence.md
+--------------------------------------------------------------------------------
 
-4. **Print preview** — Before committing to thermal print, show a modal
-   preview of what the receipt will look like.
+/* ============================================================
+ * PrimeSetu — Shoper9-Based Retail OS
+ * Skill: ux-operational-intelligence
+ * ============================================================ */
 
-5. **Cashier performance dashboard** — Per-session stats (bills processed,
-   avg basket, voids). Visible to manager only. Discourages misconduct.
+# SKILL: Operational Intelligence & Predictive UX
 
-6. **Customer-facing display** — Second screen mode showing the cart total
-   to the customer. Common in Indian retail setups.
+This skill defines the visual and logical patterns for "Phase 5: Operational Intelligence." It governs how PrimeSetu visualizes foresight, node connectivity, and performance metrics.
+
+---
+
+## 1. PREDICTIVE STOCKOUT (Days of Cover - DoC)
+
+The system must forecast when a SKU will reach zero stock based on historical sales velocity and current inventory levels.
+
+### Visual Representation
+- **High Risk (< 7 Days)**: `bg-rose-100 text-rose-600` badge + "Critical" label.
+- **Medium Risk (7-14 Days)**: `bg-amber-100 text-amber-600` badge + "Watchlist" label.
+- **Healthy (> 14 Days)**: `bg-emerald-100 text-emerald-600` badge + "Stable" label.
+
+### Logic Pattern
+```typescript
+DaysOfCover = TotalStock / (AverageDailySales_30D || 1);
+```
+- If `AverageDailySales` is 0, default to a minimum velocity of 0.1 to avoid infinity.
+- Always round to 1 decimal place (e.g., "4.2 Days").
+
+---
+
+## 2. HQ HEARTBEAT (Node Sync Pulse)
+
+Sovereign Nodes must visualize their connectivity to the Head Office (HO) without using distracting "Loading" spinners.
+
+### The "Pulse" Widget
+- **Location**: Top Bar (Zone A) or Sidebar Footer.
+- **Visual**: A small 8px breathing circle.
+  - **Emerald Pulse**: Online & Fully Synched.
+  - **Amber Pulse**: Online with Pending Queue (Syncing...).
+  - **Rose Pulse**: Offline (Local Mode active).
+- **Hover State**: Show tooltip with "Last Sync: 2m ago | 12 Vouchers Pending".
+
+### Animation Rule
+- Use `animate-pulse` for active syncing.
+- Use `animate-none` for offline or idle states to reduce visual noise.
+
+---
+
+## 3. CASHIER PERFORMANCE (Scan Velocity)
+
+Monitor operational efficiency to identify training needs or bottlenecks.
+
+### Core Metrics
+- **IPS (Items Per Second)**: Calculated from first scan to last scan in a bill.
+- **Void Ratio**: Percentage of items scanned then removed.
+- **Avg. Tender Time**: Seconds between F10 (Pay) and Finalize.
+
+### Design Pattern
+- Displayed in the **Manager Dashboard** using `Recharts` sparklines.
+- Avoid showing these to the cashier during billing to prevent performance anxiety.
+
+---
+
+## 4. AUDIT VARIANCE RESOLUTION
+
+Patterns for correcting book stock after a Physical Stock Audit (PSA).
+
+- **Discrepancy Highlight**: Use `font-mono` with `+` (Emerald) or `-` (Rose) prefixes.
+- **Voucher Action**: F10 on the Audit screen triggers an "Adjustment Journal."
+- **Tally Bridge**: All adjustments must be tagged with `tally_sync_pending = true`.
+
+---
+
+**© 2026 AITDL Network · All Rights Reserved**
 

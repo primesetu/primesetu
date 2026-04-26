@@ -58,7 +58,7 @@ const FunctionBar: React.FC<FunctionBarProps> = ({ activeTab }) => {
   const keys = getContextKeys();
 
   return (
-    <aside className="fixed right-0 top-[58px] bottom-0 w-[120px] bg-[#1a2340] border-l border-white/5 z-50 flex flex-col py-1">
+    <aside className="fixed right-0 top-[64px] bottom-0 w-[120px] bg-navy-mid border-l border-white/5 z-50 flex flex-col py-1">
       {Array.from({ length: 12 }).map((_, i) => {
         const keyNum = `F${i + 1}`;
         const activeKey = keys.find(k => k.key === keyNum);
@@ -74,11 +74,11 @@ const FunctionBar: React.FC<FunctionBarProps> = ({ activeTab }) => {
               }
             `}
           >
-            <span className={`text-[10px] font-black tracking-tighter ${activeKey ? 'text-[var(--gold)] group-hover:scale-110 transition-transform' : 'text-white/40'}`}>
+            <span className={`text-lg font-mono font-black tracking-tighter ${activeKey ? 'text-gold group-hover:scale-110 transition-transform' : 'text-white/30'}`}>
               {keyNum}
             </span>
             {activeKey && (
-              <span className="text-[9px] font-bold text-white/50 uppercase tracking-tight text-center px-1 leading-tight mt-0.5">
+              <span className="text-xs font-bold text-white/70 uppercase tracking-tight text-center px-1 leading-tight mt-1">
                 {activeKey.label}
               </span>
             )}

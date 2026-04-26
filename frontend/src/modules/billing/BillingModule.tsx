@@ -180,6 +180,22 @@ export default function BillingModule() {
   const taxablePaise = tax_summary.taxable
   const taxTotalPaise = tax_summary.tax
 
+  // SOVEREIGN HOTKEY REGISTRY (Dependent on cart totals)
+  useHotkeys('f2', (e) => { e.preventDefault(); searchRef.current?.focus() }, { enableOnFormTags: true })
+  useHotkeys('alt+1', (e) => { e.preventDefault(); setCart([]); setCustomerMobile(''); setQ(''); searchRef.current?.focus() }, { enableOnFormTags: true })
+  useHotkeys('alt+2', (e) => { e.preventDefault(); setShowReturns(true) }, { enableOnFormTags: true })
+  useHotkeys('f9', (e) => { e.preventDefault(); setShowTotals(v => !v) }, { enableOnFormTags: true })
+  useHotkeys('f7', (e) => { e.preventDefault(); setPayLines([{ mode: 'CASH', amount: toRupees(netPayablePaise) }]); setShowSettle(true) }, { enableOnFormTags: true })
+  useHotkeys('f8', (e) => { e.preventDefault(); setShowSettle(true) }, { enableOnFormTags: true })
+  useHotkeys('f6', (e) => { e.preventDefault(); setShowSlips(true) }, { enableOnFormTags: true })
+  useHotkeys('f12', (e) => { e.preventDefault(); handleSuspend() }, { enableOnFormTags: true })
+  useHotkeys('f4', (e) => { e.preventDefault(); setShowSuspended(v => !v) }, { enableOnFormTags: true })
+  useHotkeys('alt+6', (e) => { 
+    e.preventDefault(); 
+    if (lastBill) setBillToPrint({ ...lastBill, is_duplicate: true }); 
+    else alert('No bill to reprint. Complete a transaction first.'); 
+  }, { enableOnFormTags: true })
+
   const handleFinalize = async () => {
     if (!cart.length || processing) return
     setProcessing(true)
@@ -405,38 +421,38 @@ export default function BillingModule() {
           <span className="text-[10px] font-bold text-gray-300 ml-1">(Cash Transaction)</span>
         </div>
         <div className="relative flex-[3]">
-          <ScanBarcode className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-300" />
+          <ScanBarcode className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
           <input ref={searchRef} autoFocus value={q} onChange={e => setQ(e.target.value)}
             id="item-search"
             data-f2="items"
             placeholder="Scan barcode / search item code or name [F2]..."
-            className="w-full bg-white border-2 border-gray-200 focus:border-amber-400 rounded-xl pl-9 pr-10 py-2.5 text-sm font-mono outline-none transition-all shadow-sm"
+            className="w-full bg-white border-2 border-gray-200 focus:border-amber-400 rounded-xl pl-10 pr-10 h-touch text-lg font-mono outline-none transition-all shadow-sm"
           />
           <button 
             onClick={() => { searchRef.current?.focus(); window.dispatchEvent(new KeyboardEvent('keydown', { key: 'f2', bubbles: true })) }}
-            className="absolute right-3 top-1/2 -translate-y-1/2 p-1.5 hover:bg-amber-100 rounded-lg text-amber-500 transition-all"
+            className="absolute right-3 top-1/2 -translate-y-1/2 p-2 hover:bg-amber-100 rounded-lg text-amber-500 transition-all"
           >
-            <Search className="w-4 h-4" />
+            <Search className="w-5 h-5" />
           </button>
         </div>
         <div className="relative flex-1">
-          <User className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-300" />
+          <User className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
           <input id="cust-mobile" value={customerMobile} onChange={e => setCustomerMobile(e.target.value)}
             data-f2="customers" placeholder="Customer Mobile [F2]"
-            className="w-full bg-white border-2 border-gray-200 focus:border-amber-400 rounded-xl pl-9 pr-10 py-2.5 text-sm font-mono outline-none transition-all shadow-sm" />
+            className="w-full bg-white border-2 border-gray-200 focus:border-amber-400 rounded-xl pl-10 pr-10 h-touch text-lg font-mono outline-none transition-all shadow-sm" />
           <button 
             onClick={() => { document.getElementById('cust-mobile')?.focus(); window.dispatchEvent(new KeyboardEvent('keydown', { key: 'f2', bubbles: true })) }}
-            className="absolute right-3 top-1/2 -translate-y-1/2 p-1.5 hover:bg-amber-100 rounded-lg text-amber-500 transition-all"
+            className="absolute right-3 top-1/2 -translate-y-1/2 p-2 hover:bg-amber-100 rounded-lg text-amber-500 transition-all"
           >
-            <Search className="w-3.5 h-3.5" />
+            <Search className="w-5 h-5" />
           </button>
         </div>
         <div className="relative flex-1">
-          <UserCheck className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-300" />
+          <UserCheck className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
           <input id="sales-person" value={salesperson} onChange={e => setSalesperson(e.target.value)}
             data-f2="salesperson"
             placeholder="Salesperson [F2]"
-            className="w-full bg-white border-2 border-gray-200 focus:border-amber-400 rounded-xl pl-9 pr-10 py-2.5 text-sm font-mono outline-none transition-all shadow-sm" />
+            className="w-full bg-white border-2 border-gray-200 focus:border-amber-400 rounded-xl pl-10 pr-10 h-touch text-lg font-mono outline-none transition-all shadow-sm" />
           <button 
             onClick={() => { document.getElementById('sales-person')?.focus(); window.dispatchEvent(new KeyboardEvent('keydown', { key: 'f2', bubbles: true })) }}
             className="absolute right-3 top-1/2 -translate-y-1/2 p-1.5 hover:bg-amber-100 rounded-lg text-amber-500 transition-all"
@@ -465,10 +481,11 @@ export default function BillingModule() {
                 </div>
               ) : (
                 <div className="flex-1 overflow-y-auto">
+                  <AnimatePresence>
                   {cart.map((item, idx) => {
               const lineNetPaise = Math.round(item.mrp * item.qty * (1 - item.discount_per / 100))
               return (
-                <motion.div key={item.id} layout initial={{ opacity: 0, x: -10 }} animate={{ opacity: 1, x: 0 }}
+                <motion.div key={item.id} layout initial={{ opacity: 0, x: -10 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, scale: 0.95, transition: { duration: 0.2 } }}
                   className={`grid items-center border-b border-gray-50 hover:bg-amber-50 transition-colors group ${idx % 2 === 0 ? 'bg-white' : 'bg-gray-50/60'}`}
                   style={{ gridTemplateColumns: '40px 90px 1fr 80px 90px 70px 80px 100px 36px' }}>
                   <div className="px-2 py-3 text-center text-[11px] font-bold text-gray-400">{idx + 1}</div>
@@ -501,6 +518,7 @@ export default function BillingModule() {
                 </motion.div>
               )
             })}
+                  </AnimatePresence>
                 </div>
               )}
             </div>
@@ -524,8 +542,8 @@ export default function BillingModule() {
         <div className="w-72 flex flex-col gap-2 shrink-0">
           <div className="bg-[#1a2340] rounded-2xl p-4 text-white text-center shadow-lg border-b-4 border-amber-400 relative overflow-hidden">
             <div className="absolute inset-0 bg-gradient-to-br from-amber-400/5 to-transparent" />
-            <div className="text-[9px] font-black text-amber-400 uppercase tracking-[0.3em] mb-1">{t('payable')}</div>
-            <div className="text-4xl font-black font-mono">{formatCurrency(netPayablePaise)}</div>
+            <div className="text-xs font-black text-amber-400 uppercase tracking-[0.3em] mb-1">{t('payable')}</div>
+            <div className="text-5xl font-black font-mono">{formatCurrency(netPayablePaise)}</div>
             {discTotalPaise > 0 && <div className="text-[10px] text-emerald-400 font-bold mt-1">Saves {formatCurrency(discTotalPaise)}</div>}
             {salesperson && <div className="text-[9px] text-white/40 mt-1 font-mono">SP: {salesperson}</div>}
           </div>
@@ -636,10 +654,10 @@ export default function BillingModule() {
           </button>
 
           <button onClick={handleFinalize} disabled={processing || !cart.length || balanceRupees > 0.05}
-            className="bg-amber-400 hover:bg-amber-500 disabled:opacity-30 text-navy font-black rounded-2xl shadow-xl text-base uppercase tracking-wider flex items-center justify-center gap-2 transition-all hover:scale-[1.01] active:scale-[0.99] border-b-4 border-amber-600 py-4">
+            className="btn-pay mt-2">
             {processing
-              ? <div className="w-5 h-5 border-2 border-navy border-t-transparent rounded-full animate-spin" />
-              : <><CheckCircle2 className="w-5 h-5" />{t('settle')} [F10]<ChevronRight className="w-4 h-4" /></>}
+              ? <div className="w-6 h-6 border-4 border-white border-t-transparent rounded-full animate-spin" />
+              : <><CheckCircle2 className="w-8 h-8" />{t('settle')} [F10]<ChevronRight className="w-6 h-6 opacity-50" /></>}
           </button>
 
           <div className="bg-white/60 rounded-xl p-2.5 text-[9px] text-gray-400 font-mono border border-gray-100 leading-relaxed">

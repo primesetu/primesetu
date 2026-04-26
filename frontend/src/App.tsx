@@ -225,7 +225,7 @@ const PrimeSetuOS: React.FC = () => {
         setIsCollapsed={setIsCollapsed}
       />
       
-      <div className="main flex-1 ml-[var(--sw)] mr-[var(--fw)] flex flex-col relative transition-all duration-300">
+      <div className="main flex-1 ml-[var(--sw)] mr-[120px] flex flex-col relative transition-all duration-300">
         <CommandBar 
           isOpen={isCommandBarOpen} 
           onClose={() => {
@@ -248,7 +248,7 @@ const PrimeSetuOS: React.FC = () => {
         <StatusBar activeTab={activeTab} />
 
         {/* Main Content Area */}
-        <main className="flex-1 p-[82px_28px_24px] animate-fadeUp">
+        <main className="flex-1 p-[96px_32px_32px] animate-fadeUp">
           <AnimatePresence mode="wait">
             <motion.div
               key={activeTab}

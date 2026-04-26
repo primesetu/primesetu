@@ -77,7 +77,7 @@ const StatusBar: React.FC<StatusBarProps> = ({ activeTab }) => {
   }[pulseState]
 
   return (
-    <div className="fixed bottom-0 left-0 right-0 h-14 bg-navy border-t-2 border-gold/40 z-[9999] flex items-center px-10 gap-12 shadow-[0_-10px_40px_rgba(13,27,62,0.5)] backdrop-blur-md">
+    <div className="fixed bottom-0 left-0 right-0 h-16 bg-navy border-t-2 border-gold/40 z-[9999] flex items-center px-10 gap-12 shadow-[0_-10px_40px_rgba(13,27,62,0.5)] backdrop-blur-md">
       <div className="flex gap-8">
         {[
           { key: 'F1', label: 'Billing' },
@@ -88,8 +88,8 @@ const StatusBar: React.FC<StatusBarProps> = ({ activeTab }) => {
           { key: 'F12', label: 'DayEnd' }
         ].map(btn => (
           <div key={btn.key} className={`flex items-center gap-3 group cursor-pointer ${activeTab === btn.label.toLowerCase() ? 'opacity-100' : 'opacity-60 hover:opacity-100'} transition-opacity`}>
-             <span className="text-gold font-black text-[12px] group-hover:scale-125 transition-transform">{btn.key}</span>
-             <span className="text-white/60 font-black text-[10px] uppercase tracking-[0.2em] group-hover:text-white transition-colors">{btn.label}</span>
+             <span className="text-gold font-mono font-black text-lg group-hover:scale-125 transition-transform">{btn.key}</span>
+             <span className="text-white/60 font-black text-xs uppercase tracking-[0.2em] group-hover:text-white transition-colors">{btn.label}</span>
           </div>
         ))}
       </div>
@@ -113,17 +113,17 @@ const StatusBar: React.FC<StatusBarProps> = ({ activeTab }) => {
             ))}
           </div>
           <div>
-            <div className={`text-[10px] font-black uppercase tracking-[0.3em] ${pulseColor}`}>
+            <div className={`text-xs font-black uppercase tracking-[0.3em] ${pulseColor}`}>
               {pulseLabel}
             </div>
             {lastSync && pulseState === 'online' && (
-              <div className="text-[8px] text-white/20 font-mono">Last: {lastSync}</div>
+              <div className="text-2xs text-white/40 font-mono">Last: {lastSync}</div>
             )}
           </div>
         </div>
 
         {/* Node identity */}
-        <div className="text-white/20 text-[10px] font-black uppercase tracking-[0.6em] pr-4 border-l border-white/10 pl-8">
+        <div className="text-white/30 text-xs font-black uppercase tracking-[0.6em] pr-4 border-l border-white/10 pl-8">
           PST-X01 · NODE v2.0
         </div>
       </div>

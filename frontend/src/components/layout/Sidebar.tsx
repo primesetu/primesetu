@@ -23,6 +23,7 @@ import { useMenu } from '../../hooks/useMenu';
 import { ICON_MAP } from '../../lib/ModuleRegistry';
 import { useHotkeys } from 'react-hotkeys-hook';
 import { useLanguage } from '../../hooks/useLanguage';
+import { useNodeSync } from '../../hooks/useNodeSync';
 import { MenuItem } from '../../api/menuService';
 import { clsx, type ClassValue } from 'clsx';
 import { twMerge } from 'tailwind-merge';
@@ -50,7 +51,15 @@ const Sidebar: React.FC<SidebarProps> = ({
 }) => {
   const { language, setLanguage } = useLanguage();
   const { menu: modules, loading } = useMenu();
+  const sync = useNodeSync();
   const [expandedCategories, setExpandedCategories] = useState<string[]>(['POS', 'WAREHOUSE']);
+
+  // Sync pulse colours per ux-operational-intelligence.md
+  const syncConfig = {
+    online:  { dot: 'bg-emerald-400', label: 'Synced',   pulse: false },
+    syncing: { dot: 'bg-amber-400',   label: 'Syncing…', pulse: true  },
+    offline: { dot: 'bg-rose-500',    label: 'Offline',  pulse: false },
+  }[sync.status];
 
   // 1. Dynamic Category Resolution (Following "Never Static Arrays" Rule)
   const categories = useMemo(() => {
@@ -117,9 +126,9 @@ const Sidebar: React.FC<SidebarProps> = ({
             animate={{ opacity: 1, x: 0 }}
             className="flex-1 flex items-center justify-between overflow-hidden"
           >
-            <span className="text-[12.5px] font-black truncate uppercase tracking-wider">{item.label}</span>
+            <span className="text-sm font-black truncate uppercase tracking-wider">{item.label}</span>
             {item.shortcut && (
-              <span className="text-[9px] font-black bg-white/10 text-white/50 px-1.5 py-0.5 rounded opacity-0 group-hover:opacity-100 transition-opacity">
+              <span className="text-2xs font-mono font-black bg-white/10 text-white/50 px-1.5 py-0.5 rounded opacity-0 group-hover:opacity-100 transition-opacity">
                 {item.shortcut}
               </span>
             )}
@@ -127,7 +136,7 @@ const Sidebar: React.FC<SidebarProps> = ({
         )}
 
         {isCollapsed && (
-          <div className="fixed left-20 px-3 py-1.5 bg-navy text-white text-[11px] rounded opacity-0 group-hover:opacity-100 pointer-events-none transition-opacity whitespace-nowrap z-[200] shadow-xl border border-white/10 font-bold uppercase tracking-widest">
+          <div className="fixed left-20 px-3 py-1.5 bg-navy text-white text-xs rounded opacity-0 group-hover:opacity-100 pointer-events-none transition-opacity whitespace-nowrap z-[200] shadow-xl border border-white/10 font-bold uppercase tracking-widest">
             {item.label} {item.shortcut && `(${item.shortcut})`}
           </div>
         )}
@@ -163,7 +172,7 @@ const Sidebar: React.FC<SidebarProps> = ({
               <path d="M8 44 Q32 14 56 44" stroke="#F9B942" strokeWidth="5.5" strokeLinecap="round" fill="none"/>
               <circle cx="32" cy="10" r="4" fill="#F4840A"/>
             </svg>
-            <div className="font-serif text-[18px] font-black text-white tracking-tighter">
+            <div className="font-serif text-2xl font-black text-white tracking-tighter">
               Prime<span className="text-gold">Setu</span>
             </div>
           </motion.div>
@@ -184,7 +193,7 @@ const Sidebar: React.FC<SidebarProps> = ({
         {/* Core Section */}
         <div className="mb-6">
           {!isCollapsed && (
-            <div className="text-[9px] font-black tracking-[3px] uppercase text-white/45 px-5 mb-2">Overview</div>
+            <div className="text-xs font-black tracking-[3px] uppercase text-white/45 px-5 mb-2">Overview</div>
           )}
           {modules
             .filter(m => m.id === 'dashboard' || m.module === 'dashboard')
@@ -220,11 +229,11 @@ const Sidebar: React.FC<SidebarProps> = ({
               >
                 {!isCollapsed && (
                   <>
-                    <span className="text-[9px] font-black tracking-[3px] uppercase text-white/60 group-hover:text-white/80">
+                    <span className="text-xs font-black tracking-[3px] uppercase text-white/60 group-hover:text-white/80">
                       {cat.label}
                     </span>
                     <div className="text-white/30 group-hover:text-white/60">
-                      {isExpanded ? <ChevronDown size={12} /> : <ChevronRight size={12} />}
+                      {isExpanded ? <ChevronDown size={14} /> : <ChevronRight size={14} />}
                     </div>
                   </>
                 )}
@@ -258,12 +267,47 @@ const Sidebar: React.FC<SidebarProps> = ({
 
       {/* Footer / Status / Language */}
       <div className="mt-auto border-t border-white/5 flex flex-col bg-white/[0.01] shrink-0">
+
+        {/* HQ Heartbeat Pulse */}
+        <div
+          className={cn(
+            "mx-4 my-3 rounded-2xl px-4 py-2.5 flex items-center gap-3 transition-all",
+            sync.status === 'online'  && "bg-emerald-500/10 border border-emerald-500/20",
+            sync.status === 'syncing' && "bg-amber-500/10 border border-amber-500/20",
+            sync.status === 'offline' && "bg-rose-500/10 border border-rose-500/20",
+          )}
+          title={sync.lastSync ? `Last sync: ${sync.lastSync.toLocaleTimeString()}${sync.pendingCount ? ` · ${sync.pendingCount} pending` : ''}` : 'Never synced'}
+        >
+          <span className={cn(
+            'w-2 h-2 rounded-full shrink-0',
+            syncConfig.dot,
+            syncConfig.pulse && 'animate-pulse'
+          )} />
+          {!isCollapsed && (
+            <div className="flex-1 overflow-hidden">
+              <div className={cn(
+                'text-xs font-black uppercase tracking-widest truncate',
+                sync.status === 'online'  && 'text-emerald-400',
+                sync.status === 'syncing' && 'text-amber-400',
+                sync.status === 'offline' && 'text-rose-400',
+              )}>
+                HQ · {syncConfig.label}
+              </div>
+              {sync.latencyMs !== null && (
+                <div className="text-2xs text-white/25 font-bold tracking-wider">
+                  {sync.latencyMs}ms{sync.pendingCount > 0 ? ` · ${sync.pendingCount} queued` : ''}
+                </div>
+              )}
+            </div>
+          )}
+        </div>
+
         {!isCollapsed && (
           <div className="px-5 py-3 flex gap-2 border-b border-white/5">
             <button 
               onClick={() => setLanguage('en')}
               className={cn(
-                "flex-1 py-1.5 rounded-lg text-[9px] font-black transition-all",
+                "flex-1 py-1.5 rounded-lg text-xs font-black transition-all",
                 language === 'en' ? "bg-gold text-navy shadow-lg" : "text-white/30 hover:bg-white/5"
               )}
             >
@@ -272,7 +316,7 @@ const Sidebar: React.FC<SidebarProps> = ({
             <button 
               onClick={() => setLanguage('hi')}
               className={cn(
-                "flex-1 py-1.5 rounded-lg text-[9px] font-black transition-all",
+                "flex-1 py-1.5 rounded-lg text-xs font-black transition-all",
                 language === 'hi' ? "bg-gold text-navy shadow-lg" : "text-white/30 hover:bg-white/5"
               )}
             >
@@ -282,7 +326,7 @@ const Sidebar: React.FC<SidebarProps> = ({
         )}
 
         <div className="p-[14px_20px] flex items-center gap-3">
-          <div className="w-8 h-8 bg-gradient-to-br from-saffron to-gold rounded-full flex items-center justify-center text-[12px] font-black text-white shrink-0 shadow-lg shadow-saffron/10">
+          <div className="w-10 h-10 bg-gradient-to-br from-saffron to-gold rounded-full flex items-center justify-center text-lg font-black text-white shrink-0 shadow-lg shadow-saffron/10">
             {userRole?.[0] || 'U'}
           </div>
           {!isCollapsed && (
@@ -291,14 +335,14 @@ const Sidebar: React.FC<SidebarProps> = ({
               animate={{ opacity: 1 }}
               className="flex-1 overflow-hidden"
             >
-              <div className="text-[11px] font-black text-white tracking-tight truncate uppercase">{nodeType} NODE</div>
-              <div className="text-[9px] text-white/40 uppercase tracking-[0.2em] truncate font-bold">{userRole} · Sovereign</div>
+              <div className="text-sm font-black text-white tracking-tight truncate uppercase">{nodeType} NODE</div>
+              <div className="text-2xs text-white/40 uppercase tracking-[0.2em] truncate font-bold">{userRole} · Sovereign</div>
             </motion.div>
           )}
           {isCollapsed && (
             <button 
               onClick={() => setLanguage(language === 'en' ? 'hi' : 'en')}
-              className="w-8 h-8 rounded-full border border-white/10 flex items-center justify-center text-[9px] font-black text-white/40 hover:text-white transition-all"
+              className="w-10 h-10 rounded-full border border-white/10 flex items-center justify-center text-xs font-black text-white/40 hover:text-white transition-all"
             >
               {language === 'en' ? 'HI' : 'EN'}
             </button>

@@ -94,38 +94,33 @@ const Sidebar: React.FC<SidebarProps> = ({
       <button
         onClick={() => onSelect(item.id)}
         className={cn(
-          "group relative flex items-center w-full px-6 py-4 transition-all duration-500",
+          "group relative flex items-center w-full px-6 py-4 transition-all duration-300",
           isActive 
-            ? "bg-white/[0.03] text-brand-gold" 
-            : "text-white/30 hover:text-white/60 hover:bg-white/[0.01]"
+            ? "bg-white text-black font-semibold" 
+            : "text-white/40 hover:text-white hover:bg-white/5"
         )}
       >
-        {/* Active Indicator Pulse */}
-        {isActive && (
-          <motion.div 
-            layoutId="active-nav-glow"
-            className="absolute left-0 w-1 h-6 bg-brand-gold rounded-r-full shadow-[0_0_15px_rgba(244,162,97,0.8)]"
-          />
-        )}
-
         <div className={cn(
-          "flex items-center justify-center transition-transform duration-500",
+          "flex items-center justify-center transition-transform duration-300",
           isCollapsed ? "w-full" : "w-5 mr-4",
-          isActive && "scale-110"
+          isActive && "scale-105"
         )}>
-          <Icon size={18} strokeWidth={isActive ? 2.5 : 1.5} />
+          <Icon size={18} strokeWidth={isActive ? 2 : 1.5} />
         </div>
         
         {!isCollapsed && (
           <div className="flex-1 flex items-center justify-between overflow-hidden">
             <span className={cn(
-              "text-[11px] font-black uppercase tracking-[0.2em] truncate transition-all",
-              isActive ? "text-white" : "text-inherit"
+              "text-xs uppercase tracking-widest truncate transition-all",
+              isActive ? "text-black font-bold" : "text-inherit"
             )}>
               {item.label}
             </span>
             {item.shortcut && (
-              <span className="text-[9px] font-mono font-black bg-white/5 text-white/20 px-1.5 py-0.5 rounded group-hover:text-brand-gold/50 transition-colors">
+              <span className={cn(
+                "text-[9px] font-mono font-bold px-1.5 py-0.5 rounded transition-colors",
+                isActive ? "bg-black/10 text-black/60" : "bg-white/5 text-white/30 group-hover:text-white/70"
+              )}>
                 {item.shortcut}
               </span>
             )}
@@ -133,7 +128,7 @@ const Sidebar: React.FC<SidebarProps> = ({
         )}
 
         {isCollapsed && (
-          <div className="fixed left-20 px-4 py-2 bg-black text-[10px] font-black uppercase tracking-widest text-white rounded-xl opacity-0 group-hover:opacity-100 pointer-events-none transition-all shadow-2xl border border-white/10 z-[300]">
+          <div className="fixed left-20 px-4 py-2 bg-white text-[10px] font-bold uppercase tracking-widest text-black rounded shadow-xl opacity-0 group-hover:opacity-100 pointer-events-none transition-all z-[300]">
             {item.label}
           </div>
         )}
@@ -143,8 +138,8 @@ const Sidebar: React.FC<SidebarProps> = ({
 
   return (
     <motion.aside 
-      animate={{ width: isCollapsed ? 80 : 300 }}
-      className="fixed top-0 left-0 bottom-0 flex flex-col z-[100] bg-[#0a0a0c] border-r border-white/5 shadow-[20px_0_40px_rgba(0,0,0,0.3)] overflow-hidden"
+      animate={{ width: isCollapsed ? 0 : 280 }}
+      className="fixed top-0 left-0 bottom-0 flex flex-col z-[100] bg-black border-r border-white/10 shadow-[20px_0_40px_rgba(0,0,0,0.3)] overflow-hidden"
       style={{ fontFamily: 'var(--font-tesla)' }}
     >
       {/* ── HEADER ── */}

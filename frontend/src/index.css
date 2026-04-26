@@ -27,20 +27,20 @@
 ───────────────────────────────────────────── */
 @layer base {
   :root {
-    /* Tesla-Inspired Premium Palette */
-    --navy:        #080F21;   /* Deeper, more luxurious navy */
-    --navy-light:  #0F1A35;
-    --navy-mid:    #152347;
-    --saffron:     #F4840A;
-    --saffron-dk:  #D9720A;
-    --gold:        #F9B942;
-    --cream:       #FAF7F2;
+    /* Tesla-Inspired Premium Palette - Monochromatic, stark, elegant */
+    --navy:        #000000;   /* Pure black for highest contrast */
+    --navy-light:  #111111;
+    --navy-mid:    #222222;
+    --saffron:     #000000;   /* Primary accent is stark black */
+    --saffron-dk:  #333333;   
+    --gold:        #CCCCCC;
+    --cream:       #F9F9F9;   /* Very light gray instead of cream */
     --white:       #FFFFFF;
-    --glass:       rgba(255, 255, 255, 0.03);
-    --glass-border: rgba(255, 255, 255, 0.08);
+    --glass:       rgba(255, 255, 255, 0.6);
+    --glass-border: rgba(0, 0, 0, 0.05);
 
-    /* Typography - Outfit for that modern Tesla feel */
-    --font-tesla:  'Outfit', 'Inter', sans-serif;
+    /* Typography - Inter is clean, but let's use it starkly */
+    --font-tesla:  'Inter', sans-serif;
   }
 
   :root[data-theme="shoper9"] {

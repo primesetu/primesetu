@@ -10,7 +10,7 @@
  * ============================================================ */
 
 import React, { useState } from 'react';
-import { Bell, Settings, Search, ChevronDown, Monitor, Package, Globe, Lock, ShieldCheck, Palette } from 'lucide-react';
+import { Bell, Settings, Search, ChevronDown, Monitor, Package, Globe, Lock, ShieldCheck, Palette, Menu } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useMenu } from '@/hooks/useMenu';
 import { useTranslation } from 'react-i18next';
@@ -55,9 +55,18 @@ export default function TopBar({
   });
 
   return (
-    <header className="fixed top-0 left-[var(--sw)] right-0 h-[72px] bg-white/80 backdrop-blur-md border-b border-navy/5 z-[100] flex items-center px-8 gap-8 transition-all duration-300">
-      {/* ── Classic Top Menu System ── */}
+    <header className="fixed top-0 left-[var(--sw)] right-0 h-[72px] bg-white/90 backdrop-blur-md border-b border-navy/10 z-[100] flex items-center px-8 gap-8 transition-all duration-300">
+      {/* ── Menu Toggle & Top Menu System ── */}
       <nav className="flex items-center gap-1 h-full">
+        <button 
+          onClick={() => {
+            const toggleEvent = new CustomEvent('toggleSidebar');
+            window.dispatchEvent(toggleEvent);
+          }}
+          className="mr-4 p-2 hover:bg-navy/5 rounded-full transition-colors hidden md:block"
+        >
+          <Menu className="w-5 h-5 text-navy" />
+        </button>
         {categories.map((cat) => (
           <div 
             key={cat.id} 

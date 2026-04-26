@@ -153,8 +153,11 @@ const PrimeSetuOS: React.FC = () => {
 
     const handleOnline = () => setIsOnline(true);
     const handleOffline = () => setIsOnline(false);
+    const handleToggleSidebar = () => setIsCollapsed(prev => !prev);
+    
     window.addEventListener('online', handleOnline);
     window.addEventListener('offline', handleOffline);
+    window.addEventListener('toggleSidebar', handleToggleSidebar);
     
     const syncInterval = setInterval(() => {
       setPendingSyncs(syncEngine.getPendingCount());
@@ -164,6 +167,7 @@ const PrimeSetuOS: React.FC = () => {
       subscription.unsubscribe();
       window.removeEventListener('online', handleOnline);
       window.removeEventListener('offline', handleOffline);
+      window.removeEventListener('toggleSidebar', handleToggleSidebar);
       clearInterval(syncInterval);
     };
   }, []);
@@ -215,9 +219,10 @@ const PrimeSetuOS: React.FC = () => {
   return (
     <div 
       className="flex min-h-screen bg-cream"
-      style={{ '--sw': isCollapsed ? '72px' : '280px' } as React.CSSProperties}
+      style={{ '--sw': isCollapsed ? '0px' : '280px' } as React.CSSProperties}
     >
       <Sidebar 
+
         activeTab={activeTab} 
         setActiveTab={setActiveTab} 
         userRole={user?.role} 

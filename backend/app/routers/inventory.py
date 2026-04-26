@@ -230,12 +230,6 @@ async def upsert_audit_entry(
 
     # Check for existing entry
     entry_stmt = select(AuditEntry).where(
-        AuditEntry.audit_id == session_id,
-        AuditEntry.item_id == data.item_id,
-        And(AuditEntry.size == data.size, AuditEntry.colour == data.colour)
-    )
-    # Corrected the 'And' to 'and_'
-    entry_stmt = select(AuditEntry).where(
         and_(
             AuditEntry.audit_id == session_id,
             AuditEntry.item_id == data.item_id,

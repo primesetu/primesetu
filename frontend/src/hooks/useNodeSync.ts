@@ -34,7 +34,7 @@ export function useNodeSync(): NodeSyncState {
   const ping = useCallback(async () => {
     const t0 = Date.now();
     try {
-      const res = await fetch(`${API_BASE}/api/health`, {
+      const res = await fetch(`${API_BASE}/api/v1/health`, {
         signal: AbortSignal.timeout(5000),
       });
       const latencyMs = Date.now() - t0;

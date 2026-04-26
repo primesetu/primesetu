@@ -9,72 +9,32 @@
  * "Memory, Not Code."
  * ============================================================ */
 
-import React, { useState, useEffect } from 'react';
+import { useNodeSync } from '@/hooks/useNodeSync';
 
 interface StatusBarProps {
   activeTab: string;
 }
 
-type PulseState = 'connecting' | 'online' | 'offline'
-
 const StatusBar: React.FC<StatusBarProps> = ({ activeTab }) => {
-  const [pulseState, setPulseState] = useState<PulseState>('connecting')
-  const [offlineQueueCount, setOfflineQueueCount] = useState(0)
-  const [lastSync, setLastSync] = useState<string>('')
-
-  // Real-time HO Pulse: ping navigator.onLine + attempt fetch
-  useEffect(() => {
-    let interval: ReturnType<typeof setInterval>
-
-    const checkPulse = async () => {
-      if (!navigator.onLine) {
-        setPulseState('offline')
-        return
-      }
-      try {
-        // Lightweight ping to the local sovereign node
-        await fetch('/api/health', { method: 'HEAD', signal: AbortSignal.timeout(2000) })
-        setPulseState('online')
-        setLastSync(new Date().toLocaleTimeString('en-IN', { hour: '2-digit', minute: '2-digit' }))
-      } catch {
-        // offline or node down — still online via browser but node unreachable
-        setPulseState(navigator.onLine ? 'offline' : 'offline')
-      }
-    }
-
-    // Also track browser offline/online events
-    const goOnline = () => checkPulse()
-    const goOffline = () => setPulseState('offline')
-    window.addEventListener('online', goOnline)
-    window.addEventListener('offline', goOffline)
-
-    checkPulse()
-    interval = setInterval(checkPulse, 30000) // re-check every 30s
-
-    return () => {
-      clearInterval(interval)
-      window.removeEventListener('online', goOnline)
-      window.removeEventListener('offline', goOffline)
-    }
-  }, [])
+  const sync = useNodeSync();
 
   const pulseColor = {
-    connecting: 'text-amber-400/70',
-    online:     'text-emerald-400/80',
-    offline:    'text-rose-400/80',
-  }[pulseState]
+    syncing: 'text-amber-400/70',
+    online:  'text-emerald-400/80',
+    offline: 'text-rose-400/80',
+  }[sync.status];
 
   const pulseBarColor = {
-    connecting: 'bg-amber-400/50',
-    online:     'bg-emerald-400/70',
-    offline:    'bg-rose-400/70',
-  }[pulseState]
+    syncing: 'bg-amber-400/50',
+    online:  'bg-emerald-400/70',
+    offline: 'bg-rose-400/70',
+  }[sync.status];
 
   const pulseLabel = {
-    connecting: 'HO Connecting...',
-    online:     'HO Pulse Active',
-    offline:    'HO Offline',
-  }[pulseState]
+    syncing: 'HO Syncing...',
+    online:  'HO Pulse Active',
+    offline: 'HO Offline',
+  }[sync.status];
 
   return (
     <div className="fixed bottom-0 left-0 right-0 h-16 bg-navy border-t-2 border-gold/40 z-[9999] flex items-center px-10 gap-12 shadow-[0_-10px_40px_rgba(13,27,62,0.5)] backdrop-blur-md">
@@ -103,11 +63,11 @@ const StatusBar: React.FC<StatusBarProps> = ({ activeTab }) => {
             {[1, 2, 3].map(i => (
               <div
                 key={i}
-                className={`w-1 rounded-full transition-all ${pulseBarColor} ${pulseState === 'online' ? 'animate-pulse' : ''}`}
+                className={`w-1 rounded-full transition-all ${pulseBarColor} ${sync.status === 'online' ? 'animate-pulse' : ''}`}
                 style={{
                   height: `${8 + i * 4}px`,
                   animationDelay: `${i * 180}ms`,
-                  opacity: pulseState === 'connecting' ? 0.4 : 1
+                  opacity: sync.status === 'syncing' ? 0.4 : 1
                 }}
               />
             ))}
@@ -116,8 +76,11 @@ const StatusBar: React.FC<StatusBarProps> = ({ activeTab }) => {
             <div className={`text-xs font-black uppercase tracking-[0.3em] ${pulseColor}`}>
               {pulseLabel}
             </div>
-            {lastSync && pulseState === 'online' && (
-              <div className="text-2xs text-white/40 font-mono">Last: {lastSync}</div>
+            {sync.lastSync && sync.status !== 'offline' && (
+              <div className="text-2xs text-white/40 font-mono">Last: {sync.lastSync.toLocaleTimeString('en-IN', { hour: '2-digit', minute: '2-digit' })}</div>
+            )}
+            {sync.pendingCount > 0 && (
+              <div className="text-2xs text-amber-400 font-mono">Pending: {sync.pendingCount}</div>
             )}
           </div>
         </div>

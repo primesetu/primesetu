@@ -43,7 +43,7 @@ class VaUserGroup(Base):
     __tablename__ = "va_user_groups"
 
     id = Column(PGUUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
-    user_id = Column(PGUUID(as_uuid=True), ForeignKey("auth.users.id", ondelete="CASCADE"), nullable=False)
+    user_id = Column(PGUUID(as_uuid=True), nullable=False)
     group_id = Column(PGUUID(as_uuid=True), ForeignKey("va_groups.id", ondelete="CASCADE"), nullable=False)
     store_id = Column(PGUUID(as_uuid=True), ForeignKey("stores.id", ondelete="CASCADE"), nullable=False)
     created_at = Column(DateTime(timezone=True), server_default=text("now()"), nullable=False)

@@ -3,8 +3,8 @@
 # PrimeSetu — Pre-commit Design Lock Hook
 # © 2026 AITDL Network — All Rights Reserved
 # ============================================================
-# This hook blocks commits that modify LOCKED design files
-# without explicit unlock. See DESIGN_LOCK.md for rules.
+# UNLOCK STATUS: UI/UX patterns UNLOCKED by Architect (2026-04-28)
+# Only the two foundational token files remain locked.
 # ============================================================
 
 RED='\033[0;31m'
@@ -16,7 +16,7 @@ echo ""
 echo "🔒 PrimeSetu Design Lock — Pre-commit Check"
 echo "─────────────────────────────────────────────"
 
-# ── LOCKED FILES ──
+# ── LOCKED FILES (frozen — change needs architect sign-off) ──
 LOCKED_FILES=(
   "frontend/src/index.css"
   "frontend/tailwind.config.ts"
@@ -35,58 +35,35 @@ for FILE in "${LOCKED_FILES[@]}"; do
   fi
 done
 
-# ── BANNED PATTERN CHECK (frontend src files only) ──
+# ── CRITICAL PATTERN CHECK (only truly-breaking patterns blocked) ──
 STAGED_TSX=$(git diff --cached --name-only | grep "frontend/src" | grep -E "\.(tsx|ts|css)$")
 
 if [ -n "$STAGED_TSX" ]; then
-  # Check for banned patterns
   BANNED_FOUND=0
 
   while IFS= read -r file; do
-    # Skip locked files (already handled above)
     [[ "$file" == "frontend/src/index.css" ]] && continue
 
     STAGED_CONTENT=$(git show ":$file" 2>/dev/null)
 
-    # Check for emojis used as icons
+    # Block emojis used AS icons (not in comments/strings)
     if echo "$STAGED_CONTENT" | grep -qP '[\x{1F300}-\x{1F9FF}]' 2>/dev/null; then
       echo "${RED}❌ BANNED: Emoji icon detected in $file${NC}"
       echo "   Use Lucide React icons instead. See DESIGN_LOCK.md"
       BANNED_FOUND=1
     fi
 
-    # Check for font-black
-    if echo "$STAGED_CONTENT" | grep -q '"font-black"'; then
-      echo "${RED}❌ BANNED: font-black (weight 900) in $file${NC}"
-      echo "   Use font-semibold (600) max. See DESIGN_LOCK.md"
-      BANNED_FOUND=1
-    fi
-
-    # Check for bg-white in JSX
+    # Block bg-white (breaks dark UI completely)
     if echo "$STAGED_CONTENT" | grep -qE 'className=.*"[^"]*bg-white[^"]*"'; then
-      echo "${RED}❌ BANNED: bg-white hardcode in $file${NC}"
-      echo "   Use var(--bg-overlay) or surface-* classes. See DESIGN_LOCK.md"
+      echo "${RED}❌ BANNED: bg-white in $file${NC}"
+      echo "   Use var(--bg-overlay) or surface-* classes."
       BANNED_FOUND=1
     fi
 
-    # Check for text-black
+    # Block text-black (unreadable on dark bg)
     if echo "$STAGED_CONTENT" | grep -qE 'className=.*"[^"]*text-black[^"]*"'; then
       echo "${RED}❌ BANNED: text-black in $file${NC}"
-      echo "   Use var(--text-primary). See DESIGN_LOCK.md"
-      BANNED_FOUND=1
-    fi
-
-    # Check for bg-navy (old token)
-    if echo "$STAGED_CONTENT" | grep -qE 'className=.*"[^"]*bg-navy[^"]*"'; then
-      echo "${YELLOW}⚠️  DEPRECATED: bg-navy used in $file${NC}"
-      echo "   Use var(--bg-elevated) or bg-elevated. See DESIGN_LOCK.md"
-      BANNED_FOUND=1
-    fi
-
-    # Check for bg-brand-gold (old token)
-    if echo "$STAGED_CONTENT" | grep -qE 'className=.*"[^"]*bg-brand-gold[^"]*"'; then
-      echo "${YELLOW}⚠️  DEPRECATED: bg-brand-gold in $file${NC}"
-      echo "   Use var(--accent) or btn-primary. See DESIGN_LOCK.md"
+      echo "   Use var(--text-primary)."
       BANNED_FOUND=1
     fi
 

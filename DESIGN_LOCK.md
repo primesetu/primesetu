@@ -1,7 +1,13 @@
 # DESIGN LOCK — PrimeSetu UI System
 > **Version:** 1.0.0 · Locked: 2026-04-27
 > **Authority:** Jawahar R Mallah — System Architect, AITDL Network
-> **Status:** 🔒 LOCKED — No changes without explicit architect approval
+> **Status:** 🔓 UI/UX PATTERNS UNLOCKED — 2026-04-28 (Architect approved)
+
+> ### 🔓 Unlock Record
+> **Date:** 2026-04-28 · **Approved by:** Jawahar R Mallah
+> **Scope:** All component-level UI/UX pattern restrictions removed.
+> **Still Locked:** `index.css` and `tailwind.config.ts` (token definitions).
+> **Still Blocked:** `bg-white` and `text-black` (break dark-mode rendering).
 
 ---
 

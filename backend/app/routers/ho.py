@@ -22,7 +22,7 @@ router = APIRouter()
 @router.get("/status")
 async def get_ho_status(
     db: AsyncSession = Depends(get_db),
-    current_user: CurrentUser = Depends(require_manager)
+    current_user: CurrentUser = Depends(require_auth)
 ):
     """Head Office connectivity and sync status."""
     stmt = select(SyncPacket).where(

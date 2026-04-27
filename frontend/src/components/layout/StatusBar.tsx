@@ -21,23 +21,14 @@ const StatusBar: React.FC<StatusBarProps> = ({ activeTab }) => {
   const sync = useNodeSync();
   const [showSync, setShowSync] = useState(false);
 
-  const pulseColor = {
-    syncing: 'var(--yellow)',
-    online:  'var(--green)',
-    offline: 'var(--red)',
-  }[sync.status];
+  const statusMap: Record<string, { color: string; label: string }> = {
+    online:          { color: 'var(--green)',            label: 'HO Pulse Active' },
+    syncing:         { color: 'var(--yellow)',           label: 'HO Syncing...' },
+    offline:         { color: 'var(--red)',              label: 'HO Offline' },
+    unauthenticated: { color: 'var(--text-tertiary)',    label: 'No Session' },
+  };
 
-  const pulseBarColor = {
-    syncing: 'var(--yellow)',
-    online:  'var(--green)',
-    offline: 'var(--red)',
-  }[sync.status];
-
-  const pulseLabel = {
-    syncing: 'HO Syncing...',
-    online:  'HO Pulse Active',
-    offline: sync.nodeId === 'AUTH_REQUIRED' ? 'Auth Required' : 'HO Offline',
-  }[sync.status];
+  const { color: pulseColor, label: pulseLabel } = statusMap[sync.status] ?? statusMap.offline;
 
   return (
     <div className="fixed bottom-0 left-0 right-0 h-16 z-[9999] flex items-center px-10 gap-12 backdrop-blur-md" style={{ background: 'var(--bg-elevated)', borderTop: '2px solid rgba(99,102,241,0.2)' }}>
@@ -72,7 +63,7 @@ const StatusBar: React.FC<StatusBarProps> = ({ activeTab }) => {
                 className={`w-1 rounded-full transition-all ${sync.status === 'online' ? 'animate-pulse' : ''}`}
                 style={{
                   height: `${8 + i * 4}px`,
-                  background: pulseBarColor,
+                  background: pulseColor,
                   animationDelay: `${i * 180}ms`,
                   opacity: sync.status === 'syncing' ? 0.4 : 1
                 }}

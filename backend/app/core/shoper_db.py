@@ -8,7 +8,10 @@
 # * .(c) 2026 - All Rights Reserved
 # * "Memory, Not Code."
 # ============================================================ #
-import pyodbc
+try:
+    import pyodbc
+except ImportError:
+    pyodbc = None
 from typing import List, Dict, Any
 
 # Shoper9 Configuration (Audited)

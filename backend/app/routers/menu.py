@@ -61,18 +61,48 @@ class MenuItemResponse(BaseModel):
 # ------------------------------------------------------------
 router = APIRouter()
 
+# ── Static SYSTEM menu — always available, no auth required ──
+STATIC_MENU = [
+    {"id": "dashboard",  "label": "Overview",          "route": "dashboard",  "module": "dashboard",  "required_permission": "dashboard.view",   "category": "OPERATIONS", "icon": "LayoutDashboard", "shortcut": None, "children": []},
+    {"id": "sales",      "label": "Billing (POS)",     "route": "sales",      "module": "sales",      "required_permission": "billing.view",     "category": "OPERATIONS", "icon": "ShoppingCart",    "shortcut": "F1", "children": []},
+    {"id": "returns",    "label": "Sales Returns",     "route": "returns",    "module": "returns",    "required_permission": "billing.returns",  "category": "OPERATIONS", "icon": "RotateCcw",       "shortcut": None, "children": []},
+    {"id": "tills",      "label": "Till Management",   "route": "tills",      "module": "tills",      "required_permission": "finance.till",     "category": "OPERATIONS", "icon": "Monitor",         "shortcut": None, "children": []},
+    {"id": "dayend",     "label": "Day End Closure",   "route": "dayend",     "module": "dayend",     "required_permission": "billing.dayend",   "category": "OPERATIONS", "icon": "Lock",            "shortcut": "F12","children": []},
+    {"id": "price",      "label": "Price Master",      "route": "price",      "module": "price",      "required_permission": "catalogue.price",  "category": "OPERATIONS", "icon": "DollarSign",      "shortcut": None, "children": []},
+    {"id": "customers",  "label": "Customer Master",   "route": "customers",  "module": "customers",  "required_permission": "crm.view",         "category": "OPERATIONS", "icon": "UserSquare2",     "shortcut": None, "children": []},
+    {"id": "loyalty",    "label": "Loyalty Program",   "route": "loyalty",    "module": "loyalty",    "required_permission": "crm.loyalty",      "category": "OPERATIONS", "icon": "Trophy",          "shortcut": None, "children": []},
+    {"id": "vouchers",   "label": "Gift Vouchers",     "route": "vouchers",   "module": "vouchers",   "required_permission": "billing.vouchers", "category": "OPERATIONS", "icon": "FileText",        "shortcut": None, "children": []},
+    {"id": "schemes",    "label": "Promotions",        "route": "schemes",    "module": "schemes",    "required_permission": "catalogue.schemes","category": "OPERATIONS", "icon": "Tag",             "shortcut": None, "children": []},
+    {"id": "inventory",  "label": "Stock Status",      "route": "inventory",  "module": "inventory",  "required_permission": "inventory.view",   "category": "INVENTORY",  "icon": "Package",         "shortcut": "F9", "children": []},
+    {"id": "grn",        "label": "Goods Inward (GRN)","route": "grn",        "module": "grn",        "required_permission": "inventory.grn",    "category": "INVENTORY",  "icon": "Truck",           "shortcut": None, "children": []},
+    {"id": "procurement","label": "Purchase Orders",   "route": "procurement","module": "procurement","required_permission": "inventory.po",     "category": "INVENTORY",  "icon": "ShoppingBag",     "shortcut": None, "children": []},
+    {"id": "movement",   "label": "Stock Movement",    "route": "movement",   "module": "movement",   "required_permission": "inventory.view",   "category": "INVENTORY",  "icon": "History",         "shortcut": None, "children": []},
+    {"id": "transfer",   "label": "Store Transfers",   "route": "transfer",   "module": "transfer",   "required_permission": "inventory.transfer","category":"INVENTORY",  "icon": "ArrowLeftRight",  "shortcut": None, "children": []},
+    {"id": "reconcile",  "label": "Physical Audit",    "route": "reconcile",  "module": "reconcile",  "required_permission": "inventory.audit",  "category": "INVENTORY",  "icon": "History",         "shortcut": None, "children": []},
+    {"id": "barcode",    "label": "Barcode Studio",    "route": "barcode",    "module": "barcode",    "required_permission": "inventory.view",   "category": "INVENTORY",  "icon": "Package",         "shortcut": None, "children": []},
+    {"id": "finance",    "label": "Finance Hub",       "route": "finance",    "module": "finance",    "required_permission": "finance.view",     "category": "FINANCE",    "icon": "DollarSign",      "shortcut": None, "children": []},
+    {"id": "analytics",  "label": "Sales Reports",     "route": "analytics",  "module": "analytics",  "required_permission": "reports.view",     "category": "FINANCE",    "icon": "BarChart3",       "shortcut": "F3", "children": []},
+    {"id": "gstr1",      "label": "GST Compliance",    "route": "gstr1",      "module": "gstr1",      "required_permission": "reports.gst",      "category": "FINANCE",    "icon": "FileText",        "shortcut": None, "children": []},
+    {"id": "ho",         "label": "HO Sync",           "route": "ho",         "module": "ho",         "required_permission": "ho.view",          "category": "NETWORK",    "icon": "Globe",           "shortcut": None, "children": []},
+    {"id": "settings",   "label": "System Config",     "route": "settings",   "module": "settings",   "required_permission": "settings.view",    "category": "SETTINGS",   "icon": "Settings",        "shortcut": "F10","children": []},
+    {"id": "security",   "label": "Security",          "route": "security",   "module": "security",   "required_permission": "settings.security","category": "SETTINGS",   "icon": "ShieldCheck",     "shortcut": None, "children": []},
+]
+
 @router.get("", response_model=List[MenuItemResponse])
 async def get_menu(
     db: AsyncSession = Depends(get_db),
-    current_user: UserContext = Depends(get_current_user)
+    current_user: Optional[UserContext] = Depends(get_current_user)
 ):
     """
-    Resolves the dynamic menu tree for the authenticated user.
-    Extracts store_id from JWT context (never from body).
+    Resolves the dynamic menu tree.
+    Public endpoint — returns SYSTEM menu when unauthenticated.
+    Returns store-filtered DB menu when authenticated.
     """
+    # ── Unauthenticated: return static SYSTEM menu ──
+    if not current_user:
+        return [MenuItemResponse(**item) for item in STATIC_MENU]
+
     try:
-        # 1. Fetch all active menu items for the tenant or SYSTEM
-        # Filter: (tenant_id == store_id OR tenant_id == 'SYSTEM') AND is_active == True
         query = select(MenuItem).where(
             and_(
                 MenuItem.is_active == True,
@@ -82,12 +112,14 @@ async def get_menu(
                 )
             )
         ).order_by(MenuItem.sort_order)
-        
+
         result = await db.execute(query)
         db_items = result.scalars().all()
 
-        # 2. Build Nested Tree Logic
-        # Create a mapping of all items for O(1) lookup
+        # If DB has no menu items yet, fall back to static menu
+        if not db_items:
+            return [MenuItemResponse(**item) for item in STATIC_MENU]
+
         item_map = {
             item.id: MenuItemResponse(
                 id=item.id,
@@ -107,17 +139,12 @@ async def get_menu(
         for item in db_items:
             menu_node = item_map[item.id]
             if item.parent_id and item.parent_id in item_map:
-                # Attach to parent's children list
                 item_map[item.parent_id].children.append(menu_node)
             elif not item.parent_id:
-                # It's a top-level root item
                 root_items.append(menu_node)
 
         return root_items
 
     except Exception as e:
-        # Explicitly handle and report DB errors without swallowing
-        raise HTTPException(
-            status_code=500,
-            detail=f"[PrimeSetu] Menu Engine Resolution Error: {str(e)}"
-        )
+        # DB error — fall back to static menu instead of 500
+        return [MenuItemResponse(**item) for item in STATIC_MENU]

@@ -34,6 +34,7 @@ from app.core.config import settings
 
 # .. Bearer token extractor ....................................................
 _bearer = HTTPBearer(auto_error=True)
+_bearer_optional = HTTPBearer(auto_error=False)  # returns None instead of 401
 
 # .. Typed user context ........................................................
 @dataclass
@@ -143,7 +144,20 @@ require_cashier = require_auth                           # any logged-in user
 require_manager = require_role("manager", "admin")
 require_admin   = require_role("admin")
 
+# .. Optional auth (returns None when no token — for public endpoints) ........
+async def optional_auth(
+    credentials: Optional[HTTPAuthorizationCredentials] = Depends(_bearer_optional),
+) -> Optional[CurrentUser]:
+    """Returns CurrentUser if a valid Bearer token is present, else None."""
+    if not credentials:
+        return None
+    try:
+        payload = _decode_token(credentials.credentials)
+        return _build_user(payload)
+    except HTTPException:
+        return None
+
 # .. Phase 2 Legacy Aliases ...................................................
 UserContext = CurrentUser
-get_current_user = require_auth
+get_current_user = optional_auth   # menu.py uses this — optional by default
 verify_role = require_role

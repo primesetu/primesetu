@@ -1,16 +1,16 @@
 # ============================================================
 # PrimeSetu - Shoper9-Based Retail OS
-# Zero Cloud · Sovereign · AI-Governed
+# Zero Cloud . Sovereign . AI-Governed
 # ============================================================
 # System Architect : Jawahar R Mallah
 # Organisation     : AITDL Network
 # Project          : PrimeSetu
-# © 2026 — All Rights Reserved
+# (c) 2026 - All Rights Reserved
 # "Memory, Not Code."
 # ============================================================
 
 """
-gst.py — GST calculation engine (Sovereign Money Standard)
+gst.py - GST calculation engine (Sovereign Money Standard)
 
 All monetary inputs/outputs are Decimal.
 Internal math uses Decimal for precision.
@@ -21,14 +21,14 @@ from dataclasses import dataclass, field
 from decimal import Decimal, ROUND_HALF_UP
 from typing import Optional, List
 
-# ── Valid GST slabs ───────────────────────────────────────────────────────────
+# .. Valid GST slabs ...........................................................
 VALID_GST_RATES = {Decimal("0"), Decimal("5"), Decimal("12"), Decimal("18"), Decimal("28")}
 
-# ── Input types ───────────────────────────────────────────────────────────────
+# .. Input types ...............................................................
 @dataclass
 class BillLineInput:
     product_id: int
-    qty: float                          # Quantity — float allows partial units
+    qty: float                          # Quantity - float allows partial units
     unit_price: Decimal                 # Monetary value (Decimal)
     mrp_at_billing: Decimal             # Monetary value (Decimal)
     gst_rate: Decimal                   # e.g. Decimal("18")
@@ -36,7 +36,7 @@ class BillLineInput:
     discount_amount: Decimal = Decimal("0")
 
 
-# ── Output types ──────────────────────────────────────────────────────────────
+# .. Output types ..............................................................
 @dataclass
 class BillLineResult:
     product_id: int
@@ -68,7 +68,7 @@ class BillTotals:
     lines: List[BillLineResult] = field(default_factory=list)
 
 
-# ── Engine ────────────────────────────────────────────────────────────────────
+# .. Engine ....................................................................
 class GSTEngine:
     """
     Stateless GST computation engine for the Sovereign Node.
@@ -162,7 +162,7 @@ class GSTEngine:
         )
 
 
-# ── Validators ────────────────────────────────────────────────────────────────
+# .. Validators ................................................................
 def validate_hsn(hsn_code: Optional[str]) -> bool:
     if not hsn_code:
         return False

@@ -1,11 +1,11 @@
 # ============================================================
-# * PrimeSetu â€” Shoper9-Based Retail OS
-# * Zero Cloud Â. Sovereign Â. AI-Governed
+# * PrimeSetu ... Shoper9-Based Retail OS
+# * Zero Cloud .. Sovereign .. AI-Governed
 # ============================================================
 # * System Architect   :  Jawahar R Mallah
 # * Organisation       :  AITDL Network
 # * Project            :  PrimeSetu
-# * Â(c) 2026 â€” All Rights Reserved
+# * .(c) 2026 ... All Rights Reserved
 # * "Memory, Not Code."
 # ============================================================ #
 

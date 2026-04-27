@@ -1,6 +1,6 @@
 # ============================================================
 # PrimeSetu - Shoper9-Based Retail OS
-# © 2026 AITDL Network
+# (c) 2026 AITDL Network
 # ============================================================
 
 from fastapi import APIRouter, Depends, HTTPException

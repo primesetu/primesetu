@@ -1,36 +1,36 @@
 # ============================================================
 # PrimeSetu - Shoper9-Based Retail OS
-# Zero Cloud · Sovereign · AI-Governed
+# Zero Cloud . Sovereign . AI-Governed
 # ============================================================
 # System Architect : Jawahar R Mallah
 # Organisation     : AITDL Network
 # Project          : PrimeSetu
-# © 2026 — All Rights Reserved
+# (c) 2026 - All Rights Reserved
 # "Memory, Not Code."
 # ============================================================
 
 """
-models.py — SQLAlchemy 2 async ORM models
+models.py - SQLAlchemy 2 async ORM models
 
 CHANGES from original:
-  1. All monetary columns migrated from Float → Numeric(12, 2)
+  1. All monetary columns migrated from Float . Numeric(12, 2)
      Prevents floating-point precision errors in financial calculations.
 
   2. Product gains:
-       hsn_code      — mandatory for GST invoicing
-       gst_rate      — percentage (0 / 5 / 12 / 18 / 28)
-       cost_price    — for margin / valuation reports
+       hsn_code      - mandatory for GST invoicing
+       gst_rate      - percentage (0 / 5 / 12 / 18 / 28)
+       cost_price    - for margin / valuation reports
 
   3. Bill gains:
-       store_id      — for multi-store RBAC isolation
+       store_id      - for multi-store RBAC isolation
        customer_gstin
-       bill_type     — 'sale' | 'return' | 'slip'
-       payment_mode  — 'cash' | 'upi' | 'card' | 'credit'
+       bill_type     - 'sale' | 'return' | 'slip'
+       payment_mode  - 'cash' | 'upi' | 'card' | 'credit'
        discount_amount
        subtotal_amount
-       cgst_amount   — Central GST
-       sgst_amount   — State GST
-       igst_amount   — Inter-state GST (B2B)
+       cgst_amount   - Central GST
+       sgst_amount   - State GST
+       igst_amount   - Inter-state GST (B2B)
        total_tax_amount
        round_off
        is_cancelled
@@ -40,7 +40,7 @@ CHANGES from original:
        discount_amount, line_total
 
   5. Store gains:
-       state_code    — for IGST vs CGST/SGST determination
+       state_code    - for IGST vs CGST/SGST determination
 """
 
 from sqlalchemy import (
@@ -53,12 +53,12 @@ from datetime import datetime
 from decimal import Decimal
 from typing import List, Optional
 
-# ── Helper type alias ─────────────────────────────────────────────────────────
-Money = Numeric(12, 2)      # ₹ amounts — always exact decimal
+# .. Helper type alias .........................................................
+Money = Numeric(12, 2)      # . amounts - always exact decimal
 GSTRate = Numeric(5, 2)     # percentage e.g. 18.00
 
 
-# ── Store ─────────────────────────────────────────────────────────────────────
+# .. Store .....................................................................
 class Store(Base):
     __tablename__ = "stores"
 
@@ -76,7 +76,7 @@ class Store(Base):
     users: Mapped[List["User"]] = relationship("User", back_populates="store")
 
 
-# ── User ──────────────────────────────────────────────────────────────────────
+# .. User ......................................................................
 class User(Base):
     __tablename__ = "users"
 
@@ -92,7 +92,7 @@ class User(Base):
     store: Mapped["Store"] = relationship("Store", back_populates="users")
 
 
-# ── Till ──────────────────────────────────────────────────────────────────────
+# .. Till ......................................................................
 class Till(Base):
     __tablename__ = "tills"
 
@@ -106,7 +106,7 @@ class Till(Base):
     last_sync: Mapped[datetime] = mapped_column(DateTime, server_default=text("now()"))
 
 
-# ── Product / Inventory ───────────────────────────────────────────────────────
+# .. Product / Inventory .......................................................
 class Product(Base):
     __tablename__ = "inventory"
 
@@ -117,21 +117,21 @@ class Product(Base):
     name: Mapped[str]     = mapped_column(String(255))
     barcode: Mapped[Optional[str]] = mapped_column(String(50), nullable=True)
 
-    # ── Pricing (Numeric — never Float) ──────────────────────────────────────
+    # .. Pricing (Numeric - never Float) ......................................
     mrp: Mapped[Decimal]        = mapped_column(Money,
         comment="Maximum Retail Price")
     cost_price: Mapped[Decimal] = mapped_column(Money, default=Decimal("0.00"),
-        comment="Purchase cost — used for margin/valuation")
+        comment="Purchase cost - used for margin/valuation")
     selling_price: Mapped[Optional[Decimal]] = mapped_column(Money, nullable=True,
         comment="Override price if different from MRP")
 
-    # ── GST ──────────────────────────────────────────────────────────────────
+    # .. GST ..................................................................
     hsn_code: Mapped[Optional[str]] = mapped_column(String(10), nullable=True,
-        comment="HSN/SAC code — mandatory for GST invoicing")
+        comment="HSN/SAC code - mandatory for GST invoicing")
     gst_rate: Mapped[Decimal] = mapped_column(GSTRate, default=Decimal("18.00"),
-        comment="GST % — 0 / 5 / 12 / 18 / 28")
+        comment="GST % - 0 / 5 / 12 / 18 / 28")
 
-    # ── Stock ─────────────────────────────────────────────────────────────────
+    # .. Stock .................................................................
     stock_qty: Mapped[int]    = mapped_column(Integer, default=0)
     reorder_level: Mapped[int] = mapped_column(Integer, default=5,
         comment="Alert threshold for low-stock")
@@ -142,29 +142,29 @@ class Product(Base):
         onupdate=datetime.utcnow)
 
 
-# ── Bill (Invoice / Receipt) ──────────────────────────────────────────────────
+# .. Bill (Invoice / Receipt) ..................................................
 class Bill(Base):
     __tablename__ = "bills"
 
     id: Mapped[int]       = mapped_column(primary_key=True)
     store_id: Mapped[str] = mapped_column(ForeignKey("stores.id"),
-        comment="Scoped per store — never cross-store leakage")
+        comment="Scoped per store - never cross-store leakage")
     bill_number: Mapped[str] = mapped_column(String(30), unique=True)
 
-    # ── Customer ──────────────────────────────────────────────────────────────
+    # .. Customer ..............................................................
     customer_name: Mapped[Optional[str]]  = mapped_column(String(200), nullable=True)
     customer_phone: Mapped[Optional[str]] = mapped_column(String(15), nullable=True)
     customer_gstin: Mapped[Optional[str]] = mapped_column(String(15), nullable=True,
         comment="Required for B2B GST invoices")
 
-    # ── Bill metadata ─────────────────────────────────────────────────────────
+    # .. Bill metadata .........................................................
     bill_type: Mapped[str]    = mapped_column(String(10), default="sale",
         comment="sale | return | slip")
     payment_mode: Mapped[str] = mapped_column(String(10), default="cash",
         comment="cash | upi | card | credit | split")
     cashier_id: Mapped[Optional[str]] = mapped_column(ForeignKey("users.id"), nullable=True)
 
-    # ── Amounts (all Numeric — never Float) ───────────────────────────────────
+    # .. Amounts (all Numeric - never Float) ...................................
     subtotal_amount: Mapped[Decimal]  = mapped_column(Money, default=Decimal("0.00"),
         comment="Sum of line totals before tax/discount")
     discount_amount: Mapped[Decimal]  = mapped_column(Money, default=Decimal("0.00"))
@@ -190,7 +190,7 @@ class Bill(Base):
                                                     cascade="all, delete-orphan")
 
 
-# ── Bill Line Item ────────────────────────────────────────────────────────────
+# .. Bill Line Item ............................................................
 class BillItem(Base):
     __tablename__ = "bill_items"
 
@@ -202,7 +202,7 @@ class BillItem(Base):
     unit_price: Mapped[Decimal]   = mapped_column(Money,
         comment="Effective selling price at time of billing")
     mrp_at_billing: Mapped[Decimal] = mapped_column(Money,
-        comment="MRP snapshot — immutable audit trail")
+        comment="MRP snapshot - immutable audit trail")
     discount_amount: Mapped[Decimal] = mapped_column(Money, default=Decimal("0.00"))
 
     # GST per line item
@@ -219,7 +219,7 @@ class BillItem(Base):
     bill: Mapped["Bill"] = relationship("Bill", back_populates="items")
 
 
-# ── Promotional Schemes ───────────────────────────────────────────────────────
+# .. Promotional Schemes .......................................................
 class Scheme(Base):
     __tablename__ = "schemes"
 
@@ -236,7 +236,7 @@ class Scheme(Base):
     created_at: Mapped[datetime] = mapped_column(DateTime, server_default=text("now()"))
 
 
-# ── System Alerts ─────────────────────────────────────────────────────────────
+# .. System Alerts .............................................................
 class Alert(Base):
     __tablename__ = "alerts"
 

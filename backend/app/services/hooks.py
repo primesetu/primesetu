@@ -58,7 +58,7 @@ class HookEngine:
         
         return current_data
 
-# ── DEFAULT SYSTEM HOOKS (Parity with Shoper 9) ───────────────────────────────
+# .. DEFAULT SYSTEM HOOKS (Parity with Shoper 9) ...............................
 
 async def validate_gst_compliance(data: Any) -> HookResponse:
     """Example Level 3 Hook: Ensure GST is never zero for taxable items."""

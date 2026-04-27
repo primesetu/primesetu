@@ -1,26 +1,26 @@
 # ============================================================
 # PrimeSetu - Shoper9-Based Retail OS
-# Zero Cloud · Sovereign · AI-Governed
+# Zero Cloud . Sovereign . AI-Governed
 # ============================================================
 # System Architect   :  Jawahar R Mallah
 # Organisation       :  AITDL Network
 # Project            :  PrimeSetu
-# © 2026 — All Rights Reserved
+# (c) 2026 - All Rights Reserved
 # "Memory, Not Code."
 # ============================================================
 
 """
-gstr1.py — GSTR-1 Compliance Export Engine
+gstr1.py - GSTR-1 Compliance Export Engine
 
 Generates the government-mandated GSTR-1 return payload:
   - B2B  : Business-to-Business invoices (customer has GSTIN)
-  - B2CS : Business-to-Consumer Small (aggregate, taxable value < ₹2.5L)
+  - B2CS : Business-to-Consumer Small (aggregate, taxable value < .2.5L)
   - HSN  : HSN-wise summary
   - DOCS : Document summary (invoice count)
 
 Usage:
-    GET /api/v1/gstr1/export?month=4&year=2026       → JSON payload
-    GET /api/v1/gstr1/export?month=4&year=2026&fmt=csv → CSV download
+    GET /api/v1/gstr1/export?month=4&year=2026       . JSON payload
+    GET /api/v1/gstr1/export?month=4&year=2026&fmt=csv . CSV download
 """
 
 from fastapi import APIRouter, Depends, Query
@@ -40,12 +40,12 @@ import json
 router = APIRouter(prefix="/api/v1/gstr1", tags=["gstr1"])
 
 
-# ── Constants ─────────────────────────────────────────────────────────────────
+# .. Constants .................................................................
 B2B_THRESHOLD = 0          # B2B if customer has GSTIN
 B2CS_THRESHOLD = 250000    # B2CS aggregate limit (GST Council)
 
 
-# ── Helpers ───────────────────────────────────────────────────────────────────
+# .. Helpers ...................................................................
 def _compute_gst_split(net_amount: float, tax_rate: float, is_inter_state: bool) -> dict:
     """
     Back-compute CGST/SGST/IGST from a tax-inclusive net amount.
@@ -61,7 +61,7 @@ def _compute_gst_split(net_amount: float, tax_rate: float, is_inter_state: bool)
         return {"taxable": taxable, "igst": 0.0, "cgst": half, "sgst": half}
 
 
-# ── Summary Endpoint ──────────────────────────────────────────────────────────
+# .. Summary Endpoint ..........................................................
 @router.get("/summary")
 async def get_gstr1_summary(
     db: AsyncSession = Depends(get_db),
@@ -74,7 +74,7 @@ async def get_gstr1_summary(
     return await export_gstr1(today.month, today.year, "json", db, current_user)
 
 
-# ── Main Export Endpoint ──────────────────────────────────────────────────────
+# .. Main Export Endpoint ......................................................
 @router.get("/export")
 async def export_gstr1(
     month: int = Query(..., ge=1, le=12, description="Return month (1-12)"),
@@ -190,7 +190,7 @@ async def export_gstr1(
                 }]
             })
         else:
-            # B2CS — aggregate by "state|tax_rate"
+            # B2CS - aggregate by "state|tax_rate"
             b2cs_key = f"{customer_state}|{invoice_items[0]['rt'] if invoice_items else 18.0}"
             if b2cs_key not in b2cs_aggregate:
                 b2cs_aggregate[b2cs_key] = {
@@ -253,10 +253,10 @@ def _build_csv_response(payload: dict, month: int, year: int) -> StreamingRespon
     writer = csv.writer(output)
 
     # Header
-    writer.writerow(["PrimeSetu — GSTR-1 Export"])
+    writer.writerow(["PrimeSetu - GSTR-1 Export"])
     writer.writerow([f"GSTIN: {payload['gstin']}",
                      f"Period: {month:02d}/{year}",
-                     f"Grand Total: ₹{payload['gt']:,.2f}"])
+                     f"Grand Total: .{payload['gt']:,.2f}"])
     writer.writerow([])
 
     # B2B Section

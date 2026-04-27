@@ -1,11 +1,11 @@
 # ============================================================
-# * PrimeSetu — Shoper9-Based Retail OS
-# * Zero Cloud · Sovereign · AI-Governed
+# * PrimeSetu - Shoper9-Based Retail OS
+# * Zero Cloud . Sovereign . AI-Governed
 # ============================================================
 # * System Architect   :  Jawahar R Mallah
 # * Organisation       :  AITDL Network
 # * Project            :  PrimeSetu
-# * © 2026 — All Rights Reserved
+# * (c) 2026 - All Rights Reserved
 # * "Memory, Not Code."
 # ============================================================ #
 
@@ -32,7 +32,7 @@ class SovereignMessenger:
         # For now, we simulate the success of the sovereign communication pulse.
         message = (
             f"Greetings from PrimeSetu Node!\n\n"
-            f"Your bill {bill_no} for ₹{total} has been finalized. \n"
+            f"Your bill {bill_no} for .{total} has been finalized. \n"
             f"Thank you for shopping with us.\n\n"
             f"Digital Sovereign Receipt: https://primesetu.io/r/{bill_no}"
         )

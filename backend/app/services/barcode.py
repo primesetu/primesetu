@@ -65,7 +65,7 @@ def print_barcode_label(
     ----------------------------------
     |         STORE NAME             |
     |  ITEM NAME (BOLD)              |
-    |  MRP: ₹1,299                   |
+    |  MRP: .1,299                   |
     |  Size: L  Col: Navy  HSN: 6109 |
     |  ||||||||||||||||||||||||||||  |
     |        BARCODE TEXT            |

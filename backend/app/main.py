@@ -1,11 +1,11 @@
 # ============================================================
 # PrimeSetu - Shoper9-Based Retail OS
-# Zero Cloud · Sovereign · AI-Governed
+# Zero Cloud . Sovereign . AI-Governed
 # ============================================================
 # System Architect : Jawahar R Mallah
 # Organisation     : AITDL Network
 # Project          : PrimeSetu
-# © 2026 — All Rights Reserved
+# (c) 2026 - All Rights Reserved
 # "Memory, Not Code."
 # ============================================================
 
@@ -25,11 +25,11 @@ from datetime import date
 import uvicorn
 
 app = FastAPI(
-    title="PrimeSetu — Sovereign Retail OS",
+    title="PrimeSetu - Sovereign Retail OS",
     redirect_slashes=False  # Crucial for CORS stability with frontend pulse
 )
 
-# ── CORS ──────────────────────────────────────────────────────────────────────
+# .. CORS ......................................................................
 ALLOWED_ORIGIN_REGEX = (
     r"https?://(localhost|127\.0\.0\.1"
     r"|(.*\.)?primesetu\.pages\.dev"

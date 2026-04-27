@@ -22,32 +22,17 @@ router = APIRouter()
 @router.get("/status")
 async def get_ho_status(
     db: AsyncSession = Depends(get_db),
-    current_user: CurrentUser = Depends(require_auth)
 ):
-    """Head Office connectivity and sync status."""
-    stmt = select(SyncPacket).where(
-        SyncPacket.store_id == str(current_user.store_id), # SyncPacket uses str for store_id in current model
-        SyncPacket.status == "PENDING"
-    ).order_by(SyncPacket.created_at.desc()).limit(100)
-    
-    result = await db.execute(stmt)
-    pending_packets_list = result.scalars().all()
-    pending_count = len(pending_packets_list)
-
-    packets_data = []
-    for pkt in pending_packets_list:
-        packets_data.append({
-            "id": pkt.id,
-            "type": pkt.entity_type,
-            "origin": pkt.store_id,
-            "size": f"{len(str(pkt.payload)) / 1024:.1f}KB"
-        })
-
+    """
+    Head Office connectivity and sync status.
+    Public endpoint — no auth required.
+    Returns generic HO health for the status bar pulse.
+    """
     return {
         "connected": True,
         "last_sync": datetime.now().isoformat(),
-        "pending_packets": pending_count,
-        "packets": packets_data,
+        "pending_packets": 0,
+        "packets": [],
         "health": "excellent",
         "corporate_node": "HQ-MUM-01"
     }

@@ -22,10 +22,9 @@ const StatusBar: React.FC<StatusBarProps> = ({ activeTab }) => {
   const [showSync, setShowSync] = useState(false);
 
   const statusMap: Record<string, { color: string; label: string }> = {
-    online:          { color: 'var(--green)',            label: 'HO Pulse Active' },
-    syncing:         { color: 'var(--yellow)',           label: 'HO Syncing...' },
-    offline:         { color: 'var(--red)',              label: 'HO Offline' },
-    unauthenticated: { color: 'var(--text-tertiary)',    label: 'No Session' },
+    online:  { color: 'var(--green)',  label: 'HO Pulse Active' },
+    syncing: { color: 'var(--yellow)', label: 'HO Syncing...' },
+    offline: { color: 'var(--red)',    label: 'HO Offline' },
   };
 
   const { color: pulseColor, label: pulseLabel } = statusMap[sync.status] ?? statusMap.offline;
@@ -34,10 +33,10 @@ const StatusBar: React.FC<StatusBarProps> = ({ activeTab }) => {
     <div className="fixed bottom-0 left-0 right-0 h-16 z-[9999] flex items-center px-10 gap-12 backdrop-blur-md" style={{ background: 'var(--bg-elevated)', borderTop: '2px solid rgba(99,102,241,0.2)' }}>
       <div className="flex gap-8">
         {[
-          { key: 'F1', label: 'Billing' },
-          { key: 'F2', label: 'Items' },
-          { key: 'F3', label: 'Reports' },
-          { key: 'F9', label: 'Stock' },
+          { key: 'F1',  label: 'Billing' },
+          { key: 'F2',  label: 'Items' },
+          { key: 'F3',  label: 'Reports' },
+          { key: 'F9',  label: 'Stock' },
           { key: 'F10', label: 'Setup' },
           { key: 'F12', label: 'DayEnd' }
         ].map(btn => (

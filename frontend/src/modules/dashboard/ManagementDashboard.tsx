@@ -151,7 +151,7 @@ export default function ManagementDashboard() {
         </div>
 
         {/* Institutional Health */}
-        <div className="bg-navy text-white rounded-[3rem] p-10 flex flex-col relative overflow-hidden border border-white/5 shadow-2xl">
+        <div style={{ background: 'var(--bg-overlay)', border: '1px solid var(--border-subtle)' }} className="rounded-[3rem] p-10 flex flex-col relative overflow-hidden shadow-2xl">
            <div className="absolute -bottom-24 -right-24 w-64 h-64 bg-brand-gold/5 blur-[80px] rounded-full" />
            <h3 className="text-xl font-black uppercase tracking-widest mb-12 text-center">Node Health</h3>
            

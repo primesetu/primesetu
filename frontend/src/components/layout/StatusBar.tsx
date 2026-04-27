@@ -22,25 +22,25 @@ const StatusBar: React.FC<StatusBarProps> = ({ activeTab }) => {
   const [showSync, setShowSync] = useState(false);
 
   const pulseColor = {
-    syncing: 'text-amber-400/70',
-    online:  'text-emerald-400/80',
-    offline: 'text-rose-400/80',
+    syncing: 'var(--yellow)',
+    online:  'var(--green)',
+    offline: 'var(--red)',
   }[sync.status];
 
   const pulseBarColor = {
-    syncing: 'bg-amber-400/50',
-    online:  'bg-emerald-400/70',
-    offline: 'bg-rose-400/70',
+    syncing: 'var(--yellow)',
+    online:  'var(--green)',
+    offline: 'var(--red)',
   }[sync.status];
 
   const pulseLabel = {
     syncing: 'HO Syncing...',
     online:  'HO Pulse Active',
-    offline: 'HO Offline',
+    offline: sync.nodeId === 'AUTH_REQUIRED' ? 'Auth Required' : 'HO Offline',
   }[sync.status];
 
   return (
-    <div className="fixed bottom-0 left-0 right-0 h-16 bg-navy border-t-2 border-gold/40 z-[9999] flex items-center px-10 gap-12 shadow-[0_-10px_40px_rgba(13,27,62,0.5)] backdrop-blur-md">
+    <div className="fixed bottom-0 left-0 right-0 h-16 z-[9999] flex items-center px-10 gap-12 backdrop-blur-md" style={{ background: 'var(--bg-elevated)', borderTop: '2px solid rgba(99,102,241,0.2)' }}>
       <div className="flex gap-8">
         {[
           { key: 'F1', label: 'Billing' },
@@ -51,8 +51,8 @@ const StatusBar: React.FC<StatusBarProps> = ({ activeTab }) => {
           { key: 'F12', label: 'DayEnd' }
         ].map(btn => (
           <div key={btn.key} className={`flex items-center gap-3 group cursor-pointer ${activeTab === btn.label.toLowerCase() ? 'opacity-100' : 'opacity-60 hover:opacity-100'} transition-opacity`}>
-             <span className="text-gold font-mono font-black text-lg group-hover:scale-125 transition-transform">{btn.key}</span>
-             <span className="text-white/60 font-black text-xs uppercase tracking-[0.2em] group-hover:text-white transition-colors">{btn.label}</span>
+             <span className="font-mono font-semibold text-lg group-hover:scale-125 transition-transform" style={{ color: 'var(--accent-light)' }}>{btn.key}</span>
+             <span className="font-semibold text-xs uppercase tracking-wider transition-colors" style={{ color: 'var(--text-secondary)' }}>{btn.label}</span>
           </div>
         ))}
       </div>
@@ -63,15 +63,16 @@ const StatusBar: React.FC<StatusBarProps> = ({ activeTab }) => {
         {/* HO Pulse Indicator — live */}
         <div 
           onClick={() => setShowSync(true)}
-          className="flex items-center gap-3 border-l border-white/10 pl-8 cursor-pointer hover:opacity-80 transition-opacity active:scale-95"
+          className="flex items-center gap-3 pl-8 cursor-pointer hover:opacity-80 transition-opacity active:scale-95" style={{ borderLeft: '1px solid var(--border-subtle)' }}
         >
           <div className="flex gap-1 items-end">
             {[1, 2, 3].map(i => (
               <div
                 key={i}
-                className={`w-1 rounded-full transition-all ${pulseBarColor} ${sync.status === 'online' ? 'animate-pulse' : ''}`}
+                className={`w-1 rounded-full transition-all ${sync.status === 'online' ? 'animate-pulse' : ''}`}
                 style={{
                   height: `${8 + i * 4}px`,
+                  background: pulseBarColor,
                   animationDelay: `${i * 180}ms`,
                   opacity: sync.status === 'syncing' ? 0.4 : 1
                 }}
@@ -79,20 +80,20 @@ const StatusBar: React.FC<StatusBarProps> = ({ activeTab }) => {
             ))}
           </div>
           <div>
-            <div className={`text-xs font-black uppercase tracking-[0.3em] ${pulseColor}`}>
+            <div className="text-xs font-semibold uppercase tracking-wider" style={{ color: pulseColor }}>
               {pulseLabel}
             </div>
             {sync.lastSync && sync.status !== 'offline' && (
-              <div className="text-2xs text-white/40 font-mono">Last: {sync.lastSync.toLocaleTimeString('en-IN', { hour: '2-digit', minute: '2-digit' })}</div>
+              <div className="text-[10px] font-mono" style={{ color: 'var(--text-tertiary)' }}>Last: {sync.lastSync.toLocaleTimeString('en-IN', { hour: '2-digit', minute: '2-digit' })}</div>
             )}
             {sync.pendingCount > 0 && (
-              <div className="text-2xs text-amber-400 font-mono">Pending: {sync.pendingCount}</div>
+              <div className="text-[10px] font-mono" style={{ color: 'var(--yellow)' }}>Pending: {sync.pendingCount}</div>
             )}
           </div>
         </div>
 
         {/* Node identity */}
-        <div className="text-white/30 text-xs font-black uppercase tracking-[0.6em] pr-4 border-l border-white/10 pl-8">
+        <div className="text-xs font-semibold uppercase tracking-wider pr-4 pl-8" style={{ color: 'var(--text-tertiary)', borderLeft: '1px solid var(--border-subtle)' }}>
           {sync.nodeId || 'PST-X01'} · NODE v2.0
         </div>
       </div>

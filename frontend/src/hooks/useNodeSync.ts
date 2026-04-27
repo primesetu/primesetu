@@ -45,9 +45,15 @@ export function useNodeSync(): NodeSyncState {
         latencyMs,
         nodeId: data.corporate_node
       });
-    } catch (err) {
-      console.warn('[PrimeSetu] HO Pulse Failed:', err);
-      setState(prev => ({ ...prev, status: 'offline', latencyMs: null }));
+    } catch (err: any) {
+      const isAuthError = err.response?.status === 401;
+      console.warn('[PrimeSetu] HO Pulse Failed:', isAuthError ? 'Unauthorized' : err.message);
+      setState(prev => ({ 
+        ...prev, 
+        status: 'offline', 
+        latencyMs: null,
+        nodeId: isAuthError ? 'AUTH_REQUIRED' : prev.nodeId
+      }));
     }
   }, []);
 

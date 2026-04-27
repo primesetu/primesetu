@@ -114,6 +114,12 @@ const PrimeSetuOS: React.FC = () => {
   });
 
   const handleLogin = (role: string) => {
+    // If bypass is used, we set a mock user context
+    setUser({
+      name: 'System Admin (Bypass)',
+      role: role.toUpperCase(),
+      store_id: 'X01'
+    });
     setActiveTab(role === 'CASHIER' ? 'sales' : 'dashboard');
   };
 

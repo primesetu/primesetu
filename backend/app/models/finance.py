@@ -8,7 +8,7 @@ class TillHardware(Base):
     __tablename__ = "till_hardware"
 
     id = Column(PGUUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
-    store_id = Column(PGUUID(as_uuid=True), ForeignKey("stores.id", ondelete="CASCADE"), nullable=False)
+    store_id = Column(String, ForeignKey("stores.id", ondelete="CASCADE"), nullable=False)
     name = Column(String, nullable=False)
     code = Column(String, nullable=False)
     created_at = Column(DateTime(timezone=True), server_default=text("now()"), nullable=False)
@@ -17,7 +17,7 @@ class TillSession(Base):
     __tablename__ = "till_sessions"
 
     id = Column(PGUUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
-    store_id = Column(PGUUID(as_uuid=True), ForeignKey("stores.id", ondelete="CASCADE"), nullable=False)
+    store_id = Column(String, ForeignKey("stores.id", ondelete="CASCADE"), nullable=False)
     till_hardware_id = Column(PGUUID(as_uuid=True), ForeignKey("till_hardware.id"), nullable=True) # Added FK
     opened_by = Column(PGUUID(as_uuid=True), nullable=False)
     closed_by = Column(PGUUID(as_uuid=True), nullable=True)
@@ -35,7 +35,7 @@ class PosCashTrn(Base):
     __tablename__ = "pos_cash_trn"
 
     id = Column(PGUUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
-    store_id = Column(PGUUID(as_uuid=True), ForeignKey("stores.id", ondelete="CASCADE"), nullable=False)
+    store_id = Column(String, ForeignKey("stores.id", ondelete="CASCADE"), nullable=False)
     till_session_id = Column(PGUUID(as_uuid=True), ForeignKey("till_sessions.id"), nullable=False)
     user_id = Column(PGUUID(as_uuid=True), nullable=False)
     trn_type = Column(String, nullable=False)

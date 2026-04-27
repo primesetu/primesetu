@@ -8,7 +8,7 @@ class VaGroup(Base):
     __tablename__ = "va_groups"
 
     id = Column(PGUUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
-    store_id = Column(PGUUID(as_uuid=True), ForeignKey("stores.id", ondelete="CASCADE"), nullable=False)
+    store_id = Column(String, ForeignKey("stores.id", ondelete="CASCADE"), nullable=False)
     name = Column(String, nullable=False)
     description = Column(String, nullable=True)
     is_active = Column(Boolean, nullable=False, default=True)
@@ -45,5 +45,5 @@ class VaUserGroup(Base):
     id = Column(PGUUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
     user_id = Column(PGUUID(as_uuid=True), nullable=False)
     group_id = Column(PGUUID(as_uuid=True), ForeignKey("va_groups.id", ondelete="CASCADE"), nullable=False)
-    store_id = Column(PGUUID(as_uuid=True), ForeignKey("stores.id", ondelete="CASCADE"), nullable=False)
+    store_id = Column(String, ForeignKey("stores.id", ondelete="CASCADE"), nullable=False)
     created_at = Column(DateTime(timezone=True), server_default=text("now()"), nullable=False)

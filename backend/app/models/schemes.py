@@ -8,7 +8,7 @@ class PromoHeader(Base):
     __tablename__ = "promo_header"
 
     id = Column(PGUUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
-    store_id = Column(PGUUID(as_uuid=True), ForeignKey("stores.id", ondelete="CASCADE"), nullable=False)
+    store_id = Column(String, ForeignKey("stores.id", ondelete="CASCADE"), nullable=False)
     promo_code = Column(String, nullable=False)
     description = Column(String, nullable=False)
     promo_type = Column(String, nullable=False)

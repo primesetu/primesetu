@@ -8,7 +8,7 @@ class PrintTemplate(Base):
     __tablename__ = "print_templates"
 
     id = Column(PGUUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
-    store_id = Column(PGUUID(as_uuid=True), ForeignKey("stores.id", ondelete="CASCADE"), nullable=False)
+    store_id = Column(String, ForeignKey("stores.id", ondelete="CASCADE"), nullable=False)
     template_name = Column(String, nullable=False)
     template_type = Column(String, nullable=False)
     is_active = Column(Boolean, nullable=False, default=True)
@@ -37,7 +37,7 @@ class ReportConfig(Base):
     __tablename__ = "report_configs"
 
     id = Column(PGUUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
-    store_id = Column(PGUUID(as_uuid=True), ForeignKey("stores.id", ondelete="CASCADE"), nullable=False)
+    store_id = Column(String, ForeignKey("stores.id", ondelete="CASCADE"), nullable=False)
     report_name = Column(String, nullable=False)
     module = Column(String, nullable=False)
     query_json = Column(JSONB, nullable=False)
@@ -50,7 +50,7 @@ class ReportSchedule(Base):
 
     id = Column(PGUUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
     report_id = Column(PGUUID(as_uuid=True), ForeignKey("report_configs.id", ondelete="CASCADE"), nullable=False)
-    store_id = Column(PGUUID(as_uuid=True), ForeignKey("stores.id", ondelete="CASCADE"), nullable=False)
+    store_id = Column(String, ForeignKey("stores.id", ondelete="CASCADE"), nullable=False)
     frequency = Column(String, nullable=False)
     send_time = Column(String, nullable=False)
     email_to = Column(String, nullable=False)

@@ -10,8 +10,8 @@
 # ============================================================ #
 
 import uuid
-from pydantic import BaseModel, Field
-from typing import List, Optional
+from pydantic import BaseModel, Field, ConfigDict
+from typing import List, Optional, Dict, Any
 from datetime import datetime
 
 class PaymentModeDetail(BaseModel):
@@ -49,3 +49,35 @@ class SlipResponse(BaseModel):
     slip_no: str
     slip_id: uuid.UUID
     total: int = Field(..., description="Total amount in paise (integer)")
+
+class TransactionItemRead(BaseModel):
+    id: uuid.UUID
+    product_id: uuid.UUID
+    qty: float
+    mrp: int
+    discount_per: int
+    tax_amount: int
+    net_amount: int
+    model_config = ConfigDict(from_attributes=True)
+
+class TransactionRead(BaseModel):
+    id: uuid.UUID
+    bill_no: Optional[str] = None
+    customer_id: Optional[uuid.UUID] = None
+    type: str
+    payments: Optional[Dict[str, Any]] = None
+    subtotal: int
+    discount_total: int
+    tax_total: int
+    net_payable: int
+    status: str
+    created_at: datetime
+    items: List[TransactionItemRead] = []
+    model_config = ConfigDict(from_attributes=True)
+
+class TransactionCreate(BaseModel):
+    customer_mobile: Optional[str] = None
+    items: List[BillItemCreate]
+    payments: Optional[List[PaymentModeDetail]] = None
+    type: str = "Sales"
+    till_id: Optional[uuid.UUID] = None

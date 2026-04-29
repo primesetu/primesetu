@@ -1,10 +1,10 @@
 /* ============================================================
- * PrimeSetu — Shoper9-Based Retail OS
+ * SMRITI-OS — Shoper9-Based Retail OS
  * Zero Cloud · Sovereign · AI-Governed
  * ============================================================
  * System Architect   :  Jawahar R Mallah
  * Organisation       :  AITDL Network
- * Project            :  PrimeSetu
+ * Project            :  SMRITI-OS
  * © 2026 — All Rights Reserved
  * "Memory, Not Code."
  * ============================================================ */
@@ -19,7 +19,7 @@ export interface SyncPacket {
 }
 
 class SyncEngine {
-  private queueKey = 'primesetu_sync_queue'
+  private queueKey = 'SMRITI-OS_sync_queue'
 
   constructor() {
     if (typeof window !== 'undefined') {

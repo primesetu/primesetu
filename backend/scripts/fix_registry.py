@@ -1,6 +1,6 @@
 import re
 
-file_path = r"d:\IMP\GitHub\primesetu\frontend\src\lib\ModuleRegistry.tsx"
+file_path = r"d:\IMP\GitHub\SMRITI-OS\frontend\src\lib\ModuleRegistry.tsx"
 
 with open(file_path, "r", encoding="utf-8") as f:
     content = f.read()

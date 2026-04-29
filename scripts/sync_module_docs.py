@@ -2,14 +2,14 @@ import os
 import re
 from pathlib import Path
 
-# PrimeSetu Signature Block
+# SMRITI-OS Signature Block
 SIGNATURE = """/* ============================================================
- * PrimeSetu — Shoper9-Based Retail OS
+ * SMRITI-OS — Shoper9-Based Retail OS
  * Zero Cloud · Sovereign · AI-Governed
  * ============================================================
  * System Architect   :  Jawahar R Mallah
  * Organisation       :  AITDL Network
- * Project            :  PrimeSetu
+ * Project            :  SMRITI-OS
  * © 2026 — All Rights Reserved
  * "Memory, Not Code."
  * ============================================================ */
@@ -122,7 +122,7 @@ def update_module_doc(module_name):
 
 def generate_overview(modules_info):
     overview_path = DOCS_DIR / "IMPLEMENTATION.md"
-    content = f"{SIGNATURE}\n# PrimeSetu Module Implementation Overview\n\n"
+    content = f"{SIGNATURE}\n# SMRITI-OS Module Implementation Overview\n\n"
     content += "This document provides a summary of all implemented modules and their dependency on Shoper9.\n\n"
     content += "| Module | Frontend | Backend | Shoper9 Integration |\n"
     content += "|--------|----------|---------|---------------------|\n"

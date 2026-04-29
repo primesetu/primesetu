@@ -14,7 +14,7 @@ def extract_schema(instance=".", database="Shoper9001"):
         cursor.execute("SELECT TABLE_NAME FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_TYPE = 'BASE TABLE'")
         tables = [row.TABLE_NAME for row in cursor.fetchall()]
         
-        # We focus on interesting ones for PrimeSetu
+        # We focus on interesting ones for SMRITI-OS
         shoper_focus = [
             'SaleHeader', 'SaleDetail', 'Stock', 'ItemMaster', 'Partners', 
             'GenLookUp', 'StoreMaster', 'TillMaster', 'InventoryHeader', 'InventoryDetail'
@@ -38,7 +38,7 @@ def extract_schema(instance=".", database="Shoper9001"):
                 schema[table] = columns
         
         # Save to a file in skills directory or as an artifact
-        output_path = os.path.join("d:\\IMP\\GitHub\\primesetu\\skills", f"shoper9_schema_{database}.json")
+        output_path = os.path.join("d:\\IMP\\GitHub\\SMRITI-OS\\skills", f"shoper9_schema_{database}.json")
         with open(output_path, 'w') as f:
             json.dump(schema, f, indent=4)
         

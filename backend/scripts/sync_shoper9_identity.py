@@ -6,7 +6,7 @@ from sqlalchemy import select
 import uuid
 
 # ============================================================
-# PrimeSetu - Shoper 9 "Zero-Config" Identity Sync
+# SMRITI-OS - Shoper 9 "Zero-Config" Identity Sync
 # Phase 5: Importing Stores & Users from System Kernel (tspsysdb9)
 # ============================================================
 
@@ -82,7 +82,7 @@ async def sync_identity():
                     print(f"Updated User: {u['name']}")
 
         await session.commit()
-        print("Identity Sync Complete. You can now use Shoper 9 Store IDs in PrimeSetu.")
+        print("Identity Sync Complete. You can now use Shoper 9 Store IDs in SMRITI-OS.")
 
 if __name__ == "__main__":
     asyncio.run(sync_identity())

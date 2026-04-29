@@ -1,5 +1,5 @@
 /* ============================================================
- * PrimeSetu — TopBar Component
+ * SMRITI-OS — TopBar Component
  * Design: Stripe/Notion-inspired minimal topbar
  * © 2026 AITDL Network
  * ============================================================ */
@@ -129,7 +129,7 @@ export default function TopBar({
 
       {/* ── Breadcrumb ── */}
       <div className="flex items-center gap-1.5 text-xs overflow-hidden flex-1">
-        <span className="text-[var(--text-tertiary)] shrink-0">PrimeSetu</span>
+        <span className="text-[var(--text-tertiary)] shrink-0">SMRITI-OS</span>
         <span className="text-[var(--border-default)]">/</span>
         <span className="text-[var(--text-primary)] font-medium truncate">
           {activeModule?.label || 'Dashboard'}

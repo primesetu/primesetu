@@ -1,5 +1,5 @@
 /* ============================================================
- * PrimeSetu — Shoper9-Based Retail OS
+ * SMRITI-OS — Shoper9-Based Retail OS
  * Zero Cloud · Sovereign · AI-Governed
  * ============================================================ */
 

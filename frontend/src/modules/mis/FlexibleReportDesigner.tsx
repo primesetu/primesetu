@@ -1,5 +1,5 @@
 /* ============================================================
- * PrimeSetu — Shoper9-Based Retail OS
+ * SMRITI-OS — Shoper9-Based Retail OS
  * Zero Cloud · Sovereign · AI-Governed
  * ============================================================ */
 import React, { useState } from 'react';
@@ -79,8 +79,8 @@ export default function FlexibleReportDesigner() {
   return (
     <div className="flex h-[calc(100vh-12rem)] gap-6 animate-in fade-in slide-in-from-bottom-4 duration-700">
       {/* Sidebar: Data Elements */}
-      <div className="w-72 bg-white/50 backdrop-blur-xl border border-white/60 rounded-[2.5rem] p-8 flex flex-col shadow-xl shadow-navy/5">
-        <h3 className="text-[10px] font-black text-navy/40 uppercase tracking-[0.3em] mb-8 flex items-center gap-3">
+      <div className="w-72 bg-bg-elevated/40 backdrop-blur-xl border border-border rounded-[2.5rem] p-8 flex flex-col shadow-xl shadow-navy/5">
+        <h3 className="text-[10px] font-black text-text-primary/40 uppercase tracking-[0.3em] mb-8 flex items-center gap-3">
           <Layout size={14} /> Data Elements
         </h3>
         
@@ -152,7 +152,7 @@ export default function FlexibleReportDesigner() {
         </div>
 
         {/* Action Bar */}
-        <div className="flex items-center justify-between px-8 py-4 bg-white/50 backdrop-blur-xl border border-white/60 rounded-[2rem] shadow-lg shadow-navy/5">
+        <div className="flex items-center justify-between px-8 py-4 bg-bg-elevated/40 backdrop-blur-xl border border-border rounded-[2rem] shadow-lg shadow-navy/5">
           <div className="flex items-center gap-6">
              <div className="flex items-center gap-2 text-navy/40">
                 <Filter size={14} />
@@ -169,23 +169,23 @@ export default function FlexibleReportDesigner() {
         </div>
 
         {/* Results Canvas */}
-        <div className="flex-1 bg-white/50 backdrop-blur-xl border border-white/60 rounded-[2.5rem] p-10 shadow-xl shadow-navy/5 overflow-hidden flex flex-col">
+        <div className="flex-1 bg-bg-elevated/40 backdrop-blur-xl border border-border rounded-[2.5rem] p-10 shadow-xl shadow-navy/5 overflow-hidden flex flex-col">
           {reportData ? (
              <div className="flex-1 flex flex-col overflow-hidden">
                 <div className="flex justify-between items-center mb-8">
-                   <h3 className="text-xl font-serif font-black text-navy uppercase tracking-tighter">Matrix Analysis</h3>
+                   <h3 className="text-xl font-serif font-black text-text-primary uppercase tracking-tighter">Matrix Analysis</h3>
                    <div className="flex gap-2">
-                      <button className="p-3 bg-navy/5 text-navy rounded-xl hover:bg-navy hover:text-white transition-all"><FileJson size={18} /></button>
-                      <button className="p-3 bg-navy/5 text-navy rounded-xl hover:bg-navy hover:text-white transition-all"><TableIcon size={18} /></button>
+                      <button className="p-3 bg-bg-float text-text-secondary rounded-xl hover:bg-brand-navy hover:text-white transition-all"><FileJson size={18} /></button>
+                      <button className="p-3 bg-bg-float text-text-secondary rounded-xl hover:bg-brand-navy hover:text-white transition-all"><TableIcon size={18} /></button>
                    </div>
                 </div>
-                <div className="flex-1 overflow-auto custom-scrollbar border border-navy/5 rounded-3xl">
+                <div className="flex-1 overflow-auto custom-scrollbar border border-border rounded-3xl">
                    <PivotTable report={reportData} />
                 </div>
              </div>
           ) : (
-            <div className="flex-1 flex flex-col items-center justify-center text-navy/20 gap-6">
-              <div className="w-24 h-24 bg-navy/[0.03] rounded-full flex items-center justify-center animate-pulse">
+            <div className="flex-1 flex flex-col items-center justify-center text-text-secondary gap-6">
+              <div className="w-24 h-24 bg-bg-float rounded-full flex items-center justify-center animate-pulse">
                 <Layout size={40} strokeWidth={1} />
               </div>
               <div className="text-center">
@@ -212,7 +212,7 @@ function DropZone({ label, items, onDrop, onRemove }: DropZoneProps) {
     <div 
       onDragOver={(e) => e.preventDefault()}
       onDrop={onDrop}
-      className="bg-white/50 backdrop-blur-xl border-2 border-dashed border-navy/10 rounded-[2rem] p-6 min-h-[140px] transition-all hover:border-navy/20 group"
+      className="bg-bg-input/50 backdrop-blur-xl border-2 border-dashed border-border rounded-[2rem] p-6 min-h-[140px] transition-all hover:border-brand-saffron/30 group"
     >
       <div className="text-[9px] font-black text-navy/30 uppercase tracking-[0.2em] mb-4 group-hover:text-navy/50 transition-colors">{label}</div>
       <div className="flex flex-wrap gap-2">
@@ -260,11 +260,11 @@ function PivotTable({ report }: {
           ))}
         </tr>
       </thead>
-      <tbody className="divide-y divide-navy/5 bg-white/30">
+      <tbody className="divide-y divide-border bg-bg-float/30">
         {data.map((row: any, i: number) => (
-          <tr key={i} className="hover:bg-navy/[0.02] transition-colors">
+          <tr key={i} className="hover:bg-bg-elevated transition-colors">
             {headers.map(h => (
-              <td key={h} className={`px-6 py-4 text-xs ${metadata.values.includes(h) ? 'font-mono font-black text-navy' : 'font-bold text-navy/60 uppercase'}`}>
+              <td key={h} className={`px-6 py-4 text-xs ${metadata.values.includes(h) ? 'font-mono font-black text-text-primary' : 'font-bold text-text-secondary uppercase'}`}>
                 {metadata.values.includes(h) && h.includes('amount') ? formatCurrency(row[h]) : row[h]}
               </td>
             ))}

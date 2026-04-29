@@ -1,0 +1,424 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Employee Management - RETAIL OS</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;900&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "primary-fixed-dim": "#bec6e0",
+                        "on-tertiary-container": "#957d5a",
+                        "on-tertiary": "#3e2d11",
+                        "inverse-surface": "#e4e2e4",
+                        "primary-container": "#0f172a",
+                        "secondary": "#b9c7e0",
+                        "primary-fixed": "#dae2fd",
+                        "surface-tint": "#bec6e0",
+                        "on-secondary": "#233144",
+                        "on-background": "#e4e2e4",
+                        "outline": "#909097",
+                        "secondary-fixed-dim": "#b9c7e0",
+                        "surface-variant": "#353436",
+                        "on-primary-container": "#798098",
+                        "error-container": "#93000a",
+                        "surface-bright": "#39393b",
+                        "on-primary": "#283044",
+                        "on-surface-variant": "#c6c6cd",
+                        "surface-container-lowest": "#0e0e10",
+                        "surface": "#131315",
+                        "inverse-on-surface": "#303032",
+                        "on-surface": "#e4e2e4",
+                        "on-tertiary-fixed": "#271901",
+                        "tertiary-fixed": "#fcdeb5",
+                        "surface-container": "#1f1f21",
+                        "surface-dim": "#131315",
+                        "surface-container-high": "#2a2a2b",
+                        "tertiary-fixed-dim": "#dec29a",
+                        "outline-variant": "#45464d",
+                        "surface-container-highest": "#353436",
+                        "on-primary-fixed-variant": "#3f465c",
+                        "background": "#131315",
+                        "secondary-container": "#3c4a5e",
+                        "on-secondary-fixed": "#0d1c2f",
+                        "on-tertiary-fixed-variant": "#574425",
+                        "primary": "#bec6e0",
+                        "on-secondary-container": "#abb9d2",
+                        "error": "#ffb4ab",
+                        "on-primary-fixed": "#131b2e",
+                        "on-error-container": "#ffdad6",
+                        "on-error": "#690005",
+                        "surface-container-low": "#1b1b1d",
+                        "inverse-primary": "#565e74",
+                        "secondary-fixed": "#d5e3fd",
+                        "tertiary-container": "#231500",
+                        "tertiary": "#dec29a",
+                        "on-secondary-fixed-variant": "#3a485c"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.125rem",
+                        "lg": "0.25rem",
+                        "xl": "0.5rem",
+                        "full": "0.75rem"
+                    },
+                    "spacing": {
+                        "container-padding": "24px",
+                        "component-gap-md": "16px",
+                        "gutter": "16px",
+                        "component-gap-sm": "8px",
+                        "component-gap-xs": "4px",
+                        "unit": "4px"
+                    },
+                    "fontFamily": {
+                        "body-sm": ["Inter"],
+                        "label-caps": ["Inter"],
+                        "display": ["Inter"],
+                        "body-lg": ["Inter"],
+                        "data-tabular": ["Inter"],
+                        "h2": ["Inter"],
+                        "h1": ["Inter"]
+                    },
+                    "fontSize": {
+                        "body-sm": ["14px", { "lineHeight": "20px", "fontWeight": "400" }],
+                        "label-caps": ["11px", { "lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "700" }],
+                        "display": ["36px", { "lineHeight": "44px", "letterSpacing": "-0.02em", "fontWeight": "700" }],
+                        "body-lg": ["16px", { "lineHeight": "24px", "fontWeight": "400" }],
+                        "data-tabular": ["13px", { "lineHeight": "18px", "fontWeight": "500" }],
+                        "h2": ["20px", { "lineHeight": "28px", "fontWeight": "600" }],
+                        "h1": ["24px", { "lineHeight": "32px", "letterSpacing": "-0.01em", "fontWeight": "600" }]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        body { font-family: 'Inter', sans-serif; }
+    </style>
+</head>
+<body class="bg-background text-on-background min-h-screen">
+<!-- TopAppBar -->
+<header class="fixed top-0 right-0 left-64 h-16 flex items-center justify-between px-6 z-40 bg-slate-950/95 backdrop-blur-md border-b border-slate-800/50">
+<div class="flex items-center gap-4">
+<div class="text-lg font-black tracking-tighter text-slate-100 uppercase">RETAIL OS</div>
+<!-- Search Bar on Left -->
+<div class="relative flex items-center bg-surface-container-high border border-outline-variant rounded px-3 py-1.5 focus-within:border-primary focus-within:ring-1 focus-within:ring-primary transition-all">
+<span class="material-symbols-outlined text-on-surface-variant text-[18px] mr-2">search</span>
+<input class="bg-transparent border-none outline-none text-body-sm font-body-sm text-on-surface w-64 placeholder:text-on-surface-variant p-0 focus:ring-0" placeholder="Search employees..." type="text"/>
+</div>
+</div>
+<div class="flex items-center gap-6">
+<div class="flex items-center gap-4">
+<button class="text-slate-400 hover:bg-slate-800/50 hover:text-white transition-all p-2 rounded flex items-center justify-center">
+<span class="material-symbols-outlined text-[20px]">notifications</span>
+</button>
+<button class="text-slate-400 hover:bg-slate-800/50 hover:text-white transition-all p-2 rounded flex items-center justify-center">
+<span class="material-symbols-outlined text-[20px]">history</span>
+</button>
+<button class="text-slate-400 hover:bg-slate-800/50 hover:text-white transition-all p-2 rounded flex items-center justify-center">
+<span class="material-symbols-outlined text-[20px]">help_outline</span>
+</button>
+</div>
+<div class="flex items-center gap-3 border-l border-slate-800/50 pl-6">
+<button class="font-body-sm text-body-sm text-slate-400 hover:text-white transition-colors">Support</button>
+<button class="bg-sky-500 hover:bg-sky-400 text-slate-950 font-label-caps text-label-caps px-4 py-2 rounded transition-colors flex items-center gap-2">
+<span class="material-symbols-outlined text-[16px]" style="font-variation-settings: 'FILL' 1;">add</span>
+                    Create Order
+                </button>
+</div>
+</div>
+</header>
+<!-- SideNavBar -->
+<nav class="fixed left-0 top-0 bottom-0 w-64 flex flex-col py-6 z-50 bg-slate-900 border-r border-white/5 shadow-xl shadow-black/40">
+<div class="px-6 mb-8 flex flex-col gap-2">
+<div class="flex items-center gap-3">
+<div class="w-8 h-8 rounded bg-primary-container border border-outline-variant flex items-center justify-center overflow-hidden">
+<img alt="Corporate Logo" class="w-full h-full object-cover" data-alt="minimalist geometric abstract corporate logo design in deep blue and white" src="https://lh3.googleusercontent.com/aida-public/AB6AXuB9Vm9sSY-r9c0rbGH0qfsPL08bx-th8YkOuPExybuyASPvpXbJxPmWH6Kre8vRXqvPvS9rXCDcpSC39BvGJET6Rp0ZmlJvZ9YE5EGNXwABDxBlG5T2uwk2t9xFFXXHKA_cFfWl0Z7PWSt50oL38m2R48CL9T9pE9r2kCPPYIYfeh8QkXXMGktmgKlplZPM3wQECfSbO75UuqvmV5l9S6sVuRL21GaQj5qym9rgvZJqzWJLVdVretjpR2xwOdWPh7BpNRDvAsPnMZQ"/>
+</div>
+<div>
+<h2 class="text-xl font-bold text-slate-50 leading-tight">OPERATIONS</h2>
+<p class="font-label-caps text-label-caps text-slate-400">Enterprise Node 01</p>
+</div>
+</div>
+</div>
+<div class="flex-1 flex flex-col gap-1 px-2">
+<a class="text-slate-400 flex items-center px-4 py-3 gap-3 rounded hover:bg-slate-800/80 hover:text-slate-200 transition-colors duration-150 font-inter text-[13px] font-semibold tracking-wide" href="#">
+<span class="material-symbols-outlined text-[20px]">leaderboard</span>
+                Executive
+            </a>
+<a class="text-slate-400 flex items-center px-4 py-3 gap-3 rounded hover:bg-slate-800/80 hover:text-slate-200 transition-colors duration-150 font-inter text-[13px] font-semibold tracking-wide" href="#">
+<span class="material-symbols-outlined text-[20px]">inventory_2</span>
+                Inventory
+            </a>
+<a class="text-sky-400 bg-sky-500/5 border-r-2 border-sky-500 flex items-center px-4 py-3 gap-3 rounded hover:bg-slate-800/80 transition-colors duration-150 font-inter text-[13px] font-semibold tracking-wide translate-x-1" href="#">
+<span class="material-symbols-outlined text-[20px]" style="font-variation-settings: 'FILL' 1;">badge</span>
+                Staffing
+            </a>
+<a class="text-slate-400 flex items-center px-4 py-3 gap-3 rounded hover:bg-slate-800/80 hover:text-slate-200 transition-colors duration-150 font-inter text-[13px] font-semibold tracking-wide" href="#">
+<span class="material-symbols-outlined text-[20px]">analytics</span>
+                Insights
+            </a>
+<a class="text-slate-400 flex items-center px-4 py-3 gap-3 rounded hover:bg-slate-800/80 hover:text-slate-200 transition-colors duration-150 font-inter text-[13px] font-semibold tracking-wide" href="#">
+<span class="material-symbols-outlined text-[20px]">admin_panel_settings</span>
+                Security
+            </a>
+</div>
+<div class="mt-auto px-2 flex flex-col gap-1 border-t border-white/5 pt-4">
+<a class="text-slate-400 flex items-center px-4 py-3 gap-3 rounded hover:bg-slate-800/80 hover:text-slate-200 transition-colors duration-150 font-inter text-[13px] font-semibold tracking-wide" href="#">
+<span class="material-symbols-outlined text-[18px]">menu_book</span>
+                Documentation
+            </a>
+<a class="text-slate-400 flex items-center px-4 py-3 gap-3 rounded hover:bg-slate-800/80 hover:text-slate-200 transition-colors duration-150 font-inter text-[13px] font-semibold tracking-wide" href="#">
+<span class="material-symbols-outlined text-[18px]">dns</span>
+                System Status
+            </a>
+</div>
+</nav>
+<!-- Main Content Canvas -->
+<main class="ml-64 pt-16 p-container-padding bg-surface-dim min-h-screen">
+<!-- Page Header & Quick Actions -->
+<div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-6 gap-4">
+<div>
+<h1 class="font-h1 text-h1 text-on-surface">Staffing Operations</h1>
+<p class="font-body-sm text-body-sm text-on-surface-variant mt-1">Manage personnel, scheduling, and performance metrics.</p>
+</div>
+<div class="flex gap-3">
+<button class="bg-surface-container hover:bg-surface-container-high border border-outline-variant text-on-surface font-data-tabular text-data-tabular px-4 py-2 rounded transition-colors flex items-center gap-2">
+<span class="material-symbols-outlined text-[18px]">calendar_month</span>
+                    Generate Schedule
+                </button>
+<button class="bg-primary hover:bg-primary-fixed text-on-primary font-data-tabular text-data-tabular px-4 py-2 rounded transition-colors flex items-center gap-2">
+<span class="material-symbols-outlined text-[18px]" style="font-variation-settings: 'FILL' 1;">person_add</span>
+                    Add Employee
+                </button>
+</div>
+</div>
+<!-- Bento Grid Layout -->
+<div class="grid grid-cols-12 gap-gutter">
+<!-- Staff Directory (Spans 8 cols) -->
+<div class="col-span-12 xl:col-span-8 bg-surface border border-white/5 rounded-lg shadow-sm shadow-black/20 overflow-hidden flex flex-col h-[500px]">
+<div class="p-4 border-b border-white/5 flex justify-between items-center bg-surface-container-lowest">
+<h2 class="font-h2 text-h2 text-on-surface flex items-center gap-2">
+<span class="material-symbols-outlined text-primary text-[20px]">groups</span>
+                        Active Roster
+                    </h2>
+<div class="flex gap-2">
+<span class="bg-tertiary-container text-tertiary text-[10px] uppercase font-bold tracking-wider px-2 py-1 rounded">Floor Staff: 24</span>
+<span class="bg-secondary-container text-secondary text-[10px] uppercase font-bold tracking-wider px-2 py-1 rounded">Management: 6</span>
+</div>
+</div>
+<div class="flex-1 overflow-auto">
+<table class="w-full text-left border-collapse">
+<thead class="sticky top-0 bg-surface-container z-10 border-b border-white/5">
+<tr>
+<th class="py-2 px-4 font-label-caps text-label-caps text-on-surface-variant uppercase">Employee</th>
+<th class="py-2 px-4 font-label-caps text-label-caps text-on-surface-variant uppercase">Role</th>
+<th class="py-2 px-4 font-label-caps text-label-caps text-on-surface-variant uppercase">Status</th>
+<th class="py-2 px-4 font-label-caps text-label-caps text-on-surface-variant uppercase text-right">Actions</th>
+</tr>
+</thead>
+<tbody class="font-data-tabular text-data-tabular divide-y divide-white/5">
+<tr class="hover:bg-surface-container-low transition-colors group">
+<td class="py-3 px-4 flex items-center gap-3">
+<img alt="Sarah Jenkins" class="w-8 h-8 rounded-full object-cover border border-outline-variant" data-alt="professional headshot of female retail manager in modern store setting" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAYfuAFOEpDWiwCwH9n_C92ljPc6o1ONzyHZMPCMLpcUZt4Z-xL6KOJtSrywTEcQ5Xl4ojSkaD4eIO3RSiGezMsvJosTqaXlHvYRCXlCg1tDWYRlkvFmE1-S2IrMoSVkTDCMcTvweG2eqxT0XTzbQ-C3aWAmJSVYKppIctC-LGXRPs2WXf5XyM-52QwcDoTmR9n_WK2FGxcDsXeZUMbveVHqrjyCbjGD4Z0QgVyEukgwu117-KJMLVp3f7IzZq14HXaPq9wieQp49I"/>
+<div>
+<div class="text-on-surface font-semibold">Sarah Jenkins</div>
+<div class="text-on-surface-variant text-[11px]">ID: EMP-8492</div>
+</div>
+</td>
+<td class="py-3 px-4 text-on-surface-variant">Store Manager</td>
+<td class="py-3 px-4">
+<span class="inline-flex items-center gap-1.5 px-2 py-0.5 rounded text-[11px] font-medium bg-[#0f2e1b] text-[#4ade80] border border-[#14532d]">
+<span class="w-1.5 h-1.5 rounded-full bg-[#4ade80]"></span> Active
+                                    </span>
+</td>
+<td class="py-3 px-4 text-right opacity-0 group-hover:opacity-100 transition-opacity">
+<button class="text-primary hover:text-primary-fixed"><span class="material-symbols-outlined text-[18px]">edit</span></button>
+</td>
+</tr>
+<tr class="hover:bg-surface-container-low transition-colors group bg-surface-container-lowest/50">
+<td class="py-3 px-4 flex items-center gap-3">
+<img alt="Marcus Chen" class="w-8 h-8 rounded-full object-cover border border-outline-variant" data-alt="professional headshot of male retail supervisor looking focused" src="https://lh3.googleusercontent.com/aida-public/AB6AXuB130T5FoJxp_4Ii1hd867gRQCnkD4zKWKCmYNiHbD-6Yu306g4-d0tDrWI9B_4JYO6wqc3IXIqScMVVcNm476qaDkR62bLhA6kUtqsnXFt61RS2Xf2X1ln4TPe7W6AvKhxukqxLUcgT6wIT-xYg4DKkEyn19J1-H0vjaXYEClKgnfCMJNIwRRM_lvwrdu4v0oY6HQHMdeLLmIT0cs8kCx8ixIAWVNkzFPFV5YeCC5WrNf5rbhm9WkbcLvxjJbiIm5DWhy9BPQCgq8"/>
+<div>
+<div class="text-on-surface font-semibold">Marcus Chen</div>
+<div class="text-on-surface-variant text-[11px]">ID: EMP-9104</div>
+</div>
+</td>
+<td class="py-3 px-4 text-on-surface-variant">Inventory Lead</td>
+<td class="py-3 px-4">
+<span class="inline-flex items-center gap-1.5 px-2 py-0.5 rounded text-[11px] font-medium bg-[#2e1b0f] text-[#fb923c] border border-[#7c2d12]">
+<span class="w-1.5 h-1.5 rounded-full bg-[#fb923c]"></span> On Break
+                                    </span>
+</td>
+<td class="py-3 px-4 text-right opacity-0 group-hover:opacity-100 transition-opacity">
+<button class="text-primary hover:text-primary-fixed"><span class="material-symbols-outlined text-[18px]">edit</span></button>
+</td>
+</tr>
+<tr class="hover:bg-surface-container-low transition-colors group">
+<td class="py-3 px-4 flex items-center gap-3">
+<img alt="Elena Rodriguez" class="w-8 h-8 rounded-full object-cover border border-outline-variant" data-alt="friendly female retail associate headshot against neutral background" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBE1sZaoMd1Yi8RaqrUrcvmU_2oS4rPTSOimhJVvuhTnY_cPquyw9-k-icgilD30oi6WRy908HkvcuaYbRPaTdShAOnfuiI2BegKhevC_kMp4KeV5FukBuWgH_Y8UplePD-NVHF-qZmHVTPTgsrz5RTJwuYOtqbHTUqftM6Vw4pu5ODSYm_P-mkjh720LgBHAX-eB2k9_4xuBILb1PY6kZ1i-Bn6kMg0OdVZOoL85nbLO4PF7rpSvpxkRBK2hM0h9D64-q06QCiVJI"/>
+<div>
+<div class="text-on-surface font-semibold">Elena Rodriguez</div>
+<div class="text-on-surface-variant text-[11px]">ID: EMP-7731</div>
+</div>
+</td>
+<td class="py-3 px-4 text-on-surface-variant">Sales Associate</td>
+<td class="py-3 px-4">
+<span class="inline-flex items-center gap-1.5 px-2 py-0.5 rounded text-[11px] font-medium bg-[#0f2e1b] text-[#4ade80] border border-[#14532d]">
+<span class="w-1.5 h-1.5 rounded-full bg-[#4ade80]"></span> Active
+                                    </span>
+</td>
+<td class="py-3 px-4 text-right opacity-0 group-hover:opacity-100 transition-opacity">
+<button class="text-primary hover:text-primary-fixed"><span class="material-symbols-outlined text-[18px]">edit</span></button>
+</td>
+</tr>
+<tr class="hover:bg-surface-container-low transition-colors group bg-surface-container-lowest/50">
+<td class="py-3 px-4 flex items-center gap-3">
+<div class="w-8 h-8 rounded-full bg-surface-variant border border-outline flex items-center justify-center text-on-surface-variant font-bold text-[12px]">DT</div>
+<div>
+<div class="text-on-surface font-semibold">David Thompson</div>
+<div class="text-on-surface-variant text-[11px]">ID: EMP-8822</div>
+</div>
+</td>
+<td class="py-3 px-4 text-on-surface-variant">Logistics Specialist</td>
+<td class="py-3 px-4">
+<span class="inline-flex items-center gap-1.5 px-2 py-0.5 rounded text-[11px] font-medium bg-surface-container-highest text-on-surface-variant border border-outline-variant">
+<span class="w-1.5 h-1.5 rounded-full bg-outline"></span> Off Shift
+                                    </span>
+</td>
+<td class="py-3 px-4 text-right opacity-0 group-hover:opacity-100 transition-opacity">
+<button class="text-primary hover:text-primary-fixed"><span class="material-symbols-outlined text-[18px]">edit</span></button>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<!-- Performance Scorecards (Spans 4 cols) -->
+<div class="col-span-12 xl:col-span-4 flex flex-col gap-component-gap-md h-[500px]">
+<div class="bg-surface border border-white/5 rounded-lg p-4 shadow-sm shadow-black/20 flex-1">
+<h3 class="font-h2 text-h2 text-on-surface mb-4 flex items-center gap-2">
+<span class="material-symbols-outlined text-tertiary-fixed text-[20px]">trending_up</span>
+                        Performance Overview
+                    </h3>
+<div class="flex flex-col gap-4">
+<!-- Scorecard 1 -->
+<div class="bg-surface-container rounded p-3 border border-outline-variant/30 relative overflow-hidden">
+<div class="absolute right-0 top-0 h-full w-1/3 bg-gradient-to-l from-[#14532d]/20 to-transparent pointer-events-none"></div>
+<div class="flex justify-between items-start mb-2 relative z-10">
+<span class="font-data-tabular text-data-tabular text-on-surface">Sales Efficiency</span>
+<span class="text-[#4ade80] font-bold text-[14px]">94%</span>
+</div>
+<div class="w-full bg-surface-variant h-1.5 rounded-full overflow-hidden">
+<div class="bg-[#4ade80] h-full" style="width: 94%"></div>
+</div>
+<div class="mt-2 text-[11px] text-on-surface-variant flex items-center gap-1">
+<span class="material-symbols-outlined text-[12px] text-[#4ade80]">arrow_upward</span>
+                                +2.4% vs last week
+                            </div>
+</div>
+<!-- Scorecard 2 -->
+<div class="bg-surface-container rounded p-3 border border-outline-variant/30 relative overflow-hidden">
+<div class="absolute right-0 top-0 h-full w-1/3 bg-gradient-to-l from-primary/10 to-transparent pointer-events-none"></div>
+<div class="flex justify-between items-start mb-2 relative z-10">
+<span class="font-data-tabular text-data-tabular text-on-surface">Schedule Adherence</span>
+<span class="text-primary font-bold text-[14px]">88%</span>
+</div>
+<div class="w-full bg-surface-variant h-1.5 rounded-full overflow-hidden">
+<div class="bg-primary h-full" style="width: 88%"></div>
+</div>
+<div class="mt-2 text-[11px] text-on-surface-variant flex items-center gap-1">
+<span class="material-symbols-outlined text-[12px] text-primary">arrow_downward</span>
+                                -1.1% vs last week
+                            </div>
+</div>
+</div>
+</div>
+<!-- Needs Attention Widget -->
+<div class="bg-surface-container-high border border-error/20 rounded-lg p-4 shadow-sm shadow-black/20 relative overflow-hidden">
+<div class="absolute -right-4 -top-4 text-error/10">
+<span class="material-symbols-outlined text-[100px]" style="font-variation-settings: 'FILL' 1;">warning</span>
+</div>
+<h3 class="font-data-tabular text-data-tabular text-error flex items-center gap-2 mb-3 relative z-10">
+<span class="material-symbols-outlined text-[16px]">priority_high</span>
+                        Shift Conflicts
+                    </h3>
+<ul class="space-y-2 relative z-10">
+<li class="bg-surface border border-outline-variant/50 rounded p-2 text-[12px] text-on-surface flex items-start gap-2">
+<div class="w-1.5 h-1.5 rounded-full bg-error mt-1.5 flex-shrink-0"></div>
+<div>
+<span class="font-semibold">Sat, Oct 14:</span> Floor coverage below minimum threshold (14:00 - 18:00).
+                            </div>
+</li>
+</ul>
+</div>
+</div>
+<!-- Scheduling Calendar View (Spans full width) -->
+<div class="col-span-12 bg-surface border border-white/5 rounded-lg shadow-sm shadow-black/20 overflow-hidden mt-2">
+<div class="p-4 border-b border-white/5 flex justify-between items-center bg-surface-container-lowest">
+<h2 class="font-h2 text-h2 text-on-surface flex items-center gap-2">
+<span class="material-symbols-outlined text-secondary text-[20px]">calendar_view_week</span>
+                        Department Scheduling
+                    </h2>
+<div class="flex items-center gap-2 bg-surface-container p-1 rounded border border-outline-variant/50">
+<button class="px-3 py-1 bg-surface-variant text-on-surface rounded text-[12px] font-medium">Day</button>
+<button class="px-3 py-1 text-on-surface-variant hover:text-on-surface rounded text-[12px] font-medium">Week</button>
+</div>
+</div>
+<div class="overflow-x-auto">
+<div class="min-w-[800px] p-4">
+<!-- Timeline Header -->
+<div class="flex border-b border-outline-variant/30 pb-2 mb-4 font-data-tabular text-[12px] text-on-surface-variant">
+<div class="w-32 flex-shrink-0">Department</div>
+<div class="flex-1 grid grid-cols-8 text-center">
+<div>08:00</div>
+<div>10:00</div>
+<div>12:00</div>
+<div>14:00</div>
+<div>16:00</div>
+<div>18:00</div>
+<div>20:00</div>
+<div>22:00</div>
+</div>
+</div>
+<!-- Department Rows -->
+<div class="space-y-4">
+<!-- Sales Floor -->
+<div class="flex items-center">
+<div class="w-32 flex-shrink-0 font-data-tabular text-data-tabular text-on-surface">Sales Floor</div>
+<div class="flex-1 relative h-8 bg-surface-container-low rounded border border-outline-variant/20">
+<!-- Shift Block -->
+<div class="absolute top-1 bottom-1 left-[10%] right-[40%] bg-primary-container border border-primary/50 rounded flex items-center px-2 shadow-sm shadow-black/20">
+<img alt="Sarah J." class="w-5 h-5 rounded-full mr-2" data-alt="tiny headshot thumbnail" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCk4jG3ThWvf1xCu1bIynqBAhcjRen0Co2E1OTFxr95ir5In_-1fboJsBJWTSy5YWI-hQ95fgukzeiHEvsopV7VnVnVr-y4ITRJl9DQGXeE5KBfcYLsiM6K5zSQl2Itl5t6tKwvv2T_c8ilH1cuSiJ12_ByYzQCcEEFF30d3UEzSALBlPIFj0dLwLQIqlwRTYJhtSLLZL5HL8jukS8Ncdgv1DSFcw9xrhpZTY2UovNgFvLLTkC0zeZb_IFliXH6KNtCLKpQxBB_6ms"/>
+<span class="text-[10px] text-primary-fixed font-bold truncate">Jenkins, S. + 4</span>
+</div>
+<!-- Shift Block -->
+<div class="absolute top-1 bottom-1 left-[50%] right-[10%] bg-secondary-container border border-secondary/50 rounded flex items-center px-2 shadow-sm shadow-black/20">
+<span class="text-[10px] text-secondary-fixed font-bold truncate">Evening Crew (6)</span>
+</div>
+</div>
+</div>
+<!-- Inventory -->
+<div class="flex items-center">
+<div class="w-32 flex-shrink-0 font-data-tabular text-data-tabular text-on-surface">Inventory</div>
+<div class="flex-1 relative h-8 bg-surface-container-low rounded border border-outline-variant/20">
+<!-- Shift Block -->
+<div class="absolute top-1 bottom-1 left-[0%] right-[60%] bg-[#2e1b0f] border border-[#7c2d12] rounded flex items-center px-2 shadow-sm shadow-black/20">
+<img alt="Marcus C." class="w-5 h-5 rounded-full mr-2" data-alt="tiny headshot thumbnail" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAieDi28eARJaHZQtDCYDYK2izTz7OfarAknddqPMqPKKdJRB_9h01uE_Kvu8GnthhsLZ_lBLR2n_noCbfvBcp5SbByb-zwjM7yisSSL_iRMWlfc2qV9gY4RN5wcMDFfmvZbJauNqrH_Bu3Rtuq1wmBNCoxGeO_kkVaYS4L4OlnvrgR-fTKgBVe4osOf-AWeyjYElBt1JYNa8dTvK9wZKiQ_N2b1jVotRFEuWQS-2gTMHzsi1U_2gx7HbTBmLuQ1Cd0eBTqaN4DnII"/>
+<span class="text-[10px] text-[#fb923c] font-bold truncate">Chen, M. (Receiving)</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</main>
+</body></html>

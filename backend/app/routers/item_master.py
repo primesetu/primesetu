@@ -1,10 +1,10 @@
 # ============================================================
-# PrimeSetu - Shoper9-Based Retail OS
+# SMRITI-OS - Shoper9-Based Retail OS
 # Zero Cloud - Sovereign - AI-Governed
 # ============================================================
 # System Architect : Jawahar R Mallah
 # Organisation     : AITDL Network
-# Project          : PrimeSetu
+# Project          : SMRITI-OS
 # (c) 2026 - All Rights Reserved
 # "Memory, Not Code."
 # ============================================================
@@ -63,7 +63,8 @@ async def create_item(
         mrp_paise=payload.mrp_paise,
         cost_paise=payload.cost_paise,
         gst_rate=payload.gst_rate,
-        hsn_code=payload.hsn_code
+        hsn_code=payload.hsn_code,
+        shoper_recid=payload.shoper_recid
     )
     db.add(new_item)
     await db.flush() # Get item ID

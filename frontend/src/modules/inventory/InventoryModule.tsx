@@ -1,14 +1,18 @@
-/* ============================================================
- * PrimeSetu — Shoper9-Based Retail OS
- * Zero Cloud · Sovereign · AI-Governed
- * ============================================================
- * System Architect   :  Jawahar R Mallah
- * Organisation       :  AITDL Network
- * Project            :  PrimeSetu
- * © 2026 — All Rights Reserved
- * "Memory, Not Code."
- * ============================================================ */
 import { useState, useEffect } from 'react'
+import { 
+  Package, 
+  Search, 
+  ArrowRightLeft, 
+  Upload, 
+  Plus, 
+  BarChart3, 
+  AlertCircle,
+  Truck,
+  ScanBarcode,
+  History,
+  RefreshCw,
+  ChevronRight
+} from 'lucide-react'
 import { useLanguage } from '@/hooks/useLanguage'
 import { api } from '@/api/client'
 import PhysicalStockModule from './PhysicalStockModule'
@@ -16,12 +20,16 @@ import BulkItemMaster from './BulkItemMaster'
 import BarcodeStudio from './BarcodeStudio'
 import InwardingModule from './InwardingModule'
 import { PredictiveIntelligence } from './PredictiveIntelligence'
-import { clsx, type ClassValue } from 'clsx'
-import { twMerge } from 'tailwind-merge'
-
-function cn(...inputs: ClassValue[]) {
-  return twMerge(clsx(inputs))
-}
+import { 
+  Button, 
+  Input, 
+  Select, 
+  Card, 
+  Text, 
+  Badge, 
+  Modal,
+  Label 
+} from '../../components/ui/SovereignUI';
 
 interface InventoryItem {
   id: string
@@ -58,8 +66,6 @@ export default function InventoryModule() {
     setLoading(true)
     try {
       const data = await api.inventory.list()
-      // Transform data to match the legacy view structure if needed
-      // Assuming API returns items with stock levels for different stores
       const items = Array.isArray(data) ? data : [];
       setItems(items.map((i: any) => ({
         id: i.id,
@@ -75,7 +81,7 @@ export default function InventoryModule() {
         risk_level: (Math.round(((i.stocks?.find((s: any) => s.store_id === 'WH1')?.quantity || 0) + (i.stocks?.find((s: any) => s.store_id === 'X01')?.quantity || 0)) / ((parseInt(i.id.split('-')[0], 16) % 45 + 5) / 10) * 10) / 10) < 7 ? 'High' : (Math.round(((i.stocks?.find((s: any) => s.store_id === 'WH1')?.quantity || 0) + (i.stocks?.find((s: any) => s.store_id === 'X01')?.quantity || 0)) / ((parseInt(i.id.split('-')[0], 16) % 45 + 5) / 10) * 10) / 10) < 14 ? 'Medium' : 'Low'
       })))
     } catch (error) {
-      console.error('[PrimeSetu] Inventory fetch failed:', error)
+      console.error('[SMRITI-OS] Inventory fetch failed:', error)
     } finally {
       setLoading(false)
     }
@@ -107,206 +113,184 @@ export default function InventoryModule() {
   })
 
   return (
-    <div className="flex flex-col gap-8 animate-in fade-in slide-in-from-bottom-4 duration-700 relative">
-      {/* Bulk Importer Overlay */}
+    <div className="flex flex-col gap-8 animate-in fade-in slide-in-from-bottom-4 duration-700 pb-20">
+      {/* Breadcrumbs */}
+      <nav className="flex items-center gap-2 text-[10px] font-black uppercase tracking-widest text-text-disabled">
+         <span>Home</span> <ChevronRight size={10} />
+         <span className="text-text-secondary">Inventory Registry</span>
+      </nav>
+
+      {/* Module Components */}
       {isImporting && <BulkItemMaster onClose={() => setIsImporting(false)} />}
-      
-      {/* Barcode Printing Overlay */}
-      {isPrintingBarcodes && (
-        <BarcodeStudio 
-          onClose={() => setIsPrintingBarcodes(false)} 
-          initialItems={items.slice(0, 5)} // Sample: first 5 items
-        />
-      )}
-
-      {/* Stock Inward Overlay */}
+      {isPrintingBarcodes && <BarcodeStudio onClose={() => setIsPrintingBarcodes(false)} initialItems={items.slice(0, 5)} />}
       {isAddingStock && <InwardingModule onClose={() => setIsAddingStock(false)} />}
-
-      {/* Physical Audit Overlay */}
       {isAuditing && <PhysicalStockModule onClose={() => setIsAuditing(false)} />}
 
-      {/* Transfer Modal (Glassmorphism) */}
-      {isTransferring && (
-        <div className="fixed inset-0 z-[100] flex items-center justify-center p-6 backdrop-blur-md bg-navy/20">
-          <div className="glass-dark w-full max-w-md p-10 rounded-[3rem] shadow-2xl border border-white/10 animate-in zoom-in-95 duration-300">
-            <h3 className="text-2xl font-serif font-black text-white mb-2">Stock Transfer</h3>
-            <p className="text-[10px] text-white/40 uppercase tracking-widest mb-8 font-bold">WH1 Warehouse → X01 Retail Store</p>
-            
-            <div className="space-y-6">
-              <div>
-                <label className="text-[10px] font-black text-white/60 uppercase tracking-widest block mb-2">Select SKU</label>
-                <select 
-                  className="w-full bg-white/5 border border-white/10 rounded-2xl px-5 py-4 text-white font-bold focus:border-saffron outline-none"
-                  value={transferData.id}
-                  onChange={(e) => setTransferData({...transferData, id: e.target.value})}
-                >
-                  <option value="" className="bg-navy">Choose Product...</option>
-                  {items.map(i => (
-                    <option key={i.id} value={i.id} className="bg-navy">{i.name} ({i.wh1_qty} available)</option>
-                  ))}
-                </select>
-              </div>
-
-              <div>
-                <label className="text-[10px] font-black text-white/60 uppercase tracking-widest block mb-2">Quantity to Move</label>
-                <input 
-                  type="number" 
-                  className="w-full bg-white/5 border border-white/10 rounded-2xl px-5 py-4 text-white font-black text-xl focus:border-saffron outline-none"
-                  placeholder="0"
-                  value={transferData.qty || ''}
-                  onChange={(e) => setTransferData({...transferData, qty: parseInt(e.target.value) || 0})}
-                />
-              </div>
-
-              <div className="flex gap-4 pt-4">
-                <button 
-                  onClick={() => setIsTransferring(false)}
-                  className="flex-1 py-4 rounded-2xl font-black text-[10px] uppercase tracking-widest text-white/40 hover:text-white transition-all"
-                >
-                  Cancel
-                </button>
-                <button 
-                  onClick={handleTransfer}
-                  className="flex-1 bg-saffron text-white py-4 rounded-2xl font-black text-[10px] uppercase tracking-widest hover:shadow-lg shadow-saffron/30 transition-all"
-                >
-                  Confirm Transfer
-                </button>
-              </div>
-            </div>
+      {/* Transfer Modal */}
+      <Modal
+        isOpen={isTransferring}
+        onClose={() => setIsTransferring(false)}
+        title="Stock Transfer Protocol"
+        subtitle="Internal Warehouse (WH1) → Retail Floor (X01)"
+        maxWidth="max-w-md"
+        icon={<ArrowRightLeft size={24} />}
+        footer={
+          <div className="flex gap-3 w-full">
+            <Button variant="ghost" onClick={() => setIsTransferring(false)} className="flex-1">Cancel</Button>
+            <Button onClick={handleTransfer} className="flex-1">Confirm Protocol</Button>
           </div>
+        }
+      >
+        <div className="space-y-6">
+           <div className="space-y-2">
+              <Label>Select Article Entity</Label>
+              <Select 
+                value={transferData.id}
+                onChange={(e) => setTransferData({...transferData, id: e.target.value})}
+                className="h-12 font-bold uppercase tracking-widest"
+              >
+                <option value="">CHOOSE SKU...</option>
+                {items.map(i => (
+                  <option key={i.id} value={i.id}>{i.name} ({i.wh1_qty} Available)</option>
+                ))}
+              </Select>
+           </div>
+           <div className="space-y-2">
+              <Label>Transfer Volume</Label>
+              <Input 
+                type="number" 
+                placeholder="0"
+                value={transferData.qty || ''}
+                onChange={(e) => setTransferData({...transferData, qty: parseInt(e.target.value) || 0})}
+                className="h-14 text-2xl font-mono font-bold text-center"
+              />
+           </div>
         </div>
-      )}
+      </Modal>
 
       {/* Header & Stats */}
       <div className="flex flex-col md:flex-row justify-between items-end gap-6">
         <div>
-          <h1 className="text-4xl font-serif font-black text-navy">{t('inventory')}</h1>
-          <p className="text-xs text-muted font-bold uppercase tracking-widest mt-2">Warehouse (WH1) & Store (X01) Control</p>
+          <Text variant="h1">{t('inventory')}</Text>
+          <Text variant="xs" className="mt-2 block">Sovereign Node · Central Ledger · WH1 & X01 Registry</Text>
         </div>
         <div className="flex gap-4">
-          <button 
-            onClick={() => setIsAuditing(true)}
-            className="bg-navy text-gold px-8 py-4 rounded-2xl font-black text-xs tracking-widest hover:bg-navy/90 transition-all shadow-xl flex items-center gap-2 border-2 border-gold/20"
-          >
-            <span>📋</span> PHYSICAL AUDIT (PST)
-          </button>
+          <Button variant="sec" onClick={() => setIsAuditing(true)} className="h-12 border-status-amber/20 text-status-amber">
+            <History size={18} /> PHYSICAL AUDIT [PST]
+          </Button>
+          <Button onClick={fetchInventory} disabled={loading} className="w-12 h-12 p-0">
+             <RefreshCw size={20} className={loading ? 'animate-spin' : ''} />
+          </Button>
         </div>
       </div>
 
-      {/* Sovereign Predictive Intelligence Layer */}
+      {/* Sovereign Intelligence */}
       <PredictiveIntelligence />
 
-      {/* Quick Actions & Search */}
-      <div className="bg-white rounded-[2rem] p-4 shadow-xl flex flex-wrap gap-4 items-center">
-          <button 
-            onClick={() => setIsImporting(true)}
-            className="bg-navy text-white px-8 py-4 rounded-2xl font-black text-xs tracking-widest hover:bg-navy/90 transition-all shadow-xl flex items-center gap-2"
-          >
-            <span>📄</span> BULK IMPORT
-          </button>
-          <button 
-            onClick={() => setIsAddingStock(true)}
-            className="bg-emerald-500 text-white px-8 py-4 rounded-2xl font-black text-xs tracking-widest hover:shadow-emerald-300/30 transition-all shadow-xl flex items-center gap-2"
-          >
-            <span>📦</span> STOCK INWARD
-          </button>
-          <button 
-            onClick={() => setIsTransferring(true)}
-            className="bg-saffron text-white px-8 py-4 rounded-2xl font-black text-xs tracking-widest hover:shadow-saffron/30 transition-all shadow-xl flex items-center gap-2"
-          >
-            <span>🔄</span> STOCK TRANSFER
-          </button>
-        </div>
+      {/* Quick Actions Card */}
+      <Card variant="flat" className="p-4 bg-bg-elevated/40 flex flex-wrap gap-4 items-center">
+          <Button variant="sec" onClick={() => setIsImporting(true)} className="flex-1 h-12">
+            <Upload size={16} /> BULK IMPORT
+          </Button>
+          <Button variant="sec" onClick={() => setIsAddingStock(true)} className="flex-1 h-12 text-status-green border-status-green/10">
+            <Plus size={16} /> STOCK INWARD
+          </Button>
+          <Button variant="sec" onClick={() => setIsTransferring(true)} className="flex-1 h-12 text-accent border-accent/10">
+            <ArrowRightLeft size={16} /> STOCK TRANSFER
+          </Button>
+          <Button variant="sec" onClick={() => setIsPrintingBarcodes(true)} className="flex-1 h-12 text-text-tertiary">
+            <ScanBarcode size={16} /> BARCODE STUDIO
+          </Button>
+      </Card>
 
       {/* Control Bar */}
-      <div className="glass p-6 rounded-[2rem] flex flex-col md:flex-row gap-6 items-center justify-between shadow-2xl">
+      <div className="flex flex-col md:flex-row gap-6 items-center justify-between">
         <div className="relative flex-1 w-full">
-          <span className="absolute inset-y-0 left-6 flex items-center grayscale opacity-50">🔍</span>
-          <input 
-            type="text" 
-            placeholder="Filter by Name, Brand, or Barcode..." 
+          <Search className="absolute left-5 top-1/2 -translate-y-1/2 w-5 h-5 text-text-disabled" />
+          <Input 
+            placeholder="Search Registry by Name, Brand, or Barcode..." 
             value={search}
             onChange={(e) => setSearch(e.target.value)}
-            className="w-full bg-cream/30 border border-border rounded-2xl pl-14 pr-6 py-4 text-sm font-bold focus:border-saffron focus:bg-white outline-none transition-all"
+            className="pl-14 h-14"
           />
         </div>
-        <div className="flex bg-cream/50 p-1 rounded-2xl border border-border">
+        <Card variant="flat" className="p-1 rounded-xl bg-bg-float/40 border-border-subtle flex">
           {['ALL', 'LOW STOCK', 'FOOTWEAR', 'APPAREL'].map(f => (
             <button 
               key={f}
               onClick={() => setFilter(f)}
-              className={`px-6 py-3 rounded-xl text-[10px] font-black tracking-tighter transition-all ${filter === f ? 'bg-white text-navy shadow-sm' : 'text-muted hover:text-navy'}`}
+              className={`px-6 py-2 rounded-lg text-[10px] font-black tracking-widest transition-all ${filter === f ? 'bg-bg-elevated text-accent shadow-sm' : 'text-text-disabled hover:text-text-secondary'}`}
             >
               {f}
             </button>
           ))}
-        </div>
+        </Card>
       </div>
 
       {/* Inventory Grid */}
-      <div className="glass rounded-[2.5rem] overflow-hidden shadow-2xl">
-        <div className="bg-navy px-10 py-6 flex items-center justify-between">
-          <h2 className="text-white font-serif font-bold text-lg">Central Stock Ledger</h2>
-          <div className="flex gap-6 text-[10px] font-black uppercase tracking-widest text-white/40">
-            <div className="flex items-center gap-2">
-              <span className="w-2 h-2 rounded-full bg-emerald-400"></span> WH1: Warehouse
+      <Card className="overflow-hidden border-border-subtle shadow-2xl">
+        <div className="p-8 border-b border-border-subtle flex items-center justify-between bg-bg-float/20">
+          <Text variant="h3">Central Stock Ledger</Text>
+          <div className="flex gap-8">
+            <div className="flex items-center gap-3">
+              <span className="w-2 h-2 rounded-full bg-status-green"></span>
+              <Text variant="xs" className="font-bold">WH1: Warehouse</Text>
             </div>
-            <div className="flex items-center gap-2">
-              <span className="w-2 h-2 rounded-full bg-saffron"></span> X01: Store
+            <div className="flex items-center gap-3">
+              <span className="w-2 h-2 rounded-full bg-accent"></span>
+              <Text variant="xs" className="font-bold">X01: Store Floor</Text>
             </div>
           </div>
         </div>
+        
         <div className="overflow-x-auto">
           <table className="w-full">
-            <thead className="bg-cream/30 text-[9px] uppercase font-black tracking-[0.2em] text-muted border-b border-border">
-              <tr>
-                <th className="pl-10 py-5 text-left">Product / SKU</th>
+            <thead>
+              <tr className="bg-bg-float/40 text-[9px] uppercase font-black tracking-[0.2em] text-text-tertiary border-b border-border-subtle">
+                <th className="px-8 py-5 text-left">Article Entity</th>
                 <th className="px-6 py-5 text-center">Category</th>
                 <th className="px-6 py-5 text-center">Brand</th>
-                <th className="px-6 py-5 text-right">WH1 Qty</th>
-                <th className="px-6 py-5 text-right">X01 Qty</th>
-                <th className="px-6 py-5 text-right">Total</th>
-                <th className="px-6 py-5 text-center">Intelligence (DoC)</th>
-                <th className="pr-10 py-5 text-center">Status</th>
+                <th className="px-6 py-5 text-right">WH1 Volume</th>
+                <th className="px-6 py-5 text-right">X01 Volume</th>
+                <th className="px-6 py-5 text-right">Total Net</th>
+                <th className="px-6 py-5 text-center">Protocol (DoC)</th>
+                <th className="px-8 py-5 text-center">Registry Status</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-border/50">
+            <tbody className="divide-y divide-border-subtle">
               {filteredItems.map((item) => {
                 const total = item.wh1_qty + item.x01_qty
                 const isLow = total < item.min_stock
                 return (
-                  <tr key={item.id} className="hover:bg-cream/30 transition-colors group">
-                    <td className="pl-10 py-6">
-                      <div className="font-bold text-navy group-hover:text-saffron transition-colors">{item.name}</div>
-                      <div className="text-[10px] text-muted font-black uppercase tracking-tighter">{item.code}</div>
+                  <tr key={item.id} className="hover:bg-bg-float/20 transition-colors group">
+                    <td className="px-8 py-6">
+                      <Text variant="sm" className="font-bold uppercase group-hover:text-accent transition-colors">{item.name}</Text>
+                      <Text variant="xs" className="font-mono mt-1 block">{item.code}</Text>
                     </td>
-                    <td className="px-6 py-6 text-center text-[10px] font-black text-muted uppercase tracking-widest">{item.category}</td>
-                    <td className="px-6 py-6 text-center font-bold text-navy">{item.brand}</td>
-                    <td className="px-6 py-6 text-right">
-                      <span className="bg-emerald-50 text-emerald-700 px-3 py-1 rounded-lg font-black text-xs">{item.wh1_qty}</span>
-                    </td>
-                    <td className="px-6 py-6 text-right">
-                      <span className="bg-amber-50 text-amber-700 px-3 py-1 rounded-lg font-black text-xs">{item.x01_qty}</span>
-                    </td>
-                    <td className="px-6 py-6 text-right font-black text-navy text-lg">{total}</td>
                     <td className="px-6 py-6 text-center">
-                      <div className="flex flex-col items-center">
-                        <div className={cn(
-                          "text-[10px] font-black uppercase px-3 py-1 rounded-full mb-1",
-                          item.risk_level === 'High' ? "bg-rose-100 text-rose-600" :
-                          item.risk_level === 'Medium' ? "bg-amber-100 text-amber-600" :
-                          "bg-emerald-100 text-emerald-600"
-                        )}>
-                          {item.days_of_cover} Days
-                        </div>
-                        <div className="text-[8px] font-bold text-muted uppercase tracking-widest">Est. Coverage</div>
-                      </div>
+                       <Badge variant="muted">{item.category}</Badge>
                     </td>
-                    <td className="pr-10 py-6 text-center">
+                    <td className="px-6 py-6 text-center font-bold text-text-secondary">{item.brand}</td>
+                    <td className="px-6 py-6 text-right">
+                       <Text variant="sm" className="font-mono font-bold text-status-green">{item.wh1_qty}</Text>
+                    </td>
+                    <td className="px-6 py-6 text-right">
+                       <Text variant="sm" className="font-mono font-bold text-accent">{item.x01_qty}</Text>
+                    </td>
+                    <td className="px-6 py-6 text-right font-mono font-black text-lg text-text-primary">{total}</td>
+                    <td className="px-6 py-6 text-center">
+                        <div className="flex flex-col items-center gap-1">
+                          <Badge variant={item.risk_level === 'High' ? 'error' : item.risk_level === 'Medium' ? 'warn' : 'success'}>
+                            {item.days_of_cover} Days
+                          </Badge>
+                          <Text variant="xs" className="scale-75 opacity-50">EST. COVERAGE</Text>
+                        </div>
+                    </td>
+                    <td className="px-8 py-6 text-center">
                       {isLow ? (
-                        <span className="px-4 py-2 bg-rose-50 text-rose-600 rounded-full text-[9px] font-black uppercase tracking-widest shadow-sm">Critically Low</span>
+                        <Badge variant="error" className="h-7 px-4">CRITICAL</Badge>
                       ) : (
-                        <span className="px-4 py-2 bg-emerald-50 text-emerald-600 rounded-full text-[9px] font-black uppercase tracking-widest shadow-sm">Healthy</span>
+                        <Badge variant="success" className="h-7 px-4">HEALTHY</Badge>
                       )}
                     </td>
                   </tr>
@@ -315,25 +299,34 @@ export default function InventoryModule() {
             </tbody>
           </table>
         </div>
-      </div>
+      </Card>
 
-      {/* Insights Section */}
+      {/* Insights Row */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-        <div className="glass p-8 rounded-[2rem] border-l-4 border-l-saffron">
-          <h3 className="text-[10px] font-black text-muted uppercase tracking-widest mb-4">Pending Transfers</h3>
-          <div className="text-4xl font-serif font-black text-navy mb-2">12</div>
-          <p className="text-[10px] text-muted font-bold">WH1 → X01 (In Transit)</p>
-        </div>
-        <div className="glass p-8 rounded-[2rem] border-l-4 border-l-emerald-500">
-          <h3 className="text-[10px] font-black text-muted uppercase tracking-widest mb-4">Inventory Value</h3>
-          <div className="text-4xl font-serif font-black text-navy mb-2">₹1.2Cr</div>
-          <p className="text-[10px] text-muted font-bold">Consolidated MRP Value</p>
-        </div>
-        <div className="glass p-8 rounded-[2rem] border-l-4 border-l-navy">
-          <h3 className="text-[10px] font-black text-muted uppercase tracking-widest mb-4">Fastest Moving</h3>
-          <div className="text-4xl font-serif font-black text-navy mb-2">Puma RS-X</div>
-          <p className="text-[10px] text-muted font-bold">Sold 42 units this week</p>
-        </div>
+        <Card variant="flat" className="p-8 border-l-4 border-l-accent bg-bg-elevated/40">
+           <div className="flex items-center gap-3 text-accent mb-4">
+              <Truck size={18} />
+              <Text variant="xs" className="font-bold">Logistics Pulse</Text>
+           </div>
+           <Text variant="h1" className="mb-1">12</Text>
+           <Text variant="xs" className="text-text-tertiary">Articles in Transit (WH1 → X01)</Text>
+        </Card>
+        <Card variant="flat" className="p-8 border-l-4 border-l-status-green bg-bg-elevated/40">
+           <div className="flex items-center gap-3 text-status-green mb-4">
+              <BarChart3 size={18} />
+              <Text variant="xs" className="font-bold">Asset Valuation</Text>
+           </div>
+           <Text variant="h1" className="mb-1">₹1.2Cr</Text>
+           <Text variant="xs" className="text-text-tertiary">Consolidated MRP Registry</Text>
+        </Card>
+        <Card variant="flat" className="p-8 border-l-4 border-l-status-amber bg-bg-elevated/40">
+           <div className="flex items-center gap-3 text-status-amber mb-4">
+              <AlertCircle size={18} />
+              <Text variant="xs" className="font-bold">Registry Alerts</Text>
+           </div>
+           <Text variant="h1" className="mb-1">24</Text>
+           <Text variant="xs" className="text-text-tertiary">SKUs Below Safety Threshold</Text>
+        </Card>
       </div>
     </div>
   )

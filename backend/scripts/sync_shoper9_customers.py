@@ -7,7 +7,7 @@ from datetime import datetime
 from app.core.config import settings
 
 # ============================================================
-# PrimeSetu - Shoper 9 BULK Customer Sync Engine (V2)
+# SMRITI-OS - Shoper 9 BULK Customer Sync Engine (V2)
 # Phase 7: Handling 34,000+ Customers with Legacy Codes
 # ============================================================
 
@@ -46,7 +46,7 @@ async def sync_customers():
     if not rows:
         return
         
-    print(f"Found {len(rows)} customers. Formatting for PrimeSetu...")
+    print(f"Found {len(rows)} customers. Formatting for SMRITI-OS...")
     
     # 2. Connect to Supabase
     url = settings.database_url.replace("postgresql+asyncpg://", "postgresql://")

@@ -12,56 +12,56 @@ export default {
       // ── Design Token Colors (elevation model) ─────────────
       colors: {
         // Surfaces
-        'bg-base':     '#0C0C0E',
-        'bg-elevated': '#141416',
-        'bg-overlay':  '#1C1C1F',
-        'bg-float':    '#242428',
-        'bg-input':    '#1A1A1D',
+        'bg-base':     'var(--bg-base)',
+        'bg-elevated': 'var(--bg-elevated)',
+        'bg-overlay':  'var(--bg-overlay)',
+        'bg-float':    'var(--bg-float)',
+        'bg-input':    'var(--bg-input)',
 
         // Borders
-        'border-subtle':  'rgba(255,255,255,0.05)',
-        'border-default': 'rgba(255,255,255,0.09)',
-        'border-strong':  'rgba(255,255,255,0.16)',
+        'border-subtle':  'var(--border-subtle)',
+        'border-default': 'var(--border-default)',
+        'border-strong':  'var(--border-strong)',
 
         // Text hierarchy
-        'text-primary':   '#F2F2F4',
-        'text-secondary': '#9A9AA8',
-        'text-tertiary':  '#5C5C68',
-        'text-disabled':  '#3A3A44',
+        'text-primary':   'var(--text-primary)',
+        'text-secondary': 'var(--text-secondary)',
+        'text-tertiary':  'var(--text-tertiary)',
+        'text-disabled':  'var(--text-disabled)',
 
         // Accent (Indigo — Linear-style)
-        'accent':         '#6366F1',
-        'accent-light':   '#818CF8',
-        'accent-bg':      'rgba(99,102,241,0.10)',
-        'accent-border':  'rgba(99,102,241,0.25)',
+        'accent':         'var(--accent)',
+        'accent-light':   'var(--accent-light)',
+        'accent-bg':      'var(--accent-bg)',
+        'accent-border':  'var(--accent-border)',
 
         // Status
-        'status-green':  '#22C55E',
-        'status-amber':  '#F59E0B',
-        'status-red':    '#EF4444',
-        'status-blue':   '#3B82F6',
+        'status-green':  'var(--green)',
+        'status-amber':  'var(--amber)',
+        'status-red':    'var(--red)',
+        'status-blue':   'var(--blue)',
 
         // POS CTA (billing screens only)
-        'pos-cta':       '#10B981',
-        'pos-cta-hover': '#059669',
-        'pos-void':      '#EF4444',
+        'pos-cta':       'var(--pos-cta)',
+        'pos-cta-hover': 'var(--pos-cta-hover)',
+        'pos-void':      'var(--pos-void)',
 
         // ── Legacy aliases (backward compat) ──
-        navy:         '#F2F2F4',
-        'navy-light': '#1C1C1F',
-        'navy-mid':   '#242428',
-        saffron:      '#6366F1',
-        'saffron-dk': '#818CF8',
-        gold:         '#F59E0B',
-        cream:        '#0C0C0E',
-        muted:        '#9A9AA8',
-        border:       'rgba(255,255,255,0.09)',
-        surface:      '#1C1C1F',
+        navy:         'var(--text-primary)',
+        'navy-light': 'var(--bg-overlay)',
+        'navy-mid':   'var(--bg-float)',
+        saffron:      'var(--accent)',
+        'saffron-dk': 'var(--accent-light)',
+        gold:         'var(--amber)',
+        cream:        'var(--bg-base)',
+        muted:        'var(--text-secondary)',
+        border:       'var(--border-default)',
+        surface:      'var(--bg-overlay)',
         // brand aliases
-        'brand-navy':    '#0C0C0E',
-        'brand-saffron': '#6366F1',
-        'brand-gold':    '#F59E0B',
-        'brand-cream':   '#1C1C1F',
+        'brand-navy':    'var(--bg-base)',
+        'brand-saffron': 'var(--accent)',
+        'brand-gold':    'var(--amber)',
+        'brand-cream':   'var(--bg-overlay)',
       },
 
       // ── Font Families ─────────────────────────────────────

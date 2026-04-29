@@ -1,10 +1,10 @@
 /* ============================================================
- * PrimeSetu — Shoper9-Based Retail OS
+ * SMRITI-OS — Shoper9-Based Retail OS
  * Zero Cloud · Sovereign · AI-Governed
  * ============================================================
  * System Architect   :  Jawahar R Mallah
  * Organisation       :  AITDL Network
- * Project            :  PrimeSetu
+ * Project            :  SMRITI-OS
  * © 2026 — All Rights Reserved
  * "Memory, Not Code."
  * ============================================================ */
@@ -62,7 +62,7 @@ export default function MultiModePayment({
         <div className="bg-navy p-10 text-white flex items-center justify-between">
           <div>
             <h2 className="text-4xl font-serif font-black text-gold">Final Settlement</h2>
-            <p className="text-[10px] font-black uppercase tracking-widest text-white/40 mt-1">Multi-Mode Payment Gateway · PrimeSetu Node 01</p>
+            <p className="text-[10px] font-black uppercase tracking-widest text-white/40 mt-1">Multi-Mode Payment Gateway · SMRITI-OS Node 01</p>
           </div>
           <div className="text-right">
             <div className="text-[10px] font-black uppercase tracking-widest text-white/40 mb-1">Total Bill Value</div>

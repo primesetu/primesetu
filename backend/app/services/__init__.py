@@ -1,1 +1,1 @@
-# PrimeSetu Services Package
+# SMRITI-OS Services Package

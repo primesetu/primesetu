@@ -7,7 +7,7 @@ from app.models.base import Item, ItemStock, Store, Department
 from typing import Dict
 
 # ============================================================
-# PrimeSetu - Shoper 9 Inventory Sync Engine
+# SMRITI-OS - Shoper 9 Inventory Sync Engine
 # Phase 3: Moving Products & Stock into the Sovereign Cloud
 # ============================================================
 
@@ -19,7 +19,7 @@ async def get_store_id() -> str:
         return store.id
 
 async def get_department_map() -> Dict[str, uuid.UUID]:
-    """Creates a map of Shoper 9 Dept Codes to PrimeSetu UUIDs."""
+    """Creates a map of Shoper 9 Dept Codes to SMRITI-OS UUIDs."""
     async with AsyncSessionLocal() as session:
         stmt = select(Department)
         result = await session.execute(stmt)
@@ -119,7 +119,7 @@ async def sync_inventory():
                 stock_entry.qty_on_hand = qty
         
         await session.commit()
-        print("Inventory Sync Complete. PrimeSetu is now live with Shoper 9 stock data.")
+        print("Inventory Sync Complete. SMRITI-OS is now live with Shoper 9 stock data.")
 
 if __name__ == "__main__":
     asyncio.run(sync_inventory())

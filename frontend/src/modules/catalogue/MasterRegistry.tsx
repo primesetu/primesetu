@@ -1,12 +1,6 @@
 /* ============================================================
- * PrimeSetu — Shoper9-Based Retail OS
+ * SMRITI-OS — Shoper9-Based Retail OS
  * Zero Cloud · Sovereign · AI-Governed
- * ============================================================
- * System Architect   :  Jawahar R Mallah
- * Organisation       :  AITDL Network
- * Project            :  PrimeSetu
- * © 2026 — All Rights Reserved
- * "Memory, Not Code."
  * ============================================================ */
 
 import React, { useState, useEffect, useMemo } from 'react';
@@ -14,7 +8,8 @@ import {
   Search, Package, Users, Truck, Layers, Zap,
   Filter, MoreVertical, Plus, 
   ShieldCheck, Smartphone, Info, Settings2, Globe, X, History as HistoryIcon,
-  ShieldAlert
+  ShieldAlert,
+  ArrowRight
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { api } from '@/api/client';
@@ -22,6 +17,20 @@ import { useMenu } from '../../hooks/useMenu';
 import { ICON_MAP } from '../../lib/ModuleRegistry';
 import { usePermission } from '../../hooks/usePermission';
 import { useOfflineFallback } from '../../hooks/useOfflineFallback';
+import { 
+  Button, 
+  Input, 
+  Card, 
+  Text, 
+  Badge,
+  Flex,
+  Grid,
+  Container,
+  Divider,
+  DataTable,
+  cn
+} from '../../components/ui/SovereignUI';
+import { formatCurrency } from '@/utils/currency';
 
 type RegistryType = 'ITEMS' | 'CUSTOMERS' | 'VENDORS' | 'TAXES' | 'CLASSIFICATION';
 
@@ -50,11 +59,9 @@ const MasterRegistry: React.FC = () => {
   const { menu, findModule } = useMenu();
   const { hasPermission } = usePermission();
   
-  // Resolve dynamic registries from DB menu (BUG-03 Fix)
   const registries = useMemo(() => {
     const registryModule = findModule('registry');
     if (!registryModule || !registryModule.children) {
-      // Fallback to minimal set if DB menu is not yet loaded
       return [
         { id: 'ITEMS', icon: Package, label: 'Items' },
         { id: 'CUSTOMERS', icon: Users, label: 'Customers' }
@@ -64,7 +71,7 @@ const MasterRegistry: React.FC = () => {
       id: child.id.toUpperCase() as RegistryType,
       icon: ICON_MAP[child.id] || Package,
       label: child.label,
-      count: 0 // In a real app, this would be fetched
+      count: 0 
     }));
   }, [menu]);
 
@@ -72,18 +79,20 @@ const MasterRegistry: React.FC = () => {
   const [search, setSearch] = useState('');
   const [selectedEntity, setSelectedEntity] = useState<RegistryEntity | null>(null);
 
-  // 1. Permission Guard
   if (!hasPermission('catalog.view')) {
     return (
-      <div className="flex flex-col items-center justify-center h-[60vh] text-center">
-        <ShieldAlert size={48} className="text-rose-500 mb-4" />
-        <h2 className="text-xl font-black text-navy uppercase">Access Denied</h2>
-        <p className="text-xs text-navy/40 uppercase tracking-widest mt-2">Insufficient permissions to view Master Registry</p>
-      </div>
+      <Flex center className="h-[60vh]" col gap={6}>
+        <div className="w-20 h-20 bg-status-red/10 text-status-red rounded-full flex items-center justify-center">
+           <ShieldAlert size={40} />
+        </div>
+        <div>
+           <Text variant="h2">Access Denied</Text>
+           <Text variant="xs" className="mt-2 block opacity-40 uppercase tracking-widest">Insufficient permissions to view Master Registry</Text>
+        </div>
+      </Flex>
     );
   }
 
-  // 2. Fetch Data with Offline Fallback (BUG-05 Fix)
   const { 
     data: registryData = [], 
     loading, 
@@ -94,7 +103,6 @@ const MasterRegistry: React.FC = () => {
       let data: any[] = [];
       if (activeRegistry === 'ITEMS') data = await api.inventory.list();
       else if (activeRegistry === 'CUSTOMERS') data = await api.customers.list();
-      // Add other lookups as needed
       return data;
     },
     []
@@ -107,224 +115,212 @@ const MasterRegistry: React.FC = () => {
   );
 
   return (
-    <div className="flex flex-col gap-8 animate-in fade-in duration-700">
-      
+    <Container>
       {/* Sovereign Command Header */}
-      <div className="glass p-10 rounded-[3.5rem] shadow-2xl relative overflow-hidden">
-        <div className="absolute top-0 right-0 w-80 h-80 bg-gold/5 blur-[120px] rounded-full"></div>
-        <div className="flex flex-col lg:flex-row justify-between items-start lg:items-center gap-8 relative z-10">
+      <Card className="p-10 relative overflow-hidden bg-bg-elevated/40">
+        <div className="absolute top-0 right-0 w-80 h-80 bg-accent/5 blur-[120px] rounded-full"></div>
+        <Flex between gap={8} className="relative z-10 lg:flex-row flex-col items-start lg:items-center">
           <div>
-            <div className="flex items-center gap-3 mb-2">
-               <div className="px-3 py-1 bg-navy text-gold text-[9px] font-black uppercase tracking-widest rounded-md">Master Catalogue</div>
-               <div className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></div>
-               {isOfflineData && (
-                <span className="px-2 py-0.5 bg-amber-100 text-amber-700 text-[8px] font-black uppercase rounded">Offline Buffer</span>
-               )}
-            </div>
-            <h1 className="text-4xl font-serif font-black text-navy uppercase tracking-tight">Sovereign Registry</h1>
-            <p className="text-xs text-muted font-bold uppercase tracking-widest mt-2 flex items-center gap-2 italic">
-               <Globe className="w-3.5 h-3.5 text-emerald-500" /> Deep Analysis Mapping: Shoper 9 Protocol
-            </p>
+            <Flex gap={3} className="mb-4">
+               <Badge variant="info">Master Catalogue</Badge>
+               <div className="w-2 h-2 rounded-full bg-status-green animate-pulse"></div>
+               {isOfflineData && <Badge variant="warn">Offline Buffer</Badge>}
+            </Flex>
+            <Text variant="h1">Sovereign Registry</Text>
+            <Text variant="xs" className="mt-2 block opacity-60 flex items-center gap-2">
+               <Globe size={14} className="text-status-green" /> Shoper 9 Deep Mapping Protocol
+            </Text>
           </div>
           
-          <div className="flex-1 max-w-2xl w-full relative group">
-            <Search className="absolute left-6 top-1/2 -translate-y-1/2 w-5 h-5 text-muted group-hover:text-gold transition-colors" />
-            <input type="text" placeholder={`Deep search in ${activeRegistry.toLowerCase()} registry...`}
-              value={search} onChange={(e) => setSearch(e.target.value)}
-              className="w-full bg-white/50 border border-gray-100 rounded-[2rem] pl-16 pr-6 py-6 text-sm font-bold focus:border-gold focus:bg-white outline-none transition-all shadow-inner" />
-          </div>
+          <Flex className="flex-1 max-w-2xl w-full relative group">
+            <Search className="absolute left-6 top-1/2 -translate-y-1/2 text-text-disabled group-hover:text-accent transition-colors" size={20} />
+            <Input 
+              placeholder={`Deep search in ${activeRegistry.toLowerCase()} registry...`}
+              value={search} 
+              onChange={(e) => setSearch(e.target.value)}
+              className="h-16 pl-16 pr-6 text-sm font-bold tracking-widest" 
+            />
+          </Flex>
 
           {hasPermission('catalog.edit') && (
-            <button className="bg-navy text-white px-10 py-6 rounded-3xl font-black text-xs tracking-[0.2em] hover:bg-gold hover:text-navy transition-all shadow-2xl flex items-center gap-4 group">
-              <Plus className="w-5 h-5 text-gold group-hover:text-navy" />
-              CREATE MASTER
-            </button>
+            <Button className="h-16 px-10">
+              <Plus size={20} /> CREATE MASTER
+            </Button>
           )}
-        </div>
-      </div>
+        </Flex>
+      </Card>
 
-      <div className="flex gap-10 h-[calc(100vh-320px)]">
+      <Flex gap={8} className="h-[calc(100vh-320px)] items-start">
         {/* Registry Selection Rail */}
-        <aside className="w-80 flex flex-col gap-4 overflow-y-auto pr-2">
+        <aside className="w-80 flex flex-col gap-3 overflow-y-auto pr-2 h-full">
           {registries.map((reg) => (
             <button key={reg.id} onClick={() => { setActiveRegistry(reg.id as RegistryType); setSelectedEntity(null); }}
-              className={`p-6 rounded-[2.5rem] flex flex-col gap-4 transition-all duration-500 text-left border-2 ${
-                activeRegistry === reg.id ? 'bg-navy border-navy text-white shadow-2xl scale-105' : 'bg-white border-transparent text-gray-400 hover:border-gray-100 hover:bg-cream/20'
-              }`}>
-              <div className="flex justify-between items-start">
-                <div className={`p-4 rounded-2xl ${activeRegistry === reg.id ? 'bg-gold/10 text-gold' : 'bg-gray-50 text-gray-400'}`}>
-                   <reg.icon size={24} />
+              className={cn(
+                "p-6 rounded-3xl flex flex-col gap-4 transition-all duration-500 text-left border-2",
+                activeRegistry === reg.id ? 'bg-bg-elevated border-accent shadow-2xl scale-105' : 'bg-bg-float/40 border-transparent text-text-tertiary hover:border-border-subtle hover:bg-bg-float'
+              )}>
+              <Flex between>
+                <div className={cn("p-4 rounded-2xl", activeRegistry === reg.id ? 'bg-accent/10 text-accent' : 'bg-bg-base/40 text-text-tertiary')}>
+                   {React.createElement(reg.icon, { size: 24 })}
                 </div>
-                {reg.count > 0 && <div className={`text-[10px] font-black px-3 py-1 rounded-full ${activeRegistry === reg.id ? 'bg-white/10 text-gold' : 'bg-gray-100'}`}>{reg.count}</div>}
-              </div>
+                {reg.count > 0 && <Badge variant={activeRegistry === reg.id ? 'info' : 'muted'}>{reg.count}</Badge>}
+              </Flex>
               <div>
-                <h3 className="font-serif font-black text-xl tracking-tight">{reg.label}</h3>
-                <p className={`text-[9px] font-black uppercase tracking-widest mt-1 ${activeRegistry === reg.id ? 'text-white/40' : 'text-muted'}`}>Shoper Protocol Registry</p>
+                <Text variant="h3" className={activeRegistry === reg.id ? 'text-accent' : ''}>{reg.label}</Text>
+                <Text variant="xs" className="mt-1 block opacity-40">Shoper Protocol Registry</Text>
               </div>
             </button>
           ))}
         </aside>
 
         {/* Dynamic Registry Table */}
-        <main className="flex-1 glass rounded-[3.5rem] shadow-2xl flex flex-col overflow-hidden relative">
-          <div className="bg-navy px-10 py-8 flex items-center justify-between border-b border-white/5">
-             <div className="flex items-center gap-4">
-                <div className="w-12 h-12 bg-white/5 rounded-2xl flex items-center justify-center text-gold">
-                   {registries.find(r => r.id === activeRegistry)?.icon && React.createElement(registries.find(r => r.id === activeRegistry)!.icon, { size: 24 })}
-                </div>
-                <div>
-                   <h2 className="text-white font-serif font-black text-2xl uppercase tracking-tight">{activeRegistry} Catalogue</h2>
-                   <p className="text-[10px] text-white/40 font-black uppercase tracking-widest">Viewing Record Buffer</p>
-                </div>
-             </div>
-             <div className="flex gap-4">
-                <button className="p-4 bg-white/5 rounded-2xl hover:bg-white/10 text-white/60 transition-all"><Filter size={20} /></button>
-                <button className="p-4 bg-white/5 rounded-2xl hover:bg-white/10 text-white/60 transition-all"><Settings2 size={20} /></button>
-             </div>
-          </div>
-
-          <div className="flex-1 overflow-auto">
-             <table className="w-full text-left">
-                <thead className="sticky top-0 bg-white/95 backdrop-blur-md text-[10px] font-black uppercase tracking-widest text-gray-400 border-b border-gray-100 z-10">
-                   <tr>
-                      <th className="pl-12 py-6">ID / Code</th>
-                      <th className="px-6 py-6">Master Name</th>
-                      <th className="px-6 py-6 text-right">Primary DNA</th>
-                      <th className="px-6 py-6 text-center">Protocol Status</th>
-                      <th className="pr-12 py-6"></th>
-                   </tr>
-                </thead>
-                <tbody className="divide-y divide-gray-50">
-                   {loading && filteredData.length === 0 ? (
-                      Array(5).fill(0).map((_, i) => (
-                        <tr key={i} className="animate-pulse"><td colSpan={5} className="h-24 bg-gray-50"></td></tr>
-                      ))
-                   ) : filteredData.length === 0 ? (
-                      <tr><td colSpan={5} className="py-20 text-center text-navy/10 font-black uppercase tracking-widest">No records found</td></tr>
-                   ) : filteredData.map(item => (
-                     <tr key={item.id} onClick={() => setSelectedEntity(item)}
-                       className={`group cursor-pointer transition-all ${selectedEntity?.id === item.id ? 'bg-gold/5' : 'hover:bg-cream/10'}`}>
-                        <td className="pl-12 py-8">
-                           <span className="font-mono text-[11px] font-black text-navy px-4 py-2 bg-gray-100 rounded-xl group-hover:bg-white transition-all">
-                              {item.code || item.mobile}
-                           </span>
-                        </td>
-                        <td className="px-6 py-8">
-                           <div className="text-lg font-black text-navy group-hover:text-gold transition-colors">{item.name}</div>
-                           <div className="text-[10px] font-black text-muted uppercase tracking-widest mt-1">
-                              {item.category || item.loyalty_tier || item.tax_behavior} Registry
-                           </div>
-                        </td>
-                        <td className="px-6 py-8 text-right">
-                           <div className="text-lg font-black text-navy font-mono">
-                              {item.price ? `₹${item.price.toLocaleString()}` : item.points ? `${item.points} Pts` : item.terms}
-                           </div>
-                           <div className="text-[10px] font-bold text-muted uppercase tracking-widest mt-1">
-                              {item.stock !== undefined ? `In-Stock: ${item.stock}` : item.tax_type || item.category || 'Standard Value'}
-                           </div>
-                        </td>
-                        <td className="px-6 py-8 text-center">
-                           <div className="flex items-center justify-center gap-2">
-                              <ShieldCheck className="w-4 h-4 text-emerald-500" />
-                              <span className="text-[10px] font-black uppercase tracking-widest text-emerald-600">Verified</span>
-                           </div>
-                        </td>
-                        <td className="pr-12 py-8 text-right">
-                           <button className="p-3 text-gray-300 hover:text-navy transition-all"><MoreVertical size={20} /></button>
-                        </td>
-                     </tr>
-                   ))}
-                </tbody>
-             </table>
-          </div>
+        <main className="flex-1 flex flex-col overflow-hidden h-full">
+           <DataTable<RegistryEntity>
+              data={filteredData}
+              loading={loading}
+              onRowClick={(item) => setSelectedEntity(item)}
+              columns={[
+                {
+                  header: 'Protocol ID',
+                  accessor: (item) => (
+                    <Badge variant="muted" className="font-mono text-[10px] h-8 px-4">
+                      {item.code || item.mobile}
+                    </Badge>
+                  )
+                },
+                {
+                  header: 'Master Name',
+                  accessor: (item) => (
+                    <div>
+                      <Text variant="sm" className="font-bold uppercase group-hover:text-accent transition-colors">{item.name}</Text>
+                      <Text variant="xs" className="mt-1 block opacity-40">
+                        {item.category || item.loyalty_tier || item.tax_behavior} Registry
+                      </Text>
+                    </div>
+                  )
+                },
+                {
+                  header: 'DNA Map',
+                  align: 'right',
+                  accessor: (item) => (
+                    <div>
+                      <Text variant="sm" className="font-mono font-bold">
+                        {item.price ? formatCurrency(item.price * 100) : item.points ? `${item.points} Pts` : item.terms}
+                      </Text>
+                      <Text variant="xs" className="mt-1 block opacity-40">
+                        {item.stock !== undefined ? `In-Stock: ${item.stock}` : item.tax_type || item.category || 'Standard Value'}
+                      </Text>
+                    </div>
+                  )
+                },
+                {
+                  header: 'Protocol Status',
+                  align: 'center',
+                  accessor: () => (
+                    <Flex center gap={2}>
+                      <ShieldCheck size={14} className="text-status-green" />
+                      <Text variant="xs" className="text-status-green font-bold">VERIFIED</Text>
+                    </Flex>
+                  )
+                },
+                {
+                  header: '',
+                  align: 'right',
+                  accessor: () => (
+                    <Button variant="ghost" size="sm" className="w-10 h-10 p-0 text-text-tertiary">
+                      <MoreVertical size={18} />
+                    </Button>
+                  )
+                }
+              ]}
+           />
         </main>
 
         {/* Sovereign Relationship Matrix (Side Panel) */}
         <AnimatePresence>
           {selectedEntity && (
             <motion.aside initial={{ x: 400, opacity: 0 }} animate={{ x: 0, opacity: 1 }} exit={{ x: 400, opacity: 0 }}
-              className="w-[450px] glass rounded-[3.5rem] shadow-2xl flex flex-col overflow-hidden border-l border-white/20">
-              
-              <div className="bg-navy p-10 text-white relative overflow-hidden">
-                 <div className="absolute top-0 right-0 p-10 opacity-10"><Zap size={120} strokeWidth={0.5} /></div>
-                 <button onClick={() => setSelectedEntity(null)} className="absolute top-8 right-8 p-3 bg-white/5 rounded-xl hover:bg-white/10 transition-all text-white/40"><X size={20} /></button>
-                 
-                 <div className="p-4 bg-gold text-navy rounded-2xl w-14 h-14 flex items-center justify-center mb-6 shadow-2xl shadow-gold/20">
-                    <Zap size={28} />
-                 </div>
-                 <h2 className="text-3xl font-serif font-black uppercase leading-tight">{selectedEntity.name}</h2>
-                 <p className="text-[10px] font-black text-gold uppercase tracking-[0.3em] mt-3">Sovereign Matrix Entry</p>
-              </div>
+              className="w-[450px] flex flex-col overflow-hidden h-full">
+              <Card className="flex-1 flex flex-col overflow-hidden border-border-subtle shadow-2xl bg-bg-elevated/40">
+                
+                <div className="bg-accent p-10 text-bg-base relative overflow-hidden">
+                   <div className="absolute top-0 right-0 p-10 opacity-10 pointer-events-none"><Zap size={160} /></div>
+                   <Button variant="ghost" onClick={() => setSelectedEntity(null)} className="absolute top-8 right-8 w-10 h-10 p-0 rounded-full bg-bg-base/10 hover:bg-bg-base/20 text-bg-base">
+                      <X size={20} />
+                   </Button>
+                   
+                   <div className="p-4 bg-bg-base text-accent rounded-2xl w-14 h-14 flex items-center justify-center mb-6 shadow-2xl shadow-bg-base/20">
+                      <Zap size={28} />
+                   </div>
+                   <Text variant="h1" className="text-bg-base leading-tight">{selectedEntity.name}</Text>
+                   <Text variant="xs" className="text-bg-base opacity-60 mt-3 block font-black">Sovereign Matrix Mapping</Text>
+                </div>
 
-              <div className="flex-1 overflow-auto p-10 space-y-10">
-                 
-                 {/* Identity DNA */}
-                 <section className="space-y-4">
-                    <h4 className="text-[10px] font-black text-navy/30 uppercase tracking-[0.2em] flex items-center gap-2">
-                       <ShieldCheck size={14} /> Identity DNA
-                    </h4>
-                    <div className="grid grid-cols-2 gap-4">
-                       {[
-                         { label: 'Code', value: selectedEntity.code || 'N/A', icon: Info },
-                         { label: 'Category', value: selectedEntity.category || activeRegistry, icon: Layers },
-                         { label: 'Mobile', value: selectedEntity.mobile || 'Private', icon: Smartphone },
-                         { label: 'Tax Map', value: selectedEntity.tax_type || selectedEntity.tax_behavior || 'Local-Incl', icon: Globe },
-                       ].map(dna => (
-                         <div key={dna.label} className="bg-gray-50 p-5 rounded-3xl border border-gray-100 group hover:border-gold/30 transition-all">
-                            <div className="flex items-center gap-3 mb-2">
-                               <dna.icon size={12} className="text-muted" />
-                               <span className="text-[9px] font-black text-muted uppercase tracking-widest">{dna.label}</span>
-                            </div>
-                            <div className="text-sm font-black text-navy truncate font-mono">{dna.value}</div>
-                         </div>
-                       ))}
-                    </div>
-                 </section>
+                <div className="flex-1 overflow-auto p-10 space-y-10 no-scrollbar">
+                   {/* Identity DNA */}
+                   <section className="space-y-6">
+                      <Flex gap={3} className="opacity-40 uppercase tracking-widest text-[10px] font-black">
+                         <ShieldCheck size={14} /> Identity DNA
+                      </Flex>
+                      <Grid cols={2} gap={4}>
+                         {[
+                           { label: 'Code', value: selectedEntity.code || 'N/A', icon: Info },
+                           { label: 'Category', value: selectedEntity.category || activeRegistry, icon: Layers },
+                           { label: 'Mobile', value: selectedEntity.mobile || 'Private', icon: Smartphone },
+                           { label: 'Tax Map', value: selectedEntity.tax_type || selectedEntity.tax_behavior || 'Local-Incl', icon: Globe },
+                         ].map(dna => (
+                           <Card key={dna.label} variant="flat" className="p-5 border-border-subtle group hover:border-accent/30 transition-all">
+                              <Flex gap={3} className="mb-2 opacity-40">
+                                 <dna.icon size={12} />
+                                 <Text variant="xs" className="uppercase font-black scale-90 origin-left">{dna.label}</Text>
+                              </Flex>
+                              <Text variant="sm" className="font-bold truncate font-mono">{dna.value}</Text>
+                           </Card>
+                         ))}
+                      </Grid>
+                   </section>
 
-                 {/* Shoper 9 Deep Mapping (Context Dependent) */}
-                 <section className="space-y-4">
-                    <h4 className="text-[10px] font-black text-navy/30 uppercase tracking-[0.2em] flex items-center gap-2">
-                       <Zap size={14} /> Shoper 9 Protocols
-                    </h4>
-                    <div className="bg-white rounded-3xl border border-gray-100 p-6 shadow-sm space-y-6">
-                       {activeRegistry === 'CUSTOMERS' && (
-                         <>
-                            <div className="flex justify-between items-center pb-4 border-b border-gray-50">
-                               <div className="flex items-center gap-3 text-rose-500 font-black"><span className="text-[11px] font-bold text-navy uppercase">Birthday / Anniv</span></div>
-                               <span className="text-xs font-black text-rose-500 uppercase font-mono">{selectedEntity.dob || 'NOT SET'}</span>
-                            </div>
-                         </>
-                       )}
-                       {activeRegistry === 'ITEMS' && (
-                         <>
-                            <div className="flex justify-between items-center pb-4 border-b border-gray-50">
-                               <div className="flex items-center gap-3 text-indigo-500 font-black"><span className="text-[11px] font-bold text-navy uppercase">HSN / SAC Code</span></div>
-                               <span className="text-xs font-black text-indigo-500 uppercase font-mono">{selectedEntity.hsn}</span>
-                            </div>
-                         </>
-                       )}
-                    </div>
-                 </section>
+                   {/* Shoper 9 Deep Mapping */}
+                   <section className="space-y-6">
+                      <Flex gap={3} className="opacity-40 uppercase tracking-widest text-[10px] font-black">
+                         <Zap size={14} /> Protocol Rules
+                      </Flex>
+                      <Card variant="flat" className="p-6 space-y-6">
+                         {activeRegistry === 'CUSTOMERS' && (
+                           <Flex between className="pb-4 border-b border-border-subtle/50">
+                              <Text variant="xs" className="font-bold">Birthday / Anniversary</Text>
+                              <Badge variant="warn" className="font-mono">{selectedEntity.dob || 'NOT SET'}</Badge>
+                           </Flex>
+                         )}
+                         {activeRegistry === 'ITEMS' && (
+                           <Flex between className="pb-4 border-b border-border-subtle/50">
+                              <Text variant="xs" className="font-bold">HSN / SAC Code</Text>
+                              <Badge variant="info" className="font-mono">{selectedEntity.hsn || 'PENDING'}</Badge>
+                           </Flex>
+                         )}
+                      </Card>
+                   </section>
 
-                 {/* Action Intelligence */}
-                 <div className="grid grid-cols-2 gap-4 pt-6 border-t border-gray-100">
-                      <button className="flex flex-col items-center justify-center gap-2 p-6 bg-gray-50 rounded-3xl hover:bg-gold hover:text-navy transition-all group">
-                         <HistoryIcon className="w-6 h-6 text-muted group-hover:text-navy" />
-                         <span className="text-[9px] font-black uppercase tracking-widest">Transaction History</span>
-                      </button>
-                    {hasPermission('catalog.edit') && (
-                      <button className="flex flex-col items-center justify-center gap-2 p-6 bg-navy text-white rounded-3xl hover:shadow-2xl hover:scale-105 transition-all">
-                        <Settings2 className="w-6 h-6 text-gold" />
-                        <span className="text-[9px] font-black uppercase tracking-widest">Modify Master</span>
-                      </button>
-                    )}
-                 </div>
-              </div>
+                   {/* Action Intelligence */}
+                   <Flex gap={4} className="pt-8 border-t border-border-subtle">
+                        <Button variant="sec" className="flex-1 flex flex-col h-auto p-6 gap-3 group border-border-subtle">
+                           <HistoryIcon size={24} className="opacity-20 group-hover:opacity-100 transition-opacity" />
+                           <span className="text-[9px] font-black uppercase tracking-widest">History Log</span>
+                        </Button>
+                      {hasPermission('catalog.edit') && (
+                        <Button className="flex-1 flex flex-col h-auto p-6 gap-3">
+                          <Settings2 size={24} />
+                          <span className="text-[9px] font-black uppercase tracking-widest">Modify Entity</span>
+                        </Button>
+                      )}
+                   </Flex>
+                </div>
+              </Card>
             </motion.aside>
           )}
         </AnimatePresence>
-      </div>
-    </div>
+      </Flex>
+    </Container>
   );
 };
 

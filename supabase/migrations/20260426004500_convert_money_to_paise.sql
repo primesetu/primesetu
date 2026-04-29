@@ -1,5 +1,5 @@
 /* ============================================================
- * PrimeSetu — Shoper9-Based Retail OS
+ * SMRITI-OS — Shoper9-Based Retail OS
  * Migration: convert_money_to_paise
  * © 2026 AITDL Network
  * ============================================================ */

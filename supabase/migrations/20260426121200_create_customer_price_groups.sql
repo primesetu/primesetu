@@ -1,5 +1,5 @@
 /* ============================================================
- * PrimeSetu — Shoper9-Based Retail OS
+ * SMRITI-OS — Shoper9-Based Retail OS
  * Migration: create_customer_price_groups
  * © 2026 AITDL Network
  * ============================================================ */

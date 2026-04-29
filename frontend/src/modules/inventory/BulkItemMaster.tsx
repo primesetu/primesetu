@@ -1,10 +1,10 @@
 /* ============================================================
- * PrimeSetu — Shoper9-Based Retail OS
+ * SMRITI-OS — Shoper9-Based Retail OS
  * Zero Cloud · Sovereign · AI-Governed
  * ============================================================
  * System Architect   :  Jawahar R Mallah
  * Organisation       :  AITDL Network
- * Project            :  PrimeSetu
+ * Project            :  SMRITI-OS
  * © 2026 — All Rights Reserved
  * "Memory, Not Code."
  * ============================================================ */
@@ -204,7 +204,7 @@ export default function BulkItemMaster({ onClose }: { onClose: () => void }) {
           {step === 'map' && (
             <div className="flex-1 flex flex-col p-12 overflow-hidden">
               <h3 className="text-2xl font-serif font-black text-navy mb-2">Column Mapping</h3>
-              <p className="text-xs text-muted mb-10">Map Shoper 9 fields to PrimeSetu attributes. System will perform "Present Check" on commit.</p>
+              <p className="text-xs text-muted mb-10">Map Shoper 9 fields to SMRITI-OS attributes. System will perform "Present Check" on commit.</p>
               
               <div className="flex-1 overflow-auto grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 content-start pb-10">
                 {columns.map((col, i) => (

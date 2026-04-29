@@ -1,5 +1,5 @@
 # ============================================================
-# * PrimeSetu - Shoper9-Based Retail OS
+# * SMRITI-OS - Shoper9-Based Retail OS
 # * Document : backend/app/services/hooks.py
 # * Pattern  : Shoper 9 Extension Framework (Levels 1-4)
 # ============================================================ #
@@ -40,7 +40,7 @@ class HookEngine:
             if response.status == 30:
                 raise HTTPException(
                     status_code=400, 
-                    detail=f"[PrimeSetu Extension Level {level}] Stop: {response.message}"
+                    detail=f"[SMRITI-OS Extension Level {level}] Stop: {response.message}"
                 )
             
             if response.modified_data:

@@ -1,10 +1,10 @@
 /* ============================================================
- * PrimeSetu — Shoper9-Based Retail OS
+ * SMRITI-OS — Shoper9-Based Retail OS
  * Zero Cloud · Sovereign · AI-Governed
  * ============================================================
  * System Architect   :  Jawahar R Mallah
  * Organisation     :  AITDL Network
- * Project            :  PrimeSetu
+ * Project            :  SMRITI-OS
  * © 2026 — All Rights Reserved
  * "Memory, Not Code."
  * ============================================================ */
@@ -25,17 +25,17 @@ const ThemeContext = createContext<ThemeContextType | undefined>(undefined);
 
 export function ThemeProvider({ children }: { children: React.ReactNode }) {
   const [theme, setThemeState] = useState<Theme>(() => {
-    const savedTheme = localStorage.getItem('primesetu_theme');
+    const savedTheme = localStorage.getItem('SMRITI-OS_theme');
     return (savedTheme as Theme) || 'tesla';
   });
 
   const [accent, setAccentState] = useState<Accent>(() => {
-    const savedAccent = localStorage.getItem('primesetu_accent');
+    const savedAccent = localStorage.getItem('SMRITI-OS_accent');
     return (savedAccent as Accent) || 'default';
   });
 
   useEffect(() => {
-    localStorage.setItem('primesetu_theme', theme);
+    localStorage.setItem('SMRITI-OS_theme', theme);
     if (theme === 'shoper9') {
       document.documentElement.setAttribute('data-theme', 'shoper9');
     } else {
@@ -44,7 +44,7 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
   }, [theme]);
 
   useEffect(() => {
-    localStorage.setItem('primesetu_accent', accent);
+    localStorage.setItem('SMRITI-OS_accent', accent);
     if (accent !== 'default') {
       document.documentElement.setAttribute('data-accent', accent);
     } else {

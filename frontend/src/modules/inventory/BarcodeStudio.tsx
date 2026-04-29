@@ -1,10 +1,10 @@
 /* ============================================================
- * PrimeSetu — Shoper9-Based Retail OS
+ * SMRITI-OS — Shoper9-Based Retail OS
  * Zero Cloud · Sovereign · AI-Governed
  * ============================================================
  * System Architect : Jawahar R Mallah
  * Organisation     : AITDL Network
- * Project          : PrimeSetu
+ * Project          : SMRITI-OS
  * © 2026 — All Rights Reserved
  * "Memory, Not Code."
  * ============================================================ */
@@ -31,16 +31,40 @@ import {
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { useHotkeys } from 'react-hotkeys-hook';
 
-import { supabase } from '../../lib/supabase';
 import { formatCurrency } from '../../utils/currency';
 import { usePermission } from '../../hooks/usePermission';
 import { useBarcodeScanner } from '../../hooks/useBarcodeScanner';
 import { validateEAN13, calculateEAN13CheckDigit } from '../../utils/barcode';
-import { api } from '../../api/client';
+import { api, apiClient } from '../../api/client';
 
 interface BarcodeStudioProps {
   onClose?: () => void;
-  initialItems?: any[];
+  initialItems?: BarcodeItem[];
+}
+
+interface BarcodeItem {
+  id: string;
+  // FastAPI shape
+  item_code?: string;
+  item_name?: string;
+  mrp_paise?: number;
+  // Legacy InventoryModule shape (code/name/mrp)
+  code?: string;
+  name?: string;
+  mrp?: number;
+  hsn_code?: string;
+  barcode?: string;
+  size?: string;
+  colour?: string;
+  store_name?: string;
+}
+
+interface PrintJob extends BarcodeItem {
+  qty: number;
+}
+
+interface BulkImportRow {
+  [key: string]: string;
 }
 
 import { useLocation } from 'react-router-dom';
@@ -49,10 +73,10 @@ const BarcodeStudio: React.FC<BarcodeStudioProps> = ({ onClose, initialItems = [
   const queryClient = useQueryClient();
   const location = useLocation();
   const [searchTerm, setSearchTerm] = useState('');
-  const [selectedItem, setSelectedItem] = useState<any>(null);
+  const [selectedItem, setSelectedItem] = useState<BarcodeItem | null>(null);
   const [labelQty, setLabelQty] = useState(1);
   const [activeView, setActiveView] = useState<'STUDIO' | 'QUEUE' | 'AUDIT'>(location.state?.items ? 'QUEUE' : 'STUDIO');
-  const [printQueue, setPrintQueue] = useState<any[]>(location.state?.items || []);
+  const [printQueue, setPrintQueue] = useState<PrintJob[]>(location.state?.items || []);
   const [labelProfile, setLabelProfile] = useState({
     id: 'STANDARD',
     name: '38x25mm Single',
@@ -116,16 +140,9 @@ const BarcodeStudio: React.FC<BarcodeStudioProps> = ({ onClose, initialItems = [
   });
 
   const bulkImport = useMutation({
-    mutationFn: async (data: any[]) => {
-       const res = await fetch(`${import.meta.env.VITE_API_URL}/api/v1/barcodes/bulk-import`, {
-          method: 'POST',
-          headers: { 
-            'Content-Type': 'application/json',
-            'Authorization': `Bearer ${localStorage.getItem('primesetu_token')}` 
-          },
-          body: JSON.stringify(data)
-       });
-       return res.json();
+    mutationFn: async (data: BulkImportRow[]) => {
+      const res = await apiClient.post('/barcodes/bulk-import', data);
+      return res.data;
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['items-barcode'] });
@@ -164,7 +181,7 @@ const BarcodeStudio: React.FC<BarcodeStudioProps> = ({ onClose, initialItems = [
       });
     }
     setPrintQueue([]);
-    alert("Queue dispatched to label printer.");
+    console.log('[SMRITI-OS] Print queue dispatched to label printer.');
   };
 
   const handleFileUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -179,7 +196,7 @@ const BarcodeStudio: React.FC<BarcodeStudioProps> = ({ onClose, initialItems = [
       
       const data = lines.slice(1).map(line => {
         const values = line.split(',').map(v => v.trim());
-        const obj: any = {};
+        const obj: BulkImportRow = {};
         headers.forEach((h, i) => obj[h] = values[i]);
         return obj;
       });
@@ -199,7 +216,7 @@ const BarcodeStudio: React.FC<BarcodeStudioProps> = ({ onClose, initialItems = [
       </nav>
 
       {/* Header Section */}
-      <div className="flex items-center justify-between bg-white/50 p-8 rounded-[40px] border border-navy/5 backdrop-blur-sm shadow-sm">
+      <div className="flex items-center justify-between bg-bg-elevated/40 p-8 rounded-[40px] border border-border backdrop-blur-sm shadow-sm">
         <div className="flex items-center gap-6">
           <div className="w-16 h-16 bg-brand-navy rounded-[24px] flex items-center justify-center text-brand-gold shadow-2xl shadow-navy/20">
             <ScanBarcode size={32} />
@@ -230,7 +247,7 @@ const BarcodeStudio: React.FC<BarcodeStudioProps> = ({ onClose, initialItems = [
       <div className="grid grid-cols-12 gap-10">
         {/* Left Panel: Explorer */}
         <div className="col-span-12 lg:col-span-4 space-y-8">
-           <div className="bg-white rounded-[40px] p-10 border border-navy/5 shadow-xl relative overflow-hidden group">
+           <div className="bg-bg-elevated rounded-[40px] p-10 border border-border shadow-xl relative overflow-hidden group">
               <div className="absolute top-0 right-0 w-32 h-32 bg-brand-gold/5 blur-3xl rounded-full -mr-10 -mt-10"></div>
               
               <div className="flex items-center justify-between mb-8">
@@ -251,14 +268,14 @@ const BarcodeStudio: React.FC<BarcodeStudioProps> = ({ onClose, initialItems = [
               </div>
 
               <div className="space-y-3 max-h-[450px] overflow-y-auto pr-2 custom-scrollbar">
-                 {Array.isArray(items) && items.map((item: any) => (
+                 {Array.isArray(items) && items.map((item: BarcodeItem) => (
                     <button 
                       key={item.id}
                       onClick={() => setSelectedItem(item)}
                       className={`w-full flex items-center justify-between p-6 rounded-3xl transition-all border-2
                         ${selectedItem?.id === item.id 
                           ? 'bg-brand-gold/5 border-brand-gold shadow-lg shadow-brand-gold/10' 
-                          : 'bg-white border-transparent hover:border-navy/5'}`}
+                          : 'bg-bg-float border-transparent hover:border-border'}`}
                     >
                        <div className="text-left">
                           <div className="text-xs font-black text-navy uppercase">{item.item_name}</div>
@@ -279,7 +296,7 @@ const BarcodeStudio: React.FC<BarcodeStudioProps> = ({ onClose, initialItems = [
         {/* Right Panel: Studio Canvas */}
         <div className="col-span-12 lg:col-span-8 space-y-8">
            {activeView === 'STUDIO' && (
-             <div className="bg-white rounded-[40px] p-10 border border-navy/5 shadow-xl mb-10 flex items-center justify-between">
+             <div className="bg-bg-elevated rounded-[40px] p-10 border border-border shadow-xl mb-10 flex items-center justify-between">
                 <div>
                    <h3 className="text-[10px] font-black text-navy/40 uppercase tracking-[0.3em] mb-4">Active Roll Profile</h3>
                    <div className="flex gap-4">
@@ -371,7 +388,7 @@ const BarcodeStudio: React.FC<BarcodeStudioProps> = ({ onClose, initialItems = [
                    <button 
                      onClick={() => selectedItem?.barcode && printLabel.mutate({ barcode: selectedItem.barcode, copies: 1 })}
                      disabled={!selectedItem?.barcode || printLabel.isPending}
-                     className="w-full py-5 bg-white text-navy rounded-3xl font-black text-[11px] uppercase tracking-widest mt-12 hover:bg-brand-gold transition-all shadow-2xl relative z-10 disabled:opacity-20"
+                     className="w-full py-5 bg-brand-navy text-white rounded-3xl font-black text-[11px] uppercase tracking-widest mt-12 hover:bg-brand-gold transition-all shadow-2xl relative z-10 disabled:opacity-20"
                    >
                       {printLabel.isPending ? 'PRINTING...' : 'Print Single Label'}
                    </button>
@@ -400,20 +417,20 @@ const BarcodeStudio: React.FC<BarcodeStudioProps> = ({ onClose, initialItems = [
 
                 {/* Generator Controls */}
                 <div className="col-span-1 space-y-8">
-                   <div className="bg-white rounded-[40px] p-10 border border-navy/5 shadow-xl">
-                      <h3 className="text-[10px] font-black text-navy/40 uppercase tracking-[0.3em] mb-8">Encoding Protocols</h3>
+                   <div className="bg-bg-elevated rounded-[40px] p-10 border border-border shadow-xl">
+                      <h3 className="text-[10px] font-black text-text-primary/40 uppercase tracking-[0.3em] mb-8">Encoding Protocols</h3>
                       
                       <div className="space-y-6">
                          <button 
                            onClick={() => generateInternal.mutate(selectedItem.id)}
                            disabled={!selectedItem || generateInternal.isPending}
-                           className="w-full p-6 bg-navy/5 rounded-3xl border-2 border-transparent hover:border-navy/10 transition-all flex items-center justify-between group disabled:opacity-20"
+                           className="w-full p-6 bg-bg-input rounded-3xl border-2 border-transparent hover:border-navy/10 transition-all flex items-center justify-between group disabled:opacity-20"
                          >
                             <div className="text-left">
-                               <div className="text-xs font-black text-navy uppercase">Generate Internal</div>
-                               <div className="text-[8px] font-black text-navy/30 uppercase mt-1 tracking-widest">CODE128 · Sovereign Format</div>
+                               <div className="text-xs font-black text-text-primary uppercase">Generate Internal</div>
+                               <div className="text-[8px] font-black text-text-primary/30 uppercase mt-1 tracking-widest">CODE128 · Sovereign Format</div>
                             </div>
-                            <div className="w-10 h-10 bg-white rounded-xl flex items-center justify-center text-navy shadow-sm group-hover:bg-navy group-hover:text-white transition-all">
+                            <div className="w-10 h-10 bg-bg-float rounded-xl flex items-center justify-center text-text-primary shadow-sm group-hover:bg-brand-navy group-hover:text-white transition-all">
                                <Zap size={18} />
                             </div>
                          </button>
@@ -421,20 +438,20 @@ const BarcodeStudio: React.FC<BarcodeStudioProps> = ({ onClose, initialItems = [
                          <button 
                            onClick={() => generateEan13.mutate(selectedItem.id)}
                            disabled={!selectedItem || generateEan13.isPending}
-                           className="w-full p-6 bg-navy/5 rounded-3xl border-2 border-transparent hover:border-emerald-500/10 transition-all flex items-center justify-between group disabled:opacity-20"
+                           className="w-full p-6 bg-bg-input rounded-3xl border-2 border-transparent hover:border-emerald-500/10 transition-all flex items-center justify-between group disabled:opacity-20"
                          >
                             <div className="text-left">
-                               <div className="text-xs font-black text-navy uppercase">Register EAN-13</div>
-                               <div className="text-[8px] font-black text-navy/30 uppercase mt-1 tracking-widest">GS1 Standard · Phase 7</div>
+                               <div className="text-xs font-black text-text-primary uppercase">Register EAN-13</div>
+                               <div className="text-[8px] font-black text-text-primary/30 uppercase mt-1 tracking-widest">GS1 Standard · Phase 7</div>
                             </div>
-                            <div className="w-10 h-10 bg-white rounded-xl flex items-center justify-center text-navy shadow-sm group-hover:bg-emerald-500 group-hover:text-white transition-all">
+                            <div className="w-10 h-10 bg-bg-float rounded-xl flex items-center justify-center text-text-primary shadow-sm group-hover:bg-emerald-500 group-hover:text-white transition-all">
                                <Tag size={18} />
                             </div>
                          </button>
                       </div>
                    </div>
 
-                   <div className="bg-brand-gold rounded-[40px] p-10 text-navy shadow-xl relative overflow-hidden">
+                   <div className="bg-brand-gold rounded-[40px] p-10 text-text-primary shadow-xl relative overflow-hidden">
                       <div className="absolute top-0 right-0 p-8 opacity-20"><Printer size={100} /></div>
                       <h3 className="text-[10px] font-black uppercase tracking-[0.3em] mb-8 relative z-10">Batch Operations</h3>
                       <div className="flex items-center gap-4 relative z-10">
@@ -442,7 +459,7 @@ const BarcodeStudio: React.FC<BarcodeStudioProps> = ({ onClose, initialItems = [
                            type="number" 
                            value={labelQty}
                            onChange={(e) => setLabelQty(parseInt(e.target.value) || 1)}
-                           className="w-20 bg-navy/5 border-2 border-navy/10 rounded-2xl py-4 px-4 text-center font-black outline-none focus:border-navy"
+                           className="w-20 bg-bg-input border-2 border-navy/10 rounded-2xl py-4 px-4 text-center font-black outline-none focus:border-navy"
                          />
                          <button 
                            onClick={handleAddToQueue}
@@ -458,11 +475,11 @@ const BarcodeStudio: React.FC<BarcodeStudioProps> = ({ onClose, initialItems = [
            )}
 
            {activeView === 'QUEUE' && (
-             <div className="bg-white rounded-[40px] p-12 border border-navy/5 shadow-2xl animate-in slide-in-from-right-10 duration-500">
+             <div className="bg-bg-elevated rounded-[40px] p-12 border border-border shadow-2xl animate-in slide-in-from-right-10 duration-500">
                 <div className="flex items-center justify-between mb-10 pb-10 border-b border-navy/5">
                    <div>
-                      <h2 className="text-3xl font-serif font-black text-navy uppercase tracking-tight">Print Queue</h2>
-                      <p className="text-[9px] font-black text-navy/40 uppercase tracking-widest mt-2">Active Jobs Pending Transmission</p>
+                      <h2 className="text-3xl font-serif font-black text-text-primary uppercase tracking-tight">Print Queue</h2>
+                      <p className="text-[9px] font-black text-text-primary/40 uppercase tracking-widest mt-2">Active Jobs Pending Transmission</p>
                    </div>
                    <div className="flex items-center gap-4">
                      <button 
@@ -486,7 +503,7 @@ const BarcodeStudio: React.FC<BarcodeStudioProps> = ({ onClose, initialItems = [
                      {printQueue.map((job, idx) => (
                        <div key={idx} className="flex items-center justify-between p-6 bg-navy/5 rounded-3xl border border-navy/5 group">
                           <div className="flex items-center gap-6">
-                             <div className="w-12 h-12 bg-white rounded-2xl flex items-center justify-center text-navy shadow-sm group-hover:bg-brand-gold transition-all">
+                             <div className="w-12 h-12 bg-bg-float rounded-2xl flex items-center justify-center text-text-primary shadow-sm group-hover:bg-brand-gold transition-all">
                                 <Tag size={20} />
                              </div>
                              <div>
@@ -518,7 +535,7 @@ const BarcodeStudio: React.FC<BarcodeStudioProps> = ({ onClose, initialItems = [
            )}
 
            {activeView === 'AUDIT' && (
-             <div className="bg-white rounded-[40px] p-12 border border-navy/5 shadow-2xl animate-in slide-in-from-right-10 duration-500">
+             <div className="bg-bg-elevated rounded-[40px] p-12 border border-border shadow-2xl animate-in slide-in-from-right-10 duration-500">
                 <div className="max-w-2xl mx-auto text-center py-20">
                    <div className="w-24 h-24 bg-navy/5 rounded-[32px] flex items-center justify-center text-navy mx-auto mb-10">
                       <Layers size={48} />
@@ -538,7 +555,7 @@ const BarcodeStudio: React.FC<BarcodeStudioProps> = ({ onClose, initialItems = [
                         htmlFor="pdt-upload"
                         className="cursor-pointer group flex flex-col items-center"
                       >
-                         <div className="w-16 h-16 bg-white rounded-2xl flex items-center justify-center text-navy shadow-xl mb-6 group-hover:bg-brand-gold transition-all">
+                         <div className="w-16 h-16 bg-bg-float rounded-2xl flex items-center justify-center text-text-primary shadow-xl mb-6 group-hover:bg-brand-gold transition-all">
                             <Plus size={32} />
                          </div>
                          <div className="text-sm font-black text-navy uppercase tracking-widest">Select CSV File</div>

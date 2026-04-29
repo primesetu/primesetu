@@ -13,8 +13,8 @@ async def bootstrap():
     service_key = os.getenv("SUPABASE_SERVICE_ROLE_KEY")
     supabase = create_client(url, service_key)
     
-    email = "admin@primesetu.com"
-    password = "PrimeSetu@2026"
+    email = "admin@SMRITI-OS.com"
+    password = "SMRITI-OS@2026"
     
     try:
         # Create or fetch Auth user

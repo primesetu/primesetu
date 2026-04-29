@@ -1,10 +1,10 @@
 # ============================================================
-# * PrimeSetu - Shoper9-Based Retail OS
+# * SMRITI-OS - Shoper9-Based Retail OS
 # * Zero Cloud . Sovereign . AI-Governed
 # ============================================================
 # * System Architect   :  Jawahar R Mallah
 # * Organisation       :  AITDL Network
-# * Project            :  PrimeSetu
+# * Project            :  SMRITI-OS
 # * (c) 2026 - All Rights Reserved
 # * "Memory, Not Code."
 # ============================================================ #
@@ -30,7 +30,9 @@ class BillCreate(BaseModel):
     items: List[BillItemCreate]
     payments: Optional[List[PaymentModeDetail]] = None
     type: str = "Sales" # Sales, SalesReturn
-    till_id: Optional[uuid.UUID] = None
+    till_id: Optional[int] = None
+    cashier_id: Optional[uuid.UUID] = None
+    shoper_recid: Optional[int] = None
     original_invoice_id: Optional[uuid.UUID] = None
     suspended_reason: Optional[str] = None
 
@@ -70,6 +72,9 @@ class TransactionRead(BaseModel):
     discount_total: int
     tax_total: int
     net_payable: int
+    cashier_id: Optional[uuid.UUID] = None
+    till_id: Optional[int] = None
+    shoper_recid: Optional[int] = None
     status: str
     created_at: datetime
     items: List[TransactionItemRead] = []

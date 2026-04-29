@@ -1,5 +1,5 @@
 /* ============================================================
- * PrimeSetu — Shoper9-Based Retail OS
+ * SMRITI-OS — Shoper9-Based Retail OS
  * Zero Cloud · Sovereign · AI-Governed
  * ============================================================ */
 import React, { useEffect } from 'react'
@@ -35,7 +35,7 @@ export default function ThermalReceipt({ bill, onPrinted, autoPrint = true }: { 
       `}} />
       
       <div className="text-center mb-4">
-        <h2 className="text-lg font-black uppercase mb-1">{store?.name || 'PrimeSetu Retail'}</h2>
+        <h2 className="text-lg font-black uppercase mb-1">{store?.name || 'SMRITI-OS Retail'}</h2>
         <p className="text-[10px]">{store?.address || 'Verified Sovereign Node'}</p>
         <p className="text-[10px]">GSTIN: {store?.gstin || '07AABCU9603R1Z2'}</p>
         <p className="text-[10px] mt-1 font-bold">Ph: {store?.phone || '+91 0000000000'}</p>
@@ -110,7 +110,7 @@ export default function ThermalReceipt({ bill, onPrinted, autoPrint = true }: { 
         <p className="font-bold">Thank you for visiting!</p>
         <p className="mt-1">Exchange within 14 days.</p>
         <p>No refund on sale items.</p>
-        <p className="mt-4 font-black">*** POWERED BY PRIMESETU ***</p>
+        <p className="mt-4 font-black">*** POWERED BY SMRITI-OS ***</p>
       </div>
     </div>
   )

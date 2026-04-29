@@ -1,10 +1,10 @@
 /* ============================================================
- * PrimeSetu — Shoper9-Based Retail OS
+ * SMRITI-OS — Shoper9-Based Retail OS
  * Zero Cloud · Sovereign · AI-Governed
  * ============================================================
  * System Architect   :  Jawahar R Mallah
  * Organisation       :  AITDL Network
- * Project            :  PrimeSetu
+ * Project            :  SMRITI-OS
  * © 2026 — All Rights Reserved
  * "Memory, Not Code."
  * ============================================================ */
@@ -13,9 +13,10 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { useState } from 'react';
 import AttributeSales from './AttributeSales';
 import MISReports from './MISReports';
+import FlexibleReportGenerator from './FlexibleReportGenerator';
 
 export default function AnalyticsModule() {
-  const [activeTab, setActiveTab] = useState<'OVERVIEW' | 'ATTRIBUTES' | 'MIS'>('OVERVIEW');
+  const [activeTab, setActiveTab] = useState<'OVERVIEW' | 'ATTRIBUTES' | 'MIS' | 'DESIGNER'>('OVERVIEW');
 
   const chartData = [
     { day: 'Mon', sales: 42000 },
@@ -56,6 +57,12 @@ export default function AnalyticsModule() {
             className={`px-8 py-3 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all whitespace-nowrap ${activeTab === 'MIS' ? 'bg-navy text-white shadow-lg' : 'text-muted'}`}
           >
             MIS Reports
+          </button>
+          <button 
+            onClick={() => setActiveTab('DESIGNER')}
+            className={`px-8 py-3 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all whitespace-nowrap ${activeTab === 'DESIGNER' ? 'bg-navy text-white shadow-lg' : 'text-muted'}`}
+          >
+            Report Designer
           </button>
         </div>
       </div>
@@ -165,6 +172,17 @@ export default function AnalyticsModule() {
             exit={{ opacity: 0, y: -10 }}
           >
             <MISReports />
+          </motion.div>
+        )}
+
+        {activeTab === 'DESIGNER' && (
+          <motion.div
+            key="designer"
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -10 }}
+          >
+            <FlexibleReportGenerator />
           </motion.div>
         )}
       </AnimatePresence>

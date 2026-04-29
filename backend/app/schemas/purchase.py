@@ -1,5 +1,5 @@
 # ============================================================
-# PrimeSetu - Shoper9-Based Retail OS
+# SMRITI-OS - Shoper9-Based Retail OS
 # Document : backend/app/schemas/purchase.py
 # (c) 2026 - All Rights Reserved
 # ============================================================
@@ -55,6 +55,9 @@ class GRNItemBase(BaseModel):
     colour: Optional[str] = None
     qty_received: int
     unit_cost_paise: int
+    batch_no: Optional[str] = None
+    mfg_date: Optional[date] = None
+    exp_date: Optional[date] = None
 
 class GRNItemCreate(GRNItemBase):
     pass

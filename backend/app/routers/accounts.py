@@ -1,13 +1,13 @@
-/* ============================================================
- * PrimeSetu - Shoper9-Based Retail OS
- * Zero Cloud . Sovereign . AI-Governed
- * ============================================================
- * System Architect : Jawahar R Mallah
- * Organisation     : AITDL Network
- * Project          : PrimeSetu
- * (c) 2026 - All Rights Reserved
- * "Memory, Not Code."
- * ============================================================ */
+# ============================================================
+# SMRITI-OS - Shoper9-Based Retail OS
+# Zero Cloud . Sovereign . AI-Governed
+# ============================================================
+# System Architect : Jawahar R Mallah
+# Organisation     : AITDL Network
+# Project          : SMRITI-OS
+# (c) 2026 - All Rights Reserved
+# "Memory, Not Code."
+# ============================================================ #
 
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.ext.asyncio import AsyncSession
@@ -31,8 +31,7 @@ async def get_gstr1_summary(
     Aggregates sales by HSN and Tax Rate (Paise Perfect).
     """
     store_id = current_user.store_id
-    
-    # Query: Group by HSN and Tax Rate
+# Query: Group by HSN and Tax Rate
     stmt = (
         select(
             Item.hsn_code,
@@ -73,8 +72,7 @@ async def generate_tally_xml(
     Produces Shoper 9 compatible <ENVELOPE> XML for Voucher import.
     """
     store_id = current_user.store_id
-    
-    # Fetch today's transactions
+# Fetch today's transactions
     result = await db.execute(
         select(Transaction).where(
             and_(
@@ -85,8 +83,7 @@ async def generate_tally_xml(
         )
     )
     txns = result.scalars().all()
-    
-    # Minimal Shoper 9 / Tally XML Template
+# Minimal Shoper 9 / Tally XML Template
     xml_content = f"""<ENVELOPE>
   <HEADER>
     <TALLYREQUEST>Import Data</TALLYREQUEST>
@@ -131,5 +128,5 @@ async def issue_credit_note(
     current_user = Depends(get_current_user)
 ):
     """Issue a new institutional credit note for sales return."""
-    # Simplified logic for refactor
+# Simplified logic for refactor
     return {"status": "SUCCESS", "note_no": f"CN-{uuid.uuid4().hex[:6].upper()}"}

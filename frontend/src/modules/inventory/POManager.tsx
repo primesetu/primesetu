@@ -1,10 +1,10 @@
 /* ============================================================
- * PrimeSetu — Shoper9-Based Retail OS
+ * SMRITI-OS — Shoper9-Based Retail OS
  * Zero Cloud · Sovereign · AI-Governed
  * ============================================================
  * System Architect : Jawahar R Mallah
  * Organisation     : AITDL Network
- * Project          : PrimeSetu
+ * Project          : SMRITI-OS
  * © 2026 — All Rights Reserved
  * "Memory, Not Code."
  * ============================================================ */
@@ -44,8 +44,8 @@ const POManager: React.FC = () => {
     return (
       <div className="flex flex-col items-center justify-center h-[60vh] text-center">
         <ShieldAlert size={48} className="text-rose-500 mb-4" />
-        <h2 className="text-xl font-black text-navy uppercase tracking-tighter">Access Denied</h2>
-        <p className="text-xs text-navy/40 uppercase tracking-widest mt-2">Insufficient permissions to manage Purchase Orders</p>
+        <h2 className="text-xl font-black text-text-primary uppercase tracking-tighter">Access Denied</h2>
+        <p className="text-xs text-text-secondary uppercase tracking-widest mt-2">Insufficient permissions to manage Purchase Orders</p>
       </div>
     );
   }
@@ -88,22 +88,22 @@ const POManager: React.FC = () => {
   return (
     <div className="space-y-6 animate-in fade-in duration-500 pb-20">
       {/* Breadcrumb Pattern */}
-      <nav className="flex items-center gap-2 text-[10px] font-black uppercase tracking-widest text-navy/20 mb-4">
+      <nav className="flex items-center gap-2 text-[10px] font-black uppercase tracking-widest text-text-secondary/40 mb-4">
          <span>Home</span> <ChevronRight size={10} />
          <span>Procurement</span> <ChevronRight size={10} />
-         <span className="text-navy/60">PO Registry</span>
+         <span className="text-text-primary/60">PO Registry</span>
       </nav>
 
       {/* Sovereign Header */}
-      <div className="flex items-center justify-between bg-white/50 p-10 rounded-[40px] border border-navy/5 backdrop-blur-sm shadow-sm">
+      <div className="flex items-center justify-between bg-bg-elevated/40 p-10 rounded-[40px] border border-border backdrop-blur-sm shadow-sm">
         <div className="flex items-center gap-6">
           <div className="w-16 h-16 bg-brand-navy rounded-[24px] flex items-center justify-center text-brand-gold shadow-2xl shadow-navy/20">
             <FileText size={32} />
           </div>
           <div>
-            <h1 className="text-4xl font-serif font-black text-navy uppercase tracking-tight leading-none">Purchase Orders</h1>
+            <h1 className="text-4xl font-serif font-black text-text-primary uppercase tracking-tight leading-none">Purchase Orders</h1>
             <div className="flex items-center gap-3 mt-3">
-              <p className="text-[10px] font-mono text-navy/40 uppercase tracking-[0.2em]">Procurement Lifecycle · Inwarding Protocol · Sovereign Node</p>
+              <p className="text-[10px] font-mono text-text-secondary uppercase tracking-[0.2em]">Procurement Lifecycle · Inwarding Protocol · Sovereign Node</p>
               {isOfflineData && (
                 <span className="px-3 py-1 bg-amber-100 text-amber-700 text-[9px] font-black uppercase rounded-lg">Offline Buffer</span>
               )}
@@ -113,19 +113,19 @@ const POManager: React.FC = () => {
 
         <div className="flex items-center gap-4">
           <div className="relative group">
-            <Search className="absolute left-6 top-1/2 -translate-y-1/2 text-navy/20 group-focus-within:text-brand-gold transition-colors" size={18} />
+            <Search className="absolute left-6 top-1/2 -translate-y-1/2 text-text-secondary/40 group-focus-within:text-brand-gold transition-colors" size={18} />
             <input 
               ref={searchInputRef}
               type="text" 
               placeholder="Search PO # / Vendor... [F3]"
-              className="w-80 bg-white border-2 border-navy/5 rounded-[2rem] py-5 pl-14 pr-6 text-xs font-black outline-none focus:border-brand-gold transition-all shadow-sm uppercase tracking-widest"
+              className="w-80 bg-bg-input border-2 border-border rounded-[2rem] py-5 pl-14 pr-6 text-xs font-black outline-none focus:border-brand-gold transition-all shadow-sm uppercase tracking-widest text-text-primary"
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
             />
           </div>
           <button 
             onClick={() => queryClient.invalidateQueries({ queryKey: [`purchase_orders_${searchTerm}`] })} 
-            className="p-5 bg-white rounded-2xl text-navy/20 hover:text-navy border border-navy/5 shadow-sm transition-all"
+            className="p-5 bg-bg-float rounded-2xl text-text-secondary/40 hover:text-text-primary border border-border shadow-sm transition-all"
           >
             <RefreshCw size={20} />
           </button>
@@ -149,20 +149,20 @@ const POManager: React.FC = () => {
           { label: 'Draft Sessions', val: '04 Units', icon: Clock, color: 'saffron' },
           { label: 'Today\'s GRN', val: '12 Inbound', icon: FileText, color: 'green' }
         ].map((kpi, idx) => (
-          <div key={idx} className="bg-white rounded-[40px] p-10 border border-navy/5 shadow-xl relative overflow-hidden transition-all hover:-translate-y-2 hover:shadow-2xl group">
+          <div key={idx} className="bg-bg-elevated rounded-[40px] p-10 border border-border shadow-xl relative overflow-hidden transition-all hover:-translate-y-2 hover:shadow-2xl group">
              <div className="flex justify-between items-start mb-6">
-                <div className={`w-12 h-12 rounded-2xl flex items-center justify-center ${kpi.color === 'navy' ? 'bg-navy text-white shadow-lg' : kpi.color === 'gold' ? 'bg-brand-gold/10 text-brand-gold' : kpi.color === 'saffron' ? 'bg-brand-saffron/10 text-brand-saffron' : 'bg-emerald-50 text-emerald-600'}`}>
+                <div className={`w-12 h-12 rounded-2xl flex items-center justify-center ${kpi.color === 'navy' ? 'bg-brand-navy text-white shadow-lg' : kpi.color === 'gold' ? 'bg-brand-gold/10 text-brand-gold' : kpi.color === 'saffron' ? 'bg-brand-saffron/10 text-brand-saffron' : 'bg-emerald-50 text-emerald-600'}`}>
                    <kpi.icon size={22} />
                 </div>
-                <span className="text-[10px] font-black text-navy/30 uppercase tracking-[0.3em]">{kpi.label}</span>
+                <span className="text-[10px] font-black text-text-secondary/40 uppercase tracking-[0.3em]">{kpi.label}</span>
              </div>
-             <div className="text-4xl font-serif font-black text-navy tracking-tight">{kpi.val}</div>
+             <div className="text-4xl font-serif font-black text-text-primary tracking-tight">{kpi.val}</div>
           </div>
         ))}
       </div>
 
       {/* List Container */}
-      <div className="bg-white rounded-[50px] border border-navy/5 shadow-2xl overflow-hidden mt-10">
+      <div className="bg-bg-elevated rounded-[50px] border border-border shadow-2xl overflow-hidden mt-10">
         <div className="overflow-x-auto max-h-[600px] custom-scrollbar">
           <table className="w-full border-collapse">
             <thead className="sticky top-0 z-10">
@@ -181,16 +181,16 @@ const POManager: React.FC = () => {
                   <tr key={i} className="animate-pulse"><td colSpan={6} className="px-12 py-10 h-24 bg-navy/5" /></tr>
                 ))
               ) : (Array.isArray(pos) && pos.length > 0) ? pos.map((po: any) => (
-                <tr key={po.id} className="hover:bg-brand-cream transition-all group">
+                <tr key={po.id} className="hover:bg-bg-float transition-all group">
                   <td className="px-12 py-10">
                     <div className="flex items-center gap-4">
-                       <span className="bg-navy/5 text-navy px-4 py-2 rounded-xl font-mono text-[12px] font-black uppercase group-hover:bg-white transition-all shadow-sm">{po.po_number}</span>
-                       <div className="text-[9px] font-black text-navy/20 uppercase tracking-widest">#{po.id.slice(0,8)}</div>
+                       <span className="bg-bg-input text-text-primary px-4 py-2 rounded-xl font-mono text-[12px] font-black uppercase group-hover:bg-bg-elevated transition-all shadow-sm">{po.po_number}</span>
+                       <div className="text-[9px] font-black text-text-secondary/20 uppercase tracking-widest">#{po.id.slice(0,8)}</div>
                     </div>
                   </td>
                   <td className="px-12 py-10">
-                    <div className="text-base font-black text-navy uppercase tracking-tight">{po.vendor_name || 'Direct Procurement'}</div>
-                    <div className="text-[10px] font-bold text-navy/30 uppercase tracking-widest mt-2 flex items-center gap-2">
+                    <div className="text-base font-black text-text-primary uppercase tracking-tight">{po.vendor_name || 'Direct Procurement'}</div>
+                    <div className="text-[10px] font-bold text-text-secondary/40 uppercase tracking-widest mt-2 flex items-center gap-2">
                        <Calendar size={12} className="text-brand-gold" /> Created {new Date(po.created_at).toLocaleDateString('en-IN', { day: '2-digit', month: 'short' })}
                     </div>
                   </td>
@@ -199,18 +199,18 @@ const POManager: React.FC = () => {
                       {po.status}
                     </span>
                   </td>
-                  <td className="px-12 py-10 text-right font-mono text-base font-black text-navy">
+                  <td className="px-12 py-10 text-right font-mono text-base font-black text-text-primary">
                     {formatCurrency(po.total_paise)}
                   </td>
-                  <td className="px-12 py-10 text-center font-mono text-[12px] font-black text-navy/60">
+                  <td className="px-12 py-10 text-center font-mono text-[12px] font-black text-text-secondary/60">
                     {po.expected_date ? new Date(po.expected_date).toLocaleDateString('en-IN') : 'IMMEDIATE'}
                   </td>
                   <td className="px-12 py-10 text-right">
                     <div className="flex items-center justify-end gap-3">
-                      <button onClick={() => navigate(`/purchase/${po.id}`)} className="p-4 bg-navy/5 text-navy rounded-2xl hover:bg-navy hover:text-white transition-all shadow-sm">
+                      <button onClick={() => navigate(`/purchase/${po.id}`)} className="p-4 bg-bg-float text-text-primary rounded-2xl hover:bg-brand-navy hover:text-white transition-all shadow-sm border border-border">
                         <ChevronRight size={22} />
                       </button>
-                      <button className="p-4 bg-navy/5 text-navy/20 hover:text-brand-saffron hover:bg-brand-saffron/10 rounded-2xl transition-all"><MoreVertical size={22} /></button>
+                      <button className="p-4 bg-bg-float text-text-secondary/20 hover:text-brand-saffron hover:bg-brand-saffron/10 rounded-2xl transition-all border border-border"><MoreVertical size={22} /></button>
                     </div>
                   </td>
                 </tr>

@@ -1,10 +1,10 @@
 # ============================================================
-# * PrimeSetu - Shoper9-Based Retail OS
+# * SMRITI-OS - Shoper9-Based Retail OS
 # * Zero Cloud . Sovereign . AI-Governed
 # ============================================================
 # * System Architect   :  Jawahar R Mallah
 # * Organisation       :  AITDL Network
-# * Project            :  PrimeSetu
+# * Project            :  SMRITI-OS
 # * (c) 2026 - All Rights Reserved
 # * "Memory, Not Code."
 # ============================================================ #
@@ -12,7 +12,7 @@
 import logging
 from typing import Dict, Any
 
-logger = logging.getLogger("primesetu.messenger")
+logger = logging.getLogger("SMRITI-OS.messenger")
 
 class SovereignMessenger:
     """
@@ -31,10 +31,10 @@ class SovereignMessenger:
         # In a real scenario, we would hit an external API here.
         # For now, we simulate the success of the sovereign communication pulse.
         message = (
-            f"Greetings from PrimeSetu Node!\n\n"
+            f"Greetings from SMRITI-OS Node!\n\n"
             f"Your bill {bill_no} for .{total} has been finalized. \n"
             f"Thank you for shopping with us.\n\n"
-            f"Digital Sovereign Receipt: https://primesetu.io/r/{bill_no}"
+            f"Digital Sovereign Receipt: https://SMRITI-OS.io/r/{bill_no}"
         )
         
         logger.info(f"[Messenger] Dispatching receipt to {mobile} via Sovereign Bridge.")

@@ -1,20 +1,22 @@
 /* ============================================================
- * PrimeSetu — Shoper9-Based Retail OS
+ * SMRITI-OS — Shoper9-Based Retail OS
  * Zero Cloud · Sovereign · AI-Governed
  * ============================================================
  * System Architect   :  Jawahar R Mallah
  * Organisation       :  AITDL Network
- * Project            :  PrimeSetu
+ * Project            :  SMRITI-OS
  * © 2026 — All Rights Reserved
  * "Memory, Not Code."
  * ============================================================ */
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import TaxMaster from './TaxMaster'
 import Personalization from './Personalization'
+import BrowseCustomizer from './BrowseCustomizer'
+import CatalogueDNA from './CatalogueDNA'
 import { api } from '@/api/client'
 
 export default function ConfigModule() {
-  const [activeSubTab, setActiveSubTab] = useState<'params' | 'classification' | 'brands' | 'tax' | 'integrations' | 'labels' | 'personalization'>('params')
+  const [activeSubTab, setActiveSubTab] = useState<'params' | 'classification' | 'brands' | 'tax' | 'integrations' | 'labels' | 'personalization' | 'browsers'>('params')
   const [params, setParams] = useState([
     { id: 1, code: 'MRP_INCL_TAX', desc: 'Is MRP inclusive of tax by default?', value: true, type: 'bool' },
     { id: 2, code: 'AUTO_ROUND_OFF', desc: 'Enable automatic round-off of bills?', value: true, type: 'bool' },
@@ -29,6 +31,35 @@ export default function ConfigModule() {
     { id: '3', name: 'Adidas', category: 'Footwear', skus: 120, status: 'Active' },
     { id: '4', name: 'Levi\'s', category: 'Apparel', skus: 210, status: 'Active' },
   ])
+
+  const [storeSettings, setStoreSettings] = useState<any>(null);
+  const [loadingStore, setLoadingStore] = useState(false);
+
+  useEffect(() => {
+    const fetchStore = async () => {
+      try {
+        setLoadingStore(true);
+        const data = await api.store.getSettings();
+        setStoreSettings(data);
+      } catch (err) {
+        console.error("Failed to fetch store settings", err);
+      } finally {
+        setLoadingStore(false);
+      }
+    };
+    if (activeSubTab === 'integrations') {
+      fetchStore();
+    }
+  }, [activeSubTab]);
+
+  const handleUpdateStore = async () => {
+    try {
+      await api.store.updateSettings(storeSettings);
+      alert("Store profile updated successfully.");
+    } catch (err) {
+      alert("Failed to update store profile.");
+    }
+  };
 
   return (
     <div className="flex flex-col gap-10 animate-in fade-in slide-in-from-bottom-4 duration-700">
@@ -46,7 +77,8 @@ export default function ConfigModule() {
             { id: 'brands', label: 'Catalogue' },
             { id: 'tax', label: 'Tax Master' },
             { id: 'labels', label: 'Label Management' },
-            { id: 'integrations', label: 'Corporate Bridge' },
+            { id: 'browsers', label: 'Grid Mask' },
+            { id: 'integrations', label: 'Store Profile' },
             { id: 'personalization', label: '🎨 Personalization' },
           ].map(tab => (
             <button 
@@ -87,6 +119,7 @@ export default function ConfigModule() {
                         type="text" 
                         value={p.value as string} 
                         className="bg-slate-900/50 border border-slate-700/50 rounded-xl px-4 py-2 text-xs font-black text-white w-24 text-center outline-none focus:border-brand-saffron focus:bg-slate-800"
+                        onChange={(e) => setParams(params.map(x => x.id === p.id ? {...x, value: e.target.value} : x))}
                       />
                     )}
                     <span className="text-[9px] font-black text-slate-500 uppercase tracking-tighter">Verified Node</span>
@@ -100,7 +133,7 @@ export default function ConfigModule() {
             <div className="absolute top-0 right-0 w-64 h-64 bg-brand-saffron/10 blur-[100px]"></div>
             <h3 className="text-xl font-serif font-black mb-6 relative z-10 text-white">Security Note</h3>
             <p className="text-sm text-slate-400 leading-relaxed relative z-10 font-medium">
-              Changes to System Parameters affect all active billing nodes across the PrimeSetu ecosystem. 
+              Changes to System Parameters affect all active billing nodes across the SMRITI-OS ecosystem. 
               Always verify <span className="text-brand-gold font-bold">MRP_INCL_TAX</span> settings before starting a new business day.
             </p>
             <div className="mt-12 p-6 bg-slate-800/50 rounded-3xl relative z-10 border border-slate-700/50">
@@ -116,21 +149,16 @@ export default function ConfigModule() {
           <div className="flex items-center justify-between mb-10">
             <div>
               <h3 className="text-2xl font-serif font-black text-white">Classification Master</h3>
-              <p className="text-[10px] text-slate-500 font-bold uppercase tracking-widest mt-1">Class1 (Brand) & Class2 (Dept) Repository</p>
+              <p className="text-[10px] text-slate-500 font-bold uppercase tracking-widest mt-1">Global Catalogue Index</p>
             </div>
-            <button className="bg-slate-800 text-white px-8 py-4 rounded-2xl text-[10px] font-black tracking-widest hover:bg-slate-700 transition-all shadow-xl border border-slate-600/50">
-              + NEW CLASSIFICATION
-            </button>
           </div>
-
           <div className="overflow-x-auto">
             <table className="w-full text-left">
               <thead className="bg-slate-800/40 text-[9px] uppercase font-black tracking-widest text-slate-500 border-b border-slate-700/50">
                 <tr>
-                  <th className="px-8 py-5">Brand Name</th>
-                  <th className="px-8 py-5">Main Category</th>
+                  <th className="px-8 py-5">Name</th>
+                  <th className="px-8 py-5">Category</th>
                   <th className="px-8 py-5 text-center">Active SKUs</th>
-                  <th className="px-8 py-5 text-center">Status</th>
                   <th className="px-8 py-5 text-right">Actions</th>
                 </tr>
               </thead>
@@ -140,11 +168,6 @@ export default function ConfigModule() {
                     <td className="px-8 py-6 font-bold text-white">{brand.name}</td>
                     <td className="px-8 py-6 text-xs font-bold text-slate-400 uppercase tracking-wider">{brand.category}</td>
                     <td className="px-8 py-6 text-center font-black text-white">{brand.skus}</td>
-                    <td className="px-8 py-6 text-center">
-                      <span className="px-3 py-1 bg-emerald-500/10 text-emerald-400 rounded-lg text-[9px] font-black uppercase tracking-tighter border border-emerald-500/20">
-                        {brand.status}
-                      </span>
-                    </td>
                     <td className="px-8 py-6 text-right">
                       <button className="text-[10px] font-black text-slate-500 hover:text-white uppercase tracking-widest">Edit</button>
                     </td>
@@ -156,6 +179,10 @@ export default function ConfigModule() {
         </div>
       )}
 
+      {activeSubTab === 'classification' && (
+        <CatalogueDNA />
+      )}
+
       {activeSubTab === 'tax' && <TaxMaster onClose={() => setActiveSubTab('params')} />}
       
       {activeSubTab === 'integrations' && (
@@ -164,24 +191,84 @@ export default function ConfigModule() {
              <div className="flex justify-between items-start mb-10">
                 <div>
                    <h3 className="text-2xl font-serif font-black text-white mb-2">Sovereign Store Identity</h3>
-                   <p className="text-xs text-slate-500 font-bold uppercase tracking-widest italic">PST Node PST-X01 Active</p>
+                   <p className="text-xs text-slate-500 font-bold uppercase tracking-widest italic">Institutional Profile (Tally Sync Ready)</p>
                 </div>
                 <div className="px-4 py-2 bg-emerald-500/10 text-emerald-400 text-[9px] font-black uppercase rounded-lg border border-emerald-500/20">Verified Identity</div>
              </div>
              
-             <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-                <div className="space-y-2">
-                   <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-2">Store ID</label>
-                   <input defaultValue="ST-001" className="w-full bg-slate-800/50 border border-slate-700/50 rounded-2xl p-5 text-sm font-black text-white outline-none focus:border-brand-saffron" />
-                </div>
-                <div className="space-y-2">
-                   <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-2">Site Code</label>
-                   <input defaultValue="SITE-BANGALORE-MAIN" className="w-full bg-slate-800/50 border border-slate-700/50 rounded-2xl p-5 text-sm font-black text-white outline-none focus:border-brand-saffron" />
-                </div>
-                <div className="flex items-end pb-1">
-                   <button className="w-full bg-slate-800 text-white p-5 rounded-2xl text-[10px] font-black uppercase tracking-widest hover:bg-slate-700 transition-all shadow-xl border border-slate-600/50">Update Node Config</button>
-                </div>
-             </div>
+             {loadingStore ? (
+               <div className="h-64 flex items-center justify-center">
+                 <div className="w-10 h-10 border-4 border-brand-saffron border-t-transparent rounded-full animate-spin"></div>
+               </div>
+             ) : (
+               <div className="space-y-8">
+                 <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                    <div className="space-y-2">
+                       <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-2">Store Name</label>
+                       <input 
+                         value={storeSettings?.name || ''} 
+                         onChange={(e) => setStoreSettings({...storeSettings, name: e.target.value})}
+                         className="w-full bg-slate-800/50 border border-slate-700/50 rounded-2xl p-5 text-sm font-black text-white outline-none focus:border-brand-saffron" 
+                       />
+                    </div>
+                    <div className="space-y-2">
+                       <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-2">Site Code (Tally ID)</label>
+                       <input 
+                         value={storeSettings?.code || ''} 
+                         onChange={(e) => setStoreSettings({...storeSettings, code: e.target.value})}
+                         className="w-full bg-slate-800/50 border border-slate-700/50 rounded-2xl p-5 text-sm font-black text-white outline-none focus:border-brand-saffron" 
+                       />
+                    </div>
+                 </div>
+
+                 <div className="space-y-2">
+                    <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-2">Official Address</label>
+                    <textarea 
+                      rows={3}
+                      value={storeSettings?.address || ''} 
+                      onChange={(e) => setStoreSettings({...storeSettings, address: e.target.value})}
+                      className="w-full bg-slate-800/50 border border-slate-700/50 rounded-2xl p-5 text-sm font-black text-white outline-none focus:border-brand-saffron resize-none" 
+                    />
+                 </div>
+
+                 <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+                    <div className="space-y-2">
+                       <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-2">GSTIN</label>
+                       <input 
+                         value={storeSettings?.gstin || ''} 
+                         onChange={(e) => setStoreSettings({...storeSettings, gstin: e.target.value})}
+                         className="w-full bg-slate-800/50 border border-slate-700/50 rounded-2xl p-5 text-sm font-black text-white outline-none focus:border-brand-saffron" 
+                       />
+                    </div>
+                    <div className="space-y-2">
+                       <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-2">Phone</label>
+                       <input 
+                         value={storeSettings?.phone || ''} 
+                         onChange={(e) => setStoreSettings({...storeSettings, phone: e.target.value})}
+                         className="w-full bg-slate-800/50 border border-slate-700/50 rounded-2xl p-5 text-sm font-black text-white outline-none focus:border-brand-saffron" 
+                       />
+                    </div>
+                    <div className="space-y-2">
+                       <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-2">State Code</label>
+                       <input 
+                         value={storeSettings?.state_code || ''} 
+                         onChange={(e) => setStoreSettings({...storeSettings, state_code: e.target.value})}
+                         placeholder="e.g. 27 for MH"
+                         className="w-full bg-slate-800/50 border border-slate-700/50 rounded-2xl p-5 text-sm font-black text-white outline-none focus:border-brand-saffron" 
+                       />
+                    </div>
+                 </div>
+
+                 <div className="flex justify-end pt-4">
+                    <button 
+                      onClick={handleUpdateStore}
+                      className="bg-brand-saffron text-slate-900 px-12 py-5 rounded-2xl text-xs font-black uppercase tracking-widest hover:opacity-90 transition-all shadow-xl shadow-brand-saffron/20"
+                    >
+                      Update Store Profile [F10]
+                    </button>
+                 </div>
+               </div>
+             )}
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-10">
@@ -295,6 +382,9 @@ export default function ConfigModule() {
         <div className="bg-slate-900/40 backdrop-blur-md rounded-[3rem] p-12 shadow-2xl border border-slate-700/50">
           <Personalization />
         </div>
+      )}
+      {activeSubTab === 'browsers' && (
+        <BrowseCustomizer />
       )}
     </div>
   )

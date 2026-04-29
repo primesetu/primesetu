@@ -6,7 +6,7 @@ import os
 from app.core.config import settings
 
 # ============================================================
-# PrimeSetu - Shoper 9 Personnel Sync Engine (V2)
+# SMRITI-OS - Shoper 9 Personnel Sync Engine (V2)
 # Phase 8: Migrating Sales Staff to the Sovereign Cloud
 # ============================================================
 

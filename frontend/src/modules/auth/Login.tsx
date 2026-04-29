@@ -1,10 +1,10 @@
 /* ============================================================
- * PrimeSetu — Shoper9-Based Retail OS
+ * SMRITI-OS — Shoper9-Based Retail OS
  * Zero Cloud · Sovereign · AI-Governed
  * ============================================================
  * System Architect   :  Jawahar R Mallah
  * Organisation     :  AITDL Network
- * Project            :  PrimeSetu
+ * Project            :  SMRITI-OS
  * © 2026 — All Rights Reserved
  * "Memory, Not Code."
  * ============================================================ */
@@ -52,7 +52,7 @@ export default function Login({
       }
       
       const { data, error: authError } = await supabase.auth.signInWithPassword({
-        email: username.includes("@") ? username : `${username}@primesetu.io`,
+        email: username.includes("@") ? username : `${username}@SMRITI-OS.io`,
         password: password,
       });
 
@@ -102,7 +102,7 @@ export default function Login({
               <Zap size={20} style={{ color: 'var(--accent-light)' }} />
             </div>
             <h1 className="text-xl font-semibold tracking-tight" style={{ color: 'var(--text-primary)', letterSpacing: '-0.02em' }}>
-              PrimeSetu
+              SMRITI-OS
             </h1>
             <AnimatePresence mode="wait">
               <motion.p

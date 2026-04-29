@@ -1,5 +1,5 @@
 # ============================================================
-# PrimeSetu - Shoper9-Based Retail OS
+# SMRITI-OS - Shoper9-Based Retail OS
 # Document : backend/app/services/barcode.py
 # (c) 2026 - All Rights Reserved
 # ============================================================

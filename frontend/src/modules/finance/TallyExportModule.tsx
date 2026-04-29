@@ -1,10 +1,10 @@
 /* ============================================================
- * PrimeSetu — Shoper9-Based Retail OS
+ * SMRITI-OS — Shoper9-Based Retail OS
  * Zero Cloud · Sovereign · AI-Governed
  * ============================================================
  * System Architect   :  Jawahar R Mallah
  * Organisation       :  AITDL Network
- * Project            :  PrimeSetu
+ * Project            :  SMRITI-OS
  * © 2026 — All Rights Reserved
  * "Memory, Not Code."
  * ============================================================ */
@@ -12,12 +12,10 @@
 import React, { useState } from 'react';
 import { Download, FileText, Calendar, CheckCircle2, Shield, Search, FileJson } from 'lucide-react';
 import { useLanguage } from '@/hooks/useLanguage';
-import { useSession } from '@/hooks/useSession';
-import { api } from '@/api/client';
+import { apiClient } from '@/api/client';
 
 export default function TallyExportModule() {
   const { t } = useLanguage();
-  const { session } = useSession();
   
   const [startDate, setStartDate] = useState(new Date().toISOString().split('T')[0]);
   const [endDate, setEndDate] = useState(new Date().toISOString().split('T')[0]);
@@ -29,21 +27,16 @@ export default function TallyExportModule() {
       setExporting(true);
       setSuccess(false);
       
-      // We directly fetch the XML text from our endpoint
-      // Using custom fetch here to handle XML blob response natively
-      const response = await fetch(`${import.meta.env.VITE_BACKEND_URL || 'http://localhost:8000'}/api/v1/tally/export?start_date=${startDate}&end_date=${endDate}`, {
-        headers: {
-          'Authorization': `Bearer ${session?.access_token}`
-        }
+      // We directly fetch the XML text from our endpoint via apiClient
+      const response = await apiClient.get(`/tally/export?start_date=${startDate}&end_date=${endDate}`, {
+        responseType: 'blob'
       });
       
-      if (!response.ok) throw new Error("Failed to export Tally XML");
-      
-      const xmlBlob = await response.blob();
+      const xmlBlob = new Blob([response.data], { type: 'application/xml' });
       const url = window.URL.createObjectURL(xmlBlob);
       const link = document.createElement('a');
       link.href = url;
-      link.setAttribute('download', `PrimeSetu_Tally_Export_${startDate}_to_${endDate}.xml`);
+      link.setAttribute('download', `SMRITI-OS_Tally_Export_${startDate}_to_${endDate}.xml`);
       document.body.appendChild(link);
       link.click();
       document.body.removeChild(link);
@@ -61,7 +54,7 @@ export default function TallyExportModule() {
   return (
     <div className="flex h-full gap-4 p-4">
       {/* ── Left Pane: Configuration ── */}
-      <div className="flex-[2] shoper-panel flex flex-col overflow-hidden bg-white">
+      <div className="flex-[2] shoper-panel flex flex-col overflow-hidden">
         <div className="p-6 border-b border-border bg-cream/30">
           <div className="flex items-center gap-4">
             <div className="w-14 h-14 bg-saffron/10 rounded-2xl flex items-center justify-center border border-saffron/20 shadow-inner">
@@ -77,7 +70,7 @@ export default function TallyExportModule() {
         <div className="flex-1 overflow-auto p-6 space-y-8">
           
           {/* Data Filter Panel */}
-          <div className="p-6 border-2 border-border rounded-2xl bg-white shadow-sm space-y-6">
+          <div className="p-6 border-2 border-border rounded-2xl bg-bg-float shadow-sm space-y-6">
             <h3 className="text-lg font-black text-navy flex items-center gap-2">
               <Calendar className="w-5 h-5 text-saffron" />
               Extraction Period
@@ -90,7 +83,7 @@ export default function TallyExportModule() {
                   type="date" 
                   value={startDate}
                   onChange={(e) => setStartDate(e.target.value)}
-                  className="w-full h-touch border-2 border-border focus:border-navy rounded-xl px-4 font-mono text-lg font-bold outline-none transition-all"
+                  className="w-full h-touch border-2 border-border bg-bg-input focus:border-navy rounded-xl px-4 font-mono text-lg font-bold outline-none transition-all"
                 />
               </div>
               <div className="space-y-2">
@@ -99,7 +92,7 @@ export default function TallyExportModule() {
                   type="date" 
                   value={endDate}
                   onChange={(e) => setEndDate(e.target.value)}
-                  className="w-full h-touch border-2 border-border focus:border-navy rounded-xl px-4 font-mono text-lg font-bold outline-none transition-all"
+                  className="w-full h-touch border-2 border-border bg-bg-input focus:border-navy rounded-xl px-4 font-mono text-lg font-bold outline-none transition-all"
                 />
               </div>
             </div>

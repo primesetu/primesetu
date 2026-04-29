@@ -1,10 +1,10 @@
 # ============================================================
-# * PrimeSetu - Shoper9-Based Retail OS
+# * SMRITI-OS - Shoper9-Based Retail OS
 # * Zero Cloud . Sovereign . AI-Governed
 # ============================================================
 # * System Architect   :  Jawahar R Mallah
 # * Organisation       :  AITDL Network
-# * Project            :  PrimeSetu
+# * Project            :  SMRITI-OS
 # * (c) 2026 - All Rights Reserved
 # * "Memory, Not Code."
 # ============================================================ #
@@ -90,7 +90,7 @@ async def export_to_tally(
     xml_str = ET.tostring(envelope, encoding='unicode')
     
     return {
-        "filename": f"PrimeSetu_Tally_{datetime.now().strftime('%Y%m%d_%H%M')}.xml",
+        "filename": f"SMRITI-OS_Tally_{datetime.now().strftime('%Y%m%d_%H%M')}.xml",
         "content": xml_str,
         "bill_count": len(bills)
     }

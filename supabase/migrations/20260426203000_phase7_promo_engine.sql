@@ -1,5 +1,5 @@
 /* ============================================================
- * PrimeSetu — Shoper9-Based Retail OS
+ * SMRITI-OS — Shoper9-Based Retail OS
  * Migration: phase7_promo_engine
  * © 2026 AITDL Network
  * ============================================================ */

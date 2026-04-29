@@ -1,10 +1,10 @@
 # ============================================================
-# PrimeSetu - Shoper9-Based Retail OS
+# SMRITI-OS - Shoper9-Based Retail OS
 # Zero Cloud . Sovereign . AI-Governed
 # ============================================================
 # System Architect   :  Jawahar R Mallah
 # Organisation       :  AITDL Network
-# Project            :  PrimeSetu
+# Project            :  SMRITI-OS
 # (c) 2026 - All Rights Reserved
 # "Memory, Not Code."
 # ============================================================
@@ -253,7 +253,7 @@ def _build_csv_response(payload: dict, month: int, year: int) -> StreamingRespon
     writer = csv.writer(output)
 
     # Header
-    writer.writerow(["PrimeSetu - GSTR-1 Export"])
+    writer.writerow(["SMRITI-OS - GSTR-1 Export"])
     writer.writerow([f"GSTIN: {payload['gstin']}",
                      f"Period: {month:02d}/{year}",
                      f"Grand Total: .{payload['gt']:,.2f}"])

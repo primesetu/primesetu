@@ -1,10 +1,10 @@
 /* ============================================================
- * PrimeSetu — Shoper9-Based Retail OS
+ * SMRITI-OS — Shoper9-Based Retail OS
  * Zero Cloud · Sovereign · AI-Governed
  * ============================================================
  * System Architect   :  Jawahar R Mallah
  * Organisation       :  AITDL Network
- * Project            :  PrimeSetu
+ * Project            :  SMRITI-OS
  * © 2026 — All Rights Reserved
  * "Memory, Not Code."
  * ============================================================ */
@@ -14,9 +14,17 @@ import { motion } from 'framer-motion';
 import { PieChart, Calendar, ChevronRight } from 'lucide-react';
 import { api } from '@/api/client';
 
+export interface AttributeSalesData {
+  label?: string;
+  brand?: string;
+  category?: string;
+  total_revenue?: number;
+  total_qty?: number;
+}
+
 const AttributeSales: React.FC = () => {
   const [attribute, setAttribute] = useState('category');
-  const [data, setData] = useState<any[]>([]);
+  const [data, setData] = useState<AttributeSalesData[]>([]);
   const [loading, setLoading] = useState(true);
 
   const attributes = [

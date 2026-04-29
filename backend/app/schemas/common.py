@@ -1,10 +1,10 @@
 # ============================================================
-# * PrimeSetu - Shoper9-Based Retail OS
+# * SMRITI-OS - Shoper9-Based Retail OS
 # * Zero Cloud . Sovereign . AI-Governed
 # ============================================================
 # * System Architect   :  Jawahar R Mallah
 # * Organisation       :  AITDL Network
-# * Project            :  PrimeSetu
+# * Project            :  SMRITI-OS
 # * (c) 2026 - All Rights Reserved
 # * "Memory, Not Code."
 # ============================================================ #
@@ -78,3 +78,21 @@ class StoreRegistrationRequest(BaseModel):
     admin_email: str = Field(..., max_length=200)
     admin_password: str = Field(..., min_length=6)
     admin_full_name: str = Field(..., max_length=200)
+
+class RemoteCommandRead(BaseModel):
+    id: uuid.UUID
+    command_type: str
+    payload: str
+    status: str
+    model_config = ConfigDict(from_attributes=True)
+
+class PulseRequest(BaseModel):
+    transaction_count: int
+    pending_sync_packets: int
+    last_sync_id: Optional[uuid.UUID] = None
+
+class PulseResponse(BaseModel):
+    status: str
+    server_time: datetime
+    commands: List[RemoteCommandRead]
+    message: Optional[str] = None

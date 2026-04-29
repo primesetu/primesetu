@@ -1,10 +1,10 @@
 /* ============================================================
- * PrimeSetu — Shoper9-Based Retail OS
+ * SMRITI-OS — Shoper9-Based Retail OS
  * Zero Cloud · Sovereign · AI-Governed
  * ============================================================
  * System Architect   :  Jawahar R Mallah
  * Organisation       :  AITDL Network
- * Project            :  PrimeSetu
+ * Project            :  SMRITI-OS
  * © 2026 — All Rights Reserved
  * "Memory, Not Code."
  * ============================================================ */
@@ -59,7 +59,7 @@ export default function TaxInvoiceA4({ bill, onPrinted }: { bill: any, onPrinted
       {/* Corporate Header */}
       <div className="flex justify-between border-b-2 border-black pb-6 mb-6">
         <div className="space-y-1">
-          <h1 className="text-4xl font-black uppercase tracking-tight leading-none">{store?.name || 'PrimeSetu Retail'}</h1>
+          <h1 className="text-4xl font-black uppercase tracking-tight leading-none">{store?.name || 'SMRITI-OS Retail'}</h1>
           <p className="text-xs font-black uppercase text-gray-500 tracking-widest">Premium Retail Sovereign Unit</p>
           <div className="mt-4 space-y-0.5 text-xs">
             <p>{store?.address || 'Sovereign Node, India'}</p>
@@ -221,16 +221,16 @@ export default function TaxInvoiceA4({ bill, onPrinted }: { bill: any, onPrinted
             </div>
             <div className="flex flex-col items-center justify-center border-2 border-dashed border-gray-200 h-32 relative group">
                 <ShieldCheck className="text-gray-100 group-hover:text-emerald-500/20 transition-all absolute" size={60} />
-                <div className="text-[10px] font-black uppercase tracking-widest text-navy relative z-10">{store?.name || 'PrimeSetu Retail'}</div>
+                <div className="text-[10px] font-black uppercase tracking-widest text-navy relative z-10">{store?.name || 'SMRITI-OS Retail'}</div>
                 <div className="mt-8 text-[9px] font-bold opacity-60 relative z-10">(Authorised Signatory)</div>
-                <div className="absolute bottom-2 right-2 text-[8px] font-mono opacity-20">PrimeSetu Digitally Signed</div>
+                <div className="absolute bottom-2 right-2 text-[8px] font-mono opacity-20">SMRITI-OS Digitally Signed</div>
             </div>
          </div>
       </div>
 
       <div className="absolute bottom-8 left-8 right-8 flex justify-between items-end border-t border-gray-100 pt-4">
         <div className="text-[8px] font-black uppercase tracking-[0.2em] text-gray-400 italic">Institutional Retail Protocol X-2026</div>
-        <div className="text-[8px] font-bold text-gray-300">Generated via PrimeSetu Sovereign Node · No Internet Reconciliation Required</div>
+        <div className="text-[8px] font-bold text-gray-300">Generated via SMRITI-OS Sovereign Node · No Internet Reconciliation Required</div>
       </div>
     </div>
   );

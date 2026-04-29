@@ -1,5 +1,5 @@
 /* ============================================================
- * PrimeSetu — Sidebar Component
+ * SMRITI-OS — Sidebar Component
  * Design: Linear-inspired dark sidebar
  * © 2026 AITDL Network
  * ============================================================ */
@@ -62,8 +62,8 @@ const Sidebar: React.FC<SidebarProps> = ({
         className={cn(
           "relative group flex items-center w-full gap-3 px-3 py-2 rounded-lg transition-colors duration-100 text-left",
           isActive
-            ? "bg-[var(--accent-bg)] text-[var(--accent-light)]"
-            : "text-[var(--text-secondary)] hover:bg-[var(--bg-float)] hover:text-[var(--text-primary)]"
+            ? "bg-accent-bg text-accent-light"
+            : "text-text-secondary hover:bg-bg-float hover:text-text-primary"
         )}
         style={{ margin: '1px 0' }}
       >
@@ -71,7 +71,7 @@ const Sidebar: React.FC<SidebarProps> = ({
         {isActive && (
           <motion.div
             layoutId="sidebar-active"
-            className="absolute left-0 top-1/2 -translate-y-1/2 w-0.5 h-4 rounded-full bg-[var(--accent)]"
+            className="absolute left-0 top-1/2 -translate-y-1/2 w-0.5 h-4 rounded-full bg-accent"
           />
         )}
 
@@ -82,7 +82,7 @@ const Sidebar: React.FC<SidebarProps> = ({
         </span>
 
         {item.shortcut && (
-          <span className="text-[10px] font-mono opacity-0 group-hover:opacity-100 transition-opacity px-1 py-0.5 rounded bg-[var(--bg-base)] text-[var(--text-tertiary)] border border-[var(--border-subtle)]">
+          <span className="text-[10px] font-mono opacity-0 group-hover:opacity-100 transition-opacity px-1 py-0.5 rounded bg-bg-base text-text-tertiary border border-border-subtle">
             {item.shortcut}
           </span>
         )}
@@ -94,17 +94,16 @@ const Sidebar: React.FC<SidebarProps> = ({
     <motion.aside
       animate={{ width: isCollapsed ? 0 : 256 }}
       transition={{ duration: 0.2, ease: [0.16, 1, 0.3, 1] }}
-      className="fixed top-0 left-0 bottom-0 flex flex-col z-[100] overflow-hidden"
-      style={{ background: 'var(--bg-elevated)', borderRight: '1px solid var(--border-subtle)' }}
+      className="fixed top-0 left-0 bottom-0 flex flex-col z-[100] overflow-hidden bg-bg-elevated border-r border-border-subtle"
     >
       {/* ── HEADER / LOGO ── */}
-      <div className="h-[52px] flex items-center px-4 shrink-0 gap-3" style={{ borderBottom: '1px solid var(--border-subtle)' }}>
-        <div className="w-6 h-6 rounded-md bg-[var(--accent)] flex items-center justify-center shrink-0">
-          <span className="text-white text-[10px] font-bold">P</span>
+      <div className="h-[52px] flex items-center px-4 shrink-0 gap-3 border-b border-border-subtle">
+        <div className="w-6 h-6 rounded-md bg-accent flex items-center justify-center shrink-0">
+          <span className="text-white text-[10px] font-bold">S</span>
         </div>
         <div className="flex flex-col overflow-hidden">
-          <span className="text-sm font-semibold text-[var(--text-primary)] leading-tight tracking-tight whitespace-nowrap">PrimeSetu</span>
-          <span className="text-[10px] text-[var(--text-tertiary)] whitespace-nowrap">Sovereign OS</span>
+          <span className="text-sm font-semibold text-text-primary leading-tight tracking-tight whitespace-nowrap">SMRITI-OS</span>
+          <span className="text-[10px] text-text-tertiary whitespace-nowrap">Sovereign OS</span>
         </div>
       </div>
 
@@ -116,7 +115,7 @@ const Sidebar: React.FC<SidebarProps> = ({
           <SidebarItem key={m.id} item={m} isActive={activeTab === m.id} onSelect={setActiveTab} />
         ))}
 
-        <div className="my-3" style={{ height: '1px', background: 'var(--border-subtle)' }} />
+        <div className="my-3 h-px bg-border-subtle" />
 
         {/* Categories */}
         {categories.map(cat => {
@@ -130,10 +129,10 @@ const Sidebar: React.FC<SidebarProps> = ({
                 onClick={() => setExpandedCategories(p => p.includes(cat.id) ? p.filter(x => x !== cat.id) : [...p, cat.id])}
                 className="w-full flex items-center justify-between px-2 py-1.5 group"
               >
-                <span className="text-[11px] font-medium uppercase tracking-wider text-[var(--text-tertiary)] group-hover:text-[var(--text-secondary)] transition-colors">
+                <span className="text-[11px] font-medium uppercase tracking-wider text-text-tertiary group-hover:text-text-secondary transition-colors">
                   {cat.label}
                 </span>
-                <ChevronDown size={12} className={cn("text-[var(--text-tertiary)] transition-transform duration-150", !isExpanded && "-rotate-90")} />
+                <ChevronDown size={12} className={cn("text-text-tertiary transition-transform duration-150", !isExpanded && "-rotate-90")} />
               </button>
 
               <AnimatePresence>
@@ -157,21 +156,21 @@ const Sidebar: React.FC<SidebarProps> = ({
       </div>
 
       {/* ── FOOTER / USER ── */}
-      <div className="px-3 py-3 shrink-0" style={{ borderTop: '1px solid var(--border-subtle)' }}>
+      <div className="px-3 py-3 shrink-0 border-t border-border-subtle">
         {/* Sync status */}
         <div className="flex items-center gap-2 px-2 py-2 mb-2">
           <div className="w-1.5 h-1.5 rounded-full shrink-0" style={{ background: syncDot }} />
-          <span className="text-xs text-[var(--text-tertiary)] font-medium">{syncLabel}</span>
+          <span className="text-xs text-text-tertiary font-medium">{syncLabel}</span>
         </div>
 
         {/* User row */}
-        <div className="flex items-center gap-3 px-2 py-2 rounded-lg hover:bg-[var(--bg-float)] transition-colors cursor-pointer group">
-          <div className="w-7 h-7 rounded-full bg-[var(--accent-bg)] border border-[var(--accent-border)] flex items-center justify-center shrink-0">
-            <span className="text-xs font-semibold text-[var(--accent-light)]">{(userRole || 'U')[0]}</span>
+        <div className="flex items-center gap-3 px-2 py-2 rounded-lg hover:bg-bg-float transition-colors cursor-pointer group">
+          <div className="w-7 h-7 rounded-full bg-accent-bg border border-accent-border flex items-center justify-center shrink-0">
+            <span className="text-xs font-semibold text-accent-light">{(userRole || 'U')[0]}</span>
           </div>
           <div className="flex-1 overflow-hidden">
-            <div className="text-sm font-medium text-[var(--text-primary)] truncate leading-tight">{userRole}</div>
-            <div className="text-[10px] text-[var(--text-tertiary)] truncate">Sovereign Guard Active</div>
+            <div className="text-sm font-medium text-text-primary truncate leading-tight">{userRole}</div>
+            <div className="text-[10px] text-text-tertiary truncate">Sovereign Guard Active</div>
           </div>
         </div>
       </div>

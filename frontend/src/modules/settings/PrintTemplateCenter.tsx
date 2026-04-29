@@ -1,10 +1,10 @@
 /* ============================================================
- * PrimeSetu — Shoper9-Based Retail OS
+ * SMRITI-OS — Shoper9-Based Retail OS
  * Zero Cloud · Sovereign · AI-Governed
  * ============================================================
  * System Architect   :  Jawahar R Mallah
  * Organisation       :  AITDL Network
- * Project            :  PrimeSetu
+ * Project            :  SMRITI-OS
  * © 2026 — All Rights Reserved
  * "Memory, Not Code."
  * ============================================================ */
@@ -76,14 +76,14 @@ export default function PrintTemplateCenter() {
           </p>
         </div>
 
-        <div className="flex bg-white shadow-2xl rounded-2xl p-2 border border-gray-100">
+        <div className="flex bg-bg-elevated shadow-2xl rounded-2xl p-2 border border-border">
           <div className="relative mr-4">
              <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
              <input value={search} onChange={e => setSearch(e.target.value)}
                 placeholder="Find template..."
-                className="bg-gray-50 border-none pl-10 pr-4 py-3 rounded-xl text-xs font-bold outline-none focus:bg-white focus:ring-2 ring-amber-400/20" />
+                className="bg-bg-input border-none pl-10 pr-4 py-3 rounded-xl text-xs font-bold outline-none focus:bg-bg-float focus:ring-2 ring-amber-400/20" />
           </div>
-          <button className="bg-navy text-white px-8 py-3 rounded-xl text-[10px] font-black uppercase tracking-widest hover:bg-amber-400 hover:text-navy transition-all flex items-center gap-2">
+          <button className="bg-brand-navy text-white px-8 py-3 rounded-xl text-[10px] font-black uppercase tracking-widest hover:bg-amber-400 hover:text-brand-navy transition-all flex items-center gap-2">
              <Plus className="w-4 h-4" /> Create New
           </button>
         </div>
@@ -102,7 +102,7 @@ export default function PrintTemplateCenter() {
              { id: 'ACCOUNTS', label: 'Financial Reports', icon: FileText },
            ].map(item => (
              <button key={item.id} onClick={() => setFilter(item.id)}
-                className={`w-full flex items-center justify-between p-5 rounded-3xl transition-all border ${filter === item.id ? 'bg-navy border-navy text-white shadow-2xl scale-105' : 'bg-white border-transparent text-gray-400 hover:bg-cream/50 hover:text-navy'}`}>
+                className={`w-full flex items-center justify-between p-5 rounded-3xl transition-all border ${filter === item.id ? 'bg-brand-navy border-brand-navy text-white shadow-2xl scale-105' : 'bg-bg-elevated border-transparent text-gray-400 hover:bg-bg-float hover:text-text-primary'}`}>
                 <div className="flex items-center gap-4">
                    <item.icon className={`w-5 h-5 ${filter === item.id ? 'text-amber-400' : 'text-gray-300'}`} />
                    <span className="text-[11px] font-black uppercase tracking-widest">{item.label}</span>
@@ -118,7 +118,7 @@ export default function PrintTemplateCenter() {
               <AnimatePresence mode="popLayout">
                 {filtered.map((tpl) => (
                   <motion.div layout key={tpl.id} initial={{ opacity: 0, scale: 0.9 }} animate={{ opacity: 1, scale: 1 }} exit={{ opacity: 0, scale: 0.9 }}
-                    className={`glass rounded-[3rem] p-10 border transition-all relative overflow-hidden group ${tpl.isDefault ? 'border-amber-400/30 bg-amber-50/5' : 'border-white/40 hover:border-navy/10 hover:bg-white'}`}>
+                    className={`glass rounded-[3rem] p-10 border transition-all relative overflow-hidden group ${tpl.isDefault ? 'border-amber-400/30 bg-amber-50/5' : 'border-border hover:border-brand-saffron/40 hover:bg-bg-float'}`}>
                     
                     {tpl.isDefault && (
                       <div className="absolute top-0 right-0 p-8">
@@ -127,7 +127,7 @@ export default function PrintTemplateCenter() {
                     )}
 
                     <div className="flex items-center gap-6 mb-8">
-                       <div className={`w-14 h-14 rounded-2xl flex items-center justify-center shadow-xl ${tpl.type === 'ZPL' ? 'bg-indigo-600 text-white' : 'bg-navy text-white'}`}>
+                       <div className={`w-14 h-14 rounded-2xl flex items-center justify-center shadow-xl ${tpl.type === 'ZPL' ? 'bg-indigo-600 text-white' : 'bg-brand-navy text-white'}`}>
                           {tpl.module === 'BILLING' ? <Receipt /> : tpl.module === 'INVENTORY' ? <ScanBarcode /> : <FileText />}
                        </div>
                        <div>
@@ -142,14 +142,14 @@ export default function PrintTemplateCenter() {
 
                     <div className="flex items-center justify-between pt-8 border-t border-gray-100">
                        <div className="flex gap-3">
-                          <button onClick={() => handleEdit(tpl)} className="px-6 py-2.5 bg-navy text-white rounded-xl text-[9px] font-black uppercase tracking-widest hover:bg-amber-400 hover:text-navy transition-all shadow-md flex items-center gap-2">
+                          <button onClick={() => handleEdit(tpl)} className="px-6 py-2.5 bg-brand-navy text-white rounded-xl text-[9px] font-black uppercase tracking-widest hover:bg-amber-400 hover:text-brand-navy transition-all shadow-md flex items-center gap-2">
                              <PenTool className="w-3.5 h-3.5" /> Design
                           </button>
                           <button onClick={() => alert(`Triggering Test Print for ${tpl.name}...`)} className="px-6 py-2.5 bg-emerald-50 text-emerald-700 border border-emerald-100 rounded-xl text-[9px] font-black uppercase tracking-widest hover:bg-emerald-600 hover:text-white transition-all shadow-sm flex items-center gap-2">
                              <Printer className="w-3.5 h-3.5" /> Test
                           </button>
                           {!tpl.isDefault && (
-                            <button onClick={() => setDefault(tpl.id, tpl.module)} className="px-6 py-2.5 bg-white border border-gray-200 text-navy rounded-xl text-[9px] font-black uppercase tracking-widest hover:border-navy transition-all">
+                            <button onClick={() => setDefault(tpl.id, tpl.module)} className="px-6 py-2.5 bg-bg-float border border-border text-text-primary rounded-xl text-[9px] font-black uppercase tracking-widest hover:border-brand-saffron transition-all">
                                Set Default
                             </button>
                           )}

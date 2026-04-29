@@ -1,5 +1,5 @@
 /* ============================================================
- * PrimeSetu — Dashboard
+ * SMRITI-OS — Dashboard
  * Design: Linear/Vercel Bento Grid with proper dark tokens
  * © 2026 AITDL Network
  * ============================================================ */

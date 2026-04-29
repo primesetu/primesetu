@@ -1,5 +1,5 @@
 /* ============================================================
- * PrimeSetu — Shoper9-Based Retail OS
+ * SMRITI-OS — Shoper9-Based Retail OS
  * F2 Global Context-Aware Search System
  * ============================================================ */
 import { createContext, useContext, useState, useEffect, useRef, useCallback, ReactNode } from 'react'
@@ -208,7 +208,7 @@ export function GlobalF2SearchOverlay() {
         }
         targetEl.focus()
       } catch (e) {
-        console.warn('[PrimeSetu] F2 event dispatch skipped:', e)
+        console.warn('[SMRITI-OS] F2 event dispatch skipped:', e)
       }
     }
     // Dispatch a custom event so modules can handle selection
@@ -217,7 +217,7 @@ export function GlobalF2SearchOverlay() {
         targetEl.dispatchEvent(new CustomEvent('f2-select', { detail: row, bubbles: true }))
       }
     } catch (e) {
-      console.warn('[PrimeSetu] F2 custom event dispatch skipped:', e)
+      console.warn('[SMRITI-OS] F2 custom event dispatch skipped:', e)
     }
     closeSearch()
   }

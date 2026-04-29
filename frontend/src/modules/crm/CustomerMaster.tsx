@@ -1,10 +1,10 @@
 /* ============================================================
- * PrimeSetu — Shoper9-Based Retail OS
+ * SMRITI-OS — Shoper9-Based Retail OS
  * Zero Cloud · Sovereign · AI-Governed
  * ============================================================
  * System Architect : Jawahar R Mallah
  * Organisation     : AITDL Network
- * Project          : PrimeSetu
+ * Project          : SMRITI-OS
  * © 2026 — All Rights Reserved
  * "Memory, Not Code."
  * ============================================================ */
@@ -32,6 +32,18 @@ import { formatCurrency } from '../../utils/currency';
 import CustomerForm from './CustomerForm';
 import { usePermission } from '../../hooks/usePermission';
 import { useOfflineFallback } from '../../hooks/useOfflineFallback';
+import { apiClient } from '../../api/client';
+
+interface Customer {
+  id: string;
+  code?: string;
+  name: string;
+  phone?: string;
+  loyalty_points?: number;
+  outstanding_paise?: number;
+  created_at: string;
+  found?: boolean;
+}
 
 const CustomerMaster: React.FC = () => {
   const [searchTerm, setSearchTerm] = useState('');
@@ -40,30 +52,21 @@ const CustomerMaster: React.FC = () => {
   const searchInputRef = useRef<HTMLInputElement>(null);
   const { hasPermission } = usePermission();
 
-  // 1. Fetch Customers with Offline Fallback
+  // 1. Fetch Customers with Offline Fallback via sovereign apiClient
   const { 
     data: customers = [], 
     loading: isLoading, 
     isOfflineData 
-  } = useOfflineFallback(
+  } = useOfflineFallback<Customer[]>(
     `customers_${searchTerm}`,
     async () => {
-      // Try direct phone lookup first if it's 10 digits
+      // Direct phone lookup for 10-digit queries
       if (searchTerm.length === 10 && /^\d+$/.test(searchTerm)) {
-         const response = await fetch(`${import.meta.env.VITE_API_URL}/api/v1/customers/lookup?phone=${searchTerm}`, {
-           headers: { 'Authorization': `Bearer ${localStorage.getItem('primesetu_token')}` }
-         });
-         if (response.ok) {
-           const lookup = await response.json();
-           if (lookup.found) return [lookup];
-         }
+        const res = await apiClient.get<Customer>(`/customers/lookup?phone=${searchTerm}`);
+        if (res.data?.found) return [res.data];
       }
-      
-      const response = await fetch(`${import.meta.env.VITE_API_URL}/api/v1/customer/search?type=customer&q=${searchTerm}`, {
-        headers: { 'Authorization': `Bearer ${localStorage.getItem('primesetu_token')}` }
-      });
-      if (!response.ok) throw new Error("Failed to fetch customers");
-      return response.json();
+      const res = await apiClient.get<Customer[]>(`/customer/search?type=customer&q=${searchTerm}`);
+      return res.data;
     },
     []
   );
@@ -185,7 +188,7 @@ const CustomerMaster: React.FC = () => {
                 <tr>
                    <td colSpan={6} className="px-12 py-32 text-center text-navy/10 uppercase font-black tracking-[0.5em] text-sm">No customers found in registry</td>
                 </tr>
-              ) : customers.map((c: any) => (
+              ) : customers.map((c: Customer) => (
                 <tr key={c.id} className="hover:bg-brand-cream transition-all group">
                   <td className="px-12 py-10">
                     <span className="bg-navy/5 text-navy px-4 py-2 rounded-xl font-mono text-[12px] font-black uppercase group-hover:bg-white transition-all shadow-sm">{c.code}</span>

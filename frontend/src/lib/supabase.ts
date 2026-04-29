@@ -1,10 +1,10 @@
 /* ============================================================
- * PrimeSetu — Shoper9-Based Retail OS
+ * SMRITI-OS — Shoper9-Based Retail OS
  * Zero Cloud · Sovereign · AI-Governed
  * ============================================================
  * System Architect   :  Jawahar R Mallah
  * Organisation       :  AITDL Network
- * Project            :  PrimeSetu
+ * Project            :  SMRITI-OS
  * © 2026 — All Rights Reserved
  * "Memory, Not Code."
  * ============================================================ */
@@ -15,7 +15,7 @@ const url  = import.meta.env.VITE_SUPABASE_URL
 const key  = import.meta.env.VITE_SUPABASE_ANON_KEY
 
 if (!url || !key) {
-  throw new Error('[PrimeSetu] Missing VITE_SUPABASE_URL or VITE_SUPABASE_ANON_KEY in .env.local')
+  throw new Error('[SMRITI-OS] Missing VITE_SUPABASE_URL or VITE_SUPABASE_ANON_KEY in .env.local')
 }
 
 export const supabase = createClient<Database>(url, key, {

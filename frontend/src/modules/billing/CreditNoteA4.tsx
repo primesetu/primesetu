@@ -1,10 +1,10 @@
 /* ============================================================
- * PrimeSetu — Shoper9-Based Retail OS
+ * SMRITI-OS — Shoper9-Based Retail OS
  * Zero Cloud · Sovereign · AI-Governed
  * ============================================================
  * System Architect   :  Jawahar R Mallah
  * Organisation       :  AITDL Network
- * Project            :  PrimeSetu
+ * Project            :  SMRITI-OS
  * © 2026 — All Rights Reserved
  * "Memory, Not Code."
  * ============================================================ */
@@ -36,7 +36,7 @@ export default function CreditNoteA4({ bill, onPrinted }: { bill: any, onPrinted
       {/* Header */}
       <div className="flex justify-between border-b-2 border-black pb-6 mb-6">
         <div className="space-y-1">
-          <h1 className="text-3xl font-black uppercase tracking-tight">{bill.store_name || 'PrimeSetu Retail'}</h1>
+          <h1 className="text-3xl font-black uppercase tracking-tight">{bill.store_name || 'SMRITI-OS Retail'}</h1>
           <p className="text-xs font-bold uppercase text-rose-600">Credit Note (Sales Return)</p>
           <p className="text-xs">{bill.store_address || 'Sovereign Node, India'}</p>
           <p className="text-xs">GSTIN: {bill.store_gstin || 'N/A'} | Ph: {bill.store_phone || 'N/A'}</p>
@@ -115,7 +115,7 @@ export default function CreditNoteA4({ bill, onPrinted }: { bill: any, onPrinted
       </div>
 
       <div className="absolute bottom-8 left-8 right-8 text-center text-[10px] text-gray-400 border-t border-gray-100 pt-4 font-mono italic">
-        Sovereign Retail OS · Credit Adjustment Protocol · Powered by PrimeSetu
+        Sovereign Retail OS · Credit Adjustment Protocol · Powered by SMRITI-OS
       </div>
     </div>
   );

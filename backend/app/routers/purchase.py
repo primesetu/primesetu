@@ -1,10 +1,10 @@
 # ============================================================
-# * PrimeSetu - Shoper9-Based Retail OS
+# * SMRITI-OS - Shoper9-Based Retail OS
 # * Zero Cloud . Sovereign . AI-Governed
 # ============================================================
 # * System Architect   :  Jawahar R Mallah
 # * Organisation       :  AITDL Network
-# * Project            :  PrimeSetu
+# * Project            :  SMRITI-OS
 # * (c) 2026 - All Rights Reserved
 # * "Memory, Not Code."
 # ============================================================ #
@@ -19,7 +19,7 @@ from datetime import datetime
 from app.core.database import get_db
 from app.core.security import require_auth, CurrentUser
 from app.models import (
-    PurchaseOrder, PurchaseOrderItem, GRN, GRNItem, ItemStock, Partner
+    PurchaseOrder, PurchaseOrderItem, GRN, GRNItem, ItemStock, Partner, CustomerLedger
 )
 from app.schemas.purchase import POCreate, PO, GRNCreate, GRN as GRNSchema
 
@@ -106,7 +106,10 @@ async def process_grn(
             size=item_data.size,
             colour=item_data.colour,
             qty_received=item_data.qty_received,
-            unit_cost_paise=item_data.unit_cost_paise
+            unit_cost_paise=item_data.unit_cost_paise,
+            batch_no=item_data.batch_no,
+            mfg_date=item_data.mfg_date,
+            exp_date=item_data.exp_date
         )
         db.add(grn_item)
         
@@ -122,7 +125,8 @@ async def process_grn(
                 ItemStock.item_id == item_data.item_id,
                 ItemStock.store_id == current_user.store_id,
                 ItemStock.size == item_data.size,
-                ItemStock.colour == item_data.colour
+                ItemStock.colour == item_data.colour,
+                ItemStock.batch_no == item_data.batch_no
             )
         )
         stock = (await db.execute(stock_stmt)).scalar_one_or_none()
@@ -135,7 +139,10 @@ async def process_grn(
                 store_id=current_user.store_id,
                 size=item_data.size,
                 colour=item_data.colour,
-                qty_on_hand=item_data.qty_received
+                qty_on_hand=item_data.qty_received,
+                batch_no=item_data.batch_no,
+                mfg_date=item_data.mfg_date,
+                exp_date=item_data.exp_date
             )
             db.add(new_stock)
             
@@ -144,6 +151,18 @@ async def process_grn(
         po = await db.get(PurchaseOrder, payload.po_id)
         if po:
             po.status = "CLOSED" # Simplified
+            
+    # Vendor Ledger Entry (Sovereign Finance DNA)
+    total_grn_value = sum([item.qty_received * item.unit_cost_paise for item in payload.items])
+    ledger_entry = CustomerLedger(
+        store_id=current_user.store_id,
+        partner_id=payload.vendor_id,
+        txn_type="grn_invoice",
+        txn_ref=payload.grn_number,
+        amount_paise=total_grn_value,
+        balance_paise=total_grn_value # In production, this would be previous balance + this amount
+    )
+    db.add(ledger_entry)
             
     await db.commit()
     await db.refresh(grn)

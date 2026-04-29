@@ -8,7 +8,7 @@ import uuid
 from typing import Dict
 
 # ============================================================
-# PrimeSetu - Shoper 9 Sales History Sync Engine
+# SMRITI-OS - Shoper 9 Sales History Sync Engine
 # Phase 6: Bringing Sales Records into the Sovereign Cloud
 # ============================================================
 
@@ -20,7 +20,7 @@ async def get_store_id() -> str:
         return store.id
 
 async def get_item_map() -> Dict[str, uuid.UUID]:
-    """Creates a map of Shoper 9 StockNo to PrimeSetu Item UUIDs."""
+    """Creates a map of Shoper 9 StockNo to SMRITI-OS Item UUIDs."""
     async with AsyncSessionLocal() as session:
         print("Caching 40k items... (Please wait)")
         stmt = select(Item.id, Item.external_id)

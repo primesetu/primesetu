@@ -1,1 +1,1 @@
-# PrimeSetu Utils Package
+# SMRITI-OS Utils Package

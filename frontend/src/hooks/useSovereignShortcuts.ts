@@ -1,10 +1,10 @@
 /* ============================================================
- * PrimeSetu — Shoper9-Based Retail OS
+ * SMRITI-OS — Shoper9-Based Retail OS
  * Zero Cloud · Sovereign · AI-Governed
  * ============================================================
  * System Architect   :  Jawahar R Mallah
  * Organisation       :  AITDL Network
- * Project            :  PrimeSetu
+ * Project            :  SMRITI-OS
  * © 2026 — All Rights Reserved
  * "Memory, Not Code."
  * ============================================================ */
@@ -13,7 +13,7 @@ import { useEffect } from 'react';
 /**
  * Sovereign Shortcut Guard
  * Disables default browser shortcuts to prevent accidental disruption.
- * Only whitelisted PrimeSetu shortcuts are allowed.
+ * Only whitelisted SMRITI-OS shortcuts are allowed.
  */
 export function useSovereignShortcuts() {
   useEffect(() => {
@@ -26,7 +26,7 @@ export function useSovereignShortcuts() {
         return;
       }
 
-      // 2. Handle PrimeSetu Specific Shortcuts (Whitelist)
+      // 2. Handle SMRITI-OS Specific Shortcuts (Whitelist)
       // Ctrl + K: Command Bar
       if (e.key === 'k' && (e.ctrlKey || e.metaKey)) {
         return; 
@@ -45,7 +45,7 @@ export function useSovereignShortcuts() {
         // Block: S (Save), P (Print), N (New), T (Tab), W (Close), R (Reload), F (Find), D (Bookmark)
         const blockedChars = ['s', 'p', 'n', 't', 'w', 'r', 'f', 'd', 'j', 'u'];
         if (blockedChars.includes(e.key.toLowerCase())) {
-          console.warn(`[PrimeSetu] Sovereign Guard: Blocked browser shortcut Ctrl+${e.key.toUpperCase()}`);
+          console.warn(`[SMRITI-OS] Sovereign Guard: Blocked browser shortcut Ctrl+${e.key.toUpperCase()}`);
           e.preventDefault();
           e.stopPropagation();
         }

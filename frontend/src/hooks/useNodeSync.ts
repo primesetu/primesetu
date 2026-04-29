@@ -1,10 +1,10 @@
 /* ============================================================
- * PrimeSetu — Shoper9-Based Retail OS
+ * SMRITI-OS — Shoper9-Based Retail OS
  * Zero Cloud · Sovereign · AI-Governed
  * ============================================================
  * System Architect   :  Jawahar R Mallah
  * Organisation       :  AITDL Network
- * Project            :  PrimeSetu
+ * Project            :  SMRITI-OS
  * © 2026 — All Rights Reserved
  * "Memory, Not Code."
  * ============================================================ */
@@ -37,14 +37,33 @@ export function useNodeSync(): NodeSyncState {
   const checkPulse = useCallback(async () => {
     const t0 = Date.now();
     try {
-      const data = await api.ho.getStatus();
+      // Sovereign Pulse: Send local heartbeat and get remote commands
+      const data = await api.ho.pulse({
+        transaction_count: 0,
+        pending_sync_packets: 0, // Should be fetched from local DB/sync engine
+        last_sync_id: null
+      });
+
       const latencyMs = Date.now() - t0;
+      
+      // Execute any pending remote commands
+      if (data.commands && data.commands.length > 0) {
+        console.log(`[SMRITI-OS] HO Pulse: ${data.commands.length} commands received.`);
+        for (const cmd of data.commands) {
+          try {
+            await api.ho.executeCommand(cmd.id);
+          } catch (cmdErr) {
+            console.error(`[SMRITI-OS] Command ${cmd.id} execution failed:`, cmdErr);
+          }
+        }
+      }
+
       setState({
-        status: data.pending_packets > 0 ? 'syncing' : 'online',
-        lastSync: data.last_sync ? new Date(data.last_sync) : new Date(),
-        pendingCount: data.pending_packets || 0,
+        status: 'online',
+        lastSync: data.server_time ? new Date(data.server_time) : new Date(),
+        pendingCount: 0,
         latencyMs,
-        nodeId: data.corporate_node,
+        nodeId: 'HQ-MUM-01',
       });
     } catch {
       setState(prev => ({ ...prev, status: 'offline', latencyMs: null }));

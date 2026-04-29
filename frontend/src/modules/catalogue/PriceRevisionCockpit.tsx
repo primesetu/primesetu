@@ -1,9 +1,6 @@
 /* ============================================================
- * PrimeSetu — Shoper9-Based Retail OS
+ * SMRITI-OS — Shoper9-Based Retail OS
  * Zero Cloud · Sovereign · AI-Governed
- * ============================================================
- * Price Revision Cockpit (Bulk Updates)
- * Tesla Style Management
  * ============================================================ */
 
 import React, { useState } from 'react';
@@ -20,10 +17,24 @@ import {
   Filter,
   Save,
   Percent,
-  Calendar
+  Calendar,
+  History,
+  RefreshCw
 } from 'lucide-react';
 import { api } from '@/api/client';
 import { formatCurrency } from '@/utils/currency';
+import { cn } from '@/lib/utils';
+import { 
+  Button, 
+  Input, 
+  Card, 
+  Text, 
+  Badge,
+  Flex,
+  Grid,
+  Container,
+  DataTable
+} from '../../components/ui/SovereignUI';
 
 interface RevisionItem {
   id: string;
@@ -63,213 +74,203 @@ export default function PriceRevisionCockpit() {
         new_price: i.new_price
       }));
       
-      if (revisions.length === 0) {
-        alert('No price changes detected');
-        return;
-      }
+      if (revisions.length === 0) return;
 
       await api.catalogue.bulkPriceRevision(revisions);
       setShowSuccess(true);
       setTimeout(() => setShowSuccess(false), 3000);
     } catch (err) {
-      alert('Failed to apply price revisions');
+      console.error('Failed to apply price revisions');
     } finally {
       setIsApplying(false);
     }
   };
 
+  const affectedCount = items.filter(i => i.new_price !== i.current_price).length;
+  const valueDelta = items.reduce((acc, i) => acc + (i.new_price - i.current_price), 0);
+
   return (
-    <div className="flex flex-col h-full bg-navy/5 p-8 gap-8 animate-in fade-in duration-700">
+    <Container className="pb-20">
       {/* ── HEADER ── */}
-      <div className="flex items-center justify-between">
+      <Flex between gap={8}>
         <div>
-          <div className="text-[10px] font-black text-brand-gold uppercase tracking-[0.4em] mb-2">Catalogue / Pricing</div>
-          <h1 className="text-4xl font-black text-navy tracking-tighter" style={{ fontFamily: 'var(--font-tesla)' }}>
-            Price Revision Cockpit
-          </h1>
+          <Text variant="xs" className="text-accent mb-2 block font-black uppercase tracking-[0.4em]">Pricing Engine</Text>
+          <Text variant="h1">Price Revision Cockpit</Text>
         </div>
         
-        <div className="flex items-center gap-4">
-          <div className="flex items-center gap-2 px-6 py-3 bg-white rounded-2xl shadow-sm border border-navy/5">
-            <Calendar className="w-4 h-4 text-navy/40" />
-            <span className="text-[10px] font-black text-navy uppercase tracking-widest">Effective: Immediate</span>
-          </div>
-          <button 
+        <Flex gap={4}>
+          <Badge variant="muted" className="h-12 px-6 flex items-center gap-2">
+            <Calendar size={14} className="opacity-40" />
+            <span className="font-bold">EFFECTIVE: IMMEDIATE</span>
+          </Badge>
+          <Button 
             onClick={handleSave}
-            disabled={isApplying}
-            className="tesla-button px-10"
+            disabled={isApplying || affectedCount === 0}
+            className="h-12 px-10 shadow-xl shadow-accent/20"
           >
-            {isApplying ? <Zap className="animate-spin w-5 h-5" /> : <Save className="w-5 h-5" />}
+            {isApplying ? <RefreshCw className="animate-spin" /> : <Save size={18} />}
             Apply Revisions
-          </button>
-        </div>
-      </div>
+          </Button>
+        </Flex>
+      </Flex>
 
-      <div className="grid grid-cols-12 gap-8 flex-1 min-h-0">
+      <Grid cols="12" gap={8} className="flex-1 min-h-0 items-start">
         {/* ── BULK TOOLS ── */}
-        <div className="col-span-12 lg:col-span-3 space-y-6">
-          <div className="tesla-card bg-white p-8">
-            <h3 className="text-xs font-black text-navy uppercase tracking-[0.3em] mb-8 flex items-center gap-3">
-              <Zap className="text-brand-gold w-5 h-5" /> Bulk Adjust
-            </h3>
+        <aside className="col-span-3 space-y-6">
+          <Card className="p-8 bg-bg-elevated/40">
+            <Flex gap={3} className="opacity-40 uppercase tracking-[0.3em] text-[10px] font-black mb-10">
+               <Zap size={14} className="text-accent" /> Bulk Control
+            </Flex>
             
-            <div className="space-y-6">
-              <div>
-                <label className="text-[9px] font-black text-navy/40 uppercase tracking-widest block mb-3">Markup / Markdown (%)</label>
-                <div className="flex gap-2">
-                  <input 
+            <div className="space-y-8">
+              <div className="space-y-4">
+                <Text variant="xs" className="opacity-60 block font-black">SURGE / MARKDOWN (%)</Text>
+                <Flex gap={2}>
+                  <Input 
                     type="number"
-                    value={globalAdj}
+                    value={globalAdj || ''}
                     onChange={(e) => setGlobalAdj(parseFloat(e.target.value) || 0)}
-                    className="flex-1 bg-navy/5 border-2 border-transparent focus:border-brand-gold/20 rounded-xl px-4 py-3 text-sm font-black outline-none"
-                    placeholder="E.g. 10"
+                    className="h-12 font-mono font-bold"
+                    placeholder="0.00"
                   />
-                  <button 
+                  <Button 
+                    variant="sec"
                     onClick={() => applyAdjustment('percent', globalAdj)}
-                    className="p-3 bg-navy text-white rounded-xl hover:scale-105 transition-all"
+                    className="w-12 h-12 p-0"
                   >
-                    <Percent className="w-4 h-4" />
-                  </button>
-                </div>
+                    <Percent size={14} />
+                  </Button>
+                </Flex>
               </div>
 
-              <div className="grid grid-cols-2 gap-4">
-                <button 
+              <Grid gap={3}>
+                <Button 
+                  variant="sec"
                   onClick={() => applyAdjustment('percent', 5)}
-                  className="py-4 bg-emerald-50 text-emerald-600 rounded-2xl text-[10px] font-black uppercase tracking-widest hover:bg-emerald-600 hover:text-white transition-all border border-emerald-100"
+                  className="h-12 text-status-green border-status-green/10 bg-status-green/5"
                 >
-                  +5% Surge
-                </button>
-                <button 
+                  <TrendingUp size={14} /> +5% Surged
+                </Button>
+                <Button 
+                  variant="sec"
                   onClick={() => applyAdjustment('percent', -10)}
-                  className="py-4 bg-rose-50 text-rose-500 rounded-2xl text-[10px] font-black uppercase tracking-widest hover:bg-rose-500 hover:text-white transition-all border border-rose-100"
+                  className="h-12 text-status-red border-status-red/10 bg-status-red/5"
                 >
-                  -10% Clearance
-                </button>
-              </div>
+                  <TrendingDown size={14} /> -10% Clearance
+                </Button>
+              </Grid>
             </div>
-          </div>
+          </Card>
 
-          <div className="tesla-card bg-navy text-white p-8 overflow-hidden relative">
-            <TrendingUp className="absolute -right-4 -bottom-4 w-32 h-32 text-white/5" />
-            <h3 className="text-[10px] font-black uppercase tracking-[0.3em] text-white/40 mb-8">Revision Impact</h3>
-            <div className="space-y-6 relative z-10">
+          <Card className="p-8 bg-text-primary text-bg-base border-none overflow-hidden relative shadow-2xl">
+            <History className="absolute -right-6 -bottom-6 w-32 h-32 opacity-10" />
+            <Text variant="xs" className="text-bg-base opacity-40 block font-black uppercase tracking-widest mb-10">Revision Pulse</Text>
+            <div className="space-y-8 relative z-10">
                <div>
-                 <div className="text-[9px] font-bold text-white/20 uppercase tracking-widest mb-1">Items Affected</div>
-                 <div className="text-3xl font-black">{items.filter(i => i.new_price !== i.current_price).length}</div>
+                 <Text variant="xs" className="text-bg-base opacity-20 block mb-1">Entities Affected</Text>
+                 <Text variant="h1" className="text-bg-base text-4xl">{affectedCount}</Text>
                </div>
                <div>
-                 <div className="text-[9px] font-bold text-white/20 uppercase tracking-widest mb-1">Value Delta</div>
-                 <div className="text-2xl font-black text-emerald-400">
-                   +{formatCurrency(items.reduce((acc, i) => acc + (i.new_price - i.current_price), 0))}
-                 </div>
+                 <Text variant="xs" className="text-bg-base opacity-20 block mb-1">Value Drift</Text>
+                 <Text variant="h2" className={cn("text-2xl font-mono", valueDelta >= 0 ? "text-status-green" : "text-status-red")}>
+                   {valueDelta >= 0 ? '+' : ''}{formatCurrency(valueDelta * 100)}
+                 </Text>
                </div>
             </div>
-          </div>
-        </div>
+          </Card>
+        </aside>
 
         {/* ── ITEM GRID ── */}
-        <div className="col-span-12 lg:col-span-9 flex flex-col gap-6 min-h-0">
-          <div className="tesla-card bg-white flex-1 flex flex-col overflow-hidden">
-            <div className="p-6 border-b border-navy/5 flex items-center justify-between">
-              <div className="relative w-80">
-                <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-navy/20" />
-                <input 
-                  type="text"
-                  placeholder="Filter grid..."
+        <main className="col-span-9 flex flex-col gap-6 min-h-0">
+          <Card className="flex-1 flex flex-col overflow-hidden bg-bg-elevated/20">
+            <Flex between className="p-6 border-b border-border-subtle bg-bg-elevated/40">
+              <div className="relative w-96">
+                <Search size={16} className="absolute left-4 top-1/2 -translate-y-1/2 text-text-disabled" />
+                <Input 
+                  placeholder="Filter Registry Grid..."
                   value={search}
                   onChange={(e) => setSearch(e.target.value)}
-                  className="w-full bg-navy/5 border-none rounded-xl pl-12 pr-4 py-3 text-sm font-black outline-none placeholder:text-navy/20"
+                  className="h-12 pl-12 font-bold"
                 />
               </div>
-              <div className="flex items-center gap-4 text-[10px] font-black text-navy/40 uppercase tracking-widest">
-                <span>Sorting: High Price</span>
-                <Filter className="w-4 h-4" />
-              </div>
-            </div>
+              <Flex gap={6}>
+                <Text variant="xs" className="opacity-40 font-black">SORTING: VALUE ASC</Text>
+                <Button variant="ghost" size="sm" className="w-10 h-10 p-0">
+                   <Filter size={16} />
+                </Button>
+              </Flex>
+            </Flex>
 
-            <div className="flex-1 overflow-auto">
-              <table className="w-full border-collapse">
-                <thead>
-                  <tr className="bg-navy/[0.02] text-[10px] font-black text-navy/30 uppercase tracking-[0.3em]">
-                    <th className="p-6 text-left">Product Detail</th>
-                    <th className="p-6 text-center">Current MRP</th>
-                    <th className="p-6 text-center">New MRP</th>
-                    <th className="p-6 text-right">Variance</th>
-                  </tr>
-                </thead>
-                <tbody className="divide-y divide-navy/5">
-                  <AnimatePresence>
-                    {items.map((item, idx) => (
-                      <motion.tr 
-                        key={item.id}
-                        initial={{ opacity: 0, y: 10 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        transition={{ delay: idx * 0.05 }}
-                        className="group hover:bg-navy/[0.01]"
-                      >
-                        <td className="p-6">
-                          <div className="text-sm font-black text-navy uppercase tracking-tight">{item.name}</div>
-                          <div className="text-[10px] font-mono text-navy/40 mt-1 uppercase tracking-widest">{item.code}</div>
-                        </td>
-                        <td className="p-6 text-center font-mono font-black text-navy/40 text-sm italic">
-                          {formatCurrency(item.current_price)}
-                        </td>
-                        <td className="p-6 text-center">
-                          <input 
-                            type="number"
-                            value={item.new_price}
-                            onChange={(e) => {
-                              const val = parseFloat(e.target.value) || 0;
-                              setItems(prev => prev.map(p => p.id === item.id ? { ...p, new_price: val } : p));
-                            }}
-                            className={cn(
-                              "w-32 bg-transparent border-2 rounded-xl py-2 px-4 text-center text-sm font-black outline-none transition-all",
-                              item.new_price === item.current_price 
-                                ? "border-transparent focus:border-navy/10" 
-                                : item.new_price > item.current_price 
-                                  ? "border-emerald-100 bg-emerald-50 text-emerald-600" 
-                                  : "border-rose-100 bg-rose-50 text-rose-500"
-                            )}
-                          />
-                        </td>
-                        <td className="p-6 text-right">
-                          <div className={cn(
-                            "flex items-center justify-end gap-2 text-[10px] font-black uppercase tracking-widest",
-                            item.new_price === item.current_price ? "text-navy/20" : item.new_price > item.current_price ? "text-emerald-500" : "text-rose-500"
-                          )}>
-                            {item.new_price > item.current_price ? <TrendingUp className="w-3 h-3" /> : item.new_price < item.current_price ? <TrendingDown className="w-3 h-3" /> : null}
-                            {item.new_price === item.current_price ? 'NO CHANGE' : `${((item.new_price - item.current_price) / item.current_price * 100).toFixed(1)}%`}
-                          </div>
-                        </td>
-                      </motion.tr>
-                    ))}
-                  </AnimatePresence>
-                </tbody>
-              </table>
-            </div>
-          </div>
-        </div>
-      </div>
+            <DataTable<RevisionItem>
+              data={items}
+              columns={[
+                {
+                  header: 'Protocol Entity',
+                  accessor: (item) => (
+                    <div>
+                      <Text variant="sm" className="font-bold uppercase group-hover:text-accent transition-colors">{item.name}</Text>
+                      <Text variant="xs" className="font-mono mt-1 block opacity-40">{item.code}</Text>
+                    </div>
+                  )
+                },
+                {
+                  header: 'Registry MRP',
+                  align: 'center',
+                  accessor: (item) => (
+                    <Text variant="sm" className="font-mono opacity-40 italic">{formatCurrency(item.current_price * 100)}</Text>
+                  )
+                },
+                {
+                  header: 'Proposed MRP',
+                  align: 'center',
+                  accessor: (item) => (
+                    <div className="inline-block relative">
+                      <Input 
+                        type="number"
+                        value={item.new_price}
+                        onChange={(e) => {
+                          const val = parseFloat(e.target.value) || 0;
+                          setItems(prev => prev.map(p => p.id === item.id ? { ...p, new_price: val } : p));
+                        }}
+                        className={cn(
+                          "w-40 h-11 text-center font-mono font-bold tracking-widest",
+                          item.new_price !== item.current_price && "border-accent/40 bg-accent/5 text-accent"
+                        )}
+                      />
+                    </div>
+                  )
+                },
+                {
+                  header: 'Variance Threshold',
+                  align: 'right',
+                  accessor: (item) => (
+                    <div className={cn(
+                      "inline-flex items-center gap-2 text-[10px] font-black uppercase tracking-widest px-3 py-1.5 rounded-lg",
+                      item.new_price === item.current_price ? "text-text-tertiary" : item.new_price > item.current_price ? "bg-status-green/10 text-status-green" : "bg-status-red/10 text-status-red"
+                    )}>
+                      {item.new_price > item.current_price ? <TrendingUp size={12} /> : item.new_price < item.current_price ? <TrendingDown size={12} /> : null}
+                      {item.new_price === item.current_price ? 'STABLE' : `${((item.new_price - item.current_price) / item.current_price * 100).toFixed(1)}%`}
+                    </div>
+                  )
+                }
+              ]}
+            />
+          </Card>
+        </main>
+      </Grid>
 
       {/* ── SUCCESS NOTIFICATION ── */}
       <AnimatePresence>
         {showSuccess && (
           <motion.div 
-            initial={{ y: 100, opacity: 0 }}
-            animate={{ y: 0, opacity: 1 }}
-            exit={{ y: 100, opacity: 0 }}
-            className="fixed bottom-12 left-1/2 -translate-x-1/2 bg-emerald-600 text-white px-10 py-5 rounded-[2rem] shadow-2xl flex items-center gap-4 z-[300] border-2 border-emerald-400"
+            initial={{ y: 100, opacity: 0 }} animate={{ y: 0, opacity: 1 }} exit={{ y: 100, opacity: 0 }}
+            className="fixed bottom-12 left-1/2 -translate-x-1/2 bg-status-green text-bg-base px-10 py-5 rounded-3xl shadow-2xl flex items-center gap-4 z-[400] border border-status-green/20"
           >
-            <CheckCircle2 className="w-6 h-6" />
-            <span className="text-xs font-black uppercase tracking-[0.2em]">Sovereign Pricing Synced Successfully</span>
+            <CheckCircle2 size={24} />
+            <Text variant="xs" className="font-black uppercase tracking-widest">Sovereign Pricing Pulse Verified</Text>
           </motion.div>
         )}
       </AnimatePresence>
-    </div>
+    </Container>
   );
-}
-
-function cn(...classes: any[]) {
-  return classes.filter(Boolean).join(' ');
 }

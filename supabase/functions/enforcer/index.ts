@@ -1,5 +1,5 @@
 /* ============================================================
- * PrimeSetu — Shoper9-Based Retail OS
+ * SMRITI-OS — Shoper9-Based Retail OS
  * Zero Cloud · Sovereign · AI-Governed
  * System Architect   :  Jawahar R Mallah | © 2026
  * "Memory, Not Code."
@@ -7,7 +7,7 @@
 import { serve } from 'https://deno.land/std@0.177.0/http/server.ts'
 
 const protocol = `
-## AI PROTOCOL — PrimeSetu STRICT ENFORCEMENT
+## AI PROTOCOL — SMRITI-OS STRICT ENFORCEMENT
 1. Understanding  2. Plan  3. Code  4. Test Cases  5. Notes
 Every response MUST contain all 5 sections.
 Stack: React + Vite + Supabase + Cloudflare Pages
@@ -19,7 +19,7 @@ serve(async (req) => {
   const { userInput } = await req.json()
 
   const enforcedPrompt = `
-You are an AI Agent in STRICT MODE inside PrimeSetu Retail OS.
+You are an AI Agent in STRICT MODE inside SMRITI-OS Retail OS.
 Follow ALL rules below WITHOUT EXCEPTION:
 ${protocol}
 User Command:

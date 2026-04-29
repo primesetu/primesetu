@@ -1,10 +1,10 @@
 # ============================================================
-# PrimeSetu - Shoper9-Based Retail OS
+# SMRITI-OS - Shoper9-Based Retail OS
 # Zero Cloud - Sovereign - AI-Governed
 # ============================================================
 # System Architect : Jawahar R Mallah
 # Organisation     : AITDL Network
-# Project          : PrimeSetu
+# Project          : SMRITI-OS
 # (c) 2026 - All Rights Reserved
 # "Memory, Not Code."
 # ============================================================
@@ -36,6 +36,7 @@ class ItemCreate(BaseModel):
     cost_paise: Optional[int] = Field(default=None, gt=0)
     gst_rate: int = Field(..., description="Must be 0, 5, 12, 18, or 28")
     hsn_code: str
+    shoper_recid: Optional[int] = None
     stock_matrix: List[StockMatrixEntry] = []
 
 class ItemResponse(BaseModel):
@@ -49,6 +50,7 @@ class ItemResponse(BaseModel):
     hsn_code: str
     is_active: bool
     total_stock: int = 0
+    shoper_recid: Optional[int] = None
     created_at: datetime
     
     model_config = ConfigDict(from_attributes=True)

@@ -1,10 +1,10 @@
 /* ============================================================
- * PrimeSetu — Shoper9-Based Retail OS
+ * SMRITI-OS — Shoper9-Based Retail OS
  * Zero Cloud · Sovereign · AI-Governed
  * ============================================================
  * System Architect   :  Jawahar R Mallah
  * Organisation       :  AITDL Network
- * Project            :  PrimeSetu
+ * Project            :  SMRITI-OS
  * © 2026 — All Rights Reserved
  * "Memory, Not Code."
  * ============================================================ */
@@ -30,7 +30,7 @@ export function useStore() {
         .eq('id', storeId)
         .single()
 
-      if (error) console.error('[PrimeSetu] useStore:', error.message)
+      if (error) console.error('[SMRITI-OS] useStore:', error.message)
       else setStore(storeData as unknown as Store)
       setLoading(false)
     }

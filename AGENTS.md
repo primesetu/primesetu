@@ -1,13 +1,14 @@
 /* ============================================================
- * PrimeSetu — Shoper9-Based Retail OS
- * Zero Cloud · Sovereign · AI-Governed
- * ============================================================
- * System Architect : Jawahar R Mallah
- * Organisation     : AITDL Network
- * Project          : PrimeSetu
- * © 2026 — All Rights Reserved
- * "Memory, Not Code."
- * ============================================================ */
+
+- SMRITI-OS — Inspired from Shoper9 Retail OS
+- Zero Cloud · Sovereign · AI-Governed
+- ============================================================
+- System Architect : Jawahar R Mallah
+- Organisation : AITDL Network
+- Project : SMRITI-OS
+- © 2026 — All Rights Reserved
+- "Memory, Not Code."
+- ============================================================ */
 
 # AGENTS.md — AI Agent Role Registry
 
@@ -33,9 +34,11 @@ Before any response: read aiprotocol.md → apply ALL rules → load `skills/cod
 ## AGENT ROLES
 
 ### AGENT-BACKEND
+
 **Owns:** `backend/` — FastAPI routers, SQLAlchemy models, Pydantic schemas, business logic
 
 **Responsibilities:**
+
 - New API endpoints following the pattern in `skills/add-api-endpoint.md`
 - SQLAlchemy 2 async models in `backend/app/models/`
 - Pydantic v2 request/response schemas in `backend/app/schemas/`
@@ -44,6 +47,7 @@ Before any response: read aiprotocol.md → apply ALL rules → load `skills/cod
 - RLS policy verification before any new table is queried
 
 **Must NOT touch:**
+
 - `frontend/` — no React, no Tailwind, no TSX
 - `supabase/migrations/` — coordinate with AGENT-DB before schema changes
 - Design tokens or UI components
@@ -53,22 +57,26 @@ Before any response: read aiprotocol.md → apply ALL rules → load `skills/cod
 ---
 
 ### AGENT-FRONTEND
+
 **Owns:** `frontend/src/` — React components, pages, hooks, Tailwind UI
 
 **Responsibilities:**
+
 - New pages following the pattern in `skills/add-react-page.md`
 - Keyboard hotkey registration via `react-hotkeys-hook` (see `skills/hotkey-registration.md`)
 - All menu items fetched from DB — never static arrays
 - Offline fallback to IndexedDB for all structural UI data
-- UI validated against `primesetu-shoper9-ui.html` before commit
+- UI validated against `smriti-os-shoper9-ui.html` before commit
 - `npm run build` must produce 0 TypeScript errors
 
 **Must NOT touch:**
+
 - `backend/` — no Python, no FastAPI, no SQLAlchemy
 - `supabase/migrations/` — coordinate with AGENT-DB
 - Any auth token stored in `localStorage` or `sessionStorage` — ever
 
 **Permission binding rule:**
+
 ```typescript
 // WRONG ❌
 if (user.role === 'admin') { ... }
@@ -80,19 +88,23 @@ if (user.hasPermission('billing.void')) { ... }
 ---
 
 ### AGENT-DB
+
 **Owns:** `supabase/migrations/`, RLS policies, DB schema
 
 **Responsibilities:**
+
 - New migration files following `skills/add-db-migration.md`
 - RLS policy for every new table — no table goes live without RLS
 - Every `store_id` column must reference the auth context, never be hardcoded
 - Schema changes must be backward compatible (Phase 2 API uses same schema as Phase 1)
 
 **Must NOT touch:**
+
 - Application code in `frontend/` or `backend/`
 - `.env` files or secrets
 
 **RLS template for every new table:**
+
 ```sql
 ALTER TABLE public.new_table ENABLE ROW LEVEL SECURITY;
 
@@ -110,6 +122,7 @@ CREATE POLICY "store_isolation" ON public.new_table
 When AGENT-BACKEND or AGENT-FRONTEND produces code, AGENT-QA reviews it in a **fresh context window** (no shared memory with the writer).
 
 **AGENT-QA checks:**
+
 - All 5 output sections present
 - File signature present on new files
 - No banned dependencies introduced
@@ -121,6 +134,7 @@ When AGENT-BACKEND or AGENT-FRONTEND produces code, AGENT-QA reviews it in a **f
 - Shoper9 hotkey parity maintained (if UI change)
 
 **AGENT-QA does NOT:**
+
 - Rewrite the code — it returns a pass/fail verdict with specific line-level feedback
 - Merge or commit — human review is always the final gate
 

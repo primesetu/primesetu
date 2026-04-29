@@ -1,5 +1,5 @@
 /* ============================================================
- * PrimeSetu — Shoper9-Based Retail OS
+ * SMRITI-OS — Shoper9-Based Retail OS
  * Zero Cloud · Sovereign · AI-Governed
  * System Architect   :  Jawahar R Mallah | © 2026
  * "Memory, Not Code."
@@ -102,7 +102,7 @@ serve(async (req) => {
     const protocol = await Deno.readTextFile('./aiprotocol.md').catch(() => 'Follow 5-section output format.')
 
     const enforcedPrompt = `
-You are an AI Agent in STRICT MODE inside PrimeSetu Retail OS.
+You are an AI Agent in STRICT MODE inside SMRITI-OS Retail OS.
 Stack: React + Vite + TypeScript + Supabase + Cloudflare Pages.
 ${protocol}
 User Command: ${userInput}

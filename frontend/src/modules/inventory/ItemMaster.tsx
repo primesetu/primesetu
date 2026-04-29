@@ -1,10 +1,10 @@
 /* ============================================================
- * PrimeSetu — Shoper9-Based Retail OS
+ * SMRITI-OS — Shoper9-Based Retail OS
  * Zero Cloud · Sovereign · AI-Governed
  * ============================================================
  * System Architect : Jawahar R Mallah
  * Organisation     : AITDL Network
- * Project          : PrimeSetu
+ * Project          : SMRITI-OS
  * © 2026 — All Rights Reserved
  * "Memory, Not Code."
  * ============================================================ */
@@ -30,6 +30,19 @@ import { formatCurrency } from "../../utils/currency";
 import ItemForm from "./ItemForm";
 import { usePermission } from "../../hooks/usePermission";
 import { useOfflineFallback } from "../../hooks/useOfflineFallback";
+import { apiClient } from "../../api/client";
+
+interface Item {
+  id: string;
+  item_code: string;
+  item_name: string;
+  brand?: string;
+  department?: string;
+  mrp_paise: number;
+  gst_rate: number;
+  total_stock: number;
+  is_active: boolean;
+}
 
 const ItemMaster: React.FC = () => {
   const [searchTerm, setSearchTerm] = useState("");
@@ -38,24 +51,16 @@ const ItemMaster: React.FC = () => {
   const searchInputRef = useRef<HTMLInputElement>(null);
   const { hasPermission } = usePermission();
 
-  // 1. Fetch Items with Offline Fallback
+  // 1. Fetch Items with Offline Fallback via sovereign apiClient
   const { 
     data: items = [], 
     loading: isLoading, 
     isOfflineData 
-  } = useOfflineFallback(
+  } = useOfflineFallback<Item[]>(
     `items_${searchTerm}`,
     async () => {
-      const response = await fetch(
-        `${import.meta.env.VITE_API_URL}/api/v1/items/?search=${searchTerm}`,
-        {
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem('primesetu_token')}`,
-          },
-        },
-      );
-      if (!response.ok) throw new Error("Failed to fetch items");
-      return response.json();
+      const response = await apiClient.get<Item[]>(`/items/?search=${searchTerm}`);
+      return response.data;
     },
     []
   );
@@ -97,9 +102,9 @@ const ItemMaster: React.FC = () => {
             <Package size={32} />
           </div>
           <div>
-            <h1 className="text-4xl font-serif font-black text-navy uppercase tracking-tight leading-none">Item Master</h1>
+            <h1 className="text-4xl font-serif font-black text-text-primary uppercase tracking-tight leading-none">Item Master</h1>
             <div className="flex items-center gap-3 mt-3">
-              <p className="text-[10px] font-mono text-navy/40 uppercase tracking-[0.2em]">Universal SKU Registry · GTIN Alignment · Stock Control</p>
+              <p className="text-[10px] font-mono text-text-secondary uppercase tracking-[0.2em]">Universal SKU Registry · GTIN Alignment · Stock Control</p>
               {isOfflineData && (
                 <span className="px-3 py-1 bg-amber-100 text-amber-700 text-[9px] font-black uppercase rounded-lg">Offline Buffer</span>
               )}
@@ -109,17 +114,17 @@ const ItemMaster: React.FC = () => {
 
         <div className="flex items-center gap-4">
           <div className="relative group">
-            <Search className="absolute left-6 top-1/2 -translate-y-1/2 text-navy/20 group-focus-within:text-brand-gold transition-colors" size={18} />
+            <Search className="absolute left-6 top-1/2 -translate-y-1/2 text-text-secondary/40 group-focus-within:text-brand-gold transition-colors" size={18} />
             <input 
               ref={searchInputRef}
               type="text" 
               placeholder="Search SKU / Name... [F3]"
-              className="w-80 bg-white border-2 border-navy/5 rounded-[2rem] py-5 pl-14 pr-6 text-xs font-black outline-none focus:border-brand-gold transition-all shadow-sm uppercase tracking-widest"
+              className="w-80 bg-bg-input border-2 border-border rounded-[2rem] py-5 pl-14 pr-6 text-xs font-black outline-none focus:border-brand-gold transition-all shadow-sm uppercase tracking-widest text-text-primary"
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
             />
           </div>
-          <button className="p-5 bg-white rounded-2xl text-navy/20 hover:text-navy border border-navy/5 shadow-sm transition-all"><Filter size={20} /></button>
+          <button className="p-5 bg-bg-float rounded-2xl text-text-secondary/40 hover:text-text-primary border border-border shadow-sm transition-all"><Filter size={20} /></button>
           {hasPermission('catalog.edit') && (
             <button 
               onClick={() => {
@@ -143,14 +148,14 @@ const ItemMaster: React.FC = () => {
           { label: 'Low Stock', val: '24 Items', icon: ShieldAlert, color: 'saffron' },
           { label: 'Active Sync', val: 'Live', icon: Zap, color: 'green' }
         ].map((kpi, idx) => (
-          <div key={idx} className="bg-white rounded-[40px] p-10 border border-navy/5 shadow-xl relative overflow-hidden transition-all hover:-translate-y-2 hover:shadow-2xl group">
+          <div key={idx} className="bg-bg-elevated rounded-[40px] p-10 border border-border shadow-xl relative overflow-hidden transition-all hover:-translate-y-2 hover:shadow-2xl group">
              <div className="flex justify-between items-start mb-6">
-                <div className={`w-12 h-12 rounded-2xl flex items-center justify-center ${kpi.color === 'navy' ? 'bg-navy text-white shadow-lg' : kpi.color === 'gold' ? 'bg-brand-gold/10 text-brand-gold' : kpi.color === 'saffron' ? 'bg-brand-saffron/10 text-brand-saffron' : 'bg-emerald-50 text-emerald-600'}`}>
+                <div className={`w-12 h-12 rounded-2xl flex items-center justify-center ${kpi.color === 'navy' ? 'bg-brand-navy text-white shadow-lg' : kpi.color === 'gold' ? 'bg-brand-gold/10 text-brand-gold' : kpi.color === 'saffron' ? 'bg-brand-saffron/10 text-brand-saffron' : 'bg-emerald-50 text-emerald-600'}`}>
                    <kpi.icon size={22} />
                 </div>
-                <span className="text-[10px] font-black text-navy/30 uppercase tracking-[0.3em]">{kpi.label}</span>
+                <span className="text-[10px] font-black text-text-secondary/40 uppercase tracking-[0.3em]">{kpi.label}</span>
              </div>
-             <div className="text-4xl font-serif font-black text-navy tracking-tight">{kpi.val}</div>
+             <div className="text-4xl font-serif font-black text-text-primary tracking-tight">{kpi.val}</div>
           </div>
         ))}
       </div>
@@ -172,13 +177,13 @@ const ItemMaster: React.FC = () => {
             <tbody className="divide-y divide-navy/5">
               {isLoading && items.length === 0 ? (
                 Array(5).fill(0).map((_, i) => (
-                  <tr key={i} className="animate-pulse"><td colSpan={6} className="px-12 py-10 h-24 bg-navy/5" /></tr>
+                  <tr key={i} className="animate-pulse"><td colSpan={6} className="px-12 py-10 h-24 bg-bg-input/20" /></tr>
                 ))
-              ) : (Array.isArray(items) && items.length > 0) ? items.map((item: any) => (
-                <tr key={item.id} className="hover:bg-brand-cream transition-all group">
+              ) : (Array.isArray(items) && items.length > 0) ? items.map((item: Item) => (
+                <tr key={item.id} className="hover:bg-bg-float transition-all group">
                   <td className="px-12 py-10">
                     <div className="flex items-center gap-4">
-                       <span className="bg-navy/5 text-navy px-4 py-2 rounded-xl font-mono text-[12px] font-black uppercase group-hover:bg-white transition-all shadow-sm">{item.item_code}</span>
+                       <span className="bg-bg-input text-text-primary px-4 py-2 rounded-xl font-mono text-[12px] font-black uppercase group-hover:bg-bg-elevated transition-all shadow-sm">{item.item_code}</span>
                     </div>
                   </td>
                   <td className="px-12 py-10">
@@ -192,10 +197,10 @@ const ItemMaster: React.FC = () => {
                       {item.total_stock} Units
                     </span>
                   </td>
-                  <td className="px-12 py-10 text-right font-mono text-base font-black text-navy">
+                  <td className="px-12 py-10 text-right font-mono text-base font-black text-text-primary">
                     {formatCurrency(item.mrp_paise)}
                   </td>
-                  <td className="px-12 py-10 text-center font-mono text-[12px] font-black text-navy/60">
+                  <td className="px-12 py-10 text-center font-mono text-[12px] font-black text-text-secondary/60">
                     {item.gst_rate}% GST
                   </td>
                   <td className="px-12 py-10 text-right">
@@ -205,11 +210,11 @@ const ItemMaster: React.FC = () => {
                           setSelectedItemId(item.id);
                           setIsFormOpen(true);
                         }}
-                        className="p-4 bg-navy/5 text-navy rounded-2xl hover:bg-navy hover:text-white transition-all shadow-sm"
+                        className="p-4 bg-bg-float text-text-primary rounded-2xl hover:bg-brand-navy hover:text-white transition-all shadow-sm border border-border"
                       >
                         <RefreshCw size={20} className="group-hover:rotate-180 transition-all duration-700" />
                       </button>
-                      <button className="p-4 bg-navy/5 text-navy/20 hover:text-brand-saffron hover:bg-brand-saffron/10 rounded-2xl transition-all"><MoreVertical size={22} /></button>
+                      <button className="p-4 bg-bg-float text-text-secondary/20 hover:text-brand-saffron hover:bg-brand-saffron/10 rounded-2xl transition-all border border-border"><MoreVertical size={22} /></button>
                     </div>
                   </td>
                 </tr>

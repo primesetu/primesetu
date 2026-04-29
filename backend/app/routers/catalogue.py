@@ -1,13 +1,13 @@
-/* ============================================================
- * PrimeSetu - Shoper9-Based Retail OS
- * Zero Cloud . Sovereign . AI-Governed
- * ============================================================
- * System Architect : Jawahar R Mallah
- * Organisation     : AITDL Network
- * Project          : PrimeSetu
- * (c) 2026 - All Rights Reserved
- * "Memory, Not Code."
- * ============================================================ */
+# ============================================================
+# SMRITI-OS - Shoper9-Based Retail OS
+# Zero Cloud . Sovereign . AI-Governed
+# ============================================================
+# System Architect : Jawahar R Mallah
+# Organisation     : AITDL Network
+# Project          : SMRITI-OS
+# (c) 2026 - All Rights Reserved
+# "Memory, Not Code."
+# ============================================================ #
 
 from fastapi import APIRouter, Depends, HTTPException, Query
 from sqlalchemy.ext.asyncio import AsyncSession
@@ -32,8 +32,7 @@ async def universal_search(
     """
     query = q.strip().lower()
     store_id = current_user.store_id
-
-    # Search in Items
+# Search in Items
     items_result = await db.execute(
         select(Item).where(
             and_(
@@ -47,8 +46,7 @@ async def universal_search(
         ).limit(10)
     )
     items = items_result.scalars().all()
-
-    # Search in Partners (Customer/Vendor)
+# Search in Partners (Customer/Vendor)
     partners_result = await db.execute(
         select(Partner).where(
             or_(
@@ -100,8 +98,8 @@ async def get_partner_matrix(
     Shoper 9 Style Matrix Resolution.
     Returns size/color stock and pricing grid for a specific style (mapped via partner context).
     """
-    # This is a simplified institutional resolution logic
-    # In production, this would resolve via StyleCode -> Item List -> Stock
+# This is a simplified institutional resolution logic
+# In production, this would resolve via StyleCode -> Item List -> Stock
     
     result = await db.execute(
         select(ItemStock, Item).join(Item).where(

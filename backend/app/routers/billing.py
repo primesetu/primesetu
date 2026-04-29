@@ -1,10 +1,10 @@
 # ============================================================
-# PrimeSetu - Shoper9-Based Retail OS
+# SMRITI-OS - Shoper9-Based Retail OS
 # Zero Cloud - Sovereign - AI-Governed
 # ============================================================
 # System Architect : Jawahar R Mallah
 # Organisation     : AITDL Network
-# Project          : PrimeSetu
+# Project          : SMRITI-OS
 # (c) 2026 - All Rights Reserved
 # "Memory, Not Code."
 # ============================================================
@@ -13,9 +13,10 @@ from fastapi import APIRouter, Depends, HTTPException, Query
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import select, func, desc, and_
 from app.core.database import get_db
-from app.models.base import Transaction, TransactionItem, Item, ItemStock, Customer, Till
+from app.models.base import Transaction, TransactionItem, Item, ItemStock, Customer, Till, Partner, LoyaltyLedger
 from app.schemas.billing import TransactionRead, TransactionCreate
 from typing import List, Optional, Dict, Any
+from decimal import Decimal, ROUND_HALF_UP
 from app.core.security import require_auth, CurrentUser
 from app.core.database import get_db
 
@@ -69,7 +70,10 @@ async def finalize_transaction(
         type=txn_in.type,
         status="Finalized",
         payments=txn_in.payments,
-        customer_id=txn_in.customer_id
+        customer_id=txn_in.customer_id,
+        cashier_id=txn_in.cashier_id,
+        till_id=txn_in.till_id,
+        shoper_recid=txn_in.shoper_recid
     )
     
     subtotal = 0
@@ -81,7 +85,7 @@ async def finalize_transaction(
         # Fetch Item Master & Stock
         item = await db.get(Item, item_in.product_id)
         if not item:
-            raise HTTPException(status_code=404, detail=f"[PrimeSetu] Item {item_in.product_id} not found")
+            raise HTTPException(status_code=404, detail=f"[SMRITI-OS] Item {item_in.product_id} not found")
 
         # Calculations in PAISE (Integers only)
         line_gross_paise = item_in.qty * item_in.unit_price
@@ -131,20 +135,45 @@ async def finalize_transaction(
     from app.services.extension_engine import ExtensionEngine, ReturnCode
     ext_code, ext_msg = await ExtensionEngine.validate_transaction(db, store_id, new_txn, new_txn.items)
     if ext_code == ReturnCode.BLOCK:
-        raise HTTPException(status_code=400, detail=f"[PrimeSetu] Extension Blocked: {ext_msg}")
+        raise HTTPException(status_code=400, detail=f"[SMRITI-OS] Extension Blocked: {ext_msg}")
     elif ext_code == ReturnCode.WARNING:
         # In a real system, you might log this warning or return it in the payload
         pass
     
     db.add(new_txn)
     
-    # 5. Update Till Balance
-    if txn_in.till_id:
-        till = await db.get(Till, txn_in.till_id)
-        if till:
-            # Add only cash component to till balance
-            cash_pay = sum(p.get('amount', 0) for p in txn_in.payments if p.get('mode') == 'CASH')
-            till.cash_collected += cash_pay
+    # 5. Loyalty Points Accrual (Parity with Shoper9 Loyalty Engine)
+    if txn_in.customer_id:
+        customer = await db.get(Partner, txn_in.customer_id)
+        if customer:
+            # Basic Accrual: 1 point per 100 Rs (10,000 paise)
+            # Tier Multipliers: Silver=1x, Gold=1.5x, Platinum=2x
+            multiplier = 1.0
+            if customer.loyalty_tier == "GOLD": multiplier = 1.5
+            elif customer.loyalty_tier == "PLATINUM": multiplier = 2.0
+            
+            accrued_points = int((new_txn.net_payable / 10000) * multiplier)
+            if accrued_points > 0:
+                customer.loyalty_points += accrued_points
+                customer.total_points_earned += accrued_points
+                
+                # Log to Loyalty Ledger
+                ledger_entry = LoyaltyLedger(
+                    store_id=store_id,
+                    partner_id=customer.id,
+                    txn_type="accrue",
+                    points=accrued_points,
+                    balance=customer.loyalty_points,
+                    sale_id=new_txn.id,
+                    txn_date=func.current_date()
+                )
+                db.add(ledger_entry)
+
+                # Tier Upgrades
+                if customer.total_points_earned > 10000 and customer.loyalty_tier == "GOLD":
+                    customer.loyalty_tier = "PLATINUM"
+                elif customer.total_points_earned > 2500 and customer.loyalty_tier == "SILVER":
+                    customer.loyalty_tier = "GOLD"
 
     await db.commit()
     await db.refresh(new_txn)
@@ -209,4 +238,4 @@ async def finalize_day_end(
     Locks all transactions for the day.
     """
     # Logic to move current transactions to audit ledger or set a lock flag
-    return {"status": "SUCCESS", "message": "[PrimeSetu] Day End Sealed for " + current_user.store_id}
+    return {"status": "SUCCESS", "message": "[SMRITI-OS] Day End Sealed for " + current_user.store_id}

@@ -1,24 +1,24 @@
 <!-- 
   ============================================================
-  * PrimeSetu — Shoper9-Based Retail OS
+  * SMRITI-OS — Shoper9-Based Retail OS
   * Zero Cloud · Sovereign · AI-Governed
   * ============================================================
   * System Architect   :  Jawahar R Mallah
   * Organisation       :  AITDL Network
-  * Project            :  PrimeSetu
+  * Project            :  SMRITI-OS
   * © 2026 — All Rights Reserved
   * "Memory, Not Code."
   * ============================================================ 
 -->
 
-# 🛡️ PrimeSetu: The Sovereign Retail OS
+# 🛡️ SMRITI-OS: The Sovereign Retail OS
 
 [![Vite](https://img.shields.io/badge/Vite-646CFF?style=for-the-badge&logo=vite&logoColor=white)](https://vitejs.dev/)
 [![React](https://img.shields.io/badge/React-20232A?style=for-the-badge&logo=react&logoColor=61DAFB)](https://reactjs.org/)
 [![FastAPI](https://img.shields.io/badge/FastAPI-005571?style=for-the-badge&logo=fastapi&logoColor=white)](https://fastapi.tiangolo.com/)
 [![Supabase](https://img.shields.io/badge/Supabase-3ECF8E?style=for-the-badge&logo=supabase&logoColor=white)](https://supabase.io/)
 
-**PrimeSetu** is an institutional-grade Retail Operating System designed to achieve 100% operational parity with Shoper9. It combines modern aesthetics with "Zero Cloud" data sovereignty, providing a high-speed, AI-governed environment for high-volume retail.
+**SMRITI-OS** is an institutional-grade Retail Operating System designed to achieve 100% operational parity with Shoper9. It combines modern aesthetics with "Zero Cloud" data sovereignty, providing a high-speed, AI-governed environment for high-volume retail.
 
 ---
 
@@ -64,7 +64,7 @@
 *   **Supabase** Account (for Database & Auth)
 
 ### 2. Unified Development Environment
-PrimeSetu uses a unified command to launch both the Sovereign Frontend and the FastAPI Backend:
+SMRITI-OS uses a unified command to launch both the Sovereign Frontend and the FastAPI Backend:
 
 ```bash
 # Install dependencies (Root)
@@ -90,7 +90,7 @@ Ensure your `.env` file in the root/backend contains:
 ---
 
 ## 📜 AI Protocol & Governance
-PrimeSetu is built under strict **AI-Governed Development Protocols**. Every contribution must adhere to:
+SMRITI-OS is built under strict **AI-Governed Development Protocols**. Every contribution must adhere to:
 *   `AGENTS.md` (Sovereign Role Definitions)
 *   `aiprotocol.md` (Structural Laws)
 *   `AI_GUIDELINES.md` (Zero-Defect Coding Standards)

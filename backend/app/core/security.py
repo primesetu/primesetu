@@ -1,10 +1,10 @@
 # ============================================================
-# PrimeSetu - Shoper9-Based Retail OS
+# SMRITI-OS - Shoper9-Based Retail OS
 # Zero Cloud . Sovereign . AI-Governed
 # ============================================================
 # System Architect : Jawahar R Mallah
 # Organisation     : AITDL Network
-# Project          : PrimeSetu
+# Project          : SMRITI-OS
 # (c) 2026 - All Rights Reserved
 # "Memory, Not Code."
 # ============================================================
@@ -61,7 +61,7 @@ def _decode_token(token: str) -> dict:
     # Prefer settings (loaded from .env via pydantic), fallback to raw env
     secret = settings.supabase_jwt_secret or os.environ.get("SUPABASE_JWT_SECRET") or settings.jwt_secret
     if not secret:
-        raise RuntimeError("[PrimeSetu] SUPABASE_JWT_SECRET is not set in environment.")
+        raise RuntimeError("[SMRITI-OS] SUPABASE_JWT_SECRET is not set in environment.")
 
     try:
         payload = jwt.decode(
@@ -75,13 +75,13 @@ def _decode_token(token: str) -> dict:
     except jwt.ExpiredSignatureError:
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
-            detail="[PrimeSetu] Token has expired. Please log in again.",
+            detail="[SMRITI-OS] Token has expired. Please log in again.",
             headers={"WWW-Authenticate": "Bearer"},
         )
     except jwt.InvalidTokenError as exc:
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
-            detail=f"[PrimeSetu] Invalid token: {exc}",
+            detail=f"[SMRITI-OS] Invalid token: {exc}",
             headers={"WWW-Authenticate": "Bearer"},
         )
 
@@ -94,11 +94,11 @@ def _build_user(payload: dict) -> CurrentUser:
     store_id = meta.get("store_id")
 
     if not user_id:
-        raise HTTPException(status_code=401, detail="[PrimeSetu] Token missing 'sub'.")
+        raise HTTPException(status_code=401, detail="[SMRITI-OS] Token missing 'sub'.")
     if not store_id:
         raise HTTPException(
             status_code=403,
-            detail="[PrimeSetu] User has no store_id in metadata. Contact your administrator.",
+            detail="[SMRITI-OS] User has no store_id in metadata. Contact your administrator.",
         )
 
     return CurrentUser(
@@ -131,7 +131,7 @@ def require_role(*allowed_roles: str):
             raise HTTPException(
                 status_code=status.HTTP_403_FORBIDDEN,
                 detail=(
-                    f"[PrimeSetu] Access denied. "
+                    f"[SMRITI-OS] Access denied. "
                     f"Required: {allowed_roles}, you have: '{current_user.role}'."
                 ),
             )

@@ -1,12 +1,6 @@
 /* ============================================================
- * PrimeSetu — Shoper9-Based Retail OS
+ * SMRITI-OS — Shoper9-Based Retail OS
  * Zero Cloud · Sovereign · AI-Governed
- * ============================================================
- * System Architect   :  Jawahar R Mallah
- * Organisation       :  AITDL Network
- * Project            :  PrimeSetu
- * © 2026 — All Rights Reserved
- * "Memory, Not Code."
  * ============================================================ */
 
 import { useState, useEffect, useRef, useMemo } from 'react'
@@ -15,8 +9,12 @@ import {
   FilePlus2, RotateCcw, Banknote, CreditCard, Smartphone,
   Pause, Printer, CheckCircle2, ScanBarcode, Trash2,
   Calculator, User, Clock, ChevronRight, Zap, Search,
-  Gift, Tag, UserCheck, Plus, Minus, X, AlertTriangle,
-  FileText, Wifi, WifiOff, LayoutDashboard, Settings, Package
+  Tag, UserCheck, Plus, Minus, X, AlertTriangle,
+  FileText, Wifi, WifiOff, LayoutDashboard, Settings, Package,
+  ArrowRightLeft,
+  Receipt,
+  Info,
+  RefreshCw
 } from 'lucide-react'
 import { api } from '@/api/client'
 import DayEndModule from './DayEndModule'
@@ -34,8 +32,39 @@ import { useLanguage } from '@/hooks/useLanguage'
 import { toPaise, formatCurrency, formatDecimal, toRupees } from '@/utils/currency'
 import StyleMatrix from '../catalogue/StyleMatrix'
 import { cn } from '@/lib/utils'
+import { 
+  Button, 
+  Input, 
+  Select, 
+  Card, 
+  Text, 
+  Badge, 
+  Modal,
+  Label 
+} from '../../components/ui/SovereignUI';
 
 // ── TYPES ──
+export interface TillInfo {
+  id: string;
+  status: string;
+  [key: string]: unknown;
+}
+
+export interface BillReceipt {
+  bill_number?: string;
+  total?: number;
+  status?: string;
+  type?: string;
+  [key: string]: unknown;
+}
+
+export interface CustomerData {
+  id: string;
+  current_balance: number;
+  name?: string;
+  phone?: string;
+}
+
 interface CartItem {
   id: string; 
   code: string; 
@@ -71,24 +100,34 @@ export default function BillingModule() {
   const [showDayEnd, setShowDayEnd] = useState(false)
   const [customerMobile, setCustomerMobile] = useState('')
   const [salesperson, setSalesperson] = useState('')
-  const [lastBill, setLastBill] = useState<any>(null)
+  const [lastBill, setLastBill] = useState<BillReceipt | null>(null)
   const [showTotals, setShowTotals] = useState(false)
   const [showSettle, setShowSettle] = useState(false)
   const [showSuspended, setShowSuspended] = useState(false)
   const [showSalesSlips, setShowSalesSlips] = useState(false)
   const [showHistory, setShowHistory] = useState(false)
   const [showReturns, setShowReturns] = useState(false)
-  const [billToPrint, setBillToPrint] = useState<any>(null)
+  const [billToPrint, setBillToPrint] = useState<BillReceipt | null>(null)
   const [currentTime, setCurrentTime] = useState(getNow())
   const [isOnline, setIsOnline] = useState(navigator.onLine)
   const [offlineCount, setOfflineCount] = useState(0)
   const [printFormat, setPrintFormat] = useState<'thermal' | 'a4' | 'b2b'>('thermal')
   const [sendSms, setSendSms] = useState(true)
-  const [activeTill, setActiveTill] = useState<any>(null)
+  const [activeTill, setActiveTill] = useState<TillInfo | null>(null)
   const [showStyleMatrix, setShowStyleMatrix] = useState(false)
   const [selectedStyleCode, setSelectedStyleCode] = useState('')
+  const [toasts, setToasts] = useState<{id: number, msg: string, type: 'error' | 'success' | 'info'}[]>([])
+  const [customerInfo, setCustomerInfo] = useState<CustomerData | null>(null)
   
   const searchRef = useRef<HTMLInputElement>(null)
+
+  const showToast = (msg: string, type: 'error' | 'success' | 'info' = 'info') => {
+    const id = Date.now()
+    setToasts(prev => [...prev, { id, msg, type }])
+    setTimeout(() => {
+      setToasts(prev => prev.filter(t => t.id !== id))
+    }, 3000)
+  }
 
   // ── EFFECTS ──
   useEffect(() => { 
@@ -105,7 +144,7 @@ export default function BillingModule() {
     offlineService.getQueueCount().then(setOfflineCount)
 
     api.tills.list().then(tills => {
-      const openTill = tills.find((t: any) => t.status === 'Open')
+      const openTill = tills.find((t: TillInfo) => t.status === 'Open')
       if (openTill) setActiveTill(openTill)
     }).catch(console.error)
 
@@ -126,7 +165,7 @@ export default function BillingModule() {
             await offlineService.clearItem(item.id)
             setOfflineCount(prev => prev - 1)
           } catch (err) {
-            console.error('[PrimeSetu] Sync Fail:', err)
+            console.error('[SMRITI-OS] Sync Fail:', err)
             break
           }
         }
@@ -141,14 +180,15 @@ export default function BillingModule() {
     const timer = setTimeout(async () => {
       try {
         const results = await api.inventory.search(q)
-        const exactItem = results.find((p: any) => p.code.toLowerCase() === q.toLowerCase())
+        type SearchItem = CartItem & { style_code?: string };
+        const exactItem = results.find((p: SearchItem) => p.code.toLowerCase() === q.toLowerCase())
         if (exactItem) { 
           handleAddToCart(exactItem)
           setQ('')
           return
         }
 
-        const isStyle = results.some((p: any) => p.style_code?.toLowerCase() === q.toLowerCase())
+        const isStyle = results.some((p: SearchItem) => p.style_code?.toLowerCase() === q.toLowerCase())
         if (isStyle) {
           setSelectedStyleCode(q.toUpperCase())
           setShowStyleMatrix(true)
@@ -159,13 +199,27 @@ export default function BillingModule() {
     return () => clearTimeout(timer)
   }, [q])
 
+  // Fetch Customer Info for Outstanding Warning
+  useEffect(() => {
+    if (customerMobile.length >= 10) {
+      api.catalogue.getPartners('CUSTOMER', customerMobile).then(res => {
+        if (res && res.length > 0) {
+          setCustomerInfo(res[0])
+        } else {
+          setCustomerInfo(null)
+        }
+      }).catch(() => setCustomerInfo(null))
+    } else {
+      setCustomerInfo(null)
+    }
+  }, [customerMobile])
+
   // ── LOGIC ──
-  const handleAddToCart = (p: any) => {
-    // Standardize mapping from backend to local cart item
+  const handleAddToCart = (p: Partial<CartItem> & { mrp?: number }) => {
     const normalizedItem: CartItem = {
-      id: p.id,
-      code: p.code,
-      name: p.name,
+      id: p.id!,
+      code: p.code!,
+      name: p.name!,
       brand: p.brand || 'Unknown',
       category: p.category || 'General',
       mrp_paise: p.mrp_paise || toPaise(p.mrp || 0),
@@ -177,14 +231,14 @@ export default function BillingModule() {
       stocks: p.stocks
     }
 
-    const storeStock = normalizedItem.stocks?.find((s: any) => s.store_id === 'X01')?.quantity
+    const storeStock = normalizedItem.stocks?.find(s => s.store_id === 'X01')?.quantity
 
     setCart(prev => {
       const existing = prev.find(i => i.id === normalizedItem.id)
       const currentQty = existing ? existing.qty : 0
       
       if (storeStock !== undefined && currentQty + 1 > storeStock) {
-        alert(`STOCK ALERT: Only ${storeStock} units available in X01 store.`)
+        showToast(`STOCK ALERT: Only ${storeStock} units available in X01 store.`, 'error')
         return prev
       }
 
@@ -197,9 +251,9 @@ export default function BillingModule() {
     setCart(prev => prev.map(i => {
       if (i.id === id) {
         if (updates.qty !== undefined) {
-          const storeStock = i.stocks?.find((s: any) => s.store_id === 'X01')?.quantity
+          const storeStock = i.stocks?.find(s => s.store_id === 'X01')?.quantity
           if (storeStock !== undefined && updates.qty > storeStock) {
-            alert(`STOCK ALERT: Only ${storeStock} units available.`)
+            showToast(`STOCK ALERT: Only ${storeStock} units available.`, 'error')
             return i
           }
         }
@@ -243,7 +297,6 @@ export default function BillingModule() {
   }, [cart])
 
   const netPayablePaise = totals.net
-  const roundoffPaise = 0 // Shoper 9 usually rounds at payment stage or maintains paise
 
   // ── SHORTCUTS ──
   useHotkeys('f2', (e) => { e.preventDefault(); searchRef.current?.focus() }, { enableOnFormTags: true })
@@ -287,7 +340,7 @@ export default function BillingModule() {
       resetSession()
       setTimeout(() => setLastBill(null), 6000)
     } catch (err) { 
-      console.warn('[PrimeSetu] Isolation Protocol Engaged. Saving to Local Ledger.')
+      console.warn('[SMRITI-OS] Isolation Protocol Engaged. Saving to Local Ledger.')
       await offlineService.queueTransaction(billData)
       setOfflineCount(prev => prev + 1)
       
@@ -323,30 +376,11 @@ export default function BillingModule() {
     } catch {} finally { setProcessing(false) }
   }
 
-  const handleCreateSlip = async () => {
-    if (!cart.length) return
-    setProcessing(true)
-    try {
-      await api.billing.createSlip({ 
-        customer_mobile: customerMobile, 
-        items: cart.map(i => ({ 
-          product_id: i.id, 
-          qty: i.qty, 
-          unit_price: i.mrp_paise,
-          discount_per: i.discount_per 
-        })) 
-      })
-      resetSession()
-    } catch (err) {
-      console.error('Slip creation failed:', err)
-    } finally { setProcessing(false) }
-  }
-
   const paidTotalRupees = payLines.reduce((s, p) => s + p.amount, 0)
   const balanceRupees = toRupees(netPayablePaise) - paidTotalRupees
 
   return (
-    <div className="flex flex-col h-screen font-sans overflow-hidden relative" style={{ background: 'var(--bg-base)' }}>
+    <div className="flex flex-col h-screen overflow-hidden relative bg-bg-base">
       {/* ── PRINTING LAYERS ── */}
       {printFormat === 'thermal' && <ThermalReceipt bill={billToPrint} onPrinted={() => setBillToPrint(null)} />}
       {printFormat === 'a4' && <TaxInvoiceA4 bill={billToPrint} onPrinted={() => setBillToPrint(null)} />}
@@ -356,10 +390,10 @@ export default function BillingModule() {
       {/* ── OVERLAYS ── */}
       <AnimatePresence>
         {showSuspended && (
-          <motion.div initial={{ x: '100%' }} animate={{ x: 0 }} exit={{ x: '100%' }} className="absolute right-0 top-0 bottom-0 w-[400px] z-[250] shadow-2xl" style={{ background: 'var(--bg-elevated)', borderLeft: '1px solid var(--border-default)' }}>
+          <motion.div initial={{ x: '100%' }} animate={{ x: 0 }} exit={{ x: '100%' }} className="fixed inset-y-0 right-0 w-[450px] z-[250] shadow-2xl bg-bg-elevated border-l border-border-subtle">
              <SuspendedBillsBrowser 
-                onRecall={(items: any, mobile: string) => { 
-                  setCart(items.map((i: any) => ({ ...i, mrp_paise: i.unit_price }))); 
+                onRecall={(items, mobile: string) => { 
+                  setCart(items.map((i) => ({ ...i, mrp_paise: i.mrp } as unknown as CartItem))); 
                   setCustomerMobile(mobile); 
                   setShowSuspended(false); 
                 }} 
@@ -368,140 +402,165 @@ export default function BillingModule() {
            </motion.div>
         )}
         {showReturns && (
-           <motion.div initial={{ x: '100%' }} animate={{ x: 0 }} exit={{ x: '100%' }} className="absolute right-0 top-0 bottom-0 w-[400px] z-[250] shadow-2xl" style={{ background: 'var(--bg-elevated)', borderLeft: '1px solid var(--red)' }}>
+           <motion.div initial={{ x: '100%' }} animate={{ x: 0 }} exit={{ x: '100%' }} className="fixed inset-y-0 right-0 w-[450px] z-[250] shadow-2xl bg-bg-elevated border-l border-status-red/20">
              <ReturnsDrawer 
                 onReturn={(bill) => { setBillToPrint(bill); setShowReturns(false); }}
                 onClose={() => setShowReturns(false)} 
               />
            </motion.div>
         )}
-        {showSalesSlips && <SalesSlipsBrowser onRecall={(items, mobile) => { setCart(items as any); setCustomerMobile(mobile); setShowSalesSlips(false); }} onClose={() => setShowSalesSlips(false)} />}
+        {showSalesSlips && <SalesSlipsBrowser onRecall={(items, mobile) => { setCart(items as unknown as CartItem[]); setCustomerMobile(mobile); setShowSalesSlips(false); }} onClose={() => setShowSalesSlips(false)} />}
         {showHistory && <BillHistoryBrowser onReprint={(b) => setBillToPrint(b)} onClose={() => setShowHistory(false)} />}
         {showDayEnd && <DayEndModule onClose={() => setShowDayEnd(false)} />}
         
         {lastBill && (
           <motion.div initial={{ y: -80, opacity: 0 }} animate={{ y: 0, opacity: 1 }} exit={{ y: -80, opacity: 0 }}
-            className="absolute top-4 left-1/2 -translate-x-1/2 z-[200] bg-emerald-600 text-white px-8 py-4 rounded-2xl shadow-2xl flex items-center gap-4 border-2 border-emerald-400">
-            <CheckCircle2 className="w-8 h-8" />
+            className="absolute top-8 left-1/2 -translate-x-1/2 z-[300] bg-status-green text-bg-base px-10 py-5 rounded-3xl shadow-2xl flex items-center gap-6 border-2 border-status-green/30">
+            <CheckCircle2 size={32} />
             <div>
-              <div className="text-[10px] font-bold uppercase tracking-widest opacity-70">Bill Settled</div>
-              <div className="text-xl font-black">{lastBill.bill_number} &nbsp;·&nbsp; {formatCurrency(lastBill.total)}</div>
+              <Text variant="xs" className="font-bold opacity-70">Sovereign Protocol Finalized</Text>
+              <Text variant="h2" className="text-bg-base">{lastBill.bill_number} &nbsp;·&nbsp; {formatCurrency(lastBill.total)}</Text>
             </div>
           </motion.div>
         )}
 
-        {showTotals && (
-          <div className="absolute inset-0 z-[150] flex items-center justify-center" style={{ background: 'rgba(0,0,0,0.6)', backdropFilter: 'blur(4px)' }} onClick={() => setShowTotals(false)}>
-            <motion.div initial={{ scale: 0.97 }} animate={{ scale: 1 }} className="rounded-xl p-6 shadow-2xl w-80" style={{ background: 'var(--bg-overlay)', border: '1px solid var(--border-default)' }} onClick={e => e.stopPropagation()}>
-              <div className="text-xs font-medium uppercase tracking-wider mb-4" style={{ color: 'var(--text-tertiary)' }}>Bill Totals [F9]</div>
+        <Modal
+          isOpen={showTotals}
+          onClose={() => setShowTotals(false)}
+          title="Consolidated Bill Summary"
+          subtitle="Real-time Revenue Intelligence"
+          maxWidth="max-w-md"
+          icon={<Calculator size={24} />}
+        >
+          <div className="space-y-4">
               {[
                 ['Gross Subtotal', formatCurrency(totals.subtotal)],
                 ['Disc. Allowance', `-${formatCurrency(totals.discount)}`],
                 ['Taxable Base', formatCurrency(totals.taxable)],
-                ['GST', formatCurrency(totals.tax)],
+                ['GST Total', formatCurrency(totals.tax)],
               ].map(([l, v]) => (
-                <div key={l} className="flex justify-between py-2.5 text-sm" style={{ borderBottom: '1px solid var(--border-subtle)' }}>
-                  <span style={{ color: 'var(--text-secondary)' }}>{l}</span>
-                  <span className="font-semibold font-mono" style={{ color: 'var(--text-primary)' }}>{v}</span>
+                <div key={l} className="flex justify-between py-3 border-b border-border-subtle">
+                  <Text variant="p" className="opacity-60">{l}</Text>
+                  <Text variant="sm" className="font-mono font-bold">{v}</Text>
                 </div>
               ))}
-              <div className="flex justify-between pt-4 text-lg font-semibold">
-                <span style={{ color: 'var(--text-secondary)' }}>Net Payable</span>
-                <span className="font-mono" style={{ color: 'var(--green)' }}>{formatCurrency(totals.net)}</span>
+              <div className="flex justify-between pt-6">
+                <Text variant="h3">Net Payable</Text>
+                <Text variant="h2" className="text-status-green">{formatCurrency(totals.net)}</Text>
               </div>
-              <button onClick={() => setShowTotals(false)} className="mt-5 w-full py-2.5 rounded-lg text-sm font-medium transition-colors" style={{ background: 'var(--bg-float)', color: 'var(--text-primary)', border: '1px solid var(--border-default)' }}>Return to POS</button>
-            </motion.div>
+              <Button onClick={() => setShowTotals(false)} variant="sec" className="w-full mt-8">
+                 Return to Terminal [ESC]
+              </Button>
           </div>
-        )}
+        </Modal>
 
         {showStyleMatrix && (
-          <div className="fixed inset-0 z-[200] flex items-center justify-center p-12 bg-navy/60 backdrop-blur-xl">
-            <motion.div initial={{ scale: 0.9 }} animate={{ scale: 1 }} className="w-full max-w-6xl h-full bg-white rounded-[3rem] overflow-hidden shadow-2xl relative">
+          <div className="fixed inset-0 z-[200] flex items-center justify-center p-12 bg-bg-base/60 backdrop-blur-xl">
+            <motion.div initial={{ scale: 0.9 }} animate={{ scale: 1 }} className="w-full max-w-6xl h-full bg-bg-elevated rounded-[3rem] overflow-hidden shadow-2xl relative border border-border-subtle">
               <StyleMatrix styleCode={selectedStyleCode} onBack={() => setShowStyleMatrix(false)} />
-              <button onClick={() => setShowStyleMatrix(false)} className="absolute top-8 right-8 w-12 h-12 rounded-full bg-navy text-white flex items-center justify-center hover:scale-110 transition-transform z-[210]">
-                <X className="w-6 h-6" />
-              </button>
+              <Button variant="ghost" onClick={() => setShowStyleMatrix(false)} className="absolute top-8 right-8 w-12 h-12 p-0 rounded-full bg-bg-float">
+                <X size={24} />
+              </Button>
             </motion.div>
           </div>
         )}
       </AnimatePresence>
 
-      {/* ── TOOLBAR ── */}
-      <div className="flex items-center gap-1 px-3 py-2 shrink-0 select-none" style={{ background: 'var(--bg-elevated)', borderBottom: '1px solid var(--border-subtle)' }}>
-        <div className="flex items-center gap-2 pr-4 mr-2" style={{ borderRight: '1px solid var(--border-subtle)' }}>
-          <div className="w-7 h-7 rounded-lg flex items-center justify-center" style={{ background: 'var(--accent-bg)', border: '1px solid var(--accent-border)' }}>
-            <Zap className="w-4 h-4" style={{ color: 'var(--accent-light)' }} />
-          </div>
-          <div className="flex flex-col">
-            <span className="font-semibold text-xs leading-none" style={{ color: 'var(--text-primary)' }}>PrimeSetu POS</span>
-            <span className="text-[9px] font-medium uppercase tracking-widest" style={{ color: 'var(--text-tertiary)' }}>Institutional</span>
-          </div>
-        </div>
-
-        {[
-          { icon: <FilePlus2 size={14}/>, label: 'New', sub: 'Alt+1', action: () => resetSession() },
-          { icon: <Search size={14}/>, label: 'Find', sub: 'F2', action: () => searchRef.current?.focus() },
-          { icon: <RotateCcw size={14}/>, label: 'Return', sub: '', action: () => setShowReturns(true) },
-          { icon: <Calculator size={14}/>, label: 'Totals', sub: 'F9', action: () => setShowTotals(v => !v) },
-          { icon: <Banknote size={14}/>, label: 'Exact', sub: 'F7', action: () => { setPayLines([{ mode: 'CASH', amount: toRupees(netPayablePaise) }]); setShowSettle(true) } },
-          { icon: <CreditCard size={14}/>, label: 'Settle', sub: 'F8', action: () => setShowSettle(true) },
-          { icon: <FileText size={14}/>, label: 'Slips', sub: 'F6', action: () => setShowSalesSlips(true) },
-          { icon: <Pause size={14}/>, label: 'Hold', sub: 'F12', action: handleSuspend },
-          { icon: <Clock size={14}/>, label: 'Recall', sub: 'F5', action: () => setShowSuspended(v => !v) },
-        ].map(btn => (
-          <button key={btn.label} onClick={btn.action}
-            className="flex flex-col items-center px-3 py-1.5 rounded-md transition-colors group"
-            style={{ color: 'var(--text-tertiary)' }}
-            onMouseEnter={e => (e.currentTarget.style.background = 'var(--bg-float)', e.currentTarget.style.color = 'var(--text-primary)')}
-            onMouseLeave={e => (e.currentTarget.style.background = 'transparent', e.currentTarget.style.color = 'var(--text-tertiary)')}
-          >
-            <div className="mb-0.5">{btn.icon}</div>
-            <span className="text-[8px] font-medium uppercase tracking-tight">{btn.label}</span>
-            {btn.sub && <span className="text-[7px] font-mono" style={{ color: 'var(--text-tertiary)' }}>{btn.sub}</span>}
-          </button>
-        ))}
-
-        <div className="ml-auto flex items-center gap-4 text-[10px] font-medium">
-          <div className="flex items-center gap-2">
-            {!isOnline
-              ? <span className="flex items-center gap-1" style={{ color: 'var(--red)' }}><WifiOff size={11}/> Isolated</span>
-              : <span className="flex items-center gap-1" style={{ color: 'var(--green)' }}><Wifi size={11}/> Online</span>}
-            <span style={{ color: 'var(--text-tertiary)' }}>{currentTime}</span>
-          </div>
-          <div className="flex gap-2">
-            <button onClick={() => setShowHistory(true)} className="px-3 py-1.5 rounded-md text-xs font-medium transition-colors"
-              style={{ background: 'var(--bg-float)', color: 'var(--text-secondary)', border: '1px solid var(--border-subtle)' }}>
-              History
-            </button>
-            <button onClick={() => setShowDayEnd(true)} className="px-3 py-1.5 rounded-md text-xs font-medium transition-colors"
-              style={{ background: 'var(--amber-bg)', color: 'var(--amber)', border: '1px solid rgba(245,158,11,0.2)' }}>
-              Day End
-            </button>
-          </div>
-        </div>
+      {/* ── TOASTS ── */}
+      <div className="fixed top-8 right-8 z-[400] flex flex-col gap-3">
+        <AnimatePresence>
+          {toasts.map(t => (
+            <motion.div key={t.id} initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, scale: 0.9 }} 
+              className={cn(
+                "px-6 py-4 rounded-2xl shadow-2xl text-sm font-bold flex items-center gap-4 border border-border-subtle",
+                t.type === 'error' ? 'bg-status-red/10 text-status-red border-status-red/20' : 
+                t.type === 'success' ? 'bg-status-green/10 text-status-green border-status-green/20' : 
+                'bg-bg-elevated text-text-primary'
+              )}>
+              {t.type === 'error' ? <AlertTriangle size={20}/> : t.type === 'success' ? <CheckCircle2 size={20}/> : <Info size={20}/>}
+              {t.msg}
+            </motion.div>
+          ))}
+        </AnimatePresence>
       </div>
 
+      {/* ── TOOLBAR ── */}
+      <Card variant="flat" className="flex items-center gap-1 px-4 py-3 shrink-0 rounded-none border-t-0 border-x-0 bg-bg-elevated/40">
+        <div className="flex items-center gap-4 pr-6 mr-4 border-r border-border-subtle">
+          <div className="w-9 h-9 bg-accent/10 rounded-xl flex items-center justify-center text-accent">
+            <Zap size={20} />
+          </div>
+          <div>
+            <Text variant="h3" className="leading-none text-sm">Sovereign POS</Text>
+            <Text variant="xs" className="mt-1 block">Institutional Node</Text>
+          </div>
+        </div>
+
+        <div className="flex gap-2">
+          {[
+            { icon: <FilePlus2 size={16}/>, label: 'New', sub: 'Alt+1', action: () => resetSession() },
+            { icon: <Search size={16}/>, label: 'Find', sub: 'F2', action: () => searchRef.current?.focus() },
+            { icon: <RotateCcw size={16}/>, label: 'Return', sub: '', action: () => setShowReturns(true) },
+            { icon: <Calculator size={16}/>, label: 'Totals', sub: 'F9', action: () => setShowTotals(v => !v) },
+            { icon: <Banknote size={16}/>, label: 'Exact', sub: 'F7', action: () => { setPayLines([{ mode: 'CASH', amount: toRupees(netPayablePaise) }]); setShowSettle(true) } },
+            { icon: <CreditCard size={16}/>, label: 'Settle', sub: 'F8', action: () => setShowSettle(true) },
+            { icon: <Clock size={16}/>, label: 'Recall', sub: 'F5', action: () => setShowSuspended(v => !v) },
+          ].map(btn => (
+            <Button key={btn.label} variant="ghost" size="sm" onClick={btn.action} className="flex-col h-auto py-2 px-3 gap-1 hover:bg-bg-float">
+               {btn.icon}
+               <span className="text-[8px] font-black uppercase tracking-widest">{btn.label}</span>
+            </Button>
+          ))}
+        </div>
+
+        <div className="ml-auto flex items-center gap-6">
+          <div className="flex items-center gap-3">
+             <Badge variant={isOnline ? 'success' : 'error'}>
+               {isOnline ? <Wifi size={10} className="inline mr-1" /> : <WifiOff size={10} className="inline mr-1" />}
+               {isOnline ? 'SYNCED' : 'OFFLINE'}
+             </Badge>
+             <Text variant="xs" className="font-mono">{currentTime}</Text>
+          </div>
+          <div className="flex gap-2">
+            <Button variant="sec" size="sm" onClick={() => setShowHistory(true)} className="h-10">
+               History
+            </Button>
+            <Button size="sm" onClick={() => setShowDayEnd(true)} className="h-10 bg-status-amber text-bg-base hover:bg-status-amber/90">
+               Day End
+            </Button>
+          </div>
+        </div>
+      </Card>
+
       {/* ── INPUTS ── */}
-      <div className="flex gap-2 px-3 pt-2 pb-2 shrink-0" style={{ borderBottom: '1px solid var(--border-subtle)' }}>
+      <div className="flex gap-4 px-6 py-4 shrink-0 bg-bg-base/40 border-b border-border-subtle">
         <div className="flex-[3] relative">
-          <ScanBarcode size={16} className="absolute left-3 top-1/2 -translate-y-1/2" style={{ color: 'var(--text-tertiary)' }} />
-          <input ref={searchRef} autoFocus value={q} onChange={e => setQ(e.target.value)} placeholder="Scan barcode or style code... [F2]" className="finput-lg pl-9 font-mono text-sm" />
+          <ScanBarcode size={20} className="absolute left-5 top-1/2 -translate-y-1/2 text-text-disabled" />
+          <Input ref={searchRef} autoFocus value={q} onChange={e => setQ(e.target.value)} placeholder="SCAN BARCODE OR STYLE PROTOCOL... [F2]" className="h-14 pl-14 font-mono text-lg tracking-wider" />
+        </div>
+        <div className="flex-[1.5] relative flex items-center gap-3">
+          <div className="relative flex-1">
+             <User size={18} className="absolute left-4 top-1/2 -translate-y-1/2 text-text-disabled" />
+             <Input value={customerMobile} onChange={e => setCustomerMobile(e.target.value)} placeholder="Customer Identity (Mobile)" className="h-14 pl-12 font-mono" />
+          </div>
+          {customerInfo && customerInfo.current_balance > 0 && (
+             <Badge variant="warn" className="h-14 px-4 flex flex-col items-center justify-center gap-0.5">
+                <Text variant="xs" className="text-status-amber opacity-60">Balance Due</Text>
+                <Text variant="sm" className="font-mono font-bold">₹{formatDecimal(customerInfo.current_balance)}</Text>
+             </Badge>
+          )}
         </div>
         <div className="flex-1 relative">
-          <User size={14} className="absolute left-3 top-1/2 -translate-y-1/2" style={{ color: 'var(--text-tertiary)' }} />
-          <input id="cust-mobile" value={customerMobile} onChange={e => setCustomerMobile(e.target.value)} placeholder="Customer mobile" className="finput-lg pl-9 font-mono text-sm" />
-        </div>
-        <div className="flex-1 relative">
-          <UserCheck size={14} className="absolute left-3 top-1/2 -translate-y-1/2" style={{ color: 'var(--text-tertiary)' }} />
-          <input value={salesperson} onChange={e => setSalesperson(e.target.value)} placeholder="Salesperson" className="finput-lg pl-9 text-sm" />
+          <UserCheck size={18} className="absolute left-4 top-1/2 -translate-y-1/2 text-text-disabled" />
+          <Input value={salesperson} onChange={e => setSalesperson(e.target.value)} placeholder="Salesperson" className="h-14 pl-12" />
         </div>
       </div>
 
       {/* ── CART ── */}
-      <div className="flex gap-4 px-4 py-4 flex-1 overflow-hidden">
-        <div className="flex-1 flex flex-col overflow-hidden rounded-xl" style={{ background: 'var(--bg-overlay)', border: '1px solid var(--border-subtle)' }}>
-          <div className="grid text-[10px] font-medium uppercase tracking-wider" style={{ gridTemplateColumns: '44px 110px 1fr 100px 100px 90px 110px 36px', background: 'var(--bg-elevated)', borderBottom: '1px solid var(--border-subtle)', color: 'var(--text-tertiary)' }}>
-            {['#','Code','Product','Price','Qty','Disc%','Net',''].map(h => <div key={h} className="px-4 py-3 text-left">{h}</div>)}
+      <div className="flex gap-6 px-6 py-6 flex-1 overflow-hidden">
+        <Card className="flex-1 flex flex-col overflow-hidden border-border-subtle shadow-2xl bg-bg-elevated/20">
+          <div className="grid text-[9px] font-black uppercase tracking-[0.2em] bg-bg-float/40 border-b border-border-subtle text-text-tertiary" style={{ gridTemplateColumns: '60px 140px 1fr 120px 120px 100px 130px 60px' }}>
+            {['#','Code','Product','Price','Volume','Disc%','Net Value',''].map(h => <div key={h} className="px-6 py-4">{h}</div>)}
           </div>
           
           <div className="flex-1 overflow-y-auto">
@@ -509,108 +568,151 @@ export default function BillingModule() {
               {cart.map((item, idx) => {
                 const lineNet = Math.round(item.mrp_paise * item.qty * (1 - item.discount_per / 100))
                 return (
-                  <motion.div key={item.id} layout initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0 }} className="grid items-center group transition-colors" style={{ gridTemplateColumns: '44px 110px 1fr 100px 100px 90px 110px 36px', borderBottom: '1px solid var(--border-subtle)' }}
-                    onMouseEnter={e => (e.currentTarget.style.background = 'var(--bg-float)')}
-                    onMouseLeave={e => (e.currentTarget.style.background = 'transparent')}>
-                    <div className="px-4 py-3 text-xs font-mono" style={{ color: 'var(--text-tertiary)' }}>{idx + 1}</div>
-                    <div className="px-4 py-3 font-mono text-xs" style={{ color: 'var(--text-tertiary)' }}>{item.code}</div>
-                    <div className="px-4 py-3">
-                      <div className="text-sm font-medium" style={{ color: 'var(--text-primary)' }}>{item.name}</div>
-                      <div className="text-xs mt-0.5" style={{ color: 'var(--text-tertiary)' }}>{item.brand} · {item.category}</div>
+                  <motion.div key={item.id} layout initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0 }} 
+                    className="grid items-center hover:bg-bg-float/20 transition-all border-b border-border-subtle/50" 
+                    style={{ gridTemplateColumns: '60px 140px 1fr 120px 120px 100px 130px 60px' }}>
+                    <div className="px-6 py-4 font-mono text-xs opacity-40">{idx + 1}</div>
+                    <div className="px-6 py-4 font-mono text-xs font-bold text-accent">{item.code}</div>
+                    <div className="px-6 py-4 flex flex-col gap-1.5">
+                      <Text variant="sm" className="font-bold uppercase">{item.name}</Text>
+                      <div className="flex items-center gap-2">
+                        <Badge variant="muted" className="scale-90 origin-left">{item.brand}</Badge>
+                        {item.discount_per > 0 && (
+                          <Badge variant="success" className="scale-90 origin-left">
+                            <Tag size={10} className="mr-1 inline" /> PROMO
+                          </Badge>
+                        )}
+                      </div>
                     </div>
-                    <div className="px-4 py-3 font-mono text-sm font-medium" style={{ color: 'var(--text-secondary)' }}>{formatDecimal(item.mrp_paise)}</div>
-                    <div className="px-4 py-3 flex items-center gap-1.5">
-                       <button onClick={() => updateCartItem(item.id, { qty: Math.max(1, item.qty - 1) })} className="w-5 h-5 rounded flex items-center justify-center transition-colors" style={{ background: 'var(--bg-float)', color: 'var(--text-secondary)' }}><Minus size={10}/></button>
-                       <span className="w-6 text-center text-sm font-semibold" style={{ color: 'var(--text-primary)', fontFamily: 'monospace' }}>{item.qty}</span>
-                       <button onClick={() => updateCartItem(item.id, { qty: item.qty + 1 })} className="w-5 h-5 rounded flex items-center justify-center transition-colors" style={{ background: 'var(--bg-float)', color: 'var(--text-secondary)' }}><Plus size={10}/></button>
+                    <div className="px-6 py-4 font-mono font-bold text-text-secondary">{formatDecimal(item.mrp_paise)}</div>
+                    <div className="px-6 py-4 flex items-center gap-3">
+                       <Button variant="sec" size="sm" onClick={() => updateCartItem(item.id, { qty: Math.max(1, item.qty - 1) })} className="w-8 h-8 p-0 rounded-lg">-</Button>
+                       <Text variant="sm" className="font-mono font-bold w-6 text-center">{item.qty}</Text>
+                       <Button variant="sec" size="sm" onClick={() => updateCartItem(item.id, { qty: item.qty + 1 })} className="w-8 h-8 p-0 rounded-lg">+</Button>
                     </div>
-                    <div className="px-4 py-3">
-                       <input type="number" value={item.discount_per} onChange={e => updateCartItem(item.id, { discount_per: Number(e.target.value) })} className="w-14 text-xs text-center rounded p-1.5 outline-none" style={{ background: 'var(--bg-float)', color: 'var(--text-primary)', border: '1px solid var(--border-subtle)' }} />
+                    <div className="px-6 py-4">
+                       <Input type="number" value={item.discount_per} onChange={e => updateCartItem(item.id, { discount_per: Number(e.target.value) })} className="w-16 h-10 text-center font-bold" />
                     </div>
-                    <div className="px-4 py-3 font-mono text-sm font-semibold" style={{ color: 'var(--text-primary)' }}>{formatCurrency(lineNet)}</div>
-                    <div className="px-4 py-3">
-                       <button onClick={() => removeCartItem(item.id)} className="opacity-0 group-hover:opacity-100 transition-opacity" style={{ color: 'var(--red)' }}><Trash2 size={14}/></button>
+                    <div className="px-6 py-4 font-mono font-black text-sm text-text-primary">{formatCurrency(lineNet)}</div>
+                    <div className="px-6 py-4">
+                       <Button variant="ghost" size="sm" onClick={() => removeCartItem(item.id)} className="text-status-red hover:bg-status-red/10 h-10 w-10 p-0">
+                          <Trash2 size={16}/>
+                       </Button>
                     </div>
                   </motion.div>
                 )
               })}
             </AnimatePresence>
             {cart.length === 0 && (
-              <div className="h-full flex flex-col items-center justify-center opacity-5 select-none">
-                 <ScanBarcode size={120} strokeWidth={1} />
-                 <span className="text-3xl font-black uppercase tracking-[0.5em] mt-8">Awaiting Input</span>
+              <div className="h-full flex flex-col items-center justify-center opacity-5 select-none grayscale">
+                 <Package size={160} strokeWidth={0.5} />
+                 <Text variant="h1" className="tracking-[0.8em] mt-12 opacity-20">Awaiting Terminal Input</Text>
               </div>
             )}
           </div>
 
-          <div className="p-4 flex justify-between items-end shrink-0" style={{ background: 'var(--bg-elevated)', borderTop: '1px solid var(--border-subtle)' }}>
-             <div className="flex gap-8">
+          {/* Cart Footer Stats */}
+          <div className="p-8 flex justify-between items-end bg-bg-elevated/40 border-t border-border-subtle">
+             <div className="flex gap-12">
                 <div>
-                   <div className="text-[10px] font-medium uppercase tracking-wider mb-1" style={{ color: 'var(--text-tertiary)' }}>Cart Value</div>
-                   <div className="text-lg font-semibold font-mono" style={{ color: 'var(--text-secondary)' }}>{formatCurrency(totals.subtotal)}</div>
+                   <Text variant="xs" className="mb-2 block">Gross Subtotal</Text>
+                   <Text variant="h3" className="font-mono opacity-60">{formatCurrency(totals.subtotal)}</Text>
                 </div>
                 <div>
-                   <div className="text-[10px] font-medium uppercase tracking-wider mb-1" style={{ color: 'var(--text-tertiary)' }}>Discount</div>
-                   <div className="text-lg font-semibold font-mono" style={{ color: 'var(--red)' }}>-{formatCurrency(totals.discount)}</div>
+                   <Text variant="xs" className="mb-2 block text-status-red">Discount Value</Text>
+                   <Text variant="h3" className="font-mono text-status-red">-{formatCurrency(totals.discount)}</Text>
                 </div>
                 <div>
-                   <div className="text-[10px] font-medium uppercase tracking-wider mb-1" style={{ color: 'var(--text-tertiary)' }}>GST</div>
-                   <div className="text-lg font-semibold font-mono" style={{ color: 'var(--text-secondary)' }}>{formatCurrency(totals.tax)}</div>
+                   <Text variant="xs" className="mb-2 block">GST Collected</Text>
+                   <Text variant="h3" className="font-mono opacity-60">{formatCurrency(totals.tax)}</Text>
                 </div>
              </div>
              <div className="text-right">
-                <div className="text-[10px] font-medium uppercase tracking-wider mb-1" style={{ color: 'var(--text-tertiary)' }}>Amount Due</div>
-                <div className="text-4xl font-semibold font-mono tracking-tight" style={{ color: 'var(--text-primary)', letterSpacing: '-0.02em' }}>{formatCurrency(netPayablePaise)}</div>
+                <Text variant="xs" className="mb-2 block font-black text-accent tracking-[0.3em]">NET PAYABLE AMOUNT</Text>
+                <Text variant="h1" className="text-5xl tracking-tighter text-text-primary">{formatCurrency(netPayablePaise)}</Text>
              </div>
           </div>
-        </div>
+        </Card>
 
         {/* ── SETTLEMENT PANEL ── */}
-        <div className="w-72 flex flex-col gap-3 shrink-0">
-           <div className="rounded-xl p-4 flex-1 flex flex-col" style={{ background: 'var(--bg-overlay)', border: '1px solid var(--border-subtle)' }}>
-              <div className="flex items-center justify-between mb-4">
-                 <h3 className="text-xs font-medium uppercase tracking-wider" style={{ color: 'var(--text-tertiary)' }}>Payment</h3>
-                 <button onClick={() => setPayLines(p => [...p, { mode: 'CASH', amount: 0 }])} className="w-6 h-6 rounded flex items-center justify-center transition-colors" style={{ background: 'var(--bg-float)', color: 'var(--text-secondary)' }}><Plus size={12}/></button>
+        <div className="w-80 flex flex-col gap-4 shrink-0">
+           <Card className="p-6 flex-1 flex flex-col border-border-subtle shadow-2xl bg-bg-elevated/40">
+              <div className="flex items-center justify-between mb-6">
+                 <Text variant="h3" className="text-sm">Payment Protocol</Text>
+                 <Button variant="sec" size="sm" onClick={() => setPayLines(p => [...p, { mode: 'CASH', amount: 0 }])} className="w-8 h-8 p-0">
+                    <Plus size={16}/>
+                 </Button>
               </div>
 
-              <div className="space-y-2 flex-1 overflow-y-auto">
+              <div className="space-y-3 flex-1 overflow-y-auto">
                  {payLines.map((pl, idx) => (
-                   <div key={idx} className="p-3 rounded-lg space-y-2 relative group" style={{ background: 'var(--bg-float)' }}>
-                      <select value={pl.mode} onChange={e => setPayLines(prev => prev.map((p,i) => i===idx ? {...p, mode: e.target.value as PayMode} : p))} className="fselect" style={{ height: '32px', fontSize: '12px' }}>
+                   <Card key={idx} variant="flat" className="p-4 space-y-3 relative group rounded-2xl bg-bg-base/40">
+                      <Select value={pl.mode} onChange={e => setPayLines(prev => prev.map((p,i) => i===idx ? {...p, mode: e.target.value as PayMode} : p))} className="h-10">
                          {['CASH','UPI','CARD','GV','COUPON'].map(m => <option key={m}>{m}</option>)}
-                      </select>
+                      </Select>
                       <div className="relative">
-                         <span className="absolute left-3 top-1/2 -translate-y-1/2 text-sm font-medium" style={{ color: 'var(--text-tertiary)' }}>₹</span>
-                         <input type="number" value={pl.amount || ''} onChange={e => setPayLines(prev => prev.map((p,i) => i===idx ? {...p, amount: Number(e.target.value)} : p))} placeholder="0.00" className="finput pl-7" style={{ height: '32px' }} />
+                         <span className="absolute left-4 top-1/2 -translate-y-1/2 text-sm font-bold opacity-30">₹</span>
+                         <Input type="number" value={pl.amount || ''} onChange={e => setPayLines(prev => prev.map((p,i) => i===idx ? {...p, amount: Number(e.target.value)} : p))} placeholder="0.00" className="h-12 pl-8 font-mono text-lg font-bold" />
                       </div>
                       {payLines.length > 1 && (
-                         <button onClick={() => setPayLines(p => p.filter((_,i) => i !== idx))} className="absolute -right-1.5 -top-1.5 w-5 h-5 rounded-full flex items-center justify-center scale-0 group-hover:scale-100 transition-transform" style={{ background: 'var(--red)', color: '#fff' }}><X size={10}/></button>
+                         <Button variant="ghost" onClick={() => setPayLines(p => p.filter((_,i) => i !== idx))} className="absolute -right-2 -top-2 w-7 h-7 p-0 rounded-full bg-status-red text-bg-base scale-0 group-hover:scale-100 transition-all shadow-lg">
+                            <X size={14}/>
+                         </Button>
                       )}
-                   </div>
+                   </Card>
                  ))}
               </div>
 
-              <div className="mt-4 p-4 rounded-lg text-center transition-all" style={{ background: balanceRupees > 0.01 ? 'var(--red-bg)' : 'var(--green-bg)', color: balanceRupees > 0.01 ? 'var(--red)' : 'var(--green)' }}>
-                 <div className="text-[10px] font-medium uppercase tracking-wider mb-1">{balanceRupees > 0.01 ? 'Balance Due' : 'Change Back'}</div>
-                 <div className="text-xl font-semibold font-mono">₹{Math.abs(balanceRupees).toFixed(2)}</div>
-              </div>
-           </div>
+              <Card variant="flat" className={cn(
+                "mt-6 p-6 text-center border-none",
+                balanceRupees > 0.01 ? "bg-status-red/10 text-status-red" : "bg-status-green/10 text-status-green"
+              )}>
+                 <Text variant="xs" className="font-black mb-2 block">{balanceRupees > 0.01 ? 'PROTOCOL REMAINING' : 'EXCESS / CHANGE'}</Text>
+                 <Text variant="h1" className="text-3xl font-mono">₹{Math.abs(balanceRupees).toFixed(2)}</Text>
+              </Card>
+           </Card>
 
-           <button
+           <Button
              onClick={handleFinalize}
              disabled={processing || !cart.length || balanceRupees > 0.05}
-             className="w-full rounded-xl flex flex-col items-center justify-center gap-1 transition-all disabled:opacity-40 disabled:cursor-not-allowed"
-             style={{ height: '72px', background: 'var(--pos-cta)', color: '#fff' }}
+             className="h-24 rounded-3xl flex flex-col shadow-2xl shadow-accent/20"
            >
-              {processing ? <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin" /> : (
+              {processing ? <RefreshCw className="animate-spin" /> : (
                 <>
-                  <div className="text-base font-semibold flex items-center gap-2"><CheckCircle2 size={16}/> Finalize Bill</div>
-                  <div className="text-[10px] font-medium opacity-60 uppercase tracking-wider">F10</div>
+                  <div className="text-lg font-black flex items-center gap-3">
+                    <Receipt size={24}/> FINALIZE BILL
+                  </div>
+                  <Text variant="xs" className="text-bg-base/60 mt-1">[F10] Execute Protocol</Text>
                 </>
               )}
-           </button>
+           </Button>
         </div>
       </div>
+      
+      {/* ── HOTKEY FOOTER ── */}
+      <Card variant="flat" className="shrink-0 flex items-center justify-between px-6 py-3 bg-bg-elevated rounded-none border-x-0 border-b-0">
+        <div className="flex items-center gap-8 overflow-x-auto">
+           {[
+             { key: 'F2', label: 'Find' },
+             { key: 'Alt+1', label: 'New' },
+             { key: 'Alt+2', label: 'Return' },
+             { key: 'F4', label: 'History' },
+             { key: 'F5', label: 'Recall' },
+             { key: 'F6', label: 'Slips' },
+             { key: 'F7', label: 'Exact' },
+             { key: 'F8', label: 'Settle' },
+             { key: 'F9', label: 'Totals' },
+             { key: 'F10', label: 'Finalize' },
+             { key: 'F12', label: 'Hold' },
+             { key: 'Esc', label: 'Cancel' },
+           ].map(hk => (
+             <div key={hk.key} className="flex items-center gap-2">
+                <Badge variant="muted" className="font-mono text-[10px] h-6 px-2">{hk.key}</Badge>
+                <Text variant="xs" className="font-bold opacity-60">{hk.label}</Text>
+             </div>
+           ))}
+        </div>
+      </Card>
     </div>
   )
 }

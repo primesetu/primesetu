@@ -1,10 +1,10 @@
 /* ============================================================
- * PrimeSetu — Shoper9-Based Retail OS
+ * SMRITI-OS — Shoper9-Based Retail OS
  * Zero Cloud · Sovereign · AI-Governed
  * ============================================================
  * System Architect : Jawahar R Mallah
  * Organisation     : AITDL Network
- * Project          : PrimeSetu
+ * Project          : SMRITI-OS
  * © 2026 — All Rights Reserved
  * "Memory, Not Code."
  * ============================================================ */
@@ -12,7 +12,7 @@
 import { useState, useEffect } from 'react';
 import { openDB, IDBPDatabase } from 'idb';
 
-const DB_NAME = 'PrimeSetuOfflineDB';
+const DB_NAME = 'SMRITI-OSOfflineDB';
 const DB_VERSION = 1;
 const STORE_NAME = 'data_cache';
 
@@ -69,7 +69,7 @@ export function useOfflineFallback<T>(
           await db.put(STORE_NAME, result, key);
         }
       } catch (err) {
-        console.warn(`[PrimeSetu] Offline Fallback Active for ${key}:`, err);
+        console.warn(`[SMRITI-OS] Offline Fallback Active for ${key}:`, err);
         
         // 4. Engaging Sovereign Offline Fallback
         const saved = await db.get(STORE_NAME, key);

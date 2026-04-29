@@ -1,16 +1,16 @@
 /* ============================================================
- * PrimeSetu — Shoper9-Based Retail OS
+ * SMRITI-OS — Shoper9-Based Retail OS
  * Zero Cloud · Sovereign · AI-Governed
  * ============================================================
  * System Architect   :  Jawahar R Mallah
  * Organisation       :  AITDL Network
- * Project            :  PrimeSetu
+ * Project            :  SMRITI-OS
  * © 2026 — All Rights Reserved
  * "Memory, Not Code."
  * ============================================================ */
 import { openDB, IDBPDatabase } from 'idb';
 
-const DB_NAME = 'primesetu_sovereign_cache';
+const DB_NAME = 'SMRITI-OS_sovereign_cache';
 const STORE_NAME = 'transaction_queue';
 
 export interface QueuedTransaction {

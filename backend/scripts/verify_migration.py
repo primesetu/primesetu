@@ -7,7 +7,7 @@ async def verify_all():
     conn = await asyncpg.connect(url)
     
     print("=" * 60)
-    print("PRIMESETU - SHOPER 9 MIGRATION VERIFICATION REPORT")
+    print("SMRITI-OS - SHOPER 9 MIGRATION VERIFICATION REPORT")
     print("=" * 60)
     
     # 1. Identity Verification

@@ -6,7 +6,7 @@ import os
 from app.core.config import settings
 
 # ============================================================
-# PrimeSetu - Shoper 9 BULK Sync Engine
+# SMRITI-OS - Shoper 9 BULK Sync Engine
 # Phase 4: Institutional-Grade High-Speed Migration
 # ============================================================
 

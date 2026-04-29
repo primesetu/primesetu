@@ -10,7 +10,7 @@ def check_admin():
     service_key = os.getenv("SUPABASE_SERVICE_ROLE_KEY")
     supabase = create_client(url, service_key)
     
-    email = "admin@primesetu.com"
+    email = "admin@SMRITI-OS.com"
     
     users = supabase.auth.admin.list_users()
     user_list = users if isinstance(users, list) else getattr(users, 'users', [])

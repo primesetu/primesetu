@@ -1,3 +1,3 @@
-# PrimeSetu Routers Package
+# SMRITI-OS Routers Package
 
 from . import finance

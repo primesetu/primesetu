@@ -1,5 +1,5 @@
 # ============================================================
-# PrimeSetu - Shoper9-Based Retail OS
+# SMRITI-OS - Shoper9-Based Retail OS
 # Document : backend/app/models/__init__.py
 # (c) 2026 - All Rights Reserved
 # ============================================================
@@ -10,9 +10,13 @@ from .base import (
     SalesSlipItem, GeneralLookup, SizeGroup, Department, 
     CustomerPriceGroup, TaxMaster, Scheme, Alert, SyncPacket,
     InventoryAudit, InventoryAuditItem, Partner, Item, ItemStock, 
-    ItemPriceLevel, ItemBarcode, User, CustomerLedger, LoyaltyLedger
+    ItemPriceLevel, ItemBarcode, User, CustomerLedger, LoyaltyLedger,
+    RemoteCommand, StockTransaction, StockTransactionItem, StockLedger,
+    UIFieldConfig, AttributeAlias, CategoryPolicy, TaxRule
 )
 from .purchase import PurchaseOrder, PurchaseOrderItem, GRN, GRNItem
+from .config import PrefixConfig, PrefixMaster, PrefixTrnNo, PrefixTerminalGroup
+from .pricing import PriceRangeSetting, PriceRange, PriceRevision, PriceRevisionHistory
 
 __all__ = [
     "Base", "Store", "SystemParameter", "Customer", "Till", "Transaction",
@@ -21,7 +25,11 @@ __all__ = [
     "CustomerPriceGroup", "TaxMaster", "Scheme", "Alert", "SyncPacket",
     "InventoryAudit", "InventoryAuditItem", "Partner", "Item", "ItemStock",
     "ItemPriceLevel", "ItemBarcode", "PurchaseOrder", "PurchaseOrderItem",
-    "GRN", "GRNItem", "User", "CustomerLedger", "LoyaltyLedger"
+    "GRN", "GRNItem", "User", "CustomerLedger", "LoyaltyLedger",
+    "RemoteCommand", "StockTransaction", "StockTransactionItem", "StockLedger",
+    "UIFieldConfig", "AttributeAlias", "CategoryPolicy", "TaxRule",
+    "PrefixConfig", "PrefixMaster", "PrefixTrnNo", "PrefixTerminalGroup",
+    "PriceRangeSetting", "PriceRange", "PriceRevision", "PriceRevisionHistory"
 ]
 
 from .finance import TillSession, PosCashTrn, TillHardware

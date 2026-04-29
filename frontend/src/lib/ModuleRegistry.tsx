@@ -1,10 +1,10 @@
 /* ============================================================
- * PrimeSetu — Shoper9-Based Retail OS
+ * SMRITI-OS — Shoper9-Based Retail OS
  * Zero Cloud · Sovereign · AI-Governed
  * ============================================================
  * System Architect   :  Jawahar R Mallah
  * Organisation     :  AITDL Network
- * Project            :  PrimeSetu
+ * Project            :  SMRITI-OS
  * © 2026 — All Rights Reserved
  * "Memory, Not Code."
  * ============================================================ */
@@ -32,7 +32,8 @@ import {
   Zap,
   BarChart,
   Tag,
-  AlertCircle
+  AlertCircle,
+  Box
 } from 'lucide-react'
 
 // Module Lazy/Dynamic Imports
@@ -73,6 +74,10 @@ import InventoryAudit from '../modules/inventory/InventoryAudit'
 import GRNProcessor from '../modules/inventory/GRNProcessor'
 import FinanceHub from '../modules/accounts/FinanceHub'
 import SalesDrilldownModule from '../modules/analytics/SalesDrilldownModule'
+import WarehouseDashboard from '../modules/inventory/WarehouseDashboard'
+import StockTransfer from '../modules/inventory/StockTransfer'
+
+import IntelligenceCockpit from '../modules/intelligence/IntelligenceCockpit'
 
 export interface ModuleDefinition {
   id: string
@@ -103,6 +108,15 @@ export const MODULES: ModuleDefinition[] = [
     component: <BillingModule />,
     roles: ['OWNER', 'MANAGER', 'CASHIER'],
     shortcut: 'F1',
+    showInSidebar: true,
+    category: 'POS'
+  },
+  {
+    id: 'intelligence',
+    label: 'Stock Intelligence',
+    icon: BarChart3,
+    component: <IntelligenceCockpit />,
+    roles: ['OWNER', 'MANAGER'],
     showInSidebar: true,
     category: 'POS'
   },
@@ -138,6 +152,15 @@ export const MODULES: ModuleDefinition[] = [
     label: 'Audit / Reconcile',
     icon: History,
     component: <InventoryAudit />,
+    roles: ['OWNER', 'MANAGER'],
+    showInSidebar: true,
+    category: 'WAREHOUSE'
+  },
+  {
+    id: 'warehouse_os',
+    label: 'Warehouse OS',
+    icon: Box,
+    component: <WarehouseDashboard />,
     roles: ['OWNER', 'MANAGER'],
     showInSidebar: true,
     category: 'WAREHOUSE'
@@ -193,6 +216,7 @@ export const COMPONENT_MAP: Record<string, React.ReactNode> = {
   'registry': <MasterRegistry />,
   'ho': <HOSyncModule />,
   'analytics': <AnalyticsModule />,
+  'intelligence': <IntelligenceCockpit />,
   'settings': <ConfigModule />,
   'customers': <CustomerMaster />,
   'vendors': <VendorMaster />,
@@ -216,6 +240,8 @@ export const COMPONENT_MAP: Record<string, React.ReactNode> = {
   'onboarding': <StoreOnboarding />,
   'gstr1': <FinanceHub />,
   'pricegroups': <PriceGroups />,
+  'warehouse_os': <WarehouseDashboard />,
+  'stock_transfer': <StockTransfer />,
 };
 
 export const ICON_MAP: Record<string, any> = {
@@ -231,6 +257,7 @@ export const ICON_MAP: Record<string, any> = {
   'registry': Package,
   'ho': Globe,
   'analytics': BarChart3,
+  'intelligence': BarChart3,
   'settings': Settings,
   'customers': UserSquare2,
   'vendors': Truck,
@@ -255,4 +282,6 @@ export const ICON_MAP: Record<string, any> = {
   'onboarding': Store,
   'gstr1': FileText,
   'pricegroups': DollarSign,
+  'warehouse_os': Box,
+  'stock_transfer': Truck,
 };

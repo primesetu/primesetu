@@ -1,122 +1,170 @@
 /* ============================================================
- * PrimeSetu — Shoper9-Based Retail OS
+ * SMRITI-OS — Shoper9-Based Retail OS
  * Zero Cloud · Sovereign · AI-Governed
  * ============================================================ */
+
 import React, { useState } from 'react';
-import { Trophy, Star, TrendingUp, Settings2, ShieldCheck, Zap, Users } from 'lucide-react';
+import { 
+  Trophy, 
+  Target, 
+  TrendingUp, 
+  Users, 
+  Search, 
+  ArrowUpRight, 
+  ArrowDownRight,
+  Gift,
+  Star,
+  Zap
+} from 'lucide-react';
 import { motion } from 'framer-motion';
 
 export default function LoyaltyModule() {
-  const [activeTier, setActiveTier] = useState('GOLD');
+  const [filter, setFilter] = useState('ALL');
 
   const tiers = [
-    { id: 'SILVER', name: 'Silver Tier', icon: Star, color: 'text-slate-400', bg: 'bg-slate-50', points: '0 - 5,000', earn: '1 Point / ₹200', burn: '₹0.50 / Point' },
-    { id: 'GOLD', name: 'Gold Tier', icon: Trophy, color: 'text-amber-500', bg: 'bg-amber-50', points: '5,001 - 20,000', earn: '1 Point / ₹100', burn: '₹0.75 / Point' },
-    { id: 'PLATINUM', name: 'Platinum Tier', icon: ShieldCheck, color: 'text-cyan-500', bg: 'bg-cyan-50', points: '20,000+', earn: '1 Point / ₹50', burn: '₹1.00 / Point' },
+    { name: 'SILVER', color: 'bg-slate-400', textColor: 'text-slate-900', multiplier: '1.0x', threshold: '0 - 2,500' },
+    { name: 'GOLD', color: 'bg-amber-400', textColor: 'text-amber-950', multiplier: '1.5x', threshold: '2,501 - 10,000' },
+    { name: 'PLATINUM', color: 'bg-indigo-400', textColor: 'text-indigo-950', multiplier: '2.0x', threshold: '10,001+' }
+  ];
+
+  const recentTxns = [
+    { id: 1, type: 'ACCRUE', member: 'Rahul Sharma', points: '+124', date: '10m ago', tier: 'GOLD' },
+    { id: 2, type: 'REDEEM', member: 'Priya Patel', points: '-500', date: '45m ago', tier: 'PLATINUM' },
+    { id: 3, type: 'ACCRUE', member: 'Amit Varma', points: '+42', date: '2h ago', tier: 'SILVER' },
   ];
 
   return (
-    <div className="p-6 space-y-8 max-w-6xl mx-auto">
-      <div className="flex items-center justify-between">
+    <div className="p-8 space-y-10 max-w-7xl mx-auto">
+      <header className="flex justify-between items-end">
         <div>
-          <h1 className="text-3xl font-serif font-black text-navy flex items-center gap-4">
-            <Star className="w-10 h-10 text-amber-500 fill-amber-500" />
-            Loyalty Engine
+          <h1 className="text-4xl font-serif font-black text-navy flex items-center gap-4">
+            <Trophy className="w-12 h-12 text-brand-gold" />
+            CRM & Loyalty Protocol
           </h1>
-          <p className="text-xs text-muted font-bold uppercase tracking-widest mt-2">Sovereign Customer Retention Framework</p>
+          <p className="text-xs text-muted font-bold uppercase tracking-[0.2em] mt-3">Engagement Engine · Tier-Based Accrual Active</p>
         </div>
+        
         <div className="flex gap-4">
-          <button className="bg-white border-2 border-border px-6 py-3 rounded-2xl font-black text-[10px] uppercase tracking-widest hover:bg-cream transition-all flex items-center gap-2">
-            <Settings2 className="w-4 h-4" /> Global Rules
+          <button className="bg-white border-2 border-border px-8 py-4 rounded-2xl font-black text-[10px] uppercase tracking-widest hover:bg-cream transition-all flex items-center gap-2">
+            <Gift className="w-4 h-4" /> Redemption Rules
           </button>
-          <button className="bg-navy text-white px-8 py-3 rounded-2xl font-black text-[10px] uppercase tracking-widest shadow-xl hover:bg-navy/90 transition-all flex items-center gap-2">
-            <Zap className="w-4 h-4 text-amber-400 fill-amber-400" /> ACTIVATE CAMPAIGN
+          <button className="bg-navy text-white px-10 py-4 rounded-2xl font-black text-[10px] uppercase tracking-widest shadow-xl hover:bg-navy/90 transition-all flex items-center gap-2">
+            <Star className="w-4 h-4" /> Configure Campaigns
           </button>
         </div>
-      </div>
+      </header>
 
-      {/* Tier Overview */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-        {tiers.map((tier) => (
+      {/* Tier Summary Grid */}
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+        {tiers.map((tier, i) => (
           <motion.div 
-            key={tier.id}
-            whileHover={{ scale: 1.02 }}
-            onClick={() => setActiveTier(tier.id)}
-            className={`p-8 rounded-[3rem] border-2 cursor-pointer transition-all ${
-              activeTier === tier.id ? 'border-navy shadow-2xl bg-white' : 'border-white bg-white/50 opacity-60'
-            }`}
+            key={i}
+            whileHover={{ y: -5 }}
+            className="glass p-10 rounded-[3rem] shadow-xl border border-white/50 relative overflow-hidden"
           >
-            <div className={`w-16 h-16 ${tier.bg} ${tier.color} rounded-3xl flex items-center justify-center mb-6 shadow-inner`}>
-              <tier.icon className="w-8 h-8" />
+            <div className={`absolute top-0 right-0 w-32 h-32 ${tier.color} opacity-5 blur-[40px]`} />
+            <div className="flex justify-between items-start mb-10">
+              <span className={`px-5 py-2 rounded-xl text-[10px] font-black uppercase tracking-widest ${tier.color} ${tier.textColor}`}>
+                {tier.name}
+              </span>
+              <span className="text-2xl font-serif font-black text-navy">{tier.multiplier}</span>
             </div>
-            <h3 className="text-xl font-serif font-black text-navy mb-2">{tier.name}</h3>
-            <div className="text-[10px] font-black text-muted uppercase tracking-widest mb-6">Entry: {tier.points} Points</div>
-            
-            <div className="space-y-4">
-              <div className="flex items-center justify-between">
-                <span className="text-[9px] font-black text-gray-400 uppercase">Earning Rate</span>
-                <span className="text-xs font-black text-navy">{tier.earn}</span>
-              </div>
-              <div className="flex items-center justify-between">
-                <span className="text-[9px] font-black text-gray-400 uppercase">Burn Value</span>
-                <span className="text-xs font-black text-emerald-600">{tier.burn}</span>
-              </div>
+            <p className="text-[10px] font-black text-muted uppercase tracking-widest mb-1">Points Threshold</p>
+            <div className="text-xl font-black text-navy mb-6">{tier.threshold}</div>
+            <div className="flex items-center gap-2 text-[9px] font-black text-emerald-600 uppercase tracking-tighter">
+              <TrendingUp className="w-3 h-3" /> 12% Growth this month
             </div>
           </motion.div>
         ))}
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-        {/* Campaign Insights */}
-        <div className="glass p-10 rounded-[3rem] shadow-xl">
-          <h4 className="text-lg font-serif font-black text-navy flex items-center gap-3 mb-8 uppercase">
-            <TrendingUp className="w-5 h-5 text-emerald-500" />
-            Retention Analytics
-          </h4>
-          <div className="grid grid-cols-2 gap-6">
-            <div className="p-6 bg-cream/30 rounded-[2rem] border border-white">
-              <div className="text-[9px] font-black text-muted uppercase tracking-widest mb-2">Liability Balance</div>
-              <div className="text-2xl font-black text-navy">₹14.2L</div>
-              <div className="text-[8px] font-bold text-rose-500 mt-1">+4.2% This Month</div>
-            </div>
-            <div className="p-6 bg-cream/30 rounded-[2rem] border border-white">
-              <div className="text-[9px] font-black text-muted uppercase tracking-widest mb-2">Burn-to-Earn Ratio</div>
-              <div className="text-2xl font-black text-navy">1:4.2</div>
-              <div className="text-[8px] font-bold text-emerald-500 mt-1">Healthy Zone</div>
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-10">
+        {/* Member Pulse */}
+        <div className="lg:col-span-2 glass rounded-[3rem] p-10 shadow-2xl">
+          <div className="flex justify-between items-center mb-10">
+            <h3 className="text-xl font-serif font-black text-navy uppercase tracking-tight">Active Member Ledger</h3>
+            <div className="relative">
+              <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-muted" />
+              <input 
+                type="text" 
+                placeholder="Search Member..."
+                className="pl-12 pr-6 py-3 bg-cream/30 border-2 border-transparent focus:border-brand-gold/30 rounded-full outline-none text-xs font-bold transition-all w-64"
+              />
             </div>
           </div>
-          <div className="mt-8 pt-8 border-t border-border flex justify-between items-center">
-            <span className="text-[10px] font-black text-muted uppercase tracking-widest">Active Members: 4,250</span>
-            <button className="text-[10px] font-black text-navy hover:text-amber-600 uppercase tracking-widest flex items-center gap-1">
-              View Segments <Users className="w-3 h-3" />
-            </button>
+
+          <div className="space-y-4">
+            {recentTxns.map((row, i) => (
+              <div key={i} className="flex items-center justify-between p-6 bg-white/50 hover:bg-white rounded-3xl transition-all border border-transparent hover:border-brand-gold/10 group">
+                <div className="flex items-center gap-6">
+                  <div className={`w-12 h-12 rounded-2xl flex items-center justify-center font-black text-xs uppercase ${
+                    row.tier === 'PLATINUM' ? 'bg-indigo-100 text-indigo-600' : 
+                    row.tier === 'GOLD' ? 'bg-amber-100 text-amber-600' : 'bg-slate-100 text-slate-600'
+                  }`}>
+                    {row.member.charAt(0)}
+                  </div>
+                  <div>
+                    <h4 className="font-bold text-navy group-hover:text-indigo-600 transition-colors">{row.member}</h4>
+                    <p className="text-[10px] text-muted font-bold uppercase tracking-widest mt-1">{row.tier} MEMBER · {row.date}</p>
+                  </div>
+                </div>
+                <div className="flex items-center gap-10">
+                  <div className="text-right">
+                    <div className={`text-lg font-black ${row.type === 'ACCRUE' ? 'text-emerald-600' : 'text-rose-600'}`}>
+                      {row.points}
+                    </div>
+                    <div className="text-[9px] font-black text-muted uppercase tracking-tighter">{row.type}</div>
+                  </div>
+                  <button className="p-3 bg-cream rounded-xl opacity-0 group-hover:opacity-100 transition-opacity">
+                    <ArrowUpRight className="w-4 h-4 text-muted" />
+                  </button>
+                </div>
+              </div>
+            ))}
           </div>
         </div>
 
-        {/* Quick Actions */}
-        <div className="glass p-10 rounded-[3rem] shadow-xl">
-           <h4 className="text-lg font-serif font-black text-navy flex items-center gap-3 mb-8 uppercase">
-            <Zap className="w-5 h-5 text-amber-500" />
-            Instant Triggers
-          </h4>
-          <div className="space-y-4">
-            {[
-              { label: 'Double Points Weekend', desc: 'Auto-active Fri 6PM - Sun 11PM', status: 'Active' },
-              { label: 'Birthday Multiplier (3x)', desc: 'For Gold & Platinum members', status: 'Paused' },
-              { label: 'Lapsed Customer Recall', desc: 'Trigger SMS for 90-day inactive', status: 'Draft' }
-            ].map((trigger, i) => (
-              <div key={i} className="flex items-center justify-between p-4 bg-white/40 rounded-2xl border border-white/50">
-                <div>
-                  <div className="text-[11px] font-black text-navy">{trigger.label}</div>
-                  <div className="text-[9px] text-gray-500 font-medium">{trigger.desc}</div>
-                </div>
-                <span className={`px-3 py-1 rounded-full text-[8px] font-black uppercase ${
-                  trigger.status === 'Active' ? 'bg-emerald-100 text-emerald-600' : 'bg-gray-100 text-gray-400'
-                }`}>
-                  {trigger.status}
-                </span>
+        {/* Global Stats */}
+        <div className="bg-[#1a2340] rounded-[3rem] p-10 shadow-2xl text-white">
+          <h3 className="text-xl font-serif font-black uppercase tracking-tight mb-10">Global CRM Health</h3>
+          <div className="space-y-10">
+            <div>
+              <div className="flex justify-between items-end mb-4">
+                <p className="text-[10px] font-black text-white/40 uppercase tracking-widest">Total Active Members</p>
+                <p className="text-3xl font-black">12,402</p>
               </div>
-            ))}
+              <div className="h-2 bg-white/10 rounded-full overflow-hidden">
+                <div className="h-full bg-brand-gold w-[70%]" />
+              </div>
+            </div>
+
+            <div className="grid grid-cols-2 gap-6">
+              <div className="p-6 bg-white/5 rounded-2xl border border-white/5">
+                <Zap className="w-5 h-5 text-brand-gold mb-4" />
+                <p className="text-[9px] font-black text-white/40 uppercase tracking-widest mb-1">Redemption Rate</p>
+                <div className="text-xl font-black">24.5%</div>
+              </div>
+              <div className="p-6 bg-white/5 rounded-2xl border border-white/5">
+                <Target className="w-5 h-5 text-indigo-400 mb-4" />
+                <p className="text-[9px] font-black text-white/40 uppercase tracking-widest mb-1">Retention Rate</p>
+                <div className="text-xl font-black">88.2%</div>
+              </div>
+            </div>
+
+            <div className="pt-6 border-t border-white/10">
+              <h4 className="text-[10px] font-black uppercase tracking-widest text-white/40 mb-6">Tier Distribution</h4>
+              <div className="space-y-4">
+                {['SILVER', 'GOLD', 'PLATINUM'].map((t, idx) => (
+                  <div key={t} className="flex items-center justify-between">
+                    <span className="text-[10px] font-black uppercase tracking-tighter">{t}</span>
+                    <div className="flex-1 mx-4 h-1 bg-white/5 rounded-full overflow-hidden">
+                      <div className={`h-full ${idx === 2 ? 'bg-indigo-400' : idx === 1 ? 'bg-amber-400' : 'bg-slate-400'}`} style={{ width: `${60 - idx*20}%` }} />
+                    </div>
+                    <span className="text-[10px] font-mono text-white/40">{60 - idx*20}%</span>
+                  </div>
+                ))}
+              </div>
+            </div>
           </div>
         </div>
       </div>

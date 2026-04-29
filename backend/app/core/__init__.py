@@ -1,1 +1,1 @@
-# PrimeSetu Core Package
+# SMRITI-OS Core Package

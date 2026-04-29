@@ -1,10 +1,10 @@
 /* ============================================================
- * PrimeSetu — Shoper9-Based Retail OS
+ * SMRITI-OS — Shoper9-Based Retail OS
  * Zero Cloud · Sovereign · AI-Governed
  * ============================================================
  * System Architect   :  Jawahar R Mallah
  * Organisation       :  AITDL Network
- * Project            :  PrimeSetu
+ * Project            :  SMRITI-OS
  * © 2026 — All Rights Reserved
  * "Memory, Not Code."
  * ============================================================ */
@@ -38,7 +38,7 @@ import Sidebar from './components/layout/Sidebar';
 import FunctionBar from './components/layout/FunctionBar';
 import StatusBar from './components/layout/StatusBar';
 
-const PrimeSetuOS: React.FC = () => {
+const SmritiOS: React.FC = () => {
   useSovereignShortcuts();
   const { language, setLanguage } = useLanguage();
   const [activeTab, setActiveTab] = useState('dashboard');
@@ -58,7 +58,7 @@ const PrimeSetuOS: React.FC = () => {
       // Block F5, Ctrl+R, Ctrl+Shift+R (Refresh)
       if (e.key === 'F5' || (e.ctrlKey && e.key === 'r') || (e.ctrlKey && e.shiftKey && e.key === 'R')) {
         e.preventDefault();
-        console.log('[PrimeSetu] Sovereign Guard: Blocked accidental refresh.');
+        console.log('[SMRITI-OS] Sovereign Guard: Blocked accidental refresh.');
       }
       
       // Block Ctrl+W (Close Tab) - Note: Browsers often block this override, but we try
@@ -151,8 +151,8 @@ const PrimeSetuOS: React.FC = () => {
         if (supaUser.user_metadata?.store_id) setSelectedInstance(supaUser.user_metadata.store_id);
       } else {
         // SOVEREIGN PURGE: Clear session-specific local data on logout
-        localStorage.removeItem('primesetu_pending_print');
-        localStorage.removeItem('primesetu_last_catalogue_sync');
+        localStorage.removeItem('smriti_os_pending_print');
+        localStorage.removeItem('smriti_os_last_catalogue_sync');
         setUser(null);
       }
     });
@@ -198,7 +198,7 @@ const PrimeSetuOS: React.FC = () => {
           <h2 className="text-2xl font-serif font-black text-navy uppercase">Unauthorized</h2>
           <p className="text-xs text-navy/50 max-w-md">This module is not active in your current navigation context.</p>
         </div>
-      );
+       );
     }
 
     return component;
@@ -228,7 +228,6 @@ const PrimeSetuOS: React.FC = () => {
       style={{ '--sw': isCollapsed ? '0px' : '280px' } as React.CSSProperties}
     >
       <Sidebar 
-
         activeTab={activeTab} 
         setActiveTab={setActiveTab} 
         userRole={user?.role} 
@@ -277,4 +276,4 @@ const PrimeSetuOS: React.FC = () => {
   );
 };
 
-export default PrimeSetuOS;
+export default SmritiOS;

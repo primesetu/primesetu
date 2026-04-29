@@ -1,10 +1,10 @@
 # ============================================================
-# * PrimeSetu - Shoper9-Based Retail OS
+# * SMRITI-OS - Shoper9-Based Retail OS
 # * Zero Cloud . Sovereign . AI-Governed
 # ============================================================
 # * System Architect   :  Jawahar R Mallah
 # * Organisation       :  AITDL Network
-# * Project            :  PrimeSetu
+# * Project            :  SMRITI-OS
 # * (c) 2026 - All Rights Reserved
 # * "Memory, Not Code."
 # ============================================================ #
@@ -132,7 +132,7 @@ async def generate_einvoice(
     # Store configuration (In Phase 3, this is fetched from 'StoreParams')
     store_config = {
         "gstin": "27AAAAA0000A1Z5",
-        "legal_name": "PrimeSetu Retail Node X01",
+        "legal_name": "SMRITI-OS Retail Node X01",
         "address": "Digital Sovereign Hub, Mumbai",
         "city": "Mumbai",
         "pincode": "400001",

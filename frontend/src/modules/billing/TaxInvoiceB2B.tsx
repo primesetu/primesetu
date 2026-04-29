@@ -1,10 +1,10 @@
 /* ============================================================
- * PrimeSetu — Shoper9-Based Retail OS
+ * SMRITI-OS — Shoper9-Based Retail OS
  * Zero Cloud · Sovereign · AI-Governed
  * ============================================================
  * System Architect : Jawahar R Mallah
  * Organisation     : AITDL Network
- * Project          : PrimeSetu
+ * Project          : SMRITI-OS
  * © 2026 — All Rights Reserved
  * "Memory, Not Code."
  * ============================================================ */
@@ -102,12 +102,12 @@ export default function TaxInvoiceB2B({ bill, onPrinted }: B2BInvoiceProps) {
         {/* Main Header */}
         <div className="flex justify-between items-start mb-8">
           <div className="space-y-1">
-            <h1 className="text-4xl font-black uppercase tracking-tighter leading-none">{store?.name || 'PrimeSetu Global'}</h1>
+            <h1 className="text-4xl font-black uppercase tracking-tighter leading-none">{store?.name || 'SMRITI-OS Global'}</h1>
             <p className="text-[10px] font-bold uppercase tracking-widest text-gray-400">Institutional Retail OS Node</p>
             <div className="mt-6 space-y-1 text-[11px] leading-relaxed">
               <p className="font-bold">{store?.address || 'Central Sovereign Unit, India'}</p>
               <p><strong>GSTIN:</strong> {store?.gstin || '27AAACP0000A1Z5'} | <strong>State:</strong> {store?.state_code || 'MAHARASHTRA'} (27)</p>
-              <p><strong>Email:</strong> {store?.email || 'nodes@primesetu.os'} | <strong>Ph:</strong> {store?.phone || '+91 0000000000'}</p>
+              <p><strong>Email:</strong> {store?.email || 'nodes@SMRITI-OS.os'} | <strong>Ph:</strong> {store?.phone || '+91 0000000000'}</p>
             </div>
           </div>
           <div className="flex flex-col items-end">
@@ -236,7 +236,7 @@ export default function TaxInvoiceB2B({ bill, onPrinted }: B2BInvoiceProps) {
              </div>
              <div className="text-[8px] font-medium leading-relaxed italic pr-10">
                 <p><strong>Declaration:</strong> Certified that all particulars in this invoice are true and correct, and the amount indicated is as per actuals.</p>
-                <p className="mt-2 text-navy not-italic font-black uppercase">** DIGITAL SIGNATURE VERIFIED BY PRIMESETU SOVEREIGN NODE **</p>
+                <p className="mt-2 text-navy not-italic font-black uppercase">** DIGITAL SIGNATURE VERIFIED BY SMRITI-OS SOVEREIGN NODE **</p>
              </div>
           </div>
           <div className="col-span-5 flex flex-col gap-6">
@@ -261,7 +261,7 @@ export default function TaxInvoiceB2B({ bill, onPrinted }: B2BInvoiceProps) {
 
         <div className="absolute bottom-10 left-10 right-10 flex justify-between items-end text-[7px] font-black uppercase text-gray-300 tracking-[0.3em]">
            <span>Institutional Standard X-2026</span>
-           <span>Powered by PrimeSetu Sovereign Retail OS · Memory Not Code</span>
+           <span>Powered by SMRITI-OS Sovereign Retail OS · Memory Not Code</span>
         </div>
       </div>
     </>

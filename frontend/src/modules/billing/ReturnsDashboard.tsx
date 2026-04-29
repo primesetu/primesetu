@@ -1,10 +1,10 @@
 /* ============================================================
- * PrimeSetu — Shoper9-Based Retail OS
+ * SMRITI-OS — Shoper9-Based Retail OS
  * Zero Cloud · Sovereign · AI-Governed
  * ============================================================
  * System Architect   :  Jawahar R Mallah
  * Organisation       :  AITDL Network
- * Project            :  PrimeSetu
+ * Project            :  SMRITI-OS
  * © 2026 — All Rights Reserved
  * "Memory, Not Code."
  * ============================================================ */
@@ -14,15 +14,35 @@ import { RotateCcw, Search, User, FileText, Banknote, ShieldAlert, BadgeIndianRu
 import { useLanguage } from '@/hooks/useLanguage';
 import { api } from '@/api/client';
 
+export interface CustomerRecord {
+  id: string;
+  name?: string;
+  label?: string;
+  phone?: string;
+  type?: string;
+  role?: string;
+}
+
+export interface CreditNote {
+  note_no: string;
+  balance: number;
+  expiry: string;
+}
+
+export interface AdvanceRecord {
+  id: string;
+  amount: number;
+}
+
 export default function ReturnsDashboard() {
   const { t } = useLanguage();
   
   const [searchQuery, setSearchQuery] = useState('');
-  const [customers, setCustomers] = useState<any[]>([]);
-  const [selectedCustomer, setSelectedCustomer] = useState<any | null>(null);
+  const [customers, setCustomers] = useState<CustomerRecord[]>([]);
+  const [selectedCustomer, setSelectedCustomer] = useState<CustomerRecord | null>(null);
   
-  const [creditNotes, setCreditNotes] = useState<any[]>([]);
-  const [advances, setAdvances] = useState<any[]>([]);
+  const [creditNotes, setCreditNotes] = useState<CreditNote[]>([]);
+  const [advances, setAdvances] = useState<AdvanceRecord[]>([]);
   const [loading, setLoading] = useState(false);
 
   // Search customers
@@ -35,7 +55,7 @@ export default function ReturnsDashboard() {
       // universalSearch handles customers as well if it's the global lookup
       const res = await api.catalogue.universalSearch(searchQuery);
       // Filter out only customers
-      const filtered = (res || []).filter((item: any) => item.type === 'CUSTOMER' || item.role === 'customer');
+      const filtered = (res || []).filter((item: CustomerRecord) => item.type === 'CUSTOMER' || item.role === 'customer');
       setCustomers(filtered);
     } catch (err) {
       console.error(err);
@@ -44,7 +64,7 @@ export default function ReturnsDashboard() {
     }
   };
 
-  const handleSelectCustomer = async (customer: any) => {
+  const handleSelectCustomer = async (customer: CustomerRecord) => {
     setSelectedCustomer(customer);
     setCustomers([]);
     setSearchQuery('');
@@ -66,7 +86,7 @@ export default function ReturnsDashboard() {
   return (
     <div className="flex h-full gap-4 p-4">
       {/* ── Left Pane: Customer Search & Selection ── */}
-      <div className="w-[350px] shoper-panel flex flex-col bg-navy text-white overflow-hidden shrink-0 relative">
+      <div className="w-[350px] shoper-panel flex flex-col bg-brand-navy text-white overflow-hidden shrink-0 relative">
         <div className="absolute inset-0 bg-[url('/noise.png')] opacity-10 mix-blend-overlay pointer-events-none" />
         
         <div className="p-6 border-b border-white/10 relative z-10">
@@ -118,7 +138,7 @@ export default function ReturnsDashboard() {
       </div>
 
       {/* ── Right Pane: Ledger & Credit Notes ── */}
-      <div className="flex-1 shoper-panel bg-white flex flex-col overflow-hidden">
+      <div className="flex-1 shoper-panel bg-bg-base flex flex-col overflow-hidden">
         {selectedCustomer ? (
           <>
             <div className="p-6 border-b border-border bg-cream/30 flex justify-between items-center shrink-0">
@@ -149,7 +169,7 @@ export default function ReturnsDashboard() {
               ) : creditNotes.length > 0 ? (
                 <div className="grid grid-cols-2 gap-6">
                   {creditNotes.map((cn, idx) => (
-                    <div key={idx} className="bg-white border-2 border-border rounded-2xl p-6 shadow-sm hover:border-navy hover:shadow-xl transition-all group relative overflow-hidden">
+                    <div key={idx} className="bg-bg-float border-2 border-border rounded-2xl p-6 shadow-sm hover:border-brand-navy hover:shadow-xl transition-all group relative overflow-hidden">
                       <div className="absolute -right-6 -top-6 w-24 h-24 bg-saffron/10 rounded-full group-hover:scale-150 transition-all duration-500 ease-out" />
                       <div className="flex justify-between items-start relative z-10">
                         <div>
@@ -177,7 +197,7 @@ export default function ReturnsDashboard() {
                   ))}
                 </div>
               ) : (
-                <div className="flex flex-col items-center justify-center p-20 text-center border-2 border-dashed border-border rounded-3xl bg-white">
+                <div className="flex flex-col items-center justify-center p-20 text-center border-2 border-dashed border-border rounded-3xl bg-bg-float">
                   <ShieldAlert className="w-16 h-16 text-muted mb-4" />
                   <h5 className="text-xl font-black text-navy mb-2">No Active Credit Notes</h5>
                   <p className="text-sm font-bold text-muted">This customer has no outstanding returns or unadjusted balances.</p>
@@ -187,7 +207,7 @@ export default function ReturnsDashboard() {
           </>
         ) : (
           <div className="flex-1 flex flex-col items-center justify-center bg-cream/10 text-center p-10">
-            <div className="w-32 h-32 bg-white rounded-full flex items-center justify-center shadow-xl shadow-navy/5 mb-6">
+            <div className="w-32 h-32 bg-bg-float rounded-full flex items-center justify-center shadow-xl shadow-navy/5 mb-6">
               <BadgeIndianRupee className="w-16 h-16 text-saffron" />
             </div>
             <h3 className="text-3xl font-serif font-black text-navy mb-3">Sovereign Ledger</h3>

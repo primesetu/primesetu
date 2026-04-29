@@ -1,10 +1,10 @@
 /* ============================================================
- * PrimeSetu — Shoper9-Based Retail OS
+ * SMRITI-OS — Shoper9-Based Retail OS
  * Zero Cloud · Sovereign · AI-Governed
  * ============================================================
  * System Architect   :  Jawahar R Mallah
  * Organisation       :  AITDL Network
- * Project            :  PrimeSetu
+ * Project            :  SMRITI-OS
  * © 2026 — All Rights Reserved
  * "Memory, Not Code."
  * ============================================================ */
@@ -88,7 +88,7 @@ function ThemePreview({ preview, themeName }: { preview: typeof THEMES[0]['previ
       <div style={{ flex: 1, display: 'flex', flexDirection: 'column' }}>
         {/* Topbar */}
         <div style={{ height: 24, background: preview.header, borderBottom: `1px solid ${preview.border}`, display: 'flex', alignItems: 'center', padding: '0 8px', gap: 6 }}>
-          <div style={{ fontSize: 8, color: '#FFF', fontWeight: 'bold', opacity: 0.9 }}>PrimeSetu</div>
+          <div style={{ fontSize: 8, color: '#FFF', fontWeight: 'bold', opacity: 0.9 }}>SMRITI-OS</div>
           <div style={{ marginLeft: 'auto', width: 40, height: 12, background: preview.primary, borderRadius: brSm, opacity: 0.9 }} />
         </div>
         {/* Content */}

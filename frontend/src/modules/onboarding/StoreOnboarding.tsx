@@ -1,10 +1,10 @@
 /* ============================================================
- * PrimeSetu — Shoper9-Based Retail OS
+ * SMRITI-OS — Shoper9-Based Retail OS
  * Zero Cloud · Sovereign · AI-Governed
  * ============================================================
  * System Architect   :  Jawahar R Mallah
  * Organisation       :  AITDL Network
- * Project            :  PrimeSetu
+ * Project            :  SMRITI-OS
  * © 2026 — All Rights Reserved
  * "Memory, Not Code."
  * ============================================================ */
@@ -76,7 +76,7 @@ const StoreOnboarding: React.FC = () => {
         </div>
         <button 
           onClick={() => window.location.reload()}
-          className="mt-4 px-8 py-3 bg-navy text-white text-[10px] font-black uppercase tracking-widest rounded-full hover:bg-navy/90 transition-all shadow-xl shadow-navy/20"
+          className="mt-4 px-8 py-3 bg-brand-navy text-white text-[10px] font-black uppercase tracking-widest rounded-full hover:bg-brand-navy/90 transition-all shadow-xl shadow-navy/20"
         >
           Return to Dashboard
         </button>
@@ -96,7 +96,7 @@ const StoreOnboarding: React.FC = () => {
         {[1, 2].map((s) => (
           <React.Fragment key={s}>
             <div className={`flex items-center gap-2 ${step >= s ? 'text-navy' : 'text-navy/20'}`}>
-              <div className={`w-8 h-8 rounded-full border-2 flex items-center justify-center font-bold text-[10px] ${step === s ? 'border-navy bg-navy text-white' : step > s ? 'border-navy bg-white text-navy' : 'border-navy/10 bg-transparent'}`}>
+              <div className={`w-8 h-8 rounded-full border-2 flex items-center justify-center font-bold text-[10px] ${step === s ? 'border-brand-navy bg-brand-navy text-white' : step > s ? 'border-brand-navy bg-bg-float text-text-primary' : 'border-navy/10 bg-transparent'}`}>
                 {s === 1 ? <Store size={14} /> : <UserPlus size={14} />}
               </div>
               <span className="text-[9px] font-black uppercase tracking-widest">
@@ -108,7 +108,7 @@ const StoreOnboarding: React.FC = () => {
         ))}
       </div>
 
-      <div className="bg-white/40 backdrop-blur-xl border border-white/60 rounded-3xl p-10 shadow-2xl shadow-navy/5 relative overflow-hidden">
+      <div className="bg-bg-elevated/40 backdrop-blur-xl border border-border rounded-3xl p-10 shadow-2xl shadow-navy/5 relative overflow-hidden">
         {/* Sovereign watermark */}
         <div className="absolute top-0 right-0 p-8 opacity-[0.03] pointer-events-none select-none">
           <Store size={200} />
@@ -135,8 +135,8 @@ const StoreOnboarding: React.FC = () => {
                         value={formData.store_name}
                         onChange={handleChange}
                         required
-                        placeholder="e.g. PrimeSetu flagship"
-                        className="w-full bg-white/60 border-2 border-transparent focus:border-navy focus:bg-white px-12 py-3.5 rounded-2xl text-xs font-bold text-navy placeholder:text-navy/20 outline-none transition-all shadow-inner"
+                        placeholder="e.g. SMRITI-OS flagship"
+                        className="w-full bg-bg-input border-2 border-transparent focus:border-brand-navy focus:bg-bg-float px-12 py-3.5 rounded-2xl text-xs font-bold text-text-primary placeholder:text-navy/20 outline-none transition-all shadow-inner"
                       />
                     </div>
                   </div>
@@ -151,7 +151,7 @@ const StoreOnboarding: React.FC = () => {
                         onChange={handleChange}
                         required
                         placeholder="e.g. DEL01"
-                        className="w-full bg-white/60 border-2 border-transparent focus:border-navy focus:bg-white px-12 py-3.5 rounded-2xl text-xs font-bold text-navy placeholder:text-navy/20 outline-none transition-all shadow-inner"
+                        className="w-full bg-bg-input border-2 border-transparent focus:border-brand-navy focus:bg-bg-float px-12 py-3.5 rounded-2xl text-xs font-bold text-text-primary placeholder:text-navy/20 outline-none transition-all shadow-inner"
                       />
                     </div>
                   </div>
@@ -182,7 +182,7 @@ const StoreOnboarding: React.FC = () => {
                       onChange={handleChange}
                       rows={3}
                       placeholder="Full operating address"
-                      className="w-full bg-white/60 border-2 border-transparent focus:border-navy focus:bg-white px-12 py-3.5 rounded-2xl text-xs font-bold text-navy placeholder:text-navy/20 outline-none transition-all shadow-inner resize-none"
+                      className="w-full bg-bg-input border-2 border-transparent focus:border-brand-navy focus:bg-bg-float px-12 py-3.5 rounded-2xl text-xs font-bold text-text-primary placeholder:text-navy/20 outline-none transition-all shadow-inner resize-none"
                     />
                   </div>
                 </div>
@@ -197,7 +197,7 @@ const StoreOnboarding: React.FC = () => {
                       onChange={handleChange}
                       maxLength={2}
                       placeholder="e.g. 07"
-                      className="w-full bg-white/60 border-2 border-transparent focus:border-navy focus:bg-white px-4 py-3.5 rounded-2xl text-xs font-bold text-navy placeholder:text-navy/20 outline-none transition-all shadow-inner"
+                      className="w-full bg-bg-input border-2 border-transparent focus:border-brand-navy focus:bg-bg-float px-4 py-3.5 rounded-2xl text-xs font-bold text-text-primary placeholder:text-navy/20 outline-none transition-all shadow-inner"
                     />
                   </div>
                   <div className="space-y-1.5">
@@ -210,7 +210,7 @@ const StoreOnboarding: React.FC = () => {
                         value={formData.phone}
                         onChange={handleChange}
                         placeholder="+91..."
-                        className="w-full bg-white/60 border-2 border-transparent focus:border-navy focus:bg-white px-12 py-3.5 rounded-2xl text-xs font-bold text-navy placeholder:text-navy/20 outline-none transition-all shadow-inner"
+                        className="w-full bg-bg-input border-2 border-transparent focus:border-brand-navy focus:bg-bg-float px-12 py-3.5 rounded-2xl text-xs font-bold text-text-primary placeholder:text-navy/20 outline-none transition-all shadow-inner"
                       />
                     </div>
                   </div>
@@ -220,7 +220,7 @@ const StoreOnboarding: React.FC = () => {
                   type="button" 
                   onClick={handleNext}
                   disabled={!formData.store_name || !formData.store_code}
-                  className="w-full mt-6 bg-navy text-white text-[10px] font-black uppercase tracking-[0.2em] py-5 rounded-2xl flex items-center justify-center gap-2 hover:bg-navy/90 transition-all shadow-xl shadow-navy/20 disabled:opacity-20"
+                  className="w-full mt-6 bg-brand-navy text-white text-[10px] font-black uppercase tracking-[0.2em] py-5 rounded-2xl flex items-center justify-center gap-2 hover:bg-brand-navy/90 transition-all shadow-xl shadow-navy/20 disabled:opacity-20"
                 >
                   Configure Admin User <ChevronRight size={14} />
                 </button>
@@ -244,7 +244,7 @@ const StoreOnboarding: React.FC = () => {
                       onChange={handleChange}
                       required
                       placeholder="e.g. John Doe"
-                      className="w-full bg-white/60 border-2 border-transparent focus:border-navy focus:bg-white px-12 py-3.5 rounded-2xl text-xs font-bold text-navy placeholder:text-navy/20 outline-none transition-all shadow-inner"
+                      className="w-full bg-bg-input border-2 border-transparent focus:border-brand-navy focus:bg-bg-float px-12 py-3.5 rounded-2xl text-xs font-bold text-text-primary placeholder:text-navy/20 outline-none transition-all shadow-inner"
                     />
                   </div>
                 </div>
@@ -260,7 +260,7 @@ const StoreOnboarding: React.FC = () => {
                       onChange={handleChange}
                       required
                       placeholder="admin@store.com"
-                      className="w-full bg-white/60 border-2 border-transparent focus:border-navy focus:bg-white px-12 py-3.5 rounded-2xl text-xs font-bold text-navy placeholder:text-navy/20 outline-none transition-all shadow-inner"
+                      className="w-full bg-bg-input border-2 border-transparent focus:border-brand-navy focus:bg-bg-float px-12 py-3.5 rounded-2xl text-xs font-bold text-text-primary placeholder:text-navy/20 outline-none transition-all shadow-inner"
                     />
                   </div>
                 </div>
@@ -276,7 +276,7 @@ const StoreOnboarding: React.FC = () => {
                       onChange={handleChange}
                       required
                       placeholder="••••••••"
-                      className="w-full bg-white/60 border-2 border-transparent focus:border-navy focus:bg-white px-12 py-3.5 rounded-2xl text-xs font-bold text-navy placeholder:text-navy/20 outline-none transition-all shadow-inner"
+                      className="w-full bg-bg-input border-2 border-transparent focus:border-brand-navy focus:bg-bg-float px-12 py-3.5 rounded-2xl text-xs font-bold text-text-primary placeholder:text-navy/20 outline-none transition-all shadow-inner"
                     />
                   </div>
                 </div>
@@ -291,14 +291,14 @@ const StoreOnboarding: React.FC = () => {
                   <button 
                     type="button" 
                     onClick={handleBack}
-                    className="bg-white/60 text-navy/60 text-[10px] font-black uppercase tracking-widest py-5 rounded-2xl hover:bg-white transition-all shadow-inner"
+                    className="bg-bg-input text-text-primary/60 text-[10px] font-black uppercase tracking-widest py-5 rounded-2xl hover:bg-bg-float transition-all shadow-inner"
                   >
                     Back to Store
                   </button>
                   <button 
                     type="submit" 
                     disabled={loading || !formData.admin_email || !formData.admin_password}
-                    className="bg-navy text-white text-[10px] font-black uppercase tracking-[0.2em] py-5 rounded-2xl flex items-center justify-center gap-2 hover:bg-navy/90 transition-all shadow-xl shadow-navy/20 disabled:opacity-20"
+                    className="bg-brand-navy text-white text-[10px] font-black uppercase tracking-[0.2em] py-5 rounded-2xl flex items-center justify-center gap-2 hover:bg-brand-navy/90 transition-all shadow-xl shadow-navy/20 disabled:opacity-20"
                   >
                     {loading ? <Loader2 className="animate-spin" size={14} /> : 'Initialise Sovereign Node'}
                   </button>
@@ -310,7 +310,7 @@ const StoreOnboarding: React.FC = () => {
       </div>
       
       <footer className="mt-8 text-center">
-        <p className="text-[8px] text-navy/20 uppercase tracking-[0.3em]">Institutional Grade · Sovereignty Guaranteed · PrimeSetu Engine</p>
+        <p className="text-[8px] text-navy/20 uppercase tracking-[0.3em]">Institutional Grade · Sovereignty Guaranteed · SMRITI-OS Engine</p>
       </footer>
     </div>
   );

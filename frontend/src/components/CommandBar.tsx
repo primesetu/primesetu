@@ -1,10 +1,10 @@
 /* ============================================================
- * PrimeSetu — Shoper9-Based Retail OS
+ * SMRITI-OS — Shoper9-Based Retail OS
  * Zero Cloud · Sovereign · AI-Governed
  * ============================================================
  * System Architect   :  Jawahar R Mallah
  * Organisation       :  AITDL Network
- * Project            :  PrimeSetu
+ * Project            :  SMRITI-OS
  * © 2026 — All Rights Reserved
  * "Memory, Not Code."
  * ============================================================ */
@@ -35,14 +35,14 @@ export default function CommandBar({ isOpen, onClose, onNavigate, initialContext
   const [history, setHistory] = useState<any[]>([]);
 
   useEffect(() => {
-    const saved = localStorage.getItem('primesetu_cmd_history');
+    const saved = localStorage.getItem('SMRITI-OS_cmd_history');
     if (saved) setHistory(JSON.parse(saved));
   }, []);
 
   const addToHistory = (cmd: any) => {
     const next = [cmd, ...history.filter(h => h.id !== cmd.id)].slice(0, 5);
     setHistory(next);
-    localStorage.setItem('primesetu_cmd_history', JSON.stringify(next));
+    localStorage.setItem('SMRITI-OS_cmd_history', JSON.stringify(next));
   };
 
   // Context-Aware UI Configuration

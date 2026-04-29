@@ -1,10 +1,10 @@
 # ============================================================
-# PrimeSetu - Shoper9-Based Retail OS
+# SMRITI-OS - Shoper9-Based Retail OS
 # Zero Cloud . Sovereign . AI-Governed
 # ============================================================
 # System Architect : Jawahar R Mallah
 # Organisation     : AITDL Network
-# Project          : PrimeSetu
+# Project          : SMRITI-OS
 # (c) 2026 - All Rights Reserved
 # "Memory, Not Code."
 # ============================================================
@@ -25,14 +25,14 @@ from datetime import date
 import uvicorn
 
 app = FastAPI(
-    title="PrimeSetu - Sovereign Retail OS",
+    title="SMRITI-OS - Sovereign Retail OS",
     redirect_slashes=False  # Crucial for CORS stability with frontend pulse
 )
 
 # .. CORS ......................................................................
 ALLOWED_ORIGIN_REGEX = (
     r"https?://(localhost|127\.0\.0\.1"
-    r"|(.*\.)?primesetu\.pages\.dev"
+    r"|(.*\.)?SMRITI-OS\.pages\.dev"
     r"|.*\.github\.io)(:\d+)?"
 )
 app.add_middleware(
@@ -45,9 +45,9 @@ app.add_middleware(
 
 from app.routers import (
     onboarding, item_master, customer, barcode, 
-    price_group, purchase, inventory, billing, 
+    price_group,    purchase, inventory, billing, 
     ho, flexible_reports, users, menu, extensions, finance, schemes, security, reporting,
-    store, inventory_audit
+    store, inventory_audit, stock_ledger, department, configuration, warehouse, intelligence
 )
 from app.routers.gstr1 import router as gstr1_router
 
@@ -59,6 +59,8 @@ app.include_router(extensions.router, prefix="/api/v1/extensions")
 
 # Masters
 app.include_router(item_master.router, prefix="/api/v1")
+app.include_router(department.router, prefix="/api/v1")
+app.include_router(configuration.router, prefix="/api/v1")
 app.include_router(customer.router, prefix="/api/v1")
 app.include_router(price_group.router, prefix="/api/v1")
 app.include_router(barcode.router, prefix="/api/v1")
@@ -68,11 +70,14 @@ app.include_router(menu.router, prefix="/api/v1/menu")
 app.include_router(billing.router)
 app.include_router(inventory.router)
 app.include_router(inventory_audit.router)
+app.include_router(stock_ledger.router, prefix="/api/v1")
 app.include_router(purchase.router)
 app.include_router(finance.router)
 app.include_router(schemes.router)
 app.include_router(security.router)
 app.include_router(reporting.router)
+app.include_router(warehouse.router)
+app.include_router(intelligence.router)
 
 # Reports & Sync
 app.include_router(ho.router, prefix="/api/v1/ho")
@@ -83,12 +88,12 @@ app.include_router(gstr1_router, prefix="/api/v1/accounts") # Align with fronten
 async def startup():
     async with engine.begin() as conn:
         await conn.run_sync(Base.metadata.create_all)
-    print("[PrimeSetu] Database connected and schema verified.")
+    print("[SMRITI-OS] Database connected and schema verified.")
 
 @app.get("/")
 async def read_index():
     return {
-        "message": "PrimeSetu Sovereign OS - Operational",
+        "message": "SMRITI-OS Sovereign OS - Operational",
         "version": "1.0.0",
         "phase": 2,
         "architect": "Jawahar R Mallah"

@@ -1,10 +1,10 @@
 /* ============================================================
- * PrimeSetu — Shoper9-Based Retail OS
+ * SMRITI-OS — Shoper9-Based Retail OS
  * Zero Cloud · Sovereign · AI-Governed
  * ============================================================
  * System Architect   :  Jawahar R Mallah
  * Organisation       :  AITDL Network
- * Project            :  PrimeSetu
+ * Project            :  SMRITI-OS
  * © 2026 — All Rights Reserved
  * "Memory, Not Code."
  * ============================================================ */
@@ -53,13 +53,13 @@ export default function MISModule() {
           <div className="flex bg-navy/5 p-1.5 rounded-2xl border border-navy/5">
              <button 
                onClick={() => setMode('dashboard')}
-               className={`flex items-center gap-2 px-6 py-2.5 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all ${mode === 'dashboard' ? 'bg-white text-navy shadow-lg shadow-navy/5' : 'text-navy/40 hover:text-navy'}`}
+               className={`flex items-center gap-2 px-6 py-2.5 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all ${mode === 'dashboard' ? 'bg-bg-elevated text-text-primary shadow-lg shadow-navy/5' : 'text-text-secondary hover:text-text-primary'}`}
              >
                 <BarChart3 size={14} /> Dashboard
              </button>
              <button 
                onClick={() => setMode('designer')}
-               className={`flex items-center gap-2 px-6 py-2.5 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all ${mode === 'designer' ? 'bg-white text-navy shadow-lg shadow-navy/5' : 'text-navy/40 hover:text-navy'}`}
+               className={`flex items-center gap-2 px-6 py-2.5 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all ${mode === 'designer' ? 'bg-bg-elevated text-text-primary shadow-lg shadow-navy/5' : 'text-text-secondary hover:text-text-primary'}`}
              >
                 <Layout size={14} /> Designer
              </button>
@@ -96,18 +96,18 @@ export default function MISModule() {
 
           <div className="grid grid-cols-12 gap-8">
             {/* Sales Chart (CSS Bars) */}
-            <div className="col-span-8 bg-white/50 backdrop-blur-xl border border-white/60 rounded-[2.5rem] p-10 shadow-xl shadow-navy/5">
-              <h3 className="font-serif font-black text-navy text-xl uppercase tracking-tighter mb-8">Revenue Trend (Daily)</h3>
+            <div className="col-span-8 bg-bg-elevated/40 backdrop-blur-xl border border-border rounded-[2.5rem] p-10 shadow-xl shadow-navy/5">
+              <h3 className="font-serif font-black text-text-primary text-xl uppercase tracking-tighter mb-8">Revenue Trend (Daily)</h3>
               <div className="h-64 flex items-end justify-between gap-4 px-4 pb-8 border-b border-navy/5 relative">
                 {salesLoading ? (
-                   <div className="absolute inset-0 flex items-center justify-center bg-white/50 z-10">Loading...</div>
+                   <div className="absolute inset-0 flex items-center justify-center bg-bg-elevated/50 z-10">Loading...</div>
                 ) : sales?.daily?.map((d: any) => (
                   <div key={d.date} className="flex-1 flex flex-col items-center group relative">
                     <div 
                       className="w-full bg-navy/10 group-hover:bg-navy rounded-t-2xl transition-all duration-700 relative"
                       style={{ height: `${(d.amount / sales.revenue) * 200 + 20}px` }}
                     >
-                      <div className="absolute -top-10 left-1/2 -translate-x-1/2 text-[10px] font-black text-navy opacity-0 group-hover:opacity-100 transition-all bg-white px-3 py-1.5 rounded-xl shadow-xl border border-navy/5">
+                      <div className="absolute -top-10 left-1/2 -translate-x-1/2 text-[10px] font-black text-text-primary opacity-0 group-hover:opacity-100 transition-all bg-bg-float px-3 py-1.5 rounded-xl shadow-xl border border-border">
                         ₹{d.amount}
                       </div>
                     </div>
@@ -120,14 +120,14 @@ export default function MISModule() {
             </div>
 
             {/* Category Distribution */}
-            <div className="col-span-4 bg-white/50 backdrop-blur-xl border border-white/60 rounded-[2.5rem] p-10 shadow-xl shadow-navy/5">
-              <h3 className="font-serif font-black text-navy text-xl uppercase tracking-tighter mb-8">Stock by Category</h3>
+            <div className="col-span-4 bg-bg-elevated/40 backdrop-blur-xl border border-border rounded-[2.5rem] p-10 shadow-xl shadow-navy/5">
+              <h3 className="font-serif font-black text-text-primary text-xl uppercase tracking-tighter mb-8">Stock by Category</h3>
               <div className="space-y-6">
                 {inventory?.by_category?.map((c: any) => (
                   <div key={c.category} className="space-y-2">
-                    <div className="flex justify-between text-[10px] font-black uppercase tracking-[0.2em] text-navy/40">
+                    <div className="flex justify-between text-[10px] font-black uppercase tracking-[0.2em] text-text-secondary">
                       <span>{c.category}</span>
-                      <span className="text-navy">₹{c.value.toLocaleString()}</span>
+                      <span className="text-text-primary">₹{c.value.toLocaleString()}</span>
                     </div>
                     <div className="h-2 bg-navy/5 rounded-full overflow-hidden">
                       <div 
@@ -140,7 +140,7 @@ export default function MISModule() {
               </div>
               <div className="mt-12 p-6 bg-navy/[0.03] rounded-3xl border border-navy/5 border-dashed">
                 <p className="text-[10px] text-navy/40 font-bold italic text-center leading-relaxed">
-                  "Data integrity verified by PrimeSetu Sovereign Audit Engine v2.0"
+                  "Data integrity verified by SMRITI-OS Sovereign Audit Engine v2.0"
                 </p>
               </div>
             </div>
@@ -155,14 +155,14 @@ export default function MISModule() {
 
 function KPICard({ title, value, subtitle, icon, loading }: any) {
   return (
-    <div className="bg-white p-6 rounded-2xl border border-border shadow-sm group hover:border-saffron/30 transition-all">
+    <div className="bg-bg-float p-6 rounded-2xl border border-border shadow-sm group hover:border-saffron/30 transition-all">
       <div className="flex items-start justify-between">
         <div className="space-y-1">
           <p className="text-[10px] font-black uppercase tracking-widest text-muted">{title}</p>
           {loading ? (
             <div className="h-8 w-32 bg-cream animate-pulse rounded-lg"></div>
           ) : (
-            <h2 className="text-3xl font-black text-navy">{value}</h2>
+            <h2 className="text-3xl font-black text-text-primary">{value}</h2>
           )}
           <p className="text-[10px] font-bold text-saffron uppercase tracking-tighter">{subtitle}</p>
         </div>

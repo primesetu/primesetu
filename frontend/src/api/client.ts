@@ -1,10 +1,10 @@
 /* ============================================================
- * PrimeSetu — Shoper9-Based Retail OS
+ * SMRITI-OS — Shoper9-Based Retail OS
  * Zero Cloud · Sovereign · AI-Governed
  * ============================================================
  * System Architect   :  Jawahar R Mallah
  * Organisation       :  AITDL Network
- * Project            :  PrimeSetu
+ * Project            :  SMRITI-OS
  * © 2026 — All Rights Reserved
  * "Memory, Not Code."
  * ============================================================ */
@@ -117,6 +117,8 @@ export const api = {
   },
   ho: {
     getStatus: () => apiClient.get('/ho/status').then(r => r.data),
+    pulse: (data: any) => apiClient.post('/ho/pulse', data).then(r => r.data),
+    executeCommand: (id: string) => apiClient.post(`/ho/execute-command/${id}`).then(r => r.data),
     triggerSync: () => apiClient.post('/ho/sync').then(r => r.data),
   },
   reports: {
@@ -158,5 +160,34 @@ export const api = {
     list: () => apiClient.get('/users/').then(r => r.data),
     create: (data: any) => apiClient.post('/users/', data).then(r => r.data),
     update: (id: string, data: any) => apiClient.put(`/users/${id}`, data).then(r => r.data),
+  },
+  config: {
+    getUIFields: (screen: string) => apiClient.get(`/config/ui-fields/${screen}`).then(r => r.data),
+    upsertUIField: (data: any) => apiClient.post('/config/ui-fields', data).then(r => r.data),
+    listPrintTemplates: (type?: string) => apiClient.get('/config/print-templates', { params: { template_type: type } }).then(r => r.data),
+    createPrintTemplate: (data: any) => apiClient.post('/config/print-templates', data).then(r => r.data),
+    listAttributeAliases: () => apiClient.get('/config/attribute-aliases').then(r => r.data),
+    upsertAttributeAlias: (data: any) => apiClient.post('/config/attribute-aliases', data).then(r => r.data),
+    listCategoryPolicies: () => apiClient.get('/config/category-policies').then(r => r.data),
+    upsertCategoryPolicy: (data: any) => apiClient.post('/config/category-policies', data).then(r => r.data),
+  },
+  departments: {
+    list: (level?: number, parentId?: string) => apiClient.get('/departments/', { params: { level, parent_id: parentId } }).then(r => r.data),
+    create: (data: any) => apiClient.post('/departments/', data).then(r => r.data),
+  },
+  stockLedger: {
+    list: () => apiClient.get('/stock-ledger/').then(r => r.data),
+    create: (data: any) => apiClient.post('/stock-ledger/', data).then(r => r.data),
+  },
+  intelligence: {
+    getDoc: () => apiClient.get('/intelligence/doc').then(r => r.data),
+    getRiskSummary: () => apiClient.get('/intelligence/risk-summary').then(r => r.data),
+  },
+  warehouse: {
+    getDashboard: () => apiClient.get('/warehouse/dashboard').then(r => r.data),
+    getStores: () => apiClient.get('/warehouse/stores').then(r => r.data),
+    transfer: (data: unknown) => apiClient.post('/warehouse/transfer', data).then(r => r.data),
+    adjust: (data: unknown) => apiClient.post('/warehouse/adjustment', data).then(r => r.data),
+    assignBin: (data: unknown) => apiClient.post('/warehouse/bin-assignment', data).then(r => r.data),
   }
 }

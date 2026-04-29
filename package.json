@@ -1,7 +1,7 @@
 {
-  "name": "primesetu",
+  "name": "smriti-os",
   "version": "1.0.0",
-  "description": "PrimeSetu — Shoper9 Based Retail OS",
+  "description": "SMRITI-OS — Shoper9 Based Retail OS",
   "main": "main.py",
   "scripts": {
     "dev:backend": "python -m uvicorn app.main:app --reload --port 8000 --app-dir backend",
@@ -11,7 +11,7 @@
     "build": "npm run build --prefix frontend"
   },
   "keywords": [
-    "primesetu",
+    "smriti-os",
     "shoper9",
     "retail",
     "sovereign-os"

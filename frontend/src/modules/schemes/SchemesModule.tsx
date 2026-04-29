@@ -1,5 +1,5 @@
 /* ============================================================
- * PrimeSetu — Shoper9-Based Retail OS
+ * SMRITI-OS — Shoper9-Based Retail OS
  * Zero Cloud · Sovereign · AI-Governed
  * ============================================================
  * Promotions Cockpit (Schemes Parity)
@@ -25,8 +25,16 @@ import {
 } from 'lucide-react';
 import { api } from '@/api/client';
 
+export interface Scheme {
+  id: string;
+  name?: string;
+  type?: string;
+  is_active?: boolean;
+  description?: string;
+}
+
 export default function SchemesModule() {
-  const [schemes, setSchemes] = useState<any[]>([]);
+  const [schemes, setSchemes] = useState<Scheme[]>([]);
   const [loading, setLoading] = useState(true);
   const [view, setView] = useState<'list' | 'create'>('list');
 
@@ -47,7 +55,7 @@ export default function SchemesModule() {
   };
 
   return (
-    <div className="flex flex-col h-full bg-white relative overflow-hidden animate-in fade-in duration-700">
+    <div className="flex flex-col h-full bg-bg-base relative overflow-hidden animate-in fade-in duration-700">
       {/* ── TOP NAVIGATION ── */}
       <div className="p-12 pb-0 flex justify-between items-end">
         <div>
@@ -80,7 +88,7 @@ export default function SchemesModule() {
               className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8"
             >
               {/* STATS CARD */}
-              <div className="tesla-card bg-navy text-white p-10 flex flex-col justify-between overflow-hidden relative">
+              <div className="tesla-card bg-brand-navy text-white p-10 flex flex-col justify-between overflow-hidden relative">
                  <Zap className="absolute -right-4 -top-4 w-32 h-32 text-white/5" />
                  <div>
                    <h3 className="text-[10px] font-black text-white/40 uppercase tracking-widest mb-6 italic">Performance Yield</h3>
@@ -104,7 +112,7 @@ export default function SchemesModule() {
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: i * 0.1 }}
-                  className="tesla-card bg-white border border-navy/5 p-10 flex flex-col justify-between group hover:shadow-2xl transition-all"
+                  className="tesla-card bg-bg-float border border-brand-navy/20 p-10 flex flex-col justify-between group hover:shadow-2xl transition-all"
                 >
                   <div>
                     <div className="flex justify-between items-start mb-6">
@@ -134,12 +142,12 @@ export default function SchemesModule() {
               {/* EMPTY STATE / ADD NEW */}
               <div 
                 onClick={() => setView('create')}
-                className="tesla-card bg-navy/5 border-2 border-dashed border-navy/10 p-10 flex flex-col items-center justify-center gap-6 cursor-pointer hover:border-brand-gold/40 hover:bg-white transition-all group"
+                className="tesla-card bg-bg-elevated border-2 border-dashed border-white/10 p-10 flex flex-col items-center justify-center gap-6 cursor-pointer hover:border-brand-gold/40 hover:bg-bg-float transition-all group"
               >
-                <div className="w-16 h-16 rounded-full bg-white flex items-center justify-center text-navy group-hover:bg-brand-gold transition-all shadow-sm">
+                <div className="w-16 h-16 rounded-full bg-bg-float flex items-center justify-center text-white group-hover:bg-brand-gold transition-all shadow-sm">
                    <Plus size={32} />
                 </div>
-                <span className="text-[10px] font-black text-navy uppercase tracking-[0.3em]">Launch New Campaign</span>
+                <span className="text-[10px] font-black text-white uppercase tracking-[0.3em]">Launch New Campaign</span>
               </div>
             </motion.div>
           ) : (
@@ -151,8 +159,8 @@ export default function SchemesModule() {
               className="max-w-5xl mx-auto grid grid-cols-12 gap-12"
             >
               <div className="col-span-12 lg:col-span-8 space-y-12">
-                 <div className="tesla-card bg-white p-12 border border-navy/5">
-                    <h3 className="text-xs font-black text-navy uppercase tracking-[0.4em] mb-12 flex items-center gap-4">
+                 <div className="tesla-card bg-bg-float p-12 border border-brand-navy/20">
+                    <h3 className="text-xs font-black text-white uppercase tracking-[0.4em] mb-12 flex items-center gap-4">
                        <ShieldCheck className="text-brand-gold" /> Parameters & Triggers
                     </h3>
                     <div className="grid grid-cols-2 gap-8">
@@ -179,19 +187,19 @@ export default function SchemesModule() {
                     </div>
                  </div>
 
-                 <div className="tesla-card bg-white p-12 border border-navy/5">
-                    <h3 className="text-xs font-black text-navy uppercase tracking-[0.4em] mb-12 flex items-center gap-4">
+                 <div className="tesla-card bg-bg-float p-12 border border-brand-navy/20">
+                    <h3 className="text-xs font-black text-white uppercase tracking-[0.4em] mb-12 flex items-center gap-4">
                        <LayoutGrid className="text-brand-gold" /> Applicable Fleet (Items)
                     </h3>
-                    <div className="p-10 bg-navy/5 rounded-[2rem] border-2 border-dashed border-navy/10 flex flex-col items-center justify-center gap-4">
-                       <ShoppingBag className="text-navy/20" size={32} />
-                       <span className="text-[10px] font-black text-navy/40 uppercase tracking-widest">Select Items / Categories to Include</span>
+                    <div className="p-10 bg-bg-elevated rounded-[2rem] border-2 border-dashed border-white/10 flex flex-col items-center justify-center gap-4">
+                       <ShoppingBag className="text-white/40" size={32} />
+                       <span className="text-[10px] font-black text-white/40 uppercase tracking-widest">Select Items / Categories to Include</span>
                     </div>
                  </div>
               </div>
 
               <div className="col-span-12 lg:col-span-4 space-y-12">
-                 <div className="tesla-card bg-navy text-white p-12 relative overflow-hidden">
+                 <div className="tesla-card bg-brand-navy text-white p-12 relative overflow-hidden">
                     <Zap className="absolute -right-8 -bottom-8 w-48 h-48 text-white/5" />
                     <h3 className="text-xs font-black uppercase tracking-[0.4em] mb-10">Simulation</h3>
                     <div className="space-y-8 relative z-10">

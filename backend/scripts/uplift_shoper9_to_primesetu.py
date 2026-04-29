@@ -7,7 +7,7 @@ from app.models.base import Department, Store
 from typing import Optional
 
 # ============================================================
-# PrimeSetu - Shoper 9 "Uplift" Engine
+# SMRITI-OS - Shoper 9 "Uplift" Engine
 # Phase 2: Transforming Legacy Lookups into Future-Ready Trees
 # ============================================================
 
@@ -78,7 +78,7 @@ async def uplift_departments():
                 session.add(new_dep)
         
         await session.commit()
-        print("Uplift Complete. Shoper 9 Departments are now PrimeSetu Future-Ready entities.")
+        print("Uplift Complete. Shoper 9 Departments are now SMRITI-OS Future-Ready entities.")
 
 if __name__ == "__main__":
     asyncio.run(uplift_departments())

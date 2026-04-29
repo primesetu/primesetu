@@ -17,8 +17,8 @@ async def bootstrap():
 
     supabase = create_client(url, service_key)
     
-    email = "admin@primesetu.com"
-    password = "PrimeSetu@2026"
+    email = "admin@SMRITI-OS.com"
+    password = "SMRITI-OS@2026"
     
     print(f"--- Bootstrapping Admin User: {email} ---")
     

@@ -1,5 +1,5 @@
 /* ============================================================
- * PrimeSetu — Shoper9-Based Retail OS
+ * SMRITI-OS — Shoper9-Based Retail OS
  * Zero Cloud · Sovereign · AI-Governed
  * ============================================================
  * Finance Hub (GSTR-1 & Tally Bridge)
@@ -152,7 +152,7 @@ export default function FinanceHub() {
           <div>
             <h2 className="text-4xl font-black text-navy tracking-tighter mb-4" style={{ fontFamily: 'var(--font-tesla)' }}>Tally ERP Bridge</h2>
             <p className="text-sm text-navy/40 font-bold uppercase tracking-widest max-w-lg leading-relaxed">
-              Export institutional vouchers directly to Tally. PrimeSetu handles all ledger mapping, tax reconciliation, and voucher numbering automatically.
+              Export institutional vouchers directly to Tally. SMRITI-OS handles all ledger mapping, tax reconciliation, and voucher numbering automatically.
             </p>
           </div>
 

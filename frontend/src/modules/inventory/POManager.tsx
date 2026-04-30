@@ -118,7 +118,7 @@ const POManager: React.FC = () => {
               ref={searchInputRef}
               type="text" 
               placeholder="Search PO # / Vendor... [F3]"
-              className="w-80 bg-bg-input border-2 border-border rounded-[2rem] py-5 pl-14 pr-6 text-xs font-black outline-none focus:border-brand-gold transition-all shadow-sm uppercase tracking-widest text-text-primary"
+              className="w-80 bg-bg-input border-2 border-border rounded-[2rem] py-5 pl-12 pr-6 text-xs font-black outline-none focus:border-brand-gold transition-all shadow-sm uppercase tracking-widest text-text-primary"
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
             />

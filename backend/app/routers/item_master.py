@@ -21,7 +21,8 @@ from app.core.security import require_auth, CurrentUser
 from app.models import Item, ItemPriceLevel, ItemStock, SizeGroup
 from app.schemas.item_master import (
     ItemCreate, ItemResponse, PriceLevelUpdate, 
-    StockMatrixEntry, StockMatrixResponse
+    StockMatrixEntry, StockMatrixResponse,
+    ItemBatchCreate, BatchCreateResponse
 )
 
 router = APIRouter(prefix="/items", tags=["item-master"])
@@ -222,3 +223,98 @@ async def update_price_level(
 
     await db.commit()
     return {"status": "success", "message": f"Price level '{payload.price_level}' updated."}
+
+@router.post("/batch", response_model=BatchCreateResponse)
+async def batch_create_items(
+    payload: ItemBatchCreate,
+    current_user: CurrentUser = Depends(require_auth),
+    db: AsyncSession = Depends(get_db)
+):
+    """
+    Bulk create items. 
+    Parity with Shoper9 Excel Import: Omits duplicates if requested.
+    """
+    success_count = 0
+    skipped_count = 0
+    error_count = 0
+    created_items = []
+    skipped_codes = []
+
+    # 1. Fetch existing item codes for this store to avoid N+1 queries
+    existing_codes_q = await db.execute(
+        select(Item.item_code).where(Item.store_id == current_user.store_id)
+    )
+    existing_codes = set(existing_codes_q.scalars().all())
+
+    for item_data in payload.items:
+        try:
+            if item_data.item_code in existing_codes:
+                if payload.omit_duplicates:
+                    skipped_count += 1
+                    skipped_codes.append(item_data.item_code)
+                    continue
+                else:
+                    raise HTTPException(
+                        status_code=409,
+                        detail=f"Item code '{item_data.item_code}' already exists."
+                    )
+
+            # Create Item
+            new_item = Item(
+                store_id=current_user.store_id,
+                item_code=item_data.item_code,
+                item_name=item_data.item_name,
+                department_id=item_data.department_id,
+                brand=item_data.brand,
+                supplier_id=item_data.supplier_id,
+                size_group_id=item_data.size_group_id,
+                colour=item_data.colour,
+                colour_code=item_data.colour_code,
+                mrp_paise=item_data.mrp_paise,
+                cost_paise=item_data.cost_paise,
+                gst_rate=item_data.gst_rate,
+                hsn_code=item_data.hsn_code,
+                shoper_recid=item_data.shoper_recid
+            )
+            db.add(new_item)
+            await db.flush()
+
+            # Create MRP
+            initial_price = ItemPriceLevel(
+                item_id=new_item.id,
+                store_id=current_user.store_id,
+                price_level="mrp",
+                price_paise=item_data.mrp_paise,
+                valid_from=date.today()
+            )
+            db.add(initial_price)
+
+            # Create Stock Matrix
+            for entry in item_data.stock_matrix:
+                stock = ItemStock(
+                    item_id=new_item.id,
+                    store_id=current_user.store_id,
+                    size=entry.size,
+                    colour=entry.colour,
+                    qty_on_hand=entry.qty_on_hand
+                )
+                db.add(stock)
+
+            success_count += 1
+            created_items.append(new_item)
+            existing_codes.add(item_data.item_code) # Add to set to avoid duplicates within same batch
+
+        except Exception as e:
+            error_count += 1
+            print(f"[SMRITI-OS] Error creating item {item_data.item_code}: {str(e)}")
+            continue
+
+    await db.commit()
+    
+    return BatchCreateResponse(
+        success_count=success_count,
+        skipped_count=skipped_count,
+        error_count=error_count,
+        items=created_items,
+        skipped_codes=skipped_codes
+    )

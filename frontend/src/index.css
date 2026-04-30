@@ -52,12 +52,14 @@
 
     /* ── Layout ── */
     --sidebar-w: 256px;
-    --topbar-h: 52px;
-    --content-pad: 24px; /* Updated to 24px */
-    --radius-sm: 2px; /* 0.125rem */
-    --radius-md: 4px; /* 0.25rem - Default */
-    --radius-lg: 6px; /* 0.375rem */
-    --radius-xl: 8px; /* 0.5rem - Large */
+    --topbar-h: 32px;
+    --function-bar-w: 120px;
+    --status-bar-h: 24px;
+    --content-pad: 24px;
+    --radius-sm: 2px;
+    --radius-md: 4px;
+    --radius-lg: 6px;
+    --radius-xl: 8px;
 
     /* ── Typography scale ── */
     --text-2xs: 11px;
@@ -90,38 +92,882 @@
     --font-tesla: "Inter", system-ui, sans-serif;
   }
 
-  /* ── Classic Shoper 9 Theme (unchanged) ── */
-  :root[data-theme="shoper9"] {
-    --navy: #003399;
-    --navy-light: #0044bb;
-    --navy-mid: #0033aa;
-    --saffron: #003399;
-    --saffron-dk: #002277;
-    --cream: #ece9d8;
-    --white: #ffffff;
-    --font-tesla: "Tahoma", "MS Sans Serif", Arial, sans-serif;
-    --border: #808080;
-    --muted: #6d6d6d;
-    --surface: #ffffff;
+  /* ── TallyPrime Deep Institutional Theme ── */
+  :root[data-theme="tallyprime"] {
+    --bg-base: #f0f1f1;
+    --bg-elevated: #ffffff;
+    --bg-overlay: #ffffff;
+    --bg-float: #ffffff;
+    --bg-input: #ffffff;
+
+    --border-subtle: #bcbcbc;
+    --border-default: #808080;
+    --border-strong: #000000;
+    --border-focus: #f29b12;
+
+    --text-primary: #212121;
+    --text-secondary: #444444;
+    --text-tertiary: #666666;
+
+    --accent: #008c85; /* Tally Teal */
+    --accent-light: #e0f2f1;
+    --accent-dark: #1a4a48; /* Deep teal for function bar bg */
+    --accent-bg: #008c85;
+    --accent-border: #004d40;
+
+    --green: #2e7d32;
+    --red: #c62828;
+    --gold: #f29b12;
+
+    --sidebar-w: 280px;
+    --topbar-h: 32px;
+    --function-bar-w: 120px;
+    --status-bar-h: 24px;
+    --radius-md: 0px;
+    --radius-lg: 0px;
+    --font-tesla: 'Inter', sans-serif;
   }
 
-  [data-theme="shoper9"] body {
-    background-color: #ece9d8;
-    color: #000;
-    font-family: "Tahoma", Arial, sans-serif !important;
-    font-size: 11px !important;
-    -webkit-font-smoothing: none !important;
-    line-height: 1.3;
+  [data-theme="tallyprime"] body {
+    background-color: var(--bg-base);
+    color: var(--text-primary);
+    font-family: "Segoe UI", "Tahoma", sans-serif !important;
+    font-size: 13px !important;
+    line-height: 1.4;
   }
 
-  [data-theme="shoper9"] * {
+  [data-theme="tallyprime"] * {
+    border-radius: 0 !important;
+    box-shadow: none !important;
+    transition: none !important;
+    animation: none !important;
+  }
+
+  /* ── Component Classes (Theme-Aware) ── */
+  .tp-header {
+    background-color: var(--accent) !important;
+    color: #ffffff !important;
+    height: var(--topbar-h) !important;
+    display: flex;
+    align-items: center;
+    border: none !important;
+    padding: 0 1rem;
+  }
+
+  .tp-sidebar {
+    background-color: #ffffff !important;
+    border-right: 2px solid var(--accent) !important;
+  }
+
+  .tp-sidebar-header {
+    background-color: var(--accent) !important;
+    color: #ffffff !important;
+  }
+
+  .tp-card {
+    background-color: var(--bg-elevated) !important;
+    border: 1px solid var(--border-subtle) !important;
+    padding: 1.5rem;
+  }
+
+  .tp-btn-gold {
+    background-color: var(--gold) !important;
+    color: #000000 !important;
+    border: 1px solid #000000 !important;
+    font-weight: bold;
+    text-transform: uppercase;
+    font-size: 10px;
+    padding: 4px 12px;
+  }
+
+  .tp-btn-white {
+    background-color: #ffffff !important;
+    color: var(--text-primary) !important;
+    border: 1px solid var(--border-subtle) !important;
+    font-weight: bold;
+    text-transform: uppercase;
+    font-size: 10px;
+    padding: 4px 12px;
+  }
+
+  .tp-section-header {
+    background-color: var(--accent-light) !important;
+    color: var(--accent) !important;
+    font-weight: 900;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    font-size: 10px;
+    padding: 0.375rem 1rem;
+    border-top: 1px solid var(--border-subtle) !important;
+    border-bottom: 1px solid var(--border-subtle) !important;
+  }
+
+  /* ── General Semantic Classes ── */
+  .flex-between { display: flex; align-items: center; justify-content: space-between; }
+  .flex-center { display: flex; align-items: center; justify-content: center; }
+  
+  .card-base {
+    background-color: var(--bg-elevated);
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-md);
+  }
+
+  .text-tp-primary { color: var(--text-primary); }
+  .text-tp-secondary { color: var(--text-secondary); }
+  .text-tp-tertiary { color: var(--text-tertiary); }
+  .text-tp-accent { color: var(--accent); }
+  
+  .text-tp-mono {
+    font-family: 'JetBrains Mono', monospace;
+    letter-spacing: -0.02em;
+  }
+
+  .tp-label {
+    font-size: 10px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--text-tertiary);
+  }
+
+  .tp-value {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: var(--text-primary);
+  }
+
+  /* ── Inputs ── */
+  [data-theme="tallyprime"] input,
+  [data-theme="tallyprime"] select {
+    border: 1px solid var(--border-subtle) !important;
+    border-top-color: var(--border-default) !important;
+    border-left-color: var(--border-default) !important;
+    padding: 4px 8px !important;
+    background-color: #ffffff !important;
     border-radius: 0 !important;
   }
-  [data-theme="shoper9"] *,
-  [data-theme="shoper9"] *::before,
-  [data-theme="shoper9"] *::after {
-    animation: none !important;
-    transition: none !important;
+
+  [data-theme="tallyprime"] input:focus {
+    background-color: #fffde7 !important;
+    border: 1px solid var(--gold) !important;
+    outline: none !important;
+  }
+
+  /* ── Status Bar ── */
+  [data-theme="tallyprime"] footer,
+  .tp-status-bar {
+    background-color: #225c5a !important;
+    color: #ffffff !important;
+    height: 24px !important;
+    font-size: 10px !important;
+  }
+
+  /* ── Tally Scrollbar ── */
+  .tally-scrollbar::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+  }
+  .tally-scrollbar::-webkit-scrollbar-track {
+    background: var(--bg-base);
+  }
+  .tally-scrollbar::-webkit-scrollbar-thumb {
+    background: #bcbcbc;
+    border-radius: 0;
+  }
+  .tally-scrollbar::-webkit-scrollbar-thumb:hover {
+    background: var(--accent);
+  }
+
+  /* ══════════════════════════════════════════════
+     TALLYPRIME GLASS & DARK COMPONENT OVERRIDES
+     Forces all dark-themed glassmorphic cards,
+     navy backgrounds, and Tesla-style elements
+     to render in the institutional light palette.
+  ══════════════════════════════════════════════ */
+
+  /* Glass cards → white panels */
+  [data-theme="tallyprime"] .glass,
+  [data-theme="tallyprime"] .tesla-card {
+    background: #ffffff !important;
+    border: 1px solid var(--border-subtle) !important;
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+    box-shadow: none !important;
+  }
+
+  /* Tesla inputs → tally form inputs */
+  [data-theme="tallyprime"] .tesla-input {
+    background: #ffffff !important;
+    border: 1px solid #808080 !important;
+    border-top-color: #404040 !important;
+    border-left-color: #404040 !important;
+    border-radius: 0 !important;
+    color: #212121 !important;
+    font-family: "Segoe UI", Tahoma, sans-serif;
+    font-size: 12px !important;
+  }
+  [data-theme="tallyprime"] .tesla-input:focus {
+    background: #fffde7 !important;
+    border-color: var(--gold) !important;
+    outline: none !important;
+  }
+
+  /* Tesla buttons → tally standard buttons */
+  [data-theme="tallyprime"] .tesla-button {
+    background: var(--accent) !important;
+    color: #ffffff !important;
+    border: 1px solid var(--accent-border) !important;
+    border-radius: 0 !important;
+    font-family: "Segoe UI", Tahoma, sans-serif;
+    font-size: 11px !important;
+  }
+
+  /* Any dark navy/brand container → white */
+  [data-theme="tallyprime"] [class*="bg-navy"],
+  [data-theme="tallyprime"] [class*="bg-brand-navy"],
+  [data-theme="tallyprime"] [class*="bg-bg-float"],
+  [data-theme="tallyprime"] [class*="bg-bg-elevated"] {
+    background-color: #ffffff !important;
+    color: var(--text-primary) !important;
+  }
+
+  /* Hardcoded dark hex containers */
+  [data-theme="tallyprime"] [style*="background: #1a2340"],
+  [data-theme="tallyprime"] [style*="background-color: #1a2340"],
+  [data-theme="tallyprime"] [style*="background: rgb(26, 35, 64)"] {
+    background: #ffffff !important;
+    color: var(--text-primary) !important;
+  }
+
+  /* Text that was white on dark → now dark on light */
+  [data-theme="tallyprime"] .glass .text-white,
+  [data-theme="tallyprime"] .tesla-card .text-white,
+  [data-theme="tallyprime"] [class*="bg-navy"] .text-white,
+  [data-theme="tallyprime"] [class*="bg-brand-navy"] .text-white {
+    color: var(--text-primary) !important;
+  }
+
+  /* White/opacity text labels on dark → muted */
+  [data-theme="tallyprime"] .glass [class*="text-white/"],
+  [data-theme="tallyprime"] .tesla-card [class*="text-white/"],
+  [data-theme="tallyprime"] [class*="bg-navy"] [class*="text-white/"] {
+    color: var(--text-tertiary) !important;
+  }
+
+  /* White/opacity borders on dark → subtle borders */
+  [data-theme="tallyprime"] [class*="border-white/"] {
+    border-color: var(--border-subtle) !important;
+  }
+
+  /* White/opacity backgrounds on dark → light surface */
+  [data-theme="tallyprime"] [class*="bg-white/"] {
+    background-color: var(--bg-elevated) !important;
+  }
+
+  /* Animate-pulse rings that are white → accent */
+  [data-theme="tallyprime"] [class*="bg-white/10"],
+  [data-theme="tallyprime"] [class*="bg-white/5"] {
+    background-color: var(--bg-float) !important;
+  }
+
+  /* Gradient overlays → remove in tally mode */
+  [data-theme="tallyprime"] .bg-gradient-to-r,
+  [data-theme="tallyprime"] .bg-gradient-to-b,
+  [data-theme="tallyprime"] .bg-gradient-to-br,
+  [data-theme="tallyprime"] .bg-gradient-to-tr {
+    background-image: none !important;
+    background-color: var(--bg-elevated) !important;
+  }
+
+  /* Backdrop blur (glassmorphism) → remove */
+  [data-theme="tallyprime"] [class*="backdrop-blur"] {
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+  }
+
+  /* Dark navy icon containers → teal/accent */
+  [data-theme="tallyprime"] [class*="bg-navy/"] {
+    background-color: var(--accent-light) !important;
+  }
+
+  /* text-navy → institutional dark text */
+  [data-theme="tallyprime"] .text-navy {
+    color: var(--text-primary) !important;
+  }
+
+  /* bg-navy (exact, not partial) → accent in tally */
+  [data-theme="tallyprime"] .bg-navy {
+    background-color: var(--accent) !important;
+    color: #ffffff !important;
+  }
+
+  /* Muted text → theme-aware */
+  [data-theme="tallyprime"] .text-muted {
+    color: var(--text-tertiary) !important;
+  }
+
+  /* bg-cream → light base */
+  [data-theme="tallyprime"] .bg-cream {
+    background-color: var(--bg-base) !important;
+  }
+
+  /* brand-navy/brand-gold alignment */
+  [data-theme="tallyprime"] .text-brand-gold {
+    color: var(--gold) !important;
+  }
+  [data-theme="tallyprime"] .bg-brand-navy {
+    background-color: var(--accent) !important;
+    color: #ffffff !important;
+  }
+
+  /* Schemes module: dark navy "performance yield" card */
+  [data-theme="tallyprime"] .tesla-card.bg-brand-navy,
+  [data-theme="tallyprime"] .glass.bg-brand-navy {
+    background: var(--accent) !important;
+    color: #ffffff !important;
+  }
+
+  /* white bg cards that now need tally border */
+  [data-theme="tallyprime"] .bg-white {
+    background-color: #ffffff !important;
+    color: var(--text-primary) !important;
+  }
+
+  /* Remove animation in tally mode for performance */
+  [data-theme="tallyprime"] .animate-pulse,
+  [data-theme="tallyprime"] .animate-spin,
+  [data-theme="tallyprime"] .animate-ping {
+    animation-duration: 2s;
+  }
+
+  /* Rounded shapes → square in institutional mode */
+  [data-theme="tallyprime"] [class*="rounded-["] {
+    border-radius: 0 !important;
+  }
+  [data-theme="tallyprime"] [class*="rounded-3xl"],
+  [data-theme="tallyprime"] [class*="rounded-2xl"],
+  [data-theme="tallyprime"] [class*="rounded-xl"],
+  [data-theme="tallyprime"] [class*="rounded-full"] {
+    border-radius: 0 !important;
+  }
+}
+
+/* ─────────────────────────────────────────────
+   SOVEREIGN COMPONENT LIBRARY
+   Single source of truth for all UI classes.
+   NO inline styles needed in any TSX component.
+───────────────────────────────────────────── */
+@layer components {
+
+  /* ── BUTTON SYSTEM ── */
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    font-weight: 600;
+    cursor: pointer;
+    user-select: none;
+    padding: 6px 16px;
+    font-size: 13px;
+    border-radius: var(--radius-md);
+    transition: opacity 120ms, background 120ms;
+    border: 1px solid transparent;
+    white-space: nowrap;
+  }
+  .btn-primary {
+    background: var(--accent);
+    color: #fff;
+    border-color: var(--accent-border);
+  }
+  .btn-primary:hover { opacity: 0.88; }
+  .btn-secondary {
+    background: var(--bg-float);
+    color: var(--text-primary);
+    border-color: var(--border-default);
+  }
+  .btn-secondary:hover { background: var(--bg-elevated); }
+  .btn-danger {
+    background: var(--red);
+    color: #fff;
+    border-color: var(--red);
+  }
+  .btn-danger:hover { opacity: 0.85; }
+  .btn-ghost {
+    background: transparent;
+    color: var(--text-secondary);
+  }
+  .btn-ghost:hover { background: var(--bg-float); color: var(--text-primary); }
+  .btn-sm { padding: 3px 10px !important; font-size: 11px !important; }
+  .btn-icon { padding: 6px; aspect-ratio: 1; }
+
+  [data-theme="tallyprime"] .btn { border-radius: 0 !important; }
+  [data-theme="tallyprime"] .btn-primary { background: var(--accent); }
+  [data-theme="tallyprime"] .btn-secondary { background: #D4D0C8; color: #000; border: 1px outset #fff !important; }
+
+  /* ── MODULE LAYOUT ── */
+  .module-page { display: flex; flex-direction: column; gap: 20px; }
+  .module-header { display: flex; align-items: flex-start; justify-content: space-between; flex-wrap: wrap; gap: 12px; }
+  .module-title {
+    font-size: 22px;
+    font-weight: 800;
+    color: var(--text-primary);
+    letter-spacing: -0.02em;
+    line-height: 1.2;
+  }
+  .module-subtitle {
+    font-size: 11px;
+    color: var(--text-tertiary);
+    margin-top: 2px;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    font-weight: 600;
+  }
+  .module-toolbar { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+
+  [data-theme="tallyprime"] .module-title {
+    font-size: 13px;
+    font-weight: 700;
+    font-family: "Segoe UI", Tahoma, sans-serif;
+    text-transform: uppercase;
+    color: var(--accent);
+    letter-spacing: 0.05em;
+  }
+
+  /* ── STAT / KPI CARDS ── */
+  .stat-card {
+    background: var(--bg-elevated);
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-md);
+    padding: 16px;
+    transition: border-color 150ms;
+  }
+  .stat-card:hover { border-color: var(--border-default); }
+  .stat-card-value {
+    font-size: 24px;
+    font-weight: 700;
+    color: var(--text-primary);
+    font-family: 'JetBrains Mono', monospace;
+    letter-spacing: -0.02em;
+    line-height: 1.1;
+  }
+  .stat-card-label {
+    font-size: 10px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.07em;
+    color: var(--text-tertiary);
+    margin-bottom: 6px;
+  }
+  .stat-card-delta-up   { color: var(--green); font-size: 11px; font-weight: 600; }
+  .stat-card-delta-down { color: var(--red);   font-size: 11px; font-weight: 600; }
+
+  [data-theme="tallyprime"] .stat-card {
+    background: #fff;
+    border: 1px solid var(--border-subtle);
+    border-top: 2px solid var(--accent);
+    border-radius: 0 !important;
+  }
+
+  /* ── PANEL ── */
+  .panel {
+    background: var(--bg-elevated);
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-md);
+    overflow: hidden;
+  }
+  .panel-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px 14px;
+    border-bottom: 1px solid var(--border-subtle);
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--text-primary);
+  }
+  .panel-body { padding: 14px; }
+
+  [data-theme="tallyprime"] .panel { border-radius: 0 !important; background: #fff; }
+  [data-theme="tallyprime"] .panel-header {
+    background: var(--accent-light);
+    color: var(--accent);
+    font-weight: 700;
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+  }
+
+  /* ── DATA TABLE ── */
+  .data-table { width: 100%; border-collapse: collapse; font-size: 13px; }
+  .data-table thead tr { background: var(--bg-float); border-bottom: 2px solid var(--border-default); }
+  .data-table th {
+    padding: 8px 12px;
+    text-align: left;
+    font-size: 10px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.07em;
+    color: var(--text-tertiary);
+    white-space: nowrap;
+  }
+  .data-table td {
+    padding: 8px 12px;
+    color: var(--text-primary);
+    border-bottom: 1px solid var(--border-subtle);
+  }
+  .data-table tbody tr:hover { background: var(--bg-float); }
+  .data-table tbody tr:last-child td { border-bottom: none; }
+
+  [data-theme="tallyprime"] .data-table thead tr { background: var(--accent); }
+  [data-theme="tallyprime"] .data-table th { color: #fff; background: var(--accent); border-color: #004d40; }
+  [data-theme="tallyprime"] .data-table td { border-bottom: 1px solid #d0d0d0; }
+  [data-theme="tallyprime"] .data-table tbody tr:hover { background: #e0f2f1; }
+  [data-theme="tallyprime"] .data-table tbody tr:nth-child(even) { background: #f5f5f5; }
+
+  /* ── BADGES ── */
+  .badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    padding: 2px 8px;
+    border-radius: 99px;
+    font-size: 10px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    white-space: nowrap;
+  }
+  .badge-green  { background: rgba(34,197,94,0.12);  color: var(--green); }
+  .badge-red    { background: rgba(198,40,40,0.12);   color: var(--red); }
+  .badge-amber  { background: rgba(242,155,18,0.12);  color: var(--gold); }
+  .badge-blue   { background: rgba(59,130,246,0.12);  color: #3b82f6; }
+  .badge-muted  { background: var(--bg-float);         color: var(--text-tertiary); }
+  [data-theme="tallyprime"] .badge { border-radius: 0 !important; border: 1px solid currentColor; }
+
+  /* ── FORM SYSTEM ── */
+  .form-group { display: flex; flex-direction: column; gap: 4px; }
+  .form-label {
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--text-tertiary);
+  }
+  .form-input, .form-select {
+    background: var(--bg-input);
+    border: 1px solid var(--border-default);
+    border-radius: var(--radius-md);
+    color: var(--text-primary);
+    font-size: 13px;
+    padding: 7px 10px;
+    width: 100%;
+    outline: none;
+    transition: border-color 150ms;
+  }
+  .form-input:focus, .form-select:focus { border-color: var(--accent); background: var(--bg-elevated); }
+  .form-input::placeholder { color: var(--text-disabled); }
+  .form-select { cursor: pointer; }
+  .form-section { border-top: 1px solid var(--border-subtle); padding-top: 16px; margin-top: 16px; }
+  .form-actions { display: flex; align-items: center; justify-content: flex-end; gap: 10px; border-top: 1px solid var(--border-subtle); padding-top: 14px; margin-top: 14px; }
+
+  [data-theme="tallyprime"] .form-input,
+  [data-theme="tallyprime"] .form-select {
+    border-radius: 0 !important;
+    border: 1px solid #808080 !important;
+    border-top-color: #404040 !important;
+    border-left-color: #404040 !important;
+    font-family: "Segoe UI", Tahoma, sans-serif;
+    font-size: 12px;
+    background: #fff;
+  }
+  [data-theme="tallyprime"] .form-input:focus,
+  [data-theme="tallyprime"] .form-select:focus {
+    background: #fffde7 !important;
+    border-color: var(--gold) !important;
+  }
+  [data-theme="tallyprime"] .form-label {
+    font-size: 12px;
+    font-weight: 600;
+    color: #333;
+    text-transform: none;
+    letter-spacing: 0;
+  }
+
+  /* ── SEARCH BAR ── */
+  .search-bar {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    background: var(--bg-float);
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-md);
+    padding: 6px 12px;
+    color: var(--text-tertiary);
+    font-size: 13px;
+    transition: border-color 150ms;
+  }
+  .search-bar:focus-within { border-color: var(--accent); }
+  .search-bar input {
+    background: transparent;
+    border: none;
+    outline: none;
+    color: var(--text-primary);
+    font-size: 13px;
+    flex: 1;
+    min-width: 0;
+  }
+  .search-bar input::placeholder { color: var(--text-disabled); }
+  [data-theme="tallyprime"] .search-bar { border-radius: 0 !important; background: #fff; border: 1px solid #808080; }
+
+  /* ── EMPTY STATE ── */
+  .empty-state {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 48px 24px;
+    gap: 12px;
+    color: var(--text-tertiary);
+  }
+  .empty-state-icon {
+    width: 48px;
+    height: 48px;
+    background: var(--bg-float);
+    border-radius: var(--radius-md);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .empty-state-title { font-size: 14px; font-weight: 600; color: var(--text-primary); }
+  .empty-state-text  { font-size: 12px; color: var(--text-tertiary); max-width: 320px; }
+
+  /* ── MONO VALUE ── */
+  .mono-value {
+    font-family: 'JetBrains Mono', monospace;
+    letter-spacing: -0.02em;
+    font-weight: 600;
+    color: var(--text-primary);
+  }
+
+  /* ── SECTION DIVIDER ── */
+  .section-divider {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    color: var(--text-tertiary);
+    font-size: 10px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    margin: 6px 0;
+  }
+  .section-divider::before,
+  .section-divider::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: var(--border-subtle);
+  }
+
+  /* ── LOADING / SPINNER ── */
+  .spinner {
+    width: 20px;
+    height: 20px;
+    border: 2px solid var(--border-subtle);
+    border-top-color: var(--accent);
+    border-radius: 50%;
+    animation: spin 600ms linear infinite;
+  }
+  @keyframes spin { to { transform: rotate(360deg); } }
+
+  /* ════════════════════════════════════════════
+     GOLDEN SAFFRON ACCENT SYSTEM
+     var(--gold): #f29b12  (TallyPrime Amber)
+     Primary signal for: active, selected, focus, highlight
+     Authority color (--accent teal) = Structure
+     Signal color  (--gold amber)   = Action / Attention
+  ════════════════════════════════════════════ */
+
+  /* ── Gold Active Sidebar Item ── */
+  .sidebar-item-active {
+    border-left: 3px solid var(--gold) !important;
+    background: rgba(242, 155, 18, 0.08) !important;
+    color: var(--text-primary) !important;
+  }
+  [data-theme="tallyprime"] .sidebar-item-active {
+    background: #fff8e1 !important;
+    border-left-color: var(--gold) !important;
+    color: #212121 !important;
+  }
+
+  /* ── Gold Tab Underline ── */
+  .tab-active {
+    border-bottom: 2px solid var(--gold);
+    color: var(--text-primary);
+    font-weight: 700;
+  }
+  .tab-inactive {
+    border-bottom: 2px solid transparent;
+    color: var(--text-tertiary);
+  }
+  .tab-inactive:hover {
+    border-bottom-color: var(--border-default);
+    color: var(--text-secondary);
+  }
+
+  /* ── Gold Card Top Accent ── */
+  .card-gold {
+    background: var(--bg-elevated);
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-md);
+    border-top: 2px solid var(--gold);
+    padding: 16px;
+  }
+  [data-theme="tallyprime"] .card-gold {
+    background: #fff;
+    border-radius: 0 !important;
+    border-top-color: var(--gold);
+  }
+
+  /* ── Gold Panel Header Divider ── */
+  .panel-header-gold {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px 14px;
+    border-bottom: 2px solid var(--gold);
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--text-primary);
+    background: var(--bg-elevated);
+  }
+  [data-theme="tallyprime"] .panel-header-gold {
+    background: #fff8e1;
+    color: #5c3d00;
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+  }
+
+  /* ── Gold Section Divider ── */
+  .section-divider-gold {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    color: var(--gold);
+    font-size: 10px;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    margin: 8px 0;
+  }
+  .section-divider-gold::before,
+  .section-divider-gold::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, var(--gold), transparent);
+  }
+  [data-theme="tallyprime"] .section-divider-gold::before,
+  [data-theme="tallyprime"] .section-divider-gold::after {
+    background: var(--gold);
+  }
+
+  /* ── Gold Table Row Highlight (selected/active) ── */
+  .data-table tbody tr.row-selected td {
+    background: rgba(242, 155, 18, 0.07) !important;
+    border-left: 3px solid var(--gold);
+  }
+  [data-theme="tallyprime"] .data-table tbody tr.row-selected td {
+    background: #fff8e1 !important;
+    border-left-color: var(--gold);
+  }
+
+  /* ── Gold Focus Ring (inputs, buttons) ── */
+  .focus-gold:focus,
+  .focus-gold:focus-within {
+    outline: none;
+    border-color: var(--gold) !important;
+    box-shadow: 0 0 0 2px rgba(242, 155, 18, 0.2);
+  }
+  [data-theme="tallyprime"] .focus-gold:focus,
+  [data-theme="tallyprime"] .focus-gold:focus-within {
+    box-shadow: none !important;
+    background: #fffde7 !important;
+  }
+
+  /* ── Gold Stat Card (KPI with gold border-top) ── */
+  .stat-card-gold {
+    background: var(--bg-elevated);
+    border: 1px solid var(--border-subtle);
+    border-top: 3px solid var(--gold);
+    border-radius: var(--radius-md);
+    padding: 16px;
+    transition: border-color 150ms;
+  }
+  [data-theme="tallyprime"] .stat-card-gold {
+    border-radius: 0 !important;
+    background: #fff;
+    border-top: 3px solid var(--gold);
+  }
+
+  /* ── Gold Badge / Tag ── */
+  .badge-gold {
+    display: inline-flex;
+    align-items: center;
+    padding: 2px 10px;
+    background: rgba(242, 155, 18, 0.12);
+    color: var(--gold);
+    border: 1px solid rgba(242, 155, 18, 0.3);
+    font-size: 10px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    border-radius: 99px;
+  }
+  [data-theme="tallyprime"] .badge-gold {
+    border-radius: 0 !important;
+    background: #fff8e1;
+    border-color: var(--gold);
+    color: #5c3d00;
+  }
+
+  /* ── Gold Dot Indicator ── */
+  .gold-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: var(--gold);
+    box-shadow: 0 0 6px rgba(242, 155, 18, 0.5);
+    display: inline-block;
+    flex-shrink: 0;
+  }
+  [data-theme="tallyprime"] .gold-dot {
+    border-radius: 0 !important;
+    box-shadow: none !important;
+  }
+
+  /* ── Gold Sidebar Section Label ── */
+  .sidebar-section-gold {
+    font-size: 9px;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    color: var(--gold);
+    padding: 6px 12px 4px;
+    border-top: 1px solid var(--border-subtle);
+    margin-top: 8px;
+  }
+
+  /* ── Gold Breadcrumb/Status Bar Separator ── */
+  .breadcrumb-sep {
+    color: var(--gold);
+    opacity: 0.6;
+    font-weight: 900;
+    margin: 0 6px;
+    font-size: 10px;
   }
 }
 

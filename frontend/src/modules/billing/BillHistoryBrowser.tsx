@@ -74,9 +74,9 @@ export default function BillHistoryBrowser({ onReprint, onClose }: BillHistoryPr
             placeholder="Search by Bill No / Mobile..."
             value={search}
             onChange={(e) => setSearch(e.target.value)}
-            className="w-full bg-white/5 border border-white/10 rounded-xl px-10 py-3 text-sm text-white outline-none focus:border-gold focus:bg-white/10 transition-all placeholder-white/20"
+            className="w-full bg-white/5 border border-white/10 rounded-xl pl-12 pr-4 py-3 text-sm text-white outline-none focus:border-gold focus:bg-white/10 transition-all placeholder-white/20"
           />
-          <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-white/20" />
+          <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-white/20" />
         </div>
       </div>
 

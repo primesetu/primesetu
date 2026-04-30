@@ -849,8 +849,8 @@ class TallyLedgerMap(Base):
     id: Mapped[uuid.UUID] = mapped_column(primary_key=True, server_default=text("gen_random_uuid()"))
     store_id: Mapped[str] = mapped_column(String, ForeignKey("stores.id"))
     
-    SMRITI-OS_category: Mapped[str] = mapped_column(String) # payment_mode, tax_category, sales_ledger
-    SMRITI-OS_code: Mapped[str] = mapped_column(String) # e.g. "CASH", "GST_18"
+    smriti_os_category: Mapped[str] = mapped_column(String) # payment_mode, tax_category, sales_ledger
+    smriti_os_code: Mapped[str] = mapped_column(String) # e.g. "CASH", "GST_18"
     tally_ledger_name: Mapped[str] = mapped_column(String) # e.g. "Cash in Hand", "Sales @ 18%"
     created_at: Mapped[datetime] = mapped_column(DateTime, server_default=text("now()"))
 

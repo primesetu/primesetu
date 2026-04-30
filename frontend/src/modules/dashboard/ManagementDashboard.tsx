@@ -23,6 +23,7 @@ import {
 import { api } from '@/api/client'
 import { syncEngine } from '@/lib/SyncEngine'
 import { cn } from '@/lib/utils'
+import { useTheme } from '@/hooks/useTheme'
 
 // ── MOCK DATA FOR CINEMATIC FEEL ──
 const salesPulse = [
@@ -49,6 +50,89 @@ export default function ManagementDashboard() {
     { label: 'Risk Alerts', value: stats.low_stock_alerts, sub: 'Action Required', icon: AlertCircle, color: 'text-rose-500', bg: 'bg-rose-500/10' },
   ];
 
+  const { theme } = useTheme();
+  const isTally = theme === 'tallyprime';
+
+  if (isTally) {
+    return (
+      <div className="flex flex-col gap-6 tally-scrollbar pb-10">
+        {/* ── Tally Header Bar ── */}
+        <div className="tp-header px-4 flex items-center justify-between">
+           <div className="flex items-center gap-4">
+              <div className="w-8 h-8 bg-white flex items-center justify-center border border-[var(--accent-border)]">
+                 <Activity className="w-5 h-5 text-[var(--accent)]" />
+              </div>
+              <div>
+                 <h2 className="text-sm font-bold uppercase">Management Cockpit</h2>
+                 <p className="text-[9px] opacity-80 uppercase font-bold tracking-widest">System Status: Optimal · MUM-X01</p>
+              </div>
+           </div>
+           <div className="flex gap-1">
+              {['1H', '1D', '1W', '1M'].map(t => (
+                <button key={t} className={t === '1D' ? "tp-btn-gold" : "tp-btn-white"}>{t}</button>
+              ))}
+           </div>
+        </div>
+
+        {/* ── Tally Grid ── */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+          {metricCards.map((m, i) => (
+            <div key={i} className="tp-card flex flex-col gap-4">
+              <div className="flex justify-between items-start">
+                <div className="text-[10px] font-bold text-[var(--accent)] uppercase tracking-widest">{m.label}</div>
+                <m.icon size={18} className="text-[var(--accent)]" />
+              </div>
+              <div className="text-2xl font-bold text-[var(--text-primary)] font-mono">{m.value}</div>
+              <div className="text-[9px] font-bold text-[var(--text-tertiary)] uppercase">{m.sub}</div>
+            </div>
+          ))}
+        </div>
+
+        {/* ── Tally Reports ── */}
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+          <div className="lg:col-span-2 tp-card">
+            <h3 className="text-xs font-bold text-[var(--accent)] uppercase mb-6 border-b border-[var(--bg-base)] pb-2">Revenue Velocity</h3>
+            <div className="h-[280px] w-full">
+              <ResponsiveContainer width="100%" height="100%">
+                <AreaChart data={salesPulse}>
+                  <CartesianGrid strokeDasharray="0" stroke="var(--bg-base)" />
+                  <XAxis dataKey="time" axisLine={{ stroke: 'var(--border-subtle)' }} tickLine={false} tick={{ fontSize: 9, fontWeight: 700, fill: 'var(--text-primary)' }} />
+                  <YAxis axisLine={{ stroke: 'var(--border-subtle)' }} tickLine={false} tick={{ fontSize: 9, fontWeight: 700, fill: 'var(--text-primary)' }} />
+                  <Tooltip 
+                    contentStyle={{ backgroundColor: 'var(--bg-elevated)', border: '1px solid var(--border-subtle)', borderRadius: '0' }}
+                  />
+                  <Area type="stepAfter" dataKey="val" stroke="var(--accent)" strokeWidth={2} fill="var(--accent-light)" />
+                </AreaChart>
+              </ResponsiveContainer>
+            </div>
+          </div>
+
+          <div className="tp-card">
+            <h3 className="text-xs font-bold text-[var(--accent)] uppercase mb-6 border-b border-[var(--bg-base)] pb-2 text-center">Node Health</h3>
+            <div className="space-y-6">
+              {[
+                { label: 'Database Sync', val: 100, color: 'bg-emerald-600' },
+                { label: 'Auth Latency', val: 98, color: 'bg-[var(--gold)]' },
+                { label: 'Audit Compliance', val: 92, color: 'bg-sky-600' },
+                { label: 'AI Predictor', val: 84, color: 'bg-purple-600' },
+              ].map((h, i) => (
+                <div key={i} className="space-y-2">
+                   <div className="flex justify-between items-end">
+                      <span className="text-[9px] font-bold uppercase text-[var(--text-tertiary)]">{h.label}</span>
+                      <span className="text-xs font-bold text-[var(--text-primary)]">{h.val}%</span>
+                   </div>
+                   <div className="h-2 w-full bg-[var(--bg-base)] border border-[var(--border-subtle)]">
+                      <div className={cn("h-full", h.color)} style={{ width: `${h.val}%` }} />
+                   </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="flex flex-col gap-8 pb-20 animate-in fade-in duration-1000">
       
@@ -60,7 +144,7 @@ export default function ManagementDashboard() {
             <Activity className="w-8 h-8 text-navy animate-pulse" />
           </div>
           <div>
-            <h2 className="text-2xl font-black text-white tracking-tighter uppercase" style={{ fontFamily: 'var(--font-tesla)' }}>Mission Control</h2>
+            <h2 className="module-title text-2xl tracking-tighter uppercase text-white">Mission Control</h2>
             <div className="flex items-center gap-3 mt-1">
                <span className="flex items-center gap-1.5 text-[9px] font-black text-emerald-400 uppercase tracking-widest">
                   <div className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-ping" /> System Optimal
@@ -96,7 +180,7 @@ export default function ManagementDashboard() {
               <div className="text-[10px] font-black text-white/20 uppercase tracking-[0.2em]">{m.sub}</div>
             </div>
             <div className="text-[9px] font-black text-white/30 uppercase tracking-[0.3em] mb-2">{m.label}</div>
-            <div className="text-4xl font-black text-white tracking-tighter" style={{ fontFamily: 'var(--font-tesla)' }}>{m.value}</div>
+            <div className="stat-card-value text-4xl text-white">{m.value}</div>
           </motion.div>
         ))}
       </div>
@@ -151,9 +235,9 @@ export default function ManagementDashboard() {
         </div>
 
         {/* Institutional Health */}
-        <div style={{ background: 'var(--bg-overlay)', border: '1px solid var(--border-subtle)' }} className="rounded-[3rem] p-10 flex flex-col relative overflow-hidden shadow-2xl">
+        <div className="bg-white/[0.02] border border-white/5 rounded-[3rem] p-10 flex flex-col relative overflow-hidden shadow-2xl">
            <div className="absolute -bottom-24 -right-24 w-64 h-64 bg-brand-gold/5 blur-[80px] rounded-full" />
-           <h3 className="text-xl font-black uppercase tracking-widest mb-12 text-center">Node Health</h3>
+           <h3 className="text-xl font-black text-white uppercase tracking-widest mb-12 text-center">Node Health</h3>
            
            <div className="flex-1 flex flex-col justify-center gap-8">
               {[
@@ -190,28 +274,47 @@ export default function ManagementDashboard() {
       </div>
 
       {/* ── 4. PREDICTIVE INSIGHTS BAR ── */}
-      <div className="bg-gradient-to-br from-brand-gold to-saffron p-1 rounded-[3rem] shadow-2xl">
-         <div className="bg-[#0a0a0c] rounded-[2.9rem] p-10 flex flex-col md:flex-row items-center justify-between gap-10">
-            <div className="flex items-center gap-8">
-               <div className="w-20 h-20 bg-white/5 rounded-[2rem] flex items-center justify-center border border-white/10">
-                  <BarChart3 className="w-10 h-10 text-brand-gold" />
-               </div>
-               <div>
-                  <h4 className="text-2xl font-black text-white uppercase tracking-tighter">Inventory Forecast</h4>
-                  <p className="text-[10px] font-black text-white/30 uppercase tracking-[0.4em] mt-2">Next 72 Hours Projection</p>
-               </div>
+      {isTally ? (
+        <div className="tp-card flex flex-col md:flex-row items-center justify-between gap-6 mt-4">
+          <div className="flex items-center gap-6">
+            <div className="w-12 h-12 bg-[var(--accent-light)] flex items-center justify-center border border-[var(--accent)]">
+              <BarChart3 className="w-6 h-6 text-[var(--accent)]" />
             </div>
-
-            <div className="flex-1 max-w-lg bg-white/5 p-6 rounded-3xl border border-white/10">
-               <p className="text-sm font-medium text-white/60 leading-relaxed uppercase tracking-widest">
-                  Demand for <span className="text-brand-gold font-black">Athletic Wear</span> is expected to surge by <span className="text-emerald-400 font-black">24%</span> this weekend. Recommend restocking <span className="text-white font-black underline decoration-brand-gold underline-offset-4">Top 5 SKUs</span>.
-               </p>
+            <div>
+              <h4 className="text-sm font-bold text-[var(--accent)] uppercase">Inventory Forecast</h4>
+              <p className="text-[10px] font-bold text-[var(--text-tertiary)] uppercase tracking-widest mt-1">Next 72 Hours Projection</p>
             </div>
+          </div>
+          <div className="flex-1 bg-[var(--bg-base)] p-4 border border-[var(--border-subtle)]">
+            <p className="text-xs font-bold text-[var(--text-primary)] uppercase leading-relaxed">
+              Demand for <span className="text-[var(--accent)]">Athletic Wear</span> is expected to surge by <span className="text-emerald-600">24%</span> this weekend.
+            </p>
+          </div>
+          <button className="tp-btn-gold px-6 py-2">Action Inventory</button>
+        </div>
+      ) : (
+        <div className="bg-gradient-to-br from-brand-gold to-saffron p-1 rounded-[3rem] shadow-2xl">
+          <div className="bg-[#0a0a0c] rounded-[2.9rem] p-10 flex flex-col md:flex-row items-center justify-between gap-10">
+              <div className="flex items-center gap-8">
+                <div className="w-20 h-20 bg-white/5 rounded-[2rem] flex items-center justify-center border border-white/10">
+                    <BarChart3 className="w-10 h-10 text-brand-gold" />
+                </div>
+                <div>
+                    <h4 className="text-2xl font-black text-white uppercase tracking-tighter">Inventory Forecast</h4>
+                    <p className="text-[10px] font-black text-white/30 uppercase tracking-[0.4em] mt-2">Next 72 Hours Projection</p>
+                </div>
+              </div>
 
-            <button className="h-16 px-10 bg-brand-gold text-navy rounded-2xl font-black text-[10px] uppercase tracking-[0.3em] shadow-lg hover:scale-105 transition-all">Action Inventory</button>
-         </div>
-      </div>
+              <div className="flex-1 max-w-lg bg-white/5 p-6 rounded-3xl border border-white/10">
+                <p className="text-sm font-medium text-white/60 leading-relaxed uppercase tracking-widest">
+                    Demand for <span className="text-brand-gold font-black">Athletic Wear</span> is expected to surge by <span className="text-emerald-400 font-black">24%</span> this weekend. Recommend restocking <span className="text-white font-black underline decoration-brand-gold underline-offset-4">Top 5 SKUs</span>.
+                </p>
+              </div>
 
+              <button className="h-16 px-10 bg-brand-gold text-navy rounded-2xl font-black text-[10px] uppercase tracking-[0.3em] shadow-lg hover:scale-105 transition-all">Action Inventory</button>
+          </div>
+        </div>
+      )}
     </div>
   )
 }

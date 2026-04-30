@@ -88,7 +88,7 @@ export interface ModuleDefinition {
   shortcut?: string
   showInSidebar: boolean
   description?: string
-  category: 'POS' | 'WAREHOUSE' | 'FINANCE' | 'HO' | 'SYSTEM'
+  category: 'POS' | 'WAREHOUSE' | 'CATALOGUE' | 'FINANCE' | 'HO' | 'SYSTEM'
 }
 
 export const MODULES: ModuleDefinition[] = [
@@ -139,13 +139,13 @@ export const MODULES: ModuleDefinition[] = [
     category: 'POS'
   },
   {
-    id: 'registry',
-    label: 'Masters (Registry)',
+    id: 'item_master',
+    label: 'Item Master',
     icon: Package,
-    component: <MasterRegistry />,
+    component: <ItemMaster />,
     roles: ['OWNER', 'MANAGER'],
     showInSidebar: true,
-    category: 'FINANCE'
+    category: 'CATALOGUE'
   },
   {
     id: 'reconcile',
@@ -181,7 +181,7 @@ export const MODULES: ModuleDefinition[] = [
     component: <SchemesModule />,
     roles: ['OWNER', 'MANAGER'],
     showInSidebar: true,
-    category: 'POS'
+    category: 'CATALOGUE'
   },
   {
     id: 'finance',
@@ -218,6 +218,7 @@ export const COMPONENT_MAP: Record<string, React.ReactNode> = {
   'analytics': <AnalyticsModule />,
   'intelligence': <IntelligenceCockpit />,
   'settings': <ConfigModule />,
+  'item_master': <ItemMaster />,
   'customers': <CustomerMaster />,
   'vendors': <VendorMaster />,
   'personnel': <PersonnelMaster />,
@@ -259,6 +260,7 @@ export const ICON_MAP: Record<string, any> = {
   'analytics': BarChart3,
   'intelligence': BarChart3,
   'settings': Settings,
+  'item_master': Package,
   'customers': UserSquare2,
   'vendors': Truck,
   'personnel': UserSquare2,

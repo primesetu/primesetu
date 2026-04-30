@@ -44,7 +44,7 @@ export default function CustomerMaster() {
         />
         <input
           placeholder="Search CRM by Mobile, Name, UID..."
-          className="w-full h-9 pl-9 pr-4 text-sm rounded-lg outline-none transition-colors"
+          className="w-full h-9 pl-12 pr-4 text-sm rounded-lg outline-none transition-colors"
           style={{
             background: 'var(--bg-overlay)',
             border: '1px solid var(--border-subtle)',

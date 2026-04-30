@@ -74,7 +74,7 @@ export default function HODashboard() {
               <button 
                 onClick={() => syncMutation.mutate()}
                 disabled={isSyncing}
-                className="bg-navy text-white px-8 py-3 rounded-2xl font-black text-[11px] uppercase tracking-[2px] shadow-xl shadow-navy/20 hover:scale-105 active:scale-95 transition-all disabled:opacity-50"
+                className="btn btn-primary text-[11px] uppercase tracking-[2px] disabled:opacity-50"
               >
                 Sync Now
               </button>
@@ -100,7 +100,7 @@ export default function HODashboard() {
 
         {/* Right: Compliance */}
         <div className="col-span-4 space-y-6">
-          <div className="bg-cream rounded-3xl p-8 border border-border">
+          <div className="panel rounded-3xl p-8">
             <h3 className="font-serif text-lg font-bold text-navy mb-6">Corporate Compliance</h3>
             <div className="space-y-6">
               <ComplianceCheck label="Daily Inventory Audit" done={true} />
@@ -128,11 +128,11 @@ export default function HODashboard() {
 
 function MetricBox({ label, value, unit }: any) {
   return (
-    <div className="bg-cream/50 rounded-2xl p-5 border border-border group hover:bg-navy hover:border-navy transition-all">
-      <p className="text-[9px] font-black uppercase tracking-widest text-muted group-hover:text-white/40 mb-1">{label}</p>
+    <div className="stat-card rounded-2xl p-5">
+      <p className="stat-card-label">{label}</p>
       <div className="flex items-end gap-1">
-        <span className="text-2xl font-black text-navy group-hover:text-white">{value}</span>
-        <span className="text-[9px] font-bold text-saffron mb-1.5">{unit}</span>
+        <span className="stat-card-value text-2xl">{value}</span>
+        <span className="text-[9px] font-bold mb-1.5" style={{ color: 'var(--gold)' }}>{unit}</span>
       </div>
     </div>
   )

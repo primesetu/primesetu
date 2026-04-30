@@ -9,6 +9,7 @@ import { useQuery } from '@tanstack/react-query'
 import { api } from '@/api/client'
 import { TrendingUp, Package, Receipt, AlertTriangle, Wifi, Activity, ArrowUpRight, ArrowDownRight } from 'lucide-react'
 import { motion } from 'framer-motion'
+import { cn } from '@/lib/utils'
 
 const container = { hidden: {}, show: { transition: { staggerChildren: 0.06 } } }
 const item = { hidden: { opacity: 0, y: 12 }, show: { opacity: 1, y: 0, transition: { duration: 0.25, ease: [0.16, 1, 0.3, 1] } } }
@@ -74,16 +75,16 @@ export default function Dashboard() {
       {/* ── Header ── */}
       <motion.div variants={item} className="flex items-end justify-between">
         <div>
-          <p className="text-sm font-medium mb-1" style={{ color: 'var(--text-tertiary)' }}>
+          <p className="text-tp-tertiary text-sm font-medium mb-1">
             {greeting}, {store?.name || 'Manager'}
           </p>
-          <h1 className="text-2xl font-semibold tracking-tight" style={{ color: 'var(--text-primary)', letterSpacing: '-0.02em' }}>
+          <h1 className="text-tp-primary text-2xl font-semibold tracking-tight">
             Overview
           </h1>
         </div>
         <div className="text-right">
-          <p className="text-xs" style={{ color: 'var(--text-tertiary)' }}>Business Date</p>
-          <p className="text-sm font-semibold" style={{ color: 'var(--text-primary)' }}>{today}</p>
+          <p className="text-tp-tertiary text-xs">Business Date</p>
+          <p className="text-tp-primary text-sm font-semibold">{today}</p>
         </div>
       </motion.div>
 
@@ -93,28 +94,29 @@ export default function Dashboard() {
           <motion.div
             key={i}
             variants={item}
-            className="p-4 rounded-xl cursor-default group transition-colors"
-            style={{
-              background: 'var(--bg-overlay)',
-              border: '1px solid var(--border-subtle)',
-            }}
-            whileHover={{ borderColor: 'var(--border-default)' }}
+            className="card-base p-4 cursor-default group transition-colors hover:border-border-default"
           >
             <div className="flex items-start justify-between mb-4">
-              <div className="w-8 h-8 rounded-lg flex items-center justify-center" style={{ background: kpi.accentBg }}>
+              <div 
+                className="w-8 h-8 rounded-lg flex items-center justify-center" 
+                style={{ background: kpi.accentBg } as React.CSSProperties}
+              >
                 <kpi.icon size={15} style={{ color: kpi.accent }} strokeWidth={1.75} />
               </div>
               {kpi.change !== null && (
-                <div className={`flex items-center gap-0.5 text-xs font-medium`} style={{ color: kpi.change > 0 ? 'var(--green)' : 'var(--red)' }}>
+                <div className={cn(
+                  "flex items-center gap-0.5 text-xs font-medium",
+                  kpi.change > 0 ? "text-[var(--green)]" : "text-[var(--red)]"
+                )}>
                   {kpi.change > 0 ? <ArrowUpRight size={13} /> : <ArrowDownRight size={13} />}
                   {Math.abs(kpi.change)}%
                 </div>
               )}
             </div>
-            <div className="text-[11px] font-medium uppercase tracking-wider mb-1" style={{ color: 'var(--text-tertiary)' }}>
+            <div className="tp-label mb-1">
               {kpi.label}
             </div>
-            <div className="text-2xl font-semibold tracking-tight" style={{ fontFamily: "'JetBrains Mono', monospace", color: 'var(--text-primary)', letterSpacing: '-0.02em' }}>
+            <div className="text-tp-primary text-tp-mono text-2xl font-semibold tracking-tight">
               {kpi.value}
             </div>
           </motion.div>
@@ -127,12 +129,11 @@ export default function Dashboard() {
         {/* Recent Transactions */}
         <motion.div
           variants={item}
-          className="lg:col-span-2 rounded-xl overflow-hidden"
-          style={{ background: 'var(--bg-overlay)', border: '1px solid var(--border-subtle)' }}
+          className="lg:col-span-2 card-base rounded-xl overflow-hidden"
         >
-          <div className="flex items-center justify-between px-5 py-4" style={{ borderBottom: '1px solid var(--border-subtle)' }}>
-            <h3 className="text-sm font-semibold" style={{ color: 'var(--text-primary)' }}>Recent Transactions</h3>
-            <button className="text-xs font-medium transition-colors" style={{ color: 'var(--accent-light)' }}>
+          <div className="flex items-center justify-between px-5 py-4 border-b border-border-subtle">
+            <h3 className="text-tp-primary text-sm font-semibold">Recent Transactions</h3>
+            <button className="text-tp-accent text-xs font-medium transition-colors hover:opacity-80">
               View all →
             </button>
           </div>
@@ -140,23 +141,25 @@ export default function Dashboard() {
             {recentBills.map((bill, i) => (
               <div
                 key={i}
-                className="flex items-center gap-4 px-5 py-3 transition-colors hover:bg-[var(--bg-float)] cursor-pointer"
-                style={{ borderBottom: i < recentBills.length - 1 ? '1px solid var(--border-subtle)' : 'none' }}
+                className={cn(
+                  "flex items-center gap-4 px-5 py-3 transition-colors hover:bg-[var(--bg-float)] cursor-pointer",
+                  i < recentBills.length - 1 && "border-b border-border-subtle"
+                )}
               >
-                <div className="w-9 h-9 rounded-lg flex items-center justify-center shrink-0" style={{ background: 'var(--bg-float)', border: '1px solid var(--border-subtle)' }}>
-                  <Receipt size={14} style={{ color: 'var(--text-tertiary)' }} />
+                <div className="w-9 h-9 rounded-lg flex items-center justify-center shrink-0 bg-[var(--bg-float)] border border-border-subtle">
+                  <Receipt size={14} className="text-tp-tertiary" />
                 </div>
                 <div className="flex-1 min-w-0">
-                  <div className="text-sm font-medium truncate" style={{ color: 'var(--text-primary)' }}>{bill.customer}</div>
-                  <div className="text-xs truncate" style={{ color: 'var(--text-tertiary)' }}>{bill.items}</div>
+                  <div className="text-tp-primary text-sm font-medium truncate">{bill.customer}</div>
+                  <div className="text-tp-tertiary text-xs truncate">{bill.items}</div>
                 </div>
                 <div className="text-right shrink-0">
-                  <div className="text-sm font-semibold" style={{ fontFamily: "'JetBrains Mono', monospace", color: 'var(--text-primary)' }}>
+                  <div className="text-tp-primary text-tp-mono text-sm font-semibold">
                     ₹{bill.amount.toLocaleString('en-IN')}
                   </div>
-                  <div className="text-[10px]" style={{ color: 'var(--green)' }}>{bill.method}</div>
+                  <div className="text-[10px] text-[var(--green)] font-bold">{bill.method}</div>
                 </div>
-                <div className="text-[11px] shrink-0 w-16 text-right" style={{ color: 'var(--text-tertiary)' }}>{bill.time}</div>
+                <div className="text-tp-tertiary text-[11px] shrink-0 w-16 text-right">{bill.time}</div>
               </div>
             ))}
           </div>
@@ -165,11 +168,10 @@ export default function Dashboard() {
         {/* System Status */}
         <motion.div
           variants={item}
-          className="rounded-xl overflow-hidden"
-          style={{ background: 'var(--bg-overlay)', border: '1px solid var(--border-subtle)' }}
+          className="card-base rounded-xl overflow-hidden"
         >
-          <div className="px-5 py-4" style={{ borderBottom: '1px solid var(--border-subtle)' }}>
-            <h3 className="text-sm font-semibold" style={{ color: 'var(--text-primary)' }}>System Status</h3>
+          <div className="px-5 py-4 border-b border-border-subtle">
+            <h3 className="text-tp-primary text-sm font-semibold">System Status</h3>
           </div>
           <div className="px-5 py-4 space-y-4">
             {[
@@ -180,20 +182,20 @@ export default function Dashboard() {
             ].map((row, i) => (
               <div key={i} className="flex items-center justify-between">
                 <div className="flex items-center gap-2">
-                  <div className="w-1.5 h-1.5 rounded-full" style={{ background: row.ok ? 'var(--green)' : 'var(--red)' }} />
-                  <span className="text-sm" style={{ color: 'var(--text-secondary)' }}>{row.label}</span>
+                  <div className={cn("w-1.5 h-1.5 rounded-full", row.ok ? "bg-[var(--green)]" : "bg-[var(--red)]")} />
+                  <span className="text-tp-secondary text-sm">{row.label}</span>
                 </div>
-                <span className="text-xs font-medium" style={{ color: row.ok ? 'var(--green)' : 'var(--red)' }}>{row.status}</span>
+                <span className={cn("text-xs font-medium", row.ok ? "text-[var(--green)]" : "text-[var(--red)]")}>{row.status}</span>
               </div>
             ))}
           </div>
 
-          <div className="px-5 py-4 mx-4 mb-4 rounded-lg" style={{ background: 'var(--bg-float)', border: '1px solid var(--border-subtle)' }}>
+          <div className="mx-4 mb-4 p-4 rounded-lg bg-[var(--bg-float)] border border-border-subtle">
             <div className="flex items-center gap-2 mb-2">
-              <Activity size={13} style={{ color: 'var(--accent-light)' }} />
-              <span className="text-xs font-medium" style={{ color: 'var(--text-primary)' }}>Operations Hub</span>
+              <Activity size={13} className="text-tp-accent" />
+              <span className="text-tp-primary text-xs font-medium">Operations Hub</span>
             </div>
-            <p className="text-xs" style={{ color: 'var(--text-tertiary)' }}>All systems nominal. Sovereign mode active.</p>
+            <p className="text-tp-tertiary text-xs">All systems nominal. Sovereign mode active.</p>
           </div>
         </motion.div>
       </div>

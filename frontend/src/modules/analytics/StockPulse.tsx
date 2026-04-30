@@ -70,9 +70,9 @@ export default function StockPulse() {
 
       {/* Main Pulse Table */}
       <div className="glass rounded-[3.5rem] shadow-2xl overflow-hidden border border-white/50">
-        <div className="bg-[#1a2340] px-10 py-6 flex justify-between items-center text-white">
+        <div className="panel-header px-10 py-6 flex justify-between items-center">
           <h3 className="text-xl font-serif font-black uppercase tracking-tight">Intelligence Ledger</h3>
-          <span className="text-[10px] text-white/40 font-black tracking-[0.2em]">30-Day Velocity Moving Average</span>
+          <span className="text-[10px] font-black tracking-[0.2em] opacity-60">30-Day Velocity Moving Average</span>
         </div>
 
         <div className="overflow-x-auto">

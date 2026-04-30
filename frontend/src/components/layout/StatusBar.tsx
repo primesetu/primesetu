@@ -11,7 +11,9 @@
 
 import React, { useState } from 'react';
 import { useNodeSync } from '@/hooks/useNodeSync';
+import { cn } from '@/lib/utils';
 import SyncManagerModal from './SyncManagerModal';
+import { useTheme } from '@/hooks/useTheme';
 
 interface StatusBarProps {
   activeTab: string;
@@ -19,18 +21,27 @@ interface StatusBarProps {
 
 const StatusBar: React.FC<StatusBarProps> = ({ activeTab }) => {
   const sync = useNodeSync();
+  const { theme } = useTheme();
   const [showSync, setShowSync] = useState(false);
+  const isTally = theme === 'tallyprime';
 
   const statusMap: Record<string, { color: string; label: string }> = {
     online:  { color: 'var(--green)',  label: 'HO Pulse Active' },
-    syncing: { color: 'var(--yellow)', label: 'HO Syncing...' },
+    syncing: { color: 'var(--gold)',   label: 'HO Syncing...' },
     offline: { color: 'var(--red)',    label: 'HO Offline' },
   };
 
   const { color: pulseColor, label: pulseLabel } = statusMap[sync.status] ?? statusMap.offline;
 
   return (
-    <div className="fixed bottom-0 left-0 right-0 h-16 z-[9999] flex items-center px-10 gap-12 backdrop-blur-md" style={{ background: 'var(--bg-elevated)', borderTop: '2px solid rgba(99,102,241,0.2)' }}>
+    <div 
+      className={cn(
+        "fixed bottom-0 left-0 right-0 z-[9999] flex items-center px-10 transition-all",
+        isTally 
+          ? "tp-status-bar gap-6" 
+          : "h-16 backdrop-blur-md bg-[var(--bg-elevated)] border-t-2 border-[rgba(99,102,241,0.2)] gap-12"
+      )} 
+    >
       <div className="flex gap-8">
         {[
           { key: 'F1',  label: 'Billing' },
@@ -40,9 +51,18 @@ const StatusBar: React.FC<StatusBarProps> = ({ activeTab }) => {
           { key: 'F10', label: 'Setup' },
           { key: 'F12', label: 'DayEnd' }
         ].map(btn => (
-          <div key={btn.key} className={`flex items-center gap-3 group cursor-pointer ${activeTab === btn.label.toLowerCase() ? 'opacity-100' : 'opacity-60 hover:opacity-100'} transition-opacity`}>
-             <span className="font-mono font-semibold text-lg group-hover:scale-125 transition-transform" style={{ color: 'var(--accent-light)' }}>{btn.key}</span>
-             <span className="font-semibold text-xs uppercase tracking-wider transition-colors" style={{ color: 'var(--text-secondary)' }}>{btn.label}</span>
+          <div key={btn.key} className={cn(
+            "flex items-center gap-3 group cursor-pointer transition-opacity",
+            activeTab === btn.label.toLowerCase() ? 'opacity-100' : 'opacity-60 hover:opacity-100'
+          )}>
+             <span className={cn(
+               "font-mono font-semibold",
+               isTally ? "text-[11px] text-[var(--gold)]" : "text-lg text-[var(--accent-light)]",
+             )}>{btn.key}</span>
+             <span className={cn(
+               "font-semibold uppercase tracking-wider transition-colors",
+               isTally ? "text-[10px] text-white" : "text-xs text-[var(--text-secondary)]"
+             )}>{btn.label}</span>
           </div>
         ))}
       </div>

@@ -178,7 +178,7 @@ const PriceGroups: React.FC = () => {
               ref={searchInputRef}
               type="text" 
               placeholder="Search Code / Name... [F3]"
-              className="w-80 bg-white border-2 border-navy/5 rounded-[2rem] py-5 pl-14 pr-6 text-xs font-black outline-none focus:border-brand-gold transition-all shadow-sm uppercase tracking-widest"
+              className="w-80 bg-white border-2 border-navy/5 rounded-[2rem] py-5 pl-12 pr-6 text-xs font-black outline-none focus:border-brand-gold transition-all shadow-sm uppercase tracking-widest"
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
             />

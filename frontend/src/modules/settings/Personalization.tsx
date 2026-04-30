@@ -30,18 +30,18 @@ const THEMES = [
     }
   },
   {
-    id: 'shoper9' as const,
-    name: 'Shoper 9 Classic',
-    tagline: 'Authentic Windows XP ERP — Zero Distraction',
+    id: 'tallyprime' as const,
+    name: 'TallyPrime Institutional',
+    tagline: 'Enterprise ERP Parity — Zero Distraction',
     icon: Monitor,
     preview: {
-      bg: '#ECE9D8',
-      sidebar: '#003399',
-      header: '#003399',
-      primary: '#D4D0C8',
-      text: '#000000',
+      bg: '#f0f1f1',
+      sidebar: '#008c85',
+      header: '#008c85',
+      primary: '#f29b12',
+      text: '#212121',
       card: '#FFFFFF',
-      border: '#808080',
+      border: '#bcbcbc',
     }
   }
 ];
@@ -55,14 +55,14 @@ const ACCENTS = [
 
 // Mini preview of the billing terminal in each theme
 function ThemePreview({ preview, themeName }: { preview: typeof THEMES[0]['preview'], themeName: string }) {
-  const isClassic = themeName === 'Shoper 9 Classic';
-  const br = isClassic ? '0px' : '12px';
-  const brSm = isClassic ? '0px' : '8px';
-  const shadow = isClassic ? 'none' : '0 4px 20px rgba(0,0,0,0.4)';
-  const font = isClassic ? "'Tahoma', Arial, sans-serif" : "'Inter', sans-serif";
-  const btnBg = isClassic ? '#D4D0C8' : preview.primary;
-  const btnColor = isClassic ? '#000' : '#FFF';
-  const btnBorder = isClassic ? '2px outset #D4D0C8' : 'none';
+  const isInstitutional = themeName === 'TallyPrime Institutional';
+  const br = isInstitutional ? '0px' : '12px';
+  const brSm = isInstitutional ? '0px' : '8px';
+  const shadow = isInstitutional ? 'none' : '0 4px 20px rgba(0,0,0,0.4)';
+  const font = isInstitutional ? "'Segoe UI', Tahoma, sans-serif" : "'Inter', sans-serif";
+  const btnBg = isInstitutional ? '#f29b12' : preview.primary;
+  const btnColor = isInstitutional ? '#000' : '#FFF';
+  const btnBorder = isInstitutional ? '1px solid #000' : 'none';
 
   return (
     <div
@@ -97,7 +97,7 @@ function ThemePreview({ preview, themeName }: { preview: typeof THEMES[0]['previ
           <div style={{ flex: 2, background: preview.card, border: `1px solid ${preview.border}`, borderRadius: brSm, padding: 4 }}>
             {[...Array(3)].map((_, i) => (
               <div key={i} style={{ display: 'flex', gap: 4, marginBottom: 3 }}>
-                <div style={{ flex: 2, height: 8, background: isClassic ? '#000' : preview.text, opacity: 0.3, borderRadius: 2 }} />
+                <div style={{ flex: 2, height: 8, background: isInstitutional ? '#000' : preview.text, opacity: 0.3, borderRadius: 2 }} />
                 <div style={{ flex: 1, height: 8, background: preview.primary, opacity: 0.6, borderRadius: 2 }} />
               </div>
             ))}
@@ -105,7 +105,7 @@ function ThemePreview({ preview, themeName }: { preview: typeof THEMES[0]['previ
           {/* Right panel */}
           <div style={{ flex: 1, display: 'flex', flexDirection: 'column', gap: 4 }}>
             <div style={{ height: 32, background: preview.card, border: `1px solid ${preview.border}`, borderRadius: brSm, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-              <span style={{ fontSize: 10, color: isClassic ? '#000' : preview.text, fontWeight: 'bold', fontFamily: isClassic ? 'Tahoma' : 'monospace' }}>₹1,240</span>
+              <span style={{ fontSize: 10, color: isInstitutional ? '#000' : preview.text, fontWeight: 'bold', fontFamily: isInstitutional ? 'Segoe UI' : 'monospace' }}>₹1,240</span>
             </div>
             <div style={{ flex: 1, background: btnBg, border: btnBorder, borderRadius: brSm, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
               <span style={{ fontSize: 9, color: btnColor, fontWeight: 'bold' }}>F10 PAY</span>
@@ -113,9 +113,9 @@ function ThemePreview({ preview, themeName }: { preview: typeof THEMES[0]['previ
           </div>
         </div>
         {/* HotkeyBar */}
-        <div style={{ height: 18, background: isClassic ? '#D4D0C8' : preview.header, borderTop: `1px solid ${preview.border}`, display: 'flex', alignItems: 'center', padding: '0 8px', gap: 8 }}>
+        <div style={{ height: 18, background: isInstitutional ? '#225c5a' : preview.header, borderTop: `1px solid ${preview.border}`, display: 'flex', alignItems: 'center', padding: '0 8px', gap: 8 }}>
           {['F2', 'F5', 'F8', 'F10'].map(k => (
-            <span key={k} style={{ fontSize: 7, color: isClassic ? '#000' : 'rgba(255,255,255,0.5)', fontFamily: 'monospace', background: isClassic ? '#A0A0A0' : 'rgba(255,255,255,0.1)', padding: '0 3px', borderRadius: brSm, border: isClassic ? '1px solid #808080' : 'none' }}>{k}</span>
+            <span key={k} style={{ fontSize: 7, color: isInstitutional ? '#ffc107' : 'rgba(255,255,255,0.5)', fontFamily: 'monospace', background: isInstitutional ? '#004d40' : 'rgba(255,255,255,0.1)', padding: '0 3px', borderRadius: brSm, border: isInstitutional ? 'none' : 'none' }}>{k}</span>
           ))}
         </div>
       </div>
@@ -221,18 +221,18 @@ export default function Personalization() {
         </motion.section>
       )}
 
-      {/* Shoper 9 note */}
-      {theme === 'shoper9' && (
+      {/* TallyPrime Institutional note */}
+      {theme === 'tallyprime' && (
         <motion.div
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
-          className="p-4 border border-border rounded-xl bg-cream/50 text-sm text-muted flex items-start gap-3"
+          className="p-4 border border-border rounded-xl bg-emerald-50 text-sm text-emerald-900 flex items-start gap-3"
         >
-          <Monitor className="w-5 h-5 mt-0.5 shrink-0 text-navy" />
+          <Monitor className="w-5 h-5 mt-0.5 shrink-0 text-[#008c85]" />
           <div>
-            <strong className="text-navy">Classic Mode Active</strong> — All animations disabled.
-            Fonts set to Tahoma 8pt. Buttons render with authentic Windows XP 3D borders.
-            Accents are locked to Classic Navy.
+            <strong className="text-[#008c85]">Institutional Mode Active</strong> — All animations disabled for maximum speed.
+            Fonts set to Segoe UI. Headers use Tally Institutional Teal.
+            Hotkey labels are locked to Golden Amber.
           </div>
         </motion.div>
       )}

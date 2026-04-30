@@ -70,8 +70,8 @@ export default function StockReports() {
         <div className="bg-navy px-10 py-6 flex justify-between items-center text-white">
           <h3 className="font-serif font-black uppercase tracking-tight">Stock Analysis Ledger</h3>
           <div className="relative">
-            <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-3 h-3 text-white/40" />
-            <input placeholder="Search Brand..." className="bg-white/10 border border-white/10 rounded-lg pl-8 pr-4 py-1.5 text-[10px] outline-none focus:bg-white/20" />
+            <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-white/40" />
+            <input placeholder="Search Brand..." className="w-64 bg-white/10 border border-white/10 rounded-lg pl-12 pr-4 py-1.5 text-[10px] outline-none focus:bg-white/20 transition-all" />
           </div>
         </div>
         <table className="w-full text-left">

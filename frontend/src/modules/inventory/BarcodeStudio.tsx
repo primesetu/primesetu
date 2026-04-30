@@ -261,7 +261,7 @@ const BarcodeStudio: React.FC<BarcodeStudioProps> = ({ onClose, initialItems = [
                    ref={searchInputRef}
                    type="text" 
                    placeholder="SCAN OR TYPE SKU..."
-                   className="w-full bg-navy/5 border-2 border-transparent focus:border-brand-gold/20 rounded-[2rem] py-5 pl-16 pr-8 text-sm font-black text-navy outline-none transition-all placeholder:text-navy/20 uppercase tracking-widest"
+                   className="w-full bg-navy/5 border-2 border-transparent focus:border-brand-gold/20 rounded-[2rem] py-5 pl-12 pr-8 text-sm font-black text-navy outline-none transition-all placeholder:text-navy/20 uppercase tracking-widest"
                    value={searchTerm}
                    onChange={(e) => setSearchTerm(e.target.value)}
                  />

@@ -11,7 +11,7 @@
 
 import React, { createContext, useContext, useEffect, useState } from 'react';
 
-type Theme = 'tesla' | 'shoper9';
+type Theme = 'tesla' | 'tallyprime' | 'dark';
 type Accent = 'default' | 'gold' | 'cream' | 'crimson';
 
 interface ThemeContextType {
@@ -25,26 +25,23 @@ const ThemeContext = createContext<ThemeContextType | undefined>(undefined);
 
 export function ThemeProvider({ children }: { children: React.ReactNode }) {
   const [theme, setThemeState] = useState<Theme>(() => {
-    const savedTheme = localStorage.getItem('SMRITI-OS_theme');
-    return (savedTheme as Theme) || 'tesla';
+    let savedTheme = localStorage.getItem('smriti-theme') || 'dark';
+    if (savedTheme === 'shoper9') savedTheme = 'tallyprime';
+    return savedTheme as Theme;
   });
 
   const [accent, setAccentState] = useState<Accent>(() => {
-    const savedAccent = localStorage.getItem('SMRITI-OS_accent');
+    const savedAccent = localStorage.getItem('smriti-accent');
     return (savedAccent as Accent) || 'default';
   });
 
   useEffect(() => {
-    localStorage.setItem('SMRITI-OS_theme', theme);
-    if (theme === 'shoper9') {
-      document.documentElement.setAttribute('data-theme', 'shoper9');
-    } else {
-      document.documentElement.removeAttribute('data-theme');
-    }
+    localStorage.setItem('smriti-theme', theme);
+    document.documentElement.setAttribute('data-theme', theme);
   }, [theme]);
 
   useEffect(() => {
-    localStorage.setItem('SMRITI-OS_accent', accent);
+    localStorage.setItem('smriti-accent', accent);
     if (accent !== 'default') {
       document.documentElement.setAttribute('data-accent', accent);
     } else {

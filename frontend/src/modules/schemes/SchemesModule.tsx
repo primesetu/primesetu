@@ -63,7 +63,7 @@ export default function SchemesModule() {
               <div className="px-3 py-1 bg-brand-navy text-brand-gold text-[9px] font-black uppercase tracking-[0.2em] rounded-md">Growth Engine</div>
               <Sparkles className="w-4 h-4 text-brand-gold animate-pulse" />
            </div>
-           <h1 className="text-5xl font-black text-navy tracking-tighter" style={{ fontFamily: 'var(--font-tesla)' }}>Promotions Cockpit</h1>
+           <h1 className="module-title text-5xl tracking-tighter">Promotions Cockpit</h1>
            <p className="text-xs text-navy/40 font-bold uppercase tracking-widest mt-4 flex items-center gap-2">
              <Trophy className="w-3.5 h-3.5" /> Shoper 9 Compatible Scheme Engine Active
            </p>

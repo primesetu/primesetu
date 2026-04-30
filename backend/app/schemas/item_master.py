@@ -60,6 +60,18 @@ class PriceLevelUpdate(BaseModel):
     price_paise: int = Field(..., gt=0)
     valid_from: date = Field(default_factory=date.today)
 
+class ItemBatchCreate(BaseModel):
+    items: List[ItemCreate]
+    omit_duplicates: bool = Field(default=True)
+    apply_common_data: bool = Field(default=False)
+
+class BatchCreateResponse(BaseModel):
+    success_count: int
+    skipped_count: int
+    error_count: int
+    items: List[ItemResponse] = []
+    skipped_codes: List[str] = []
+
 class StockMatrixResponse(BaseModel):
     item_id: UUID
     matrix: List[StockMatrixEntry]

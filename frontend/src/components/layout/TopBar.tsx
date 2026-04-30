@@ -10,6 +10,7 @@ import { useMenu } from '@/hooks/useMenu';
 import { useTranslation } from 'react-i18next';
 import { MODULES } from '@/lib/ModuleRegistry';
 import { useTheme } from '@/hooks/useTheme';
+import { cn } from '@/lib/utils';
 
 interface TopBarProps {
   activeTab: string;
@@ -44,12 +45,10 @@ export default function TopBar({
 
   return (
     <header
-      className="fixed top-0 left-[var(--sw)] right-0 z-[100] flex items-center px-4 gap-4 transition-all duration-200"
-      style={{
-        height: 'var(--topbar-h)',
-        background: 'var(--bg-base)',
-        borderBottom: '1px solid var(--border-subtle)',
-      }}
+      className={cn(
+        "fixed top-0 left-0 md:left-[var(--sw)] right-0 lg:right-[120px] z-[100] flex items-center px-4 gap-4 transition-all duration-300",
+        theme === 'tallyprime' ? "tp-header" : "h-[var(--topbar-h)] bg-[var(--bg-base)] border-b border-[var(--border-subtle)]"
+      )}
     >
       {/* ── Hamburger toggle ── */}
       <button
@@ -100,23 +99,19 @@ export default function TopBar({
                     <button
                       key={module.id}
                       onClick={() => { setActiveTab(module.id); setOpenMenu(null); }}
-                      className="w-full flex items-center gap-3 px-3 py-2 text-left transition-colors hover:bg-[var(--bg-float)] group"
+                      className="w-full flex items-center gap-3 px-3 py-2 text-left transition-colors hover:bg-[var(--bg-float)] group text-[var(--text-primary)]"
                     >
-                      <div className="w-7 h-7 rounded-md flex items-center justify-center shrink-0"
-                           style={{ background: 'var(--bg-float)' }}>
-                        <module.icon size={13} className="text-[var(--text-secondary)] group-hover:text-[var(--accent-light)]" />
+                      <div className="w-7 h-7 flex items-center justify-center shrink-0">
+                        <module.icon size={13} />
                       </div>
                       <div>
-                        <div className="text-sm font-medium text-[var(--text-primary)] leading-tight">{module.label}</div>
+                        <div className="text-sm font-medium leading-tight">{module.label}</div>
                         {module.shortcut && (
-                          <div className="text-[10px] font-mono text-[var(--text-tertiary)]">{module.shortcut}</div>
+                          <div className="text-[10px] font-mono" style={{ color: 'var(--text-tertiary)' }}>{module.shortcut}</div>
                         )}
                       </div>
                     </button>
                   ))}
-                  {MODULES.filter(m => m.category === cat.id).length === 0 && (
-                    <div className="px-3 py-4 text-center text-xs text-[var(--text-tertiary)]">No modules</div>
-                  )}
                 </motion.div>
               )}
             </AnimatePresence>
@@ -125,54 +120,67 @@ export default function TopBar({
       </nav>
 
       {/* ── Divider ── */}
-      <div className="w-px h-4 shrink-0" style={{ background: 'var(--border-default)' }} />
+      <div className="w-px h-4 shrink-0 bg-white/20" />
 
       {/* ── Breadcrumb ── */}
-      <div className="flex items-center gap-1.5 text-xs overflow-hidden flex-1">
-        <span className="text-[var(--text-tertiary)] shrink-0">SMRITI-OS</span>
-        <span className="text-[var(--border-default)]">/</span>
-        <span className="text-[var(--text-primary)] font-medium truncate">
-          {activeModule?.label || 'Dashboard'}
-        </span>
+      {/* ── Breadcrumb / Center Area ── */}
+      <div className="flex-1 flex justify-center overflow-hidden">
+        {document.documentElement.getAttribute('data-theme') === 'tallyprime' ? (
+          <button
+            onClick={() => setIsCommandBarOpen?.(true)}
+            className="flex items-center gap-4 px-6 py-1 bg-black/20 hover:bg-black/30 border border-white/20 transition-all group"
+          >
+            <span className="text-[10px] font-black uppercase tracking-widest text-white/80">Go To</span>
+            <div className="h-4 w-px bg-white/20" />
+            <div className="flex items-center gap-2">
+              <Search size={12} className="text-[var(--gold)]" />
+              <span className="text-[10px] font-mono font-bold" style={{ color: 'var(--gold)' }}>Alt+G</span>
+            </div>
+          </button>
+        ) : (
+          <div className="flex items-center gap-1.5 text-xs text-[var(--text-tertiary)]">
+            <span>SMRITI-OS</span>
+            <span>/</span>
+            <span className="font-medium truncate text-[var(--text-primary)]">
+              {activeModule?.label || 'Dashboard'}
+            </span>
+          </div>
+        )}
       </div>
 
       {/* ── Right actions ── */}
       <div className="flex items-center gap-1 shrink-0">
-        {/* Search */}
-        <button
-          onClick={() => setIsCommandBarOpen?.(true)}
-          className="flex items-center gap-2 px-3 py-1.5 rounded-md text-xs font-medium transition-colors text-[var(--text-tertiary)] hover:text-[var(--text-primary)] hover:bg-[var(--bg-float)] border border-transparent hover:border-[var(--border-default)]"
-        >
-          <Search size={13} />
-          <span className="hidden md:inline">Search</span>
-          <span className="font-mono text-[10px] px-1 py-0.5 rounded" style={{ background: 'var(--bg-float)', border: '1px solid var(--border-subtle)' }}>F3</span>
-        </button>
+        {document.documentElement.getAttribute('data-theme') !== 'tallyprime' && (
+          <button
+            onClick={() => setIsCommandBarOpen?.(true)}
+            className="flex items-center gap-2 px-3 py-1.5 rounded-md text-xs font-medium transition-colors text-[var(--text-tertiary)] hover:text-[var(--text-primary)] hover:bg-[var(--bg-float)]"
+          >
+            <Search size={13} />
+            <span className="hidden md:inline">Search</span>
+            <span className="font-mono text-[10px] px-1 py-0.5 rounded" style={{ background: 'var(--bg-float)', border: '1px solid var(--border-subtle)' }}>F3</span>
+          </button>
+        )}
 
-        {/* Theme toggle */}
         <button
-          onClick={() => setTheme(theme === 'tesla' ? 'shoper9' : 'tesla')}
-          className="p-2 rounded-md transition-colors text-[var(--text-tertiary)] hover:text-[var(--text-primary)] hover:bg-[var(--bg-float)]"
-          title={theme === 'tesla' ? 'Switch to Classic' : 'Switch to Modern'}
+          onClick={() => setTheme(theme === 'tesla' ? 'tallyprime' : 'tesla')}
+          className="p-2 hover:bg-black/10"
         >
           <Palette size={15} />
         </button>
 
-        <button
-          className="p-2 rounded-md transition-colors text-[var(--text-tertiary)] hover:text-[var(--text-primary)] hover:bg-[var(--bg-float)]"
-        >
+        <button className="p-2 hover:bg-black/10">
           <Bell size={15} />
         </button>
 
         <button
           onClick={() => setActiveTab('settings')}
-          className="p-2 rounded-md transition-colors text-[var(--text-tertiary)] hover:text-[var(--text-primary)] hover:bg-[var(--bg-float)]"
+          className="p-2 hover:bg-black/10"
         >
           <Settings size={15} />
         </button>
 
-        {/* Node type (owners only) */}
         {userRole === 'OWNER' && setNodeType && (
-          <div className="flex items-center rounded-md p-0.5 gap-0.5 ml-1" style={{ background: 'var(--bg-float)', border: '1px solid var(--border-subtle)' }}>
+          <div className="flex items-center ml-1">
             {(['RETAIL', 'HO', 'WAREHOUSE'] as const).map(type => (
               <button
                 key={type}

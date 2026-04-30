@@ -125,8 +125,8 @@ export default function LoyaltyModule() {
         </div>
 
         {/* Global Stats */}
-        <div className="bg-[#1a2340] rounded-[3rem] p-10 shadow-2xl text-white">
-          <h3 className="text-xl font-serif font-black uppercase tracking-tight mb-10">Global CRM Health</h3>
+        <div className="panel rounded-[3rem] p-10 shadow-2xl" style={{ background: 'var(--bg-float)', color: 'var(--text-primary)' }}>
+          <h3 className="text-xl font-serif font-black uppercase tracking-tight mb-10" style={{ color: 'var(--text-primary)' }}>Global CRM Health</h3>
           <div className="space-y-10">
             <div>
               <div className="flex justify-between items-end mb-4">

@@ -42,25 +42,25 @@ export default function AnalyticsModule() {
         <div className="flex bg-navy/5 p-1 rounded-2xl border border-border/50 overflow-x-auto">
           <button 
             onClick={() => setActiveTab('OVERVIEW')}
-            className={`px-8 py-3 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all whitespace-nowrap ${activeTab === 'OVERVIEW' ? 'bg-navy text-white shadow-lg' : 'text-muted'}`}
+            className={`px-8 py-3 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all whitespace-nowrap ${activeTab === 'OVERVIEW' ? 'bg-[var(--accent)] text-white shadow-lg' : 'text-muted hover:bg-white/5'}`}
           >
             Overview
           </button>
           <button 
             onClick={() => setActiveTab('ATTRIBUTES')}
-            className={`px-8 py-3 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all whitespace-nowrap ${activeTab === 'ATTRIBUTES' ? 'bg-navy text-white shadow-lg' : 'text-muted'}`}
+            className={`px-8 py-3 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all whitespace-nowrap ${activeTab === 'ATTRIBUTES' ? 'bg-[var(--accent)] text-white shadow-lg' : 'text-muted hover:bg-white/5'}`}
           >
             Attribute Sales
           </button>
           <button 
             onClick={() => setActiveTab('MIS')}
-            className={`px-8 py-3 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all whitespace-nowrap ${activeTab === 'MIS' ? 'bg-navy text-white shadow-lg' : 'text-muted'}`}
+            className={`px-8 py-3 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all whitespace-nowrap ${activeTab === 'MIS' ? 'bg-[var(--accent)] text-white shadow-lg' : 'text-muted hover:bg-white/5'}`}
           >
             MIS Reports
           </button>
           <button 
             onClick={() => setActiveTab('DESIGNER')}
-            className={`px-8 py-3 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all whitespace-nowrap ${activeTab === 'DESIGNER' ? 'bg-navy text-white shadow-lg' : 'text-muted'}`}
+            className={`px-8 py-3 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all whitespace-nowrap ${activeTab === 'DESIGNER' ? 'bg-[var(--accent)] text-white shadow-lg' : 'text-muted hover:bg-white/5'}`}
           >
             Report Designer
           </button>
@@ -124,8 +124,8 @@ export default function AnalyticsModule() {
               </div>
 
               {/* Category Split */}
-              <div className="glass-dark rounded-[3rem] p-12 text-white shadow-2xl relative overflow-hidden">
-                <h3 className="text-2xl font-serif font-black mb-10 relative z-10">Category Mix</h3>
+              <div className="panel rounded-[3rem] p-12 shadow-2xl relative overflow-hidden">
+                <h3 className="text-2xl font-serif font-black text-navy mb-10 relative z-10">Category Mix</h3>
                 <div className="space-y-10 relative z-10">
                   {[
                     { label: 'Footwear', value: 68, color: 'bg-saffron' },
@@ -134,10 +134,10 @@ export default function AnalyticsModule() {
                   ].map((cat, i) => (
                     <div key={i}>
                       <div className="flex justify-between items-center mb-3">
-                        <span className="text-xs font-bold text-white/60 uppercase tracking-widest">{cat.label}</span>
-                        <span className="text-sm font-black text-white">{cat.value}%</span>
+                        <span className="text-xs font-bold text-muted uppercase tracking-widest">{cat.label}</span>
+                        <span className="text-sm font-black text-navy">{cat.value}%</span>
                       </div>
-                      <div className="w-full h-3 bg-white/5 rounded-full overflow-hidden">
+                      <div className="w-full h-3 bg-[var(--border-subtle)] rounded-full overflow-hidden">
                         <motion.div 
                           initial={{ width: 0 }}
                           animate={{ width: `${cat.value}%` }}

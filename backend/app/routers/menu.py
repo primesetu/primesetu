@@ -63,29 +63,37 @@ router = APIRouter()
 
 # ── Static SYSTEM menu — always available, no auth required ──
 STATIC_MENU = [
-    {"id": "dashboard",  "label": "Overview",          "route": "dashboard",  "module": "dashboard",  "required_permission": "dashboard.view",   "category": "OPERATIONS", "icon": "LayoutDashboard", "shortcut": None, "children": []},
-    {"id": "sales",      "label": "Billing (POS)",     "route": "sales",      "module": "sales",      "required_permission": "billing.view",     "category": "OPERATIONS", "icon": "ShoppingCart",    "shortcut": "F1", "children": []},
-    {"id": "returns",    "label": "Sales Returns",     "route": "returns",    "module": "returns",    "required_permission": "billing.returns",  "category": "OPERATIONS", "icon": "RotateCcw",       "shortcut": None, "children": []},
-    {"id": "tills",      "label": "Till Management",   "route": "tills",      "module": "tills",      "required_permission": "finance.till",     "category": "OPERATIONS", "icon": "Monitor",         "shortcut": None, "children": []},
-    {"id": "dayend",     "label": "Day End Closure",   "route": "dayend",     "module": "dayend",     "required_permission": "billing.dayend",   "category": "OPERATIONS", "icon": "Lock",            "shortcut": "F12","children": []},
-    {"id": "price",      "label": "Price Master",      "route": "price",      "module": "price",      "required_permission": "catalogue.price",  "category": "OPERATIONS", "icon": "DollarSign",      "shortcut": None, "children": []},
-    {"id": "customers",  "label": "Customer Master",   "route": "customers",  "module": "customers",  "required_permission": "crm.view",         "category": "OPERATIONS", "icon": "UserSquare2",     "shortcut": None, "children": []},
-    {"id": "loyalty",    "label": "Loyalty Program",   "route": "loyalty",    "module": "loyalty",    "required_permission": "crm.loyalty",      "category": "OPERATIONS", "icon": "Trophy",          "shortcut": None, "children": []},
-    {"id": "vouchers",   "label": "Gift Vouchers",     "route": "vouchers",   "module": "vouchers",   "required_permission": "billing.vouchers", "category": "OPERATIONS", "icon": "FileText",        "shortcut": None, "children": []},
-    {"id": "schemes",    "label": "Promotions",        "route": "schemes",    "module": "schemes",    "required_permission": "catalogue.schemes","category": "OPERATIONS", "icon": "Tag",             "shortcut": None, "children": []},
-    {"id": "inventory",  "label": "Stock Status",      "route": "inventory",  "module": "inventory",  "required_permission": "inventory.view",   "category": "INVENTORY",  "icon": "Package",         "shortcut": "F9", "children": []},
-    {"id": "grn",        "label": "Goods Inward (GRN)","route": "grn",        "module": "grn",        "required_permission": "inventory.grn",    "category": "INVENTORY",  "icon": "Truck",           "shortcut": None, "children": []},
-    {"id": "procurement","label": "Purchase Orders",   "route": "procurement","module": "procurement","required_permission": "inventory.po",     "category": "INVENTORY",  "icon": "ShoppingBag",     "shortcut": None, "children": []},
-    {"id": "movement",   "label": "Stock Movement",    "route": "movement",   "module": "movement",   "required_permission": "inventory.view",   "category": "INVENTORY",  "icon": "History",         "shortcut": None, "children": []},
-    {"id": "transfer",   "label": "Store Transfers",   "route": "transfer",   "module": "transfer",   "required_permission": "inventory.transfer","category":"INVENTORY",  "icon": "ArrowLeftRight",  "shortcut": None, "children": []},
-    {"id": "reconcile",  "label": "Physical Audit",    "route": "reconcile",  "module": "reconcile",  "required_permission": "inventory.audit",  "category": "INVENTORY",  "icon": "History",         "shortcut": None, "children": []},
-    {"id": "barcode",    "label": "Barcode Studio",    "route": "barcode",    "module": "barcode",    "required_permission": "inventory.view",   "category": "INVENTORY",  "icon": "Package",         "shortcut": None, "children": []},
+    {"id": "dashboard",  "label": "Overview",          "route": "dashboard",  "module": "dashboard",  "required_permission": "dashboard.view",   "category": "POS",        "icon": "LayoutDashboard", "shortcut": None, "children": []},
+    {"id": "sales",      "label": "Billing (POS)",     "route": "sales",      "module": "sales",      "required_permission": "billing.view",     "category": "POS",        "icon": "ShoppingCart",    "shortcut": "F1", "children": []},
+    {"id": "returns",    "label": "Sales Returns",     "route": "returns",    "module": "returns",    "required_permission": "billing.returns",  "category": "POS",        "icon": "RotateCcw",       "shortcut": None, "children": []},
+    {"id": "tills",      "label": "Till Management",   "route": "tills",      "module": "tills",      "required_permission": "finance.till",     "category": "POS",        "icon": "Monitor",         "shortcut": None, "children": []},
+    {"id": "dayend",     "label": "Day End Closure",   "route": "dayend",     "module": "dayend",     "required_permission": "billing.dayend",   "category": "POS",        "icon": "Lock",            "shortcut": "F12","children": []},
+    
+    {"id": "item_master","label": "Item Master",       "route": "item_master","module": "item_master","required_permission": "catalogue.view",   "category": "CATALOGUE",  "icon": "Package",         "shortcut": None, "children": []},
+    {"id": "customers",  "label": "Customer Master",   "route": "customers",  "module": "customers",  "required_permission": "crm.view",         "category": "CATALOGUE",  "icon": "UserSquare2",     "shortcut": None, "children": []},
+    {"id": "vendors",    "label": "Vendor Master",     "route": "vendors",    "module": "vendors",    "required_permission": "catalogue.view",   "category": "CATALOGUE",  "icon": "Truck",           "shortcut": None, "children": []},
+    {"id": "price",      "label": "Price Master",      "route": "price",      "module": "price",      "required_permission": "catalogue.price",  "category": "CATALOGUE",  "icon": "DollarSign",      "shortcut": None, "children": []},
+    {"id": "schemes",    "label": "Promotions",        "route": "schemes",    "module": "schemes",    "required_permission": "catalogue.schemes","category": "CATALOGUE",  "icon": "Tag",             "shortcut": None, "children": []},
+    {"id": "loyalty",    "label": "Loyalty Program",   "route": "loyalty",    "module": "loyalty",    "required_permission": "crm.loyalty",      "category": "CATALOGUE",  "icon": "Trophy",          "shortcut": None, "children": []},
+    {"id": "personnel",  "label": "Personnel Master",  "route": "personnel",  "module": "personnel",  "required_permission": "catalogue.view",   "category": "CATALOGUE",  "icon": "UserSquare2",     "shortcut": None, "children": []},
+    {"id": "hsn",        "label": "HSN Manager",       "route": "hsn",        "module": "hsn",        "required_permission": "catalogue.view",   "category": "CATALOGUE",  "icon": "Tag",             "shortcut": None, "children": []},
+    
+    {"id": "inventory",  "label": "Stock Status",      "route": "inventory",  "module": "inventory",  "required_permission": "inventory.view",   "category": "WAREHOUSE",  "icon": "Package",         "shortcut": "F9", "children": []},
+    {"id": "grn",        "label": "Goods Inward (GRN)","route": "grn",        "module": "grn",        "required_permission": "inventory.grn",    "category": "WAREHOUSE",  "icon": "Truck",           "shortcut": None, "children": []},
+    {"id": "procurement","label": "Purchase Orders",   "route": "procurement","module": "procurement","required_permission": "inventory.po",     "category": "WAREHOUSE",  "icon": "ShoppingBag",     "shortcut": None, "children": []},
+    {"id": "movement",   "label": "Stock Movement",    "route": "movement",   "module": "movement",   "required_permission": "inventory.view",   "category": "WAREHOUSE",  "icon": "History",         "shortcut": None, "children": []},
+    {"id": "transfer",   "label": "Store Transfers",   "route": "transfer",   "module": "transfer",   "required_permission": "inventory.transfer","category":"WAREHOUSE",  "icon": "ArrowLeftRight",  "shortcut": None, "children": []},
+    {"id": "reconcile",  "label": "Physical Audit",    "route": "reconcile",  "module": "reconcile",  "required_permission": "inventory.audit",  "category": "WAREHOUSE",  "icon": "History",         "shortcut": None, "children": []},
+    {"id": "barcode",    "label": "Barcode Studio",    "route": "barcode",    "module": "barcode",    "required_permission": "inventory.view",   "category": "WAREHOUSE",  "icon": "Package",         "shortcut": None, "children": []},
+    
     {"id": "finance",    "label": "Finance Hub",       "route": "finance",    "module": "finance",    "required_permission": "finance.view",     "category": "FINANCE",    "icon": "DollarSign",      "shortcut": None, "children": []},
     {"id": "analytics",  "label": "Sales Reports",     "route": "analytics",  "module": "analytics",  "required_permission": "reports.view",     "category": "FINANCE",    "icon": "BarChart3",       "shortcut": "F3", "children": []},
     {"id": "gstr1",      "label": "GST Compliance",    "route": "gstr1",      "module": "gstr1",      "required_permission": "reports.gst",      "category": "FINANCE",    "icon": "FileText",        "shortcut": None, "children": []},
-    {"id": "ho",         "label": "HO Sync",           "route": "ho",         "module": "ho",         "required_permission": "ho.view",          "category": "NETWORK",    "icon": "Globe",           "shortcut": None, "children": []},
-    {"id": "settings",   "label": "System Config",     "route": "settings",   "module": "settings",   "required_permission": "settings.view",    "category": "SETTINGS",   "icon": "Settings",        "shortcut": "F10","children": []},
-    {"id": "security",   "label": "Security",          "route": "security",   "module": "security",   "required_permission": "settings.security","category": "SETTINGS",   "icon": "ShieldCheck",     "shortcut": None, "children": []},
+    {"id": "vouchers",   "label": "Gift Vouchers",     "route": "vouchers",   "module": "vouchers",   "required_permission": "billing.vouchers", "category": "FINANCE",    "icon": "FileText",        "shortcut": None, "children": []},
+    
+    {"id": "ho",         "label": "HO Sync",           "route": "ho",         "module": "ho",         "required_permission": "ho.view",          "category": "HO",         "icon": "Globe",           "shortcut": None, "children": []},
+    {"id": "settings",   "label": "System Config",     "route": "settings",   "module": "settings",   "required_permission": "settings.view",    "category": "SYSTEM",     "icon": "Settings",        "shortcut": "F10","children": []},
+    {"id": "security",   "label": "Security",          "route": "security",   "module": "security",   "required_permission": "settings.security","category": "SYSTEM",     "icon": "ShieldCheck",     "shortcut": None, "children": []},
 ]
 
 @router.get("", response_model=List[MenuItemResponse])

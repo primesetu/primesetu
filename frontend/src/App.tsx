@@ -10,6 +10,7 @@
  * ============================================================ */
 
 import React, { useState, useEffect } from 'react';
+import { cn } from '@/lib/utils';
 import { 
   Settings,
   Bell,
@@ -44,6 +45,7 @@ const SmritiOS: React.FC = () => {
   const [activeTab, setActiveTab] = useState('dashboard');
   const { menu: dynamicMenu, findModule } = useMenu();
   const [isCollapsed, setIsCollapsed] = useState(false);
+  const [isRightCollapsed, setIsRightCollapsed] = useState(false);
   const [isCommandBarOpen, setIsCommandBarOpen] = useState(false);
   const [searchContext, setSearchContext] = useState<string | null>(null);
   const [isOnline, setIsOnline] = useState(navigator.onLine);
@@ -225,7 +227,7 @@ const SmritiOS: React.FC = () => {
   return (
     <div 
       className="flex min-h-screen bg-cream"
-      style={{ '--sw': isCollapsed ? '0px' : '280px' } as React.CSSProperties}
+      style={{ '--sw': isCollapsed ? '64px' : '256px' } as React.CSSProperties}
     >
       <Sidebar 
         activeTab={activeTab} 
@@ -235,7 +237,10 @@ const SmritiOS: React.FC = () => {
         setIsCollapsed={setIsCollapsed}
       />
       
-      <div className="main flex-1 ml-[var(--sw)] mr-[120px] flex flex-col relative transition-all duration-300">
+      <div className={cn(
+        "main flex-1 ml-0 md:ml-[var(--sw)] flex flex-col relative transition-all duration-300 w-full overflow-x-hidden",
+        isRightCollapsed ? "mr-0" : "mr-0 lg:mr-[120px]"
+      )}>
         <CommandBar 
           isOpen={isCommandBarOpen} 
           onClose={() => {
@@ -254,11 +259,23 @@ const SmritiOS: React.FC = () => {
           setIsCommandBarOpen={setIsCommandBarOpen}
         />
 
-        <FunctionBar activeTab={activeTab} />
+        <FunctionBar 
+          activeTab={activeTab} 
+          isRightCollapsed={isRightCollapsed}
+          setIsRightCollapsed={setIsRightCollapsed}
+        />
         <StatusBar activeTab={activeTab} />
 
         {/* Main Content Area */}
-        <main className="flex-1 p-[72px_28px_28px] animate-fadeUp">
+        <main 
+          className="flex-1 animate-fadeUp overflow-y-auto"
+          style={{ 
+            paddingTop: 'calc(var(--topbar-h) + 24px)',
+            paddingBottom: 'calc(var(--status-bar-h) + 24px)',
+            paddingLeft: '28px',
+            paddingRight: '28px'
+          }}
+        >
           <AnimatePresence mode="wait">
             <motion.div
               key={activeTab}

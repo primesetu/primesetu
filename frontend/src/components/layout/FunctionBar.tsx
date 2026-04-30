@@ -4,7 +4,7 @@
  * ============================================================
  * System Architect   :  Jawahar R Mallah
  * Organisation       :  AITDL Network
- * Project            :  SMRITI-OS
+ * Project : SMRITI-OS
  * © 2026 — All Rights Reserved
  * "Memory, Not Code."
  * ============================================================ */
@@ -28,7 +28,7 @@ const FunctionBar: React.FC<FunctionBarProps> = ({
   setIsRightCollapsed 
 }) => {
   const { theme } = useTheme();
-  const isTally = theme === 'tallyprime';
+  const isTally = theme === 'SMRITI-OS';
 
   // Static mapping for core Shoper9-style function keys
   const getContextKeys = () => {
@@ -76,7 +76,7 @@ const FunctionBar: React.FC<FunctionBarProps> = ({
         <button
           onClick={() => setIsRightCollapsed?.(false)}
           className={cn(
-            "fixed right-0 top-1/2 -translate-y-1/2 z-[60] p-1 rounded-l-md transition-all shadow-md",
+            "fixed right-0 top-1/2 -translate-y-1/2 z-[var(--z-sidebar)] p-1 rounded-l-md transition-all shadow-md",
             isTally ? "bg-[var(--accent)] text-[var(--gold)]" : "bg-accent text-white"
           )}
           title="Show Shortcut Keys"
@@ -86,8 +86,8 @@ const FunctionBar: React.FC<FunctionBarProps> = ({
       )}
 
       <aside className={cn(
-        "fixed right-0 top-[var(--topbar-h)] bottom-[var(--status-bar-h,24px)] z-50 flex flex-col py-0 transition-all duration-300 ease-in-out overflow-hidden",
-        isRightCollapsed ? "w-0 border-none" : "w-[120px]",
+        "fixed right-0 top-[var(--topbar-h)] bottom-[var(--status-bar-h,24px)] z-[var(--z-sidebar)] flex flex-col py-0 transition-all duration-300 ease-in-out overflow-hidden",
+        isRightCollapsed ? "w-0 border-none" : "w-[var(--sidebar-right-w,120px)]",
         isTally 
           ? "border-l" 
           : "bg-navy-mid border-l border-white/5"
@@ -99,7 +99,7 @@ const FunctionBar: React.FC<FunctionBarProps> = ({
           <button
             onClick={() => setIsRightCollapsed?.(true)}
             className={cn(
-              "absolute left-0 top-2 -translate-x-1/2 z-[60] p-1 rounded-full border shadow-sm transition-all",
+              "absolute left-0 top-2 -translate-x-1/2 z-[var(--z-sidebar)] p-1 rounded-full border shadow-sm transition-all",
               isTally ? "bg-[var(--accent)] border-[var(--accent-border)] text-[var(--gold)]" : "bg-navy text-white border-white/10"
             )}
             title="Hide Shortcut Keys"
@@ -150,3 +150,7 @@ const FunctionBar: React.FC<FunctionBarProps> = ({
 };
 
 export default FunctionBar;
+
+
+
+

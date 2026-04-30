@@ -45,3 +45,7 @@ export function useBarcodeScanner(onScan: (barcode: string) => void) {
     return () => window.removeEventListener('keydown', handleKeyDown);
   }, [onScan]);
 }
+
+
+
+

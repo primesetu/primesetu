@@ -285,3 +285,7 @@ const IntelligenceCockpit: React.FC = () => {
 };
 
 export default IntelligenceCockpit;
+
+
+
+

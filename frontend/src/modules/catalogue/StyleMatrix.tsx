@@ -194,3 +194,7 @@ export default function StyleMatrix({ styleCode, onBack }: StyleMatrixProps) {
     </div>
   );
 }
+
+
+
+

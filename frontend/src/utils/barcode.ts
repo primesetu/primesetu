@@ -61,3 +61,7 @@ export const generateInternalBarcode = (
 export const isInternalBarcode = (barcode: string, prefix: string): boolean => {
   return barcode.startsWith(prefix) && barcode.length >= (prefix.length + 6);
 };
+
+
+
+

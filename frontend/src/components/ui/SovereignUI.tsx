@@ -7,40 +7,33 @@ export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
 }
 
-// ... existing code ...
+/* ============================================================
+   SMRITI-OS — Lead Frontend Architect UI Primitives
+   Enforcing SMRITI Sentinal Governance (Audit Rule 11)
+   ============================================================ */
 
 // 1. Button Primitive
 interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
-  variant?: 'pri' | 'sec' | 'ghost' | 'danger' | 'primary';
+  variant?: 'primary' | 'secondary' | 'ghost' | 'danger' | 'pri' | 'sec'; // pri/sec for legacy compat
   size?: 'sm' | 'md' | 'lg';
 }
 
 export const Button = ({ 
-  variant = 'pri', 
+  variant = 'primary', 
   size = 'md', 
   className, 
   ...props 
 }: ButtonProps) => {
-  const variants = {
-    pri: 'bg-accent text-bg-base hover:bg-accent-hover shadow-lg shadow-accent/10',
-    primary: 'bg-accent text-bg-base hover:bg-accent-hover shadow-lg shadow-accent/10', // Alias for pri
-    sec: 'bg-bg-elevated border border-border-subtle text-text-primary hover:border-accent/40',
-    ghost: 'bg-transparent text-text-secondary hover:bg-bg-float hover:text-text-primary',
-    danger: 'bg-status-red/10 text-status-red hover:bg-status-red/20 border border-status-red/20',
-  };
+  // Normalize legacy variants
+  const normalizedVariant = variant === 'pri' ? 'primary' : variant === 'sec' ? 'secondary' : variant;
   
-  const sizes = {
-    sm: 'px-4 py-2 text-[10px]',
-    md: 'px-6 py-3 text-xs',
-    lg: 'px-10 py-4 text-sm',
-  };
-
   return (
     <button 
       className={cn(
-        'rounded-xl font-black uppercase tracking-widest transition-all active:scale-95 disabled:opacity-50 disabled:pointer-events-none flex items-center justify-center gap-2',
-        variants[variant],
-        sizes[size],
+        'c-button',
+        `c-button--${normalizedVariant}`,
+        size === 'sm' && 'c-button--sm',
+        size === 'lg' && 'c-button--lg',
         className
       )}
       {...props}
@@ -54,7 +47,7 @@ export const Input = React.forwardRef<HTMLInputElement, React.InputHTMLAttribute
     <input 
       ref={ref}
       className={cn(
-        'w-full bg-bg-input border border-border-subtle rounded-xl px-5 py-3 text-sm font-medium text-text-primary outline-none focus:border-accent focus:ring-4 focus:ring-accent/5 transition-all placeholder:text-text-disabled',
+        'c-input',
         className
       )}
       {...props}
@@ -66,7 +59,8 @@ export const Input = React.forwardRef<HTMLInputElement, React.InputHTMLAttribute
 export const Select = ({ className, children, ...props }: React.SelectHTMLAttributes<HTMLSelectElement>) => (
   <select 
     className={cn(
-      'w-full bg-bg-input border border-border-subtle rounded-xl px-5 py-3 text-sm font-bold text-text-primary outline-none focus:border-accent transition-all cursor-pointer appearance-none',
+      'c-input', // Using same base as input for uniformity
+      'cursor-pointer appearance-none',
       className
     )} 
     {...props}
@@ -78,26 +72,29 @@ export const Select = ({ className, children, ...props }: React.SelectHTMLAttrib
 // 4. Label
 export const Label = ({ className, ...props }: React.LabelHTMLAttributes<HTMLLabelElement>) => (
   <label 
-    className={cn('text-[10px] font-black uppercase tracking-[0.2em] text-text-tertiary ml-1', className)} 
+    className={cn('u-uppercase font-bold text-[10px] text-[var(--text-tertiary)] ml-1', className)} 
     {...props} 
   />
 );
 
 // 5. Card / Container
 interface CardProps extends React.HTMLAttributes<HTMLDivElement> {
-  variant?: 'elevated' | 'flat' | 'outline';
-  level?: number; // Legacy compatibility
+  variant?: 'elevated' | 'flat' | 'outline' | 'success' | 'danger' | 'warning';
 }
 
-export const Card = ({ variant = 'elevated', level, className, ...props }: CardProps) => {
-  const variants = {
-    elevated: 'bg-bg-elevated border border-border-subtle shadow-xl',
-    flat: 'bg-bg-float/40 border border-border-subtle',
-    outline: 'bg-transparent border border-border-subtle',
-  };
-
+export const Card = ({ variant = 'elevated', className, ...props }: CardProps) => {
   return (
-    <div className={cn('rounded-[2rem]', variants[variant], className)} {...props} />
+    <div 
+      className={cn(
+        'c-card', 
+        variant === 'elevated' && 'c-card--elevated',
+        variant === 'success' && 'c-card--success',
+        variant === 'danger' && 'c-card--danger',
+        variant === 'warning' && 'c-card--warning',
+        className
+      )} 
+      {...props} 
+    />
   );
 };
 
@@ -108,14 +105,14 @@ interface TextProps extends React.HTMLAttributes<HTMLSpanElement> {
 
 export const Text = ({ variant = 'p', className, ...props }: TextProps) => {
   const variants = {
-    h1: 'text-3xl font-serif font-black tracking-tight text-text-primary uppercase',
-    h2: 'text-xl font-serif font-black tracking-tight text-text-primary uppercase',
-    h3: 'text-lg font-bold tracking-tight text-text-primary uppercase',
-    p: 'text-sm font-medium text-text-secondary leading-relaxed',
-    sm: 'text-xs font-medium text-text-secondary',
-    hint: 'text-xs font-medium text-text-secondary', // Alias for sm
-    xs: 'text-[10px] font-black uppercase tracking-[0.2em] text-text-tertiary',
-    label: 'text-[10px] font-black uppercase tracking-[0.2em] text-text-tertiary', // Alias for xs
+    h1: 'text-3xl font-bold tracking-tight text-[var(--text-primary)] u-uppercase',
+    h2: 'text-xl font-bold tracking-tight text-[var(--text-primary)] u-uppercase',
+    h3: 'text-lg font-bold tracking-tight text-[var(--text-primary)] u-uppercase',
+    p: 'text-sm font-medium text-[var(--text-secondary)] leading-relaxed',
+    sm: 'text-xs font-medium text-[var(--text-secondary)]',
+    hint: 'text-xs font-medium text-[var(--text-secondary)]',
+    xs: 'u-uppercase font-black text-[10px] text-[var(--text-tertiary)] tracking-widest',
+    label: 'u-uppercase font-black text-[10px] text-[var(--text-tertiary)] tracking-widest',
   };
 
   return <span className={cn(variants[variant], className)} {...props} />;
@@ -131,22 +128,31 @@ export const Badge = ({
   variant?: 'info' | 'warn' | 'error' | 'success' | 'muted';
   className?: string;
 }) => {
-  const variants = {
-    info: 'bg-accent/10 text-accent border-accent/20',
-    warn: 'bg-status-amber/10 text-status-amber border-status-amber/20',
-    error: 'bg-status-red/10 text-status-red border-status-red/20',
-    success: 'bg-status-green/10 text-status-green border-status-green/20',
-    muted: 'bg-bg-float text-text-tertiary border-border-subtle',
+  const badgeMap = {
+    info: 'c-badge--info',
+    warn: 'c-badge--warning',
+    error: 'c-badge--error',
+    success: 'c-badge--success',
+    muted: 'c-badge--muted',
   };
 
   return (
-    <span className={cn('px-3 py-1 rounded-lg text-[9px] font-black uppercase tracking-widest border', variants[variant], className)}>
+    <span className={cn('c-badge', badgeMap[variant], className)}>
       {children}
     </span>
   );
 };
 
-// 8. Modal Overlay
+// 8. Portal System
+import { createPortal } from 'react-dom';
+
+export const Portal = ({ children, containerId = 'smriti-overlay-root' }: { children: ReactNode, containerId?: string }) => {
+  const container = document.getElementById(containerId);
+  if (!container) return <>{children}</>;
+  return createPortal(children, container);
+};
+
+// 9. Modal Overlay
 interface ModalProps {
   isOpen: boolean;
   onClose: () => void;
@@ -171,41 +177,45 @@ export const Modal = ({
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 z-[150] flex items-center justify-center p-6 bg-bg-base/60 backdrop-blur-xl animate-in fade-in duration-300">
-      <Card className={cn("w-full h-fit max-h-[90vh] flex flex-col overflow-hidden shadow-2xl border-border-subtle", maxWidth)}>
-        {/* Modal Header */}
-        <div className="p-8 border-b border-border-subtle flex items-center justify-between bg-bg-elevated/40">
-           <div className="flex items-center gap-6">
-              {icon && (
-                <div className="w-12 h-12 bg-accent/10 rounded-xl flex items-center justify-center text-accent">
-                   {icon}
+    <Portal>
+      <div className="fixed inset-0 z-[var(--z-modal)] flex items-center justify-center p-6 bg-[var(--background)]/60 backdrop-blur-xl animate-in fade-in duration-300">
+        <div className="absolute inset-0" onClick={onClose} />
+        <Card className={cn("w-full h-fit max-h-[90vh] flex flex-col overflow-hidden c-card--elevated relative z-[var(--z-modal)]", maxWidth)}>
+          {/* Modal Header */}
+          <div className="p-8 border-b border-[var(--border-subtle)] flex items-center justify-between bg-[var(--surface-elevated)]/40">
+            <div className="flex items-center gap-6">
+                {icon && (
+                  <div className="w-12 h-12 bg-[var(--primary)]/10 rounded-xl flex items-center justify-center text-[var(--primary)]">
+                    {icon}
+                  </div>
+                )}
+                <div>
+                  <Text variant="h2" className="leading-none">{title}</Text>
+                  {subtitle && <Text variant="xs" className="mt-1.5 block">{subtitle}</Text>}
                 </div>
-              )}
-              <div>
-                 <Text variant="h2" className="leading-none">{title}</Text>
-                 {subtitle && <Text variant="xs" className="mt-1.5 block">{subtitle}</Text>}
-              </div>
-           </div>
-           <Button variant="ghost" size="sm" onClick={onClose} className="h-10 w-10 p-0 rounded-lg">
-              <X size={18} />
-           </Button>
-        </div>
-
-        {/* Modal Content */}
-        <div className="flex-1 overflow-y-auto p-10 bg-bg-base/20">
-           {children}
-        </div>
-
-        {/* Modal Footer */}
-        {footer && (
-          <div className="p-8 border-t border-border-subtle bg-bg-elevated/40 flex items-center justify-between">
-             {footer}
+            </div>
+            <Button variant="ghost" size="sm" onClick={onClose} className="h-10 w-10 p-0 rounded-lg">
+                <X size={18} />
+            </Button>
           </div>
-        )}
-      </Card>
-    </div>
+
+          {/* Modal Content */}
+          <div className="flex-1 overflow-y-auto p-10 bg-[var(--background)]/20">
+            {children}
+          </div>
+
+          {/* Modal Footer */}
+          {footer && (
+            <div className="p-8 border-t border-[var(--border-subtle)] bg-[var(--surface-elevated)]/40 flex items-center justify-between">
+              {footer}
+            </div>
+          )}
+        </Card>
+      </div>
+    </Portal>
   );
 };
+
 // 9. Layout Primitives
 export const Flex = ({ 
   children, 
@@ -268,7 +278,7 @@ export const Container = ({ className, ...props }: React.HTMLAttributes<HTMLDivE
 // 10. Divider
 export const Divider = ({ className, vertical = false }: { className?: string; vertical?: boolean }) => (
   <div className={cn(
-    vertical ? 'w-px h-full bg-border-subtle' : 'h-px w-full bg-border-subtle',
+    vertical ? 'w-px h-full bg-[var(--border-subtle)]' : 'h-px w-full bg-[var(--border-subtle)]',
     className
   )} />
 );
@@ -295,14 +305,13 @@ export function DataTable<T>({
   emptyMessage?: string;
 }) {
   return (
-    <Card className="flex-1 flex flex-col overflow-hidden border-border-subtle bg-bg-elevated/10">
+    <div className="c-card p-0 flex-1 flex flex-col overflow-hidden border-[var(--border-subtle)] bg-[var(--surface-elevated)]/10">
       <div className="overflow-x-auto">
-        <table className="w-full text-left border-collapse">
-          <thead className="sticky top-0 bg-bg-elevated/95 backdrop-blur-md z-10 border-b border-border-subtle">
+        <table className="c-table">
+          <thead>
             <tr>
               {columns.map((col, i) => (
                 <th key={i} className={cn(
-                  'px-8 py-5 text-[9px] font-black uppercase tracking-[0.2em] text-text-tertiary',
                   col.align === 'center' && 'text-center',
                   col.align === 'right' && 'text-right',
                   col.className
@@ -312,18 +321,18 @@ export function DataTable<T>({
               ))}
             </tr>
           </thead>
-          <tbody className="divide-y divide-border-subtle/50">
+          <tbody className="divide-y divide-[var(--border-subtle)]/50">
             {loading ? (
               Array(5).fill(0).map((_, i) => (
                 <tr key={i} className="animate-pulse">
                   <td colSpan={columns.length} className="p-10">
-                    <div className="h-10 bg-bg-float/40 rounded-xl" />
+                    <div className="h-10 bg-[var(--background)]/40 rounded-xl" />
                   </td>
                 </tr>
               ))
             ) : data.length === 0 ? (
               <tr>
-                <td colSpan={columns.length} className="py-24 text-center opacity-10 font-black uppercase tracking-[0.5em] text-4xl">
+                <td colSpan={columns.length} className="py-24 text-center opacity-10 font-black u-uppercase tracking-[0.5em] text-4xl">
                   {emptyMessage}
                 </td>
               </tr>
@@ -332,13 +341,11 @@ export function DataTable<T>({
                 key={i} 
                 onClick={() => onRowClick?.(item)}
                 className={cn(
-                  'group transition-all',
-                  onRowClick ? 'cursor-pointer hover:bg-bg-float/20' : ''
+                  onRowClick ? 'cursor-pointer' : ''
                 )}
               >
                 {columns.map((col, j) => (
                   <td key={j} className={cn(
-                    'px-8 py-6 text-sm font-medium text-text-secondary',
                     col.align === 'center' && 'text-center',
                     col.align === 'right' && 'text-right',
                     col.className
@@ -353,7 +360,7 @@ export function DataTable<T>({
           </tbody>
         </table>
       </div>
-    </Card>
+    </div>
   );
 }
 
@@ -376,7 +383,7 @@ export const KPI = ({
   <Card className={cn("p-8 relative overflow-hidden group", className)}>
     <Flex between className="mb-6">
       {Icon && (
-        <div className="w-12 h-12 bg-accent/10 text-accent rounded-2xl flex items-center justify-center">
+        <div className="w-12 h-12 bg-[var(--primary)]/10 text-[var(--primary)] rounded-2xl flex items-center justify-center">
           <Icon size={24} />
         </div>
       )}

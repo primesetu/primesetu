@@ -295,3 +295,7 @@ export default function PhysicalStockModule({ onClose }: { onClose: () => void }
     </div>
   );
 }
+
+
+
+

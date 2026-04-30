@@ -1,59 +1,49 @@
 /* ============================================================
- * SMRITI-OS — Shoper9-Based Retail OS
- * Zero Cloud · Sovereign · AI-Governed
- * ============================================================
- * System Architect   :  Jawahar R Mallah
- * Organisation     :  AITDL Network
- * Project            :  SMRITI-OS
- * © 2026 — All Rights Reserved
- * "Memory, Not Code."
- * ============================================================ */
+   SMRITI-OS — Shoper9-Based Retail OS
+   Zero Cloud · Sovereign · AI-Governed
+   ============================================================ */
 
 import React, { createContext, useContext, useEffect, useState } from 'react';
-
-type Theme = 'tesla' | 'tallyprime' | 'dark';
-type Accent = 'default' | 'gold' | 'cream' | 'crimson';
+import { ThemeEngine, SmritiTheme } from '../lib/ThemeEngine';
 
 interface ThemeContextType {
-  theme: Theme;
-  accent: Accent;
-  setTheme: (theme: Theme) => void;
-  setAccent: (accent: Accent) => void;
+  theme: SmritiTheme;
+  setTheme: (theme: SmritiTheme) => void;
+  accent: string;
+  setAccent: (color: string) => void;
+  isInstitutional: boolean;
 }
 
 const ThemeContext = createContext<ThemeContextType | undefined>(undefined);
 
 export function ThemeProvider({ children }: { children: React.ReactNode }) {
-  const [theme, setThemeState] = useState<Theme>(() => {
-    let savedTheme = localStorage.getItem('smriti-theme') || 'dark';
-    if (savedTheme === 'shoper9') savedTheme = 'tallyprime';
-    return savedTheme as Theme;
-  });
-
-  const [accent, setAccentState] = useState<Accent>(() => {
-    const savedAccent = localStorage.getItem('smriti-accent');
-    return (savedAccent as Accent) || 'default';
-  });
+  const [theme, setThemeState] = useState<SmritiTheme>(() => ThemeEngine.getTheme());
+  const [accent, setAccentState] = useState(() => localStorage.getItem('smriti-accent') || '#ffc107');
 
   useEffect(() => {
-    localStorage.setItem('smriti-theme', theme);
-    document.documentElement.setAttribute('data-theme', theme);
+    // Synchronize with document attribute
+    ThemeEngine.setTheme(theme);
+
+    // Listen for external theme changes
+    const handleThemeChange = (e: any) => {
+      if (e.detail?.theme) setThemeState(e.detail.theme);
+    };
+
+    window.addEventListener('smriti-theme-change', handleThemeChange);
+    return () => window.removeEventListener('smriti-theme-change', handleThemeChange);
   }, [theme]);
 
   useEffect(() => {
+    document.documentElement.style.setProperty('--accent', accent);
     localStorage.setItem('smriti-accent', accent);
-    if (accent !== 'default') {
-      document.documentElement.setAttribute('data-accent', accent);
-    } else {
-      document.documentElement.removeAttribute('data-accent');
-    }
   }, [accent]);
 
-  const setTheme = (newTheme: Theme) => setThemeState(newTheme);
-  const setAccent = (newAccent: Accent) => setAccentState(newAccent);
+  const setTheme = (newTheme: SmritiTheme) => setThemeState(newTheme);
+  const setAccent = (newColor: string) => setAccentState(newColor);
+  const isInstitutional = theme === 'SMRITI-OS';
 
   return (
-    <ThemeContext.Provider value={{ theme, accent, setTheme, setAccent }}>
+    <ThemeContext.Provider value={{ theme, setTheme, accent, setAccent, isInstitutional }}>
       {children}
     </ThemeContext.Provider>
   );

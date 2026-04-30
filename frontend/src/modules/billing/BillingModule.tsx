@@ -14,7 +14,9 @@ import {
   ArrowRightLeft,
   Receipt,
   Info,
-  RefreshCw
+  RefreshCw,
+  ShieldCheck,
+  History
 } from 'lucide-react'
 import { api } from '@/api/client'
 import DayEndModule from './DayEndModule'
@@ -33,15 +35,17 @@ import { toPaise, formatCurrency, formatDecimal, toRupees } from '@/utils/curren
 import StyleMatrix from '../catalogue/StyleMatrix'
 import { cn } from '@/lib/utils'
 import { 
+  Badge, 
   Button, 
-  Input, 
-  Select, 
   Card, 
   Text, 
-  Badge, 
-  Modal,
-  Label 
-} from '../../components/ui/SovereignUI';
+  Input, 
+  Select, 
+  Label, 
+  Flex, 
+  Grid, 
+  Portal 
+} from '@/components/ui/SovereignUI';
 
 // ── TYPES ──
 export interface TillInfo {
@@ -80,8 +84,8 @@ interface CartItem {
   stocks?: { store_id: string; quantity: number }[];
 }
 
-type PayMode = 'CASH' | 'UPI' | 'CARD' | 'GV' | 'COUPON'
-interface PayLine { mode: PayMode; amount: number; ref?: string }
+type PayMode = 'CASH' | 'UPI' | 'CARD' | 'CHQ' | 'GV' | 'COUPON' | 'CREDIT'
+interface PayLine { mode: PayMode; amount: number; ref?: string; metadata?: Record<string, string> }
 
 // ── HELPERS ──
 const getNow = () => {
@@ -116,10 +120,63 @@ export default function BillingModule() {
   const [activeTill, setActiveTill] = useState<TillInfo | null>(null)
   const [showStyleMatrix, setShowStyleMatrix] = useState(false)
   const [selectedStyleCode, setSelectedStyleCode] = useState('')
+  const [billType, setBillType] = useState<'Product' | 'Service'>('Product')
+  const [transType, setTransType] = useState<'Cash' | 'Credit'>('Cash')
+  const [remarks, setRemarks] = useState('')
+  const [isSuspended, setIsSuspended] = useState(false)
   const [toasts, setToasts] = useState<{id: number, msg: string, type: 'error' | 'success' | 'info'}[]>([])
   const [customerInfo, setCustomerInfo] = useState<CustomerData | null>(null)
+  const [suspendedBills, setSuspendedBills] = useState<any[]>([])
+  const [showRecallModal, setShowRecallModal] = useState(false)
   
   const searchRef = useRef<HTMLInputElement>(null)
+
+  // ── SHOPER 9 SYSTEM PARAMETERS (Sovereign Context) ──
+  const SHOPER9_PARAMS = {
+    AllowServiceBilling: true,
+    CreditBillingAllowed: true,
+    CustomerSelectionMandatory: transType === 'Credit',
+    AllowRateAlteration: false,
+    CheckStockOnSelection: true,
+    StockOutAction: 2, // 1: Warning, 2: Disallow, 3: Stop Update
+    ClubDuplicatedItems: true,
+    SalesManSelectionMandatory: true,
+    DefaultSalesManMode: 2, // 2: Both Item and Bill level
+    AutoGenerateSuspensionNo: true,
+  }
+
+  // ── HANDLERS ──
+  const handleSuspend = () => {
+    if (!cart.length) return
+    const suspNo = `SUSP-${Date.now().toString().slice(-6)}`
+    const newSuspension = {
+      id: suspNo,
+      timestamp: new Date().toISOString(),
+      cart,
+      customerMobile,
+      salesperson,
+      payLines,
+      remarks,
+      billType,
+      transType
+    }
+    setSuspendedBills(prev => [...prev, newSuspension])
+    showToast(`BILL SUSPENDED: ${suspNo}`, 'success')
+    resetSession()
+  }
+
+  const handleRecall = (suspBill: any) => {
+    setCart(suspBill.cart)
+    setCustomerMobile(suspBill.customerMobile)
+    setSalesperson(suspBill.salesperson)
+    setPayLines(suspBill.payLines)
+    setRemarks(suspBill.remarks)
+    setBillType(suspBill.billType)
+    setTransType(suspBill.transType)
+    setSuspendedBills(prev => prev.filter(b => b.id !== suspBill.id))
+    setShowRecallModal(false)
+    showToast(`BILL RECALLED: ${suspBill.id}`, 'info')
+  }
 
   const showToast = (msg: string, type: 'error' | 'success' | 'info' = 'info') => {
     const id = Date.now()
@@ -215,7 +272,15 @@ export default function BillingModule() {
   }, [customerMobile])
 
   // ── LOGIC ──
-  const handleAddToCart = (p: Partial<CartItem> & { mrp?: number }) => {
+  const playChime = () => {
+    try {
+      const audio = new Audio('https://assets.mixkit.co/active_storage/sfx/2869/2869-preview.mp3')
+      audio.volume = 0.2
+      audio.play()
+    } catch {}
+  }
+
+  const handleAddToCart = (p: Partial<CartItem> & { mrp?: number }, multiplier: number = 1) => {
     const normalizedItem: CartItem = {
       id: p.id!,
       code: p.code!,
@@ -224,7 +289,7 @@ export default function BillingModule() {
       category: p.category || 'General',
       mrp_paise: p.mrp_paise || toPaise(p.mrp || 0),
       cost_paise: p.cost_paise || 0,
-      qty: 1,
+      qty: multiplier,
       discount_per: 0,
       tax_rate: p.tax_rate ?? 18,
       is_tax_inclusive: p.is_tax_inclusive ?? true,
@@ -234,17 +299,68 @@ export default function BillingModule() {
     const storeStock = normalizedItem.stocks?.find(s => s.store_id === 'X01')?.quantity
 
     setCart(prev => {
-      const existing = prev.find(i => i.id === normalizedItem.id)
-      const currentQty = existing ? existing.qty : 0
+      const existingIdx = SHOPER9_PARAMS.ClubDuplicatedItems 
+        ? prev.findIndex(i => i.id === normalizedItem.id && i.discount_per === normalizedItem.discount_per)
+        : -1
       
-      if (storeStock !== undefined && currentQty + 1 > storeStock) {
-        showToast(`STOCK ALERT: Only ${storeStock} units available in X01 store.`, 'error')
-        return prev
+      const currentQty = existingIdx > -1 ? prev[existingIdx].qty : 0
+      
+      // Stock Validation
+      if (SHOPER9_PARAMS.CheckStockOnSelection) {
+        if (storeStock !== undefined && currentQty + multiplier > storeStock) {
+           if (SHOPER9_PARAMS.StockOutAction === 2) {
+              showToast(`STOCK OUT: Only ${storeStock} available. Billing Disallowed.`, 'error')
+              return prev
+           }
+           if (SHOPER9_PARAMS.StockOutAction === 1) {
+              showToast(`STOCK WARNING: Only ${storeStock} available. Proceeding...`, 'info')
+           }
+        }
       }
 
-      if (existing) return prev.map(i => i.id === normalizedItem.id ? { ...i, qty: i.qty + 1 } : i)
+      playChime()
+      if (existingIdx > -1) {
+        const newCart = [...prev]
+        newCart[existingIdx] = { ...newCart[existingIdx], qty: newCart[existingIdx].qty + multiplier }
+        return newCart
+      }
       return [...prev, normalizedItem]
     })
+  }
+
+  const handleBarcodeSearch = async (val: string) => {
+    let multiplier = 1
+    let barcode = val
+
+    // Vedic Speed: 5*barcode logic
+    if (val.includes('*')) {
+      const parts = val.split('*')
+      if (parts[0] && !isNaN(Number(parts[0]))) {
+        multiplier = Number(parts[0])
+        barcode = parts[1] || ''
+      }
+    }
+
+    if (!barcode) return
+
+    try {
+      const results = await api.inventory.search(barcode)
+      type SearchItem = CartItem & { style_code?: string };
+      const exactItem = results.find((p: SearchItem) => p.code.toLowerCase() === barcode.toLowerCase())
+      
+      if (exactItem) { 
+        handleAddToCart(exactItem, multiplier)
+        setQ('')
+        return
+      }
+
+      const isStyle = results.some((p: SearchItem) => p.style_code?.toLowerCase() === barcode.toLowerCase())
+      if (isStyle) {
+        setSelectedStyleCode(barcode.toUpperCase())
+        setShowStyleMatrix(true)
+        setQ('')
+      }
+    } catch {}
   }
 
   const updateCartItem = (id: string, updates: Partial<CartItem>) => {
@@ -267,7 +383,7 @@ export default function BillingModule() {
 
   // ── CALCULATIONS (PAISE ONLY) ──
   const totals = useMemo(() => {
-    return cart.reduce((acc, i) => {
+    const raw = cart.reduce((acc, i) => {
       const lineGrossPaise = i.mrp_paise * i.qty
       const lineDiscPaise = Math.round(lineGrossPaise * (i.discount_per / 100))
       const lineNetPaise = lineGrossPaise - lineDiscPaise
@@ -294,32 +410,59 @@ export default function BillingModule() {
         net: acc.net + (taxablePaise + taxPaise)
       }
     }, { subtotal: 0, discount: 0, taxable: 0, tax: 0, net: 0 })
+
+    const roundedNetPaise = Math.round(raw.net / 100) * 100
+    const roundingPaise = roundedNetPaise - raw.net
+
+    return { ...raw, roundedNet: roundedNetPaise, rounding: roundingPaise }
   }, [cart])
 
-  const netPayablePaise = totals.net
+  const netPayablePaise = totals.roundedNet
 
   // ── SHORTCUTS ──
+  useHotkeys('f1', (e) => { e.preventDefault(); searchRef.current?.focus() }, { enableOnFormTags: true })
   useHotkeys('f2', (e) => { e.preventDefault(); searchRef.current?.focus() }, { enableOnFormTags: true })
-  useHotkeys('alt+1', (e) => { e.preventDefault(); setCart([]); setCustomerMobile(''); setQ(''); searchRef.current?.focus() }, { enableOnFormTags: true })
-  useHotkeys('alt+2', (e) => { e.preventDefault(); setShowReturns(true) }, { enableOnFormTags: true })
-  useHotkeys('f4', () => setShowHistory(true), { enableOnFormTags: true })
-  useHotkeys('f5', () => setShowSuspended(true), { enableOnFormTags: true })
-  useHotkeys('f6', () => setShowSalesSlips(true), { enableOnFormTags: true })
-  useHotkeys('f7', (e) => { e.preventDefault(); setPayLines([{ mode: 'CASH', amount: toRupees(netPayablePaise) }]); setShowSettle(true) }, { enableOnFormTags: true })
-  useHotkeys('f8', () => setShowSettle(true), { enableOnFormTags: true })
-  useHotkeys('f9', () => setShowTotals(v => !v), { enableOnFormTags: true })
-  useHotkeys('f10', () => setShowSettle(true), { enableOnFormTags: true })
+  useHotkeys('f7', (e) => { e.preventDefault(); handleExactCash() }, { enableOnFormTags: true })
+  useHotkeys('f8', (e) => { e.preventDefault(); setShowSettle(true) }, { enableOnFormTags: true })
+  useHotkeys('f9', (e) => { e.preventDefault(); handleFinalize() }, { enableOnFormTags: true })
   useHotkeys('f12', (e) => { e.preventDefault(); handleSuspend() }, { enableOnFormTags: true })
+  useHotkeys('delete', (e) => { 
+    if (cart.length > 0) {
+      removeCartItem(cart[cart.length - 1].id)
+    }
+  }, { enableOnFormTags: true })
+  
+  useHotkeys('alt+1', (e) => { e.preventDefault(); setCart([]); setCustomerMobile(''); setQ(''); searchRef.current?.focus() }, { enableOnFormTags: true })
   useHotkeys('escape', (e) => { e.preventDefault(); setQ(''); setShowTotals(false); setShowSettle(false) }, { enableOnFormTags: true })
 
   // ── HANDLERS ──
+  const handleExactCash = () => {
+     if (!cart.length) return
+     setPayLines([{ mode: 'CASH', amount: toRupees(netPayablePaise) }])
+     handleFinalize()
+  }
+
   const handleFinalize = async () => {
     if (!cart.length || processing) return
+
+    // Compliance Checks
+    if (SHOPER9_PARAMS.SalesManSelectionMandatory && !salesperson) {
+       showToast("VALIDATION ERROR: Sales Staff ID is mandatory for this transaction.", "error")
+       return
+    }
+
+    if (SHOPER9_PARAMS.CustomerSelectionMandatory && !customerMobile) {
+       showToast("VALIDATION ERROR: Customer selection is mandatory for Credit billing.", "error")
+       return
+    }
+
     setProcessing(true)
     
     const billData = {
       customer_mobile: sendSms ? customerMobile : '',
-      type: 'Sales',
+      type: transType === 'Credit' ? 'Credit Sales' : 'Sales',
+      bill_type: billType,
+      remarks: remarks,
       till_id: activeTill?.id,
       items: cart.map(i => ({ 
         product_id: i.id, 
@@ -362,357 +505,391 @@ export default function BillingModule() {
     searchRef.current?.focus()
   }
 
-  const handleSuspend = async () => {
-    if (!cart.length) return
-    setProcessing(true)
-    try {
-      await api.billing.suspend({ 
-        customer_mobile: customerMobile, 
-        type: 'Sales', 
-        items: cart.map(i => ({ product_id: i.id, qty: i.qty, unit_price: i.mrp_paise })), 
-        suspended_reason: 'Counter Queue' 
-      })
-      resetSession()
-    } catch {} finally { setProcessing(false) }
-  }
-
   const paidTotalRupees = payLines.reduce((s, p) => s + p.amount, 0)
   const balanceRupees = toRupees(netPayablePaise) - paidTotalRupees
 
   return (
-    <div className="flex flex-col h-screen overflow-hidden relative bg-bg-base">
+    <div id="page-billing" className="c-billing-layout">
       {/* ── PRINTING LAYERS ── */}
       {printFormat === 'thermal' && <ThermalReceipt bill={billToPrint} onPrinted={() => setBillToPrint(null)} />}
       {printFormat === 'a4' && <TaxInvoiceA4 bill={billToPrint} onPrinted={() => setBillToPrint(null)} />}
       {printFormat === 'b2b' && <TaxInvoiceB2B bill={billToPrint} onPrinted={() => setBillToPrint(null)} />}
-      <CreditNoteA4 bill={billToPrint?.type === 'Return' ? billToPrint : null} onPrinted={() => setBillToPrint(null)} />
-
-      {/* ── OVERLAYS ── */}
+      
       <AnimatePresence>
-        {showSuspended && (
-          <motion.div initial={{ x: '100%' }} animate={{ x: 0 }} exit={{ x: '100%' }} className="fixed inset-y-0 right-0 w-[450px] z-[250] shadow-2xl bg-bg-elevated border-l border-border-subtle">
-             <SuspendedBillsBrowser 
-                onRecall={(items, mobile: string) => { 
-                  setCart(items.map((i) => ({ ...i, mrp_paise: i.mrp } as unknown as CartItem))); 
-                  setCustomerMobile(mobile); 
-                  setShowSuspended(false); 
-                }} 
-                onClose={() => setShowSuspended(false)} 
-             />
-           </motion.div>
-        )}
-        {showReturns && (
-           <motion.div initial={{ x: '100%' }} animate={{ x: 0 }} exit={{ x: '100%' }} className="fixed inset-y-0 right-0 w-[450px] z-[250] shadow-2xl bg-bg-elevated border-l border-status-red/20">
-             <ReturnsDrawer 
-                onReturn={(bill) => { setBillToPrint(bill); setShowReturns(false); }}
-                onClose={() => setShowReturns(false)} 
-              />
-           </motion.div>
-        )}
-        {showSalesSlips && <SalesSlipsBrowser onRecall={(items, mobile) => { setCart(items as unknown as CartItem[]); setCustomerMobile(mobile); setShowSalesSlips(false); }} onClose={() => setShowSalesSlips(false)} />}
-        {showHistory && <BillHistoryBrowser onReprint={(b) => setBillToPrint(b)} onClose={() => setShowHistory(false)} />}
-        {showDayEnd && <DayEndModule onClose={() => setShowDayEnd(false)} />}
-        
         {lastBill && (
-          <motion.div initial={{ y: -80, opacity: 0 }} animate={{ y: 0, opacity: 1 }} exit={{ y: -80, opacity: 0 }}
-            className="absolute top-8 left-1/2 -translate-x-1/2 z-[300] bg-status-green text-bg-base px-10 py-5 rounded-3xl shadow-2xl flex items-center gap-6 border-2 border-status-green/30">
-            <CheckCircle2 size={32} />
-            <div>
-              <Text variant="xs" className="font-bold opacity-70">Sovereign Protocol Finalized</Text>
-              <Text variant="h2" className="text-bg-base">{lastBill.bill_number} &nbsp;·&nbsp; {formatCurrency(lastBill.total)}</Text>
-            </div>
-          </motion.div>
-        )}
-
-        <Modal
-          isOpen={showTotals}
-          onClose={() => setShowTotals(false)}
-          title="Consolidated Bill Summary"
-          subtitle="Real-time Revenue Intelligence"
-          maxWidth="max-w-md"
-          icon={<Calculator size={24} />}
-        >
-          <div className="space-y-4">
-              {[
-                ['Gross Subtotal', formatCurrency(totals.subtotal)],
-                ['Disc. Allowance', `-${formatCurrency(totals.discount)}`],
-                ['Taxable Base', formatCurrency(totals.taxable)],
-                ['GST Total', formatCurrency(totals.tax)],
-              ].map(([l, v]) => (
-                <div key={l} className="flex justify-between py-3 border-b border-border-subtle">
-                  <Text variant="p" className="opacity-60">{l}</Text>
-                  <Text variant="sm" className="font-mono font-bold">{v}</Text>
-                </div>
-              ))}
-              <div className="flex justify-between pt-6">
-                <Text variant="h3">Net Payable</Text>
-                <Text variant="h2" className="text-status-green">{formatCurrency(totals.net)}</Text>
+          <Portal>
+            <motion.div initial={{ y: -80, opacity: 0 }} animate={{ y: 0, opacity: 1 }} exit={{ y: -80, opacity: 0 }}
+              className="fixed top-8 left-1/2 -translate-x-1/2 z-[var(--z-modal)] bg-[var(--secondary)] text-[var(--background)] px-10 py-5 rounded-[var(--radius-xl)] shadow-2xl flex items-center gap-[var(--space-6)] border-2 border-[var(--secondary)]/30">
+               <CheckCircle2 size={32} />
+              <div>
+                <Text variant="xs" className="font-bold opacity-70">Protocol Finalized</Text>
+                <Text variant="h2" className="text-[var(--background)]">{lastBill.bill_number} &nbsp;·&nbsp; {formatCurrency(lastBill.total)}</Text>
               </div>
-              <Button onClick={() => setShowTotals(false)} variant="sec" className="w-full mt-8">
-                 Return to Terminal [ESC]
-              </Button>
-          </div>
-        </Modal>
-
-        {showStyleMatrix && (
-          <div className="fixed inset-0 z-[200] flex items-center justify-center p-12 bg-bg-base/60 backdrop-blur-xl">
-            <motion.div initial={{ scale: 0.9 }} animate={{ scale: 1 }} className="w-full max-w-6xl h-full bg-bg-elevated rounded-[3rem] overflow-hidden shadow-2xl relative border border-border-subtle">
-              <StyleMatrix styleCode={selectedStyleCode} onBack={() => setShowStyleMatrix(false)} />
-              <Button variant="ghost" onClick={() => setShowStyleMatrix(false)} className="absolute top-8 right-8 w-12 h-12 p-0 rounded-full bg-bg-float">
-                <X size={24} />
-              </Button>
             </motion.div>
-          </div>
+          </Portal>
         )}
       </AnimatePresence>
 
-      {/* ── TOASTS ── */}
-      <div className="fixed top-8 right-8 z-[400] flex flex-col gap-3">
-        <AnimatePresence>
-          {toasts.map(t => (
-            <motion.div key={t.id} initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, scale: 0.9 }} 
-              className={cn(
-                "px-6 py-4 rounded-2xl shadow-2xl text-sm font-bold flex items-center gap-4 border border-border-subtle",
-                t.type === 'error' ? 'bg-status-red/10 text-status-red border-status-red/20' : 
-                t.type === 'success' ? 'bg-status-green/10 text-status-green border-status-green/20' : 
-                'bg-bg-elevated text-text-primary'
-              )}>
-              {t.type === 'error' ? <AlertTriangle size={20}/> : t.type === 'success' ? <CheckCircle2 size={20}/> : <Info size={20}/>}
-              {t.msg}
-            </motion.div>
-          ))}
-        </AnimatePresence>
-      </div>
+      <main className="c-ledger-area">
+        {/* ── TRANSACTION HEADER (SHOPER 9 PARITY) ── */}
+        <div className="flex items-end gap-4 p-4 bg-[var(--surface)] border-b border-[var(--border-saffron)] border-t-2 border-[var(--accent-light)] overflow-x-auto">
+           <div className="flex flex-col gap-1 w-[100px]">
+              <Label className="text-[9px] font-black uppercase text-[var(--text-tertiary)] tracking-widest">Bill Type</Label>
+              <Select value={billType} onChange={e => setBillType(e.target.value as any)} className="h-9 bg-[var(--background)] text-xs border-[var(--border-subtle)]">
+                 <option>Product</option>
+                 <option>Service</option>
+              </Select>
+           </div>
 
-      {/* ── TOOLBAR ── */}
-      <Card variant="flat" className="flex items-center gap-1 px-4 py-3 shrink-0 rounded-none border-t-0 border-x-0 bg-bg-elevated/40">
-        <div className="flex items-center gap-4 pr-6 mr-4 border-r border-border-subtle">
-          <div className="w-9 h-9 bg-accent/10 rounded-xl flex items-center justify-center text-accent">
-            <Zap size={20} />
-          </div>
-          <div>
-            <Text variant="h3" className="leading-none text-sm">Sovereign POS</Text>
-            <Text variant="xs" className="mt-1 block">Institutional Node</Text>
-          </div>
+           <div className="flex flex-col gap-1 w-[100px]">
+              <Label className="text-[9px] font-black uppercase text-[var(--text-tertiary)] tracking-widest">Trans Type</Label>
+              <Select value={transType} onChange={e => setTransType(e.target.value as any)} className="h-9 bg-[var(--background)] text-xs border-[var(--border-subtle)]">
+                 <option>Cash</option>
+                 <option>Credit</option>
+              </Select>
+           </div>
+
+           <div className="flex flex-col gap-1 w-[120px]">
+              <Label className="text-[9px] font-black uppercase text-[var(--text-tertiary)] tracking-widest">Bill Number</Label>
+              <div className="h-9 px-3 bg-[var(--background)] flex items-center border border-[var(--border-subtle)] rounded text-xs font-bold text-[var(--accent)]">
+                 {isSuspended ? "RECALLED" : "NEW BILL"}
+              </div>
+           </div>
+           
+           <div className="flex flex-col gap-1 flex-1 min-w-[200px]">
+              <Label className="text-[9px] font-black uppercase text-[var(--text-tertiary)] tracking-widest">Customer (Code / Mobile)</Label>
+              <div className="flex gap-2">
+                <input 
+                  type="text" 
+                  value={customerMobile}
+                  onChange={e => setCustomerMobile(e.target.value)}
+                  placeholder="Scan/Type..."
+                  className="h-9 px-3 bg-[var(--background)] border border-[var(--border-subtle)] rounded text-xs font-black w-[120px] outline-none focus:border-[var(--accent)]"
+                />
+                <div className="h-9 px-3 bg-[var(--background)]/50 flex items-center border border-[var(--border-subtle)] rounded text-[10px] font-bold text-[var(--text-primary)] flex-1 truncate">
+                   {customerInfo?.name || 'WALK-IN CUSTOMER'}
+                </div>
+              </div>
+           </div>
+
+           <div className="flex flex-col gap-1 w-[160px]">
+              <Label className="text-[9px] font-black uppercase text-[var(--text-tertiary)] tracking-widest">Global Sales Staff</Label>
+              <Select 
+                 value={salesperson} 
+                 onChange={e => setSalesperson(e.target.value)}
+                 className="h-9 bg-[var(--background)] text-xs border-[var(--border-subtle)]"
+              >
+                <option value="">Select...</option>
+                <option value="S01">Jawahar M (S01)</option>
+                <option value="S02">Anshul K (S02)</option>
+              </Select>
+           </div>
+
+           <div className="flex gap-2 mb-0.5">
+              <Button 
+                variant="secondary" 
+                className="h-9 px-3 text-[10px] font-black bg-[var(--background)] relative group" 
+                onClick={() => setShowRecallModal(true)}
+              >
+                 RECALL [F12]
+                 {suspendedBills.length > 0 && (
+                   <span className="absolute -top-1 -right-1 w-4 h-4 bg-[var(--accent)] text-[var(--background)] rounded-full flex items-center justify-center text-[8px] animate-pulse">
+                     {suspendedBills.length}
+                   </span>
+                 )}
+              </Button>
+              <Button variant="secondary" className="h-9 px-3 text-[10px] font-black bg-[var(--background)]">
+                 PDT IMPORT
+              </Button>
+           </div>
         </div>
 
-        <div className="flex gap-2">
-          {[
-            { icon: <FilePlus2 size={16}/>, label: 'New', sub: 'Alt+1', action: () => resetSession() },
-            { icon: <Search size={16}/>, label: 'Find', sub: 'F2', action: () => searchRef.current?.focus() },
-            { icon: <RotateCcw size={16}/>, label: 'Return', sub: '', action: () => setShowReturns(true) },
-            { icon: <Calculator size={16}/>, label: 'Totals', sub: 'F9', action: () => setShowTotals(v => !v) },
-            { icon: <Banknote size={16}/>, label: 'Exact', sub: 'F7', action: () => { setPayLines([{ mode: 'CASH', amount: toRupees(netPayablePaise) }]); setShowSettle(true) } },
-            { icon: <CreditCard size={16}/>, label: 'Settle', sub: 'F8', action: () => setShowSettle(true) },
-            { icon: <Clock size={16}/>, label: 'Recall', sub: 'F5', action: () => setShowSuspended(v => !v) },
-          ].map(btn => (
-            <Button key={btn.label} variant="ghost" size="sm" onClick={btn.action} className="flex-col h-auto py-2 px-3 gap-1 hover:bg-bg-float">
-               {btn.icon}
-               <span className="text-[8px] font-black uppercase tracking-widest">{btn.label}</span>
-            </Button>
-          ))}
+        <div className="c-ledger-header">
+           <span className="w-12 text-center">S.No</span>
+           <span className="flex-[2]">Product Protocol / Description</span>
+           <span className="flex-1 text-center">Qty</span>
+           <span className="flex-1 text-right">Unit Price</span>
+           <span className="flex-1 text-right">Disc %</span>
+           <span className="flex-1 text-right">Net Value</span>
         </div>
 
-        <div className="ml-auto flex items-center gap-6">
-          <div className="flex items-center gap-3">
-             <Badge variant={isOnline ? 'success' : 'error'}>
-               {isOnline ? <Wifi size={10} className="inline mr-1" /> : <WifiOff size={10} className="inline mr-1" />}
-               {isOnline ? 'SYNCED' : 'OFFLINE'}
-             </Badge>
-             <Text variant="xs" className="font-mono">{currentTime}</Text>
-          </div>
-          <div className="flex gap-2">
-            <Button variant="sec" size="sm" onClick={() => setShowHistory(true)} className="h-10">
-               History
-            </Button>
-            <Button size="sm" onClick={() => setShowDayEnd(true)} className="h-10 bg-status-amber text-bg-base hover:bg-status-amber/90">
-               Day End
-            </Button>
-          </div>
-        </div>
-      </Card>
-
-      {/* ── INPUTS ── */}
-      <div className="flex gap-4 px-6 py-4 shrink-0 bg-bg-base/40 border-b border-border-subtle">
-        <div className="flex-[3] relative">
-          <ScanBarcode size={20} className="absolute left-5 top-1/2 -translate-y-1/2 text-text-disabled" />
-          <Input ref={searchRef} autoFocus value={q} onChange={e => setQ(e.target.value)} placeholder="SCAN BARCODE OR STYLE PROTOCOL... [F2]" className="h-14 pl-14 font-mono text-lg tracking-wider" />
-        </div>
-        <div className="flex-[1.5] relative flex items-center gap-3">
-          <div className="relative flex-1">
-             <User size={18} className="absolute left-4 top-1/2 -translate-y-1/2 text-text-disabled" />
-             <Input value={customerMobile} onChange={e => setCustomerMobile(e.target.value)} placeholder="Customer Identity (Mobile)" className="h-14 pl-12 font-mono" />
-          </div>
-          {customerInfo && customerInfo.current_balance > 0 && (
-             <Badge variant="warn" className="h-14 px-4 flex flex-col items-center justify-center gap-0.5">
-                <Text variant="xs" className="text-status-amber opacity-60">Balance Due</Text>
-                <Text variant="sm" className="font-mono font-bold">₹{formatDecimal(customerInfo.current_balance)}</Text>
-             </Badge>
+        <div className="c-ledger-list">
+          <AnimatePresence initial={false}>
+            {cart.map((item, idx) => {
+              const lineNet = Math.round(item.mrp_paise * item.qty * (1 - item.discount_per / 100))
+              return (
+                <motion.div 
+                  key={item.id} 
+                  initial={{ opacity: 0, height: 0 }} 
+                  animate={{ opacity: 1, height: 60 }} 
+                  exit={{ opacity: 0, height: 0 }}
+                  className={cn("c-ledger-row", idx === cart.length - 1 && "c-ledger-row--active")}
+                >
+                  <div className="w-12 text-center text-[10px] font-black text-[var(--text-tertiary)]">{idx + 1}</div>
+                  <div className="flex-[2] flex flex-col justify-center">
+                    <span className="text-sm font-black uppercase text-[var(--text-primary)]">{item.name}</span>
+                    <span className="text-[10px] font-bold text-[var(--accent)] tracking-widest">{item.code}</span>
+                  </div>
+                  <div className="flex-1 text-center font-bold text-lg">{item.qty}</div>
+                  <div className="flex-1 text-right text-[var(--text-secondary)] font-mono text-sm">₹{formatDecimal(item.mrp_paise)}</div>
+                  <div className="flex-1 text-right text-[var(--danger)] font-bold text-sm">{item.discount_per}%</div>
+                  <div className="flex-1 text-right font-black text-lg font-mono">₹{formatDecimal(lineNet)}</div>
+                </motion.div>
+              )
+            })}
+          </AnimatePresence>
+          {cart.length === 0 && (
+            <div className="h-full flex flex-col items-center justify-center opacity-5 grayscale pointer-events-none">
+               <ScanBarcode size={120} strokeWidth={0.5} />
+               <Text variant="h1" className="tracking-[1em] mt-8">Awaiting Scan</Text>
+            </div>
           )}
         </div>
-        <div className="flex-1 relative">
-          <UserCheck size={18} className="absolute left-4 top-1/2 -translate-y-1/2 text-text-disabled" />
-          <Input value={salesperson} onChange={e => setSalesperson(e.target.value)} placeholder="Salesperson" className="h-14 pl-12" />
+
+        {/* Barcode Input Bar */}
+        <div className="p-[var(--space-6)] bg-[var(--surface-elevated)] border-t border-[var(--border-subtle)]">
+           <div className="relative">
+              <ScanBarcode className="absolute left-6 top-1/2 -translate-y-1/2 text-[var(--accent)]" size={24} />
+              <input 
+                ref={searchRef}
+                autoFocus
+                value={q}
+                onChange={e => setQ(e.target.value)}
+                onKeyDown={e => e.key === 'Enter' && handleBarcodeSearch(q)}
+                placeholder="[F1] SCAN BARCODE OR PROTOCOL (e.g. 5*890123)..."
+                className="c-input--barcode w-full pl-16 pr-8 h-[var(--input-h)] bg-[var(--background)] text-[var(--text-primary)] border-2 border-[var(--accent)] rounded-[var(--radius-lg)] outline-none"
+              />
+           </div>
         </div>
-      </div>
+      </main>
 
-      {/* ── CART ── */}
-      <div className="flex gap-6 px-6 py-6 flex-1 overflow-hidden">
-        <Card className="flex-1 flex flex-col overflow-hidden border-border-subtle shadow-2xl bg-bg-elevated/20">
-          <div className="grid text-[9px] font-black uppercase tracking-[0.2em] bg-bg-float/40 border-b border-border-subtle text-text-tertiary" style={{ gridTemplateColumns: '60px 140px 1fr 120px 120px 100px 130px 60px' }}>
-            {['#','Code','Product','Price','Volume','Disc%','Net Value',''].map(h => <div key={h} className="px-6 py-4">{h}</div>)}
-          </div>
-          
-          <div className="flex-1 overflow-y-auto">
-            <AnimatePresence>
-              {cart.map((item, idx) => {
-                const lineNet = Math.round(item.mrp_paise * item.qty * (1 - item.discount_per / 100))
-                return (
-                  <motion.div key={item.id} layout initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0 }} 
-                    className="grid items-center hover:bg-bg-float/20 transition-all border-b border-border-subtle/50" 
-                    style={{ gridTemplateColumns: '60px 140px 1fr 120px 120px 100px 130px 60px' }}>
-                    <div className="px-6 py-4 font-mono text-xs opacity-40">{idx + 1}</div>
-                    <div className="px-6 py-4 font-mono text-xs font-bold text-accent">{item.code}</div>
-                    <div className="px-6 py-4 flex flex-col gap-1.5">
-                      <Text variant="sm" className="font-bold uppercase">{item.name}</Text>
-                      <div className="flex items-center gap-2">
-                        <Badge variant="muted" className="scale-90 origin-left">{item.brand}</Badge>
-                        {item.discount_per > 0 && (
-                          <Badge variant="success" className="scale-90 origin-left">
-                            <Tag size={10} className="mr-1 inline" /> PROMO
-                          </Badge>
-                        )}
-                      </div>
-                    </div>
-                    <div className="px-6 py-4 font-mono font-bold text-text-secondary">{formatDecimal(item.mrp_paise)}</div>
-                    <div className="px-6 py-4 flex items-center gap-3">
-                       <Button variant="sec" size="sm" onClick={() => updateCartItem(item.id, { qty: Math.max(1, item.qty - 1) })} className="w-8 h-8 p-0 rounded-lg">-</Button>
-                       <Text variant="sm" className="font-mono font-bold w-6 text-center">{item.qty}</Text>
-                       <Button variant="sec" size="sm" onClick={() => updateCartItem(item.id, { qty: item.qty + 1 })} className="w-8 h-8 p-0 rounded-lg">+</Button>
-                    </div>
-                    <div className="px-6 py-4">
-                       <Input type="number" value={item.discount_per} onChange={e => updateCartItem(item.id, { discount_per: Number(e.target.value) })} className="w-16 h-10 text-center font-bold" />
-                    </div>
-                    <div className="px-6 py-4 font-mono font-black text-sm text-text-primary">{formatCurrency(lineNet)}</div>
-                    <div className="px-6 py-4">
-                       <Button variant="ghost" size="sm" onClick={() => removeCartItem(item.id)} className="text-status-red hover:bg-status-red/10 h-10 w-10 p-0">
-                          <Trash2 size={16}/>
-                       </Button>
-                    </div>
-                  </motion.div>
-                )
-              })}
-            </AnimatePresence>
-            {cart.length === 0 && (
-              <div className="h-full flex flex-col items-center justify-center opacity-5 select-none grayscale">
-                 <Package size={160} strokeWidth={0.5} />
-                 <Text variant="h1" className="tracking-[0.8em] mt-12 opacity-20">Awaiting Terminal Input</Text>
+      <aside className="c-summary-area">
+        <div className="c-summary-card">
+           <div className="flex items-center gap-[var(--space-4)] mb-[var(--space-2)]">
+              <div className="w-10 h-10 bg-[var(--accent)]/10 rounded-[var(--radius-lg)] flex items-center justify-center text-[var(--accent)]">
+                 <Receipt size={20} />
               </div>
-            )}
-          </div>
+              <Text variant="h3" className="uppercase tracking-widest">Transaction Summary</Text>
+           </div>
 
-          {/* Cart Footer Stats */}
-          <div className="p-8 flex justify-between items-end bg-bg-elevated/40 border-t border-border-subtle">
-             <div className="flex gap-12">
-                <div>
-                   <Text variant="xs" className="mb-2 block">Gross Subtotal</Text>
-                   <Text variant="h3" className="font-mono opacity-60">{formatCurrency(totals.subtotal)}</Text>
-                </div>
-                <div>
-                   <Text variant="xs" className="mb-2 block text-status-red">Discount Value</Text>
-                   <Text variant="h3" className="font-mono text-status-red">-{formatCurrency(totals.discount)}</Text>
-                </div>
-                <div>
-                   <Text variant="xs" className="mb-2 block">GST Collected</Text>
-                   <Text variant="h3" className="font-mono opacity-60">{formatCurrency(totals.tax)}</Text>
-                </div>
-             </div>
-             <div className="text-right">
-                <Text variant="xs" className="mb-2 block font-black text-accent tracking-[0.3em]">NET PAYABLE AMOUNT</Text>
-                <Text variant="h1" className="text-5xl tracking-tighter text-text-primary">{formatCurrency(netPayablePaise)}</Text>
-             </div>
-          </div>
-        </Card>
+           {/* Document Remarks */}
+           <div className="mt-4 mb-2">
+              <Label className="text-[9px] font-black uppercase text-[var(--text-tertiary)] mb-1 block">Document Remarks</Label>
+              <textarea 
+                value={remarks}
+                onChange={e => setRemarks(e.target.value)}
+                placeholder="Enter comments..."
+                className="w-full h-12 p-2 bg-[var(--background)]/30 border border-[var(--border-subtle)] rounded text-[10px] outline-none focus:border-[var(--accent)] resize-none"
+              />
+           </div>
+           
+           <div className="space-y-3 mt-4">
+              <div className="flex justify-between items-center text-[10px] font-black">
+                 <span className="text-[var(--text-tertiary)] uppercase">Total No. of Items</span>
+                 <span className="bg-[var(--surface-elevated)] px-2 py-0.5 rounded">{cart.length}</span>
+              </div>
+              <div className="flex justify-between items-center text-[10px] font-black">
+                 <span className="text-[var(--text-tertiary)] uppercase">Total Quantity</span>
+                 <span className="bg-[var(--surface-elevated)] px-2 py-0.5 rounded">{cart.reduce((s,i)=>s+i.qty, 0)}</span>
+              </div>
 
-        {/* ── SETTLEMENT PANEL ── */}
-        <div className="w-80 flex flex-col gap-4 shrink-0">
-           <Card className="p-6 flex-1 flex flex-col border-border-subtle shadow-2xl bg-bg-elevated/40">
-              <div className="flex items-center justify-between mb-6">
-                 <Text variant="h3" className="text-sm">Payment Protocol</Text>
-                 <Button variant="sec" size="sm" onClick={() => setPayLines(p => [...p, { mode: 'CASH', amount: 0 }])} className="w-8 h-8 p-0">
-                    <Plus size={16}/>
+              <hr className="border-[var(--border-subtle)] opacity-50" />
+
+              <div className="flex justify-between items-center">
+                 <span className="text-[10px] font-black text-[var(--text-tertiary)] uppercase">Sales Value</span>
+                 <span className="font-mono text-xs">₹{formatDecimal(totals.subtotal)}</span>
+              </div>
+              <div className="flex justify-between items-center text-[var(--danger)]">
+                 <span className="text-[10px] font-black uppercase">Item Level Disc.</span>
+                 <span className="font-mono text-xs">-₹{formatDecimal(totals.discount)}</span>
+              </div>
+              <div className="flex justify-between items-center text-[var(--danger)] opacity-50">
+                 <span className="text-[10px] font-black uppercase">Bill Discount</span>
+                 <span className="font-mono text-xs">₹0.00</span>
+              </div>
+              <div className="flex justify-between items-center">
+                 <span className="text-[10px] font-black text-[var(--text-tertiary)] uppercase">Total Tax (GST)</span>
+                 <span className="font-mono text-xs">₹{formatDecimal(totals.tax)}</span>
+              </div>
+              {totals.rounding !== 0 && (
+                <div className="flex justify-between items-center text-[var(--text-tertiary)] italic">
+                   <span className="text-[10px] font-black uppercase">Bill Round Off</span>
+                   <span className="font-mono text-xs">{totals.rounding > 0 ? '+' : ''}₹{formatDecimal(totals.rounding)}</span>
+                </div>
+              )}
+           </div>
+
+           <hr className="border-[var(--border-subtle)] my-[var(--space-4)]" />
+
+           <div className="text-right">
+              <Text variant="xs" className="font-black text-[var(--accent)] uppercase tracking-[0.3em] mb-1">Net Amount</Text>
+              <h1 className="c-summary__total text-3xl font-black text-white">₹{formatDecimal(netPayablePaise)}</h1>
+           </div>
+        </div>
+
+        <div className="flex-1 flex flex-col gap-4 mt-auto">
+            <Card className="p-4 bg-[var(--background)]/40 border-[var(--border-subtle)]">
+               <div className="flex justify-between items-center mb-3">
+                  <Text variant="h3" className="text-[10px] font-black uppercase tracking-[0.2em]">Settlement Protocol</Text>
+                  <div className="flex gap-2">
+                     <Badge variant="muted" className="h-5 text-[9px]">F7 CASH</Badge>
+                     <Badge variant="muted" className="h-5 text-[9px]">F8 MODAL</Badge>
+                  </div>
+               </div>
+
+               <div className="space-y-3">
+                  {payLines.map((pl, idx) => (
+                     <div key={idx} className="space-y-2 p-2 bg-[var(--surface)] rounded border border-[var(--border-subtle)]">
+                        <div className="flex gap-2">
+                           <Select 
+                              value={pl.mode} 
+                              className="w-[100px] h-9 bg-[var(--background)] text-xs font-black" 
+                              onChange={e => setPayLines(prev => prev.map((p,i) => i===idx ? {...p, mode: e.target.value as PayMode} : p))}
+                           >
+                              {['CASH','UPI','CARD','CHQ','GV','CREDIT'].map(m => <option key={m}>{m}</option>)}
+                           </Select>
+                           <Input 
+                              type="number" 
+                              value={pl.amount || ''} 
+                              placeholder="Amount..."
+                              onChange={e => setPayLines(prev => prev.map((p,i) => i===idx ? {...p, amount: Number(e.target.value)} : p))} 
+                              className="flex-1 h-9 text-right font-mono text-sm font-black bg-[var(--background)]" 
+                           />
+                        </div>
+
+                        {/* Metadata per mode */}
+                        {pl.mode === 'CARD' && (
+                           <input 
+                              placeholder="Card No (Last 4) / Auth Code..." 
+                              className="w-full h-8 px-2 bg-[var(--background)] border border-[var(--border-subtle)] rounded text-[10px] outline-none"
+                              onChange={e => setPayLines(prev => prev.map((p,i) => i===idx ? {...p, metadata: {...p.metadata, card_no: e.target.value}} : p))}
+                           />
+                        )}
+                        {pl.mode === 'CHQ' && (
+                           <input 
+                              placeholder="Cheque No / Date..." 
+                              className="w-full h-8 px-2 bg-[var(--background)] border border-[var(--border-subtle)] rounded text-[10px] outline-none"
+                              onChange={e => setPayLines(prev => prev.map((p,i) => i===idx ? {...p, metadata: {...p.metadata, cheque_no: e.target.value}} : p))}
+                           />
+                        )}
+                        {pl.mode === 'GV' && (
+                           <input 
+                              placeholder="Voucher Code / Prefix..." 
+                              className="w-full h-8 px-2 bg-[var(--background)] border border-[var(--border-subtle)] rounded text-[10px] outline-none"
+                              onChange={e => setPayLines(prev => prev.map((p,i) => i===idx ? {...p, metadata: {...p.metadata, voucher_no: e.target.value}} : p))}
+                           />
+                        )}
+                     </div>
+                  ))}
+               </div>
+
+               <div className="mt-4 flex justify-between items-center bg-[var(--accent)]/5 p-2 rounded border border-[var(--accent)]/20">
+                  <span className="text-[9px] font-black uppercase text-[var(--text-tertiary)]">Balance Receivable</span>
+                  <span className={cn("font-mono text-sm font-black", balanceRupees < 0 ? "text-[var(--success)]" : "text-[var(--accent)]")}>
+                     {balanceRupees < 0 ? `CHANGE: ₹${Math.abs(balanceRupees).toFixed(2)}` : `₹${balanceRupees.toFixed(2)}`}
+                  </span>
+               </div>
+            </Card>
+
+            <div className="flex gap-2">
+               <Button 
+                  onClick={handleExactCash}
+                  disabled={processing || !cart.length}
+                  className="flex-1 h-16 bg-[var(--surface-elevated)] border-2 border-[var(--border-subtle)] hover:border-[var(--accent)] text-[var(--text-primary)] rounded-[var(--radius-lg)] flex flex-col items-center justify-center gap-1 group transition-all"
+               >
+                  <span className="text-xs font-black uppercase">Exact Cash</span>
+                  <span className="text-[8px] font-black opacity-40 group-hover:opacity-100">[F7] Auto-Pay</span>
+               </Button>
+               
+               <Button 
+                  onClick={handleFinalize}
+                  disabled={processing || !cart.length || balanceRupees > 0}
+                  className="flex-[2] h-16 rounded-[var(--radius-lg)] bg-[var(--accent)] text-[var(--background)] flex flex-col items-center justify-center gap-0.5 shadow-xl shadow-[var(--accent)]/20 hover:scale-[1.02] active:scale-[0.98] transition-all"
+               >
+                  {processing ? <RefreshCw className="animate-spin" /> : (
+                  <>
+                     <span className="text-sm font-black uppercase tracking-tight">Update Bill [F9]</span>
+                     <span className="text-[8px] font-black opacity-60 uppercase tracking-widest">Execute Protocol</span>
+                  </>
+                  )}
+               </Button>
+            </div>
+        </div>
+      </aside>
+
+      {/* Hotkey Footer */}
+      <div className="fixed bottom-0 left-0 w-[70%] h-[var(--status-bar-h)] bg-[var(--surface-elevated)] border-t border-[var(--border-subtle)] px-6 flex items-center justify-between text-[10px] font-black uppercase tracking-widest text-[var(--text-tertiary)]">
+         <div className="flex gap-[var(--space-6)]">
+            <span>F1 Barcode</span>
+            <span>F2 Search</span>
+            <span>F7 Exact Cash</span>
+            <span>F8 Multi-Mode</span>
+            <span>F9 Finalize</span>
+            <span>DEL Remove</span>
+            <span>Esc Reset</span>
+         </div>
+         <div className="flex items-center gap-4 text-[var(--accent)]">
+            <ShieldCheck size={12} />
+            Sovereign Node: MUM-X01
+         </div>
+      </div>
+      {/* ── SUSPENDED BILLS RECALL MODAL ── */}
+      {showRecallModal && (
+        <Portal>
+          <div className="fixed inset-0 z-[var(--z-modal)] flex items-center justify-center p-6 bg-[var(--background)]/80 backdrop-blur-md">
+            <motion.div initial={{ scale: 0.9, opacity: 0 }} animate={{ scale: 1, opacity: 1 }}
+              className="w-full max-w-2xl bg-[var(--surface)] border-2 border-[var(--border-subtle)] rounded-[var(--radius-xl)] shadow-2xl overflow-hidden"
+            >
+              <div className="p-6 bg-[var(--accent)] text-[var(--background)] flex justify-between items-center">
+                 <div className="flex items-center gap-3">
+                    <History size={24} />
+                    <Text variant="h2" className="text-[var(--background)] uppercase tracking-tighter">Recall Suspended Protocol</Text>
+                 </div>
+                 <Button variant="ghost" onClick={() => setShowRecallModal(false)} className="text-[var(--background)] hover:bg-white/10">
+                    <X size={24} />
                  </Button>
               </div>
 
-              <div className="space-y-3 flex-1 overflow-y-auto">
-                 {payLines.map((pl, idx) => (
-                   <Card key={idx} variant="flat" className="p-4 space-y-3 relative group rounded-2xl bg-bg-base/40">
-                      <Select value={pl.mode} onChange={e => setPayLines(prev => prev.map((p,i) => i===idx ? {...p, mode: e.target.value as PayMode} : p))} className="h-10">
-                         {['CASH','UPI','CARD','GV','COUPON'].map(m => <option key={m}>{m}</option>)}
-                      </Select>
-                      <div className="relative">
-                         <span className="absolute left-4 top-1/2 -translate-y-1/2 text-sm font-bold opacity-30">₹</span>
-                         <Input type="number" value={pl.amount || ''} onChange={e => setPayLines(prev => prev.map((p,i) => i===idx ? {...p, amount: Number(e.target.value)} : p))} placeholder="0.00" className="h-12 pl-8 font-mono text-lg font-bold" />
-                      </div>
-                      {payLines.length > 1 && (
-                         <Button variant="ghost" onClick={() => setPayLines(p => p.filter((_,i) => i !== idx))} className="absolute -right-2 -top-2 w-7 h-7 p-0 rounded-full bg-status-red text-bg-base scale-0 group-hover:scale-100 transition-all shadow-lg">
-                            <X size={14}/>
-                         </Button>
-                      )}
-                   </Card>
-                 ))}
+              <div className="p-6 max-h-[60vh] overflow-y-auto">
+                 {suspendedBills.length === 0 ? (
+                   <div className="text-center py-12 opacity-30">
+                      <Clock size={48} className="mx-auto mb-4" />
+                      <Text variant="h3">No Suspended Transactions Found</Text>
+                   </div>
+                 ) : (
+                   <div className="grid gap-4">
+                      {suspendedBills.map(bill => (
+                        <div key={bill.id} className="p-4 bg-[var(--background)] border border-[var(--border-subtle)] rounded-[var(--radius-lg)] flex justify-between items-center group hover:border-[var(--accent)] transition-all">
+                           <div>
+                              <div className="flex items-center gap-2 mb-1">
+                                 <span className="text-sm font-black text-[var(--accent)]">{bill.id}</span>
+                                 <span className="text-[10px] font-bold text-[var(--text-tertiary)] opacity-60">· {new Date(bill.timestamp).toLocaleTimeString()}</span>
+                              </div>
+                              <div className="flex gap-4 text-[10px] font-black uppercase text-[var(--text-secondary)]">
+                                 <span>Items: {bill.cart.length}</span>
+                                 <span>Customer: {bill.customerMobile || 'WALK-IN'}</span>
+                              </div>
+                           </div>
+                           <Button onClick={() => handleRecall(bill)} className="bg-[var(--surface-elevated)] hover:bg-[var(--accent)] hover:text-[var(--background)] transition-all">
+                              RECALL PROTOCOL
+                           </Button>
+                        </div>
+                      ))}
+                   </div>
+                 )}
               </div>
 
-              <Card variant="flat" className={cn(
-                "mt-6 p-6 text-center border-none",
-                balanceRupees > 0.01 ? "bg-status-red/10 text-status-red" : "bg-status-green/10 text-status-green"
-              )}>
-                 <Text variant="xs" className="font-black mb-2 block">{balanceRupees > 0.01 ? 'PROTOCOL REMAINING' : 'EXCESS / CHANGE'}</Text>
-                 <Text variant="h1" className="text-3xl font-mono">₹{Math.abs(balanceRupees).toFixed(2)}</Text>
-              </Card>
-           </Card>
-
-           <Button
-             onClick={handleFinalize}
-             disabled={processing || !cart.length || balanceRupees > 0.05}
-             className="h-24 rounded-3xl flex flex-col shadow-2xl shadow-accent/20"
-           >
-              {processing ? <RefreshCw className="animate-spin" /> : (
-                <>
-                  <div className="text-lg font-black flex items-center gap-3">
-                    <Receipt size={24}/> FINALIZE BILL
-                  </div>
-                  <Text variant="xs" className="text-bg-base/60 mt-1">[F10] Execute Protocol</Text>
-                </>
-              )}
-           </Button>
-        </div>
-      </div>
-      
-      {/* ── HOTKEY FOOTER ── */}
-      <Card variant="flat" className="shrink-0 flex items-center justify-between px-6 py-3 bg-bg-elevated rounded-none border-x-0 border-b-0">
-        <div className="flex items-center gap-8 overflow-x-auto">
-           {[
-             { key: 'F2', label: 'Find' },
-             { key: 'Alt+1', label: 'New' },
-             { key: 'Alt+2', label: 'Return' },
-             { key: 'F4', label: 'History' },
-             { key: 'F5', label: 'Recall' },
-             { key: 'F6', label: 'Slips' },
-             { key: 'F7', label: 'Exact' },
-             { key: 'F8', label: 'Settle' },
-             { key: 'F9', label: 'Totals' },
-             { key: 'F10', label: 'Finalize' },
-             { key: 'F12', label: 'Hold' },
-             { key: 'Esc', label: 'Cancel' },
-           ].map(hk => (
-             <div key={hk.key} className="flex items-center gap-2">
-                <Badge variant="muted" className="font-mono text-[10px] h-6 px-2">{hk.key}</Badge>
-                <Text variant="xs" className="font-bold opacity-60">{hk.label}</Text>
-             </div>
-           ))}
-        </div>
-      </Card>
+              <div className="p-4 bg-[var(--surface-elevated)] text-[10px] font-black uppercase text-center opacity-40">
+                 [Esc] Close Recall Window
+              </div>
+            </motion.div>
+          </div>
+        </Portal>
+      )}
     </div>
   )
 }
+
+
+
+

@@ -4,7 +4,7 @@
  * ============================================================
  * System Architect   :  Jawahar R Mallah
  * Organisation       :  AITDL Network
- * Project            :  SMRITI-OS
+ * Project : SMRITI-OS
  * © 2026 — All Rights Reserved
  * "Memory, Not Code."
  * ============================================================ */
@@ -71,7 +71,7 @@ export default function MISReports() {
         {[
           { id: 'SALES_BOOK', label: 'Daily Sales Book', icon: FileSpreadsheet, desc: 'Detailed transaction log' },
           { id: 'MARGIN', label: 'Margin Analysis', icon: TrendingUp, desc: 'Product-wise profitability' },
-          { id: 'AUDIT', label: 'Audit Compliance', icon: ShieldCheck, desc: 'HSN/Tax register for Tally' }
+          { id: 'AUDIT', label: 'Audit Compliance', icon: ShieldCheck, desc: 'HSN/Tax register for accounting' }
         ].map((rep) => (
           <button 
             key={rep.id}
@@ -105,7 +105,7 @@ export default function MISReports() {
         <div className="flex gap-4">
           <button className="p-3 bg-navy/5 hover:bg-navy/10 rounded-xl transition-all"><Filter className="w-5 h-5 text-navy" /></button>
           <button className="flex items-center gap-2 bg-emerald-500 text-white px-6 py-3 rounded-xl text-[10px] font-black tracking-widest hover:shadow-lg transition-all">
-            <Download className="w-4 h-4" /> EXPORT TO TALLY (XML)
+            <Download className="w-4 h-4" /> EXPORT to accounting (XML)
           </button>
         </div>
       </div>
@@ -314,3 +314,7 @@ export default function MISReports() {
     </div>
   )
 }
+
+
+
+

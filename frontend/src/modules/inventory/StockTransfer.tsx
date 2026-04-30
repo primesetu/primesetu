@@ -387,3 +387,7 @@ export default function StockTransfer() {
     </div>
   );
 }
+
+
+
+

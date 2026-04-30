@@ -4,7 +4,7 @@
  * ============================================================
  * System Architect   :  Jawahar R Mallah
  * Organisation       :  AITDL Network
- * Project            :  SMRITI-OS
+ * Project : SMRITI-OS
  * © 2026 — All Rights Reserved
  * "Memory, Not Code."
  * ============================================================ */
@@ -87,3 +87,7 @@ export type SyncLog = {
 }
 export type SyncLogInsert = Omit<SyncLog, 'id' | 'created_at'>
 export type SyncLogUpdate = Partial<SyncLogInsert>
+
+
+
+

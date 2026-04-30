@@ -4,7 +4,7 @@
  * ============================================================
  * System Architect : Jawahar R Mallah
  * Organisation     : AITDL Network
- * Project          : SMRITI-OS
+ * Project : SMRITI-OS
  * © 2026 — All Rights Reserved
  * "Memory, Not Code."
  * ============================================================ */
@@ -288,7 +288,7 @@ const PriceGroups: React.FC = () => {
       {/* Modal - Create Form */}
       <AnimatePresence>
         {isModalOpen && (
-          <div className="fixed inset-0 z-[10000] flex items-center justify-center p-8">
+          <div className="fixed inset-0 z-[var(--z-modal)] flex items-center justify-center p-8">
             <motion.div 
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
@@ -416,3 +416,7 @@ const PriceGroups: React.FC = () => {
 };
 
 export default PriceGroups;
+
+
+
+

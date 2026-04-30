@@ -115,3 +115,7 @@ export default function ThermalReceipt({ bill, onPrinted, autoPrint = true }: { 
     </div>
   )
 }
+
+
+
+

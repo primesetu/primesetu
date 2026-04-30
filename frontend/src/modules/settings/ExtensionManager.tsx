@@ -122,18 +122,18 @@ export default function ExtensionManager() {
         <div className="flex items-center gap-3">
           {/* Theme Mode */}
           <div className="flex bg-slate-900/50 p-1.5 rounded-xl border border-slate-700/50">
-            {(['tesla', 'tallyprime'] as const).map(t => (
+            {(['SMRITI-OS', 'tesla'] as const).map(t => (
               <button
                 key={t}
                 onClick={() => setTheme(t)}
-                title={t === 'tesla' ? 'Tesla Design Mode' : 'Tally Institutional Mode'}
+                title={t === 'tesla' ? 'Tesla Design Mode' : 'SMRITI Institutional Mode'}
                 className={`px-4 py-2 rounded-lg text-sm font-medium transition-all ${
                   theme === t
                     ? 'bg-slate-800 text-white shadow-md'
                     : 'text-slate-500 hover:text-slate-300'
                 }`}
               >
-                {t === 'tesla' ? '⚡ Tesla' : '🏢 TallyPrime'}
+                {t === 'tesla' ? '⚡ Tesla' : '🏢 SMRITI-OS'}
               </button>
             ))}
           </div>
@@ -229,3 +229,7 @@ export default function ExtensionManager() {
     </div>
   );
 }
+
+
+
+

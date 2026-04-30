@@ -4,7 +4,7 @@
  * ============================================================
  * System Architect : Jawahar R Mallah
  * Organisation     : AITDL Network
- * Project          : SMRITI-OS
+ * Project : SMRITI-OS
  * © 2026 — All Rights Reserved
  * "Memory, Not Code."
  * ============================================================ */
@@ -230,3 +230,7 @@ const POManager: React.FC = () => {
 };
 
 export default POManager;
+
+
+
+

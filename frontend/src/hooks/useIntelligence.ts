@@ -32,3 +32,7 @@ export const useIntelligenceRiskSummary = () => {
     refetchInterval: 300000,
   });
 };
+
+
+
+

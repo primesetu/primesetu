@@ -4,7 +4,7 @@
  * ============================================================
  * System Architect : Jawahar R Mallah
  * Organisation     : AITDL Network
- * Project          : SMRITI-OS
+ * Project : SMRITI-OS
  * © 2026 — All Rights Reserved
  * "Memory, Not Code."
  * ============================================================ */
@@ -146,7 +146,7 @@ const ItemForm: React.FC<ItemFormProps> = ({ onClose, editId }) => {
   };
 
   return (
-    <div className="fixed inset-0 z-[10000] flex items-center justify-end">
+    <div className="fixed inset-0 z-[var(--z-modal)] flex items-center justify-end">
       <div className="absolute inset-0 bg-navy/60 backdrop-blur-sm" onClick={onClose} />
       
       <div className="relative bg-bg-base w-full max-w-4xl h-full shadow-2xl flex flex-col animate-slideLeft">
@@ -260,7 +260,7 @@ const ItemForm: React.FC<ItemFormProps> = ({ onClose, editId }) => {
           </div>
 
           {/* Section: Pricing & Tax */}
-          <Card level={1} className="rounded-[40px] p-10 space-y-8 shadow-sm">
+          <Card className="rounded-[40px] p-10 space-y-8 shadow-sm">
             <Text variant="label" className="text-brand-gold flex items-center gap-3">
               <Tag size={16} /> Pricing Protocol & Compliance
             </Text>
@@ -369,3 +369,7 @@ const ItemForm: React.FC<ItemFormProps> = ({ onClose, editId }) => {
 };
 
 export default ItemForm;
+
+
+
+

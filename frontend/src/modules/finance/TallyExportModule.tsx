@@ -4,7 +4,7 @@
  * ============================================================
  * System Architect   :  Jawahar R Mallah
  * Organisation       :  AITDL Network
- * Project            :  SMRITI-OS
+ * Project : SMRITI-OS
  * © 2026 — All Rights Reserved
  * "Memory, Not Code."
  * ============================================================ */
@@ -45,7 +45,7 @@ export default function TallyExportModule() {
       setTimeout(() => setSuccess(false), 5000);
     } catch (err) {
       console.error(err);
-      alert("Error generating Tally XML. Ensure your backend is running.");
+      alert("Error generating Institutional XML. Ensure your backend is running.");
     } finally {
       setExporting(false);
     }
@@ -61,7 +61,7 @@ export default function TallyExportModule() {
               <FileJson className="w-7 h-7 text-saffron" />
             </div>
             <div>
-              <h2 className="text-3xl font-serif font-black text-navy">Tally ERP-9 Interface</h2>
+              <h2 className="text-3xl font-serif font-black text-navy">Institutional Interface</h2>
               <p className="text-sm font-bold text-muted uppercase tracking-widest mt-1">Financial Voucher Synchronization</p>
             </div>
           </div>
@@ -104,7 +104,7 @@ export default function TallyExportModule() {
               <div className="flex-1">
                 <h4 className="text-sm font-black text-navy mb-1">Generate Standard XML</h4>
                 <p className="text-xs text-muted font-bold leading-relaxed">
-                  Generates a highly compliant Tally ERP-9 XML containing Daybook Sales, Tax Ledgers (CGST/SGST/IGST), and Cash/Bank entries.
+                  Generates a highly compliant Institutional XML containing Daybook Sales, Tax Ledgers (CGST/SGST/IGST), and Cash/Bank entries.
                 </p>
               </div>
               <Shield className="w-10 h-10 text-navy/20" />
@@ -139,7 +139,7 @@ export default function TallyExportModule() {
         
         <div className="flex-1 overflow-auto p-6 space-y-6 text-sm">
           <p className="text-white/80 font-medium leading-relaxed">
-            The exported XML automatically maps POS transactions to the following standard Tally Ledgers. Ensure these exact ledger names exist in your Tally Company Master.
+            The exported XML automatically maps POS transactions to the following standard Accounting Ledgers. Ensure these exact ledger names exist in your Accounting Software.
           </p>
           
           <div className="space-y-3">
@@ -172,3 +172,7 @@ export default function TallyExportModule() {
     </div>
   );
 }
+
+
+
+

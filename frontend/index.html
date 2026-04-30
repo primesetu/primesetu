@@ -14,6 +14,21 @@
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600;700&family=Noto+Sans+Devanagari:wght@400;500;600;700&family=Outfit:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
+    <script id="smriti-theme-init">
+      (function () {
+        try {
+          const STORAGE_KEY = "smriti-theme";
+          const savedTheme = localStorage.getItem(STORAGE_KEY);
+          const domainThemeMap = {
+            "smritios.com": "shopper-prime",
+            "vyomautomation.com": "vyom",
+            "prathamone.com": "pratham"
+          };
+          const theme = savedTheme || domainThemeMap[window.location.hostname] || "shopper-prime";
+          document.documentElement.setAttribute("data-theme", theme);
+        } catch (e) {}
+      })();
+    </script>
     <script>
       // Safety guard: React DOM scheduler uses new MessageChannel() internally.
       // Ensure it is a valid constructor before React loads.
@@ -34,7 +49,10 @@
     </script>
   </head>
   <body>
-    <div id="root"></div>
+    <div id="smriti-root">
+      <div id="root"></div>
+    </div>
+    <div id="smriti-overlay-root"></div>
     <script type="module" src="/src/main.tsx"></script>
   </body>
 </html>

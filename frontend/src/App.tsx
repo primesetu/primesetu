@@ -1,25 +1,12 @@
 /* ============================================================
- * SMRITI-OS — Shoper9-Based Retail OS
- * Zero Cloud · Sovereign · AI-Governed
- * ============================================================
- * System Architect   :  Jawahar R Mallah
- * Organisation       :  AITDL Network
- * Project            :  SMRITI-OS
- * © 2026 — All Rights Reserved
- * "Memory, Not Code."
- * ============================================================ */
+   SMRITI-OS — Lead Frontend Architect Main Shell
+   Enforcing Smriti Sentinal Governance (Audit Rule 11)
+   ============================================================ */
 
 import React, { useState, useEffect } from 'react';
-import { cn } from '@/lib/utils';
+import { cn } from '@/components/ui/SovereignUI';
 import { 
-  Settings,
-  Bell,
-  Search,
-  Wifi,
-  WifiOff,
-  User,
-  Terminal,
-  RotateCcw,
+  X,
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useHotkeys } from 'react-hotkeys-hook';
@@ -29,8 +16,6 @@ import { useMenu } from './hooks/useMenu';
 import CommandBar from './components/CommandBar';
 import { useSovereignShortcuts } from './hooks/useSovereignShortcuts';
 import { syncEngine } from './lib/SyncEngine';
-import { useLanguage } from './hooks/useLanguage';
-import { SupportedLanguage, LANGUAGES } from './lib/i18n';
 import { supabase } from './lib/supabase';
 import Login from './modules/auth/Login';
 import TopBar from './components/layout/TopBar';
@@ -38,18 +23,17 @@ import TopBar from './components/layout/TopBar';
 import Sidebar from './components/layout/Sidebar';
 import FunctionBar from './components/layout/FunctionBar';
 import StatusBar from './components/layout/StatusBar';
+import { useTheme } from './hooks/useTheme';
 
 const SmritiOS: React.FC = () => {
   useSovereignShortcuts();
-  const { language, setLanguage } = useLanguage();
+  const { theme, isInstitutional } = useTheme();
   const [activeTab, setActiveTab] = useState('dashboard');
   const { menu: dynamicMenu, findModule } = useMenu();
   const [isCollapsed, setIsCollapsed] = useState(false);
   const [isRightCollapsed, setIsRightCollapsed] = useState(false);
   const [isCommandBarOpen, setIsCommandBarOpen] = useState(false);
   const [searchContext, setSearchContext] = useState<string | null>(null);
-  const [isOnline, setIsOnline] = useState(navigator.onLine);
-  const [pendingSyncs, setPendingSyncs] = useState(0);
   const [user, setUser] = useState<{ name: string, role: string, store_id?: string } | null>(null);
   const [selectedInstance, setSelectedInstance] = useState('X01');
   const [nodeType, setNodeType] = useState<'RETAIL' | 'HO' | 'WAREHOUSE'>('RETAIL');
@@ -57,22 +41,17 @@ const SmritiOS: React.FC = () => {
   // SOVEREIGN SHORTCUT GUARD - Protecting against accidental refresh/loss
   useEffect(() => {
     const handleSovereignGuard = (e: KeyboardEvent) => {
-      // Block F5, Ctrl+R, Ctrl+Shift+R (Refresh)
       if (e.key === 'F5' || (e.ctrlKey && e.key === 'r') || (e.ctrlKey && e.shiftKey && e.key === 'R')) {
         e.preventDefault();
-        console.log('[SMRITI-OS] Sovereign Guard: Blocked accidental refresh.');
       }
-      
-      // Block Ctrl+W (Close Tab) - Note: Browsers often block this override, but we try
       if (e.ctrlKey && e.key === 'w') {
         e.preventDefault();
       }
     };
 
     const handleBeforeUnload = (e: BeforeUnloadEvent) => {
-      // Always warn if in active session
       e.preventDefault();
-      e.returnValue = ''; // Standard browser warning
+      e.returnValue = ''; 
     };
 
     window.addEventListener('keydown', handleSovereignGuard);
@@ -89,34 +68,23 @@ const SmritiOS: React.FC = () => {
     const activeEl = document.activeElement as HTMLElement;
     if (!activeEl || activeEl.tagName !== 'INPUT') return;
 
-    // Smart context detection (Priority: data-f2 > id > name)
-    const context = activeEl.getAttribute('data-f2') || 
-                   activeEl.id || 
-                   activeEl.getAttribute('name');
+    const context = activeEl.getAttribute('data-f2') || activeEl.id || activeEl.getAttribute('name');
 
     if (context) {
-      // Clean up common prefixes/suffixes
       const cleanContext = context.replace(/input|field|search|-/gi, '').toLowerCase();
       setSearchContext(cleanContext || 'generic');
       setIsCommandBarOpen(true);
     }
-  }, { 
-    enableOnFormTags: true,
-    preventDefault: true 
-  });
+  }, { enableOnFormTags: true, preventDefault: true });
 
   // GLOBAL NAVIGATION (F3 / Ctrl+K)
   useHotkeys('f3, ctrl+k, cmd+k', (e) => {
     e.preventDefault();
     setSearchContext(null);
     setIsCommandBarOpen(true);
-  }, { 
-    enableOnFormTags: true,
-    preventDefault: true 
-  });
+  }, { enableOnFormTags: true, preventDefault: true });
 
   const handleLogin = (role: string) => {
-    // If bypass is used, we set a mock user context
     setUser({
       name: 'System Admin (Bypass)',
       role: role.toUpperCase(),
@@ -125,8 +93,12 @@ const SmritiOS: React.FC = () => {
     setActiveTab(role === 'CASHIER' ? 'sales' : 'dashboard');
   };
 
+  // ── PAGE-SPECIFIC SCOPING ──
   useEffect(() => {
-    // 1. Authenticate and Establish User Context
+    document.body.id = `page-${activeTab}`;
+  }, [activeTab]);
+
+  useEffect(() => {
     supabase.auth.getSession().then(({ data: { session } }) => {
       if (session) {
         supabase.auth.getUser().then(({ data: { user: supaUser } }) => {
@@ -152,53 +124,33 @@ const SmritiOS: React.FC = () => {
         });
         if (supaUser.user_metadata?.store_id) setSelectedInstance(supaUser.user_metadata.store_id);
       } else {
-        // SOVEREIGN PURGE: Clear session-specific local data on logout
         localStorage.removeItem('smriti_os_pending_print');
         localStorage.removeItem('smriti_os_last_catalogue_sync');
         setUser(null);
       }
     });
 
-    const handleOnline = () => setIsOnline(true);
-    const handleOffline = () => setIsOnline(false);
     const handleToggleSidebar = () => setIsCollapsed(prev => !prev);
-    
-    window.addEventListener('online', handleOnline);
-    window.addEventListener('offline', handleOffline);
     window.addEventListener('toggleSidebar', handleToggleSidebar);
     
-    const syncInterval = setInterval(() => {
-      setPendingSyncs(syncEngine.getPendingCount());
-    }, 5000);
-
     return () => {
       subscription.unsubscribe();
-      window.removeEventListener('online', handleOnline);
-      window.removeEventListener('offline', handleOffline);
       window.removeEventListener('toggleSidebar', handleToggleSidebar);
-      clearInterval(syncInterval);
     };
   }, []);
 
-  /**
-   * Sovereign Rendering Engine
-   * Resolves the active tab to a dynamic component from the map.
-   */
   const renderContent = () => {
     const activeModule = findModule(activeTab);
-    
-    // If not found in dynamic menu or no component mapped, default to dashboard
     const component = COMPONENT_MAP[activeTab] || COMPONENT_MAP['dashboard'];
     
-    // Security check: If backend didn't return it, it shouldn't be accessible
     if (Array.isArray(dynamicMenu) && dynamicMenu.length > 0 && !activeModule && activeTab !== 'dashboard') {
        return (
-        <div className="flex flex-col items-center justify-center h-[60vh] gap-6 text-center">
-          <div className="w-20 h-20 bg-rose-500/10 rounded-3xl flex items-center justify-center text-rose-500">
+        <div className="flex flex-col items-center justify-center h-[60vh] gap-[var(--space-6)] text-center">
+          <div className="w-20 h-20 bg-[var(--danger)]/10 rounded-[var(--radius-xl)] flex items-center justify-center text-[var(--danger)]">
             <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><path d="M12 8v4"/><path d="M12 16h.01"/></svg>
           </div>
-          <h2 className="text-2xl font-serif font-black text-navy uppercase">Unauthorized</h2>
-          <p className="text-xs text-navy/50 max-w-md">This module is not active in your current navigation context.</p>
+          <h2 className="text-2xl font-bold text-[var(--text-primary)] u-uppercase">Unauthorized</h2>
+          <p className="text-xs text-[var(--text-secondary)] max-w-md">This module is not active in your current navigation context.</p>
         </div>
        );
     }
@@ -211,11 +163,11 @@ const SmritiOS: React.FC = () => {
   // ── FULLSCREEN BILLING MODE ──────────────────────────────────────────
   if (activeTab === 'sales') {
     return (
-      <div className="fixed inset-0 z-[9000] bg-[#f0ede8] overflow-hidden">
+      <div className="fixed inset-0 z-[var(--z-modal)] bg-[var(--background)] overflow-hidden">
         <button
           onClick={() => setActiveTab('dashboard')}
           title="Exit Billing [Esc]"
-          className="fixed top-3 right-4 z-[9999] text-[9px] font-black text-white/40 hover:text-white uppercase tracking-widest bg-black/20 hover:bg-black/40 px-3 py-1.5 rounded-full transition-all"
+          className="fixed top-[var(--space-3)] right-[var(--space-4)] z-[var(--z-modal)] text-[9px] font-black text-[var(--text-tertiary)] hover:text-[var(--text-primary)] u-uppercase tracking-widest bg-black/10 hover:bg-black/20 px-[var(--space-4)] py-[var(--space-2)] rounded-full transition-all"
         >
           ✕ Exit Billing
         </button>
@@ -226,8 +178,11 @@ const SmritiOS: React.FC = () => {
 
   return (
     <div 
-      className="flex min-h-screen bg-cream"
-      style={{ '--sw': isCollapsed ? '64px' : '256px' } as React.CSSProperties}
+      className="flex min-h-screen bg-[var(--background)] text-[var(--text-primary)]"
+      style={{ 
+        '--sw': isCollapsed ? '64px' : '256px',
+        '--srw': isRightCollapsed ? '0px' : 'var(--sidebar-right-w)'
+      } as React.CSSProperties}
     >
       <Sidebar 
         activeTab={activeTab} 
@@ -237,10 +192,14 @@ const SmritiOS: React.FC = () => {
         setIsCollapsed={setIsCollapsed}
       />
       
-      <div className={cn(
-        "main flex-1 ml-0 md:ml-[var(--sw)] flex flex-col relative transition-all duration-300 w-full overflow-x-hidden",
-        isRightCollapsed ? "mr-0" : "mr-0 lg:mr-[120px]"
-      )}>
+      <div 
+        className="main flex-1 flex flex-col relative transition-all duration-300 w-full overflow-x-hidden"
+        style={{ 
+          marginLeft: 'var(--sw)', 
+          marginRight: 'var(--srw)',
+          marginTop: 'var(--topbar-h)' 
+        }}
+      >
         <CommandBar 
           isOpen={isCommandBarOpen} 
           onClose={() => {
@@ -268,12 +227,9 @@ const SmritiOS: React.FC = () => {
 
         {/* Main Content Area */}
         <main 
-          className="flex-1 animate-fadeUp overflow-y-auto"
+          className="flex-1 overflow-y-auto p-6 bg-[var(--background)]"
           style={{ 
-            paddingTop: 'calc(var(--topbar-h) + 24px)',
-            paddingBottom: 'calc(var(--status-bar-h) + 24px)',
-            paddingLeft: '28px',
-            paddingRight: '28px'
+            paddingBottom: 'calc(var(--status-bar-h, 24px) + 2rem)'
           }}
         >
           <AnimatePresence mode="wait">
@@ -282,7 +238,7 @@ const SmritiOS: React.FC = () => {
               initial={{ opacity: 0, y: 12 }}
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: -12 }}
-              transition={{ duration: 0.3, ease: "easeOut" }}
+              transition={{ duration: 0.2, ease: "easeOut" }}
             >
               {renderContent()}
             </motion.div>

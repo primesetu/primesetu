@@ -4,7 +4,7 @@
  * ============================================================
  * System Architect   :  Jawahar R Mallah
  * Organisation       :  AITDL Network
- * Project            :  SMRITI-OS
+ * Project : SMRITI-OS
  * © 2026 — All Rights Reserved
  * "Memory, Not Code."
  * ============================================================ */
@@ -23,7 +23,7 @@ const StatusBar: React.FC<StatusBarProps> = ({ activeTab }) => {
   const sync = useNodeSync();
   const { theme } = useTheme();
   const [showSync, setShowSync] = useState(false);
-  const isTally = theme === 'tallyprime';
+  const isTally = theme === 'SMRITI-OS';
 
   const statusMap: Record<string, { color: string; label: string }> = {
     online:  { color: 'var(--green)',  label: 'HO Pulse Active' },
@@ -114,3 +114,7 @@ const StatusBar: React.FC<StatusBarProps> = ({ activeTab }) => {
 };
 
 export default StatusBar;
+
+
+
+

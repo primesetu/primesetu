@@ -6,7 +6,7 @@ export const ThemeToggle = () => {
   const { theme, setTheme } = useTheme();
 
   const toggleTheme = () => {
-    setTheme(theme === 'tallyprime' ? 'dark' : 'tallyprime');
+    setTheme(theme === 'SMRITI-OS' ? 'dark' : 'SMRITI-OS');
   };
 
   return (
@@ -16,10 +16,10 @@ export const ThemeToggle = () => {
       onClick={toggleTheme}
       className="gap-3 px-4 py-2 bg-bg-float/40 border-border-subtle hover:bg-accent/10 hover:text-accent transition-all group"
     >
-      {theme !== 'tallyprime' ? (
+      {theme !== 'SMRITI-OS' ? (
         <>
           <Monitor size={14} className="text-accent" />
-          <span className="text-[10px] font-black uppercase tracking-widest">TallyPrime Mode</span>
+          <span className="text-[10px] font-black uppercase tracking-widest">SMRITI-OS Mode</span>
         </>
       ) : (
         <>
@@ -30,3 +30,7 @@ export const ThemeToggle = () => {
     </Button>
   );
 };
+
+
+
+

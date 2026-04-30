@@ -4,7 +4,7 @@
  * ============================================================
  * System Architect : Jawahar R Mallah
  * Organisation     : AITDL Network
- * Project          : SMRITI-OS
+ * Project : SMRITI-OS
  * © 2026 — All Rights Reserved
  * "Memory, Not Code."
  * ============================================================ */
@@ -239,3 +239,7 @@ const CustomerMaster: React.FC = () => {
 };
 
 export default CustomerMaster;
+
+
+
+

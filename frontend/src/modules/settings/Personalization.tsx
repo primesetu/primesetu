@@ -4,7 +4,7 @@
  * ============================================================
  * System Architect   :  Jawahar R Mallah
  * Organisation       :  AITDL Network
- * Project            :  SMRITI-OS
+ * Project : SMRITI-OS
  * © 2026 — All Rights Reserved
  * "Memory, Not Code."
  * ============================================================ */
@@ -14,6 +14,21 @@ import { motion } from 'framer-motion';
 import { Palette, Monitor, Zap, CheckCircle2 } from 'lucide-react';
 
 const THEMES = [
+  {
+    id: 'SMRITI-OS' as const,
+    name: 'SMRITI-OS Institutional',
+    tagline: 'Enterprise ERP Parity — Zero Distraction',
+    icon: Monitor,
+    preview: {
+      bg: '#f0f1f1',
+      sidebar: '#008c85',
+      header: '#008c85',
+      primary: '#f29b12',
+      text: '#212121',
+      card: '#FFFFFF',
+      border: '#bcbcbc',
+    }
+  },
   {
     id: 'tesla' as const,
     name: 'Tesla Design',
@@ -28,21 +43,6 @@ const THEMES = [
       card: 'rgba(255,255,255,0.04)',
       border: 'rgba(255,255,255,0.08)',
     }
-  },
-  {
-    id: 'tallyprime' as const,
-    name: 'TallyPrime Institutional',
-    tagline: 'Enterprise ERP Parity — Zero Distraction',
-    icon: Monitor,
-    preview: {
-      bg: '#f0f1f1',
-      sidebar: '#008c85',
-      header: '#008c85',
-      primary: '#f29b12',
-      text: '#212121',
-      card: '#FFFFFF',
-      border: '#bcbcbc',
-    }
   }
 ];
 
@@ -55,7 +55,7 @@ const ACCENTS = [
 
 // Mini preview of the billing terminal in each theme
 function ThemePreview({ preview, themeName }: { preview: typeof THEMES[0]['preview'], themeName: string }) {
-  const isInstitutional = themeName === 'TallyPrime Institutional';
+  const isInstitutional = themeName === 'SMRITI-OS Institutional';
   const br = isInstitutional ? '0px' : '12px';
   const brSm = isInstitutional ? '0px' : '8px';
   const shadow = isInstitutional ? 'none' : '0 4px 20px rgba(0,0,0,0.4)';
@@ -221,8 +221,8 @@ export default function Personalization() {
         </motion.section>
       )}
 
-      {/* TallyPrime Institutional note */}
-      {theme === 'tallyprime' && (
+      {/* SMRITI-OS Institutional note */}
+      {theme === 'SMRITI-OS' && (
         <motion.div
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
@@ -231,7 +231,7 @@ export default function Personalization() {
           <Monitor className="w-5 h-5 mt-0.5 shrink-0 text-[#008c85]" />
           <div>
             <strong className="text-[#008c85]">Institutional Mode Active</strong> — All animations disabled for maximum speed.
-            Fonts set to Segoe UI. Headers use Tally Institutional Teal.
+            Fonts set to Segoe UI. Headers use SMRITI Institutional Teal.
             Hotkey labels are locked to Golden Amber.
           </div>
         </motion.div>
@@ -239,3 +239,7 @@ export default function Personalization() {
     </div>
   );
 }
+
+
+
+

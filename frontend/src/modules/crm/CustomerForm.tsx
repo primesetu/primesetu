@@ -4,7 +4,7 @@
  * ============================================================
  * System Architect : Jawahar R Mallah
  * Organisation     : AITDL Network
- * Project          : SMRITI-OS
+ * Project : SMRITI-OS
  * © 2026 — All Rights Reserved
  * "Memory, Not Code."
  * ============================================================ */
@@ -96,7 +96,7 @@ const CustomerForm: React.FC<CustomerFormProps> = ({ onClose, editId }) => {
   });
 
   return (
-    <div className="fixed inset-0 z-[10000] flex items-center justify-end">
+    <div className="fixed inset-0 z-[var(--z-modal)] flex items-center justify-end">
       <div className="absolute inset-0 bg-navy/60 backdrop-blur-sm" onClick={onClose} />
       
       <div className="relative bg-cream w-full max-w-3xl h-full shadow-2xl flex flex-col animate-slideLeft">
@@ -253,3 +253,7 @@ const CustomerForm: React.FC<CustomerFormProps> = ({ onClose, editId }) => {
 };
 
 export default CustomerForm;
+
+
+
+

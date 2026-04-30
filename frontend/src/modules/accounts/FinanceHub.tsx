@@ -2,7 +2,7 @@
  * SMRITI-OS — Shoper9-Based Retail OS
  * Zero Cloud · Sovereign · AI-Governed
  * ============================================================
- * Finance Hub (GSTR-1 & Tally Bridge)
+ * Finance Hub (GSTR-1 & Accounting Bridge)
  * Tesla Style Reporting
  * ============================================================ */
 
@@ -56,7 +56,7 @@ export default function FinanceHub() {
       a.download = res.filename;
       a.click();
     } catch (err) {
-      alert('Tally Export Failed');
+      alert('Accounting Export Failed');
     }
   };
 
@@ -70,12 +70,12 @@ export default function FinanceHub() {
              <ShieldCheck className="w-4 h-4 text-emerald-500" />
           </div>
           <h1 className="text-5xl font-black text-navy tracking-tighter" style={{ fontFamily: 'var(--font-tesla)' }}>Finance Hub</h1>
-          <p className="text-xs text-navy/40 font-bold uppercase tracking-widest mt-4">GSTR-1 Reconciliation · Tally Bridge · Ledger Management</p>
+          <p className="text-xs text-navy/40 font-bold uppercase tracking-widest mt-4">GSTR-1 Reconciliation · Accounting Bridge · Ledger Management</p>
         </div>
 
         <div className="flex gap-4">
            <button onClick={() => setActiveTab('gst')} className={`px-8 py-4 rounded-2xl text-[10px] font-black uppercase tracking-widest transition-all ${activeTab === 'gst' ? 'bg-navy text-white shadow-xl' : 'bg-navy/5 text-navy/40 hover:bg-navy/10'}`}>GSTR-1 Summary</button>
-           <button onClick={() => setActiveTab('tally')} className={`px-8 py-4 rounded-2xl text-[10px] font-black uppercase tracking-widest transition-all ${activeTab === 'tally' ? 'bg-navy text-white shadow-xl' : 'bg-navy/5 text-navy/40 hover:bg-navy/10'}`}>Tally Bridge</button>
+           <button onClick={() => setActiveTab('tally')} className={`px-8 py-4 rounded-2xl text-[10px] font-black uppercase tracking-widest transition-all ${activeTab === 'tally' ? 'bg-navy text-white shadow-xl' : 'bg-navy/5 text-navy/40 hover:bg-navy/10'}`}>Accounting Bridge</button>
         </div>
       </div>
 
@@ -150,16 +150,16 @@ export default function FinanceHub() {
           </div>
           
           <div>
-            <h2 className="text-4xl font-black text-navy tracking-tighter mb-4" style={{ fontFamily: 'var(--font-tesla)' }}>Tally ERP Bridge</h2>
+            <h2 className="text-4xl font-black text-navy tracking-tighter mb-4" style={{ fontFamily: 'var(--font-tesla)' }}>Institutional Bridge</h2>
             <p className="text-sm text-navy/40 font-bold uppercase tracking-widest max-w-lg leading-relaxed">
-              Export institutional vouchers directly to Tally. SMRITI-OS handles all ledger mapping, tax reconciliation, and voucher numbering automatically.
+              Export institutional vouchers directly to accounting. SMRITI-OS handles all ledger mapping, tax reconciliation, and voucher numbering automatically.
             </p>
           </div>
 
           <div className="flex gap-6 mt-6">
              <button onClick={handleTallyExport} className="tesla-button px-12 py-6 bg-navy text-white flex items-center gap-4">
                <Download size={20} className="text-brand-gold" />
-               Generate Tally XML
+               Generate Accounting XML
              </button>
              <button className="tesla-button px-12 py-6 bg-white text-navy border-navy/10 flex items-center gap-4">
                <FileText size={20} className="text-navy/40" />
@@ -183,3 +183,7 @@ export default function FinanceHub() {
     </div>
   );
 }
+
+
+
+

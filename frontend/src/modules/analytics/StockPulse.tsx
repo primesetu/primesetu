@@ -3,7 +3,7 @@
  * Zero Cloud · Sovereign · AI-Governed
  * ============================================================ */
 
-import React from 'react';
+import React, { useMemo } from 'react';
 import { 
   Zap, 
   AlertTriangle, 
@@ -13,126 +13,164 @@ import {
   Package,
   Activity,
   ChevronRight,
-  Filter
+  Filter,
+  BrainCircuit,
+  Box
 } from 'lucide-react';
 import { motion } from 'framer-motion';
-
 import { useIntelligenceDoc } from '@/hooks/useIntelligence';
+import { 
+  Button, 
+  Card, 
+  Text, 
+  Badge,
+  DataTable 
+} from '@/components/ui/SovereignUI';
+import { cn } from '@/lib/utils';
 
 export default function StockPulse() {
   const { data: analysis = [], isLoading: loading } = useIntelligenceDoc();
 
   const getStatusColor = (status: string) => {
     switch (status) {
-      case 'CRITICAL': return 'text-rose-600 bg-rose-100 border-rose-200';
-      case 'WARNING': return 'text-amber-600 bg-amber-100 border-amber-200';
-      case 'OVERSTOCK': return 'text-indigo-600 bg-indigo-100 border-indigo-200';
-      case 'DEAD': return 'text-slate-600 bg-slate-100 border-slate-200';
-      default: return 'text-emerald-600 bg-emerald-100 border-emerald-200';
+      case 'CRITICAL': return 'bg-rose-500 text-white border-none shadow-lg shadow-rose-100';
+      case 'WARNING': return 'bg-amber-500 text-white border-none shadow-lg shadow-amber-100';
+      case 'OVERSTOCK': return 'bg-indigo-500 text-white border-none shadow-lg shadow-indigo-100';
+      case 'DEAD': return 'bg-slate-500 text-white border-none shadow-lg shadow-slate-100';
+      default: return 'bg-emerald-500 text-white border-none shadow-lg shadow-emerald-100';
     }
   };
 
+  // ── INTELLIGENCE COLUMNS ──
+  const columns = useMemo(() => [
+    {
+      header: "ENTITY IDENTITY",
+      accessor: (row: any) => (
+        <div className="flex items-center gap-6 py-2">
+          <div className="w-12 h-12 rounded-2xl bg-navy/5 flex items-center justify-center font-black text-xs text-navy/40 shadow-inner">
+            {row.sku.charAt(0)}
+          </div>
+          <div className="flex flex-col leading-tight">
+            <span className="font-black text-navy text-sm uppercase tracking-tight">{row.name}</span>
+            <span className="text-[9px] text-navy/30 font-black uppercase tracking-[0.2em] mt-1">{row.sku} · {row.brand}</span>
+          </div>
+        </div>
+      ),
+      flex: 2,
+      pinned: 'left' as const
+    },
+    {
+      header: "STOCK (UNITS)",
+      accessor: 'stock',
+      width: 130,
+      className: 'text-center font-mono font-black text-navy'
+    },
+    {
+      header: "30D VELOCITY",
+      accessor: (row: any) => (
+        <div className="flex flex-col items-center">
+          <span className="font-black text-navy">{row.velocity}</span>
+          <span className="text-[8px] font-black text-navy/20 uppercase tracking-tighter">Units / Day</span>
+        </div>
+      ),
+      width: 140,
+      className: 'text-center'
+    },
+    {
+      header: "DAYS OF COVER",
+      accessor: (row: any) => (
+        <div className={cn(
+          "inline-flex items-center justify-center px-6 py-2 rounded-2xl font-black text-sm border-2",
+          row.doc < 7 ? "bg-rose-50 border-rose-100 text-rose-600" : "bg-navy/5 border-transparent text-navy"
+        )}>
+          {row.doc}
+        </div>
+      ),
+      width: 160,
+      className: 'text-center'
+    },
+    {
+      header: "HEALTH STATUS",
+      accessor: (row: any) => (
+        <Badge className={cn("px-4 py-2 font-black text-[9px] uppercase tracking-widest rounded-xl", getStatusColor(row.status))}>
+          {row.status}
+        </Badge>
+      ),
+      width: 160,
+      pinned: 'right' as const
+    }
+  ], []);
+
   return (
-    <div className="p-8 space-y-10 max-w-7xl mx-auto animate-in fade-in slide-in-from-bottom-4 duration-700">
-      <header className="flex justify-between items-end">
-        <div>
-          <h1 className="text-4xl font-serif font-black text-navy flex items-center gap-4">
-            <Activity className="w-12 h-12 text-brand-gold" />
-            Predictive Stock Pulse
-          </h1>
-          <p className="text-xs text-muted font-bold uppercase tracking-[0.2em] mt-3">Phase 5 Operational Intelligence · Days of Cover Active</p>
+    <div className="p-10 space-y-10 max-w-7xl mx-auto animate-in fade-in slide-in-from-bottom-4 duration-1000">
+      <header className="flex justify-between items-center bg-white p-12 rounded-[4rem] shadow-sm border border-navy/5">
+        <div className="flex items-center gap-8">
+           <div className="h-20 w-20 bg-navy rounded-[2.5rem] flex items-center justify-center shadow-2xl shadow-navy/20">
+              <Activity className="w-10 h-10 text-brand-gold" />
+           </div>
+           <div>
+             <Text variant="h1" className="font-serif font-black text-navy uppercase tracking-tighter leading-none">Predictive Stock Pulse</Text>
+             <Text variant="xs" className="text-navy/30 font-black uppercase tracking-[0.4em] mt-3">Phase 5 Operational Intelligence · Days of Cover Algorithm Active</Text>
+           </div>
         </div>
         
         <div className="flex gap-4">
-          <button className="bg-white border-2 border-border px-8 py-4 rounded-2xl font-black text-[10px] uppercase tracking-widest hover:bg-cream transition-all flex items-center gap-2">
-            <Filter className="w-4 h-4" /> Refine Heuristics
-          </button>
+          <Button variant="sec" className="h-14 px-8 rounded-2xl border-navy/5 bg-white text-navy font-black text-[10px] uppercase tracking-widest gap-3 shadow-xl">
+            <Filter className="w-5 h-5 text-brand-gold" /> Refine Heuristics
+          </Button>
         </div>
       </header>
 
       {/* KPI Grid */}
       <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
         {[
-          { label: 'OOS Risk (Critical)', val: analysis.filter(a => a.status === 'CRITICAL').length, icon: AlertTriangle, color: 'text-rose-500' },
-          { label: 'Reorder Needed', val: analysis.filter(a => a.status === 'WARNING').length, icon: Zap, color: 'text-amber-500' },
-          { label: 'Healthy Runway', val: analysis.filter(a => a.status === 'HEALTHY').length, icon: ShieldCheck, color: 'text-emerald-500' },
-          { label: 'Inventory Bloat', val: analysis.filter(a => a.status === 'OVERSTOCK').length, icon: TrendingDown, color: 'text-indigo-500' },
+          { label: 'OOS Risk (Critical)', val: analysis.filter(a => a.status === 'CRITICAL').length, icon: AlertTriangle, color: 'text-rose-500', bg: 'bg-rose-50' },
+          { label: 'Reorder Protocol', val: analysis.filter(a => a.status === 'WARNING').length, icon: Zap, color: 'text-amber-500', bg: 'bg-amber-50' },
+          { label: 'Healthy Runway', val: analysis.filter(a => a.status === 'HEALTHY').length, icon: ShieldCheck, color: 'text-emerald-500', bg: 'bg-emerald-50' },
+          { label: 'Inventory Bloat', val: analysis.filter(a => a.status === 'OVERSTOCK').length, icon: TrendingDown, color: 'text-indigo-500', bg: 'bg-indigo-50' },
         ].map((kpi, i) => (
-          <div key={i} className="glass p-8 rounded-[2.5rem] shadow-xl border border-white/50">
-            <div className="flex justify-between items-start mb-6">
-              <kpi.icon className={`w-8 h-8 ${kpi.color}`} />
+          <Card key={i} className={cn("p-10 rounded-[3rem] shadow-xl border-none relative overflow-hidden group bg-white")}>
+            <div className={cn("absolute -right-4 -top-4 opacity-5 group-hover:scale-110 transition-transform duration-1000", kpi.color)}>
+               <kpi.icon size={120} />
             </div>
-            <p className="text-[10px] font-black text-muted uppercase tracking-widest mb-1">{kpi.label}</p>
-            <div className="text-4xl font-serif font-black text-navy">{kpi.val} <span className="text-sm font-sans font-bold text-muted/40">SKUs</span></div>
-          </div>
+            <div className="relative z-10">
+               <kpi.icon className={cn("w-8 h-8 mb-6", kpi.color)} />
+               <Text variant="h1" className="text-4xl font-black text-navy mb-2">
+                 {kpi.val} <span className="text-xs text-navy/20 font-sans uppercase tracking-widest">SKUs</span>
+               </Text>
+               <Text variant="xs" className="font-black text-navy/20 uppercase tracking-widest">{kpi.label}</Text>
+            </div>
+          </Card>
         ))}
       </div>
 
       {/* Main Pulse Table */}
-      <div className="glass rounded-[3.5rem] shadow-2xl overflow-hidden border border-white/50">
-        <div className="panel-header px-10 py-6 flex justify-between items-center">
-          <h3 className="text-xl font-serif font-black uppercase tracking-tight">Intelligence Ledger</h3>
-          <span className="text-[10px] font-black tracking-[0.2em] opacity-60">30-Day Velocity Moving Average</span>
+      <Card className="rounded-[4.5rem] shadow-2xl overflow-hidden border-none bg-white flex flex-col relative">
+        <div className="absolute right-0 top-0 opacity-[0.02] p-10 rotate-12">
+           <BrainCircuit size={200} />
+        </div>
+        <div className="px-12 py-10 border-b border-navy/5 flex justify-between items-center relative z-10">
+          <div className="flex items-center gap-4">
+             <div className="h-3 w-3 bg-brand-gold rounded-full animate-pulse" />
+             <Text variant="xs" className="font-black text-navy uppercase tracking-[0.4em]">Intelligence Ledger · Real-Time Pulse</Text>
+          </div>
+          <Badge variant="info" className="bg-navy/5 text-navy font-black text-[9px] uppercase tracking-widest">30-Day Velocity MVA</Badge>
         </div>
 
-        <div className="overflow-x-auto">
-          <table className="w-full text-left">
-            <thead className="bg-cream/30 text-[9px] font-black uppercase tracking-widest text-muted border-b border-border">
-              <tr>
-                <th className="pl-10 py-6">Identity</th>
-                <th className="px-6 py-6 text-center">Stock</th>
-                <th className="px-6 py-6 text-center">30D Velocity</th>
-                <th className="px-6 py-6 text-center">Days of Cover</th>
-                <th className="pr-10 py-6 text-right">Health Status</th>
-              </tr>
-            </thead>
-            <tbody className="divide-y divide-border/50">
-              {loading ? (
-                <tr><td colSpan={5} className="py-20 text-center font-black text-muted uppercase tracking-widest">Synthesizing Neural Data...</td></tr>
-              ) : (
-                analysis.map((row, i) => (
-                  <tr key={i} className="hover:bg-cream/5 transition-colors group">
-                    <td className="pl-10 py-6">
-                      <div className="flex items-center gap-4">
-                        <div className="w-10 h-10 rounded-xl bg-navy/5 flex items-center justify-center font-black text-xs text-navy/40">
-                          {row.sku.charAt(0)}
-                        </div>
-                        <div>
-                          <p className="font-black text-navy text-sm">{row.name}</p>
-                          <p className="text-[10px] text-muted font-bold uppercase tracking-widest">{row.sku} · {row.brand}</p>
-                        </div>
-                      </div>
-                    </td>
-                    <td className="px-6 py-6 text-center font-mono text-sm font-bold">{row.stock}</td>
-                    <td className="px-6 py-6 text-center">
-                      <div className="flex flex-col items-center">
-                        <span className="font-black text-navy">{row.velocity}</span>
-                        <span className="text-[8px] font-black text-muted uppercase tracking-tighter">Units/Day</span>
-                      </div>
-                    </td>
-                    <td className="px-6 py-6 text-center">
-                      <div className={`inline-flex items-center gap-2 px-4 py-2 rounded-xl font-black text-sm ${
-                        row.doc < 7 ? 'text-rose-600 bg-rose-50' : 'text-navy'
-                      }`}>
-                        {row.doc}
-                      </div>
-                    </td>
-                    <td className="pr-10 py-6 text-right">
-                      <span className={`px-4 py-2 rounded-lg text-[9px] font-black uppercase tracking-widest border ${getStatusColor(row.status)}`}>
-                        {row.status}
-                      </span>
-                    </td>
-                  </tr>
-                ))
-              )}
-            </tbody>
-          </table>
+        <div className="h-[500px]">
+           <DataTable 
+             data={analysis} 
+             columns={columns} 
+             loading={loading}
+             overlayNoRowsTemplate={`
+               <div class="flex flex-col items-center justify-center opacity-10 h-full">
+                  <Box size="60" class="mb-4" />
+                  <div class="text-xs font-black uppercase tracking-[0.4em]">Neural Data Unavailable</div>
+               </div>
+             `}
+           />
         </div>
-      </div>
+      </Card>
     </div>
   );
 }
-
-
-
-

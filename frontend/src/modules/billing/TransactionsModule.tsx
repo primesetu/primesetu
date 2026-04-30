@@ -23,7 +23,8 @@ import {
   Input, 
   Card, 
   Text, 
-  Badge 
+  Badge,
+  DataTable
 } from '../../components/ui/SovereignUI';
 
 export default function TransactionsModule() {
@@ -110,42 +111,45 @@ export default function TransactionsModule() {
                   </div>
 
                   <div className="p-0">
-                    <table className="w-full text-left">
-                      <thead>
-                        <tr className="bg-bg-float/40 text-[9px] font-black uppercase tracking-[0.2em] text-text-tertiary border-b border-border-subtle">
-                          <th className="px-10 py-5">Item Entity</th>
-                          <th className="py-5 text-center">Original Qty</th>
-                          <th className="py-5 text-center">Return Volume</th>
-                          <th className="py-5 text-right">Refund Value</th>
-                          <th className="px-10 py-5 text-center">Registry Action</th>
-                        </tr>
-                      </thead>
-                      <tbody className="divide-y divide-border-subtle">
-                        {[
-                          { name: 'Puma RS-X Bold', size: '10', price: 249900 },
-                          { name: 'Nexus Cotton Tee', size: 'L', price: 99900 }
-                        ].map((item, i) => (
-                          <tr key={i} className="hover:bg-bg-float/20 transition-colors">
-                            <td className="px-10 py-6">
+                    <DataTable
+                      data={[
+                        { name: 'Puma RS-X Bold', size: '10', price: 249900 },
+                        { name: 'Nexus Cotton Tee', size: 'L', price: 99900 }
+                      ]}
+                      columns={[
+                        { 
+                          header: 'Item Entity', 
+                          accessor: (item: any) => (
+                            <div className="py-2">
                               <Text variant="sm" className="font-bold uppercase">{item.name}</Text>
                               <Text variant="xs" className="font-mono mt-1 block">Size: {item.size} | MRP: {formatCurrency(item.price)}</Text>
-                            </td>
-                            <td className="py-6 text-center font-mono font-bold text-text-tertiary">1</td>
-                            <td className="py-6 text-center">
-                              <div className="inline-flex items-center bg-bg-input rounded-xl border border-border-subtle px-4 py-2">
-                                <Input type="number" defaultValue="1" className="w-12 h-6 p-0 border-none bg-transparent text-center font-black" />
-                              </div>
-                            </td>
-                            <td className="py-6 text-right font-mono font-black text-text-primary">{formatCurrency(item.price)}</td>
-                            <td className="px-10 py-6 text-center">
-                               <Button variant="ghost" size="sm" className="text-status-red hover:bg-status-red/10">
-                                  <Trash2 size={14} />
-                               </Button>
-                            </td>
-                          </tr>
-                        ))}
-                      </tbody>
-                    </table>
+                            </div>
+                          ),
+                          className: 'px-10'
+                        },
+                        { header: 'Original Qty', accessor: () => '1', align: 'center', className: 'font-mono font-bold text-text-tertiary' },
+                        { 
+                          header: 'Return Volume', 
+                          accessor: () => (
+                            <div className="inline-flex items-center bg-bg-input rounded-xl border border-border-subtle px-4 py-1">
+                              <Input type="number" defaultValue="1" className="w-12 h-6 p-0 border-none bg-transparent text-center font-black" />
+                            </div>
+                          ),
+                          align: 'center'
+                        },
+                        { header: 'Refund Value', accessor: (item: any) => formatCurrency(item.price), align: 'right', className: 'font-mono font-black text-text-primary' },
+                        { 
+                          header: 'Registry Action', 
+                          accessor: () => (
+                            <Button variant="ghost" size="sm" className="text-status-red hover:bg-status-red/10">
+                              <Trash2 size={14} />
+                            </Button>
+                          ),
+                          align: 'center',
+                          className: 'px-10'
+                        }
+                      ]}
+                    />
                   </div>
 
                   <div className="p-8 bg-bg-float/20 border-t border-border-subtle flex items-center justify-between">
@@ -199,39 +203,29 @@ export default function TransactionsModule() {
                    </Button>
                 </div>
                 <div className="overflow-x-auto">
-                   <table className="w-full text-left">
-                      <thead>
-                        <tr className="bg-bg-float/40 text-[9px] font-black uppercase tracking-[0.2em] text-text-tertiary border-b border-border-subtle">
-                          <th className="px-10 py-5">Protocol ID</th>
-                          <th className="px-6 py-5">Customer Entity</th>
-                          <th className="px-6 py-5">Issue Timestamp</th>
-                          <th className="px-6 py-5">Expiry Threshold</th>
-                          <th className="px-6 py-5 text-right">Registry Balance</th>
-                          <th className="px-10 py-5 text-center">Status</th>
-                        </tr>
-                      </thead>
-                      <tbody className="divide-y divide-border-subtle">
-                        {[
-                          { no: 'CN-2026-001', cust: 'A.K. Sharma', date: '2026-04-01', exp: '2026-07-01', val: 120000, status: 'ACTIVE' },
-                          { no: 'CN-2026-002', cust: 'Mehul Jani', date: '2026-04-12', exp: '2026-07-12', val: 45000, status: 'EXPIRED' }
-                        ].map((cn, i) => (
-                          <tr key={i} className="hover:bg-bg-float/20 transition-colors">
-                            <td className="px-10 py-6 font-mono font-bold text-accent">{cn.no}</td>
-                            <td className="px-6 py-6 font-bold uppercase text-text-secondary">{cn.cust}</td>
-                            <td className="px-6 py-6 font-mono text-xs opacity-60">{cn.date}</td>
-                            <td className="px-6 py-6 font-mono text-xs text-status-red/60">{cn.exp}</td>
-                            <td className="px-6 py-6 text-right">
-                               <Text variant="h3" className="font-mono text-text-primary">{formatCurrency(cn.val)}</Text>
-                            </td>
-                            <td className="px-10 py-6 text-center">
-                               <Badge variant={cn.status === 'ACTIVE' ? 'success' : 'error'}>
-                                 {cn.status}
-                               </Badge>
-                            </td>
-                          </tr>
-                        ))}
-                      </tbody>
-                   </table>
+                   <DataTable
+                      data={[
+                        { no: 'CN-2026-001', cust: 'A.K. Sharma', date: '2026-04-01', exp: '2026-07-01', val: 120000, status: 'ACTIVE' },
+                        { no: 'CN-2026-002', cust: 'Mehul Jani', date: '2026-04-12', exp: '2026-07-12', val: 45000, status: 'EXPIRED' }
+                      ]}
+                      columns={[
+                        { header: 'Protocol ID', accessor: 'no', className: 'px-10 font-mono font-bold text-accent' },
+                        { header: 'Customer Entity', accessor: 'cust', className: 'px-6 font-bold uppercase text-text-secondary' },
+                        { header: 'Issue Timestamp', accessor: (item: any) => <span className="opacity-60">{item.date}</span>, className: 'px-6 font-mono text-xs' },
+                        { header: 'Expiry Threshold', accessor: (item: any) => <span className="text-status-red/60">{item.exp}</span>, className: 'px-6 font-mono text-xs' },
+                        { header: 'Registry Balance', accessor: (item: any) => <Text variant="h3" className="font-mono text-text-primary">{formatCurrency(item.val)}</Text>, align: 'right', className: 'px-6' },
+                        { 
+                          header: 'Status', 
+                          accessor: (item: any) => (
+                            <Badge variant={item.status === 'ACTIVE' ? 'success' : 'error'}>
+                              {item.status}
+                            </Badge>
+                          ),
+                          align: 'center',
+                          className: 'px-10'
+                        }
+                      ]}
+                   />
                 </div>
              </Card>
           </motion.div>

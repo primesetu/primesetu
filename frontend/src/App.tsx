@@ -170,18 +170,6 @@ const SmritiOS: React.FC = () => {
   if (activeTab === 'sales') {
     return (
       <div className="fixed inset-0 z-[var(--z-modal)] bg-[var(--background)] overflow-hidden">
-        <button
-          onClick={() => setActiveTab('dashboard')}
-          title="Exit Billing [Esc]"
-          className={cn(
-            "fixed top-[var(--space-3)] right-[var(--space-4)] z-[var(--z-modal)] text-[9px] font-black u-uppercase tracking-widest px-[var(--space-4)] py-[var(--space-2)] rounded-full transition-all",
-            theme === 'SMRITI-OS' 
-              ? "bg-white/20 text-white hover:bg-white/30" 
-              : "bg-[var(--surface-elevated)] border border-[var(--border-subtle)] text-[var(--text-tertiary)] hover:text-[var(--text-primary)]"
-          )}
-        >
-          ✕ Exit Billing
-        </button>
         {COMPONENT_MAP['sales']}
       </div>
     );
@@ -239,7 +227,7 @@ const SmritiOS: React.FC = () => {
 
         {/* Main Content Area */}
         <main 
-          className="flex-1 overflow-y-auto p-6 bg-[var(--background)]"
+          className="flex-1 overflow-y-auto bg-[var(--background)]"
           style={{ 
             paddingBottom: 'calc(var(--status-bar-h, 24px) + 2rem)'
           }}

@@ -29,7 +29,8 @@ import {
   Card, 
   Text, 
   Badge, 
-  cn 
+  cn,
+  DataTable 
 } from '../../components/ui/SovereignUI';
 
 interface FieldConfig {
@@ -75,7 +76,9 @@ export default function ItemMaster({ onOpenMatrix }: ItemMasterProps) {
   });
 
   // ── GRID DATA STATE ────────────────────────────────────────────────
-  const [gridData, setGridData] = useState<any[]>([]);
+  const [gridData, setGridData] = useState<any[]>([
+    { id: 1 }, { id: 2 }, { id: 3 }, { id: 4 }, { id: 5 }
+  ]);
   const [focusedCell, setFocusedCell] = useState<{ row: number, col: string } | null>(null);
 
   // ── KEYBOARD SHORTCUTS ──────────────────────────────────────────────
@@ -300,59 +303,42 @@ export default function ItemMaster({ onOpenMatrix }: ItemMasterProps) {
               exit={{ opacity: 0, y: -10 }}
               className="h-full flex flex-col p-6"
             >
-              <div className="flex-1 bg-bg-elevated/5 border border-border-subtle rounded-2xl overflow-auto custom-scrollbar relative shadow-2xl">
-                <table className="w-full text-left border-collapse whitespace-nowrap table-fixed">
-                  <thead className="sticky top-0 z-30 bg-bg-elevated/90 backdrop-blur-md border-b border-border-subtle">
-                    <tr className="font-mono text-[9px] font-black text-text-tertiary uppercase tracking-widest">
-                      <th className="w-12 px-4 py-4 text-center border-r border-border-subtle/30">#</th>
-                      {selectedFields.map(id => (
-                        <th key={id} className="px-6 py-4 border-r border-border-subtle/30">
-                          {ALL_FIELDS.find(f => f.id === id)?.label}
-                        </th>
-                      ))}
-                      <th className="w-12 px-4 py-4"></th>
-                    </tr>
-                  </thead>
-                  <tbody className="font-mono text-xs divide-y divide-border-subtle/10">
-                    {[1, 2, 3, 4, 5].map((rowIdx) => (
-                      <tr key={rowIdx} className="hover:bg-accent/[0.02] group transition-all">
-                        <td className="px-4 py-3 text-center border-r border-border-subtle/10 text-text-disabled text-[10px]">{rowIdx}</td>
-                        {selectedFields.map(fieldId => (
-                          <td 
-                            key={fieldId} 
-                            className={cn(
-                              "px-6 py-3 border-r border-border-subtle/10 relative",
-                              focusedCell?.row === rowIdx && focusedCell?.col === fieldId && "bg-accent/5 ring-1 ring-inset ring-accent/30"
-                            )}
-                          >
-                            <input 
-                              onFocus={() => setFocusedCell({ row: rowIdx, col: fieldId })}
-                              placeholder="..."
-                              className="w-full bg-transparent outline-none focus:text-accent font-medium placeholder:opacity-10"
-                              defaultValue={commonFields.includes(fieldId) ? commonData[fieldId] : ''}
-                            />
-                            {focusedCell?.row === rowIdx && focusedCell?.col === fieldId && (
-                              <span className="absolute right-2 top-1/2 -translate-y-1/2 text-[8px] font-black opacity-30">F2</span>
-                            )}
-                          </td>
-                        ))}
-                        <td className="px-4 py-3 text-center">
-                          <button className="opacity-0 group-hover:opacity-100 text-text-tertiary hover:text-status-red transition-all">
-                            <Trash2 size={14} />
-                          </button>
-                        </td>
-                      </tr>
-                    ))}
-                    {/* Empty add row */}
-                    <tr className="bg-bg-float/20 cursor-pointer hover:bg-accent/5 transition-all">
-                      <td colSpan={selectedFields.length + 2} className="px-6 py-4 text-center">
-                        <div className="flex items-center justify-center gap-2 text-accent text-[10px] font-black uppercase tracking-widest">
-                          <Plus size={14} /> Click to add next item or press Enter
-                        </div>
-                      </td>
-                    </tr>
-                  </tbody>
-                </table>
+              <div className="flex-1 bg-bg-elevated/5 border border-border-subtle rounded-2xl overflow-hidden relative shadow-2xl">
+                <DataTable
+                  data={gridData}
+                  columns={[
+                    { header: '#', accessor: (item: any) => gridData.indexOf(item) + 1, align: 'center', className: 'border-r border-border-subtle/10 text-text-disabled text-[10px]' },
+                    ...selectedFields.map(id => ({
+                      header: ALL_FIELDS.find(f => f.id === id)?.label || id,
+                      accessor: id,
+                      editable: true,
+                      className: 'px-6 border-r border-border-subtle/10 font-mono'
+                    })),
+                    { 
+                      header: '', 
+                      accessor: () => (
+                        <button className="text-text-tertiary hover:text-status-red transition-all">
+                          <Trash2 size={14} />
+                        </button>
+                      ),
+                      align: 'center'
+                    }
+                  ]}
+                  onCellValueChanged={(params) => {
+                    const newData = [...gridData];
+                    newData[params.rowIndex] = params.data;
+                    setGridData(newData);
+                  }}
+                />
+                {/* Empty add row simulation */}
+                <div 
+                  onClick={() => setGridData([...gridData, { id: gridData.length + 1 }])}
+                  className="bg-bg-float/20 cursor-pointer hover:bg-accent/5 transition-all py-4 border-t border-border-subtle"
+                >
+                  <div className="flex items-center justify-center gap-2 text-accent text-[10px] font-black uppercase tracking-widest">
+                    <Plus size={14} /> Click to add next item
+                  </div>
+                </div>
               </div>
             </motion.div>
           )}

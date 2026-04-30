@@ -8,7 +8,7 @@
  * © 2026 — All Rights Reserved
  * "Memory, Not Code."
  * ============================================================ */
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useMemo } from 'react'
 import { useTheme } from '@/hooks/useTheme'
 import { Monitor, Shield, Settings, Database, Tag, Layout, Store, Palette, Search, Plus, Filter, Save, X, Trash2, ArrowRight } from 'lucide-react'
 import { cn } from '@/lib/utils'
@@ -17,7 +17,14 @@ import Personalization from './Personalization'
 import BrowseCustomizer from './BrowseCustomizer'
 import CatalogueDNA from './CatalogueDNA'
 import TaxMaster from './TaxMaster'
-import { Button, Card, Text, Input, Badge } from '@/components/ui/SovereignUI'
+import { 
+  Button, 
+  Card, 
+  Text, 
+  Input, 
+  Badge,
+  DataTable 
+} from '@/components/ui/SovereignUI'
 
 export default function ConfigModule() {
   const { theme } = useTheme();
@@ -67,6 +74,39 @@ export default function ConfigModule() {
       alert("Failed to update store profile.");
     }
   };
+
+  // ── BRAND COLUMNS ──
+  const brandColumns = useMemo(() => [
+    {
+      header: "BRAND NAME",
+      accessor: (item: any) => <span className="font-black text-navy uppercase tracking-widest">{item.name}</span>,
+      flex: 2,
+      pinned: 'left' as const
+    },
+    {
+      header: "CATEGORY",
+      accessor: (item: any) => <span className="text-[10px] font-black text-navy/40 uppercase tracking-widest">{item.category}</span>,
+      width: 180
+    },
+    {
+      header: "ACTIVE SKUS",
+      accessor: (item: any) => <span className="font-serif font-black text-navy text-lg">{item.skus}</span>,
+      width: 150,
+      className: 'text-center'
+    },
+    {
+      header: "ACTIONS",
+      accessor: (item: any) => (
+        <div className="flex justify-end">
+          <Button variant="ghost" size="sm" className="text-[10px] font-black uppercase tracking-widest text-navy/40 hover:text-navy">
+            EDIT
+          </Button>
+        </div>
+      ),
+      width: 100,
+      pinned: 'right' as const
+    }
+  ], []);
 
   return (
     <div className="flex flex-col gap-[var(--space-8)] animate-in fade-in slide-in-from-bottom-4 duration-700">
@@ -219,50 +259,12 @@ export default function ConfigModule() {
               <p className="text-[10px] text-[var(--text-tertiary)] font-bold uppercase tracking-widest mt-1">Global Catalogue Index</p>
             </div>
           </div>
-          <div className="overflow-x-auto">
-            <table className="w-full text-left">
-              <thead className={cn(
-                "text-[9px] uppercase font-black tracking-widest border-b",
-                isInstitutional ? "bg-[var(--background)] text-[var(--text-tertiary)] border-[var(--border-subtle)]" : "bg-[var(--surface-elevated)]/40 text-[var(--text-tertiary)] border-[var(--border-subtle)]/50"
-              )}>
-                <tr>
-                  <th className="px-8 py-5">Name</th>
-                  <th className="px-8 py-5">Category</th>
-                  <th className="px-8 py-5 text-center">Active SKUs</th>
-                  <th className="px-8 py-5 text-right">Actions</th>
-                </tr>
-              </thead>
-              <tbody className={cn(
-                "divide-y",
-                isInstitutional ? "divide-[var(--border-subtle)]" : "divide-[var(--border-subtle)]/50"
-              )}>
-                {brands.map(brand => (
-                  <tr key={brand.id} className={cn(
-                    "transition-all group",
-                    isInstitutional ? "hover:bg-[var(--background)]" : "hover:bg-[var(--surface-elevated)]/30"
-                  )}>
-                    <td className={cn(
-                      "px-8 py-6 font-bold",
-                      isInstitutional ? "text-[var(--text-primary)]" : "text-[var(--text-primary)]"
-                    )}>{brand.name}</td>
-                    <td className={cn(
-                      "px-8 py-6 text-xs font-bold uppercase tracking-wider",
-                      isInstitutional ? "text-[var(--text-secondary)]" : "text-[var(--text-secondary)]"
-                    )}>{brand.category}</td>
-                    <td className={cn(
-                      "px-8 py-6 text-center font-black",
-                      isInstitutional ? "text-[var(--text-primary)]" : "text-[var(--text-primary)]"
-                    )}>{brand.skus}</td>
-                    <td className="px-8 py-6 text-right">
-                      <button className={cn(
-                        "text-[10px] font-black uppercase tracking-widest transition-colors",
-                        isInstitutional ? "text-[var(--text-tertiary)] hover:text-[var(--accent)]" : "text-[var(--text-tertiary)] hover:text-[var(--text-primary)]"
-                      )}>Edit</button>
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
+          
+          <div className="h-[400px]">
+             <DataTable 
+               data={brands}
+               columns={brandColumns}
+             />
           </div>
         </div>
       )}
@@ -290,10 +292,10 @@ export default function ConfigModule() {
                    <p className="text-xs text-[var(--text-tertiary)] font-bold uppercase tracking-widest italic">Institutional Profile (Sync Ready)</p>
                 </div>
                 <div className={cn(
-                  "px-4 py-2 text-[9px] font-black uppercase rounded-[var(--radius-sm)] border",
-                  isInstitutional 
-                    ? "bg-[var(--accent)]/10 text-[var(--accent)] border-[var(--accent)]/20" 
-                    : "bg-[var(--secondary)]/10 text-[var(--secondary)] border-[var(--secondary)]/20"
+                   "px-4 py-2 text-[9px] font-black uppercase rounded-[var(--radius-sm)] border",
+                   isInstitutional 
+                     ? "bg-[var(--accent)]/10 text-[var(--accent)] border-[var(--accent)]/20" 
+                     : "bg-[var(--secondary)]/10 text-[var(--secondary)] border-[var(--secondary)]/20"
                 )}>Verified Identity</div>
              </div>
              
@@ -596,7 +598,3 @@ export default function ConfigModule() {
     </div>
   )
 }
-
-
-
-

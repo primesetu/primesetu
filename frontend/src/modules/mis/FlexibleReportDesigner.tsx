@@ -2,7 +2,8 @@
  * SMRITI-OS — Shoper9-Based Retail OS
  * Zero Cloud · Sovereign · AI-Governed
  * ============================================================ */
-import React, { useState } from 'react';
+
+import React, { useState, useMemo } from 'react';
 import { 
   Layout, 
   GripVertical, 
@@ -10,11 +11,25 @@ import {
   Play, 
   FileJson, 
   Table as TableIcon,
-  Filter
+  Filter,
+  Layers,
+  Activity,
+  Box,
+  ChevronRight,
+  Database,
+  RefreshCw
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { api } from '@/api/client';
 import { formatCurrency } from '@/utils/currency';
+import { 
+  Button, 
+  Card, 
+  Text, 
+  Badge,
+  DataTable 
+} from '@/components/ui/SovereignUI';
+import { cn } from '@/lib/utils';
 
 const AVAILABLE_DIMENSIONS = [
   { id: 'category', label: 'Category', icon: '📁' },
@@ -76,61 +91,86 @@ export default function FlexibleReportDesigner() {
     }
   };
 
+  // ── DYNAMIC COLUMNS FOR DATA TABLE ──
+  const dynamicColumns = useMemo(() => {
+    if (!reportData) return [];
+    const { metadata } = reportData;
+    const headers = [...metadata.rows, ...metadata.columns, ...metadata.values];
+
+    return headers.map(h => ({
+      header: h.toUpperCase(),
+      accessor: (row: any) => {
+        const val = row[h];
+        if (metadata.values.includes(h)) {
+          return h.includes('amount') 
+            ? <span className="font-mono font-black text-navy">{formatCurrency(val)}</span>
+            : <span className="font-mono font-black text-navy">{val}</span>;
+        }
+        return <span className="font-black text-navy/40 uppercase tracking-widest">{val}</span>;
+      },
+      width: metadata.values.includes(h) ? 140 : 180,
+      className: metadata.values.includes(h) ? 'text-right' : 'text-left'
+    }));
+  }, [reportData]);
+
   return (
-    <div className="flex h-[calc(100vh-12rem)] gap-6 animate-in fade-in slide-in-from-bottom-4 duration-700">
+    <div className="flex h-[calc(100vh-12rem)] gap-8 animate-in fade-in slide-in-from-bottom-4 duration-1000 overflow-hidden">
       {/* Sidebar: Data Elements */}
-      <div className="w-72 bg-bg-elevated/40 backdrop-blur-xl border border-border rounded-[2.5rem] p-8 flex flex-col shadow-xl shadow-navy/5">
-        <h3 className="text-[10px] font-black text-text-primary/40 uppercase tracking-[0.3em] mb-8 flex items-center gap-3">
-          <Layout size={14} /> Data Elements
-        </h3>
+      <Card className="w-80 bg-white border-none rounded-[4rem] p-10 flex flex-col shadow-2xl overflow-hidden relative">
+        <div className="absolute left-0 top-0 opacity-5 rotate-12 -translate-x-4">
+           <Layers size={140} />
+        </div>
+        <Text variant="xs" className="font-black text-navy/20 uppercase tracking-[0.4em] mb-10 flex items-center gap-3 relative z-10">
+          <Database size={16} className="text-brand-gold" /> Protocol Elements
+        </Text>
         
-        <div className="space-y-6 overflow-y-auto custom-scrollbar pr-2">
+        <div className="space-y-10 overflow-y-auto custom-scrollbar pr-4 relative z-10">
           <section>
-            <h4 className="text-[9px] font-black text-navy/30 uppercase tracking-widest mb-4">Dimensions</h4>
-            <div className="space-y-2">
+            <Text variant="xs" className="font-black text-navy uppercase tracking-[0.2em] mb-6 block border-b border-navy/5 pb-2">Dimensions</Text>
+            <div className="space-y-3">
               {AVAILABLE_DIMENSIONS.map(dim => (
                 <div 
                   key={dim.id}
                   draggable
                   onDragStart={(e) => handleDragStart(e, dim.id)}
-                  className="flex items-center justify-between p-4 bg-white border border-navy/5 rounded-2xl cursor-grab active:cursor-grabbing hover:border-navy/20 hover:shadow-lg hover:shadow-navy/5 transition-all group"
+                  className="flex items-center justify-between p-5 bg-navy/5 border border-transparent rounded-2xl cursor-grab active:cursor-grabbing hover:bg-white hover:border-navy/10 hover:shadow-2xl transition-all group"
                 >
-                  <div className="flex items-center gap-3">
-                    <span className="text-lg grayscale group-hover:grayscale-0 transition-all">{dim.icon}</span>
-                    <span className="text-[11px] font-bold text-navy uppercase tracking-wider">{dim.label}</span>
+                  <div className="flex items-center gap-4">
+                    <span className="text-xl grayscale group-hover:grayscale-0 transition-all">{dim.icon}</span>
+                    <Text variant="xs" className="font-black text-navy uppercase tracking-widest">{dim.label}</Text>
                   </div>
-                  <GripVertical size={14} className="text-navy/20" />
+                  <GripVertical size={16} className="text-navy/10 group-hover:text-brand-gold transition-colors" />
                 </div>
               ))}
             </div>
           </section>
 
           <section>
-            <h4 className="text-[9px] font-black text-navy/30 uppercase tracking-widest mb-4">Metrics</h4>
-            <div className="space-y-2">
+            <Text variant="xs" className="font-black text-navy uppercase tracking-[0.2em] mb-6 block border-b border-navy/5 pb-2">Metrics</Text>
+            <div className="space-y-3">
               {AVAILABLE_METRICS.map(met => (
                 <div 
                   key={met.id}
                   draggable
                   onDragStart={(e) => handleDragStart(e, met.id)}
-                  className="flex items-center justify-between p-4 bg-white border border-navy/5 rounded-2xl cursor-grab active:cursor-grabbing hover:border-navy/20 hover:shadow-lg hover:shadow-navy/5 transition-all group"
+                  className="flex items-center justify-between p-5 bg-navy/5 border border-transparent rounded-2xl cursor-grab active:cursor-grabbing hover:bg-white hover:border-navy/10 hover:shadow-2xl transition-all group"
                 >
-                  <div className="flex items-center gap-3">
-                    <span className="text-lg grayscale group-hover:grayscale-0 transition-all">{met.icon}</span>
-                    <span className="text-[11px] font-bold text-navy uppercase tracking-wider">{met.label}</span>
+                  <div className="flex items-center gap-4">
+                    <span className="text-xl grayscale group-hover:grayscale-0 transition-all">{met.icon}</span>
+                    <Text variant="xs" className="font-black text-navy uppercase tracking-widest">{met.label}</Text>
                   </div>
-                  <GripVertical size={14} className="text-navy/20" />
+                  <GripVertical size={16} className="text-navy/10 group-hover:text-indigo-500 transition-colors" />
                 </div>
               ))}
             </div>
           </section>
         </div>
-      </div>
+      </Card>
 
       {/* Main Designer Area */}
-      <div className="flex-1 flex flex-col gap-6">
+      <div className="flex-1 flex flex-col gap-8">
         {/* Drop Zones */}
-        <div className="grid grid-cols-3 gap-6">
+        <div className="grid grid-cols-3 gap-8">
           <DropZone 
             label="Rows (Y-Axis)" 
             items={rows} 
@@ -152,49 +192,59 @@ export default function FlexibleReportDesigner() {
         </div>
 
         {/* Action Bar */}
-        <div className="flex items-center justify-between px-8 py-4 bg-bg-elevated/40 backdrop-blur-xl border border-border rounded-[2rem] shadow-lg shadow-navy/5">
-          <div className="flex items-center gap-6">
-             <div className="flex items-center gap-2 text-navy/40">
-                <Filter size={14} />
-                <span className="text-[10px] font-black uppercase tracking-widest">Active Filters: April 2026</span>
+        <Card className="flex items-center justify-between px-10 py-6 bg-white border-none rounded-[3rem] shadow-2xl relative overflow-hidden group">
+          <div className="absolute right-0 top-0 opacity-5 rotate-12 -translate-y-4">
+             <Activity size={100} />
+          </div>
+          <div className="flex items-center gap-6 relative z-10">
+             <div className="flex items-center gap-3 text-navy/30">
+                <Filter size={16} className="text-brand-gold" />
+                <Text variant="xs" className="font-black uppercase tracking-[0.3em]">Institutional Pulse: April 2026 Active</Text>
              </div>
           </div>
-          <button 
+          <Button 
             onClick={generateReport}
             disabled={loading}
-            className="flex items-center gap-3 bg-navy text-white px-8 py-4 rounded-2xl text-[10px] font-black uppercase tracking-widest hover:scale-105 active:scale-95 transition-all shadow-xl shadow-navy/20 disabled:opacity-50"
+            className="h-14 px-10 rounded-2xl bg-navy text-white shadow-2xl font-black text-[10px] uppercase tracking-widest gap-3 relative z-10 hover:scale-105 transition-all"
           >
-            {loading ? <span className="animate-pulse">Synthesizing...</span> : <><Play size={14} /> Run Report Designer</>}
-          </button>
-        </div>
+            {loading ? <RefreshCw className="animate-spin" size={18} /> : <><Play size={18} className="text-brand-gold" /> Run Report Designer</>}
+          </Button>
+        </Card>
 
         {/* Results Canvas */}
-        <div className="flex-1 bg-bg-elevated/40 backdrop-blur-xl border border-border rounded-[2.5rem] p-10 shadow-xl shadow-navy/5 overflow-hidden flex flex-col">
+        <Card className="flex-1 bg-white border-none rounded-[4.5rem] p-12 shadow-2xl overflow-hidden flex flex-col">
           {reportData ? (
              <div className="flex-1 flex flex-col overflow-hidden">
-                <div className="flex justify-between items-center mb-8">
-                   <h3 className="text-xl font-serif font-black text-text-primary uppercase tracking-tighter">Matrix Analysis</h3>
-                   <div className="flex gap-2">
-                      <button className="p-3 bg-bg-float text-text-secondary rounded-xl hover:bg-brand-navy hover:text-white transition-all"><FileJson size={18} /></button>
-                      <button className="p-3 bg-bg-float text-text-secondary rounded-xl hover:bg-brand-navy hover:text-white transition-all"><TableIcon size={18} /></button>
+                <div className="flex justify-between items-center mb-10">
+                   <div className="flex items-center gap-4">
+                      <div className="h-3 w-3 bg-brand-gold rounded-full animate-pulse" />
+                      <Text variant="h2" className="font-serif font-black text-navy uppercase tracking-tighter leading-none">Matrix Synthesis Result</Text>
+                   </div>
+                   <div className="flex gap-4">
+                      <Button variant="sec" className="h-12 w-12 p-0 rounded-xl bg-navy/5 border-none text-navy/40 hover:text-navy transition-all"><FileJson size={20} /></Button>
+                      <Button variant="sec" className="h-12 w-12 p-0 rounded-xl bg-navy/5 border-none text-navy/40 hover:text-navy transition-all"><TableIcon size={20} /></Button>
                    </div>
                 </div>
-                <div className="flex-1 overflow-auto custom-scrollbar border border-border rounded-3xl">
-                   <PivotTable report={reportData} />
+                <div className="flex-1 rounded-[3rem] overflow-hidden border border-navy/5 shadow-inner">
+                   <DataTable 
+                     data={reportData.data} 
+                     columns={dynamicColumns} 
+                     rowHeight={60}
+                   />
                 </div>
              </div>
           ) : (
-            <div className="flex-1 flex flex-col items-center justify-center text-text-secondary gap-6">
-              <div className="w-24 h-24 bg-bg-float rounded-full flex items-center justify-center animate-pulse">
-                <Layout size={40} strokeWidth={1} />
+            <div className="flex-1 flex flex-col items-center justify-center text-navy/10 gap-8">
+              <div className="w-32 h-32 bg-navy/2 rounded-[3rem] flex items-center justify-center border-4 border-dashed border-navy/10 animate-pulse">
+                <Layout size={60} strokeWidth={1} />
               </div>
-              <div className="text-center">
-                <div className="text-sm font-black uppercase tracking-widest mb-1">Canvas Empty</div>
-                <div className="text-[10px]">Drag dimensions and metrics to design your report</div>
+              <div className="text-center space-y-2">
+                <Text variant="h2" className="font-serif font-black uppercase tracking-widest text-navy/20">Canvas Initialized</Text>
+                <Text variant="xs" className="font-black uppercase tracking-[0.4em] text-navy/10">Drag protocol elements to synthesize matrix</Text>
               </div>
             </div>
           )}
-        </div>
+        </Card>
       </div>
     </div>
   );
@@ -212,10 +262,10 @@ function DropZone({ label, items, onDrop, onRemove }: DropZoneProps) {
     <div 
       onDragOver={(e) => e.preventDefault()}
       onDrop={onDrop}
-      className="bg-bg-input/50 backdrop-blur-xl border-2 border-dashed border-border rounded-[2rem] p-6 min-h-[140px] transition-all hover:border-brand-saffron/30 group"
+      className="bg-white/60 backdrop-blur-xl border-4 border-dashed border-navy/5 rounded-[3.5rem] p-8 min-h-[160px] transition-all hover:border-brand-gold/30 group flex flex-col shadow-inner"
     >
-      <div className="text-[9px] font-black text-navy/30 uppercase tracking-[0.2em] mb-4 group-hover:text-navy/50 transition-colors">{label}</div>
-      <div className="flex flex-wrap gap-2">
+      <Text variant="xs" className="font-black text-navy/20 uppercase tracking-[0.4em] mb-6 group-hover:text-navy/40 transition-colors">{label}</Text>
+      <div className="flex flex-wrap gap-3">
         <AnimatePresence>
           {items.map((item: string) => (
             <motion.div 
@@ -223,58 +273,19 @@ function DropZone({ label, items, onDrop, onRemove }: DropZoneProps) {
               initial={{ scale: 0.8, opacity: 0 }}
               animate={{ scale: 1, opacity: 1 }}
               exit={{ scale: 0.8, opacity: 0 }}
-              className="flex items-center gap-2 bg-navy text-white px-4 py-2.5 rounded-xl text-[10px] font-black uppercase tracking-widest shadow-lg shadow-navy/10"
+              className="flex items-center gap-3 bg-navy text-white px-6 py-3 rounded-2xl text-[9px] font-black uppercase tracking-widest shadow-2xl shadow-navy/20 border-b-4 border-brand-gold"
             >
               {item}
-              <button onClick={() => onRemove(item)} className="hover:text-rose-400 transition-colors">
-                <Trash2 size={12} />
+              <button onClick={() => onRemove(item)} className="hover:text-rose-400 transition-colors ml-2">
+                <Trash2 size={14} />
               </button>
             </motion.div>
           ))}
         </AnimatePresence>
         {items.length === 0 && (
-          <div className="text-[10px] text-navy/10 font-bold uppercase mt-2">Drop Here</div>
+          <div className="text-[10px] text-navy/10 font-black uppercase mt-4 tracking-[0.2em] ml-2">Drop Protocol Element</div>
         )}
       </div>
     </div>
   );
 }
-
-function PivotTable({ report }: { 
-  report: { 
-    data: Record<string, any>[]; 
-    metadata: { rows: string[]; columns: string[]; values: string[]; } 
-  } 
-}) {
-  const { data, metadata } = report;
-  if (!data || data.length === 0) return <div className="p-10 text-center text-navy/40 font-bold">No data matches these dimensions.</div>;
-
-  const headers = [...metadata.rows, ...metadata.columns, ...metadata.values];
-
-  return (
-    <table className="w-full text-left border-collapse">
-      <thead>
-        <tr className="bg-navy sticky top-0 z-10">
-          {headers.map(h => (
-            <th key={h} className="px-6 py-4 text-[9px] font-black text-white/50 uppercase tracking-widest border-r border-white/5 last:border-0">{h}</th>
-          ))}
-        </tr>
-      </thead>
-      <tbody className="divide-y divide-border bg-bg-float/30">
-        {data.map((row: any, i: number) => (
-          <tr key={i} className="hover:bg-bg-elevated transition-colors">
-            {headers.map(h => (
-              <td key={h} className={`px-6 py-4 text-xs ${metadata.values.includes(h) ? 'font-mono font-black text-text-primary' : 'font-bold text-text-secondary uppercase'}`}>
-                {metadata.values.includes(h) && h.includes('amount') ? formatCurrency(row[h]) : row[h]}
-              </td>
-            ))}
-          </tr>
-        ))}
-      </tbody>
-    </table>
-  );
-}
-
-
-
-

@@ -124,7 +124,7 @@ function ThemePreview({ preview, themeName }: { preview: typeof THEMES[0]['previ
 }
 
 export default function Personalization() {
-  const { theme, setTheme, accent, setAccent } = useTheme();
+  const { theme, accent, setAccent } = useTheme();
 
   return (
     <div className="space-y-8">
@@ -134,108 +134,65 @@ export default function Personalization() {
         <div>
           <h2 className="text-xl font-bold text-navy">Personalization</h2>
           <p className="text-xs text-muted uppercase tracking-widest font-bold mt-0.5">
-            Theme &amp; Ambient Design Controls
+            Institutional Display Governance
           </p>
         </div>
       </div>
 
-      {/* Theme Selector */}
+      {/* SMRITI-OS Institutional Mode Info */}
+      <motion.div
+        initial={{ opacity: 0, y: 10 }}
+        animate={{ opacity: 1, y: 0 }}
+        className="relative overflow-hidden rounded-2xl p-6 border-2 border-teal-100 bg-teal-50/30 shadow-lg shadow-teal-600/5"
+      >
+        <div className="flex items-start gap-4">
+          <div className="p-3 rounded-xl bg-white border border-teal-100 text-teal-600">
+            <Monitor className="w-6 h-6" />
+          </div>
+          <div>
+            <h3 className="text-lg font-bold text-teal-900">Institutional Mode Active</h3>
+            <p className="text-sm text-teal-700/80 leading-relaxed mb-4">
+              SMRITI-OS Governance is enforcing the master institutional theme. All UI elements, fonts, and interaction protocols are locked to ERP-parity standards for maximum operational speed and zero distraction.
+            </p>
+            <div className="flex flex-wrap gap-4 text-[10px] font-black uppercase tracking-widest text-teal-600">
+              <span className="flex items-center gap-1.5"><CheckCircle2 size={12} /> SEGUE UI FONTS</span>
+              <span className="flex items-center gap-1.5"><CheckCircle2 size={12} /> TEAL HEADER PROTOCOL</span>
+              <span className="flex items-center gap-1.5"><CheckCircle2 size={12} /> ZERO ANIMATION OVERHEAD</span>
+            </div>
+          </div>
+        </div>
+      </motion.div>
+
+      {/* Accent Selector — for functional highlights */}
       <section>
-        <p className="section-label mb-4">Display Mode</p>
-        <div className="grid grid-cols-2 gap-6">
-          {THEMES.map((t, idx) => {
-            const Icon = t.icon;
-            const isActive = theme === t.id;
+        <p className="section-label mb-4">Functional Accent Color</p>
+        <div className="flex gap-4 flex-wrap">
+          {ACCENTS.map((a) => {
+            const isActive = accent === a.id;
             return (
-              <motion.button
-                key={t.id}
-                initial={{ opacity: 0, y: 10 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: idx * 0.08 }}
-                onClick={() => setTheme(t.id)}
-                className="text-left w-full"
+              <button
+                key={a.id}
+                onClick={() => setAccent(a.id)}
+                className={`flex items-center gap-3 px-5 py-3 rounded-xl border-2 transition-all ${
+                  isActive ? 'border-teal-600 shadow-md bg-white' : 'border-border bg-white hover:border-teal-200'
+                }`}
               >
-                <div className={`relative rounded-2xl p-4 border-2 transition-all ${
-                  isActive
-                    ? 'border-saffron bg-saffron/5 shadow-lg shadow-saffron/10'
-                    : 'border-border bg-white hover:border-saffron/40'
-                }`}>
-                  {/* Active badge */}
-                  {isActive && (
-                    <div className="absolute top-3 right-3">
-                      <CheckCircle2 className="w-5 h-5 text-saffron" />
-                    </div>
-                  )}
-                  {/* Theme preview */}
-                  <div className="mb-3">
-                    <ThemePreview preview={t.preview} themeName={t.name} />
-                  </div>
-                  {/* Label */}
-                  <div className="flex items-center gap-2 mt-2">
-                    <Icon className={`w-4 h-4 ${isActive ? 'text-saffron' : 'text-muted'}`} />
-                    <div>
-                      <div className="font-bold text-sm text-navy">{t.name}</div>
-                      <div className="text-xs text-muted">{t.tagline}</div>
-                    </div>
-                  </div>
-                </div>
-              </motion.button>
+                <span
+                  className="w-5 h-5 rounded-full border border-border/50 shadow-sm"
+                  style={{ background: a.color }}
+                />
+                <span className={`text-sm font-semibold ${isActive ? 'text-teal-900' : 'text-muted'}`}>
+                  {a.name}
+                </span>
+                {isActive && <CheckCircle2 className="w-4 h-4 text-teal-600 ml-auto" />}
+              </button>
             );
           })}
         </div>
+        <div className="mt-6 p-4 rounded-xl bg-slate-50 border border-slate-100 text-[10px] text-slate-400 font-mono uppercase tracking-widest text-center">
+          Note: Accents apply to buttons, badges, and notification pulses only.
+        </div>
       </section>
-
-      {/* Accent Selector — only for Tesla mode */}
-      {theme === 'tesla' && (
-        <motion.section
-          initial={{ opacity: 0, height: 0 }}
-          animate={{ opacity: 1, height: 'auto' }}
-          exit={{ opacity: 0, height: 0 }}
-        >
-          <p className="section-label mb-4">Ambient Accent Color</p>
-          <div className="flex gap-4 flex-wrap">
-            {ACCENTS.map((a) => {
-              const isActive = accent === a.id;
-              return (
-                <button
-                  key={a.id}
-                  onClick={() => setAccent(a.id)}
-                  className={`flex items-center gap-3 px-5 py-3 rounded-xl border-2 transition-all ${
-                    isActive ? 'border-navy shadow-md bg-cream/30' : 'border-border bg-white hover:border-muted'
-                  }`}
-                >
-                  <span
-                    className="w-5 h-5 rounded-full border border-border/50 shadow-sm"
-                    style={{ background: a.color }}
-                  />
-                  <span className={`text-sm font-semibold ${isActive ? 'text-navy' : 'text-muted'}`}>
-                    {a.name}
-                  </span>
-                  {isActive && <CheckCircle2 className="w-4 h-4 text-saffron ml-auto" />}
-                </button>
-              );
-            })}
-          </div>
-          {/* Live accent preview bar */}
-          <div className="mt-4 h-2 rounded-full w-full" style={{ background: `linear-gradient(to right, var(--saffron-dk), var(--saffron), var(--gold))` }} />
-        </motion.section>
-      )}
-
-      {/* SMRITI-OS Institutional note */}
-      {theme === 'SMRITI-OS' && (
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          className="p-4 border border-border rounded-xl bg-emerald-50 text-sm text-emerald-900 flex items-start gap-3"
-        >
-          <Monitor className="w-5 h-5 mt-0.5 shrink-0 text-[var(--teal-primary)]" />
-          <div>
-            <strong className="text-[var(--teal-primary)]">Institutional Mode Active</strong> — All animations disabled for maximum speed.
-            Fonts set to Segoe UI. Headers use SMRITI Institutional Teal.
-            Hotkey labels are locked to Golden Amber.
-          </div>
-        </motion.div>
-      )}
     </div>
   );
 }

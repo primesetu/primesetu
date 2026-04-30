@@ -3,45 +3,23 @@
    Zero-FOUC Runtime Governance
    ============================================================ */
 
-export type SmritiTheme = 'shopper-prime' | 'SMRITI-OS' | 'vyom' | 'pratham' | 'dark' | 'tesla';
+export type SmritiTheme = 'SMRITI-OS';
 
 export const ThemeEngine = (() => {
   const STORAGE_KEY = "smriti-theme";
 
-  const domainThemeMap: Record<string, SmritiTheme> = {
-    "smritios.com": "shopper-prime",
-    "vyomautomation.com": "vyom",
-    "prathamone.com": "pratham"
-  };
-
-  /**
-   * Applies the theme to the document and persists it.
-   */
   function setTheme(theme: SmritiTheme) {
-    document.documentElement.setAttribute("data-theme", theme);
-    localStorage.setItem(STORAGE_KEY, theme);
-    
-    // Dispatch event for reactive components
-    window.dispatchEvent(new CustomEvent('smriti-theme-change', { detail: { theme } }));
+    document.documentElement.setAttribute("data-theme", "SMRITI-OS");
+    localStorage.setItem(STORAGE_KEY, "SMRITI-OS");
+    window.dispatchEvent(new CustomEvent('smriti-theme-change', { detail: { theme: "SMRITI-OS" } }));
   }
 
-  /**
-   * Retrieves the current theme from storage or domain mapping.
-   */
   function getTheme(): SmritiTheme {
-    const savedTheme = localStorage.getItem(STORAGE_KEY) as SmritiTheme | null;
-    if (savedTheme) return savedTheme;
-
-    const domainTheme = domainThemeMap[window.location.hostname];
-    return domainTheme || "shopper-prime";
+    return "SMRITI-OS";
   }
 
-  /**
-   * Initializes the theme on application load (redundant but safe with head script).
-   */
   function init() {
-    const theme = getTheme();
-    document.documentElement.setAttribute("data-theme", theme);
+    document.documentElement.setAttribute("data-theme", "SMRITI-OS");
   }
 
   return { setTheme, getTheme, init };

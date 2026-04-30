@@ -2,6 +2,15 @@ import React, { ReactNode } from 'react';
 import { clsx, type ClassValue } from 'clsx';
 import { twMerge } from 'tailwind-merge';
 import { X } from 'lucide-react';
+import { AgGridReact } from 'ag-grid-react';
+import { ColDef, ModuleRegistry } from 'ag-grid-community';
+import { ClientSideRowModelModule } from 'ag-grid-community';
+import 'ag-grid-community/styles/ag-grid.css';
+import 'ag-grid-community/styles/ag-theme-quartz.css';
+
+import { useTheme } from '@/hooks/useTheme';
+
+ModuleRegistry.registerModules([ClientSideRowModelModule]);
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
@@ -283,82 +292,100 @@ export const Divider = ({ className, vertical = false }: { className?: string; v
   )} />
 );
 
-// 11. Data Table Primitive
-interface Column<T> {
+// 11. Data Table Primitive (AI Data Grid Standard)
+export interface Column<T> {
   header: string;
-  accessor: keyof T | ((item: T) => ReactNode);
-  className?: string;
+  accessor: string | ((data: T, index: number) => React.ReactNode) | ((data: T) => React.ReactNode);
   align?: 'left' | 'center' | 'right';
+  className?: string;
+  editable?: boolean;
+  width?: number;
+  flex?: number;
+  pinned?: 'left' | 'right';
+}
+
+interface DataTableProps<T> {
+  data: T[];
+  columns: Column<T>[];
+  onRowClick?: (item: T) => void;
+  onCellValueChanged?: (params: any) => void;
+  loading?: boolean;
+  emptyMessage?: string;
+  pinnedBottomRowData?: any[];
+  singleClickEdit?: boolean;
+  overlayNoRowsTemplate?: string;
+  rowHeight?: number;
+  headerHeight?: number;
+  onRowDoubleClicked?: (params: any) => void;
+  className?: string;
 }
 
 export function DataTable<T>({ 
   data, 
   columns, 
-  onRowClick, 
+  onRowClick,
+  onCellValueChanged,
   loading = false,
-  emptyMessage = 'No records found'
-}: { 
-  data: T[]; 
-  columns: Column<T>[]; 
-  onRowClick?: (item: T) => void;
-  loading?: boolean;
-  emptyMessage?: string;
-}) {
+  emptyMessage = 'No records found',
+  pinnedBottomRowData,
+  singleClickEdit = false,
+  overlayNoRowsTemplate,
+  rowHeight = 40,
+  headerHeight = 30,
+  onRowDoubleClicked,
+  className
+}: DataTableProps<T>) {
+  const { isInstitutional } = useTheme();
+  const agColumns: ColDef[] = React.useMemo(() => {
+    return columns.map((col) => ({
+      headerName: col.header,
+      field: typeof col.accessor === 'string' ? col.accessor as string : undefined,
+      cellRenderer: typeof col.accessor === 'function' 
+        ? (params: any) => (col.accessor as Function)(params.data, params.node.rowIndex) 
+        : undefined,
+      editable: col.editable,
+      width: col.width,
+      flex: col.flex || (col.width ? undefined : 1),
+      pinned: col.pinned,
+      cellClass: cn(
+        col.align === 'center' && 'text-center',
+        col.align === 'right' && 'text-right',
+        col.className
+      ),
+    }));
+  }, [columns]);
+
   return (
-    <div className="c-card p-0 flex-1 flex flex-col overflow-hidden border-[var(--border-subtle)] bg-[var(--surface-elevated)]/10">
-      <div className="overflow-x-auto">
-        <table className="c-table">
-          <thead>
-            <tr>
-              {columns.map((col, i) => (
-                <th key={i} className={cn(
-                  col.align === 'center' && 'text-center',
-                  col.align === 'right' && 'text-right',
-                  col.className
-                )}>
-                  {col.header}
-                </th>
-              ))}
-            </tr>
-          </thead>
-          <tbody className="divide-y divide-[var(--border-subtle)]/50">
-            {loading ? (
-              Array(5).fill(0).map((_, i) => (
-                <tr key={i} className="animate-pulse">
-                  <td colSpan={columns.length} className="p-10">
-                    <div className="h-10 bg-[var(--background)]/40 rounded-xl" />
-                  </td>
-                </tr>
-              ))
-            ) : data.length === 0 ? (
-              <tr>
-                <td colSpan={columns.length} className="py-24 text-center opacity-10 font-black u-uppercase tracking-[0.5em] text-4xl">
-                  {emptyMessage}
-                </td>
-              </tr>
-            ) : data.map((item, i) => (
-              <tr 
-                key={i} 
-                onClick={() => onRowClick?.(item)}
-                className={cn(
-                  onRowClick ? 'cursor-pointer' : ''
-                )}
-              >
-                {columns.map((col, j) => (
-                  <td key={j} className={cn(
-                    col.align === 'center' && 'text-center',
-                    col.align === 'right' && 'text-right',
-                    col.className
-                  )}>
-                    {typeof col.accessor === 'function' 
-                      ? col.accessor(item) 
-                      : (item[col.accessor] as ReactNode)}
-                  </td>
-                ))}
-              </tr>
-            ))}
-          </tbody>
-        </table>
+    <div className={cn("c-card p-0 flex-1 flex flex-col overflow-hidden border-[var(--border-subtle)] bg-transparent", className)}>
+      <div 
+        className={cn("w-full h-full min-h-[400px] ag-theme-quartz", isInstitutional && "ag-theme-quartz-light")} 
+        style={{ 
+          '--ag-background-color': 'var(--surface) !important',
+          '--ag-header-background-color': 'var(--surface-elevated) !important',
+          '--ag-header-foreground-color': 'var(--text-primary) !important',
+          '--ag-data-color': 'var(--text-primary) !important',
+          '--ag-odd-row-background-color': 'var(--surface-subtle) !important',
+          '--ag-border-color': 'var(--border-subtle) !important',
+          '--ag-row-hover-color': 'var(--surface-elevated) !important',
+          '--ag-selected-row-background-color': 'var(--accent-border) !important',
+          '--ag-font-family': 'var(--font-primary)',
+          '--ag-font-size': '12px'
+        } as React.CSSProperties}
+      >
+        <AgGridReact
+          rowData={loading ? [] : data}
+          columnDefs={agColumns}
+          rowHeight={rowHeight}
+          headerHeight={headerHeight}
+          onRowClicked={(params) => onRowClick?.(params.data)}
+          onRowDoubleClicked={onRowDoubleClicked}
+          onCellValueChanged={onCellValueChanged}
+          pinnedBottomRowData={pinnedBottomRowData}
+          singleClickEdit={singleClickEdit}
+          overlayNoRowsTemplate={overlayNoRowsTemplate || `<div class="p-4 text-center opacity-50">${emptyMessage}</div>`}
+          suppressCellFocus={true}
+          animateRows={true}
+        />
       </div>
     </div>
   );

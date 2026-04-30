@@ -5,6 +5,7 @@
 import React, { useState } from 'react';
 import { CreditCard, Download, Search, Landmark, PieChart, ShieldCheck, History } from 'lucide-react';
 import { motion } from 'framer-motion';
+import { DataTable, cn } from '../../components/ui/SovereignUI';
 
 export default function TaxRegister() {
   const [period, setPeriod] = useState('APR-2026');
@@ -60,42 +61,36 @@ export default function TaxRegister() {
             <option>FEBRUARY 2026</option>
           </select>
         </div>
-        <table className="w-full text-left">
-          <thead className="bg-cream/30 text-[9px] font-black uppercase tracking-widest text-muted border-b border-border">
-            <tr>
-              <th className="px-10 py-5">Tax Rate</th>
-              <th className="px-6 py-5 text-right">Taxable Value</th>
-              <th className="px-6 py-5 text-right">CGST</th>
-              <th className="px-6 py-5 text-right">SGST</th>
-              <th className="px-6 py-5 text-right">Total Tax</th>
-              <th className="px-10 py-5 text-center">Compliance</th>
-            </tr>
-          </thead>
-          <tbody className="divide-y divide-border/50 font-mono text-xs">
-            {taxSummary.map((row, i) => (
-              <tr key={i} className="hover:bg-cream/5">
-                <td className="px-10 py-6 font-black text-navy">{row.rate}</td>
-                <td className="px-6 py-6 text-right font-bold text-gray-600">{row.taxable}</td>
-                <td className="px-6 py-6 text-right text-gray-500">{row.cgst}</td>
-                <td className="px-6 py-6 text-right text-gray-500">{row.sgst}</td>
-                <td className="px-6 py-6 text-right font-black text-rose-500">{row.total}</td>
-                <td className="px-10 py-6 text-center">
-                  <span className="text-[9px] font-black uppercase bg-emerald-50 text-emerald-600 px-3 py-1 rounded-full">Matched</span>
-                </td>
-              </tr>
-            ))}
-          </tbody>
-          <tfoot className="bg-navy/5 font-black">
-            <tr>
-              <td className="px-10 py-6 text-navy uppercase tracking-widest">Total Liability</td>
-              <td className="px-6 py-6 text-right text-navy">₹7,15,000</td>
-              <td className="px-6 py-6 text-right text-navy">₹40,570</td>
-              <td className="px-6 py-6 text-right text-navy">₹40,570</td>
-              <td className="px-6 py-6 text-right text-rose-600 text-lg">₹81,140</td>
-              <td className="px-10 py-6"></td>
-            </tr>
-          </tfoot>
-        </table>
+        <DataTable
+          data={taxSummary}
+          pinnedBottomRowData={[
+            { rate: 'Total Liability', taxable: '₹7,15,000', cgst: '₹40,570', sgst: '₹40,570', total: '₹81,140', isTotal: true }
+          ]}
+          columns={[
+            { header: 'Tax Rate', accessor: 'rate', className: 'px-10 font-black text-navy' },
+            { header: 'Taxable Value', accessor: 'taxable', align: 'right', className: 'px-6 font-bold text-gray-600' },
+            { header: 'CGST', accessor: 'cgst', align: 'right', className: 'px-6 text-gray-500' },
+            { header: 'SGST', accessor: 'sgst', align: 'right', className: 'px-6 text-gray-500' },
+            { 
+              header: 'Total Tax', 
+              accessor: (item: any) => (
+                <span className={cn(item.isTotal ? "text-rose-600 text-lg font-black" : "text-rose-500 font-bold")}>
+                  {item.total}
+                </span>
+              ), 
+              align: 'right', 
+              className: 'px-6' 
+            },
+            { 
+              header: 'Compliance', 
+              align: 'center', 
+              accessor: (item: any) => !item.isTotal && (
+                <span className="text-[9px] font-black uppercase bg-emerald-50 text-emerald-600 px-3 py-1 rounded-full">Matched</span>
+              ),
+              className: 'px-10'
+            }
+          ]}
+        />
       </div>
     </div>
   );

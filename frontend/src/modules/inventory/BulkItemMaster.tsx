@@ -8,11 +8,30 @@
  * © 2026 — All Rights Reserved
  * "Memory, Not Code."
  * ============================================================ */
-import React, { useState, useRef } from 'react'
+import React, { useState, useRef, useMemo } from 'react'
 import * as XLSX from 'xlsx'
 import { motion } from 'framer-motion'
-import { Upload, Download, FileSpreadsheet, CheckCircle2, AlertTriangle, AlertCircle, ClipboardPaste, X, ChevronRight } from 'lucide-react'
+import { 
+  Upload, 
+  Download, 
+  FileSpreadsheet, 
+  CheckCircle2, 
+  AlertTriangle, 
+  AlertCircle, 
+  ClipboardPaste, 
+  X, 
+  ChevronRight,
+  ShieldCheck,
+  RefreshCw
+} from 'lucide-react'
 import { api } from '@/api/client'
+import { 
+  Button, 
+  DataTable, 
+  Badge, 
+  Text, 
+  Card 
+} from '@/components/ui/SovereignUI'
 
 interface BulkItem {
   code: string
@@ -40,7 +59,7 @@ interface ColumnMap {
 export default function BulkItemMaster({ onClose }: { onClose: () => void }) {
   const [rawData, setRawData] = useState<string[][]>([])
   const [data, setData] = useState<BulkItem[]>([])
-  const [columns, setColumns] = useState<ColumnMap[]>([
+  const [columnsMap, setColumnsMap] = useState<ColumnMap[]>([
     { id: '1', label: 'Item Code', mappedTo: 'code', required: true },
     { id: '2', label: 'Description', mappedTo: 'name', required: true },
     { id: '3', label: 'Brand (Class1)', mappedTo: 'brand', required: true },
@@ -82,29 +101,27 @@ export default function BulkItemMaster({ onClose }: { onClose: () => void }) {
 
   const [isProcessing, setIsProcessing] = useState(false)
 
-  // 2. Validate and Map (The "Present Check")
+  // 2. Validate and Map
   const finalizeMapping = () => {
     const mapped = rawData.map(row => {
       const item: any = { status: 'valid', message: '' }
-      columns.forEach((col, idx) => {
+      columnsMap.forEach((col, idx) => {
         if (col.mappedTo !== 'skip') {
           const val = row[idx]?.trim()
           item[col.mappedTo] = col.mappedTo === 'mrp' || col.mappedTo === 'cost' || col.mappedTo === 'tax' 
             ? Number(val || 0) 
             : val
 
-          // Shoper 9 Style "Present Check"
           if (col.required && !val) {
             item.status = 'error'
-            item.message = `${col.label} is Mandatory`
+            item.message = `${col.label} Required`
           }
         }
       })
       
-      // Class1 & Class2 Combination Check (Simulated)
       if (item.brand === 'INVALID' || !item.category) {
         item.status = 'error'
-        item.message = 'Brand/Category Combination Invalid'
+        item.message = 'Brand/Category Invalid'
       }
 
       return item as BulkItem
@@ -135,7 +152,6 @@ export default function BulkItemMaster({ onClose }: { onClose: () => void }) {
           attributes: { anal1: item.anal1, anal2: item.anal2 }
         }))
       )
-
       alert(`Successfully imported ${validItems.length} SKUs!`)
       onClose()
     } catch (err) {
@@ -144,6 +160,41 @@ export default function BulkItemMaster({ onClose }: { onClose: () => void }) {
       setIsProcessing(false)
     }
   }
+
+  // ── GRID COLUMNS ──
+  const gridColumns = useMemo(() => {
+    const statusCol = {
+      header: "STATUS",
+      accessor: (item: any) => (
+        <div className="flex items-center gap-2">
+          {item.status === 'valid' ? (
+            <Badge variant="info" className="h-5 text-[9px] bg-emerald-500 text-white border-none">PASSED</Badge>
+          ) : (
+            <div className="flex items-center gap-1.5 text-rose-500">
+              <AlertCircle size={14} />
+              <span className="text-[9px] font-black uppercase truncate max-w-[120px]">{item.message}</span>
+            </div>
+          )}
+        </div>
+      ),
+      width: 150,
+      pinned: 'left' as const
+    }
+
+    const dataCols = columnsMap
+      .filter(c => c.mappedTo !== 'skip')
+      .map(c => ({
+        header: c.label.toUpperCase(),
+        accessor: (item: any) => (
+          <span className={cn("text-xs font-bold", item.status === 'error' && !item[c.mappedTo] ? "text-rose-400" : "text-navy")}>
+            {item[c.mappedTo] ?? '-'}
+          </span>
+        ),
+        width: 140
+      }))
+
+    return [statusCol, ...dataCols]
+  }, [columnsMap])
 
   return (
     <div className="fixed inset-0 z-[100] flex items-center justify-center p-8 backdrop-blur-xl bg-navy/40">
@@ -165,18 +216,19 @@ export default function BulkItemMaster({ onClose }: { onClose: () => void }) {
           </div>
           <div className="flex gap-4">
             {step !== 'upload' && (
-              <button 
+              <Button 
+                variant="ghost" 
                 onClick={() => setStep('upload')}
-                className="px-6 py-3 rounded-xl bg-white/5 hover:bg-white/10 text-[10px] font-black tracking-widest transition-all"
+                className="h-10 px-6 text-[10px] font-black tracking-widest text-white/60 hover:text-white"
               >
                 ← START OVER
-              </button>
+              </Button>
             )}
             <button onClick={onClose} className="w-12 h-12 rounded-2xl bg-white/5 hover:bg-white/10 flex items-center justify-center transition-all"><X /></button>
           </div>
         </div>
 
-        {/* Dynamic Content based on Step */}
+        {/* Content Area */}
         <div className="flex-1 overflow-hidden flex flex-col">
           {step === 'upload' && (
             <div 
@@ -191,29 +243,32 @@ export default function BulkItemMaster({ onClose }: { onClose: () => void }) {
               <p className="text-muted text-sm text-center max-w-md leading-relaxed">
                 Click here and press <kbd className="bg-navy text-white px-2 py-1 rounded">Ctrl + V</kbd> to ingest data from Excel, or select a file below.
               </p>
-              <button 
+              <Button 
                 onClick={() => fileInputRef.current?.click()}
-                className="mt-10 bg-gold text-navy px-10 py-4 rounded-2xl font-black text-xs tracking-widest shadow-xl hover:shadow-gold/20 transition-all"
+                className="mt-10 h-14 px-10 rounded-2xl bg-gold text-navy font-black text-xs tracking-widest shadow-xl shadow-gold/10"
               >
                 SELECT EXCEL FILE
-              </button>
+              </Button>
               <input type="file" ref={fileInputRef} onChange={handleFileUpload} className="hidden" accept=".xlsx,.csv" />
             </div>
           )}
 
           {step === 'map' && (
             <div className="flex-1 flex flex-col p-12 overflow-hidden">
-              <h3 className="text-2xl font-serif font-black text-navy mb-2">Column Mapping</h3>
+              <div className="flex items-center gap-3 mb-2">
+                 <ShieldCheck className="text-gold" size={24} />
+                 <h3 className="text-2xl font-serif font-black text-navy">Column Mapping Protocol</h3>
+              </div>
               <p className="text-xs text-muted mb-10">Map Shoper 9 fields to SMRITI-OS attributes. System will perform "Present Check" on commit.</p>
               
-              <div className="flex-1 overflow-auto grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 content-start pb-10">
-                {columns.map((col, i) => (
+              <div className="flex-1 overflow-auto grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 content-start pb-10 pr-4">
+                {columnsMap.map((col, i) => (
                   <div key={col.id} className="bg-cream/30 p-6 rounded-[2rem] border border-border/50 relative">
                     <div className="text-[10px] font-black text-navy/40 uppercase tracking-widest mb-4">Column {i + 1}</div>
                     <div className="text-sm font-bold text-navy mb-4 truncate">{rawData[0]?.[i] || 'No Data'}</div>
                     <select 
                       value={col.mappedTo}
-                      onChange={(e) => setColumns(columns.map(c => c.id === col.id ? {...c, mappedTo: e.target.value as any} : c))}
+                      onChange={(e) => setColumnsMap(columnsMap.map(c => c.id === col.id ? {...c, mappedTo: e.target.value as any} : c))}
                       className="w-full bg-white border border-border rounded-xl px-4 py-3 text-xs font-black text-navy outline-none focus:border-saffron"
                     >
                       <option value="skip">Ignore Column</option>
@@ -231,51 +286,30 @@ export default function BulkItemMaster({ onClose }: { onClose: () => void }) {
               </div>
 
               <div className="pt-10 border-t border-border flex justify-end">
-                <button 
-                  onClick={finalizeMapping}
-                  className="bg-navy text-white px-12 py-5 rounded-[2rem] font-black text-xs tracking-widest shadow-2xl hover:bg-navy/90 transition-all flex items-center gap-3"
+                <Button 
+                   size="lg"
+                   onClick={finalizeMapping}
+                   className="h-14 px-12 rounded-[2rem] bg-navy text-white font-black text-xs tracking-widest gap-3"
                 >
-                  PERFORM PRESENT CHECK <ChevronRight className="w-4 h-4 text-gold" />
-                </button>
+                   PERFORM PRESENT CHECK <ChevronRight size={16} className="text-gold" />
+                </Button>
               </div>
             </div>
           )}
 
           {step === 'preview' && (
-            <div className="flex-1 overflow-auto">
-              <table className="w-full text-left text-xs border-collapse">
-                <thead className="bg-navy text-white/60 sticky top-0 z-20">
-                  <tr>
-                    <th className="px-10 py-5 font-black uppercase tracking-widest">Status</th>
-                    {columns.filter(c => c.mappedTo !== 'skip').map(c => (
-                      <th key={c.id} className="px-6 py-5 font-black uppercase tracking-widest border-l border-white/5">{c.label}</th>
-                    ))}
-                  </tr>
-                </thead>
-                <tbody className="divide-y divide-border">
-                  {data.map((item, i) => (
-                    <tr key={i} className={`hover:bg-gold/5 transition-colors group ${item.status === 'error' ? 'bg-rose-50/50' : ''}`}>
-                      <td className="px-10 py-4">
-                        <div className="flex items-center gap-3">
-                          {item.status === 'valid' ? <CheckCircle2 className="w-5 h-5 text-emerald-500" /> : <AlertCircle className="w-5 h-5 text-rose-500" />}
-                          <span className={`text-[9px] font-black uppercase tracking-tighter ${item.status === 'valid' ? 'text-emerald-600' : 'text-rose-600'}`}>
-                            {item.status === 'valid' ? 'Passed' : item.message}
-                          </span>
-                        </div>
-                      </td>
-                      {columns.filter(c => c.mappedTo !== 'skip').map(c => (
-                        <td key={c.id} className="px-6 py-4 font-bold text-navy border-l border-border/50">{(item as any)[c.mappedTo]}</td>
-                      ))}
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
+            <div className="flex-1 overflow-hidden">
+               <DataTable 
+                 data={data}
+                 columns={gridColumns}
+                 singleClickEdit={false}
+               />
             </div>
           )}
         </div>
 
-        {/* Footer */}
-        <div className="p-8 bg-[var(--institutional-bg)] border-t border-border flex items-center justify-between">
+        {/* Footer Area */}
+        <div className="p-8 bg-cream/20 border-t border-border flex items-center justify-between">
           <div className="flex gap-10">
             <div className="flex flex-col">
               <span className="text-[9px] font-black text-muted uppercase tracking-widest mb-1">Total Ingested</span>
@@ -295,13 +329,15 @@ export default function BulkItemMaster({ onClose }: { onClose: () => void }) {
             )}
           </div>
           {step === 'preview' && data.some(d => d.status === 'valid') && (
-            <button 
+            <Button 
               onClick={handleCommit}
               disabled={isProcessing}
-              className={`bg-emerald-500 text-white px-12 py-5 rounded-[2rem] font-black text-xs tracking-widest shadow-2xl hover:bg-emerald-600 transition-all ${isProcessing ? 'opacity-50 cursor-not-allowed' : ''}`}
+              size="lg"
+              className="h-14 px-12 rounded-[2rem] bg-emerald-500 text-white font-black text-xs tracking-widest gap-2"
             >
+              {isProcessing ? <RefreshCw className="animate-spin" size={16} /> : <CheckCircle2 size={16} />}
               {isProcessing ? 'COMMITTING...' : 'COMMIT VALID SKUS (PARITY MODE)'}
-            </button>
+            </Button>
           )}
         </div>
       </motion.div>
@@ -309,6 +345,6 @@ export default function BulkItemMaster({ onClose }: { onClose: () => void }) {
   )
 }
 
-
-
-
+function cn(...classes: any[]) {
+  return classes.filter(Boolean).join(' ')
+}

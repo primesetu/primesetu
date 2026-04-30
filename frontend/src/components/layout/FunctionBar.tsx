@@ -108,23 +108,25 @@ const FunctionBar: React.FC<FunctionBarProps> = ({
           </button>
         )}
 
-        <div className="flex-1 flex flex-col tally-scrollbar overflow-y-auto">
+        <div className="flex-1 flex flex-col tally-scrollbar overflow-y-auto divide-y divide-white/5 border-t border-white/5">
           {keys.map((k, i) => {
             if (k.type === 'spacer') {
-              return <div key={`spacer-${i}`} className="h-4 w-full bg-white/5" />;
+              return <div key={`spacer-${i}`} className="h-6 w-full bg-white/5 flex items-center justify-center">
+                <div className="w-8 h-px bg-white/10" />
+              </div>;
             }
 
             return (
               <div 
                 key={`${k.key}-${i}`}
                 className={cn(
-                  "flex items-center px-2 py-1 border-b transition-all group min-h-[32px] cursor-pointer",
-                  isTally ? "border-[var(--accent-border)] hover:bg-white/5" : "border-white/5 hover:bg-white/10"
+                  "flex items-center px-4 py-0 transition-all group h-8 cursor-pointer",
+                  isTally ? "hover:bg-white/5" : "hover:bg-white/10"
                 )}
               >
                 <div className="flex-1 flex items-baseline gap-2 overflow-hidden">
                   <span className={cn(
-                    "text-[12px] font-mono font-black tracking-tighter shrink-0",
+                    "text-[10px] font-mono font-black tracking-tighter shrink-0",
                     isTally ? "text-[var(--gold)]" : "text-gold",
                     k.type === 'alt' && "shortcut-alt",
                     k.type === 'ctrl' && "shortcut-ctrl"
@@ -132,7 +134,7 @@ const FunctionBar: React.FC<FunctionBarProps> = ({
                     {k.key}:
                   </span>
                   <span className={cn(
-                    "text-[11px] font-bold uppercase tracking-tight truncate",
+                    "text-[9px] font-black uppercase tracking-widest truncate",
                     isTally ? "text-white group-hover:text-[var(--gold)]" : "text-white/70"
                   )}>
                     {k.label}
@@ -140,7 +142,7 @@ const FunctionBar: React.FC<FunctionBarProps> = ({
                 </div>
                 
                 {k.hasSub && (
-                  <ChevronRight size={10} className="text-white/30 shrink-0" />
+                   <div className="w-1.5 h-1.5 bg-[var(--gold)]/20 rotate-45 shrink-0" />
                 )}
               </div>
             );

@@ -5,6 +5,7 @@
 import React, { useState } from 'react';
 import { FileText, Search, Download, BarChart2, Filter, Package, AlertTriangle } from 'lucide-react';
 import { motion } from 'framer-motion';
+import { DataTable } from '../../components/ui/SovereignUI';
 
 export default function StockReports() {
   const [reportType, setReportType] = useState('VALUATION');
@@ -74,30 +75,23 @@ export default function StockReports() {
             <input placeholder="Search Brand..." className="w-64 bg-white/10 border border-white/10 rounded-lg pl-12 pr-4 py-1.5 text-[10px] outline-none focus:bg-white/20 transition-all" />
           </div>
         </div>
-        <table className="w-full text-left">
-          <thead className="bg-cream/30 text-[9px] font-black uppercase tracking-widest text-muted border-b border-border">
-            <tr>
-              <th className="px-10 py-5">Brand Name</th>
-              <th className="px-6 py-5 text-center">In-Stock Qty</th>
-              <th className="px-6 py-5 text-right">Valuation (Cost)</th>
-              <th className="px-6 py-5 text-center">Avg. Ageing</th>
-              <th className="px-10 py-5 text-center">Actions</th>
-            </tr>
-          </thead>
-          <tbody className="divide-y divide-border/50 font-mono text-xs">
-            {stockData.map((row, i) => (
-              <tr key={i} className="hover:bg-cream/5">
-                <td className="px-10 py-6 font-black text-navy">{row.brand}</td>
-                <td className="px-6 py-6 text-center font-bold">{row.qty}</td>
-                <td className="px-6 py-6 text-right font-black text-emerald-600">{row.valuation}</td>
-                <td className="px-6 py-6 text-center text-gray-500">{row.ageing}</td>
-                <td className="px-10 py-6 text-center">
-                  <button className="text-[9px] font-black uppercase text-blue-500 hover:underline">Full Audit</button>
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
+        <DataTable
+          data={stockData}
+          columns={[
+            { header: 'Brand Name', accessor: 'brand', className: 'px-10 font-black text-navy' },
+            { header: 'In-Stock Qty', accessor: 'qty', align: 'center', className: 'font-bold' },
+            { header: 'Valuation (Cost)', accessor: 'valuation', align: 'right', className: 'font-black text-emerald-600 px-6' },
+            { header: 'Avg. Ageing', accessor: 'ageing', align: 'center', className: 'text-gray-500' },
+            { 
+              header: 'Actions', 
+              align: 'center', 
+              accessor: () => (
+                <button className="text-[9px] font-black uppercase text-blue-500 hover:underline">Full Audit</button>
+              ),
+              className: 'px-10'
+            }
+          ]}
+        />
       </div>
     </div>
   );

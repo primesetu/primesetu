@@ -5,6 +5,7 @@
 import React, { useEffect } from 'react'
 import { useQuery } from '@tanstack/react-query'
 import { api } from '@/api/client'
+import { formatCurrency, formatDecimal } from '@/utils/currency'
 
 export default function ThermalReceipt({ bill, onPrinted, autoPrint = true }: { bill: any, onPrinted: () => void, autoPrint?: boolean }) {
   const { data: store } = useQuery({
@@ -67,7 +68,8 @@ export default function ThermalReceipt({ bill, onPrinted, autoPrint = true }: { 
         </thead>
         <tbody>
           {bill.items?.map((item: any, i: number) => {
-            const amount = item.qty * item.unit_price * (1 - item.discount_per / 100)
+            const unitPrice = item.unit_price || item.mrp || 0;
+            const amount = item.qty * unitPrice * (1 - item.discount_per / 100);
             return (
               <tr key={i}>
                 <td className="py-1 break-words pr-2 max-w-[40mm]">
@@ -75,7 +77,7 @@ export default function ThermalReceipt({ bill, onPrinted, autoPrint = true }: { 
                   {item.discount_per > 0 && <div className="text-[9px]">Disc: {item.discount_per}%</div>}
                 </td>
                 <td className="py-1 text-center align-top">{item.qty}</td>
-                <td className="py-1 text-right align-top">{amount.toFixed(2)}</td>
+                <td className="py-1 text-right align-top">{formatDecimal(amount)}</td>
               </tr>
             )
           })}
@@ -85,7 +87,7 @@ export default function ThermalReceipt({ bill, onPrinted, autoPrint = true }: { 
       <div className="border-t border-black pt-2 mb-4">
         <div className="flex justify-between font-bold text-[14px]">
           <span>Net Payable</span>
-          <span>Rs. {bill.total.toFixed(2)}</span>
+          <span>Rs. {formatDecimal(bill.total)}</span>
         </div>
         <div className="flex justify-between text-[10px] mt-1">
           <span>Total Items</span>
@@ -93,15 +95,22 @@ export default function ThermalReceipt({ bill, onPrinted, autoPrint = true }: { 
         </div>
         <div className="flex justify-between text-[10px]">
           <span>Taxable Value</span>
-          <span>Rs. {(bill.items?.reduce((a:any, i:any) => {
-            const net = i.unit_price * i.qty * (1 - (i.discount_per||0)/100);
-            const rate = (i.tax_per||0)/100;
+          <span>Rs. {formatDecimal(bill.items?.reduce((a:any, i:any) => {
+            const unitPrice = i.unit_price || i.mrp || 0;
+            const net = unitPrice * i.qty * (1 - (i.discount_per||0)/100);
+            const rate = (i.tax_per || i.tax_rate || 18)/100;
             return a + (net / (1 + rate));
-          }, 0)).toFixed(2)}</span>
+          }, 0))}</span>
         </div>
-        {bill.items?.reduce((a:any, i:any) => a + (i.unit_price * i.qty * (i.discount_per||0)/100), 0) > 0 && (
+        {bill.items?.reduce((a:any, i:any) => {
+           const unitPrice = i.unit_price || i.mrp || 0;
+           return a + (unitPrice * i.qty * (i.discount_per||0)/100);
+        }, 0) > 0 && (
           <div className="bg-black text-white px-2 py-1 mt-2 text-center text-[11px] font-black uppercase tracking-widest">
-            *** YOU SAVED RS. {(bill.items?.reduce((a:any, i:any) => a + (i.unit_price * i.qty * (i.discount_per||0)/100), 0)).toFixed(2)} ***
+            *** YOU SAVED RS. {formatDecimal(bill.items?.reduce((a:any, i:any) => {
+               const unitPrice = i.unit_price || i.mrp || 0;
+               return a + (unitPrice * i.qty * (i.discount_per||0)/100);
+            }, 0))} ***
           </div>
         )}
       </div>
@@ -115,7 +124,3 @@ export default function ThermalReceipt({ bill, onPrinted, autoPrint = true }: { 
     </div>
   )
 }
-
-
-
-

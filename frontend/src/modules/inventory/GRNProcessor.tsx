@@ -10,12 +10,13 @@ import {
   ShieldCheck,
   Zap,
   ArrowDownLeft,
-  RefreshCw
+  RefreshCw,
+  Info
 } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { useHotkeys } from 'react-hotkeys-hook';
 
-import { formatCurrency } from '../../utils/currency';
+import { formatCurrency, formatDecimal } from '../../utils/currency';
 import { useOfflineFallback } from '../../hooks/useOfflineFallback';
 import { useBarcodeScanner } from '../../hooks/useBarcodeScanner';
 import { apiClient } from '../../api/client';
@@ -25,7 +26,8 @@ import {
   Card, 
   Text, 
   Badge, 
-  Label 
+  Label,
+  DataTable
 } from '../../components/ui/SovereignUI';
 
 interface POItem {
@@ -262,64 +264,80 @@ const GRNProcessor: React.FC = () => {
                  </div>
               </Card>
 
-              <Card className="overflow-hidden border-border-subtle">
-                 <table className="w-full">
-                    <thead>
-                       <tr className="bg-bg-float text-[10px] font-bold uppercase tracking-widest text-text-tertiary border-b border-border-subtle">
-                          <th className="px-6 py-5 text-left">Item Entity</th>
-                          <th className="px-4 py-5 text-center">Batch No</th>
-                          <th className="px-4 py-5 text-center">Expiry</th>
-                          <th className="px-4 py-5 text-center">Ordered</th>
-                          <th className="px-4 py-5 text-center">Inwarding</th>
-                          <th className="px-6 py-5 text-center">Status</th>
-                       </tr>
-                    </thead>
-                    <tbody className="divide-y divide-border-subtle">
-                       {receivedItems.map((item, idx) => (
-                         <tr key={idx} className="hover:bg-bg-float/30 transition-colors">
-                           <td className="px-6 py-5">
-                              <Text variant="sm" className="font-bold uppercase">{item.item_name || 'Inwarding Item'}</Text>
-                              <Text variant="xs" className="font-mono text-text-tertiary mt-1">{item.size} / {item.colour}</Text>
-                           </td>
-                           <td className="px-4 py-5">
-                               <Input 
-                                 placeholder="BATCH..."
-                                 className="h-9 text-center uppercase"
-                                 value={item.batch_no}
-                                 onChange={(e) => updateItemField(idx, 'batch_no', e.target.value)}
-                               />
-                           </td>
-                           <td className="px-4 py-5">
-                               <Input 
-                                 type="date" 
-                                 className="h-9 text-center"
-                                 value={item.exp_date}
-                                 onChange={(e) => updateItemField(idx, 'exp_date', e.target.value)}
-                               />
-                           </td>
-                           <td className="px-4 py-5 text-center font-mono text-sm text-text-secondary">{item.qty_ordered}</td>
-                           <td className="px-4 py-5 text-center">
-                               <Input 
-                                 type="number" 
-                                 className="w-20 h-10 text-center font-mono text-accent"
-                                 value={item.received_now}
-                                 max={item.qty_ordered - item.qty_received}
-                                 min={0}
-                                 onChange={(e) => updateItemField(idx, 'received_now', parseInt(e.target.value) || 0)}
-                               />
-                           </td>
-                           <td className="px-6 py-5 text-center">
-                              {item.received_now + item.qty_received >= item.qty_ordered ? (
-                                <div className="text-status-green flex justify-center"><CheckCircle2 size={18} /></div>
-                              ) : (
-                                <div className="text-status-amber animate-pulse flex justify-center"><Zap size={18} /></div>
-                              )}
-                           </td>
-                         </tr>
-                       ))}
-                    </tbody>
-                 </table>
-              </Card>
+              <div className="min-h-[400px]">
+                 <DataTable 
+                   data={receivedItems}
+                   columns={[
+                     { 
+                       header: "ITEM ENTITY", 
+                       accessor: (item: any) => (
+                         <div className="flex flex-col py-2">
+                           <Text variant="sm" className="font-bold uppercase leading-tight">{item.item_name || 'Inwarding Item'}</Text>
+                           <Text variant="xs" className="font-mono text-text-tertiary tracking-tighter mt-1">{item.size} / {item.colour}</Text>
+                         </div>
+                       ),
+                       flex: 2
+                     },
+                     { 
+                       header: "BATCH NO", 
+                       accessor: (item: any, idx) => (
+                         <Input 
+                           placeholder="BATCH..."
+                           className="h-8 text-[10px] text-center uppercase bg-bg-float/50"
+                           value={item.batch_no}
+                           onChange={(e) => updateItemField(idx!, 'batch_no', e.target.value)}
+                         />
+                       ),
+                       width: 130
+                     },
+                     { 
+                       header: "EXPIRY", 
+                       accessor: (item: any, idx) => (
+                         <Input 
+                           type="date" 
+                           className="h-8 text-[10px] text-center bg-bg-float/50"
+                           value={item.exp_date}
+                           onChange={(e) => updateItemField(idx!, 'exp_date', e.target.value)}
+                         />
+                       ),
+                       width: 140
+                     },
+                     { 
+                       header: "ORDERED", 
+                       accessor: 'qty_ordered', 
+                       width: 100,
+                       className: 'text-center font-mono font-bold text-text-secondary'
+                     },
+                     { 
+                       header: "INWARDING", 
+                       accessor: (item: any, idx) => (
+                         <Input 
+                           type="number" 
+                           className="w-20 h-9 text-center font-mono text-accent font-bold bg-white"
+                           value={item.received_now}
+                           max={item.qty_ordered - item.qty_received}
+                           min={0}
+                           onChange={(e) => updateItemField(idx!, 'received_now', parseInt(e.target.value) || 0)}
+                         />
+                       ),
+                       width: 110
+                     },
+                     { 
+                       header: "STATUS", 
+                       accessor: (item: any) => (
+                         <div className="flex justify-center items-center h-full">
+                           {item.received_now + item.qty_received >= item.qty_ordered ? (
+                             <div className="text-status-green"><CheckCircle2 size={20} /></div>
+                           ) : (
+                             <div className="text-status-amber animate-pulse"><Zap size={20} /></div>
+                           )}
+                         </div>
+                       ),
+                       width: 90
+                     }
+                   ]}
+                 />
+              </div>
            </div>
 
            {/* Inwarding Control Panel */}
@@ -382,7 +400,3 @@ const GRNProcessor: React.FC = () => {
 };
 
 export default GRNProcessor;
-
-
-
-

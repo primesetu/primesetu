@@ -55,78 +55,138 @@ export default function ManagementDashboard() {
 
   if (isTally) {
     return (
-      <div className="flex flex-col gap-[var(--space-6)] tally-scrollbar pb-[var(--space-8)]">
-        {/* ── Tally Header Bar ── */}
-        <div className="tp-header px-[var(--space-4)] flex items-center justify-between">
-           <div className="flex items-center gap-[var(--space-4)]">
-              <div className="w-8 h-8 bg-[var(--surface)] flex items-center justify-center border border-[var(--border-subtle)]">
-                 <Activity className="w-5 h-5 text-[var(--accent)]" />
-              </div>
+      <div className="flex flex-col tally-scrollbar h-full divide-y divide-white/5 border-b border-white/5 bg-[var(--surface-muted)]">
+        {/* ── Institutional Bento Header ── */}
+        <div className="h-12 flex divide-x divide-white/5 items-stretch border-b border-white/5">
+           <div className="w-[300px] flex items-center gap-4 px-6 bg-[var(--surface)]">
+              <Activity className="w-4 h-4 text-[var(--gold)]" />
               <div>
-                 <h2 className="text-sm font-bold uppercase">Management Cockpit</h2>
-                 <p className="text-[9px] opacity-80 uppercase font-bold tracking-widest">System Status: Optimal · MUM-X01</p>
+                 <h2 className="text-[10px] font-black uppercase tracking-widest text-white">Management Cockpit</h2>
+                 <p className="text-[8px] font-black text-slate-400 uppercase tracking-tighter">NODE: MUM-X01 · ACTIVE</p>
               </div>
            </div>
-           <div className="flex gap-1">
+           <div className="flex-1 flex items-center justify-center gap-4">
+              <span className="text-[9px] font-black uppercase tracking-[0.3em] text-slate-500">System Pulse Monitoring</span>
+           </div>
+           <div className="flex divide-x divide-white/5">
               {['1H', '1D', '1W', '1M'].map(t => (
-                <button key={t} className={t === '1D' ? "tp-btn-gold" : "tp-btn-white"}>{t}</button>
+                <button key={t} className={cn("px-6 text-[9px] font-black transition-all", t === '1D' ? "bg-[var(--gold)] text-black" : "text-white/40 hover:bg-white/5 hover:text-white")}>{t}</button>
               ))}
            </div>
         </div>
 
-        {/* ── Tally Grid ── */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-[var(--space-4)]">
+        {/* ── Bento Metrics Row ── */}
+        <div className="grid grid-cols-4 divide-x divide-white/5 h-20 items-stretch bg-[var(--surface)]">
           {metricCards.map((m, i) => (
-            <div key={i} className="tp-card flex flex-col gap-[var(--space-4)]">
-              <div className="flex justify-between items-start">
-                <div className="text-[10px] font-bold text-[var(--accent)] uppercase tracking-widest">{m.label}</div>
-                <m.icon size={18} className="text-[var(--accent)]" />
+            <div key={i} className="flex flex-col justify-center px-6 group hover:bg-white/5 transition-all">
+              <div className="flex justify-between items-center mb-1">
+                <span className="text-[8px] font-black text-slate-400 uppercase tracking-widest">{m.label}</span>
+                <m.icon size={12} className="text-[var(--gold)] opacity-40 group-hover:opacity-100 transition-opacity" />
               </div>
-              <div className="text-2xl font-bold text-[var(--text-primary)] font-mono">{m.value}</div>
-              <div className="text-[9px] font-bold text-[var(--text-tertiary)] uppercase">{m.sub}</div>
+              <div className="text-[14px] font-black text-white tracking-tighter">{m.value}</div>
+              <div className="text-[8px] font-black text-emerald-400 uppercase tracking-tighter shadow-sm">{m.sub}</div>
             </div>
           ))}
         </div>
 
-        {/* ── Tally Reports ── */}
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-[var(--space-6)]">
-          <div className="lg:col-span-2 tp-card">
-            <h3 className="text-xs font-bold text-[var(--accent)] uppercase mb-[var(--space-6)] border-b border-[var(--background)] pb-[var(--space-2)]">Revenue Velocity</h3>
-            <div className="h-[280px] w-full">
-              <ResponsiveContainer width="100%" height="100%">
-                <AreaChart data={salesPulse}>
-                  <CartesianGrid strokeDasharray="0" stroke="var(--background)" />
-                  <XAxis dataKey="time" axisLine={{ stroke: 'var(--border-subtle)' }} tickLine={false} tick={{ fontSize: 9, fontWeight: 700, fill: 'var(--text-primary)' }} />
-                  <YAxis axisLine={{ stroke: 'var(--border-subtle)' }} tickLine={false} tick={{ fontSize: 9, fontWeight: 700, fill: 'var(--text-primary)' }} />
-                  <Tooltip 
-                    contentStyle={{ backgroundColor: 'var(--surface-elevated)', border: '1px solid var(--border-subtle)', borderRadius: '0' }}
-                  />
-                  <Area type="stepAfter" dataKey="val" stroke="var(--accent)" strokeWidth={2} fill="var(--accent)" fillOpacity={0.1} />
-                </AreaChart>
-              </ResponsiveContainer>
-            </div>
+        {/* ── Main Bento Area ── */}
+        <div className="flex-1 grid grid-cols-3 divide-x divide-white/5 items-stretch min-h-0">
+          <div className="col-span-2 flex flex-col p-6 bg-[var(--surface)]/50">
+             <div className="flex justify-between items-center mb-6">
+                <h3 className="text-[9px] font-black text-[var(--gold)] uppercase tracking-[0.2em]">Revenue Velocity</h3>
+                <span className="text-[8px] font-black text-slate-500 uppercase tracking-widest">Real-time Terminal Feed</span>
+             </div>
+             <div className="flex-1 min-h-[300px]">
+               <ResponsiveContainer width="100%" height="100%">
+                 <AreaChart data={salesPulse}>
+                   <CartesianGrid strokeDasharray="0" stroke="rgba(255,255,255,0.03)" />
+                   <XAxis dataKey="time" axisLine={false} tickLine={false} tick={{ fontSize: 8, fontWeight: 900, fill: 'rgba(255,255,255,0.2)' }} />
+                   <YAxis axisLine={false} tickLine={false} tick={{ fontSize: 8, fontWeight: 900, fill: 'rgba(255,255,255,0.2)' }} />
+                   <Tooltip 
+                     contentStyle={{ backgroundColor: '#000', border: '1px solid rgba(255,255,255,0.1)', borderRadius: '0' }}
+                   />
+                   <Area type="stepAfter" dataKey="val" stroke="var(--gold)" strokeWidth={1} fill="var(--gold)" fillOpacity={0.05} />
+                 </AreaChart>
+               </ResponsiveContainer>
+             </div>
           </div>
 
-          <div className="tp-card">
-            <h3 className="text-xs font-bold text-[var(--accent)] uppercase mb-[var(--space-6)] border-b border-[var(--background)] pb-[var(--space-2)] text-center">Node Health</h3>
-            <div className="space-y-[var(--space-6)]">
-              {[
-                { label: 'Database Sync', val: 100, color: 'bg-[var(--secondary)]' },
-                { label: 'Auth Latency', val: 98, color: 'bg-[var(--accent)]' },
-                { label: 'Audit Compliance', val: 92, color: 'bg-[var(--primary)]' },
-                { label: 'AI Predictor', val: 84, color: 'bg-[var(--warning)]' },
-              ].map((h, i) => (
-                <div key={i} className="space-y-[var(--space-2)]">
-                   <div className="flex justify-between items-end">
-                      <span className="text-[9px] font-bold uppercase text-[var(--text-tertiary)]">{h.label}</span>
-                      <span className="text-xs font-bold text-[var(--text-primary)]">{h.val}%</span>
-                   </div>
-                   <div className="h-2 w-full bg-[var(--background)] border border-[var(--border-subtle)]">
-                      <div className={cn("h-full", h.color)} style={{ width: `${h.val}%` }} />
-                   </div>
+          <div className="flex flex-col divide-y divide-white/5 bg-[var(--surface)]">
+             <div className="h-12 flex items-center justify-center px-6">
+                <h3 className="text-[9px] font-black text-white uppercase tracking-[0.3em]">Node Health Audit</h3>
+             </div>
+             <div className="flex-1 p-6 space-y-6 overflow-y-auto">
+               {[
+                 { label: 'Database Sync', val: 100, color: 'bg-emerald-500' },
+                 { label: 'Auth Latency', val: 98, color: 'bg-[var(--gold)]' },
+                 { label: 'Audit Compliance', val: 92, color: 'bg-sky-500' },
+                 { label: 'AI Predictor', val: 84, color: 'bg-purple-500' },
+               ].map((h, i) => (
+                 <div key={i} className="space-y-2">
+                    <div className="flex justify-between items-end">
+                       <span className="text-[8px] font-black uppercase text-slate-500 tracking-widest">{h.label}</span>
+                       <span className="text-[10px] font-black text-white">{h.val}%</span>
+                    </div>
+                    <div className="h-1 w-full bg-white/5 border border-white/5 overflow-hidden">
+                       <motion.div initial={{ width: 0 }} animate={{ width: `${h.val}%` }} className={cn("h-full", h.color)} />
+                    </div>
+                 </div>
+               ))}
+             </div>
+             <div className="p-6 bg-white/5">
+                <div className="flex items-center gap-3 text-[9px] font-black text-[var(--gold)] uppercase">
+                   <div className="w-2 h-2 rounded-full bg-[var(--gold)] animate-pulse" />
+                   Sovereign Integrity Verified
                 </div>
-              ))}
-            </div>
+             </div>
+          </div>
+        </div>
+
+        {/* ── Lower Bento Row (Live Audit Stream) ── */}
+        <div className="grid grid-cols-4 divide-x divide-white/5 border-t border-white/5 items-stretch bg-[var(--surface)]">
+          <div className="col-span-3 flex flex-col divide-y divide-white/5">
+             <div className="h-10 flex items-center px-6 bg-white/5 justify-between">
+                <span className="text-[9px] font-black text-[var(--gold)] uppercase tracking-widest">Live Terminal Audit Stream</span>
+                <span className="text-[8px] font-black text-slate-500 uppercase">Real-time Feed · {new Date().toLocaleDateString()}</span>
+             </div>
+             <div className="flex-1 max-h-[200px] overflow-y-auto tally-scrollbar">
+                {[
+                  { time: '18:32:05', msg: 'TERMINAL X01: BILL #INV-2026-0042 GENERATED', status: 'SUCCESS', amt: '₹12,450' },
+                  { time: '18:31:12', msg: 'STOCK SYNC: 124 ITEMS PUSHED TO HO CLOUD', status: 'SYNCED', amt: '' },
+                  { time: '18:30:45', msg: 'SECURITY: SOVEREIGN INTEGRITY CHECK PASSED', status: 'VERIFIED', amt: '' },
+                  { time: '18:28:10', msg: 'USER: OWNER LOGGED IN FROM IP 192.168.1.42', status: 'AUTH', amt: '' },
+                  { time: '18:25:00', msg: 'SYSTEM: AUTO-RECONCILIATION COMPLETED', status: 'DONE', amt: '' },
+                ].map((log, i) => (
+                  <div key={i} className="flex items-center gap-4 px-6 py-2 hover:bg-white/5 transition-all group">
+                     <span className="text-[9px] font-mono text-slate-500 font-bold">{log.time}</span>
+                     <div className="h-2 w-px bg-white/10" />
+                     <span className="flex-1 text-[9px] font-black text-white/70 group-hover:text-white uppercase tracking-tight truncate">{log.msg}</span>
+                     <span className="text-[9px] font-black text-[var(--gold)] font-mono">{log.amt}</span>
+                     <div className={cn(
+                       "px-2 py-0.5 text-[8px] font-black uppercase tracking-widest",
+                       log.status === 'SUCCESS' ? 'text-emerald-500' : 'text-slate-400'
+                     )}>{log.status}</div>
+                  </div>
+                ))}
+             </div>
+          </div>
+          <div className="flex flex-col p-6 gap-4 bg-[var(--surface-muted)]">
+             <div className="flex items-center gap-2 mb-2">
+                <Database size={14} className="text-[var(--gold)]" />
+                <span className="text-[9px] font-black text-white uppercase tracking-widest">Storage Pulse</span>
+             </div>
+             <div className="space-y-4">
+                <div className="flex justify-between items-end">
+                   <span className="text-[8px] font-black text-slate-500 uppercase">DB Cluster Load</span>
+                   <span className="text-[10px] font-black text-white">12.4%</span>
+                </div>
+                <div className="h-1.5 w-full bg-white/5 border border-white/5">
+                   <div className="h-full bg-[var(--gold)]" style={{ width: '12.4%' }} />
+                </div>
+                <p className="text-[8px] font-black text-slate-500 uppercase leading-relaxed">
+                   High-performance PostgreSQL cluster operating at optimal latency.
+                </p>
+             </div>
           </div>
         </div>
       </div>

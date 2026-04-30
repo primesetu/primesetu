@@ -17,30 +17,21 @@ interface ThemeContextType {
 const ThemeContext = createContext<ThemeContextType | undefined>(undefined);
 
 export function ThemeProvider({ children }: { children: React.ReactNode }) {
-  const [theme, setThemeState] = useState<SmritiTheme>(() => ThemeEngine.getTheme());
-  const [accent, setAccentState] = useState(() => localStorage.getItem('smriti-accent') || '#ffc107');
+  const theme = 'SMRITI-OS';
+  const [accent, setAccentState] = useState(() => localStorage.getItem('smriti-accent') || '#f29b12');
 
   useEffect(() => {
-    // Synchronize with document attribute
-    ThemeEngine.setTheme(theme);
-
-    // Listen for external theme changes
-    const handleThemeChange = (e: any) => {
-      if (e.detail?.theme) setThemeState(e.detail.theme);
-    };
-
-    window.addEventListener('smriti-theme-change', handleThemeChange);
-    return () => window.removeEventListener('smriti-theme-change', handleThemeChange);
-  }, [theme]);
+    ThemeEngine.setTheme('SMRITI-OS');
+  }, []);
 
   useEffect(() => {
     document.documentElement.style.setProperty('--accent', accent);
     localStorage.setItem('smriti-accent', accent);
   }, [accent]);
 
-  const setTheme = (newTheme: SmritiTheme) => setThemeState(newTheme);
+  const setTheme = (_newTheme: SmritiTheme) => {}; // No-op as theme is locked
   const setAccent = (newColor: string) => setAccentState(newColor);
-  const isInstitutional = theme === 'SMRITI-OS';
+  const isInstitutional = true;
 
   return (
     <ThemeContext.Provider value={{ theme, setTheme, accent, setAccent, isInstitutional }}>

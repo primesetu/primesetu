@@ -26,6 +26,7 @@ import {
 } from "lucide-react";
 import { useHotkeys } from "react-hotkeys-hook";
 
+import { DataTable } from "../../components/ui/SovereignUI";
 import { formatCurrency } from "../../utils/currency";
 import ItemForm from "./ItemForm";
 import { usePermission } from "../../hooks/usePermission";
@@ -162,72 +163,78 @@ const ItemMaster: React.FC = () => {
 
       {/* List Container */}
       <div className="bg-white rounded-[50px] border border-navy/5 shadow-2xl overflow-hidden mt-10">
-        <div className="overflow-x-auto max-h-[600px] custom-scrollbar">
-          <table className="w-full border-collapse">
-            <thead className="sticky top-0 z-10">
-              <tr className="bg-brand-navy text-white text-[10px] font-black uppercase tracking-[0.4em]">
-                <th className="px-12 py-8 text-left">SKU Protocol</th>
-                <th className="px-12 py-8 text-left">Description</th>
-                <th className="px-12 py-8 text-center">In-Hand Stock</th>
-                <th className="px-12 py-8 text-right">MRP (Paise)</th>
-                <th className="px-12 py-8 text-center">Tax Matrix</th>
-                <th className="px-12 py-8 text-right">Actions</th>
-              </tr>
-            </thead>
-            <tbody className="divide-y divide-navy/5">
-              {isLoading && items.length === 0 ? (
-                Array(5).fill(0).map((_, i) => (
-                  <tr key={i} className="animate-pulse"><td colSpan={6} className="px-12 py-10 h-24 bg-bg-input/20" /></tr>
-                ))
-              ) : (Array.isArray(items) && items.length > 0) ? items.map((item: Item) => (
-                <tr key={item.id} className="hover:bg-bg-float transition-all group">
-                  <td className="px-12 py-10">
-                    <div className="flex items-center gap-4">
-                       <span className="bg-bg-input text-text-primary px-4 py-2 rounded-xl font-mono text-[12px] font-black uppercase group-hover:bg-bg-elevated transition-all shadow-sm">{item.item_code}</span>
-                    </div>
-                  </td>
-                  <td className="px-12 py-10">
-                    <div className="text-base font-black text-navy uppercase tracking-tight">{item.item_name}</div>
-                    <div className="text-[10px] font-bold text-navy/30 uppercase tracking-widest mt-2 flex items-center gap-2">
-                       {item.brand || "UNBRANDED"} · {item.department || "GENERAL"}
-                    </div>
-                  </td>
-                  <td className="px-12 py-10 text-center">
-                    <span className={`px-5 py-2.5 rounded-xl text-[10px] font-black uppercase tracking-widest shadow-sm ${item.total_stock > 10 ? 'bg-emerald-50 text-emerald-600' : 'bg-rose-50 text-rose-500'}`}>
-                      {item.total_stock} Units
-                    </span>
-                  </td>
-                  <td className="px-12 py-10 text-right font-mono text-base font-black text-text-primary">
-                    {formatCurrency(item.mrp_paise)}
-                  </td>
-                  <td className="px-12 py-10 text-center font-mono text-[12px] font-black text-text-secondary/60">
-                    {item.gst_rate}% GST
-                  </td>
-                  <td className="px-12 py-10 text-right">
-                    <div className="flex items-center justify-end gap-3">
-                      <button 
-                        onClick={() => {
-                          setSelectedItemId(item.id);
-                          setIsFormOpen(true);
-                        }}
-                        className="p-4 bg-bg-float text-text-primary rounded-2xl hover:bg-brand-navy hover:text-white transition-all shadow-sm border border-border"
-                      >
-                        <RefreshCw size={20} className="group-hover:rotate-180 transition-all duration-700" />
-                      </button>
-                      <button className="p-4 bg-bg-float text-text-secondary/20 hover:text-brand-saffron hover:bg-brand-saffron/10 rounded-2xl transition-all border border-border"><MoreVertical size={22} /></button>
-                    </div>
-                  </td>
-                </tr>
-              )) : (
-                <tr>
-                   <td colSpan={6} className="px-12 py-32 text-center text-navy/10 uppercase font-black tracking-[0.5em] text-sm">
-                      {Array.isArray(items) ? 'No items found in registry' : 'Connectivity Error / Unauthorized'}
-                   </td>
-                </tr>
-              )}
-            </tbody>
-          </table>
-        </div>
+        <DataTable
+          data={items}
+          loading={isLoading}
+          columns={[
+            { 
+              header: 'SKU Protocol', 
+              accessor: (item: Item) => (
+                <div className="py-4">
+                  <span className="bg-bg-input text-text-primary px-4 py-2 rounded-xl font-mono text-[12px] font-black uppercase shadow-sm">
+                    {item.item_code}
+                  </span>
+                </div>
+              ),
+              className: 'px-12'
+            },
+            { 
+              header: 'Description', 
+              accessor: (item: Item) => (
+                <div className="py-4">
+                  <div className="text-base font-black text-navy uppercase tracking-tight">{item.item_name}</div>
+                  <div className="text-[10px] font-bold text-navy/30 uppercase tracking-widest mt-2 flex items-center gap-2">
+                    {item.brand || "UNBRANDED"} · {item.department || "GENERAL"}
+                  </div>
+                </div>
+              ),
+              className: 'px-12'
+            },
+            { 
+              header: 'In-Hand Stock', 
+              accessor: (item: Item) => (
+                <span className={`px-5 py-2.5 rounded-xl text-[10px] font-black uppercase tracking-widest shadow-sm ${item.total_stock > 10 ? 'bg-emerald-50 text-emerald-600' : 'bg-rose-50 text-rose-500'}`}>
+                  {item.total_stock} Units
+                </span>
+              ),
+              align: 'center',
+              className: 'px-12'
+            },
+            { 
+              header: 'MRP (Paise)', 
+              accessor: (item: Item) => formatCurrency(item.mrp_paise), 
+              align: 'right', 
+              className: 'px-12 font-mono text-base font-black text-text-primary' 
+            },
+            { 
+              header: 'Tax Matrix', 
+              accessor: (item: Item) => `${item.gst_rate}% GST`, 
+              align: 'center', 
+              className: 'px-12 font-mono text-[12px] font-black text-text-secondary/60' 
+            },
+            { 
+              header: 'Actions', 
+              accessor: (item: Item) => (
+                <div className="flex items-center justify-end gap-3 py-4">
+                  <button 
+                    onClick={() => {
+                      setSelectedItemId(item.id);
+                      setIsFormOpen(true);
+                    }}
+                    className="p-4 bg-bg-float text-text-primary rounded-2xl hover:bg-brand-navy hover:text-white transition-all shadow-sm border border-border"
+                  >
+                    <RefreshCw size={20} />
+                  </button>
+                  <button className="p-4 bg-bg-float text-text-secondary/20 hover:text-brand-saffron hover:bg-brand-saffron/10 rounded-2xl transition-all border border-border">
+                    <MoreVertical size={22} />
+                  </button>
+                </div>
+              ),
+              align: 'right',
+              className: 'px-12'
+            }
+          ]}
+        />
       </div>
 
       {/* Item Form Slide-over */}
@@ -242,7 +249,3 @@ const ItemMaster: React.FC = () => {
 };
 
 export default ItemMaster;
-
-
-
-

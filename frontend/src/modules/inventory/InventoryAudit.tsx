@@ -3,7 +3,7 @@
  * Zero Cloud · Sovereign · AI-Governed
  * ============================================================ */
 
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useMemo } from 'react';
 import { 
   ClipboardCheck, 
   Search, 
@@ -16,7 +16,10 @@ import {
   ArrowRight,
   TrendingUp,
   BarChart2,
-  ChevronRight
+  ChevronRight,
+  ShieldCheck,
+  Zap,
+  RefreshCw
 } from 'lucide-react';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { useHotkeys } from 'react-hotkeys-hook';
@@ -27,6 +30,15 @@ import { api } from '@/api/client';
 import { formatCurrency } from '@/utils/currency';
 import InventoryAuditReport from './InventoryAuditReport';
 import MobileAudit from './MobileAudit';
+import { 
+  DataTable, 
+  Badge, 
+  Text, 
+  Button, 
+  Card, 
+  Input,
+  cn 
+} from '@/components/ui/SovereignUI';
 
 const InventoryAudit: React.FC = () => {
   const [activeSession, setActiveSession] = useState<any>(null);
@@ -109,8 +121,6 @@ const InventoryAudit: React.FC = () => {
           physical_qty: 1 
         });
         setSearchQuery('');
-      } else {
-        console.warn('Product not found for barcode:', barcode);
       }
     } catch (err) {
       console.error('Scan failed:', err);
@@ -119,123 +129,156 @@ const InventoryAudit: React.FC = () => {
 
   const startAudit = () => createMutation.mutate();
 
+  // Columns for History
+  const historyColumns = useMemo(() => [
+    {
+      header: "SESSION REF",
+      accessor: (item: any) => (
+        <div className="flex flex-col py-1">
+          <span className="font-mono font-black text-navy text-sm uppercase tracking-tight">{item.audit_no}</span>
+          <span className="text-[9px] font-black text-navy/20 uppercase tracking-widest mt-1">Manual Verification</span>
+        </div>
+      ),
+      width: 200,
+      pinned: 'left' as const
+    },
+    {
+      header: "AUDIT DATE",
+      accessor: (item: any) => new Date(item.created_at).toLocaleDateString('en-IN', { day: '2-digit', month: 'short', year: 'numeric' }),
+      width: 150
+    },
+    {
+      header: "STATUS",
+      accessor: (item: any) => (
+        <Badge variant={item.status === 'OPEN' ? 'info' : 'success'} className="h-6 text-[9px] font-black uppercase tracking-widest">
+          {item.status}
+        </Badge>
+      ),
+      width: 120
+    },
+    {
+      header: "VARIANCE",
+      accessor: (item: any) => <span className="font-mono font-black text-rose-500 text-lg">-2</span>,
+      width: 120,
+      className: 'text-center'
+    },
+    {
+      header: "ACTIONS",
+      accessor: (item: any) => (
+        <div className="flex justify-end">
+           <Button variant="sec" size="sm" onClick={() => setViewReport(item)} className="h-9 w-9 p-0 rounded-xl">
+              <FileText size={16} />
+           </Button>
+        </div>
+      ),
+      width: 100,
+      pinned: 'right' as const
+    }
+  ], []);
+
+  // Columns for Active Session
+  const activeColumns = useMemo(() => [
+    {
+      header: "ITEM PROTOCOL",
+      accessor: (item: any) => (
+        <div className="flex flex-col py-2 leading-tight">
+          <span className="text-sm font-serif font-black text-navy uppercase tracking-tight">{item.product_name}</span>
+          <span className="text-[9px] font-black text-navy/30 uppercase tracking-widest mt-1">
+            {item.product_code} • {item.size} / {item.colour}
+          </span>
+        </div>
+      ),
+      flex: 2,
+      pinned: 'left' as const
+    },
+    {
+      header: "BOOK QTY",
+      accessor: 'book_qty',
+      width: 120,
+      className: 'text-center font-mono font-black text-navy/40'
+    },
+    {
+      header: "PHYSICAL",
+      accessor: 'physical_qty',
+      width: 120,
+      className: 'text-center font-mono font-black text-navy text-lg'
+    },
+    {
+      header: "DISCREPANCY",
+      accessor: (item: any) => {
+        const v = item.physical_qty - item.book_qty;
+        return (
+          <div className={cn(
+            "inline-flex px-4 py-1 rounded-lg text-[11px] font-black",
+            v === 0 ? 'bg-navy/5 text-navy/40' : v > 0 ? 'bg-emerald-50 text-emerald-600' : 'bg-rose-50 text-rose-500'
+          )}>
+            {v > 0 ? '+' : ''}{v}
+          </div>
+        )
+      },
+      width: 130,
+      className: 'text-center'
+    }
+  ], []);
+
   return (
     <div className="space-y-6 animate-in fade-in duration-700 pb-20">
-      {/* Breadcrumb Pattern */}
       <nav className="flex items-center gap-2 text-[10px] font-black uppercase tracking-widest text-navy/20 mb-4">
          <span>Home</span> <ChevronRight size={10} />
          <span>Operations</span> <ChevronRight size={10} />
          <span className="text-navy/60">Inventory Audit</span>
       </nav>
 
-      {/* Header Section */}
       <div className="flex flex-col lg:flex-row justify-between items-start lg:items-end gap-6 bg-white/50 p-10 rounded-[40px] border border-navy/5 backdrop-blur-sm shadow-sm">
         <div>
           <div className="flex items-center gap-3 mb-4">
-            <div className="px-3 py-1 bg-brand-navy text-brand-gold text-[9px] font-black uppercase tracking-[0.2em] rounded-md">Operational Audit</div>
+            <Badge variant="muted" className="bg-brand-navy text-brand-gold text-[9px] font-black uppercase tracking-[0.2em] border-none h-6">Operational Audit</Badge>
             <div className="w-1.5 h-1.5 rounded-full bg-indigo-500 animate-pulse"></div>
           </div>
           <h1 className="text-5xl font-serif font-black text-navy uppercase tracking-tight">Stock Verification</h1>
           <p className="text-xs text-muted font-bold uppercase tracking-widest mt-3 flex items-center gap-2 italic text-navy/40">
-            <ClipboardCheck className="w-3.5 h-3.5 text-navy" /> Physical Stock Alignment Logic Active
+            <ClipboardCheck size={14} className="text-navy" /> Physical Stock Alignment Logic Active
           </p>
         </div>
 
-           <div className="flex gap-4">
-             <button 
-               onClick={() => setMobileMode(true)}
-               className="bg-navy/5 text-navy px-8 py-5 rounded-[2rem] font-black text-[11px] uppercase tracking-widest hover:bg-navy/10 transition-all flex items-center gap-4"
-             >
-               <Scan size={20} className="text-brand-gold" />
-               Mobile Handheld Mode
-             </button>
-             <button 
-               onClick={startAudit}
-               className="bg-brand-navy text-white px-10 py-5 rounded-[2rem] font-black text-[11px] uppercase tracking-widest hover:scale-105 transition-all shadow-2xl active:scale-95 flex items-center gap-4"
-             >
-               <Plus size={20} className="text-brand-gold" />
-               Start New Audit Session
-             </button>
-           </div>
+        <div className="flex gap-4">
+           <Button variant="sec" size="lg" onClick={() => setMobileMode(true)} className="h-14 px-8 rounded-[2rem] gap-3">
+              <Scan size={20} className="text-brand-gold" /> Mobile Handheld Mode
+           </Button>
+           <Button variant="pri" size="lg" onClick={startAudit} className="h-14 px-10 rounded-[2rem] gap-3 bg-brand-navy text-white hover:scale-105 shadow-2xl">
+              <Plus size={20} className="text-brand-gold" /> Start New Audit Session
+           </Button>
+        </div>
       </div>
 
       {!activeSession ? (
          <div className="grid grid-cols-12 gap-10">
-            {/* KPI Summary */}
             <div className="col-span-12 grid grid-cols-4 gap-6">
-               <div className="bg-white p-10 rounded-[3rem] border border-navy/5 shadow-xl">
-                  <div className="text-[10px] font-black text-navy/30 uppercase tracking-[0.3em] mb-6">Total Sessions</div>
-                  <div className="text-5xl font-serif font-black text-navy">{audits.length}</div>
-               </div>
-               <div className="bg-white p-10 rounded-[3rem] border border-navy/5 shadow-xl">
-                  <div className="text-[10px] font-black text-navy/30 uppercase tracking-[0.3em] mb-6">Net Variance</div>
-                  <div className="text-5xl font-serif font-black text-rose-500">-12 <span className="text-sm">PCS</span></div>
-               </div>
-               <div className="bg-white p-10 rounded-[3rem] border border-navy/5 shadow-xl">
-                  <div className="text-[10px] font-black text-navy/30 uppercase tracking-[0.3em] mb-6">Accuracy Rate</div>
-                  <div className="text-5xl font-serif font-black text-emerald-600">99.4%</div>
-               </div>
-               <div className="bg-white p-10 rounded-[3rem] border border-navy/5 shadow-xl">
-                  <div className="text-[10px] font-black text-navy/30 uppercase tracking-[0.3em] mb-6">Last Audit</div>
-                  <div className="text-2xl font-black text-navy uppercase tracking-tight pt-2">24 APR 2026</div>
-               </div>
+               {[
+                 { label: 'Total Sessions', val: audits.length.toString(), color: 'navy' },
+                 { label: 'Net Variance', val: '-12 PCS', color: 'rose' },
+                 { label: 'Accuracy Rate', val: '99.4%', color: 'emerald' },
+                 { label: 'Last Audit', val: '24 APR 2026', color: 'navy' }
+               ].map((kpi, idx) => (
+                 <Card key={idx} className="p-10 rounded-[3rem] border-navy/5 shadow-xl">
+                    <Text variant="xs" className="text-navy/30 uppercase tracking-[0.3em] mb-6">{kpi.label}</Text>
+                    <div className={cn("text-4xl font-serif font-black", kpi.color === 'rose' ? 'text-rose-500' : kpi.color === 'emerald' ? 'text-emerald-600' : 'text-navy')}>
+                       {kpi.val}
+                    </div>
+                 </Card>
+               ))}
             </div>
 
-            {/* Audit History Table */}
-            <div className="col-span-12 bg-white rounded-[3rem] border border-navy/5 shadow-2xl overflow-hidden">
-               <table className="w-full text-left">
-                  <thead>
-                     <tr className="bg-navy text-white text-[10px] font-black uppercase tracking-[0.3em]">
-                        <th className="px-12 py-8">Session Ref</th>
-                        <th className="px-12 py-8">Audit Date</th>
-                        <th className="px-12 py-8">Status</th>
-                        <th className="px-12 py-8 text-center">Variance</th>
-                        <th className="px-12 py-8 text-right">Actions</th>
-                     </tr>
-                  </thead>
-                  <tbody className="divide-y divide-navy/5">
-                     {Array.isArray(audits) && audits.length > 0 ? audits.map((audit: any) => (
-                        <tr key={audit.id} className="hover:bg-brand-cream transition-all group">
-                           <td className="px-12 py-10">
-                              <div className="font-mono font-black text-navy text-base uppercase tracking-tight">{audit.audit_no}</div>
-                              <div className="text-[9px] font-black text-navy/20 uppercase tracking-widest mt-2">Manual Verification</div>
-                           </td>
-                           <td className="px-12 py-10 text-sm font-black text-navy/60">
-                              {new Date(audit.created_at).toLocaleDateString('en-IN', { day: '2-digit', month: 'short', year: 'numeric' })}
-                           </td>
-                           <td className="px-12 py-10">
-                              <span className={`px-5 py-2.5 rounded-xl text-[9px] font-black uppercase tracking-widest ${
-                                 audit.status === 'OPEN' ? 'bg-indigo-50 text-indigo-600' : 'bg-emerald-50 text-emerald-600'
-                              }`}>
-                                 {audit.status}
-                              </span>
-                           </td>
-                           <td className="px-12 py-10 text-center font-mono font-black text-rose-500 text-lg">
-                              -2
-                           </td>
-                           <td className="px-12 py-10 text-right">
-                               <button 
-                                 onClick={() => setViewReport(audit)}
-                                 className="p-4 bg-navy/5 text-navy rounded-2xl hover:bg-navy hover:text-white transition-all shadow-sm"
-                               >
-                                  <FileText size={20} />
-                               </button>
-                           </td>
-                        </tr>
-                     )) : (
-                        <tr>
-                           <td colSpan={5} className="px-12 py-32 text-center text-navy/10 uppercase font-black tracking-[0.5em] text-sm">
-                              {Array.isArray(audits) ? 'No audit history found' : 'Connectivity Error / Unauthorized'}
-                           </td>
-                        </tr>
-                     )}
-                  </tbody>
-               </table>
+            <div className="col-span-12 bg-white rounded-[3rem] border border-navy/5 shadow-2xl overflow-hidden min-h-[400px]">
+               <DataTable 
+                 data={audits}
+                 columns={historyColumns}
+                 loading={isLoading && audits.length === 0}
+               />
             </div>
          </div>
       ) : (
          <div className="grid grid-cols-12 gap-10 animate-in slide-in-from-right-10 duration-500">
-            {/* Active Scanning Interface */}
             <div className="col-span-12 lg:col-span-8 space-y-10">
                <div className="bg-brand-navy p-16 rounded-[50px] text-white shadow-2xl relative overflow-hidden">
                   <div className="absolute top-0 right-0 w-96 h-96 bg-brand-gold/10 blur-[120px] rounded-full"></div>
@@ -245,85 +288,50 @@ const InventoryAudit: React.FC = () => {
                         <p className="text-[11px] font-black text-white/30 uppercase tracking-[0.4em] mt-3">Active Session · Please Scan Items</p>
                      </div>
                      <div className="flex gap-6">
-                        <button onClick={() => setActiveSession(null)} className="px-10 py-5 bg-white/5 text-white/60 rounded-[2rem] font-black text-[11px] uppercase tracking-widest hover:bg-white/10 transition-all border border-white/10">
+                        <Button variant="sec" onClick={() => setActiveSession(null)} className="px-10 h-14 bg-white/5 border-white/10 text-white/60 rounded-[2rem] hover:bg-white/10">
                            Suspend [Esc]
-                        </button>
-                        <button className="px-12 py-5 bg-brand-gold text-navy rounded-[2rem] font-black text-[11px] uppercase tracking-widest hover:scale-105 transition-all shadow-2xl shadow-brand-gold/20">
+                        </Button>
+                        <Button onClick={() => submitMutation.mutate(activeSession.id)} className="px-12 h-14 bg-brand-gold text-navy rounded-[2rem] shadow-2xl shadow-brand-gold/20 hover:scale-105">
                            Submit Final [F10]
-                        </button>
+                        </Button>
                      </div>
                   </div>
                </div>
 
-               <div className="bg-white rounded-[50px] p-12 border border-navy/5 shadow-2xl relative overflow-hidden">
+               <Card className="rounded-[50px] p-12 border-navy/5 shadow-2xl overflow-hidden">
                   <div className="flex items-center gap-8 mb-12 pb-12 border-b border-navy/5">
                      <div className="flex-1 relative">
                         <Scan className="absolute left-8 top-1/2 -translate-y-1/2 text-navy/20" size={24} />
-                        <input 
+                        <Input 
                            ref={searchInputRef}
                            type="text" 
                            placeholder="SCAN BARCODE OR SEARCH ITEM... [F3]"
-                           className="w-full bg-navy/5 border-2 border-transparent focus:border-brand-gold/20 rounded-[2.5rem] py-6 pl-20 pr-10 text-base font-black text-navy outline-none transition-all placeholder:text-navy/20 uppercase tracking-widest"
+                           className="w-full bg-navy/5 border-none h-16 rounded-[2.5rem] pl-20 pr-10 text-base font-black text-navy placeholder:text-navy/20 uppercase tracking-widest"
                            value={searchQuery}
                            onChange={(e) => setSearchQuery(e.target.value)}
+                           onKeyDown={(e) => e.key === 'Enter' && handleScan(searchQuery)}
                         />
                      </div>
                   </div>
 
-                  <div className="space-y-4 max-h-[500px] overflow-y-auto custom-scrollbar">
-                     {loadingSession ? (
-                        <div className="flex flex-col items-center py-20 gap-4">
-                           <div className="w-10 h-10 border-4 border-navy/10 border-t-navy rounded-full animate-spin" />
-                           <span className="text-[10px] font-black uppercase tracking-widest text-navy/20">Syncing Ledger...</span>
-                        </div>
-                     ) : !sessionDetails?.entries?.length ? (
-                        <div className="flex flex-col items-center py-20 gap-4">
-                           <Scan className="w-12 h-12 text-navy/10" />
-                           <span className="text-[10px] font-black uppercase tracking-widest text-navy/20">No items scanned yet</span>
-                        </div>
-                     ) : (
-                        sessionDetails.entries.map((entry: any, i: number) => {
-                           const v = entry.physical_qty - entry.book_qty;
-                           return (
-                              <motion.div initial={{ opacity: 0, x: -10 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: i * 0.05 }}
-                                 key={entry.id} className="flex items-center justify-between p-6 bg-navy/5 rounded-3xl border border-transparent hover:border-navy/10 transition-all group">
-                                 <div className="flex items-center gap-6">
-                                    <div className="w-12 h-12 bg-white rounded-2xl flex items-center justify-center shadow-sm">
-                                       <FileText className="text-navy/20" size={20} />
-                                    </div>
-                                    <div>
-                                       <div className="font-serif font-black text-navy text-lg uppercase tracking-tight">{entry.product_name}</div>
-                                       <div className="text-[10px] font-black text-navy/30 uppercase tracking-widest mt-1">
-                                          {entry.product_code} • {entry.size} / {entry.colour}
-                                       </div>
-                                    </div>
-                                 </div>
-                                 <div className="flex items-center gap-12">
-                                    <div className="text-right">
-                                       <div className="text-[9px] font-black text-navy/20 uppercase tracking-widest mb-1">Book Qty</div>
-                                       <div className="font-mono font-black text-navy text-base">{entry.book_qty}</div>
-                                    </div>
-                                    <div className="text-right">
-                                       <div className="text-[9px] font-black text-navy/20 uppercase tracking-widest mb-1">Physical</div>
-                                       <div className="font-mono font-black text-navy text-xl">{entry.physical_qty}</div>
-                                    </div>
-                                    <div className={`w-20 text-center px-4 py-2 rounded-xl text-[11px] font-black ${
-                                       v === 0 ? 'bg-navy/5 text-navy/40' : v > 0 ? 'bg-emerald-50 text-emerald-600' : 'bg-rose-50 text-rose-500'
-                                    }`}>
-                                       {v > 0 ? '+' : ''}{v}
-                                    </div>
-                                 </div>
-                              </motion.div>
-                           )
-                        })
-                     )}
+                  <div className="min-h-[400px]">
+                     <DataTable 
+                        data={sessionDetails?.entries || []}
+                        columns={activeColumns}
+                        loading={loadingSession}
+                        overlayNoRowsTemplate={`
+                          <div class="flex flex-col items-center justify-center opacity-10 h-full">
+                             <Scan size="60" class="mb-4" />
+                             <div class="text-xs font-black uppercase tracking-[0.4em]">Ready for Verification Feed</div>
+                          </div>
+                        `}
+                     />
                   </div>
-               </div>
+               </Card>
             </div>
 
-            {/* Variance Sidebar */}
             <div className="col-span-12 lg:col-span-4 space-y-10">
-               <div className="bg-white rounded-[50px] p-12 border border-navy/5 shadow-2xl">
+               <Card className="rounded-[50px] p-12 border-navy/5 shadow-2xl">
                   <h3 className="text-[11px] font-black text-navy uppercase tracking-[0.4em] mb-12 flex items-center gap-4">
                      <BarChart2 size={24} className="text-brand-gold" /> Discrepancy Feed
                   </h3>
@@ -349,7 +357,7 @@ const InventoryAudit: React.FC = () => {
                         Inventory adjustment is <span className="text-rose-500">irreversible</span>. Ensure physical count matches digital entry before final submission.
                      </p>
                   </div>
-               </div>
+               </Card>
             </div>
          </div>
       )}
@@ -369,7 +377,3 @@ const InventoryAudit: React.FC = () => {
 };
 
 export default InventoryAudit;
-
-
-
-

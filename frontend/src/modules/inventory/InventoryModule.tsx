@@ -28,7 +28,8 @@ import {
   Text, 
   Badge, 
   Modal,
-  Label 
+  Label,
+  DataTable
 } from '../../components/ui/SovereignUI';
 
 interface InventoryItem {
@@ -244,60 +245,52 @@ export default function InventoryModule() {
         </div>
         
         <div className="overflow-x-auto">
-          <table className="w-full">
-            <thead>
-              <tr className="bg-bg-float/40 text-[9px] uppercase font-black tracking-[0.2em] text-text-tertiary border-b border-border-subtle">
-                <th className="px-8 py-5 text-left">Article Entity</th>
-                <th className="px-6 py-5 text-center">Category</th>
-                <th className="px-6 py-5 text-center">Brand</th>
-                <th className="px-6 py-5 text-right">WH1 Volume</th>
-                <th className="px-6 py-5 text-right">X01 Volume</th>
-                <th className="px-6 py-5 text-right">Total Net</th>
-                <th className="px-6 py-5 text-center">Protocol (DoC)</th>
-                <th className="px-8 py-5 text-center">Registry Status</th>
-              </tr>
-            </thead>
-            <tbody className="divide-y divide-border-subtle">
-              {filteredItems.map((item) => {
-                const total = item.wh1_qty + item.x01_qty
-                const isLow = total < item.min_stock
-                return (
-                  <tr key={item.id} className="hover:bg-bg-float/20 transition-colors group">
-                    <td className="px-8 py-6">
-                      <Text variant="sm" className="font-bold uppercase group-hover:text-accent transition-colors">{item.name}</Text>
-                      <Text variant="xs" className="font-mono mt-1 block">{item.code}</Text>
-                    </td>
-                    <td className="px-6 py-6 text-center">
-                       <Badge variant="muted">{item.category}</Badge>
-                    </td>
-                    <td className="px-6 py-6 text-center font-bold text-text-secondary">{item.brand}</td>
-                    <td className="px-6 py-6 text-right">
-                       <Text variant="sm" className="font-mono font-bold text-status-green">{item.wh1_qty}</Text>
-                    </td>
-                    <td className="px-6 py-6 text-right">
-                       <Text variant="sm" className="font-mono font-bold text-accent">{item.x01_qty}</Text>
-                    </td>
-                    <td className="px-6 py-6 text-right font-mono font-black text-lg text-text-primary">{total}</td>
-                    <td className="px-6 py-6 text-center">
-                        <div className="flex flex-col items-center gap-1">
-                          <Badge variant={item.risk_level === 'High' ? 'error' : item.risk_level === 'Medium' ? 'warn' : 'success'}>
-                            {item.days_of_cover} Days
-                          </Badge>
-                          <Text variant="xs" className="scale-75 opacity-50">EST. COVERAGE</Text>
-                        </div>
-                    </td>
-                    <td className="px-8 py-6 text-center">
-                      {isLow ? (
-                        <Badge variant="error" className="h-7 px-4">CRITICAL</Badge>
-                      ) : (
-                        <Badge variant="success" className="h-7 px-4">HEALTHY</Badge>
-                      )}
-                    </td>
-                  </tr>
-                )
-              })}
-            </tbody>
-          </table>
+          <DataTable
+            data={filteredItems}
+            loading={loading}
+            columns={[
+              { 
+                header: 'Article Entity', 
+                accessor: (item: InventoryItem) => (
+                  <div className="py-2">
+                    <Text variant="sm" className="font-bold uppercase group-hover:text-accent transition-colors">{item.name}</Text>
+                    <Text variant="xs" className="font-mono mt-1 block">{item.code}</Text>
+                  </div>
+                ),
+                className: 'px-8'
+              },
+              { header: 'Category', accessor: (item: InventoryItem) => <Badge variant="muted">{item.category}</Badge>, align: 'center', className: 'px-6' },
+              { header: 'Brand', accessor: 'brand', align: 'center', className: 'px-6 font-bold text-text-secondary' },
+              { header: 'WH1 Volume', accessor: (item: InventoryItem) => <Text variant="sm" className="font-mono font-bold text-status-green">{item.wh1_qty}</Text>, align: 'right', className: 'px-6' },
+              { header: 'X01 Volume', accessor: (item: InventoryItem) => <Text variant="sm" className="font-mono font-bold text-accent">{item.x01_qty}</Text>, align: 'right', className: 'px-6' },
+              { header: 'Total Net', accessor: (item: InventoryItem) => <span className="font-mono font-black text-lg text-text-primary">{item.wh1_qty + item.x01_qty}</span>, align: 'right', className: 'px-6' },
+              { 
+                header: 'Protocol (DoC)', 
+                accessor: (item: InventoryItem) => (
+                  <div className="flex flex-col items-center gap-1">
+                    <Badge variant={item.risk_level === 'High' ? 'error' : item.risk_level === 'Medium' ? 'warn' : 'success'}>
+                      {item.days_of_cover} Days
+                    </Badge>
+                    <Text variant="xs" className="scale-75 opacity-50">EST. COVERAGE</Text>
+                  </div>
+                ),
+                align: 'center',
+                className: 'px-6'
+              },
+              { 
+                header: 'Registry Status', 
+                accessor: (item: InventoryItem) => (
+                  (item.wh1_qty + item.x01_qty < item.min_stock) ? (
+                    <Badge variant="error" className="h-7 px-4">CRITICAL</Badge>
+                  ) : (
+                    <Badge variant="success" className="h-7 px-4">HEALTHY</Badge>
+                  )
+                ),
+                align: 'center',
+                className: 'px-8'
+              }
+            ]}
+          />
         </div>
       </Card>
 

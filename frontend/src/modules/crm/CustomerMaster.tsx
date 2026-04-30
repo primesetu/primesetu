@@ -9,7 +9,7 @@
  * "Memory, Not Code."
  * ============================================================ */
 
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useMemo } from 'react';
 import { 
   Users, 
   Search, 
@@ -33,6 +33,12 @@ import CustomerForm from './CustomerForm';
 import { usePermission } from '../../hooks/usePermission';
 import { useOfflineFallback } from '../../hooks/useOfflineFallback';
 import { apiClient } from '../../api/client';
+import { 
+  DataTable, 
+  Badge, 
+  Text, 
+  Button 
+} from '@/components/ui/SovereignUI';
 
 interface Customer {
   id: string;
@@ -52,7 +58,7 @@ const CustomerMaster: React.FC = () => {
   const searchInputRef = useRef<HTMLInputElement>(null);
   const { hasPermission } = usePermission();
 
-  // 1. Fetch Customers with Offline Fallback via sovereign apiClient
+  // 1. Fetch Customers
   const { 
     data: customers = [], 
     loading: isLoading, 
@@ -60,7 +66,6 @@ const CustomerMaster: React.FC = () => {
   } = useOfflineFallback<Customer[]>(
     `customers_${searchTerm}`,
     async () => {
-      // Direct phone lookup for 10-digit queries
       if (searchTerm.length === 10 && /^\d+$/.test(searchTerm)) {
         const res = await apiClient.get<Customer>(`/customers/lookup?phone=${searchTerm}`);
         if (res.data?.found) return [res.data];
@@ -92,6 +97,77 @@ const CustomerMaster: React.FC = () => {
     }
   }, { enableOnFormTags: true });
 
+  // 4. Columns Definition
+  const columns = useMemo(() => [
+    {
+      header: "PROTOCOL CODE",
+      accessor: (item: Customer) => (
+        <span className="bg-navy/5 text-navy px-3 py-1 rounded-lg font-mono text-[11px] font-black uppercase">
+          {item.code || '-'}
+        </span>
+      ),
+      width: 150,
+      pinned: 'left' as const
+    },
+    {
+      header: "IDENTITY DNA",
+      accessor: (item: Customer) => (
+        <div className="flex flex-col py-2 leading-tight">
+          <span className="text-sm font-black text-navy uppercase tracking-tight">{item.name}</span>
+          <span className="text-[9px] font-bold text-navy/30 uppercase tracking-widest mt-1 flex items-center gap-1">
+            <ShieldCheck size={10} className="text-emerald-500" /> Joined {new Date(item.created_at).getFullYear()}
+          </span>
+        </div>
+      ),
+      flex: 2,
+      pinned: 'left' as const
+    },
+    {
+      header: "CONTACT PROTOCOL",
+      accessor: (item: Customer) => <span className="font-mono text-xs font-black text-navy/60">{item.phone}</span>,
+      width: 180,
+      className: 'text-center'
+    },
+    {
+      header: "LOYALTY TIER",
+      accessor: (item: Customer) => (
+        <Badge variant="info" className="inline-flex items-center gap-1 bg-brand-gold/10 text-brand-gold border-none font-black text-[9px]">
+          <Zap size={10} strokeWidth={3} /> {item.loyalty_points || 0} PTS
+        </Badge>
+      ),
+      width: 140,
+      className: 'text-center'
+    },
+    {
+      header: "LEDGER BALANCE",
+      accessor: (item: Customer) => (
+        <span className={`font-mono text-sm font-black ${item.outstanding_paise! > 0 ? 'text-rose-500' : 'text-emerald-500'}`}>
+          {formatCurrency(item.outstanding_paise || 0)}
+        </span>
+      ),
+      width: 180,
+      className: 'text-right'
+    },
+    {
+      header: "ACTIONS",
+      accessor: (item: Customer) => (
+        <div className="flex items-center justify-end gap-2">
+          <button 
+            onClick={() => { setSelectedCustomerId(item.id); setIsFormOpen(true); }}
+            className="p-2.5 bg-navy/5 text-navy rounded-xl hover:bg-navy hover:text-white transition-all shadow-sm group/btn"
+          >
+            <RefreshCw size={16} className="group-hover/btn:rotate-180 transition-all duration-500" />
+          </button>
+          <button className="p-2.5 bg-navy/5 text-navy/20 hover:text-brand-saffron hover:bg-brand-saffron/10 rounded-xl transition-all">
+            <MoreVertical size={18} />
+          </button>
+        </div>
+      ),
+      width: 120,
+      pinned: 'right' as const
+    }
+  ], []);
+
   return (
     <div className="space-y-6 animate-in fade-in duration-700 pb-20">
       {/* Breadcrumb Pattern */}
@@ -101,7 +177,7 @@ const CustomerMaster: React.FC = () => {
          <span className="text-navy/60">Customer Registry</span>
       </nav>
 
-      {/* Sovereign Header Panel */}
+      {/* Header Panel */}
       <div className="flex items-center justify-between bg-white/50 p-10 rounded-[40px] border border-navy/5 backdrop-blur-sm shadow-sm">
         <div className="flex items-center gap-6">
           <div className="w-16 h-16 bg-brand-navy rounded-[24px] flex items-center justify-center text-brand-gold shadow-2xl shadow-navy/20">
@@ -143,89 +219,21 @@ const CustomerMaster: React.FC = () => {
         </div>
       </div>
 
-      {/* KPI Grid */}
-      <div className="grid grid-cols-4 gap-8">
-        {[
-          { label: 'Active Members', val: customers.length.toString(), icon: Users, color: 'navy' },
-          { label: 'Loyalty Value', val: '1.2M Pts', icon: Zap, color: 'gold' },
-          { label: 'Avg Ticket', val: '₹4,280', icon: Target, color: 'saffron' },
-          { label: 'Outstandings', val: '₹1.8L', icon: CreditCard, color: 'rose' }
-        ].map((kpi, idx) => (
-          <div key={idx} className="bg-white rounded-[40px] p-10 border border-navy/5 shadow-xl relative overflow-hidden transition-all hover:-translate-y-2 hover:shadow-2xl group">
-             <div className="flex justify-between items-start mb-6">
-                <div className={`w-12 h-12 rounded-2xl flex items-center justify-center ${kpi.color === 'navy' ? 'bg-navy text-white shadow-lg' : kpi.color === 'gold' ? 'bg-brand-gold/10 text-brand-gold' : kpi.color === 'saffron' ? 'bg-brand-saffron/10 text-brand-saffron' : 'bg-rose-50 text-rose-500'}`}>
-                   <kpi.icon size={22} />
-                </div>
-                <span className="text-[10px] font-black text-navy/30 uppercase tracking-[0.3em]">{kpi.label}</span>
-             </div>
-             <div className="text-4xl font-serif font-black text-navy tracking-tight">{kpi.val}</div>
-          </div>
-        ))}
-      </div>
-
-      {/* Registry Table */}
+      {/* Registry Grid */}
       <div className="bg-white rounded-[50px] border border-navy/5 shadow-2xl overflow-hidden mt-10">
-        <div className="overflow-x-auto max-h-[600px] custom-scrollbar">
-          <table className="w-full border-collapse">
-            <thead className="sticky top-0 z-10">
-              <tr className="bg-brand-navy text-white text-[10px] font-black uppercase tracking-[0.4em]">
-                <th className="px-12 py-8 text-left">Protocol Code</th>
-                <th className="px-12 py-8 text-left">Identity DNA</th>
-                <th className="px-12 py-8 text-center">Contact Protocol</th>
-                <th className="px-12 py-8 text-center">Loyalty Tier</th>
-                <th className="px-12 py-8 text-right">Ledger Balance</th>
-                <th className="px-12 py-8 text-right">Actions</th>
-              </tr>
-            </thead>
-            <tbody className="divide-y divide-navy/5">
-              {isLoading && customers.length === 0 ? (
-                Array(6).fill(0).map((_, i) => (
-                  <tr key={i} className="animate-pulse">
-                    <td colSpan={6} className="px-12 py-10 h-24 bg-navy/5" />
-                  </tr>
-                ))
-              ) : customers.length === 0 ? (
-                <tr>
-                   <td colSpan={6} className="px-12 py-32 text-center text-navy/10 uppercase font-black tracking-[0.5em] text-sm">No customers found in registry</td>
-                </tr>
-              ) : customers.map((c: Customer) => (
-                <tr key={c.id} className="hover:bg-brand-cream transition-all group">
-                  <td className="px-12 py-10">
-                    <span className="bg-navy/5 text-navy px-4 py-2 rounded-xl font-mono text-[12px] font-black uppercase group-hover:bg-white transition-all shadow-sm">{c.code}</span>
-                  </td>
-                  <td className="px-12 py-10">
-                    <div className="text-base font-black text-navy uppercase tracking-tight group-hover:text-brand-gold transition-colors">{c.name}</div>
-                    <div className="text-[10px] font-bold text-navy/30 uppercase tracking-widest mt-2 flex items-center gap-2">
-                       <ShieldCheck size={12} className="text-emerald-500" /> Member since {new Date(c.created_at).getFullYear()}
-                    </div>
-                  </td>
-                  <td className="px-12 py-10 text-center font-mono text-[12px] font-black text-navy/60">
-                    {c.phone}
-                  </td>
-                  <td className="px-12 py-10 text-center">
-                    <span className="inline-flex items-center gap-2 px-5 py-2.5 bg-brand-gold/10 text-brand-gold rounded-xl text-[10px] font-black uppercase tracking-wider shadow-sm">
-                      <Zap size={12} strokeWidth={3} /> {c.loyalty_points || 0} Pts
-                    </span>
-                  </td>
-                  <td className={`px-12 py-10 text-right font-mono text-base font-black ${c.outstanding_paise > 0 ? 'text-rose-500' : 'text-emerald-500'}`}>
-                    {formatCurrency(c.outstanding_paise || 0)}
-                  </td>
-                  <td className="px-12 py-10 text-right">
-                    <div className="flex items-center justify-end gap-3">
-                      <button 
-                        onClick={() => { setSelectedCustomerId(c.id); setIsFormOpen(true); }}
-                        className="p-4 bg-navy/5 text-navy rounded-2xl hover:bg-navy hover:text-white transition-all shadow-sm"
-                      >
-                        <RefreshCw size={20} className="group-hover:rotate-180 transition-all duration-700" />
-                      </button>
-                      <button className="p-4 bg-navy/5 text-navy/20 hover:text-brand-saffron hover:bg-brand-saffron/10 rounded-2xl transition-all"><MoreVertical size={22} /></button>
-                    </div>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
+         <div className="h-[600px]">
+            <DataTable 
+               data={customers}
+               columns={columns}
+               loading={isLoading && customers.length === 0}
+               overlayNoRowsTemplate={`
+                 <div class="flex flex-col items-center justify-center opacity-10 h-full">
+                    <Users size="80" class="mb-4" />
+                    <div class="text-lg font-black uppercase tracking-[0.5em]">No Members in Registry</div>
+                 </div>
+               `}
+            />
+         </div>
       </div>
 
       {isFormOpen && (
@@ -239,7 +247,3 @@ const CustomerMaster: React.FC = () => {
 };
 
 export default CustomerMaster;
-
-
-
-

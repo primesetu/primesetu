@@ -31,6 +31,7 @@ import { supabase } from '../../lib/supabase';
 import { formatCurrency } from '../../utils/currency';
 import { usePermission } from '../../hooks/usePermission';
 import { useOfflineFallback } from '../../hooks/useOfflineFallback';
+import { DataTable } from '../../components/ui/SovereignUI';
 
 const POManager: React.FC = () => {
   const navigate = useNavigate();
@@ -102,11 +103,18 @@ const POManager: React.FC = () => {
           </div>
           <div>
             <h1 className="text-4xl font-serif font-black text-text-primary uppercase tracking-tight leading-none">Purchase Orders</h1>
-            <div className="flex items-center gap-3 mt-3">
-              <p className="text-[10px] font-mono text-text-secondary uppercase tracking-[0.2em]">Procurement Lifecycle · Inwarding Protocol · Sovereign Node</p>
-              {isOfflineData && (
-                <span className="px-3 py-1 bg-amber-100 text-amber-700 text-[9px] font-black uppercase rounded-lg">Offline Buffer</span>
-              )}
+            <div className="flex items-center gap-6 mt-3">
+              <p className="text-[10px] font-mono text-text-secondary uppercase tracking-[0.2em]">Procurement Lifecycle · Inwarding Protocol</p>
+              <div className="flex items-center gap-4 border-l border-border pl-6">
+                <div className="flex flex-col">
+                  <span className="text-[8px] font-black text-text-secondary/40 uppercase">Store Node</span>
+                  <span className="text-[10px] font-bold text-text-primary uppercase">HQ-MUM-01</span>
+                </div>
+                <div className="flex flex-col">
+                  <span className="text-[8px] font-black text-text-secondary/40 uppercase">Station</span>
+                  <span className="text-[10px] font-bold text-text-primary uppercase">PCS-11</span>
+                </div>
+              </div>
             </div>
           </div>
         </div>
@@ -162,68 +170,77 @@ const POManager: React.FC = () => {
       </div>
 
       {/* List Container */}
-      <div className="bg-bg-elevated rounded-[50px] border border-border shadow-2xl overflow-hidden mt-10">
-        <div className="overflow-x-auto max-h-[600px] custom-scrollbar">
-          <table className="w-full border-collapse">
-            <thead className="sticky top-0 z-10">
-              <tr className="bg-brand-navy text-white text-[10px] font-black uppercase tracking-[0.4em]">
-                <th className="px-12 py-8 text-left">PO Protocol</th>
-                <th className="px-12 py-8 text-left">Vendor Identity</th>
-                <th className="px-12 py-8 text-center">Status Matrix</th>
-                <th className="px-12 py-8 text-right">Order Value (INR)</th>
-                <th className="px-12 py-8 text-center">Expected On</th>
-                <th className="px-12 py-8 text-right">Actions</th>
-              </tr>
-            </thead>
-            <tbody className="divide-y divide-navy/5">
-              {isLoading && pos.length === 0 ? (
-                Array(5).fill(0).map((_, i) => (
-                  <tr key={i} className="animate-pulse"><td colSpan={6} className="px-12 py-10 h-24 bg-navy/5" /></tr>
-                ))
-              ) : (Array.isArray(pos) && pos.length > 0) ? pos.map((po: any) => (
-                <tr key={po.id} className="hover:bg-bg-float transition-all group">
-                  <td className="px-12 py-10">
-                    <div className="flex items-center gap-4">
-                       <span className="bg-bg-input text-text-primary px-4 py-2 rounded-xl font-mono text-[12px] font-black uppercase group-hover:bg-bg-elevated transition-all shadow-sm">{po.po_number}</span>
-                       <div className="text-[9px] font-black text-text-secondary/20 uppercase tracking-widest">#{po.id.slice(0,8)}</div>
-                    </div>
-                  </td>
-                  <td className="px-12 py-10">
-                    <div className="text-base font-black text-text-primary uppercase tracking-tight">{po.vendor_name || 'Direct Procurement'}</div>
-                    <div className="text-[10px] font-bold text-text-secondary/40 uppercase tracking-widest mt-2 flex items-center gap-2">
-                       <Calendar size={12} className="text-brand-gold" /> Created {new Date(po.created_at).toLocaleDateString('en-IN', { day: '2-digit', month: 'short' })}
-                    </div>
-                  </td>
-                  <td className="px-12 py-10 text-center">
-                    <span className={`px-5 py-2.5 rounded-xl text-[10px] font-black uppercase tracking-widest shadow-sm ${statusColors[po.status] || 'bg-gray-100 text-gray-400'}`}>
-                      {po.status}
-                    </span>
-                  </td>
-                  <td className="px-12 py-10 text-right font-mono text-base font-black text-text-primary">
-                    {formatCurrency(po.total_paise)}
-                  </td>
-                  <td className="px-12 py-10 text-center font-mono text-[12px] font-black text-text-secondary/60">
-                    {po.expected_date ? new Date(po.expected_date).toLocaleDateString('en-IN') : 'IMMEDIATE'}
-                  </td>
-                  <td className="px-12 py-10 text-right">
-                    <div className="flex items-center justify-end gap-3">
-                      <button onClick={() => navigate(`/purchase/${po.id}`)} className="p-4 bg-bg-float text-text-primary rounded-2xl hover:bg-brand-navy hover:text-white transition-all shadow-sm border border-border">
-                        <ChevronRight size={22} />
-                      </button>
-                      <button className="p-4 bg-bg-float text-text-secondary/20 hover:text-brand-saffron hover:bg-brand-saffron/10 rounded-2xl transition-all border border-border"><MoreVertical size={22} /></button>
-                    </div>
-                  </td>
-                </tr>
-              )) : (
-                <tr>
-                   <td colSpan={6} className="px-12 py-32 text-center text-navy/10 uppercase font-black tracking-[0.5em] text-sm">
-                      {Array.isArray(pos) ? 'No procurement orders found' : 'Connectivity Error / Unauthorized'}
-                   </td>
-                </tr>
-              )}
-            </tbody>
-          </table>
-        </div>
+      <div className="bg-bg-elevated rounded-[50px] border border-border shadow-2xl overflow-hidden mt-10 min-h-[500px]">
+        <DataTable
+          data={pos}
+          loading={isLoading}
+          onRowClick={(po) => navigate(`/purchase/${po.id}`)}
+          columns={[
+            {
+              header: 'PO Protocol',
+              accessor: (po: any) => (
+                <div className="flex items-center gap-4 py-4">
+                   <div className="flex flex-col gap-1">
+                     <span className="bg-bg-input text-text-primary px-4 py-2 rounded-xl font-mono text-[12px] font-black uppercase shadow-sm">{po.po_number}</span>
+                     <div className="flex items-center gap-2 px-1">
+                        <span className="text-[9px] font-black text-text-secondary/20 uppercase tracking-widest">#{po.id.slice(0,8)}</span>
+                        <span className="w-1 h-1 rounded-full bg-border" />
+                        <span className="text-[9px] font-bold text-accent uppercase tracking-tighter">{po.item_count || 0} SKUs · {po.total_qty || 0} Units</span>
+                     </div>
+                   </div>
+                </div>
+              ),
+              className: 'px-12'
+            },
+            {
+              header: 'Vendor Identity',
+              accessor: (po: any) => (
+                <div className="py-4">
+                  <div className="text-base font-black text-text-primary uppercase tracking-tight">{po.vendor_name || 'Direct Procurement'}</div>
+                  <div className="text-[10px] font-bold text-text-secondary/40 uppercase tracking-widest mt-2 flex items-center gap-2">
+                     <Calendar size={12} className="text-brand-gold" /> Created {new Date(po.created_at).toLocaleDateString('en-IN', { day: '2-digit', month: 'short' })}
+                  </div>
+                </div>
+              ),
+              className: 'px-12'
+            },
+            {
+              header: 'Status Matrix',
+              align: 'center',
+              accessor: (po: any) => (
+                <span className={`px-5 py-2.5 rounded-xl text-[10px] font-black uppercase tracking-widest shadow-sm ${statusColors[po.status] || 'bg-gray-100 text-gray-400'}`}>
+                  {po.status}
+                </span>
+              ),
+              className: 'px-12'
+            },
+            {
+              header: 'Order Value (INR)',
+              align: 'right',
+              accessor: (po: any) => formatCurrency(po.total_paise),
+              className: 'px-12 font-mono text-base font-black text-text-primary'
+            },
+            {
+              header: 'Expected On',
+              align: 'center',
+              accessor: (po: any) => po.expected_date ? new Date(po.expected_date).toLocaleDateString('en-IN') : 'IMMEDIATE',
+              className: 'px-12 font-mono text-[12px] font-black text-text-secondary/60'
+            },
+            {
+              header: '',
+              align: 'right',
+              accessor: (po: any) => (
+                <div className="flex items-center justify-end gap-3">
+                  <button onClick={() => navigate(`/purchase/${po.id}`)} className="p-4 bg-bg-float text-text-primary rounded-2xl hover:bg-brand-navy hover:text-white transition-all shadow-sm border border-border">
+                    <ChevronRight size={22} />
+                  </button>
+                  <button className="p-4 bg-bg-float text-text-secondary/20 hover:text-brand-saffron hover:bg-brand-saffron/10 rounded-2xl transition-all border border-border"><MoreVertical size={22} /></button>
+                </div>
+              ),
+              className: 'px-12'
+            }
+          ]}
+        />
       </div>
     </div>
   );

@@ -17,6 +17,7 @@ import {
 } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { useWarehouseDashboard } from '@/hooks/useWarehouse';
+import { DataTable } from '../../components/ui/SovereignUI';
 
 export default function WarehouseDashboard() {
   const { data, isLoading: loading } = useWarehouseDashboard();
@@ -90,28 +91,49 @@ export default function WarehouseDashboard() {
           </div>
 
           <div className="space-y-4">
-            {bins.map((bin, i) => (
-              <div key={i} className="flex items-center justify-between p-6 bg-bg-elevated hover:bg-bg-float rounded-3xl transition-all border border-transparent hover:border-indigo-100 group">
-                <div className="flex items-center gap-6">
-                  <div className="w-12 h-12 bg-indigo-50 rounded-2xl flex items-center justify-center font-black text-indigo-600 text-xs uppercase">
-                    {bin.bin || 'NA'}
-                  </div>
-                  <div>
-                    <h4 className="font-bold text-navy group-hover:text-indigo-600 transition-colors">{bin.name}</h4>
-                    <p className="text-[10px] text-muted font-bold uppercase tracking-widest mt-1">SKU: {bin.sku || 'ITEM-001'}</p>
-                  </div>
-                </div>
-                <div className="flex items-center gap-10">
-                  <div className="text-right">
-                    <div className="text-lg font-black text-navy">{bin.qty} Units</div>
-                    <div className="text-[9px] font-black text-emerald-600 uppercase tracking-tighter">Optimal Level</div>
-                  </div>
-                  <button className="p-3 bg-cream rounded-xl opacity-0 group-hover:opacity-100 transition-opacity">
-                    <MapPin className="w-4 h-4 text-muted" />
-                  </button>
-                </div>
-              </div>
-            ))}
+            <DataTable
+              data={bins}
+              columns={[
+                { 
+                  header: 'Bin Protocol', 
+                  accessor: (bin: any) => (
+                    <div className="w-12 h-12 bg-indigo-50 rounded-2xl flex items-center justify-center font-black text-indigo-600 text-xs uppercase">
+                      {bin.bin || 'NA'}
+                    </div>
+                  ),
+                  className: 'w-24'
+                },
+                { 
+                  header: 'SKU Entity', 
+                  accessor: (bin: any) => (
+                    <div className="py-2">
+                      <h4 className="font-bold text-navy group-hover:text-indigo-600 transition-colors">{bin.name}</h4>
+                      <p className="text-[10px] text-muted font-bold uppercase tracking-widest mt-1">SKU: {bin.sku || 'ITEM-001'}</p>
+                    </div>
+                  )
+                },
+                { 
+                  header: 'Net Volume', 
+                  align: 'right',
+                  accessor: (bin: any) => (
+                    <div className="text-right py-2">
+                      <div className="text-lg font-black text-navy">{bin.qty} Units</div>
+                      <div className="text-[9px] font-black text-emerald-600 uppercase tracking-tighter">Optimal Level</div>
+                    </div>
+                  )
+                },
+                {
+                  header: '',
+                  align: 'center',
+                  accessor: () => (
+                    <button className="p-3 bg-cream rounded-xl">
+                      <MapPin className="w-4 h-4 text-muted" />
+                    </button>
+                  ),
+                  className: 'w-16'
+                }
+              ]}
+            />
           </div>
         </div>
 

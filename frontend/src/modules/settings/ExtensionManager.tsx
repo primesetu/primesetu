@@ -120,47 +120,9 @@ export default function ExtensionManager() {
           </p>
         </div>
         <div className="flex items-center gap-3">
-          {/* Theme Mode */}
-          <div className="flex bg-slate-900/50 p-1.5 rounded-xl border border-slate-700/50">
-            {(['SMRITI-OS', 'tesla'] as const).map(t => (
-              <button
-                key={t}
-                onClick={() => setTheme(t)}
-                title={t === 'tesla' ? 'Tesla Design Mode' : 'SMRITI Institutional Mode'}
-                className={`px-4 py-2 rounded-lg text-sm font-medium transition-all ${
-                  theme === t
-                    ? 'bg-slate-800 text-white shadow-md'
-                    : 'text-slate-500 hover:text-slate-300'
-                }`}
-              >
-                {t === 'tesla' ? '⚡ Tesla' : '🏢 SMRITI-OS'}
-              </button>
-            ))}
+          <div className="bg-white/5 p-2 px-4 rounded-xl border border-white/10 text-white/40 text-[10px] font-black uppercase tracking-[0.2em]">
+            Institutional Governance Mode
           </div>
-          {/* Accent (only in Tesla mode) */}
-          {theme === 'tesla' && (
-            <div className="flex bg-slate-900/50 p-1.5 rounded-xl border border-slate-700/50">
-              {([
-                { id: 'default', label: '🟠', title: 'Saffron (Default)' },
-                { id: 'gold',    label: '🟡', title: 'Gold' },
-                { id: 'cream',   label: '🟤', title: 'Cream' },
-                { id: 'crimson', label: '🔴', title: 'Crimson' },
-              ] as const).map(a => (
-                <button
-                  key={a.id}
-                  onClick={() => setAccent(a.id)}
-                  title={a.title}
-                  className={`w-9 h-9 rounded-lg text-base transition-all ${
-                    accent === a.id
-                      ? 'bg-slate-800 shadow-md scale-110'
-                      : 'hover:bg-slate-800/50'
-                  }`}
-                >
-                  {a.label}
-                </button>
-              ))}
-            </div>
-          )}
         </div>
       </motion.div>
 

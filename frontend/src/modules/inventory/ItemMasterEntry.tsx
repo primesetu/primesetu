@@ -9,7 +9,7 @@
  * "Memory, Not Code."
  * ============================================================ */
 
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useMemo } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { 
   X, Save, Trash2, Plus, LogOut, ChevronUp, ChevronDown, 
@@ -24,7 +24,8 @@ import {
   Label, 
   Badge, 
   Text, 
-  Portal 
+  Portal,
+  DataTable
 } from '@/components/ui/SovereignUI'
 import { cn } from '@/lib/utils'
 import { useHotkeys } from 'react-hotkeys-hook'
@@ -77,11 +78,11 @@ export default function ItemMasterEntry({ onClose }: { onClose: () => void }) {
 
   // Tab 3: Grid State
   const [gridData, setGridData] = useState<Record<string, any>[]>([
-    { id: '1', size: '38', item_description: 'PT' },
-    { id: '2', size: '39', item_description: 'PT0002_1' },
-    { id: '3', size: '40', item_description: 'PT0002_2' },
+    { id: '1', size: '38', name: 'PT' },
+    { id: '2', size: '39', name: 'PT0002_1' },
+    { id: '3', size: '40', name: 'PT0002_2' },
   ])
-  const [frozenCols, setFrozenCols] = useState(0)
+  const [frozenCols, setFrozenCols] = useState(2)
 
   // ── HOTKEYS ──
   useHotkeys('alt+1', (e) => { e.preventDefault(); setActiveTab('view') })
@@ -97,8 +98,11 @@ export default function ItemMasterEntry({ onClose }: { onClose: () => void }) {
   }
 
   const handleSave = () => {
-    // Commit to API
     alert('Sovereign Ledger Updated: SKUs Committed to Registry.')
+  }
+
+  const updateGridField = (rowId: string, field: string, val: any) => {
+    setGridData(prev => prev.map(r => r.id === rowId ? {...r, [field]: val} : r))
   }
 
   const moveRight = () => {
@@ -114,6 +118,44 @@ export default function ItemMasterEntry({ onClose }: { onClose: () => void }) {
     setUnselectedFields(prev => [...prev, ...toMove])
     setHighlightedSelected([])
   }
+
+  // Memoize columns for DataTable
+  const columns = useMemo(() => {
+    const baseCols = [
+      { 
+        header: "#", 
+        accessor: (item: any, idx: number) => idx + 1, 
+        width: 60, 
+        className: 'text-center font-black opacity-30' 
+      }
+    ]
+
+    const fieldCols = selectedFields.map((fid, index) => {
+      const field = ALL_FIELDS.find(f => f.id === fid)
+      return {
+        header: field?.label || fid,
+        accessor: (item: any) => {
+          const isCommon = commonFieldsEnabled[fid]
+          const val = isCommon ? commonFieldData[fid] : item[fid]
+          return (
+            <input 
+              className={cn(
+                "w-full bg-transparent border-none outline-none text-xs font-bold px-4 py-1",
+                isCommon && "text-[var(--accent)] opacity-80"
+              )}
+              value={val || ''}
+              readOnly={isCommon}
+              onChange={(e) => !isCommon && updateGridField(item.id, fid, e.target.value)}
+            />
+          )
+        },
+        width: 160,
+        pinned: (index < frozenCols ? 'left' : undefined) as 'left' | 'right' | undefined
+      }
+    })
+
+    return [...baseCols, ...fieldCols]
+  }, [selectedFields, commonFieldsEnabled, commonFieldData, frozenCols])
 
   return (
     <div className="fixed inset-0 z-[200] bg-[var(--background)] flex flex-col font-sans">
@@ -271,7 +313,7 @@ export default function ItemMasterEntry({ onClose }: { onClose: () => void }) {
               className="h-full flex flex-col bg-[var(--background)]"
             >
                <div className="p-4 border-b border-[var(--border-subtle)] flex items-center gap-4 bg-[var(--surface)]">
-                  <Label className="text-[10px] font-black uppercase">Columns to Freeze:</Label>
+                  <Label className="text-[10px] font-black uppercase">Freeze Columns:</Label>
                   <Input 
                     type="number" 
                     value={frozenCols} 
@@ -287,50 +329,12 @@ export default function ItemMasterEntry({ onClose }: { onClose: () => void }) {
                   </div>
                </div>
 
-               <div className="flex-1 overflow-auto bg-[var(--surface-elevated)] p-4">
-                  <table className="min-w-full border-collapse bg-[var(--surface)] border border-[var(--border-subtle)]">
-                     <thead>
-                        <tr className="bg-[var(--surface-elevated)] text-[10px] font-black uppercase tracking-[0.2em] border-b border-[var(--border-subtle)]">
-                           <th className="w-10 px-4 py-3 border-r border-[var(--border-subtle)] sticky left-0 z-20 bg-[var(--surface-elevated)]">#</th>
-                           {selectedFields.map((fid, idx) => (
-                             <th 
-                               key={fid} 
-                               className={cn(
-                                 "px-6 py-3 border-r border-[var(--border-subtle)] text-left min-w-[150px]",
-                                 idx < frozenCols && "sticky bg-[var(--surface-elevated)] z-10"
-                               )}
-                               style={idx < frozenCols ? { left: `${40 + (idx * 150)}px` } : {}}
-                             >
-                                {ALL_FIELDS.find(f => f.id === fid)?.label}
-                             </th>
-                           ))}
-                        </tr>
-                     </thead>
-                     <tbody className="divide-y divide-[var(--border-subtle)]">
-                        {gridData.map((row, rIdx) => (
-                          <tr key={row.id} className="hover:bg-[var(--accent)]/5 group">
-                             <td className="w-10 px-4 py-2 border-r border-[var(--border-subtle)] text-[10px] font-black text-[var(--text-tertiary)] text-center sticky left-0 z-20 bg-[var(--surface)] group-hover:bg-[var(--surface-elevated)]">
-                                {rIdx + 1}
-                             </td>
-                             {selectedFields.map((fid, cIdx) => (
-                               <td 
-                                 key={fid} 
-                                 className={cn(
-                                   "px-2 py-1 border-r border-[var(--border-subtle)]",
-                                   cIdx < frozenCols && "sticky bg-[var(--surface)] z-10 group-hover:bg-[var(--surface-elevated)]"
-                                 )}
-                                 style={cIdx < frozenCols ? { left: `${40 + (cIdx * 150)}px` } : {}}
-                               >
-                                  <input 
-                                    className="w-full bg-transparent border-none outline-none text-xs font-bold px-4 py-1"
-                                    defaultValue={commonFieldsEnabled[fid] ? commonFieldData[fid] : row[fid]}
-                                  />
-                               </td>
-                             ))}
-                          </tr>
-                        ))}
-                     </tbody>
-                  </table>
+               <div className="flex-1 overflow-hidden">
+                  <DataTable 
+                    data={gridData}
+                    columns={columns}
+                    singleClickEdit={true}
+                  />
                </div>
             </motion.div>
           )}

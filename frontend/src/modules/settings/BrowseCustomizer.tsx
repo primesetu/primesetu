@@ -1,17 +1,35 @@
 /* ============================================================
  * SMRITI-OS — Shoper9-Based Retail OS
  * Zero Cloud · Sovereign · AI-Governed
- * ============================================================
- * System Architect   :  Jawahar R Mallah
- * Organisation       :  AITDL Network
- * Project : SMRITI-OS
- * © 2026 — All Rights Reserved
- * "Memory, Not Code."
  * ============================================================ */
-import React, { useState, useEffect } from 'react';
+
+import React, { useState, useEffect, useMemo } from 'react';
 import { motion } from 'framer-motion';
-import { Layout, Columns, Save, RefreshCw, Eye, EyeOff, Lock, Unlock, Type, ChevronRight } from 'lucide-react';
+import { 
+  Layout, 
+  Columns, 
+  Save, 
+  RefreshCw, 
+  Eye, 
+  EyeOff, 
+  Lock, 
+  Unlock, 
+  Type, 
+  ChevronRight,
+  Monitor,
+  ShieldAlert,
+  Box
+} from 'lucide-react';
 import { api } from '@/api/client';
+import { 
+  Button, 
+  Input, 
+  Card, 
+  Text, 
+  Badge,
+  DataTable 
+} from '@/components/ui/SovereignUI';
+import { cn } from '@/lib/utils';
 
 const SCREENS = [
   { id: 'BILLING', label: 'Billing Terminal' },
@@ -46,6 +64,8 @@ export default function BrowseCustomizer() {
     try {
       setSaving(true);
       await api.config.upsertUIField(field);
+      // Optimistic UI update
+      setFields(prev => prev.map(f => f.id === field.id ? field : f));
     } catch (err) {
       console.error("Failed to update field", err);
     } finally {
@@ -53,23 +73,131 @@ export default function BrowseCustomizer() {
     }
   };
 
+  // ── GRID COLUMNS ──
+  const columns = useMemo(() => [
+    {
+      header: "FIELD IDENTITY",
+      accessor: (row: any) => (
+        <div className="flex flex-col py-2">
+          <span className="font-black text-white uppercase text-xs tracking-tight">{row.field_name}</span>
+          <span className="text-[9px] text-slate-500 font-black uppercase tracking-widest mt-1">SHOPER_RECID: {row.shoper_recid || 'DYNAMIC'}</span>
+        </div>
+      ),
+      flex: 1.5,
+      pinned: 'left' as const
+    },
+    {
+      header: "DISPLAY LABEL",
+      accessor: (row: any) => (
+        <div className="relative">
+          <Input 
+            defaultValue={row.display_label || row.field_name}
+            onBlur={(e) => handleUpdate({ ...row, display_label: e.target.value })}
+            className="h-10 bg-slate-900/50 border-slate-700/50 text-white font-black text-xs pl-10 focus:border-brand-gold"
+          />
+          <Type className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-600" />
+        </div>
+      ),
+      width: 200
+    },
+    {
+      header: "WIDTH (PX)",
+      accessor: (row: any) => (
+        <Input 
+          type="number"
+          defaultValue={row.column_width}
+          onBlur={(e) => handleUpdate({ ...row, column_width: parseInt(e.target.value) })}
+          className="h-10 bg-slate-900/50 border-slate-700/50 text-white font-black text-xs text-center focus:border-brand-gold w-24 mx-auto"
+        />
+      ),
+      width: 120,
+      className: 'text-center'
+    },
+    {
+      header: "VISIBILITY",
+      accessor: (row: any) => (
+        <button 
+          onClick={() => handleUpdate({ ...row, is_visible: !row.is_visible })}
+          className={cn(
+            "h-10 w-10 rounded-xl transition-all flex items-center justify-center mx-auto shadow-inner",
+            row.is_visible ? "bg-emerald-500/10 text-emerald-400" : "bg-slate-800 text-slate-600"
+          )}
+        >
+          {row.is_visible ? <Eye size={18} /> : <EyeOff size={18} />}
+        </button>
+      ),
+      width: 120,
+      className: 'text-center'
+    },
+    {
+      header: "EDITABLE",
+      accessor: (row: any) => (
+        <button 
+          onClick={() => handleUpdate({ ...row, is_editable: !row.is_editable })}
+          className={cn(
+            "h-10 w-10 rounded-xl transition-all flex items-center justify-center mx-auto shadow-inner",
+            row.is_editable ? "bg-indigo-500/10 text-indigo-400" : "bg-slate-800 text-slate-600"
+          )}
+        >
+          {row.is_editable ? <Unlock size={18} /> : <Lock size={18} />}
+        </button>
+      ),
+      width: 120,
+      className: 'text-center'
+    },
+    {
+      header: "MANDATORY",
+      accessor: (row: any) => (
+        <button 
+          onClick={() => handleUpdate({ ...row, is_mandatory: !row.is_mandatory })}
+          className={cn(
+            "w-12 h-6 rounded-full transition-all relative mx-auto",
+            row.is_mandatory ? "bg-brand-gold shadow-lg shadow-brand-gold/20" : "bg-slate-800"
+          )}
+        >
+          <div className={cn("absolute top-1 w-4 h-4 bg-white rounded-full transition-all", row.is_mandatory ? "right-1" : "left-1")}></div>
+        </button>
+      ),
+      width: 120,
+      className: 'text-center'
+    },
+    {
+      header: "PROTOCOL",
+      accessor: (row: any) => (
+         <div className="flex justify-end pr-4">
+            {saving ? <RefreshCw className="animate-spin text-brand-gold" size={16} /> : <ShieldAlert className="text-slate-800 group-hover:text-brand-gold transition-colors" size={16} />}
+         </div>
+      ),
+      width: 100,
+      pinned: 'right' as const
+    }
+  ], [saving]);
+
   return (
-    <div className="space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-500">
-      <div className="flex flex-col md:flex-row justify-between items-start gap-6">
-        <div>
-          <h2 className="text-3xl font-serif font-black text-white flex items-center gap-4">
-            <Layout className="w-8 h-8 text-brand-saffron" />
-            Browse Customization
-          </h2>
-          <p className="text-[10px] text-slate-500 font-bold uppercase tracking-widest mt-2">Parity with Shoper 9 BrowseSettings</p>
+    <div className="flex flex-col gap-10 animate-in fade-in slide-in-from-bottom-4 duration-1000 h-full p-2">
+      <div className="flex justify-between items-center bg-slate-900 p-10 rounded-[4rem] border border-white/5 shadow-2xl relative overflow-hidden">
+        <div className="absolute right-0 top-0 opacity-5 rotate-12 -translate-y-8">
+           <Monitor size={220} />
+        </div>
+        <div className="flex items-center gap-8 relative z-10">
+           <div className="h-20 w-20 bg-white/5 rounded-[2.5rem] flex items-center justify-center border border-white/10 shadow-inner">
+              <Layout className="w-10 h-10 text-brand-gold" />
+           </div>
+           <div>
+             <Text variant="h1" className="font-serif font-black text-white uppercase tracking-tighter leading-none">Browse Customizer</Text>
+             <Text variant="xs" className="text-slate-500 font-black uppercase tracking-[0.4em] mt-3">Parity with Shoper 9 BrowseSettings · Sovereign UI Sync</Text>
+           </div>
         </div>
         
-        <div className="flex gap-2 p-1 bg-slate-900/50 rounded-2xl border border-slate-700/50">
+        <div className="flex gap-3 p-2 bg-white/5 rounded-[2.5rem] border border-white/10 relative z-10">
           {SCREENS.map(s => (
             <button
               key={s.id}
               onClick={() => setSelectedScreen(s.id)}
-              className={`px-4 py-2 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all ${selectedScreen === s.id ? 'bg-slate-800 text-white shadow-lg' : 'text-slate-500 hover:text-slate-300'}`}
+              className={cn(
+                "px-8 h-12 rounded-2xl text-[9px] font-black uppercase tracking-widest transition-all",
+                selectedScreen === s.id ? 'bg-white text-navy shadow-2xl' : 'text-slate-500 hover:text-white hover:bg-white/5'
+              )}
             >
               {s.label}
             </button>
@@ -77,115 +205,43 @@ export default function BrowseCustomizer() {
         </div>
       </div>
 
-      <div className="bg-slate-900/40 backdrop-blur-md rounded-[3rem] p-1 shadow-2xl border border-slate-700/50 overflow-hidden">
-        <div className="overflow-x-auto">
-          <table className="w-full text-left">
-            <thead className="bg-slate-800/40 text-[9px] uppercase font-black tracking-widest text-slate-500 border-b border-slate-700/50">
-              <tr>
-                <th className="px-8 py-6">Field / ID</th>
-                <th className="px-6 py-6">Display Label</th>
-                <th className="px-6 py-6 text-center">Width (px)</th>
-                <th className="px-6 py-6 text-center">Visibility</th>
-                <th className="px-6 py-6 text-center">Editable</th>
-                <th className="px-6 py-6 text-center">Mandatory</th>
-                <th className="px-8 py-6 text-right">Action</th>
-              </tr>
-            </thead>
-            <tbody className="divide-y divide-slate-700/50">
-              {loading ? (
-                <tr>
-                  <td colSpan={7} className="px-8 py-20 text-center">
-                    <RefreshCw className="w-8 h-8 text-brand-saffron animate-spin mx-auto mb-4" />
-                    <span className="text-[10px] font-black uppercase text-slate-500 tracking-widest">Consulting Registry...</span>
-                  </td>
-                </tr>
-              ) : fields.length === 0 ? (
-                <tr>
-                  <td colSpan={7} className="px-8 py-20 text-center">
-                    <p className="text-slate-400 font-bold">No custom fields defined for this screen.</p>
-                    <button className="mt-4 text-brand-saffron text-[10px] font-black uppercase tracking-widest underline">+ Initialize Defaults</button>
-                  </td>
-                </tr>
-              ) : (
-                fields.map((field, i) => (
-                  <motion.tr 
-                    initial={{ opacity: 0, y: 10 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ delay: i * 0.05 }}
-                    key={field.id} 
-                    className="hover:bg-slate-800/30 transition-all group"
-                  >
-                    <td className="px-8 py-6">
-                      <div className="font-black text-white text-xs">{field.field_name}</div>
-                      <div className="text-[9px] text-slate-500 uppercase tracking-tighter">RECID: {field.shoper_recid || 'NEW'}</div>
-                    </td>
-                    <td className="px-6 py-6">
-                      <div className="relative group/input">
-                        <Type className="absolute left-3 top-1/2 -translate-y-1/2 w-3 h-3 text-slate-600 group-focus-within/input:text-brand-saffron transition-colors" />
-                        <input 
-                          type="text"
-                          defaultValue={field.display_label || field.field_name}
-                          className="bg-slate-900/50 border border-slate-700/50 rounded-xl pl-9 pr-4 py-2 text-xs font-bold text-white outline-none focus:border-brand-saffron w-full transition-all"
-                          onBlur={(e) => handleUpdate({ ...field, display_label: e.target.value })}
-                        />
-                      </div>
-                    </td>
-                    <td className="px-6 py-6 text-center">
-                      <input 
-                        type="number"
-                        defaultValue={field.column_width}
-                        className="bg-slate-900/50 border border-slate-700/50 rounded-xl px-2 py-2 text-xs font-black text-white w-20 text-center outline-none focus:border-brand-saffron"
-                        onBlur={(e) => handleUpdate({ ...field, column_width: parseInt(e.target.value) })}
-                      />
-                    </td>
-                    <td className="px-6 py-6 text-center">
-                      <button 
-                        onClick={() => handleUpdate({ ...field, is_visible: !field.is_visible })}
-                        className={`p-2 rounded-lg transition-all ${field.is_visible ? 'text-emerald-400 bg-emerald-500/10' : 'text-slate-500 bg-slate-800'}`}
-                      >
-                        {field.is_visible ? <Eye className="w-4 h-4" /> : <EyeOff className="w-4 h-4" />}
-                      </button>
-                    </td>
-                    <td className="px-6 py-6 text-center">
-                      <button 
-                        onClick={() => handleUpdate({ ...field, is_editable: !field.is_editable })}
-                        className={`p-2 rounded-lg transition-all ${field.is_editable ? 'text-blue-400 bg-blue-500/10' : 'text-slate-500 bg-slate-800'}`}
-                      >
-                        {field.is_editable ? <Unlock className="w-4 h-4" /> : <Lock className="w-4 h-4" />}
-                      </button>
-                    </td>
-                    <td className="px-6 py-6 text-center">
-                       <button 
-                        onClick={() => handleUpdate({ ...field, is_mandatory: !field.is_mandatory })}
-                        className={`w-12 h-6 rounded-full transition-all relative ${field.is_mandatory ? 'bg-amber-500 shadow-lg shadow-amber-500/20' : 'bg-slate-800'}`}
-                      >
-                        <div className={`absolute top-1 w-4 h-4 bg-white rounded-full transition-all ${field.is_mandatory ? 'right-1' : 'left-1'}`}></div>
-                      </button>
-                    </td>
-                    <td className="px-8 py-6 text-right">
-                       {saving ? <RefreshCw className="w-4 h-4 text-brand-saffron animate-spin inline" /> : <Save className="w-4 h-4 text-slate-600 group-hover:text-brand-saffron cursor-pointer" />}
-                    </td>
-                  </motion.tr>
-                ))
-              )}
-            </tbody>
-          </table>
+      <Card className="rounded-[4.5rem] bg-slate-900 border border-white/5 shadow-2xl overflow-hidden flex flex-col flex-1 relative min-h-[500px]">
+        <div className="px-12 py-8 border-b border-white/5 flex justify-between items-center bg-white/2">
+          <div className="flex items-center gap-4">
+             <div className="h-3 w-3 bg-brand-gold rounded-full animate-pulse" />
+             <Text variant="xs" className="font-black text-slate-500 uppercase tracking-[0.4em]">Field Protocol Registry: {selectedScreen}</Text>
+          </div>
+          <Badge variant="info" className="bg-white/5 text-white font-black text-[9px] uppercase tracking-widest border-none px-4">Institutional Lock Active</Badge>
         </div>
-      </div>
+
+        <div className="flex-1 overflow-hidden">
+           <DataTable 
+             data={fields} 
+             columns={columns} 
+             loading={loading}
+             rowHeight={80}
+             overlayNoRowsTemplate={`
+               <div class="flex flex-col items-center justify-center opacity-10 h-full">
+                  <Box size="60" class="mb-4 text-white" />
+                  <div class="text-xs font-black uppercase tracking-[0.4em] text-white">No Custom Fields Defined</div>
+               </div>
+             `}
+           />
+        </div>
+      </Card>
       
-      <div className="flex justify-end items-center gap-6 p-8 bg-slate-900/60 rounded-[2.5rem] border border-slate-700/50">
-        <div className="text-right">
-          <p className="text-[10px] font-black text-slate-500 uppercase tracking-widest">Sovereign State</p>
-          <p className="text-xs font-bold text-slate-400">All changes propagate to nodes in real-time.</p>
+      <div className="flex justify-between items-center p-10 bg-brand-gold rounded-[3.5rem] shadow-2xl relative overflow-hidden group">
+        <div className="absolute left-0 top-0 opacity-10 -translate-x-4">
+           <RefreshCw size={120} className="group-hover:rotate-180 transition-transform duration-1000" />
         </div>
-        <button className="bg-brand-saffron text-slate-900 px-10 py-4 rounded-2xl text-[10px] font-black uppercase tracking-widest hover:opacity-90 transition-all shadow-xl shadow-brand-saffron/20 flex items-center gap-2">
-          <RefreshCw className="w-4 h-4" /> SYNC ALL TERMINALS
-        </button>
+        <div>
+          <Text variant="h3" className="font-black text-navy uppercase tracking-tight leading-none mb-2">Protocol Real-Time Sync</Text>
+          <Text variant="xs" className="font-black text-navy/40 uppercase tracking-widest">All UI changes propagate to nodes immediately upon save signature.</Text>
+        </div>
+        <Button className="h-16 px-12 bg-navy text-white rounded-[2rem] shadow-2xl font-black text-[10px] uppercase tracking-widest gap-3 hover:scale-105 transition-all">
+          <RefreshCw className="w-5 h-5 text-brand-gold" /> SYNC ALL NODE TERMINALS
+        </Button>
       </div>
     </div>
   );
 }
-
-
-
-

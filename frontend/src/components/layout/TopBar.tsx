@@ -62,10 +62,7 @@ export default function TopBar({
 
   return (
     <header
-      className={cn(
-        "fixed top-0 left-0 right-0 z-[var(--z-nav)] flex items-center transition-all duration-300",
-        theme === 'SMRITI-OS' ? "tp-header" : "h-[var(--topbar-h)] bg-[var(--bg-base)] border-b border-[var(--border-subtle)]"
-      )}
+      className="fixed top-0 left-0 right-0 z-[var(--z-nav)] flex items-center transition-all duration-300 tp-header"
       style={{ 
         paddingRight: '1rem' 
       }}
@@ -79,10 +76,10 @@ export default function TopBar({
             <span className="text-[10px] font-black text-[var(--primary)]">S</span>
           </div>
           <div className="flex flex-col overflow-hidden transition-opacity duration-300">
-            <span className="text-[11px] font-bold leading-tight tracking-tight whitespace-nowrap u-uppercase text-white">
+            <span className="text-[11px] font-black leading-tight tracking-tight whitespace-nowrap u-uppercase text-white">
               SMRITI-OS
             </span>
-            <span className="text-[8px] opacity-70 whitespace-nowrap u-uppercase font-black tracking-widest text-white">
+            <span className="text-[8px] font-black text-[var(--gold)] whitespace-nowrap u-uppercase tracking-widest">
               Institutional
             </span>
           </div>
@@ -100,24 +97,25 @@ export default function TopBar({
       </div>
 
       {/* ── Top menu nav ── */}
-      <nav className="flex items-center gap-0.5 px-4 overflow-x-auto no-scrollbar">
+      <nav className="flex items-center divide-x divide-white/10 h-full border-r border-white/10 shrink-0">
         {categories.map(cat => (
           <div
             key={cat.id}
-            className="relative"
+            className="h-full relative"
             onMouseEnter={(e) => handleMouseEnter(e, cat.id)}
             onMouseLeave={handleMouseLeave}
           >
             <button
-              className={`flex items-center gap-1.5 px-3 py-1.5 rounded-md text-xs font-medium transition-colors ${
+              className={cn(
+                "h-full flex items-center gap-2 px-4 text-[10px] font-black uppercase tracking-widest transition-all",
                 openMenu === cat.id
-                  ? 'bg-[var(--bg-float)] text-[var(--text-primary)]'
-                  : 'text-[var(--text-secondary)] hover:text-[var(--text-primary)] hover:bg-[var(--bg-float)]'
-              }`}
+                  ? 'bg-white/20 text-white'
+                  : 'text-white/70 hover:text-white hover:bg-white/10'
+              )}
             >
-              <cat.icon size={13} />
-              {cat.label}
-              <ChevronDown size={11} className={`transition-transform duration-150 ${openMenu === cat.id ? 'rotate-180' : ''}`} />
+              <cat.icon size={13} className={openMenu === cat.id ? 'text-[var(--gold)]' : 'text-white/40'} />
+              <span className="hidden lg:block">{cat.label}</span>
+              <ChevronDown size={11} className={cn("transition-transform duration-150 opacity-40", openMenu === cat.id ? 'rotate-180 opacity-100' : '')} />
             </button>
 
             <AnimatePresence>
@@ -173,24 +171,22 @@ export default function TopBar({
 
       {/* ── Breadcrumb ── */}
       {/* ── Breadcrumb / Center Area ── */}
-      <div className="flex-1 flex justify-center overflow-hidden">
+      <div className="flex-1 flex items-stretch h-full overflow-hidden">
         {theme === 'SMRITI-OS' ? (
           <button
             onClick={() => setIsCommandBarOpen?.(true)}
-            className={cn(
-              "flex items-center gap-4 px-6 py-1 border border-white/20 transition-all group",
-              theme === 'SMRITI-OS' ? "bg-white/10 hover:bg-white/20" : "bg-black/20 hover:bg-black/30"
-            )}
+            className="flex-1 flex items-center justify-center gap-4 hover:bg-white/5 transition-all group"
           >
-            <span className="text-[10px] font-black uppercase tracking-widest text-white/80">Go To</span>
-            <div className="h-4 w-px bg-white/20" />
             <div className="flex items-center gap-2">
-              <Search size={12} className="text-[var(--gold)]" />
-              <span className="text-[10px] font-mono font-bold" style={{ color: 'var(--gold)' }}>Alt+G</span>
+               <span className="text-[10px] font-black uppercase tracking-widest text-white/40">GO TO</span>
+               <div className="flex items-center gap-2 px-2 py-0.5 bg-white/10 border border-white/10">
+                 <Search size={10} className="text-[var(--gold)]" />
+                 <span className="text-[10px] font-mono font-bold" style={{ color: 'var(--gold)' }}>Alt+G</span>
+               </div>
             </div>
           </button>
         ) : (
-          <div className="flex items-center gap-1.5 text-xs text-[var(--text-tertiary)]">
+          <div className="flex-1 flex items-center px-6 gap-1.5 text-xs text-[var(--text-tertiary)]">
             <span>SMRITI-OS</span>
             <span>/</span>
             <span className="font-medium truncate text-[var(--text-primary)]">
@@ -202,22 +198,13 @@ export default function TopBar({
 
       {/* ── Right actions ── */}
       <div className="flex items-center gap-1 shrink-0">
-        {theme !== 'SMRITI-OS' && (
-          <button
-            onClick={() => setIsCommandBarOpen?.(true)}
-            className="flex items-center gap-2 px-3 py-1.5 rounded-md text-xs font-medium transition-colors text-[var(--text-tertiary)] hover:text-[var(--text-primary)] hover:bg-[var(--bg-float)]"
-          >
-            <Search size={13} />
-            <span className="hidden md:inline">Search</span>
-            <span className="font-mono text-[10px] px-1 py-0.5 rounded" style={{ background: 'var(--bg-float)', border: '1px solid var(--border-subtle)' }}>F3</span>
-          </button>
-        )}
-
         <button
-          onClick={() => setTheme(theme === 'tesla' ? 'SMRITI-OS' : 'tesla')}
-          className={cn("p-2 transition-colors", theme === 'SMRITI-OS' ? "hover:bg-white/10" : "hover:bg-black/10")}
+          onClick={() => setIsCommandBarOpen?.(true)}
+          className="flex items-center gap-2 px-3 py-1.5 rounded-md text-xs font-medium transition-colors text-white/80 hover:text-white hover:bg-white/10"
         >
-          <Palette size={15} />
+          <Search size={13} />
+          <span className="hidden md:inline">Search</span>
+          <span className="font-mono text-[10px] px-1 py-0.5 rounded bg-white/10 border border-white/20">F3</span>
         </button>
 
         <button className={cn("p-2 transition-colors", theme === 'SMRITI-OS' ? "hover:bg-white/10" : "hover:bg-black/10")}>

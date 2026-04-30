@@ -12,6 +12,7 @@ import React, { useEffect } from 'react';
 import { QrCode, ShieldCheck } from 'lucide-react';
 import { useQuery } from '@tanstack/react-query';
 import { api } from '@/api/client';
+import { formatCurrency, formatDecimal } from '@/utils/currency';
 
 export default function TaxInvoiceA4({ bill, onPrinted }: { bill: any, onPrinted: () => void }) {
   const { data: store } = useQuery({
@@ -30,11 +31,13 @@ export default function TaxInvoiceA4({ bill, onPrinted }: { bill: any, onPrinted
 
   if (!bill) return null;
 
-  // HSN-wise Summary Calculation
+  // HSN-wise Summary Calculation (All inputs are in paise)
   const hsnSummary = (bill.items || []).reduce((acc: any, item: any) => {
     const hsn = item.product?.hsn || '6403';
-    const taxable = item.qty * item.unit_price * (1 - item.discount_per / 100);
-    const taxAmt = taxable - (taxable / (1 + item.tax_per / 100));
+    const unitPrice = item.unit_price || item.mrp || 0;
+    const taxable = item.qty * unitPrice * (1 - item.discount_per / 100);
+    const taxRate = item.tax_per || item.tax_rate || 18;
+    const taxAmt = taxable - (taxable / (1 + taxRate / 100));
     
     if (!acc[hsn]) {
       acc[hsn] = { hsn, taxable: 0, cgst: 0, sgst: 0, igst: 0, totalTax: 0 };
@@ -117,7 +120,8 @@ export default function TaxInvoiceA4({ bill, onPrinted }: { bill: any, onPrinted
         </thead>
         <tbody className="text-xs font-bold">
           {bill.items?.map((item: any, i: number) => {
-            const amount = item.qty * item.unit_price * (1 - item.discount_per / 100)
+            const unitPrice = item.unit_price || item.mrp || 0;
+            const amount = item.qty * unitPrice * (1 - item.discount_per / 100);
             return (
               <tr key={i}>
                 <td className="border border-black p-2 text-center">{i + 1}</td>
@@ -127,10 +131,10 @@ export default function TaxInvoiceA4({ bill, onPrinted }: { bill: any, onPrinted
                 </td>
                 <td className="border border-black p-2 text-center font-mono">{item.product?.hsn || '6403'}</td>
                 <td className="border border-black p-2 text-center font-black">{item.qty}</td>
-                <td className="border border-black p-2 text-right">{item.unit_price.toLocaleString()}</td>
+                <td className="border border-black p-2 text-right">{formatDecimal(unitPrice)}</td>
                 <td className="border border-black p-2 text-center">{item.discount_per}%</td>
-                <td className="border border-black p-2 text-center">{item.tax_per}%</td>
-                <td className="border border-black p-2 text-right font-black">{amount.toLocaleString()}</td>
+                <td className="border border-black p-2 text-center">{item.tax_per || item.tax_rate || 18}%</td>
+                <td className="border border-black p-2 text-right font-black">{formatDecimal(amount)}</td>
               </tr>
             )
           })}
@@ -147,7 +151,7 @@ export default function TaxInvoiceA4({ bill, onPrinted }: { bill: any, onPrinted
               <td colSpan={3} className="border border-black p-3 text-right">Grand Total (Incl Tax)</td>
               <td className="border border-black p-3 text-center">{bill.items?.reduce((a:any,i:any)=>a+i.qty,0)}</td>
               <td colSpan={3} className="border border-black p-3"></td>
-              <td className="border border-black p-3 text-right text-lg">₹{bill.total.toLocaleString()}</td>
+              <td className="border border-black p-3 text-right text-lg">{formatCurrency(bill.total)}</td>
            </tr>
         </tfoot>
       </table>
@@ -169,10 +173,10 @@ export default function TaxInvoiceA4({ bill, onPrinted }: { bill: any, onPrinted
                {Object.values(hsnSummary).map((s: any) => (
                  <tr key={s.hsn}>
                     <td className="border border-black p-1">{s.hsn}</td>
-                    <td className="border border-black p-1">₹{s.taxable.toLocaleString()}</td>
-                    <td className="border border-black p-1">₹{s.cgst.toLocaleString()}</td>
-                    <td className="border border-black p-1">₹{s.sgst.toLocaleString()}</td>
-                    <td className="border border-black p-1 font-black">₹{s.totalTax.toLocaleString()}</td>
+                    <td className="border border-black p-1">{formatCurrency(Math.round(s.taxable))}</td>
+                    <td className="border border-black p-1">{formatCurrency(Math.round(s.cgst))}</td>
+                    <td className="border border-black p-1">{formatCurrency(Math.round(s.sgst))}</td>
+                    <td className="border border-black p-1 font-black">{formatCurrency(Math.round(s.totalTax))}</td>
                  </tr>
                ))}
             </tbody>
@@ -189,7 +193,7 @@ export default function TaxInvoiceA4({ bill, onPrinted }: { bill: any, onPrinted
                     const numberToWords = (numIn: number) => {
                       const a = ['','One ','Two ','Three ','Four ', 'Five ','Six ','Seven ','Eight ','Nine ','Ten ','Eleven ','Twelve ','Thirteen ','Fourteen ','Fifteen ','Sixteen ','Seventeen ','Eighteen ','Nineteen '];
                       const b = ['', '', 'Twenty','Thirty','Forty','Fifty', 'Sixty','Seventy','Eighty','Ninety'];
-                      const numStr = numIn.toString();
+                      const numStr = Math.floor(numIn / 100).toString();
                       if (numStr.length > 9) return 'overflow';
                       let n = ('000000000' + numStr).substr(-9).match(/^(\d{2})(\d{2})(\d{2})(\d{1})(\d{2})$/);
                       if (!n) return ''; 
@@ -201,7 +205,7 @@ export default function TaxInvoiceA4({ bill, onPrinted }: { bill: any, onPrinted
                       str += (Number(n[5]) != 0) ? ((str != '') ? 'and ' : '') + (a[Number(n[5])] || b[Number(n[5][0])] + ' ' + a[Number(n[5][1])]) + 'Only ' : 'Only';
                       return str;
                     }
-                    return numberToWords(Math.floor(bill.total))
+                    return numberToWords(bill.total)
                   })()}
                </div>
             </div>
@@ -235,7 +239,3 @@ export default function TaxInvoiceA4({ bill, onPrinted }: { bill: any, onPrinted
     </div>
   );
 }
-
-
-
-

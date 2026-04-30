@@ -9,8 +9,8 @@
  * "Memory, Not Code."
  * ============================================================ */
 
-import React from 'react';
 import { Users, Search, Plus, UserPlus, Phone, Award } from 'lucide-react';
+import { DataTable } from '../../components/ui/SovereignUI';
 
 export default function CustomerMaster() {
   return (
@@ -55,53 +55,18 @@ export default function CustomerMaster() {
         />
       </div>
 
-      {/* ── Table ── */}
-      <div
-        className="rounded-xl overflow-hidden"
-        style={{ background: 'var(--bg-overlay)', border: '1px solid var(--border-subtle)' }}
-      >
-        {/* Table header */}
-        <div
-          className="grid px-5 py-3"
-          style={{
-            gridTemplateColumns: '1fr 2fr 1.5fr 1fr 1fr',
-            borderBottom: '1px solid var(--border-subtle)',
-          }}
-        >
-          {['Member ID', 'Full Name', 'Contact', 'Points', 'Loyalty Tier'].map((col, i) => (
-            <span
-              key={col}
-              className="text-[10px] font-semibold uppercase tracking-wider"
-              style={{ color: 'var(--text-tertiary)', textAlign: i === 4 ? 'right' : 'left' }}
-            >
-              {col}
-            </span>
-          ))}
-        </div>
-
-        {/* Empty state */}
-        <div className="flex flex-col items-center justify-center py-24 gap-4 select-none">
-          <div
-            className="w-16 h-16 rounded-2xl flex items-center justify-center"
-            style={{ background: 'var(--bg-float)', border: '1px solid var(--border-subtle)' }}
-          >
-            <Users size={24} style={{ color: 'var(--text-tertiary)' }} />
-          </div>
-          <div className="text-center">
-            <p className="text-sm font-medium mb-1" style={{ color: 'var(--text-secondary)' }}>
-              CRM Registry Empty
-            </p>
-            <p className="text-xs" style={{ color: 'var(--text-tertiary)' }}>
-              Enroll your first customer to get started
-            </p>
-          </div>
-          <button
-            className="flex items-center gap-2 mt-2 px-4 h-8 rounded-lg text-xs font-medium transition-all hover:opacity-90"
-            style={{ background: 'var(--bg-float)', border: '1px solid var(--border-subtle)', color: 'var(--accent-light)' }}
-          >
-            <UserPlus size={13} /> Enroll First Member
-          </button>
-        </div>
+      <div className="rounded-xl overflow-hidden min-h-[400px]">
+        <DataTable
+          data={[]}
+          emptyMessage="CRM Registry Empty"
+          columns={[
+            { header: 'Member ID', accessor: 'id', className: 'font-mono text-xs' },
+            { header: 'Full Name', accessor: 'name', className: 'font-bold uppercase' },
+            { header: 'Contact', accessor: 'mobile', className: 'font-mono' },
+            { header: 'Points', accessor: (item: any) => item.points || 0, align: 'center', className: 'font-bold text-accent' },
+            { header: 'Loyalty Tier', accessor: 'tier', align: 'right', className: 'font-black' }
+          ]}
+        />
       </div>
     </div>
   );

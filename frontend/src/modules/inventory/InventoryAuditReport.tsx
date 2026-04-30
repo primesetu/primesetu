@@ -2,8 +2,16 @@
  * SMRITI-OS — Shoper9-Based Retail OS
  * Zero Cloud · Sovereign · AI-Governed
  * ============================================================ */
-import React from 'react';
-import { ShieldCheck, BarChart3, AlertCircle } from 'lucide-react';
+
+import React, { useMemo } from 'react';
+import { ShieldCheck, BarChart3, AlertCircle, X, Printer, FileText, Package } from 'lucide-react';
+import { 
+  Button, 
+  Card, 
+  Text, 
+  Badge,
+  DataTable 
+} from '@/components/ui/SovereignUI';
 
 interface AuditReportProps {
   audit: any;
@@ -21,114 +29,147 @@ export default function InventoryAuditReport({ audit, onClose }: AuditReportProp
     varianceQty: audit.items?.reduce((acc: number, item: any) => acc + (item.physical_qty - item.system_qty), 0) || 0,
   };
 
+  // ── VARIANCE COLUMNS ──
+  const columns = useMemo(() => [
+    {
+      header: "ITEM PROTOCOL DETAIL",
+      accessor: (item: any) => (
+        <div className="flex flex-col py-2">
+          <span className="font-black text-navy uppercase leading-none">{item.product_name || 'Generic Article'}</span>
+          <span className="text-[9px] text-navy/30 font-mono mt-1 uppercase tracking-widest">{item.item_id}</span>
+        </div>
+      ),
+      flex: 2,
+      pinned: 'left' as const
+    },
+    {
+      header: "SIZE / COLOUR",
+      accessor: (item: any) => (
+        <div className="flex gap-2">
+          <Badge variant="info" className="bg-navy/5 text-navy border-none font-black">{item.size || 'UNI'}</Badge>
+          <Badge variant="info" className="bg-navy/5 text-navy border-none font-black">{item.colour || 'NOS'}</Badge>
+        </div>
+      ),
+      width: 160,
+      className: 'text-center'
+    },
+    {
+      header: "SYSTEM QTY",
+      accessor: 'system_qty',
+      width: 120,
+      className: 'text-right font-mono font-black text-navy/30'
+    },
+    {
+      header: "PHYSICAL",
+      accessor: 'physical_qty',
+      width: 120,
+      className: 'text-right font-mono font-black text-navy'
+    },
+    {
+      header: "VARIANCE",
+      accessor: (item: any) => {
+        const v = item.physical_qty - item.system_qty;
+        return (
+          <span className={`font-mono font-black ${
+            v === 0 ? 'text-navy/10' : v < 0 ? 'text-rose-500' : 'text-emerald-500'
+          }`}>
+            {v > 0 ? '+' : ''}{v}
+          </span>
+        );
+      },
+      width: 120,
+      className: 'text-right',
+      pinned: 'right' as const
+    }
+  ], []);
+
   return (
-    <div className="fixed inset-0 z-[10000] flex items-center justify-center p-4 bg-navy/80 backdrop-blur-sm animate-in fade-in duration-300">
-      <div className="bg-white w-full max-w-4xl rounded-[40px] shadow-2xl overflow-hidden flex flex-col max-h-[90vh]">
+    <div className="fixed inset-0 z-[10000] flex items-center justify-center p-8 bg-navy/60 backdrop-blur-md animate-in fade-in duration-500">
+      <Card className="bg-white w-full max-w-6xl rounded-[4rem] shadow-[0_50px_100px_rgba(0,0,0,0.3)] overflow-hidden flex flex-col max-h-[90vh] border-none">
         
-        {/* Print Header (Visible on screen and print) */}
-        <div className="bg-navy p-10 text-white flex justify-between items-start">
-          <div className="space-y-2">
-            <div className="flex items-center gap-3">
-              <ShieldCheck className="text-brand-gold" size={24} />
-              <h2 className="text-3xl font-serif font-black uppercase tracking-tighter">Variance Certificate</h2>
-            </div>
-            <p className="text-[10px] font-black text-white/30 uppercase tracking-[0.4em]">Audit Reference: {audit.audit_no}</p>
+        {/* Institutional Header */}
+        <div className="bg-navy p-12 text-white flex justify-between items-center relative overflow-hidden">
+          <div className="absolute right-0 top-0 opacity-10 rotate-12 -translate-y-8">
+             <ShieldCheck size={260} />
           </div>
-          <div className="text-right">
-            <div className="text-[10px] font-black uppercase tracking-widest text-white/40">Audit Date</div>
-            <div className="text-xl font-black">{new Date(audit.submitted_at || audit.created_at).toLocaleDateString()}</div>
+          <div className="relative z-10 space-y-4">
+            <div className="flex items-center gap-6">
+              <div className="h-16 w-16 bg-white/10 rounded-2xl flex items-center justify-center backdrop-blur-xl">
+                 <ShieldCheck className="text-brand-gold" size={32} />
+              </div>
+              <div>
+                 <Text variant="h1" className="font-serif font-black uppercase tracking-tighter leading-none">Variance Certificate</Text>
+                 <Text variant="xs" className="font-black text-white/30 uppercase tracking-[0.4em] mt-3">Audit Protocol: {audit.audit_no} · SMRITI-OS Audit Vault</Text>
+              </div>
+            </div>
+          </div>
+          <div className="text-right relative z-10">
+            <Text variant="xs" className="font-black uppercase tracking-[0.2em] text-white/20 mb-3">Institutional Timestamp</Text>
+            <Text variant="h2" className="font-black text-white">{new Date(audit.submitted_at || audit.created_at).toLocaleDateString('en-IN', { day: '2-digit', month: 'long', year: 'numeric' })}</Text>
           </div>
         </div>
 
-        {/* Report Content */}
-        <div className="flex-1 overflow-y-auto p-12 custom-scrollbar">
+        {/* Content */}
+        <div className="flex-1 overflow-hidden flex flex-col p-12 gap-12 bg-navy/[0.01]">
           {/* Executive Summary */}
-          <div className="grid grid-cols-4 gap-6 mb-12">
+          <div className="grid grid-cols-4 gap-8">
             {[
-              { label: 'Scanned Items', value: stats.totalItems, icon: BarChart3, color: 'text-navy' },
-              { label: 'Total Units', value: stats.totalQty, icon: ShieldCheck, color: 'text-emerald-600' },
-              { label: 'Shortages', value: stats.shortages, icon: AlertCircle, color: 'text-rose-500' },
-              { label: 'Surplus', value: stats.surplus, icon: ShieldCheck, color: 'text-indigo-500' },
+              { label: 'Scanned DNA', value: stats.totalItems, icon: BarChart3, color: 'text-navy', bg: 'bg-navy/5' },
+              { label: 'Net Units', value: stats.totalQty, icon: ShieldCheck, color: 'text-emerald-500', bg: 'bg-emerald-50' },
+              { label: 'Operational Shortages', value: stats.shortages, icon: AlertCircle, color: 'text-rose-500', bg: 'bg-rose-50' },
+              { label: 'Surplus Detection', value: stats.surplus, icon: ShieldCheck, color: 'text-indigo-500', bg: 'bg-indigo-50' },
             ].map((stat, i) => (
-              <div key={i} className="bg-navy/5 p-6 rounded-[2.5rem] border border-transparent hover:border-navy/10 transition-all">
-                <stat.icon className={`${stat.color} mb-3`} size={20} />
-                <div className={`text-3xl font-serif font-black ${stat.color}`}>{stat.value}</div>
-                <div className="text-[9px] font-black text-navy/30 uppercase tracking-widest mt-1">{stat.label}</div>
+              <div key={i} className={`${stat.bg} p-10 rounded-[3rem] border border-transparent hover:border-navy/5 transition-all shadow-sm flex flex-col justify-center`}>
+                <stat.icon className={`${stat.color} mb-6`} size={24} />
+                <Text variant="h1" className={`text-4xl font-black ${stat.color}`}>{stat.value}</Text>
+                <Text variant="xs" className="font-black text-navy/20 uppercase tracking-[0.2em] mt-2">{stat.label}</Text>
               </div>
             ))}
           </div>
 
           {/* Variance Ledger */}
-          <div className="space-y-4">
-            <h3 className="text-[11px] font-black text-navy uppercase tracking-[0.4em] mb-6">Detailed Variance Ledger</h3>
-            <table className="w-full text-left">
-              <thead>
-                <tr className="text-[9px] font-black text-navy/30 uppercase tracking-widest border-b border-navy/5">
-                  <th className="py-4 px-2">Item Description</th>
-                  <th className="py-4 px-2 text-center">Size/Color</th>
-                  <th className="py-4 px-2 text-right">System Qty</th>
-                  <th className="py-4 px-2 text-right">Physical</th>
-                  <th className="py-4 px-2 text-right">Variance</th>
-                </tr>
-              </thead>
-              <tbody className="divide-y divide-navy/5">
-                {audit.items?.map((item: any, i: number) => {
-                  const v = item.physical_qty - item.system_qty;
-                  return (
-                    <tr key={i} className="text-xs group hover:bg-navy/[0.02] transition-all">
-                      <td className="py-5 px-2">
-                        <div className="font-black text-navy uppercase">{item.product_name || 'Item Name'}</div>
-                        <div className="text-[9px] text-navy/40 font-mono mt-0.5">{item.item_id}</div>
-                      </td>
-                      <td className="py-5 px-2 text-center font-bold text-navy/60">
-                        {item.size || 'UNI'} / {item.colour || 'NOS'}
-                      </td>
-                      <td className="py-5 px-2 text-right font-mono text-navy/40">{item.system_qty}</td>
-                      <td className="py-5 px-2 text-right font-mono font-black text-navy">{item.physical_qty}</td>
-                      <td className={`py-5 px-2 text-right font-mono font-black ${
-                        v === 0 ? 'text-navy/20' : v < 0 ? 'text-rose-500' : 'text-emerald-600'
-                      }`}>
-                        {v > 0 ? '+' : ''}{v}
-                      </td>
-                    </tr>
-                  );
-                })}
-              </tbody>
-            </table>
+          <div className="flex-1 flex flex-col min-h-0">
+            <Text variant="xs" className="font-black text-navy/30 uppercase tracking-[0.4em] mb-8">Detailed Variance Ledger</Text>
+            <Card className="flex-1 bg-white rounded-[3.5rem] border-none shadow-2xl overflow-hidden">
+               <DataTable 
+                 data={audit.items || []} 
+                 columns={columns} 
+                 overlayNoRowsTemplate={`
+                   <div class="flex flex-col items-center justify-center opacity-10 h-full">
+                      <Package size="60" class="mb-4" />
+                      <div class="text-xs font-black uppercase tracking-[0.4em]">Zero Variance Detected</div>
+                   </div>
+                 `}
+               />
+            </Card>
           </div>
         </div>
 
         {/* Footer Actions */}
-        <div className="p-10 bg-navy/5 flex justify-between items-center border-t border-navy/10">
-          <button 
+        <div className="p-10 bg-white border-t border-navy/5 flex justify-between items-center px-12">
+          <Button 
+            variant="sec" 
             onClick={onClose}
-            className="px-10 py-4 bg-white border border-navy/10 text-navy rounded-2xl font-black text-[10px] uppercase tracking-widest hover:bg-navy hover:text-white transition-all"
+            className="h-16 px-10 rounded-[2rem] border-navy/5 text-navy font-black text-[10px] uppercase tracking-[0.3em] gap-3"
           >
-            Close [Esc]
-          </button>
-          <div className="flex gap-4">
-            <button 
-              onClick={() => window.print()}
-              className="px-10 py-4 bg-navy text-white rounded-2xl font-black text-[10px] uppercase tracking-widest hover:scale-105 transition-all shadow-xl shadow-navy/20"
+            <X size={18} /> Close Protocol [Esc]
+          </Button>
+          <div className="flex gap-6">
+            <Button 
+              variant="sec"
+              className="h-16 px-10 rounded-[2rem] border-navy/5 text-navy font-black text-[10px] uppercase tracking-[0.3em] gap-3"
             >
-              Print Certificate [P]
-            </button>
+              <FileText size={18} className="text-indigo-500" /> Export CSV
+            </Button>
+            <Button 
+              onClick={() => window.print()}
+              className="h-16 px-12 bg-navy text-white rounded-[2rem] shadow-2xl font-black text-[10px] uppercase tracking-[0.3em] gap-3"
+            >
+              <Printer size={18} className="text-brand-gold" /> Print Certificate [P]
+            </Button>
           </div>
         </div>
-      </div>
-
-      <style dangerouslySetInnerHTML={{ __html: `
-        @media print {
-          body * { visibility: hidden; }
-          #report-container, #report-container * { visibility: visible; }
-          #report-container { position: absolute; left: 0; top: 0; width: 100%; }
-          .non-print { display: none !important; }
-        }
-      `}} />
+      </Card>
     </div>
   );
 }
-
-
-
-

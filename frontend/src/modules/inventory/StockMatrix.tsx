@@ -9,7 +9,9 @@
  * "Memory, Not Code."
  * ============================================================ */
 
-import React from 'react';
+import React, { useMemo } from 'react';
+import { DataTable, Text } from '@/components/ui/SovereignUI';
+import { Keyboard } from 'lucide-react';
 
 interface MatrixCell {
   size: string;
@@ -52,52 +54,74 @@ const StockMatrix: React.FC<StockMatrixProps> = ({
     onChange(newMatrix);
   };
 
+  // ── TRANSFORM DATA FOR AG GRID ──
+  // Each row is a Size, with properties for each Colour
+  const rowData = useMemo(() => {
+    return sizes.map(size => {
+      const row: any = { size };
+      colours.forEach(col => {
+        row[col] = getQty(size, col);
+      });
+      return row;
+    });
+  }, [sizes, colours, matrix]);
+
+  // ── GENERATE COLUMNS DYNAMICALLY ──
+  const columns = useMemo(() => {
+    const sizeCol = {
+      header: "SIZE \\ COLOUR",
+      accessor: (item: any) => (
+        <span className="text-[10px] font-black text-navy uppercase tracking-widest">{item.size}</span>
+      ),
+      width: 150,
+      pinned: 'left' as const,
+      className: 'bg-navy/5'
+    };
+
+    const colorCols = colours.map(col => ({
+      header: col.toUpperCase(),
+      accessor: (item: any) => {
+        const qty = item[col] || 0;
+        return (
+          <input 
+            type="number"
+            disabled={readOnly}
+            value={qty || ''}
+            placeholder="0"
+            onChange={(e) => handleQtyChange(item.size, col, parseInt(e.target.value) || 0)}
+            className={`w-full h-full min-h-[40px] px-3 py-2 text-center text-xs font-mono outline-none transition-all
+              ${qty === 0 ? 'text-navy/10 bg-transparent' : 
+                qty <= 3 ? 'text-amber-500 bg-amber-500/5 font-black' : 
+                'text-emerald-500 bg-emerald-500/5 font-black'}
+              focus:bg-brand-gold/10 focus:ring-1 focus:ring-brand-gold
+            `}
+          />
+        );
+      },
+      width: 100,
+      className: 'p-0 text-center border-l border-navy/5'
+    }));
+
+    return [sizeCol, ...colorCols];
+  }, [colours, readOnly, matrix]);
+
   return (
-    <div className="overflow-x-auto bg-bg-elevated rounded-2xl border border-border shadow-sm">
-      <table className="w-full border-collapse">
-        <thead>
-          <tr className="bg-brand-navy text-white text-[10px] font-black uppercase tracking-widest">
-            <th className="px-4 py-3 text-left border-r border-border/10">Size \ Colour</th>
-            {colours.map(col => (
-              <th key={col} className="px-4 py-3 text-center border-r border-border/10">{col}</th>
-            ))}
-          </tr>
-        </thead>
-        <tbody>
-          {sizes.map(size => (
-            <tr key={size} className="border-b border-border transition-colors hover:bg-brand-gold/5">
-              <td className="px-4 py-3 text-[10px] font-black text-text-primary uppercase bg-bg-float border-r border-border">
-                {size}
-              </td>
-              {colours.map(col => {
-                const qty = getQty(size, col);
-                return (
-                  <td key={`${size}-${col}`} className="p-0 border-r border-border">
-                    <input 
-                      type="number"
-                      disabled={readOnly}
-                      value={qty || ''}
-                      placeholder="0"
-                      onChange={(e) => handleQtyChange(size, col, parseInt(e.target.value) || 0)}
-                      className={`w-full h-full min-h-[40px] px-3 py-2 text-center text-xs font-mono outline-none transition-all text-text-primary
-                        ${qty === 0 ? 'text-text-secondary/20 bg-transparent' : 
-                          qty <= 3 ? 'text-amber-500 bg-amber-500/10 font-black' : 
-                          'text-emerald-500 bg-emerald-500/10 font-black'}
-                        focus:bg-bg-input focus:ring-2 focus:ring-brand-gold focus:z-10
-                      `}
-                    />
-                  </td>
-                );
-              })}
-            </tr>
-          ))}
-        </tbody>
-      </table>
+    <div className="bg-white rounded-3xl border border-navy/5 shadow-2xl overflow-hidden flex flex-col">
+       <div className="h-[400px]">
+          <DataTable 
+            data={rowData}
+            columns={columns}
+            singleClickEdit={true}
+          />
+       </div>
       
       {!readOnly && (
-        <div className="p-3 bg-bg-float border-t border-border flex items-center justify-between text-[10px] font-bold text-text-secondary/40 uppercase tracking-wider">
-          <span>Enter opening stock per size/colour</span>
-          <span>Tab to move cell ›</span>
+        <div className="p-5 bg-navy text-white/40 flex items-center justify-between text-[9px] font-black uppercase tracking-[0.2em]">
+          <div className="flex items-center gap-3">
+             <Keyboard size={14} className="text-brand-gold" />
+             <span>Enter opening stock per size/colour matrix</span>
+          </div>
+          <span>Use Arrow Keys / Tab to navigate cells ›</span>
         </div>
       )}
     </div>
@@ -105,7 +129,3 @@ const StockMatrix: React.FC<StockMatrixProps> = ({
 };
 
 export default StockMatrix;
-
-
-
-

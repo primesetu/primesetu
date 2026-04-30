@@ -91,6 +91,7 @@ RULE-012: NEVER use `font-black` (900 weight). Max is `font-bold` (700).
 RULE-013: ALWAYS wrap every Supabase/API call in `try/catch`.
 RULE-014: ALWAYS provide IndexedDB fallback for structural UI data.
 RULE-015: ALWAYS present code with a self-rating score. No score = INVALID response.
+RULE-016: ONLY AI Data Grid (DataTable) allowed. Sync with Direct Entry rows. (skills/ai-grid-protocol.md)
 ```
 
 ---
@@ -105,6 +106,7 @@ RULE-015: ALWAYS present code with a self-rating score. No score = INVALID respo
 [ ] No static menu arrays
 [ ] No localStorage for auth
 [ ] npm run build will pass (no TypeScript errors)
+[ ] Using AI Data Grid (DataTable) for all tabular data (RULE-016)
 [ ] Self-rating scorecard is ready to fill
 ```
 

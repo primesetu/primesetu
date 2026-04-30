@@ -55,7 +55,7 @@ export default function StockMovement() {
       </div>
 
       <div className="glass rounded-[3rem] overflow-hidden shadow-2xl">
-        <div className="bg-[#1a2340] px-10 py-6 flex justify-between items-center text-white">
+        <div className="bg-[var(--navy-deep)] px-10 py-6 flex justify-between items-center text-white">
           <h3 className="font-serif font-black uppercase tracking-tight">Movement History</h3>
           <div className="flex gap-4">
             {['ALL', 'IN', 'OUT'].map((t) => (

@@ -30,41 +30,39 @@ const FunctionBar: React.FC<FunctionBarProps> = ({
   const { theme } = useTheme();
   const isTally = theme === 'SMRITI-OS';
 
-  // Static mapping for core Shoper9-style function keys
+  // High-Density Shortcut Mapping (Tally style)
   const getContextKeys = () => {
-    switch(activeTab) {
-      case 'sales':
-        return [
-          { key: 'F1', label: 'New Bill' },
-          { key: 'F2', label: 'Item Search' },
-          { key: 'F4', label: 'Returns' },
-          { key: 'F5', label: 'Suspended' },
-          { key: 'F7', label: 'Exact Cash' },
-          { key: 'F8', label: 'Settlement' },
-          { key: 'F9', label: 'Bill Totals' },
-          { key: 'F10', label: 'Finalize' },
-          { key: 'F12', label: 'Suspend' },
-        ];
-      case 'inventory':
-      case 'registry':
-        return [
-          { key: 'F1', label: 'Select Store' },
-          { key: 'F2', label: 'Advanced Search' },
-          { key: 'F3', label: 'Stock Report' },
-          { key: 'F5', label: 'Refresh Grid' },
-          { key: 'F9', label: 'Stock Take' },
-          { key: 'F12', label: 'Configure' },
-        ];
-      default:
-        return [
-          { key: 'F1', label: 'Help' },
-          { key: 'F2', label: 'Date Change' },
-          { key: 'F3', label: 'Company Info' },
-          { key: 'F10', label: 'System Config' },
-          { key: 'F11', label: 'Features' },
-          { key: 'F12', label: 'Configuration' },
-        ];
-    }
+    const baseKeys = [
+      { key: 'F1', label: 'Help', type: 'normal' },
+      { key: 'F2', label: 'Period', type: 'alt', hasSub: true },
+      { key: 'F3', label: 'Company', type: 'alt', hasSub: true },
+      { key: 'F4', label: '', type: 'spacer' },
+      
+      { key: 'F5', label: 'Refresh', type: 'normal' },
+      { key: 'F6', label: 'Dashboard', type: 'normal' },
+      { key: 'F7', label: 'Registry', type: 'normal' },
+      { key: 'F8', label: 'Valuation', type: 'alt', hasSub: true },
+      { key: 'F9', label: 'Stock Take', type: 'normal' },
+      { key: 'F10', label: 'System', type: 'normal' },
+      { key: 'F11', label: 'Features', type: 'normal' },
+      { key: 'F4', label: '', type: 'spacer' },
+
+      { key: 'B', label: 'Basis of Values', type: 'alt', hasSub: true },
+      { key: 'H', label: 'Change View', type: 'alt', hasSub: true },
+      { key: 'J', label: 'Exceptions', type: 'alt', hasSub: true },
+      { key: 'L', label: 'Save View', type: 'alt', hasSub: true },
+      { key: 'F4', label: '', type: 'spacer' },
+
+      { key: 'C', label: 'New Column', type: 'alt' },
+      { key: 'A', label: 'Alter Column', type: 'alt' },
+      { key: 'D', label: 'Delete Column', type: 'alt' },
+      { key: 'N', label: 'Auto Column', type: 'alt' },
+      { key: 'F4', label: '', type: 'spacer' },
+
+      { key: 'F12', label: 'Configure', type: 'normal', hasSub: true },
+    ];
+
+    return baseKeys;
   };
 
   const keys = getContextKeys();
@@ -76,74 +74,78 @@ const FunctionBar: React.FC<FunctionBarProps> = ({
         <button
           onClick={() => setIsRightCollapsed?.(false)}
           className={cn(
-            "fixed right-0 top-1/2 -translate-y-1/2 z-[var(--z-sidebar)] p-1 rounded-l-md transition-all shadow-md",
-            isTally ? "bg-[var(--accent)] text-[var(--gold)]" : "bg-accent text-white"
+            "fixed right-0 top-[20%] z-[var(--z-sidebar)] w-10 h-16 flex items-center justify-center rounded-l-xl transition-all shadow-2xl border-l-4",
+            isTally 
+              ? "bg-[var(--accent)] border-[var(--gold)] text-white hover:pr-4" 
+              : "bg-navy-mid border-white/20 text-white hover:pr-4"
           )}
-          title="Show Shortcut Keys"
+          title="Show Shortcut Keys [Alt+K]"
         >
-          <ChevronLeft size={16} />
+          <ChevronLeft size={24} className="animate-pulse" />
         </button>
       )}
 
       <aside className={cn(
-        "fixed right-0 top-[var(--topbar-h)] bottom-[var(--status-bar-h,24px)] z-[var(--z-sidebar)] flex flex-col py-0 transition-all duration-300 ease-in-out overflow-hidden",
-        isRightCollapsed ? "w-0 border-none" : "w-[var(--sidebar-right-w,120px)]",
-        isTally 
-          ? "border-l" 
-          : "bg-navy-mid border-l border-white/5"
+        "c-function-bar fixed right-0 top-[var(--topbar-h)] bottom-[var(--status-bar-h,28px)] z-[var(--z-sidebar)] flex flex-col py-0 transition-all duration-300 ease-in-out overflow-hidden",
+        isRightCollapsed ? "w-0 border-none" : "w-[var(--sidebar-right-w,160px)]"
       )}
-      style={isTally ? { background: 'var(--accent-dark, #1a4a48)', borderColor: 'var(--accent-border)' } : {}}
+      style={{ 
+        background: 'var(--aside-bg)',
+        boxShadow: `calc(-4px * ${isRightCollapsed ? 0 : 1}) 0 20px var(--aside-glow)` 
+      }}
     >
-        {/* Internal Toggle Button (When Visible) */}
+        {/* Internal Toggle Button (When Visible) — Handle Style */}
         {!isRightCollapsed && (
           <button
             onClick={() => setIsRightCollapsed?.(true)}
             className={cn(
-              "absolute left-0 top-2 -translate-x-1/2 z-[var(--z-sidebar)] p-1 rounded-full border shadow-sm transition-all",
-              isTally ? "bg-[var(--accent)] border-[var(--accent-border)] text-[var(--gold)]" : "bg-navy text-white border-white/10"
+              "absolute left-0 top-[15%] -translate-x-1/2 z-[var(--z-sidebar)] w-8 h-12 flex items-center justify-center rounded-full border-2 transition-all hover:scale-110",
+              isTally ? "bg-[var(--accent)] border-white/20 text-white shadow-[var(--shadow-accent)]" : "bg-navy text-white border-white/10"
             )}
-            title="Hide Shortcut Keys"
+            title="Hide Shortcut Keys [Alt+K]"
           >
-            <ChevronRight size={12} />
+            <ChevronRight size={16} />
           </button>
         )}
 
-        {Array.from({ length: 12 }).map((_, i) => {
-          const keyNum = `F${i + 1}`;
-          const activeKey = keys.find(k => k.key === keyNum);
+        <div className="flex-1 flex flex-col tally-scrollbar overflow-y-auto">
+          {keys.map((k, i) => {
+            if (k.type === 'spacer') {
+              return <div key={`spacer-${i}`} className="h-4 w-full bg-white/5" />;
+            }
 
-          return (
-            <div 
-              key={keyNum}
-              className={cn(
-                "flex-1 flex flex-col items-center justify-center border-b transition-all min-w-[120px]",
-                isTally ? "border-[var(--accent-border)]" : "border-white/5",
-              activeKey 
-                  ? (isTally 
-                      ? 'cursor-pointer group border-l-2 border-transparent hover:border-[var(--gold)] hover:bg-[var(--accent)]' 
-                      : 'cursor-pointer hover:bg-white/10 active:bg-saffron/20 group')
-                  : 'opacity-20 pointer-events-none'
-              )}
-            >
-              <span className={cn(
-                "text-lg font-mono font-black tracking-tighter",
-                activeKey 
-                  ? (isTally ? 'text-[var(--gold)]' : 'text-gold group-hover:scale-110 transition-transform') 
-                  : 'text-white/30'
-              )}>
-                {keyNum}
-              </span>
-              {activeKey && (
-                <span className={cn(
-                  "text-xs font-bold uppercase tracking-tight text-center px-1 leading-tight mt-1",
-                  isTally ? "text-white" : "text-white/70"
-                )}>
-                  {activeKey.label}
-                </span>
-              )}
-            </div>
-          );
-        })}
+            return (
+              <div 
+                key={`${k.key}-${i}`}
+                className={cn(
+                  "flex items-center px-2 py-1 border-b transition-all group min-h-[32px] cursor-pointer",
+                  isTally ? "border-[var(--accent-border)] hover:bg-white/5" : "border-white/5 hover:bg-white/10"
+                )}
+              >
+                <div className="flex-1 flex items-baseline gap-2 overflow-hidden">
+                  <span className={cn(
+                    "text-[12px] font-mono font-black tracking-tighter shrink-0",
+                    isTally ? "text-[var(--gold)]" : "text-gold",
+                    k.type === 'alt' && "shortcut-alt",
+                    k.type === 'ctrl' && "shortcut-ctrl"
+                  )}>
+                    {k.key}:
+                  </span>
+                  <span className={cn(
+                    "text-[11px] font-bold uppercase tracking-tight truncate",
+                    isTally ? "text-white group-hover:text-[var(--gold)]" : "text-white/70"
+                  )}>
+                    {k.label}
+                  </span>
+                </div>
+                
+                {k.hasSub && (
+                  <ChevronRight size={10} className="text-white/30 shrink-0" />
+                )}
+              </div>
+            );
+          })}
+        </div>
       </aside>
     </>
   );

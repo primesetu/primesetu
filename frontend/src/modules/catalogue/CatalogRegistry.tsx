@@ -78,7 +78,7 @@ export default function CatalogRegistry() {
   };
 
   return (
-    <div className="flex flex-col h-full bg-[#f8f9fa] overflow-hidden">
+    <div className="flex flex-col h-full bg-[var(--surface-subtle)] overflow-hidden">
       {/* ── UNIFIED HUB HEADER ── */}
       {!viewStyle && (
         <div className="px-12 pt-12 pb-8 bg-white border-b border-navy/5 shrink-0">

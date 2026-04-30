@@ -12,12 +12,28 @@
 
 # AGENTS.md — AI Agent Role Registry
 
-> Protocol Version: 2.0.0 | Effective: April 2026
+> Protocol Version: 3.0.0 | Effective: 2026-04-30
+
+## ⚡ CURRENT ACTIVE PHASE: PHASE 2
+> Phase 1 (PostgREST) = DEAD. Phase 2 (FastAPI + SQLAlchemy 2) = ONLY STANDARD.
+> This header MUST be read before any other rule in this file.
+
+## 🔴 THE 9/10 QUALITY GATE — NON-NEGOTIABLE
+Every AI agent MUST self-rate its code out of 10 before presenting.
+
+```
+SCORE 10/10  → APPROVED. Ship it.
+SCORE 9/10   → APPROVED. Note the failed criterion.
+SCORE 8/10   → BLOCKED.  AI must rewrite, then re-score.
+SCORE ≤7/10  → BLOCKED.  AI must restart from scratch.
+```
+
+The scorecard is defined in `AI_ATOMIC_RULES.md`. ALL agents read that file first.
 
 ## MANDATORY RULE
+Follow `aiprotocol.md`, `AI_GUIDELINES.md`, AND `AI_ATOMIC_RULES.md` WITHOUT EXCEPTION.
+Before any response: read `AI_ATOMIC_RULES.md` → self-rate → output 5-section format.
 
-Follow `aiprotocol.md` and `AI_GUIDELINES.md` WITHOUT EXCEPTION.
-Before any response: read aiprotocol.md → apply ALL rules → load `skills/code-review-and-refine.md` → output 5-section format.
 
 ---
 

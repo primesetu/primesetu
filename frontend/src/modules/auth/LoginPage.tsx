@@ -95,7 +95,7 @@ export default function LoginPage() {
             <button
               type="submit"
               disabled={loading}
-              className="w-full bg-saffron hover:bg-[#D9720A] text-white font-bold py-3.5 rounded-xl transition-all shadow-lg shadow-saffron/20 disabled:opacity-50 disabled:shadow-none active:transform active:scale-[0.98]"
+              className="w-full bg-saffron hover:bg-[var(--accent-hover)] text-white font-bold py-3.5 rounded-xl transition-all shadow-lg shadow-saffron/20 disabled:opacity-50 disabled:shadow-none active:transform active:scale-[0.98]"
             >
               {loading ? 'Authenticating...' : 'Sign In to Terminal'}
             </button>

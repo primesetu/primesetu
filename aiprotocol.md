@@ -11,6 +11,15 @@
 
 # AI PROTOCOL — SMRITI-OS (STRICT ENFORCEMENT)
 
+## ⚡ CURRENT ACTIVE PHASE: PHASE 2
+> Phase 1 (PostgREST) = DEAD. Phase 2 (FastAPI + SQLAlchemy 2) = ONLY STANDARD.
+
+## 🔴 QUALITY GATE — MANDATORY
+> Every AI response with code MUST include a self-rating score out of 10.
+> Score >= 9 → APPROVED. Score < 9 → BLOCKED. Rewrite before presenting.
+> See `AI_ATOMIC_RULES.md` for the full 10-criterion scorecard.
+
+
 ## THE 4-PHASE WORKFLOW
 1. Explore   — Research codebase, read KIs, understand context
 2. Plan      — Draft implementation_plan.md, get approval

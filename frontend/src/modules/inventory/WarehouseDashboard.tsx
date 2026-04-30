@@ -116,7 +116,7 @@ export default function WarehouseDashboard() {
         </div>
 
         {/* Recent Logistics Activity */}
-        <div className="bg-[#1a2340] rounded-[3rem] p-10 shadow-2xl text-white">
+        <div className="bg-[var(--navy-deep)] rounded-[3rem] p-10 shadow-2xl text-white">
           <h3 className="text-xl font-serif font-black uppercase tracking-tight mb-10">Logistics Pulse</h3>
           <div className="space-y-8">
             {[

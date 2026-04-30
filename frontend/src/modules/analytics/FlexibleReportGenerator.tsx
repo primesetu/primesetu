@@ -130,7 +130,7 @@ export default function FlexibleReportGenerator() {
         {/* Results Area */}
         <div className="lg:col-span-3">
           <div className="glass rounded-[3rem] shadow-2xl overflow-hidden min-h-[600px] flex flex-col">
-            <div className="bg-[#1a2340] px-10 py-6 flex justify-between items-center text-white">
+            <div className="bg-[var(--navy-deep)] px-10 py-6 flex justify-between items-center text-white">
               <div className="flex items-center gap-4">
                 <TableIcon className="w-5 h-5 text-amber-500" />
                 <h3 className="font-serif font-black uppercase tracking-tight">Pivot Output</h3>

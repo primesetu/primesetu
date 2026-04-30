@@ -75,15 +75,15 @@
     --button-pos-h: 44px;
 
     /* SHADOW */
-    --shadow-sm: 0 1px 2px rgba(0,0,0,0.05);
-    --shadow-md: 0 4px 6px -1px rgba(0,0,0,0.1);
-    --shadow-lg: 0 10px 15px -3px rgba(0,0,0,0.1);
+    --shadow-sm: 0 1px 2px rgba(242, 155, 18, 0.05);
+    --shadow-md: 0 4px 6px -1px rgba(242, 155, 18, 0.1);
+    --shadow-lg: 0 10px 15px -3px rgba(242, 155, 18, 0.1);
 
     /* LAYOUT */
     --sidebar-w: 256px;
-    --sidebar-right-w: 120px;
+    --sidebar-right-w: 160px;
     --topbar-h: 48px;
-    --status-bar-h: 24px;
+    --status-bar-h: 28px;
 
     /* Z-INDEX STACKING CONTEXT — SMRITI-OS Governance (v2.2) */
     --z-base: 0;
@@ -123,7 +123,16 @@
 
   [data-theme="tesla"] :root,
   [data-theme="SMRITI-OS"] :root {
+    --accent: var(--color-gold-500);
+    --gold: var(--color-gold-500);
+    --accent-light: #FFC107;
+
     --bg-overlay: rgba(15, 23, 42, 0.98);
+    --aside-bg: var(--surface-elevated);
+    --aside-border: var(--border-subtle);
+    --aside-glow: transparent;
+
+    --text-primary: #ffffff;
     --border-default: #334155;
   }
 
@@ -131,22 +140,87 @@
   [data-theme="SMRITI-OS"] {
     --primary: var(--color-teal-500);
     --secondary: #2e7d32;
-    --accent: var(--color-gold-500);
+    --accent: #f29b12; /* Premium Gold */
+    --gold: #f29b12;
+    --accent-dark: #1a4a48;
+    --accent-border: rgba(242, 155, 18, 0.4); /* Premium Gold Border */
     
     --surface: #ffffff;
-    --background: #f0f1f1;
+    --background: #f0f2f5; /* Increased contrast for card visibility */
     --surface-elevated: #ffffff;
 
-    --text-primary: #212121;
-    --text-secondary: #444444;
-    --text-tertiary: #666666;
+    --aside-bg: #1a4a48; /* Premium Institutional Teal */
+    --aside-border: transparent;
+    --aside-glow: transparent; 
+    --aside-text: #ffffff;
+    --aside-text-dim: rgba(255, 255, 255, 0.6);
 
-    --border-subtle: #bcbcbc;
-    --border-default: #808080;
+    --text-primary: #334155; /* Softer Institutional Charcoal */
+    --text-secondary: #475569;
+    --text-tertiary: #64748b;
+
+    --shadow-sm: 0 1px 3px rgba(242, 155, 18, 0.1);
+    --shadow-md: 0 10px 25px -5px rgba(242, 155, 18, 0.1), 0 8px 10px -6px rgba(242, 155, 18, 0.1);
+    --shadow-lg: 0 20px 25px -5px rgba(242, 155, 18, 0.15);
+
+    --border-subtle: rgba(26, 74, 72, 0.05);
+    --border-default: transparent;
+    --border-shortcut: rgba(242, 155, 18, 0.2);
     
-    --radius-md: 0px;
-    --radius-lg: 0px;
+    --accent-deep: #b4740d;
+    --accent-hover: #D9720A;
+    --shadow-accent: 0 0 20px rgba(242, 155, 18, 0.3);
+    
+    --navy-deep: #1a2340;
+    --teal-primary: #008c85;
+    --institutional-bg: #f0ede8;
+    --surface-subtle: #F5F5F5;
+    --surface-muted: #F9F9F9;
+    
+    --radius-md: 8px;
+    --radius-lg: 12px;
+    --radius-xl: 20px;
   }
+
+  /* 🛡️ DEEP LEVEL SOVEREIGN GOVERNANCE */
+  [data-theme="SMRITI-OS"] * {
+    border-color: var(--border-default) !important;
+  }
+
+  /* 🔑 Restore Borders for Right Sidebar Shortcuts */
+  [data-theme="SMRITI-OS"] .c-function-bar * {
+    border-color: var(--border-shortcut) !important;
+  }
+
+  [data-theme="SMRITI-OS"] input, 
+  [data-theme="SMRITI-OS"] select, 
+  [data-theme="SMRITI-OS"] textarea,
+  [data-theme="SMRITI-OS"] button {
+    border-width: 1.5px !important;
+    border-style: solid !important;
+    border-radius: var(--radius-md) !important;
+    transition: all 0.2s ease-in-out;
+  }
+
+  [data-theme="SMRITI-OS"] button:hover {
+    border-color: var(--accent) !important;
+    background: color-mix(in srgb, var(--accent) 5%, transparent);
+  }
+  [data-theme="SMRITI-OS"] * {
+    outline-color: var(--accent) !important;
+  }
+
+  [data-theme="SMRITI-OS"] aside { 
+    border: none !important;
+    box-shadow: none !important;
+  }
+
+  [data-theme="SMRITI-OS"] .tally-scrollbar::-webkit-scrollbar-thumb {
+    background: var(--accent) !important;
+    opacity: 0.5;
+  }
+  
+  [data-theme="SMRITI-OS"] .tp-brand-divider { border: none !important; }
 
   /* 🎭 THEME OVERRIDES — VYOM (Cyber Dark) */
   [data-theme="vyom"] {
@@ -211,9 +285,54 @@
   .tp-header {
     height: var(--topbar-h);
     background-color: var(--primary);
-    border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
     color: #ffffff;
+    box-shadow: 0 2px 10px var(--aside-glow);
   }
+
+  .tp-status-bar {
+    height: var(--status-bar-h);
+    background-color: var(--color-teal-500);
+    color: #ffffff;
+    font-size: 11px;
+    font-weight: 600;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    display: flex;
+    align-items: center;
+    padding: 0 1rem;
+    box-shadow: 0 -2px 10px var(--aside-glow);
+  }
+
+  /* 📜 SOVEREIGN SCROLLBARS */
+  ::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+  }
+
+  ::-webkit-scrollbar-track {
+    background: transparent;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background: var(--accent-border);
+    border-radius: 10px;
+  }
+
+  ::-webkit-scrollbar-thumb:hover {
+    background: var(--accent);
+  }
+
+  .tally-scrollbar::-webkit-scrollbar-thumb {
+    background: var(--accent);
+    opacity: 0.5;
+  }
+
+  .golden-border-r { border-right: 4px solid var(--accent) !important; }
+  .golden-border-l { border-left: 4px solid var(--accent) !important; }
+
+  /* ⌨️ SHORTCUT NOTATION */
+  .shortcut-alt { border-bottom: 1.5px solid currentColor; padding-bottom: 0.5px; }
+  .shortcut-ctrl { border-bottom: 3px double currentColor; padding-bottom: 0.5px; }
 
   input, select, textarea {
     font: inherit;
@@ -233,6 +352,32 @@
   .u-mono { font-family: var(--font-mono); }
   .u-uppercase { text-transform: uppercase; letter-spacing: 0.05em; }
   .u-square { border-radius: 0 !important; }
+
+  /* 🏛️ INSTITUTIONAL UTILITIES (Centralized Mapping) */
+  .bg-bg-base { background-color: var(--background) !important; }
+  .bg-bg-float { 
+    background-color: var(--surface-elevated) !important; 
+    box-shadow: var(--shadow-md) !important; 
+    border-radius: var(--radius-md);
+  }
+  .bg-bg-elevated { 
+    background-color: var(--surface-elevated) !important; 
+    box-shadow: var(--shadow-lg) !important; 
+    border-radius: var(--radius-md);
+  }
+  
+  /* 🔤 TYPOGRAPHY GOVERNANCE */
+  .text-navy { color: var(--accent-dark) !important; }
+  [class*="text-navy/"] { color: var(--accent-dark) !important; opacity: 0.6 !important; } /* Force visibility for opaque variants */
+  
+  .bg-brand-navy { background-color: var(--accent-dark) !important; }
+  .text-brand-gold { color: var(--accent) !important; }
+  .bg-brand-gold { background-color: var(--accent) !important; }
+
+  /* ⌨️ INPUT & LABEL FIXES */
+  [data-theme="SMRITI-OS"] label { color: var(--accent-dark) !important; font-weight: 900 !important; }
+  [data-theme="SMRITI-OS"] input::placeholder { color: var(--text-tertiary) !important; opacity: 0.5; }
+  [data-theme="SMRITI-OS"] input { color: var(--text-primary) !important; }
 }
 
 /* =========================
@@ -377,33 +522,63 @@
     color: #ffffff;
   }
 
-  /* ── BILLING / POS SYSTEM ── */
+  /* ── Billing POS Core Layout ── */
   .c-billing-layout {
-    display: flex;
     height: 100vh;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
     overflow: hidden;
     background: var(--background);
+    color: var(--text-primary);
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  /* 🔍 Expansion Mode (User Choice) */
+  .c-billing-layout--expanded {
+    height: auto !important;
+    min-height: 100vh;
+    overflow: auto !important;
+  }
+
+  .c-billing-layout--expanded .c-billing-main-container {
+    flex: none;
+    height: auto;
+  }
+
+  .c-billing-layout--expanded .c-ledger-list {
+    overflow: visible !important;
+    height: auto !important;
+  }
+
+  .c-billing-main-container {
+    flex: 1;
+    display: flex;
+    min-height: 0; /* Critical for inner scrolling */
+    width: 100%;
   }
 
   .c-ledger-area {
     flex: 7;
     display: flex;
     flex-direction: column;
-    overflow: hidden;
-    border-right: 1px solid var(--border-subtle);
+    min-width: 0;
     background: var(--surface);
+    border-right: 1px solid var(--border-subtle);
   }
 
   .c-summary-area {
     flex: 3;
     display: flex;
     flex-direction: column;
+    min-height: 0; /* Prevents sidebar from pushing layout */
     background: var(--surface-elevated);
     padding: var(--space-6);
     gap: var(--space-6);
     border-left: 1px solid var(--border-subtle);
-    box-shadow: -10px 0 30px rgba(0,0,0,0.1);
+    box-shadow: -10px 0 30px var(--aside-glow);
     z-index: 10;
+    overflow-y: auto; /* Allow sidebar itself to scroll if content is too tall */
   }
 
   .c-ledger-header {
@@ -447,12 +622,13 @@
 
   .c-summary-card {
     padding: var(--space-8);
-    background: var(--background);
-    border: 1px solid var(--border-subtle);
-    border-radius: var(--radius-xl);
+    background: var(--surface); /* Pure White for contrast */
+    border: 1px solid var(--border-default); /* Stronger border */
+    border-radius: var(--radius-md);
     display: flex;
     flex-direction: column;
     gap: var(--space-4);
+    box-shadow: var(--shadow-sm);
   }
 
   .c-summary__total {

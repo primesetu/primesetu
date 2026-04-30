@@ -245,7 +245,7 @@ export function GlobalF2SearchOverlay() {
           onClick={e => e.stopPropagation()}
         >
           {/* Header */}
-          <div className="flex items-center gap-4 px-6 py-4 bg-[#1a2340]">
+          <div className="flex items-center gap-4 px-6 py-4 bg-[var(--navy-deep)]">
             {cfg.icon}
             <div className="flex flex-col">
               <span className="text-amber-400 text-[10px] font-black uppercase tracking-widest">[F2] Context Search</span>

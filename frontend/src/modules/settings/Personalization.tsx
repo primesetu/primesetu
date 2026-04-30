@@ -228,9 +228,9 @@ export default function Personalization() {
           animate={{ opacity: 1 }}
           className="p-4 border border-border rounded-xl bg-emerald-50 text-sm text-emerald-900 flex items-start gap-3"
         >
-          <Monitor className="w-5 h-5 mt-0.5 shrink-0 text-[#008c85]" />
+          <Monitor className="w-5 h-5 mt-0.5 shrink-0 text-[var(--teal-primary)]" />
           <div>
-            <strong className="text-[#008c85]">Institutional Mode Active</strong> — All animations disabled for maximum speed.
+            <strong className="text-[var(--teal-primary)]">Institutional Mode Active</strong> — All animations disabled for maximum speed.
             Fonts set to Segoe UI. Headers use SMRITI Institutional Teal.
             Hotkey labels are locked to Golden Amber.
           </div>

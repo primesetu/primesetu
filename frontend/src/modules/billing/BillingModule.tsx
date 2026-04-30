@@ -16,7 +16,9 @@ import {
   Info,
   RefreshCw,
   ShieldCheck,
-  History
+  History,
+  Maximize2,
+  Minimize2
 } from 'lucide-react'
 import { api } from '@/api/client'
 import DayEndModule from './DayEndModule'
@@ -271,7 +273,9 @@ export default function BillingModule() {
     }
   }, [customerMobile])
 
-  // ── LOGIC ──
+  const [isExpanded, setIsExpanded] = useState(false)
+  
+  // ── CART LOGIC ──
   const playChime = () => {
     try {
       const audio = new Audio('https://assets.mixkit.co/active_storage/sfx/2869/2869-preview.mp3')
@@ -509,7 +513,7 @@ export default function BillingModule() {
   const balanceRupees = toRupees(netPayablePaise) - paidTotalRupees
 
   return (
-    <div id="page-billing" className="c-billing-layout">
+    <div id="page-billing" className={cn("c-billing-layout", isExpanded && "c-billing-layout--expanded")}>
       {/* ── PRINTING LAYERS ── */}
       {printFormat === 'thermal' && <ThermalReceipt bill={billToPrint} onPrinted={() => setBillToPrint(null)} />}
       {printFormat === 'a4' && <TaxInvoiceA4 bill={billToPrint} onPrinted={() => setBillToPrint(null)} />}
@@ -530,309 +534,311 @@ export default function BillingModule() {
         )}
       </AnimatePresence>
 
-      <main className="c-ledger-area">
-        {/* ── TRANSACTION HEADER (SHOPER 9 PARITY) ── */}
-        <div className="flex items-end gap-4 p-4 bg-[var(--surface)] border-b border-[var(--border-saffron)] border-t-2 border-[var(--accent-light)] overflow-x-auto">
-           <div className="flex flex-col gap-1 w-[100px]">
-              <Label className="text-[9px] font-black uppercase text-[var(--text-tertiary)] tracking-widest">Bill Type</Label>
-              <Select value={billType} onChange={e => setBillType(e.target.value as any)} className="h-9 bg-[var(--background)] text-xs border-[var(--border-subtle)]">
-                 <option>Product</option>
-                 <option>Service</option>
-              </Select>
-           </div>
-
-           <div className="flex flex-col gap-1 w-[100px]">
-              <Label className="text-[9px] font-black uppercase text-[var(--text-tertiary)] tracking-widest">Trans Type</Label>
-              <Select value={transType} onChange={e => setTransType(e.target.value as any)} className="h-9 bg-[var(--background)] text-xs border-[var(--border-subtle)]">
-                 <option>Cash</option>
-                 <option>Credit</option>
-              </Select>
-           </div>
-
-           <div className="flex flex-col gap-1 w-[120px]">
-              <Label className="text-[9px] font-black uppercase text-[var(--text-tertiary)] tracking-widest">Bill Number</Label>
-              <div className="h-9 px-3 bg-[var(--background)] flex items-center border border-[var(--border-subtle)] rounded text-xs font-bold text-[var(--accent)]">
-                 {isSuspended ? "RECALLED" : "NEW BILL"}
-              </div>
-           </div>
-           
-           <div className="flex flex-col gap-1 flex-1 min-w-[200px]">
-              <Label className="text-[9px] font-black uppercase text-[var(--text-tertiary)] tracking-widest">Customer (Code / Mobile)</Label>
-              <div className="flex gap-2">
-                <input 
-                  type="text" 
-                  value={customerMobile}
-                  onChange={e => setCustomerMobile(e.target.value)}
-                  placeholder="Scan/Type..."
-                  className="h-9 px-3 bg-[var(--background)] border border-[var(--border-subtle)] rounded text-xs font-black w-[120px] outline-none focus:border-[var(--accent)]"
-                />
-                <div className="h-9 px-3 bg-[var(--background)]/50 flex items-center border border-[var(--border-subtle)] rounded text-[10px] font-bold text-[var(--text-primary)] flex-1 truncate">
-                   {customerInfo?.name || 'WALK-IN CUSTOMER'}
-                </div>
-              </div>
-           </div>
-
-           <div className="flex flex-col gap-1 w-[160px]">
-              <Label className="text-[9px] font-black uppercase text-[var(--text-tertiary)] tracking-widest">Global Sales Staff</Label>
-              <Select 
-                 value={salesperson} 
-                 onChange={e => setSalesperson(e.target.value)}
-                 className="h-9 bg-[var(--background)] text-xs border-[var(--border-subtle)]"
-              >
-                <option value="">Select...</option>
-                <option value="S01">Jawahar M (S01)</option>
-                <option value="S02">Anshul K (S02)</option>
-              </Select>
-           </div>
-
-           <div className="flex gap-2 mb-0.5">
-              <Button 
-                variant="secondary" 
-                className="h-9 px-3 text-[10px] font-black bg-[var(--background)] relative group" 
-                onClick={() => setShowRecallModal(true)}
-              >
-                 RECALL [F12]
-                 {suspendedBills.length > 0 && (
-                   <span className="absolute -top-1 -right-1 w-4 h-4 bg-[var(--accent)] text-[var(--background)] rounded-full flex items-center justify-center text-[8px] animate-pulse">
-                     {suspendedBills.length}
-                   </span>
-                 )}
-              </Button>
-              <Button variant="secondary" className="h-9 px-3 text-[10px] font-black bg-[var(--background)]">
-                 PDT IMPORT
-              </Button>
-           </div>
-        </div>
-
-        <div className="c-ledger-header">
-           <span className="w-12 text-center">S.No</span>
-           <span className="flex-[2]">Product Protocol / Description</span>
-           <span className="flex-1 text-center">Qty</span>
-           <span className="flex-1 text-right">Unit Price</span>
-           <span className="flex-1 text-right">Disc %</span>
-           <span className="flex-1 text-right">Net Value</span>
-        </div>
-
-        <div className="c-ledger-list">
-          <AnimatePresence initial={false}>
-            {cart.map((item, idx) => {
-              const lineNet = Math.round(item.mrp_paise * item.qty * (1 - item.discount_per / 100))
-              return (
-                <motion.div 
-                  key={item.id} 
-                  initial={{ opacity: 0, height: 0 }} 
-                  animate={{ opacity: 1, height: 60 }} 
-                  exit={{ opacity: 0, height: 0 }}
-                  className={cn("c-ledger-row", idx === cart.length - 1 && "c-ledger-row--active")}
+      <div className="c-billing-main-container">
+        <main className="c-ledger-area">
+          {/* ── TRANSACTION HEADER (SHOPER 9 PARITY) ── */}
+          <div className="grid grid-cols-12 gap-3 p-3 bg-[var(--surface)] border-b border-[var(--accent)]/30 border-t-2 border-[var(--accent)] shadow-sm">
+             <div className="col-span-1.5 flex flex-col gap-1">
+                <Label className="text-[9px] font-bold uppercase text-[var(--accent-dark)] tracking-widest">View Mode</Label>
+                <Button 
+                   onClick={() => setIsExpanded(!isExpanded)}
+                   className={cn(
+                     "h-8 px-2 flex items-center justify-center gap-2 text-[9px] font-bold transition-all",
+                     isExpanded ? "bg-[var(--accent)] text-white" : "bg-[var(--background)]"
+                   )}
                 >
-                  <div className="w-12 text-center text-[10px] font-black text-[var(--text-tertiary)]">{idx + 1}</div>
-                  <div className="flex-[2] flex flex-col justify-center">
-                    <span className="text-sm font-black uppercase text-[var(--text-primary)]">{item.name}</span>
-                    <span className="text-[10px] font-bold text-[var(--accent)] tracking-widest">{item.code}</span>
-                  </div>
-                  <div className="flex-1 text-center font-bold text-lg">{item.qty}</div>
-                  <div className="flex-1 text-right text-[var(--text-secondary)] font-mono text-sm">₹{formatDecimal(item.mrp_paise)}</div>
-                  <div className="flex-1 text-right text-[var(--danger)] font-bold text-sm">{item.discount_per}%</div>
-                  <div className="flex-1 text-right font-black text-lg font-mono">₹{formatDecimal(lineNet)}</div>
-                </motion.div>
-              )
-            })}
-          </AnimatePresence>
-          {cart.length === 0 && (
-            <div className="h-full flex flex-col items-center justify-center opacity-5 grayscale pointer-events-none">
-               <ScanBarcode size={120} strokeWidth={0.5} />
-               <Text variant="h1" className="tracking-[1em] mt-8">Awaiting Scan</Text>
-            </div>
-          )}
-        </div>
+                   {isExpanded ? <Minimize2 size={14} /> : <Maximize2 size={14} />}
+                   {isExpanded ? "FIXED" : "EXPAND"}
+                </Button>
+             </div>
 
-        {/* Barcode Input Bar */}
-        <div className="p-[var(--space-6)] bg-[var(--surface-elevated)] border-t border-[var(--border-subtle)]">
-           <div className="relative">
-              <ScanBarcode className="absolute left-6 top-1/2 -translate-y-1/2 text-[var(--accent)]" size={24} />
-              <input 
-                ref={searchRef}
-                autoFocus
-                value={q}
-                onChange={e => setQ(e.target.value)}
-                onKeyDown={e => e.key === 'Enter' && handleBarcodeSearch(q)}
-                placeholder="[F1] SCAN BARCODE OR PROTOCOL (e.g. 5*890123)..."
-                className="c-input--barcode w-full pl-16 pr-8 h-[var(--input-h)] bg-[var(--background)] text-[var(--text-primary)] border-2 border-[var(--accent)] rounded-[var(--radius-lg)] outline-none"
-              />
-           </div>
-        </div>
-      </main>
+             <div className="col-span-2 flex flex-col gap-1">
+                <Label className="text-[9px] font-bold uppercase text-[var(--accent-dark)] tracking-widest">Bill Type</Label>
+                <Select value={billType} onChange={e => setBillType(e.target.value as any)} className="h-8 bg-[var(--background)] text-xs border-[var(--border-default)]">
+                   <option>Product</option>
+                   <option>Service</option>
+                </Select>
+             </div>
 
-      <aside className="c-summary-area">
-        <div className="c-summary-card">
-           <div className="flex items-center gap-[var(--space-4)] mb-[var(--space-2)]">
-              <div className="w-10 h-10 bg-[var(--accent)]/10 rounded-[var(--radius-lg)] flex items-center justify-center text-[var(--accent)]">
-                 <Receipt size={20} />
-              </div>
-              <Text variant="h3" className="uppercase tracking-widest">Transaction Summary</Text>
-           </div>
+             <div className="col-span-2 flex flex-col gap-1">
+                <Label className="text-[9px] font-bold uppercase text-[var(--accent-dark)] tracking-widest">Trans Type</Label>
+                <Select value={transType} onChange={e => setTransType(e.target.value as any)} className="h-8 bg-[var(--background)] text-xs border-[var(--border-default)]">
+                   <option>Cash</option>
+                   <option>Credit</option>
+                </Select>
+             </div>
 
-           {/* Document Remarks */}
-           <div className="mt-4 mb-2">
-              <Label className="text-[9px] font-black uppercase text-[var(--text-tertiary)] mb-1 block">Document Remarks</Label>
-              <textarea 
-                value={remarks}
-                onChange={e => setRemarks(e.target.value)}
-                placeholder="Enter comments..."
-                className="w-full h-12 p-2 bg-[var(--background)]/30 border border-[var(--border-subtle)] rounded text-[10px] outline-none focus:border-[var(--accent)] resize-none"
-              />
-           </div>
-           
-           <div className="space-y-3 mt-4">
-              <div className="flex justify-between items-center text-[10px] font-black">
-                 <span className="text-[var(--text-tertiary)] uppercase">Total No. of Items</span>
-                 <span className="bg-[var(--surface-elevated)] px-2 py-0.5 rounded">{cart.length}</span>
-              </div>
-              <div className="flex justify-between items-center text-[10px] font-black">
-                 <span className="text-[var(--text-tertiary)] uppercase">Total Quantity</span>
-                 <span className="bg-[var(--surface-elevated)] px-2 py-0.5 rounded">{cart.reduce((s,i)=>s+i.qty, 0)}</span>
-              </div>
-
-              <hr className="border-[var(--border-subtle)] opacity-50" />
-
-              <div className="flex justify-between items-center">
-                 <span className="text-[10px] font-black text-[var(--text-tertiary)] uppercase">Sales Value</span>
-                 <span className="font-mono text-xs">₹{formatDecimal(totals.subtotal)}</span>
-              </div>
-              <div className="flex justify-between items-center text-[var(--danger)]">
-                 <span className="text-[10px] font-black uppercase">Item Level Disc.</span>
-                 <span className="font-mono text-xs">-₹{formatDecimal(totals.discount)}</span>
-              </div>
-              <div className="flex justify-between items-center text-[var(--danger)] opacity-50">
-                 <span className="text-[10px] font-black uppercase">Bill Discount</span>
-                 <span className="font-mono text-xs">₹0.00</span>
-              </div>
-              <div className="flex justify-between items-center">
-                 <span className="text-[10px] font-black text-[var(--text-tertiary)] uppercase">Total Tax (GST)</span>
-                 <span className="font-mono text-xs">₹{formatDecimal(totals.tax)}</span>
-              </div>
-              {totals.rounding !== 0 && (
-                <div className="flex justify-between items-center text-[var(--text-tertiary)] italic">
-                   <span className="text-[10px] font-black uppercase">Bill Round Off</span>
-                   <span className="font-mono text-xs">{totals.rounding > 0 ? '+' : ''}₹{formatDecimal(totals.rounding)}</span>
+             <div className="col-span-2 flex flex-col gap-1">
+                <Label className="text-[9px] font-bold uppercase text-[var(--accent-dark)] tracking-widest">Bill Number</Label>
+                <div className="h-8 px-3 bg-[var(--background)] flex items-center border border-[var(--border-default)] rounded text-xs font-bold text-[var(--accent)]">
+                   {isSuspended ? "RECALLED" : "NEW BILL"}
                 </div>
-              )}
-           </div>
-
-           <hr className="border-[var(--border-subtle)] my-[var(--space-4)]" />
-
-           <div className="text-right">
-              <Text variant="xs" className="font-black text-[var(--accent)] uppercase tracking-[0.3em] mb-1">Net Amount</Text>
-              <h1 className="c-summary__total text-3xl font-black text-white">₹{formatDecimal(netPayablePaise)}</h1>
-           </div>
-        </div>
-
-        <div className="flex-1 flex flex-col gap-4 mt-auto">
-            <Card className="p-4 bg-[var(--background)]/40 border-[var(--border-subtle)]">
-               <div className="flex justify-between items-center mb-3">
-                  <Text variant="h3" className="text-[10px] font-black uppercase tracking-[0.2em]">Settlement Protocol</Text>
-                  <div className="flex gap-2">
-                     <Badge variant="muted" className="h-5 text-[9px]">F7 CASH</Badge>
-                     <Badge variant="muted" className="h-5 text-[9px]">F8 MODAL</Badge>
+             </div>
+             
+             <div className="col-span-4 flex flex-col gap-1">
+                <Label className="text-[9px] font-bold uppercase text-[var(--accent-dark)] tracking-widest">Customer (Code / Mobile)</Label>
+                <div className="flex gap-2">
+                  <input 
+                    type="text" 
+                    value={customerMobile}
+                    onChange={e => setCustomerMobile(e.target.value)}
+                    placeholder="Scan/Type..."
+                    className="h-8 px-3 bg-[var(--background)] border border-[var(--border-default)] rounded text-xs font-black w-[120px] outline-none focus:border-[var(--accent)]"
+                  />
+                  <div className="h-8 px-3 bg-[var(--background)]/50 flex items-center border border-[var(--border-default)] rounded text-[10px] font-bold text-[var(--text-primary)] flex-1 truncate">
+                     {customerInfo?.name || 'WALK-IN CUSTOMER'}
                   </div>
-               </div>
+                </div>
+             </div>
 
-               <div className="space-y-3">
-                  {payLines.map((pl, idx) => (
-                     <div key={idx} className="space-y-2 p-2 bg-[var(--surface)] rounded border border-[var(--border-subtle)]">
-                        <div className="flex gap-2">
-                           <Select 
-                              value={pl.mode} 
-                              className="w-[100px] h-9 bg-[var(--background)] text-xs font-black" 
-                              onChange={e => setPayLines(prev => prev.map((p,i) => i===idx ? {...p, mode: e.target.value as PayMode} : p))}
-                           >
-                              {['CASH','UPI','CARD','CHQ','GV','CREDIT'].map(m => <option key={m}>{m}</option>)}
-                           </Select>
-                           <Input 
-                              type="number" 
-                              value={pl.amount || ''} 
-                              placeholder="Amount..."
-                              onChange={e => setPayLines(prev => prev.map((p,i) => i===idx ? {...p, amount: Number(e.target.value)} : p))} 
-                              className="flex-1 h-9 text-right font-mono text-sm font-black bg-[var(--background)]" 
-                           />
-                        </div>
+             <div className="col-span-2 flex flex-col gap-1">
+                <Label className="text-[9px] font-bold uppercase text-[var(--accent-dark)] tracking-widest">Global Sales Staff</Label>
+                <Select 
+                   value={salesperson} 
+                   onChange={e => setSalesperson(e.target.value)}
+                   className="h-8 bg-[var(--background)] text-xs border-[var(--border-default)]"
+                >
+                  <option value="">Select...</option>
+                  <option value="S01">Jawahar M (S01)</option>
+                  <option value="S02">Anshul K (S02)</option>
+                </Select>
+             </div>
 
-                        {/* Metadata per mode */}
-                        {pl.mode === 'CARD' && (
-                           <input 
-                              placeholder="Card No (Last 4) / Auth Code..." 
-                              className="w-full h-8 px-2 bg-[var(--background)] border border-[var(--border-subtle)] rounded text-[10px] outline-none"
-                              onChange={e => setPayLines(prev => prev.map((p,i) => i===idx ? {...p, metadata: {...p.metadata, card_no: e.target.value}} : p))}
-                           />
-                        )}
-                        {pl.mode === 'CHQ' && (
-                           <input 
-                              placeholder="Cheque No / Date..." 
-                              className="w-full h-8 px-2 bg-[var(--background)] border border-[var(--border-subtle)] rounded text-[10px] outline-none"
-                              onChange={e => setPayLines(prev => prev.map((p,i) => i===idx ? {...p, metadata: {...p.metadata, cheque_no: e.target.value}} : p))}
-                           />
-                        )}
-                        {pl.mode === 'GV' && (
-                           <input 
-                              placeholder="Voucher Code / Prefix..." 
-                              className="w-full h-8 px-2 bg-[var(--background)] border border-[var(--border-subtle)] rounded text-[10px] outline-none"
-                              onChange={e => setPayLines(prev => prev.map((p,i) => i===idx ? {...p, metadata: {...p.metadata, voucher_no: e.target.value}} : p))}
-                           />
-                        )}
-                     </div>
-                  ))}
-               </div>
+             {/* Actions Row */}
+             <div className="col-span-12 flex items-center gap-3 mt-1">
+                <div className="flex gap-1.5">
+                   <Button 
+                     variant="secondary" 
+                     className="h-7 px-3 text-[9px] font-bold bg-[var(--background)] relative group" 
+                     onClick={() => setShowRecallModal(true)}
+                   >
+                      RECALL [F12]
+                      {suspendedBills.length > 0 && (
+                        <span className="absolute -top-1 -right-1 w-3 h-3 bg-[var(--accent)] text-[var(--background)] rounded-full flex items-center justify-center text-[7px] animate-pulse">
+                          {suspendedBills.length}
+                        </span>
+                      )}
+                   </Button>
+                   <Button variant="secondary" className="h-7 px-3 text-[9px] font-bold bg-[var(--background)]">
+                      PDT IMPORT
+                   </Button>
+                </div>
+                <div className="h-px flex-1 bg-[var(--border-subtle)] opacity-50"></div>
+                <div className="text-[9px] font-black uppercase text-[var(--accent)] tracking-widest opacity-60">
+                    SMRITI-OS POS PROTOCOL v2.4
+                </div>
+             </div>
+          </div>
 
-               <div className="mt-4 flex justify-between items-center bg-[var(--accent)]/5 p-2 rounded border border-[var(--accent)]/20">
-                  <span className="text-[9px] font-black uppercase text-[var(--text-tertiary)]">Balance Receivable</span>
-                  <span className={cn("font-mono text-sm font-black", balanceRupees < 0 ? "text-[var(--success)]" : "text-[var(--accent)]")}>
-                     {balanceRupees < 0 ? `CHANGE: ₹${Math.abs(balanceRupees).toFixed(2)}` : `₹${balanceRupees.toFixed(2)}`}
-                  </span>
-               </div>
-            </Card>
+          <div className="c-ledger-header text-[var(--accent-dark)] font-bold uppercase tracking-widest text-[10px]">
+             <span className="w-12 text-center">S.No</span>
+             <span className="flex-[2]">Product Protocol / Description</span>
+             <span className="flex-1 text-center">Qty</span>
+             <span className="flex-1 text-right">Unit Price</span>
+             <span className="flex-1 text-right">Disc %</span>
+             <span className="flex-1 text-right">Net Value</span>
+          </div>
 
-            <div className="flex gap-2">
-               <Button 
-                  onClick={handleExactCash}
-                  disabled={processing || !cart.length}
-                  className="flex-1 h-16 bg-[var(--surface-elevated)] border-2 border-[var(--border-subtle)] hover:border-[var(--accent)] text-[var(--text-primary)] rounded-[var(--radius-lg)] flex flex-col items-center justify-center gap-1 group transition-all"
-               >
-                  <span className="text-xs font-black uppercase">Exact Cash</span>
-                  <span className="text-[8px] font-black opacity-40 group-hover:opacity-100">[F7] Auto-Pay</span>
-               </Button>
-               
-               <Button 
-                  onClick={handleFinalize}
-                  disabled={processing || !cart.length || balanceRupees > 0}
-                  className="flex-[2] h-16 rounded-[var(--radius-lg)] bg-[var(--accent)] text-[var(--background)] flex flex-col items-center justify-center gap-0.5 shadow-xl shadow-[var(--accent)]/20 hover:scale-[1.02] active:scale-[0.98] transition-all"
-               >
-                  {processing ? <RefreshCw className="animate-spin" /> : (
-                  <>
-                     <span className="text-sm font-black uppercase tracking-tight">Update Bill [F9]</span>
-                     <span className="text-[8px] font-black opacity-60 uppercase tracking-widest">Execute Protocol</span>
-                  </>
-                  )}
-               </Button>
-            </div>
-        </div>
-      </aside>
+          <div className="c-ledger-list">
+            <AnimatePresence initial={false}>
+              {cart.map((item, idx) => {
+                const lineNet = Math.round(item.mrp_paise * item.qty * (1 - item.discount_per / 100))
+                return (
+                  <motion.div 
+                    key={item.id} 
+                    initial={{ opacity: 0, height: 0 }} 
+                    animate={{ opacity: 1, height: 60 }} 
+                    exit={{ opacity: 0, height: 0 }}
+                    className={cn("c-ledger-row", idx === cart.length - 1 && "c-ledger-row--active")}
+                  >
+                    <div className="w-12 text-center text-[10px] font-bold text-[var(--text-tertiary)]">{idx + 1}</div>
+                    <div className="flex-[2] flex flex-col justify-center">
+                      <span className="text-sm font-bold uppercase text-[var(--text-primary)]">{item.name}</span>
+                      <span className="text-[10px] font-bold text-[var(--accent)] tracking-widest">{item.code}</span>
+                    </div>
+                    <div className="flex-1 text-center font-bold text-lg">{item.qty}</div>
+                    <div className="flex-1 text-right text-[var(--text-secondary)] font-mono text-sm">₹{formatDecimal(item.mrp_paise)}</div>
+                    <div className="flex-1 text-right text-[var(--danger)] font-bold text-sm">{item.discount_per}%</div>
+                    <div className="flex-1 text-right font-bold text-lg font-mono">₹{formatDecimal(lineNet)}</div>
+                  </motion.div>
+                )
+              })}
+            </AnimatePresence>
+            {cart.length === 0 && (
+              <div className="h-full flex flex-col items-center justify-center opacity-20 grayscale pointer-events-none">
+                 <ScanBarcode size={120} strokeWidth={0.5} className="text-[var(--accent-dark)]" />
+                 <Text variant="h1" className="tracking-[1em] mt-8 text-[var(--accent-dark)]">Awaiting Scan</Text>
+              </div>
+            )}
+          </div>
 
-      {/* Hotkey Footer */}
-      <div className="fixed bottom-0 left-0 w-[70%] h-[var(--status-bar-h)] bg-[var(--surface-elevated)] border-t border-[var(--border-subtle)] px-6 flex items-center justify-between text-[10px] font-black uppercase tracking-widest text-[var(--text-tertiary)]">
-         <div className="flex gap-[var(--space-6)]">
-            <span>F1 Barcode</span>
-            <span>F2 Search</span>
-            <span>F7 Exact Cash</span>
-            <span>F8 Multi-Mode</span>
-            <span>F9 Finalize</span>
-            <span>DEL Remove</span>
-            <span>Esc Reset</span>
+          {/* Barcode Input Bar */}
+          <div className="p-3 bg-[var(--surface-elevated)] border-t-2 border-[var(--accent)]/40 shadow-inner">
+             <div className="relative">
+                <ScanBarcode className="absolute left-4 top-1/2 -translate-y-1/2 text-[var(--accent)]" size={20} />
+                <input 
+                  ref={searchRef}
+                  autoFocus
+                  value={q}
+                  onChange={e => setQ(e.target.value)}
+                  onKeyDown={e => e.key === 'Enter' && handleBarcodeSearch(q)}
+                  placeholder="[F1] SCAN BARCODE OR PROTOCOL (e.g. 5*890123)..."
+                  className="c-input--barcode w-full pl-12 pr-6 h-10 bg-[var(--background)] text-[var(--text-primary)] border-2 border-[var(--accent)] rounded-lg outline-none text-xs"
+                />
+             </div>
+          </div>
+        </main>
+
+        <aside className="c-summary-area">
+          <div className="c-summary-card">
+             <div className="flex items-center gap-[var(--space-4)] mb-[var(--space-2)]">
+                <div className="w-10 h-10 bg-[var(--accent)]/10 rounded-[var(--radius-lg)] flex items-center justify-center text-[var(--accent)]">
+                   <Receipt size={20} />
+                </div>
+                <Text variant="h3" className="uppercase tracking-widest">Transaction Summary</Text>
+             </div>
+
+             {/* Document Remarks */}
+             <div className="mt-4 mb-2">
+                <Label className="text-[9px] font-bold uppercase text-[var(--text-tertiary)] mb-1 block">Document Remarks</Label>
+                <textarea 
+                  value={remarks}
+                  onChange={e => setRemarks(e.target.value)}
+                  placeholder="Enter comments..."
+                  className="w-full h-12 p-2 bg-[var(--background)]/30 border border-[var(--border-default)] rounded text-[10px] outline-none focus:border-[var(--accent)] resize-none"
+                />
+             </div>
+             
+             <div className="space-y-3 mt-4">
+                <div className="flex justify-between items-center text-[10px] font-bold">
+                   <span className="text-[var(--text-tertiary)] uppercase">Total No. of Items</span>
+                   <span className="bg-[var(--surface-elevated)] px-2 py-0.5 rounded">{cart.length}</span>
+                </div>
+                <div className="flex justify-between items-center text-[10px] font-bold">
+                   <span className="text-[var(--text-tertiary)] uppercase">Total Quantity</span>
+                   <span className="bg-[var(--surface-elevated)] px-2 py-0.5 rounded">{cart.reduce((s,i)=>s+i.qty, 0)}</span>
+                </div>
+
+                <hr className="border-[var(--border-subtle)] opacity-50" />
+
+                <div className="flex justify-between items-center">
+                   <span className="text-[10px] font-bold text-[var(--text-tertiary)] uppercase">Sales Value</span>
+                   <span className="font-mono text-xs">₹{formatDecimal(totals.subtotal)}</span>
+                </div>
+                <div className="flex justify-between items-center text-[var(--danger)]">
+                   <span className="text-[10px] font-bold uppercase">Item Level Disc.</span>
+                   <span className="font-mono text-xs">-₹{formatDecimal(totals.discount)}</span>
+                </div>
+                <div className="flex justify-between items-center text-[var(--danger)] opacity-50">
+                   <span className="text-[10px] font-bold uppercase">Bill Discount</span>
+                   <span className="font-mono text-xs">₹0.00</span>
+                </div>
+                <div className="flex justify-between items-center">
+                   <span className="text-[10px] font-bold text-[var(--text-tertiary)] uppercase">Total Tax (GST)</span>
+                   <span className="font-mono text-xs">₹{formatDecimal(totals.tax)}</span>
+                </div>
+                {totals.rounding !== 0 && (
+                  <div className="flex justify-between items-center text-[var(--text-tertiary)] italic">
+                     <span className="text-[10px] font-bold uppercase">Bill Round Off</span>
+                     <span className="font-mono text-xs">{totals.rounding > 0 ? '+' : ''}₹{formatDecimal(totals.rounding)}</span>
+                  </div>
+                )}
+             </div>
+
+             <hr className="border-[var(--border-subtle)] my-[var(--space-4)]" />
+
+             <div className="text-right">
+                <Text variant="xs" className="font-bold text-[var(--accent)] uppercase tracking-[0.3em] mb-1">Net Amount</Text>
+                <h1 className="c-summary__total text-3xl font-bold text-[var(--accent-dark)]">₹{formatDecimal(netPayablePaise)}</h1>
+             </div>
+          </div>
+
+          <div className="flex-1 flex flex-col gap-4 mt-auto">
+              <Card className="p-4 bg-[var(--background)]/40 border-[var(--border-default)]">
+                 <div className="flex justify-between items-center mb-3">
+                    <Text variant="h3" className="text-[10px] font-bold uppercase tracking-[0.2em]">Settlement Protocol</Text>
+                    <div className="flex gap-2">
+                       <Badge variant="muted" className="h-5 text-[9px]">F7 CASH</Badge>
+                       <Badge variant="muted" className="h-5 text-[9px]">F8 MODAL</Badge>
+                    </div>
+                 </div>
+
+                 <div className="space-y-3">
+                    {payLines.map((pl, idx) => (
+                       <div key={idx} className="space-y-2 p-2 bg-[var(--surface)] rounded border border-[var(--border-default)]">
+                          <div className="flex gap-2">
+                             <Select 
+                                value={pl.mode} 
+                                className="w-[100px] h-9 bg-[var(--background)] text-xs font-bold" 
+                                onChange={e => setPayLines(prev => prev.map((p,i) => i===idx ? {...p, mode: e.target.value as PayMode} : p))}
+                             >
+                                {['CASH','UPI','CARD','CHQ','GV','CREDIT'].map(m => <option key={m}>{m}</option>)}
+                             </Select>
+                             <Input 
+                                type="number" 
+                                value={pl.amount || ''} 
+                                placeholder="Amount..."
+                                onChange={e => setPayLines(prev => prev.map((p,i) => i===idx ? {...p, amount: Number(e.target.value)} : p))} 
+                                className="flex-1 h-9 text-right font-mono text-sm font-bold bg-[var(--background)]" 
+                             />
+                          </div>
+                       </div>
+                    ))}
+                 </div>
+
+                 <div className="mt-4 flex justify-between items-center bg-[var(--accent)]/5 p-2 rounded border border-[var(--accent)]/20">
+                    <span className="text-[9px] font-bold uppercase text-[var(--text-tertiary)]">Balance Receivable</span>
+                    <span className={cn("font-mono text-sm font-bold", balanceRupees < 0 ? "text-[var(--success)]" : "text-[var(--accent)]")}>
+                       {balanceRupees < 0 ? `CHANGE: ₹${Math.abs(balanceRupees).toFixed(2)}` : `₹${balanceRupees.toFixed(2)}`}
+                    </span>
+                 </div>
+              </Card>
+
+              <div className="flex gap-3 mt-auto">
+                 <Button 
+                    onClick={handleExactCash}
+                    disabled={processing || !cart.length}
+                    className="flex-1 h-12 bg-[var(--surface-elevated)] border-[var(--border-default)] hover:border-[var(--accent)] text-[var(--text-primary)] rounded-md flex flex-col items-center justify-center gap-0.5 transition-all"
+                 >
+                    <span className="text-[10px] font-bold uppercase">Exact Cash</span>
+                    <span className="text-[7px] font-bold opacity-60 uppercase tracking-widest">[F7]</span>
+                 </Button>
+                 <Button 
+                    onClick={handleFinalize}
+                    disabled={processing || !cart.length}
+                    className="flex-[2] h-12 bg-[var(--accent-dark)] text-[var(--background)] rounded-md flex flex-col items-center justify-center gap-0.5 shadow-lg shadow-[var(--accent)]/10 transition-all border-none"
+                 >
+                    {processing ? (
+                      <RefreshCw className="animate-spin" size={16} />
+                    ) : (
+                    <>
+                       <span className="text-xs font-bold uppercase">Update Bill [F9]</span>
+                       <span className="text-[8px] font-bold opacity-60 uppercase tracking-widest">Execute Protocol</span>
+                    </>
+                    )}
+                 </Button>
+              </div>
+          </div>
+        </aside>
+      </div>
+
+      {/* Hotkey Footer (Now part of the flex layout, not fixed) */}
+      <div className="flex-shrink-0 h-10 bg-[var(--surface-elevated)] border-t border-[var(--border-subtle)] px-6 flex items-center justify-between text-[10px] font-bold uppercase tracking-widest text-[var(--text-tertiary)]">
+         <div className="flex gap-8">
+            <span className="flex items-center gap-1.5"><kbd className="bg-[var(--background)] px-1 rounded border border-[var(--border-subtle)]">F1</kbd> Barcode</span>
+            <span className="flex items-center gap-1.5"><kbd className="bg-[var(--background)] px-1 rounded border border-[var(--border-subtle)]">F2</kbd> Search</span>
+            <span className="flex items-center gap-1.5"><kbd className="bg-[var(--background)] px-1 rounded border border-[var(--border-subtle)]">F7</kbd> Exact Cash</span>
+            <span className="flex items-center gap-1.5"><kbd className="bg-[var(--background)] px-1 rounded border border-[var(--border-subtle)]">F8</kbd> Multi-Mode</span>
+            <span className="flex items-center gap-1.5"><kbd className="bg-[var(--background)] px-1 rounded border border-[var(--border-subtle)]">F9</kbd> Finalize</span>
+            <span className="flex items-center gap-1.5"><kbd className="bg-[var(--background)] px-1 rounded border border-[var(--border-subtle)]">DEL</kbd> Remove</span>
+            <span className="flex items-center gap-1.5"><kbd className="bg-[var(--background)] px-1 rounded border border-[var(--border-subtle)]">Esc</kbd> Reset</span>
          </div>
-         <div className="flex items-center gap-4 text-[var(--accent)]">
-            <ShieldCheck size={12} />
-            Sovereign Node: MUM-X01
+         <div className="flex items-center gap-4 text-[var(--accent)] font-bold">
+            <ShieldCheck size={14} className="animate-pulse" />
+            <span className="opacity-70">MUM-X01 · TERMINAL ACTIVE · SMRITI NODE</span>
          </div>
       </div>
+
       {/* ── SUSPENDED BILLS RECALL MODAL ── */}
       {showRecallModal && (
         <Portal>

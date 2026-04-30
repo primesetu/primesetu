@@ -275,7 +275,7 @@ export default function BulkItemMaster({ onClose }: { onClose: () => void }) {
         </div>
 
         {/* Footer */}
-        <div className="p-8 bg-[#FAF7F2] border-t border-border flex items-center justify-between">
+        <div className="p-8 bg-[var(--institutional-bg)] border-t border-border flex items-center justify-between">
           <div className="flex gap-10">
             <div className="flex flex-col">
               <span className="text-[9px] font-black text-muted uppercase tracking-widest mb-1">Total Ingested</span>

@@ -82,7 +82,7 @@ export default function SecurityModule() {
                   </button>
                 </div>
               </div>
-              <button className="w-full bg-[#1a2340] text-white py-3 rounded-xl font-black text-[10px] uppercase tracking-widest hover:bg-black transition-all">
+              <button className="w-full bg-[var(--navy-deep)] text-white py-3 rounded-xl font-black text-[10px] uppercase tracking-widest hover:bg-black transition-all">
                 ROTATE MASTER KEYS
               </button>
             </div>

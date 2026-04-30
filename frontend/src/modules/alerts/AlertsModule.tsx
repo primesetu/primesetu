@@ -50,7 +50,7 @@ export default function AlertsModule() {
             </div>
           </div>
 
-          <div className="bg-[#1a2340] p-6 rounded-[2rem] text-white shadow-2xl relative overflow-hidden">
+          <div className="bg-[var(--navy-deep)] p-6 rounded-[2rem] text-white shadow-2xl relative overflow-hidden">
             <div className="absolute top-0 right-0 p-8 opacity-10"><Globe className="w-32 h-32" /></div>
             <div className="text-[9px] font-black text-cyan-400 uppercase tracking-widest mb-2">Network Status</div>
             <div className="text-xl font-serif font-black mb-4">12 Active Nodes</div>

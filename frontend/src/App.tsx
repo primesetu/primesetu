@@ -77,11 +77,17 @@ const SmritiOS: React.FC = () => {
     }
   }, { enableOnFormTags: true, preventDefault: true });
 
-  // GLOBAL NAVIGATION (F3 / Ctrl+K)
-  useHotkeys('f3, ctrl+k, cmd+k', (e) => {
+  // GLOBAL NAVIGATION (F3 / Ctrl+K / Alt+G)
+  useHotkeys('f3, ctrl+k, cmd+k, alt+g', (e) => {
     e.preventDefault();
     setSearchContext(null);
     setIsCommandBarOpen(true);
+  }, { enableOnFormTags: true, preventDefault: true });
+
+  // RIGHT SIDEBAR TOGGLE (Alt+K)
+  useHotkeys('alt+k', (e) => {
+    e.preventDefault();
+    setIsRightCollapsed(prev => !prev);
   }, { enableOnFormTags: true, preventDefault: true });
 
   const handleLogin = (role: string) => {
@@ -167,7 +173,12 @@ const SmritiOS: React.FC = () => {
         <button
           onClick={() => setActiveTab('dashboard')}
           title="Exit Billing [Esc]"
-          className="fixed top-[var(--space-3)] right-[var(--space-4)] z-[var(--z-modal)] text-[9px] font-black text-[var(--text-tertiary)] hover:text-[var(--text-primary)] u-uppercase tracking-widest bg-black/10 hover:bg-black/20 px-[var(--space-4)] py-[var(--space-2)] rounded-full transition-all"
+          className={cn(
+            "fixed top-[var(--space-3)] right-[var(--space-4)] z-[var(--z-modal)] text-[9px] font-black u-uppercase tracking-widest px-[var(--space-4)] py-[var(--space-2)] rounded-full transition-all",
+            theme === 'SMRITI-OS' 
+              ? "bg-white/20 text-white hover:bg-white/30" 
+              : "bg-[var(--surface-elevated)] border border-[var(--border-subtle)] text-[var(--text-tertiary)] hover:text-[var(--text-primary)]"
+          )}
         >
           ✕ Exit Billing
         </button>
@@ -179,6 +190,7 @@ const SmritiOS: React.FC = () => {
   return (
     <div 
       className="flex min-h-screen bg-[var(--background)] text-[var(--text-primary)]"
+      data-theme={theme}
       style={{ 
         '--sw': isCollapsed ? '64px' : '256px',
         '--srw': isRightCollapsed ? '0px' : 'var(--sidebar-right-w)'

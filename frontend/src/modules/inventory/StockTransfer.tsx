@@ -262,7 +262,7 @@ export default function StockTransfer() {
           <div className="glass rounded-[2.5rem] shadow-2xl overflow-hidden min-h-[500px] flex flex-col">
 
             {/* Table Header */}
-            <div className="bg-[#1a2340] px-10 py-6 flex justify-between items-center text-white">
+            <div className="bg-[var(--navy-deep)] px-10 py-6 flex justify-between items-center text-white">
               <h3 className="font-serif font-black uppercase tracking-tight">Transfer Manifesto</h3>
               <button
                 onClick={addRow}

@@ -147,7 +147,7 @@ export default function SchemesModule() {
                 <div className="w-16 h-16 rounded-full bg-bg-float flex items-center justify-center text-white group-hover:bg-brand-gold transition-all shadow-sm">
                    <Plus size={32} />
                 </div>
-                <span className="text-[10px] font-black text-white uppercase tracking-[0.3em]">Launch New Campaign</span>
+                <span className="text-[10px] font-black text-navy uppercase tracking-[0.3em]">Launch New Campaign</span>
               </div>
             </motion.div>
           ) : (
@@ -160,7 +160,7 @@ export default function SchemesModule() {
             >
               <div className="col-span-12 lg:col-span-8 space-y-12">
                  <div className="tesla-card bg-bg-float p-12 border border-brand-navy/20">
-                    <h3 className="text-xs font-black text-white uppercase tracking-[0.4em] mb-12 flex items-center gap-4">
+                    <h3 className="text-xs font-black text-navy uppercase tracking-[0.4em] mb-12 flex items-center gap-4">
                        <ShieldCheck className="text-brand-gold" /> Parameters & Triggers
                     </h3>
                     <div className="grid grid-cols-2 gap-8">
@@ -188,7 +188,7 @@ export default function SchemesModule() {
                  </div>
 
                  <div className="tesla-card bg-bg-float p-12 border border-brand-navy/20">
-                    <h3 className="text-xs font-black text-white uppercase tracking-[0.4em] mb-12 flex items-center gap-4">
+                    <h3 className="text-xs font-black text-navy uppercase tracking-[0.4em] mb-12 flex items-center gap-4">
                        <LayoutGrid className="text-brand-gold" /> Applicable Fleet (Items)
                     </h3>
                     <div className="p-10 bg-bg-elevated rounded-[2rem] border-2 border-dashed border-white/10 flex flex-col items-center justify-center gap-4">

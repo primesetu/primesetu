@@ -75,8 +75,8 @@ const Sidebar: React.FC<SidebarProps> = ({
         className={cn(
           "relative group flex items-center w-full gap-3 px-4 py-2.5 transition-all duration-100 text-left min-h-[44px]", // POS Standards
           isActive
-            ? "bg-[var(--primary)]/10 text-[var(--primary)] font-bold"
-            : "text-[var(--text-secondary)] hover:bg-[var(--surface-elevated)] hover:text-[var(--text-primary)]"
+            ? "bg-white/10 text-[var(--accent)] font-bold"
+            : "text-[var(--aside-text-dim)] hover:bg-white/5 hover:text-[var(--aside-text)]"
         )}
       >
         {/* Active Indicator */}
@@ -122,9 +122,13 @@ const Sidebar: React.FC<SidebarProps> = ({
         animate={{ width: isCollapsed ? 64 : 256 }}
         transition={{ duration: 0.2, ease: [0.16, 1, 0.3, 1] }}
         className={cn(
-          "fixed top-[var(--topbar-h)] left-0 bottom-[var(--status-bar-h,24px)] flex flex-col overflow-hidden z-[var(--z-sidebar)]",
-          "bg-[var(--surface)] border-r border-[var(--border-subtle)]"
+          "fixed top-[var(--topbar-h)] left-0 bottom-[var(--status-bar-h,28px)] flex flex-col overflow-hidden z-[var(--z-sidebar)] transition-all"
         )}
+        style={{ 
+          width: isCollapsed ? 64 : 256,
+          background: 'var(--aside-bg)',
+          boxShadow: `calc(4px * ${isCollapsed ? 0 : 1}) 0 20px var(--aside-glow)`
+        }}
       >
       {/* ── NAVIGATION ── */}
       <div className="flex-1 overflow-y-auto tally-scrollbar py-2">
@@ -142,7 +146,7 @@ const Sidebar: React.FC<SidebarProps> = ({
                 <div key={group} className="mt-2 first:mt-0">
                   <button
                     onClick={() => setExpandedCategories(p => p.includes(group) ? p.filter(x => x !== group) : [...p, group])}
-                    className="w-full flex items-center justify-between px-4 py-2 bg-[var(--primary)]/5 text-[var(--primary)] font-black u-uppercase text-[10px] tracking-widest border-y border-[var(--border-subtle)]"
+                    className="w-full flex items-center justify-between px-4 py-2 bg-white/5 text-[var(--accent)] font-black u-uppercase text-[10px] tracking-widest border-y border-[var(--accent-border)]"
                   >
                     <span>{group}</span>
                     <ChevronDown size={14} className={cn("transition-transform duration-150", !isExpanded && "-rotate-90")} />
@@ -214,7 +218,7 @@ const Sidebar: React.FC<SidebarProps> = ({
       </div>
 
       {/* ── FOOTER / USER ── */}
-      <div className={cn("px-3 py-4 shrink-0 border-t border-[var(--border-subtle)] flex flex-col gap-4", isCollapsed && "items-center")}>
+      <div className={cn("px-3 py-4 shrink-0 border-t border-[var(--border-subtle)] flex flex-col gap-4 text-[var(--aside-text)]", isCollapsed && "items-center")}>
         <div className={cn(isCollapsed && "hidden")}>
           <ThemeToggle />
         </div>
@@ -225,8 +229,8 @@ const Sidebar: React.FC<SidebarProps> = ({
           </div>
           {!isCollapsed && (
             <div className="flex-1 overflow-hidden">
-              <div className="text-sm font-bold text-[var(--text-primary)] truncate leading-tight u-uppercase">{userRole}</div>
-              <div className="text-[9px] text-[var(--text-tertiary)] truncate u-uppercase font-black tracking-widest mt-0.5">Sovereign Guard</div>
+              <div className="text-sm font-bold text-[var(--aside-text)] truncate leading-tight u-uppercase">{userRole}</div>
+              <div className="text-[9px] text-[var(--aside-text-dim)] truncate u-uppercase font-black tracking-widest mt-0.5">Sovereign Guard</div>
             </div>
           )}
         </div>

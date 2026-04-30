@@ -87,7 +87,7 @@ export default function MultiModePayment({
           {/* Modes Sidebar */}
           <div className={cn(
             "w-80 border-r p-8 flex flex-col gap-4",
-            isInstitutional ? "bg-[#F5F5F5] border-border-subtle" : "bg-bg-base/30 border-border-subtle"
+            isInstitutional ? "bg-[var(--surface-subtle)] border-border-subtle" : "bg-bg-base/30 border-border-subtle"
           )}>
              {payments.map((p) => (
                <button 
@@ -177,7 +177,7 @@ export default function MultiModePayment({
                       className={cn(
                         "w-full border-4 rounded-[2.5rem] pl-16 pr-10 py-10 text-5xl font-black outline-none transition-all",
                         isInstitutional 
-                          ? "bg-[#F9F9F9] border-accent/10 focus:border-accent text-accent rounded-none" 
+                          ? "bg-[var(--surface-muted)] border-accent/10 focus:border-accent text-accent rounded-none" 
                           : "bg-bg-base/40 border-white/5 focus:border-accent text-text-primary"
                       )}
                     />
@@ -240,7 +240,7 @@ export default function MultiModePayment({
         <div className={cn(
           "p-10 flex items-center justify-between border-t",
           isInstitutional 
-            ? "bg-[#F0F1F1] text-text-primary border-accent border-t-4" 
+            ? "bg-[var(--surface-subtle)] text-text-primary border-accent border-t-4" 
             : "bg-bg-float text-text-primary border-white/10"
         )}>
            <div className="flex gap-12">

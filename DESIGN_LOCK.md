@@ -1,7 +1,31 @@
 # DESIGN LOCK — PrimeSetu UI System
-> **Version:** 1.0.0 · Locked: 2026-04-27
+> **Version:** 2.0.0 · Updated: 2026-04-30
 > **Authority:** Jawahar R Mallah — System Architect, AITDL Network
 > **Status:** 🔓 UI/UX PATTERNS UNLOCKED — 2026-04-28 (Architect approved)
+
+## ⚡ CURRENT ACTIVE PHASE: PHASE 2
+> Phase 1 (PostgREST) = DEAD. Phase 2 (FastAPI + SQLAlchemy 2) = ONLY STANDARD.
+
+## 🔐 DESIGN LOCK HIERARCHY — CONFLICT RESOLUTION
+
+```
+LEVEL 1 — HARD LOCK (NEVER touch without Architect sign-off):
+  Applies to: --bg-base, --text-primary, --accent, --pos-cta VALUES
+  Violation: Auto-rejected by pre-commit hook.
+
+LEVEL 2 — SOFT LOCK (Adding NEW tokens is allowed with commit note):
+  Applies to: Adding new variables like --navy-deep, --teal-primary to index.css
+  Rule: New token must not override any Level 1 value.
+  Process: Add token → add comment "// SOFT-LOCK ADDITION: [reason]" → commit.
+
+LEVEL 3 — FREE (No approval needed):
+  Applies to: Component-level classes, spacing, layout, border-radius adjustments
+  Rule: Must still use var(--token), no hardcoded hex allowed.
+```
+
+> **When conflict exists between two rules:** Level 1 > Level 2 > Level 3.
+> **When in doubt:** Ask architect before touching Level 1 tokens.
+
 
 > ### 🔓 Unlock Record
 > **Date:** 2026-04-28 · **Approved by:** Jawahar R Mallah

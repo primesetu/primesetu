@@ -32,14 +32,14 @@ export default function DailySalesBook() {
   }, {} as Record<string, number>)
 
   return (
-    <div className="flex flex-col h-full bg-[#f0ede8] font-sans">
+    <div className="flex flex-col h-full bg-[var(--institutional-bg)] font-sans">
       <div className="flex items-center gap-3 px-4 pt-3 pb-2 shrink-0">
         <div className="flex items-center gap-2 mr-2">
-          <div className="w-8 h-8 bg-[#1a2340] rounded-lg flex items-center justify-center">
+          <div className="w-8 h-8 bg-[var(--navy-deep)] rounded-lg flex items-center justify-center">
             <Receipt className="w-4 h-4 text-purple-400"/>
           </div>
           <div>
-            <div className="text-xs font-black text-[#1a2340] uppercase tracking-widest leading-none">Daily Sales Book</div>
+            <div className="text-xs font-black text-[var(--navy-deep)] uppercase tracking-widest leading-none">Daily Sales Book</div>
             <div className="text-[9px] text-gray-400 font-bold">Reports › Sales</div>
           </div>
         </div>
@@ -56,7 +56,7 @@ export default function DailySalesBook() {
 
         <div className="flex-1"/>
 
-        <button className="flex items-center gap-2 bg-[#1a2340] text-white hover:bg-navy font-black text-xs uppercase px-4 py-2 rounded-xl shadow-md transition-all">
+        <button className="flex items-center gap-2 bg-[var(--navy-deep)] text-white hover:bg-navy font-black text-xs uppercase px-4 py-2 rounded-xl shadow-md transition-all">
           <Download className="w-4 h-4"/> Export PDF
         </button>
       </div>

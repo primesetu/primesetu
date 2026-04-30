@@ -70,9 +70,8 @@ export default function TopBar({
         paddingRight: '1rem' 
       }}
     >
-      {/* ── SIDEBAR GAP & BRANDING ── */}
       <div 
-        className="flex items-center px-4 shrink-0 h-full border-r border-white/10"
+        className="flex items-center px-4 shrink-0 h-full transition-all tp-brand-divider"
         style={{ width: 'var(--sw)' }}
       >
         <div className="flex items-center gap-3 overflow-hidden">
@@ -178,7 +177,10 @@ export default function TopBar({
         {theme === 'SMRITI-OS' ? (
           <button
             onClick={() => setIsCommandBarOpen?.(true)}
-            className="flex items-center gap-4 px-6 py-1 bg-black/20 hover:bg-black/30 border border-white/20 transition-all group"
+            className={cn(
+              "flex items-center gap-4 px-6 py-1 border border-white/20 transition-all group",
+              theme === 'SMRITI-OS' ? "bg-white/10 hover:bg-white/20" : "bg-black/20 hover:bg-black/30"
+            )}
           >
             <span className="text-[10px] font-black uppercase tracking-widest text-white/80">Go To</span>
             <div className="h-4 w-px bg-white/20" />
@@ -213,18 +215,18 @@ export default function TopBar({
 
         <button
           onClick={() => setTheme(theme === 'tesla' ? 'SMRITI-OS' : 'tesla')}
-          className="p-2 hover:bg-black/10"
+          className={cn("p-2 transition-colors", theme === 'SMRITI-OS' ? "hover:bg-white/10" : "hover:bg-black/10")}
         >
           <Palette size={15} />
         </button>
 
-        <button className="p-2 hover:bg-black/10">
+        <button className={cn("p-2 transition-colors", theme === 'SMRITI-OS' ? "hover:bg-white/10" : "hover:bg-black/10")}>
           <Bell size={15} />
         </button>
 
         <button
           onClick={() => setActiveTab('settings')}
-          className="p-2 hover:bg-black/10"
+          className={cn("p-2 transition-colors", theme === 'SMRITI-OS' ? "hover:bg-white/10" : "hover:bg-black/10")}
         >
           <Settings size={15} />
         </button>

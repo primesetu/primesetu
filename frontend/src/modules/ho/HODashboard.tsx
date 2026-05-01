@@ -16,7 +16,7 @@ import { cn } from '@/lib/utils'
 
 export default function HODashboard() {
   const { theme } = useTheme();
-  const isInstitutional = theme === 'SMRITI-OS';
+  const isInstitutional = theme === 'LIGHT'
   const [isSyncing, setIsSyncing] = useState(false)
 
   const { data: status } = useQuery({

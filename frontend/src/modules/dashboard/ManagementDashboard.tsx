@@ -70,9 +70,9 @@ export default function ManagementDashboard() {
   ];
 
   const { theme } = useTheme();
-  const isTally = theme === 'SMRITI-OS';
+  const isInstitutional = theme === 'LIGHT'
 
-  if (isTally) {
+  if (isInstitutional) {
     return (
       <div className="flex flex-col tally-scrollbar h-full divide-y divide-white/5 border-b border-white/5 bg-[var(--surface-muted)]">
         {/* ── Institutional Bento Header ── */}
@@ -346,7 +346,7 @@ export default function ManagementDashboard() {
       </div>
 
       {/* ── 4. PREDICTIVE INSIGHTS BAR ── */}
-      {isTally ? (
+      {isInstitutional ? (
         <div className="tp-card flex flex-col md:flex-row items-center justify-between gap-[var(--space-6)] mt-[var(--space-4)]">
           <div className="flex items-center gap-[var(--space-6)]">
             <div className="w-12 h-12 bg-[var(--accent)]/10 flex items-center justify-center border border-[var(--accent)]">

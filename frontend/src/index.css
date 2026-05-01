@@ -138,6 +138,39 @@
     --surface-muted: #F9F9F9;
   }
 
+  /* ═══════════════════════════════════════════════════════
+     🌌 SMRITI-OS (DARK MODE) — OVERRIDES
+     ═══════════════════════════════════════════════════════ */
+  [data-theme="DARK"] {
+    --primary: #3b82f6;
+    --primary-rgb: 59, 130, 246;
+    --background: #0a0c10;
+    --surface: #0f1117;
+    --surface-elevated: #161b22;
+    --surface-container-low: #0d1117;
+    --surface-container: #161b22;
+    --surface-container-high: #21262d;
+    --surface-container-highest: #30363d;
+
+    --bg-base: #0a0c10;
+    --bg-elevated: #0f1117;
+    --bg-overlay: rgba(10, 12, 16, 0.9);
+    --bg-float: #161b22;
+
+    --text-primary: #f0f6fc;
+    --text-secondary: #8b949e;
+    --text-tertiary: #6e7681;
+    --text-disabled: #484f58;
+
+    --border-subtle: rgba(255, 255, 255, 0.05);
+    --border-default: rgba(255, 255, 255, 0.1);
+    --border-strong: #30363d;
+
+    --aside-bg: #0d1117;
+    --aside-text: #f0f6fc;
+    --aside-text-dim: #8b949e;
+  }
+
   /* 🧱 ROOT STACKING CONTEXTS */
   #smriti-root {
     position: relative;

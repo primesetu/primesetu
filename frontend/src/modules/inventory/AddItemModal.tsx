@@ -39,7 +39,7 @@ interface AddItemModalProps {
 
 export default function AddItemModal({ isOpen, onClose, onSuccess }: AddItemModalProps) {
   const { theme } = useTheme()
-  const isInstitutional = theme === 'SMRITI-OS'
+  const isInstitutional = theme === 'LIGHT'
 
   const [activeTab, setActiveTab] = useState<'basic' | 'dna' | 'pricing'>('basic')
   const [loading, setLoading] = useState(false)

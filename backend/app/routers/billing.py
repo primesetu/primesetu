@@ -155,13 +155,13 @@ async def finalize_transaction(
     """
     store_id = current_user.store_id
     
-    # 1. Generate Bill Number (Institutional Format: STORE-YYYYMMDD-SEQ)
-    today_str = func.to_char(func.now(), 'YYYYMMDD')
-    bill_prefix = f"B-{store_id}-{today_str}-"
-    
-    # Simple sequence logic for demo
-    new_bill_no = f"{bill_prefix}{uuid.uuid4().hex[:4].upper()}"
-
+    # 1. Resolve Bill Number (Use client-side if provided, else generate)
+    new_bill_no = txn_in.bill_no
+    if not new_bill_no:
+        today_str = func.to_char(func.now(), 'YYYYMMDD')
+        bill_prefix = f"B-{store_id}-{today_str}-"
+        new_bill_no = f"{bill_prefix}{uuid.uuid4().hex[:4].upper()}"
+ 
     # 2. Create Transaction Header
     new_txn = Transaction(
         id=uuid.uuid4(),
@@ -173,7 +173,10 @@ async def finalize_transaction(
         customer_id=txn_in.customer_id,
         cashier_id=current_user.id,
         till_id=txn_in.till_id,
-        shoper_recid=txn_in.shoper_recid
+        shoper_recid=txn_in.shoper_recid,
+        # Using description or generic field if model doesn't have salesperson yet
+        # We can store salesman_id in extra metadata or a dedicated field if exists
+        notes=f"Salesman: {txn_in.salesman_id}" if txn_in.salesman_id else None
     )
     
     subtotal = 0

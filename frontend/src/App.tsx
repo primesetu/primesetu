@@ -24,11 +24,7 @@ import { useSovereignShortcuts } from './hooks/useSovereignShortcuts';
 import { syncEngine } from './lib/SyncEngine';
 import { supabase } from './lib/supabase';
 import Login from './modules/auth/Login';
-import TopBar from './components/layout/TopBar';
-
-import Sidebar from './components/layout/Sidebar';
-import FunctionBar from './components/layout/FunctionBar';
-import StatusBar from './components/layout/StatusBar';
+import ResponsiveShell from './components/layouts/ResponsiveShell';
 import { useTheme } from './hooks/useTheme';
 
 const PrimeSetu: React.FC = () => {
@@ -152,106 +148,45 @@ const PrimeSetu: React.FC = () => {
   }, []);
 
   const renderContent = () => {
-    const activeModule = findModule(activeTab);
     const component = COMPONENT_MAP[activeTab] || COMPONENT_MAP['dashboard'];
-    
-    if (Array.isArray(dynamicMenu) && dynamicMenu.length > 0 && !activeModule && activeTab !== 'dashboard') {
-       return (
-        <div className="flex flex-col items-center justify-center h-[60vh] gap-[var(--space-6)] text-center">
-          <div className="w-20 h-20 bg-[var(--danger)]/10 rounded-[var(--radius-xl)] flex items-center justify-center text-[var(--danger)]">
-            <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><path d="M12 8v4"/><path d="M12 16h.01"/></svg>
-          </div>
-          <h2 className="text-2xl font-bold text-[var(--text-primary)] u-uppercase">Unauthorized</h2>
-          <p className="text-xs text-[var(--text-secondary)] max-w-md">This module is not active in your current navigation context.</p>
-        </div>
-       );
-    }
-
     return component;
   };
 
   if (!user) return <Login onLogin={handleLogin} />;
 
-  // ── FULLSCREEN BILLING MODE ──────────────────────────────────────────
-  if (activeTab === 'sales') {
-    return (
-      <div className="fixed inset-0 z-[var(--z-modal)] bg-[var(--background)] overflow-hidden">
-        {COMPONENT_MAP['sales']}
-      </div>
-    );
-  }
-
   return (
-    <div 
-      className="flex min-h-screen bg-[var(--background)] text-[var(--text-primary)]"
-      data-theme={theme}
-      style={{ 
-        '--sw': isCollapsed ? '64px' : '256px',
-        '--srw': isRightCollapsed ? '0px' : 'var(--sidebar-right-w)'
-      } as React.CSSProperties}
+    <ResponsiveShell 
+      activeTab={activeTab} 
+      setActiveTab={setActiveTab}
+      userRole={user.role}
+      nodeType={nodeType}
+      setNodeType={setNodeType}
+      setIsCommandBarOpen={setIsCommandBarOpen}
+      isRightCollapsed={isRightCollapsed}
+      setIsRightCollapsed={setIsRightCollapsed}
     >
-      <Sidebar 
-        activeTab={activeTab} 
-        setActiveTab={setActiveTab} 
-        userRole={user?.role} 
-        isCollapsed={isCollapsed}
-        setIsCollapsed={setIsCollapsed}
+      <CommandBar 
+        isOpen={isCommandBarOpen} 
+        onClose={() => {
+          setIsCommandBarOpen(false);
+          setSearchContext(null);
+        }} 
+        onNavigate={(tab) => setActiveTab(tab)}
+        initialContext={searchContext}
       />
-      
-      <div 
-        className="main flex-1 flex flex-col relative transition-all duration-300 w-full overflow-x-hidden"
-        style={{ 
-          marginLeft: 'var(--sw)', 
-          marginRight: 'var(--srw)',
-          marginTop: 'var(--topbar-h)' 
-        }}
-      >
-        <CommandBar 
-          isOpen={isCommandBarOpen} 
-          onClose={() => {
-            setIsCommandBarOpen(false);
-            setSearchContext(null);
-          }} 
-          onNavigate={(tab) => setActiveTab(tab)}
-          initialContext={searchContext}
-        />
-        <TopBar 
-          activeTab={activeTab} 
-          setActiveTab={setActiveTab} 
-          userRole={user?.role}
-          nodeType={nodeType}
-          setNodeType={setNodeType}
-          setIsCommandBarOpen={setIsCommandBarOpen}
-        />
-
-        <FunctionBar 
-          activeTab={activeTab} 
-          isRightCollapsed={isRightCollapsed}
-          setIsRightCollapsed={setIsRightCollapsed}
-        />
-        <StatusBar activeTab={activeTab} />
-
-        {/* Main Content Area */}
-        <main 
-          className="flex-1 overflow-y-auto bg-[var(--background)]"
-          style={{ 
-            paddingBottom: 'calc(var(--status-bar-h, 24px) + 2rem)'
-          }}
+      <AnimatePresence mode="wait">
+        <motion.div
+          key={activeTab}
+          initial={{ opacity: 0, y: 12 }}
+          animate={{ opacity: 1, y: 0 }}
+          exit={{ opacity: 0, y: -12 }}
+          transition={{ duration: 0.2, ease: "easeOut" }}
+          className="h-full"
         >
-          <AnimatePresence mode="wait">
-            <motion.div
-              key={activeTab}
-              initial={{ opacity: 0, y: 12 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: -12 }}
-              transition={{ duration: 0.2, ease: "easeOut" }}
-            >
-              {renderContent()}
-            </motion.div>
-          </AnimatePresence>
-        </main>
-      </div>
-    </div>
+          {renderContent()}
+        </motion.div>
+      </AnimatePresence>
+    </ResponsiveShell>
   );
 };
 

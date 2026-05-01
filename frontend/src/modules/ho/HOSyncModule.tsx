@@ -18,7 +18,7 @@ import {
 
 export default function HOSyncModule() {
   const { theme } = useTheme();
-  const isInstitutional = theme === 'SMRITI-OS';
+  const isInstitutional = theme === 'LIGHT';
   const [syncStatus, setSyncStatus] = useState<any>(null)
   const [isSyncing, setIsSyncing] = useState(false)
 

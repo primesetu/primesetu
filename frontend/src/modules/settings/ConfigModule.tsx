@@ -30,7 +30,7 @@ import {
 
 export default function ConfigModule() {
   const { theme } = useTheme();
-  const isInstitutional = theme === 'SMRITI-OS';
+  const isInstitutional = theme === 'LIGHT';
 
   const [activeSubTab, setActiveSubTab] = useState<'params' | 'classification' | 'brands' | 'tax' | 'integrations' | 'labels' | 'personalization' | 'browsers'>('params')
   const [params, setParams] = useState([

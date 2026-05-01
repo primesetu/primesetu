@@ -3,23 +3,24 @@
    Zero-FOUC Runtime Governance
    ============================================================ */
 
-export type SmritiTheme = 'SMRITI-OS';
+export type SmritiTheme = 'LIGHT' | 'DARK';
 
 export const ThemeEngine = (() => {
   const STORAGE_KEY = "smriti-theme";
 
   function setTheme(theme: SmritiTheme) {
-    document.documentElement.setAttribute("data-theme", "SMRITI-OS");
-    localStorage.setItem(STORAGE_KEY, "SMRITI-OS");
-    window.dispatchEvent(new CustomEvent('smriti-theme-change', { detail: { theme: "SMRITI-OS" } }));
+    document.documentElement.setAttribute("data-theme", theme);
+    localStorage.setItem(STORAGE_KEY, theme);
+    window.dispatchEvent(new CustomEvent('smriti-theme-change', { detail: { theme } }));
   }
 
   function getTheme(): SmritiTheme {
-    return "SMRITI-OS";
+    return (localStorage.getItem(STORAGE_KEY) as SmritiTheme) || "LIGHT";
   }
 
   function init() {
-    document.documentElement.setAttribute("data-theme", "SMRITI-OS");
+    const theme = getTheme();
+    document.documentElement.setAttribute("data-theme", theme);
   }
 
   return { setTheme, getTheme, init };

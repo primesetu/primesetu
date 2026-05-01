@@ -172,7 +172,7 @@ export default function TopBar({
       {/* ── Breadcrumb ── */}
       {/* ── Breadcrumb / Center Area ── */}
       <div className="flex-1 flex items-stretch h-full overflow-hidden">
-        {theme === 'SMRITI-OS' ? (
+        {theme === 'LIGHT' ? (
           <button
             onClick={() => setIsCommandBarOpen?.(true)}
             className="flex-1 flex items-center justify-center gap-4 hover:bg-white/5 transition-all group"
@@ -207,13 +207,13 @@ export default function TopBar({
           <span className="font-mono text-[10px] px-1 py-0.5 rounded bg-white/10 border border-white/20">F3</span>
         </button>
 
-        <button className={cn("p-2 transition-colors", theme === 'SMRITI-OS' ? "hover:bg-white/10" : "hover:bg-black/10")}>
+        <button className={cn("p-2 transition-colors", theme === 'LIGHT' ? "hover:bg-white/10" : "hover:bg-black/10")}>
           <Bell size={15} />
         </button>
 
         <button
           onClick={() => setActiveTab('settings')}
-          className={cn("p-2 transition-colors", theme === 'SMRITI-OS' ? "hover:bg-white/10" : "hover:bg-black/10")}
+          className={cn("p-2 transition-colors", theme === 'LIGHT' ? "hover:bg-white/10" : "hover:bg-black/10")}
         >
           <Settings size={15} />
         </button>

@@ -28,7 +28,7 @@ interface ParamData {
 
 export default function SystemParameters() {
   const { theme } = useTheme()
-  const isInstitutional = theme === 'SMRITI-OS'
+  const isInstitutional = theme === 'LIGHT'
   
   const [loading, setLoading] = useState(true)
   const [saving, setSaving] = useState(false)

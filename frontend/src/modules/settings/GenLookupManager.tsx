@@ -31,7 +31,7 @@ interface LookupMember {
 
 export default function GenLookupManager() {
   const { theme } = useTheme()
-  const isInstitutional = theme === 'SMRITI-OS'
+  const isInstitutional = theme === 'LIGHT'
 
   const [categories, setCategories] = useState<LookupCategory[]>([])
   const [selectedCat, setSelectedCat] = useState<LookupCategory | null>(null)

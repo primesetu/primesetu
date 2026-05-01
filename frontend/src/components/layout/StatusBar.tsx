@@ -27,7 +27,7 @@ const StatusBar: React.FC<StatusBarProps> = ({ activeTab }) => {
   const sync = useNodeSync();
   const { theme } = useTheme();
   const [showSync, setShowSync] = useState(false);
-  const isTally = theme === 'SMRITI-OS';
+  const isInstitutional = theme === 'LIGHT';
 
   const HOTKEYS = [
     { key: 'F1',  label: 'Help',     icon: HelpCircle },
@@ -51,7 +51,7 @@ const StatusBar: React.FC<StatusBarProps> = ({ activeTab }) => {
     <div 
       className={cn(
         "fixed bottom-0 left-0 right-0 z-[9999] flex items-center transition-all h-[var(--status-bar-h,28px)] divide-x divide-white/10",
-        isTally 
+        isInstitutional 
           ? "bg-[var(--aside-bg)] text-white border-t border-white/10" 
           : "backdrop-blur-md bg-[var(--bg-elevated)] border-t-2 border-[rgba(99,102,241,0.2)]"
       )} 

@@ -78,8 +78,8 @@ export default function InventoryModule() {
         x01_qty: i.stocks?.find((s: any) => s.store_id === 'X01')?.quantity || 0,
         min_stock: i.min_stock || 10,
         mrp: i.mrp,
-        days_of_cover: Math.round(((i.stocks?.find((s: any) => s.store_id === 'WH1')?.quantity || 0) + (i.stocks?.find((s: any) => s.store_id === 'X01')?.quantity || 0)) / ((parseInt(i.id.split('-')[0], 16) % 45 + 5) / 10) * 10) / 10,
-        risk_level: (Math.round(((i.stocks?.find((s: any) => s.store_id === 'WH1')?.quantity || 0) + (i.stocks?.find((s: any) => s.store_id === 'X01')?.quantity || 0)) / ((parseInt(i.id.split('-')[0], 16) % 45 + 5) / 10) * 10) / 10) < 7 ? 'High' : (Math.round(((i.stocks?.find((s: any) => s.store_id === 'WH1')?.quantity || 0) + (i.stocks?.find((s: any) => s.store_id === 'X01')?.quantity || 0)) / ((parseInt(i.id.split('-')[0], 16) % 45 + 5) / 10) * 10) / 10) < 14 ? 'Medium' : 'Low'
+        days_of_cover: Math.round(((i.stocks?.find((s: any) => s.store_id === 'WH1')?.quantity || 0) + (i.stocks?.find((s: any) => s.store_id === 'X01')?.quantity || 0)) / ((parseInt((i.id || '0-').split('-')[0], 16) % 45 + 5) / 10) * 10) / 10,
+        risk_level: (Math.round(((i.stocks?.find((s: any) => s.store_id === 'WH1')?.quantity || 0) + (i.stocks?.find((s: any) => s.store_id === 'X01')?.quantity || 0)) / ((parseInt((i.id || '0-').split('-')[0], 16) % 45 + 5) / 10) * 10) / 10) < 7 ? 'High' : (Math.round(((i.stocks?.find((s: any) => s.store_id === 'WH1')?.quantity || 0) + (i.stocks?.find((s: any) => s.store_id === 'X01')?.quantity || 0)) / ((parseInt((i.id || '0-').split('-')[0], 16) % 45 + 5) / 10) * 10) / 10) < 14 ? 'Medium' : 'Low'
       })))
     } catch (error) {
       console.error('[SMRITI-OS] Inventory fetch failed:', error)

@@ -36,7 +36,7 @@ import AddItemModal from './AddItemModal'
 
 export default function ItemMasterModule() {
   const { theme } = useTheme()
-  const isInstitutional = theme === 'SMRITI-OS'
+  const isInstitutional = theme === 'LIGHT'
 
   const [isAddModalOpen, setIsAddModalOpen] = useState(false)
 

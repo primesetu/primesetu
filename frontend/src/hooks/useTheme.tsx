@@ -17,21 +17,25 @@ interface ThemeContextType {
 const ThemeContext = createContext<ThemeContextType | undefined>(undefined);
 
 export function ThemeProvider({ children }: { children: React.ReactNode }) {
-  const theme = 'SMRITI-OS';
-  const [accent, setAccentState] = useState(() => localStorage.getItem('smriti-accent') || '#f29b12');
+  const [theme, setThemeState] = useState<SmritiTheme>(() => ThemeEngine.getTheme());
+  const [accent, setAccentState] = useState(() => localStorage.getItem('smriti-accent') || '#2563eb');
 
   useEffect(() => {
-    ThemeEngine.setTheme('SMRITI-OS');
+    ThemeEngine.init();
   }, []);
+
+  useEffect(() => {
+    ThemeEngine.setTheme(theme);
+  }, [theme]);
 
   useEffect(() => {
     document.documentElement.style.setProperty('--accent', accent);
     localStorage.setItem('smriti-accent', accent);
   }, [accent]);
 
-  const setTheme = (_newTheme: SmritiTheme) => {}; // No-op as theme is locked
+  const setTheme = (newTheme: SmritiTheme) => setThemeState(newTheme);
   const setAccent = (newColor: string) => setAccentState(newColor);
-  const isInstitutional = true;
+  const isInstitutional = theme === 'LIGHT';
 
   return (
     <ThemeContext.Provider value={{ theme, setTheme, accent, setAccent, isInstitutional }}>

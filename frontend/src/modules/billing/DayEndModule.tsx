@@ -42,7 +42,7 @@ interface DayEndStats {
 
 export default function DayEndModule() {
   const { theme } = useTheme()
-  const isInstitutional = theme === 'SMRITI-OS'
+  const isInstitutional = theme === 'LIGHT'
 
   const [stats, setStats] = useState<DayEndStats | null>(null)
   const [loading, setLoading] = useState(true)

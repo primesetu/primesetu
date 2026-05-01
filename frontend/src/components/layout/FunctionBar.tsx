@@ -28,7 +28,7 @@ const FunctionBar: React.FC<FunctionBarProps> = ({
   setIsRightCollapsed 
 }) => {
   const { theme } = useTheme();
-  const isTally = theme === 'SMRITI-OS';
+  const isInstitutional = theme === 'LIGHT';
 
   // High-Density Shortcut Mapping (Tally style)
   const getContextKeys = () => {
@@ -75,7 +75,7 @@ const FunctionBar: React.FC<FunctionBarProps> = ({
           onClick={() => setIsRightCollapsed?.(false)}
           className={cn(
             "fixed right-0 top-[20%] z-[var(--z-sidebar)] w-10 h-16 flex items-center justify-center rounded-l-xl transition-all shadow-2xl border-l-4",
-            isTally 
+            isInstitutional 
               ? "bg-[var(--accent)] border-[var(--gold)] text-white hover:pr-4" 
               : "bg-navy-mid border-white/20 text-white hover:pr-4"
           )}
@@ -100,7 +100,7 @@ const FunctionBar: React.FC<FunctionBarProps> = ({
             onClick={() => setIsRightCollapsed?.(true)}
             className={cn(
               "absolute left-0 top-[15%] -translate-x-1/2 z-[var(--z-sidebar)] w-8 h-12 flex items-center justify-center rounded-full border-2 transition-all hover:scale-110",
-              isTally ? "bg-[var(--accent)] border-white/20 text-white shadow-[var(--shadow-accent)]" : "bg-navy text-white border-white/10"
+              isInstitutional ? "bg-[var(--accent)] border-white/20 text-white shadow-[var(--shadow-accent)]" : "bg-navy text-white border-white/10"
             )}
             title="Hide Shortcut Keys [Alt+K]"
           >
@@ -121,13 +121,13 @@ const FunctionBar: React.FC<FunctionBarProps> = ({
                 key={`${k.key}-${i}`}
                 className={cn(
                   "flex items-center px-4 py-0 transition-all group h-8 cursor-pointer",
-                  isTally ? "hover:bg-white/5" : "hover:bg-white/10"
+                  isInstitutional ? "hover:bg-white/5" : "hover:bg-white/10"
                 )}
               >
                 <div className="flex-1 flex items-baseline gap-2 overflow-hidden">
                   <span className={cn(
                     "text-[10px] font-mono font-black tracking-tighter shrink-0",
-                    isTally ? "text-[var(--gold)]" : "text-gold",
+                    isInstitutional ? "text-[var(--gold)]" : "text-gold",
                     k.type === 'alt' && "shortcut-alt",
                     k.type === 'ctrl' && "shortcut-ctrl"
                   )}>
@@ -135,7 +135,7 @@ const FunctionBar: React.FC<FunctionBarProps> = ({
                   </span>
                   <span className={cn(
                     "text-[9px] font-black uppercase tracking-widest truncate",
-                    isTally ? "text-white group-hover:text-[var(--gold)]" : "text-white/70"
+                    isInstitutional ? "text-white group-hover:text-[var(--gold)]" : "text-white/70"
                   )}>
                     {k.label}
                   </span>

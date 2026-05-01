@@ -11,7 +11,7 @@
 
 import React, { useState, useRef, useEffect } from 'react';
 import { api } from '@/api/client';
-import { Input, Badge, Text, Button } from '@/components/ui/SovereignUI';
+import { Input, Badge, Text, Button, DataTable } from '@/components/ui/SovereignUI';
 import { SovereignSearch } from '@/components/SovereignSearch';
 import { Filter, Search, Info, Package, Tag, Loader2 } from 'lucide-react';
 import { cn } from '@/lib/utils';
@@ -78,59 +78,60 @@ const ItemInquiry: React.FC<Props> = ({ onClose }) => {
       </div>
 
       {/* Results Area */}
-      <div className="flex-1 overflow-y-auto p-6 space-y-4">
-        {results.length === 0 && !loading && (
-          <div className="h-full flex flex-col items-center justify-center text-white/20">
-            <Info size={48} strokeWidth={1} />
-            <p className="mt-4 text-xs font-black uppercase tracking-widest">Awaiting Sovereign Query...</p>
-          </div>
-        )}
-
-        {results.map((item) => (
-          <div key={item.id} className="bg-white/5 border border-white/10 p-6 rounded-none flex gap-8 items-start hover:border-accent/40 transition-all">
-            <div className="w-24 h-24 bg-white/5 flex items-center justify-center border border-white/5">
-                <Package size={40} className="text-white/10" />
-            </div>
-            
-            <div className="flex-1 grid grid-cols-2 gap-8">
-                <div>
-                    <Text variant="xs" className="opacity-40 uppercase font-black tracking-widest mb-1">Product Identity</Text>
-                    <h3 className="text-2xl font-black text-white uppercase">{item.name}</h3>
-                    <div className="flex items-center gap-2 mt-2">
-                        <Badge variant="muted" className="font-mono text-accent">{item.code}</Badge>
-                        <Badge variant="muted" className="opacity-60">{item.brand}</Badge>
-                    </div>
+      <div className="flex-1 overflow-hidden p-6">
+        <DataTable 
+          data={results}
+          loading={loading}
+          emptyMessage="Awaiting Sovereign Query..."
+          columns={[
+            {
+              header: 'PRODUCT IDENTITY',
+              accessor: (item: any) => (
+                <div className="flex flex-col py-2">
+                  <span className="font-black text-sm uppercase leading-tight">{item.name}</span>
+                  <div className="flex gap-2 mt-1">
+                    <span className="text-[10px] font-mono text-accent">{item.code}</span>
+                    <span className="text-[10px] opacity-40">{item.brand}</span>
+                  </div>
                 </div>
-
-                <div className="grid grid-cols-2 gap-4">
-                    <div className="bg-white/5 p-4 border border-white/5">
-                        <Text variant="xs" className="opacity-40 uppercase font-black tracking-widest mb-1">Price (MRP)</Text>
-                        <div className="text-xl font-black text-status-green">₹{(item.mrp_paise / 100).toLocaleString()}</div>
-                    </div>
-                    <div className="bg-white/5 p-4 border border-white/5">
-                        <Text variant="xs" className="opacity-40 uppercase font-black tracking-widest mb-1">Available Stock</Text>
-                        <div className={cn(
-                            "text-xl font-black",
-                            item.stock <= 0 ? "text-status-red" : "text-accent"
-                        )}>{item.stock} {item.uom}</div>
-                    </div>
+              ),
+              flex: 2
+            },
+            {
+              header: 'PRICE (MRP)',
+              accessor: (item: any) => (
+                <span className="font-mono font-black text-status-green">
+                  ₹{(item.mrp_paise / 100).toLocaleString()}
+                </span>
+              ),
+              align: 'right',
+              width: 150
+            },
+            {
+              header: 'AVAILABLE STOCK',
+              accessor: (item: any) => (
+                <span className={cn(
+                  "font-black",
+                  item.stock <= 0 ? "text-status-red" : "text-accent"
+                )}>
+                  {item.stock} {item.uom}
+                </span>
+              ),
+              align: 'right',
+              width: 180
+            },
+            {
+              header: 'HSN / TAX',
+              accessor: (item: any) => (
+                <div className="flex flex-col text-[10px] opacity-60">
+                   <span className="font-bold">HSN: {item.hsn_code || 'N/A'}</span>
+                   <span className="font-black">{item.tax_rate}% GST</span>
                 </div>
-
-                <div className="col-span-2 grid grid-cols-4 gap-4 mt-2">
-                    <div className="text-[10px] flex items-center gap-2">
-                        <Tag size={12} className="text-accent" />
-                        <span className="opacity-40 font-bold uppercase">Tax:</span>
-                        <span className="font-black text-white">{item.tax_rate}% GST</span>
-                    </div>
-                    <div className="text-[10px] flex items-center gap-2">
-                        <Info size={12} className="text-accent" />
-                        <span className="opacity-40 font-bold uppercase">HSN:</span>
-                        <span className="font-black text-white">{item.hsn_code || 'N/A'}</span>
-                    </div>
-                </div>
-            </div>
-          </div>
-        ))}
+              ),
+              width: 120
+            }
+          ]}
+        />
       </div>
 
       <div className="p-4 border-t border-white/5 bg-black/20 text-center">

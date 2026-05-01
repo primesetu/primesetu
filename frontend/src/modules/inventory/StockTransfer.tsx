@@ -9,7 +9,7 @@
  * "Memory, Not Code."
  * ============================================================ */
 
-import React, { useState, useMemo } from 'react';
+import React, { useState } from 'react';
 import {
   ArrowRightLeft,
   Search,
@@ -30,6 +30,7 @@ import {
   type TransferManifestItem,
   type StockTransferPayload,
 } from '@/hooks/useWarehouse';
+import { useGridMask } from '@/hooks/useGridMask';
 import { 
   DataTable, 
   Badge, 
@@ -112,54 +113,36 @@ export default function StockTransfer() {
     }
   };
 
-  // ── GRID COLUMNS ──
-  const columns = useMemo(() => [
-    {
-      header: "SKU / ITEM DESCRIPTION",
-      accessor: (item: any) => (
+  // AcceptDisplayDtls mask TrnType 1200 = Stock Transfer Out
+  // SKU input and qty editor are module-specific — injected as renderer overrides
+  const { colDefs: transferColDefs, loading: gridLoading } = useGridMask(1200, {
+    overrides: {
+      'sku': (params: any) => (
         <div className="relative py-2">
-           <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-navy/20" />
-           <input
-             type="text"
-             value={item.sku}
-             onChange={e => updateSku(item.id, e.target.value)}
-             placeholder="Scan or enter SKU..."
-             className="w-full bg-navy/5 border-none rounded-xl pl-10 pr-4 h-10 text-xs font-mono font-bold outline-none focus:bg-navy/10 transition-all uppercase"
-           />
+          <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-on-surface-variant/30" />
+          <input
+            type="text"
+            value={params.data?.sku ?? ''}
+            onChange={e => updateSku(params.data.id, e.target.value)}
+            placeholder="Scan or enter SKU..."
+            className="w-full bg-surface-container-low border-none rounded-xl pl-10 pr-4 h-10 text-xs font-mono font-bold outline-none focus:bg-surface-container transition-all uppercase"
+          />
         </div>
       ),
-      flex: 2,
-      pinned: 'left' as const
-    },
-    {
-      header: "TRANSFER QTY",
-      accessor: (item: any) => (
+      'qty': (params: any) => (
         <div className="flex justify-center py-2">
           <input
             type="number"
             min={1}
-            value={item.qty}
-            onChange={e => updateQty(item.id, Math.max(1, parseInt(e.target.value) || 1))}
-            className="w-20 bg-white border-2 border-navy/5 rounded-xl h-10 text-center text-sm font-black font-mono outline-none focus:border-indigo-500 transition-all shadow-sm"
+            value={params.data?.qty ?? 1}
+            onChange={e => updateQty(params.data.id, Math.max(1, parseInt(e.target.value) || 1))}
+            className="w-20 bg-white border-2 border-outline-variant rounded-xl h-10 text-center text-sm font-black font-mono outline-none focus:border-primary transition-all shadow-sm"
           />
         </div>
       ),
-      width: 150,
-      className: 'text-center'
-    },
-    {
-      header: "ACTIONS",
-      accessor: (item: any) => (
-        <div className="flex justify-end pr-4">
-           <Button variant="sec" size="sm" onClick={() => removeRow(item.id)} className="h-9 w-9 p-0 text-rose-500 hover:bg-rose-50 border-none">
-              <Trash2 size={16} />
-           </Button>
-        </div>
-      ),
-      width: 100,
-      pinned: 'right' as const
     }
-  ], []);
+  });
+
 
   return (
     <div className="p-8 space-y-8 max-w-7xl mx-auto animate-in fade-in slide-in-from-bottom-4 duration-700">
@@ -275,7 +258,10 @@ export default function StockTransfer() {
           <div className="flex-1 min-h-[400px]">
             <DataTable 
               data={items}
-              columns={columns}
+              columns={transferColDefs as any}
+              loading={gridLoading}
+              rowHeight={45}
+              headerHeight={32}
               overlayNoRowsTemplate={`
                 <div class="flex flex-col items-center justify-center opacity-10 h-full">
                    <PackageCheck size="60" class="mb-4" />
@@ -316,3 +302,4 @@ export default function StockTransfer() {
     </div>
   );
 }
+

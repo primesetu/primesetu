@@ -1,0 +1,346 @@
+
+<!doctype HTML public "-//W3C//DTD HTML 4.0 Frameset//EN">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=windows-1252">
+ <meta name="generator" content="Adobe RoboHelp 10">
+<title>Shoper 9 POS Series A Release 1.91</title>
+<link rel="StyleSheet" href="../Shoper.css" type="text/css">
+<style title="hcp" type="text/css">
+<!--
+span.hcp1 { font-weight:bold; }
+li.hcp2 { list-style:none;
+display:inline; }
+h4.hcp3 { margin-left:64px; }
+-->
+</style>
+</head>
+<body>
+<script type="text/javascript" src="../ehlpdhtm.js" language="JavaScript1.2"></script>
+
+<h1>Shoper 9 POS Series A Release 1.91</h1>
+<p class="Body-Text" style="text-align: justify;">Enhancements:</p>
+<ul>
+<li class="p-bullet">
+<p class="bullet"><a href="#ENH_Billing">Billing</a></p>
+</li>
+<li class="p-bullet">
+<p class="bullet"><a href="#ENH_Goods_Inwards">Goods Inwards</a></p>
+</li>
+<li class="p-bullet">
+<p class="bullet"><a href="#ENH_Goods_Outwards">Goods Outwards</a></p>
+</li>
+<li class="p-bullet">
+<p class="bullet"><a href="#ENH_Import__Export_Data">Import/ Export Data</a></p>
+</li>
+<li class="p-bullet">
+<p class="bullet"><a href="#ENH_Stock_Number_Generation_Methodology">Stock Number Generation Methodology</a></p>
+</li>
+<li class="p-bullet">
+<p class="bullet"><a href="#ENH_Reports">Reports</a></p>
+</li>
+</ul>
+<p class="Body-Text" style="text-align: justify;">Issues Resolved:</p>
+<ul>
+<li class="p-bullet">
+<p class="bullet"><a href="#IR_Billing">Billing</a></p>
+</li>
+<li class="p-bullet">
+<p class="bullet"><a href="#IR_Bill_Printing">Bill Printing</a></p>
+</li>
+<li class="p-bullet">
+<p class="bullet"><a href="#IR_Packing">Packing</a></p>
+</li>
+<li class="p-bullet">
+<p class="bullet"><a href="#IR_Purchase_Order">Purchase Order</a></p>
+</li>
+<li class="p-bullet">
+<p class="bullet"><a href="#IR_Goods_Outwards">Goods Outwards</a></p>
+</li>
+<li class="p-bullet">
+<p class="bullet"><a href="#IR_Physical_Stock_Take">Physical Stock Take</a></p>
+</li>
+<li class="p-bullet">
+<p class="bullet"><a href="#IR_Import__Export_Data">Import/ Export Data</a></p>
+</li>
+<li class="p-bullet">
+<p class="bullet"><a href="#IR_Price_Revision">Price Revision</a></p>
+</li>
+<li class="p-bullet">
+<p class="bullet"><a href="#IR_Price_Revision">Item Master</a></p>
+</li>
+<li class="p-bullet">
+<p class="bullet"><a href="#IR_Customer">Customer</a></p>
+</li>
+<li class="p-bullet">
+<p class="bullet"><a href="#IR_Tally_Printing">Tally Printing</a></p>
+</li>
+<li class="p-bullet">
+<p class="bullet"><a href="#IR_Reports">Reports</a></p>
+</li>
+</ul>
+<h2>Enhancements</h2>
+<h3><a name="ENH_Billing" id="ENH_Billing">Billing</a></h3>
+<ul>
+<li class="p-bullet">
+<p class="bullet">A new parameter, <span class="hcp1">Allow Rate alteration in Sales Return without Reference</span>, has been introduced under <span class="hcp1">System Parameters</span>, to allow rate alteration while performing a <span class="hcp1">Return without Reference</span>.</p>
+</li>
+</ul>
+<h3><a name="ENH_Goods_Inwards" id="ENH_Goods_Inwards">Goods Inwards</a></h3>
+<ul>
+<li class="p-bullet">
+<p class="bullet">On scanning a stock item against a DC, if there is a difference in the <span class="hcp1">Cost Price</span>, the same is picked from the DC and the masters updated.</p>
+</li>
+</ul>
+<ul>
+<li class="p-bullet">
+<p class="bullet">A provision is available to recall any outward transactions in <span class="hcp1">Goods Receipt</span> form (Crossdocking). Multiple outward transactions can also be recalled.</p>
+</li>
+</ul>
+<ul>
+<li class="p-bullet">
+<p class="bullet">Provision to capture Reason Codes for specific transaction in <span class="hcp1">General Lookup</span> and select transaction specific <span class="hcp1">Reason Code</span> in <span class="hcp1">Goods Receipts</span> form.</p>
+</li>
+</ul>
+<p class="bullet" style="margin-left: 64px;">Also, if a new reason code is found on loading a PT file, the same is included in the Reason Code browse.</p>
+<p class="bullet" style="margin-left: 64px;">If the Reason Codes are not catalogued for Purchase and Transfer-In transactions, by default, the reason codes are taken from Miscellaneous Receipts.</p>
+<h3><a name="ENH_Goods_Outwards" id="ENH_Goods_Outwards">Goods Outwards</a></h3>
+<ul>
+<li class="p-bullet">
+<p class="bullet">Provision to capture Reason Codes for specific transaction in General Lookup and to select transaction specific <span class="hcp1">Reason Code</span> in Goods Outward forms.</p>
+</li>
+</ul>
+<p class="bullet" style="margin-left: 64px;">If the Reason Codes are not catalogued for <span class="hcp1">Purchase Return</span> and <span class="hcp1">Transfers-Out</span> transactions, by default, the reason codes are taken from miscellaneous issues.</p>
+<h3><a name="ENH_Import__Export_Data" id="ENH_Import__Export_Data">Import/ Export Data</a></h3>
+<p class="Body-Text">&#160;</p>
+<ul>
+<li class="p-bullet">
+<p class="bullet">Data Synchronisation module is enhanced to display the correct detail in the log, where there are duplicate data.</p>
+</li>
+<li class="p-bullet">
+<p class="bullet">Data Synchronisation module is enhanced to update the cost price and last purchase for non-transacted items.</p>
+</li>
+</ul>
+<h3><a name="ENH_Stock_Number_Generation_Methodology" id="ENH_Stock_Number_Generation_Methodology">Stock Number Generation Methodology</a></h3>
+<ul>
+<li class="p-bullet">
+<p class="bullet">Stock number generation methodology gives a provision to use the following in stock number:</p>
+</li>
+<li class="hcp2">
+<ul>
+<li class="p-bullet">
+<p class="bullet">Year, month, day and date (YYYYMMDD) based on system date</p>
+</li>
+</ul>
+<ul>
+<li class="p-bullet">
+<p class="bullet">Date (YYYYMMDD) based on Shoper date</p>
+</li>
+</ul>
+<ul>
+<li class="p-bullet">
+<p class="bullet">Super Classifications 1 and 2</p>
+</li>
+</ul>
+<ul>
+<li class="p-bullet">
+<p class="bullet">All defined Analysis Codes</p>
+</li>
+</ul>
+</li>
+</ul>
+<h3><a name="ENH_Reports" id="ENH_Reports">Reports</a></h3>
+<h4 class="hcp3">Sales Reports</h4>
+<ol>
+<li class="hcp2">
+<ul>
+<li class="p-bullet">
+<p class="bullet">The <span class="hcp1">Salesperson Sales</span> report is enhanced to show a break-up of the both the header level as well as the item level sales-staff details.</p>
+</li>
+</ul>
+</li>
+</ol>
+<h4 class="hcp3">MIS Reports</h4>
+<ol>
+<li class="hcp2">
+<ul>
+<li class="p-bullet">
+<p class="bullet">The <span class="hcp1">Customer Offtake Product-wise</span> report has been enhanced to display details of addons and deductions.</p>
+</li>
+</ul>
+</li>
+</ol>
+<h2>Issues Resolved</h2>
+<h3><a name="IR_Billing" id="IR_Billing">Billing</a></h3>
+<ul>
+<li class="p-bullet">
+<p class="bullet">During billing, the scanned bar codes of <span class="hcp1">Sales Staff</span> were not getting displayed in the item level entry panel.</p>
+</li>
+</ul>
+<p class="bullet" style="margin-left: 64px;">This issue has been resolved.</p>
+<ul>
+<li class="p-bullet">
+<p class="bullet">During billing, the short cut key <span class="hcp1">Alt+S</span> did not display the <span class="hcp1">Current Stock</span>.</p>
+</li>
+</ul>
+<p class="bullet" style="margin-left: 64px;">This issue has been resolved.</p>
+<ul>
+<li class="p-bullet">
+<p class="bullet">The bill was not getting saved when the <span class="hcp1">Sales Factor</span> had decimal values.</p>
+</li>
+</ul>
+<p class="bullet" style="margin-left: 64px;">This issue has been resolved.</p>
+<ul>
+<li class="p-bullet">
+<p class="bullet">During billing, when a customer was entered on the fly, an error message was displayed.</p>
+</li>
+</ul>
+<p class="bullet" style="margin-left: 64px;">This issue has been resolved.</p>
+<ul>
+<li class="p-bullet">
+<p class="bullet">While doing a <span class="hcp1">Return without Reference</span>, the reason code entered for the first item was not carried forward to the next items that were scanned.</p>
+</li>
+</ul>
+<p class="bullet" style="margin-left: 64px;">This issue has been resolved.</p>
+<h3><a name="IR_Bill_Printing" id="IR_Bill_Printing">Bill Printing</a></h3>
+<ul>
+<li class="p-bullet">
+<p class="bullet">While printing, an error message <span class="hcp1">Invalid Use of Null</span> was displayed when the <span class="hcp1">Payment &amp; Transaction</span> details category was left blank in the <span class="hcp1">Customer</span> window.</p>
+</li>
+</ul>
+<p class="bullet" style="margin-left: 64px;">This issue has been resolved.</p>
+<h3><a name="IR_Packing" id="IR_Packing">Packing</a></h3>
+<ul>
+<li class="p-bullet">
+<p class="bullet">On clubbing duplicated items, the total value was not correctly calculated in the database.</p>
+</li>
+</ul>
+<p class="bullet" style="margin-left: 64px;">This issue has been resolved.</p>
+<ul>
+<li class="p-bullet">
+<p class="bullet">The Stock availability was not validated when duplicate items were scanned and the transaction could be saved. This resulted in erroneous stock calculation while recalling the Packing Slip in Outward and Billing transactions.</p>
+</li>
+</ul>
+<p class="bullet" style="margin-left: 64px;">This issue has been resolved.</p>
+<h3><a name="IR_Purchase_Order" id="IR_Purchase_Order">Purchase Order</a></h3>
+<ul>
+<li class="p-bullet">
+<p class="bullet">Purchase order <span class="hcp1">Status Report</span> did not display the updated received quantity and pending quantity.</p>
+</li>
+</ul>
+<p class="bullet" style="margin-left: 64px;">This issue has been resolved.</p>
+<ul>
+<li class="p-bullet">
+<p class="bullet">On saving a Purchase Order, the <span class="hcp1">Doc.Net Value</span> was rounded off and this rounded off amount was not appended to the existing Add-on/ Deduction amount.</p>
+</li>
+</ul>
+<p class="bullet" style="margin-left: 64px;">These issues have been resolved.</p>
+<h3><a name="IR_Goods_Outwards" id="IR_Goods_Outwards">Goods Outwards</a></h3>
+<ul>
+<li class="p-bullet">
+<p class="bullet">On loading the inward information in <span class="hcp1">Goods Outwards</span>, the transaction could be saved even when the stock of the items referred was insufficient, resulting in negative balance of the stock item.</p>
+</li>
+</ul>
+<p class="bullet" style="margin-left: 64px;">This issue has been resolved.</p>
+<p class="bullet" style="margin-left: 64px;">Now, a message prompts that stock is insufficient and cannot be saved. The items with insufficient stock are highlighted in the grid.</p>
+<h3><a name="IR_Physical_Stock_Take" id="IR_Physical_Stock_Take">Physical Stock Take</a></h3>
+<ul>
+<li class="p-bullet">
+<p class="bullet">If the super classifications were not enabled in system parameter under <span class="hcp1">Item Classification</span>, the fields (columns) in the <span class="hcp1">Progress Summary</span> report were not positioned correctly.</p>
+</li>
+</ul>
+<p class="bullet" style="margin-left: 64px;">This issue has been resolved.</p>
+<h3><a name="IR_Import__Export_Data" id="IR_Import__Export_Data">Import/ Export Data</a></h3>
+<ul>
+<li class="p-bullet">
+<p class="bullet">During item master Synchronization, Analysis codes were not getting updated, when the existing data was Null.</p>
+</li>
+</ul>
+<p class="bullet" style="margin-left: 64px;">This issue has been resolved.</p>
+<h3><a name="IR_Price_Revision" id="IR_Price_Revision">Price Revision</a></h3>
+<ul>
+<li class="p-bullet">
+<p class="bullet">When location-wise prices were not enabled, price revisions defined and sent from HO were not updating the prices at the POS locations.</p>
+</li>
+</ul>
+<p class="bullet" style="margin-left: 64px;">This issue has been resolved.</p>
+<ul>
+<li class="p-bullet">
+<p class="bullet">Revised prices were not available for billing even when the price revisions were defined appropriately.</p>
+</li>
+</ul>
+<p class="bullet" style="margin-left: 64px;">This issue has been resolved.</p>
+<h3><a name="IR_Item_Master" id="IR_Item_Master">Item Master</a></h3>
+<ul>
+<li class="p-bullet">
+<p class="bullet">If new analysis codes were enabled or the captions for analysis codes were changed in system parameters, the same were not getting updated properly in item master entry.</p>
+</li>
+</ul>
+<p class="bullet" style="margin-left: 64px;">This issue has been resolved.</p>
+<ul>
+<li class="p-bullet">
+<p class="bullet">While editing item masters, Item Classifications 1 and 2 (Product &amp; Brand) were not getting saved properly. Hence, data could not be saved.</p>
+</li>
+</ul>
+<p class="bullet" style="margin-left: 64px;">This issue has been resolved.</p>
+<ul>
+<li class="p-bullet">
+<p class="bullet">When creating item masters, values entered for columns selected as common fields were not getting saved properly. Hence, data could not be saved.</p>
+</li>
+</ul>
+<p class="bullet" style="margin-left: 64px;">This issue has been resolved.</p>
+<ul>
+<li class="p-bullet">
+<p class="bullet">When creating item masters by copy and paste from Excel sheet, no column could be saved as common data column. After pasting the details some values were becoming blank and hence data could not be saved.</p>
+</li>
+</ul>
+<p class="bullet" style="margin-left: 64px;">These issues have been resolved.</p>
+<h3><a name="IR_Customer" id="IR_Customer">Customer</a></h3>
+<ul>
+<li class="p-bullet">
+<p class="bullet">In distributor environment, transporter details could be added in general lookup with code exceeding 16 characters. Using such transporter codes when adding new customer records were resulting in runtime error.</p>
+</li>
+</ul>
+<p class="bullet" style="margin-left: 64px;">This issue has been resolved by restricting the length of transporter code in general lookup to 16 characters.</p>
+<h3><a name="IR_Tally_Printing" id="IR_Tally_Printing">Tally Printing</a></h3>
+<ul>
+<li class="p-bullet">
+<p class="bullet">When using <span class="hcp1">Tally Printing</span> for sales and excise billing, if the system parameter <span class="hcp1">Club Duplicate Items in Bill</span> under the category <span class="hcp1">Billing</span> is disabled, each distinct item was printed only once with quantity as one, regardless of the number of repeated entries. This was leading to mismatch in sold quantities and values with the printed bill.</p>
+</li>
+</ul>
+<p class="bullet" style="margin-left: 64px;">This issue has been resolved.</p>
+<h3><a name="IR_Reports" id="IR_Reports">Reports</a></h3>
+<h4 class="hcp3">Stock Reports</h4>
+<ol>
+<li class="hcp2">
+<ul>
+<li class="p-bullet">
+<p class="bullet">When the option, <span class="hcp1">Display Zero Balance</span> was unchecked, the Stock Movement Detailed Report validated against the current balance and not the transacted quantity.</p>
+</li>
+</ul>
+</li>
+</ol>
+<p class="bullet" style="margin-left: 104px;">This issue has been resolved.</p>
+<ol>
+<li class="hcp2">
+<ul>
+<li class="p-bullet">
+<p class="bullet">The stock movement report did not display the non-transacted items.</p>
+</li>
+</ul>
+</li>
+</ol>
+<p class="bullet" style="margin-left: 104px;">This issue has been resolved.</p>
+<ol>
+<li class="hcp2">
+<ul>
+<li class="p-bullet">
+<p class="bullet">Multiple transactions having a common prefix were grouped together based on the prefix and not on transaction type and displayed in the <span class="hcp1">Stock Transaction Ledger</span>.</p>
+</li>
+</ul>
+</li>
+</ol>
+<p class="bullet" style="margin-left: 104px;">This issue has been resolved.</p>
+<p class="Body-Text">&#160;</p>
+</body>
+</html>

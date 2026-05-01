@@ -1,0 +1,167 @@
+
+<!doctype HTML public "-//W3C//DTD HTML 4.0 Frameset//EN">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=windows-1252">
+ <meta name="generator" content="Adobe RoboHelp 10">
+<title>Goods Outwards Grid Details</title>
+<link rel="StyleSheet" href="../Shoper.css" type="text/css">
+<style title="hcp" type="text/css">
+<!--
+img.hcp1 { border:none; }
+span.hcp2 { font-weight:bold; }
+span.hcp3 { color:#000000; }
+-->
+</style>
+</head>
+
+<body>
+<script type="text/javascript" src="../ehlpdhtm.js" language="JavaScript1.2"></script>
+
+<h1 class="Body-Text">Goods Outwards Transaction Grid Detail</h1>
+<p class="Body-Text">The detail part of an outward transaction/ issue is 
+ displayed. The columns displayed in the grid are based on the transaction 
+ type selected.</p>
+<p class="body-text"><img src="GO_Trans_Detail.gif" alt="" border="0" class="hcp1"></p>
+<p class="Body-Text" style="color: #000000;">Each item with its required 
+ details for issue can be entered in the Item Details grid from the Direct 
+ Entry grid. The columns displayed in the grids can be configured <a href="../Setup/Entry_Panel_Column_Configuration.htm">here</a>.</p>
+<p class="Body-Text" style="text-align: left;">The Direct Entry grid is 
+ displayed.</p>
+<p class="Body-Text" style="text-align: left;"><img src="GO_Trans_Detail_EntryPanel.gif" alt="" border="0" class="hcp1"></p>
+<p class="Body-Text" style="margin-left: 7px;"><span class="hcp2">T</span>he 
+ grid displays the item details, if selected. Otherwise, you may scan the 
+ stock number, enter the stock number, or press <span class="hcp2">F2</span> 
+ in the <span class="hcp2">Stock No.</span> column to select 
+ items using the search window.</p>
+<p class="Body-Text" style="color: #ff0000; margin-left: 7px;"><span class="hcp3">If 
+ the selected transaction type is purchase return, and the reference documents 
+ are selected, items are validated against the documents.</span> <span class="hcp3">Otherwise, a <a href="GO_List_of_Purchase_Documents.htm">list 
+ of documents</a> are displayed for selection as soon as an item number 
+ is entered. Select the required documents. In order to do a transaction 
+ without reference, press</span> <span style="color: #000000; font-weight: bold;">Esc</span><span class="hcp3">.</span></p>
+<p class="Note"><span class="hcp2"><span class="hcp3">N</span>ote:</span></p>
+<p class="Note"><span class="hcp2"><font face="Microsoft Sans Serif" style="font-weight: normal;">•</font></span> 
+ When Dispatch Advice or Purchase document is loaded, the selected document 
+ prefix and document numbers are displayed in the grid.</p>
+<p class="Note"><font face="Microsoft Sans Serif">•</font> 
+ When PDT file is loaded, if sufficient quantity is not available, Shoper 
+ gives a warning message and the stock number is skipped after writing 
+ to a log file.</p>
+<p class="Note"><font face="Microsoft Sans Serif">•</font> 
+ In the cases of: inward to outward, item details for purchase return loaded 
+ from multiple purchase documents, and dispatch advice loading, stock numbers 
+ having insufficient quantity are shown in different colours. If available 
+ quantity is less, you can change the quantity as per availability, and 
+ remove items with zero quantity.</p>
+<p class="Body-Text"><span class="hcp2">Stock No</span>: 
+ Enter the stock number of the item or press <span class="hcp2">F2</span> 
+ to activate <a href="../Common/Common_Browse.htm">Item Search</a> window 
+ and select the required item. If the stock number of the item is entered 
+ by scanning the barcode, then the scanning of the barcode is to be done 
+ when the cursor is in this field.</p>
+<p class="Body-Text"><span class="hcp2">Item Description</span>: 
+ Displays the description of the selected item/ stock number. &#160;</p>
+<p class="Body-Text"><span class="hcp2">Purchase Doc Prefix</span>: 
+ Displays the prefix of the purchase document.</p>
+<p class="Body-Text"><span class="hcp2">Purchase Doc No.</span>: 
+ Displays the number of the purchase document.</p>
+<p class="Note"><span class="hcp2">Note</span>: In case <span class="hcp2">Enable Delivery from Remote Location</span> 
+ is set to <span class="hcp2">1-Yes</span> in System Parameter,under 
+ category <span class="hcp2">Delivery Process</span>, then 
+ an additional column <span class="hcp2">Location</span> 
+ will be available in the grid. When location as part of batch is enabled, 
+ <span class="hcp2">Location Code</span> field will be displayed.</p>
+<p class="Body-Text"><span class="hcp2">Selling Price</span>: 
+ Displays the values available in the items master for the field. If the 
+ transaction type is <span class="hcp2">Purchase</span> then, 
+ <span class="hcp2">Purchase Price</span> is displayed instead 
+ of <span class="hcp2">Current Cost</span>. &#160;A drop-down 
+ list is displayed (based on parameter settings). Select the price from 
+ the list.</p>
+<p id="p1" class="Body-Text"><span class="hcp2">Quantity</span>: 
+ Enter the item quantity being transacted. This is validated against the 
+ quantity in the reference document. If <a href="GO_Configuration.htm#EnablingLSQ">LSQ 
+ is enabled</a>, it is taken as the transaction quantity. For returning 
+ more quantity, you need to scan different pieces individually. When duplicate 
+ items are entered, if all details in the lines match, duplicate entries 
+ are clubbed and quantity and values are computed.</p>
+<p class="Note" style="margin-left: 19px;"><span class="hcp2">Note:</span></p>
+<p class="Note" style="margin-left: 19px;"><font 
+ face="Microsoft Sans Serif">•</font> &#160;Even if LSQ 
+ is enabled, when loading details from PDT file, the quantities in the 
+ PDT file are loaded.</p>
+<p class="Note" style="margin-left: 19px;"><font 
+ face="Microsoft Sans Serif">•</font> &#160;Quantities 
+ that are not multiples of the corresponding LSQ is allowed based on configuration 
+ at the time of installation.</p>
+<p class="Body-Text" style="margin-left: 7px;">Validation of transaction 
+ quantity against stock on hand is done based on <a href="GO_Configuration.htm#ValidationofTranQty">configuration</a>.</p>
+<p class="Body-Text" style="color: #000000;"><span class="hcp2">Doc 
+ Rate</span>: The rate of the item entered in the document when the item 
+ was received during Goods Inwards.</p>
+<p class="Body-Text"><span class="hcp2">Value</span>: Calculates 
+ and displays the product of the <span class="hcp2">Act Qty</span> 
+ and <span class="hcp2">Purchase Cost</span>.</p>
+<p class="Body-Text"><span class="hcp2">Discount Rate</span> 
+ and <span class="hcp2">Discount Amount</span>: Enter the 
+ items level discounts, if any, as an <span class="hcp2">Amount</span> 
+ or <span class="hcp2">Rate</span> to be applied on <span class="hcp2">Value</span>. If rate is entered then the 
+ amount is automatically calculated and displayed and vice versa.</p>
+<p class="Body-Text" style="color: #000000;">The percentage of discount 
+ applicable is as per the selected discount code/ scheme, subjected to 
+ the maximum allowed (if defined). If the item level discount selected 
+ is a fixed one you cannot edit it. On the other hand, in the case of a 
+ variable discount, if it is defined as:</p>
+<ul>
+	<li class="p-bullet"><p class="bullet" style="color: #000000;"><span class="hcp2">Percentage</span>: You may change the percentage 
+	 of discount for the selected item</p></li>
+	<li class="p-bullet"><p class="bullet" style="color: #000000;"><span class="hcp2">Amount</span>: The computed percentage 
+	 based on the discount amount is displayed</p></li>
+</ul>
+<p class="Body-Text" style="color: #000000;">The discount amount applicable 
+ is as per the selected discount code/ scheme, subjected to the maximum 
+ allowed (if defined). If the item level discount selected is a fixed one 
+ you cannot edit it. On the other hand, in the case of a variable discount, 
+ if it is defined as:</p>
+<ul>
+	<li class="p-bullet"><p class="bullet" style="color: #000000;"><span class="hcp2">Amount</span>: You may change the amount 
+	 of discount for the selected item</p></li>
+	<li class="p-bullet"><p class="bullet" style="color: #000000;"><span class="hcp2">Percentage</span>: The computed amount 
+	 based on the discount percentage is displayed</p></li>
+</ul>
+<p class="Body-Text" style="color: #000000;">Additionally, if you have 
+ defined the variable discount as <span class="hcp2">Both</span>, 
+ you may enter either percentage or amount. If you enter percentage, the 
+ corresponding amount will be displayed and vice versa.</p>
+<p class="Note"><span class="hcp2">Note:</span> In the case 
+ of manual selection of discount as well as auto selection of discount, 
+ changing variable discount percentage/ amount at item level are similar.</p>
+<p class="Body-Text"><span class="hcp2">Tax Rate</span> and 
+ <span class="hcp2">Tax Amount</span>: Enter Item level tax 
+ either as Tax Rate or Tax Amount.</p>
+<p class="Body-Text"><span class="hcp2">Addon Before Tax</span>: 
+ Enter any additional value to be added to the cost before calculating 
+ the Tax. Tax is also calculated for this value.</p>
+<p class="Body-Text"><span class="hcp2">Addon After Tax</span>: 
+ Enter any additional value to be added to the cost. Tax is not calculated 
+ on this value.</p>
+<p class="Body-Text"><span class="hcp2">Deduction Before 
+ Tax</span>: Enter any value to be subtracted from the cost. Tax is calculated 
+ on this value also and reduced from the Tax Amount.</p>
+<p class="Body-Text"><span class="hcp2">Deduction After Tax</span>: 
+ Enter any value to be subtracted from the cost. Tax is not calculated 
+ on this value.</p>
+<p class="Body-Text"><span class="hcp2">Net Amount</span>: 
+ Displays the total amount arrived by adding or subtracting, as the case 
+ may be, the values of Discount, Tax, Add-On and Deductions.</p>
+<p class="Note"><span class="hcp2">Note:</span> By double 
+ clicking on any of the items present in the Item Details grid, the item 
+ is brought to the Direct Entry grid where it can be edited as required. 
+ To delete any item from the Item details grid, you have to select the 
+ item by clicking and then press <span class="hcp2">Ctrl+D</span> 
+ when it is high lighted.</p>
+<p class="BlankLine">&#160;</p>
+<p class="BlankLine">&#160;</p>
+</body>
+</html>

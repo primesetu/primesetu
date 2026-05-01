@@ -15,8 +15,10 @@ import { cn } from '@/lib/utils'
 import { api } from '@/api/client'
 import Personalization from './Personalization'
 import BrowseCustomizer from './BrowseCustomizer'
-import CatalogueDNA from './CatalogueDNA'
+import SystemParameters from './SystemParameters'
+import GenLookupManager from './GenLookupManager'
 import TaxMaster from './TaxMaster'
+import CatalogueDNA from './CatalogueDNA'
 import { 
   Button, 
   Card, 
@@ -151,127 +153,10 @@ export default function ConfigModule() {
         </div>
       </div>
 
-      {activeSubTab === 'params' && (
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-[var(--space-8)]">
-          <div className={cn(
-            "lg:col-span-2 rounded-[var(--radius-lg)] p-[var(--space-8)] shadow-2xl border",
-            isInstitutional ? "bg-[var(--surface-elevated)] border-[var(--border-subtle)]" : "bg-[var(--background)]/40 backdrop-blur-md border-[var(--border-subtle)]/50"
-          )}>
-            <div className="flex items-center gap-[var(--space-4)] mb-[var(--space-8)]">
-              <div className={cn(
-                "w-12 h-12 rounded-[var(--radius-md)] flex items-center justify-center text-xl shadow-lg border",
-                isInstitutional ? "bg-[var(--background)] border-[var(--border-subtle)]" : "bg-[var(--surface-elevated)] border-[var(--border-default)]/50"
-              )}>⚙️</div>
-              <h3 className={cn(
-                "text-2xl font-serif font-black",
-                isInstitutional ? "text-[var(--text-primary)]" : "text-[var(--text-primary)]"
-              )}>System-Wide Parameters</h3>
-            </div>
-            
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-[var(--space-6)]">
-              {params.map(p => (
-                <div key={p.id} className={cn(
-                  "p-[var(--space-6)] rounded-[var(--radius-lg)] border transition-all group",
-                  isInstitutional 
-                    ? "bg-[var(--background)] border-[var(--border-subtle)] hover:border-[var(--accent)]" 
-                    : "bg-[var(--surface-elevated)]/40 border-[var(--border-subtle)]/50 hover:border-[var(--text-tertiary)] hover:bg-[var(--surface-elevated)]/80"
-                )}>
-                  <div className="text-[10px] font-black text-[var(--text-tertiary)] uppercase tracking-widest mb-[var(--space-2)]">{p.code}</div>
-                  <div className={cn(
-                    "text-xs font-bold mb-[var(--space-6)] h-8 leading-relaxed",
-                    isInstitutional ? "text-[var(--text-secondary)]" : "text-[var(--text-secondary)]"
-                  )}>{p.desc}</div>
-                  
-                  <div className="flex justify-between items-center">
-                    {p.type === 'bool' ? (
-                      <button 
-                        onClick={() => setParams(params.map(x => x.id === p.id ? {...x, value: !x.value} : x))}
-                        className={cn(
-                          "w-14 h-8 rounded-full transition-all relative",
-                          p.value 
-                            ? (isInstitutional ? "bg-[var(--accent)]" : "bg-[var(--secondary)] shadow-[0_0_15px_rgba(39,174,96,0.3)]") 
-                            : "bg-[var(--surface-elevated)]/50"
-                        )}
-                      >
-                        <div className={`absolute top-1 w-6 h-6 bg-white rounded-full transition-all shadow-md ${p.value ? 'right-1' : 'left-1'}`}></div>
-                      </button>
-                    ) : (
-                      <input 
-                        type="text" 
-                        value={p.value as string} 
-                        className={cn(
-                          "rounded-[var(--radius-md)] px-4 py-2 text-xs font-black w-24 text-center outline-none focus:border-[var(--accent)] transition-all",
-                          isInstitutional 
-                            ? "bg-[var(--surface-elevated)] border border-[var(--border-subtle)] text-[var(--text-primary)]" 
-                            : "bg-[var(--background)]/50 border border-[var(--border-subtle)]/50 text-[var(--text-primary)] focus:bg-[var(--surface-elevated)]"
-                        )}
-                        onChange={(e) => setParams(params.map(x => x.id === p.id ? {...x, value: e.target.value} : x))}
-                      />
-                    )}
-                    <span className="text-[9px] font-black text-[var(--text-tertiary)] uppercase tracking-tighter">Verified Node</span>
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
+      {activeSubTab === 'params' && <SystemParameters />}
 
-          <div className={cn(
-            "rounded-[var(--radius-lg)] p-[var(--space-8)] shadow-2xl relative overflow-hidden border",
-            isInstitutional ? "bg-[var(--surface-elevated)] border-[var(--border-subtle)]" : "bg-[var(--background)]/60 backdrop-blur-xl border-[var(--border-subtle)]/50 text-[var(--text-primary)]"
-          )}>
-            {!isInstitutional && <div className="absolute top-0 right-0 w-64 h-64 bg-[var(--accent)]/10 blur-[100px]"></div>}
-            <h3 className={cn(
-              "text-xl font-serif font-black mb-[var(--space-6)] relative z-10",
-              isInstitutional ? "text-[var(--accent)]" : "text-[var(--text-primary)]"
-            )}>Security Note</h3>
-            <p className={cn(
-              "text-sm leading-relaxed relative z-10 font-medium",
-              isInstitutional ? "text-[var(--text-secondary)]" : "text-[var(--text-secondary)]"
-            )}>
-              Changes to System Parameters affect all active billing nodes across the SMRITI-OS ecosystem. 
-              Always verify <span className="text-[var(--accent)] font-bold">MRP_INCL_TAX</span> settings before starting a new business day.
-            </p>
-            <div className={cn(
-              "mt-[var(--space-8)] p-[var(--space-6)] rounded-[var(--radius-lg)] relative z-10 border",
-              isInstitutional ? "bg-[var(--background)] border-[var(--border-subtle)]" : "bg-[var(--surface-elevated)]/50 border-[var(--border-subtle)]/50"
-            )}>
-              <div className="text-[10px] font-black uppercase text-[var(--text-tertiary)] mb-[var(--space-2)]">Last Audit</div>
-              <div className={cn(
-                "text-xs font-bold",
-                isInstitutional ? "text-[var(--text-primary)]" : "text-[var(--text-primary)]"
-              )}>14 Aug 2025 · 17:42</div>
-            </div>
-          </div>
-        </div>
-      )}
-
-      {activeSubTab === 'brands' && (
-        <div className={cn(
-          "rounded-[var(--radius-lg)] p-[var(--space-8)] shadow-2xl overflow-hidden border",
-          isInstitutional ? "bg-[var(--surface-elevated)] border-[var(--border-subtle)]" : "bg-[var(--background)]/40 backdrop-blur-md border-[var(--border-subtle)]/50"
-        )}>
-          <div className="flex items-center justify-between mb-[var(--space-8)]">
-            <div>
-              <h3 className={cn(
-                "text-2xl font-serif font-black",
-                isInstitutional ? "text-[var(--text-primary)]" : "text-[var(--text-primary)]"
-              )}>Classification Master</h3>
-              <p className="text-[10px] text-[var(--text-tertiary)] font-bold uppercase tracking-widest mt-1">Global Catalogue Index</p>
-            </div>
-          </div>
-          
-          <div className="h-[400px]">
-             <DataTable 
-               data={brands}
-               columns={brandColumns}
-             />
-          </div>
-        </div>
-      )}
-
-      {activeSubTab === 'classification' && (
-        <CatalogueDNA />
-      )}
+      {activeSubTab === 'classification' && <GenLookupManager />}
+      {activeSubTab === 'brands' && <GenLookupManager />}
 
       {activeSubTab === 'tax' && <TaxMaster onClose={() => setActiveSubTab('params')} />}
       

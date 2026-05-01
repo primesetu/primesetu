@@ -1,0 +1,7884 @@
+{
+    "GenLookUp": [
+        {
+            "name": "Recid",
+            "type": "int",
+            "nullable": "NO",
+            "length": null
+        },
+        {
+            "name": "Code",
+            "type": "varchar",
+            "nullable": "NO",
+            "length": 128
+        },
+        {
+            "name": "Descr",
+            "type": "varchar",
+            "nullable": "YES",
+            "length": 1600
+        },
+        {
+            "name": "Flag",
+            "type": "varchar",
+            "nullable": "YES",
+            "length": 256
+        },
+        {
+            "name": "Number",
+            "type": "int",
+            "nullable": "YES",
+            "length": null
+        },
+        {
+            "name": "VaUid",
+            "type": "varchar",
+            "nullable": "YES",
+            "length": 32
+        },
+        {
+            "name": "VaCtr",
+            "type": "int",
+            "nullable": "YES",
+            "length": null
+        },
+        {
+            "name": "VaTermId",
+            "type": "varchar",
+            "nullable": "YES",
+            "length": 32
+        },
+        {
+            "name": "VaCompCode",
+            "type": "varchar",
+            "nullable": "YES",
+            "length": 16
+        }
+    ],
+    "BAKStockCreditNote": [
+        {
+            "name": "DocNoPrefix",
+            "type": "varchar",
+            "nullable": "NO",
+            "length": 8
+        },
+        {
+            "name": "DocNo",
+            "type": "int",
+            "nullable": "NO",
+            "length": null
+        },
+        {
+            "name": "DocEntSrlNo",
+            "type": "int",
+            "nullable": "NO",
+            "length": null
+        },
+        {
+            "name": "DocDt",
+            "type": "datetime",
+            "nullable": "YES",
+            "length": null
+        },
+        {
+            "name": "Partyid",
+            "type": "varchar",
+            "nullable": "YES",
+            "length": 16
+        },
+        {
+            "name": "PartyName",
+            "type": "varchar",
+            "nullable": "YES",
+            "length": 60
+        },
+        {
+            "name": "RefDocNo",
+            "type": "varchar",
+            "nullable": "YES",
+            "length": 32
+        },
+        {
+            "name": "Remarks",
+            "type": "varchar",
+            "nullable": "YES",
+            "length": 256
+        },
+        {
+            "name": "Class1Cd",
+            "type": "varchar",
+            "nullable": "YES",
+            "length": 32
+        },
+        {
+            "name": "Class2Cd",
+            "type": "varchar",
+            "nullable": "YES",
+            "length": 32
+        },
+        {
+            "name": "Subclass1Cd",
+            "type": "varchar",
+            "nullable": "YES",
+            "length": 32
+        },
+        {
+            "name": "SubClass2Cd",
+            "type": "varchar",
+            "nullable": "YES",
+            "length": 32
+        },
+        {
+            "name": "SizeCd",
+            "type": "varchar",
+            "nullable": "YES",
+            "length": 32
+        },
+        {
+            "name": "StockNo",
+            "type": "varchar",
+            "nullable": "YES",
+            "length": 32
+        },
+        {
+            "name": "DocQty",
+            "type": "real",
+            "nullable": "YES",
+            "length": null
+        },
+        {
+            "name": "DocRate",
+            "type": "money",
+            "nullable": "YES",
+            "length": null
+        },
+        {
+            "name": "DocValue",
+            "type": "money",
+            "nullable": "YES",
+            "length": null
+        },
+        {
+            "name": "DocNetValue",
+            "type": "money",
+            "nullable": "YES",
+            "length": null
+        },
+        {
+            "name": "CreditNoteNo",
+            "type": "int",
+            "nullable": "YES",
+            "length": null
+        },
+        {
+            "name": "CreditNoteDt",
+            "type": "datetime",
+            "nullable": "YES",
+            "length": null
+        },
+        {
+            "name": "CreditNoteQty",
+            "type": "real",
+            "nullable": "YES",
+            "length": null
+        },
+        {
+            "name": "CreditNoteRemark",
+            "type": "varchar",
+            "nullable": "YES",
+            "length": 256
+        },
+        {
+            "name": "VAUid",
+            "type": "varchar",
+            "nullable": "YES",
+            "length": 32
+        },
+        {
+            "name": "VActr",
+            "type": "int",
+            "nullable": "YES",
+            "length": null
+        },
+        {
+            "name": "VATermId",
+            "type": "varchar",
+            "nullable": "YES",
+            "length": 32
+        },
+        {
+            "name": "VACompCode",
+            "type": "varchar",
+            "nullable": "YES",
+            "length": 16
+        },
+        {
+            "name": "UpdFlag",
+            "type": "varchar",
+            "nullable": "YES",
+            "length": 1
+        }
+    ],
+    "BAKStockMaster": [
+        {
+            "name": "StockNo",
+            "type": "varchar",
+            "nullable": "NO",
+            "length": 32
+        },
+        {
+            "name": "BatchSrlNo",
+            "type": "varchar",
+            "nullable": "NO",
+            "length": 16
+        },
+        {
+            "name": "LocnId",
+            "type": "varchar",
+            "nullable": "NO",
+            "length": 16
+        },
+        {
+            "name": "YrOpBalQty",
+            "type": "money",
+            "nullable": "YES",
+            "length": null
+        },
+        {
+            "name": "YrOpBalVal",
+            "type": "money",
+            "nullable": "YES",
+            "length": null
+        },
+        {
+            "name": "CurBalQty",
+            "type": "money",
+            "nullable": "YES",
+            "length": null
+        },
+        {
+            "name": "CurBalVal",
+            "type": "money",
+            "nullable": "YES",
+            "length": null
+        },
+        {
+            "name": "VAUid",
+            "type": "varchar",
+            "nullable": "YES",
+            "length": 32
+        },
+        {
+            "name": "VActr",
+            "type": "int",
+            "nullable": "YES",
+            "length": null
+        },
+        {
+            "name": "VATermId",
+            "type": "varchar",
+            "nullable": "YES",
+            "length": 32
+        },
+        {
+            "name": "VACompCode",
+            "type": "varchar",
+            "nullable": "YES",
+            "length": 16
+        },
+        {
+            "name": "UpdFlag",
+            "type": "varchar",
+            "nullable": "YES",
+            "length": 1
+        }
+    ],
+    "BAKStockMasterExtd": [
+        {
+            "name": "StockNo",
+            "type": "varchar",
+            "nullable": "NO",
+            "length": 32
+        },
+        {
+            "name": "BatchSrlno",
+            "type": "varchar",
+            "nullable": "NO",
+            "length": 16
+        },
+        {
+            "name": "Qty1",
+            "type": "real",
+            "nullable": "YES",
+            "length": null
+        },
+        {
+            "name": "Qty2",
+            "type": "real",
+            "nullable": "YES",
+            "length": null
+        },
+        {
+            "name": "Qty3",
+            "type": "real",
+            "nullable": "YES",
+            "length": null
+        },
+        {
+            "name": "Qty4",
+            "type": "real",
+            "nullable": "YES",
+            "length": null
+        },
+        {
+            "name": "Qty5",
+            "type": "real",
+            "nullable": "YES",
+            "length": null
+        },
+        {
+            "name": "Qty6",
+            "type": "real",
+            "nullable": "YES",
+            "length": null
+        },
+        {
+            "name": "Qty7",
+            "type": "real",
+            "nullable": "YES",
+            "length": null
+        },
+        {
+            "name": "Qty8",
+            "type": "real",
+            "nullable": "YES",
+            "length": null
+        },
+        {
+            "name": "Qty9",
+            "type": "real",
+            "nullable": "YES",
+            "length": null
+        },
+        {
+            "name": "Qty10",
+            "type": "real",
+            "nullable": "YES",
+            "length": null
+        },
+        {
+            "name": "Qty11",
+            "type": "real",
+            "nullable": "YES",
+            "length": null
+        },
+        {
+            "name": "Qty12",
+            "type": "real",
+            "nullable": "YES",
+            "length": null
+        },
+        {
+            "name": "Qty13",
+            "type": "real",
+            "nullable": "YES",
+            "length": null
+        },
+        {
+            "name": "Qty14",
+            "type": "real",
+            "nullable": "YES",
+            "length": null
+        },
+        {
+            "name": "Qty15",
+            "type": "real",
+            "nullable": "YES",
+            "length": null
+        },
+        {
+            "name": "Qty16",
+            "type": "real",
+            "nullable": "YES",
+            "length": null
+        },
+        {
+            "name": "Qty17",
+            "type": "real",
+            "nullable": "YES",
+            "length": null
+        },
+        {
+            "name": "Qty18",
+            "type": "real",
+            "nullable": "YES",
+            "length": null
+        },
+        {
+            "name": "Qty19",
+            "type": "real",
+            "nullable": "YES",
+            "length": null
+        },
+        {
+            "name": "Qty20",
+            "type": "real",
+            "nullable": "YES",
+            "length": null
+        },
+        {
+            "name": "Qty21",
+            "type": "real",
+            "nullable": "YES",
+            "length": null
+        },
+        {
+            "name": "VAUId",
+            "type": "varchar",
+            "nullable": "YES",
+            "length": 32
+        },
+        {
+            "name": "VACtr",
+            "type": "int",
+            "nullable": "YES",
+            "length": null
+        },
+        {
+            "name": "VATermId",
+            "type": "varchar",
+            "nullable": "YES",
+            "length": 32
+        },
+        {
+            "name": "VACompCode",
+            "type": "varchar",
+            "nullable": "YES",
+            "length": 16
+        },
+        {
+            "name": "UpdFlag",
+            "type": "varchar",
+            "nullable": "YES",
+            "length": 1
+        }
+    ],
+    "GenLookupExtd": [
+        {
+            "name": "RecID",
+            "type": "int",
+            "nullable": "NO",
+            "length": null
+        },
+        {
+            "name": "Category",
+            "type": "varchar",
+            "nullable": "YES",
+            "length": 256
+        },
+        {
+            "name": "IsEditable",
+            "type": "int",
+            "nullable": "YES",
+            "length": null
+        },
+        {
+            "name": "RecType",
+            "type": "varchar",
+            "nullable": "YES",
+            "length": 25
+        },
+        {
+            "name": "Operations",
+            "type": "varchar",
+            "nullable": "YES",
+            "length": 3
+        },
+        {
+            "name": "AddRules",
+            "type": "varchar",
+            "nullable": "YES",
+            "length": 256
+        },
+        {
+            "name": "EditRules",
+            "type": "varchar",
+            "nullable": "YES",
+            "length": 256
+        },
+        {
+            "name": "DeleteRules",
+            "type": "varchar",
+            "nullable": "YES",
+            "length": 256
+        },
+        {
+            "name": "Additional1",
+            "type": "varchar",
+            "nullable": "YES",
+            "length": 256
+        },
+        {
+            "name": "Additional2",
+            "type": "varchar",
+            "nullable": "YES",
+            "length": 256
+        },
+        {
+            "name": "Description",
+            "type": "varchar",
+            "nullable": "YES",
+            "length": 256
+        },
+        {
+            "name": "VaUid",
+            "type": "varchar",
+            "nullable": "YES",
+            "length": 32
+        },
+        {
+            "name": "VaCtr",
+            "type": "int",
+            "nullable": "YES",
+            "length": null
+        },
+        {
+            "name": "VaTermId",
+            "type": "varchar",
+            "nullable": "YES",
+            "length": 32
+        },
+        {
+            "name": "VaCompCode",
+            "type": "varchar",
+            "nullable": "YES",
+            "length": 16
+        }
+    ],
+    "BAKStockTrnSummary": [
+        {
+            "name": "StockNo",
+            "type": "varchar",
+            "nullable": "NO",
+            "length": 32
+        },
+        {
+            "name": "BatchSrlNo",
+            "type": "varchar",
+            "nullable": "NO",
+            "length": 16
+        },
+        {
+            "name": "LocnId",
+            "type": "varchar",
+            "nullable": "NO",
+            "length": 16
+        },
+        {
+            "name": "Yr",
+            "type": "int",
+            "nullable": "NO",
+            "length": null
+        },
+        {
+            "name": "MonthNo",
+            "type": "int",
+            "nullable": "NO",
+            "length": null
+        },
+        {
+            "name": "MonthOpBalQty",
+            "type": "money",
+            "nullable": "YES",
+            "length": null
+        },
+        {
+            "name": "MonthOpBalVal",
+            "type": "money",
+            "nullable": "YES",
+            "length": null
+        },
+        {
+            "name": "GoodsPurchQty",
+            "type": "real",
+            "nullable": "YES",
+            "length": null
+        },
+        {
+            "name": "GoodsPurchVal",
+            "type": "money",
+            "nullable": "YES",
+            "length": null
+        },
+        {
+            "name": "PurchRetnQty",
+            "type": "real",
+            "nullable": "YES",
+            "length": null
+        },
+        {
+            "name": "PurchRetnVal",
+            "type": "money",
+            "nullable": "YES",
+            "length": null
+        },
+        {
+            "name": "SaleQty",
+            "type": "real",
+            "nullable": "YES",
+            "length": null
+        },
+        {
+            "name": "SaleDocVal",
+            "type": "money",
+            "nullable": "YES",
+            "length": null
+        },
+        {
+            "name": "SaleRetnQty",
+            "type": "real",
+            "nullable": "YES",
+            "length": null
+        },
+        {
+            "name": "SaleRetnDocVal",
+            "type": "money",
+            "nullable": "YES",
+            "length": null
+        },
+        {
+            "name": "SaleStkVal",
+            "type": "money",
+            "nullable": "YES",
+            "length": null
+        },
+        {
+            "name": "SaleRetnStkVal",
+            "type": "money",
+            "nullable": "YES",
+            "length": null
+        },
+        {
+            "name": "CSTransferInQty",
+            "type": "real",
+            "nullable": "YES",
+            "length": null
+        },
+        {
+            "name": "CSTransferInVal",
+            "type": "money",
+            "nullable": "YES",
+            "length": null
+        },
+        {
+            "name": "CSTransferOutQty",
+            "type": "real",
+            "nullable": "YES",
+            "length": null
+        },
+        {
+            "name": "CSTransferOutVal",
+            "type": "money",
+            "nullable": "YES",
+            "length": null
+        },
+        {
+            "name": "MiscRcptQty",
+            "type": "real",
+            "nullable": "YES",
+            "length": null
+        },
+        {
+            "name": "MiscRcptVal",
+            "type": "money",
+            "nullable": "YES",
+            "length": null
+        },
+        {
+            "name": "MiscIssuQty",
+            "type": "real",
+            "nullable": "YES",
+            "length": null
+        },
+        {
+            "name": "MiscIssuVal",
+            "type": "money",
+            "nullable": "YES",
+            "length": null
+        },
+        {
+            "name": "ILTransferInQty",
+            "type": "real",
+            "nullable": "YES",
+            "length": null
+        },
+        {
+            "name": "ILTransferInVal",
+            "type": "money",
+            "nullable": "YES",
+            "length": null
+        },
+        {
+            "name": "ILTransferOutQty",
+            "type": "real",
+            "nullable": "YES",
+            "length": null
+        },
+        {
+            "name": "ILTransferOutVal",
+            "type": "money",
+            "nullable": "YES",
+            "length": null
+        },
+        {
+            "name": "ApprovalIssQty",
+            "type": "real",
+            "nullable": "YES",
+            "length": null
+        },
+        {
+            "name": "ApprovalIssVal",
+            "type": "money",
+            "nullable": "YES",
+            "length": null
+        },
+        {
+            "name": "ApprovalRetQty",
+            "type": "real",
+            "nullable": "YES",
+            "length": null
+        },
+        {
+            "name": "ApprovalRetVal",
+            "type": "money",
+            "nullable": "YES",
+            "length": null
+        },
+        {
+            "name": "MiscRcptStkVal",
+            "type": "money",
+            "nullable": "YES",
+            "length": null
+        },
+        {
+            "name": "MiscIssStkVal",
+            "type": "money",
+            "nullable": "YES",
+            "length": null
+        },
+        {
+            "name": "ApprovalIssStkVal",
+            "type": "money",
+            "nullable": "YES",
+            "length": null
+        },
+        {
+            "name": "ApprovalRetStkVal",
+            "type": "money",
+            "nullable": "YES",
+            "length": null
+        },
+        {
+            "name": "VAUid",
+            "type": "varchar",
+            "nullable": "YES",
+            "length": 32
+        },
+        {
+            "name": "VActr",
+            "type": "int",
+            "nullable": "YES",
+            "length": null
+        },
+        {
+            "name": "VATermId",
+            "type": "varchar",
+            "nullable": "YES",
+            "length": 32
+        },
+        {
+            "name": "VACompCode",
+            "type": "varchar",
+            "nullable": "YES",
+            "length": 16
+        },
+        {
+            "name": "UpdFlag",
+            "type": "varchar",
+            "nullable": "YES",
+            "length": 1
+        }
+    ],
+    "StockCreditNote": [
+        {
+            "name": "DocNoPrefix",
+            "type": "varchar",
+            "nullable": "NO",
+            "length": 8
+        },
+        {
+            "name": "DocNo",
+            "type": "int",
+            "nullable": "NO",
+            "length": null
+        },
+        {
+            "name": "DocEntSrlNo",
+            "type": "int",
+            "nullable": "NO",
+            "length": null
+        },
+        {
+            "name": "DocDt",
+            "type": "datetime",
+            "nullable": "YES",
+            "length": null
+        },
+        {
+            "name": "Partyid",
+            "type": "varchar",
+            "nullable": "YES",
+            "length": 16
+        },
+        {
+            "name": "PartyName",
+            "type": "varchar",
+            "nullable": "YES",
+            "length": 60
+        },
+        {
+            "name": "RefDocNo",
+            "type": "varchar",
+            "nullable": "YES",
+            "length": 32
+        },
+        {
+            "name": "Remarks",
+            "type": "varchar",
+            "nullable": "YES",
+            "length": 256
+        },
+        {
+            "name": "Class1Cd",
+            "type": "varchar",
+            "nullable": "YES",
+            "length": 32
+        },
+        {
+            "name": "Class2Cd",
+            "type": "varchar",
+            "nullable": "YES",
+            "length": 32
+        },
+        {
+            "name": "Subclass1Cd",
+            "type": "varchar",
+            "nullable": "YES",
+            "length": 32
+        },
+        {
+            "name": "SubClass2Cd",
+            "type": "varchar",
+            "nullable": "YES",
+            "length": 32
+        },
+        {
+            "name": "SizeCd",
+            "type": "varchar",
+            "nullable": "YES",
+            "length": 32
+        },
+        {
+            "name": "StockNo",
+            "type": "varchar",
+            "nullable": "YES",
+            "length": 32
+        },
+        {
+            "name": "DocQty",
+            "type": "real",
+            "nullable": "YES",
+            "length": null
+        },
+        {
+            "name": "DocRate",
+            "type": "money",
+            "nullable": "YES",
+            "length": null
+        },
+        {
+            "name": "DocValue",
+            "type": "money",
+            "nullable": "YES",
+            "length": null
+        },
+        {
+            "name": "DocNetValue",
+            "type": "money",
+            "nullable": "YES",
+            "length": null
+        },
+        {
+            "name": "CreditNoteNo",
+            "type": "int",
+            "nullable": "YES",
+            "length": null
+        },
+        {
+            "name": "CreditNoteDt",
+            "type": "datetime",
+            "nullable": "YES",
+            "length": null
+        },
+        {
+            "name": "CreditNoteQty",
+            "type": "real",
+            "nullable": "YES",
+            "length": null
+        },
+        {
+            "name": "CreditNoteRemark",
+            "type": "varchar",
+            "nullable": "YES",
+            "length": 256
+        },
+        {
+            "name": "VAUid",
+            "type": "varchar",
+            "nullable": "YES",
+            "length": 32
+        },
+        {
+            "name": "VActr",
+            "type": "int",
+            "nullable": "YES",
+            "length": null
+        },
+        {
+            "name": "VATermId",
+            "type": "varchar",
+            "nullable": "YES",
+            "length": 32
+        },
+        {
+            "name": "VACompCode",
+            "type": "varchar",
+            "nullable": "YES",
+            "length": 16
+        }
+    ],
+    "TmpStockReserved2200super": [
+        {
+            "name": "SourceCompCode",
+            "type": "varchar",
+            "nullable": "YES",
+            "length": 16
+        },
+        {
+            "name": "DestCompCode",
+            "type": "varchar",
+            "nullable": "YES",
+            "length": 16
+        },
+        {
+            "name": "TrnType",
+            "type": "int",
+            "nullable": "YES",
+            "length": null
+        },
+        {
+            "name": "TrnCtrlNo",
+            "type": "int",
+            "nullable": "YES",
+            "length": null
+        },
+        {
+            "name": "StockNo",
+            "type": "varchar",
+            "nullable": "YES",
+            "length": 32
+        },
+        {
+            "name": "ItemTag1",
+            "type": "varchar",
+            "nullable": "YES",
+            "length": 128
+        },
+        {
+            "name": "DocQty",
+            "type": "money",
+            "nullable": "YES",
+            "length": null
+        },
+        {
+            "name": "ServicedQty",
+            "type": "money",
+            "nullable": "YES",
+            "length": null
+        },
+        {
+            "name": "PhyQtyOut",
+            "type": "money",
+            "nullable": "YES",
+            "length": null
+        },
+        {
+            "name": "DeliveredQty",
+            "type": "money",
+            "nullable": "YES",
+            "length": null
+        },
+        {
+            "name": "RejectedQty",
+            "type": "money",
+            "nullable": "YES",
+            "length": null
+        },
+        {
+            "name": "RescheduleQty",
+            "type": "money",
+            "nullable": "YES",
+            "length": null
+        },
+        {
+            "name": "ReservedQty",
+            "type": "money",
+            "nullable": "YES",
+            "length": null
+        }
+    ],
+    "StockMaster": [
+        {
+            "name": "StockNo",
+            "type": "varchar",
+            "nullable": "NO",
+            "length": 32
+        },
+        {
+            "name": "BatchSrlNo",
+            "type": "varchar",
+            "nullable": "NO",
+            "length": 16
+        },
+        {
+            "name": "LocnId",
+            "type": "varchar",
+            "nullable": "NO",
+            "length": 16
+        },
+        {
+            "name": "YrOpBalQty",
+            "type": "money",
+            "nullable": "YES",
+            "length": null
+        },
+        {
+            "name": "YrOpBalVal",
+            "type": "money",
+            "nullable": "YES",
+            "length": null
+        },
+        {
+            "name": "CurBalQty",
+            "type": "money",
+            "nullable": "YES",
+            "length": null
+        },
+        {
+            "name": "CurBalVal",
+            "type": "money",
+            "nullable": "YES",
+            "length": null
+        },
+        {
+            "name": "VAUid",
+            "type": "varchar",
+            "nullable": "YES",
+            "length": 32
+        },
+        {
+            "name": "VActr",
+            "type": "int",
+            "nullable": "YES",
+            "length": null
+        },
+        {
+            "name": "VATermId",
+            "type": "varchar",
+            "nullable": "YES",
+            "length": 32
+        },
+        {
+            "name": "VACompCode",
+            "type": "varchar",
+            "nullable": "YES",
+            "length": 16
+        }
+    ],
+    "BAKExportGenLookUp": [
+        {
+            "name": "RecId",
+            "type": "int",
+            "nullable": "NO",
+            "length": null
+        },
+        {
+            "name": "Code",
+            "type": "varchar",
+            "nullable": "NO",
+            "length": 128
+        },
+        {
+            "name": "Descr",
+            "type": "varchar",
+            "nullable": "YES",
+            "length": 1600
+        },
+        {
+            "name": "Flag",
+            "type": "varchar",
+            "nullable": "YES",
+            "length": 255
+        },
+        {
+            "name": "Number",
+            "type": "int",
+            "nullable": "YES",
+            "length": null
+        },
+        {
+            "name": "VAUid",
+            "type": "varchar",
+            "nullable": "YES",
+            "length": 32
+        },
+        {
+            "name": "VActr",
+            "type": "int",
+            "nullable": "YES",
+            "length": null
+        },
+        {
+            "name": "VATermId",
+            "type": "varchar",
+            "nullable": "YES",
+            "length": 32
+        },
+        {
+            "name": "VACompCode",
+            "type": "varchar",
+            "nullable": "YES",
+            "length": 16
+        },
+        {
+            "name": "HOCompCode",
+            "type": "varchar",
+            "nullable": "NO",
+            "length": 32
+        },
+        {
+            "name": "FlagAckRecd",
+            "type": "bit",
+            "nullable": "YES",
+            "length": null
+        },
+        {
+            "name": "FileNumber",
+            "type": "numeric",
+            "nullable": "NO",
+            "length": null
+        },
+        {
+            "name": "UpdFlag",
+            "type": "varchar",
+            "nullable": "YES",
+            "length": 1
+        }
+    ],
+    "TRNStockAudit": [
+        {
+            "name": "TrnType",
+            "type": "int",
+            "nullable": "YES",
+            "length": null
+        },
+        {
+            "name": "TrnCtrlNo",
+            "type": "int",
+            "nullable": "YES",
+            "length": null
+        },
+        {
+            "name": "EntSrlNo",
+            "type": "int",
+            "nullable": "YES",
+            "length": null
+        },
+        {
+            "name": "ItemTagSrlNo",
+            "type": "int",
+            "nullable": "YES",
+            "length": null
+        },
+        {
+            "name": "StockNo",
+            "type": "varchar",
+            "nullable": "YES",
+            "length": 32
+        },
+        {
+            "name": "BatchNo",
+            "type": "varchar",
+            "nullable": "YES",
+            "length": 32
+        },
+        {
+            "name": "GradeCD",
+            "type": "varchar",
+            "nullable": "YES",
+            "length": 32
+        },
+        {
+            "name": "LocationCD",
+            "type": "varchar",
+            "nullable": "YES",
+            "length": 32
+        },
+        {
+            "name": "STDExItemTag1",
+            "type": "varchar",
+            "nullable": "YES",
+            "length": 128
+        },
+        {
+            "name": "DocQty",
+            "type": "real",
+            "nullable": "YES",
+            "length": null
+        },
+        {
+            "name": "PhyQtyIn",
+            "type": "real",
+            "nullable": "YES",
+            "length": null
+        },
+        {
+            "name": "PhyQtyOut",
+            "type": "real",
+            "nullable": "YES",
+            "length": null
+        },
+        {
+            "name": "SMCurBalQty",
+            "type": "money",
+            "nullable": "YES",
+            "length": null
+        },
+        {
+            "name": "SMCurBalVal",
+            "type": "money",
+            "nullable": "YES",
+            "length": null
+        },
+        {
+            "name": "SMEx01CurBalQty",
+            "type": "money",
+            "nullable": "YES",
+            "length": null
+        },
+        {
+            "name": "SMEx01CurBalVal",
+            "type": "money",
+            "nullable": "YES",
+            "length": null
+        },
+        {
+            "name": "SMEx02CurBalQty",
+            "type": "money",
+            "nullable": "YES",
+            "length": null
+        },
+        {
+            "name": "SMEx02CurBalVal",
+            "type": "money",
+            "nullable": "YES",
+            "length": null
+        },
+        {
+            "name": "DateInsert",
+            "type": "datetime",
+            "nullable": "YES",
+            "length": null
+        }
+    ],
+    "TmpMnStockReserved2200super": [
+        {
+            "name": "SourceCompCode",
+            "type": "varchar",
+            "nullable": "YES",
+            "length": 16
+        },
+        {
+            "name": "DestCompCode",
+            "type": "varchar",
+            "nullable": "YES",
+            "length": 16
+        },
+        {
+            "name": "TrnType",
+            "type": "int",
+            "nullable": "YES",
+            "length": null
+        },
+        {
+            "name": "TrnCtrlNo",
+            "type": "int",
+            "nullable": "YES",
+            "length": null
+        },
+        {
+            "name": "StockNo",
+            "type": "varchar",
+            "nullable": "YES",
+            "length": 32
+        },
+        {
+            "name": "ItemTag1",
+            "type": "varchar",
+            "nullable": "YES",
+            "length": 128
+        },
+        {
+            "name": "DocQty",
+            "type": "money",
+            "nullable": "YES",
+            "length": null
+        },
+        {
+            "name": "ServicedQty",
+            "type": "money",
+            "nullable": "YES",
+            "length": null
+        },
+        {
+            "name": "PhyQtyOut",
+            "type": "money",
+            "nullable": "YES",
+            "length": null
+        },
+        {
+            "name": "DeliveredQty",
+            "type": "money",
+            "nullable": "YES",
+            "length": null
+        },
+        {
+            "name": "RejectedQty",
+            "type": "money",
+            "nullable": "YES",
+            "length": null
+        },
+        {
+            "name": "RescheduleQty",
+            "type": "money",
+            "nullable": "YES",
+            "length": null
+        },
+        {
+            "name": "ReservedQty",
+            "type": "money",
+            "nullable": "YES",
+            "length": null
+        }
+    ],
+    "StockMasterExtd": [
+        {
+            "name": "StockNo",
+            "type": "varchar",
+            "nullable": "NO",
+            "length": 32
+        },
+        {
+            "name": "BatchSrlno",
+            "type": "varchar",
+            "nullable": "NO",
+            "length": 16
+        },
+        {
+            "name": "Qty1",
+            "type": "real",
+            "nullable": "YES",
+            "length": null
+        },
+        {
+            "name": "Qty2",
+            "type": "real",
+            "nullable": "YES",
+            "length": null
+        },
+        {
+            "name": "Qty3",
+            "type": "real",
+            "nullable": "YES",
+            "length": null
+        },
+        {
+            "name": "Qty4",
+            "type": "real",
+            "nullable": "YES",
+            "length": null
+        },
+        {
+            "name": "Qty5",
+            "type": "real",
+            "nullable": "YES",
+            "length": null
+        },
+        {
+            "name": "Qty6",
+            "type": "real",
+            "nullable": "YES",
+            "length": null
+        },
+        {
+            "name": "Qty7",
+            "type": "real",
+            "nullable": "YES",
+            "length": null
+        },
+        {
+            "name": "Qty8",
+            "type": "real",
+            "nullable": "YES",
+            "length": null
+        },
+        {
+            "name": "Qty9",
+            "type": "real",
+            "nullable": "YES",
+            "length": null
+        },
+        {
+            "name": "Qty10",
+            "type": "real",
+            "nullable": "YES",
+            "length": null
+        },
+        {
+            "name": "Qty11",
+            "type": "real",
+            "nullable": "YES",
+            "length": null
+        },
+        {
+            "name": "Qty12",
+            "type": "real",
+            "nullable": "YES",
+            "length": null
+        },
+        {
+            "name": "Qty13",
+            "type": "real",
+            "nullable": "YES",
+            "length": null
+        },
+        {
+            "name": "Qty14",
+            "type": "real",
+            "nullable": "YES",
+            "length": null
+        },
+        {
+            "name": "Qty15",
+            "type": "real",
+            "nullable": "YES",
+            "length": null
+        },
+        {
+            "name": "Qty16",
+            "type": "real",
+            "nullable": "YES",
+            "length": null
+        },
+        {
+            "name": "Qty17",
+            "type": "real",
+            "nullable": "YES",
+            "length": null
+        },
+        {
+            "name": "Qty18",
+            "type": "real",
+            "nullable": "YES",
+            "length": null
+        },
+        {
+            "name": "Qty19",
+            "type": "real",
+            "nullable": "YES",
+            "length": null
+        },
+        {
+            "name": "Qty20",
+            "type": "real",
+            "nullable": "YES",
+            "length": null
+        },
+        {
+            "name": "Qty21",
+            "type": "real",
+            "nullable": "YES",
+            "length": null
+        },
+        {
+            "name": "VAUId",
+            "type": "varchar",
+            "nullable": "YES",
+            "length": 32
+        },
+        {
+            "name": "VACtr",
+            "type": "int",
+            "nullable": "YES",
+            "length": null
+        },
+        {
+            "name": "VATermId",
+            "type": "varchar",
+            "nullable": "YES",
+            "length": 32
+        },
+        {
+            "name": "VACompCode",
+            "type": "varchar",
+            "nullable": "YES",
+            "length": 16
+        }
+    ],
+    "BAKGenLookupExtd": [
+        {
+            "name": "RecID",
+            "type": "int",
+            "nullable": "NO",
+            "length": null
+        },
+        {
+            "name": "Category",
+            "type": "varchar",
+            "nullable": "YES",
+            "length": 256
+        },
+        {
+            "name": "IsEditable",
+            "type": "int",
+            "nullable": "YES",
+            "length": null
+        },
+        {
+            "name": "RecType",
+            "type": "varchar",
+            "nullable": "YES",
+            "length": 25
+        },
+        {
+            "name": "Operations",
+            "type": "varchar",
+            "nullable": "YES",
+            "length": 3
+        },
+        {
+            "name": "AddRules",
+            "type": "varchar",
+            "nullable": "YES",
+            "length": 256
+        },
+        {
+            "name": "EditRules",
+            "type": "varchar",
+            "nullable": "YES",
+            "length": 256
+        },
+        {
+            "name": "DeleteRules",
+            "type": "varchar",
+            "nullable": "YES",
+            "length": 256
+        },
+        {
+            "name": "Additional1",
+            "type": "varchar",
+            "nullable": "YES",
+            "length": 256
+        },
+        {
+            "name": "Additional2",
+            "type": "varchar",
+            "nullable": "YES",
+            "length": 256
+        },
+        {
+            "name": "Description",
+            "type": "varchar",
+            "nullable": "YES",
+            "length": 256
+        },
+        {
+            "name": "VaUid",
+            "type": "varchar",
+            "nullable": "YES",
+            "length": 32
+        },
+        {
+            "name": "VaCtr",
+            "type": "int",
+            "nullable": "YES",
+            "length": null
+        },
+        {
+            "name": "VaTermId",
+            "type": "varchar",
+            "nullable": "YES",
+            "length": 32
+        },
+        {
+            "name": "VaCompCode",
+            "type": "varchar",
+            "nullable": "YES",
+            "length": 16
+        },
+        {
+            "name": "UpdFlag",
+            "type": "varchar",
+            "nullable": "YES",
+            "length": 1
+        }
+    ],
+    "StockTrnSummary": [
+        {
+            "name": "StockNo",
+            "type": "varchar",
+            "nullable": "NO",
+            "length": 32
+        },
+        {
+            "name": "BatchSrlNo",
+            "type": "varchar",
+            "nullable": "NO",
+            "length": 16
+        },
+        {
+            "name": "LocnId",
+            "type": "varchar",
+            "nullable": "NO",
+            "length": 16
+        },
+        {
+            "name": "Yr",
+            "type": "int",
+            "nullable": "NO",
+            "length": null
+        },
+        {
+            "name": "MonthNo",
+            "type": "int",
+            "nullable": "NO",
+            "length": null
+        },
+        {
+            "name": "MonthOpBalQty",
+            "type": "money",
+            "nullable": "YES",
+            "length": null
+        },
+        {
+            "name": "MonthOpBalVal",
+            "type": "money",
+            "nullable": "YES",
+            "length": null
+        },
+        {
+            "name": "GoodsPurchQty",
+            "type": "real",
+            "nullable": "YES",
+            "length": null
+        },
+        {
+            "name": "GoodsPurchVal",
+            "type": "money",
+            "nullable": "YES",
+            "length": null
+        },
+        {
+            "name": "PurchRetnQty",
+            "type": "real",
+            "nullable": "YES",
+            "length": null
+        },
+        {
+            "name": "PurchRetnVal",
+            "type": "money",
+            "nullable": "YES",
+            "length": null
+        },
+        {
+            "name": "SaleQty",
+            "type": "real",
+            "nullable": "YES",
+            "length": null
+        },
+        {
+            "name": "SaleDocVal",
+            "type": "money",
+            "nullable": "YES",
+            "length": null
+        },
+        {
+            "name": "SaleRetnQty",
+            "type": "real",
+            "nullable": "YES",
+            "length": null
+        },
+        {
+            "name": "SaleRetnDocVal",
+            "type": "money",
+            "nullable": "YES",
+            "length": null
+        },
+        {
+            "name": "SaleStkVal",
+            "type": "money",
+            "nullable": "YES",
+            "length": null
+        },
+        {
+            "name": "SaleRetnStkVal",
+            "type": "money",
+            "nullable": "YES",
+            "length": null
+        },
+        {
+            "name": "CSTransferInQty",
+            "type": "real",
+            "nullable": "YES",
+            "length": null
+        },
+        {
+            "name": "CSTransferInVal",
+            "type": "money",
+            "nullable": "YES",
+            "length": null
+        },
+        {
+            "name": "CSTransferOutQty",
+            "type": "real",
+            "nullable": "YES",
+            "length": null
+        },
+        {
+            "name": "CSTransferOutVal",
+            "type": "money",
+            "nullable": "YES",
+            "length": null
+        },
+        {
+            "name": "MiscRcptQty",
+            "type": "real",
+            "nullable": "YES",
+            "length": null
+        },
+        {
+            "name": "MiscRcptVal",
+            "type": "money",
+            "nullable": "YES",
+            "length": null
+        },
+        {
+            "name": "MiscIssuQty",
+            "type": "real",
+            "nullable": "YES",
+            "length": null
+        },
+        {
+            "name": "MiscIssuVal",
+            "type": "money",
+            "nullable": "YES",
+            "length": null
+        },
+        {
+            "name": "ILTransferInQty",
+            "type": "real",
+            "nullable": "YES",
+            "length": null
+        },
+        {
+            "name": "ILTransferInVal",
+            "type": "money",
+            "nullable": "YES",
+            "length": null
+        },
+        {
+            "name": "ILTransferOutQty",
+            "type": "real",
+            "nullable": "YES",
+            "length": null
+        },
+        {
+            "name": "ILTransferOutVal",
+            "type": "money",
+            "nullable": "YES",
+            "length": null
+        },
+        {
+            "name": "ApprovalIssQty",
+            "type": "real",
+            "nullable": "YES",
+            "length": null
+        },
+        {
+            "name": "ApprovalIssVal",
+            "type": "money",
+            "nullable": "YES",
+            "length": null
+        },
+        {
+            "name": "ApprovalRetQty",
+            "type": "real",
+            "nullable": "YES",
+            "length": null
+        },
+        {
+            "name": "ApprovalRetVal",
+            "type": "money",
+            "nullable": "YES",
+            "length": null
+        },
+        {
+            "name": "MiscRcptStkVal",
+            "type": "money",
+            "nullable": "YES",
+            "length": null
+        },
+        {
+            "name": "MiscIssStkVal",
+            "type": "money",
+            "nullable": "YES",
+            "length": null
+        },
+        {
+            "name": "ApprovalIssStkVal",
+            "type": "money",
+            "nullable": "YES",
+            "length": null
+        },
+        {
+            "name": "ApprovalRetStkVal",
+            "type": "money",
+            "nullable": "YES",
+            "length": null
+        },
+        {
+            "name": "VAUid",
+            "type": "varchar",
+            "nullable": "YES",
+            "length": 32
+        },
+        {
+            "name": "VActr",
+            "type": "int",
+            "nullable": "YES",
+            "length": null
+        },
+        {
+            "name": "VATermId",
+            "type": "varchar",
+            "nullable": "YES",
+            "length": 32
+        },
+        {
+            "name": "VACompCode",
+            "type": "varchar",
+            "nullable": "YES",
+            "length": 16
+        }
+    ],
+    "ItemMaster": [
+        {
+            "name": "StockNo",
+            "type": "varchar",
+            "nullable": "NO",
+            "length": 32
+        },
+        {
+            "name": "BatchSrlNo",
+            "type": "varchar",
+            "nullable": "NO",
+            "length": 16
+        },
+        {
+            "name": "Class1Cd",
+            "type": "varchar",
+            "nullable": "YES",
+            "length": 16
+        },
+        {
+            "name": "Class2Cd",
+            "type": "varchar",
+            "nullable": "YES",
+            "length": 16
+        },
+        {
+            "name": "SubClass1Cd",
+            "type": "varchar",
+            "nullable": "YES",
+            "length": 16
+        },
+        {
+            "name": "SubClass2Cd",
+            "type": "varchar",
+            "nullable": "YES",
+            "length": 16
+        },
+        {
+            "name": "SizeCd",
+            "type": "varchar",
+            "nullable": "YES",
+            "length": 16
+        },
+        {
+            "name": "LeastSalableQty",
+            "type": "money",
+            "nullable": "YES",
+            "length": null
+        },
+        {
+            "name": "UseJwlPricing",
+            "type": "bit",
+            "nullable": "YES",
+            "length": null
+        },
+        {
+            "name": "Retail_Price",
+            "type": "money",
+            "nullable": "YES",
+            "length": null
+        },
+        {
+            "name": "Dealer_Price",
+            "type": "money",
+            "nullable": "YES",
+            "length": null
+        },
+        {
+            "name": "ProdTaxType",
+            "type": "varchar",
+            "nullable": "YES",
+            "length": 16
+        },
+        {
+            "name": "SrcTaxType",
+            "type": "varchar",
+            "nullable": "YES",
+            "length": 16
+        },
+        {
+            "name": "IsInventoryItem",
+            "type": "bit",
+            "nullable": "YES",
+            "length": null
+        },
+        {
+            "name": "IsRPTaxInclusive",
+            "type": "bit",
+            "nullable": "YES",
+            "length": null
+        },
+        {
+            "name": "ItemDesc",
+            "type": "varchar",
+            "nullable": "YES",
+            "length": 60
+        },
+        {
+            "name": "ExtDescPresent",
+            "type": "bit",
+            "nullable": "YES",
+            "length": null
+        },
+        {
+            "name": "RegularInd",
+            "type": "varchar",
+            "nullable": "YES",
+            "length": 2
+        },
+        {
+            "name": "ReordLvl",
+            "type": "real",
+            "nullable": "YES",
+            "length": null
+        },
+        {
+            "name": "EOQ",
+            "type": "real",
+            "nullable": "YES",
+            "length": null
+        },
+        {
+            "name": "MinOrdQty",
+            "type": "real",
+            "nullable": "YES",
+            "length": null
+        },
+        {
+            "name": "LastPurchPrice",
+            "type": "money",
+            "nullable": "YES",
+            "length": null
+        },
+        {
+            "name": "CurrentCost",
+            "type": "money",
+            "nullable": "YES",
+            "length": null
+        },
+        {
+            "name": "JwlMetalInd",
+            "type": "varchar",
+            "nullable": "YES",
+            "length": 2
+        },
+        {
+            "name": "JwlCaratage",
+            "type": "int",
+            "nullable": "YES",
+            "length": null
+        },
+        {
+            "name": "JwlGrossWt",
+            "type": "real",
+            "nullable": "YES",
+            "length": null
+        },
+        {
+            "name": "JwlStoneWt",
+            "type": "real",
+            "nullable": "YES",
+            "length": null
+        },
+        {
+            "name": "JwlWtFactor",
+            "type": "real",
+            "nullable": "YES",
+            "length": null
+        },
+        {
+            "name": "JwlRateFactor",
+            "type": "money",
+            "nullable": "YES",
+            "length": null
+        },
+        {
+            "name": "JwlStoneVal",
+            "type": "money",
+            "nullable": "YES",
+            "length": null
+        },
+        {
+            "name": "JwlMakeCharge",
+            "type": "money",
+            "nullable": "YES",
+            "length": null
+        },
+        {
+            "name": "JwlValFactor",
+            "type": "money",
+            "nullable": "YES",
+            "length": null
+        },
+        {
+            "name": "AnalCode1",
+            "type": "varchar",
+            "nullable": "YES",
+            "length": 16
+        },
+        {
+            "name": "AnalCode2",
+            "type": "varchar",
+            "nullable": "YES",
+            "length": 16
+        },
+        {
+            "name": "AnalCode3",
+            "type": "varchar",
+            "nullable": "YES",
+            "length": 16
+        },
+        {
+            "name": "AnalCode4",
+            "type": "varchar",
+            "nullable": "YES",
+            "length": 16
+        },
+        {
+            "name": "AnalCode5",
+            "type": "varchar",
+            "nullable": "YES",
+            "length": 16
+        },
+        {
+            "name": "AnalCode6",
+            "type": "varchar",
+            "nullable": "YES",
+            "length": 16
+        },
+        {
+            "name": "AnalCode7",
+            "type": "varchar",
+            "nullable": "YES",
+            "length": 16
+        },
+        {
+            "name": "AnalCode8",
+            "type": "varchar",
+            "nullable": "YES",
+            "length": 16
+        },
+        {
+            "name": "AnalCode9",
+            "type": "varchar",
+            "nullable": "YES",
+            "length": 16
+        },
+        {
+            "name": "AnalCode10",
+            "type": "varchar",
+            "nullable": "YES",
+            "length": 16
+        },
+        {
+            "name": "AnalCode11",
+            "type": "varchar",
+            "nullable": "YES",
+            "length": 16
+        },
+        {
+            "name": "AnalCode12",
+            "type": "varchar",
+            "nullable": "YES",
+            "length": 16
+        },
+        {
+            "name": "AnalCode13",
+            "type": "varchar",
+            "nullable": "YES",
+            "length": 16
+        },
+        {
+            "name": "AnalCode14",
+            "type": "varchar",
+            "nullable": "YES",
+            "length": 16
+        },
+        {
+            "name": "AnalCode15",
+            "type": "varchar",
+            "nullable": "YES",
+            "length": 16
+        },
+        {
+            "name": "AnalCode16",
+            "type": "varchar",
+            "nullable": "YES",
+            "length": 16
+        },
+        {
+            "name": "AnalCode17",
+            "type": "varchar",
+            "nullable": "YES",
+            "length": 16
+        },
+        {
+            "name": "AnalCode18",
+            "type": "varchar",
+            "nullable": "YES",
+            "length": 16
+        },
+        {
+            "name": "AnalCode19",
+            "type": "varchar",
+            "nullable": "YES",
+            "length": 16
+        },
+        {
+            "name": "AnalCode20",
+            "type": "varchar",
+            "nullable": "YES",
+            "length": 16
+        },
+        {
+            "name": "AnalCode21",
+            "type": "varchar",
+            "nullable": "YES",
+            "length": 16
+        },
+        {
+            "name": "AnalCode22",
+            "type": "varchar",
+            "nullable": "YES",
+            "length": 16
+        },
+        {
+            "name": "AnalCode23",
+            "type": "varchar",
+            "nullable": "YES",
+            "length": 16
+        },
+        {
+            "name": "AnalCode24",
+            "type": "varchar",
+            "nullable": "YES",
+            "length": 16
+        },
+        {
+            "name": "AnalCode25",
+            "type": "varchar",
+            "nullable": "YES",
+            "length": 16
+        },
+        {
+            "name": "AnalCode26",
+            "type": "varchar",
+            "nullable": "YES",
+            "length": 16
+        },
+        {
+            "name": "AnalCode27",
+            "type": "varchar",
+            "nullable": "YES",
+            "length": 16
+        },
+        {
+            "name": "AnalCode28",
+            "type": "varchar",
+            "nullable": "YES",
+            "length": 16
+        },
+        {
+            "name": "AnalCode29",
+            "type": "varchar",
+            "nullable": "YES",
+            "length": 16
+        },
+        {
+            "name": "AnalCode30",
+            "type": "varchar",
+            "nullable": "YES",
+            "length": 16
+        },
+        {
+            "name": "AnalCode31",
+            "type": "varchar",
+            "nullable": "YES",
+            "length": 16
+        },
+        {
+            "name": "AnalCode32",
+            "type": "varchar",
+            "nullable": "YES",
+            "length": 16
+        },
+        {
+            "name": "MfgDate",
+            "type": "datetime",
+            "nullable": "YES",
+            "length": null
+        },
+        {
+            "name": "ExpDate",
+            "type": "datetime",
+            "nullable": "YES",
+            "length": null
+        },
+        {
+            "name": "ShelfLife",
+            "type": "int",
+            "nullable": "YES",
+            "length": null
+        },
+        {
+            "name": "ImagePresent",
+            "type": "bit",
+            "nullable": "YES",
+            "length": null
+        },
+        {
+            "name": "IsBillable",
+            "type": "bit",
+            "nullable": "YES",
+            "length": null
+        },
+        {
+            "name": "IsService",
+            "type": "bit",
+            "nullable": "YES",
+            "length": null
+        },
+        {
+            "name": "RtlMarkUp",
+            "type": "money",
+            "nullable": "YES",
+            "length": null
+        },
+        {
+            "name": "DlrMarkUp",
+            "type": "money",
+            "nullable": "YES",
+            "length": null
+        },
+        {
+            "name": "VAUid",
+            "type": "varchar",
+            "nullable": "YES",
+            "length": 32
+        },
+        {
+            "name": "VActr",
+            "type": "int",
+            "nullable": "YES",
+            "length": null
+        },
+        {
+            "name": "VATermId",
+            "type": "varchar",
+            "nullable": "YES",
+            "length": 32
+        },
+        {
+            "name": "VACompCode",
+            "type": "varchar",
+            "nullable": "YES",
+            "length": 16
+        },
+        {
+            "name": "CCStockNo",
+            "type": "varchar",
+            "nullable": "YES",
+            "length": 40
+        },
+        {
+            "name": "GradeCd",
+            "type": "varchar",
+            "nullable": "YES",
+            "length": 16
+        },
+        {
+            "name": "ImageID",
+            "type": "varchar",
+            "nullable": "YES",
+            "length": 256
+        },
+        {
+            "name": "SField1",
+            "type": "varchar",
+            "nullable": "YES",
+            "length": 8
+        },
+        {
+            "name": "SField2",
+            "type": "varchar",
+            "nullable": "YES",
+            "length": 8
+        },
+        {
+            "name": "SField3",
+            "type": "varchar",
+            "nullable": "YES",
+            "length": 8
+        },
+        {
+            "name": "SField4",
+            "type": "varchar",
+            "nullable": "YES",
+            "length": 8
+        },
+        {
+            "name": "SField5",
+            "type": "varchar",
+            "nullable": "YES",
+            "length": 8
+        },
+        {
+            "name": "NField1",
+            "type": "int",
+            "nullable": "YES",
+            "length": null
+        },
+        {
+            "name": "NField2",
+            "type": "int",
+            "nullable": "YES",
+            "length": null
+        },
+        {
+            "name": "NField3",
+            "type": "int",
+            "nullable": "YES",
+            "length": null
+        },
+        {
+            "name": "NField4",
+            "type": "int",
+            "nullable": "YES",
+            "length": null
+        },
+        {
+            "name": "NField5",
+            "type": "int",
+            "nullable": "YES",
+            "length": null
+        },
+        {
+            "name": "DField1",
+            "type": "datetime",
+            "nullable": "YES",
+            "length": null
+        },
+        {
+            "name": "DField2",
+            "type": "datetime",
+            "nullable": "YES",
+            "length": null
+        },
+        {
+            "name": "DField3",
+            "type": "datetime",
+            "nullable": "YES",
+            "length": null
+        },
+        {
+            "name": "BField1",
+            "type": "bit",
+            "nullable": "YES",
+            "length": null
+        },
+        {
+            "name": "BField2",
+            "type": "bit",
+            "nullable": "YES",
+            "length": null
+        },
+        {
+            "name": "MerchId",
+            "type": "varchar",
+            "nullable": "YES",
+            "length": 16
+        },
+        {
+            "name": "DiscId",
+            "type": "int",
+            "nullable": "YES",
+            "length": null
+        },
+        {
+            "name": "DiscPer",
+            "type": "int",
+            "nullable": "YES",
+            "length": null
+        },
+        {
+            "name": "DiscAmt",
+            "type": "int",
+            "nullable": "YES",
+            "length": null
+        },
+        {
+            "name": "DiscSQLQry",
+            "type": "varchar",
+            "nullable": "YES",
+            "length": 32
+        },
+        {
+            "name": "PriceFactorId",
+            "type": "int",
+            "nullable": "YES",
+            "length": null
+        },
+        {
+            "name": "PriceFactorPer",
+            "type": "int",
+            "nullable": "YES",
+            "length": null
+        },
+        {
+            "name": "PriceFactorAmt",
+            "type": "int",
+            "nullable": "YES",
+            "length": null
+        },
+        {
+            "name": "PriceFactorSQLQry",
+            "type": "varchar",
+            "nullable": "YES",
+            "length": 32
+        },
+        {
+            "name": "AddOnId",
+            "type": "int",
+            "nullable": "YES",
+            "length": null
+        },
+        {
+            "name": "AddOnPer",
+            "type": "money",
+            "nullable": "YES",
+            "length": null
+        },
+        {
+            "name": "AddOnAmt",
+            "type": "money",
+            "nullable": "YES",
+            "length": null
+        },
+        {
+            "name": "AddOnSQLQry",
+            "type": "varchar",
+            "nullable": "YES",
+            "length": 32
+        },
+        {
+            "name": "DednId",
+            "type": "int",
+            "nullable": "YES",
+            "length": null
+        },
+        {
+            "name": "DednPer",
+            "type": "money",
+            "nullable": "YES",
+            "length": null
+        },
+        {
+            "name": "DednAmt",
+            "type": "money",
+            "nullable": "YES",
+            "length": null
+        },
+        {
+            "name": "DednSQLQry",
+            "type": "varchar",
+            "nullable": "YES",
+            "length": 32
+        },
+        {
+            "name": "EDId",
+            "type": "int",
+            "nullable": "YES",
+            "length": null
+        },
+        {
+            "name": "EDPer",
+            "type": "money",
+            "nullable": "YES",
+            "length": null
+        },
+        {
+            "name": "EDAmt",
+            "type": "money",
+            "nullable": "YES",
+            "length": null
+        },
+        {
+            "name": "EDSQLQry",
+            "type": "varchar",
+            "nullable": "YES",
+            "length": 32
+        },
+        {
+            "name": "FinalMRP",
+            "type": "money",
+            "nullable": "YES",
+            "length": null
+        },
+        {
+            "name": "IsConsignmentItem",
+            "type": "bit",
+            "nullable": "YES",
+            "length": null
+        },
+        {
+            "name": "FlgStockTake",
+            "type": "int",
+            "nullable": "YES",
+            "length": null
+        },
+        {
+            "name": "FlgRateAlterable",
+            "type": "int",
+            "nullable": "YES",
+            "length": null
+        },
+        {
+            "name": "FlgStockChkAppl",
+            "type": "int",
+            "nullable": "YES",
+            "length": null
+        },
+        {
+            "name": "StockTolerance",
+            "type": "money",
+            "nullable": "YES",
+            "length": null
+        },
+        {
+            "name": "Dateinsert",
+            "type": "datetime",
+            "nullable": "YES",
+            "length": null
+        },
+        {
+            "name": "Lastupdateddate",
+            "type": "datetime",
+            "nullable": "YES",
+            "length": null
+        },
+        {
+            "name": "BatchApplicable",
+            "type": "tinyint",
+            "nullable": "YES",
+            "length": null
+        },
+        {
+            "name": "GradeApplicable",
+            "type": "tinyint",
+            "nullable": "YES",
+            "length": null
+        },
+        {
+            "name": "LocationApplicable",
+            "type": "tinyint",
+            "nullable": "YES",
+            "length": null
+        },
+        {
+            "name": "BatchNoFlag",
+            "type": "tinyint",
+            "nullable": "YES",
+            "length": null
+        }
+    ],
+    "TmpUpdtStockReserved2200super": [
+        {
+            "name": "SourceCompCode",
+            "type": "varchar",
+            "nullable": "YES",
+            "length": 16
+        },
+        {
+            "name": "DestCompCode",
+            "type": "varchar",
+            "nullable": "YES",
+            "length": 16
+        },
+        {
+            "name": "TrnType",
+            "type": "int",
+            "nullable": "YES",
+            "length": null
+        },
+        {
+            "name": "TrnCtrlNo",
+            "type": "int",
+            "nullable": "YES",
+            "length": null
+        },
+        {
+            "name": "StockNo",
+            "type": "varchar",
+            "nullable": "YES",
+            "length": 32
+        },
+        {
+            "name": "ItemTag1",
+            "type": "varchar",
+            "nullable": "YES",
+            "length": 128
+        },
+        {
+            "name": "DocQty",
+            "type": "money",
+            "nullable": "YES",
+            "length": null
+        },
+        {
+            "name": "ServicedQty",
+            "type": "money",
+            "nullable": "YES",
+            "length": null
+        },
+        {
+            "name": "PhyQtyOut",
+            "type": "money",
+            "nullable": "YES",
+            "length": null
+        },
+        {
+            "name": "DeliveredQty",
+            "type": "money",
+            "nullable": "YES",
+            "length": null
+        },
+        {
+            "name": "RejectedQty",
+            "type": "money",
+            "nullable": "YES",
+            "length": null
+        },
+        {
+            "name": "RescheduleQty",
+            "type": "money",
+            "nullable": "YES",
+            "length": null
+        },
+        {
+            "name": "ReservedQty",
+            "type": "money",
+            "nullable": "YES",
+            "length": null
+        }
+    ],
+    "StockMasterExtd01": [
+        {
+            "name": "StockNo",
+            "type": "varchar",
+            "nullable": "NO",
+            "length": 32
+        },
+        {
+            "name": "BatchNo",
+            "type": "varchar",
+            "nullable": "NO",
+            "length": 32
+        },
+        {
+            "name": "GradeCd",
+            "type": "varchar",
+            "nullable": "NO",
+            "length": 32
+        },
+        {
+            "name": "LocationCd",
+            "type": "varchar",
+            "nullable": "NO",
+            "length": 32
+        },
+        {
+            "name": "YrOpBalQty",
+            "type": "money",
+            "nullable": "YES",
+            "length": null
+        },
+        {
+            "name": "YrOpBalVal",
+            "type": "money",
+            "nullable": "YES",
+            "length": null
+        },
+        {
+            "name": "CurBalQty",
+            "type": "money",
+            "nullable": "YES",
+            "length": null
+        },
+        {
+            "name": "CurBalVal",
+            "type": "money",
+            "nullable": "YES",
+            "length": null
+        },
+        {
+            "name": "VAUid",
+            "type": "varchar",
+            "nullable": "YES",
+            "length": 32
+        },
+        {
+            "name": "VActr",
+            "type": "int",
+            "nullable": "YES",
+            "length": null
+        },
+        {
+            "name": "VATermId",
+            "type": "varchar",
+            "nullable": "YES",
+            "length": 32
+        },
+        {
+            "name": "VACompCode",
+            "type": "varchar",
+            "nullable": "YES",
+            "length": 16
+        }
+    ],
+    "StockMasterExtd02": [
+        {
+            "name": "StockNo",
+            "type": "varchar",
+            "nullable": "NO",
+            "length": 32
+        },
+        {
+            "name": "ItemTag1",
+            "type": "varchar",
+            "nullable": "NO",
+            "length": 128
+        },
+        {
+            "name": "BatchNo",
+            "type": "varchar",
+            "nullable": "NO",
+            "length": 32
+        },
+        {
+            "name": "GradeCd",
+            "type": "varchar",
+            "nullable": "NO",
+            "length": 32
+        },
+        {
+            "name": "LocationCd",
+            "type": "varchar",
+            "nullable": "NO",
+            "length": 32
+        },
+        {
+            "name": "CurBalQty",
+            "type": "money",
+            "nullable": "YES",
+            "length": null
+        },
+        {
+            "name": "CurBalVal",
+            "type": "money",
+            "nullable": "YES",
+            "length": null
+        },
+        {
+            "name": "DateInsert",
+            "type": "datetime",
+            "nullable": "YES",
+            "length": null
+        },
+        {
+            "name": "VaUid",
+            "type": "varchar",
+            "nullable": "YES",
+            "length": 32
+        },
+        {
+            "name": "VActr",
+            "type": "int",
+            "nullable": "YES",
+            "length": null
+        },
+        {
+            "name": "VATermId",
+            "type": "varchar",
+            "nullable": "YES",
+            "length": 32
+        },
+        {
+            "name": "VACompCode",
+            "type": "varchar",
+            "nullable": "YES",
+            "length": 16
+        }
+    ],
+    "BAKPhyStockTakingItemBkUp01": [
+        {
+            "name": "ScopeId",
+            "type": "int",
+            "nullable": "NO",
+            "length": null
+        },
+        {
+            "name": "EntSrlNo",
+            "type": "int",
+            "nullable": "NO",
+            "length": null
+        },
+        {
+            "name": "StockNo",
+            "type": "varchar",
+            "nullable": "YES",
+            "length": 32
+        },
+        {
+            "name": "BatchSrlNo",
+            "type": "varchar",
+            "nullable": "YES",
+            "length": 50
+        },
+        {
+            "name": "ItemDesc",
+            "type": "varchar",
+            "nullable": "YES",
+            "length": 75
+        },
+        {
+            "name": "CurrCost",
+            "type": "money",
+            "nullable": "YES",
+            "length": null
+        },
+        {
+            "name": "MRP",
+            "type": "money",
+            "nullable": "YES",
+            "length": null
+        },
+        {
+            "name": "SOH",
+            "type": "money",
+            "nullable": "YES",
+            "length": null
+        },
+        {
+            "name": "PhyStock",
+            "type": "money",
+            "nullable": "YES",
+            "length": null
+        },
+        {
+            "name": "DiffQty",
+            "type": "money",
+            "nullable": "YES",
+            "length": null
+        },
+        {
+            "name": "UpdtFlag",
+            "type": "int",
+            "nullable": "YES",
+            "length": null
+        },
+        {
+            "name": "PhyStkBatchNo",
+            "type": "varchar",
+            "nullable": "YES",
+            "length": 16
+        },
+        {
+            "name": "PageNo",
+            "type": "int",
+            "nullable": "YES",
+            "length": null
+        },
+        {
+            "name": "RecDt",
+            "type": "datetime",
+            "nullable": "YES",
+            "length": null
+        },
+        {
+            "name": "RecTime",
+            "type": "datetime",
+            "nullable": "YES",
+            "length": null
+        },
+        {
+            "name": "LocId",
+            "type": "varchar",
+            "nullable": "YES",
+            "length": 50
+        },
+        {
+            "name": "SC1Cd",
+            "type": "varchar",
+            "nullable": "YES",
+            "length": 50
+        },
+        {
+            "name": "SC1Desc",
+            "type": "varchar",
+            "nullable": "YES",
+            "length": 255
+        },
+        {
+            "name": "SC2Cd",
+            "type": "varchar",
+            "nullable": "YES",
+            "length": 50
+        },
+        {
+            "name": "SC2Desc",
+            "type": "varchar",
+            "nullable": "YES",
+            "length": 255
+        },
+        {
+            "name": "Cls1Cd",
+            "type": "varchar",
+            "nullable": "YES",
+            "length": 50
+        },
+        {
+            "name": "Cls1Desc",
+            "type": "varchar",
+            "nullable": "YES",
+            "length": 255
+        },
+        {
+            "name": "Cls2Cd",
+            "type": "varchar",
+            "nullable": "YES",
+            "length": 50
+        },
+        {
+            "name": "Cls2Desc",
+            "type": "varchar",
+            "nullable": "YES",
+            "length": 255
+        },
+        {
+            "name": "SubCls1Cd",
+            "type": "varchar",
+            "nullable": "YES",
+            "length": 50
+        },
+        {
+            "name": "SubCls1Desc",
+            "type": "varchar",
+            "nullable": "YES",
+            "length": 50
+        },
+        {
+            "name": "SubCls2Cd",
+            "type": "varchar",
+            "nullable": "YES",
+            "length": 50
+        },
+        {
+            "name": "SubCls2Desc",
+            "type": "varchar",
+            "nullable": "YES",
+            "length": 50
+        },
+        {
+            "name": "SizeCd",
+            "type": "varchar",
+            "nullable": "YES",
+            "length": 50
+        },
+        {
+            "name": "UserId",
+            "type": "varchar",
+            "nullable": "YES",
+            "length": 100
+        },
+        {
+            "name": "VAUid",
+            "type": "varchar",
+            "nullable": "YES",
+            "length": 32
+        },
+        {
+            "name": "VActr",
+            "type": "int",
+            "nullable": "YES",
+            "length": null
+        },
+        {
+            "name": "VATermId",
+            "type": "varchar",
+            "nullable": "YES",
+            "length": 32
+        },
+        {
+            "name": "VACompCode",
+            "type": "varchar",
+            "nullable": "YES",
+            "length": 16
+        },
+        {
+            "name": "StkTakeMode",
+            "type": "varchar",
+            "nullable": "YES",
+            "length": 64
+        },
+        {
+            "name": "BatchNo",
+            "type": "varchar",
+            "nullable": "YES",
+            "length": 32
+        },
+        {
+            "name": "GradeCd",
+            "type": "varchar",
+            "nullable": "YES",
+            "length": 32
+        },
+        {
+            "name": "GradeDesc",
+            "type": "varchar",
+            "nullable": "YES",
+            "length": 60
+        },
+        {
+            "name": "LocationCd",
+            "type": "varchar",
+            "nullable": "YES",
+            "length": 32
+        },
+        {
+            "name": "LocationDesc",
+            "type": "varchar",
+            "nullable": "YES",
+            "length": 60
+        },
+        {
+            "name": "UpdFlag",
+            "type": "varchar",
+            "nullable": "YES",
+            "length": 1
+        }
+    ],
+    "StockMasterExtdOpBal": [
+        {
+            "name": "DateInsert",
+            "type": "datetime",
+            "nullable": "YES",
+            "length": null
+        },
+        {
+            "name": "ShoperDate",
+            "type": "datetime",
+            "nullable": "YES",
+            "length": null
+        },
+        {
+            "name": "StockNo",
+            "type": "varchar",
+            "nullable": "NO",
+            "length": 32
+        },
+        {
+            "name": "BatchNo",
+            "type": "varchar",
+            "nullable": "NO",
+            "length": 32
+        },
+        {
+            "name": "GradeCd",
+            "type": "varchar",
+            "nullable": "NO",
+            "length": 32
+        },
+        {
+            "name": "LocationCd",
+            "type": "varchar",
+            "nullable": "NO",
+            "length": 32
+        },
+        {
+            "name": "DayOpBalQty",
+            "type": "money",
+            "nullable": "YES",
+            "length": null
+        },
+        {
+            "name": "DayOpBalVal",
+            "type": "money",
+            "nullable": "YES",
+            "length": null
+        },
+        {
+            "name": "YrOpBalQty",
+            "type": "money",
+            "nullable": "YES",
+            "length": null
+        },
+        {
+            "name": "YrOpBalVal",
+            "type": "money",
+            "nullable": "YES",
+            "length": null
+        },
+        {
+            "name": "CurBalQty",
+            "type": "money",
+            "nullable": "YES",
+            "length": null
+        },
+        {
+            "name": "CurBalVal",
+            "type": "money",
+            "nullable": "YES",
+            "length": null
+        },
+        {
+            "name": "VAUid",
+            "type": "varchar",
+            "nullable": "YES",
+            "length": 32
+        },
+        {
+            "name": "VActr",
+            "type": "int",
+            "nullable": "YES",
+            "length": null
+        },
+        {
+            "name": "VATermId",
+            "type": "varchar",
+            "nullable": "YES",
+            "length": 32
+        },
+        {
+            "name": "VACompCode",
+            "type": "varchar",
+            "nullable": "YES",
+            "length": 16
+        }
+    ],
+    "BAKExtdItemMaster": [
+        {
+            "name": "StockNo",
+            "type": "varchar",
+            "nullable": "NO",
+            "length": 32
+        },
+        {
+            "name": "ItemExtDesc",
+            "type": "varchar",
+            "nullable": "YES",
+            "length": 1024
+        },
+        {
+            "name": "ImageId",
+            "type": "varchar",
+            "nullable": "YES",
+            "length": 60
+        },
+        {
+            "name": "VAUid",
+            "type": "varchar",
+            "nullable": "YES",
+            "length": 32
+        },
+        {
+            "name": "VActr",
+            "type": "int",
+            "nullable": "YES",
+            "length": null
+        },
+        {
+            "name": "VATermId",
+            "type": "varchar",
+            "nullable": "YES",
+            "length": 32
+        },
+        {
+            "name": "VACompCode",
+            "type": "varchar",
+            "nullable": "YES",
+            "length": 16
+        },
+        {
+            "name": "UpdFlag",
+            "type": "varchar",
+            "nullable": "YES",
+            "length": 1
+        }
+    ],
+    "ItemMasterConfig": [
+        {
+            "name": "FId",
+            "type": "varchar",
+            "nullable": "NO",
+            "length": 16
+        },
+        {
+            "name": "FN",
+            "type": "varchar",
+            "nullable": "YES",
+            "length": 128
+        },
+        {
+            "name": "FC",
+            "type": "varchar",
+            "nullable": "YES",
+            "length": 128
+        },
+        {
+            "name": "Flag1",
+            "type": "int",
+            "nullable": "YES",
+            "length": null
+        },
+        {
+            "name": "Flag2",
+            "type": "int",
+            "nullable": "YES",
+            "length": null
+        },
+        {
+            "name": "Flag3",
+            "type": "int",
+            "nullable": "YES",
+            "length": null
+        },
+        {
+            "name": "Flag4",
+            "type": "int",
+            "nullable": "YES",
+            "length": null
+        },
+        {
+            "name": "ValidRule1",
+            "type": "varchar",
+            "nullable": "YES",
+            "length": 256
+        },
+        {
+            "name": "ValidRule2",
+            "type": "varchar",
+            "nullable": "YES",
+            "length": 256
+        },
+        {
+            "name": "ValidRule3",
+            "type": "varchar",
+            "nullable": "YES",
+            "length": 256
+        },
+        {
+            "name": "ValidRule1Message",
+            "type": "varchar",
+            "nullable": "YES",
+            "length": 256
+        },
+        {
+            "name": "ValidRule2Message",
+            "type": "varchar",
+            "nullable": "YES",
+            "length": 256
+        },
+        {
+            "name": "ValidRule3Message",
+            "type": "varchar",
+            "nullable": "YES",
+            "length": 256
+        },
+        {
+            "name": "Remarks",
+            "type": "varchar",
+            "nullable": "YES",
+            "length": 128
+        },
+        {
+            "name": "DefaultVaue",
+            "type": "varchar",
+            "nullable": "YES",
+            "length": 128
+        },
+        {
+            "name": "Exceptions",
+            "type": "varchar",
+            "nullable": "YES",
+            "length": 128
+        },
+        {
+            "name": "SysParamTitleID",
+            "type": "varchar",
+            "nullable": "YES",
+            "length": 50
+        },
+        {
+            "name": "BoundToLookup",
+            "type": "varchar",
+            "nullable": "YES",
+            "length": 50
+        },
+        {
+            "name": "BoundToLookupID",
+            "type": "varchar",
+            "nullable": "YES",
+            "length": 50
+        },
+        {
+            "name": "VAUid",
+            "type": "varchar",
+            "nullable": "YES",
+            "length": 32
+        },
+        {
+            "name": "VActr",
+            "type": "int",
+            "nullable": "YES",
+            "length": null
+        },
+        {
+            "name": "VATermId",
+            "type": "varchar",
+            "nullable": "YES",
+            "length": 32
+        },
+        {
+            "name": "VACompCode",
+            "type": "varchar",
+            "nullable": "YES",
+            "length": 16
+        }
+    ],
+    "BAKGenLookUp": [
+        {
+            "name": "Recid",
+            "type": "int",
+            "nullable": "NO",
+            "length": null
+        },
+        {
+            "name": "Code",
+            "type": "varchar",
+            "nullable": "NO",
+            "length": 128
+        },
+        {
+            "name": "Descr",
+            "type": "varchar",
+            "nullable": "YES",
+            "length": 1600
+        },
+        {
+            "name": "Flag",
+            "type": "varchar",
+            "nullable": "YES",
+            "length": 256
+        },
+        {
+            "name": "Number",
+            "type": "int",
+            "nullable": "YES",
+            "length": null
+        },
+        {
+            "name": "VaUid",
+            "type": "varchar",
+            "nullable": "YES",
+            "length": 32
+        },
+        {
+            "name": "VaCtr",
+            "type": "int",
+            "nullable": "YES",
+            "length": null
+        },
+        {
+            "name": "VaTermId",
+            "type": "varchar",
+            "nullable": "YES",
+            "length": 32
+        },
+        {
+            "name": "VaCompCode",
+            "type": "varchar",
+            "nullable": "YES",
+            "length": 16
+        },
+        {
+            "name": "UpdFlag",
+            "type": "varchar",
+            "nullable": "YES",
+            "length": 1
+        }
+    ],
+    "ItemMasterExtd01": [
+        {
+            "name": "StockNo",
+            "type": "varchar",
+            "nullable": "NO",
+            "length": 32
+        },
+        {
+            "name": "BatchNo",
+            "type": "varchar",
+            "nullable": "NO",
+            "length": 32
+        },
+        {
+            "name": "GradeCd",
+            "type": "varchar",
+            "nullable": "NO",
+            "length": 32
+        },
+        {
+            "name": "BatchMfgDate",
+            "type": "smalldatetime",
+            "nullable": "YES",
+            "length": null
+        },
+        {
+            "name": "BatchMfgFormat",
+            "type": "tinyint",
+            "nullable": "YES",
+            "length": null
+        },
+        {
+            "name": "BatchMfgDateString",
+            "type": "varchar",
+            "nullable": "YES",
+            "length": 32
+        },
+        {
+            "name": "BatchExpDate",
+            "type": "smalldatetime",
+            "nullable": "YES",
+            "length": null
+        },
+        {
+            "name": "BatchExpFormat",
+            "type": "tinyint",
+            "nullable": "YES",
+            "length": null
+        },
+        {
+            "name": "BatchExpDateString",
+            "type": "varchar",
+            "nullable": "YES",
+            "length": 32
+        },
+        {
+            "name": "BatchShelfLife",
+            "type": "smallint",
+            "nullable": "YES",
+            "length": null
+        },
+        {
+            "name": "BatchRemarks",
+            "type": "varchar",
+            "nullable": "YES",
+            "length": 128
+        },
+        {
+            "name": "LinkSrcCompCode",
+            "type": "varchar",
+            "nullable": "YES",
+            "length": 16
+        },
+        {
+            "name": "LinkDocNo",
+            "type": "int",
+            "nullable": "YES",
+            "length": null
+        },
+        {
+            "name": "LinkDestCompCode",
+            "type": "varchar",
+            "nullable": "YES",
+            "length": 16
+        },
+        {
+            "name": "LinkSlabNo",
+            "type": "int",
+            "nullable": "YES",
+            "length": null
+        },
+        {
+            "name": "ActiveFlag",
+            "type": "tinyint",
+            "nullable": "YES",
+            "length": null
+        },
+        {
+            "name": "DateInsert",
+            "type": "smalldatetime",
+            "nullable": "YES",
+            "length": null
+        },
+        {
+            "name": "VaUid",
+            "type": "varchar",
+            "nullable": "YES",
+            "length": 32
+        },
+        {
+            "name": "VaCtr",
+            "type": "int",
+            "nullable": "YES",
+            "length": null
+        },
+        {
+            "name": "VaTermId",
+            "type": "varchar",
+            "nullable": "YES",
+            "length": 32
+        },
+        {
+            "name": "VaCompCode",
+            "type": "varchar",
+            "nullable": "YES",
+            "length": 16
+        }
+    ],
+    "BAKItemMaster": [
+        {
+            "name": "StockNo",
+            "type": "varchar",
+            "nullable": "NO",
+            "length": 32
+        },
+        {
+            "name": "BatchSrlNo",
+            "type": "varchar",
+            "nullable": "NO",
+            "length": 16
+        },
+        {
+            "name": "Class1Cd",
+            "type": "varchar",
+            "nullable": "YES",
+            "length": 16
+        },
+        {
+            "name": "Class2Cd",
+            "type": "varchar",
+            "nullable": "YES",
+            "length": 16
+        },
+        {
+            "name": "SubClass1Cd",
+            "type": "varchar",
+            "nullable": "YES",
+            "length": 16
+        },
+        {
+            "name": "SubClass2Cd",
+            "type": "varchar",
+            "nullable": "YES",
+            "length": 16
+        },
+        {
+            "name": "SizeCd",
+            "type": "varchar",
+            "nullable": "YES",
+            "length": 16
+        },
+        {
+            "name": "LeastSalableQty",
+            "type": "money",
+            "nullable": "YES",
+            "length": null
+        },
+        {
+            "name": "UseJwlPricing",
+            "type": "bit",
+            "nullable": "YES",
+            "length": null
+        },
+        {
+            "name": "Retail_Price",
+            "type": "money",
+            "nullable": "YES",
+            "length": null
+        },
+        {
+            "name": "Dealer_Price",
+            "type": "money",
+            "nullable": "YES",
+            "length": null
+        },
+        {
+            "name": "ProdTaxType",
+            "type": "varchar",
+            "nullable": "YES",
+            "length": 16
+        },
+        {
+            "name": "SrcTaxType",
+            "type": "varchar",
+            "nullable": "YES",
+            "length": 16
+        },
+        {
+            "name": "IsInventoryItem",
+            "type": "bit",
+            "nullable": "YES",
+            "length": null
+        },
+        {
+            "name": "IsRPTaxInclusive",
+            "type": "bit",
+            "nullable": "YES",
+            "length": null
+        },
+        {
+            "name": "ItemDesc",
+            "type": "varchar",
+            "nullable": "YES",
+            "length": 60
+        },
+        {
+            "name": "ExtDescPresent",
+            "type": "bit",
+            "nullable": "YES",
+            "length": null
+        },
+        {
+            "name": "RegularInd",
+            "type": "varchar",
+            "nullable": "YES",
+            "length": 2
+        },
+        {
+            "name": "ReordLvl",
+            "type": "real",
+            "nullable": "YES",
+            "length": null
+        },
+        {
+            "name": "EOQ",
+            "type": "real",
+            "nullable": "YES",
+            "length": null
+        },
+        {
+            "name": "MinOrdQty",
+            "type": "real",
+            "nullable": "YES",
+            "length": null
+        },
+        {
+            "name": "LastPurchPrice",
+            "type": "money",
+            "nullable": "YES",
+            "length": null
+        },
+        {
+            "name": "CurrentCost",
+            "type": "money",
+            "nullable": "YES",
+            "length": null
+        },
+        {
+            "name": "JwlMetalInd",
+            "type": "varchar",
+            "nullable": "YES",
+            "length": 2
+        },
+        {
+            "name": "JwlCaratage",
+            "type": "int",
+            "nullable": "YES",
+            "length": null
+        },
+        {
+            "name": "JwlGrossWt",
+            "type": "real",
+            "nullable": "YES",
+            "length": null
+        },
+        {
+            "name": "JwlStoneWt",
+            "type": "real",
+            "nullable": "YES",
+            "length": null
+        },
+        {
+            "name": "JwlWtFactor",
+            "type": "real",
+            "nullable": "YES",
+            "length": null
+        },
+        {
+            "name": "JwlRateFactor",
+            "type": "money",
+            "nullable": "YES",
+            "length": null
+        },
+        {
+            "name": "JwlStoneVal",
+            "type": "money",
+            "nullable": "YES",
+            "length": null
+        },
+        {
+            "name": "JwlMakeCharge",
+            "type": "money",
+            "nullable": "YES",
+            "length": null
+        },
+        {
+            "name": "JwlValFactor",
+            "type": "money",
+            "nullable": "YES",
+            "length": null
+        },
+        {
+            "name": "AnalCode1",
+            "type": "varchar",
+            "nullable": "YES",
+            "length": 16
+        },
+        {
+            "name": "AnalCode2",
+            "type": "varchar",
+            "nullable": "YES",
+            "length": 16
+        },
+        {
+            "name": "AnalCode3",
+            "type": "varchar",
+            "nullable": "YES",
+            "length": 16
+        },
+        {
+            "name": "AnalCode4",
+            "type": "varchar",
+            "nullable": "YES",
+            "length": 16
+        },
+        {
+            "name": "AnalCode5",
+            "type": "varchar",
+            "nullable": "YES",
+            "length": 16
+        },
+        {
+            "name": "AnalCode6",
+            "type": "varchar",
+            "nullable": "YES",
+            "length": 16
+        },
+        {
+            "name": "AnalCode7",
+            "type": "varchar",
+            "nullable": "YES",
+            "length": 16
+        },
+        {
+            "name": "AnalCode8",
+            "type": "varchar",
+            "nullable": "YES",
+            "length": 16
+        },
+        {
+            "name": "AnalCode9",
+            "type": "varchar",
+            "nullable": "YES",
+            "length": 16
+        },
+        {
+            "name": "AnalCode10",
+            "type": "varchar",
+            "nullable": "YES",
+            "length": 16
+        },
+        {
+            "name": "AnalCode11",
+            "type": "varchar",
+            "nullable": "YES",
+            "length": 16
+        },
+        {
+            "name": "AnalCode12",
+            "type": "varchar",
+            "nullable": "YES",
+            "length": 16
+        },
+        {
+            "name": "AnalCode13",
+            "type": "varchar",
+            "nullable": "YES",
+            "length": 16
+        },
+        {
+            "name": "AnalCode14",
+            "type": "varchar",
+            "nullable": "YES",
+            "length": 16
+        },
+        {
+            "name": "AnalCode15",
+            "type": "varchar",
+            "nullable": "YES",
+            "length": 16
+        },
+        {
+            "name": "AnalCode16",
+            "type": "varchar",
+            "nullable": "YES",
+            "length": 16
+        },
+        {
+            "name": "AnalCode17",
+            "type": "varchar",
+            "nullable": "YES",
+            "length": 16
+        },
+        {
+            "name": "AnalCode18",
+            "type": "varchar",
+            "nullable": "YES",
+            "length": 16
+        },
+        {
+            "name": "AnalCode19",
+            "type": "varchar",
+            "nullable": "YES",
+            "length": 16
+        },
+        {
+            "name": "AnalCode20",
+            "type": "varchar",
+            "nullable": "YES",
+            "length": 16
+        },
+        {
+            "name": "AnalCode21",
+            "type": "varchar",
+            "nullable": "YES",
+            "length": 16
+        },
+        {
+            "name": "AnalCode22",
+            "type": "varchar",
+            "nullable": "YES",
+            "length": 16
+        },
+        {
+            "name": "AnalCode23",
+            "type": "varchar",
+            "nullable": "YES",
+            "length": 16
+        },
+        {
+            "name": "AnalCode24",
+            "type": "varchar",
+            "nullable": "YES",
+            "length": 16
+        },
+        {
+            "name": "AnalCode25",
+            "type": "varchar",
+            "nullable": "YES",
+            "length": 16
+        },
+        {
+            "name": "AnalCode26",
+            "type": "varchar",
+            "nullable": "YES",
+            "length": 16
+        },
+        {
+            "name": "AnalCode27",
+            "type": "varchar",
+            "nullable": "YES",
+            "length": 16
+        },
+        {
+            "name": "AnalCode28",
+            "type": "varchar",
+            "nullable": "YES",
+            "length": 16
+        },
+        {
+            "name": "AnalCode29",
+            "type": "varchar",
+            "nullable": "YES",
+            "length": 16
+        },
+        {
+            "name": "AnalCode30",
+            "type": "varchar",
+            "nullable": "YES",
+            "length": 16
+        },
+        {
+            "name": "AnalCode31",
+            "type": "varchar",
+            "nullable": "YES",
+            "length": 16
+        },
+        {
+            "name": "AnalCode32",
+            "type": "varchar",
+            "nullable": "YES",
+            "length": 16
+        },
+        {
+            "name": "MfgDate",
+            "type": "datetime",
+            "nullable": "YES",
+            "length": null
+        },
+        {
+            "name": "ExpDate",
+            "type": "datetime",
+            "nullable": "YES",
+            "length": null
+        },
+        {
+            "name": "ShelfLife",
+            "type": "int",
+            "nullable": "YES",
+            "length": null
+        },
+        {
+            "name": "ImagePresent",
+            "type": "bit",
+            "nullable": "YES",
+            "length": null
+        },
+        {
+            "name": "IsBillable",
+            "type": "bit",
+            "nullable": "YES",
+            "length": null
+        },
+        {
+            "name": "IsService",
+            "type": "bit",
+            "nullable": "YES",
+            "length": null
+        },
+        {
+            "name": "RtlMarkUp",
+            "type": "money",
+            "nullable": "YES",
+            "length": null
+        },
+        {
+            "name": "DlrMarkUp",
+            "type": "money",
+            "nullable": "YES",
+            "length": null
+        },
+        {
+            "name": "VAUid",
+            "type": "varchar",
+            "nullable": "YES",
+            "length": 32
+        },
+        {
+            "name": "VActr",
+            "type": "int",
+            "nullable": "YES",
+            "length": null
+        },
+        {
+            "name": "VATermId",
+            "type": "varchar",
+            "nullable": "YES",
+            "length": 32
+        },
+        {
+            "name": "VACompCode",
+            "type": "varchar",
+            "nullable": "YES",
+            "length": 16
+        },
+        {
+            "name": "CCStockNo",
+            "type": "varchar",
+            "nullable": "YES",
+            "length": 40
+        },
+        {
+            "name": "GradeCd",
+            "type": "varchar",
+            "nullable": "YES",
+            "length": 16
+        },
+        {
+            "name": "ImageID",
+            "type": "varchar",
+            "nullable": "YES",
+            "length": 256
+        },
+        {
+            "name": "SField1",
+            "type": "varchar",
+            "nullable": "YES",
+            "length": 8
+        },
+        {
+            "name": "SField2",
+            "type": "varchar",
+            "nullable": "YES",
+            "length": 8
+        },
+        {
+            "name": "SField3",
+            "type": "varchar",
+            "nullable": "YES",
+            "length": 8
+        },
+        {
+            "name": "SField4",
+            "type": "varchar",
+            "nullable": "YES",
+            "length": 8
+        },
+        {
+            "name": "SField5",
+            "type": "varchar",
+            "nullable": "YES",
+            "length": 8
+        },
+        {
+            "name": "NField1",
+            "type": "int",
+            "nullable": "YES",
+            "length": null
+        },
+        {
+            "name": "NField2",
+            "type": "int",
+            "nullable": "YES",
+            "length": null
+        },
+        {
+            "name": "NField3",
+            "type": "int",
+            "nullable": "YES",
+            "length": null
+        },
+        {
+            "name": "NField4",
+            "type": "int",
+            "nullable": "YES",
+            "length": null
+        },
+        {
+            "name": "NField5",
+            "type": "int",
+            "nullable": "YES",
+            "length": null
+        },
+        {
+            "name": "DField1",
+            "type": "datetime",
+            "nullable": "YES",
+            "length": null
+        },
+        {
+            "name": "DField2",
+            "type": "datetime",
+            "nullable": "YES",
+            "length": null
+        },
+        {
+            "name": "DField3",
+            "type": "datetime",
+            "nullable": "YES",
+            "length": null
+        },
+        {
+            "name": "BField1",
+            "type": "bit",
+            "nullable": "YES",
+            "length": null
+        },
+        {
+            "name": "BField2",
+            "type": "bit",
+            "nullable": "YES",
+            "length": null
+        },
+        {
+            "name": "MerchId",
+            "type": "varchar",
+            "nullable": "YES",
+            "length": 16
+        },
+        {
+            "name": "DiscId",
+            "type": "int",
+            "nullable": "YES",
+            "length": null
+        },
+        {
+            "name": "DiscPer",
+            "type": "int",
+            "nullable": "YES",
+            "length": null
+        },
+        {
+            "name": "DiscAmt",
+            "type": "int",
+            "nullable": "YES",
+            "length": null
+        },
+        {
+            "name": "DiscSQLQry",
+            "type": "varchar",
+            "nullable": "YES",
+            "length": 32
+        },
+        {
+            "name": "PriceFactorId",
+            "type": "int",
+            "nullable": "YES",
+            "length": null
+        },
+        {
+            "name": "PriceFactorPer",
+            "type": "int",
+            "nullable": "YES",
+            "length": null
+        },
+        {
+            "name": "PriceFactorAmt",
+            "type": "int",
+            "nullable": "YES",
+            "length": null
+        },
+        {
+            "name": "PriceFactorSQLQry",
+            "type": "varchar",
+            "nullable": "YES",
+            "length": 32
+        },
+        {
+            "name": "AddOnId",
+            "type": "int",
+            "nullable": "YES",
+            "length": null
+        },
+        {
+            "name": "AddOnPer",
+            "type": "money",
+            "nullable": "YES",
+            "length": null
+        },
+        {
+            "name": "AddOnAmt",
+            "type": "money",
+            "nullable": "YES",
+            "length": null
+        },
+        {
+            "name": "AddOnSQLQry",
+            "type": "varchar",
+            "nullable": "YES",
+            "length": 32
+        },
+        {
+            "name": "DednId",
+            "type": "int",
+            "nullable": "YES",
+            "length": null
+        },
+        {
+            "name": "DednPer",
+            "type": "money",
+            "nullable": "YES",
+            "length": null
+        },
+        {
+            "name": "DednAmt",
+            "type": "money",
+            "nullable": "YES",
+            "length": null
+        },
+        {
+            "name": "DednSQLQry",
+            "type": "varchar",
+            "nullable": "YES",
+            "length": 32
+        },
+        {
+            "name": "EDId",
+            "type": "int",
+            "nullable": "YES",
+            "length": null
+        },
+        {
+            "name": "EDPer",
+            "type": "money",
+            "nullable": "YES",
+            "length": null
+        },
+        {
+            "name": "EDAmt",
+            "type": "money",
+            "nullable": "YES",
+            "length": null
+        },
+        {
+            "name": "EDSQLQry",
+            "type": "varchar",
+            "nullable": "YES",
+            "length": 32
+        },
+        {
+            "name": "FinalMRP",
+            "type": "money",
+            "nullable": "YES",
+            "length": null
+        },
+        {
+            "name": "IsConsignmentItem",
+            "type": "bit",
+            "nullable": "YES",
+            "length": null
+        },
+        {
+            "name": "FlgStockTake",
+            "type": "int",
+            "nullable": "YES",
+            "length": null
+        },
+        {
+            "name": "FlgRateAlterable",
+            "type": "int",
+            "nullable": "YES",
+            "length": null
+        },
+        {
+            "name": "FlgStockChkAppl",
+            "type": "int",
+            "nullable": "YES",
+            "length": null
+        },
+        {
+            "name": "StockTolerance",
+            "type": "money",
+            "nullable": "YES",
+            "length": null
+        },
+        {
+            "name": "Dateinsert",
+            "type": "datetime",
+            "nullable": "YES",
+            "length": null
+        },
+        {
+            "name": "Lastupdateddate",
+            "type": "datetime",
+            "nullable": "YES",
+            "length": null
+        },
+        {
+            "name": "BatchApplicable",
+            "type": "tinyint",
+            "nullable": "YES",
+            "length": null
+        },
+        {
+            "name": "GradeApplicable",
+            "type": "tinyint",
+            "nullable": "YES",
+            "length": null
+        },
+        {
+            "name": "LocationApplicable",
+            "type": "tinyint",
+            "nullable": "YES",
+            "length": null
+        },
+        {
+            "name": "BatchNoFlag",
+            "type": "tinyint",
+            "nullable": "YES",
+            "length": null
+        },
+        {
+            "name": "UpdFlag",
+            "type": "varchar",
+            "nullable": "YES",
+            "length": 1
+        }
+    ],
+    "BAKItemMasterConfig": [
+        {
+            "name": "FId",
+            "type": "varchar",
+            "nullable": "NO",
+            "length": 16
+        },
+        {
+            "name": "FN",
+            "type": "varchar",
+            "nullable": "YES",
+            "length": 128
+        },
+        {
+            "name": "FC",
+            "type": "varchar",
+            "nullable": "YES",
+            "length": 128
+        },
+        {
+            "name": "Flag1",
+            "type": "int",
+            "nullable": "YES",
+            "length": null
+        },
+        {
+            "name": "Flag2",
+            "type": "int",
+            "nullable": "YES",
+            "length": null
+        },
+        {
+            "name": "Flag3",
+            "type": "int",
+            "nullable": "YES",
+            "length": null
+        },
+        {
+            "name": "Flag4",
+            "type": "int",
+            "nullable": "YES",
+            "length": null
+        },
+        {
+            "name": "ValidRule1",
+            "type": "varchar",
+            "nullable": "YES",
+            "length": 256
+        },
+        {
+            "name": "ValidRule2",
+            "type": "varchar",
+            "nullable": "YES",
+            "length": 256
+        },
+        {
+            "name": "ValidRule3",
+            "type": "varchar",
+            "nullable": "YES",
+            "length": 256
+        },
+        {
+            "name": "ValidRule1Message",
+            "type": "varchar",
+            "nullable": "YES",
+            "length": 256
+        },
+        {
+            "name": "ValidRule2Message",
+            "type": "varchar",
+            "nullable": "YES",
+            "length": 256
+        },
+        {
+            "name": "ValidRule3Message",
+            "type": "varchar",
+            "nullable": "YES",
+            "length": 256
+        },
+        {
+            "name": "Remarks",
+            "type": "varchar",
+            "nullable": "YES",
+            "length": 128
+        },
+        {
+            "name": "DefaultVaue",
+            "type": "varchar",
+            "nullable": "YES",
+            "length": 128
+        },
+        {
+            "name": "Exceptions",
+            "type": "varchar",
+            "nullable": "YES",
+            "length": 128
+        },
+        {
+            "name": "SysParamTitleID",
+            "type": "varchar",
+            "nullable": "YES",
+            "length": 50
+        },
+        {
+            "name": "BoundToLookup",
+            "type": "varchar",
+            "nullable": "YES",
+            "length": 50
+        },
+        {
+            "name": "BoundToLookupID",
+            "type": "varchar",
+            "nullable": "YES",
+            "length": 50
+        },
+        {
+            "name": "VAUid",
+            "type": "varchar",
+            "nullable": "YES",
+            "length": 32
+        },
+        {
+            "name": "VActr",
+            "type": "int",
+            "nullable": "YES",
+            "length": null
+        },
+        {
+            "name": "VATermId",
+            "type": "varchar",
+            "nullable": "YES",
+            "length": 32
+        },
+        {
+            "name": "VACompCode",
+            "type": "varchar",
+            "nullable": "YES",
+            "length": 16
+        },
+        {
+            "name": "UpdFlag",
+            "type": "varchar",
+            "nullable": "YES",
+            "length": 1
+        }
+    ],
+    "ItemMasterLog": [
+        {
+            "name": "SysDate",
+            "type": "datetime",
+            "nullable": "YES",
+            "length": null
+        },
+        {
+            "name": "ShoperDate",
+            "type": "datetime",
+            "nullable": "YES",
+            "length": null
+        },
+        {
+            "name": "SysTime",
+            "type": "datetime",
+            "nullable": "YES",
+            "length": null
+        },
+        {
+            "name": "Mode",
+            "type": "varchar",
+            "nullable": "YES",
+            "length": 10
+        },
+        {
+            "name": "IsNewPM",
+            "type": "bit",
+            "nullable": "YES",
+            "length": null
+        },
+        {
+            "name": "StockNo",
+            "type": "varchar",
+            "nullable": "YES",
+            "length": 32
+        },
+        {
+            "name": "BatchSrlNo",
+            "type": "varchar",
+            "nullable": "YES",
+            "length": 16
+        },
+        {
+            "name": "Class1Cd",
+            "type": "varchar",
+            "nullable": "YES",
+            "length": 16
+        },
+        {
+            "name": "Class2Cd",
+            "type": "varchar",
+            "nullable": "YES",
+            "length": 16
+        },
+        {
+            "name": "SubClass1Cd",
+            "type": "varchar",
+            "nullable": "YES",
+            "length": 16
+        },
+        {
+            "name": "SubClass2Cd",
+            "type": "varchar",
+            "nullable": "YES",
+            "length": 16
+        },
+        {
+            "name": "SizeCd",
+            "type": "varchar",
+            "nullable": "YES",
+            "length": 16
+        },
+        {
+            "name": "LeastSalableQty",
+            "type": "money",
+            "nullable": "YES",
+            "length": null
+        },
+        {
+            "name": "UseJwlPricing",
+            "type": "bit",
+            "nullable": "YES",
+            "length": null
+        },
+        {
+            "name": "Retail_Price",
+            "type": "money",
+            "nullable": "YES",
+            "length": null
+        },
+        {
+            "name": "Dealer_Price",
+            "type": "money",
+            "nullable": "YES",
+            "length": null
+        },
+        {
+            "name": "ProdTaxType",
+            "type": "varchar",
+            "nullable": "YES",
+            "length": 16
+        },
+        {
+            "name": "SrcTaxType",
+            "type": "varchar",
+            "nullable": "YES",
+            "length": 16
+        },
+        {
+            "name": "IsInventoryItem",
+            "type": "bit",
+            "nullable": "YES",
+            "length": null
+        },
+        {
+            "name": "IsRPTaxInclusive",
+            "type": "bit",
+            "nullable": "YES",
+            "length": null
+        },
+        {
+            "name": "ItemDesc",
+            "type": "varchar",
+            "nullable": "YES",
+            "length": 60
+        },
+        {
+            "name": "ExtDescPresent",
+            "type": "bit",
+            "nullable": "YES",
+            "length": null
+        },
+        {
+            "name": "RegularInd",
+            "type": "varchar",
+            "nullable": "YES",
+            "length": 2
+        },
+        {
+            "name": "ReordLvl",
+            "type": "money",
+            "nullable": "YES",
+            "length": null
+        },
+        {
+            "name": "EOQ",
+            "type": "money",
+            "nullable": "YES",
+            "length": null
+        },
+        {
+            "name": "MinOrdQty",
+            "type": "money",
+            "nullable": "YES",
+            "length": null
+        },
+        {
+            "name": "LastPurchPrice",
+            "type": "money",
+            "nullable": "YES",
+            "length": null
+        },
+        {
+            "name": "CurrentCost",
+            "type": "money",
+            "nullable": "YES",
+            "length": null
+        },
+        {
+            "name": "JwlMetalInd",
+            "type": "varchar",
+            "nullable": "YES",
+            "length": 2
+        },
+        {
+            "name": "JwlCaratage",
+            "type": "int",
+            "nullable": "YES",
+            "length": null
+        },
+        {
+            "name": "JwlGrossWt",
+            "type": "money",
+            "nullable": "YES",
+            "length": null
+        },
+        {
+            "name": "JwlStoneWt",
+            "type": "money",
+            "nullable": "YES",
+            "length": null
+        },
+        {
+            "name": "JwlWtFactor",
+            "type": "money",
+            "nullable": "YES",
+            "length": null
+        },
+        {
+            "name": "JwlRateFactor",
+            "type": "money",
+            "nullable": "YES",
+            "length": null
+        },
+        {
+            "name": "JwlStoneVal",
+            "type": "money",
+            "nullable": "YES",
+            "length": null
+        },
+        {
+            "name": "JwlMakeCharge",
+            "type": "money",
+            "nullable": "YES",
+            "length": null
+        },
+        {
+            "name": "JwlValFactor",
+            "type": "money",
+            "nullable": "YES",
+            "length": null
+        },
+        {
+            "name": "AnalCode1",
+            "type": "varchar",
+            "nullable": "YES",
+            "length": 16
+        },
+        {
+            "name": "AnalCode2",
+            "type": "varchar",
+            "nullable": "YES",
+            "length": 16
+        },
+        {
+            "name": "AnalCode3",
+            "type": "varchar",
+            "nullable": "YES",
+            "length": 16
+        },
+        {
+            "name": "AnalCode4",
+            "type": "varchar",
+            "nullable": "YES",
+            "length": 16
+        },
+        {
+            "name": "AnalCode5",
+            "type": "varchar",
+            "nullable": "YES",
+            "length": 16
+        },
+        {
+            "name": "MfgDate",
+            "type": "datetime",
+            "nullable": "YES",
+            "length": null
+        },
+        {
+            "name": "ExpDate",
+            "type": "datetime",
+            "nullable": "YES",
+            "length": null
+        },
+        {
+            "name": "ShelfLife",
+            "type": "int",
+            "nullable": "YES",
+            "length": null
+        },
+        {
+            "name": "ImagePresent",
+            "type": "bit",
+            "nullable": "YES",
+            "length": null
+        },
+        {
+            "name": "IsBillable",
+            "type": "bit",
+            "nullable": "YES",
+            "length": null
+        },
+        {
+            "name": "IsService",
+            "type": "bit",
+            "nullable": "YES",
+            "length": null
+        },
+        {
+            "name": "RtlMarkUp",
+            "type": "money",
+            "nullable": "YES",
+            "length": null
+        },
+        {
+            "name": "DlrMarkUp",
+            "type": "money",
+            "nullable": "YES",
+            "length": null
+        },
+        {
+            "name": "VAUid",
+            "type": "varchar",
+            "nullable": "YES",
+            "length": 32
+        },
+        {
+            "name": "VActr",
+            "type": "int",
+            "nullable": "YES",
+            "length": null
+        },
+        {
+            "name": "VATermId",
+            "type": "varchar",
+            "nullable": "YES",
+            "length": 32
+        },
+        {
+            "name": "VACompCode",
+            "type": "varchar",
+            "nullable": "YES",
+            "length": 16
+        },
+        {
+            "name": "CCStockNo",
+            "type": "varchar",
+            "nullable": "YES",
+            "length": 40
+        },
+        {
+            "name": "GradeCd",
+            "type": "varchar",
+            "nullable": "YES",
+            "length": 16
+        },
+        {
+            "name": "ImageID",
+            "type": "varchar",
+            "nullable": "YES",
+            "length": 256
+        },
+        {
+            "name": "MerchId",
+            "type": "varchar",
+            "nullable": "YES",
+            "length": 16
+        },
+        {
+            "name": "DiscId",
+            "type": "int",
+            "nullable": "YES",
+            "length": null
+        },
+        {
+            "name": "DiscPer",
+            "type": "int",
+            "nullable": "YES",
+            "length": null
+        },
+        {
+            "name": "DiscAmt",
+            "type": "int",
+            "nullable": "YES",
+            "length": null
+        },
+        {
+            "name": "DiscSQLQry",
+            "type": "varchar",
+            "nullable": "YES",
+            "length": 32
+        },
+        {
+            "name": "PriceFactorId",
+            "type": "int",
+            "nullable": "YES",
+            "length": null
+        },
+        {
+            "name": "PriceFactorPer",
+            "type": "int",
+            "nullable": "YES",
+            "length": null
+        },
+        {
+            "name": "PriceFactorAmt",
+            "type": "int",
+            "nullable": "YES",
+            "length": null
+        },
+        {
+            "name": "PriceFactorSQLQry",
+            "type": "varchar",
+            "nullable": "YES",
+            "length": 32
+        },
+        {
+            "name": "AddOnId",
+            "type": "int",
+            "nullable": "YES",
+            "length": null
+        },
+        {
+            "name": "AddOnPer",
+            "type": "money",
+            "nullable": "YES",
+            "length": null
+        },
+        {
+            "name": "AddOnAmt",
+            "type": "money",
+            "nullable": "YES",
+            "length": null
+        },
+        {
+            "name": "AddOnSQLQry",
+            "type": "varchar",
+            "nullable": "YES",
+            "length": 32
+        },
+        {
+            "name": "DednId",
+            "type": "int",
+            "nullable": "YES",
+            "length": null
+        },
+        {
+            "name": "DednPer",
+            "type": "money",
+            "nullable": "YES",
+            "length": null
+        },
+        {
+            "name": "DednAmt",
+            "type": "money",
+            "nullable": "YES",
+            "length": null
+        },
+        {
+            "name": "DednSQLQry",
+            "type": "varchar",
+            "nullable": "YES",
+            "length": 32
+        },
+        {
+            "name": "EDId",
+            "type": "int",
+            "nullable": "YES",
+            "length": null
+        },
+        {
+            "name": "EDPer",
+            "type": "money",
+            "nullable": "YES",
+            "length": null
+        },
+        {
+            "name": "EDAmt",
+            "type": "money",
+            "nullable": "YES",
+            "length": null
+        },
+        {
+            "name": "EDSQLQry",
+            "type": "varchar",
+            "nullable": "YES",
+            "length": 32
+        },
+        {
+            "name": "FinalMRP",
+            "type": "money",
+            "nullable": "YES",
+            "length": null
+        },
+        {
+            "name": "IsConsignmentItem",
+            "type": "bit",
+            "nullable": "YES",
+            "length": null
+        },
+        {
+            "name": "SField1",
+            "type": "varchar",
+            "nullable": "YES",
+            "length": 8
+        },
+        {
+            "name": "SField2",
+            "type": "varchar",
+            "nullable": "YES",
+            "length": 8
+        },
+        {
+            "name": "SField3",
+            "type": "varchar",
+            "nullable": "YES",
+            "length": 8
+        },
+        {
+            "name": "SField4",
+            "type": "varchar",
+            "nullable": "YES",
+            "length": 8
+        },
+        {
+            "name": "SField5",
+            "type": "varchar",
+            "nullable": "YES",
+            "length": 8
+        },
+        {
+            "name": "NField1",
+            "type": "int",
+            "nullable": "YES",
+            "length": null
+        },
+        {
+            "name": "NField2",
+            "type": "int",
+            "nullable": "YES",
+            "length": null
+        },
+        {
+            "name": "NField3",
+            "type": "int",
+            "nullable": "YES",
+            "length": null
+        },
+        {
+            "name": "NField4",
+            "type": "int",
+            "nullable": "YES",
+            "length": null
+        },
+        {
+            "name": "NField5",
+            "type": "int",
+            "nullable": "YES",
+            "length": null
+        },
+        {
+            "name": "DField1",
+            "type": "datetime",
+            "nullable": "YES",
+            "length": null
+        },
+        {
+            "name": "DField2",
+            "type": "datetime",
+            "nullable": "YES",
+            "length": null
+        },
+        {
+            "name": "DField3",
+            "type": "datetime",
+            "nullable": "YES",
+            "length": null
+        },
+        {
+            "name": "BField1",
+            "type": "bit",
+            "nullable": "YES",
+            "length": null
+        },
+        {
+            "name": "BField2",
+            "type": "bit",
+            "nullable": "YES",
+            "length": null
+        },
+        {
+            "name": "AnalCode6",
+            "type": "varchar",
+            "nullable": "YES",
+            "length": 16
+        },
+        {
+            "name": "AnalCode7",
+            "type": "varchar",
+            "nullable": "YES",
+            "length": 16
+        },
+        {
+            "name": "AnalCode8",
+            "type": "varchar",
+            "nullable": "YES",
+            "length": 16
+        },
+        {
+            "name": "AnalCode9",
+            "type": "varchar",
+            "nullable": "YES",
+            "length": 16
+        },
+        {
+            "name": "AnalCode10",
+            "type": "varchar",
+            "nullable": "YES",
+            "length": 16
+        },
+        {
+            "name": "AnalCode11",
+            "type": "varchar",
+            "nullable": "YES",
+            "length": 16
+        },
+        {
+            "name": "AnalCode12",
+            "type": "varchar",
+            "nullable": "YES",
+            "length": 16
+        },
+        {
+            "name": "AnalCode13",
+            "type": "varchar",
+            "nullable": "YES",
+            "length": 16
+        },
+        {
+            "name": "AnalCode14",
+            "type": "varchar",
+            "nullable": "YES",
+            "length": 16
+        },
+        {
+            "name": "AnalCode15",
+            "type": "varchar",
+            "nullable": "YES",
+            "length": 16
+        },
+        {
+            "name": "AnalCode16",
+            "type": "varchar",
+            "nullable": "YES",
+            "length": 16
+        },
+        {
+            "name": "AnalCode17",
+            "type": "varchar",
+            "nullable": "YES",
+            "length": 16
+        },
+        {
+            "name": "AnalCode18",
+            "type": "varchar",
+            "nullable": "YES",
+            "length": 16
+        },
+        {
+            "name": "AnalCode19",
+            "type": "varchar",
+            "nullable": "YES",
+            "length": 16
+        },
+        {
+            "name": "AnalCode20",
+            "type": "varchar",
+            "nullable": "YES",
+            "length": 16
+        },
+        {
+            "name": "AnalCode21",
+            "type": "varchar",
+            "nullable": "YES",
+            "length": 16
+        },
+        {
+            "name": "AnalCode22",
+            "type": "varchar",
+            "nullable": "YES",
+            "length": 16
+        },
+        {
+            "name": "AnalCode23",
+            "type": "varchar",
+            "nullable": "YES",
+            "length": 16
+        },
+        {
+            "name": "AnalCode24",
+            "type": "varchar",
+            "nullable": "YES",
+            "length": 16
+        },
+        {
+            "name": "AnalCode25",
+            "type": "varchar",
+            "nullable": "YES",
+            "length": 16
+        },
+        {
+            "name": "AnalCode26",
+            "type": "varchar",
+            "nullable": "YES",
+            "length": 16
+        },
+        {
+            "name": "AnalCode27",
+            "type": "varchar",
+            "nullable": "YES",
+            "length": 16
+        },
+        {
+            "name": "AnalCode28",
+            "type": "varchar",
+            "nullable": "YES",
+            "length": 16
+        },
+        {
+            "name": "AnalCode29",
+            "type": "varchar",
+            "nullable": "YES",
+            "length": 16
+        },
+        {
+            "name": "AnalCode30",
+            "type": "varchar",
+            "nullable": "YES",
+            "length": 16
+        },
+        {
+            "name": "AnalCode31",
+            "type": "varchar",
+            "nullable": "YES",
+            "length": 16
+        },
+        {
+            "name": "AnalCode32",
+            "type": "varchar",
+            "nullable": "YES",
+            "length": 16
+        },
+        {
+            "name": "FlgStockTake",
+            "type": "int",
+            "nullable": "YES",
+            "length": null
+        },
+        {
+            "name": "FlgRateAlterable",
+            "type": "int",
+            "nullable": "YES",
+            "length": null
+        },
+        {
+            "name": "FlgStockChkAppl",
+            "type": "int",
+            "nullable": "YES",
+            "length": null
+        },
+        {
+            "name": "StockTolerance",
+            "type": "money",
+            "nullable": "YES",
+            "length": null
+        }
+    ],
+    "BAKItemMasterLog": [
+        {
+            "name": "SysDate",
+            "type": "datetime",
+            "nullable": "YES",
+            "length": null
+        },
+        {
+            "name": "ShoperDate",
+            "type": "datetime",
+            "nullable": "YES",
+            "length": null
+        },
+        {
+            "name": "SysTime",
+            "type": "datetime",
+            "nullable": "YES",
+            "length": null
+        },
+        {
+            "name": "Mode",
+            "type": "varchar",
+            "nullable": "YES",
+            "length": 10
+        },
+        {
+            "name": "IsNewPM",
+            "type": "bit",
+            "nullable": "YES",
+            "length": null
+        },
+        {
+            "name": "StockNo",
+            "type": "varchar",
+            "nullable": "YES",
+            "length": 32
+        },
+        {
+            "name": "BatchSrlNo",
+            "type": "varchar",
+            "nullable": "YES",
+            "length": 16
+        },
+        {
+            "name": "Class1Cd",
+            "type": "varchar",
+            "nullable": "YES",
+            "length": 16
+        },
+        {
+            "name": "Class2Cd",
+            "type": "varchar",
+            "nullable": "YES",
+            "length": 16
+        },
+        {
+            "name": "SubClass1Cd",
+            "type": "varchar",
+            "nullable": "YES",
+            "length": 16
+        },
+        {
+            "name": "SubClass2Cd",
+            "type": "varchar",
+            "nullable": "YES",
+            "length": 16
+        },
+        {
+            "name": "SizeCd",
+            "type": "varchar",
+            "nullable": "YES",
+            "length": 16
+        },
+        {
+            "name": "LeastSalableQty",
+            "type": "money",
+            "nullable": "YES",
+            "length": null
+        },
+        {
+            "name": "UseJwlPricing",
+            "type": "bit",
+            "nullable": "YES",
+            "length": null
+        },
+        {
+            "name": "Retail_Price",
+            "type": "money",
+            "nullable": "YES",
+            "length": null
+        },
+        {
+            "name": "Dealer_Price",
+            "type": "money",
+            "nullable": "YES",
+            "length": null
+        },
+        {
+            "name": "ProdTaxType",
+            "type": "varchar",
+            "nullable": "YES",
+            "length": 16
+        },
+        {
+            "name": "SrcTaxType",
+            "type": "varchar",
+            "nullable": "YES",
+            "length": 16
+        },
+        {
+            "name": "IsInventoryItem",
+            "type": "bit",
+            "nullable": "YES",
+            "length": null
+        },
+        {
+            "name": "IsRPTaxInclusive",
+            "type": "bit",
+            "nullable": "YES",
+            "length": null
+        },
+        {
+            "name": "ItemDesc",
+            "type": "varchar",
+            "nullable": "YES",
+            "length": 60
+        },
+        {
+            "name": "ExtDescPresent",
+            "type": "bit",
+            "nullable": "YES",
+            "length": null
+        },
+        {
+            "name": "RegularInd",
+            "type": "varchar",
+            "nullable": "YES",
+            "length": 2
+        },
+        {
+            "name": "ReordLvl",
+            "type": "money",
+            "nullable": "YES",
+            "length": null
+        },
+        {
+            "name": "EOQ",
+            "type": "money",
+            "nullable": "YES",
+            "length": null
+        },
+        {
+            "name": "MinOrdQty",
+            "type": "money",
+            "nullable": "YES",
+            "length": null
+        },
+        {
+            "name": "LastPurchPrice",
+            "type": "money",
+            "nullable": "YES",
+            "length": null
+        },
+        {
+            "name": "CurrentCost",
+            "type": "money",
+            "nullable": "YES",
+            "length": null
+        },
+        {
+            "name": "JwlMetalInd",
+            "type": "varchar",
+            "nullable": "YES",
+            "length": 2
+        },
+        {
+            "name": "JwlCaratage",
+            "type": "int",
+            "nullable": "YES",
+            "length": null
+        },
+        {
+            "name": "JwlGrossWt",
+            "type": "money",
+            "nullable": "YES",
+            "length": null
+        },
+        {
+            "name": "JwlStoneWt",
+            "type": "money",
+            "nullable": "YES",
+            "length": null
+        },
+        {
+            "name": "JwlWtFactor",
+            "type": "money",
+            "nullable": "YES",
+            "length": null
+        },
+        {
+            "name": "JwlRateFactor",
+            "type": "money",
+            "nullable": "YES",
+            "length": null
+        },
+        {
+            "name": "JwlStoneVal",
+            "type": "money",
+            "nullable": "YES",
+            "length": null
+        },
+        {
+            "name": "JwlMakeCharge",
+            "type": "money",
+            "nullable": "YES",
+            "length": null
+        },
+        {
+            "name": "JwlValFactor",
+            "type": "money",
+            "nullable": "YES",
+            "length": null
+        },
+        {
+            "name": "AnalCode1",
+            "type": "varchar",
+            "nullable": "YES",
+            "length": 16
+        },
+        {
+            "name": "AnalCode2",
+            "type": "varchar",
+            "nullable": "YES",
+            "length": 16
+        },
+        {
+            "name": "AnalCode3",
+            "type": "varchar",
+            "nullable": "YES",
+            "length": 16
+        },
+        {
+            "name": "AnalCode4",
+            "type": "varchar",
+            "nullable": "YES",
+            "length": 16
+        },
+        {
+            "name": "AnalCode5",
+            "type": "varchar",
+            "nullable": "YES",
+            "length": 16
+        },
+        {
+            "name": "MfgDate",
+            "type": "datetime",
+            "nullable": "YES",
+            "length": null
+        },
+        {
+            "name": "ExpDate",
+            "type": "datetime",
+            "nullable": "YES",
+            "length": null
+        },
+        {
+            "name": "ShelfLife",
+            "type": "int",
+            "nullable": "YES",
+            "length": null
+        },
+        {
+            "name": "ImagePresent",
+            "type": "bit",
+            "nullable": "YES",
+            "length": null
+        },
+        {
+            "name": "IsBillable",
+            "type": "bit",
+            "nullable": "YES",
+            "length": null
+        },
+        {
+            "name": "IsService",
+            "type": "bit",
+            "nullable": "YES",
+            "length": null
+        },
+        {
+            "name": "RtlMarkUp",
+            "type": "money",
+            "nullable": "YES",
+            "length": null
+        },
+        {
+            "name": "DlrMarkUp",
+            "type": "money",
+            "nullable": "YES",
+            "length": null
+        },
+        {
+            "name": "VAUid",
+            "type": "varchar",
+            "nullable": "YES",
+            "length": 32
+        },
+        {
+            "name": "VActr",
+            "type": "int",
+            "nullable": "YES",
+            "length": null
+        },
+        {
+            "name": "VATermId",
+            "type": "varchar",
+            "nullable": "YES",
+            "length": 32
+        },
+        {
+            "name": "VACompCode",
+            "type": "varchar",
+            "nullable": "YES",
+            "length": 16
+        },
+        {
+            "name": "CCStockNo",
+            "type": "varchar",
+            "nullable": "YES",
+            "length": 40
+        },
+        {
+            "name": "GradeCd",
+            "type": "varchar",
+            "nullable": "YES",
+            "length": 16
+        },
+        {
+            "name": "ImageID",
+            "type": "varchar",
+            "nullable": "YES",
+            "length": 256
+        },
+        {
+            "name": "MerchId",
+            "type": "varchar",
+            "nullable": "YES",
+            "length": 16
+        },
+        {
+            "name": "DiscId",
+            "type": "int",
+            "nullable": "YES",
+            "length": null
+        },
+        {
+            "name": "DiscPer",
+            "type": "int",
+            "nullable": "YES",
+            "length": null
+        },
+        {
+            "name": "DiscAmt",
+            "type": "int",
+            "nullable": "YES",
+            "length": null
+        },
+        {
+            "name": "DiscSQLQry",
+            "type": "varchar",
+            "nullable": "YES",
+            "length": 32
+        },
+        {
+            "name": "PriceFactorId",
+            "type": "int",
+            "nullable": "YES",
+            "length": null
+        },
+        {
+            "name": "PriceFactorPer",
+            "type": "int",
+            "nullable": "YES",
+            "length": null
+        },
+        {
+            "name": "PriceFactorAmt",
+            "type": "int",
+            "nullable": "YES",
+            "length": null
+        },
+        {
+            "name": "PriceFactorSQLQry",
+            "type": "varchar",
+            "nullable": "YES",
+            "length": 32
+        },
+        {
+            "name": "AddOnId",
+            "type": "int",
+            "nullable": "YES",
+            "length": null
+        },
+        {
+            "name": "AddOnPer",
+            "type": "money",
+            "nullable": "YES",
+            "length": null
+        },
+        {
+            "name": "AddOnAmt",
+            "type": "money",
+            "nullable": "YES",
+            "length": null
+        },
+        {
+            "name": "AddOnSQLQry",
+            "type": "varchar",
+            "nullable": "YES",
+            "length": 32
+        },
+        {
+            "name": "DednId",
+            "type": "int",
+            "nullable": "YES",
+            "length": null
+        },
+        {
+            "name": "DednPer",
+            "type": "money",
+            "nullable": "YES",
+            "length": null
+        },
+        {
+            "name": "DednAmt",
+            "type": "money",
+            "nullable": "YES",
+            "length": null
+        },
+        {
+            "name": "DednSQLQry",
+            "type": "varchar",
+            "nullable": "YES",
+            "length": 32
+        },
+        {
+            "name": "EDId",
+            "type": "int",
+            "nullable": "YES",
+            "length": null
+        },
+        {
+            "name": "EDPer",
+            "type": "money",
+            "nullable": "YES",
+            "length": null
+        },
+        {
+            "name": "EDAmt",
+            "type": "money",
+            "nullable": "YES",
+            "length": null
+        },
+        {
+            "name": "EDSQLQry",
+            "type": "varchar",
+            "nullable": "YES",
+            "length": 32
+        },
+        {
+            "name": "FinalMRP",
+            "type": "money",
+            "nullable": "YES",
+            "length": null
+        },
+        {
+            "name": "IsConsignmentItem",
+            "type": "bit",
+            "nullable": "YES",
+            "length": null
+        },
+        {
+            "name": "SField1",
+            "type": "varchar",
+            "nullable": "YES",
+            "length": 8
+        },
+        {
+            "name": "SField2",
+            "type": "varchar",
+            "nullable": "YES",
+            "length": 8
+        },
+        {
+            "name": "SField3",
+            "type": "varchar",
+            "nullable": "YES",
+            "length": 8
+        },
+        {
+            "name": "SField4",
+            "type": "varchar",
+            "nullable": "YES",
+            "length": 8
+        },
+        {
+            "name": "SField5",
+            "type": "varchar",
+            "nullable": "YES",
+            "length": 8
+        },
+        {
+            "name": "NField1",
+            "type": "int",
+            "nullable": "YES",
+            "length": null
+        },
+        {
+            "name": "NField2",
+            "type": "int",
+            "nullable": "YES",
+            "length": null
+        },
+        {
+            "name": "NField3",
+            "type": "int",
+            "nullable": "YES",
+            "length": null
+        },
+        {
+            "name": "NField4",
+            "type": "int",
+            "nullable": "YES",
+            "length": null
+        },
+        {
+            "name": "NField5",
+            "type": "int",
+            "nullable": "YES",
+            "length": null
+        },
+        {
+            "name": "DField1",
+            "type": "datetime",
+            "nullable": "YES",
+            "length": null
+        },
+        {
+            "name": "DField2",
+            "type": "datetime",
+            "nullable": "YES",
+            "length": null
+        },
+        {
+            "name": "DField3",
+            "type": "datetime",
+            "nullable": "YES",
+            "length": null
+        },
+        {
+            "name": "BField1",
+            "type": "bit",
+            "nullable": "YES",
+            "length": null
+        },
+        {
+            "name": "BField2",
+            "type": "bit",
+            "nullable": "YES",
+            "length": null
+        },
+        {
+            "name": "AnalCode6",
+            "type": "varchar",
+            "nullable": "YES",
+            "length": 16
+        },
+        {
+            "name": "AnalCode7",
+            "type": "varchar",
+            "nullable": "YES",
+            "length": 16
+        },
+        {
+            "name": "AnalCode8",
+            "type": "varchar",
+            "nullable": "YES",
+            "length": 16
+        },
+        {
+            "name": "AnalCode9",
+            "type": "varchar",
+            "nullable": "YES",
+            "length": 16
+        },
+        {
+            "name": "AnalCode10",
+            "type": "varchar",
+            "nullable": "YES",
+            "length": 16
+        },
+        {
+            "name": "AnalCode11",
+            "type": "varchar",
+            "nullable": "YES",
+            "length": 16
+        },
+        {
+            "name": "AnalCode12",
+            "type": "varchar",
+            "nullable": "YES",
+            "length": 16
+        },
+        {
+            "name": "AnalCode13",
+            "type": "varchar",
+            "nullable": "YES",
+            "length": 16
+        },
+        {
+            "name": "AnalCode14",
+            "type": "varchar",
+            "nullable": "YES",
+            "length": 16
+        },
+        {
+            "name": "AnalCode15",
+            "type": "varchar",
+            "nullable": "YES",
+            "length": 16
+        },
+        {
+            "name": "AnalCode16",
+            "type": "varchar",
+            "nullable": "YES",
+            "length": 16
+        },
+        {
+            "name": "AnalCode17",
+            "type": "varchar",
+            "nullable": "YES",
+            "length": 16
+        },
+        {
+            "name": "AnalCode18",
+            "type": "varchar",
+            "nullable": "YES",
+            "length": 16
+        },
+        {
+            "name": "AnalCode19",
+            "type": "varchar",
+            "nullable": "YES",
+            "length": 16
+        },
+        {
+            "name": "AnalCode20",
+            "type": "varchar",
+            "nullable": "YES",
+            "length": 16
+        },
+        {
+            "name": "AnalCode21",
+            "type": "varchar",
+            "nullable": "YES",
+            "length": 16
+        },
+        {
+            "name": "AnalCode22",
+            "type": "varchar",
+            "nullable": "YES",
+            "length": 16
+        },
+        {
+            "name": "AnalCode23",
+            "type": "varchar",
+            "nullable": "YES",
+            "length": 16
+        },
+        {
+            "name": "AnalCode24",
+            "type": "varchar",
+            "nullable": "YES",
+            "length": 16
+        },
+        {
+            "name": "AnalCode25",
+            "type": "varchar",
+            "nullable": "YES",
+            "length": 16
+        },
+        {
+            "name": "AnalCode26",
+            "type": "varchar",
+            "nullable": "YES",
+            "length": 16
+        },
+        {
+            "name": "AnalCode27",
+            "type": "varchar",
+            "nullable": "YES",
+            "length": 16
+        },
+        {
+            "name": "AnalCode28",
+            "type": "varchar",
+            "nullable": "YES",
+            "length": 16
+        },
+        {
+            "name": "AnalCode29",
+            "type": "varchar",
+            "nullable": "YES",
+            "length": 16
+        },
+        {
+            "name": "AnalCode30",
+            "type": "varchar",
+            "nullable": "YES",
+            "length": 16
+        },
+        {
+            "name": "AnalCode31",
+            "type": "varchar",
+            "nullable": "YES",
+            "length": 16
+        },
+        {
+            "name": "AnalCode32",
+            "type": "varchar",
+            "nullable": "YES",
+            "length": 16
+        },
+        {
+            "name": "FlgStockTake",
+            "type": "int",
+            "nullable": "YES",
+            "length": null
+        },
+        {
+            "name": "FlgRateAlterable",
+            "type": "int",
+            "nullable": "YES",
+            "length": null
+        },
+        {
+            "name": "FlgStockChkAppl",
+            "type": "int",
+            "nullable": "YES",
+            "length": null
+        },
+        {
+            "name": "StockTolerance",
+            "type": "money",
+            "nullable": "YES",
+            "length": null
+        },
+        {
+            "name": "UpdFlag",
+            "type": "varchar",
+            "nullable": "YES",
+            "length": 1
+        }
+    ],
+    "TMPGENLOOKUP": [
+        {
+            "name": "Recid",
+            "type": "int",
+            "nullable": "NO",
+            "length": null
+        },
+        {
+            "name": "Code",
+            "type": "varchar",
+            "nullable": "NO",
+            "length": 128
+        },
+        {
+            "name": "Descr",
+            "type": "varchar",
+            "nullable": "YES",
+            "length": 1600
+        },
+        {
+            "name": "Flag",
+            "type": "varchar",
+            "nullable": "YES",
+            "length": 256
+        },
+        {
+            "name": "Number",
+            "type": "int",
+            "nullable": "YES",
+            "length": null
+        },
+        {
+            "name": "VaUid",
+            "type": "varchar",
+            "nullable": "YES",
+            "length": 32
+        },
+        {
+            "name": "VaCtr",
+            "type": "int",
+            "nullable": "YES",
+            "length": null
+        },
+        {
+            "name": "VaTermId",
+            "type": "varchar",
+            "nullable": "YES",
+            "length": 32
+        },
+        {
+            "name": "VaCompCode",
+            "type": "varchar",
+            "nullable": "YES",
+            "length": 16
+        },
+        {
+            "name": "PARAMCODE",
+            "type": "varchar",
+            "nullable": "YES",
+            "length": 32
+        }
+    ],
+    "ExportGenLookUp": [
+        {
+            "name": "RecId",
+            "type": "int",
+            "nullable": "NO",
+            "length": null
+        },
+        {
+            "name": "Code",
+            "type": "varchar",
+            "nullable": "NO",
+            "length": 128
+        },
+        {
+            "name": "Descr",
+            "type": "varchar",
+            "nullable": "YES",
+            "length": 1600
+        },
+        {
+            "name": "Flag",
+            "type": "varchar",
+            "nullable": "YES",
+            "length": 255
+        },
+        {
+            "name": "Number",
+            "type": "int",
+            "nullable": "YES",
+            "length": null
+        },
+        {
+            "name": "VAUid",
+            "type": "varchar",
+            "nullable": "YES",
+            "length": 32
+        },
+        {
+            "name": "VActr",
+            "type": "int",
+            "nullable": "YES",
+            "length": null
+        },
+        {
+            "name": "VATermId",
+            "type": "varchar",
+            "nullable": "YES",
+            "length": 32
+        },
+        {
+            "name": "VACompCode",
+            "type": "varchar",
+            "nullable": "YES",
+            "length": 16
+        },
+        {
+            "name": "HOCompCode",
+            "type": "varchar",
+            "nullable": "NO",
+            "length": 32
+        },
+        {
+            "name": "FlagAckRecd",
+            "type": "bit",
+            "nullable": "YES",
+            "length": null
+        },
+        {
+            "name": "FileNumber",
+            "type": "numeric",
+            "nullable": "NO",
+            "length": null
+        }
+    ],
+    "BAKPhyStockTakingItemBkUp": [
+        {
+            "name": "ScopeId",
+            "type": "int",
+            "nullable": "NO",
+            "length": null
+        },
+        {
+            "name": "StockNo",
+            "type": "varchar",
+            "nullable": "NO",
+            "length": 50
+        },
+        {
+            "name": "BatchSrlNo",
+            "type": "varchar",
+            "nullable": "NO",
+            "length": 50
+        },
+        {
+            "name": "ItemDesc",
+            "type": "varchar",
+            "nullable": "YES",
+            "length": 75
+        },
+        {
+            "name": "CurrCost",
+            "type": "money",
+            "nullable": "YES",
+            "length": null
+        },
+        {
+            "name": "MRP",
+            "type": "money",
+            "nullable": "YES",
+            "length": null
+        },
+        {
+            "name": "SOH",
+            "type": "real",
+            "nullable": "YES",
+            "length": null
+        },
+        {
+            "name": "PhyStock",
+            "type": "real",
+            "nullable": "YES",
+            "length": null
+        },
+        {
+            "name": "DiffQty",
+            "type": "real",
+            "nullable": "YES",
+            "length": null
+        },
+        {
+            "name": "UpdtFlag",
+            "type": "int",
+            "nullable": "YES",
+            "length": null
+        },
+        {
+            "name": "PhyStkBatchNo",
+            "type": "varchar",
+            "nullable": "YES",
+            "length": 16
+        },
+        {
+            "name": "PageNo",
+            "type": "int",
+            "nullable": "YES",
+            "length": null
+        },
+        {
+            "name": "RecDt",
+            "type": "datetime",
+            "nullable": "YES",
+            "length": null
+        },
+        {
+            "name": "RecTime",
+            "type": "datetime",
+            "nullable": "YES",
+            "length": null
+        },
+        {
+            "name": "LocId",
+            "type": "varchar",
+            "nullable": "YES",
+            "length": 50
+        },
+        {
+            "name": "SC1Cd",
+            "type": "varchar",
+            "nullable": "YES",
+            "length": 50
+        },
+        {
+            "name": "SC1Desc",
+            "type": "varchar",
+            "nullable": "YES",
+            "length": 256
+        },
+        {
+            "name": "SC2Cd",
+            "type": "varchar",
+            "nullable": "YES",
+            "length": 50
+        },
+        {
+            "name": "SC2Desc",
+            "type": "varchar",
+            "nullable": "YES",
+            "length": 256
+        },
+        {
+            "name": "Cls1Cd",
+            "type": "varchar",
+            "nullable": "YES",
+            "length": 50
+        },
+        {
+            "name": "Cls1Desc",
+            "type": "varchar",
+            "nullable": "YES",
+            "length": 256
+        },
+        {
+            "name": "Cls2Cd",
+            "type": "varchar",
+            "nullable": "YES",
+            "length": 50
+        },
+        {
+            "name": "Cls2Desc",
+            "type": "varchar",
+            "nullable": "YES",
+            "length": 256
+        },
+        {
+            "name": "SubCls1Cd",
+            "type": "varchar",
+            "nullable": "YES",
+            "length": 50
+        },
+        {
+            "name": "SubCls1Desc",
+            "type": "varchar",
+            "nullable": "YES",
+            "length": 50
+        },
+        {
+            "name": "SubCls2Cd",
+            "type": "varchar",
+            "nullable": "YES",
+            "length": 50
+        },
+        {
+            "name": "SubCls2Desc",
+            "type": "varchar",
+            "nullable": "YES",
+            "length": 50
+        },
+        {
+            "name": "SizeCd",
+            "type": "varchar",
+            "nullable": "YES",
+            "length": 50
+        },
+        {
+            "name": "UserId",
+            "type": "varchar",
+            "nullable": "YES",
+            "length": 100
+        },
+        {
+            "name": "VAUid",
+            "type": "varchar",
+            "nullable": "YES",
+            "length": 32
+        },
+        {
+            "name": "VActr",
+            "type": "int",
+            "nullable": "YES",
+            "length": null
+        },
+        {
+            "name": "VATermId",
+            "type": "varchar",
+            "nullable": "YES",
+            "length": 32
+        },
+        {
+            "name": "VACompCode",
+            "type": "varchar",
+            "nullable": "YES",
+            "length": 16
+        },
+        {
+            "name": "SHOPERDBVER",
+            "type": "int",
+            "nullable": "YES",
+            "length": null
+        },
+        {
+            "name": "StkTakeMode",
+            "type": "varchar",
+            "nullable": "YES",
+            "length": 64
+        },
+        {
+            "name": "UpdFlag",
+            "type": "varchar",
+            "nullable": "YES",
+            "length": 1
+        }
+    ],
+    "ExtdItemMaster": [
+        {
+            "name": "StockNo",
+            "type": "varchar",
+            "nullable": "NO",
+            "length": 32
+        },
+        {
+            "name": "ItemExtDesc",
+            "type": "varchar",
+            "nullable": "YES",
+            "length": 1024
+        },
+        {
+            "name": "ImageId",
+            "type": "varchar",
+            "nullable": "YES",
+            "length": 60
+        },
+        {
+            "name": "VAUid",
+            "type": "varchar",
+            "nullable": "YES",
+            "length": 32
+        },
+        {
+            "name": "VActr",
+            "type": "int",
+            "nullable": "YES",
+            "length": null
+        },
+        {
+            "name": "VATermId",
+            "type": "varchar",
+            "nullable": "YES",
+            "length": 32
+        },
+        {
+            "name": "VACompCode",
+            "type": "varchar",
+            "nullable": "YES",
+            "length": 16
+        }
+    ],
+    "TempItemMastersuper": [
+        {
+            "name": "StockNo",
+            "type": "varchar",
+            "nullable": "NO",
+            "length": 32
+        },
+        {
+            "name": "Class1Cd",
+            "type": "varchar",
+            "nullable": "YES",
+            "length": 16
+        },
+        {
+            "name": "Class2Cd",
+            "type": "varchar",
+            "nullable": "YES",
+            "length": 16
+        },
+        {
+            "name": "SubClass1Cd",
+            "type": "varchar",
+            "nullable": "YES",
+            "length": 16
+        },
+        {
+            "name": "SubClass2Cd",
+            "type": "varchar",
+            "nullable": "YES",
+            "length": 16
+        },
+        {
+            "name": "SizeCd",
+            "type": "varchar",
+            "nullable": "YES",
+            "length": 16
+        },
+        {
+            "name": "LeastSalableQty",
+            "type": "money",
+            "nullable": "YES",
+            "length": null
+        },
+        {
+            "name": "UseJwlPricing",
+            "type": "bit",
+            "nullable": "YES",
+            "length": null
+        },
+        {
+            "name": "Retail_Price",
+            "type": "money",
+            "nullable": "YES",
+            "length": null
+        },
+        {
+            "name": "Dealer_Price",
+            "type": "money",
+            "nullable": "YES",
+            "length": null
+        },
+        {
+            "name": "ProdTaxType",
+            "type": "varchar",
+            "nullable": "YES",
+            "length": 16
+        },
+        {
+            "name": "SrcTaxType",
+            "type": "varchar",
+            "nullable": "YES",
+            "length": 16
+        },
+        {
+            "name": "IsInventoryItem",
+            "type": "bit",
+            "nullable": "YES",
+            "length": null
+        },
+        {
+            "name": "IsRPTaxInclusive",
+            "type": "bit",
+            "nullable": "YES",
+            "length": null
+        },
+        {
+            "name": "ItemDesc",
+            "type": "varchar",
+            "nullable": "YES",
+            "length": 60
+        },
+        {
+            "name": "ExtDescPresent",
+            "type": "bit",
+            "nullable": "YES",
+            "length": null
+        },
+        {
+            "name": "RegularInd",
+            "type": "varchar",
+            "nullable": "YES",
+            "length": 2
+        },
+        {
+            "name": "ReordLvl",
+            "type": "real",
+            "nullable": "YES",
+            "length": null
+        },
+        {
+            "name": "EOQ",
+            "type": "real",
+            "nullable": "YES",
+            "length": null
+        },
+        {
+            "name": "MinOrdQty",
+            "type": "real",
+            "nullable": "YES",
+            "length": null
+        },
+        {
+            "name": "LastPurchPrice",
+            "type": "money",
+            "nullable": "YES",
+            "length": null
+        },
+        {
+            "name": "CurrentCost",
+            "type": "money",
+            "nullable": "YES",
+            "length": null
+        },
+        {
+            "name": "JwlMetalInd",
+            "type": "varchar",
+            "nullable": "YES",
+            "length": 2
+        },
+        {
+            "name": "JwlCaratage",
+            "type": "int",
+            "nullable": "YES",
+            "length": null
+        },
+        {
+            "name": "JwlGrossWt",
+            "type": "real",
+            "nullable": "YES",
+            "length": null
+        },
+        {
+            "name": "JwlStoneWt",
+            "type": "real",
+            "nullable": "YES",
+            "length": null
+        },
+        {
+            "name": "JwlWtFactor",
+            "type": "real",
+            "nullable": "YES",
+            "length": null
+        },
+        {
+            "name": "JwlRateFactor",
+            "type": "money",
+            "nullable": "YES",
+            "length": null
+        },
+        {
+            "name": "JwlStoneVal",
+            "type": "money",
+            "nullable": "YES",
+            "length": null
+        },
+        {
+            "name": "JwlMakeCharge",
+            "type": "money",
+            "nullable": "YES",
+            "length": null
+        },
+        {
+            "name": "JwlValFactor",
+            "type": "money",
+            "nullable": "YES",
+            "length": null
+        },
+        {
+            "name": "AnalCode1",
+            "type": "varchar",
+            "nullable": "YES",
+            "length": 16
+        },
+        {
+            "name": "AnalCode2",
+            "type": "varchar",
+            "nullable": "YES",
+            "length": 16
+        },
+        {
+            "name": "AnalCode3",
+            "type": "varchar",
+            "nullable": "YES",
+            "length": 16
+        },
+        {
+            "name": "AnalCode4",
+            "type": "varchar",
+            "nullable": "YES",
+            "length": 16
+        },
+        {
+            "name": "AnalCode5",
+            "type": "varchar",
+            "nullable": "YES",
+            "length": 16
+        },
+        {
+            "name": "AnalCode6",
+            "type": "varchar",
+            "nullable": "YES",
+            "length": 16
+        },
+        {
+            "name": "AnalCode7",
+            "type": "varchar",
+            "nullable": "YES",
+            "length": 16
+        },
+        {
+            "name": "AnalCode8",
+            "type": "varchar",
+            "nullable": "YES",
+            "length": 16
+        },
+        {
+            "name": "AnalCode9",
+            "type": "varchar",
+            "nullable": "YES",
+            "length": 16
+        },
+        {
+            "name": "AnalCode10",
+            "type": "varchar",
+            "nullable": "YES",
+            "length": 16
+        },
+        {
+            "name": "AnalCode11",
+            "type": "varchar",
+            "nullable": "YES",
+            "length": 16
+        },
+        {
+            "name": "AnalCode12",
+            "type": "varchar",
+            "nullable": "YES",
+            "length": 16
+        },
+        {
+            "name": "AnalCode13",
+            "type": "varchar",
+            "nullable": "YES",
+            "length": 16
+        },
+        {
+            "name": "AnalCode14",
+            "type": "varchar",
+            "nullable": "YES",
+            "length": 16
+        },
+        {
+            "name": "AnalCode15",
+            "type": "varchar",
+            "nullable": "YES",
+            "length": 16
+        },
+        {
+            "name": "AnalCode16",
+            "type": "varchar",
+            "nullable": "YES",
+            "length": 16
+        },
+        {
+            "name": "AnalCode17",
+            "type": "varchar",
+            "nullable": "YES",
+            "length": 16
+        },
+        {
+            "name": "AnalCode18",
+            "type": "varchar",
+            "nullable": "YES",
+            "length": 16
+        },
+        {
+            "name": "AnalCode19",
+            "type": "varchar",
+            "nullable": "YES",
+            "length": 16
+        },
+        {
+            "name": "AnalCode20",
+            "type": "varchar",
+            "nullable": "YES",
+            "length": 16
+        },
+        {
+            "name": "AnalCode21",
+            "type": "varchar",
+            "nullable": "YES",
+            "length": 16
+        },
+        {
+            "name": "AnalCode22",
+            "type": "varchar",
+            "nullable": "YES",
+            "length": 16
+        },
+        {
+            "name": "AnalCode23",
+            "type": "varchar",
+            "nullable": "YES",
+            "length": 16
+        },
+        {
+            "name": "AnalCode24",
+            "type": "varchar",
+            "nullable": "YES",
+            "length": 16
+        },
+        {
+            "name": "AnalCode25",
+            "type": "varchar",
+            "nullable": "YES",
+            "length": 16
+        },
+        {
+            "name": "AnalCode26",
+            "type": "varchar",
+            "nullable": "YES",
+            "length": 16
+        },
+        {
+            "name": "AnalCode27",
+            "type": "varchar",
+            "nullable": "YES",
+            "length": 16
+        },
+        {
+            "name": "AnalCode28",
+            "type": "varchar",
+            "nullable": "YES",
+            "length": 16
+        },
+        {
+            "name": "AnalCode29",
+            "type": "varchar",
+            "nullable": "YES",
+            "length": 16
+        },
+        {
+            "name": "AnalCode30",
+            "type": "varchar",
+            "nullable": "YES",
+            "length": 16
+        },
+        {
+            "name": "AnalCode31",
+            "type": "varchar",
+            "nullable": "YES",
+            "length": 16
+        },
+        {
+            "name": "AnalCode32",
+            "type": "varchar",
+            "nullable": "YES",
+            "length": 16
+        },
+        {
+            "name": "MfgDate",
+            "type": "datetime",
+            "nullable": "YES",
+            "length": null
+        },
+        {
+            "name": "ExpDate",
+            "type": "datetime",
+            "nullable": "YES",
+            "length": null
+        },
+        {
+            "name": "ShelfLife",
+            "type": "int",
+            "nullable": "YES",
+            "length": null
+        },
+        {
+            "name": "ImagePresent",
+            "type": "bit",
+            "nullable": "YES",
+            "length": null
+        },
+        {
+            "name": "IsBillable",
+            "type": "bit",
+            "nullable": "YES",
+            "length": null
+        },
+        {
+            "name": "IsService",
+            "type": "bit",
+            "nullable": "YES",
+            "length": null
+        },
+        {
+            "name": "RtlMarkUp",
+            "type": "money",
+            "nullable": "YES",
+            "length": null
+        },
+        {
+            "name": "DlrMarkUp",
+            "type": "money",
+            "nullable": "YES",
+            "length": null
+        },
+        {
+            "name": "VAUid",
+            "type": "varchar",
+            "nullable": "YES",
+            "length": 32
+        },
+        {
+            "name": "VActr",
+            "type": "int",
+            "nullable": "YES",
+            "length": null
+        },
+        {
+            "name": "VATermId",
+            "type": "varchar",
+            "nullable": "YES",
+            "length": 32
+        },
+        {
+            "name": "VACompCode",
+            "type": "varchar",
+            "nullable": "YES",
+            "length": 16
+        },
+        {
+            "name": "CCStockNo",
+            "type": "varchar",
+            "nullable": "YES",
+            "length": 40
+        },
+        {
+            "name": "GradeCd",
+            "type": "varchar",
+            "nullable": "YES",
+            "length": 16
+        },
+        {
+            "name": "ImageID",
+            "type": "varchar",
+            "nullable": "YES",
+            "length": 256
+        },
+        {
+            "name": "SField1",
+            "type": "varchar",
+            "nullable": "YES",
+            "length": 8
+        },
+        {
+            "name": "SField2",
+            "type": "varchar",
+            "nullable": "YES",
+            "length": 8
+        },
+        {
+            "name": "SField3",
+            "type": "varchar",
+            "nullable": "YES",
+            "length": 8
+        },
+        {
+            "name": "SField4",
+            "type": "varchar",
+            "nullable": "YES",
+            "length": 8
+        },
+        {
+            "name": "SField5",
+            "type": "varchar",
+            "nullable": "YES",
+            "length": 8
+        },
+        {
+            "name": "NField1",
+            "type": "int",
+            "nullable": "YES",
+            "length": null
+        },
+        {
+            "name": "NField2",
+            "type": "int",
+            "nullable": "YES",
+            "length": null
+        },
+        {
+            "name": "NField3",
+            "type": "int",
+            "nullable": "YES",
+            "length": null
+        },
+        {
+            "name": "NField4",
+            "type": "int",
+            "nullable": "YES",
+            "length": null
+        },
+        {
+            "name": "NField5",
+            "type": "int",
+            "nullable": "YES",
+            "length": null
+        },
+        {
+            "name": "DField1",
+            "type": "datetime",
+            "nullable": "YES",
+            "length": null
+        },
+        {
+            "name": "DField2",
+            "type": "datetime",
+            "nullable": "YES",
+            "length": null
+        },
+        {
+            "name": "DField3",
+            "type": "datetime",
+            "nullable": "YES",
+            "length": null
+        },
+        {
+            "name": "BField1",
+            "type": "bit",
+            "nullable": "YES",
+            "length": null
+        },
+        {
+            "name": "BField2",
+            "type": "bit",
+            "nullable": "YES",
+            "length": null
+        },
+        {
+            "name": "MerchId",
+            "type": "varchar",
+            "nullable": "YES",
+            "length": 16
+        },
+        {
+            "name": "DiscId",
+            "type": "int",
+            "nullable": "YES",
+            "length": null
+        },
+        {
+            "name": "DiscPer",
+            "type": "int",
+            "nullable": "YES",
+            "length": null
+        },
+        {
+            "name": "DiscAmt",
+            "type": "int",
+            "nullable": "YES",
+            "length": null
+        },
+        {
+            "name": "DiscSQLQry",
+            "type": "varchar",
+            "nullable": "YES",
+            "length": 32
+        },
+        {
+            "name": "PriceFactorId",
+            "type": "int",
+            "nullable": "YES",
+            "length": null
+        },
+        {
+            "name": "PriceFactorPer",
+            "type": "int",
+            "nullable": "YES",
+            "length": null
+        },
+        {
+            "name": "PriceFactorAmt",
+            "type": "int",
+            "nullable": "YES",
+            "length": null
+        },
+        {
+            "name": "PriceFactorSQLQry",
+            "type": "varchar",
+            "nullable": "YES",
+            "length": 32
+        },
+        {
+            "name": "AddOnId",
+            "type": "int",
+            "nullable": "YES",
+            "length": null
+        },
+        {
+            "name": "AddOnPer",
+            "type": "money",
+            "nullable": "YES",
+            "length": null
+        },
+        {
+            "name": "AddOnAmt",
+            "type": "money",
+            "nullable": "YES",
+            "length": null
+        },
+        {
+            "name": "AddOnSQLQry",
+            "type": "varchar",
+            "nullable": "YES",
+            "length": 32
+        },
+        {
+            "name": "DednId",
+            "type": "int",
+            "nullable": "YES",
+            "length": null
+        },
+        {
+            "name": "DednPer",
+            "type": "money",
+            "nullable": "YES",
+            "length": null
+        },
+        {
+            "name": "DednAmt",
+            "type": "money",
+            "nullable": "YES",
+            "length": null
+        },
+        {
+            "name": "DednSQLQry",
+            "type": "varchar",
+            "nullable": "YES",
+            "length": 32
+        },
+        {
+            "name": "EDId",
+            "type": "int",
+            "nullable": "YES",
+            "length": null
+        },
+        {
+            "name": "EDPer",
+            "type": "money",
+            "nullable": "YES",
+            "length": null
+        },
+        {
+            "name": "EDAmt",
+            "type": "money",
+            "nullable": "YES",
+            "length": null
+        },
+        {
+            "name": "EDSQLQry",
+            "type": "varchar",
+            "nullable": "YES",
+            "length": 32
+        },
+        {
+            "name": "FinalMRP",
+            "type": "money",
+            "nullable": "YES",
+            "length": null
+        },
+        {
+            "name": "IsConsignmentItem",
+            "type": "bit",
+            "nullable": "YES",
+            "length": null
+        },
+        {
+            "name": "FlgStockTake",
+            "type": "int",
+            "nullable": "YES",
+            "length": null
+        },
+        {
+            "name": "FlgRateAlterable",
+            "type": "int",
+            "nullable": "YES",
+            "length": null
+        },
+        {
+            "name": "FlgStockChkAppl",
+            "type": "int",
+            "nullable": "YES",
+            "length": null
+        },
+        {
+            "name": "StockTolerance",
+            "type": "money",
+            "nullable": "YES",
+            "length": null
+        },
+        {
+            "name": "Dateinsert",
+            "type": "datetime",
+            "nullable": "YES",
+            "length": null
+        },
+        {
+            "name": "Lastupdateddate",
+            "type": "datetime",
+            "nullable": "YES",
+            "length": null
+        },
+        {
+            "name": "BatchApplicable",
+            "type": "tinyint",
+            "nullable": "YES",
+            "length": null
+        },
+        {
+            "name": "GradeApplicable",
+            "type": "tinyint",
+            "nullable": "YES",
+            "length": null
+        },
+        {
+            "name": "LocationApplicable",
+            "type": "tinyint",
+            "nullable": "YES",
+            "length": null
+        },
+        {
+            "name": "BatchNoFlag",
+            "type": "tinyint",
+            "nullable": "YES",
+            "length": null
+        },
+        {
+            "name": "BatchSrlNo",
+            "type": "varchar",
+            "nullable": "YES",
+            "length": 16
+        }
+    ],
+    "PhyStockTakingItemBkUp": [
+        {
+            "name": "ScopeId",
+            "type": "int",
+            "nullable": "NO",
+            "length": null
+        },
+        {
+            "name": "StockNo",
+            "type": "varchar",
+            "nullable": "NO",
+            "length": 50
+        },
+        {
+            "name": "BatchSrlNo",
+            "type": "varchar",
+            "nullable": "NO",
+            "length": 50
+        },
+        {
+            "name": "ItemDesc",
+            "type": "varchar",
+            "nullable": "YES",
+            "length": 75
+        },
+        {
+            "name": "CurrCost",
+            "type": "money",
+            "nullable": "YES",
+            "length": null
+        },
+        {
+            "name": "MRP",
+            "type": "money",
+            "nullable": "YES",
+            "length": null
+        },
+        {
+            "name": "SOH",
+            "type": "real",
+            "nullable": "YES",
+            "length": null
+        },
+        {
+            "name": "PhyStock",
+            "type": "real",
+            "nullable": "YES",
+            "length": null
+        },
+        {
+            "name": "DiffQty",
+            "type": "real",
+            "nullable": "YES",
+            "length": null
+        },
+        {
+            "name": "UpdtFlag",
+            "type": "int",
+            "nullable": "YES",
+            "length": null
+        },
+        {
+            "name": "PhyStkBatchNo",
+            "type": "varchar",
+            "nullable": "YES",
+            "length": 16
+        },
+        {
+            "name": "PageNo",
+            "type": "int",
+            "nullable": "YES",
+            "length": null
+        },
+        {
+            "name": "RecDt",
+            "type": "datetime",
+            "nullable": "YES",
+            "length": null
+        },
+        {
+            "name": "RecTime",
+            "type": "datetime",
+            "nullable": "YES",
+            "length": null
+        },
+        {
+            "name": "LocId",
+            "type": "varchar",
+            "nullable": "YES",
+            "length": 50
+        },
+        {
+            "name": "SC1Cd",
+            "type": "varchar",
+            "nullable": "YES",
+            "length": 50
+        },
+        {
+            "name": "SC1Desc",
+            "type": "varchar",
+            "nullable": "YES",
+            "length": 256
+        },
+        {
+            "name": "SC2Cd",
+            "type": "varchar",
+            "nullable": "YES",
+            "length": 50
+        },
+        {
+            "name": "SC2Desc",
+            "type": "varchar",
+            "nullable": "YES",
+            "length": 256
+        },
+        {
+            "name": "Cls1Cd",
+            "type": "varchar",
+            "nullable": "YES",
+            "length": 50
+        },
+        {
+            "name": "Cls1Desc",
+            "type": "varchar",
+            "nullable": "YES",
+            "length": 256
+        },
+        {
+            "name": "Cls2Cd",
+            "type": "varchar",
+            "nullable": "YES",
+            "length": 50
+        },
+        {
+            "name": "Cls2Desc",
+            "type": "varchar",
+            "nullable": "YES",
+            "length": 256
+        },
+        {
+            "name": "SubCls1Cd",
+            "type": "varchar",
+            "nullable": "YES",
+            "length": 50
+        },
+        {
+            "name": "SubCls1Desc",
+            "type": "varchar",
+            "nullable": "YES",
+            "length": 50
+        },
+        {
+            "name": "SubCls2Cd",
+            "type": "varchar",
+            "nullable": "YES",
+            "length": 50
+        },
+        {
+            "name": "SubCls2Desc",
+            "type": "varchar",
+            "nullable": "YES",
+            "length": 50
+        },
+        {
+            "name": "SizeCd",
+            "type": "varchar",
+            "nullable": "YES",
+            "length": 50
+        },
+        {
+            "name": "UserId",
+            "type": "varchar",
+            "nullable": "YES",
+            "length": 100
+        },
+        {
+            "name": "VAUid",
+            "type": "varchar",
+            "nullable": "YES",
+            "length": 32
+        },
+        {
+            "name": "VActr",
+            "type": "int",
+            "nullable": "YES",
+            "length": null
+        },
+        {
+            "name": "VATermId",
+            "type": "varchar",
+            "nullable": "YES",
+            "length": 32
+        },
+        {
+            "name": "VACompCode",
+            "type": "varchar",
+            "nullable": "YES",
+            "length": 16
+        },
+        {
+            "name": "SHOPERDBVER",
+            "type": "int",
+            "nullable": "YES",
+            "length": null
+        },
+        {
+            "name": "StkTakeMode",
+            "type": "varchar",
+            "nullable": "YES",
+            "length": 64
+        }
+    ],
+    "PhyStockTakingItemBkUp01": [
+        {
+            "name": "ScopeId",
+            "type": "int",
+            "nullable": "NO",
+            "length": null
+        },
+        {
+            "name": "EntSrlNo",
+            "type": "int",
+            "nullable": "NO",
+            "length": null
+        },
+        {
+            "name": "StockNo",
+            "type": "varchar",
+            "nullable": "YES",
+            "length": 32
+        },
+        {
+            "name": "BatchSrlNo",
+            "type": "varchar",
+            "nullable": "YES",
+            "length": 50
+        },
+        {
+            "name": "ItemDesc",
+            "type": "varchar",
+            "nullable": "YES",
+            "length": 75
+        },
+        {
+            "name": "CurrCost",
+            "type": "money",
+            "nullable": "YES",
+            "length": null
+        },
+        {
+            "name": "MRP",
+            "type": "money",
+            "nullable": "YES",
+            "length": null
+        },
+        {
+            "name": "SOH",
+            "type": "money",
+            "nullable": "YES",
+            "length": null
+        },
+        {
+            "name": "PhyStock",
+            "type": "money",
+            "nullable": "YES",
+            "length": null
+        },
+        {
+            "name": "DiffQty",
+            "type": "money",
+            "nullable": "YES",
+            "length": null
+        },
+        {
+            "name": "UpdtFlag",
+            "type": "int",
+            "nullable": "YES",
+            "length": null
+        },
+        {
+            "name": "PhyStkBatchNo",
+            "type": "varchar",
+            "nullable": "YES",
+            "length": 16
+        },
+        {
+            "name": "PageNo",
+            "type": "int",
+            "nullable": "YES",
+            "length": null
+        },
+        {
+            "name": "RecDt",
+            "type": "datetime",
+            "nullable": "YES",
+            "length": null
+        },
+        {
+            "name": "RecTime",
+            "type": "datetime",
+            "nullable": "YES",
+            "length": null
+        },
+        {
+            "name": "LocId",
+            "type": "varchar",
+            "nullable": "YES",
+            "length": 50
+        },
+        {
+            "name": "SC1Cd",
+            "type": "varchar",
+            "nullable": "YES",
+            "length": 50
+        },
+        {
+            "name": "SC1Desc",
+            "type": "varchar",
+            "nullable": "YES",
+            "length": 255
+        },
+        {
+            "name": "SC2Cd",
+            "type": "varchar",
+            "nullable": "YES",
+            "length": 50
+        },
+        {
+            "name": "SC2Desc",
+            "type": "varchar",
+            "nullable": "YES",
+            "length": 255
+        },
+        {
+            "name": "Cls1Cd",
+            "type": "varchar",
+            "nullable": "YES",
+            "length": 50
+        },
+        {
+            "name": "Cls1Desc",
+            "type": "varchar",
+            "nullable": "YES",
+            "length": 255
+        },
+        {
+            "name": "Cls2Cd",
+            "type": "varchar",
+            "nullable": "YES",
+            "length": 50
+        },
+        {
+            "name": "Cls2Desc",
+            "type": "varchar",
+            "nullable": "YES",
+            "length": 255
+        },
+        {
+            "name": "SubCls1Cd",
+            "type": "varchar",
+            "nullable": "YES",
+            "length": 50
+        },
+        {
+            "name": "SubCls1Desc",
+            "type": "varchar",
+            "nullable": "YES",
+            "length": 50
+        },
+        {
+            "name": "SubCls2Cd",
+            "type": "varchar",
+            "nullable": "YES",
+            "length": 50
+        },
+        {
+            "name": "SubCls2Desc",
+            "type": "varchar",
+            "nullable": "YES",
+            "length": 50
+        },
+        {
+            "name": "SizeCd",
+            "type": "varchar",
+            "nullable": "YES",
+            "length": 50
+        },
+        {
+            "name": "UserId",
+            "type": "varchar",
+            "nullable": "YES",
+            "length": 100
+        },
+        {
+            "name": "VAUid",
+            "type": "varchar",
+            "nullable": "YES",
+            "length": 32
+        },
+        {
+            "name": "VActr",
+            "type": "int",
+            "nullable": "YES",
+            "length": null
+        },
+        {
+            "name": "VATermId",
+            "type": "varchar",
+            "nullable": "YES",
+            "length": 32
+        },
+        {
+            "name": "VACompCode",
+            "type": "varchar",
+            "nullable": "YES",
+            "length": 16
+        },
+        {
+            "name": "StkTakeMode",
+            "type": "varchar",
+            "nullable": "YES",
+            "length": 64
+        },
+        {
+            "name": "BatchNo",
+            "type": "varchar",
+            "nullable": "YES",
+            "length": 32
+        },
+        {
+            "name": "GradeCd",
+            "type": "varchar",
+            "nullable": "YES",
+            "length": 32
+        },
+        {
+            "name": "GradeDesc",
+            "type": "varchar",
+            "nullable": "YES",
+            "length": 60
+        },
+        {
+            "name": "LocationCd",
+            "type": "varchar",
+            "nullable": "YES",
+            "length": 32
+        },
+        {
+            "name": "LocationDesc",
+            "type": "varchar",
+            "nullable": "YES",
+            "length": 60
+        }
+    ],
+    "PhyStockTakingItemBkUp02": [
+        {
+            "name": "ScopeId",
+            "type": "int",
+            "nullable": "NO",
+            "length": null
+        },
+        {
+            "name": "EntSrlNo",
+            "type": "int",
+            "nullable": "NO",
+            "length": null
+        },
+        {
+            "name": "ItemTagSrlNo",
+            "type": "int",
+            "nullable": "YES",
+            "length": null
+        },
+        {
+            "name": "StockNo",
+            "type": "varchar",
+            "nullable": "YES",
+            "length": 32
+        },
+        {
+            "name": "SOH",
+            "type": "money",
+            "nullable": "YES",
+            "length": null
+        },
+        {
+            "name": "PhyStock",
+            "type": "money",
+            "nullable": "YES",
+            "length": null
+        },
+        {
+            "name": "DiffQty",
+            "type": "money",
+            "nullable": "YES",
+            "length": null
+        },
+        {
+            "name": "PhyStkBatchNo",
+            "type": "varchar",
+            "nullable": "YES",
+            "length": 16
+        },
+        {
+            "name": "PageNo",
+            "type": "int",
+            "nullable": "YES",
+            "length": null
+        },
+        {
+            "name": "RecDt",
+            "type": "datetime",
+            "nullable": "YES",
+            "length": null
+        },
+        {
+            "name": "RecTime",
+            "type": "datetime",
+            "nullable": "YES",
+            "length": null
+        },
+        {
+            "name": "UserId",
+            "type": "varchar",
+            "nullable": "YES",
+            "length": 100
+        },
+        {
+            "name": "VAUid",
+            "type": "varchar",
+            "nullable": "YES",
+            "length": 32
+        },
+        {
+            "name": "VActr",
+            "type": "int",
+            "nullable": "YES",
+            "length": null
+        },
+        {
+            "name": "VATermId",
+            "type": "varchar",
+            "nullable": "YES",
+            "length": 32
+        },
+        {
+            "name": "VACompCode",
+            "type": "varchar",
+            "nullable": "YES",
+            "length": 16
+        },
+        {
+            "name": "StkTakeMode",
+            "type": "varchar",
+            "nullable": "YES",
+            "length": 64
+        },
+        {
+            "name": "BatchNo",
+            "type": "varchar",
+            "nullable": "YES",
+            "length": 32
+        },
+        {
+            "name": "GradeCd",
+            "type": "varchar",
+            "nullable": "YES",
+            "length": 32
+        },
+        {
+            "name": "GradeDesc",
+            "type": "varchar",
+            "nullable": "YES",
+            "length": 60
+        },
+        {
+            "name": "LocationCd",
+            "type": "varchar",
+            "nullable": "YES",
+            "length": 32
+        },
+        {
+            "name": "LocationDesc",
+            "type": "varchar",
+            "nullable": "YES",
+            "length": 60
+        },
+        {
+            "name": "ItemTag1",
+            "type": "varchar",
+            "nullable": "YES",
+            "length": 128
+        },
+        {
+            "name": "ItemTag2",
+            "type": "varchar",
+            "nullable": "YES",
+            "length": 128
+        },
+        {
+            "name": "ItemTag3",
+            "type": "varchar",
+            "nullable": "YES",
+            "length": 128
+        },
+        {
+            "name": "ItemTag4",
+            "type": "varchar",
+            "nullable": "YES",
+            "length": 128
+        },
+        {
+            "name": "ItemTag5",
+            "type": "varchar",
+            "nullable": "YES",
+            "length": 128
+        }
+    ],
+    "TempPhyStkMultiStockNossuper": [
+        {
+            "name": "StockNo",
+            "type": "varchar",
+            "nullable": "YES",
+            "length": 32
+        },
+        {
+            "name": "Class1Cd",
+            "type": "varchar",
+            "nullable": "YES",
+            "length": 16
+        },
+        {
+            "name": "Class2Cd",
+            "type": "varchar",
+            "nullable": "YES",
+            "length": 16
+        },
+        {
+            "name": "SubClass1Cd",
+            "type": "varchar",
+            "nullable": "YES",
+            "length": 16
+        },
+        {
+            "name": "SubClass2Cd",
+            "type": "varchar",
+            "nullable": "YES",
+            "length": 16
+        },
+        {
+            "name": "SizeCd",
+            "type": "varchar",
+            "nullable": "YES",
+            "length": 16
+        },
+        {
+            "name": "ApplFlag",
+            "type": "varchar",
+            "nullable": "YES",
+            "length": 1
+        }
+    ]
+}

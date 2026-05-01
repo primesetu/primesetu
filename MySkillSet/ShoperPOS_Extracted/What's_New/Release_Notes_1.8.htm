@@ -1,0 +1,638 @@
+
+<!doctype HTML public "-//W3C//DTD HTML 4.0 Frameset//EN">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=windows-1252">
+ <meta name="generator" content="Adobe RoboHelp 10">
+<title>Shoper 9 POS Series A Release 1.8</title>
+<link rel="StyleSheet" href="../Shoper.css" type="text/css">
+<style title="hcp" type="text/css">
+<!--
+span.hcp1 { font-weight:bold; }
+li.hcp2 { list-style:none;
+display:inline; }
+h4.hcp3 { margin-left:64px; }
+h3.hcp4 { margin-left:64px; }
+-->
+</style>
+</head>
+<body>
+<script type="text/javascript" src="../ehlpdhtm.js" language="JavaScript1.2"></script>
+
+<h1>Shoper 9 POS Series A Release 1.8</h1>
+<p class="Body-Text">New Features:</p>
+<ul>
+<li class="p-bullet">
+<p class="bullet"><a href="#NF_Packing">Packing</a></p>
+</li>
+<li class="p-bullet">
+<p class="bullet"><a href="#NF_ReportScheduler">Report Scheduler</a></p>
+</li>
+</ul>
+<p class="Body-Text" style="text-align: justify;">Enhancements:</p>
+<ul>
+<li class="p-bullet">
+<p class="bullet"><a href="#ENH_Billing">Billing</a></p>
+</li>
+<li class="p-bullet">
+<p class="bullet"><a href="#ENH_ItemMaster">Item Master</a></p>
+</li>
+<li class="p-bullet">
+<p class="bullet"><a href="#ENH_ItemBrowse">Browse</a></p>
+</li>
+<li class="p-bullet">
+<p class="bullet"><a href="#ENH_Barcode">Barcode</a></p>
+</li>
+<li class="p-bullet">
+<p class="bullet"><a href="#ENH_PriceRevision">Price Revision</a></p>
+</li>
+<li class="p-bullet">
+<p class="bullet"><a href="#ENH_GoodsInwards">Goods Inwards</a></p>
+</li>
+<li class="p-bullet">
+<p class="bullet"><a href="#ENH_GoodsOutwards">Goods Outwards</a></p>
+</li>
+<li class="p-bullet">
+<p class="bullet"><a href="#ENH_PhysicalStockTake">Physical Stock Take</a></p>
+</li>
+<li class="p-bullet">
+<p class="bullet"><a href="#ENH_PhysicalVerification">Physical Verification</a></p>
+</li>
+<li class="p-bullet">
+<p class="bullet"><a href="#ENH_PTFileInformation">PT File Information</a></p>
+</li>
+<li class="p-bullet">
+<p class="bullet"><a href="#ENH_ExtensionFramework">Extension Framework</a></p>
+</li>
+<li class="p-bullet">
+<p class="bullet"><a href="#ENH_Printing">Printing</a></p>
+</li>
+<li class="p-bullet">
+<p class="bullet"><a href="#ENH_GoodsOutwardsPrinting">Goods Outwards Printing</a></p>
+</li>
+<li class="p-bullet">
+<p class="bullet"><a href="#ENH_SalesOrderPrinting">Sales Order Printing</a></p>
+</li>
+<li class="p-bullet">
+<p class="bullet"><a href="#ENH_TallyPrinting">Tally Printing</a></p>
+</li>
+<li class="p-bullet">
+<p class="bullet"><a href="#ENH_OpenDay">Open Day</a></p>
+</li>
+<li class="p-bullet">
+<p class="bullet"><a href="#ENH_Menu">Menu</a></p>
+</li>
+<li class="p-bullet">
+<p class="bullet"><a href="#ENH_Reports">Reports</a></p>
+</li>
+</ul>
+<p class="Body-Text" style="text-align: justify;">Issues Resolved:</p>
+<ul>
+<li class="p-bullet">
+<p class="bullet"><a href="#ISR_Billing">Billing</a></p>
+</li>
+<li class="p-bullet">
+<p class="bullet"><a href="#ISR_Sales">Sales</a></p>
+</li>
+<li class="p-bullet">
+<p class="bullet"><a href="#ISR_Barcode">Barcode</a></p>
+</li>
+<li class="p-bullet">
+<p class="bullet"><a href="#ISR_GoodsInwards">Goods Inwards</a></p>
+</li>
+<li class="p-bullet">
+<p class="bullet"><a href="#ISR_GoodsOutwards">Goods Outwards</a></p>
+</li>
+<li class="p-bullet">
+<p class="bullet"><a href="#ISR_Printing">Printing</a></p>
+</li>
+<li class="p-bullet">
+<p class="bullet"><a href="#ISR_BillPrinting">Bill Printing</a></p>
+</li>
+<li class="p-bullet">
+<p class="bullet"><a href="#ISR_DCPrinting">DC Printing</a></p>
+</li>
+<li class="p-bullet">
+<p class="bullet"><a href="#ISR_PhysicalVerification">Physical Verification</a></p>
+</li>
+<li class="p-bullet">
+<p class="bullet"><a href="#ISR_PhysicalStockTake">Physical Stock Take</a></p>
+</li>
+<li class="p-bullet">
+<p class="bullet"><a href="#ISR_ExportImport">Export/ Import</a></p>
+</li>
+<li class="p-bullet">
+<p class="bullet"><a href="#ISR_DataSynchronisation">Data Synchronisation</a></p>
+</li>
+<li class="p-bullet">
+<p class="bullet"><a href="#ISR_TallyInterface">Tally Interface</a></p>
+</li>
+<li class="p-bullet">
+<p class="bullet"><a href="#ISR_ExtensionFramework">Extension Framework</a></p>
+</li>
+<li class="p-bullet">
+<p class="bullet"><a href="#ISR_Reports">Reports</a></p>
+</li>
+</ul>
+<h2>New Features</h2>
+<h3><a name="NF_Packing" id="NF_Packing">Packing</a></h3>
+<p class="Body-Text" style="margin-left: 47px;">The functionality <span class="hcp1">Packing</span> is introduced in Shoper 9 POS to facilitate easy packing of stock items into <span class="hcp1">Cartons</span> by creating <span class="hcp1">Packing Slip</span>. You can also bundle these cartons to <span class="hcp1">Pallet</span> using <span class="hcp1">Pallet Slip</span> according to your requirement.</p>
+<p class="Body-Text" style="margin-left: 47px;">You can generate Packing Slip/ Pallet Slip for Customer, Showroom, Vendor, Sales Order and Dispatch Advice or without specifying any party.</p>
+<p class="Body-Text" style="margin-left: 47px;">The Packing Slip/ Pallet Slip can be consumed during Billing and Goods Outwards. If it is generated without any party, it can be recalled for any customer/ party.</p>
+<p class="Body-Text" style="margin-left: 47px;">You can also load item details to generate packing slip from PDT (Text file).</p>
+<h3><a name="NF_ReportScheduler" id="NF_ReportScheduler">Report Scheduler</a></h3>
+<ul>
+<li class="p-bullet">
+<p class="bullet">Generation of <span class="hcp1">Analysis Reports</span> (TDL reports) can be scheduled and the generated reports can be automatically delivered to specified recipients.</p>
+</li>
+</ul>
+<p class="bullet" style="margin-left: 64px;">The reports can be delivered in different formats using e-mail, FTP or Direct Copy.</p>
+<h2>Enhancements</h2>
+<h3><a name="ENH_Billing" id="ENH_Billing">Billing</a></h3>
+<ul>
+<li class="p-bullet">
+<p class="bullet">Billing is enhanced by providing the facility to capture and print transportation details.</p>
+</li>
+</ul>
+<h3><a name="ENH_ItemMaster" id="ENH_ItemMaster">Item Master</a></h3>
+<ul>
+<li class="p-bullet">
+<p class="bullet">Item master creation is enhanced to accept Retail Markup/ Dealer Markup and compute Retail Price/ Dealer Price of the item based on cost price. The computed retail price/ dealer price can be modified, if required.</p>
+</li>
+</ul>
+<p class="bullet" style="margin-left: 64px;">Retail Markup/ Dealer Markup may be specified during item classification and item master creation. If specified in both the places, the one in item master gets priority.</p>
+<h3><a name="ENH_ItemBrowse" id="ENH_ItemBrowse">Browse</a></h3>
+<ul>
+<li class="p-bullet">
+<p class="bullet">Common browse option introduced to browse Items, Vendor, Customer and Chain Stores from transaction options. In this release this option is enabled only for GOR transactions.</p>
+</li>
+<li class="p-bullet">
+<p class="bullet">Features of the new browse are:</p>
+</li>
+<li class="hcp2">
+<ul>
+<li class="p-bullet">
+<p class="bullet">Display the columns based on selection</p>
+</li>
+<li class="p-bullet">
+<p class="bullet">Change the order in which columns in the result set are displayed</p>
+</li>
+<li class="p-bullet">
+<p class="bullet">Hierarchically filter values based on any order of columns</p>
+</li>
+<li class="p-bullet">
+<p class="bullet">Filter the data based on a specified value in any column</p>
+</li>
+<li class="p-bullet">
+<p class="bullet">Sort rows in the result set based on a column</p>
+</li>
+<li class="p-bullet">
+<p class="bullet">Find records in the result set with a specified value in a column, even if the column is hidden</p>
+</li>
+<li class="p-bullet">
+<p class="bullet">Save separate search settings for different transaction types in different options, and revert to default settings any time</p>
+</li>
+</ul>
+</li>
+<li class="p-bullet">
+<p class="bullet">Customer browse facility is provided in <span class="hcp1">Bill-wise Items</span> report and <span class="hcp1">Customer offtake</span> reports</p>
+</li>
+<li class="p-bullet">
+<p class="bullet">In Goods Outwards, using the new item browse,</p>
+</li>
+<li class="hcp2">
+<ul>
+<li class="p-bullet">
+<p class="bullet">Document wise item filtering can be done</p>
+</li>
+<li class="p-bullet">
+<p class="bullet">Filtering can be done based on purchase reference</p>
+</li>
+</ul>
+</li>
+</ul>
+<h3><a name="ENH_Barcode" id="ENH_Barcode">Barcode</a></h3>
+<ul>
+<li class="p-bullet">
+<p class="bullet">The Barcode Label design and printing on thermal printers is enhanced to print price as alphabetical codes.</p>
+</li>
+</ul>
+<h3><a name="ENH_PriceRevision" id="ENH_PriceRevision">Price Revision</a></h3>
+<ul>
+<li class="p-bullet">
+<p class="bullet">Earlier <span class="hcp1">Price Revision</span> report was listing all the items irrespective of the stock availability.</p>
+</li>
+</ul>
+<p class="bullet" style="margin-left: 64px;">Now it is enhanced to display only the items for which stocks are available.</p>
+<h3><a name="ENH_GoodsInwards" id="ENH_GoodsInwards">Goods Inwards</a></h3>
+<ul>
+<li class="p-bullet">
+<p class="bullet">Goods Inwards is enhanced to create multiple item masters on the fly.</p>
+</li>
+<li class="p-bullet">
+<p class="bullet">Facility to restrict modification of <span class="hcp1">Doc Quantity</span>, <span class="hcp1">Actual quantity</span>, <span class="hcp1">Rate</span> and <span class="hcp1">Price</span> loaded from the PT/TT file based on system parameter setting.</p>
+</li>
+</ul>
+<h3><a name="ENH_GoodsOutwards" id="ENH_GoodsOutwards">Goods Outwards</a></h3>
+<ul>
+<li class="p-bullet">
+<p class="bullet">Facility for not clubbing duplicate items in <span class="hcp1">Goods Inwards</span>, <span class="hcp1">Goods Outwards</span> and <span class="hcp1">Physical Verification</span> based on system parameter setting.</p>
+</li>
+</ul>
+<p class="bullet" style="margin-left: 64px;">Goods Outwards is enhanced by providing the facility to capture and print transportation details.</p>
+<h3><a name="ENH_PhysicalStockTake" id="ENH_PhysicalStockTake">Physical Stock Take</a></h3>
+<ul>
+<li class="p-bullet">
+<p class="bullet">Facility to exclude all items with zero <span class="hcp1">Physical</span> and <span class="hcp1">Computed</span> stocks is provided in Progress Summary.</p>
+</li>
+<li class="p-bullet">
+<p class="bullet">The export option in <span class="hcp1">Progress Summary</span> is enhanced with the facility to export in <span class="hcp1">CSV</span> format.</p>
+</li>
+<li class="p-bullet">
+<p class="bullet"><span class="hcp1">Physical vs Computed Stock</span> Report is enhanced with the facility, to select multiple classifications and to skip zero balance items.</p>
+</li>
+<li class="p-bullet">
+<p class="bullet"><span class="hcp1">Physical Stock Take</span> log is introduced to view the discrepancy, if the current balance quantity does not match with transaction quantity.</p>
+</li>
+</ul>
+<h3><a name="ENH_PhysicalVerification" id="ENH_PhysicalVerification">Physical Verification</a></h3>
+<ul>
+<li class="p-bullet">
+<p class="bullet">Physical verification is enhanced with the facility to select <span class="hcp1">DC Information</span> and to edit the field <span class="hcp1">Carton Count</span>.</p>
+</li>
+<li class="p-bullet">
+<p class="bullet">Earlier the document remarks column in <span class="hcp1">Physical Verification</span> was accepting a maximum of 128 characters. This is enhanced to accept 250 characters.</p>
+</li>
+</ul>
+<h3><a name="ENH_PTFileInformation" id="ENH_PTFileInformation">PT File Information</a></h3>
+<ul>
+<li class="p-bullet">
+<p class="bullet">Option provided to generate the <span class="hcp1">PT File Information Report</span> based on Stock no.</p>
+</li>
+</ul>
+<h3><a name="ENH_ExtensionFramework" id="ENH_ExtensionFramework">Extension Framework</a></h3>
+<ul>
+<li class="p-bullet">
+<p class="bullet">Event based extensions can be used in:</p>
+</li>
+<li class="hcp2">
+<ul>
+<li class="p-bullet">
+<p class="bullet">Bill Level Discounts</p>
+</li>
+<li class="p-bullet">
+<p class="bullet">Purchase Order (Stock No., Quantity and Rate)</p>
+</li>
+<li class="p-bullet">
+<p class="bullet">Physical Verification (Stock No. and Quantity)</p>
+</li>
+<li class="p-bullet">
+<p class="bullet">Physical Stock Take (Stock No. and Quantity)</p>
+</li>
+<li class="p-bullet">
+<p class="bullet">Returning values captured by extension to the default fields</p>
+</li>
+</ul>
+</li>
+</ul>
+<h3><a name="ENH_Printing" id="ENH_Printing">Printing</a></h3>
+<ul>
+<li class="p-bullet">
+<p class="bullet">The Bill printing is enhanced to print the following, based on configuration.</p>
+</li>
+<li class="hcp2">
+<ul>
+<li class="p-bullet">
+<p class="bullet">The second address</p>
+</li>
+</ul>
+<ul>
+<li class="p-bullet">
+<p class="bullet">Details of Addons and Deductions with description and values</p>
+</li>
+</ul>
+<ul>
+<li class="p-bullet">
+<p class="bullet">Node ID</p>
+</li>
+</ul>
+</li>
+<li class="p-bullet">
+<p class="bullet">Printing using GUI printers is enhanced by providing the facility to print with bigger font size and readability.</p>
+</li>
+<li class="p-bullet">
+<p class="bullet">The <span class="hcp1">Audit Trail Printing</span> is enhanced with an option to print item-wise tax details for outward transactions.</p>
+</li>
+</ul>
+<h3><a name="ENH_GoodsOutwardsPrinting" id="ENH_GoodsOutwardsPrinting">Goods Outwards Printing</a></h3>
+<ul>
+<li class="p-bullet">
+<p class="bullet">The existing printing format in <span class="hcp1">Goods Outwards</span> is restructured.</p>
+</li>
+<li class="p-bullet">
+<p class="bullet">The enhancements are:</p>
+</li>
+<li class="hcp2">
+<ul>
+<li class="p-bullet">
+<p class="bullet">Earlier document header was getting printed on all the pages. Now it is printed only on the first page.</p>
+</li>
+<li class="p-bullet">
+<p class="bullet">Earlier the space for document footer was left blank in all the pages. Now, no blank space is left on any page. The document footer is printed in the last page.</p>
+</li>
+<li class="p-bullet">
+<p class="bullet">Provision to print page numbers.</p>
+</li>
+<li class="p-bullet">
+<p class="bullet">The facility to print remarks from a file (<span class="hcp1">gorremarks.txt</span> – to be created in application folder) in footer section.</p>
+</li>
+</ul>
+</li>
+</ul>
+<h3><a name="ENH_SalesOrderPrinting" id="ENH_SalesOrderPrinting">Sales Order Printing</a></h3>
+<ul>
+<li class="p-bullet">
+<p class="bullet">A4 size Sales Order printing format is introduced in Shoper 9 POS.</p>
+</li>
+</ul>
+<h3><a name="ENH_TallyPrinting" id="ENH_TallyPrinting">Tally Printing</a></h3>
+<ul>
+<li class="p-bullet">
+<p class="bullet">A new template named <span class="hcp1">Size-wise</span> is added, for all transactions (Invoice, Purchase, Purchase Returns, Transfer In &amp; Out, Misc. Issue &amp; Returns). Now, you can print details of different sizes of an item in a single line, so that the document will be shorter.</p>
+</li>
+<li class="p-bullet">
+<p class="bullet">A4 size invoice printing format is introduced in <span class="hcp1">Distributor</span> environment with option to print the company logo.</p>
+</li>
+</ul>
+<h3><a name="ENH_OpenDay" id="ENH_OpenDay">Open Day</a></h3>
+<p class="bullet">The option to select the date during day open is introduced in Shoper 9 POS based on system parameter configuration.</p>
+<h3><a name="ENH_Menu" id="ENH_Menu">Menu</a></h3>
+<ul>
+<li class="p-bullet">
+<p class="bullet">Super user authentication is provided for the following menu options:</p>
+</li>
+<li class="hcp2">
+<ul>
+<li class="p-bullet">
+<p class="bullet">Compact</p>
+</li>
+</ul>
+<ul>
+<li class="p-bullet">
+<p class="bullet">Restore</p>
+</li>
+</ul>
+<ul>
+<li class="p-bullet">
+<p class="bullet">Database Tuning Utility</p>
+</li>
+</ul>
+<ul>
+<li class="p-bullet">
+<p class="bullet">Purge Data</p>
+</li>
+</ul>
+<ul>
+<li class="p-bullet">
+<p class="bullet">Company Creation</p>
+</li>
+</ul>
+<ul>
+<li class="p-bullet">
+<p class="bullet">Data Rebuild</p>
+</li>
+</ul>
+<ul>
+<li class="p-bullet">
+<p class="bullet">Tax Re-computation</p>
+</li>
+</ul>
+</li>
+</ul>
+<h3><a name="ENH_Reports" id="ENH_Reports">Reports</a></h3>
+<h4 class="hcp3">Stock Reports</h4>
+<ol>
+<li class="hcp2">
+<ul>
+<li class="p-bullet">
+<p class="bullet"><span class="hcp1">Stock Report</span> is enhanced to generate report by excluding items with zero balance or negative balance.</p>
+</li>
+</ul>
+</li>
+</ol>
+<h3 class="hcp4">MIS Reports</h3>
+<ol>
+<li class="hcp2">
+<ul>
+<li class="p-bullet">
+<p class="bullet"><span class="hcp1">Monthly Sales Comparison</span> report is enhanced to sort the report based on <span class="hcp1">Product</span> and <span class="hcp1">Brand</span>.</p>
+</li>
+</ul>
+</li>
+</ol>
+<h3 class="hcp4">Analysis Reports</h3>
+<p class="bullet" style="margin-left: 64px;">Analysis reports in Shoper 9 POS facilitate easy analysis of the business data. You get the flexibility to choose the display columns and pivot column. These reports use Tally.ERP9 as front-end, thus bringing in the advantages of Tally platform capabilities to Shoper 9. Partners can create custom reports using TDL and avail all the advantages of export and print from Tally platform.</p>
+<p class="bullet" style="margin-left: 64px;">You can configure the report by specifying: the report title, display columns and their order. You can also select a field based on which data columns are to be repeated for comparison/ analysis. For example, Sales report can be generated with figures for different months arranged in columns to compare showroom performance across months or the same report can be tweaked to compare showroom performance product-wise.</p>
+<p class="bullet" style="margin-left: 64px;">Other options are:</p>
+<ol>
+<li class="hcp2">
+<ul>
+<li class="p-bullet">
+<p class="bullet">Save report configuration with a name</p>
+</li>
+<li class="p-bullet">
+<p class="bullet">Print on any printer</p>
+</li>
+<li class="p-bullet">
+<p class="bullet">Export to Excel, PDF, HTML, XML, JPG &amp; ASCII</p>
+</li>
+<li class="p-bullet">
+<p class="bullet">Send to any email address</p>
+</li>
+<li class="p-bullet">
+<p class="bullet">Uploaded to FTP location</p>
+</li>
+</ul>
+</li>
+</ol>
+<h2>Issues Resolved</h2>
+<h3><a name="ISR_Billing" id="ISR_Billing">Billing</a></h3>
+<ul>
+<li class="p-bullet">
+<p class="bullet">In Billing, if <span class="hcp1">Bill Level</span> offer was applied by selecting Customer, then the offer could not be selected.</p>
+</li>
+</ul>
+<p class="Body-Text" style="margin-left: 47px;">This issue has been resolved.</p>
+<h3><a name="ISR_Sales" id="ISR_Sales">Sales</a></h3>
+<ul>
+<li class="p-bullet">
+<p class="bullet"><span class="hcp1">Cash Receipts</span> and <span class="hcp1">Cash Payouts</span> were giving runtime error when the amount entered exceeded 16 digits.</p>
+</li>
+</ul>
+<p class="bullet" style="margin-left: 64px;">This issue has been resolved.</p>
+<h3><a name="ISR_Barcode" id="ISR_Barcode">Barcode</a></h3>
+<ul>
+<li class="p-bullet">
+<p class="bullet">When barcode layouts were accommodating two labels in a row, labels were getting printed in duplicate.</p>
+</li>
+</ul>
+<p class="bullet" style="margin-left: 64px;">This issue has been resolved.</p>
+<h3><a name="ISR_GoodsInwards" id="ISR_GoodsInwards">Goods Inwards</a></h3>
+<ul>
+<li class="p-bullet">
+<p class="bullet">During Goods Inwards using PT/TT file, the retail price and cost price were not getting updated in the item master as mentioned in the PT/TT file.</p>
+</li>
+</ul>
+<p class="bullet" style="margin-left: 64px;">This issue has been resolved.</p>
+<h3><a name="ISR_GoodsOutwards" id="ISR_GoodsOutwards">Goods Outwards</a></h3>
+<ul>
+<li class="p-bullet">
+<p class="bullet">When cross docking, the net values of <span class="hcp1">Goods Inwards</span> and the <span class="hcp1">Goods Outwards</span> were not matching.</p>
+</li>
+</ul>
+<p class="bullet" style="margin-left: 64px;">This issue has been resolved.</p>
+<h3><a name="ISR_Printing" id="ISR_Printing">Printing</a></h3>
+<ul>
+<li class="p-bullet">
+<p class="bullet">Extra blank pages were consumed during GIR/GOR printing.</p>
+</li>
+</ul>
+<p class="bullet" style="margin-left: 64px;">This issue has been resolved.</p>
+<h3><a name="ISR_BillPrinting" id="ISR_BillPrinting">Bill Printing</a></h3>
+<ul>
+<li class="p-bullet">
+<p class="bullet">During Bill printing, the total of <span class="hcp1">Item Level Discount</span> was getting printed incorrectly.</p>
+</li>
+</ul>
+<p class="bullet" style="margin-left: 64px;">This issue has been resolved.</p>
+<h3><a name="ISR_DCPrinting" id="ISR_DCPrinting">DC Printing</a></h3>
+<ul>
+<li class="p-bullet">
+<p class="bullet">When the customer name was edited in customer catalogue, reprinting of DC was failing.</p>
+</li>
+</ul>
+<p class="bullet" style="margin-left: 64px;">This issue has been resolved.</p>
+<h3><a name="ISR_PhysicalVerification" id="ISR_PhysicalVerification">Physical Verification</a></h3>
+<ul>
+<li class="p-bullet">
+<p class="bullet">If physical verification is in progress, the doc. quantity from PT file was not getting loaded in goods inwards.</p>
+</li>
+</ul>
+<p class="bullet" style="margin-left: 64px;">This issue has been resolved.</p>
+<h3><a name="ISR_PhysicalStockTake" id="ISR_PhysicalStockTake">Physical Stock Take</a></h3>
+<ul>
+<li class="p-bullet">
+<p class="bullet">During <span class="hcp1">Physical Stock Taking</span> it was found that even if the stock quantity was zero the value was not zero. This was creating a mismatch in the values.</p>
+</li>
+</ul>
+<p class="bullet" style="margin-left: 64px;">This issue has been resolved.</p>
+<ul>
+<li class="p-bullet">
+<p class="bullet">During PDT file loading, if the number of records exceeded 65,000 then overflow error was occurring.</p>
+</li>
+</ul>
+<p class="bullet" style="margin-left: 64px;">This issue has been resolved.</p>
+<h3><a name="ISR_ExportImport" id="ISR_ExportImport">Export/ Import</a></h3>
+<ul>
+<li class="p-bullet">
+<p class="bullet">An error message <span class="hcp1">Null values found</span> was getting displayed while importing <span class="hcp1">Item Master</span> file at the Shoper 9 POS location, if the data in the file contained <span class="hcp1">Double Quote(“)</span>.</p>
+</li>
+</ul>
+<p class="bullet" style="margin-left: 64px;">This message is corrected and the message <span class="hcp1">Special characters found</span> is displayed.</p>
+<h3><a name="ISR_DataSynchronisation" id="ISR_DataSynchronisation">Data Synchronisation</a></h3>
+<ul>
+<li class="p-bullet">
+<p class="bullet">During <span class="hcp1">Day End</span>, while extracting the current stock, if the time taken was more than 15 minutes, then synchronisation was failing.</p>
+</li>
+</ul>
+<p class="bullet" style="margin-left: 64px;">This issue has been resolved.</p>
+<h3><a name="ISR_TallyInterface" id="ISR_TallyInterface">Tally Interface</a></h3>
+<ul>
+<li class="p-bullet">
+<p class="bullet">While saving Tally Interface mapping, run time error was getting displayed.</p>
+</li>
+</ul>
+<p class="bullet" style="margin-left: 64px;">This issue has been resolved.</p>
+<ul>
+<li class="p-bullet">
+<p class="bullet">Shoper Tally Interface was failing because the <span class="hcp1">TCP version</span> file (Shoper9_ERP.tcp) available in application folder was not getting updated during patch updation.</p>
+</li>
+</ul>
+<p class="bullet" style="margin-left: 64px;">This issue has been resolved.</p>
+<h3><a name="ISR_ExtensionFramework" id="ISR_ExtensionFramework">Extension Framework</a></h3>
+<ul>
+<li class="p-bullet">
+<p class="bullet">After bill suspension, Shoper was unable to recall the value returned by extensions.</p>
+</li>
+</ul>
+<p class="bullet" style="margin-left: 64px;">This issue has been resolved.</p>
+<h3><a name="ISR_Reports" id="ISR_Reports">Reports</a></h3>
+<h4 class="hcp3">Sales Reports</h4>
+<ol>
+<li class="hcp2">
+<ul>
+<li class="p-bullet">
+<p class="bullet">In <span class="hcp1">Bill-wise Sales</span> report, the credit sales bills were getting displayed under the group <span class="hcp1">Cash Sales</span> as well.</p>
+</li>
+</ul>
+</li>
+</ol>
+<p class="bullet" style="margin-left: 104px;">This issue has been resolved.</p>
+<ol>
+<li class="hcp2">
+<ul>
+<li class="p-bullet">
+<p class="bullet">The <span class="hcp1">Returned Bill</span> report was displaying incorrect values when the option <span class="hcp1">Both (Cash/Credit)</span> under <span class="hcp1">Transaction Type</span> was selected.</p>
+</li>
+</ul>
+</li>
+</ol>
+<p class="bullet" style="margin-left: 104px;">This issue has been resolved.</p>
+<ol>
+<li class="hcp2">
+<ul>
+<li class="p-bullet">
+<p class="bullet">In <span class="hcp1">Bill-wise Item</span> report, the saved settings were not getting applied.</p>
+</li>
+</ul>
+</li>
+</ol>
+<p class="bullet" style="margin-left: 104px;">This issue has been resolved.</p>
+<h4 class="hcp3">Cash Reports</h4>
+<ol>
+<li class="hcp2">
+<ul>
+<li class="p-bullet">
+<p class="bullet">When credit notes were partially redeemed, wrong values were getting displayed in the <span class="hcp1">Counter-wise Details</span> report.</p>
+</li>
+</ul>
+</li>
+</ol>
+<p class="bullet" style="margin-left: 104px;">This issue has been resolved.</p>
+<h4 class="hcp3">Stock Reports</h4>
+<ol>
+<li class="hcp2">
+<ul>
+<li class="p-bullet">
+<p class="bullet">The <span class="hcp1">Stock Transaction Ledger</span> was not displaying the transactions in the order of the activities.</p>
+</li>
+<li class="p-bullet">
+<p class="bullet">This issue has been resolved.</p>
+</li>
+</ul>
+</li>
+</ol>
+<h4 class="hcp3">MIS Reports</h4>
+<ol>
+<li class="hcp2">
+<ul>
+<li class="p-bullet">
+<p class="bullet">The transaction quantity in the Transaction Details with Image report was incorrect when void purchase transactions were there.</p>
+</li>
+</ul>
+</li>
+</ol>
+<p class="bullet" style="margin-left: 104px;">This issue has been resolved.</p>
+<p class="bullet" style="margin-left: 104px;">&#160;</p>
+</body>
+</html>

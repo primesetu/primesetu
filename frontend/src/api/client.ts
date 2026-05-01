@@ -192,6 +192,12 @@ export const api = {
     transfer: (data: unknown) => apiClient.post('/warehouse/transfer', data).then(r => r.data),
     adjust: (data: unknown) => apiClient.post('/warehouse/adjustment', data).then(r => r.data),
     assignBin: (data: unknown) => apiClient.post('/warehouse/bin-assignment', data).then(r => r.data),
+  },
+  legacy: {
+    listTables: () => apiClient.get('/legacy/tables').then(r => r.data),
+    getData: (table: string, params?: any) => apiClient.get(`/legacy/${table}`, { params }).then(r => r.data),
+    getSchema: (table: string) => apiClient.get(`/legacy/${table}/schema`).then(r => r.data),
+    patchData: (table: string, id: string, data: any) => apiClient.patch(`/legacy/${table}/${id}`, data).then(r => r.data),
   }
 }
 

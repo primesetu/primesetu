@@ -48,7 +48,7 @@ from app.routers import (
     price_group,    purchase, inventory, billing, 
     ho, flexible_reports, users, menu, extensions, finance, schemes, security, reporting,
     store, inventory_audit, stock_ledger, department, configuration, warehouse, intelligence,
-    legacy
+    legacy, masks
 )
 from app.routers.gstr1 import router as gstr1_router
 
@@ -66,6 +66,7 @@ app.include_router(configuration.router, prefix="/api/v1")
 app.include_router(customer.router, prefix="/api/v1")
 app.include_router(price_group.router, prefix="/api/v1")
 app.include_router(barcode.router, prefix="/api/v1")
+app.include_router(masks.router, prefix="/api/v1")
 app.include_router(menu.router, prefix="/api/v1/menu")
 
 # Operational

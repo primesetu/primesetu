@@ -1,7 +1,13 @@
 /* ============================================================
-   SMRITI-OS — Lead Frontend Architect Main Shell
-   Enforcing Smriti Sentinal Governance (Audit Rule 11)
-   ============================================================ */
+ * PrimeSetu — Shoper9-Based Retail OS
+ * Zero Cloud · Sovereign · AI-Governed
+ * ============================================================
+ * System Architect : Jawahar R Mallah
+ * Organisation     : AITDL Network
+ * Project          : PrimeSetu
+ * © 2026 — All Rights Reserved
+ * "Memory, Not Code."
+ * ============================================================ */
 
 import React, { useState, useEffect } from 'react';
 import { cn } from '@/components/ui/SovereignUI';
@@ -25,7 +31,7 @@ import FunctionBar from './components/layout/FunctionBar';
 import StatusBar from './components/layout/StatusBar';
 import { useTheme } from './hooks/useTheme';
 
-const SmritiOS: React.FC = () => {
+const PrimeSetu: React.FC = () => {
   useSovereignShortcuts();
   const { theme, isInstitutional } = useTheme();
   const [activeTab, setActiveTab] = useState('dashboard');
@@ -130,8 +136,8 @@ const SmritiOS: React.FC = () => {
         });
         if (supaUser.user_metadata?.store_id) setSelectedInstance(supaUser.user_metadata.store_id);
       } else {
-        localStorage.removeItem('smriti_os_pending_print');
-        localStorage.removeItem('smriti_os_last_catalogue_sync');
+        localStorage.removeItem('primesetu_pending_print');
+        localStorage.removeItem('primesetu_last_catalogue_sync');
         setUser(null);
       }
     });
@@ -249,4 +255,4 @@ const SmritiOS: React.FC = () => {
   );
 };
 
-export default SmritiOS;
+export default PrimeSetu;

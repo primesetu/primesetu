@@ -1,0 +1,1 @@
+CREATE PROC [ResetInfoTable] AS IF OBJECT_ID('InfoTable','U') IS NOT NULL DROP TABLE InfoTable CREATE TABLE InfoTable (TableName VARCHAR(32),TablePrintSequence INT, FieldPrintConfig VARCHAR(4000), SheetName   VARCHAR(512),SheetSeq INT)

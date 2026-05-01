@@ -13,7 +13,7 @@ import {
 import { motion, AnimatePresence } from 'framer-motion';
 import { supabase } from '@/lib/supabase';
 
-import { Button, Input, Card, Badge } from '@/components/ui/SovereignUI';
+import { Button, Input, Card, Badge, DataTable } from '@/components/ui/SovereignUI';
 
 const API_BASE = import.meta.env.VITE_API_URL || 'http://localhost:8000';
 
@@ -153,31 +153,33 @@ const LegacyExplorer: React.FC = () => {
           </div>
         </div>
 
-        {/* AG-Grid Content */}
-        <Card className="flex-1 flex flex-col overflow-hidden relative border-[var(--border-subtle)] shadow-xl glass">
-           <div className="ag-theme-alpine-dark w-full h-full">
-              <AgGridReact
-                rowData={rowData}
-                columnDefs={columnDefs}
-                defaultColDef={{
-                  flex: 1,
-                  minWidth: 100,
-                }}
-                enableRangeSelection={true}
-                pagination={true}
-                paginationPageSize={50}
-                animateRows={true}
-                overlayLoadingTemplate={'<span class="ag-overlay-loading-center">Bypassing Legacy Barriers...</span>'}
-              />
-           </div>
-           
+        <div className="flex-1 flex flex-col overflow-hidden relative border border-[var(--border-subtle)] shadow-xl glass">
+           <DataTable 
+              className="flex-1"
+              data={rowData}
+              columns={schema.map(c => ({
+                header: c.name.toUpperCase(),
+                accessor: c.name,
+                width: c.name.length * 15 + 100,
+                pinned: c.primary_key ? 'left' : undefined,
+                className: c.primary_key ? 'font-mono font-bold text-primary' : ''
+              }))}
+              loading={loading}
+              pagination={true}
+              paginationPageSize={50}
+              enableRangeSelection={true}
+              rowHeight={45}
+              headerHeight={40}
+              overlayNoRowsTemplate={'<span class="font-black uppercase tracking-[0.4em] opacity-20">Bypassing Legacy Barriers...</span>'}
+           />
+             
            {/* Floating Control Bar */}
-           <div className="absolute bottom-4 right-4 flex items-center gap-2">
+           <div className="absolute bottom-4 right-4 flex items-center gap-2 z-10">
               <Button size="sm" variant="secondary" className="shadow-lg backdrop-blur-md bg-white/10" onClick={onExport}>
                 <Download size={14} className="mr-2" /> Export to CSV
               </Button>
            </div>
-        </Card>
+        </div>
       </div>
     </div>
   );

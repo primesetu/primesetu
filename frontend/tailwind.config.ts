@@ -11,37 +11,54 @@ export default {
     extend: {
       // ── Design Token Colors (elevation model) ─────────────
       colors: {
-        // Surfaces
+        // MD3 / Sovereign Light Colors (Mapped to Smriti OS Variables)
+        "surface-container-low": "var(--surface-container-low)",
+        "surface-container": "var(--surface-container)",
+        "surface-container-high": "var(--surface-container-high)",
+        "surface-container-highest": "var(--surface-container-highest)",
+        "surface-container-lowest": "var(--surface)",
+        "on-surface": "var(--text-primary)",
+        "on-surface-variant": "var(--text-secondary)",
+        "outline": "var(--text-tertiary)",
+        "outline-variant": "var(--border-default)",
+        "primary": "var(--primary)",
+        "on-primary": "#ffffff",
+        "primary-container": "rgba(var(--primary-rgb), 0.1)",
+        "on-primary-container": "var(--primary)",
+        "secondary": "var(--secondary)",
+        "on-secondary": "#ffffff",
+        "surface": "var(--surface)",
+        "background": "var(--background)",
+        "error": "var(--danger)",
+        "on-error": "#ffffff",
+        "tertiary": "var(--accent)",
+        "on-tertiary": "#ffffff",
+        "aside-bg": "var(--aside-bg)",
+        "aside-text": "var(--aside-text)",
+        "aside-text-dim": "var(--aside-text-dim)",
+        "aside-border": "var(--aside-border)",
+
+        // Legacy Aliases...
         'bg-base':     'var(--bg-base)',
         'bg-elevated': 'var(--bg-elevated)',
         'bg-overlay':  'var(--bg-overlay)',
         'bg-float':    'var(--bg-float)',
         'bg-input':    'var(--bg-input)',
-
-        // Borders
         'border-subtle':  'var(--border-subtle)',
         'border-default': 'var(--border-default)',
         'border-strong':  'var(--border-strong)',
-
-        // Text hierarchy
         'text-primary':   'var(--text-primary)',
         'text-secondary': 'var(--text-secondary)',
         'text-tertiary':  'var(--text-tertiary)',
         'text-disabled':  'var(--text-disabled)',
-
-        // Accent (Indigo — Linear-style)
         'accent':         'var(--accent)',
         'accent-light':   'var(--accent-light)',
         'accent-bg':      'var(--accent-bg)',
         'accent-border':  'var(--accent-border)',
-
-        // Status
         'status-green':  'var(--green)',
         'status-amber':  'var(--amber)',
         'status-red':    'var(--red)',
         'status-blue':   'var(--blue)',
-
-        // POS CTA (billing screens only)
         'pos-cta':       'var(--pos-cta)',
         'pos-cta-hover': 'var(--pos-cta-hover)',
         'pos-void':      'var(--pos-void)',
@@ -69,6 +86,12 @@ export default {
         sans:  ['Inter', 'system-ui', '-apple-system', 'sans-serif'],
         mono:  ['JetBrains Mono', 'Fira Code', 'ui-monospace', 'monospace'],
         indic: ['Noto Sans Devanagari', 'sans-serif'],
+        "label-caps": ["Public Sans"],
+        "body-main": ["Public Sans"],
+        "data-metric": ["monospace"],
+        "headline-md": ["Public Sans"],
+        "headline-lg": ["Public Sans"],
+        "terminal-status": ["monospace"]
       },
 
       // ── Font Scale ────────────────────────────────────────

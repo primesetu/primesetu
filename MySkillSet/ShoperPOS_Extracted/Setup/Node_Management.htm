@@ -1,0 +1,78 @@
+
+<!doctype HTML public "-//W3C//DTD HTML 4.0 Frameset//EN">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=windows-1252">
+ <meta name="generator" content="Adobe RoboHelp 10">
+<title>Node Management</title>
+<link rel="StyleSheet" href="../Shoper.css" type="text/css">
+<style title="hcp" type="text/css">
+<!--
+span.hcp1 { font-weight:bold; }
+img.hcp2 { border:none; }
+span.hcp3 { font-weight:bold;
+text-decoration:underline; }
+span.hcp4 { text-align:left;
+font-weight:bold; }
+span.hcp5 { text-align:left; }
+-->
+</style>
+</head>
+<body>
+<script type="text/javascript" src="../ehlpdhtm.js" language="JavaScript1.2"></script>
+
+
+<h1>Node Management</h1>
+<p class="Body-Text"><span class="hcp1">Node Registry</span> maintains the details of all nodes that can be used to access Shoper database.</p>
+<p class="Body-Text">This option allows you to define the nodes from which Shoper database can be accessed or you can deny nodes from accessing Shoper database. The Nodes can be defined only by a supervisor.</p>
+<p class="Note"><span class="hcp1">Note:</span> If node wise restrictions are enabled for any node, then the same has to be done for all the nodes which have access to Shoper 9 HO. If node wise restrictions are not required, it is suggested that the node registry is left empty without defining any node.</p>
+<p class="Body-Text">The process of Node Definition retrieves the information from the node it is invoked from. This option can be used in any given node only to include that node in the node registry or to modify the details of that node.</p>
+<p class="InvocationSequence">How to reach: <span class="hcp1">Setup &gt; Supervisory Functions &gt; Node Management</span></p>
+<p class="Body-Text">The Login window is displayed to confirm the supervisor's login ID and password.</p>
+<p class="Body-Text"><img src="SM_Login_1.gif" alt="" border="0" class="hcp2"></p>
+<p class="Body-Text"><span class="hcp1">User ID</span>: Enter supervisor’s login ID (Default is super).</p>
+<p class="Body-Text"><span class="hcp1">Password</span>: Enter supervisor’s password (Default is nothing).</p>
+<p class="BlankLine">&#160;</p>
+<p class="Navigation"><span class="hcp3">O</span><span class="hcp1">k:</span> To open the <span class="hcp1">Company Maintenance</span> window</p>
+<p class="Navigation"><span class="hcp3">C</span><span class="hcp1">ancel:</span> To quit the process</p>
+<p class="Body-Text">The <span class="hcp1">Registry Login</span> window &#160;is displayed.</p>
+<p class="Body-Text"><img src="Node_Management_1.gif" alt="" border="0" class="hcp2"></p>
+<p class="Body-Text">&#160;<span class="hcp1">Local Node</span>: Select to add, modify or delete a node registry.</p>
+<p class="Body-Text"><span class="hcp1">Remote Nodes</span>: Select to dissociate any of the client nodes while you are working in a multi-user environment.</p>
+<p class="Navigation"><span class="hcp3">C</span><span class="hcp1">ancel</span>: To quit the process</p>
+<p class="Navigation"><span class="hcp3">N</span><span class="hcp1">ext</span>: To proceed with the node registration process</p>
+<p class="Body-Text">The next step of the node management process depends on your selection of</p>
+<ul>
+<li class="p-bullet">
+<p class="bullet"><a class="dropspot" href="javascript:TextPopup(this)" id="a1">Local Node</a></p>
+<div class="droptext" id="POPUP156755481" style="display: none;">
+<p class="Body-Text" style="margin-left: 47px;">The <span class="hcp1">Node Creation Form</span> is displayed.</p>
+<p class="Body-Text" style="margin-left: 47px;"><img src="Node_Management_2.gif" alt="" border="0" class="hcp2"></p>
+<p class="Body-Text" style="margin-left: 47px;"><span class="hcp4">Node options</span><span class="hcp5">:</span> <span class="hcp4">Add Node</span> <span class="hcp5">option is selected, if the current node is not registered. If the node is already registered, this option will be disabled and a message</span> <span class="hcp4">Already Node Registry Done</span> <span class="hcp5">will be displayed at the bottom of the Node Creation window.</span></p>
+<p class="Body-Text" style="margin-left: 47px;"><span class="hcp1">Node Id</span>: Enter the node id for the current system. Node id can be used meaningfully to represent the physical position of the system, segment of business, etc., if used appropriately.</p>
+<p class="Body-Text" style="margin-left: 47px;"><span class="hcp1">Node Name</span>: Enter the name of the system. Appropriate naming conventions would make management of systems easier.</p>
+<p class="Body-Text" style="margin-left: 47px;"><span class="hcp1">Centre Cash Point</span>: Set Value as Yes to enable the terminal as the centre cash collection terminal. At this terminal cash reconciliation of other terminals take place.</p>
+<p class="Body-Text" style="margin-left: 47px;"><span class="hcp1">Cash Collection Point</span>: Set Value as Yes to enable the terminal as the cash collection terminal. At this terminal cash collection and inter terminal transfers take place.</p>
+<p class="Navigation" style="margin-left: 59px;"><span class="hcp3">O</span><span class="hcp1">k</span>: To complete the node registration process</p>
+<p class="Navigation" style="margin-left: 59px;"><span class="hcp1">E</span><span class="hcp3">x</span><span class="hcp1">it</span>: To quit the operation.</p>
+<p class="Note"><span class="hcp1">Note:</span> If you choose the option Modify Node, the node id and node name will be displayed but only the node name is editable.</p>
+</div></li>
+<li class="p-bullet">
+<p class="bullet"><a class="dropspot" href="javascript:TextPopup(this)" id="a2">Remote Nodes</a></p>
+<div class="droptext" id="POPUP201457803" style="display: none;">
+<p class="Body-Text" style="margin-left: 47px;">The <span class="hcp1">Registry Login</span> window is displayed.</p>
+<p class="Body-Text" style="margin-left: 47px;"><img src="Node_Management_3.gif" alt="" border="0" class="hcp2"></p>
+<p class="Body-Text" style="margin-left: 47px;"><span class="hcp1">Remote Nodes</span>: Node details of all the clients are displayed here if you are a supervisor logged in at the server. Click to select the node details that need to be denied access to the Shoper database.</p>
+<p class="Navigation" style="margin-left: 59px;"><span class="hcp3">D</span><span class="hcp1">elete</span>: To deny access to the Shoper database for the node selected</p>
+</div></li>
+</ul>
+<p class="Body-Text">&#160;</p>
+
+
+<script type="text/javascript" language="JavaScript1.2">//<![CDATA[
+	if( typeof( TextPopupInit ) != 'function' ) TextPopupInit = new Function();
+	TextPopupInit('a1','POPUP156755481');
+	TextPopupInit('a2','POPUP201457803');
+//]]></script>
+</body>
+</html>

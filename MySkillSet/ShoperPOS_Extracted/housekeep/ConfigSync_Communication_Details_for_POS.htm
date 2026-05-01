@@ -1,0 +1,65 @@
+
+<!doctype HTML public "-//W3C//DTD HTML 4.0 Frameset//EN">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=windows-1252">
+ <meta name="generator" content="Adobe RoboHelp 10">
+<title>Adding Communication Details for POS</title>
+<link rel="StyleSheet" href="../Shoper.css" type="text/css">
+<style title="hcp" type="text/css">
+<!--
+span.hcp1 { color:#0000ff; }
+span.hcp2 { font-weight:bold; }
+span.hcp3 { font-weight:normal; }
+span.hcp4 { font-weight:bold;
+text-decoration:underline; }
+-->
+</style>
+</head>
+<body>
+<script type="text/javascript" src="../ehlpdhtm.js" language="JavaScript1.2"></script>
+
+
+<h1 style="color: #ff0000;"><span class="hcp1">Add Communication Details for POS</span><span class="hcp1">&#160;</span></h1>
+<p class="Body-Text"><img src="ConfigSync_Communication_Details_for_POS.gif" alt="" style="border: none;" border="0"></p>
+<p class="Body-Text" style="margin-left: 7px; color: #000000;"><span class="hcp2">Document Type</span>: Select the required document type. Currently only Purchase Transaction (PT) File is available.</p>
+<p class="Body-Text" style="font-weight: bold;">Mode<span class="hcp3">: Choose the required mode of communication. The selected mode will be used for data transfer between the showrooms. Click the corresponding links to view the related fields to be filled.</span></p>
+<p class="Body-Text" style="margin-left: 47px; font-weight: bold; text-decoration: underline;"><a class="dropspot" href="javascript:TextPopup(this)" id="a5" style="text-decoration: underline; ">Online</a></p>
+<div class="droptext" id="POPUP47070038" style="display: none;">
+<p class="Body-Text" style="margin-left: 87px;"><span class="hcp2">Server Name</span>: Enter the Server Name and path in the format <span class="hcp2">Http://&lt;Server name&gt;#/&lt;Virtual Dir&gt;</span>.</p>
+<p class="Body-Text" style="margin-left: 87px; color: #000000;"><span class="hcp2">User Name</span>: Enter the user name</p>
+<p class="Body-Text" style="margin-left: 87px; color: #000000;"><span class="hcp2">Password</span>: Enter the password</p>
+<p class="Body-Text" style="margin-left: 87px; color: #000000;"><span class="hcp2">SSL</span>: Select to permit connections only when the web server is running/ accepts connection in SSL (Secure Socket Layer).</p>
+</div>
+<p class="Body-Text" style="margin-left: 47px; font-weight: bold; text-decoration: underline;"><a class="dropspot" href="javascript:TextPopup(this)" id="a7" style="text-decoration: underline; ">FTP</a></p>
+<div class="droptext" id="POPUP238285769" style="display: none;">
+<p class="Body-Text" style="margin-left: 87px;"><span class="hcp2">Server Name</span>: Enter the FTP Server Name in this field.</p>
+<p class="Body-Text" style="margin-left: 87px; font-weight: bold;">User Name<span class="hcp3">: Enter the user Name required for accessing the FTP Server.</span></p>
+<p class="Body-Text" style="margin-left: 87px;"><span class="hcp2">Password</span>: Enter the Password required for accessing the FTP Server.</p>
+<p class="Body-Text" style="margin-left: 87px; color: #000000;"><span class="hcp2">Upload/ Download Folder</span>: Enter the name of the FTP folder to which this showroom has to send and read data.</p>
+<p class="Body-Text" style="margin-left: 87px;"><span class="hcp2">Passive</span>: Select if your FTP server is passive.</p>
+<p class="Body-Text" style="margin-left: 87px; color: #000000;"><span class="hcp2">SSL</span>: Select to permit connections only when the FTP server is running/ accepts connection in SSL (Secure Socket Layer).</p>
+</div>
+<p class="Body-Text"><span class="hcp2">Files List</span>: These fields are active in all the modes and hold the file type format specification used for upload and download.</p>
+<p class="Body-Text" style="margin-left: 47px;"><span class="hcp2">To Upload</span>: This field gets populated automatically.</p>
+<p class="Body-Text" style="margin-left: 47px;"><span class="hcp2">To Download</span>: This field gets populated automatically.</p>
+<p class="Body-Text" style="color: #000000;"><span class="hcp2">Download Retry Interval</span>: Enter the interval duration in seconds between the retries by SIS. By default, the retry interval is 15 minutes.</p>
+<p class="Body-Text" style="color: #000000;"><span class="hcp2">Download to Folder</span>: Enter the path of the folder to download the file.</p>
+<p class="Body-Text" style="color: #000000;"><span class="hcp2">Unzip Downloaded Files</span>: Select to unzip the downloaded files.</p>
+<p class="Body-Text" style="color: #000000;"><span class="hcp2">Unzip to Folder</span>: Enter the path of the folder to where the files are to be extracted.</p>
+<p class="Body-Text" style="color: #000000;"><span class="hcp2">Move Zip File to Path</span>: Enter the path of the backup folder where used zip files are to be stored.</p>
+<p class="Body-Text"><span class="hcp2">Use this mode for communication</span>: Select to set one particular mode of communication as active. When you make one particular mode as active for a <span class="hcp2">Document Type</span> then, automatically any other mode configured for that d<span class="hcp2">ocument type</span> becomes inactive.</p>
+<p class="Navigation"><span class="hcp2">A</span><span class="hcp4">p</span><span class="hcp2">ply</span>: To save the selection and entries</p>
+<p class="Navigation"><span class="hcp2">C</span><span class="hcp4">l</span><span class="hcp2">ear</span>: To clear all the values entered</p>
+<p class="Navigation"><span class="hcp4">C</span><span class="hcp2">ancel</span>: To cancel the selection</p>
+<p class="Body-Text"><span class="hcp2">Add Download Request</span>: Click to add the task to SIS, in case SIS is restarted and the tasks get deleted.</p>
+<p class="Body-Text">&#160;</p>
+
+
+<script type="text/javascript" language="JavaScript1.2">//<![CDATA[
+	if( typeof( TextPopupInit ) != 'function' ) TextPopupInit = new Function();
+	TextPopupInit('a5','POPUP47070038');
+	TextPopupInit('a7','POPUP238285769');
+//]]></script>
+</body>
+</html>

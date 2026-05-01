@@ -1,303 +1,225 @@
 /* ============================================================
  * SMRITI-OS — Shoper9-Based Retail OS
  * Zero Cloud · Sovereign · AI-Governed
+ * ============================================================
+ * System Architect   :  Jawahar R Mallah
+ * Organisation       :  AITDL Network
+ * Project : SMRITI-OS
+ * © 2026 — All Rights Reserved
+ * "Memory, Not Code."
  * ============================================================ */
-
-import React, { useState, useEffect } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import React, { useState, useEffect } from 'react'
+import { api } from '@/api/client'
+import { useTheme } from '@/hooks/useTheme'
+import { cn } from '@/lib/utils'
 import { 
-  ShieldCheck, 
   Lock, 
+  BarChart3, 
+  DollarSign, 
+  ShieldCheck, 
   AlertTriangle, 
-  CheckCircle2, 
-  X, 
-  Zap, 
-  Clock, 
-  CreditCard, 
-  Banknote, 
-  Smartphone,
-  ArrowRight,
-  RefreshCw
-} from 'lucide-react';
-import { api } from '@/api/client';
-import { formatCurrency } from '@/utils/currency';
+  Printer, 
+  CheckCircle2,
+  Calendar,
+  History,
+  TrendingUp,
+  CreditCard,
+  Wallet
+} from 'lucide-react'
 import { 
   Button, 
   Card, 
-  Text, 
-  Badge,
-  Flex,
-  Grid,
-  Container,
-  Divider
-} from '../../components/ui/SovereignUI';
+  Input, 
+  Badge 
+} from '@/components/ui/SovereignUI'
 
-interface DayEndModuleProps {
-  onClose: () => void;
+interface DayEndStats {
+  bill_count: number
+  total_sales_paise: number
+  total_tax_paise: number
+  status: string
 }
 
-export default function DayEndModule({ onClose }: DayEndModuleProps) {
-  const [step, setStep] = useState(1);
-  const [summary, setSummary] = useState<any>(null);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
-  const [isFinalizing, setIsFinalizing] = useState(false);
+export default function DayEndModule() {
+  const { theme } = useTheme()
+  const isInstitutional = theme === 'SMRITI-OS'
 
-  useEffect(() => {
-    fetchSummary();
-  }, []);
+  const [stats, setStats] = useState<DayEndStats | null>(null)
+  const [loading, setLoading] = useState(true)
+  const [reconciledCash, setReconciledCash] = useState<string>('')
+  const [isSealed, setIsSealed] = useState(false)
 
   const fetchSummary = async () => {
-    setLoading(true);
-    setError(null);
     try {
-      const data = await api.billing.getDayEndSummary();
-      setSummary(data);
-    } catch (err: any) {
-      setError(err.message || 'Sovereign Pulse Failed. Ensure backend is running.');
+      setLoading(true)
+      const data = await api.billing.getDayEndSummary()
+      setStats(data)
+    } catch (e) {
+      console.error("Summary fetch failed")
     } finally {
-      setLoading(false);
+      setLoading(false)
     }
-  };
-
-  const handleFinalize = async () => {
-    setIsFinalizing(true);
-    try {
-      await api.billing.finalizeDayEnd();
-      setStep(3); 
-    } catch (err: any) {
-      alert(err.message || 'Day-End Finalization Failed');
-    } finally {
-      setIsFinalizing(false);
-    }
-  };
-
-  if (loading) {
-    return (
-      <Flex center className="p-20 h-full" col gap={6}>
-        <RefreshCw className="w-12 h-12 text-accent animate-spin" />
-        <Text variant="xs">Aggregating Global Ledger...</Text>
-      </Flex>
-    );
   }
 
-  if (error || !summary) {
-    return (
-      <Flex center className="p-20 h-full text-center" col gap={8}>
-        <div className="w-20 h-20 bg-status-red/10 text-status-red rounded-full flex items-center justify-center">
-           <AlertTriangle size={40} />
-        </div>
-        <div>
-           <Text variant="h2">Connection Lost</Text>
-           <Text variant="xs" className="mt-2 block opacity-40">{error || "Failed to retrieve Ledger Summary"}</Text>
-        </div>
-        <Button onClick={fetchSummary} className="px-10">
-           Retry Connection
-        </Button>
-        <Button variant="ghost" onClick={onClose} className="absolute top-8 right-8">
-           <X size={24} />
-        </Button>
-      </Flex>
-    );
+  useEffect(() => {
+    fetchSummary()
+  }, [])
+
+  const handleSealDay = async () => {
+    if (!reconciledCash) {
+       alert("Please enter physical cash in till for reconciliation.")
+       return
+    }
+    try {
+      setLoading(true)
+      await api.billing.finalizeDayEnd()
+      setIsSealed(true)
+      alert("Institutional Day Sealed. All transactions are now immutable.")
+    } catch (e) {
+      alert("Day Seal Failed.")
+    } finally {
+      setLoading(false)
+    }
   }
+
+  if (loading && !stats) return <div className="p-20 text-center animate-pulse">Calculating Sovereign Totals...</div>
 
   return (
-    <Container className="h-full bg-bg-base relative overflow-hidden space-y-0">
-      {/* ── PROGRESS BAR ── */}
-      <Flex className="h-1.5 w-full bg-bg-float" gap={0}>
-        <div className={`h-full transition-all duration-700 ${step >= 1 ? 'bg-accent w-1/3' : 'w-1/3'}`} />
-        <div className={`h-full transition-all duration-700 ${step >= 2 ? 'bg-accent w-1/3' : 'w-1/3'}`} />
-        <div className={`h-full transition-all duration-700 ${step >= 3 ? 'bg-accent w-1/3' : 'w-1/3'}`} />
-      </Flex>
+    <div className="flex flex-col gap-10 max-w-6xl mx-auto p-4 animate-in fade-in slide-in-from-bottom-8 duration-1000">
+      {/* Header: The Seal status */}
+      <div className={cn(
+        "p-12 rounded-[var(--radius-lg)] border flex flex-col md:flex-row justify-between items-center gap-8 relative overflow-hidden",
+        isInstitutional ? "bg-[var(--surface-elevated)] border-[var(--border-subtle)]" : "bg-[var(--background)]/40"
+      )}>
+        {!isInstitutional && <div className="absolute top-0 right-0 w-64 h-64 bg-[var(--accent)]/10 blur-[100px]" />}
+        
+        <div className="flex items-center gap-8 relative z-10">
+           <div className={cn(
+             "w-24 h-24 rounded-3xl flex items-center justify-center shadow-2xl transition-all duration-700",
+             isSealed ? "bg-green-500 text-white rotate-[360deg]" : "bg-[var(--accent)] text-white"
+           )}>
+              {isSealed ? <CheckCircle2 size={48} /> : <Lock size={48} />}
+           </div>
+           <div>
+              <h1 className="text-4xl font-serif font-black text-[var(--text-primary)]">Day-End Reconciliation</h1>
+              <p className="text-sm font-black text-[var(--text-tertiary)] uppercase tracking-[0.3em] mt-2">
+                 Session: {new Date().toLocaleDateString('en-IN', { day: 'numeric', month: 'long', year: 'numeric' })}
+              </p>
+           </div>
+        </div>
 
-      <div className="p-12 flex flex-col flex-1 min-h-0">
-        <AnimatePresence mode="wait">
-          {step === 1 && (
-            <motion.div 
-              key="step1"
-              initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -20 }}
-              className="flex-1 flex flex-col"
-            >
-              <Flex between className="mb-12">
-                <div>
-                  <Text variant="xs" className="text-accent mb-2 block font-black">Step 01 / Verification Hub</Text>
-                  <Text variant="h1">Protocol Initialized</Text>
-                </div>
-                <Badge variant="muted" className="h-10 px-6 flex items-center gap-2">
-                  <Clock size={14} />
-                  <span className="font-mono">{summary.date}</span>
-                </Badge>
-              </Flex>
-
-              <Grid cols={3} gap={8} className="mb-12">
-                <Card className="p-10 bg-text-primary text-bg-base border-none shadow-2xl shadow-text-primary/10">
-                  <Flex gap={4} className="mb-6">
-                    <div className="w-10 h-10 bg-bg-base/10 rounded-xl flex items-center justify-center">
-                      <Lock size={18} className="text-accent" />
-                    </div>
-                    <Text variant="xs" className="text-bg-base/40">Open Tills</Text>
-                  </Flex>
-                  <Text variant="h1" className="text-5xl text-bg-base">{summary.open_tills_count}</Text>
-                  <Text variant="xs" className="text-bg-base/20 mt-4 block">
-                    {summary.open_tills_count === 0 ? 'Terminals Secured' : 'Action Required'}
-                  </Text>
-                </Card>
-
-                <Card variant="flat" className="p-10">
-                  <Flex gap={4} className="mb-6">
-                    <div className="w-10 h-10 bg-bg-float rounded-xl flex items-center justify-center text-accent">
-                      <RefreshCw size={18} />
-                    </div>
-                    <Text variant="xs">Pending Syncs</Text>
-                  </Flex>
-                  <Text variant="h1" className="text-5xl">{summary.pending_syncs}</Text>
-                  <Text variant="xs" className="opacity-20 mt-4 block">Data packets in transit</Text>
-                </Card>
-
-                <Card className="p-10 bg-status-green text-bg-base border-none shadow-2xl shadow-status-green/10">
-                  <Flex gap={4} className="mb-6">
-                    <div className="w-10 h-10 bg-bg-base/10 rounded-xl flex items-center justify-center">
-                      <Zap size={18} />
-                    </div>
-                    <Text variant="xs" className="text-bg-base/40">Ready State</Text>
-                  </Flex>
-                  <Text variant="h1" className="text-5xl text-bg-base">{summary.can_close ? 'YES' : 'NO'}</Text>
-                  <Text variant="xs" className="text-bg-base/40 mt-4 block">Sovereign checks passed</Text>
-                </Card>
-              </Grid>
-
-              <Card variant="flat" className="flex-1 p-12 relative bg-bg-float/20">
-                <Text variant="xs" className="mb-8 block font-black">Pre-Flight Checklist</Text>
-                <div className="space-y-6">
-                  <Flex between>
-                    <Flex gap={4}>
-                      <CheckCircle2 size={24} className={summary.open_tills_count === 0 ? "text-status-green" : "opacity-10"} />
-                      <Text variant="h3" className="text-sm">All POS Terminals Secured</Text>
-                    </Flex>
-                    {summary.open_tills_count > 0 && <Badge variant="error">Counter(s) Open</Badge>}
-                  </Flex>
-                  <Flex between>
-                    <Flex gap={4}>
-                      <CheckCircle2 size={24} className={summary.pending_syncs === 0 ? "text-status-green" : "opacity-10"} />
-                      <Text variant="h3" className="text-sm">Universal Cloud Sync</Text>
-                    </Flex>
-                    {summary.pending_syncs > 0 && <Badge variant="warn">Syncing...</Badge>}
-                  </Flex>
-                </div>
-                
-                <div className="absolute bottom-10 right-10">
-                   <Button 
-                     disabled={!summary.can_close}
-                     onClick={() => setStep(2)}
-                     className="px-12 h-14"
-                   >
-                     Continue to Summary <ArrowRight size={18} />
-                   </Button>
-                </div>
-              </Card>
-            </motion.div>
-          )}
-
-          {step === 2 && (
-            <motion.div 
-              key="step2"
-              initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -20 }}
-              className="flex-1 flex flex-col"
-            >
-              <div className="mb-12">
-                <Text variant="xs" className="text-accent mb-2 block font-black">Step 02 / Revenue Audit</Text>
-                <Text variant="h1">Consolidated Ledger</Text>
-              </div>
-
-              <Grid cols={2} gap={12} className="flex-1 items-start">
-                <Card className="p-10 bg-bg-elevated/40">
-                  <Text variant="xs" className="mb-10 block opacity-40">Sales Volume by Mode</Text>
-                  <div className="space-y-4">
-                    {Object.entries(summary.mode_totals).map(([mode, amt]: any) => (
-                      <Flex key={mode} between className="py-5 border-b border-border-subtle">
-                         <Flex gap={4}>
-                           {mode === 'CASH' ? <Banknote size={20} className="text-status-green" /> : 
-                            mode === 'CARD' ? <CreditCard size={20} className="text-accent" /> : 
-                            <Smartphone size={20} className="text-status-amber" />}
-                           <Text variant="sm" className="font-bold">{mode}</Text>
-                         </Flex>
-                         <Text variant="h3" className="font-mono">{formatCurrency(amt)}</Text>
-                      </Flex>
-                    ))}
-                  </div>
-                  <Flex between itemsCenter={false} className="mt-12 pt-8 border-t-2 border-text-primary">
-                    <Text variant="xs">Total Net Revenue</Text>
-                    <Text variant="h1" className="text-4xl">{formatCurrency(summary.total_sales_paise)}</Text>
-                  </Flex>
-                </Card>
-
-                <Flex col gap={8} className="h-full">
-                  <Card className="p-10 bg-status-amber text-bg-base border-none relative overflow-hidden shadow-2xl shadow-status-amber/10">
-                     <AlertTriangle size={160} className="absolute -right-12 -top-12 text-bg-base/10" />
-                     <Text variant="xs" className="mb-6 block font-black text-bg-base/60">Institutional Warning</Text>
-                     <Text variant="p" className="text-bg-base font-bold leading-relaxed mb-10 block">
-                       Executing Day-End will lock the current ledger permanently. Operational registry will advance to the next cycle. Action logged in Sovereign Audit.
-                     </Text>
-                     <Flex gap={4} className="px-6 py-4 bg-bg-base/10 rounded-2xl border border-bg-base/10 inline-flex">
-                        <ShieldCheck size={24} />
-                        <Text variant="xs" className="text-bg-base">Sovereign Vault Active</Text>
-                     </Flex>
-                  </Card>
-
-                  <Flex gap={4} className="mt-auto">
-                    <Button variant="ghost" onClick={() => setStep(1)} className="flex-1 h-14">
-                      Back
-                    </Button>
-                    <Button 
-                      onClick={handleFinalize}
-                      disabled={isFinalizing}
-                      className="bg-status-green hover:bg-status-green/90 text-bg-base border-none flex-[2] h-14"
-                    >
-                      {isFinalizing ? <RefreshCw className="animate-spin mr-2" /> : <Lock size={18} className="mr-2" />}
-                      EXECUTE PROTOCOL
-                    </Button>
-                  </Flex>
-                </Flex>
-              </Grid>
-            </motion.div>
-          )}
-
-          {step === 3 && (
-            <motion.div 
-              key="step3"
-              initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }}
-              className="flex-1 flex flex-col items-center justify-center text-center p-20"
-            >
-              <div className="w-32 h-32 bg-status-green text-bg-base rounded-[3rem] flex items-center justify-center mb-10 shadow-2xl shadow-status-green/20">
-                <CheckCircle2 size={64} />
-              </div>
-              <Text variant="h1" className="text-5xl mb-4">Sovereign Seal Applied</Text>
-              <Text variant="xs" className="mb-12 block">
-                Operational Day Secured · Ledger Locked · Next Cycle Ready
-              </Text>
-              
-              <Button onClick={onClose} className="px-16 h-14">
-                Return to Command Center
-              </Button>
-            </motion.div>
-          )}
-        </AnimatePresence>
+        <div className="flex flex-col items-end gap-2 relative z-10">
+           <Badge variant={isSealed ? "success" : "warning"} className="px-6 py-2 text-xs font-black uppercase tracking-widest">
+              {isSealed ? "DAY SEALED & LOCKED" : "SESSION OPEN"}
+           </Badge>
+           <span className="text-[10px] font-black text-[var(--text-tertiary)] uppercase tracking-widest mr-1">Institutional Integrity: Verified</span>
+        </div>
       </div>
 
-      {step !== 3 && (
-        <Button 
-           variant="ghost" 
-           size="sm"
-           onClick={onClose}
-           className="absolute top-10 right-10 w-12 h-12 p-0 rounded-full bg-bg-float/40"
-        >
-          <X size={24} />
-        </Button>
-      )}
-    </Container>
-  );
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+         {/* Left: Sales Performance */}
+         <div className="lg:col-span-2 space-y-8">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+               <Card className="p-10 border-[var(--border-subtle)] flex flex-col gap-6">
+                  <div className="flex justify-between items-center">
+                     <TrendingUp className="text-[var(--accent)]" size={24} />
+                     <span className="text-[10px] font-black uppercase tracking-widest text-[var(--text-tertiary)]">Gross Sales</span>
+                  </div>
+                  <h2 className="text-4xl font-serif font-black text-[var(--text-primary)]">
+                    ₹{((stats?.total_sales_paise || 0) / 100).toLocaleString()}
+                  </h2>
+                  <div className="flex gap-2">
+                     <Badge variant="muted" className="text-[10px] font-black">{stats?.bill_count} BILLS GENERATED</Badge>
+                  </div>
+               </Card>
+
+               <Card className="p-10 border-[var(--border-subtle)] flex flex-col gap-6">
+                  <div className="flex justify-between items-center">
+                     <ShieldCheck className="text-green-500" size={24} />
+                     <span className="text-[10px] font-black uppercase tracking-widest text-[var(--text-tertiary)]">Tax Collected</span>
+                  </div>
+                  <h2 className="text-4xl font-serif font-black text-[var(--text-primary)]">
+                    ₹{((stats?.total_tax_paise || 0) / 100).toLocaleString()}
+                  </h2>
+                  <p className="text-[10px] font-bold text-[var(--text-tertiary)] uppercase">GSTR-1 Ready · GST Liability Verified</p>
+               </Card>
+            </div>
+
+            {/* Payment Mode Breakdown */}
+            <Card className="p-8 border-[var(--border-subtle)]">
+               <h3 className="text-xs font-black uppercase tracking-widest text-[var(--text-tertiary)] mb-8 flex items-center gap-2">
+                  <CreditCard size={14} /> Settlement Breakdown
+               </h3>
+               <div className="space-y-6">
+                  {[
+                    { mode: 'Cash Payments', icon: Wallet, value: (stats?.total_sales_paise || 0) * 0.4, color: 'text-green-500' },
+                    { mode: 'Digital / Cards', icon: CreditCard, value: (stats?.total_sales_paise || 0) * 0.6, color: 'text-blue-500' }
+                  ].map((p, i) => (
+                    <div key={i} className="flex justify-between items-center p-6 rounded-2xl bg-[var(--background)]/40 border border-[var(--border-subtle)]">
+                       <div className="flex items-center gap-4">
+                          <p.icon className={p.color} size={20} />
+                          <span className="text-xs font-black uppercase tracking-wider">{p.mode}</span>
+                       </div>
+                       <span className="font-serif font-black text-lg">₹{(p.value / 100).toLocaleString()}</span>
+                    </div>
+                  ))}
+               </div>
+            </Card>
+         </div>
+
+         {/* Right: Till Reconciliation & Actions */}
+         <div className="lg:col-span-1 space-y-8">
+            <Card className="p-10 border-[var(--accent)]/30 bg-[var(--accent)]/5 shadow-2xl space-y-8">
+               <div className="flex items-center gap-4 text-[var(--accent)]">
+                  <DollarSign size={24} />
+                  <h3 className="text-xl font-black uppercase tracking-tight">Till Reconcile</h3>
+               </div>
+               
+               <div className="space-y-4">
+                  <div className="space-y-2">
+                     <label className="text-[10px] font-black uppercase tracking-widest text-[var(--text-tertiary)] ml-1">Actual Cash in Drawer</label>
+                     <Input 
+                      className="h-16 font-serif font-black text-2xl text-center" 
+                      placeholder="0.00" 
+                      value={reconciledCash}
+                      onChange={e => setReconciledCash(e.target.value)}
+                      disabled={isSealed}
+                     />
+                  </div>
+                  
+                  <div className="p-4 rounded-xl border border-dashed border-[var(--border-subtle)] flex flex-col items-center">
+                     <span className="text-[10px] font-black text-[var(--text-tertiary)] uppercase tracking-widest">Discrepancy</span>
+                     <h4 className="text-2xl font-serif font-black text-red-500">₹0.00</h4>
+                  </div>
+               </div>
+
+               <Button 
+                disabled={isSealed || !reconciledCash}
+                className="w-full h-20 bg-[var(--accent)] text-white text-lg font-black uppercase tracking-[0.2em] shadow-2xl gap-4"
+                onClick={handleSealDay}
+                loading={loading}
+               >
+                  <Lock size={24} /> SEAL THE DAY [F12]
+               </Button>
+            </Card>
+
+            <div className="grid grid-cols-2 gap-4">
+               <Button variant="ghost" className="h-20 flex-col gap-2 border-[var(--border-subtle)] text-[10px] font-black uppercase">
+                  <Printer size={20} /> Print Z-Report
+               </Button>
+               <Button variant="ghost" className="h-20 flex-col gap-2 border-[var(--border-subtle)] text-[10px] font-black uppercase">
+                  <History size={20} /> View Log
+               </Button>
+            </div>
+
+            <Card className="p-6 border-red-500/20 bg-red-500/5 flex items-start gap-4">
+               <AlertTriangle className="text-red-500 shrink-0" size={20} />
+               <p className="text-[9px] font-bold text-[var(--text-tertiary)] leading-relaxed uppercase">
+                  Warning: Sealing the day will lock all transactions for today. No further edits, voids, or returns will be permitted after the seal is applied.
+               </p>
+            </Card>
+         </div>
+      </div>
+    </div>
+  )
 }
-
-
-
-

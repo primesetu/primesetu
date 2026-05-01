@@ -1,0 +1,485 @@
+
+<!doctype HTML public "-//W3C//DTD HTML 4.0 Frameset//EN">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=windows-1252">
+ <meta name="generator" content="Adobe RoboHelp 10">
+<title>Shoper 9 POS Series A Release 2.2</title>
+<link rel="StyleSheet" href="../Shoper.css" type="text/css">
+<style title="hcp" type="text/css">
+<!--
+span.hcp1 { font-weight:bold; }
+li.hcp2 { list-style:none;
+display:inline; }
+h4.hcp3 { margin-left:64px; }
+-->
+</style>
+</head>
+<body>
+<script type="text/javascript" src="../ehlpdhtm.js" language="JavaScript1.2"></script>
+
+<h1>Shoper 9 POS Series A Release 2.2</h1>
+<p class="Body-Text" style="text-align: justify;">New Features:</p>
+<ul>
+<li class="p-bullet">
+<p class="bullet"><a href="#NF_Message_Centre">Message Centre</a></p>
+</li>
+</ul>
+<p class="Body-Text">Enhancements:</p>
+<ul>
+<li class="p-bullet">
+<p class="bullet"><a href="#EH_Billing">Billing</a></p>
+</li>
+<li class="p-bullet">
+<p class="bullet"><a href="#EH_Franchisee">Franchisee</a></p>
+</li>
+<li class="p-bullet">
+<p class="bullet"><a href="#EH_Data_Export_Import">Data Export/Import</a></p>
+</li>
+<li class="p-bullet">
+<p class="bullet"><a href="#EH_Housekeeping">Housekeeping</a></p>
+</li>
+<li class="p-bullet">
+<p class="bullet"><a href="#EH_Printing">Printing</a></p>
+</li>
+<li class="p-bullet">
+<p class="bullet"><a href="#EH_Pay-in_Slip_Printing">Pay-in Slip Printing</a></p>
+</li>
+<li class="p-bullet">
+<p class="bullet"><a href="#EH_Document_Printing_Designer">Document Printing Designer</a></p>
+</li>
+<li class="p-bullet">
+<p class="bullet"><a href="#EH_Scheduler_for_Reports">Scheduler for Reports</a></p>
+</li>
+<li class="p-bullet">
+<p class="bullet"><a href="#EH_Reports">Reports</a></p>
+</li>
+</ul>
+<p class="Body-Text">Issues Resolved:</p>
+<ul>
+<li class="p-bullet">
+<p class="bullet"><a href="#IR_Billing">Billing</a></p>
+</li>
+<li class="p-bullet">
+<p class="bullet"><a href="#IR_Franchisee">Franchisee</a></p>
+</li>
+<li class="p-bullet">
+<p class="bullet"><a href="#IR_Data_Communication">Data Communication</a></p>
+</li>
+<li class="p-bullet">
+<p class="bullet"><a href="#IR_Item_Master">Item Master</a></p>
+</li>
+<li class="p-bullet">
+<p class="bullet"><a href="#IR_Personnel_Catalogue">Personnel Catalogue</a></p>
+</li>
+<li class="p-bullet">
+<p class="bullet"><a href="#IR_Sales_Tax_Catalogue">Sales Tax Catalogue</a></p>
+</li>
+<li class="p-bullet">
+<p class="bullet"><a href="#IR_Goods_Inwards">Goods Inwards</a></p>
+</li>
+<li class="p-bullet">
+<p class="bullet"><a href="#IR_Goods_Outwards">Goods Outwards</a></p>
+</li>
+<li class="p-bullet">
+<p class="bullet"><a href="#IR_Tally_Interface">Tally Interface</a></p>
+</li>
+<li class="p-bullet">
+<p class="bullet"><a href="#IR_Printing">Printing</a></p>
+</li>
+<li class="p-bullet">
+<p class="bullet"><a href="#IR_Reports">Reports</a></p>
+</li>
+<li class="p-bullet">
+<p class="bullet"><a href="#IR_Dashboard_Reports">Dashboard Reports</a></p>
+</li>
+</ul>
+<h2>New Features</h2>
+<h3><a name="NF_Message_Centre" id="NF_Message_Centre">Message Centre</a></h3>
+<p class="Body-Text">Facility to receive messages broadcasted from Shoper 9 HO. You can view the messages by clicking the message count displayed in the <span class="hcp1">Version</span> section of the Shoper 9 Info Panel (main screen). Also, the unread messages are displayed in a pop-up every time you login. The message status (received and read) at POS locations is sent to HO during data synchronisation.</p>
+<p class="Body-Text">You can configure the interval for downloading the messages from HO. (Set the system parameter, <span class="hcp1">Interval (In Minutes) for downloading Messages</span> under <span class="hcp1">Housekeeping</span>.)</p>
+<h2>Enhancements</h2>
+<h3><a name="EH_Billing" id="EH_Billing">Billing</a></h3>
+<ul>
+<li class="p-bullet">
+<p class="bullet">The bill remarks can be entered in the billing screen without pressing F6.</p>
+</li>
+</ul>
+<h3><a name="EH_Franchisee" id="EH_Franchisee">Franchisee</a></h3>
+<ul>
+<li class="p-bullet">
+<p class="bullet">The Franchisee Outstanding report is enhanced to display the outstanding values of cash and credit card details in a single report.</p>
+</li>
+</ul>
+<h3><a name="EH_Data_Export_Import" id="EH_Data_Export_Import">Data Export/Import</a></h3>
+<ul>
+<li class="p-bullet">
+<p class="bullet">On completion of data synchronisation, a pop-up is displayed with links to access the log files created if any error occurred.</p>
+</li>
+</ul>
+<h3><a name="EH_Housekeeping" id="EH_Housekeeping">Housekeeping</a></h3>
+<ul>
+<li class="p-bullet">
+<p class="bullet"><span class="hcp1">Back-end Data Import</span> is enhanced to import <span class="hcp1">Customer Master</span>.</p>
+</li>
+</ul>
+<h3><a name="EH_Printing" id="EH_Printing">Printing</a></h3>
+<ul>
+<li class="p-bullet">
+<p class="bullet">Option is provided in the <span class="hcp1">Tax Summary</span> section to club values based on tax rates as per the configuration. (Enable the system parameter, <span class="hcp1">Group Tax Summary Based On Tax Percentage Only</span> under <span class="hcp1">Bill Printing</span>).</p>
+</li>
+</ul>
+<p class="bullet" style="margin-left: 64px;">This is applicable only to the templates designed using <span class="hcp1">Document Printing Designer</span>.</p>
+<ul>
+<li class="p-bullet">
+<p class="bullet">When printing multiple copies of a bill at a time, captions like <span class="hcp1">Original – Buyer's Copy</span>, <span class="hcp1">Duplicate – Seller's Copy</span>, <span class="hcp1">Triplicate –Transporter's Copy</span>, <span class="hcp1">Quadruplicate – Extra Copy</span>, etc., can be printed in the header section.</p>
+</li>
+</ul>
+<h3><a name="EH_Pay-in_Slip_Printing" id="EH_Pay-in_Slip_Printing">Pay-in Slip Printing</a></h3>
+<ul>
+<li class="p-bullet">
+<p class="bullet">Printing of <span class="hcp1">Pay-in Slip</span> is enhanced to support 40-column printing format based on configuration. (Enable the system parameter, <span class="hcp1">Pay-in Slip Stationery Type</span> under <span class="hcp1">Franchisee</span>).</p>
+</li>
+</ul>
+<p class="bullet" style="margin-left: 64px;">Also, auto-cut facility is available based on configuration for printers which support auto cut feature. (Set the system parameter, <span class="hcp1">Auto-cut Character for Pay-in Slip 40 Column Stationery</span> under <span class="hcp1">Franchisee</span>).</p>
+<h3><a name="EH_Document_Printing_Designer" id="EH_Document_Printing_Designer">Document Printing Designer</a></h3>
+<ul>
+<li class="p-bullet">
+<p class="bullet">New fields are provided in the header section to</p>
+</li>
+<li class="hcp2">
+<ul>
+<li class="p-bullet">
+<p class="bullet">Indicate the type of bill, i.e., product or service</p>
+</li>
+</ul>
+<ul>
+<li class="p-bullet">
+<p class="bullet">Print the terminal ID for all sales transactions</p>
+</li>
+</ul>
+</li>
+</ul>
+<h3><a name="EH_Scheduler_for_Reports" id="EH_Scheduler_for_Reports">Scheduler for Reports</a></h3>
+<ul>
+<li class="p-bullet">
+<p class="bullet">Report scheduler is enhanced with advanced option to schedule report generation either daily, weekly, monthly or yearly along with the applicable start and end dates.</p>
+</li>
+</ul>
+<h3><a name="EH_Reports" id="EH_Reports">Reports</a></h3>
+<h4 class="hcp3">Sales Reports</h4>
+<ol>
+<li class="hcp2">
+<ul>
+<li class="p-bullet">
+<p class="bullet">The detailed Salesperson report is modified to display only product (Class 1) or brand (Class 2) or both.</p>
+</li>
+</ul>
+</li>
+</ol>
+<h4 class="hcp3">Stock Reports</h4>
+<ol>
+<li class="hcp2">
+<ul>
+<li class="p-bullet">
+<p class="bullet">The facility to view stock <span class="hcp1">Balance</span> report in old format (Crystal Report) is re-introduced.</p>
+</li>
+</ul>
+</li>
+</ol>
+<h4 class="hcp3">Analysis Reports</h4>
+<ol>
+<li class="hcp2">
+<ul>
+<li class="p-bullet">
+<p class="bullet">The <span class="hcp1">Report Designer</span> is enhanced</p>
+</li>
+<li class="hcp2">
+<ul>
+<li class="p-bullet">
+<p class="bullet">with sorting options to display</p>
+</li>
+<li class="hcp2">
+<ul>
+<li class="p-bullet">
+<p class="bullet">Customer-wise Sales report</p>
+</li>
+</ul>
+<ul>
+<li class="p-bullet">
+<p class="bullet">Customer-wise and vendor-wise Sales &amp; Stock report</p>
+</li>
+</ul>
+</li>
+<li class="p-bullet">
+<p class="bullet">to use the following as repeat column</p>
+</li>
+<li class="hcp2">
+<ul>
+<li class="p-bullet">
+<p class="bullet">Vendor in Sales &amp; Stock report</p>
+</li>
+</ul>
+<ul>
+<li class="p-bullet">
+<p class="bullet">Size-code in all analysis reports</p>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ol>
+<h4 class="hcp3">MIS Reports</h4>
+<ul>
+<li class="hcp2">
+<ul>
+<li class="p-bullet">
+<p class="bullet">The <span class="hcp1">Pending Orders Transaction</span> report is enhanced to display</p>
+</li>
+</ul>
+<ol>
+<li class="hcp2">
+<ul>
+<li class="p-bullet">
+<p class="bullet">cancelled values of Sales/ Service Orders</p>
+</li>
+</ul>
+<ul>
+<li class="p-bullet">
+<p class="bullet">details of <span class="hcp1">Advance</span> (billed, pending and cancelled) for Sales/ Service Orders</p>
+</li>
+</ul>
+</li>
+</ol>
+</li>
+</ul>
+<h2>Issues Resolved</h2>
+<h3><a name="IR_Billing" id="IR_Billing">Billing</a></h3>
+<ul>
+<li class="p-bullet">
+<p class="bullet">Error was occurring when a bill was confirmed after recalling a Sales DC.</p>
+</li>
+<li class="p-bullet">
+<p class="bullet">When the batch functionality was enabled in billing, the quantity could not be changed even when quantity alteration was enabled.</p>
+</li>
+<li class="p-bullet">
+<p class="bullet">In some cases, if quantity of any item was more than one, the discount was not getting calculated correctly.</p>
+</li>
+<li class="p-bullet">
+<p class="bullet">When a purchase order was converted to sales order and this sales order was recalled in billing, the sales factor defined earlier was not getting applied in the sales order.</p>
+</li>
+</ul>
+<p class="bullet" style="margin-left: 64px;">These issues have been resolved.</p>
+<h3><a name="IR_Franchisee" id="IR_Franchisee">Franchisee</a></h3>
+<ul>
+<li class="p-bullet">
+<p class="bullet">In Franchisee Outstanding report, the correct outstanding balance was not displayed after making payments to HO.</p>
+</li>
+</ul>
+<p class="bullet" style="margin-left: 64px;">This issue has been resolved.</p>
+<h3><a name="IR_Data_Communication" id="IR_Data_Communication">Data Communication</a></h3>
+<ul>
+<li class="p-bullet">
+<p class="bullet">In some cases, <span class="hcp1">POS Agent</span> did not auto-start during Windows start-up, resulting in synchronisation failure.</p>
+</li>
+</ul>
+<p class="bullet" style="margin-left: 64px;">This issue has been resolved.</p>
+<h3><a name="IR_Item_Master" id="IR_Item_Master">Item Master</a></h3>
+<ul>
+<li class="p-bullet">
+<p class="bullet">When stock numbers were configured as user assigned, item master creation was showing an error message if stock number duplication occurred and the data was not getting saved.</p>
+</li>
+<li class="p-bullet">
+<p class="bullet">This issue has been resolved. Details of items with unique stock numbers are saved. One entry each for the duplicated stock numbers is also saved and the other is displayed in the window. The displayed stock numbers can be modified and saved.</p>
+</li>
+<li class="p-bullet">
+<p class="bullet">The quantity entered while creating Item Master on-the fly was not displayed in the <span class="hcp1">Goods Receipt</span> grid. Instead, the LSQ was displayed in the quantity columns.</p>
+</li>
+</ul>
+<p class="bullet" style="margin-left: 64px;">This issue has been resolved.</p>
+<h3><a name="IR_Personnel_Catalogue" id="IR_Personnel_Catalogue">Personnel Catalogue</a></h3>
+<ul>
+<li class="p-bullet">
+<p class="bullet">In <span class="hcp1">Edit</span> and <span class="hcp1">View</span> modes of <span class="hcp1">Personnel</span> catalogue, some details could not be viewed.</p>
+</li>
+</ul>
+<p class="bullet" style="margin-left: 64px;">This issue has been resolved.</p>
+<h3><a name="IR_Sales_Tax_Catalogue" id="IR_Sales_Tax_Catalogue">Sales Tax Catalogue</a></h3>
+<ul>
+<li class="p-bullet">
+<p class="bullet">While editing Sales Tax Catalogue, if the <span class="hcp1">Tax Rate</span> entered in the <span class="hcp1">Common Values</span> was zero, then the earlier catalogued tax rate was displayed in the <span class="hcp1">Tax Details</span> grid.</p>
+</li>
+</ul>
+<p class="bullet" style="margin-left: 64px;">This issue has been resolved.</p>
+<h3><a name="IR_Goods_Inwards" id="IR_Goods_Inwards">Goods Inwards</a></h3>
+<ul>
+<li class="p-bullet">
+<p class="bullet">The <span class="hcp1">Purchase Price</span> column of the <span class="hcp1">Goods Receipt</span> grid was blank when a purchase order/ indent based on the analysis attribute was selected and the corresponding stock numbers were loaded from a PDT file.</p>
+</li>
+<li class="p-bullet">
+<p class="bullet">During <span class="hcp1">Goods Inwards</span>, loading of multiple DCs from a single PT File displayed an error.</p>
+</li>
+<li class="p-bullet">
+<p class="bullet">The loading order of items from PDT file in <span class="hcp1">Goods Inwards</span> was not as per the configuration. (System Parameters &gt; Inwards &gt; Allow PDT File Loading in Goods Inwards/Goods Outwards/ Physical Verification/Physical Stock &gt; Goods Inwards &gt; Loading Order)</p>
+</li>
+<li class="p-bullet">
+<p class="bullet">Goods Inwards transaction details could not be printed if the printing type/ format for inward transactions was set to GUI format and an error message was displayed. (The system parameter, <span class="hcp1">Goods Inwards Printing Type</span> was set as <span class="hcp1">GUI Format (Inkjet Printing)</span>)</p>
+</li>
+</ul>
+<p class="bullet" style="margin-left: 64px;">These issues have been resolved.</p>
+<h3><a name="IR_Goods_Outwards" id="IR_Goods_Outwards">Goods Outwards</a></h3>
+<ul>
+<li class="p-bullet">
+<p class="bullet">In Goods Outwards, if the tax rate was specified at document level, the line level tax was not calculated correctly and the total of the tax amounts for the document was not displayed.</p>
+</li>
+</ul>
+<p class="bullet" style="margin-left: 64px;">This issue has been resolved.</p>
+<h3><a name="IR_Tally_Interface" id="IR_Tally_Interface">Tally Interface</a></h3>
+<ul>
+<li class="p-bullet">
+<p class="bullet">Offline Tally Interface failed to import closing stock values sent from Shoper 9 POS.</p>
+</li>
+<li class="p-bullet">
+<p class="bullet">The posting of data from Shoper 9 to Tally was failing when the local currency was other than <span class="hcp1">Rupees</span>.</p>
+</li>
+<li class="p-bullet">
+<p class="bullet">When posting sales promotions to Tally was enabled, posting to Tally failed when two sales return transactions with different prefixes but the same document number were there. The corresponding sales transactions had used two promotions, one created in the posting period and another before the posting period.</p>
+</li>
+</ul>
+<p class="bullet" style="margin-left: 64px;">These issues have been resolved.</p>
+<h3><a name="IR_Printing" id="IR_Printing">Printing</a></h3>
+<ul>
+<li class="p-bullet">
+<p class="bullet">While printing the Purchase Return Note, the LST and CST numbers of the vendor were not included.</p>
+</li>
+<li class="p-bullet">
+<p class="bullet">When using a dot-matrix printing template designed with Document Printing Designer, if the number of copies to be printed was set as one, then an additional copy of the bill was printed.</p>
+</li>
+<li class="p-bullet">
+<p class="bullet">After an inward transaction, when the configurations to print barcodes were enabled, the barcode was not getting printed. (Enabled the system parameter, <span class="hcp1">Print barcode after inward transaction</span> and set the path in <span class="hcp1">Barcode File Path</span> under the category, <span class="hcp1">Housekeeping</span>).</p>
+</li>
+</ul>
+<p class="bullet" style="margin-left: 64px;">These issues have been resolved.</p>
+<h3><a name="IR_Reports" id="IR_Reports">Reports</a></h3>
+<h4 class="hcp3">Tax Register</h4>
+<ol>
+<li class="hcp2">
+<ul>
+<li class="p-bullet">
+<p class="bullet">In the detailed <span class="hcp1">Tax Register</span> report, the <span class="hcp1">Tax Assessable</span> values were not displayed correctly for products with more than one tax component.</p>
+</li>
+</ul>
+</li>
+</ol>
+<p class="bullet" style="margin-left: 104px;">This issue has been resolved.</p>
+<h4 class="hcp3">Cash Reports</h4>
+<ol>
+<li class="hcp2">
+<ul>
+<li class="p-bullet">
+<p class="bullet">On changing the payment mode after confirming a bill, the changes were not displayed in the <span class="hcp1">Counter Summary across Cashiers</span> report.</p>
+</li>
+</ul>
+<ul>
+<li class="p-bullet">
+<p class="bullet">In the <span class="hcp1">Credit Sale</span> report, generating a report for <span class="hcp1">Collection</span> resulted in a runtime error.</p>
+</li>
+</ul>
+</li>
+</ol>
+<p class="bullet" style="margin-left: 104px;">These issues have been resolved.</p>
+<h4 class="hcp3">Sales Reports</h4>
+<ol>
+<li class="hcp2">
+<ul>
+<li class="p-bullet">
+<p class="bullet">In the <span class="hcp1">Day-wise Sales Summary</span> report for <span class="hcp1">Cash Sales</span>, the cash paid against credit notes was not taken into account while calculating the total cash value.</p>
+</li>
+</ul>
+<ul>
+<li class="p-bullet">
+<p class="bullet">In the <span class="hcp1">Bill Wise Sales</span> report, when <span class="hcp1">Tax Wise Break Up</span> grouping was applied and the <span class="hcp1">Description</span> in the report had more than 30 characters, an error was displayed.</p>
+</li>
+</ul>
+<ul>
+<li class="p-bullet">
+<p class="bullet">In the <span class="hcp1">Daily Sales Book</span> report, incorrect date was displayed when <span class="hcp1">Date Wise</span> grouping for <span class="hcp1">Report Breakup</span> was selected.</p>
+</li>
+</ul>
+</li>
+</ol>
+<p class="bullet" style="margin-left: 104px;">These issues have been resolved.</p>
+<ol>
+<li class="hcp2">
+<ul>
+<li class="p-bullet">
+<p class="bullet">The <span class="hcp1">Bill-wise Sales</span> report did not display the complete bill number.</p>
+</li>
+</ul>
+</li>
+</ol>
+<p class="bullet" style="margin-left: 104px;">This issue has been resolved. Now, Bill numbers with length up to 14 characters are displayed.</p>
+<h4 class="hcp3">Stock Reports</h4>
+<ol>
+<li class="hcp2">
+<ul>
+<li class="p-bullet">
+<p class="bullet">The stock <span class="hcp1">Balance</span> report did not display the category-wise sub-total value.</p>
+</li>
+</ul>
+<ul>
+<li class="p-bullet">
+<p class="bullet">When the stock <span class="hcp1">Balance</span> report was exported to Excel, the titles of the quantity and value columns were not displayed correctly.</p>
+</li>
+</ul>
+<ul>
+<li class="p-bullet">
+<p class="bullet">The detailed <span class="hcp1">Transaction-wise Goods Register</span> report for a specific supplier displayed a runtime error.</p>
+</li>
+</ul>
+<ul>
+<li class="p-bullet">
+<p class="bullet">In the stock <span class="hcp1">Balance</span> <span class="hcp1">as on Date</span> report, incorrect details were displayed in the rate and value columns on selecting any one classification under <span class="hcp1">BreakUp</span>. For example, product.</p>
+</li>
+</ul>
+<ul>
+<li class="p-bullet">
+<p class="bullet">The <span class="hcp1">Purchase Tax Register</span> could not be viewed and the message, <span class="hcp1">No Records in PurchaseTaxCat Table... Please catalogue</span> was displayed even when Purchase Tax was catalogued.</p>
+</li>
+</ul>
+</li>
+</ol>
+<p class="bullet" style="margin-left: 104px;">These issues have been resolved.</p>
+<ol>
+<li class="hcp2">
+<ul>
+<li class="p-bullet">
+<p class="bullet">The <span class="hcp1">Discrepancy</span> report displayed an error message when the <span class="hcp1">Ref DC No.</span> in <span class="hcp1">Goods Receipt</span> contained more than 20 characters.</p>
+</li>
+</ul>
+</li>
+</ol>
+<p class="bullet" style="margin-left: 104px;">This issue has been resolved. Now, the <span class="hcp1">Ref DC No.</span> with length up to 32 characters are displayed.</p>
+<h4 class="hcp3">MIS Reports</h4>
+<ol>
+<li class="hcp2">
+<ul>
+<li class="p-bullet">
+<p class="bullet">The <span class="hcp1">Transaction Details with Image</span> report displayed an improper error message and the report selection window showed no selection options.</p>
+</li>
+</ul>
+</li>
+</ol>
+<p class="bullet" style="margin-left: 104px;">This issue has been resolved.</p>
+<h4 style="margin-left: 24px;"><a name="IR_Dashboard_Reports" id="IR_Dashboard_Reports">Dashboard Reports</a></h4>
+<ul>
+<li class="p-bullet">
+<p class="bullet">The Dashboard report <span class="hcp1">Discount Details (Top 20)</span> was showing the error message <span class="hcp1">String or binary data would be truncated</span> when any discount code exceeded 16 characters.</p>
+</li>
+</ul>
+<p class="bullet" style="margin-left: 64px;">This issue has been resolved.</p>
+<p class="Body-Text">&#160;</p>
+</body>
+</html>

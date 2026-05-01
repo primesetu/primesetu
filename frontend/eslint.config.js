@@ -49,6 +49,18 @@ export default tseslint.config(
           message:
             "[SMRITI-OS RULE-004] Never use localStorage for auth data. Use Supabase session only. See AI_ATOMIC_RULES.md.",
         },
+        {
+          // Blocks: <DataTable columns={[]} /> or manually passing arrays instead of useGridMask output
+          selector: "JSXElement[openingElement.name.name='DataTable'] > JSXOpeningElement > JSXAttribute[name.name='columns'] > JSXExpressionContainer > ArrayExpression",
+          message:
+            "[SMRITI-OS GRID POLICY] FATAL: Never hardcode DataTable columns arrays. You MUST use the useGridMask() hook powered by GridEngine to ensure AcceptDisplayDtls institutional parity.",
+        },
+        {
+          // Blocks: useMemo(() => [...]) being passed to columns (naive check for non-colDefs named variables)
+          selector: "JSXElement[openingElement.name.name='DataTable'] > JSXOpeningElement > JSXAttribute[name.name='columns'] > JSXExpressionContainer > Identifier[name='columns']",
+          message:
+            "[SMRITI-OS GRID POLICY] FATAL: Stale 'columns' variable detected. You MUST pass the generated colDefs from useGridMask(TrnType) to the DataTable.",
+        }
       ],
     },
   }

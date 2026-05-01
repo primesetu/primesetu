@@ -1,0 +1,52 @@
+
+<!doctype HTML public "-//W3C//DTD HTML 4.0 Frameset//EN">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=windows-1252">
+ <meta name="generator" content="Adobe RoboHelp 10">
+<title>Data Rebuild</title>
+<link rel="StyleSheet" href="../Shoper.css" type="text/css">
+<style title="hcp" type="text/css">
+<!--
+span.hcp1 { font-weight:bold; }
+img.hcp2 { border:none; }
+span.hcp3 { font-weight:bold;
+text-decoration:underline; }
+-->
+</style>
+</head>
+<body>
+<script type="text/javascript" src="../ehlpdhtm.js" language="JavaScript1.2"></script>
+
+<h1>Data Rebuild</h1>
+<p class="Body-Text">This option is to rebuild the stock transaction summary data, and update the stock balance and the cost price of the item. Only Shoper administrators can do data rebuild.</p>
+<p class="Body-Text">Updating stock transaction summary data becomes necessary when</p>
+<ul>
+<li class="p-bullet">
+<p class="bullet">There are inconsistencies in the stock values among different reports.</p>
+</li>
+<li class="p-bullet">
+<p class="bullet">Stock balance of items are shown as negative, even when sales of items without available stock is disallowed.</p>
+</li>
+</ul>
+<p class="InvocationSequence">How to reach: <span class="hcp1">Setup &gt; Supervisory Functions &gt; Data Rebuild</span></p>
+<p class="Body-Text">The <span class="hcp1">POS Login</span> window is displayed.</p>
+<p class="Body-Text"><img src="setup_supervisory_data_rebuild_1.gif" alt="" border="0" class="hcp2"></p>
+<p class="Body-Text"><span class="hcp1">User Authentication</span>: You need to provide a Shoper administrator's credentials, as supervisory user rights are required to carry out data rebuild.</p>
+<p class="Body-Text" style="margin-left: 47px;"><span class="hcp1">User Name</span>: Enter the user name.</p>
+<p class="Body-Text" style="margin-left: 47px;"><span class="hcp1">Password</span>: Enter the password.</p>
+<p class="Body-Text" style="margin-left: 47px;"><span class="hcp1">Company</span>: The currently open Shoper company name is displayed.</p>
+<p class="Navigation"><span class="hcp3">O</span><span class="hcp1">k</span>: To log in and do data rebuild</p>
+<p class="Navigation"><span class="hcp3">C</span><span class="hcp1">ancel</span>: To cancel the login process</p>
+<p class="Body-Text">The <span class="hcp1">Data Rebuild</span> window is displayed.</p>
+<p class="Body-Text"><img src="setup_supervisory_data_rebuild_2.gif" alt="" border="0" class="hcp2"></p>
+<p class="Body-Text"><span class="hcp1">Available Data</span>: Select to rebuild the data, based on the complete data available in the database.</p>
+<p class="Body-Text"><span class="hcp1">From Selected Month &amp; Year</span>: Select to consider the stock transactions from a particular month and year for the rebuilding process.</p>
+<p class="Body-Text" style="margin-left: 47px;"><span class="hcp1">Month &amp; Year</span>: Select the month and year from when the data has to be rebuilt.</p>
+<p class="Body-Text" style="margin-left: 47px;"><span class="hcp1">Use Stored Month Opening Balance</span>: Select to use the month opening balance recorded in the stock transaction summary data of the specified month. If left unselected, the month opening balance is computed from the opening balance recorded for the previous month and the transactions in the previous month.</p>
+<p class="Body-Text"><span class="hcp1">Update All VA Counters</span>: Select to update the counter number of all the transactions that are processed while updating the stock transaction summary data. Shoper 9 uses counter numbers as an internal mechanism to identify the data aging for synchronisation, wherever applicable.</p>
+<p class="Navigation"><span class="hcp3">U</span><span class="hcp1">pdate</span>: To start the data rebuild process. The progress status is displayed on the status bar and on completion, a message is displayed.</p>
+<p class="Navigation"><span class="hcp1">E</span><span class="hcp3">x</span><span class="hcp1">it</span>: To close the window.</p>
+<p class="Body-Text">&#160;</p>
+</body>
+</html>

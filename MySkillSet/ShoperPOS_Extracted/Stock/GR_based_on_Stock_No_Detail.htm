@@ -1,0 +1,148 @@
+
+<!doctype HTML public "-//W3C//DTD HTML 4.0 Frameset//EN">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=windows-1252">
+ <meta name="generator" content="Adobe RoboHelp 10">
+<title>GR based on Stock No - Detail</title>
+<link rel="StyleSheet" href="../Shoper.css" type="text/css">
+<style title="hcp" type="text/css">
+<!--
+span.hcp1 { font-weight:bold; }
+img.hcp2 { border:none; }
+span.hcp3 { font-weight:bold;
+text-decoration:underline; }
+-->
+</style>
+</head>
+
+<body>
+<script type="text/javascript" src="../ehlpdhtm.js" language="JavaScript1.2"></script>
+
+
+<h1>Goods Receipts based on Stock No. &#160;Grid Detail</h1>
+<p class="Body-Text">The combination of the fields available in this grid 
+ changes as per the value provided. There are some common fields which 
+ are displayed irrespective of the values provided. This grid is populated 
+ with values if you load the data from a <span class="hcp1">P.O.</span>/ 
+ <span class="hcp1">PDT File</span>/ <span class="hcp1">PT 
+ File</span>.</p>
+<p class="Body-Text"><img src="GR_TransGrid_1.gif" alt="" border="0" class="hcp2"></p>
+<p class="Body-Text" style="color: #000000;">Each item with its required 
+ details for issue can be entered in the Item Details grid from the Direct 
+ Entry grid. The columns displayed in the grids can be configured <a href="../Setup/Entry_Panel_Column_Configuration.htm">here</a>.</p>
+<p class="Body-Text" style="text-align: left;">The Direct Entry grid is 
+ displayed.</p>
+<p class="Body-Text" style="text-align: left;"><img src="GR_TransGrid_2.gif" alt="" border="0" class="hcp2"></p>
+<p class="Body-Text" style="margin-left: 7px;"><span class="hcp1">T</span>he 
+ grid displays the item details, if selected. Otherwise, you may scan the 
+ stock number, enter the stock number, or press <span class="hcp1">F2</span> 
+ in the <span class="hcp1">Stock No.</span> column to select 
+ items using the search window.</p>
+<p class="Body-Text"><span class="hcp1">Stock No</span>: 
+ Enter or Scan or Browse (<span class="hcp1">F2</span>) the 
+ item for stock number.</p>
+<p class="Body-Text"><span class="hcp1">Item Description</span>: 
+ Displays the description for the stock number entered.</p>
+<p class="Note"><span class="hcp1">Note</span>: In case <span class="hcp1">Enable Delivery from Remote Location</span> 
+ is set to <span class="hcp1">1-Yes</span> in System Parameter,under 
+ category <span class="hcp1">Delivery Process</span>, then 
+ an additional column <span class="hcp1">Location</span> 
+ will be available in the grid. When location as part of batch is enabled, 
+ <span class="hcp1">Location Code</span> field will be displayed.</p>
+<p class="Body-Text"><span class="hcp1">PO Prefix, PO No,</span> 
+ and <span class="hcp1">Pending PO Qty</span>: These fields 
+ appear only when the transaction type is <span class="hcp1">Purchase</span> 
+ and a PO is selected under <span class="hcp1">1.Select Purchase 
+ Order</span>.</p>
+<p class="Body-Text"><span class="hcp1">Doc Qty.</span>: 
+ The quantity as displayed in the document (example, invoice), is entered 
+ here. If items are loaded from a PT File, then this quantity which is 
+ pre-filled cannot be altered.</p>
+<p class="Body-Text"><span class="hcp1">Act Qty.</span>: 
+ Enter the item wise quantity received. This field can be filled with LSQ 
+ set for the item depending on the parameter set in the <span class="hcp1">Inwards</span> 
+ category. This field is populated when physical verification is for an 
+ inward consignment which is identified by the unique combination of Supplier 
+ Id, Ref. Doc. No. and Ref. Date.</p>
+<p class="Note" style="font-weight: bold;">Note:</p>
+<p class="Note">If the stock items are configured to include serial numbers 
+ during the inwards process, a pop-up menu is displayed after entering 
+ the actual quantity.</p>
+<p class="Note">In <span class="hcp1">System Parameter</span>, 
+ the Item Tag can be configured up to five levels under <span class="hcp1">Item 
+ Tag</span> category.</p>
+<p class="Note">Click <span class="hcp1"><a class="dropspot" href="javascript:TextPopup(this)" id="a1">here</a></span> 
+ to view the <span class="hcp1">Item Tag</span> <span class="hcp1">Information</span> 
+ window.</p>
+<div class="droptext" id="POPUP572174421" style="display: none;">
+	<p class="Body-Text">The<span class="hcp1"> Item Tag 
+	 Information</span> window is displayed as shown.</p>
+	<p class="Body-Text"><img src="GR_Item_Tag_2.gif" alt="" border="0" class="hcp2"></p>
+	<p class="Body-Text"><span class="hcp1">Item Information</span>:</p>
+	<p class="Body-Text" style="margin-left: 47px;"><span class="hcp1">Stock 
+	 Number</span>: The stock number selected is displayed.</p>
+	<p class="Body-Text" style="margin-left: 47px;"><span class="hcp1">Descr</span>: 
+	 The description of the item is displayed.</p>
+	<p class="Body-Text"><span class="hcp1">Item Qty.</span>: 
+	 The quantity taken into stock is displayed.</p>
+	<p class="Body-Text">The serial no details are captured as per configuration.</p>
+	<p class="Navigation"><span class="hcp3">O</span><span class="hcp1">K</span>: To accept the entries</p>
+	<p class="Navigation"><span class="hcp3">C</span><span class="hcp1">ancel</span>: To revert to quantity to 
+	 zero</p>
+</div>
+<p class="Body-Text" style="color: #000000;"><span class="hcp1">Selling 
+ Price</span> and <span class="hcp1">Current Cost</span>: 
+ Displays the values available in the items master for these two fields. 
+ If the transaction type is <span class="hcp1">Purchase</span> 
+ then, <span class="hcp1">Purchase Price</span> is displayed 
+ instead of <span class="hcp1">Current Cost</span>. &#160;A 
+ drop-down list is displayed (based on <span class="hcp1">Item 
+ Classification</span> parameter settings) when multiple prices are available. 
+ Select the price from the list.</p>
+<p class="Body-Text"><span class="hcp1">Value</span>: Calculates 
+ and displays the product of the <span class="hcp1">Act Qty</span> 
+ and <span class="hcp1">Purchase Cost</span>.</p>
+<p class="Body-Text"><span class="hcp1">Discount Rate</span> 
+ and <span class="hcp1">Discount Amount</span>: Enter the 
+ items level discounts, if any, as an <span class="hcp1">Amount</span> 
+ or <span class="hcp1">Rate</span> to be applied on <span class="hcp1">Value</span>. If rate is entered then the 
+ amount is automatically calculated and displayed and vice versa.</p>
+<p class="Body-Text"><span class="hcp1">Tax Rate and Tax 
+ Amount</span>: Enter Item level tax either as Rate or Amount. The purchase 
+ tax is calculated on predefined rates as per the settings in the System 
+ Parameters.</p>
+<p class="Body-Text"><span class="hcp1">Add-on Before Tax</span>: 
+ Enter any additional value to be added to the cost before calculating 
+ the Tax. Tax is also calculated for this value.</p>
+<p class="Body-Text" style="color: #000000;"><span class="hcp1">Add-on 
+ After Tax</span>: Enter any additional value to be added to the cost. 
+ Tax is not calculated on this value.</p>
+<p class="Body-Text" style="color: #000000;"><span class="hcp1">Deduction 
+ Before Tax</span>: Enter any value to be subtracted from the cost. Tax 
+ is calculated on this value also and reduced from the Tax Amount.</p>
+<p class="Body-Text" style="color: #000000;"><span class="hcp1">Deduction 
+ After Tax</span>: Enter any value to be subtracted from the cost. Tax 
+ is not calculated on this value.</p>
+<p class="Navigation"><span class="hcp1">Note:</span> Selection 
+ of multiple Addons and Deductions can be configured in System Parameters.</p>
+<p class="Body-Text"><span class="hcp1">Doc. Total</span>: 
+ Displays the total amount arrived by adding or subtracting, as the case 
+ may be, the values of Discount, Tax, Add-On and Deductions.</p>
+<p class="Body-Text"><span class="hcp1">DC/ Inv. Total</span>: 
+ Enter the DC/ Invoice total amount in this field.</p>
+<p class="Note"><span class="hcp1">Note</span>: If the amount 
+ is greater than <span class="hcp1">Doc. Total</span> amount 
+ then the following screen is displayed.</p>
+<p class="Note"><img src="Goods%20Receipts%20based%20on%20Stock%20No_5.gif" alt="" width="300" height="106" border="0" class="hcp2"></p>
+<p class="Note">If the amount is lesser than <span class="hcp1">Doc. 
+ Total</span> amount then the following screen is displayed.</p>
+<p class="Note"><img src="Goods%20Receipts%20based%20on%20Stock%20No_6.gif" alt="" width="300" height="106" border="0" class="hcp2"></p>
+
+
+<script type="text/javascript" language="JavaScript1.2">//<![CDATA[
+	if( typeof( TextPopupInit ) != 'function' ) TextPopupInit = new Function();
+	TextPopupInit('a1','POPUP572174421');
+//]]></script>
+</body>
+</html>

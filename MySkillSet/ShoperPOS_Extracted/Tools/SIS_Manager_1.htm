@@ -1,0 +1,101 @@
+
+<!doctype HTML public "-//W3C//DTD HTML 4.0 Frameset//EN">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=windows-1252">
+ <meta name="generator" content="Adobe RoboHelp 10">
+<title>Shoper SIS Manager</title>
+<link rel="StyleSheet" href="../Shoper.css" type="text/css">
+<style title="hcp" type="text/css">
+<!--
+span.hcp1 { font-weight:bold; }
+img.hcp2 { border:none; }
+span.hcp3 { font-weight:bold;
+text-decoration:underline; }
+span.hcp4 { color:#000000; }
+-->
+</style>
+</head>
+<body>
+<script type="text/javascript" src="../ehlpdhtm.js" language="JavaScript1.2"></script>
+
+<h1>Shoper Manager</h1>
+<p class="Body-Text">The Shoper Manager helps in checking if the SIS is running or not. You may start, stop or restart the service using this tool, either on your local computer or on any remote computer on which you have access rights. The Shoper Manager is also used to configure the SIS parameters, update Custom Patches, and configure advanced options such as logging in to remote machines.</p>
+<p class="Body-Text">This tool comes in handy as you need not use Windows system services to manage the Shoper Manager service.</p>
+<p class="InvocationSequence">How to reach: Right click the <span class="hcp1">Shoper Manager</span> icon in the System tray.</p>
+<p class="Body-Text">The following window is displayed.</p>
+<p class="Body-Text">&#160;<img src="ShoperManager_POS_1.gif" alt="" border="0" class="hcp2"></p>
+<p class="Body-Text">Click <span class="hcp1">Show</span>.</p>
+<p class="Body-Text">The <span class="hcp1">POS Login</span> screen is displayed.</p>
+<p class="Body-Text"><img src="ShoperManager_POS_2.gif" alt="" border="0" class="hcp2"></p>
+<p class="Body-Text" style="font-weight: bold;">Admin User Credentials</p>
+<p class="Body-Text"><span class="hcp1">User Name</span>: Enter the user name (<span class="hcp1">super</span>).</p>
+<p class="Body-Text"><span class="hcp1">Password</span>: Enter the password (<span class="hcp1">nothing</span>).</p>
+<p class="Navigation"><span class="hcp3">O</span><span class="hcp1">k</span>: To accept the entries.</p>
+<p class="Navigation"><span class="hcp3">C</span><span class="hcp1">ancel</span>: To quit.</p>
+<p class="Body-Text">The <span class="hcp1">Shoper Manager</span> window is displayed.</p>
+<p class="Body-Text">The tabs, <span class="hcp1">Jobs</span>, <span class="hcp1">SIS</span>, <span class="hcp1">Parameters</span>, <span class="hcp1">Custom Patch</span> and <span class="hcp1">Settings</span> are available.</p>
+<p class="Body-Text" style="color: #000000; font-weight: bold;">Jobs</p>
+<p class="Body-Text">All jobs done by the Shoper Manager are stored here.</p>
+<p class="Note"><span class="hcp1" style="font-weight: bold;">Note:</span> HO and POS Jobs are visible together when both, Shoper 9 HO and Shoper 9 POS are available in the same system/ computer.</p>
+<p class="Body-Text" style="color: #000000;"><span class="hcp1">POS</span>: Select <span class="hcp1">POS</span> <span>to view POS jobs</span>.</p>
+<p class="Body-Text"><img src="ShoperManager_POS_2a.gif" alt="" border="0" class="hcp2"></p>
+<p class="Body-Text" style="margin-left: 7px;"><span class="hcp1">Refresh</span>:Click to update the current status of <span class="hcp1">Jobs</span> services running on the selected system. The <span class="hcp1">Status</span> and <span class="hcp1">Progress</span> columns reflect the current status.</p>
+<p class="Body-Text" style="margin-left: 7px; font-weight: bold; color: #000000;">SIS</p>
+<p class="Body-Text"><img src="ShoperManager_POS_3.gif" alt="" border="0" class="hcp2"></p>
+<p class="Body-Text"><span class="hcp1">Control</span></p>
+<p class="Body-Text" style="margin-left: 47px;"><span class="hcp1">Server</span>: Enter the name or IP address of the computer on which <span class="hcp1">Shoper Manager</span> is installed. Alternatively, you may select one from the list, if it is your local computer or a remote computer you have accessed earlier.</p>
+<p class="Body-Text" style="margin-left: 47px;"><span class="hcp1">Refresh</span>: Click to update the current status of <span class="hcp1">SIS</span> services running on the selected system. The <span class="hcp1">Restart</span>, <span class="hcp1">Start</span> and <span class="hcp1">Stop</span> buttons reflect the current status. Click <span class="hcp1">Refresh</span> to get the current status of the services running on the system.</p>
+<p class="Body-Text" style="margin-left: 47px;">If you have selected a remote system, you may see the <span class="hcp1"><a href="SIS_Manager_2.htm">Remote Login Credentials</a></span> window to accept the Windows login details to access the remote server.</p>
+<p class="Body-Text" style="margin-left: 47px;"><span class="hcp1">Services</span>: Select the service name. All SIS services installed on the selected computer are listed. <span class="hcp1">SIS-POS9</span> is selected in the screenshot above.</p>
+<p class="Navigation" style="margin-left: 59px;"><span class="hcp1">Restart</span>: To stop and then start the service on the specified server, if it is already running.</p>
+<p class="Navigation" style="margin-left: 59px;"><span class="hcp1">Start</span>: To start the service on the specified server, if it is not running.</p>
+<p class="Navigation" style="margin-left: 59px;"><span class="hcp1">Stop</span>: To stop the service on the specified server, if it is already running.</p>
+<p class="Body-Text" style="margin-left: 47px;"><span class="hcp1">Check Connectivity</span></p>
+<p class="Body-Text" style="margin-left: 47px;"><span class="hcp1">Server</span>: Enter the computer name or IP address of the remote server to which you want to check the connectivity.</p>
+<p class="Body-Text" style="margin-left: 47px;"><span class="hcp1">Port</span>: Enter the port on which the service is accessible on the remote server.</p>
+<p class="Note" style="margin-left: 59px;"><span class="hcp1">Note</span>: The Default port number is <span class="hcp1">9525</span> for POS. This port number is configured automatically during installation. If the port is being used by any other application during SIS installation, the installer requests you to enter an available port number.</p>
+<p class="Body-Text" style="margin-left: 47px;"><span class="hcp1">Check Connectivity</span>: Click to check the connectivity to the specified server through the selected port.</p>
+<p class="Body-Text" style="font-weight: bold;">Parameters</p>
+<p class="Body-Text">&#160;Click the <span class="hcp1">Parameters</span> tab. The following screen is displayed.</p>
+<p class="Note"><span class="hcp1" style="font-weight: bold;">Note:</span> HO and POS Jobs are visible together when both, Shoper 9 HO and Shoper 9 POS are available in the same system/ computer.</p>
+<p class="Body-Text" style="margin-left: 7px; color: #000000;"><span class="hcp1">POS</span>: Select POS.</p>
+<p class="Body-Text"><img src="ShoperManager_POS_4.gif" alt="" border="0" class="hcp2"></p>
+<p class="Body-Text" style="margin-left: 47px;"><span class="hcp1">SIS Name</span>: The Server name using which client can connect is displayed. It dynamically obtains the machine name.</p>
+<p class="Body-Text" style="margin-left: 47px;"><span class="hcp1">SIS Port</span>: The Port Number in which the server will be running is displayed. The default port number for POS is <span class="hcp1">9525</span>.</p>
+<p class="Body-Text" style="margin-left: 47px;"><span class="hcp1">Service Name</span>: The Service Name of the Server in the machine is displayed.</p>
+<p class="Body-Text" style="margin-left: 47px;"><span class="hcp1">JC Wait Time</span>: The Job Controller thread sleep time after processing the job store is displayed. It is specified in seconds.</p>
+<p class="Body-Text" style="margin-left: 47px;"><span class="hcp1">JC Wait while N/w unavailable</span>: The Job Controller thread sleep time when the network is not available is displayed. It is specified in seconds.</p>
+<p class="Body-Text" style="margin-left: 47px;"><span class="hcp1">Maximum Threads</span>: The maximum threads that can be created for job processing is displayed. The number per processor is specified.</p>
+<p class="Body-Text" style="margin-left: 47px;"><span class="hcp1">Minimum Threads</span>: The minimum threads which are always present for job processing are displayed. The number per processor is specified</p>
+<p class="Body-Text" style="margin-left: 47px;"><span class="hcp1">Log File Path</span>: The path where the log file Log.log is created is displayed. It dynamically obtains the shoper share folder.</p>
+<p class="Body-Text" style="margin-left: 47px;"><span class="hcp1">Backup Threshold</span>: The maximum file size after which the log file will be truncated is displayed. It is specified in megabytes (MB).</p>
+<p class="Body-Text" style="margin-left: 47px;"><span class="hcp1">Thread Idle Time</span>: The idle time to wait for the job thread before getting destroyed is displayed. It is specified in seconds.</p>
+<p class="Body-Text" style="margin-left: 47px;"><span class="hcp1">Query Time Out</span>: The waiting time for the query response from the SQL server before closing it is displayed. It is specified in seconds.</p>
+<p class="Body-Text" style="margin-left: 47px;"><span class="hcp1">Persist Path</span>: The path where persisting files are created is displayed. It dynamically obtains the Shoper share folder.</p>
+<p class="Body-Text" style="margin-left: 47px;"><span class="hcp1">Temp Path</span>: The path where the temp files are created is displayed. It dynamically obtains the Shoper share folder.</p>
+<p class="Body-Text" style="margin-left: 47px; color: #ff0000;"><span style="font-weight: bold; color: #000000;">Users Cache Interval</span><span class="hcp4">:</span> <span class="hcp4">The time interval by which the Shoper Manager will ping (heart beat) the SIS is displayed. It is specified in minutes.</span></p>
+<p class="Body-Text" style="margin-left: 47px; color: #000000;"><span class="hcp1">Script Version</span>: The version of the script is displayed.</p>
+<p class="Navigation"><span class="hcp3">C</span><span class="hcp1">ancel</span>: To cancel the changes made to the values.</p>
+<p class="Navigation"><span class="hcp3">S</span><span class="hcp1">ave</span>: To save the changes.</p>
+<p class="Body-Text" style="font-weight: bold;">Custom Patch</p>
+<p class="Body-Text" style="color: #000000;">Click <span class="hcp1">Custom Patch</span> to view the following screen. Use this tab to download customised updates from HO to POS.</p>
+<p class="Body-Text"><img src="ShoperManager_POS_5.gif" alt="" border="0" class="hcp2"></p>
+<p class="Body-Text" style="font-weight: bold; margin-left: 7px;">POS Download Details</p>
+<p class="Body-Text" style="margin-left: 7px;">Configure the <span class="hcp1">Location Name</span>, <span class="hcp1">Download Using</span>, <span class="hcp1">From Location</span>, <span class="hcp1">Port No</span>, <span class="hcp1">User Name</span>, &#160;<span class="hcp1">Password</span> and <span class="hcp1">Active Ftp</span>.</p>
+<p class="Navigation"><span class="hcp3">A</span><span class="hcp1">dd</span>: To add POS Download Details. Click <span class="hcp3">O</span><span class="hcp1">k</span> to accept the configuration or <span class="hcp3">C</span><span class="hcp1">ancel</span> to reject the entries made<span class="hcp1">.</span></p>
+<p class="Navigation"><span class="hcp3">E</span><span class="hcp1">dit</span>: Click to make changes to the configuration.</p>
+<p class="Navigation"><span class="hcp3">D</span><span class="hcp1">elete</span>: Click to delete the configuration.</p>
+<p class="BlankLine">&#160;</p>
+<p class="Body-Text" style="font-weight: bold;">Settings</p>
+<p class="Body-Text"><span class="hcp2">C</span>lick <span class="hcp1">Settings</span> to view the following screen.</p>
+<p class="Body-Text"><img src="ShoperManager_POS_6.gif" alt="" border="0" class="hcp2"></p>
+<p class="Body-Text"><span class="hcp1">Allow login to remote machines</span>: Select to enable logging in to remote machines.</p>
+<p class="Body-Text"><span class="hcp1">Remember remote login credentials</span>: Select to remember the credentials of remote logins.</p>
+<p class="Body-Text"><span class="hcp1">Remember super user login credentials</span>: Select to remember the credentials of super user logins.</p>
+<p class="Body-Text">Set the time interval in minutes to check for pending uploads.</p>
+<p class="Body-Text">Set the time interval &#160;in minutes &#160;to send a ping request to SIS.</p>
+<p class="Body-Text">Set the time interval in days to archive the SIS jobs. Click <span class="hcp1">Do Now</span> to implement the settings immediately.</p>
+<p class="Body-Text">&#160;</p>
+</body>
+</html>

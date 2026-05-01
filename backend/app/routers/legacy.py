@@ -139,3 +139,53 @@ async def get_legacy_schema(table_name: str):
         })
         
     return {"table": table_name, "columns": columns}
+
+@router.patch("/{table_name}/{row_id}")
+async def update_legacy_table_data(
+    table_name: str,
+    row_id: str,
+    payload: Dict[str, Any],
+    current_user: CurrentUser = Depends(require_auth),
+    db: AsyncSession = Depends(get_db)
+):
+    """
+    Universal Dynamic Writer for all Shoper 9 Legacy Tables.
+    Enforces Store Isolation (RLS).
+    """
+    # 1. Resolve Model
+    target_model = None
+    for attr_name in dir(legacy_models):
+        attr = getattr(legacy_models, attr_name)
+        if hasattr(attr, "__tablename__") and attr.__tablename__ == table_name.lower():
+            target_model = attr
+            break
+    if not target_model:
+        for attr_name in dir(sys_models):
+            attr = getattr(sys_models, attr_name)
+            if hasattr(attr, "__tablename__") and attr.__tablename__ == table_name.lower():
+                target_model = attr
+                break
+
+    if not target_model:
+        raise HTTPException(status_code=404, detail="Table not found.")
+
+    # 2. Fetch Row (with store isolation)
+    stmt = select(target_model).where(
+        target_model.id == row_id,
+        target_model.store_id == current_user.store_id
+    )
+    result = await db.execute(stmt)
+    row = result.scalar_one_or_none()
+
+    if not row:
+        raise HTTPException(status_code=404, detail="Record not found or access denied.")
+
+    # 3. Update Columns
+    for key, value in payload.items():
+        if hasattr(row, key) and key not in ['id', 'store_id']:
+            setattr(row, key, value)
+
+    await db.commit()
+    await db.refresh(row)
+    
+    return {"status": "success", "data": {"id": row_id}}

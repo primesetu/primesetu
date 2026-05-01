@@ -1,0 +1,124 @@
+
+<!doctype HTML public "-//W3C//DTD HTML 4.0 Frameset//EN">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=windows-1252">
+ <meta name="generator" content="Adobe RoboHelp 10">
+<title>Reports Grid View Functions</title>
+<link rel="StyleSheet" href="../Shoper.css" type="text/css">
+<style title="hcp" type="text/css">
+<!--
+span.hcp1 { font-weight:bold; }
+img.hcp2 { border:none; }
+tr.hcp3 { vertical-align:top; }
+td.hcp4 { border-left:Solid 1px #000000;
+border-right:Solid 1px #000000;
+border-bottom:Solid 1px #000000;
+padding-right:10px;
+padding-left:10px; }
+td.hcp5 { border-right:Solid 1px #000000;
+border-bottom:Solid 1px #000000;
+padding-right:10px;
+padding-left:10px; }
+-->
+</style>
+</head>
+<body>
+<script type="text/javascript" src="../ehlpdhtm.js" language="JavaScript1.2"></script>
+
+<h2><a name="Save_as_CSV_File" id="Save_as_CSV_File">Save as CSV File</a></h2>
+<p class="Body-Text">On selecting this option the <span class="hcp1">Save As</span> dialog box opens with default file type chosen as <span class="hcp1">CSV</span> (comma separated value). You can choose the filename and location to save the file.</p>
+<p class="Body-Text">Successful completion of the process creates a .csv file containing the report exported.</p>
+<h2 class="Body-Text"><a name="Remove_Filter" id="Remove_Filter">Remove Filter</a></h2>
+<p class="Body-Text">Click this button to remove all the filters applied and load the report with all rows.</p>
+<h2 class="Body-Text"><a name="Filter_by_Selection" id="Filter_by_Selection">Filter by selection</a></h2>
+<p class="Body-Text">On selection of this option report will be filtered based on the value in the current cell. You can apply <span class="hcp1">Filter by selection</span> repeatedly at different levels.</p>
+<p class="Body-Text">Identify the value on which data needs to be filtered and make that cell active. Apply <span class="hcp1">Filter by selection</span>.</p>
+<h2 class="Body-Text"><a name="Save_as_Excel_File" id="Save_as_Excel_File">Save as Excel File</a></h2>
+<p class="Body-Text">On selecting this option the <span class="hcp1">Save to Excel File</span> dialog box opens. You can choose the file name and location to save the file. The newly created Excel workbook will be protected by default.</p>
+<p class="Body-Text">On successful completion of export to Excel, a message will be displayed as shown.</p>
+<p class="Body-Text"><img src="Reports_Grid_View_Functions_1.gif" alt="" width="466" height="161" border="0" class="hcp2"></p>
+<p class="Body-Text">To unprotect the worksheet, open the workbook and select <span class="hcp1">Tools &gt; Protection &gt; Unprotect</span>.</p>
+<h2><a name="Copy_to_Clipboard" id="Copy_to_Clipboard">Copy Report to Clipboard in Excel Format</a></h2>
+<p class="Body-Text">On selecting this option, the report is copied to Windows Clipboard in a spreadsheet friendly format and a message is displayed as shown.</p>
+<p class="Body-Text"><img src="Reports_Grid_View_Functions_2.gif" alt="" width="463" height="174" border="0" class="hcp2"></p>
+<p class="Body-Text">Once the report is copied to clipboard, it can also be pasted in notepad, word, etc.</p>
+<h2><a name="Print_on_Inkjet_Laser" id="Print_on_Inkjet_Laser">Print on Inkjet/Laser</a></h2>
+<p class="Body-Text">Report will be printed based on the predefined report format.</p>
+<p class="Body-Text">On selecting this option, the <span class="hcp1">Print Setup</span> dialog box is displayed, where you can make necessary changes in respect of Printer, Page Size, Source, etc. Inkjet and laser printers are preferred, as the formatting and page setup will remain intact. The following situations would be logically handled as explained below.</p>
+<table style="vertical-align: top;" cellspacing="0" width="100%">
+<col style="width: 50%;">
+<col style="width: 50%;">
+<tr class="hcp3">
+<td style="border: Solid 1px #000000; width: 50%; padding-right: 10px; padding-left: 10px;">
+<p class="TableCellCaption" style="font-weight: bold;">Situation</p>
+</td>
+<td style="border-top: Solid 1px #000000; border-right: Solid 1px #000000; border-bottom: Solid 1px #000000; width: 50%; padding-right: 10px; padding-left: 10px;">
+<p class="TableCellCaption" style="font-weight: bold;">Result</p>
+</td>
+</tr>
+<tr class="hcp3">
+<td style="width:50%;" class="hcp4">
+<p class="TableCell">information can be printed without making any changes</p>
+</td>
+<td style="width:50%;" class="hcp5">
+<p class="TableCell">the sheet prints in portrait mode</p>
+</td>
+</tr>
+<tr class="hcp3">
+<td style="width:50%;" class="hcp4">
+<p class="TableCell">sheet is wider than the portrait page</p>
+</td>
+<td style="width:50%;" class="hcp5">
+<p class="TableCell">the sheet prints in landscape mode</p>
+</td>
+</tr>
+<tr class="hcp3">
+<td style="width:50%;" class="hcp4">
+<p class="TableCell">information does not fit in landscape mode, but will fit in landscape mode when the sheet is reduced up to 60% of its original size</p>
+</td>
+<td style="width:50%;" class="hcp5">
+<p class="TableCell">the sheet is scaled to fit with in the page</p>
+</td>
+</tr>
+<tr class="hcp3">
+<td style="width:50%;" class="hcp4">
+<p class="TableCell">information cannot be scaled to fit the sheet</p>
+</td>
+<td style="width:50%;" class="hcp5">
+<p class="TableCell">tries to reduce the column widths to accommodate the widest string within each column</p>
+</td>
+</tr>
+<tr class="hcp3">
+<td style="width:50%;" class="hcp4">
+<p class="TableCell">all attempts to make the sheet print within a page fail</p>
+</td>
+<td style="width:50%;" class="hcp5">
+<p class="TableCell">printing resumes normally in the current printer orientation with no reductions</p>
+</td>
+</tr>
+</table>
+<h2><a name="Page_Preview" id="Page_Preview">Print Preview</a></h2>
+<p class="Body-Text">On selecting this option, the print preview is shown.</p>
+<h2 class="Body-Text"><a name="Find" id="Find">Find</a></h2>
+<p class="Body-Text">On selecting this option, the <span style="font-weight: bold; text-decoration: underline;">Find</span> dialog box is displayed where you can enter the string/ value to find. The domain of search is restricted to the current column. In case a range of cells is selected in the spreadsheet, Find does not allow you to proceed.</p>
+<h2 class="Body-Text"><a name="Insert_Sub_Grand_Total" id="Insert_Sub_Grand_Total">Insert/ Remove Totals</a></h2>
+<p class="Body-Text">On selecting this option subtotals and grand totals will be displayed at respective positions based on the following.</p>
+<ul>
+<li class="p-bullet">
+<p class="bullet">If the current column is one of the defined Class1, Class2, Subclass1 or Subclass2 categories — sorting would be done based on the columns in a left to right manner up to the current column and subtotals will be displayed at each change of category hierarchically.</p>
+</li>
+<li class="p-bullet">
+<p class="bullet">If the current column is one other than the categories listed — only grand totals will be displayed.</p>
+</li>
+</ul>
+<p class="Body-Text">Group total values and grand totals are displayed in the quantity and value columns. Totals are also displayed in any column with values calculated based on these two.</p>
+<h2 class="Body-Text"><a name="Merge_Rows_by_Column" id="Merge_Rows_by_Column">Merge Repeating Rows Column wise</a></h2>
+<p class="Body-Text">Selecting this option will eliminate the display of duplicate values appearing in consecutive rows in the current column. This enables the you to view/ print the report in a better way.</p>
+<h2 class="Body-Text"><a name="Freeze_Panes_Unfreeze_Panes" id="Freeze_Panes_Unfreeze_Panes">Freeze Panes / Unfreeze Panes</a></h2>
+<p class="Body-Text">On selection of this option you can Freeze / UnFreeze the title panes based on the currently active cell.</p>
+<h2 class="Body-Text"><a name="Sort_on_Ascending_Sort_on_Descending" id="Sort_on_Ascending_Sort_on_Descending">Sort on Ascending / Sort on Descending</a></h2>
+<p class="Body-Text">On selection of this option, you can sort the report in ascending or descending order based on the values in the current column.</p>
+<p class="Body-Text">&#160;</p>
+</body>
+</html>

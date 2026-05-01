@@ -14,6 +14,7 @@ import {
 } from 'lucide-react';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { api } from '@/api/client';
+import { useGridMask } from '@/hooks/useGridMask';
 import { 
   Button, 
   Input, 
@@ -114,44 +115,18 @@ export default function PhysicalStockModule({ onClose }: { onClose: () => void }
     entryMutation.mutate({ item_id: productId, physical_qty: Math.max(0, qty) });
   };
 
-  // ── GRID COLUMNS ──
-  const columns = useMemo(() => [
-    {
-      header: "ARTICLE ENTITY",
-      accessor: (item: AuditEntry) => (
-        <div className="flex items-center gap-4 py-2 leading-tight">
-           <div className="w-10 h-10 bg-navy/5 rounded-xl flex items-center justify-center text-navy/30 border border-navy/5"><Package size={20} /></div>
-           <div>
-              <Text variant="sm" className="font-black uppercase text-navy">{item.product_name}</Text>
-              <Text variant="xs" className="font-mono text-navy/40 mt-1 uppercase tracking-widest">{item.product_code}</Text>
-           </div>
-        </div>
-      ),
-      flex: 2,
-      pinned: 'left' as const
-    },
-    {
-      header: "BOOK QTY",
-      accessor: 'book_qty',
-      width: 120,
-      className: 'text-center font-mono font-black text-navy/40 text-xl'
-    },
-    {
-      header: "PHYSICAL COUNT",
-      accessor: (item: AuditEntry) => (
+  // AcceptDisplayDtls mask TrnType 1500 = Physical Stock
+  const { colDefs: physicalStockColDefs, loading: gridLoading } = useGridMask(1500, {
+    overrides: {
+      'physical_qty': (params: any) => (
         <div className="flex items-center justify-center gap-4 py-2 bg-indigo-50/50">
-           <Button variant="sec" size="sm" onClick={() => updateEntryQty(item.product_id, item.physical_qty - 1)} className="h-9 w-9 p-0 border-rose-200 text-rose-500 hover:bg-rose-50 rounded-xl">-</Button>
-           <Text variant="h2" className="w-12 text-center font-mono font-black text-indigo-600">{item.physical_qty}</Text>
-           <Button variant="sec" size="sm" onClick={() => updateEntryQty(item.product_id, item.physical_qty + 1)} className="h-9 w-9 p-0 border-emerald-200 text-emerald-500 hover:bg-emerald-50 rounded-xl">+</Button>
+           <Button variant="sec" size="sm" onClick={() => updateEntryQty(params.data.product_id, params.data.physical_qty - 1)} className="h-9 w-9 p-0 border-rose-200 text-rose-500 hover:bg-rose-50 rounded-xl">-</Button>
+           <Text variant="h2" className="w-12 text-center font-mono font-black text-indigo-600">{params.data.physical_qty}</Text>
+           <Button variant="sec" size="sm" onClick={() => updateEntryQty(params.data.product_id, params.data.physical_qty + 1)} className="h-9 w-9 p-0 border-emerald-200 text-emerald-500 hover:bg-emerald-50 rounded-xl">+</Button>
         </div>
       ),
-      width: 180,
-      className: 'text-center'
-    },
-    {
-      header: "VARIANCE",
-      accessor: (item: AuditEntry) => {
-        const v = item.physical_qty - item.book_qty;
+      'variance': (params: any) => {
+        const v = params.data.physical_qty - params.data.book_qty;
         return (
           <div className={cn(
             "text-2xl font-mono font-black",
@@ -160,12 +135,9 @@ export default function PhysicalStockModule({ onClose }: { onClose: () => void }
             {v === 0 ? '--' : v > 0 ? `+${v}` : v}
           </div>
         )
-      },
-      width: 150,
-      className: 'text-center',
-      pinned: 'right' as const
+      }
     }
-  ], [sessionData]);
+  });
 
   if (isFinalizing) {
     return (
@@ -272,8 +244,8 @@ export default function PhysicalStockModule({ onClose }: { onClose: () => void }
                 <div className="h-full bg-white rounded-[30px] border border-navy/5 shadow-inner overflow-hidden">
                    <DataTable 
                       data={sessionData?.entries || []}
-                      columns={columns}
-                      loading={loadingSession}
+                      columns={physicalStockColDefs as any}
+                      loading={loadingSession || gridLoading}
                       overlayNoRowsTemplate={`
                         <div class="flex flex-col items-center justify-center opacity-10 h-full">
                            <Package size="60" class="mb-4" />

@@ -1,443 +1,317 @@
-import React, { useState, useRef } from 'react';
+/* ============================================================
+ * SMRITI-OS — Institutional GRN Processor (Lite Mode)
+ * Zero Cloud · Sovereign · AI-Governed
+ * ============================================================
+ * System Architect   :  Jawahar R Mallah
+ * Organisation       :  AITDL Network
+ * Project : SMRITI-OS
+ * © 2026 — All Rights Reserved
+ * ============================================================ */
+import React, { useState, useEffect, useMemo, useRef } from 'react'
+import { AgGridReact } from 'ag-grid-react'
+import { ColDef, ValueFormatterParams } from 'ag-grid-community'
+import { api } from '@/api/client'
+import { useTheme } from '@/hooks/useTheme'
+import { cn } from '@/lib/utils'
 import { 
-  CheckCircle2, 
-  Package, 
-  ArrowRight,
-  Truck,
-  ScanBarcode,
-  ArrowLeft,
-  ChevronRight,
-  ShieldCheck,
-  Zap,
-  ArrowDownLeft,
-  RefreshCw,
-  Info
-} from 'lucide-react';
-import { useNavigate } from 'react-router-dom';
-import { useHotkeys } from 'react-hotkeys-hook';
-
-import { formatCurrency, formatDecimal } from '../../utils/currency';
-import { useOfflineFallback } from '../../hooks/useOfflineFallback';
-import { useBarcodeScanner } from '../../hooks/useBarcodeScanner';
-import { apiClient } from '../../api/client';
+  Truck, 
+  Search, 
+  Trash2, 
+  Save, 
+  Barcode, 
+  ChevronDown,
+  Database,
+  Box,
+  Loader2
+} from 'lucide-react'
 import { 
   Button, 
-  Input, 
-  Card, 
-  Text, 
-  Badge, 
-  Label,
-  DataTable
-} from '../../components/ui/SovereignUI';
-import { SovereignSearch } from '@/components/SovereignSearch';
-import { Filter } from 'lucide-react';
+  Badge
+} from '@/components/ui/SovereignUI'
 
-interface POItem {
-  id: string;
-  item_id: string;
-  item_name: string;
-  size: string;
-  colour: string;
-  qty_ordered: number;
-  qty_received: number;
-  unit_cost_paise: number;
-  code?: string;
-  barcode?: string;
-  batch_no: string;
-  mfg_date: string;
-  exp_date: string;
-  received_now: number;
+interface GRNLine {
+  id: string
+  item_id: string
+  item_code: string
+  item_name: string
+  qty_received: number
+  unit_cost_paise: number
+  total_paise: number
 }
 
-interface PurchaseOrder {
-  id: string;
-  po_number: string;
-  status: string;
-  vendor_id: string;
-  total_paise: number;
-  items: POItem[];
-}
+export default function GRNProcessor() {
+  const { theme } = useTheme()
+  const entryRef = useRef<HTMLInputElement>(null)
+  const gridRef = useRef<AgGridReact>(null)
 
-const GRNProcessor: React.FC = () => {
-  const navigate = useNavigate();
-  const searchInputRef = useRef<HTMLInputElement>(null);
-  const [selectedPO, setSelectedPO] = useState<PurchaseOrder | null>(null);
-  const [grnNumber] = useState(`GRN/${new Date().getFullYear()}/${Math.floor(Math.random()*9000)+1000}`);
-  const [receivedItems, setReceivedItems] = useState<POItem[]>([]);
-  const [isProcessing, setIsProcessing] = useState(false);
-  const [showSuccess, setShowSuccess] = useState(false);
-  const [showAdvancedSearch, setShowAdvancedSearch] = useState<{ isOpen: boolean; field: string; value: string }>({
-    isOpen: false,
-    field: 'barcode',
-    value: ''
-  });
+  const [vendors, setVendors] = useState<any[]>([])
+  const [selectedVendor, setSelectedVendor] = useState<any>(null)
+  const [grnNumber, setGrnNumber] = useState('')
+  const [lines, setLines] = useState<GRNLine[]>([])
+  const [loading, setLoading] = useState(false)
+  const [isSearching, setIsSearching] = useState(false)
+  
+  const [activeEntry, setActiveEntry] = useState({
+    item_code: '',
+    qty: 1,
+    cost: 0
+  })
 
-  // 1. Fetch Open POs
-  const { data: pos = [], loading: isLoadingPOs } = useOfflineFallback<PurchaseOrder[]>('open_pos', async () => {
-    const res = await apiClient.get<PurchaseOrder[]>('/purchase/');
-    const allPOs = res.data;
-    if (!Array.isArray(allPOs)) return [];
-    return allPOs.filter(po => po.status !== 'CLOSED' && po.status !== 'CANCELLED');
-  }, []);
+  useEffect(() => {
+    const fetchVendors = async () => {
+      try {
+        const res = await api.legacy.getData('partners', { search_col: 'is_vendor', search_val: 'true' })
+        setVendors(res.data)
+      } catch (e) { console.error(e) }
+    }
+    fetchVendors()
+    setGrnNumber(`GRN-${Math.random().toString(36).substring(7).toUpperCase()}`)
+    entryRef.current?.focus()
+  }, [])
 
-  // 2. Hotkeys
-  useHotkeys('f3', (e) => { e.preventDefault(); searchInputRef.current?.focus(); }, { enableOnFormTags: true });
-  useHotkeys('f10', (e) => { e.preventDefault(); if (selectedPO) handleProcess(); }, { enableOnFormTags: true });
-  useHotkeys('esc', (e) => { e.preventDefault(); if (selectedPO) setSelectedPO(null); }, { enableOnFormTags: true });
+  const handleEntrySubmit = async (e: React.KeyboardEvent) => {
+    if (e.key === 'Enter') {
+      e.preventDefault()
+      const searchVal = activeEntry.item_code.trim()
+      if (!searchVal) return
 
-  // 3. Scanner Hook
-  useBarcodeScanner((barcode) => {
-    if (!selectedPO) return;
-    const itemIndex = receivedItems.findIndex(it => 
-      it.code?.toLowerCase() === barcode.toLowerCase() || 
-      it.barcode?.toLowerCase() === barcode.toLowerCase() ||
-      it.item_id?.toLowerCase() === barcode.toLowerCase()
-    );
+      const currentQty = activeEntry.qty
+      const currentCost = activeEntry.cost
+      setActiveEntry(prev => ({ ...prev, item_code: '' }))
+      setIsSearching(true)
 
-    if (itemIndex > -1) {
-      const item = receivedItems[itemIndex];
-      const maxQty = item.qty_ordered - (item.qty_received || 0);
-      if (item.received_now < maxQty) {
-        updateItemField(itemIndex, 'received_now', item.received_now + 1);
+      try {
+        const results = await api.inventory.search(searchVal)
+        const inventoryItems = Array.isArray(results) ? results : (results.data || [])
+
+        if (inventoryItems.length > 0) {
+          const item = inventoryItems[0]
+          
+          // Robust Cost Mapping
+          const unit_cost_paise = currentCost > 0 ? (currentCost * 100) : (item.cost_paise ?? 0)
+
+          const newLine: GRNLine = {
+            id: crypto.randomUUID(),
+            item_id: item.id,
+            item_code: item.item_code || item.sku || 'N/A',
+            item_name: item.item_name || item.name || 'Unknown SKU',
+            qty_received: currentQty,
+            unit_cost_paise: unit_cost_paise,
+            total_paise: unit_cost_paise * currentQty
+          }
+          setLines(prev => [newLine, ...prev])
+        }
+      } catch (err) {
+        console.error("GRN Search Fail:", err)
+      } finally {
+        setIsSearching(false)
+        entryRef.current?.focus()
       }
     }
-  });
-
-  const selectPO = (po: PurchaseOrder) => {
-    setSelectedPO(po);
-    const items = Array.isArray(po.items) ? po.items : [];
-    setReceivedItems(items.map(it => ({
-      ...it,
-      received_now: it.qty_ordered - (it.qty_received || 0),
-      batch_no: '',
-      mfg_date: '',
-      exp_date: ''
-    })));
-  };
-
-  const updateItemField = (index: number, field: keyof POItem, val: string | number) => {
-    setReceivedItems(prev => prev.map((it, i) => i === index ? { ...it, [field]: val } : it));
-  };
-
-  const handleProcess = async () => {
-    if (!selectedPO) return;
-    setIsProcessing(true);
-    try {
-      const payload = {
-        po_id: selectedPO.id,
-        vendor_id: selectedPO.vendor_id,
-        grn_number: grnNumber,
-        items: receivedItems.filter(it => it.received_now > 0).map(it => ({
-          po_item_id: it.id,
-          item_id: it.item_id,
-          size: it.size,
-          colour: it.colour,
-          qty_received: it.received_now,
-          unit_cost_paise: it.unit_cost_paise,
-          batch_no: it.batch_no || null,
-          mfg_date: it.mfg_date || null,
-          exp_date: it.exp_date || null
-        }))
-      };
-      await apiClient.post('/purchase/grn', payload);
-      setShowSuccess(true);
-    } catch (err) {
-      console.error('[SMRITI-OS] GRN processing failed:', err);
-    } finally {
-      setIsProcessing(false);
-    }
-  };
-
-  if (showSuccess) {
-    return (
-      <div className="fixed inset-0 z-[200] flex items-center justify-center p-10 bg-bg-base/80 backdrop-blur-xl animate-in fade-in duration-500">
-         <Card className="w-full max-w-2xl p-16 text-center border-accent/20 relative overflow-hidden">
-            <div className="absolute top-0 left-0 w-full h-1.5 bg-status-green"></div>
-            
-            <div className="w-20 h-20 bg-status-green/10 text-status-green rounded-2xl flex items-center justify-center mx-auto mb-8 shadow-lg shadow-status-green/10 animate-in zoom-in duration-500">
-               <CheckCircle2 size={40} />
-            </div>
-
-            <Text variant="h1" className="mb-2">Inwarding Finalized</Text>
-            <Text variant="xs" className="mb-12 uppercase tracking-widest text-text-tertiary">Registry Synced · Stock Ledger Updated · {grnNumber}</Text>
-
-            <div className="grid grid-cols-2 gap-4 mb-10">
-               <Card variant="flat" className="p-6 text-left bg-bg-float/50 border-border-subtle">
-                   <Text variant="xs" className="uppercase font-bold text-text-tertiary mb-1">Total Articles</Text>
-                   <Text variant="h2" className="font-mono">{receivedItems.reduce((acc, it) => acc + (it.received_now || 0), 0)}</Text>
-                </Card>
-                <Card variant="flat" className="p-6 text-left bg-bg-float/50 border-border-subtle">
-                   <Text variant="xs" className="uppercase font-bold text-text-tertiary mb-1">Valuation</Text>
-                   <Text variant="h2" className="font-mono text-accent">
-                    {formatCurrency(receivedItems.reduce((acc, it) => acc + (it.received_now * it.unit_cost_paise), 0))}
-                  </Text>
-               </Card>
-            </div>
-
-            <div className="flex flex-col gap-3">
-               <Button 
-                 size="lg"
-                 onClick={() => navigate('/barcode', { state: { items: receivedItems.filter(it => it.received_now > 0) } })}
-                 className="w-full h-14"
-               >
-                 <ScanBarcode size={18} /> Generate Barcodes Now
-               </Button>
-               <Button 
-                 variant="sec"
-                 onClick={() => { setSelectedPO(null); setShowSuccess(false); navigate('/purchase'); }}
-                 className="w-full"
-               >
-                 Return to Purchase Registry
-               </Button>
-            </div>
-         </Card>
-      </div>
-    );
   }
 
+  const handleSave = async () => {
+    if (!selectedVendor || lines.length === 0) return
+    try {
+      setLoading(true)
+      await api.procurement.processGRN({
+        vendor_id: selectedVendor.id,
+        grn_number: grnNumber,
+        items: lines.map(l => ({
+          item_id: l.item_id,
+          qty_received: l.qty_received,
+          unit_cost_paise: l.unit_cost_paise
+        }))
+      })
+      alert("Institutional GRN Committed.")
+      setLines([])
+      setGrnNumber(`GRN-${Math.random().toString(36).substring(7).toUpperCase()}`)
+    } catch (e) { alert("GRN Failed.") } finally { setLoading(false) }
+  }
+
+  const columnDefs = useMemo<ColDef[]>(() => [
+    { field: 'item_code', headerName: 'SKU CODE', width: 140, cellStyle: { fontWeight: '900', color: 'var(--primary)' } },
+    { field: 'item_name', headerName: 'DESCRIPTION', flex: 1, cellStyle: { textTransform: 'uppercase', fontWeight: '700' } },
+    { field: 'qty_received', headerName: 'QTY', width: 100, type: 'numericColumn', editable: true },
+    { 
+      field: 'unit_cost_paise', 
+      headerName: 'UNIT COST (₹)', 
+      width: 120, 
+      type: 'numericColumn', 
+      editable: true,
+      valueFormatter: (p: ValueFormatterParams) => ((Number(p.value) || 0) / 100).toFixed(2) 
+    },
+    { 
+      headerName: 'TOTAL VALUE', 
+      width: 150, 
+      type: 'numericColumn', 
+      cellStyle: { fontWeight: '900', color: 'var(--text-primary)' },
+      valueGetter: p => ((Number(p.data.qty_received) || 0) * (Number(p.data.unit_cost_paise) || 0)) / 100,
+      valueFormatter: (p: ValueFormatterParams) => (Number(p.value) || 0).toLocaleString()
+    },
+    {
+      headerName: '',
+      width: 50,
+      cellRenderer: (p: any) => (
+        <button onClick={() => setLines(prev => prev.filter(i => i.id !== p.data.id))} className="text-red-400 hover:text-red-600">
+          <Trash2 size={14} />
+        </button>
+      )
+    }
+  ], [])
+
+  const totals = useMemo(() => {
+    return lines.reduce((acc, curr) => ({
+      qty: acc.qty + (Number(curr.qty_received) || 0),
+      value: acc.value + (Number(curr.total_paise) || 0)
+    }), { qty: 0, value: 0 })
+  }, [lines])
+
   return (
-    <>
-      <div className="space-y-6 animate-in fade-in duration-700 pb-20">
-      {/* Breadcrumb Pattern */}
-      <nav className="flex items-center gap-2 text-[10px] font-black uppercase tracking-widest text-text-disabled">
-         <span>Home</span> <ChevronRight size={10} />
-         <span>Operations</span> <ChevronRight size={10} />
-         <span className="text-text-secondary">Goods Receipt (GRN)</span>
-      </nav>
-
-      {/* Header Section */}
-      <Card variant="flat" className="flex items-center justify-between p-8 bg-bg-elevated/40 border-border-subtle">
-        <div className="flex items-center gap-6">
-          <div className="w-14 h-14 bg-accent/10 rounded-xl flex items-center justify-center text-accent">
-            <ArrowDownLeft size={28} />
-          </div>
-          <div>
-            <Text variant="h1">Goods Receipt</Text>
-            <Text variant="xs" className="text-text-tertiary uppercase tracking-widest mt-1">Inwarding Protocol · Physical Verification · Barcode Auto-Sync</Text>
-          </div>
+    <div className="flex flex-col h-screen overflow-hidden bg-[var(--background)]">
+      
+      {/* ── LITE HEADER ── */}
+      <header className="h-[var(--topbar-h)] bg-[var(--surface)] flex items-center px-6 justify-between shrink-0 border-b border-[var(--border-subtle)] shadow-sm">
+        <div className="flex items-center gap-8">
+           <div className="flex items-center gap-2">
+              <div className="w-8 h-8 rounded bg-[var(--color-teal-500)] text-white flex items-center justify-center shadow-sm">
+                 <Box size={18} />
+              </div>
+              <span className="text-sm font-black uppercase tracking-widest text-[var(--text-primary)]">Inwarding Processor</span>
+           </div>
+           <nav className="flex h-10 gap-2">
+              <button className="px-4 h-full border-b-2 border-[var(--accent)] text-[var(--text-primary)] text-[10px] font-black uppercase">GRN Entry</button>
+              <button className="px-4 h-full text-[var(--text-tertiary)] text-[10px] font-black uppercase">History</button>
+           </nav>
         </div>
-      </Card>
+        <div className="flex items-center gap-4">
+           <Badge variant="warning" className="font-black px-4">BATCH: {grnNumber}</Badge>
+           <Truck size={14} className="text-[var(--text-tertiary)]" />
+        </div>
+      </header>
 
-      {!selectedPO ? (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {isLoadingPOs && Array(3).fill(0).map((_, i) => <Card key={i} className="h-48 animate-pulse bg-bg-elevated/50" />)}
-          {Array.isArray(pos) ? pos.map((po: any) => (
-            <Card 
-              key={po.id} 
-              onClick={() => selectPO(po)}
-              className="p-8 hover:border-accent/40 transition-all cursor-pointer group relative overflow-hidden"
+      {/* ── LITE VENDOR INFO ── */}
+      <section className="bg-[var(--surface)] border-b border-[var(--border-subtle)] p-4 grid grid-cols-12 gap-6 shrink-0">
+         <div className="col-span-4">
+            <label className="block text-[9px] font-black uppercase text-[var(--text-tertiary)] mb-1 tracking-widest">Vendor Selection</label>
+            <select 
+              className="w-full bg-[var(--surface-container)] border border-[var(--border-default)] rounded h-8 px-3 text-[11px] font-bold uppercase outline-none focus:border-[var(--primary)]"
+              onChange={e => setSelectedVendor(vendors.find(v => v.id === e.target.value))}
             >
-              <div className="absolute -right-4 -bottom-4 opacity-[0.03] group-hover:opacity-[0.07] transition-opacity">
-                 <Truck size={120} />
+              <option value="">SELECT VENDOR</option>
+              {vendors.map(v => <option key={v.id} value={v.id}>{v.descr}</option>)}
+            </select>
+         </div>
+         <div className="col-span-3">
+            <label className="block text-[9px] font-black uppercase text-[var(--text-tertiary)] mb-1 tracking-widest">Supplier Invoice</label>
+            <input className="w-full bg-[var(--surface)] border border-[var(--border-default)] rounded h-8 px-3 text-[11px] font-bold uppercase outline-none" placeholder="REF NUMBER..." />
+         </div>
+         <div className="col-span-2 flex items-center justify-center">
+            {isSearching && (
+              <div className="flex items-center gap-2 text-[var(--primary)]">
+                <Loader2 size={16} className="animate-spin" />
+                <span className="text-[9px] font-black uppercase">SKU Lookup...</span>
               </div>
-              <div className="flex justify-between items-start mb-8">
-                 <Badge variant="muted" className="font-mono">{po.po_number}</Badge>
-                 <Badge variant={po.status === 'DRAFT' ? 'warn' : 'info'}>
-                    {po.status}
-                 </Badge>
-              </div>
-              <Text variant="h3" className="mb-1 group-hover:text-accent transition-colors">Pending Arrival</Text>
-              <Text variant="xs" className="text-text-tertiary mb-10">Vendor ID: {po.vendor_id.slice(0,8).toUpperCase()}</Text>
-              
-              <div className="flex items-center justify-between pt-6 border-t border-border-subtle">
-                 <Text variant="h2" className="font-mono">{formatCurrency(po.total_paise)}</Text>
-                 <div className="w-10 h-10 bg-bg-float text-text-secondary rounded-lg flex items-center justify-center group-hover:bg-accent group-hover:text-bg-base transition-all">
-                    <ArrowRight size={20} />
-                 </div>
-              </div>
-            </Card>
-          )) : (
-            <div className="col-span-full py-20 text-center border-2 border-dashed border-border-subtle rounded-2xl text-text-tertiary uppercase text-xs tracking-widest">
-               No active purchase orders found
+            )}
+         </div>
+         <div className="col-span-3 flex items-end justify-end">
+            <Button className="h-9 bg-[var(--primary)] text-white text-[11px] font-black uppercase px-8 gap-2 shadow-md" onClick={handleSave} loading={loading}>
+               <Save size={14} /> COMMIT INWARD [F9]
+            </Button>
+         </div>
+      </section>
+
+      {/* ── LITE AG GRID WORKSPACE ── */}
+      <main className="flex-1 flex flex-col p-2 overflow-hidden relative">
+         <div className="flex-1 ag-theme-quartz w-full h-full shadow-sm">
+            <AgGridReact
+              ref={gridRef}
+              rowData={lines}
+              columnDefs={columnDefs}
+              defaultColDef={{ resizable: true, sortable: true, headerClass: 'ag-header-cell' }}
+              animateRows={true}
+              onGridReady={(params) => params.api.sizeColumnsToFit()}
+            />
+         </div>
+
+         {/* ── LITE DIRECT ENTRY BAR (BOTTOM) ── */}
+         <div className="bg-[var(--surface-container)] border border-[var(--border-subtle)] mt-2 p-3 rounded shadow-sm">
+            <div className="grid grid-cols-[220px_1fr_100px_140px_160px_140px] gap-4 items-end">
+               <div className="relative">
+                  <label className="block text-[9px] font-black uppercase text-[var(--text-tertiary)] mb-1">Scan Station [SKU/Barcode]</label>
+                  <Barcode size={14} className="absolute left-3 bottom-3 text-[var(--primary)] z-10" />
+                  <input 
+                   ref={entryRef}
+                   className="w-full bg-[var(--surface)] border border-[var(--border-default)] h-11 pl-10 pr-3 text-xs font-black text-[var(--text-primary)] uppercase outline-none focus:border-[var(--primary)] focus:ring-1 focus:ring-[var(--primary)]"
+                   placeholder="READY TO INWARD..."
+                   autoComplete="off"
+                   value={activeEntry.item_code}
+                   onChange={e => setActiveEntry({...activeEntry, item_code: e.target.value.toUpperCase()})}
+                   onKeyDown={handleEntrySubmit}
+                  />
+               </div>
+               <div>
+                  <label className="block text-[9px] font-black uppercase text-[var(--text-tertiary)] mb-1 text-right">Inward Qty</label>
+                  <input 
+                   type="number"
+                   className="w-full bg-[var(--surface)] border border-[var(--border-default)] h-11 px-3 text-right text-xs font-black outline-none focus:border-[var(--primary)]"
+                   value={activeEntry.qty}
+                   onChange={e => setActiveEntry({...activeEntry, qty: Number(e.target.value) || 1})}
+                  />
+               </div>
+               <div>
+                  <label className="block text-[9px] font-black uppercase text-[var(--text-tertiary)] mb-1 text-right">Unit Cost (₹)</label>
+                  <input 
+                   type="number"
+                   className="w-full bg-[var(--surface)] border border-[var(--border-default)] h-11 px-3 text-right text-xs font-black outline-none focus:border-[var(--primary)]"
+                   placeholder="0.00"
+                   value={activeEntry.cost || ''}
+                   onChange={e => setActiveEntry({...activeEntry, cost: Number(e.target.value) || 0})}
+                  />
+               </div>
+               <div className="col-span-2 flex flex-col items-end justify-center px-4 h-11">
+                  <span className="text-[9px] font-black uppercase text-[var(--text-tertiary)]">Batch Value</span>
+                  <span className="text-xl font-black text-[var(--text-primary)]">
+                    ₹{((Number(activeEntry.qty) || 1) * (Number(activeEntry.cost) || 0)).toFixed(2)}
+                  </span>
+               </div>
+               <Button className="h-11 bg-[var(--accent)] text-black text-[11px] font-black uppercase shadow-sm">ADD TO GRN [ENT]</Button>
             </div>
-          )}
-        </div>
-      ) : (
-        <div className="grid grid-cols-12 gap-8 animate-in slide-in-from-right-4 duration-500">
-           {/* PO Details & Item List */}
-           <div className="col-span-12 lg:col-span-8 space-y-6">
-              <Card variant="flat" className="p-8 bg-bg-elevated/60 border-border-subtle flex items-center justify-between">
-                 <div className="flex items-center gap-6">
-                    <Button variant="sec" size="sm" onClick={() => setSelectedPO(null)} className="h-10 w-10 p-0">
-                       <ArrowLeft size={18} />
-                    </Button>
-                    <div>
-                       <Text variant="xs" className="text-text-tertiary uppercase tracking-widest mb-1">Inwarding Protocol</Text>
-                       <Text variant="h2" className="leading-none">{selectedPO.po_number}</Text>
-                    </div>
-                 </div>
-                 <div className="text-right flex items-center gap-6">
-                    <div>
-                       <Text variant="xs" className="text-accent uppercase tracking-widest mb-1">Current Registry</Text>
-                       <Text variant="h3" className="font-mono text-text-primary">{grnNumber}</Text>
-                    </div>
-                    <Button 
-                      variant="sec" 
-                      size="sm" 
-                      onClick={() => setShowAdvancedSearch({ isOpen: true, field: 'barcode', value: '' })}
-                      className="h-10 px-4 gap-2 border-border-subtle hover:border-accent"
-                    >
-                       <Filter size={16} /> ADVANCED SEARCH
-                    </Button>
-                 </div>
-              </Card>
+         </div>
+      </main>
 
-              <div className="min-h-[400px]">
-                 <DataTable 
-                   data={receivedItems}
-                   columns={[
-                     { 
-                       header: "ITEM ENTITY", 
-                       accessor: (item: any) => (
-                         <div className="flex flex-col py-2">
-                           <Text variant="sm" className="font-bold uppercase leading-tight">{item.item_name || 'Inwarding Item'}</Text>
-                           <Text variant="xs" className="font-mono text-text-tertiary tracking-tighter mt-1">{item.size} / {item.colour}</Text>
-                         </div>
-                       ),
-                       flex: 2
-                     },
-                     { 
-                       header: "BATCH NO", 
-                       accessor: (item: any, idx) => (
-                         <Input 
-                           placeholder="BATCH..."
-                           className="h-8 text-[10px] text-center uppercase bg-bg-float/50"
-                           value={item.batch_no}
-                           onChange={(e) => updateItemField(idx!, 'batch_no', e.target.value)}
-                         />
-                       ),
-                       width: 130
-                     },
-                     { 
-                       header: "EXPIRY", 
-                       accessor: (item: any, idx) => (
-                         <Input 
-                           type="date" 
-                           className="h-8 text-[10px] text-center bg-bg-float/50"
-                           value={item.exp_date}
-                           onChange={(e) => updateItemField(idx!, 'exp_date', e.target.value)}
-                         />
-                       ),
-                       width: 140
-                     },
-                     { 
-                       header: "ORDERED", 
-                       accessor: 'qty_ordered', 
-                       width: 100,
-                       className: 'text-center font-mono font-bold text-text-secondary'
-                     },
-                     { 
-                       header: "INWARDING", 
-                       accessor: (item: any, idx) => (
-                         <Input 
-                           type="number" 
-                           className="w-20 h-9 text-center font-mono text-accent font-bold bg-white"
-                           value={item.received_now}
-                           max={item.qty_ordered - item.qty_received}
-                           min={0}
-                           onChange={(e) => updateItemField(idx!, 'received_now', parseInt(e.target.value) || 0)}
-                         />
-                       ),
-                       width: 110
-                     },
-                     { 
-                       header: "STATUS", 
-                       accessor: (item: any) => (
-                         <div className="flex justify-center items-center h-full">
-                           {item.received_now + item.qty_received >= item.qty_ordered ? (
-                             <div className="text-status-green"><CheckCircle2 size={20} /></div>
-                           ) : (
-                             <div className="text-status-amber animate-pulse"><Zap size={20} /></div>
-                           )}
-                         </div>
-                       ),
-                       width: 90
-                     }
-                   ]}
-                 />
-              </div>
-           </div>
+      {/* ── LITE FOOTER SUMMARY ── */}
+      <section className="bg-[var(--surface)] border-t border-[var(--border-subtle)] flex flex-col md:flex-row justify-between px-10 py-6 shrink-0">
+         <div className="flex items-center gap-16">
+            <div className="flex flex-col">
+               <span className="text-[10px] font-black uppercase text-[var(--text-tertiary)] mb-1 tracking-widest">SKU Count</span>
+               <span className="text-4xl font-black text-[var(--text-primary)] leading-none">{lines.length}</span>
+            </div>
+            <div className="flex flex-col">
+               <span className="text-[10px] font-black uppercase text-[var(--text-tertiary)] mb-1 tracking-widest">Total Volume</span>
+               <span className="text-4xl font-black text-[var(--text-primary)] leading-none">{(Number(totals.qty) || 0)}</span>
+            </div>
+         </div>
 
-           {/* Inwarding Control Panel */}
-           <div className="col-span-12 lg:col-span-4 space-y-6">
-              <Card className="p-8 bg-accent-bg border-accent/10 relative overflow-hidden">
-                 <div className="absolute top-0 right-0 w-32 h-32 bg-accent/5 blur-3xl rounded-full"></div>
-                 <Text variant="xs" className="uppercase tracking-[0.3em] text-accent mb-8 flex items-center gap-3 font-bold">
-                    <ShieldCheck size={18} /> Gatekeeper Logic
-                 </Text>
-                 
-                 <div className="space-y-6">
-                    <div className="space-y-2">
-                       <Label className="text-text-tertiary ml-1">Logistic Variance Notes</Label>
-                       <textarea 
-                         className="w-full bg-bg-input border border-border-subtle rounded-xl p-4 text-sm font-medium text-text-primary outline-none focus:border-accent transition-all resize-none h-32 placeholder:text-text-disabled"
-                         placeholder="Enter short shipment details, damage notes, or carrier discrepancies..."
-                       />
-                    </div>
+         <div className="w-full md:w-[500px] flex flex-col justify-center">
+            <div className="flex justify-between items-center mb-2 border-b border-[var(--border-subtle)] pb-2 text-[12px] font-bold text-[var(--text-secondary)]">
+               <span className="uppercase">Net Inventory Value:</span>
+               <span>₹{(Number(totals.value) / 100).toFixed(2)}</span>
+            </div>
+            <div className="flex justify-between items-center">
+               <span className="text-[11px] font-black uppercase text-[var(--primary)]">Total Batch Value:</span>
+               <span className="text-5xl font-black text-[var(--text-primary)] tracking-tighter">₹{(Number(totals.value) / 100).toLocaleString('en-IN', { minimumFractionDigits: 2 })}</span>
+            </div>
+         </div>
+      </section>
 
-                    <div className="space-y-3 pt-2">
-                       <div className="flex items-center gap-3 text-text-secondary">
-                          <ScanBarcode size={16} className="text-accent" />
-                          <Text variant="xs" className="uppercase font-bold tracking-widest">Auto-Barcode Enforced</Text>
-                       </div>
-                       <div className="flex items-center gap-3 text-text-secondary">
-                          <Zap size={16} className="text-status-amber" />
-                          <Text variant="xs" className="uppercase font-bold tracking-widest">Real-time Stock Update</Text>
-                       </div>
-                    </div>
-
-                    <Button 
-                      onClick={handleProcess}
-                      disabled={isProcessing}
-                      size="lg"
-                      className="w-full mt-4 h-14"
-                    >
-                      {isProcessing ? <RefreshCw className="animate-spin" size={18} /> : <CheckCircle2 size={20} />}
-                      {isProcessing ? 'PROCESSING...' : 'COMPLETE INWARDING [F10]'}
-                    </Button>
-                 </div>
-              </Card>
-
-              <Card className="p-6 border-border-subtle">
-                 <div className="flex items-center gap-4 mb-6">
-                    <div className="w-10 h-10 bg-bg-float text-status-amber rounded-lg flex items-center justify-center">
-                       <Package size={20} />
-                    </div>
-                    <Text variant="xs" className="uppercase font-bold tracking-widest">Stock Allocation</Text>
-                 </div>
-                 <Card variant="flat" className="p-4 bg-bg-float/50 border-border-subtle flex items-center justify-between">
-                    <Text variant="xs" className="text-text-tertiary uppercase font-bold">Assigned Zone</Text>
-                    <Text variant="sm" className="font-bold uppercase">Whse-A / Row-12</Text>
-                 </Card>
-              </Card>
-           </div>
-        </div>
-      )}
+      <footer className="h-[var(--status-bar-h)] bg-[var(--surface-container-high)] flex items-center px-6 justify-between shrink-0 text-[var(--text-tertiary)] text-[10px] font-black">
+         <div className="flex items-center gap-8 divide-x divide-[var(--border-subtle)]">
+            <span className="px-4 uppercase">F2: VENDOR LIST</span>
+            <span className="px-4 uppercase">F9: COMMIT GRN</span>
+         </div>
+         <div className="uppercase opacity-60 tracking-widest">SMRITI-OS | WAREHOUSE LITE PROTOCOL</div>
+      </footer>
     </div>
-
-    <SovereignSearch 
-      isOpen={showAdvancedSearch.isOpen}
-      initialFilter={{
-        field: showAdvancedSearch.field,
-        value: showAdvancedSearch.value
-      }}
-      onClose={() => setShowAdvancedSearch(prev => ({ ...prev, isOpen: false }))}
-      onSelect={(item) => {
-        if (selectedPO) {
-          const itemIndex = receivedItems.findIndex(it => it.item_id === item.id);
-          if (itemIndex > -1) {
-            const poItem = receivedItems[itemIndex];
-            const maxQty = poItem.qty_ordered - (poItem.qty_received || 0);
-            if (poItem.received_now < maxQty) {
-              updateItemField(itemIndex, 'received_now', poItem.received_now + 1);
-            }
-          }
-        }
-        setShowAdvancedSearch(prev => ({ ...prev, isOpen: false }));
-      }}
-    />
-    </>
-  );
-};
-
-export default GRNProcessor;
+  )
+}

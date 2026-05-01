@@ -32,13 +32,15 @@ import {
 } from '../../components/ui/SovereignUI';
 import { formatCurrency } from '@/utils/currency';
 
-type RegistryType = 'ITEMS' | 'CUSTOMERS' | 'VENDORS' | 'TAXES' | 'CLASSIFICATION';
+type RegistryType = 'ITEMS' | 'CUSTOMERS' | 'VENDORS' | 'PERSONNEL' | 'TAXES' | 'CLASSIFICATION';
 
 interface RegistryEntity {
   id: string;
-  name: string;
+  name?: string;
+  full_name?: string;
   code?: string;
   mobile?: string;
+  email?: string;
   category?: string;
   stock?: number;
   price?: number;
@@ -64,7 +66,9 @@ const MasterRegistry: React.FC = () => {
     if (!registryModule || !registryModule.children) {
       return [
         { id: 'ITEMS', icon: Package, label: 'Items' },
-        { id: 'CUSTOMERS', icon: Users, label: 'Customers' }
+        { id: 'CUSTOMERS', icon: Users, label: 'Customers' },
+        { id: 'VENDORS', icon: Truck, label: 'Vendors' },
+        { id: 'PERSONNEL', icon: ShieldCheck, label: 'Personnel' }
       ];
     }
     return registryModule.children.map(child => ({
@@ -103,15 +107,18 @@ const MasterRegistry: React.FC = () => {
       let data: any[] = [];
       if (activeRegistry === 'ITEMS') data = await api.inventory.list();
       else if (activeRegistry === 'CUSTOMERS') data = await api.customers.list();
+      else if (activeRegistry === 'VENDORS') data = await api.vendors.list();
+      else if (activeRegistry === 'PERSONNEL') data = await api.users.list();
       return data;
     },
     []
   );
 
   const filteredData = registryData.filter(item => 
-    item.name.toLowerCase().includes(search.toLowerCase()) || 
+    (item.name || item.full_name || '').toLowerCase().includes(search.toLowerCase()) || 
     item.code?.toLowerCase().includes(search.toLowerCase()) ||
-    item.mobile?.includes(search)
+    item.mobile?.includes(search) ||
+    item.email?.toLowerCase().includes(search.toLowerCase())
   );
 
   return (
@@ -184,7 +191,7 @@ const MasterRegistry: React.FC = () => {
                   header: 'Protocol ID',
                   accessor: (item) => (
                     <Badge variant="muted" className="font-mono text-[10px] h-8 px-4">
-                      {item.code || item.mobile}
+                      {item.code || item.mobile || item.id.slice(0, 8)}
                     </Badge>
                   )
                 },
@@ -192,9 +199,11 @@ const MasterRegistry: React.FC = () => {
                   header: 'Master Name',
                   accessor: (item) => (
                     <div>
-                      <Text variant="sm" className="font-bold uppercase group-hover:text-accent transition-colors">{item.name}</Text>
+                      <Text variant="sm" className="font-bold uppercase group-hover:text-accent transition-colors">
+                        {item.name || item.full_name}
+                      </Text>
                       <Text variant="xs" className="mt-1 block opacity-40">
-                        {item.category || item.loyalty_tier || item.tax_behavior} Registry
+                        {item.category || item.loyalty_tier || item.tax_behavior || (item.full_name ? 'PERSONNEL' : 'Standard')} Registry
                       </Text>
                     </div>
                   )
@@ -205,10 +214,10 @@ const MasterRegistry: React.FC = () => {
                   accessor: (item) => (
                     <div>
                       <Text variant="sm" className="font-mono font-bold">
-                        {item.price ? formatCurrency(item.price * 100) : item.points ? `${item.points} Pts` : item.terms}
+                        {item.price ? formatCurrency(item.price * 100) : item.points ? `${item.points} Pts` : item.email || item.terms}
                       </Text>
                       <Text variant="xs" className="mt-1 block opacity-40">
-                        {item.stock !== undefined ? `In-Stock: ${item.stock}` : item.tax_type || item.category || 'Standard Value'}
+                        {item.stock !== undefined ? `In-Stock: ${item.stock}` : item.mobile || item.tax_type || item.category || 'Standard Value'}
                       </Text>
                     </div>
                   )
@@ -252,7 +261,7 @@ const MasterRegistry: React.FC = () => {
                    <div className="p-4 bg-bg-base text-accent rounded-2xl w-14 h-14 flex items-center justify-center mb-6 shadow-2xl shadow-bg-base/20">
                       <Zap size={28} />
                    </div>
-                   <Text variant="h1" className="text-bg-base leading-tight">{selectedEntity.name}</Text>
+                   <Text variant="h1" className="text-bg-base leading-tight">{selectedEntity.name || selectedEntity.full_name}</Text>
                    <Text variant="xs" className="text-bg-base opacity-60 mt-3 block font-black">Sovereign Matrix Mapping</Text>
                 </div>
 
@@ -266,7 +275,7 @@ const MasterRegistry: React.FC = () => {
                          {[
                            { label: 'Code', value: selectedEntity.code || 'N/A', icon: Info },
                            { label: 'Category', value: selectedEntity.category || activeRegistry, icon: Layers },
-                           { label: 'Mobile', value: selectedEntity.mobile || 'Private', icon: Smartphone },
+                           { label: 'Contact', value: selectedEntity.mobile || selectedEntity.email || 'Private', icon: Smartphone },
                            { label: 'Tax Map', value: selectedEntity.tax_type || selectedEntity.tax_behavior || 'Local-Incl', icon: Globe },
                          ].map(dna => (
                            <Card key={dna.label} variant="flat" className="p-5 border-border-subtle group hover:border-accent/30 transition-all">

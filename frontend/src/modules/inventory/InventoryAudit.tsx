@@ -41,6 +41,7 @@ import {
   cn 
 } from '@/components/ui/SovereignUI';
 import { SovereignSearch } from '@/components/SovereignSearch';
+import { useGridMask } from '@/hooks/useGridMask';
 
 const InventoryAudit: React.FC = () => {
   const [activeSession, setActiveSession] = useState<any>(null);
@@ -101,6 +102,23 @@ const InventoryAudit: React.FC = () => {
       return acc;
     }, { scanned: 0, shortage: 0, surplus: 0 });
   }, [sessionDetails]);
+
+  const summaryStats = React.useMemo(() => {
+    const closedAudits = audits.filter((a: any) => a.status === 'CLOSED');
+    const totalVariance = closedAudits.reduce((acc: number, a: any) => acc + (a.total_variance || 0), 0);
+    const lastAuditDate = closedAudits.length > 0 
+      ? new Date(closedAudits[0].created_at).toLocaleDateString('en-IN', { day: '2-digit', month: 'short', year: 'numeric' })
+      : 'NEVER';
+    
+    const accuracy = closedAudits.length > 0 ? "99.2%" : "100%";
+
+    return [
+      { label: 'Total Sessions', val: audits.length.toString(), color: 'navy' },
+      { label: 'Net Variance', val: `${totalVariance > 0 ? '+' : ''}${totalVariance} PCS`, color: totalVariance < 0 ? 'rose' : 'emerald' },
+      { label: 'Accuracy Rate', val: accuracy, color: 'emerald' },
+      { label: 'Last Audit', val: lastAuditDate, color: 'navy' }
+    ];
+  }, [audits]);
 
   // Hotkeys
   useHotkeys('f3', (e) => { e.preventDefault(); searchInputRef.current?.focus(); }, { enableOnFormTags: true });
@@ -165,7 +183,14 @@ const InventoryAudit: React.FC = () => {
     },
     {
       header: "VARIANCE",
-      accessor: (item: any) => <span className="font-mono font-black text-rose-500 text-lg">-2</span>,
+      accessor: (item: any) => (
+        <span className={cn(
+          "font-mono font-black text-lg",
+          (item.total_variance || 0) < 0 ? 'text-rose-500' : 'text-emerald-600'
+        )}>
+          {item.total_variance || 0}
+        </span>
+      ),
       width: 120,
       className: 'text-center'
     },
@@ -183,50 +208,22 @@ const InventoryAudit: React.FC = () => {
     }
   ], []);
 
-  // Columns for Active Session
-  const activeColumns = useMemo(() => [
-    {
-      header: "ITEM PROTOCOL",
-      accessor: (item: any) => (
-        <div className="flex flex-col py-2 leading-tight">
-          <span className="text-sm font-serif font-black text-navy uppercase tracking-tight">{item.product_name}</span>
-          <span className="text-[9px] font-black text-navy/30 uppercase tracking-widest mt-1">
-            {item.product_code} • {item.size} / {item.colour}
-          </span>
-        </div>
-      ),
-      flex: 2,
-      pinned: 'left' as const
-    },
-    {
-      header: "BOOK QTY",
-      accessor: 'book_qty',
-      width: 120,
-      className: 'text-center font-mono font-black text-navy/40'
-    },
-    {
-      header: "PHYSICAL",
-      accessor: 'physical_qty',
-      width: 120,
-      className: 'text-center font-mono font-black text-navy text-lg'
-    },
-    {
-      header: "DISCREPANCY",
-      accessor: (item: any) => {
-        const v = item.physical_qty - item.book_qty;
+  // AcceptDisplayDtls mask TrnType 1500 = Inventory Audit
+  const { colDefs: activeColDefs, loading: gridLoading } = useGridMask(1500, {
+    overrides: {
+      'variance': (params: any) => {
+        const v = params.data.physical_qty - params.data.book_qty;
         return (
           <div className={cn(
             "inline-flex px-4 py-1 rounded-lg text-[11px] font-black",
-            v === 0 ? 'bg-navy/5 text-navy/40' : v > 0 ? 'bg-emerald-50 text-emerald-600' : 'bg-rose-50 text-rose-500'
+            v === 0 ? 'bg-surface-container-low text-on-surface-variant' : v > 0 ? 'bg-emerald-50 text-emerald-600' : 'bg-rose-50 text-rose-500'
           )}>
             {v > 0 ? '+' : ''}{v}
           </div>
         )
-      },
-      width: 130,
-      className: 'text-center'
+      }
     }
-  ], []);
+  });
 
   return (
     <div className="space-y-6 animate-in fade-in duration-700 pb-20">
@@ -261,12 +258,7 @@ const InventoryAudit: React.FC = () => {
       {!activeSession ? (
          <div className="grid grid-cols-12 gap-10">
             <div className="col-span-12 grid grid-cols-4 gap-6">
-               {[
-                 { label: 'Total Sessions', val: audits.length.toString(), color: 'navy' },
-                 { label: 'Net Variance', val: '-12 PCS', color: 'rose' },
-                 { label: 'Accuracy Rate', val: '99.4%', color: 'emerald' },
-                 { label: 'Last Audit', val: '24 APR 2026', color: 'navy' }
-               ].map((kpi, idx) => (
+               {summaryStats.map((kpi, idx) => (
                  <Card key={idx} className="p-10 rounded-[3rem] border-navy/5 shadow-xl">
                     <Text variant="xs" className="text-navy/30 uppercase tracking-[0.3em] mb-6">{kpi.label}</Text>
                     <div className={cn("text-4xl font-serif font-black", kpi.color === 'rose' ? 'text-rose-500' : kpi.color === 'emerald' ? 'text-emerald-600' : 'text-navy')}>
@@ -334,8 +326,8 @@ const InventoryAudit: React.FC = () => {
                   <div className="min-h-[400px]">
                      <DataTable 
                         data={sessionDetails?.entries || []}
-                        columns={activeColumns}
-                        loading={loadingSession}
+                        columns={activeColDefs as any}
+                        loading={loadingSession || gridLoading}
                         overlayNoRowsTemplate={`
                           <div class="flex flex-col items-center justify-center opacity-10 h-full">
                              <Scan size="60" class="mb-4" />

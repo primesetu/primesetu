@@ -1,0 +1,427 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Industrial POS Billing Terminal</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;900&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+          darkMode: "class",
+          theme: {
+            extend: {
+              "colors": {
+                      "surface-container": "#efedf0",
+                      "primary-container": "#2d4059",
+                      "surface-container-high": "#e9e7ea",
+                      "surface-container-highest": "#e4e2e4",
+                      "on-background": "#1b1c1d",
+                      "surface": "#fbf9fb",
+                      "on-surface-variant": "#44474d",
+                      "on-error": "#ffffff",
+                      "surface-container-low": "#f5f3f5",
+                      "outline-variant": "#c4c6ce",
+                      "primary-fixed": "#d3e4ff",
+                      "error-container": "#ffdad6",
+                      "on-secondary-container": "#6b4800",
+                      "secondary": "#805600",
+                      "on-primary-container": "#98acc9",
+                      "surface-dim": "#dbd9dc",
+                      "on-surface": "#1b1c1d",
+                      "on-primary-fixed-variant": "#354861",
+                      "background": "#fbf9fb",
+                      "inverse-primary": "#b4c8e6",
+                      "inverse-on-surface": "#f2f0f2",
+                      "inverse-surface": "#303032",
+                      "tertiary": "#27292a",
+                      "on-tertiary-fixed-variant": "#454747",
+                      "on-primary": "#ffffff",
+                      "surface-bright": "#fbf9fb",
+                      "on-error-container": "#93000a",
+                      "error": "#ba1a1a",
+                      "on-tertiary": "#ffffff",
+                      "secondary-fixed-dim": "#ffba44",
+                      "secondary-fixed": "#ffddaf",
+                      "tertiary-fixed-dim": "#c6c6c7",
+                      "surface-tint": "#4d607a",
+                      "tertiary-fixed": "#e2e2e2",
+                      "on-secondary-fixed": "#281800",
+                      "tertiary-container": "#3d3f3f",
+                      "primary": "#162a42",
+                      "on-primary-fixed": "#061c34",
+                      "surface-variant": "#e4e2e4",
+                      "outline": "#74777e",
+                      "surface-container-lowest": "#ffffff",
+                      "primary-fixed-dim": "#b4c8e6",
+                      "on-tertiary-fixed": "#1a1c1c",
+                      "on-secondary": "#ffffff",
+                      "on-tertiary-container": "#a9aaaa",
+                      "secondary-container": "#ffb21d",
+                      "on-secondary-fixed-variant": "#614000"
+              },
+              "borderRadius": {
+                      "DEFAULT": "0.25rem",
+                      "lg": "0.5rem",
+                      "xl": "0.75rem",
+                      "full": "9999px"
+              },
+              "spacing": {
+                      "margin-edge": "24px",
+                      "unit": "4px",
+                      "grid-cell-padding": "8px 12px",
+                      "gutter": "16px",
+                      "header-height": "64px",
+                      "footer-height": "48px"
+              },
+              "fontFamily": {
+                      "data-tabular": [
+                              "Inter"
+                      ],
+                      "label-caps": [
+                              "Inter"
+                      ],
+                      "header-title": [
+                              "Inter"
+                      ],
+                      "body-dense": [
+                              "Inter"
+                      ],
+                      "keyboard-shortcut": [
+                              "Inter"
+                      ],
+                      "display-lg": [
+                              "Inter"
+                      ]
+              },
+              "fontSize": {
+                      "data-tabular": [
+                              "14px",
+                              {
+                                      "lineHeight": "20px",
+                                      "fontWeight": "500"
+                              }
+                      ],
+                      "label-caps": [
+                              "11px",
+                              {
+                                      "lineHeight": "16px",
+                                      "letterSpacing": "0.05em",
+                                      "fontWeight": "700"
+                              }
+                      ],
+                      "header-title": [
+                              "18px",
+                              {
+                                      "lineHeight": "24px",
+                                      "fontWeight": "600"
+                              }
+                      ],
+                      "body-dense": [
+                              "13px",
+                              {
+                                      "lineHeight": "18px",
+                                      "fontWeight": "400"
+                              }
+                      ],
+                      "keyboard-shortcut": [
+                              "12px",
+                              {
+                                      "lineHeight": "16px",
+                                      "fontWeight": "600"
+                              }
+                      ],
+                      "display-lg": [
+                              "24px",
+                              {
+                                      "lineHeight": "32px",
+                                      "letterSpacing": "-0.02em",
+                                      "fontWeight": "700"
+                              }
+                      ]
+              }
+            },
+          }
+        }
+    </script>
+</head>
+<body class="bg-surface-container h-screen flex flex-col font-data-tabular text-on-surface overflow-hidden">
+<!-- TopAppBar -->
+<header class="bg-slate-800 dark:bg-slate-950 fixed top-0 w-full h-12 flex items-center border-b border-slate-700 dark:border-slate-800 z-50">
+<div class="flex justify-between items-center w-full px-4 bg-slate-800">
+<div class="flex items-center space-x-4">
+<span class="text-lg font-black text-white dark:text-slate-100 uppercase tracking-tight">Industrial POS Billing</span>
+<nav class="flex h-12">
+<button class="px-4 h-full flex items-center border-b-2 border-amber-400 text-white font-inter tracking-tight uppercase font-bold text-xs hover:bg-slate-700 dark:hover:bg-slate-900 transition-colors focus:ring-1 focus:ring-amber-500 duration-100 outline-none">
+                        Billing
+                    </button>
+</nav>
+</div>
+<div class="flex items-center space-x-2">
+<!-- 'Go To' Search Bar Component Placeholder -->
+<div class="relative hidden md:block">
+<span class="material-symbols-outlined absolute left-2 top-1/2 -translate-y-1/2 text-slate-400 text-sm">search</span>
+<input class="h-8 pl-8 pr-3 bg-slate-900 border border-slate-600 rounded text-slate-200 text-xs focus:outline-none focus:border-amber-400 focus:ring-1 focus:ring-amber-400 w-64 placeholder-slate-500 font-data-tabular" placeholder="Go To [F3]" type="text"/>
+</div>
+<div class="flex space-x-1 border-l border-slate-600 pl-2 ml-2">
+<button class="p-1.5 text-slate-400 hover:text-white hover:bg-slate-700 dark:hover:bg-slate-900 rounded focus:ring-1 focus:ring-amber-500 outline-none" title="Notifications">
+<span class="material-symbols-outlined text-lg">notifications</span>
+</button>
+<button class="p-1.5 text-slate-400 hover:text-white hover:bg-slate-700 dark:hover:bg-slate-900 rounded focus:ring-1 focus:ring-amber-500 outline-none" title="Settings">
+<span class="material-symbols-outlined text-lg">settings</span>
+</button>
+<button class="px-3 h-8 flex items-center text-slate-200 bg-slate-700 hover:bg-slate-600 rounded text-xs font-bold uppercase tracking-wide border border-slate-600 focus:ring-1 focus:ring-amber-500 outline-none">
+                        F1: Help
+                    </button>
+</div>
+</div>
+</div>
+</header>
+<!-- Main Content Canvas -->
+<main class="flex-1 flex flex-col mt-12 mb-10 overflow-hidden bg-surface-container">
+<!-- Document Header Pane -->
+<section class="bg-surface border-b border-outline-variant p-4 flex-shrink-0">
+<div class="grid grid-cols-12 gap-x-gutter gap-y-4">
+<!-- Bill Config -->
+<div class="col-span-12 md:col-span-4 lg:col-span-3 space-y-3">
+<div class="flex items-center space-x-2">
+<div class="w-1/2">
+<label class="block font-label-caps text-label-caps text-on-surface-variant mb-1 uppercase">Bill Type</label>
+<select class="w-full bg-surface-container-lowest border-outline-variant border text-data-tabular font-data-tabular rounded p-1.5 focus:border-primary focus:ring-1 focus:ring-primary outline-none">
+<option>Product</option>
+<option>Service</option>
+</select>
+</div>
+<div class="w-1/2">
+<label class="block font-label-caps text-label-caps text-on-surface-variant mb-1 uppercase">Transaction</label>
+<select class="w-full bg-surface-container-lowest border-outline-variant border text-data-tabular font-data-tabular rounded p-1.5 focus:border-primary focus:ring-1 focus:ring-primary outline-none">
+<option>Cash</option>
+<option>Credit</option>
+</select>
+</div>
+</div>
+</div>
+<!-- Customer Info -->
+<div class="col-span-12 md:col-span-5 lg:col-span-4 space-y-3">
+<div class="flex items-end space-x-2">
+<div class="flex-1">
+<label class="block font-label-caps text-label-caps text-on-surface-variant mb-1 uppercase">Customer <span class="font-keyboard-shortcut text-keyboard-shortcut text-outline ml-1">[F2]</span></label>
+<div class="relative">
+<input class="w-full bg-surface-container-lowest border-outline-variant border text-data-tabular font-data-tabular rounded p-1.5 focus:border-primary focus:ring-1 focus:ring-primary outline-none uppercase" type="text" value="CUST-00192"/>
+<button class="absolute right-1 top-1/2 -translate-y-1/2 p-1 text-on-surface-variant hover:text-primary outline-none">
+<span class="material-symbols-outlined text-sm">search</span>
+</button>
+</div>
+</div>
+<div class="flex-1">
+<label class="block font-label-caps text-label-caps text-on-surface-variant mb-1 uppercase opacity-0">Name</label>
+<input class="w-full bg-surface-container border-transparent border text-data-tabular font-data-tabular rounded p-1.5 text-on-surface-variant cursor-not-allowed" disabled="" type="text" value="WALK-IN RETAIL"/>
+</div>
+</div>
+</div>
+<!-- Document Details -->
+<div class="col-span-12 md:col-span-3 lg:col-span-3">
+<div class="flex space-x-2">
+<div class="w-1/3">
+<label class="block font-label-caps text-label-caps text-on-surface-variant mb-1 uppercase">Prefix</label>
+<input class="w-full bg-surface-container border-transparent border text-data-tabular font-data-tabular rounded p-1.5 text-on-surface-variant text-center cursor-not-allowed" disabled="" type="text" value="INV"/>
+</div>
+<div class="w-2/3">
+<label class="block font-label-caps text-label-caps text-on-surface-variant mb-1 uppercase">Doc No.</label>
+<input class="w-full bg-surface-container border-transparent border text-data-tabular font-data-tabular rounded p-1.5 text-on-surface-variant text-right font-bold cursor-not-allowed" disabled="" type="text" value="24-089921"/>
+</div>
+</div>
+</div>
+<!-- Actions & Meta -->
+<div class="col-span-12 lg:col-span-2 flex flex-col justify-end space-y-2">
+<div class="flex justify-end space-x-2">
+<button class="px-3 py-1.5 border border-primary text-primary rounded text-label-caps font-label-caps uppercase hover:bg-primary-fixed hover:text-on-primary-fixed focus:ring-2 focus:ring-primary focus:ring-offset-1 outline-none transition-colors flex items-center justify-center">
+                            Recall <span class="ml-1 text-keyboard-shortcut font-keyboard-shortcut opacity-70">[R]</span>
+</button>
+<button class="px-3 py-1.5 border border-primary text-primary rounded text-label-caps font-label-caps uppercase hover:bg-primary-fixed hover:text-on-primary-fixed focus:ring-2 focus:ring-primary focus:ring-offset-1 outline-none transition-colors flex items-center justify-center">
+                            Import <span class="ml-1 text-keyboard-shortcut font-keyboard-shortcut opacity-70">[I]</span>
+</button>
+</div>
+</div>
+</div>
+</section>
+<!-- Central Workspace: Detail Area -->
+<section class="flex-1 flex flex-col overflow-hidden p-unit">
+<div class="bg-surface border border-outline-variant rounded flex-1 flex flex-col overflow-hidden shadow-sm">
+<!-- Direct Entry Row (Sticky Top) -->
+<div class="bg-surface-container-high border-b-2 border-primary p-2 flex-shrink-0 z-10">
+<div class="grid grid-cols-[40px_120px_1fr_80px_60px_90px_80px_60px_80px_100px_80px] gap-2 items-end">
+<div>
+<label class="block font-label-caps text-label-caps text-on-surface-variant mb-1 uppercase">S.No</label>
+<input class="w-full bg-transparent border-none p-1 text-center font-data-tabular text-data-tabular text-on-surface-variant" disabled="" type="text" value="4"/>
+</div>
+<div>
+<label class="block font-label-caps text-label-caps text-on-surface-variant mb-1 uppercase">Stock No</label>
+<input class="w-full bg-surface-container-lowest border border-outline-variant p-1 rounded font-data-tabular text-data-tabular focus:border-primary focus:ring-1 focus:ring-primary outline-none" placeholder="Scan..." type="text"/>
+</div>
+<div>
+<label class="block font-label-caps text-label-caps text-on-surface-variant mb-1 uppercase">Item Description</label>
+<input class="w-full bg-surface-container-lowest border border-outline-variant p-1 rounded font-data-tabular text-data-tabular focus:border-primary focus:ring-1 focus:ring-primary outline-none" type="text"/>
+</div>
+<div>
+<label class="block font-label-caps text-label-caps text-on-surface-variant mb-1 uppercase text-right">Rate</label>
+<input class="w-full bg-surface-container-lowest border border-outline-variant p-1 rounded font-data-tabular text-data-tabular text-right focus:border-primary focus:ring-1 focus:ring-primary outline-none" type="text"/>
+</div>
+<div>
+<label class="block font-label-caps text-label-caps text-on-surface-variant mb-1 uppercase text-right">Qty</label>
+<input class="w-full bg-surface-container-lowest border border-outline-variant p-1 rounded font-data-tabular text-data-tabular text-right focus:border-primary focus:ring-1 focus:ring-primary outline-none" type="text" value="1"/>
+</div>
+<div>
+<label class="block font-label-caps text-label-caps text-on-surface-variant mb-1 uppercase text-right">Value</label>
+<input class="w-full bg-surface-container border-transparent p-1 rounded font-data-tabular text-data-tabular text-right text-on-surface-variant" disabled="" type="text"/>
+</div>
+<div>
+<label class="block font-label-caps text-label-caps text-on-surface-variant mb-1 uppercase text-center">Disc Cd</label>
+<input class="w-full bg-surface-container-lowest border border-outline-variant p-1 rounded font-data-tabular text-data-tabular text-center focus:border-primary focus:ring-1 focus:ring-primary outline-none" type="text"/>
+</div>
+<div>
+<label class="block font-label-caps text-label-caps text-on-surface-variant mb-1 uppercase text-right">Disc %</label>
+<input class="w-full bg-surface-container-lowest border border-outline-variant p-1 rounded font-data-tabular text-data-tabular text-right focus:border-primary focus:ring-1 focus:ring-primary outline-none" type="text"/>
+</div>
+<div>
+<label class="block font-label-caps text-label-caps text-on-surface-variant mb-1 uppercase text-right">Disc Amt</label>
+<input class="w-full bg-surface-container border-transparent p-1 rounded font-data-tabular text-data-tabular text-right text-on-surface-variant" disabled="" type="text"/>
+</div>
+<div>
+<label class="block font-label-caps text-label-caps text-on-surface-variant mb-1 uppercase text-right">Total</label>
+<input class="w-full bg-surface-container border-transparent p-1 rounded font-data-tabular text-data-tabular text-right font-bold text-on-surface" disabled="" type="text"/>
+</div>
+<div>
+<label class="block font-label-caps text-label-caps text-on-surface-variant mb-1 uppercase text-center">Staff</label>
+<input class="w-full bg-surface-container-lowest border border-outline-variant p-1 rounded font-data-tabular text-data-tabular text-center focus:border-primary focus:ring-1 focus:ring-primary outline-none" type="text" value="S-42"/>
+</div>
+</div>
+</div>
+<!-- Item Details Grid -->
+<div class="flex-1 overflow-auto bg-surface">
+<table class="w-full text-left border-collapse whitespace-nowrap">
+<thead class="bg-surface-container-low sticky top-0 z-0 border-b border-outline-variant">
+<tr>
+<th class="p-2 font-label-caps text-label-caps text-on-surface-variant uppercase w-[40px] text-center border-r border-outline-variant">#</th>
+<th class="p-2 font-label-caps text-label-caps text-on-surface-variant uppercase w-[120px] border-r border-outline-variant">Stock No</th>
+<th class="p-2 font-label-caps text-label-caps text-on-surface-variant uppercase border-r border-outline-variant">Item Description</th>
+<th class="p-2 font-label-caps text-label-caps text-on-surface-variant uppercase w-[80px] text-right border-r border-outline-variant">Rate</th>
+<th class="p-2 font-label-caps text-label-caps text-on-surface-variant uppercase w-[60px] text-right border-r border-outline-variant">Qty</th>
+<th class="p-2 font-label-caps text-label-caps text-on-surface-variant uppercase w-[90px] text-right border-r border-outline-variant">Value</th>
+<th class="p-2 font-label-caps text-label-caps text-on-surface-variant uppercase w-[80px] text-center border-r border-outline-variant">D.Cd</th>
+<th class="p-2 font-label-caps text-label-caps text-on-surface-variant uppercase w-[60px] text-right border-r border-outline-variant">D.%</th>
+<th class="p-2 font-label-caps text-label-caps text-on-surface-variant uppercase w-[80px] text-right border-r border-outline-variant">D.Amt</th>
+<th class="p-2 font-label-caps text-label-caps text-on-surface-variant uppercase w-[100px] text-right border-r border-outline-variant">Total</th>
+<th class="p-2 font-label-caps text-label-caps text-on-surface-variant uppercase w-[80px] text-center">Staff</th>
+</tr>
+</thead>
+<tbody class="font-data-tabular text-data-tabular divide-y divide-outline-variant/50">
+<!-- Row 1 -->
+<tr class="hover:bg-surface-container-low">
+<td class="p-2 text-center text-on-surface-variant border-r border-outline-variant/30">1</td>
+<td class="p-2 font-medium border-r border-outline-variant/30">SKU-88219</td>
+<td class="p-2 border-r border-outline-variant/30">Heavy Duty Ratchet Set 1/2"</td>
+<td class="p-2 text-right border-r border-outline-variant/30">85.00</td>
+<td class="p-2 text-right border-r border-outline-variant/30">2</td>
+<td class="p-2 text-right border-r border-outline-variant/30">170.00</td>
+<td class="p-2 text-center border-r border-outline-variant/30">-</td>
+<td class="p-2 text-right border-r border-outline-variant/30">0.0</td>
+<td class="p-2 text-right border-r border-outline-variant/30">0.00</td>
+<td class="p-2 text-right font-bold border-r border-outline-variant/30">170.00</td>
+<td class="p-2 text-center text-on-surface-variant">S-42</td>
+</tr>
+<!-- Row 2 (Active/Highlight simulation) -->
+<tr class="bg-secondary-fixed/20 hover:bg-secondary-fixed/30 border-l-2 border-l-secondary-fixed-dim">
+<td class="p-2 text-center text-on-surface-variant border-r border-outline-variant/30">2</td>
+<td class="p-2 font-medium border-r border-outline-variant/30">SKU-10024</td>
+<td class="p-2 border-r border-outline-variant/30">Industrial Lubricant 500ml</td>
+<td class="p-2 text-right border-r border-outline-variant/30">12.50</td>
+<td class="p-2 text-right border-r border-outline-variant/30">4</td>
+<td class="p-2 text-right border-r border-outline-variant/30">50.00</td>
+<td class="p-2 text-center border-r border-outline-variant/30">VOL5</td>
+<td class="p-2 text-right border-r border-outline-variant/30">5.0</td>
+<td class="p-2 text-right border-r border-outline-variant/30">2.50</td>
+<td class="p-2 text-right font-bold border-r border-outline-variant/30">47.50</td>
+<td class="p-2 text-center text-on-surface-variant">S-42</td>
+</tr>
+<!-- Row 3 -->
+<tr class="hover:bg-surface-container-low">
+<td class="p-2 text-center text-on-surface-variant border-r border-outline-variant/30">3</td>
+<td class="p-2 font-medium border-r border-outline-variant/30">SKU-55410</td>
+<td class="p-2 border-r border-outline-variant/30">Safety Goggles Clear Lens</td>
+<td class="p-2 text-right border-r border-outline-variant/30">18.00</td>
+<td class="p-2 text-right border-r border-outline-variant/30">1</td>
+<td class="p-2 text-right border-r border-outline-variant/30">18.00</td>
+<td class="p-2 text-center border-r border-outline-variant/30">-</td>
+<td class="p-2 text-right border-r border-outline-variant/30">0.0</td>
+<td class="p-2 text-right border-r border-outline-variant/30">0.00</td>
+<td class="p-2 text-right font-bold border-r border-outline-variant/30">18.00</td>
+<td class="p-2 text-center text-on-surface-variant">S-42</td>
+</tr>
+<!-- Empty rows to fill space -->
+<tr class="h-8"><td class="border-r border-outline-variant/30 last:border-r-0" colspan="11"></td></tr>
+<tr class="h-8"><td class="border-r border-outline-variant/30 last:border-r-0" colspan="11"></td></tr>
+<tr class="h-8"><td class="border-r border-outline-variant/30 last:border-r-0" colspan="11"></td></tr>
+<tr class="h-8"><td class="border-r border-outline-variant/30 last:border-r-0" colspan="11"></td></tr>
+</tbody>
+</table>
+</div>
+<!-- Footer Bill Summary -->
+<div class="bg-surface-container-high border-t border-outline-variant flex flex-col sm:flex-row justify-between p-3 flex-shrink-0">
+<!-- Left Summary -->
+<div class="flex items-end space-x-6 mb-3 sm:mb-0">
+<div>
+<span class="block font-label-caps text-label-caps text-on-surface-variant uppercase mb-1">Total Items</span>
+<span class="font-display-lg text-display-lg text-primary">3</span>
+</div>
+<div>
+<span class="block font-label-caps text-label-caps text-on-surface-variant uppercase mb-1">Total Qty</span>
+<span class="font-display-lg text-display-lg text-primary">7</span>
+</div>
+<div class="hidden md:block pl-6 border-l border-outline-variant">
+<span class="inline-block px-2 py-1 bg-surface-dim text-on-surface-variant text-label-caps font-label-caps rounded uppercase border border-outline-variant/50">Status: DRAFT</span>
+</div>
+</div>
+<!-- Right Totals Grid -->
+<div class="w-full sm:w-[320px]">
+<div class="grid grid-cols-2 gap-x-4 gap-y-1 text-data-tabular font-data-tabular">
+<div class="text-right text-on-surface-variant">Gross Value:</div>
+<div class="text-right">238.00</div>
+<div class="text-right text-on-surface-variant">Total Discount:</div>
+<div class="text-right text-error">- 2.50</div>
+<div class="text-right text-on-surface-variant">Sales Tax (8%):</div>
+<div class="text-right">18.84</div>
+<div class="text-right text-on-surface-variant">Add-ons:</div>
+<div class="text-right">0.00</div>
+<div class="col-span-2 border-t border-outline-variant my-1"></div>
+<div class="text-right font-bold font-header-title text-header-title text-primary uppercase">Net Amount:</div>
+<div class="text-right font-bold font-header-title text-header-title text-primary">254.34</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+</main>
+<!-- Footer Toolbar -->
+<footer class="bg-slate-900 dark:bg-black fixed bottom-0 left-0 w-full z-50 flex overflow-x-auto whitespace-nowrap h-10 border-t border-slate-700 divide-x divide-slate-700">
+<!-- The active class "bg-slate-700 text-amber-400" isn't strictly applicable to a functional terminal footer where none are 'active tabs', but applying to the primary action for visual pop as per design guidelines if needed, but JSON says style_active_navigation. I will keep them inactive as they are action keys, not destinations. -->
+<button class="text-slate-300 px-3 h-full flex items-center font-inter font-semibold text-[11px] tracking-wider uppercase hover:bg-slate-800 dark:hover:bg-slate-900 Active: scale-95 transition-transform outline-none focus:bg-slate-800">
+            F7: EXACT CASH
+        </button>
+<button class="bg-slate-700 text-amber-400 px-3 h-full flex items-center font-inter font-semibold text-[11px] tracking-wider uppercase hover:bg-slate-800 dark:hover:bg-slate-900 Active: scale-95 transition-transform outline-none focus:ring-inset focus:ring-2 focus:ring-amber-500">
+            F8: SETTLE
+        </button>
+<button class="text-slate-300 px-3 h-full flex items-center font-inter font-semibold text-[11px] tracking-wider uppercase hover:bg-slate-800 dark:hover:bg-slate-900 Active: scale-95 transition-transform outline-none focus:bg-slate-800">
+            F9: TOTALS
+        </button>
+<button class="text-slate-300 px-3 h-full flex items-center font-inter font-semibold text-[11px] tracking-wider uppercase hover:bg-slate-800 dark:hover:bg-slate-900 Active: scale-95 transition-transform outline-none focus:bg-slate-800 text-opacity-80">
+            F12: SUSPEND
+        </button>
+<!-- Filler space and copyright to match JSON specification requirement -->
+<div class="flex-1 flex justify-end items-center px-4">
+<span class="text-slate-500 font-inter text-[10px] tracking-wide uppercase">© 2024 Industrial Utility Systems | High-Density Mode Active</span>
+</div>
+</footer>
+</body></html>

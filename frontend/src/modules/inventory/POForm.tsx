@@ -3,7 +3,7 @@
  * Zero Cloud · Sovereign · AI-Governed
  * ============================================================ */
 
-import React, { useState, useMemo } from 'react';
+import React, { useState } from 'react';
 import { 
   ArrowLeft, 
   Save, 
@@ -23,6 +23,7 @@ import { useHotkeys } from 'react-hotkeys-hook';
 import { formatCurrency } from '../../utils/currency';
 import { useOfflineFallback } from '../../hooks/useOfflineFallback';
 import { apiClient } from '../../api/client';
+import { useGridMask } from '@/hooks/useGridMask';
 import { 
   Button, 
   Input, 
@@ -135,89 +136,44 @@ const POForm: React.FC = () => {
 
   const totals = calculateTotals();
 
-  // ── GRID COLUMNS ──
-  const columns = useMemo(() => [
-    {
-      header: "ITEM ENTITY",
-      accessor: (item: POItemInput) => (
-        <div className="flex flex-col py-2 leading-tight">
-          <span className="text-sm font-black text-navy uppercase tracking-tight">{item.item_name}</span>
-          <span className="text-[9px] font-mono text-navy/40 mt-1 uppercase tracking-widest">{item.item_code} · {item.size} / {item.colour}</span>
-        </div>
-      ),
-      flex: 2,
-      pinned: 'left' as const
-    },
-    {
-      header: "QTY",
-      accessor: (item: POItemInput) => (
+  // AcceptDisplayDtls mask TrnType 1400 = Purchase Order
+  // PO-specific columns (qty, cost, tax) are rendered as inline editors via overrides
+  const { colDefs: poColDefs, loading: gridLoading } = useGridMask(1400, {
+    overrides: {
+      'qty_ordered': (params: any) => (
         <div className="flex justify-center py-2">
-           <Input 
-             type="number" 
-             className="w-20 h-10 text-center font-mono font-black"
-             value={item.qty_ordered}
-             onChange={(e) => updateItem(item.id, 'qty_ordered', parseInt(e.target.value) || 0)}
-           />
+          <Input
+            type="number"
+            className="w-20 h-10 text-center font-mono font-black"
+            value={params.data?.qty_ordered ?? 1}
+            onChange={(e) => updateItem(params.data.id, 'qty_ordered', parseInt(e.target.value) || 0)}
+          />
         </div>
       ),
-      width: 120,
-      className: 'text-center'
-    },
-    {
-      header: "UNIT COST (PAISE)",
-      accessor: (item: POItemInput) => (
+      'unit_cost_paise': (params: any) => (
         <div className="flex justify-center py-2">
-           <Input 
-             type="number" 
-             className="w-28 h-10 text-right font-mono font-black text-indigo-600"
-             value={item.unit_cost_paise}
-             onChange={(e) => updateItem(item.id, 'unit_cost_paise', parseInt(e.target.value) || 0)}
-           />
+          <Input
+            type="number"
+            className="w-28 h-10 text-right font-mono font-black text-primary"
+            value={params.data?.unit_cost_paise ?? 0}
+            onChange={(e) => updateItem(params.data.id, 'unit_cost_paise', parseInt(e.target.value) || 0)}
+          />
         </div>
       ),
-      width: 150,
-      className: 'text-right'
-    },
-    {
-      header: "TAX %",
-      accessor: (item: POItemInput) => (
+      'tax_rate': (params: any) => (
         <div className="flex justify-center py-2">
-           <Select 
-             className="h-10 text-xs font-black w-24"
-             value={item.tax_rate}
-             onChange={(e) => updateItem(item.id, 'tax_rate', parseInt(e.target.value))}
-           >
-             {[0, 5, 12, 18, 28].map(r => <option key={r} value={r}>{r}%</option>)}
-           </Select>
+          <Select
+            className="h-10 text-xs font-black w-24"
+            value={params.data?.tax_rate ?? 18}
+            onChange={(e) => updateItem(params.data.id, 'tax_rate', parseInt(e.target.value))}
+          >
+            {[0, 5, 12, 18, 28].map(r => <option key={r} value={r}>{r}%</option>)}
+          </Select>
         </div>
       ),
-      width: 120,
-      className: 'text-center'
-    },
-    {
-      header: "LINE TOTAL",
-      accessor: (item: POItemInput) => (
-        <span className="font-mono text-sm font-black text-navy">
-          {formatCurrency(Math.floor((item.qty_ordered * item.unit_cost_paise) * (1 + item.tax_rate/100)))}
-        </span>
-      ),
-      width: 160,
-      className: 'text-right',
-      pinned: 'right' as const
-    },
-    {
-      header: "",
-      accessor: (item: POItemInput) => (
-        <div className="flex justify-center">
-           <Button variant="sec" size="sm" onClick={() => removeItem(item.id)} className="h-9 w-9 p-0 text-rose-500 hover:bg-rose-50 border-none">
-              <Trash2 size={16} />
-           </Button>
-        </div>
-      ),
-      width: 80,
-      pinned: 'right' as const
     }
-  ], []);
+  });
+
 
   return (
     <div className="pb-20 animate-in slide-in-from-bottom-4 duration-700">
@@ -324,7 +280,10 @@ const POForm: React.FC = () => {
               <div className="h-[450px]">
                  <DataTable 
                     data={items}
-                    columns={columns}
+                    columns={poColDefs as any}
+                    loading={gridLoading}
+                    rowHeight={45}
+                    headerHeight={32}
                     overlayNoRowsTemplate={`
                       <div class="flex flex-col items-center justify-center opacity-10 h-full">
                          <Package size="60" class="mb-4" />
@@ -377,3 +336,4 @@ const POForm: React.FC = () => {
 };
 
 export default POForm;
+

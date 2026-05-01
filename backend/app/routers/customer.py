@@ -216,3 +216,56 @@ async def redeem_loyalty(
         "points_redeemed": payload.points_to_redeem,
         "new_balance": customer.loyalty_points
     }
+
+@router.get("/search", response_model=List[CustomerResponse])
+async def search_customers(
+    q: str = Query(..., min_length=2),
+    current_user: CurrentUser = Depends(require_auth),
+    db: AsyncSession = Depends(get_db)
+):
+    """
+    Institutional search for customers by name, phone, or code.
+    Returns a list of matching customer profiles.
+    """
+    search_term = f"%{q}%"
+    stmt = select(Partner).where(
+        Partner.store_id == current_user.store_id,
+        Partner.partner_type.in_(["customer", "both"]),
+        and_(
+            Partner.is_active == True,
+            (Partner.name.ilike(search_term)) | 
+            (Partner.phone.ilike(search_term)) | 
+            (Partner.code.ilike(search_term))
+        )
+    ).limit(50)
+    
+    result = await db.execute(stmt)
+    partners = result.scalars().all()
+    
+    # Enrich with outstanding balance
+    enriched = []
+    for p in partners:
+        # For demo/MVP, we'll just map. In production, use a join/agg query.
+        enriched.append(p)
+        
+    return enriched
+
+@router.get("/{code}", response_model=CustomerResponse)
+async def get_customer_by_code(
+    code: str,
+    current_user: CurrentUser = Depends(require_auth),
+    db: AsyncSession = Depends(get_db)
+):
+    """Fetch a single customer by their institutional code."""
+    stmt = select(Partner).where(
+        Partner.store_id == current_user.store_id,
+        Partner.code == code,
+        Partner.partner_type.in_(["customer", "both"])
+    )
+    result = await db.execute(stmt)
+    customer = result.scalar_one_or_none()
+    
+    if not customer:
+        raise HTTPException(status_code=404, detail=f"Customer '{code}' not found")
+        
+    return customer

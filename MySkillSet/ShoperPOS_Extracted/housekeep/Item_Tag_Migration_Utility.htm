@@ -1,0 +1,66 @@
+
+<!doctype HTML public "-//W3C//DTD HTML 4.0 Frameset//EN">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=windows-1252">
+ <meta name="generator" content="Adobe RoboHelp 10">
+<title>Item Tag Migration Utility</title>
+<link rel="StyleSheet" href="../Shoper.css" type="text/css">
+<style title="hcp" type="text/css">
+<!--
+span.hcp1 { font-weight:bold; }
+img.hcp2 { border:none; }
+-->
+</style>
+</head>
+
+<body>
+<script type="text/javascript" src="../ehlpdhtm.js" language="JavaScript1.2"></script>
+
+<h1>Item Tag Migration Utility</h1>
+<p class="Body-Text">This is a menu to migrate the existing stock (without 
+ the serial number configuration) to the serial number configuration. </p>
+<p class="Body-Text">In POS/Distributor environment the process happens 
+ in two ways. </p>
+<ol>
+	<li class="p-Numbered"><p class="Numbered">When serial number configuration 
+	 under Catalogue is defined. (Please refer Serial No. Configuration 
+	 page for more information)</p></li>
+</ol>
+<p class="Body-Text">OR </p>
+<ol start="2" style="list-style: decimal;">
+	<li class="p-Numbered"><p class="Numbered">By the manual migration 
+	 process under Housekeeping as described below.</p></li>
+</ol>
+<p class="InvocationSequence">How to reach: <span class="hcp1">Housekeeping 
+ &gt; Item Tag Migration Utility</span></p>
+<p class="Body-Text">&#160;</p>
+<p class="Body-Text">The <span class="hcp1">White Goods Migration</span> 
+ window is as shown.</p>
+<p class="Body-Text">&#160;<img src="Item%20Tag%20Migration%20Utility%201.gif" alt="" border="0" class="hcp2"></p>
+<p class="Body-Text"><span class="hcp1">Migrate</span>: Click 
+ this button to migrate the stock items to the serial number configuration.</p>
+<p class="Body-Text"><span class="hcp1">End</span>: Click 
+ this button to stop/terminate the process.</p>
+<p class="Body-Text">A message box is displayed after clicking the Migrate 
+ button.</p>
+<p class="Body-Text">&#160;<img src="Item%20Tag%20Migration%20Utility%202.gif" alt="" border="0" class="hcp2"></p>
+<p class="Body-Text" style="margin-left: 47px;"><span class="hcp1">OK</span>: 
+ Click to close the message window.</p>
+<p class="Body-Text"><span class="hcp1">In a chain stores 
+ environment with Head Office (HO):</span> </p>
+<p class="Body-Text">If the Head Office (HO) configures the serial number 
+ information of the stock items and sends to its chain stores; </p>
+<ul>
+	<li class="p-bullet"><p class="bullet">The serial number configuration 
+	 is stored in a temporary table and is applied and migrated during 
+	 the OPEN Day/ day begin process. It is essential that the stock quantity 
+	 should exist in this case. </p></li>
+	<li class="p-bullet"><p class="bullet">If the stock balance is zero, 
+	 the serial number configuration gets applied during synchronisation. 
+	 However, the manual migration has to be done after synchronisation. 
+	 </p></li>
+</ul>
+<p class="Body-Text">&#160;</p>
+</body>
+</html>

@@ -1,0 +1,159 @@
+
+<!doctype HTML public "-//W3C//DTD HTML 4.0 Frameset//EN">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=windows-1252">
+ <meta name="generator" content="Adobe RoboHelp 10">
+<title>Shoper 9 POS Series A Release 1.92</title>
+<link rel="StyleSheet" href="../Shoper.css" type="text/css">
+<style title="hcp" type="text/css">
+<!--
+span.hcp1 { font-weight:bold; }
+-->
+</style>
+</head>
+<body>
+<script type="text/javascript" src="../ehlpdhtm.js" language="JavaScript1.2"></script>
+
+<h1>Shoper 9 POS Series A Release 1.92</h1>
+<p class="Body-Text" style="text-align: justify;">Enhancements:</p>
+<ul>
+<li class="p-bullet">
+<p class="bullet"><a href="#ENH_Billing">Billing</a></p>
+</li>
+<li class="p-bullet">
+<p class="bullet"><a href="#ENH_Customer_Price_Group">Customer Price Group</a></p>
+</li>
+</ul>
+<p class="Body-Text" style="text-align: justify;">Issues Resolved:</p>
+<ul>
+<li class="p-bullet">
+<p class="bullet"><a href="#IR_Billing">Billing</a></p>
+</li>
+<li class="p-bullet">
+<p class="bullet"><a href="#IR_Slips">Slips</a></p>
+</li>
+<li class="p-bullet">
+<p class="bullet"><a href="#IR_Physical_Stock_Take">Physical Stock Take</a></p>
+</li>
+<li class="p-bullet">
+<p class="bullet"><a href="#IR_Item_Master_Import">Item Master Import</a></p>
+</li>
+<li class="p-bullet">
+<p class="bullet"><a href="#IR_Open_Day">Open Day</a></p>
+</li>
+<li class="p-bullet">
+<p class="bullet"><a href="#IR_Sales_Reports">Sales Reports</a></p>
+</li>
+</ul>
+<h2>Enhancements</h2>
+<h3><a name="ENH_Billing" id="ENH_Billing">Billing</a></h3>
+<ul>
+<li class="p-bullet">
+<p class="bullet">Facility is provided to bill items as exclusive of tax, based on <span class="hcp1">Customer Price Group</span> <span style="font-weight: normal;">configuration. This configuration overrides all other tax inclusion/ exclusion setting while generating bill for a customer belonging to the customer price group.</span></p>
+</li>
+</ul>
+<ul>
+<li class="p-bullet">
+<p class="bullet">Facility is provided to the user for setting a transaction type as default while recalling slips.</p>
+</li>
+</ul>
+<ul>
+<li class="p-bullet">
+<p class="bullet">In Billing, while recalling slips, an option is provided to scan/key-in or import items from file.</p>
+</li>
+</ul>
+<h3><a name="ENH_Customer_Price_Group" id="ENH_Customer_Price_Group">Customer Price Group</a></h3>
+<ul>
+<li class="p-bullet">
+<p class="bullet">While cataloguing <span class="hcp1">Customer Price Group</span> an option is provided to enable tax exclusive billing for the customers in this group at showrooms. This overrides all other tax inclusion/ exclusion setting.</p>
+</li>
+</ul>
+<h2>Issues Resolved</h2>
+<h3><a name="IR_Billing" id="IR_Billing">Billing</a></h3>
+<ul>
+<li class="p-bullet">
+<p class="bullet">During sales return without reference, the button <span class="hcp1">Apply Sales Promo</span> was getting disabled if the mode of application of sales promotion was <span class="hcp1">Auto</span>. Hence the user was unable to apply promotions for sales return without reference.</p>
+</li>
+</ul>
+<p class="bullet" style="margin-left: 64px;">This issue has been resolved.</p>
+<ul>
+<li class="p-bullet">
+<p class="bullet">In Billing, if the mode of application of sales promotion was <span class="hcp1">Auto</span>, on pressing <span class="hcp1">Ctrl+4</span> the Addons / Deduction screen was not displayed. Hence the user was not able to apply Addons / Deduction, if Addons / Deduction were set as <span class="hcp1">Variable</span> in <span class="hcp1">Sales Factors Catalogue</span>.</p>
+</li>
+</ul>
+<p class="bullet" style="margin-left: 64px;">This issue has been resolved.</p>
+<ul>
+<li class="p-bullet">
+<p class="bullet">In Billing, if <span class="hcp1">F7</span> is pressed twice (without much delay), then the bill was getting saved twice with different bill numbers.</p>
+</li>
+</ul>
+<p class="bullet" style="margin-left: 64px;">This issue has been resolved.</p>
+<ul>
+<li class="p-bullet">
+<p class="bullet">Billing was rounding off three decimal places in <span class="hcp1">Rate</span> and <span class="hcp1">Quantity</span> fields to two places even when the decimal places were set to 3.</p>
+</li>
+</ul>
+<p class="bullet" style="margin-left: 64px;">This issue has been resolved.</p>
+<ul>
+<li class="p-bullet">
+<p class="bullet">In Billing, after completing payment details entry, if the <span class="hcp1">Ok</span> button was pressed twice, an error was occurring.</p>
+</li>
+</ul>
+<p class="bullet" style="margin-left: 64px;">This issue has been resolved by disabling the <span class="hcp1">Ok</span> button after the first click.</p>
+<h3><a name="IR_Slips" id="IR_Slips">Slips</a></h3>
+<ul>
+<li class="p-bullet">
+<p class="bullet">In Slips, stock check was happening even if the stock check parameter was disabled.</p>
+</li>
+</ul>
+<p class="bullet" style="margin-left: 64px;">This issue has been resolved.</p>
+<h3><a name="IR_Physical_Stock_Take" id="IR_Physical_Stock_Take">Physical Stock Take</a></h3>
+<ul>
+<li class="p-bullet">
+<p class="bullet">In some cases, after reinstallation and on doing discrepancy update, the control number (Scope Id) was not getting updated.</p>
+</li>
+</ul>
+<p class="bullet" style="margin-left: 64px;">This issue has been resolved.</p>
+<h3><a name="IR_Item_Master_Import" id="IR_Item_Master_Import">Item Master Import</a></h3>
+<ul>
+<li class="p-bullet">
+<p class="bullet">An error was occurring, during item master import into secondary database.</p>
+</li>
+</ul>
+<p class="bullet" style="margin-left: 64px;">This issue has been resolved.</p>
+<h3><a name="IR_Open_Day" id="IR_Open_Day">Open Day</a></h3>
+<ul>
+<li class="p-bullet">
+<p class="bullet">Month begin was not happening in some companies where stock loading was done by accepting quantity in item master.</p>
+</li>
+</ul>
+<p class="bullet" style="margin-left: 64px;">This issue has been resolved.</p>
+<h3><a name="IR_Sales_Reports" id="IR_Sales_Reports">Sales Reports</a></h3>
+<ul>
+<li class="p-bullet">
+<p class="bullet">In <span class="hcp1">Bill Wise Sales Report</span>, the totals of <span class="hcp1">Credit Card</span> and <span class="hcp1">Cash</span> columns were not getting recomputed correctly when a bill was voided.</p>
+</li>
+</ul>
+<p class="bullet" style="margin-left: 64px;">This issue has been resolved.</p>
+<ul>
+<li class="p-bullet">
+<p class="bullet">In <span class="hcp1">Sales Tax Register Report</span>, there was mismatch in tax values between the total computed from detailed report and values in summary reports when a single bill contained multiple tax rates.</p>
+</li>
+</ul>
+<p class="bullet" style="margin-left: 64px;">This issue has been resolved.</p>
+<ul>
+<li class="p-bullet">
+<p class="bullet">In <span class="hcp1">Daily Sales Book</span>, the total of the Bill Value was incorrect when there were transactions with deduction.</p>
+</li>
+</ul>
+<p class="bullet" style="margin-left: 64px;">This issue has been resolved.</p>
+<ul>
+<li class="p-bullet">
+<p class="bullet">In the <span class="hcp1">Bill Wise Sales Report</span>, the original sales bill reference (under the caption <span class="hcp1">Old No. Prefix &amp; No.</span>) was not getting populated.</p>
+</li>
+</ul>
+<p class="bullet" style="margin-left: 64px;">This issue has been resolved.</p>
+<p class="Body-Text">&#160;</p>
+</body>
+</html>

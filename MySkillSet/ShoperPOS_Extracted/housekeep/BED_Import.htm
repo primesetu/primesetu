@@ -1,0 +1,45 @@
+
+<!doctype HTML public "-//W3C//DTD HTML 4.0 Frameset//EN">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=windows-1252">
+ <meta name="generator" content="Adobe RoboHelp 10">
+<title>BED_Import</title>
+<link rel="StyleSheet" href="../Shoper.css" type="text/css">
+<style title="hcp" type="text/css">
+<!--
+span.hcp1 { font-weight:bold; }
+span.hcp2 { font-weight:bold;
+text-decoration:underline; }
+-->
+</style>
+</head>
+<body>
+<script type="text/javascript" src="../ehlpdhtm.js" language="JavaScript1.2"></script>
+
+<h1>Import Back-end Data</h1>
+<p class="Body-Text">Master data available in other applications or ERP system can be imported to Shoper 9 POS, after converting it to flat files. The data import process compares the key value in the flat file against the key value of the destination table. If the key value is not present in the table, the details pertaining to the key are inserted into the destination table. &#160;Otherwise, if the key value is present in the table, the details are updated.</p>
+<p class="Body-Text">The pre-requisites for successful data import are:</p>
+<ul>
+<li class="p-bullet">
+<p class="bullet">Appropriate Back-end Data <a href="BED_Configure.htm">Configuration</a></p>
+</li>
+<li class="p-bullet">
+<p class="bullet">The flat files with the appropriate name should be present in the directory as specified in the back-end data configuration</p>
+</li>
+<li class="p-bullet">
+<p class="bullet">The flat files should not contain duplicate entries as it would lead to an insert and update for the same key value</p>
+</li>
+</ul>
+<p class="InvocationSequence">How to reach: <span class="hcp1">Housekeeping &gt; Back-end Data &gt; Import</span></p>
+<p class="Body-Text">The <span class="hcp1">Data Transfer Utility</span> window is displayed.</p>
+<p class="Body-Text">&#160;<img src="i_back-end.gif" alt="" style="border: none;" border="0"></p>
+<p class="Body-Text">The grid lists all the tables based on the back-end data configuration defined. Click the required line to select the tables to be imported.</p>
+<p class="Navigation"><span class="hcp2">V</span><span class="hcp1">iew Error Log</span>: To view the error report generated if there are errors during import</p>
+<p class="Navigation"><span class="hcp2">P</span><span class="hcp1">rocess</span>: To import the tables</p>
+<p class="Navigation"><span class="hcp1">E</span><span class="hcp2">x</span><span class="hcp1">it</span>: To close the window without importing data</p>
+<p class="BlankLine">&#160;</p>
+<p class="Note"><span class="hcp1">Note:</span> The settings specified in the .ini file will be considered while inserting or updating the tables with data from the flat files provided.</p>
+<p class="body-text">&#160;</p>
+</body>
+</html>

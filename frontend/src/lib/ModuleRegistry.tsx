@@ -44,7 +44,7 @@ import ComingSoon from '../components/ComingSoon'
 import ManagementDashboard from '../modules/dashboard/ManagementDashboard'
 import BillingModule from '../modules/billing/BillingModule'
 import MasterRegistry from '../modules/catalogue/CatalogRegistry'
-import ItemMaster from '../modules/catalogue/ItemMaster'
+import ItemMasterModule from '../modules/inventory/ItemMasterModule'
 import InventoryModule from '../modules/inventory/InventoryModule'
 import AnalyticsModule from '../modules/analytics/AnalyticsModule'
 import ConfigModule from '../modules/settings/ConfigModule'
@@ -144,7 +144,7 @@ export const MODULES: ModuleDefinition[] = [
     id: 'item_master',
     label: 'Item Master',
     icon: Package,
-    component: <ItemMaster />,
+    component: <ItemMasterModule />,
     roles: ['OWNER', 'MANAGER'],
     showInSidebar: true,
     category: 'CATALOGUE'
@@ -221,7 +221,7 @@ export const COMPONENT_MAP: Record<string, React.ReactNode> = {
   'inventory': <InventoryModule />,
   'procurement': <ProcurementModule />,
   'movement': <StockMovement />,
-  'dayend': <DayEndModule onClose={() => {}} />,
+  'dayend': <DayEndModule />,
   'tills': <TillManagement />,
   'price': <PriceManagement />,
   'registry': <MasterRegistry />,
@@ -229,12 +229,12 @@ export const COMPONENT_MAP: Record<string, React.ReactNode> = {
   'analytics': <AnalyticsModule />,
   'intelligence': <IntelligenceCockpit />,
   'settings': <ConfigModule />,
-  'item_master': <ItemMaster />,
+  'item_master': <ItemMasterModule />,
   'customers': <CustomerMaster />,
   'vendors': <VendorMaster />,
   'personnel': <PersonnelMaster />,
   'loyalty': <LoyaltyModule />,
-  'barcode': <BarcodeStudio onClose={() => {}} />,
+  'barcode': <BarcodeStudio />,
   'schemes': <SchemesModule />,
   'salesrep': <SalesDrilldownModule />,
   'stockrep': <StockReports />,

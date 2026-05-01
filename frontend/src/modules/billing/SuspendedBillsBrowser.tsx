@@ -13,6 +13,7 @@ import React from 'react';
 import { Play, Trash2, Clock, X, Loader2, PackageOpen } from 'lucide-react';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { api } from '@/api/client';
+import { DataTable } from '@/components/ui/SovereignUI';
 
 interface SuspendedBillItem {
   id: string;
@@ -119,86 +120,67 @@ const SuspendedBillsBrowser: React.FC<Props> = ({ onRecall, onClose }) => {
         </div>
       </div>
 
-      {/* Content */}
-      <div className="flex-1 overflow-y-auto p-5 space-y-3">
-        {isLoading ? (
-          <div className="flex flex-col items-center justify-center h-48 gap-3 text-white/20">
-            <Loader2 className="w-8 h-8 animate-spin" />
-            <span className="text-[10px] font-black uppercase tracking-widest">Scanning Sovereign Vault...</span>
-          </div>
-        ) : bills?.length === 0 ? (
-          <div className="flex flex-col items-center justify-center h-48 gap-4 text-white/20">
-            <PackageOpen className="w-16 h-16" strokeWidth={0.8} />
-            <div className="text-center">
-              <div className="text-sm font-black uppercase tracking-widest">No Suspended Bills</div>
-              <div className="text-[10px] mt-1">Use F12 to suspend the active cart</div>
-            </div>
-          </div>
-        ) : (
-          bills?.map(bill => (
-            <div 
-              key={bill.id} 
-              className="bg-white/5 border border-white/10 rounded-2xl p-5 group hover:bg-white/10 hover:border-saffron/30 transition-all"
-            >
-              {/* Bill Meta */}
-              <div className="flex items-start justify-between mb-3">
-                <div>
-                  <div className="flex items-center gap-2 mb-1">
-                    <span className="text-[9px] font-black text-saffron uppercase tracking-widest px-2 py-0.5 bg-saffron/10 rounded-full">
-                      {bill.suspended_reason || 'On Hold'}
-                    </span>
-                    <span className="text-[9px] text-white/30 font-bold">
-                      {formatTime(bill.created_at)}
-                    </span>
-                  </div>
-                  <div className="text-2xl font-serif font-black text-white">
-                    ₹{Number(bill.net_payable).toLocaleString('en-IN', { maximumFractionDigits: 0 })}
-                  </div>
-                  <div className="text-[10px] text-white/40 font-bold mt-0.5">
-                    {bill.customer_mobile || 'Walk-in'} · {bill.items.length} item{bill.items.length !== 1 ? 's' : ''}
-                  </div>
+      {/* Content Area */}
+      <div className="flex-1 overflow-hidden p-4">
+        <DataTable 
+          data={bills || []}
+          loading={isLoading}
+          emptyMessage="No Suspended Bills Found"
+          columns={[
+            {
+              header: 'STATUS / REASON',
+              accessor: (bill: SuspendedBill) => (
+                <div className="flex flex-col py-1">
+                  <span className="text-[10px] font-black text-saffron uppercase tracking-widest">{bill.suspended_reason || 'ON HOLD'}</span>
+                  <span className="text-[9px] opacity-40">{formatTime(bill.created_at)}</span>
                 </div>
-              </div>
-
-              {/* Item Preview (top 3) */}
-              <div className="space-y-1 mb-4">
-                {bill.items.slice(0, 3).map((item, i) => (
-                  <div key={i} className="flex justify-between items-center text-[10px]">
-                    <span className="text-white/50 truncate max-w-[180px]">{item.name}</span>
-                    <span className="text-white/30 font-bold ml-2">×{item.qty}</span>
-                  </div>
-                ))}
-                {bill.items.length > 3 && (
-                  <div className="text-[9px] text-white/20 font-bold">
-                    +{bill.items.length - 3} more items...
-                  </div>
-                )}
-              </div>
-
-              {/* Actions */}
-              <div className="flex gap-2">
-                <button 
-                  onClick={() => deleteMutation.mutate(bill.id)}
-                  disabled={deleteMutation.isPending || recallMutation.isPending}
-                  className="p-3 rounded-xl bg-rose-500/10 text-rose-400 hover:bg-rose-500 hover:text-white transition-all disabled:opacity-30"
-                  title="Discard this suspended bill"
-                >
-                  {deleteMutation.isPending ? <Loader2 className="w-4 h-4 animate-spin" /> : <Trash2 className="w-4 h-4" />}
-                </button>
-                <button 
-                  onClick={() => recallMutation.mutate(bill)}
-                  disabled={recallMutation.isPending || deleteMutation.isPending}
-                  className="flex-1 flex items-center justify-center gap-2 bg-white text-navy px-4 py-3 rounded-xl font-black text-[10px] tracking-widest hover:bg-saffron hover:text-white transition-all shadow-xl disabled:opacity-40"
-                >
-                  {recallMutation.isPending 
-                    ? <Loader2 className="w-4 h-4 animate-spin" />
-                    : <><Play className="w-4 h-4 fill-current" /> RECALL TO CART</>
-                  }
-                </button>
-              </div>
-            </div>
-          ))
-        )}
+              ),
+              width: 150
+            },
+            {
+              header: 'CUSTOMER / ITEMS',
+              accessor: (bill: SuspendedBill) => (
+                <div className="flex flex-col py-1">
+                  <span className="font-bold text-sm">{bill.customer_mobile || 'WALK-IN'}</span>
+                  <span className="text-[10px] opacity-40 uppercase font-black">{bill.items.length} Item{bill.items.length !== 1 ? 's' : ''}</span>
+                </div>
+              ),
+              flex: 1
+            },
+            {
+              header: 'NET PAYABLE',
+              accessor: (bill: SuspendedBill) => (
+                <span className="font-mono font-black text-white text-lg">
+                  ₹{Number(bill.net_payable).toLocaleString()}
+                </span>
+              ),
+              align: 'right',
+              width: 160
+            },
+            {
+              header: 'ACTIONS',
+              accessor: (bill: SuspendedBill) => (
+                <div className="flex items-center gap-2">
+                  <button 
+                    onClick={() => recallMutation.mutate(bill)}
+                    disabled={recallMutation.isPending}
+                    className="h-8 px-4 bg-white text-navy rounded font-black text-[10px] tracking-widest uppercase hover:bg-saffron hover:text-white transition-all"
+                  >
+                    Recall
+                  </button>
+                  <button 
+                    onClick={() => deleteMutation.mutate(bill.id)}
+                    className="h-8 w-8 flex items-center justify-center bg-rose-500/10 text-rose-400 rounded hover:bg-rose-500 hover:text-white transition-all"
+                  >
+                    <Trash2 size={14} />
+                  </button>
+                </div>
+              ),
+              width: 150,
+              align: 'center'
+            }
+          ]}
+        />
       </div>
 
       <div className="px-6 py-3 border-t border-white/5 text-center">

@@ -1,8 +1,20 @@
+/* ============================================================
+ * PrimeSetu — Shoper9-Based Retail OS
+ * Zero Cloud · Sovereign · AI-Governed
+ * ============================================================
+ * System Architect : Jawahar R Mallah
+ * Organisation     : AITDL Network
+ * Project          : PrimeSetu
+ * © 2026 — All Rights Reserved
+ * "Memory, Not Code."
+ * ============================================================ */
+
 import React, { useState } from 'react'
 import { motion } from 'framer-motion'
 import { Wallet, CreditCard, QrCode, Ticket, UserCheck, X, CheckCircle2, ChevronRight, Calculator } from 'lucide-react'
-import { useTheme } from '@/hooks/useTheme'
 import { cn } from '@/lib/utils'
+import { formatCurrency, toPaise } from '@/utils/currency'
+import { useTheme } from '@/hooks/useTheme'
 
 interface PaymentMode {
   id: string
@@ -32,16 +44,18 @@ export default function MultiModePayment({
 
   const [activeMode, setActiveMode] = useState<string>('CASH')
   const [tempAmount, setTempAmount] = useState<string>('')
+  const [tempRef, setTempRef] = useState<string>('')
 
   const paidAmount = payments.reduce((acc, p) => acc + p.amount, 0)
   const balanceAmount = totalAmount - paidAmount
 
   const handleAddPayment = () => {
-    const val = parseFloat(tempAmount) || 0
+    const val = toPaise(tempAmount)
     if (val <= 0) return
 
-    setPayments(payments.map(p => p.id === activeMode ? { ...p, amount: p.amount + val } : p))
+    setPayments(payments.map(p => p.id === activeMode ? { ...p, amount: p.amount + val, refNo: tempRef || p.refNo } : p))
     setTempAmount('')
+    setTempRef('')
   }
 
   return (
@@ -72,14 +86,14 @@ export default function MultiModePayment({
             <p className={cn(
               "text-[10px] font-black uppercase tracking-widest mt-1",
               isInstitutional ? "text-white/70" : "text-text-tertiary"
-            )}>Payment Hub · SMRITI-OS Node 01</p>
+            )}>Payment Hub · PrimeSetu Node 01</p>
           </div>
           <div className="text-right">
             <div className={cn(
               "text-[10px] font-black uppercase tracking-widest mb-1",
               isInstitutional ? "text-white/70" : "text-text-tertiary"
             )}>Total Bill Value</div>
-            <div className="text-4xl font-black">₹{totalAmount.toLocaleString()}</div>
+            <div className="text-4xl font-black">{formatCurrency(totalAmount)}</div>
           </div>
         </div>
 
@@ -117,7 +131,7 @@ export default function MultiModePayment({
                         ? (activeMode === p.id ? "text-current" : (isInstitutional ? "text-green-700" : "text-green-400")) 
                         : (activeMode === p.id ? "opacity-60" : "text-text-tertiary")
                     )}>
-                      ₹{p.amount.toLocaleString()}
+                      {formatCurrency(p.amount)}
                     </div>
                  </div>
                  {p.amount > 0 && <CheckCircle2 className={cn("w-4 h-4", isInstitutional ? "text-green-600" : "text-green-400")} />}
@@ -135,7 +149,7 @@ export default function MultiModePayment({
                     ? (isInstitutional ? "text-red-600" : "text-red-400") 
                     : (isInstitutional ? "text-green-700" : "text-green-400")
                 )}>
-                  ₹{Math.max(0, balanceAmount).toLocaleString()}
+                  {formatCurrency(Math.max(0, balanceAmount))}
                 </div>
              </div>
           </div>
@@ -173,7 +187,7 @@ export default function MultiModePayment({
                       value={tempAmount}
                       onChange={(e) => setTempAmount(e.target.value)}
                       onKeyDown={(e) => e.key === 'Enter' && handleAddPayment()}
-                      placeholder={balanceAmount.toString()}
+                      placeholder={(Math.max(0, balanceAmount) / 100).toString()}
                       className={cn(
                         "w-full border-4 rounded-[2.5rem] pl-16 pr-10 py-10 text-5xl font-black outline-none transition-all",
                         isInstitutional 
@@ -190,6 +204,8 @@ export default function MultiModePayment({
                     <input 
                       type="text" 
                       placeholder="e.g. 123456"
+                      value={tempRef}
+                      onChange={(e) => setTempRef(e.target.value)}
                       className={cn(
                         "w-full border-2 rounded-2xl px-8 py-5 text-lg font-black outline-none transition-all",
                         isInstitutional 
@@ -216,7 +232,7 @@ export default function MultiModePayment({
 
             {/* Quick Actions */}
             <div className="absolute bottom-12 right-12 flex gap-4">
-               <button onClick={() => setTempAmount(balanceAmount.toString())} className={cn(
+               <button onClick={() => setTempAmount((Math.max(0, balanceAmount) / 100).toString())} className={cn(
                  "p-4 rounded-2xl text-[10px] font-black uppercase tracking-widest flex items-center gap-2 transition-colors",
                  isInstitutional 
                   ? "bg-accent/5 hover:bg-accent/10 text-accent rounded-none border border-accent/20" 
@@ -246,7 +262,7 @@ export default function MultiModePayment({
            <div className="flex gap-12">
               <div>
                 <div className="text-[9px] font-black uppercase tracking-widest mb-1 opacity-60">Total Settled</div>
-                <div className="text-4xl font-black">₹{paidAmount.toLocaleString()}</div>
+                <div className="text-4xl font-black">{formatCurrency(paidAmount)}</div>
               </div>
               {paidAmount > totalAmount && (
                 <div>
@@ -254,7 +270,7 @@ export default function MultiModePayment({
                   <div className={cn(
                     "text-4xl font-black",
                     isInstitutional ? "text-red-700" : "text-red-400"
-                  )}>₹{(paidAmount - totalAmount).toLocaleString()}</div>
+                  )}>{formatCurrency(paidAmount - totalAmount)}</div>
                 </div>
               )}
            </div>

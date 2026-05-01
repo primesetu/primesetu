@@ -1,0 +1,104 @@
+
+<!doctype HTML public "-//W3C//DTD HTML 4.0 Frameset//EN">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=windows-1252">
+ <meta name="generator" content="Adobe RoboHelp 10">
+<title>xGoods Receipts based on Stock No.</title>
+<link rel="StyleSheet" href="../Shoper.css" type="text/css">
+<style title="hcp" type="text/css">
+<!--
+span.hcp1 { font-weight:bold; }
+img.hcp2 { border:none; }
+span.hcp3 { font-weight:bold;
+text-decoration:underline; }
+-->
+</style>
+</head>
+<body>
+<script type="text/javascript" src="../ehlpdhtm.js" language="JavaScript1.2"></script>
+
+
+<h1>Goods Receipts based on Stock No.</h1>
+<p class="Body-Text">To Add Goods Receipts based on Stock No.</p>
+<p class="Body-Text"><span class="hcp1">Header Information</span> :</p>
+<p class="Body-Text" style="font-weight: bold;"><img src="GR_HeaderDetails.gif" alt="" border="0" class="hcp2"></p>
+<p class="Body-Text"><span class="hcp1">Transaction Type</span>: Select the transaction type from the drop down list. The list can show values as Purchase, Transfer In, Approval Receipt and Miscellaneous Receipts, based on the setting of the System Parameter.</p>
+<p class="Body-Text"><span class="hcp1">Supplier Id</span>: This caption dynamically changes based on the transaction type selected.</p>
+<ul>
+<li class="p-bullet">
+<p class="bullet">For <span class="hcp1">Purchase</span>, the caption is <span class="hcp1">Supplier ID</span>, for <span class="hcp1">Transfer In</span>, the caption is Chain Store and for the other two types, the caption is <span class="hcp1">Customer ID</span>.</p>
+</li>
+<li class="p-bullet">
+<p class="bullet">Enter the value or press <span class="hcp1">F2</span> to browse and select the value in this field. On pressing <span class="hcp1">F2</span>, a search window pops up. &#160;Choose the <span class="hcp1">Supplier id</span>/ <span class="hcp1">Customer id</span>. &#160;</p>
+</li>
+</ul>
+<p class="Body-Text">On selection of the <span class="hcp1">Supplier Id</span> the supplier’s name is displayed in next field.</p>
+<p class="Body-Text"><span class="hcp1">Reason Code</span>: Select the reason for inward. This field gets displayed for transaction types other than Purchase. Press <span class="hcp1">F2</span> to display the catalogued reason codes so that the appropriate one for the current transaction type can be selected.</p>
+<p class="Body-Text" style="color: #000000;"><span class="hcp1"><a href="Ref._DC_No_Browse.htm" name="ListOfPTFiles" id="ListOfPTFiles">Ref./DC No</a></span>: &#160;Enter the value or press <span class="hcp1">F2</span> or click <img src="Reference-No-Browse-button.gif" alt="" width="17" height="17" border="0" class="hcp2"> (the PT File browse) to browse in this field and select the reference number of the document received. Choose the Invoice or DC displayed against a specific supplier.</p>
+<p class="Body-Text"><span class="hcp1">DC Date</span>: Enter the date of reference document.</p>
+<p class="Body-Text"><span class="hcp1">Issue Prefix &amp; No.</span>: This field is displayed when <span class="hcp1">Approval Receipt</span> is selected as the Transaction Type. Approval receipt is made against an approval issue made earlier. So, enter the prefix and number of the approval issue in this field.</p>
+<p class="Body-Text"><span class="hcp1">Doc Remarks</span>: Enter remark if any.</p>
+<p class="Body-Text"><span class="hcp1">Source Tax Code</span>: Enter the tax code or press <span class="hcp1">F2</span> to browse and select the value in this field. On pressing <span class="hcp1">F2</span>, a search window pops up. Choose the appropriate tax code.</p>
+<p class="Body-Text"><span class="hcp1">Doc Prefix</span>: Depending on the type of transaction the prefix is displayed automatically provided there is only one prefix for that transaction type. Manual selection is required when there are multiple prefixes.</p>
+<p class="Body-Text"><span class="hcp1">Doc Number</span>: Displays incremental number for the selected Document.</p>
+<p class="Body-Text"><span class="hcp3">4</span><span class="hcp1">.Add Tax to Cost</span>: Check this box if taxes entered in the document are to be considered for computing the cost price.</p>
+<p class="Body-Text"><span class="hcp1"><a href="PO_Selecting_Purchase_Order.htm" name="PurchaseOrder" id="PurchaseOrder">Select Purchase Order</a></span>: This is useful to select items against the pending Purchase Order’s.</p>
+<p class="Note"><span class="hcp1">Note:</span> If a purchase order raised on the selected supplier is pending and the option <span class="hcp1">1.Select Purchase Order</span> is not selected, then a message <span class="hcp1">Purchase Order Found for Selected Vendor, Do you wish to Select PO</span> is displayed. Click <span class="hcp1">Yes to</span> select the pending <span class="hcp1"><a href="PO_Selecting_Purchase_Order.htm">Purchase Order</a></span>. If you select <span class="hcp1">No</span> the cursor moves to the <span class="hcp1">Stock No.</span> column and you can enter the stock number or select the stock number by pressing <span class="hcp1">F2</span> as per the requirement.</p>
+<p class="Body-Text"><span class="hcp1">Load from PT File</span>: &#160;This option is available based on <a href="GI_Configuration.htm#Load_from_PT_File">configuration</a>. Click this <a href="Load_from_PT_File.htm">option</a> to load item details from <span class="hcp1">PT File</span>.</p>
+<p class="Body-Text">The item details in the file will be loaded on to items grid only if Supplier ID/ Chain Store ID, Doc Ref Number and Doc Date entered in the respective fields of inwards entry screen matches with that content of the PT file. If not, a proper message will be displayed. A log file (Pt_Validator) is created in the log folder (Shoper\Share\Log) while trying to load a PT File. &#160;Indicators are provided in the log file to identify the errors and corrections. If the PT File cannot be loaded (due to format or data type errors), check this log file to verify and correct the errors.</p>
+<p class="Body-Text">A <span class="hcp1">Goods Inwards</span> done using <span class="hcp1">Load from PT File</span> creates the pricing master for new items and updates the stock master.</p>
+<p class="Body-Text" style="margin-left: 7px;"><span class="hcp2" style="font-weight: bold;">Load from PDT File</span>: This option is available based on <a href="GI_Configuration.htm#LoadFromPDTFile">configuration</a>. Click to load item details from a text file.</p>
+<p class="Body-Text" style="margin-left: 47px; text-align: left;">If the PDT file format is not configured, the <span class="hcp2"><a href="Load_from_PDT_File.htm" style="font-weight: bold;">Browse</a></span> window opens. Select the required PDT file format.</p>
+<p class="Body-Text" style="margin-left: 47px;">The <span class="hcp2" style="font-weight: bold;">Open</span> window is displayed for file selection. Choose the file and click <span class="hcp2" style="font-weight: bold;">Open</span>. The item details will be displayed in the grid.</p>
+<p class="Body-Text"><span class="hcp1">Load Outward to Inward</span>: This option is available based on <span style="color: #ff00ff;"><a href="GO_Configuration.htm#LoadInwardToOutward" style="color: #0000ff;">configuration</a></span>. This is useful to send all items in an outward document to any of the stores in the chain. Click to send all the items sent against a goods outward document to an inward document. On clicking the button, the <span class="hcp2" style="font-weight: bold;"><a href="GI__Load_Outward_to_Inward.htm">Load Outward to Inward</a></span> window is displayed.</p>
+<p class="Body-Text"><span class="hcp1">Items Entry Grid</span>: The combination of the fields available in this grid changes as per the value provided. There are some common fields which are displayed irrespective of the values provided. This grid is populated with values if you load the data from a <span class="hcp1">P.O.</span>/ <span class="hcp1">PDT File</span>/ <span class="hcp1">PT File</span>. Click <a class="dropspot" href="javascript:TextPopup(this)" id="a2" style="font-weight: normal; color: #0000ff;">here</a> for more information.</p>
+<div class="droptext" id="POPUP251753633" style="display: none;">
+<p class="Body-Text"><img src="GR_TransGrid.gif" alt="" border="0" class="hcp2"></p>
+<p class="Body-Text"><span class="hcp1">Stock No</span>: Enter or Scan or Browse (<span class="hcp1">F2</span>) the item for stock number.</p>
+<p class="Body-Text"><span class="hcp1">Item Description</span>: Displays the description for the stock number entered.</p>
+<p class="Body-Text"><span class="hcp1">PO Prefix, PO No,</span> and <span class="hcp1">Pending PO Qty</span>: These fields appear only when the transaction type is <span class="hcp1">Purchase</span> and a PO is selected under <span class="hcp1">1.Select Purchase Order</span>.</p>
+<p class="Body-Text"><span class="hcp1">Doc Qty.</span>: The quantity as displayed in the document (example, invoice), is entered here. If items are loaded from a PT File, then this quantity which is pre-filled cannot be altered.</p>
+<p class="Body-Text"><span class="hcp1">Act Qty.</span>: Enter the item wise quantity received. This field can be filled with LSQ set for the item depending on the parameter set in the <span class="hcp1">Inwards</span> category. This field is populated when physical verification is for an inward consignment which is identified by the unique combination of Supplier Id, Ref. Doc. No. and Ref. Date.</p>
+<p class="Body-Text" style="color: #000000;"><span class="hcp1">Selling Price</span> and <span class="hcp1">Current Cost</span>: Displays the values available in the items master for these two fields. If the transaction type is <span class="hcp1">Purchase</span> then, <span class="hcp1">Purchase Price</span> is displayed instead of <span class="hcp1">Current Cost</span>. &#160;A drop-down list is displayed (based on <span class="hcp1">Item Classification</span> parameter settings) when multiple prices are available. Select the price from the list.</p>
+<p class="Body-Text"><span class="hcp1">Value</span>: Calculates and displays the product of the <span class="hcp1">Act Qty</span> and <span class="hcp1">Purchase Cost</span>.</p>
+<p class="Body-Text"><span class="hcp1">Discount Rate</span> and <span class="hcp1">Discount Amount</span>: Enter the items level discounts, if any, as an <span class="hcp1">Amount</span> or <span class="hcp1">Rate</span> to be applied on <span class="hcp1">Value</span>. If rate is entered then the amount is automatically calculated and displayed and vice versa.</p>
+<p class="Body-Text"><span class="hcp1">Tax Rate and Tax Amount</span>: Enter Item level tax either as Rate or Amount. The purchase tax is calculated on predefined rates as per the settings in the System Parameters.</p>
+<p class="Body-Text"><span class="hcp1">Add-on Before Tax</span>: Enter any additional value to be added to the cost before calculating the Tax. Tax is also calculated for this value.</p>
+<p class="Body-Text" style="color: #000000;"><span class="hcp1">Add-on After Tax</span>: Enter any additional value to be added to the cost. Tax is not calculated on this value.</p>
+<p class="Body-Text" style="color: #000000;"><span class="hcp1">Deduction Before Tax</span>: Enter any value to be subtracted from the cost. Tax is calculated on this value also and reduced from the Tax Amount.</p>
+<p class="Body-Text" style="color: #000000;"><span class="hcp1">Deduction After Tax</span>: Enter any value to be subtracted from the cost. Tax is not calculated on this value.</p>
+<p class="Navigation"><span class="hcp1">Note:</span> Selection of multiple Addons and Deductions can be configured in System Parameters.</p>
+<p class="Body-Text"><span class="hcp1">Doc. Total</span>: Displays the total amount arrived by adding or subtracting, as the case may be, the values of Discount, Tax, Add-On and Deductions.</p>
+<p class="Body-Text"><span class="hcp1">DC/ Inv. Total</span>: Enter the DC/ Invoice total amount in this field.</p>
+<p class="Note"><span class="hcp1">Note</span>: If the amount is greater than <span class="hcp1">Doc. Total</span> amount then the following screen is displayed.</p>
+<p class="Note"><img src="Goods%20Receipts%20based%20on%20Stock%20No_5.gif" alt="" width="300" height="106" border="0" class="hcp2"></p>
+<p class="Note">If the amount is lesser than <span class="hcp1">Doc. Total</span> amount then the following screen is displayed.</p>
+<p class="Note"><img src="Goods%20Receipts%20based%20on%20Stock%20No_6.gif" alt="" width="300" height="106" border="0" class="hcp2"> &#160;</p>
+</div>
+<p class="Body-Text" style="font-weight: bold;"><a href="Goods_Receipts_based_on_Stock_No_Footer..htm">Footer details</a></p>
+<p class="Navigation"><span class="hcp3">O</span><span class="hcp1">k</span>: To save the goods inward entry</p>
+<p class="Navigation"><span class="hcp3">C</span><span class="hcp1">ancel</span>: To clear the entries made in goods inward option</p>
+<p class="BlankLine">&#160;</p>
+<p class="FunctionKey"><span class="hcp1">Alt + H</span>: Key to display or clear the hot keys list available</p>
+<p class="FunctionKey"><span class="hcp1">Ctrl + Alt + H</span>: Header Extension</p>
+<p class="FunctionKey"><span class="hcp1">Ctrl + Alt + D</span>: Detailed Extension</p>
+<p class="FunctionKey"><span class="hcp1">Ctrl + Alt + F</span>: Footer Extension</p>
+<p class="FunctionKey"><span class="hcp1">F4</span>: To delete an item</p>
+<p class="FunctionKey"><span class="hcp1">F7</span>: To save a transaction</p>
+<p class="FunctionKey"><span class="hcp1">Up/Down arrow</span>: To move across grid</p>
+<p class="FunctionKey"><span class="hcp1">Ctrl + I</span>: To alter MRP of an item</p>
+<p class="FunctionKey"><span class="hcp1">Ctrl + T</span>: To toggle between Item Description and Item Classification</p>
+<p class="FunctionKey"><span class="hcp1">Ctrl + 1</span>: Additional document information</p>
+<p class="FunctionKey"><span class="hcp1">Ctrl + 2</span>: Additional item information</p>
+<p class="FunctionKey"><span class="hcp1">Ctrl + 3</span>: Additional summary information</p>
+<p class="FunctionKey"><span class="hcp1"><a name="CreateNewItem" id="CreateNewItem">Ins &#160;Key</a></span>: To create a new item</p>
+<p class="body-text">&#160;</p>
+
+
+<script type="text/javascript" language="JavaScript1.2">//<![CDATA[
+	if( typeof( TextPopupInit ) != 'function' ) TextPopupInit = new Function();
+	TextPopupInit('a2','POPUP251753633');
+//]]></script>
+</body>
+</html>

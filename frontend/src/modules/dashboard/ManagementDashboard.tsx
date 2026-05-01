@@ -11,6 +11,7 @@
 
 import { useState, useEffect, useMemo } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
+import { useQuery } from '@tanstack/react-query'
 import { 
   LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, 
   AreaChart, Area, BarChart, Bar, Cell 
@@ -24,24 +25,42 @@ import { api } from '@/api/client'
 import { syncEngine } from '@/lib/SyncEngine'
 import { cn } from '@/lib/utils'
 import { useTheme } from '@/hooks/useTheme'
+import { formatCurrency } from '@/utils/currency'
 
 // ── MOCK DATA FOR CINEMATIC FEEL ──
-const salesPulse = [
-  { time: '09:00', val: 12000 }, { time: '11:00', val: 45000 },
-  { time: '13:00', val: 32000 }, { time: '15:00', val: 89000 },
-  { time: '17:00', val: 110000 }, { time: '19:00', val: 95000 },
-  { time: '21:00', val: 65000 },
-]
-
 export default function ManagementDashboard() {
-  const [stats, setStats] = useState<any>({ today_revenue: 124500, bills_today: 42, active_skus: 1240, low_stock_alerts: 8 });
-  const [loading, setLoading] = useState(false);
   const [pulse, setPulse] = useState(0);
 
-  useEffect(() => {
-    const timer = setInterval(() => setPulse(p => (p + 1) % 100), 2000);
-    return () => clearInterval(timer);
-  }, []);
+  // --- Real-time Data Queries ---
+  const { data: stats = { today_revenue: 0, bills_today: 0, active_skus: 0, low_stock_alerts: 0 }, isLoading } = useQuery({
+    queryKey: ['dashboard-stats'],
+    queryFn: () => api.dashboard.getStats(),
+    refetchInterval: 30000 // Refresh every 30s
+  });
+
+  const { data: history = [] } = useQuery({
+    queryKey: ['billing-history-mini'],
+    queryFn: () => api.billing.getHistory()
+  });
+
+  // Transform history into pulse data for chart
+  const salesPulse = useMemo(() => {
+    if (!history.length) return [
+      { time: '09:00', val: 0 }, { time: '12:00', val: 0 }, { time: '15:00', val: 0 }, { time: '18:00', val: 0 }, { time: '21:00', val: 0 }
+    ];
+    
+    // Simple hourly bucket
+    const buckets: Record<string, number> = {};
+    history.forEach((b: any) => {
+      const hour = new Date(b.created_at).getHours();
+      const timeStr = `${hour.toString().padStart(2, '0')}:00`;
+      buckets[timeStr] = (buckets[timeStr] || 0) + (b.total || 0);
+    });
+
+    return Object.entries(buckets)
+      .map(([time, val]) => ({ time, val }))
+      .sort((a, b) => a.time.localeCompare(b.time));
+  }, [history]);
 
   const metricCards = [
     { label: 'Today Revenue', value: `₹${stats.today_revenue.toLocaleString()}`, sub: '+12.4% vs Avg', icon: DollarSign, color: 'text-[var(--accent)]', bg: 'bg-[var(--accent)]/10' },
@@ -150,22 +169,15 @@ export default function ManagementDashboard() {
                 <span className="text-[8px] font-black text-slate-500 uppercase">Real-time Feed · {new Date().toLocaleDateString()}</span>
              </div>
              <div className="flex-1 max-h-[200px] overflow-y-auto tally-scrollbar">
-                {[
-                  { time: '18:32:05', msg: 'TERMINAL X01: BILL #INV-2026-0042 GENERATED', status: 'SUCCESS', amt: '₹12,450' },
-                  { time: '18:31:12', msg: 'STOCK SYNC: 124 ITEMS PUSHED TO HO CLOUD', status: 'SYNCED', amt: '' },
-                  { time: '18:30:45', msg: 'SECURITY: SOVEREIGN INTEGRITY CHECK PASSED', status: 'VERIFIED', amt: '' },
-                  { time: '18:28:10', msg: 'USER: OWNER LOGGED IN FROM IP 192.168.1.42', status: 'AUTH', amt: '' },
-                  { time: '18:25:00', msg: 'SYSTEM: AUTO-RECONCILIATION COMPLETED', status: 'DONE', amt: '' },
-                ].map((log, i) => (
+                {history.slice(0, 8).map((log: any, i: number) => (
                   <div key={i} className="flex items-center gap-4 px-6 py-2 hover:bg-white/5 transition-all group">
-                     <span className="text-[9px] font-mono text-slate-500 font-bold">{log.time}</span>
+                     <span className="text-[9px] font-mono text-slate-500 font-bold">{new Date(log.created_at).toLocaleTimeString()}</span>
                      <div className="h-2 w-px bg-white/10" />
-                     <span className="flex-1 text-[9px] font-black text-white/70 group-hover:text-white uppercase tracking-tight truncate">{log.msg}</span>
-                     <span className="text-[9px] font-black text-[var(--gold)] font-mono">{log.amt}</span>
-                     <div className={cn(
-                       "px-2 py-0.5 text-[8px] font-black uppercase tracking-widest",
-                       log.status === 'SUCCESS' ? 'text-emerald-500' : 'text-slate-400'
-                     )}>{log.status}</div>
+                     <span className="flex-1 text-[9px] font-black text-white/70 group-hover:text-white uppercase tracking-tight truncate">
+                       BILL #{log.bill_number} GENERATED {log.customer_mobile ? `FOR ${log.customer_mobile}` : 'CASH'}
+                     </span>
+                     <span className="text-[9px] font-black text-[var(--gold)] font-mono">{formatCurrency(log.total)}</span>
+                     <div className="px-2 py-0.5 text-[8px] font-black uppercase tracking-widest text-emerald-500">SUCCESS</div>
                   </div>
                 ))}
              </div>

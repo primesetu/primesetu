@@ -1,10 +1,10 @@
 # ============================================================
-# SMRITI-OS — Shoper9-Based Retail OS
+# PrimeSetu — Shoper9-Based Retail OS
 # Zero Cloud · Sovereign · AI-Governed
 # ============================================================
 # System Architect : Jawahar R Mallah
 # Organisation     : AITDL Network
-# Project          : SMRITI-OS
+# Project          : PrimeSetu
 # © 2026 — All Rights Reserved
 # "Memory, Not Code."
 # ============================================================ #
@@ -17,7 +17,7 @@ from uuid import UUID
 
 from app.core.database import get_db
 from app.core.security import require_auth, CurrentUser
-from app.models import UIFieldConfig, PrintTemplate, AttributeAlias, CategoryPolicy
+from app.models import UIFieldConfig, PrintTemplate, AttributeAlias, CategoryPolicy, Acceptdisplaydtls
 from app.schemas.configuration import (
     UIFieldConfigRead, UIFieldConfigBase,
     PrintTemplateRead, PrintTemplateBase,
@@ -26,7 +26,41 @@ from app.schemas.configuration import (
 )
 
 router = APIRouter(prefix="/config", tags=["configuration"])
+
 # --- UI Field Configuration (AcceptDisplayDtls Parity) ---
+
+@router.get("/legacy-mask/{trn_type}")
+async def get_legacy_mask(
+    trn_type: int,
+    current_user: CurrentUser = Depends(require_auth),
+    db: AsyncSession = Depends(get_db)
+):
+    """
+    Fetch the legacy Shoper 9 display mask for a transaction type.
+    This bridge allows SMRITI-OS to honor institutional field captions and visibility.
+    """
+    stmt = select(Acceptdisplaydtls).where(
+        Acceptdisplaydtls.store_id == current_user.store_id,
+        Acceptdisplaydtls.trntype == trn_type
+    ).order_by(Acceptdisplaydtls.disppos)
+    
+    result = await db.execute(stmt)
+    rows = result.scalars().all()
+    
+    # Map to a standardized format for the frontend SovereignUI
+    mask = []
+    for row in rows:
+        mask.append({
+            "field": row.columnname,
+            "headerName": row.dispcap or row.acptcap or row.columnname,
+            "visible": row.dispvisible,
+            "editable": row.acptvisible, # If you can accept it, it's editable
+            "width": row.dispwidth * 10 if row.dispwidth else 150, # Scale factor for modern UI
+            "align": "left" if row.dispalign == 1 else "right" if row.dispalign == 2 else "center",
+            "pos": row.disppos
+        })
+    
+    return mask
 
 @router.get("/ui-fields/{screen_name}", response_model=List[UIFieldConfigRead])
 async def get_ui_field_configs(

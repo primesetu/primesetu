@@ -1,0 +1,868 @@
+
+<!doctype HTML public "-//W3C//DTD HTML 4.0 Frameset//EN">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=windows-1252">
+ <meta name="generator" content="Adobe RoboHelp 10">
+<title>Shoper 9 POS Series A Release 2.0</title>
+<link rel="StyleSheet" href="../Shoper.css" type="text/css">
+<style title="hcp" type="text/css">
+<!--
+span.hcp1 { font-weight:bold; }
+li.hcp2 { list-style:none;
+display:inline; }
+h4.hcp3 { margin-left:64px; }
+-->
+</style>
+</head>
+<body>
+<script type="text/javascript" src="../ehlpdhtm.js" language="JavaScript1.2"></script>
+
+<h1>Shoper 9 POS Series A Release 2.0</h1>
+<p class="Body-Text">New Features:</p>
+<ul>
+<li class="p-bullet">
+<p class="bullet"><a href="#NF_Multiple_Selling_Price">Multiple Selling Prices</a></p>
+</li>
+<li class="p-bullet">
+<p class="bullet"><a href="#NF_Personnel_Catalogue">Personnel Catalogue</a></p>
+</li>
+<li class="p-bullet">
+<p class="bullet"><a href="#NF_Incentive_Definition">Incentive Definition</a></p>
+</li>
+<li class="p-bullet">
+<p class="bullet"><a href="#NF_Purchase_Tax">Purchase Tax</a></p>
+</li>
+<li class="p-bullet">
+<p class="bullet"><a href="#NF_Transaction_Templates_Designer">Transaction Templates Designer</a></p>
+</li>
+<li class="p-bullet">
+<p class="bullet"><a href="#NF_Dashboard_Reports">Dashboard Reports</a></p>
+</li>
+</ul>
+<p class="Body-Text" style="text-align: justify;">Enhancements:</p>
+<ul>
+<li class="p-bullet">
+<p class="bullet"><a href="#Enh_Billing">Billing</a></p>
+</li>
+<li class="p-bullet">
+<p class="bullet"><a href="#Enh_Till_Management">Till Management</a></p>
+</li>
+<li class="p-bullet">
+<p class="bullet"><a href="#Enh_Sales_Return">Sales Return</a></p>
+</li>
+<li class="p-bullet">
+<p class="bullet"><a href="#Enh_Payments_to_HO">Payments to HO</a></p>
+</li>
+<li class="p-bullet">
+<p class="bullet"><a href="#Enh_Item_Master">Item Master</a></p>
+</li>
+<li class="p-bullet">
+<p class="bullet"><a href="#Enh_Goods_Inwards">Goods Inwards</a></p>
+</li>
+<li class="p-bullet">
+<p class="bullet"><a href="#Enh_Goods_Outwards">Goods Outwards</a></p>
+</li>
+<li class="p-bullet">
+<p class="bullet"><a href="#Enh_Data_Export_Masters">Data Export</a></p>
+</li>
+<li class="p-bullet">
+<p class="bullet"><a href="#Enh_Data_Communication">Data Communication</a></p>
+</li>
+<li class="p-bullet">
+<p class="bullet"><a href="#Enh_Data_Synchronisation">Data Synchronisation</a></p>
+</li>
+<li class="p-bullet">
+<p class="bullet"><a href="#Enh_Replication_Import__AST">Replication Import (AST)</a></p>
+</li>
+<li class="p-bullet">
+<p class="bullet"><a href="#Enh_Tally_Interface">Tally Interface</a></p>
+</li>
+<li class="p-bullet">
+<p class="bullet"><a href="#Enh_Shoper_Manager">Shoper Manager</a></p>
+</li>
+<li class="p-bullet">
+<p class="bullet"><a href="#Enh_Setup">Setup</a></p>
+</li>
+<li class="p-bullet">
+<p class="bullet"><a href="#Enh_Print_Engine">Print Engine</a></p>
+</li>
+<li class="p-bullet">
+<p class="bullet"><a href="#Enh_Reports">Reports</a></p>
+</li>
+<li class="p-bullet">
+<p class="bullet"><a href="#Enh_Report_Scheduler">Report Scheduler</a></p>
+</li>
+<li class="p-bullet">
+<p class="bullet"><a href="#Enh_Currency_Catalogues">Currency Catalogues</a></p>
+</li>
+</ul>
+<p class="Body-Text" style="text-align: justify;">Issues Resolved:</p>
+<ul>
+<li class="p-bullet">
+<p class="bullet"><a href="#IR_Billing">Billing</a></p>
+</li>
+<li class="p-bullet">
+<p class="bullet"><a href="#IR_Pending_order_Trn_Closure">Pending order / Trn Closure</a></p>
+</li>
+<li class="p-bullet">
+<p class="bullet"><a href="#IR_Credit_Sale_Management">Credit Sale Management</a></p>
+</li>
+<li class="p-bullet">
+<p class="bullet"><a href="#IR_Credit_Card_Submission">Credit Card Submission</a></p>
+</li>
+<li class="p-bullet">
+<p class="bullet"><a href="#IR_Printing">Printing</a></p>
+</li>
+<li class="p-bullet">
+<p class="bullet"><a href="#IR_Goods_Inwards">Goods Inwards</a></p>
+</li>
+<li class="p-bullet">
+<p class="bullet"><a href="#IR_Goods_Outwards">Goods Outwards</a></p>
+</li>
+<li class="p-bullet">
+<p class="bullet"><a href="#IR_Packing_slip">Packing slip</a></p>
+</li>
+<li class="p-bullet">
+<p class="bullet"><a href="#IR_Physical_Stock_Management">Physical Stock Management</a></p>
+</li>
+<li class="p-bullet">
+<p class="bullet"><a href="#IR_Data_Synchronisation">Data Synchronisation</a></p>
+</li>
+<li class="p-bullet">
+<p class="bullet"><a href="#IR_General_Lookup">General Lookup</a></p>
+</li>
+<li class="p-bullet">
+<p class="bullet"><a href="#IR_SIS">SIS</a></p>
+</li>
+<li class="p-bullet">
+<p class="bullet"><a href="#IR_System_Parameters">System Parameters</a></p>
+</li>
+<li class="p-bullet">
+<p class="bullet"><a href="#IR_Tally_Interface">Tally Interface</a></p>
+</li>
+<li class="p-bullet">
+<p class="bullet"><a href="#IR_Sync_Status_report">Sync Status report</a></p>
+</li>
+<li class="p-bullet">
+<p class="bullet"><a href="#IR_Reports">Reports</a></p>
+</li>
+<li class="p-bullet">
+<p class="bullet"><a href="#IR_Report_Scheduler">Report Scheduler</a></p>
+</li>
+</ul>
+<h2>New Features</h2>
+<h3 class="Body-Text"><a name="NF_Multiple_Selling_Price" id="NF_Multiple_Selling_Price">Multiple Selling Prices</a></h3>
+<ul>
+<li class="p-bullet">
+<p class="bullet">Facility to define multiple prices for selected stock items or all stock items.</p>
+</li>
+<li class="p-bullet">
+<p class="bullet">Can select any of the defined prices in Sales, Inwards, Outwards and Slips transactions.</p>
+</li>
+<li class="p-bullet">
+<p class="bullet">Can deactivate / archive obsolete prices as per requirement.</p>
+</li>
+<li class="p-bullet">
+<p class="bullet">Can use deactivated prices in sales return transactions without reference.</p>
+</li>
+<li class="p-bullet">
+<p class="bullet">Price List is available with all relevant prices for each stock item.</p>
+</li>
+<li class="p-bullet">
+<p class="bullet">Centralised control of multiple prices from Shoper 9 HO.</p>
+</li>
+</ul>
+<h3><a name="NF_Personnel_Catalogue" id="NF_Personnel_Catalogue">Personnel Catalogue</a></h3>
+<ul>
+<li class="p-bullet">
+<p class="bullet">Facility to catalogue employee details such as employee code, name, date of joining, mobile number, e-mail ID, address, etc.</p>
+</li>
+<li class="p-bullet">
+<p class="bullet">Details of all employees catalogued can be viewed in <span class="hcp1">Personnel Listing</span> under <span class="hcp1">Listing</span>.</p>
+</li>
+<li class="p-bullet">
+<p class="bullet">The facility to activate / deactivate employees temporarily or permanently.</p>
+</li>
+<li class="p-bullet">
+<p class="bullet">The facility to manage employees under different designations.</p>
+</li>
+<li class="p-bullet">
+<p class="bullet">Exclusively settings to allow selection of employees in transactions.</p>
+</li>
+<li class="p-bullet">
+<p class="bullet">Only active employees will be available for selection in transactions.</p>
+</li>
+<li class="p-bullet">
+<p class="bullet">Centralised control of employees from Shoper 9 HO.</p>
+</li>
+</ul>
+<h3><a name="NF_Incentive_Definition" id="NF_Incentive_Definition">Incentive Definition</a></h3>
+<ul>
+<li class="p-bullet">
+<p class="bullet">Incentives for personnel can be:</p>
+</li>
+<li class="hcp2">
+<ul>
+<li class="p-bullet">
+<p class="bullet">Based on total volume of goods sold, total value of goods sold, on specified bill value or on highest bill value.</p>
+</li>
+</ul>
+<ul>
+<li class="p-bullet">
+<p class="bullet">Applied for all employees alike or specified employees separately.</p>
+</li>
+</ul>
+<ul>
+<li class="p-bullet">
+<p class="bullet">Set for all items or specified items.</p>
+</li>
+</ul>
+<ul>
+<li class="p-bullet">
+<p class="bullet">Set for specific period and target.</p>
+</li>
+</ul>
+<ul>
+<li class="p-bullet">
+<p class="bullet">Calculated for sale value for a period, bill value or the value above the specified target.</p>
+</li>
+</ul>
+</li>
+<li class="p-bullet">
+<p class="bullet">Incentive report available, to help the management in deciding the incentive to be paid.</p>
+</li>
+<li class="p-bullet">
+<p class="bullet">In Chain stores, the incentives for the sales personnel can be catalogued at Shoper 9 HO and sent to the POS locations.</p>
+</li>
+</ul>
+<h3><a name="NF_Purchase_Tax" id="NF_Purchase_Tax">Purchase Tax</a></h3>
+<ul>
+<li class="p-bullet">
+<p class="bullet">Facility provided to catalogue Purchase Tax in Shoper 9 POS.</p>
+</li>
+</ul>
+<p class="bullet" style="margin-left: 64px;">In goods inwards transactions (Purchase, Transfer In &amp; Miscellaneous Receipts), the tax rates will be prefilled and the tax amount will be auto calculated according to the selected vendor types based on configuration.</p>
+<p class="bullet" style="margin-left: 64px;">(System parameter <span class="hcp1">Auto calculate purchase tax based on predefined rates</span> under category <span class="hcp1">Inwards</span>).</p>
+<h3><a name="NF_Transaction_Templates_Designer" id="NF_Transaction_Templates_Designer">Transaction Templates Designer</a></h3>
+<ul>
+<li class="p-bullet">
+<p class="bullet">Tool to design templates for printing <span class="hcp1">Sales</span> (New Bill, Returns and Void), <span class="hcp1">Slips</span> (Suspension, Sales Order, Sales Advice Slips, Service Order, Carton and Pallet) and <span class="hcp1">Stock</span> (Purchase, Transfer and Miscellaneous) transactions.</p>
+</li>
+</ul>
+<h3><a name="NF_Dashboard_Reports" id="NF_Dashboard_Reports">Dashboard Reports</a></h3>
+<p class="Body-Text">Graphical dashboard reports are accessible on Shoper 9 opening screen.</p>
+<ul>
+<li class="p-bullet">
+<p class="bullet">Any Analysis Report can be viewed as dashboard report, within the limits of user rights.</p>
+</li>
+<li class="p-bullet">
+<p class="bullet">Facility to view up to six reports at a time.</p>
+</li>
+<li class="p-bullet">
+<p class="bullet">Option to select and configure the reports as per your requirements.</p>
+</li>
+<li class="p-bullet">
+<p class="bullet">Facility to select different types of graphs simultaneously.</p>
+</li>
+<li class="p-bullet">
+<p class="bullet">Additionally, summary info of up to five selected attributes can be viewed.</p>
+</li>
+</ul>
+<h2>Enhancements</h2>
+<h3><a name="Enh_Billing" id="Enh_Billing">Billing</a></h3>
+<ul>
+<li class="p-bullet">
+<p class="bullet">In <span class="hcp1">Billing</span>, hotkey (<span class="hcp1">F3</span>) is provided to alter <span class="hcp1">Quantity</span> on the fly even when the system parameter is disabled for alteration.</p>
+</li>
+<li class="p-bullet">
+<p class="bullet">In <span class="hcp1">Billing</span>, the facility to plugin user defined customisation at <span class="hcp1">Customer Code</span> field is provided.</p>
+</li>
+</ul>
+<h3><a name="Enh_Till_Management" id="Enh_Till_Management">Till Management</a></h3>
+<ul>
+<li class="p-bullet">
+<p class="bullet">Till Management is enhanced with the facility to carry forward the closing balance of one shift as the opening balance of the next shift, user-wise.</p>
+</li>
+</ul>
+<h3><a name="Enh_Sales_Return" id="Enh_Sales_Return">Sales Return</a></h3>
+<ul>
+<li class="p-bullet">
+<p class="bullet">In Sales Return without reference, the facility to alter quantity based on configuration is provided. (System parameter <span class="hcp1">Apply LSQ for Sales Return without Ref</span> under category <span class="hcp1">Billing</span>).</p>
+</li>
+</ul>
+<h3><a name="Enh_Payments_to_HO" id="Enh_Payments_to_HO">Payments to HO</a></h3>
+<ul>
+<li class="p-bullet">
+<p class="bullet">The option <span class="hcp1">Payments to HO</span> under <span class="hcp1">Franchisee A/C</span> is enhanced with the facility to automatically fill the amount to be sent to HO based on configuration.</p>
+</li>
+<li class="p-bullet">
+<p class="bullet">(System parameter <span class="hcp1">Prefill Balance in Payments to HO</span> under category <span class="hcp1">Franchisee</span>)</p>
+</li>
+</ul>
+<h3><a name="Enh_Item_Master" id="Enh_Item_Master">Item Master</a></h3>
+<ul>
+<li class="p-bullet">
+<p class="bullet">Width of the columns SubClass1 (Style) code and SubClass2 (Shade) code in <span class="hcp1">Item Master</span> are increased to 64.</p>
+</li>
+</ul>
+<h3><a name="Enh_Goods_Inwards" id="Enh_Goods_Inwards">Goods Inwards</a></h3>
+<p class="Body-Text">Goods Inwards transaction is enhanced with the facility:</p>
+<ul>
+<li class="p-bullet">
+<p class="bullet">To use multiple <span class="hcp1">Add-ons</span> and <span class="hcp1">Deductions</span> based on configuration. (System parameter <span class="hcp1">Multiple Add-on and Deduction Applicable</span> under category <span class="hcp1">Inwards</span>)</p>
+</li>
+<li class="hcp2">
+<ul>
+<li class="p-bullet">
+<p class="bullet"><span class="hcp1">Stock Factors</span> catalogue is provided to define multiple <span class="hcp1">Add-ons</span> and <span class="hcp1">Deductions</span>.</p>
+</li>
+</ul>
+<ul>
+<li class="p-bullet">
+<p class="bullet">The <span class="hcp1">Add-ons</span> and <span class="hcp1">Deductions</span> will be affected for the cost price calculations based on system parameter. (System parameter <span class="hcp1">Add-ons &amp; Deductions Included for Cost Appropriation in Goods Inwards</span> under category <span class="hcp1">Inwards</span>)</p>
+</li>
+</ul>
+</li>
+<li class="p-bullet">
+<p class="bullet">To choose prices from a list of configured prices.</p>
+</li>
+</ul>
+<h3><a name="Enh_Goods_Outwards" id="Enh_Goods_Outwards">Goods Outwards</a></h3>
+<ul>
+<li class="p-bullet">
+<p class="bullet">Goods Outwards user interface (UI) has been modified to ensure better usability and easy plugging-in of extensions.</p>
+</li>
+<li class="p-bullet">
+<p class="bullet">Goods Outwards is enhanced with the facility to choose prices from a list of configured prices.</p>
+</li>
+<li class="p-bullet">
+<p class="bullet"><span class="hcp1">Goods Outward Size-wise</span> is introduced as a separate menu option under <span class="hcp1">Stock</span>. Earlier this option was combined with <span class="hcp1">Goods Outwards</span> based on stock numbers.</p>
+</li>
+</ul>
+<h3><a name="Enh_Data_Export_Masters" id="Enh_Data_Export_Masters">Data Export</a></h3>
+<ul>
+<li class="p-bullet">
+<p class="bullet">Create PT File option is enhanced with the facility to zip the PT file and upload the same to a user specified FTP location. It uses the FTP location as specified in <span class="hcp1">Configure Synchronisation</span> option.</p>
+</li>
+</ul>
+<h3><a name="Enh_Data_Communication" id="Enh_Data_Communication">Data Communication</a></h3>
+<ul>
+<li class="p-bullet">
+<p class="bullet">The facility to transfer data between different POS locations using FTP is provided. Need to configure the communication details in the new tab <span class="hcp1">POS to POS Communication</span> details under the menu option <span class="hcp1">Configure Synchronisation</span>.</p>
+</li>
+</ul>
+<ul>
+<li class="p-bullet">
+<p class="bullet">Goods Outwards generates PT file, zips it and uploads to the configured FTP location. Other POS location imports this file and is used during Goods Inwards.</p>
+</li>
+</ul>
+<p class="bullet" style="margin-left: 64px;">This is useful when you are transferring goods from one POS another. <span class="hcp1">Goods Outwards</span> at <span class="hcp1">Location A</span> generates PT file and uploads to the configured FTP location. <span class="hcp1">Location B</span> downloads the file and uses during <span class="hcp1">Goods Inwards</span>. The transfer process happens without manual intervention.</p>
+<h3><a name="Enh_Data_Synchronisation" id="Enh_Data_Synchronisation">Data Synchronisation</a></h3>
+<ul>
+<li class="p-bullet">
+<p class="bullet">Data synchronisation is enhanced with an option to use HTTPS (protocol) for transferring data files between POS and HO.</p>
+</li>
+</ul>
+<h3><a name="Enh_Replication_Import__AST" id="Enh_Replication_Import__AST">Replication Import (AST)</a></h3>
+<ul>
+<li class="p-bullet">
+<p class="bullet">The <span class="hcp1">Replication Import (AST)</span> is enhanced with the facility to rebuild data automatically after import.</p>
+</li>
+</ul>
+<h3><a name="Enh_Tally_Interface" id="Enh_Tally_Interface">Tally Interface</a></h3>
+<ul>
+<li class="p-bullet">
+<p class="bullet">Shoper Tally Interface is enhanced to post discounts from Shoper 9 to the respective ledgers in Tally.ERP 9 based on sales promotion transactions.</p>
+</li>
+</ul>
+<ul>
+<li class="p-bullet">
+<p class="bullet">When the actual quantity is <span class="hcp1">lesser than</span> the <span class="hcp1">Purchase Invoice</span> quantity, then during Shoper Tally Interface the value of the purchase invoice is posted to Tally and debit note is created for the difference value.</p>
+</li>
+</ul>
+<p class="bullet" style="margin-left: 64px;">Similarly, in case the actual quantity is <span class="hcp1">greater than</span> the <span class="hcp1">Purchase Invoice</span> quantity, then credit note is created for the difference value.</p>
+<h3><a name="Enh_Shoper_Manager" id="Enh_Shoper_Manager">Shoper Manager</a></h3>
+<p class="Body-Text">Shoper Manager is enhanced to:</p>
+<ul>
+<li class="p-bullet">
+<p class="bullet">Provide the status of SIS jobs such as upload &amp; download counts and pending jobs.</p>
+</li>
+<li class="p-bullet">
+<p class="bullet">Perform operations such as delete, update, restart, etc. on SIS jobs.</p>
+</li>
+<li class="p-bullet">
+<p class="bullet">Display balloon tips providing additional information about SIS jobs.</p>
+</li>
+<li class="p-bullet">
+<p class="bullet"><span class="hcp1">Shoper Manager</span> intimates the presence of pending files for upload, if any data synchronisation file created as part of <span class="hcp1">Day End</span> is pending for upload. Shoper Manager uses balloon tips for intimation.</p>
+</li>
+</ul>
+<h3><a name="Enh_Setup" id="Enh_Setup">Setup</a></h3>
+<p class="Body-Text">Transaction Prefix (Bill Prefix) configuration is enhanced to define:</p>
+<ul>
+<li class="p-bullet">
+<p class="bullet"><span class="hcp1">Group Transaction wise</span> document prefixes for Goods Inwards and Goods Outwards.</p>
+</li>
+<li class="p-bullet">
+<p class="bullet"><span class="hcp1">Transaction wise</span> prefixes for Purchase, Purchase Return, Transfer In, Transfer Out, Miscellaneous Receipt, and Miscellaneous issues.</p>
+</li>
+</ul>
+<p class="Body-Text">You can define multiple document prefixes for any transaction type.</p>
+<h3><a name="Enh_Print_Engine" id="Enh_Print_Engine">Print Engine</a></h3>
+<ul>
+<li class="p-bullet">
+<p class="bullet">Print Engine has been enhanced to facilitate:</p>
+</li>
+<li class="hcp2">
+<ul>
+<li class="p-bullet">
+<p class="bullet">Preview of the Audit Trail Report</p>
+</li>
+</ul>
+<ul>
+<li class="p-bullet">
+<p class="bullet">Exporting to PDF</p>
+</li>
+</ul>
+</li>
+<li class="p-bullet">
+<p class="bullet">Print Engine configuration UI has been enhanced to support template based printing in the following transactions:</p>
+</li>
+<li class="hcp2">
+<ul>
+<li class="p-bullet">
+<p class="bullet">Sales</p>
+</li>
+</ul>
+<ul>
+<li class="p-bullet">
+<p class="bullet">Slips</p>
+</li>
+</ul>
+<ul>
+<li class="p-bullet">
+<p class="bullet">Inwards</p>
+</li>
+</ul>
+<ul>
+<li class="p-bullet">
+<p class="bullet">Outwards</p>
+</li>
+</ul>
+</li>
+</ul>
+<h3><a name="Enh_Reports" id="Enh_Reports">Reports</a></h3>
+<h4 class="hcp3">Customer Offtake</h4>
+<ol>
+<li class="hcp2">
+<ul>
+<li class="p-bullet">
+<p class="bullet"><span class="hcp1">Customer Offtake - Product-wise</span> report is enhanced to include Dealer Price or Retail Price.</p>
+</li>
+</ul>
+</li>
+</ol>
+<h4 class="hcp3">Sales Report</h4>
+<ol>
+<li class="hcp2">
+<ul>
+<li class="p-bullet">
+<p class="bullet"><span class="hcp1">Bill Wise Item</span> report is enhanced to sort the report by Customer Price Group.</p>
+</li>
+</ul>
+<ul>
+<li class="p-bullet">
+<p class="bullet"><span class="hcp1">Day wise Sales Summary</span> report is enhanced to view Cash Sales, Credit Card Sales and Other Pay Modes separately.</p>
+</li>
+</ul>
+<ul>
+<li class="p-bullet">
+<p class="bullet"><span class="hcp1">Bill–wise Items</span> report is enhanced to view bill number-wise subtotals.</p>
+</li>
+<li class="p-bullet">
+<p class="bullet"><span class="hcp1">Tax Register</span> report is enhanced to view Basic Value and Quantity fields.</p>
+</li>
+</ul>
+</li>
+</ol>
+<h4 class="hcp3">Analysis Reports</h4>
+<p class="bullet" style="margin-left: 64px;">A new report under Report Designer</p>
+<ol>
+<li class="hcp2">
+<ul>
+<li class="p-bullet">
+<p class="bullet">Slips—to generate reports related to transactions involving Sales Advice Slips, Service Order, Sales Order, Sales DC, Approval Issue DC, Bill Suspension, Packing Slip and Pallet Slip, Dispatch advice, and so on.</p>
+</li>
+</ul>
+</li>
+</ol>
+<p class="bullet" style="margin-left: 64px;">Existing reports under Report Designer are enhanced to:</p>
+<ol>
+<li class="hcp2">
+<ul>
+<li class="p-bullet">
+<p class="bullet">View up to fifteen columns under Particulars</p>
+</li>
+</ul>
+<ul>
+<li class="p-bullet">
+<p class="bullet">Search Code and Description</p>
+</li>
+</ul>
+<ul>
+<li class="p-bullet">
+<p class="bullet">Include the following columns:</p>
+</li>
+</ul>
+</li>
+</ol>
+<p class="bullet" style="font-weight: bold; margin-left: 104px;">All reports</p>
+<ol>
+<li class="hcp2">
+<ol>
+<li class="hcp2">
+<ul>
+<li class="p-bullet">
+<p class="bullet">Under <span class="hcp1">Custom Filter</span>—only consignment items</p>
+</li>
+</ul>
+<ul>
+<li class="p-bullet">
+<p class="bullet">Under <span class="hcp1">Particulars</span>—enabled Analysis Codes and Description</p>
+</li>
+</ul>
+</li>
+</ol>
+</li>
+</ol>
+<p class="bullet" style="margin-left: 104px; font-weight: bold;">Sales reports</p>
+<ol>
+<li class="hcp2">
+<ol>
+<li class="hcp2">
+<ul>
+<li class="p-bullet">
+<p class="bullet">Under <span class="hcp1">Value Columns</span>—Addons, deductions, tax, discount, Retail Value (MRP x Quantity), Current Balance Quantity, Tax1 Value and Tax2 Value</p>
+</li>
+</ul>
+<ul>
+<li class="p-bullet">
+<p class="bullet">Under <span class="hcp1">Particulars</span>—Bill Remarks, Transport Mode and Transport Code</p>
+</li>
+</ul>
+</li>
+</ol>
+</li>
+</ol>
+<p class="bullet" style="margin-left: 104px; font-weight: bold;">Stock reports</p>
+<ol>
+<li class="hcp2">
+<ol>
+<li class="hcp2">
+<ul>
+<li class="p-bullet">
+<p class="bullet">Under <span class="hcp1">Value Columns</span>—Addons, deductions, tax and discount</p>
+</li>
+</ul>
+<ul>
+<li class="p-bullet">
+<p class="bullet">Under <span class="hcp1">Custom Filter</span>—Non-transacted items</p>
+</li>
+</ul>
+</li>
+</ol>
+</li>
+</ol>
+<p class="bullet" style="margin-left: 104px; font-weight: bold;">Sales &amp; Stock reports</p>
+<ol>
+<li class="hcp2">
+<ol>
+<li class="hcp2">
+<ul>
+<li class="p-bullet">
+<p class="bullet">Under <span class="hcp1">Value Columns</span>—Addons, deductions, tax, discount, Current Balance Quantity, Tax1 Value and Tax2 Value</p>
+</li>
+</ul>
+</li>
+</ol>
+</li>
+</ol>
+<p class="bullet" style="margin-left: 104px; font-weight: bold;">Stock as on Date reports</p>
+<ol>
+<li class="hcp2">
+<ol>
+<li class="hcp2">
+<ul>
+<li class="p-bullet">
+<p class="bullet">Under <span class="hcp1">Custom Filter</span>—Non-transacted items</p>
+</li>
+</ul>
+</li>
+</ol>
+</li>
+</ol>
+<h3><a name="Enh_Report_Scheduler" id="Enh_Report_Scheduler">Report Scheduler</a></h3>
+<ul>
+<li class="p-bullet">
+<p class="bullet">Report Scheduler is enhanced to include BCC in e-mail.</p>
+</li>
+</ul>
+<h3><a name="Enh_Currency_Catalogues" id="Enh_Currency_Catalogues">Currency Catalogues</a></h3>
+<ul>
+<li class="p-bullet">
+<p class="bullet">While cataloguing currencies other than base currency, the option Allow in PO is disabled.</p>
+</li>
+</ul>
+<p class="bullet" style="margin-left: 64px;">This is done as purchase order does not allow use of other currencies.</p>
+<h2>Issues Resolved</h2>
+<h3><a name="IR_Billing" id="IR_Billing">Billing</a></h3>
+<ul>
+<li class="p-bullet">
+<p class="bullet">Clicking <span class="hcp1">New Bill</span> was resulting in an error when the terminal Id contained hyphen (-).</p>
+</li>
+</ul>
+<p class="bullet" style="margin-left: 64px;">This issue has been resolved.</p>
+<ul>
+<li class="p-bullet">
+<p class="bullet">Even when selection of <span class="hcp1">Salesman</span> was set as mandatory in billing it could be skipped by pressing <span class="hcp1">F11</span>.</p>
+</li>
+</ul>
+<p class="bullet" style="margin-left: 64px;">This issue has been resolved.</p>
+<ul>
+<li class="p-bullet">
+<p class="bullet">During <span class="hcp1">Billing</span>, when a <span class="hcp1">salesman</span> was selected in one line, by default the same name was not appearing in the next line.</p>
+</li>
+</ul>
+<p class="bullet" style="margin-left: 64px;">This issue has been resolved.</p>
+<ul>
+<li class="p-bullet">
+<p class="bullet">Sales promotions defined for specific customer price group were not getting applied if customer was created on the fly during billing.</p>
+</li>
+</ul>
+<p class="bullet" style="margin-left: 64px;">This issue has been resolved.</p>
+<ul>
+<li class="p-bullet">
+<p class="bullet">In some scenarios, while creating an <span class="hcp1">ON-ACC</span> bill, the <span class="hcp1">Customer ID</span> was not getting saved.</p>
+</li>
+</ul>
+<p class="bullet" style="margin-left: 64px;">This issue has been resolved.</p>
+<ul>
+<li class="p-bullet">
+<p class="bullet">Shoper users who were not allowed to create customer masters were able to create customers on the fly during billing.</p>
+</li>
+</ul>
+<p class="bullet" style="margin-left: 64px;">This issue has been resolved.</p>
+<ul>
+<li class="p-bullet">
+<p class="bullet">In bill, duplicate stock numbers were not getting clubbed when items were loaded from PDT files.</p>
+</li>
+</ul>
+<p class="bullet" style="margin-left: 64px;">This issue has been resolved.</p>
+<h3><a name="IR_Pending_order_Trn_Closure" id="IR_Pending_order_Trn_Closure">Pending order / Trn Closure</a></h3>
+<ul>
+<li class="p-bullet">
+<p class="bullet">The <span class="hcp1">Pending order / Trn Closure</span> option was not displaying the partially billed Sales DCs for closure.</p>
+</li>
+</ul>
+<p class="bullet" style="margin-left: 64px;">This issue has been resolved.</p>
+<h3><a name="IR_Credit_Sale_Management" id="IR_Credit_Sale_Management">Credit Sale Management</a></h3>
+<p class="Body-Text">The following issues were occurring in Credit Sale Management.</p>
+<ul>
+<li class="p-bullet">
+<p class="bullet">If some items were returned from an <span class="hcp1">ON-ACC</span> bill, the value of returned items was not getting deducted from the outstanding amount.</p>
+</li>
+<li class="p-bullet">
+<p class="bullet">Saving payment details using <span class="hcp1">Collect Payment</span> option was resulting in runtime error when the mode of payment used was <span class="hcp1">Gift Coupons</span>.</p>
+</li>
+<li class="p-bullet">
+<p class="bullet">When an <span class="hcp1">Advance Receipt</span> was used for clearing outstanding, the outstanding was reduced appropriately but the <span class="hcp1">Advance Receipt</span> was still reusable with the original value.</p>
+</li>
+</ul>
+<p class="bullet" style="margin-left: 64px;">These issues have been resolved.</p>
+<h3><a name="IR_Credit_Card_Submission" id="IR_Credit_Card_Submission">Credit Card Submission</a></h3>
+<ul>
+<li class="p-bullet">
+<p class="bullet">While reprinting <span class="hcp1">Credit Card Submission</span>, if the attributes like card number, authorisation code, etc. under <span class="hcp1">Submission details</span> were used multiple times, then all the transactions with that attribute was getting displayed irrespective of the date.</p>
+</li>
+</ul>
+<p class="bullet" style="margin-left: 64px;">This issue has been resolved. Now it is possible to filter details based on transaction date.</p>
+<h3><a name="IR_Printing" id="IR_Printing">Printing</a></h3>
+<ul>
+<li class="p-bullet">
+<p class="bullet">Reprinting of cash receipts / payouts done during the previous financial year (before the Year End process) was not allowed.</p>
+</li>
+</ul>
+<p class="bullet" style="margin-left: 64px;">This issue has been resolved.</p>
+<h3><a name="IR_Goods_Inwards" id="IR_Goods_Inwards">Goods Inwards</a></h3>
+<ul>
+<li class="p-bullet">
+<p class="bullet">In Goods Inwards, the rounded off <span class="hcp1">Addons</span> and <span class="hcp1">Deductions</span> were not getting saved.</p>
+</li>
+</ul>
+<p class="bullet" style="margin-left: 64px;">This issue has been resolved.</p>
+<h3><a name="IR_Goods_Outwards" id="IR_Goods_Outwards">Goods Outwards</a></h3>
+<ul>
+<li class="p-bullet">
+<p class="bullet">While recalling <span class="hcp1">Miscellaneous Receipt</span> in <span class="hcp1">Purchase Return</span>, the tax rate was not getting saved appropriately.</p>
+</li>
+</ul>
+<p class="bullet" style="margin-left: 64px;">This issue has been resolved.</p>
+<h3><a name="IR_Packing_slip" id="IR_Packing_slip">Packing slip</a></h3>
+<ul>
+<li class="p-bullet">
+<p class="bullet">Packing slips created during the previous year was not available for editing, after year-end process.</p>
+</li>
+</ul>
+<p class="bullet" style="margin-left: 64px;">This issue has been resolved.</p>
+<h3><a name="IR_Physical_Stock_Management" id="IR_Physical_Stock_Management">Physical Stock Management</a></h3>
+<ul>
+<li class="p-bullet">
+<p class="bullet">If <span class="hcp1">Physical Batch No.</span> was selected while opening <span class="hcp1">Progress Summary</span> an error was displayed.</p>
+</li>
+</ul>
+<p class="bullet" style="margin-left: 64px;">This issue has been resolved.</p>
+<h3><a name="IR_Data_Synchronisation" id="IR_Data_Synchronisation">Data Synchronisation</a></h3>
+<ul>
+<li class="p-bullet">
+<p class="bullet">In Item Master, if any of the fields contained double quotes (") synchronisation was failing.</p>
+</li>
+</ul>
+<p class="bullet" style="margin-left: 64px;">This issue has been resolved.</p>
+<h3><a name="IR_General_Lookup" id="IR_General_Lookup">General Lookup</a></h3>
+<ul>
+<li class="p-bullet">
+<p class="bullet">The caption changes made in <span class="hcp1">System Parameter</span> for <span class="hcp1">Analysis Codes</span> were not reflected in General Lookup.</p>
+</li>
+</ul>
+<p class="bullet" style="margin-left: 64px;">This issue has been resolved.</p>
+<ul>
+<li class="p-bullet">
+<p class="bullet">In Item Master, when values of base classifications (class1, class2, subclass1, subclass2) were altered, an error was occurring and the data could not be saved.</p>
+</li>
+</ul>
+<p class="bullet" style="margin-left: 64px;">This issue has been resolved.</p>
+<ul>
+<li class="p-bullet">
+<p class="bullet">In some cases, when new item masters were created, it was not getting displayed in <span class="hcp1">F2</span> browse during transactions.</p>
+</li>
+</ul>
+<p class="bullet" style="margin-left: 64px;">This issue has been resolved.</p>
+<h3><a name="IR_SIS" id="IR_SIS">SIS</a></h3>
+<ul>
+<li class="p-bullet">
+<p class="bullet">SIS was not functioning when the database and Shoper 9 application were on different systems.</p>
+</li>
+</ul>
+<p class="bullet" style="margin-left: 64px;">This issue has been resolved.</p>
+<h3><a name="IR_System_Parameters" id="IR_System_Parameters">System Parameters</a></h3>
+<ul>
+<li class="p-bullet">
+<p class="bullet">When the parameter <span class="hcp1">Franchisee Year Opening Setting</span> under <span class="hcp1">Franchisee</span> was set to <span class="hcp1">1-Any Time</span>, it was not getting saved.</p>
+</li>
+</ul>
+<p class="bullet" style="margin-left: 64px;">This issue has been resolved.</p>
+<h3><a name="IR_Tally_Interface" id="IR_Tally_Interface">Tally Interface</a></h3>
+<ul>
+<li class="p-bullet">
+<p class="bullet">If purchase returns were done against multiple purchase invoices from the same supplier, only the first purchase invoice reference was recorded in the <span class="hcp1">Debit Note</span> when posted to Tally.</p>
+</li>
+</ul>
+<p class="bullet" style="margin-left: 64px;">This issue has been resolved.</p>
+<ul>
+<li class="p-bullet">
+<p class="bullet">When number of components in a <span class="hcp1">Sales Tax code</span> was revised, Tally posting of transactions using the tax code was failing.</p>
+</li>
+</ul>
+<p class="bullet" style="margin-left: 64px;">This issue has been resolved.</p>
+<ul>
+<li class="p-bullet">
+<p class="bullet">When bills with two different product tax types having the same tax percentage were posted, the amount of the second product tax type was not posted.</p>
+</li>
+</ul>
+<p class="bullet" style="margin-left: 64px;">This issue has been resolved.</p>
+<ul>
+<li class="p-bullet">
+<p class="bullet">Tally posting was failing when different types of cash pay modes were used in a bill.</p>
+</li>
+</ul>
+<p class="bullet" style="margin-left: 64px;">This issue has been resolved.</p>
+<ul>
+<li class="p-bullet">
+<p class="bullet">The Purchase return with references was not getting posted to Tally.</p>
+</li>
+</ul>
+<p class="bullet" style="margin-left: 64px;">This issue has been resolved.</p>
+<ul>
+<li class="p-bullet">
+<p class="bullet">When purchase return had tax exclusive items, tax amount was not posted to Tally.</p>
+</li>
+</ul>
+<p class="bullet" style="margin-left: 64px;">This issue has been resolved.</p>
+<ul>
+<li class="p-bullet">
+<p class="bullet">Incorrect message was getting displayed when port at which Tally listens was changed, in <span class="hcp1">Change Company Information</span>.</p>
+</li>
+</ul>
+<p class="bullet" style="margin-left: 64px;">The message has been corrected.</p>
+<h3><a name="IR_Sync_Status_report" id="IR_Sync_Status_report">Sync Status report</a></h3>
+<ul>
+<li class="p-bullet">
+<p class="bullet">The sync status report was displaying duplicate detail lines when mode of communication was online.</p>
+</li>
+</ul>
+<p class="bullet" style="margin-left: 64px;">This issue has been resolved.</p>
+<h3><a name="IR_Reports" id="IR_Reports">Reports</a></h3>
+<ul>
+<li class="p-bullet">
+<p class="bullet"><span class="hcp1">Top Selling Item</span> report for a specified period was not considering <span class="hcp1">Void Sales</span> and <span class="hcp1">Sales Return</span>.</p>
+</li>
+</ul>
+<p class="bullet" style="margin-left: 64px;">This issue has been resolved.</p>
+<ul>
+<li class="p-bullet">
+<p class="bullet"><span class="hcp1">Day Wise Sales Summary</span> report was including the value of <span class="hcp1">Advance Receipt</span> and <span class="hcp1">Gift Coupons</span> under <span class="hcp1">Cash</span> column.</p>
+</li>
+</ul>
+<p class="bullet" style="margin-left: 64px;">This issue has been resolved. A new column called <span class="hcp1">Other Paymodes</span> is added to display <span class="hcp1">Advance Receipt</span> and <span class="hcp1">Gift Coupons</span>.</p>
+<ul>
+<li class="p-bullet">
+<p class="bullet"><span class="hcp1">Item-wise Sales</span> report was not generated on clicking <span class="hcp1">View</span> button.</p>
+</li>
+</ul>
+<p class="bullet" style="margin-left: 64px;">This issue has been resolved.</p>
+<p class="bullet" style="margin-left: 64px; font-weight: bold;">&#160;</p>
+<p class="bullet" style="margin-left: 64px; font-weight: bold;">Analysis reports</p>
+<ul>
+<li class="p-bullet">
+<p class="bullet">When the company name contained special characters, opening <span class="hcp1">Analysis Report</span> was resulting in runtime error.</p>
+</li>
+</ul>
+<p class="bullet" style="margin-left: 64px;">This issue has been resolved.</p>
+<h3><a name="IR_Report_Scheduler" id="IR_Report_Scheduler">Report Scheduler</a></h3>
+<ul>
+<li class="p-bullet">
+<p class="bullet">When scheduled reports were using FTP for communication, and the file format specified was:</p>
+</li>
+<li class="hcp2">
+<ul>
+<li class="p-bullet">
+<p class="bullet">PDF, the uploaded PDF file was blank.</p>
+</li>
+</ul>
+<ul>
+<li class="p-bullet">
+<p class="bullet">Excel, the uploaded file was in XML format.</p>
+</li>
+</ul>
+<ul>
+<li class="p-bullet">
+<p class="bullet">HTML, the uploaded file was not formatted properly.</p>
+</li>
+</ul>
+</li>
+</ul>
+<p class="bullet" style="margin-left: 64px;">These issues have been resolved.</p>
+<p class="Body-Text">&#160;</p>
+</body>
+</html>

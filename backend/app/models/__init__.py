@@ -4,6 +4,7 @@
 # (c) 2026 - All Rights Reserved
 # ============================================================
 
+from .legacy_s9 import Acceptdisplaydtls
 from .base import (
     Base, Store, SystemParameter, Customer, Till, Transaction, 
     TransactionItem, CreditNote, AdvanceDeposit, SalesSlip, 
@@ -29,7 +30,8 @@ __all__ = [
     "RemoteCommand", "StockTransaction", "StockTransactionItem", "StockLedger",
     "UIFieldConfig", "AttributeAlias", "CategoryPolicy", "TaxRule",
     "PrefixConfig", "PrefixMaster", "PrefixTrnNo", "PrefixTerminalGroup",
-    "PriceRangeSetting", "PriceRange", "PriceRevision", "PriceRevisionHistory"
+    "PriceRangeSetting", "PriceRange", "PriceRevision", "PriceRevisionHistory",
+    "Acceptdisplaydtls"
 ]
 
 from .finance import TillSession, PosCashTrn, TillHardware

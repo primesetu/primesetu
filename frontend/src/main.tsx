@@ -18,6 +18,36 @@ import { ThemeProvider } from './hooks/useTheme'
 import App from './App'
 import './index.css'
 
+// AG Grid Global Module Registration (Industrial Protocol)
+import { ModuleRegistry } from 'ag-grid-community'
+import { 
+  ClientSideRowModelModule, 
+  ColumnAutoSizeModule, 
+  ValidationModule, 
+  PaginationModule,
+  CellStyleModule,
+  TextEditorModule,
+  RowSelectionModule,
+  TextFilterModule,
+  NumberFilterModule,
+  DateFilterModule,
+  CustomFilterModule
+} from 'ag-grid-community'
+
+ModuleRegistry.registerModules([
+  ClientSideRowModelModule,
+  ColumnAutoSizeModule,
+  ValidationModule,
+  PaginationModule,
+  CellStyleModule,
+  TextEditorModule,
+  RowSelectionModule,
+  TextFilterModule,
+  NumberFilterModule,
+  DateFilterModule,
+  CustomFilterModule
+])
+
 // Initialize i18n
 import './lib/i18n'
 

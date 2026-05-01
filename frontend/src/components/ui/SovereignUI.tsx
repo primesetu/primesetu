@@ -1,28 +1,34 @@
-import React, { ReactNode } from 'react';
+import React, { ReactNode, useMemo } from 'react';
 import { clsx, type ClassValue } from 'clsx';
 import { twMerge } from 'tailwind-merge';
 import { X } from 'lucide-react';
 import { AgGridReact } from 'ag-grid-react';
-import { ColDef, ModuleRegistry, ValidationModule } from 'ag-grid-community';
-import { ClientSideRowModelModule, CellStyleModule, TextEditorModule } from 'ag-grid-community';
+import { ColDef } from 'ag-grid-community';
+
+// AG Grid CSS and Modules handled globally in main.tsx/index.css
 
 import { useTheme } from '@/hooks/useTheme';
-
-ModuleRegistry.registerModules([ClientSideRowModelModule, CellStyleModule, ValidationModule, TextEditorModule]);
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
 }
 
 /* ============================================================
-   SMRITI-OS — Lead Frontend Architect UI Primitives
-   Enforcing SMRITI Sentinal Governance (Audit Rule 11)
-   ============================================================ */
+ * PrimeSetu — Shoper9-Based Retail OS
+ * Zero Cloud · Sovereign · AI-Governed
+ * ============================================================
+ * System Architect : Jawahar R Mallah
+ * Organisation     : AITDL Network
+ * Project          : PrimeSetu
+ * © 2026 — All Rights Reserved
+ * "Memory, Not Code."
+ * ============================================================ */
 
 // 1. Button Primitive
 interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   variant?: 'primary' | 'secondary' | 'ghost' | 'danger' | 'pri' | 'sec'; // pri/sec for legacy compat
   size?: 'sm' | 'md' | 'lg';
+  loading?: boolean;
 }
 
 export const Button = ({ 
@@ -132,13 +138,15 @@ export const Badge = ({
   className 
 }: { 
   children: ReactNode; 
-  variant?: 'info' | 'warn' | 'error' | 'success' | 'muted';
+  variant?: 'info' | 'warn' | 'warning' | 'error' | 'danger' | 'success' | 'muted';
   className?: string;
 }) => {
-  const badgeMap = {
+  const badgeMap: Record<string, string> = {
     info: 'c-badge--info',
     warn: 'c-badge--warning',
+    warning: 'c-badge--warning',
     error: 'c-badge--error',
+    danger: 'c-badge--error',
     success: 'c-badge--success',
     muted: 'c-badge--muted',
   };
@@ -315,7 +323,11 @@ interface DataTableProps<T> {
   rowHeight?: number;
   headerHeight?: number;
   onRowDoubleClicked?: (params: any) => void;
+  pagination?: boolean;
+  paginationPageSize?: number;
+  enableRangeSelection?: boolean;
   className?: string;
+  pinnedTopRowData?: any[];
 }
 
 export function DataTable<T>({ 
@@ -326,64 +338,93 @@ export function DataTable<T>({
   loading = false,
   emptyMessage = 'No records found',
   pinnedBottomRowData,
+  pinnedTopRowData,
   singleClickEdit = false,
   overlayNoRowsTemplate,
-  rowHeight = 40,
-  headerHeight = 30,
+  rowHeight = 45,
+  headerHeight = 38,
   onRowDoubleClicked,
-  className
+  className,
+  pagination = false,
+  paginationPageSize = 20,
+  enableRangeSelection = false
 }: DataTableProps<T>) {
   const { isInstitutional } = useTheme();
+  
   const agColumns: ColDef[] = React.useMemo(() => {
-    return columns.map((col) => ({
+    return columns.map((col: any) => ({
       headerName: col.header,
-      field: typeof col.accessor === 'string' ? col.accessor as string : undefined,
-      cellRenderer: typeof col.accessor === 'function' 
-        ? (params: any) => (col.accessor as Function)(params.data, params.node.rowIndex) 
-        : undefined,
+      field: col.field || (typeof col.accessor === 'string' ? col.accessor : undefined),
+      cellRenderer: typeof col.accessor === 'function' ? (params: any) => {
+        if (!params.data) return null;
+        return col.accessor(params.data, params.node.rowIndex);
+      } : undefined,
+      valueGetter: typeof col.accessor === 'string' ? (params: any) => params.data[col.accessor] : undefined,
       editable: col.editable,
       width: col.width,
+      sortable: true,
+      filter: true,
+      resizable: true,
       flex: col.flex || (col.width ? undefined : 1),
       pinned: col.pinned,
       cellClass: cn(
+        'font-medium text-[13px]',
         col.align === 'center' && 'text-center',
         col.align === 'right' && 'text-right',
         col.className
       ),
+      headerClass: cn(
+        'font-black text-[10px] uppercase tracking-widest',
+        col.align === 'center' && 'text-center',
+        col.align === 'right' && 'text-right'
+      )
     }));
   }, [columns]);
 
+  const defaultColDef = useMemo(() => ({
+    suppressMovable: true,
+    cellClass: 'flex items-center'
+  }), []);
+
   return (
-    <div className={cn("c-card p-0 flex-1 flex flex-col overflow-hidden border-[var(--border-subtle)] bg-transparent", className)}>
+    <div className={cn("flex-1 flex flex-col overflow-hidden border border-[var(--border-subtle)] bg-[var(--surface)] shadow-inner", className)}>
       <div 
-        className={cn("w-full h-full min-h-[400px] ag-theme-quartz", isInstitutional && "ag-theme-quartz-light")} 
+        className={cn("w-full h-full min-h-[300px] ag-theme-quartz", !isInstitutional && "ag-theme-quartz-dark")} 
         style={{ 
-          '--ag-background-color': 'var(--surface) !important',
-          '--ag-header-background-color': 'var(--surface-elevated) !important',
-          '--ag-header-foreground-color': 'var(--text-primary) !important',
-          '--ag-data-color': 'var(--text-primary) !important',
-          '--ag-odd-row-background-color': 'var(--surface-subtle) !important',
-          '--ag-border-color': 'var(--border-subtle) !important',
-          '--ag-row-hover-color': 'var(--surface-elevated) !important',
-          '--ag-selected-row-background-color': 'var(--accent-border) !important',
+          '--ag-background-color': 'transparent',
+          '--ag-header-background-color': isInstitutional ? 'rgba(248, 249, 250, 0.5)' : 'rgba(30, 41, 59, 0.5)',
+          '--ag-header-foreground-color': isInstitutional ? '#1e293b' : '#f8f9fa',
+          '--ag-data-color': isInstitutional ? '#1e293b' : '#f8f9fa',
+          '--ag-odd-row-background-color': 'rgba(255, 255, 255, 0.02)',
+          '--ag-border-color': 'var(--border-subtle)',
+          '--ag-row-hover-color': 'var(--surface-elevated)',
+          '--ag-selected-row-background-color': 'rgba(var(--primary-rgb), 0.15)',
           '--ag-font-family': 'var(--font-primary)',
-          '--ag-font-size': '12px'
+          '--ag-font-size': '13px',
+          '--ag-grid-size': '6px',
+          '--ag-list-item-height': '40px',
+          '--ag-border-radius': '0px'
         } as React.CSSProperties}
       >
         <AgGridReact
-          theme="legacy"
           rowData={loading ? [] : data}
           columnDefs={agColumns}
+          defaultColDef={defaultColDef}
           rowHeight={rowHeight}
           headerHeight={headerHeight}
           onRowClicked={(params) => onRowClick?.(params.data)}
           onRowDoubleClicked={onRowDoubleClicked}
           onCellValueChanged={onCellValueChanged}
           pinnedBottomRowData={pinnedBottomRowData}
+          pinnedTopRowData={pinnedTopRowData}
           singleClickEdit={singleClickEdit}
-          overlayNoRowsTemplate={overlayNoRowsTemplate || `<div class="p-4 text-center opacity-50">${emptyMessage}</div>`}
-          suppressCellFocus={true}
+          overlayNoRowsTemplate={overlayNoRowsTemplate || `<div class="p-8 text-center opacity-30 font-black uppercase tracking-[0.4em]">${emptyMessage}</div>`}
+          suppressCellFocus={false}
           animateRows={true}
+          rowSelection={{ mode: 'singleRow' }}
+          pagination={pagination}
+          paginationPageSize={paginationPageSize}
+          enableRangeSelection={enableRangeSelection}
         />
       </div>
     </div>

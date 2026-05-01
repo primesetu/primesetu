@@ -9,7 +9,14 @@
  * ============================================================ */
 import React, { useState, useEffect, useMemo, useRef } from 'react'
 import { AgGridReact } from 'ag-grid-react'
-import { ColDef, ValueFormatterParams } from 'ag-grid-community'
+import { ColDef, ValueFormatterParams, ModuleRegistry } from 'ag-grid-community'
+import { ClientSideRowModelModule, NumberEditorModule } from 'ag-grid-community'
+import 'ag-grid-community/styles/ag-grid.css'
+import 'ag-grid-community/styles/ag-theme-quartz.css'
+
+// Register AG Grid Modules
+ModuleRegistry.registerModules([ClientSideRowModelModule, NumberEditorModule])
+
 import { api } from '@/api/client'
 import { useTheme } from '@/hooks/useTheme'
 import { cn } from '@/lib/utils'
@@ -35,6 +42,8 @@ interface GRNLine {
   item_id: string
   item_code: string
   item_name: string
+  dept: string
+  brand: string
   subclass1: string
   subclass2: string
   colour: string
@@ -100,7 +109,9 @@ export default function GRNProcessor() {
           id: crypto.randomUUID(),
           item_id: item.id,
           item_code: item.item_code || item.sku || 'N/A',
-          item_name: item.item_name || item.name || 'Unknown SKU',
+          item_name: item.name,
+          dept: item.department || '',
+          brand: item.brand || '',
           subclass1: item.subclass1 || '',
           subclass2: item.subclass2 || '',
           colour: item.colour || '',
@@ -162,6 +173,8 @@ export default function GRNProcessor() {
   const columnDefs = useMemo<ColDef[]>(() => [
     { field: 'item_code', headerName: 'SKU CODE', width: 140, cellStyle: { fontWeight: '900', color: 'var(--primary)' } },
     { field: 'item_name', headerName: 'DESCRIPTION', flex: 1, minWidth: 200, cellStyle: { textTransform: 'uppercase', fontWeight: '700' } },
+    { field: 'dept', headerName: 'DEPT', width: 120 },
+    { field: 'brand', headerName: 'BRAND', width: 120 },
     { field: 'subclass1', headerName: 'SUB-1', width: 100 },
     { field: 'subclass2', headerName: 'SUB-2', width: 100 },
     { field: 'colour', headerName: 'COLOR', width: 100, cellStyle: { fontWeight: 'bold' } },
@@ -262,6 +275,7 @@ export default function GRNProcessor() {
               ref={gridRef}
               rowData={lines}
               columnDefs={columnDefs}
+              theme="legacy"
               defaultColDef={{ resizable: true, sortable: true, headerClass: 'ag-header-cell' }}
               animateRows={true}
               onGridReady={(params) => params.api.sizeColumnsToFit()}

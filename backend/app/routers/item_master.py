@@ -65,7 +65,8 @@ async def create_item(
         cost_paise=payload.cost_paise,
         gst_rate=payload.gst_rate,
         hsn_code=payload.hsn_code,
-        shoper_recid=payload.shoper_recid
+        shoper_recid=payload.shoper_recid,
+        anal_codes=payload.anal_codes or {}
     )
     db.add(new_item)
     await db.flush() # Get item ID

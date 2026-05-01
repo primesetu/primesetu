@@ -37,6 +37,7 @@ class ItemCreate(BaseModel):
     gst_rate: int = Field(..., description="Must be 0, 5, 12, 18, or 28")
     hsn_code: str
     shoper_recid: Optional[int] = None
+    anal_codes: Optional[dict] = None
     stock_matrix: List[StockMatrixEntry] = []
 
 class ItemResponse(BaseModel):

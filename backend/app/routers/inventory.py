@@ -11,6 +11,7 @@
 
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.ext.asyncio import AsyncSession
+from sqlalchemy.orm import joinedload
 from sqlalchemy import select, or_, func, and_
 from typing import List, Dict, Any, Optional
 from datetime import datetime, timedelta
@@ -94,17 +95,16 @@ async def search_inventory(
         if sku_item:
             items = [sku_item]
         else:
-            # 3. Fallback to fuzzy search on Name or Code
+            # 3. Fallback to fuzzy search on Name ONLY (Sovereign Search Protocol)
+            # We don't fuzzy match Code to prevent "Guesswork" in scanning
             search_query = f"%{query.lower()}%"
             stmt = (
                 select(Item)
+                .options(joinedload(Item.department))
                 .where(
                     and_(
                         Item.store_id == current_user.store_id,
-                        or_(
-                            func.lower(Item.item_code).like(search_query),
-                            func.lower(Item.item_name).like(search_query)
-                        )
+                        func.lower(Item.item_name).like(search_query)
                     )
                 )
                 .limit(50)

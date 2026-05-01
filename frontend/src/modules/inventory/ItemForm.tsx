@@ -96,6 +96,8 @@ const ItemForm: React.FC<ItemFormProps> = ({ onClose, editId }) => {
     cost_rupees: 0,
     gst_rate: 12,
     hsn_code: '',
+    subclass1: '',
+    subclass2: '',
     stock_matrix: [] as StockMatrixEntry[]
   });
 
@@ -129,6 +131,10 @@ const ItemForm: React.FC<ItemFormProps> = ({ onClose, editId }) => {
         cost_paise: data.cost_rupees ? Math.round(data.cost_rupees * 100) : null,
         gst_rate: data.gst_rate,
         hsn_code: data.hsn_code,
+        anal_codes: {
+          subclass1: data.subclass1,
+          subclass2: data.subclass2
+        },
         stock_matrix: data.stock_matrix.filter(m => m.qty_on_hand > 0)
       };
       const res = await apiClient.post('/items/', payload);
@@ -253,6 +259,27 @@ const ItemForm: React.FC<ItemFormProps> = ({ onClose, editId }) => {
                     className="font-mono"
                     value={formData.colour_code}
                     onChange={(e) => setFormData({...formData, colour_code: e.target.value.toUpperCase()})}
+                  />
+                </div>
+              </div>
+
+              <div className="grid grid-cols-2 gap-6 pt-4 border-t border-border/50">
+                <div className="space-y-3">
+                  <Label>Sub-Class 1</Label>
+                  <Input 
+                    type="text" 
+                    value={formData.subclass1}
+                    onChange={(e) => setFormData({...formData, subclass1: e.target.value})}
+                    placeholder="e.g. CASUAL"
+                  />
+                </div>
+                <div className="space-y-3">
+                  <Label>Sub-Class 2</Label>
+                  <Input 
+                    type="text" 
+                    value={formData.subclass2}
+                    onChange={(e) => setFormData({...formData, subclass2: e.target.value})}
+                    placeholder="e.g. COTTON"
                   />
                 </div>
               </div>

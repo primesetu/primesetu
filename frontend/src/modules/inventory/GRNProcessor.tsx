@@ -35,6 +35,10 @@ interface GRNLine {
   item_id: string
   item_code: string
   item_name: string
+  subclass1: string
+  subclass2: string
+  colour: string
+  size: string
   qty_received: number
   unit_cost_paise: number
   total_paise: number
@@ -97,6 +101,10 @@ export default function GRNProcessor() {
           item_id: item.id,
           item_code: item.item_code || item.sku || 'N/A',
           item_name: item.item_name || item.name || 'Unknown SKU',
+          subclass1: item.subclass1 || '',
+          subclass2: item.subclass2 || '',
+          colour: item.colour || '',
+          size: item.size || '',
           qty_received: currentQty,
           unit_cost_paise: unit_cost_paise,
           total_paise: unit_cost_paise * currentQty
@@ -153,7 +161,11 @@ export default function GRNProcessor() {
 
   const columnDefs = useMemo<ColDef[]>(() => [
     { field: 'item_code', headerName: 'SKU CODE', width: 140, cellStyle: { fontWeight: '900', color: 'var(--primary)' } },
-    { field: 'item_name', headerName: 'DESCRIPTION', flex: 1, cellStyle: { textTransform: 'uppercase', fontWeight: '700' } },
+    { field: 'item_name', headerName: 'DESCRIPTION', flex: 1, minWidth: 200, cellStyle: { textTransform: 'uppercase', fontWeight: '700' } },
+    { field: 'subclass1', headerName: 'SUB-1', width: 100 },
+    { field: 'subclass2', headerName: 'SUB-2', width: 100 },
+    { field: 'colour', headerName: 'COLOR', width: 100, cellStyle: { fontWeight: 'bold' } },
+    { field: 'size', headerName: 'SIZE', width: 80, cellStyle: { fontWeight: 'bold' } },
     { field: 'qty_received', headerName: 'QTY', width: 100, type: 'numericColumn', editable: true },
     { 
       field: 'unit_cost_paise', 

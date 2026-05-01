@@ -130,7 +130,11 @@ async def search_inventory(
             "tax_rate": item.gst_rate or 18,
             "stock": total_stock,
             "category": "Retail",
-            "uom": item.uom
+            "uom": item.uom,
+            "colour": item.colour,
+            "subclass1": item.anal_codes.get('subclass1', '') if item.anal_codes else '',
+            "subclass2": item.anal_codes.get('subclass2', '') if item.anal_codes else '',
+            "size": "" # Default for general SKU search
         })
         
     return enriched_items
@@ -217,7 +221,10 @@ async def advanced_search(
             "stock": total_stock,
             "category": "Retail",
             "uom": item.uom,
-            "colour": item.colour
+            "colour": item.colour,
+            "subclass1": item.anal_codes.get('subclass1', '') if item.anal_codes else '',
+            "subclass2": item.anal_codes.get('subclass2', '') if item.anal_codes else '',
+            "size": ""
         })
         
     return enriched_items

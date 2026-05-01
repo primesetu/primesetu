@@ -33,6 +33,10 @@ interface BillItem {
   id: string
   stock_no: string
   descr: string
+  subclass1: string
+  subclass2: string
+  colour: string
+  size: string
   rate: number
   qty: number
   disc_per: number
@@ -105,6 +109,10 @@ export default function BillingModule() {
           id: crypto.randomUUID(),
           stock_no: item.item_code || item.sku || item.code || 'N/A',
           descr: item.item_name || item.name || item.descr || 'Unknown Item',
+          subclass1: item.subclass1 || '',
+          subclass2: item.subclass2 || '',
+          colour: item.colour || '',
+          size: item.size || '',
           rate: rate,
           qty: currentQty,
           disc_per: currentDisc,
@@ -147,7 +155,11 @@ export default function BillingModule() {
 
   const columnDefs = useMemo<ColDef[]>(() => [
     { field: 'stock_no', headerName: 'STOCK NO', width: 140, cellStyle: { fontWeight: '900', color: 'var(--primary)' } },
-    { field: 'descr', headerName: 'ITEM DESCRIPTION', flex: 1, cellStyle: { textTransform: 'uppercase', fontWeight: '700' } },
+    { field: 'descr', headerName: 'DESCRIPTION', flex: 1, minWidth: 200, cellStyle: { textTransform: 'uppercase', fontWeight: '700' } },
+    { field: 'subclass1', headerName: 'SUB-1', width: 100 },
+    { field: 'subclass2', headerName: 'SUB-2', width: 100 },
+    { field: 'colour', headerName: 'COLOR', width: 100, cellStyle: { fontWeight: 'bold' } },
+    { field: 'size', headerName: 'SIZE', width: 80, cellStyle: { fontWeight: 'bold' } },
     { 
       field: 'rate', 
       headerName: 'RATE', 

@@ -32,6 +32,7 @@ app = FastAPI(
 # .. CORS ......................................................................
 ALLOWED_ORIGIN_REGEX = (
     r"https?://(localhost|127\.0\.0\.1"
+    r"|(.*\.)?primesetu\.com"
     r"|(.*\.)?primesetu\.pages\.dev"
     r"|(.*\.)?SMRITI-OS\.pages\.dev"
     r"|.*\.github\.io)(:\d+)?"

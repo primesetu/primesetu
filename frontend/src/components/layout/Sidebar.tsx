@@ -12,6 +12,7 @@ import { MenuItem } from '../../api/menuService';
 import { ThemeToggle } from '../ThemeToggle';
 import { cn } from '@/components/ui/SovereignUI'; // Using our UI's cn
 import { useTheme } from '@/hooks/useTheme';
+import { supabase } from '@/lib/supabase';
 
 interface SidebarProps {
   activeTab: string;
@@ -234,6 +235,27 @@ const Sidebar: React.FC<SidebarProps> = ({
             </div>
           )}
         </div>
+        {!isCollapsed && (
+          <button
+            onClick={async () => {
+              await supabase.auth.signOut();
+              window.location.reload(); // Hard reset for clean logout pulse
+            }}
+            className="mt-2 w-full flex items-center gap-3 px-3 py-2 rounded-lg text-error hover:bg-error/10 transition-all group"
+          >
+            <Power size={16} className="group-hover:rotate-12 transition-transform" />
+            <span className="text-[10px] font-black u-uppercase tracking-widest">Exit Terminal</span>
+          </button>
+        )}
+        {isCollapsed && (
+          <button
+            onClick={() => supabase.auth.signOut().then(() => window.location.reload())}
+            title="Logout"
+            className="mt-2 p-2 rounded-lg text-error hover:bg-error/10 transition-all"
+          >
+            <Power size={20} />
+          </button>
+        )}
       </div>
     </motion.aside>
     </>

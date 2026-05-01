@@ -13,7 +13,7 @@ from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import select, func
 from app.core.database import get_db
-from app.models.base import Transaction, TransactionItem, Product, Inventory
+from app.models.base import Transaction, TransactionItem, Item, ItemStock
 from app.core.security import get_current_user, UserContext
 from typing import List, Dict, Any, Optional
 from app.services.compliance import ComplianceEngine
@@ -83,7 +83,7 @@ async def get_sales_by_attribute(
         raise HTTPException(status_code=400, detail=f"Invalid attribute. Use one of: {valid_attributes}")
 
     # Mapping attribute to model field
-    attr_field = getattr(Product, attribute)
+    attr_field = getattr(Item, attribute)
 
     stmt = (
         select(
@@ -91,7 +91,7 @@ async def get_sales_by_attribute(
             func.sum(TransactionItem.qty).label("total_qty"),
             func.sum(TransactionItem.net_amount).label("total_revenue")
         )
-        .join(TransactionItem, TransactionItem.product_id == Product.id)
+        .join(TransactionItem, TransactionItem.product_id == Item.id)
         .join(Transaction, Transaction.id == TransactionItem.transaction_id)
         .where(Transaction.store_id == current_user.store_id)
         .where(Transaction.status == "Finalized")
@@ -179,32 +179,33 @@ async def get_inventory_valuation(
     Calculates current inventory valuation at Cost and MRP.
     Crucial for institutional audit and insurance.
     """
+    # In Item model, we use mrp_paise. We'll use it for valuation.
     stmt_total = (
         select(
-            func.sum(Product.cost_price * Inventory.quantity).label("total_valuation"),
-            func.count(Product.id).label("total_skus")
+            func.sum(Item.mrp_paise * ItemStock.qty_on_hand).label("total_valuation"),
+            func.count(Item.id).label("total_skus")
         )
-        .join(Inventory, Inventory.product_id == Product.id)
-        .where(Inventory.store_id == current_user.store_id)
+        .join(ItemStock, ItemStock.item_id == Item.id)
+        .where(ItemStock.store_id == current_user.store_id)
     )
     result = await db.execute(stmt_total)
     row = result.fetchone()
-    total_valuation = float(row.total_valuation or 0.0) if row else 0.0
+    total_valuation = float(row.total_valuation or 0.0) / 100.0 if row else 0.0
     total_skus = int(row.total_skus or 0) if row else 0
     
     # Get by category breakdown
     stmt_cat = (
         select(
-            Product.category,
-            func.sum(Product.cost_price * Inventory.quantity).label("value")
+            Item.category,
+            func.sum(Item.mrp_paise * ItemStock.qty_on_hand).label("value")
         )
-        .join(Inventory, Inventory.product_id == Product.id)
-        .where(Inventory.store_id == current_user.store_id)
-        .group_by(Product.category)
-        .order_by(func.sum(Product.cost_price * Inventory.quantity).desc())
+        .join(ItemStock, ItemStock.item_id == Item.id)
+        .where(ItemStock.store_id == current_user.store_id)
+        .group_by(Item.category)
+        .order_by(func.sum(Item.mrp_paise * ItemStock.qty_on_hand).desc())
     )
     cat_result = await db.execute(stmt_cat)
-    by_category = [{"category": row.category or "Uncategorized", "value": float(row.value or 0)} for row in cat_result]
+    by_category = [{"category": row.category or "Uncategorized", "value": float(row.value or 0) / 100.0} for row in cat_result]
 
     return {
         "total_valuation": total_valuation,

@@ -21,9 +21,11 @@ from app.core.database import get_db
 from app.core.security import require_auth, CurrentUser
 from app.models import (
     Item, ItemStock, Transaction, TransactionItem, 
-    InventoryAudit as AuditSession, InventoryAuditItem as AuditEntry
+    InventoryAudit as AuditSession, InventoryAuditItem as AuditEntry,
+    ItemBarcode
 )
 from app.schemas.common import ProductRead, PredictiveStats
+from app.schemas.item_master import AdvancedSearchRequest, SearchFilter
 from pydantic import BaseModel
 
 router = APIRouter(prefix="/api/v1/inventory", tags=["inventory"])
@@ -43,6 +45,182 @@ class AuditItemEntry(BaseModel):
     colour: Optional[str] = None
 
 # --- STOCK OPERATIONS ---
+
+@router.get("/search")
+async def search_inventory(
+    q: str,
+    db: AsyncSession = Depends(get_db),
+    current_user: CurrentUser = Depends(require_auth)
+):
+    """
+    Sovereign Search Engine: Scans 22k+ items by SKU, Barcode, or Name.
+    Matches Shoper 9 'Direct Entry' speed standards.
+    """
+    query = q.strip()
+    if not query:
+        return []
+
+    # 1. First, try an exact barcode match (Highest Priority)
+    barcode_stmt = (
+        select(Item)
+        .join(ItemBarcode, ItemBarcode.item_id == Item.id)
+        .where(
+            and_(
+                ItemBarcode.store_id == current_user.store_id,
+                ItemBarcode.barcode == query,
+                ItemBarcode.is_active == True
+            )
+        )
+    )
+    barcode_res = await db.execute(barcode_stmt)
+    barcode_item = barcode_res.scalar_one_or_none()
+    
+    if barcode_item:
+        items = [barcode_item]
+    else:
+        # 2. Try exact SKU/Item Code match
+        sku_stmt = (
+            select(Item)
+            .where(
+                and_(
+                    Item.store_id == current_user.store_id,
+                    Item.item_code == query
+                )
+            )
+        )
+        sku_res = await db.execute(sku_stmt)
+        sku_item = sku_res.scalar_one_or_none()
+        
+        if sku_item:
+            items = [sku_item]
+        else:
+            # 3. Fallback to fuzzy search on Name or Code
+            search_query = f"%{query.lower()}%"
+            stmt = (
+                select(Item)
+                .where(
+                    and_(
+                        Item.store_id == current_user.store_id,
+                        or_(
+                            func.lower(Item.item_code).like(search_query),
+                            func.lower(Item.item_name).like(search_query)
+                        )
+                    )
+                )
+                .limit(50)
+            )
+            result = await db.execute(stmt)
+            items = result.scalars().all()
+    
+    # 2. Enrich with Stock Data
+    enriched_items = []
+    for item in items:
+        # Get total stock for this item across all size/color matrices
+        stock_stmt = select(func.sum(ItemStock.qty_on_hand)).where(
+            and_(ItemStock.item_id == item.id, ItemStock.store_id == current_user.store_id)
+        )
+        total_stock = await db.scalar(stock_stmt) or 0
+        
+        enriched_items.append({
+            "id": str(item.id),
+            "code": item.item_code,
+            "name": item.item_name,
+            "brand": item.brand or "SMRITI",
+            "mrp_paise": item.mrp_paise,
+            "tax_rate": item.gst_rate or 18,
+            "stock": total_stock,
+            "category": "Retail",
+            "uom": item.uom
+        })
+        
+    return enriched_items
+
+@router.post("/advanced-search")
+async def advanced_search(
+    req: AdvancedSearchRequest,
+    db: AsyncSession = Depends(get_db),
+    current_user: CurrentUser = Depends(require_auth)
+):
+    """
+    Sovereign Advanced Search: Multi-field filtering with Shoper 9 operators.
+    Supports Contains, Starts With, Ends With, and Exact Match.
+    """
+    stmt = select(Item).where(Item.store_id == current_user.store_id)
+    
+    # Handle Barcode join if needed
+    has_barcode_filter = any(f.field == 'barcode' for f in req.filters)
+    if has_barcode_filter:
+        stmt = stmt.outerjoin(ItemBarcode, ItemBarcode.item_id == Item.id)
+        
+    filter_clauses = []
+    
+    field_map = {
+        'item_code': Item.item_code,
+        'item_name': Item.item_name,
+        'brand': Item.brand,
+        'colour': Item.colour,
+        'hsn_code': Item.hsn_code,
+        'barcode': ItemBarcode.barcode
+    }
+    
+    for f in req.filters:
+        if f.field not in field_map:
+            continue
+            
+        col = field_map[f.field]
+        val = f.value.strip().lower()
+        if not val:
+            continue
+            
+        if f.operator == "contains":
+            clause = func.lower(col).like(f"%{val}%")
+        elif f.operator == "starts_with":
+            clause = func.lower(col).like(f"{val}%")
+        elif f.operator == "ends_with":
+            clause = func.lower(col).like(f"%{val}")
+        elif f.operator == "equals":
+            clause = func.lower(col) == val
+        else:
+            continue
+            
+        # If filtering by barcode, also ensure it's active
+        if f.field == 'barcode':
+            clause = and_(clause, ItemBarcode.is_active == True)
+            
+        filter_clauses.append(clause)
+        
+    if filter_clauses:
+        if req.logic == "OR":
+            stmt = stmt.where(or_(*filter_clauses))
+        else:
+            stmt = stmt.where(and_(*filter_clauses))
+            
+    stmt = stmt.limit(100)
+    result = await db.execute(stmt)
+    items = result.scalars().unique().all()
+    
+    # 2. Enrich with Stock Data
+    enriched_items = []
+    for item in items:
+        stock_stmt = select(func.sum(ItemStock.qty_on_hand)).where(
+            and_(ItemStock.item_id == item.id, ItemStock.store_id == current_user.store_id)
+        )
+        total_stock = await db.scalar(stock_stmt) or 0
+        
+        enriched_items.append({
+            "id": str(item.id),
+            "code": item.item_code,
+            "name": item.item_name,
+            "brand": item.brand or "SMRITI",
+            "mrp_paise": item.mrp_paise,
+            "tax_rate": item.gst_rate or 18,
+            "stock": total_stock,
+            "category": "Retail",
+            "uom": item.uom,
+            "colour": item.colour
+        })
+        
+    return enriched_items
 
 @router.get("/stock", response_model=List[Dict[str, Any]])
 async def get_inventory_status(

@@ -47,7 +47,8 @@ from app.routers import (
     onboarding, item_master, customer, barcode, 
     price_group,    purchase, inventory, billing, 
     ho, flexible_reports, users, menu, extensions, finance, schemes, security, reporting,
-    store, inventory_audit, stock_ledger, department, configuration, warehouse, intelligence
+    store, inventory_audit, stock_ledger, department, configuration, warehouse, intelligence,
+    legacy
 )
 from app.routers.gstr1 import router as gstr1_router
 
@@ -56,6 +57,7 @@ app.include_router(onboarding.router)
 app.include_router(store.router)
 app.include_router(users.router)
 app.include_router(extensions.router, prefix="/api/v1/extensions")
+app.include_router(legacy.router)
 
 # Masters
 app.include_router(item_master.router, prefix="/api/v1")

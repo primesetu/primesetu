@@ -1,18 +1,17 @@
 import asyncio
-from sqlalchemy import text
-from database import engine
+import asyncpg
+import os
+from dotenv import load_dotenv
+
+load_dotenv()
 
 async def check():
-    async with engine.begin() as conn:
-        res = await conn.execute(text("SELECT column_name, data_type FROM information_schema.columns WHERE table_name = 'stores';"))
-        print("Stores columns:")
-        for row in res:
-            print(row[0], row[1])
-            
-        res = await conn.execute(text("SELECT column_name, data_type FROM information_schema.columns WHERE table_name = 'users';"))
-        print("Users columns:")
-        for row in res:
-            print(row[0], row[1])
+    db_url = os.getenv("DATABASE_URL").replace("postgresql+asyncpg://", "postgresql://")
+    conn = await asyncpg.connect(db_url)
+    rows = await conn.fetch("SELECT tablename FROM pg_tables WHERE schemaname = 'public'")
+    for r in rows:
+        print(r['tablename'])
+    await conn.close()
 
-if __name__ == "__main__":
+if __name__ == '__main__':
     asyncio.run(check())

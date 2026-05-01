@@ -26,7 +26,7 @@ async def get_department_map() -> Dict[str, uuid.UUID]:
         deps = result.scalars().all()
         return {dep.code: dep.id for dep in deps}
 
-def get_shoper9_inventory(database="SHOPER9X01"):
+def get_shoper9_inventory(database="SHOPER9WH1"):
     """Fetches items and their current balance from Shoper 9."""
     conn_str = f'DRIVER={{SQL Server}};SERVER=.;DATABASE={database};Trusted_Connection=yes;'
     try:

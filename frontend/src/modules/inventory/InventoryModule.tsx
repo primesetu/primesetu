@@ -109,6 +109,8 @@ export default function InventoryModule() {
                          i.brand.toLowerCase().includes(search.toLowerCase())
     
     if (filter === 'LOW STOCK') return matchesSearch && (i.wh1_qty + i.x01_qty < i.min_stock)
+    if (filter === 'ZERO STOCK') return matchesSearch && (i.wh1_qty + i.x01_qty === 0)
+    if (filter === 'STOCK ~100') return matchesSearch && Math.abs((i.wh1_qty + i.x01_qty) - 100) <= 10
     if (filter === 'ALL') return matchesSearch
     return matchesSearch && i.category.toUpperCase() === filter.toUpperCase()
   })
@@ -216,7 +218,7 @@ export default function InventoryModule() {
           />
         </div>
         <Card variant="flat" className="p-1 rounded-xl bg-bg-float/40 border-border-subtle flex">
-          {['ALL', 'LOW STOCK', 'FOOTWEAR', 'APPAREL'].map(f => (
+          {['ALL', 'LOW STOCK', 'ZERO STOCK', 'STOCK ~100', 'FOOTWEAR', 'APPAREL'].map(f => (
             <button 
               key={f}
               onClick={() => setFilter(f)}

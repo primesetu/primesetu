@@ -3,6 +3,9 @@ import asyncio
 import asyncpg
 import uuid
 import os
+import json
+from datetime import datetime, date
+from decimal import Decimal
 from app.core.config import settings
 
 # ============================================================
@@ -10,34 +13,44 @@ from app.core.config import settings
 # Phase 4: Institutional-Grade High-Speed Migration
 # ============================================================
 
-async def get_shoper9_data(database="SHOPER9X01"):
-    """Fetches all 40k items in one go from MSSQL."""
-    print("Reading 40k records from Shoper 9 MSSQL...")
+def custom_serializer(obj):
+    if isinstance(obj, (datetime, date)):
+        return obj.isoformat()
+    if isinstance(obj, Decimal):
+        return float(obj)
+    raise TypeError(f"Type {type(obj)} not serializable")
+
+async def get_shoper9_data(database="SHOPER9WH1"):
+    """Fetches all 40k items in one go from MSSQL including all columns."""
+    print("Reading all columns for 40k records from Shoper 9 MSSQL...")
     conn_str = f'DRIVER={{SQL Server}};SERVER=.;DATABASE={database};Trusted_Connection=yes;'
     try:
         conn = pyodbc.connect(conn_str)
         cursor = conn.cursor()
         query = """
             SELECT 
-                IM.StockNo, 
-                IM.ItemDesc, 
-                IM.Retail_Price, 
-                IM.Class2Cd as DeptCode,
-                ISNULL(SM.CurBalQty, 0) as Qty
+                IM.*,
+                ISNULL(SM.CurBalQty, 0) as CurBalQty
             FROM ItemMaster IM
             LEFT JOIN StockMaster SM ON IM.StockNo = SM.StockNo
             WHERE IM.ItemDesc IS NOT NULL
         """
         cursor.execute(query)
+        columns = [column[0] for column in cursor.description]
         rows = cursor.fetchall()
+        
+        data = []
+        for row in rows:
+            data.append(dict(zip(columns, row)))
+            
         conn.close()
-        return rows
+        return data
     except Exception as e:
         print(f"MSSQL Error: {e}")
         return []
 
 async def bulk_sync():
-    print("Starting High-Speed Bulk Sync...")
+    print("Starting High-Speed Bulk Sync (All Fields Mapping)...")
     
     # 1. Fetch data from MSSQL
     rows = await get_shoper9_data()
@@ -57,30 +70,48 @@ async def bulk_sync():
     default_dept_id = list(dept_map.values())[0] if dept_map else None
 
     # 4. Prepare Records for Items
-    # Table columns: id, store_id, item_code, item_name, department_id, mrp_paise, gst_rate, hsn_code, is_active, external_id, anal_codes, user_fields, created_at, updated_at
     item_records = []
     stock_records = []
     
-    print(f"Formatting {len(rows)} records...")
+    print(f"Formatting {len(rows)} records and mapping 127 columns into JSONB...")
     for row in rows:
         item_id = uuid.uuid4()
-        mrp_paise = int(float(row.Retail_Price) * 100) if row.Retail_Price else 0
-        dept_id = dept_map.get(row.DeptCode, default_dept_id)
+        raw_price = row.get('Retail_Price')
+        mrp_paise = int(float(raw_price) * 100) if raw_price else 0
+        dept_id = dept_map.get(row.get('Class2Cd'), default_dept_id)
+        
+        anal_codes = {}
+        user_fields = {}
+        
+        # Categorize all remaining fields dynamically
+        for k, v in row.items():
+            if v is None or str(v).strip() == '':
+                continue
+            
+            # Skip core fields that are statically mapped
+            if k in ['StockNo', 'ItemDesc', 'Retail_Price', 'Class2Cd', 'CurBalQty']:
+                continue
+                
+            # Direct mapping to AnalCodes
+            if k.startswith('AnalCode'):
+                anal_codes[k] = v
+            else:
+                user_fields[k] = v
         
         # Item Record
         item_records.append((
             item_id,                # id
             store_id,               # store_id
-            row.StockNo,            # item_code
-            row.ItemDesc[:40],       # item_name
+            row.get('StockNo'),     # item_code
+            row.get('ItemDesc', '')[:40], # item_name
             dept_id,                # department_id
             mrp_paise,              # mrp_paise
             18,                     # gst_rate
             "9999",                 # hsn_code
             True,                   # is_active
-            row.StockNo,            # external_id
-            '{}',                   # anal_codes
-            '{}'                    # user_fields
+            row.get('StockNo'),     # external_id
+            json.dumps(anal_codes, default=custom_serializer),  # anal_codes JSONB
+            json.dumps(user_fields, default=custom_serializer)  # user_fields JSONB
         ))
         
         # Stock Record
@@ -90,20 +121,17 @@ async def bulk_sync():
             store_id,               # store_id
             "NA",                   # size
             "NA",                   # colour
-            int(row.Qty),           # qty_on_hand
+            int(row.get('CurBalQty', 0)), # qty_on_hand
             0,                      # qty_reserved
             10                      # reorder_level
         ))
 
-    # 5. Execute Bulk Insert using Temp Tables (to handle duplicates/updates)
+    # 5. Execute Bulk Insert using Temp Tables
     print("Uploading to temporary buffer...")
     async with conn.transaction():
-        # Clear existing items if re-syncing (Optional: Adjust based on user needs)
-        # For now, we'll just TRUNCATE items and item_stock for a clean high-speed sync
         await conn.execute("TRUNCATE TABLE item_stock CASCADE")
         await conn.execute("TRUNCATE TABLE items CASCADE")
         
-        # Use copy_records_to_table for insane speed
         await conn.copy_records_to_table(
             'items', 
             records=item_records, 
@@ -121,7 +149,8 @@ async def bulk_sync():
         )
 
     await conn.close()
-    print(f"BULK SYNC COMPLETE! {len(item_records)} items and stock levels migrated in seconds.")
+    print(f"BULK SYNC COMPLETE! {len(item_records)} items with full JSONB metadata migrated in seconds.")
 
 if __name__ == "__main__":
     asyncio.run(bulk_sync())
+

@@ -24,6 +24,18 @@ from app.schemas.users import UserCreate, UserUpdate, UserResponse
 
 router = APIRouter(prefix="/api/v1/users", tags=["users"])
 
+@router.get("/me", response_model=UserResponse)
+async def get_me(
+    db: AsyncSession = Depends(get_db),
+    current_user: CurrentUser = Depends(require_auth)
+):
+    """Returns the currently authenticated user's profile."""
+    result = await db.execute(select(User).where(User.id == current_user.id))
+    user = result.scalar_one_or_none()
+    if not user:
+        raise HTTPException(status_code=404, detail="User profile not found")
+    return user
+
 @router.get("/", response_model=List[UserResponse])
 async def list_users(
     db: AsyncSession = Depends(get_db),

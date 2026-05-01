@@ -77,3 +77,12 @@ class StockMatrixResponse(BaseModel):
     matrix: List[StockMatrixEntry]
     
     model_config = ConfigDict(from_attributes=True)
+
+class SearchFilter(BaseModel):
+    field: str = Field(..., example="item_name")
+    operator: str = Field(..., pattern="^(contains|starts_with|ends_with|equals)$")
+    value: str
+
+class AdvancedSearchRequest(BaseModel):
+    filters: List[SearchFilter]
+    logic: str = Field(default="AND", pattern="^(AND|OR)$")

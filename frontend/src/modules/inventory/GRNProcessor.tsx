@@ -29,6 +29,8 @@ import {
   Label,
   DataTable
 } from '../../components/ui/SovereignUI';
+import { SovereignSearch } from '@/components/SovereignSearch';
+import { Filter } from 'lucide-react';
 
 interface POItem {
   id: string;
@@ -64,6 +66,11 @@ const GRNProcessor: React.FC = () => {
   const [receivedItems, setReceivedItems] = useState<POItem[]>([]);
   const [isProcessing, setIsProcessing] = useState(false);
   const [showSuccess, setShowSuccess] = useState(false);
+  const [showAdvancedSearch, setShowAdvancedSearch] = useState<{ isOpen: boolean; field: string; value: string }>({
+    isOpen: false,
+    field: 'barcode',
+    value: ''
+  });
 
   // 1. Fetch Open POs
   const { data: pos = [], loading: isLoadingPOs } = useOfflineFallback<PurchaseOrder[]>('open_pos', async () => {
@@ -189,7 +196,8 @@ const GRNProcessor: React.FC = () => {
   }
 
   return (
-    <div className="space-y-6 animate-in fade-in duration-700 pb-20">
+    <>
+      <div className="space-y-6 animate-in fade-in duration-700 pb-20">
       {/* Breadcrumb Pattern */}
       <nav className="flex items-center gap-2 text-[10px] font-black uppercase tracking-widest text-text-disabled">
          <span>Home</span> <ChevronRight size={10} />
@@ -258,9 +266,19 @@ const GRNProcessor: React.FC = () => {
                        <Text variant="h2" className="leading-none">{selectedPO.po_number}</Text>
                     </div>
                  </div>
-                 <div className="text-right">
-                    <Text variant="xs" className="text-accent uppercase tracking-widest mb-1">Current Registry</Text>
-                    <Text variant="h3" className="font-mono text-text-primary">{grnNumber}</Text>
+                 <div className="text-right flex items-center gap-6">
+                    <div>
+                       <Text variant="xs" className="text-accent uppercase tracking-widest mb-1">Current Registry</Text>
+                       <Text variant="h3" className="font-mono text-text-primary">{grnNumber}</Text>
+                    </div>
+                    <Button 
+                      variant="sec" 
+                      size="sm" 
+                      onClick={() => setShowAdvancedSearch({ isOpen: true, field: 'barcode', value: '' })}
+                      className="h-10 px-4 gap-2 border-border-subtle hover:border-accent"
+                    >
+                       <Filter size={16} /> ADVANCED SEARCH
+                    </Button>
                  </div>
               </Card>
 
@@ -396,6 +414,29 @@ const GRNProcessor: React.FC = () => {
         </div>
       )}
     </div>
+
+    <SovereignSearch 
+      isOpen={showAdvancedSearch.isOpen}
+      initialFilter={{
+        field: showAdvancedSearch.field,
+        value: showAdvancedSearch.value
+      }}
+      onClose={() => setShowAdvancedSearch(prev => ({ ...prev, isOpen: false }))}
+      onSelect={(item) => {
+        if (selectedPO) {
+          const itemIndex = receivedItems.findIndex(it => it.item_id === item.id);
+          if (itemIndex > -1) {
+            const poItem = receivedItems[itemIndex];
+            const maxQty = poItem.qty_ordered - (poItem.qty_received || 0);
+            if (poItem.received_now < maxQty) {
+              updateItemField(itemIndex, 'received_now', poItem.received_now + 1);
+            }
+          }
+        }
+        setShowAdvancedSearch(prev => ({ ...prev, isOpen: false }));
+      }}
+    />
+    </>
   );
 };
 

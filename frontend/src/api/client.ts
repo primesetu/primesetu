@@ -14,7 +14,7 @@ import { supabase } from '@/lib/supabase'
 const getBaseUrl = () => {
   if (import.meta.env.VITE_BACKEND_URL) return import.meta.env.VITE_BACKEND_URL
   // Fallback for local development
-  return 'http://localhost:8000'
+  return 'http://127.0.0.1:8000'
 }
 
 const BASE_URL = getBaseUrl()
@@ -47,14 +47,15 @@ export const api = {
     delete: (id: string) => apiClient.delete(`/products/${id}`).then(r => r.data),
     bulkCreate: (data: any[]) => apiClient.post('/products/bulk', data).then(r => r.data),
     search: (q: string) => apiClient.get(`/inventory/search?q=${q}`).then(r => r.data),
+    advancedSearch: (data: { filters: any[], logic: string }) => apiClient.post('/inventory/advanced-search', data).then(r => r.data),
     getAlerts: () => apiClient.get('/inventory/alerts').then(r => r.data),
     getPredictive: () => apiClient.get('/inventory/predictive').then(r => r.data),
     getStockPrediction: (id: string) => apiClient.get(`/inventory/predictive/${id}`).then(r => r.data),
-    createAuditSession: () => apiClient.post('/inventory-audit/').then(r => r.data),
-    listAuditSessions: () => apiClient.get('/inventory-audit/').then(r => r.data),
-    getAuditSession: (id: string) => apiClient.get(`/inventory-audit/${id}`).then(r => r.data),
-    addAuditEntry: (auditId: string, data: any) => apiClient.post(`/inventory-audit/${auditId}/entries`, data).then(r => r.data),
-    submitAudit: (id: string) => apiClient.post(`/inventory-audit/${id}/submit`).then(r => r.data),
+    createAuditSession: () => apiClient.post('/inventory/audit/sessions').then(r => r.data),
+    listAuditSessions: () => apiClient.get('/inventory/audit/sessions').then(r => r.data),
+    getAuditSession: (id: string) => apiClient.get(`/inventory/audit/sessions/${id}`).then(r => r.data),
+    addAuditEntry: (auditId: string, data: any) => apiClient.post(`/inventory/audit/sessions/${auditId}/entries`, data).then(r => r.data),
+    submitAudit: (id: string) => apiClient.post(`/inventory/audit/sessions/${id}/finalize`).then(r => r.data),
     generateInternal: (itemId: string) => apiClient.post('/barcodes/generate-internal', { item_id: itemId, is_primary: true, barcode_type: 'CODE128' }).then(r => r.data),
     generateEAN13: (itemId: string) => apiClient.post('/barcodes/generate-ean13', { item_id: itemId, is_primary: true, barcode_type: 'EAN13' }).then(r => r.data),
     printBarcode: (data: any) => apiClient.post('/barcodes/print', data).then(r => r.data),
@@ -160,6 +161,8 @@ export const api = {
     list: () => apiClient.get('/users/').then(r => r.data),
     create: (data: any) => apiClient.post('/users/', data).then(r => r.data),
     update: (id: string, data: any) => apiClient.put(`/users/${id}`, data).then(r => r.data),
+    deactivate: (id: string) => apiClient.put(`/users/${id}`, { active: false }).then(r => r.data),
+    getMe: () => apiClient.get('/users/me').then(r => r.data),
   },
   config: {
     getUIFields: (screen: string) => apiClient.get(`/config/ui-fields/${screen}`).then(r => r.data),

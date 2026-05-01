@@ -31,6 +31,8 @@ from typing import Optional
 from fastapi import Depends, HTTPException, status
 from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
 from app.core.config import settings
+from app.core.database import get_db
+from sqlalchemy.ext.asyncio import AsyncSession
 
 # .. Bearer token extractor ....................................................
 _bearer = HTTPBearer(auto_error=True)
@@ -63,15 +65,58 @@ def _decode_token(token: str) -> dict:
     if not secret:
         raise RuntimeError("[SMRITI-OS] SUPABASE_JWT_SECRET is not set in environment.")
 
+    # Determine which key to use based on algorithm
     try:
+        header = jwt.get_unverified_header(token)
+        alg = header.get("alg", "HS256")
+        kid = header.get("kid")
+        print(f"[SMRITI-OS] Auth Pulse - Algorithm: {alg}, KID: {kid}")
+        
+        if alg == "ES256":
+            # Use the project-specific JWK for ES256
+            # In a production environment, this should be fetched from Supabase JWKS endpoint
+            from jwt.algorithms import ECAlgorithm
+            import json
+            
+            jwk_data = {
+                "x": "qzk0p6I1ms-E5BIoJjtm0qe3BdBvDFLh40Q3yAxI6_E",
+                "y": "sxRlE-dD7jGBztVOePkk1K6QQGEO6fc-IOUqn_deWiA",
+                "alg": "ES256",
+                "crv": "P-256",
+                "ext": True,
+                "kid": "aca8886e-6f54-499f-b417-56fac00fc28d",
+                "kty": "EC"
+            }
+            try:
+                verification_key = ECAlgorithm.from_jwk(json.dumps(jwk_data))
+            except ValueError as ve:
+                print(f"[SMRITI-OS] Security Alert: Invalid ES256 key - {ve}")
+                raise HTTPException(
+                    status_code=status.HTTP_401_UNAUTHORIZED,
+                    detail="[SMRITI-OS] Invalid security token configuration (ES256)."
+                )
+            except Exception as e:
+                print(f"[SMRITI-OS] Security Alert: {str(e)}")
+                raise HTTPException(
+                    status_code=status.HTTP_401_UNAUTHORIZED,
+                    detail="[SMRITI-OS] Could not validate credentials."
+                )
+        else:
+            verification_key = secret
+
         payload = jwt.decode(
             token,
-            secret,
-            algorithms=["HS256"],
-            audience="authenticated",   # Supabase default audience
-            options={"verify_exp": True},
+            verification_key,
+            algorithms=["HS256", "ES256"],
+            audience="authenticated",
+            options={
+                "verify_exp": True,
+                "verify_aud": True,
+                "verify_iss": False # Supabase issuers vary by project ref
+            },
         )
         return payload
+        
     except jwt.ExpiredSignatureError:
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
@@ -81,7 +126,7 @@ def _decode_token(token: str) -> dict:
     except jwt.InvalidTokenError as exc:
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
-            detail=f"[SMRITI-OS] Invalid token: {exc}",
+            detail=f"[SMRITI-OS] Invalid token ({alg}): {exc}",
             headers={"WWW-Authenticate": "Bearer"},
         )
 
@@ -113,10 +158,45 @@ def _build_user(payload: dict) -> CurrentUser:
 # .. FastAPI dependencies ......................................................
 async def require_auth(
     credentials: HTTPAuthorizationCredentials = Depends(_bearer),
+    db: AsyncSession = Depends(get_db)
 ) -> CurrentUser:
     """Dependency: any authenticated user. Raises 401 if token is missing/invalid."""
-    payload = _decode_token(credentials.credentials)
-    return _build_user(payload)
+    token = credentials.credentials
+    payload = _decode_token(token)
+    
+    # Try to build user from payload metadata first
+    try:
+        return _build_user(payload)
+    except HTTPException as e:
+        if e.status_code == 403:
+            # Metadata missing store_id? Try the Sovereign DB lookup
+            user_id_str = payload.get("sub")
+            if not user_id_str:
+                raise e
+            
+            from app.models import User
+            from sqlalchemy import select
+            import uuid
+            
+            try:
+                user_uuid = uuid.UUID(user_id_str)
+                stmt = select(User).where(User.id == user_uuid)
+                result = await db.execute(stmt)
+                user_obj = result.scalar_one_or_none()
+                
+                if user_obj:
+                    print(f"[SMRITI-OS] Security: Resolved store_id '{user_obj.store_id}' from DB for user {user_id_str}")
+                    return CurrentUser(
+                        user_id=user_id_str,
+                        store_id=user_obj.store_id,
+                        email=user_obj.email,
+                        role=user_obj.role,
+                        full_name=user_obj.full_name
+                    )
+            except Exception as db_err:
+                print(f"[SMRITI-OS] Security: DB lookup failed for {user_id_str}: {db_err}")
+                
+        raise e
 
 
 def require_role(*allowed_roles: str):
@@ -147,13 +227,14 @@ require_admin   = require_role("admin")
 # .. Optional auth (returns None when no token — for public endpoints) ........
 async def optional_auth(
     credentials: Optional[HTTPAuthorizationCredentials] = Depends(_bearer_optional),
+    db: AsyncSession = Depends(get_db)
 ) -> Optional[CurrentUser]:
     """Returns CurrentUser if a valid Bearer token is present, else None."""
     if not credentials:
         return None
     try:
-        payload = _decode_token(credentials.credentials)
-        return _build_user(payload)
+        # Re-use the robust require_auth logic for optional too
+        return await require_auth(credentials, db)
     except HTTPException:
         return None
 

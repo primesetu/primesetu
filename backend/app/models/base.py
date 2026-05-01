@@ -173,7 +173,23 @@ class TransactionItem(Base):
     grade: Mapped[Optional[str]] = mapped_column(String, nullable=True)
 
     transaction: Mapped["Transaction"] = relationship("Transaction", back_populates="items")
-    item: Mapped["Item"] = relationship("Item")
+    item: Mapped["Item"] = relationship("Item", lazy="joined")
+
+    @property
+    def code(self):
+        return self.item.item_code if self.item else "N/A"
+
+    @property
+    def name(self):
+        return self.item.item_name if self.item else "Unknown Item"
+
+    @property
+    def brand(self):
+        return self.item.brand if self.item else "SMRITI"
+
+    @property
+    def category(self):
+        return "Retail"
 
 class SalesSlip(Base):
     __tablename__ = "sales_slips"
@@ -789,7 +805,7 @@ class StockAuditLedger(Base):
     id: Mapped[uuid.UUID] = mapped_column(primary_key=True, server_default=text("gen_random_uuid()"))
     store_id: Mapped[str] = mapped_column(String, ForeignKey("stores.id"))
     item_id: Mapped[uuid.UUID] = mapped_column(ForeignKey("items.id"))
-    txn_id: Mapped[uuid.UUID] = mapped_column(ForeignKey("transactions.id"))
+    txn_id: Mapped[Optional[uuid.UUID]] = mapped_column(ForeignKey("transactions.id"), nullable=True)
     
     # BEFORE & AFTER (Forensic Snapshot)
     prev_qty: Mapped[int] = mapped_column(Integer)
@@ -797,6 +813,43 @@ class StockAuditLedger(Base):
     new_qty: Mapped[int] = mapped_column(Integer)
     
     created_at: Mapped[datetime] = mapped_column(DateTime, server_default=text("now()"))
+
+class WarehouseItemExtension(Base):
+    """Parity with ExtdItemMaster - Warehouse specific metadata"""
+    __tablename__ = "warehouse_item_extensions"
+
+    id: Mapped[uuid.UUID] = mapped_column(primary_key=True, server_default=text("gen_random_uuid()"))
+    store_id: Mapped[str] = mapped_column(String, ForeignKey("stores.id", ondelete="CASCADE"), nullable=False)
+    item_id: Mapped[uuid.UUID] = mapped_column(ForeignKey("items.id", ondelete="CASCADE"), nullable=False)
+    
+    warehouse_bin: Mapped[Optional[str]] = mapped_column(String(50), nullable=True)
+    warehouse_rack: Mapped[Optional[str]] = mapped_column(String(50), nullable=True)
+    least_salable_qty: Mapped[int] = mapped_column(Integer, default=0)
+    bulk_pack_qty: Mapped[int] = mapped_column(Integer, default=0)
+    is_fragile: Mapped[bool] = mapped_column(Boolean, default=False)
+    handling_instructions: Mapped[Optional[str]] = mapped_column(String, nullable=True)
+    shoper_extd_recid: Mapped[Optional[int]] = mapped_column(Integer, nullable=True)
+    
+    created_at: Mapped[datetime] = mapped_column(DateTime, server_default=text("now()"))
+
+class WarehousePhysicalStockTaking(Base):
+    """Parity with PhyTmpStockTakingItem - Physical Count Audit"""
+    __tablename__ = "warehouse_physical_stock_taking"
+
+    id: Mapped[uuid.UUID] = mapped_column(primary_key=True, server_default=text("gen_random_uuid()"))
+    store_id: Mapped[str] = mapped_column(String, ForeignKey("stores.id", ondelete="CASCADE"), nullable=False)
+    audit_id: Mapped[uuid.UUID] = mapped_column(ForeignKey("inventory_audits.id", ondelete="CASCADE"), nullable=False)
+    item_id: Mapped[uuid.UUID] = mapped_column(ForeignKey("items.id"), nullable=False)
+    
+    system_qty: Mapped[int] = mapped_column(Integer, default=0)
+    physical_qty: Mapped[int] = mapped_column(Integer, default=0)
+    counted_by: Mapped[uuid.UUID] = mapped_column(ForeignKey("users.id"), nullable=False)
+    zone_code: Mapped[Optional[str]] = mapped_column(String(50), nullable=True)
+    status: Mapped[str] = mapped_column(String(20), default="PENDING")
+    shoper_recid: Mapped[Optional[int]] = mapped_column(Integer, nullable=True)
+    
+    created_at: Mapped[datetime] = mapped_column(DateTime, server_default=text("now()"))
+
 
 class DeliveryTrip(Base):
     """Parity with TripSheetHdr - Logistics Management"""

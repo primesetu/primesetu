@@ -33,7 +33,8 @@ import {
   BarChart,
   Tag,
   AlertCircle,
-  Box
+  Box,
+  Database
 } from 'lucide-react'
 
 // Module Lazy/Dynamic Imports
@@ -78,6 +79,7 @@ import WarehouseDashboard from '../modules/inventory/WarehouseDashboard'
 import StockTransfer from '../modules/inventory/StockTransfer'
 
 import IntelligenceCockpit from '../modules/intelligence/IntelligenceCockpit'
+import LegacyExplorer from '../modules/intelligence/LegacyExplorer'
 
 export interface ModuleDefinition {
   id: string
@@ -200,6 +202,15 @@ export const MODULES: ModuleDefinition[] = [
     roles: ['OWNER'],
     showInSidebar: true,
     category: 'SYSTEM'
+  },
+  {
+    id: 'legacy_explorer',
+    label: 'Legacy Explorer',
+    icon: Database,
+    component: <LegacyExplorer />,
+    roles: ['OWNER'],
+    showInSidebar: true,
+    category: 'SYSTEM'
   }
 ];
 
@@ -243,6 +254,7 @@ export const COMPONENT_MAP: Record<string, React.ReactNode> = {
   'pricegroups': <PriceGroups />,
   'warehouse_os': <WarehouseDashboard />,
   'stock_transfer': <StockTransfer />,
+  'legacy_explorer': <LegacyExplorer />,
 };
 
 export const ICON_MAP: Record<string, any> = {

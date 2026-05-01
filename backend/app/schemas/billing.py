@@ -24,6 +24,7 @@ class BillItemCreate(BaseModel):
     qty: float = Field(..., description="Quantity (decimal supported)")
     unit_price: int = Field(..., description="Unit price in paise (integer)")
     discount_per: int = Field(0, description="Discount percentage as integer")
+    tax_per: int = Field(0, description="Tax percentage as integer")
 
 class BillCreate(BaseModel):
     customer_mobile: Optional[str] = None
@@ -60,6 +61,11 @@ class TransactionItemRead(BaseModel):
     discount_per: int
     tax_amount: int
     net_amount: int
+    # Enriched fields for UI
+    code: Optional[str] = None
+    name: Optional[str] = None
+    brand: Optional[str] = None
+    category: Optional[str] = None
     model_config = ConfigDict(from_attributes=True)
 
 class TransactionRead(BaseModel):
@@ -85,4 +91,8 @@ class TransactionCreate(BaseModel):
     items: List[BillItemCreate]
     payments: Optional[List[PaymentModeDetail]] = None
     type: str = "Sales"
-    till_id: Optional[uuid.UUID] = None
+    till_id: Optional[int] = None
+    cashier_id: Optional[uuid.UUID] = None
+    customer_id: Optional[uuid.UUID] = None
+    shoper_recid: Optional[int] = None
+    suspended_reason: Optional[str] = None

@@ -30,7 +30,8 @@ import {
   Settings,
   ChevronDown,
   Printer,
-  ChevronRight
+  ChevronRight,
+  Filter
 } from 'lucide-react';
 
 import { useLanguage } from '@/hooks/useLanguage';
@@ -55,7 +56,9 @@ import {
 // Sub-modules
 import MultiModePayment from './MultiModePayment';
 import SuspendedBillsBrowser from './SuspendedBillsBrowser';
+import ItemInquiry from './ItemInquiry';
 import BillHistoryBrowser from './BillHistoryBrowser';
+import { SovereignSearch } from '@/components/SovereignSearch';
 
 // Print Templates
 import TaxInvoiceA4 from './TaxInvoiceA4';
@@ -74,6 +77,7 @@ interface CartItem {
   discount_per: number;
   tax_rate: number;
   is_tax_inclusive: boolean;
+  stock: number;
 }
 
 export default function BillingModule() {
@@ -89,8 +93,14 @@ export default function BillingModule() {
   // UI State
   const [showPayment, setShowPayment] = useState(false);
   const [showSuspended, setShowSuspended] = useState(false);
+  const [showInquiry, setShowInquiry] = useState(false);
   const [showHistory, setShowHistory] = useState(false);
   const [showPrintOptions, setShowPrintOptions] = useState(false);
+  const [showAdvancedSearch, setShowAdvancedSearch] = useState<{ isOpen: boolean; field: string; value: string }>({ 
+    isOpen: false, 
+    field: 'barcode', 
+    value: '' 
+  });
   
   const [billToPrint, setBillToPrint] = useState<any>(null);
   const [activePrintTemplate, setActivePrintTemplate] = useState<'A4' | 'THERMAL' | null>(null);
@@ -123,7 +133,19 @@ export default function BillingModule() {
   }, [cartItems]);
 
   // --- Cart Actions ---
-  const addItem = (product: any) => {
+  const addItem = (product: { 
+    id: string; 
+    code: string; 
+    name: string; 
+    brand?: string; 
+    category?: string; 
+    mrp_paise?: number; 
+    mrp?: number; 
+    cost_price?: number; 
+    tax_rate?: number; 
+    is_tax_inclusive?: boolean; 
+    stock?: number; 
+  }) => {
     setCartItems(prev => {
       const existing = prev.find(i => i.id === product.id);
       if (existing) {
@@ -140,7 +162,8 @@ export default function BillingModule() {
         cost_price: product.cost_price || 0,
         discount_per: 0,
         tax_rate: product.tax_rate || 18,
-        is_tax_inclusive: product.is_tax_inclusive ?? true
+        is_tax_inclusive: product.is_tax_inclusive ?? true,
+        stock: product.stock || 0
       }];
     });
     setSearchQuery('');
@@ -192,6 +215,15 @@ export default function BillingModule() {
 
   // --- Shortcuts ---
   useHotkeys('f1', (e) => { e.preventDefault(); searchRef.current?.focus(); });
+  useHotkeys('f2', (e) => { e.preventDefault(); setShowInquiry(true); });
+  useHotkeys('ctrl+f', (e) => { 
+    e.preventDefault(); 
+    setShowAdvancedSearch({ 
+      isOpen: true, 
+      field: 'barcode', 
+      value: searchQuery 
+    }); 
+  });
   useHotkeys('f4', (e) => { e.preventDefault(); setShowSuspended(true); });
   useHotkeys('f8', (e) => { e.preventDefault(); if (cartItems.length > 0) setShowPayment(true); });
   useHotkeys('f12', (e) => { e.preventDefault(); handleSuspend(); });
@@ -201,8 +233,13 @@ export default function BillingModule() {
     try {
       await api.billing.suspend({
         customer_mobile: customerMobile,
-        items: cartItems,
-        net_payable: totals.net,
+        items: cartItems.map(item => ({
+          product_id: item.id,
+          qty: item.qty,
+          unit_price: item.mrp,
+          discount_per: item.discount_per,
+          tax_per: item.tax_rate
+        })),
         suspended_reason: 'User Initiated'
       });
       clearCart();
@@ -250,6 +287,9 @@ export default function BillingModule() {
         </div>
 
         <div className="flex items-center gap-3">
+          <Button variant="sec" size="sm" onClick={() => setShowInquiry(true)} className="gap-2">
+            <Search size={14} /> STOCK [F2]
+          </Button>
           <Button variant="sec" size="sm" onClick={() => setShowHistory(true)} className="gap-2">
             <History size={14} /> HISTORY
           </Button>
@@ -279,9 +319,21 @@ export default function BillingModule() {
                 onChange={(e) => setSearchQuery(e.target.value)}
                 className="pl-12 h-14 text-lg font-mono font-bold tracking-widest bg-bg-base/50 border-border-subtle focus:border-accent/50 focus:ring-accent/5 rounded-none"
               />
-              <div className="absolute right-4 top-1/2 -translate-y-1/2 flex items-center gap-2 opacity-30">
-                <Scan size={14} />
-                <span className="text-[10px] font-black">READY</span>
+              <div className="absolute right-4 top-1/2 -translate-y-1/2 flex items-center gap-3">
+                <Button 
+                  type="button"
+                  variant="ghost" 
+                  size="sm" 
+                  onClick={() => setShowAdvancedSearch({ isOpen: true, field: 'barcode', value: searchQuery })}
+                  className="h-8 px-3 gap-2 border border-border-subtle hover:border-accent hover:text-accent bg-bg-float"
+                >
+                  <Filter size={14} /> 
+                  <span className="text-[10px] font-black">ADVANCED [^F]</span>
+                </Button>
+                <div className="flex items-center gap-2 opacity-30">
+                  <Scan size={14} />
+                  <span className="text-[10px] font-black">READY</span>
+                </div>
               </div>
             </form>
             
@@ -310,6 +362,15 @@ export default function BillingModule() {
                   header: 'SR',
                   accessor: (_, index) => <span className="opacity-30 font-mono text-xs">{(index || 0) + 1}</span>,
                   className: 'w-12 text-center'
+                },
+                {
+                  header: 'AVL. STOCK',
+                  accessor: (item: CartItem) => (
+                    <Badge variant={item.stock <= 5 ? "error" : "success"} className="font-mono">
+                      {item.stock}
+                    </Badge>
+                  ),
+                  className: 'w-24 text-center'
                 },
                 {
                   header: 'ARTICLE / SKU',
@@ -561,7 +622,7 @@ export default function BillingModule() {
       {/* Modals & Overlays */}
       <AnimatePresence>
         {showPayment && (
-          <Portal>
+          <Portal key="payment-portal">
             <MultiModePayment 
               totalAmount={totals.net}
               onComplete={async (paymentData) => {
@@ -569,9 +630,18 @@ export default function BillingModule() {
                 try {
                   const bill = await api.billing.finalize({
                     customer_mobile: customerMobile,
-                    items: cartItems,
-                    payments: paymentData,
-                    totals: totals
+                    items: cartItems.map(item => ({
+                      product_id: item.id,
+                      qty: item.qty,
+                      unit_price: item.mrp,
+                      discount_per: item.discount_per,
+                      tax_per: item.tax_rate
+                    })),
+                    payments: paymentData.map((p: any) => ({
+                      mode: p.id,
+                      amount: p.amount,
+                      ref_no: p.refNo
+                    }))
                   });
                   setBillToPrint(bill);
                   setShowPayment(false);
@@ -589,8 +659,24 @@ export default function BillingModule() {
         )}
 
 
+        {showInquiry && (
+          <Modal
+            key="inquiry-modal"
+            isOpen={showInquiry}
+            onClose={() => setShowInquiry(false)}
+            title="Item Insight"
+            subtitle="Real-time Price & Stock Inquiry"
+            maxWidth="max-w-4xl"
+          >
+            <div className="h-[600px]">
+              <ItemInquiry onClose={() => setShowInquiry(false)} />
+            </div>
+          </Modal>
+        )}
+
         {showSuspended && (
           <Modal
+            key="suspended-modal"
             isOpen={showSuspended}
             onClose={() => setShowSuspended(false)}
             title="Sovereign Hold Queue"
@@ -608,6 +694,7 @@ export default function BillingModule() {
 
         {showHistory && (
           <Modal
+            key="history-modal"
             isOpen={showHistory}
             onClose={() => setShowHistory(false)}
             title="Transaction Archive"
@@ -629,6 +716,7 @@ export default function BillingModule() {
 
         {showPrintOptions && (
           <Modal
+            key="print-options-modal"
             isOpen={showPrintOptions}
             onClose={() => setShowPrintOptions(false)}
             title="Document Protocol"
@@ -657,6 +745,20 @@ export default function BillingModule() {
             </div>
           </Modal>
         )}
+
+        <SovereignSearch 
+          key="advanced-search"
+          isOpen={showAdvancedSearch.isOpen}
+          initialFilter={{
+            field: showAdvancedSearch.field,
+            value: showAdvancedSearch.value
+          }}
+          onClose={() => setShowAdvancedSearch(prev => ({ ...prev, isOpen: false }))}
+          onSelect={(item) => {
+            addItem(item);
+            setShowAdvancedSearch(prev => ({ ...prev, isOpen: false }));
+          }}
+        />
       </AnimatePresence>
 
       {/* Hidden Print Trigger */}

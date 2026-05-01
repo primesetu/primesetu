@@ -19,7 +19,8 @@ import {
   ChevronRight,
   ShieldCheck,
   Zap,
-  RefreshCw
+  RefreshCw,
+  Filter
 } from 'lucide-react';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { useHotkeys } from 'react-hotkeys-hook';
@@ -39,12 +40,18 @@ import {
   Input,
   cn 
 } from '@/components/ui/SovereignUI';
+import { SovereignSearch } from '@/components/SovereignSearch';
 
 const InventoryAudit: React.FC = () => {
   const [activeSession, setActiveSession] = useState<any>(null);
   const [searchQuery, setSearchQuery] = useState('');
   const [viewReport, setViewReport] = useState<any | null>(null);
   const [mobileMode, setMobileMode] = useState(false);
+  const [showAdvancedSearch, setShowAdvancedSearch] = useState<{ isOpen: boolean; field: string; value: string }>({
+    isOpen: false,
+    field: 'barcode',
+    value: ''
+  });
   const queryClient = useQueryClient();
   const searchInputRef = useRef<HTMLInputElement>(null);
 
@@ -117,7 +124,7 @@ const InventoryAudit: React.FC = () => {
         addEntryMutation.mutate({ 
           item_id: product.id, 
           size: product.size || 'UNI', 
-          colour: product.color || 'NOS',
+          colour: product.colour || 'NOS',
           physical_qty: 1 
         });
         setSearchQuery('');
@@ -300,18 +307,28 @@ const InventoryAudit: React.FC = () => {
 
                <Card className="rounded-[50px] p-12 border-navy/5 shadow-2xl overflow-hidden">
                   <div className="flex items-center gap-8 mb-12 pb-12 border-b border-navy/5">
-                     <div className="flex-1 relative">
-                        <Scan className="absolute left-8 top-1/2 -translate-y-1/2 text-navy/20" size={24} />
-                        <Input 
-                           ref={searchInputRef}
-                           type="text" 
-                           placeholder="SCAN BARCODE OR SEARCH ITEM... [F3]"
-                           className="w-full bg-navy/5 border-none h-16 rounded-[2.5rem] pl-20 pr-10 text-base font-black text-navy placeholder:text-navy/20 uppercase tracking-widest"
-                           value={searchQuery}
-                           onChange={(e) => setSearchQuery(e.target.value)}
-                           onKeyDown={(e) => e.key === 'Enter' && handleScan(searchQuery)}
-                        />
-                     </div>
+                         <div className="flex-1 relative">
+                            <Scan className="absolute left-8 top-1/2 -translate-y-1/2 text-navy/20" size={24} />
+                            <Input 
+                               ref={searchInputRef}
+                               type="text" 
+                               placeholder="SCAN BARCODE OR SEARCH ITEM... [F3]"
+                               className="w-full bg-navy/5 border-none h-16 rounded-[2.5rem] pl-20 pr-10 text-base font-black text-navy placeholder:text-navy/20 uppercase tracking-widest"
+                               value={searchQuery}
+                               onChange={(e) => setSearchQuery(e.target.value)}
+                               onKeyDown={(e) => e.key === 'Enter' && handleScan(searchQuery)}
+                            />
+                            <div className="absolute right-6 top-1/2 -translate-y-1/2">
+                               <Button 
+                                 variant="sec" 
+                                 size="sm" 
+                                 onClick={() => setShowAdvancedSearch({ isOpen: true, field: 'barcode', value: searchQuery })}
+                                 className="h-10 px-4 rounded-2xl gap-2 border-navy/10 hover:border-brand-gold hover:text-brand-gold"
+                               >
+                                 <Filter size={16} /> ADVANCED
+                               </Button>
+                            </div>
+                         </div>
                   </div>
 
                   <div className="min-h-[400px]">
@@ -372,6 +389,26 @@ const InventoryAudit: React.FC = () => {
       {mobileMode && (
         <MobileAudit onBack={() => setMobileMode(false)} />
       )}
+
+      <SovereignSearch 
+        isOpen={showAdvancedSearch.isOpen}
+        initialFilter={{
+          field: showAdvancedSearch.field,
+          value: showAdvancedSearch.value
+        }}
+        onClose={() => setShowAdvancedSearch(prev => ({ ...prev, isOpen: false }))}
+        onSelect={(item) => {
+          if (activeSession) {
+            addEntryMutation.mutate({ 
+              item_id: item.id, 
+              size: item.size || 'UNI', 
+              colour: item.colour || 'NOS',
+              physical_qty: 1 
+            });
+          }
+          setShowAdvancedSearch(prev => ({ ...prev, isOpen: false }));
+        }}
+      />
     </div>
   );
 };

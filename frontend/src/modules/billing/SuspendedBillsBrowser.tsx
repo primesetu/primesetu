@@ -78,6 +78,7 @@ const SuspendedBillsBrowser: React.FC<Props> = ({ onRecall, onClose }) => {
         discount_per: Number(item.discount_per) || 0,
         tax_rate: Number(item.tax_rate) || 18,
         is_tax_inclusive: item.is_tax_inclusive ?? true,
+        stock: 0,
       }));
       queryClient.invalidateQueries({ queryKey: ['suspended-bills'] });
       onRecall(cartItems, bill.customer_mobile || '');

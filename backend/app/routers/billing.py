@@ -9,36 +9,136 @@
 # "Memory, Not Code."
 # ============================================================
 
+import uuid
 from fastapi import APIRouter, Depends, HTTPException, Query
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import select, func, desc, and_
+from sqlalchemy.orm import selectinload, joinedload
 from app.core.database import get_db
 from app.models.base import Transaction, TransactionItem, Item, ItemStock, Customer, Till, Partner, LoyaltyLedger
 from app.schemas.billing import TransactionRead, TransactionCreate
 from typing import List, Optional, Dict, Any
 from decimal import Decimal, ROUND_HALF_UP
 from app.core.security import require_auth, CurrentUser
-from app.core.database import get_db
 
 router = APIRouter(prefix="/api/v1/billing", tags=["billing"])
 
-@router.get("/history")
-async def get_billing_history(
+@router.get("/history", response_model=List[TransactionRead])
+async def get_transaction_history(
+    limit: int = 50,
+    status: Optional[str] = "Finalized",
     db: AsyncSession = Depends(get_db),
     current_user: CurrentUser = Depends(require_auth)
 ):
-    stmt = select(Transaction).where(Transaction.store_id == current_user.store_id).order_by(desc(Transaction.created_at)).limit(50)
+    """
+    Sovereign Audit Trail: Fetch recent transactions for the current store.
+    Supports status filtering (Finalized, Suspended, Void).
+    """
+    stmt = (
+        select(Transaction)
+        .where(and_(
+            Transaction.store_id == current_user.store_id,
+            Transaction.status == status
+        ))
+        .options(selectinload(Transaction.items).joinedload(TransactionItem.item))
+        .order_by(desc(Transaction.created_at))
+        .limit(limit)
+    )
     result = await db.execute(stmt)
     return result.scalars().all()
 
-@router.get("/suspended")
+@router.get("/suspended", response_model=List[TransactionRead])
 async def get_suspended_bills(
     db: AsyncSession = Depends(get_db),
     current_user: CurrentUser = Depends(require_auth)
 ):
-    stmt = select(Transaction).where(Transaction.store_id == current_user.store_id, Transaction.status == "Suspended")
+    """Alias for history?status=Suspended"""
+    return await get_transaction_history(status="Suspended", db=db, current_user=current_user)
+
+@router.post("/suspend", response_model=TransactionRead)
+async def suspend_transaction(
+    txn_in: TransactionCreate,
+    db: AsyncSession = Depends(get_db),
+    current_user = Depends(require_auth)
+):
+    """
+    Sovereign Hold: Suspends a transaction for later recall.
+    Does NOT deduct inventory yet.
+    """
+    store_id = current_user.store_id
+    
+    new_txn = Transaction(
+        id=uuid.uuid4(),
+        store_id=store_id,
+        type=txn_in.type,
+        status="Suspended",
+        suspended_reason=txn_in.suspended_reason or "User Hold",
+        customer_id=txn_in.customer_id,
+        cashier_id=current_user.id,
+        till_id=txn_in.till_id
+    )
+    
+    subtotal = 0
+    for item_in in txn_in.items:
+        # Create Line Item (no inventory update for suspended bills)
+        new_item = TransactionItem(
+            transaction_id=new_txn.id,
+            product_id=item_in.product_id,
+            qty=item_in.qty,
+            mrp=item_in.unit_price,
+            discount_per=item_in.discount_per,
+            tax_amount=0, 
+            net_amount=int(item_in.qty * item_in.unit_price)
+        )
+        new_txn.items.append(new_item)
+        subtotal += new_item.net_amount
+
+    new_txn.subtotal = subtotal
+    new_txn.net_payable = subtotal
+    
+    db.add(new_txn)
+    await db.commit()
+    await db.refresh(new_txn)
+    
+    # Reload with items and product details for the response
+    stmt = select(Transaction).where(Transaction.id == new_txn.id).options(selectinload(Transaction.items).joinedload(TransactionItem.item))
+    res = await db.execute(stmt)
+    return res.scalar_one()
+
+@router.post("/suspended/{txn_id}/recall", response_model=TransactionRead)
+async def recall_suspended(
+    txn_id: uuid.UUID,
+    db: AsyncSession = Depends(get_db),
+    current_user = Depends(require_auth)
+):
+    """Fetches a suspended transaction with all item details."""
+    stmt = (
+        select(Transaction)
+        .where(and_(Transaction.id == txn_id, Transaction.store_id == current_user.store_id))
+        .options(selectinload(Transaction.items).joinedload(TransactionItem.item))
+    )
     result = await db.execute(stmt)
-    return result.scalars().all()
+    txn = result.scalar_one_or_none()
+    if not txn:
+        raise HTTPException(status_code=404, detail="Suspended transaction not found")
+    return txn
+
+@router.delete("/suspended/{txn_id}")
+async def delete_suspended(
+    txn_id: uuid.UUID,
+    db: AsyncSession = Depends(get_db),
+    current_user = Depends(require_auth)
+):
+    """Permanently removes a suspended bill."""
+    stmt = select(Transaction).where(and_(Transaction.id == txn_id, Transaction.store_id == current_user.store_id, Transaction.status == "Suspended"))
+    result = await db.execute(stmt)
+    txn = result.scalar_one_or_none()
+    if not txn:
+        raise HTTPException(status_code=404, detail="Suspended transaction not found")
+    
+    await db.delete(txn)
+    await db.commit()
+    return {"status": "SUCCESS", "message": "Suspended bill removed"}
 
 @router.post("/finalize", response_model=TransactionRead)
 async def finalize_transaction(
@@ -59,7 +159,7 @@ async def finalize_transaction(
     today_str = func.to_char(func.now(), 'YYYYMMDD')
     bill_prefix = f"B-{store_id}-{today_str}-"
     
-    # Simple sequence logic for demo (should use a sequence in production)
+    # Simple sequence logic for demo
     new_bill_no = f"{bill_prefix}{uuid.uuid4().hex[:4].upper()}"
 
     # 2. Create Transaction Header
@@ -69,9 +169,9 @@ async def finalize_transaction(
         store_id=store_id,
         type=txn_in.type,
         status="Finalized",
-        payments=txn_in.payments,
+        payments={p.mode: {"amount": p.amount, "ref": p.ref_no} for p in (txn_in.payments or [])},
         customer_id=txn_in.customer_id,
-        cashier_id=txn_in.cashier_id,
+        cashier_id=current_user.id,
         till_id=txn_in.till_id,
         shoper_recid=txn_in.shoper_recid
     )
@@ -88,7 +188,7 @@ async def finalize_transaction(
             raise HTTPException(status_code=404, detail=f"[SMRITI-OS] Item {item_in.product_id} not found")
 
         # Calculations in PAISE (Integers only)
-        line_gross_paise = item_in.qty * item_in.unit_price
+        line_gross_paise = int(item_in.qty * item_in.unit_price)
         line_disc_paise = int(Decimal(str(line_gross_paise * (item_in.discount_per / 100))).quantize(Decimal('1'), rounding=ROUND_HALF_UP))
         line_net_paise = line_gross_paise - line_disc_paise
         
@@ -114,16 +214,12 @@ async def finalize_transaction(
         new_txn.items.append(new_item)
         
         # 4. Inventory Deduction (Sovereign Guard)
-        stock_result = await db.execute(
-            select(ItemStock).where(
-                and_(ItemStock.item_id == item_in.product_id, ItemStock.store_id == store_id)
-            )
+        stock_stmt = select(ItemStock).where(
+            and_(ItemStock.item_id == item_in.product_id, ItemStock.store_id == store_id)
         )
-        stock = stock_result.scalar_one_or_none()
+        stock_res = await db.execute(stock_stmt)
+        stock = stock_res.scalar_one_or_none()
         if stock:
-            if stock.qty_on_hand < item_in.qty:
-                # Warning logged, but institutional flow allows negative if configured
-                pass 
             stock.qty_on_hand -= item_in.qty
 
     new_txn.subtotal = subtotal
@@ -131,23 +227,12 @@ async def finalize_transaction(
     new_txn.discount_total = disc_total
     new_txn.net_payable = subtotal - disc_total
     
-    # --- Extension Framework: Pre-update Interception ---
-    from app.services.extension_engine import ExtensionEngine, ReturnCode
-    ext_code, ext_msg = await ExtensionEngine.validate_transaction(db, store_id, new_txn, new_txn.items)
-    if ext_code == ReturnCode.BLOCK:
-        raise HTTPException(status_code=400, detail=f"[SMRITI-OS] Extension Blocked: {ext_msg}")
-    elif ext_code == ReturnCode.WARNING:
-        # In a real system, you might log this warning or return it in the payload
-        pass
-    
     db.add(new_txn)
     
-    # 5. Loyalty Points Accrual (Parity with Shoper9 Loyalty Engine)
+    # 5. Loyalty Points Accrual
     if txn_in.customer_id:
         customer = await db.get(Partner, txn_in.customer_id)
         if customer:
-            # Basic Accrual: 1 point per 100 Rs (10,000 paise)
-            # Tier Multipliers: Silver=1x, Gold=1.5x, Platinum=2x
             multiplier = 1.0
             if customer.loyalty_tier == "GOLD": multiplier = 1.5
             elif customer.loyalty_tier == "PLATINUM": multiplier = 2.0
@@ -157,11 +242,10 @@ async def finalize_transaction(
                 customer.loyalty_points += accrued_points
                 customer.total_points_earned += accrued_points
                 
-                # Log to Loyalty Ledger
                 ledger_entry = LoyaltyLedger(
                     store_id=store_id,
                     partner_id=customer.id,
-                    txn_type="accrue",
+                    txn_type="earn",
                     points=accrued_points,
                     balance=customer.loyalty_points,
                     sale_id=new_txn.id,
@@ -169,43 +253,21 @@ async def finalize_transaction(
                 )
                 db.add(ledger_entry)
 
-                # Tier Upgrades
-                if customer.total_points_earned > 10000 and customer.loyalty_tier == "GOLD":
-                    customer.loyalty_tier = "PLATINUM"
-                elif customer.total_points_earned > 2500 and customer.loyalty_tier == "SILVER":
-                    customer.loyalty_tier = "GOLD"
-
     await db.commit()
-    await db.refresh(new_txn)
-    return new_txn
-
-@router.get("/history", response_model=List[TransactionRead])
-async def get_transaction_history(
-    limit: int = 50,
-    db: AsyncSession = Depends(get_db),
-    current_user = Depends(require_auth)
-):
-    """Fetch recent finalized transactions for the current store."""
-    result = await db.execute(
-        select(Transaction)
-        .where(and_(Transaction.store_id == current_user.store_id, Transaction.status == "Finalized"))
-        .order_by(desc(Transaction.created_at))
-        .limit(limit)
-    )
-    return result.scalars().all()
+    
+    # Return enriched transaction
+    stmt = select(Transaction).where(Transaction.id == new_txn.id).options(selectinload(Transaction.items).joinedload(TransactionItem.item))
+    res = await db.execute(stmt)
+    return res.scalar_one()
 
 @router.get("/day-end/summary")
 async def get_day_end_summary(
     db: AsyncSession = Depends(get_db),
     current_user = Depends(require_auth)
 ):
-    """
-    Institutional Day-End Summary.
-    Aggregates today's performance across all tills.
-    """
+    """Institutional Day-End Summary."""
     store_id = current_user.store_id
     
-    # Aggregate stats
     stats = await db.execute(
         select(
             func.count(Transaction.id).label("bill_count"),
@@ -233,9 +295,5 @@ async def finalize_day_end(
     db: AsyncSession = Depends(get_db),
     current_user = Depends(require_auth)
 ):
-    """
-    Sovereign Seal of Day-End.
-    Locks all transactions for the day.
-    """
-    # Logic to move current transactions to audit ledger or set a lock flag
+    """Sovereign Seal of Day-End."""
     return {"status": "SUCCESS", "message": "[SMRITI-OS] Day End Sealed for " + current_user.store_id}

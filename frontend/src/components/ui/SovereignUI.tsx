@@ -3,14 +3,12 @@ import { clsx, type ClassValue } from 'clsx';
 import { twMerge } from 'tailwind-merge';
 import { X } from 'lucide-react';
 import { AgGridReact } from 'ag-grid-react';
-import { ColDef, ModuleRegistry } from 'ag-grid-community';
-import { ClientSideRowModelModule } from 'ag-grid-community';
-import 'ag-grid-community/styles/ag-grid.css';
-import 'ag-grid-community/styles/ag-theme-quartz.css';
+import { ColDef, ModuleRegistry, ValidationModule } from 'ag-grid-community';
+import { ClientSideRowModelModule, CellStyleModule, TextEditorModule } from 'ag-grid-community';
 
 import { useTheme } from '@/hooks/useTheme';
 
-ModuleRegistry.registerModules([ClientSideRowModelModule]);
+ModuleRegistry.registerModules([ClientSideRowModelModule, CellStyleModule, ValidationModule, TextEditorModule]);
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
@@ -373,6 +371,7 @@ export function DataTable<T>({
         } as React.CSSProperties}
       >
         <AgGridReact
+          theme="legacy"
           rowData={loading ? [] : data}
           columnDefs={agColumns}
           rowHeight={rowHeight}

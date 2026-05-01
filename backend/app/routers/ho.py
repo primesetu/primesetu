@@ -19,7 +19,7 @@ from app.core.database import get_db
 from app.models import SyncPacket, RemoteCommand
 from app.schemas.common import PulseRequest, PulseResponse
 
-router = APIRouter(prefix="/ho", tags=["ho"])
+router = APIRouter(tags=["ho"])
 
 @router.get("/status")
 async def get_ho_status(

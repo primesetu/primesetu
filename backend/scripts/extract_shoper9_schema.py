@@ -38,7 +38,7 @@ def extract_schema(instance=".", database="Shoper9001"):
                 schema[table] = columns
         
         # Save to a file in skills directory or as an artifact
-        output_path = os.path.join("d:\\IMP\\GitHub\\SMRITI-OS\\skills", f"shoper9_schema_{database}.json")
+        output_path = os.path.join("d:\\IMP\\GitHub\\primesetu\\backend\\scripts", f"shoper9_schema_{database}.json")
         with open(output_path, 'w') as f:
             json.dump(schema, f, indent=4)
         
@@ -50,6 +50,6 @@ def extract_schema(instance=".", database="Shoper9001"):
 
 if __name__ == "__main__":
     # Try common Shoper 9 databases
-    databases = ["Shoper9001", "SHOPER9X01", "Shoper9CSW"]
+    databases = ["SHOPER9WH1"]
     for db in databases:
         extract_schema(database=db)

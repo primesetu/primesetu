@@ -119,9 +119,13 @@ export default function GRNProcessor() {
     if (e.key === 'Enter') {
       e.preventDefault()
       if (field === 'sku') {
-        if (activeEntry.item_code) qtyRef.current?.focus()
+        if (activeEntry.item_code) {
+          qtyRef.current?.focus()
+          qtyRef.current?.select()
+        }
       } else if (field === 'qty') {
         costRef.current?.focus()
+        costRef.current?.select()
       } else if (field === 'cost') {
         commitLine()
       }

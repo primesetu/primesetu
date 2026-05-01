@@ -132,9 +132,13 @@ export default function BillingModule() {
     if (e.key === 'Enter') {
       e.preventDefault()
       if (field === 'stock') {
-        if (activeEntry.stock_no) qtyRef.current?.focus()
+        if (activeEntry.stock_no) {
+          qtyRef.current?.focus()
+          qtyRef.current?.select()
+        }
       } else if (field === 'qty') {
         discRef.current?.focus()
+        discRef.current?.select()
       } else if (field === 'disc') {
         commitLine()
       }

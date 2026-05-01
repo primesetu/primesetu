@@ -21,7 +21,8 @@ import {
   Barcode,
   LayoutGrid,
   FileText,
-  Loader2
+  Loader2,
+  Plus
 } from 'lucide-react'
 import { 
   Button, 
@@ -43,6 +44,8 @@ interface BillItem {
 export default function BillingModule() {
   const { theme } = useTheme()
   const entryRef = useRef<HTMLInputElement>(null)
+  const qtyRef = useRef<HTMLInputElement>(null)
+  const discRef = useRef<HTMLInputElement>(null)
   const gridRef = useRef<AgGridReact>(null)
 
   const [items, setItems] = useState<BillItem[]>([])
@@ -58,7 +61,6 @@ export default function BillingModule() {
     entryRef.current?.focus()
   }, [])
 
-  // Institutional Totals — Sanitize against NaN
   const totals = useMemo(() => {
     return items.reduce((acc, curr) => {
       const rate = Number(curr.rate) || 0
@@ -76,53 +78,65 @@ export default function BillingModule() {
     }, { items: 0, qty: 0, gross: 0, disc: 0, net: 0 })
   }, [items])
 
-  const handleEntrySubmit = async (e: React.KeyboardEvent) => {
+  // Institutional Commit Line Protocol
+  const commitLine = async () => {
+    const searchVal = activeEntry.stock_no.trim()
+    if (!searchVal) {
+      entryRef.current?.focus()
+      return
+    }
+
+    const currentQty = Number(activeEntry.qty) || 1
+    const currentDisc = Number(activeEntry.disc_per) || 0
+    
+    setIsSearching(true)
+    try {
+      const results = await api.inventory.search(searchVal)
+      const inventoryItems = Array.isArray(results) ? results : (results.data || [])
+
+      if (inventoryItems.length > 0) {
+        const item = inventoryItems[0]
+        const mrp_paise = (item.mrp_paise ?? (item.mrp ? item.mrp * 100 : (item.price ? item.price * 100 : 0)))
+        const rate = mrp_paise / 100
+        const disc_amt = (rate * currentQty * currentDisc) / 100
+        const total = (rate * currentQty) - disc_amt
+
+        const newItem: BillItem = {
+          id: crypto.randomUUID(),
+          stock_no: item.item_code || item.sku || item.code || 'N/A',
+          descr: item.item_name || item.name || item.descr || 'Unknown Item',
+          rate: rate,
+          qty: currentQty,
+          disc_per: currentDisc,
+          disc_amt: disc_amt,
+          tax_amt: 0,
+          total: total
+        }
+        
+        setItems(prev => [newItem, ...prev])
+        // Reset and jump back to scanning
+        setActiveEntry({ stock_no: '', qty: 1, rate: 0, disc_per: 0 })
+        entryRef.current?.focus()
+      } else {
+        alert("SKU Not Found in Registry")
+        entryRef.current?.select()
+      }
+    } catch (err) { 
+      console.error("Search Fail:", err) 
+    } finally {
+      setIsSearching(false)
+    }
+  }
+
+  const handleKeyDown = (e: React.KeyboardEvent, field: 'stock' | 'qty' | 'disc') => {
     if (e.key === 'Enter') {
       e.preventDefault()
-      const searchVal = activeEntry.stock_no.trim()
-      if (!searchVal) return
-
-      // Protocol: Instant clear to prevent double-entry lag
-      const currentQty = activeEntry.qty
-      const currentDisc = activeEntry.disc_per
-      setActiveEntry(prev => ({ ...prev, stock_no: '' }))
-      setIsSearching(true)
-
-      try {
-        // Use dedicated SEARCH endpoint
-        const results = await api.inventory.search(searchVal)
-        const inventoryItems = Array.isArray(results) ? results : (results.data || [])
-
-        if (inventoryItems.length > 0) {
-          const item = inventoryItems[0]
-          
-          // PROTOCOL: Robust Mapping (Handle mrp vs mrp_paise vs price)
-          const mrp_paise = (item.mrp_paise ?? (item.mrp ? item.mrp * 100 : (item.price ? item.price * 100 : 0)))
-          const rate = mrp_paise / 100
-          const disc_amt = (rate * currentQty * currentDisc) / 100
-          const total = (rate * currentQty) - disc_amt
-
-          const newItem: BillItem = {
-            id: crypto.randomUUID(),
-            stock_no: item.item_code || item.sku || item.code || 'N/A',
-            descr: item.item_name || item.name || item.descr || 'Unknown Item',
-            rate: rate,
-            qty: currentQty,
-            disc_per: currentDisc,
-            disc_amt: disc_amt,
-            tax_amt: 0,
-            total: total
-          }
-          
-          setItems(prev => [newItem, ...prev])
-        } else {
-          console.warn("Item Not Found in Registry")
-        }
-      } catch (err) { 
-        console.error("Search Fail:", err) 
-      } finally {
-        setIsSearching(false)
-        entryRef.current?.focus()
+      if (field === 'stock') {
+        if (activeEntry.stock_no) qtyRef.current?.focus()
+      } else if (field === 'qty') {
+        discRef.current?.focus()
+      } else if (field === 'disc') {
+        commitLine()
       }
     }
   }
@@ -239,25 +253,29 @@ export default function BillingModule() {
                    autoComplete="off"
                    value={activeEntry.stock_no}
                    onChange={e => setActiveEntry({...activeEntry, stock_no: e.target.value.toUpperCase()})}
-                   onKeyDown={handleEntrySubmit}
+                   onKeyDown={e => handleKeyDown(e, 'stock')}
                   />
                </div>
                <div>
                   <label className="block text-[9px] font-black uppercase text-[var(--text-tertiary)] mb-1 text-center">Qty</label>
                   <input 
+                   ref={qtyRef}
                    type="number"
                    className="w-full bg-[var(--surface)] border border-[var(--border-default)] h-11 px-3 text-center text-xs font-black outline-none focus:border-[var(--primary)]"
                    value={activeEntry.qty}
-                   onChange={e => setActiveEntry({...activeEntry, qty: Number(e.target.value) || 1})}
+                   onChange={e => setActiveEntry({...activeEntry, qty: Number(e.target.value)})}
+                   onKeyDown={e => handleKeyDown(e, 'qty')}
                   />
                </div>
                <div>
                   <label className="block text-[9px] font-black uppercase text-[var(--text-tertiary)] mb-1 text-center">Disc%</label>
                   <input 
+                   ref={discRef}
                    type="number"
                    className="w-full bg-[var(--surface)] border border-[var(--border-default)] h-11 px-3 text-center text-xs font-black outline-none focus:border-[var(--primary)]"
                    value={activeEntry.disc_per}
-                   onChange={e => setActiveEntry({...activeEntry, disc_per: Number(e.target.value) || 0})}
+                   onChange={e => setActiveEntry({...activeEntry, disc_per: Number(e.target.value)})}
+                   onKeyDown={e => handleKeyDown(e, 'disc')}
                   />
                </div>
                <div className="col-span-2 flex flex-col items-end justify-center px-4 h-11">
@@ -266,7 +284,12 @@ export default function BillingModule() {
                     ₹{((Number(activeEntry.qty) || 1) * (Number(activeEntry.rate) || 0)).toFixed(2)}
                   </span>
                </div>
-               <Button className="h-11 bg-[var(--primary)] text-white text-[11px] font-black uppercase shadow-sm">ADD TO BILL [ENT]</Button>
+               <Button 
+                onClick={commitLine}
+                className="h-11 bg-[var(--primary)] text-white text-[11px] font-black uppercase shadow-sm flex items-center justify-center gap-2"
+               >
+                 <Plus size={14} /> ADD TO BILL [ENT]
+               </Button>
             </div>
          </div>
       </main>

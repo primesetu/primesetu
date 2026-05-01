@@ -22,7 +22,8 @@ import {
   ChevronDown,
   Database,
   Box,
-  Loader2
+  Loader2,
+  Plus
 } from 'lucide-react'
 import { 
   Button, 
@@ -42,6 +43,8 @@ interface GRNLine {
 export default function GRNProcessor() {
   const { theme } = useTheme()
   const entryRef = useRef<HTMLInputElement>(null)
+  const qtyRef = useRef<HTMLInputElement>(null)
+  const costRef = useRef<HTMLInputElement>(null)
   const gridRef = useRef<AgGridReact>(null)
 
   const [vendors, setVendors] = useState<any[]>([])
@@ -60,8 +63,9 @@ export default function GRNProcessor() {
   useEffect(() => {
     const fetchVendors = async () => {
       try {
-        const res = await api.legacy.getData('partners', { search_col: 'is_vendor', search_val: 'true' })
-        setVendors(res.data)
+        const res = await api.vendors.list()
+        const vendorData = Array.isArray(res) ? res : (res.data || [])
+        setVendors(vendorData)
       } catch (e) { console.error(e) }
     }
     fetchVendors()
@@ -69,43 +73,57 @@ export default function GRNProcessor() {
     entryRef.current?.focus()
   }, [])
 
-  const handleEntrySubmit = async (e: React.KeyboardEvent) => {
+  const commitLine = async () => {
+    const searchVal = activeEntry.item_code.trim()
+    if (!searchVal) {
+      entryRef.current?.focus()
+      return
+    }
+
+    const currentQty = Number(activeEntry.qty) || 1
+    const currentCost = Number(activeEntry.cost) || 0
+    setIsSearching(true)
+
+    try {
+      const results = await api.inventory.search(searchVal)
+      const inventoryItems = Array.isArray(results) ? results : (results.data || [])
+
+      if (inventoryItems.length > 0) {
+        const item = inventoryItems[0]
+        const unit_cost_paise = currentCost > 0 ? (currentCost * 100) : (item.cost_paise ?? 0)
+
+        const newLine: GRNLine = {
+          id: crypto.randomUUID(),
+          item_id: item.id,
+          item_code: item.item_code || item.sku || 'N/A',
+          item_name: item.item_name || item.name || 'Unknown SKU',
+          qty_received: currentQty,
+          unit_cost_paise: unit_cost_paise,
+          total_paise: unit_cost_paise * currentQty
+        }
+        setLines(prev => [newLine, ...prev])
+        setActiveEntry({ item_code: '', qty: 1, cost: 0 })
+        entryRef.current?.focus()
+      } else {
+        alert("SKU Not Found")
+        entryRef.current?.select()
+      }
+    } catch (err) {
+      console.error("GRN Search Fail:", err)
+    } finally {
+      setIsSearching(false)
+    }
+  }
+
+  const handleKeyDown = (e: React.KeyboardEvent, field: 'sku' | 'qty' | 'cost') => {
     if (e.key === 'Enter') {
       e.preventDefault()
-      const searchVal = activeEntry.item_code.trim()
-      if (!searchVal) return
-
-      const currentQty = activeEntry.qty
-      const currentCost = activeEntry.cost
-      setActiveEntry(prev => ({ ...prev, item_code: '' }))
-      setIsSearching(true)
-
-      try {
-        const results = await api.inventory.search(searchVal)
-        const inventoryItems = Array.isArray(results) ? results : (results.data || [])
-
-        if (inventoryItems.length > 0) {
-          const item = inventoryItems[0]
-          
-          // Robust Cost Mapping
-          const unit_cost_paise = currentCost > 0 ? (currentCost * 100) : (item.cost_paise ?? 0)
-
-          const newLine: GRNLine = {
-            id: crypto.randomUUID(),
-            item_id: item.id,
-            item_code: item.item_code || item.sku || 'N/A',
-            item_name: item.item_name || item.name || 'Unknown SKU',
-            qty_received: currentQty,
-            unit_cost_paise: unit_cost_paise,
-            total_paise: unit_cost_paise * currentQty
-          }
-          setLines(prev => [newLine, ...prev])
-        }
-      } catch (err) {
-        console.error("GRN Search Fail:", err)
-      } finally {
-        setIsSearching(false)
-        entryRef.current?.focus()
+      if (field === 'sku') {
+        if (activeEntry.item_code) qtyRef.current?.focus()
+      } else if (field === 'qty') {
+        costRef.current?.focus()
+      } else if (field === 'cost') {
+        commitLine()
       }
     }
   }
@@ -199,7 +217,7 @@ export default function GRNProcessor() {
               onChange={e => setSelectedVendor(vendors.find(v => v.id === e.target.value))}
             >
               <option value="">SELECT VENDOR</option>
-              {vendors.map(v => <option key={v.id} value={v.id}>{v.descr}</option>)}
+              {vendors.map(v => <option key={v.id} value={v.id}>{v.name || v.descr}</option>)}
             </select>
          </div>
          <div className="col-span-3">
@@ -247,26 +265,30 @@ export default function GRNProcessor() {
                    autoComplete="off"
                    value={activeEntry.item_code}
                    onChange={e => setActiveEntry({...activeEntry, item_code: e.target.value.toUpperCase()})}
-                   onKeyDown={handleEntrySubmit}
+                   onKeyDown={e => handleKeyDown(e, 'sku')}
                   />
                </div>
                <div>
                   <label className="block text-[9px] font-black uppercase text-[var(--text-tertiary)] mb-1 text-right">Inward Qty</label>
                   <input 
+                   ref={qtyRef}
                    type="number"
                    className="w-full bg-[var(--surface)] border border-[var(--border-default)] h-11 px-3 text-right text-xs font-black outline-none focus:border-[var(--primary)]"
                    value={activeEntry.qty}
-                   onChange={e => setActiveEntry({...activeEntry, qty: Number(e.target.value) || 1})}
+                   onChange={e => setActiveEntry({...activeEntry, qty: Number(e.target.value)})}
+                   onKeyDown={e => handleKeyDown(e, 'qty')}
                   />
                </div>
                <div>
                   <label className="block text-[9px] font-black uppercase text-[var(--text-tertiary)] mb-1 text-right">Unit Cost (₹)</label>
                   <input 
+                   ref={costRef}
                    type="number"
                    className="w-full bg-[var(--surface)] border border-[var(--border-default)] h-11 px-3 text-right text-xs font-black outline-none focus:border-[var(--primary)]"
                    placeholder="0.00"
                    value={activeEntry.cost || ''}
-                   onChange={e => setActiveEntry({...activeEntry, cost: Number(e.target.value) || 0})}
+                   onChange={e => setActiveEntry({...activeEntry, cost: Number(e.target.value)})}
+                   onKeyDown={e => handleKeyDown(e, 'cost')}
                   />
                </div>
                <div className="col-span-2 flex flex-col items-end justify-center px-4 h-11">
@@ -275,7 +297,12 @@ export default function GRNProcessor() {
                     ₹{((Number(activeEntry.qty) || 1) * (Number(activeEntry.cost) || 0)).toFixed(2)}
                   </span>
                </div>
-               <Button className="h-11 bg-[var(--accent)] text-black text-[11px] font-black uppercase shadow-sm">ADD TO GRN [ENT]</Button>
+               <Button 
+                onClick={commitLine}
+                className="h-11 bg-[var(--accent)] text-black text-[11px] font-black uppercase shadow-sm flex items-center justify-center gap-2"
+               >
+                 <Plus size={14} /> ADD TO GRN [ENT]
+               </Button>
             </div>
          </div>
       </main>

@@ -33,7 +33,7 @@ class VaGroupMenu(Base):
 
     id = Column(PGUUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
     group_id = Column(PGUUID(as_uuid=True), ForeignKey("va_groups.id", ondelete="CASCADE"), nullable=False)
-    menu_id = Column(String, ForeignKey("menu_items.id", ondelete="CASCADE"), nullable=False)
+    menu_id = Column(String, nullable=False)
     is_visible = Column(Boolean, nullable=False, default=True)
     created_at = Column(DateTime(timezone=True), server_default=text("now()"), nullable=False)
 

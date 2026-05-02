@@ -10,9 +10,8 @@
 import React, { useState, useEffect, useMemo, useRef } from 'react'
 import { AgGridReact } from 'ag-grid-react'
 import { ColDef, ValueFormatterParams, ModuleRegistry } from 'ag-grid-community'
-import { ClientSideRowModelModule, NumberEditorModule } from 'ag-grid-community'
-import 'ag-grid-community/styles/ag-grid.css'
-import 'ag-grid-community/styles/ag-theme-quartz.css'
+import { ClientSideRowModelModule, NumberEditorModule, themeQuartz } from 'ag-grid-community'
+// Removed AG Grid CSS imports to use v33 Theming API
 
 // Register AG Grid Modules
 ModuleRegistry.registerModules([ClientSideRowModelModule, NumberEditorModule])
@@ -138,10 +137,7 @@ export default function GRNProcessor() {
     if (e.key === 'Enter') {
       e.preventDefault()
       if (field === 'sku') {
-        if (activeEntry.item_code) {
-          qtyRef.current?.focus()
-          qtyRef.current?.select()
-        }
+        commitLine()
       } else if (field === 'qty') {
         costRef.current?.focus()
         costRef.current?.select()
@@ -270,12 +266,12 @@ export default function GRNProcessor() {
 
       {/* ── LITE AG GRID WORKSPACE ── */}
       <main className="flex-1 flex flex-col p-2 overflow-hidden relative">
-         <div className="flex-1 ag-theme-quartz w-full h-full shadow-sm">
+         <div className="flex-1 w-full h-full shadow-sm">
             <AgGridReact
+              theme={themeQuartz}
               ref={gridRef}
               rowData={lines}
               columnDefs={columnDefs}
-              theme="legacy"
               defaultColDef={{ resizable: true, sortable: true, headerClass: 'ag-header-cell' }}
               animateRows={true}
               onGridReady={(params) => params.api.sizeColumnsToFit()}

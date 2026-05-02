@@ -13,7 +13,8 @@ import {
 import { motion, AnimatePresence } from 'framer-motion';
 import { supabase } from '@/lib/supabase';
 
-import { Button, Input, Card, Badge, DataTable } from '@/components/ui/SovereignUI';
+import { Text, Input, Badge, Button, Card, DataTable } from '@/components/ui/SovereignUI'
+import { themeQuartz } from 'ag-grid-community';
 
 const API_BASE = import.meta.env.VITE_API_URL || 'http://localhost:8000';
 
@@ -167,7 +168,7 @@ const LegacyExplorer: React.FC = () => {
               loading={loading}
               pagination={true}
               paginationPageSize={50}
-              enableRangeSelection={true}
+              cellSelection={true}
               rowHeight={45}
               headerHeight={40}
               overlayNoRowsTemplate={'<span class="font-black uppercase tracking-[0.4em] opacity-20">Bypassing Legacy Barriers...</span>'}

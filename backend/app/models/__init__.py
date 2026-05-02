@@ -7,31 +7,24 @@
 from .legacy_s9 import Acceptdisplaydtls
 from .base import (
     Base, Store, SystemParameter, Customer, Till, Transaction, 
-    TransactionItem, CreditNote, AdvanceDeposit, SalesSlip, 
-    SalesSlipItem, GeneralLookup, SizeGroup, Department, 
-    CustomerPriceGroup, TaxMaster, Scheme, Alert, SyncPacket,
-    InventoryAudit, InventoryAuditItem, Partner, Item, ItemStock, 
-    ItemPriceLevel, ItemBarcode, User, CustomerLedger, LoyaltyLedger,
-    RemoteCommand, StockTransaction, StockTransactionItem, StockLedger,
-    UIFieldConfig, AttributeAlias, CategoryPolicy, TaxRule
+    TransactionItem, GeneralLookup, Department, 
+    InventoryAudit, InventoryAuditItem, Partner, 
+    User, LoyaltyLedger, Alert
 )
 from .purchase import PurchaseOrder, PurchaseOrderItem, GRN, GRNItem
 from .config import PrefixConfig, PrefixMaster, PrefixTrnNo, PrefixTerminalGroup
 from .pricing import PriceRangeSetting, PriceRange, PriceRevision, PriceRevisionHistory
+from .ho import SyncPacket, RemoteCommand
 
 __all__ = [
     "Base", "Store", "SystemParameter", "Customer", "Till", "Transaction",
-    "TransactionItem", "CreditNote", "AdvanceDeposit", "SalesSlip",
-    "SalesSlipItem", "GeneralLookup", "SizeGroup", "Department",
-    "CustomerPriceGroup", "TaxMaster", "Scheme", "Alert", "SyncPacket",
-    "InventoryAudit", "InventoryAuditItem", "Partner", "Item", "ItemStock",
-    "ItemPriceLevel", "ItemBarcode", "PurchaseOrder", "PurchaseOrderItem",
-    "GRN", "GRNItem", "User", "CustomerLedger", "LoyaltyLedger",
-    "RemoteCommand", "StockTransaction", "StockTransactionItem", "StockLedger",
-    "UIFieldConfig", "AttributeAlias", "CategoryPolicy", "TaxRule",
+    "TransactionItem", "GeneralLookup", "Department", 
+    "InventoryAudit", "InventoryAuditItem", "Partner", 
+    "PurchaseOrder", "PurchaseOrderItem",
+    "GRN", "GRNItem", "User", "LoyaltyLedger",
     "PrefixConfig", "PrefixMaster", "PrefixTrnNo", "PrefixTerminalGroup",
     "PriceRangeSetting", "PriceRange", "PriceRevision", "PriceRevisionHistory",
-    "Acceptdisplaydtls"
+    "Acceptdisplaydtls", "Alert", "SyncPacket", "RemoteCommand"
 ]
 
 from .finance import TillSession, PosCashTrn, TillHardware

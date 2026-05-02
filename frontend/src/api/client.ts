@@ -62,9 +62,9 @@ export const api = {
   },
   procurement: {
     getSuggestions: () => apiClient.get('/procurement/reorder-suggestions').then(r => r.data),
-    createPO: (data: any) => apiClient.post('/procurement/', data).then(r => r.data),
-    processGRN: (data: any) => apiClient.post('/procurement/grn', data).then(r => r.data),
-    listPOs: () => apiClient.get('/procurement/').then(r => r.data),
+    createPO: (data: any) => apiClient.post('/purchase/', data).then(r => r.data),
+    processGRN: (data: any) => apiClient.post('/purchase/grn', data).then(r => r.data),
+    listPOs: () => apiClient.get('/purchase/').then(r => r.data),
   },
   catalogue: {
     getPartners: (type?: string, q?: string) => apiClient.get('/catalogue/partners', { params: { type, q } }).then(r => r.data),
@@ -157,6 +157,12 @@ export const api = {
   onboarding: {
     registerStore: (data: any) => apiClient.post('/onboarding/store', data).then(r => r.data),
   },
+  purchase: {
+    getVendors: (q?: string) => apiClient.get('/purchase/vendors', { params: { q } }).then(r => r.data),
+    getGRNHistory: () => apiClient.get('/purchase/grn/history').then(r => r.data),
+    getGRNLines: (ctrlNo: number) => apiClient.get(`/purchase/grn/${ctrlNo}/lines`).then(r => r.data),
+    finalizeGRN: (data: any) => apiClient.post('/purchase/grn/finalize', data).then(r => r.data),
+  },
   users: {
     list: () => apiClient.get('/users/').then(r => r.data),
     create: (data: any) => apiClient.post('/users/', data).then(r => r.data),
@@ -166,21 +172,27 @@ export const api = {
   },
   config: {
     getUIFields: (screen: string) => apiClient.get(`/config/ui-fields/${screen}`).then(r => r.data),
+    getLegacyMask: (trnType: number) => apiClient.get('/masks/entry', { params: { trn_type: trnType } }).then(r => r.data),
     upsertUIField: (data: any) => apiClient.post('/config/ui-fields', data).then(r => r.data),
     listPrintTemplates: (type?: string) => apiClient.get('/config/print-templates', { params: { template_type: type } }).then(r => r.data),
     createPrintTemplate: (data: any) => apiClient.post('/config/print-templates', data).then(r => r.data),
     listAttributeAliases: () => apiClient.get('/config/attribute-aliases').then(r => r.data),
     upsertAttributeAlias: (data: any) => apiClient.post('/config/attribute-aliases', data).then(r => r.data),
-    listCategoryPolicies: () => apiClient.get('/config/category-policies').then(r => r.data),
-    upsertCategoryPolicy: (data: any) => apiClient.post('/config/category-policies', data).then(r => r.data),
+  },
+  masks: {
+    getEntry: (trnType: number) => apiClient.get('/masks/entry', { params: { trn_type: trnType } }).then(r => r.data),
+    getValidation: (trnType: number) => apiClient.get('/masks/validation', { params: { trn_type: trnType } }).then(r => r.data),
+    getHotkeys: (trnType: number) => apiClient.get('/masks/hotkeys', { params: { trn_type: trnType } }).then(r => r.data),
+    getZoneC: (trnType: number) => apiClient.get('/masks/zone_c', { params: { trn_type: trnType } }).then(r => r.data),
+    getPermissions: (trnType: number) => apiClient.get('/masks/permissions', { params: { trn_type: trnType } }).then(r => r.data),
   },
   departments: {
     list: (level?: number, parentId?: string) => apiClient.get('/departments/', { params: { level, parent_id: parentId } }).then(r => r.data),
     create: (data: any) => apiClient.post('/departments/', data).then(r => r.data),
   },
   stockLedger: {
-    list: () => apiClient.get('/stock-ledger/').then(r => r.data),
-    create: (data: any) => apiClient.post('/stock-ledger/', data).then(r => r.data),
+    list: (limit?: number) => apiClient.get('/stock-ledger/transactions', { params: { limit } }).then(r => r.data),
+    getDetails: (ctrlNo: number) => apiClient.get(`/stock-ledger/transactions/${ctrlNo}`).then(r => r.data),
   },
   intelligence: {
     getDoc: () => apiClient.get('/intelligence/doc').then(r => r.data),

@@ -9,7 +9,7 @@ from sqlalchemy import select
 import uuid
 from app.core.database import get_db
 from app.core.security import require_auth, CurrentUser
-from app.models import InventoryAudit as AuditSession, InventoryAuditItem as AuditEntry, Item
+from app.models import InventoryAudit as AuditSession, InventoryAuditItem as AuditEntry
 
 router = APIRouter(prefix="/api/v1/inventory-audit", tags=["inventory-audit"])
 
@@ -44,7 +44,7 @@ async def create_audit_session(
 
 @router.get("/{session_id}")
 async def get_audit_session(
-    session_id: uuid.UUID, 
+    session_id: int, 
     db: AsyncSession = Depends(get_db),
     current_user: CurrentUser = Depends(require_auth)
 ):
@@ -54,7 +54,7 @@ async def get_audit_session(
 
 @router.post("/{session_id}/entries")
 async def add_audit_entry(
-    session_id: uuid.UUID, 
+    session_id: int, 
     data: dict, 
     db: AsyncSession = Depends(get_db),
     current_user: CurrentUser = Depends(require_auth)
@@ -64,7 +64,7 @@ async def add_audit_entry(
 
 @router.post("/{session_id}/submit")
 async def submit_audit(
-    session_id: uuid.UUID, 
+    session_id: int, 
     db: AsyncSession = Depends(get_db),
     current_user: CurrentUser = Depends(require_auth)
 ):

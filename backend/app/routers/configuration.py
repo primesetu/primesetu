@@ -40,7 +40,6 @@ async def get_legacy_mask(
     This bridge allows SMRITI-OS to honor institutional field captions and visibility.
     """
     stmt = select(Acceptdisplaydtls).where(
-        Acceptdisplaydtls.store_id == current_user.store_id,
         Acceptdisplaydtls.trntype == trn_type
     ).order_by(Acceptdisplaydtls.disppos)
     

@@ -111,7 +111,7 @@ const Sidebar: React.FC<SidebarProps> = ({
     const nonDashboardModules = modules.filter(m => m.module !== 'dashboard');
     return {
       'MASTERS': nonDashboardModules.filter(m => m.category === 'CATALOGUE'),
-      'TRANSACTIONS': nonDashboardModules.filter(m => m.category === 'POS'),
+      'TRANSACTIONS': nonDashboardModules.filter(m => m.category === 'POS' || m.category === 'TRANSACTIONS'),
       'UTILITIES': nonDashboardModules.filter(m => m.category === 'WAREHOUSE'),
       'REPORTS': nonDashboardModules.filter(m => m.category === 'FINANCE'),
     };

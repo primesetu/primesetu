@@ -1,0 +1,290 @@
+delete from AcceptDisplayDtls
+-GO-
+INSERT INTO ACCEPTDISPLAYDTLS VALUES(1,'Stock No','Stock No',1,1,1,1,1,2,14,14,1,1,' ',' ',' ',' ',0,0,0,0,' ',' ',' ',1,' ',' ')
+-GO-
+INSERT INTO ACCEPTDISPLAYDTLS VALUES(2,'Item Description','Item Description',1,1,2,2,2,2,14,14,1,1,' ',' ',' ',' ',0,0,0,0,' ',' ',' ',1,' ',' ')
+-GO-
+INSERT INTO ACCEPTDISPLAYDTLS VALUES(6,'Rate','Rate',1,1,3,3,4,4,6.5,6.5,2,2,' ',' ',' ',' ',0,0,0,0,' ',' ',' ',1,' ',' ')
+-GO-
+INSERT INTO ACCEPTDISPLAYDTLS VALUES(7,'Qty','Qty',1,1,4,4,4,4,5.5,5.5,2,2,' ',' ',' ',' ',0,0,0,0,' ',' ',' ',1,' ',' ')
+-GO-
+INSERT INTO ACCEPTDISPLAYDTLS VALUES(8,'Value','Value',1,1,5,5,4,4,7.4,7.4,2,2,' ',' ',' ',' ',0,0,0,0,' ',' ',' ',1,' ',' ')
+-GO-
+INSERT INTO ACCEPTDISPLAYDTLS VALUES(14,'Disc Code','Disc Code',1,1,6,6,5,2,7,7,1,1,' ',' ',' ',' ',0,0,0,0,' ',' ',' ',1,' ',' ')
+-GO-
+INSERT INTO ACCEPTDISPLAYDTLS VALUES(45,'Disc Qty','Disc Qty',1,1,7,7,4,4,6,6,2,2,' ',' ',' ',' ',0,0,0,0,' ',' ',' ',1,' ',' ')
+-GO-
+INSERT INTO ACCEPTDISPLAYDTLS VALUES(9,'Disc. %','Disc. %',1,1,8,8,4,4,5.5,5.5,2,2,' ',' ',' ',' ',0,0,0,0,' ',' ',' ',1,' ',' ')
+-GO-
+INSERT INTO ACCEPTDISPLAYDTLS VALUES(10,'Disc.Amt','Disc.Amt',1,1,9,9,4,4,6,6,2,2,' ',' ',' ',' ',0,0,0,0,' ',' ',' ',1,' ',' ')
+-GO-
+INSERT INTO ACCEPTDISPLAYDTLS VALUES(15,'Total','Total',1,1,10,10,4,4,7.5,7.5,2,2,' ',' ',' ',' ',0,0,0,0,' ',' ',' ',1,' ',' ')
+-GO-
+INSERT INTO ACCEPTDISPLAYDTLS VALUES(28,'SalesStaff','SalesStaff',1,1,11,11,5,2,8.5,7.4,1,1,' ',' ',' ',' ',0,0,0,0,' ',' ',' ',1,' ',' ')
+-GO-
+INSERT INTO ACCEPTDISPLAYDTLS VALUES(44,'Position Controller','Position Controller',1,0,12,12,1,1,0.1,8,1,1,' ',' ',' ',' ',0,0,0,0,' ',' ',' ',1,' ',' ')
+-GO-
+INSERT INTO ACCEPTDISPLAYDTLS VALUES(4,'Shade','Shade',0,0,13,13,1,2,6.5,6.5,1,1,' ',' ',' ',' ',0,0,0,0,' ',' ',' ',1,' ',' ')
+-GO-
+INSERT INTO ACCEPTDISPLAYDTLS VALUES(5,'Size','Size',0,0,14,14,1,2,4.5,4.5,1,1,' ',' ',' ',' ',0,0,0,0,' ',' ',' ',1,' ',' ')
+-GO-
+INSERT INTO ACCEPTDISPLAYDTLS VALUES(11,'GD AprDiscVal','GD AprDiscVal',0,0,15,15,4,4,0,8,2,2,' ',' ',' ',' ',0,0,0,0,' ',' ',' ',1,' ',' ')
+-GO-
+INSERT INTO ACCEPTDISPLAYDTLS VALUES(12,'AprAddOnVal','AprAddOnVal',0,0,16,16,4,4,0,8,2,2,' ',' ',' ',' ',0,0,0,0,' ',' ',' ',1,' ',' ')
+-GO-
+INSERT INTO ACCEPTDISPLAYDTLS VALUES(13,'AprDednVal','AprDednVal',0,0,17,17,4,4,0,8,2,2,' ',' ',' ',' ',0,0,0,0,' ',' ',' ',1,' ',' ')
+-GO-
+INSERT INTO ACCEPTDISPLAYDTLS VALUES(16,'SF Id','SF Id',0,0,18,18,2,2,0,8,1,1,' ',' ',' ',' ',0,0,0,0,' ',' ',' ',1,' ',' ')
+-GO-
+INSERT INTO ACCEPTDISPLAYDTLS VALUES(17,'SF F/V','SF F/V',0,0,19,19,2,2,0,8,1,1,' ',' ',' ',' ',0,0,0,0,' ',' ',' ',1,' ',' ')
+-GO-
+INSERT INTO ACCEPTDISPLAYDTLS VALUES(18,'SF R/A/B','SF R/A/B',0,0,20,20,2,2,0,8,1,1,' ',' ',' ',' ',0,0,0,0,' ',' ',' ',1,' ',' ')
+-GO-
+INSERT INTO ACCEPTDISPLAYDTLS VALUES(19,'SF CalVal','SF CalVal',0,0,21,21,4,4,0,8,1,1,' ',' ',' ',' ',0,0,0,0,' ',' ',' ',1,' ',' ')
+-GO-
+INSERT INTO ACCEPTDISPLAYDTLS VALUES(20,'SFPrior No','SFPrior No',0,0,22,22,3,3,0,8,1,1,' ',' ',' ',' ',0,0,0,0,' ',' ',' ',1,' ',' ')
+-GO-
+INSERT INTO ACCEPTDISPLAYDTLS VALUES(21,'SF Val In Table','SF Val In Table',0,0,23,23,4,4,0,8,1,1,' ',' ',' ',' ',0,0,0,0,' ',' ',' ',1,' ',' ')
+-GO-
+INSERT INTO ACCEPTDISPLAYDTLS VALUES(22,'Inv Ind','Inv Ind',0,0,24,24,3,3,0,8,1,1,' ',' ',' ',' ',0,0,0,0,' ',' ',' ',1,' ',' ')
+-GO-
+INSERT INTO ACCEPTDISPLAYDTLS VALUES(23,'ETType','ETType',0,0,25,25,2,2,0,8,1,1,' ',' ',' ',' ',0,0,0,0,' ',' ',' ',1,' ',' ')
+-GO-
+INSERT INTO ACCEPTDISPLAYDTLS VALUES(24,'ETPfx','ETPfx',0,0,26,26,2,2,0,8,1,1,' ',' ',' ',' ',0,0,0,0,' ',' ',' ',1,' ',' ')
+-GO-
+INSERT INTO ACCEPTDISPLAYDTLS VALUES(25,'Slip No','DC No',0,0,27,27,3,3,7.4,7.4,1,1,' ',' ',' ',' ',0,0,0,0,' ',' ',' ',1,' ',' ')
+-GO-
+INSERT INTO ACCEPTDISPLAYDTLS VALUES(26,'ETDocSrlNo','ETDocSrlNo',0,0,28,28,3,3,0,8,1,1,' ',' ',' ',' ',0,0,0,0,' ',' ',' ',1,' ',' ')
+-GO-
+INSERT INTO ACCEPTDISPLAYDTLS VALUES(27,'ETSubSrlNo','ETSubSrlNo',0,0,29,29,3,3,0,8,1,1,' ',' ',' ',' ',0,0,0,0,' ',' ',' ',1,' ',' ')
+-GO-
+INSERT INTO ACCEPTDISPLAYDTLS VALUES(29,'Stk Qty','Stk Qty',0,0,30,30,4,4,10,10,2,2,' ',' ',' ',' ',0,0,0,0,' ',' ',' ',1,' ',' ')
+-GO-
+INSERT INTO ACCEPTDISPLAYDTLS VALUES(30,'GD Cd','GD Cd',0,0,31,31,1,2,10,10,1,1,' ',' ',' ',' ',0,0,0,0,' ',' ',' ',1,' ',' ')
+-GO-
+INSERT INTO ACCEPTDISPLAYDTLS VALUES(31,'Cal Tax Val','Cal Tax Val',0,0,32,32,4,4,10,10,2,2,' ',' ',' ',' ',0,0,0,0,' ',' ',' ',1,' ',' ')
+-GO-
+INSERT INTO ACCEPTDISPLAYDTLS VALUES(33,'Cost Price','Cost Price',0,0,33,33,4,4,8.4,8.4,2,2,' ',' ',' ',' ',0,0,0,0,' ',' ',' ',1,' ',' ')
+-GO-
+INSERT INTO ACCEPTDISPLAYDTLS VALUES(34,'AC1','AC1',0,0,34,34,2,2,0,8,1,1,' ',' ',' ',' ',0,0,0,0,' ',' ',' ',1,' ',' ')
+-GO-
+INSERT INTO ACCEPTDISPLAYDTLS VALUES(35,'AC2','AC2',0,0,35,35,2,2,0,8,1,1,' ',' ',' ',' ',0,0,0,0,' ',' ',' ',1,' ',' ')
+-GO-
+INSERT INTO ACCEPTDISPLAYDTLS VALUES(36,'AC3','AC3',0,0,36,36,2,2,0,8,1,1,' ',' ',' ',' ',0,0,0,0,' ',' ',' ',1,' ',' ')
+-GO-
+INSERT INTO ACCEPTDISPLAYDTLS VALUES(37,'AC4','AC4',0,0,37,37,2,2,0,8,1,1,' ',' ',' ',' ',0,0,0,0,' ',' ',' ',1,' ',' ')
+-GO-
+INSERT INTO ACCEPTDISPLAYDTLS VALUES(38,'AC5','AC5',0,0,38,38,2,2,0,8,1,1,' ',' ',' ',' ',0,0,0,0,' ',' ',' ',1,' ',' ')
+-GO-
+INSERT INTO ACCEPTDISPLAYDTLS VALUES(39,'C1','C1',0,0,39,39,2,2,0,8,1,1,' ',' ',' ',' ',0,0,0,0,' ',' ',' ',1,' ',' ')
+-GO-
+INSERT INTO ACCEPTDISPLAYDTLS VALUES(40,'C2','C2',0,0,40,40,2,2,0,8,1,1,' ',' ',' ',' ',0,0,0,0,' ',' ',' ',1,' ',' ')
+-GO-
+INSERT INTO ACCEPTDISPLAYDTLS VALUES(41,'Disc Reason','Disc Reason',0,0,41,41,5,2,8.5,8.5,1,1,' ',' ',' ',' ',0,0,0,0,' ',' ',' ',1,' ',' ')
+-GO-
+INSERT INTO ACCEPTDISPLAYDTLS VALUES(42,'LSQ','LSQ',0,0,42,42,1,1,0,8,1,1,' ',' ',' ',' ',0,0,0,0,' ',' ',' ',1,' ',' ')
+-GO-
+INSERT INTO ACCEPTDISPLAYDTLS VALUES(43,'ET Ctrl No','ET Ctrl No',0,0,43,43,1,1,0,8,1,1,' ',' ',' ',' ',0,0,0,0,' ',' ',' ',1,' ',' ')
+-GO-
+INSERT INTO ACCEPTDISPLAYDTLS VALUES(32,'EUP Code','EUP Code',0,0,44,44,5,2,10,10,1,1,' ',' ',' ',' ',0,0,0,0,' ',' ',' ',1,' ',' ')
+-GO-
+INSERT INTO ACCEPTDISPLAYDTLS VALUES(3,'Quality','Quality',0,0,45,45,1,2,10,10,1,1,' ',' ',' ',' ',0,0,0,0,' ',' ',' ',1,' ',' ')
+-GO-
+INSERT INTO ACCEPTDISPLAYDTLS VALUES(46,'Tax Array Index','Tax Array Index',0,0,46,46,2,2,0,8,2,2,' ',' ',' ',' ',0,0,0,0,' ',' ',' ',1,' ',' ')
+-GO-
+INSERT INTO ACCEPTDISPLAYDTLS VALUES(47,'Tax In/Ex','Tax In/Ex',0,0,47,47,2,2,3,3,2,2,' ',' ',' ',' ',0,0,0,0,' ',' ',' ',1,' ',' ')
+-GO-
+INSERT INTO ACCEPTDISPLAYDTLS VALUES(48,'ProTax Code','ProTax Code',0,0,48,48,2,2,0,8,1,1,' ',' ',' ',' ',0,0,0,0,' ',' ',' ',1,' ',' ')
+-GO-
+INSERT INTO ACCEPTDISPLAYDTLS VALUES(49,'SrcTax Code','SrcTax Code',0,0,49,49,2,2,0,8,1,1,' ',' ',' ',' ',0,0,0,0,' ',' ',' ',1,' ',' ')
+-GO-
+INSERT INTO ACCEPTDISPLAYDTLS VALUES(50,'DestTax Code','DestTax Code',0,0,50,50,2,2,0,8,1,1,' ',' ',' ',' ',0,0,0,0,' ',' ',' ',1,' ',' ')
+-GO-
+INSERT INTO ACCEPTDISPLAYDTLS VALUES(51,'Tax Comp Count','Tax Comp Count',0,0,51,51,3,3,0,8,2,2,' ',' ',' ',' ',0,0,0,0,' ',' ',' ',1,' ',' ')
+-GO-
+INSERT INTO ACCEPTDISPLAYDTLS VALUES(52,'T1 Rate','T1 Rate',0,0,52,52,4,4,0,8,2,2,' ',' ',' ',' ',0,0,0,0,' ',' ',' ',1,' ',' ')
+-GO-
+INSERT INTO ACCEPTDISPLAYDTLS VALUES(53,'T1 Comp On','T1 Comp On',0,0,53,53,3,3,0,8,2,2,' ',' ',' ',' ',0,0,0,0,' ',' ',' ',1,' ',' ')
+-GO-
+INSERT INTO ACCEPTDISPLAYDTLS VALUES(54,'T1 Comp Val','T1 Comp Val',0,0,54,54,4,4,0,8,2,2,' ',' ',' ',' ',0,0,0,0,' ',' ',' ',1,' ',' ')
+-GO-
+INSERT INTO ACCEPTDISPLAYDTLS VALUES(55,'T2 Rate','T2 Rate',0,0,55,55,4,4,0,8,2,2,' ',' ',' ',' ',0,0,0,0,' ',' ',' ',1,' ',' ')
+-GO-
+INSERT INTO ACCEPTDISPLAYDTLS VALUES(56,'T2 Comp On','T2 Comp On',0,0,56,56,3,3,0,8,2,2,' ',' ',' ',' ',0,0,0,0,' ',' ',' ',1,' ',' ')
+-GO-
+INSERT INTO ACCEPTDISPLAYDTLS VALUES(57,'T2 Comp Val','T2 Comp Val',0,0,57,57,4,4,0,8,2,2,' ',' ',' ',' ',0,0,0,0,' ',' ',' ',1,' ',' ')
+-GO-
+INSERT INTO ACCEPTDISPLAYDTLS VALUES(58,'T3 Rate','T3 Rate',0,0,58,58,4,4,0,8,2,2,' ',' ',' ',' ',0,0,0,0,' ',' ',' ',1,' ',' ')
+-GO-
+INSERT INTO ACCEPTDISPLAYDTLS VALUES(59,'T3 Comp On','T3 Comp On',0,0,59,59,3,3,0,8,2,2,' ',' ',' ',' ',0,0,0,0,' ',' ',' ',1,' ',' ')
+-GO-
+INSERT INTO ACCEPTDISPLAYDTLS VALUES(60,'T3 Comp Val','T3 Comp Val',0,0,60,60,4,4,0,8,2,2,' ',' ',' ',' ',0,0,0,0,' ',' ',' ',1,' ',' ')
+-GO-
+INSERT INTO ACCEPTDISPLAYDTLS VALUES(61,'T4 Rate','T4 Rate',0,0,61,61,4,4,0,8,2,2,' ',' ',' ',' ',0,0,0,0,' ',' ',' ',1,' ',' ')
+-GO-
+INSERT INTO ACCEPTDISPLAYDTLS VALUES(62,'T4 Comp On','T4 Comp On',0,0,62,62,3,3,0,8,2,2,' ',' ',' ',' ',0,0,0,0,' ',' ',' ',1,' ',' ')
+-GO-
+INSERT INTO ACCEPTDISPLAYDTLS VALUES(63,'T4 Comp Val','T4 Comp Val',0,0,63,63,4,4,0,8,2,2,' ',' ',' ',' ',0,0,0,0,' ',' ',' ',1,' ',' ')
+-GO-
+INSERT INTO ACCEPTDISPLAYDTLS VALUES(64,'T5 Rate','T5 Rate',0,0,64,64,4,4,0,8,2,2,' ',' ',' ',' ',0,0,0,0,' ',' ',' ',1,' ',' ')
+-GO-
+INSERT INTO ACCEPTDISPLAYDTLS VALUES(65,'T5 Comp On','T5 Comp On',0,0,65,65,3,3,0,8,2,2,' ',' ',' ',' ',0,0,0,0,' ',' ',' ',1,' ',' ')
+-GO-
+INSERT INTO ACCEPTDISPLAYDTLS VALUES(66,'T5 Comp Val','T5 Comp Val',0,0,66,66,4,4,0,8,2,2,' ',' ',' ',' ',0,0,0,0,' ',' ',' ',1,' ',' ')
+-GO-
+INSERT INTO ACCEPTDISPLAYDTLS VALUES(67,'Batch','Batch',0,0,67,67,1,2,0,8,1,1,' ',' ',' ',' ',0,0,0,0,' ',' ',' ',1,' ',' ')
+-GO-
+INSERT INTO ACCEPTDISPLAYDTLS VALUES(68,'Location','Location',0,0,68,68,1,2,0,8,1,1,' ',' ',' ',' ',0,0,0,0,' ',' ',' ',1,' ',' ')
+-GO-
+INSERT INTO ACCEPTDISPLAYDTLS VALUES(69,'Actual Rate','Actual Rate',0,0,69,69,4,2,8.4,8.4,2,2,' ',' ',' ',' ',0,0,0,0,' ',' ',' ',1,' ',' ')
+-GO-
+INSERT INTO ACCEPTDISPLAYDTLS VALUES(70,'PriceFactorId','PriceFactorId',0,0,70,70,2,2,0,8,1,1,' ',' ',' ',' ',0,0,0,0,' ',' ',' ',1,' ',' ')
+-GO-
+INSERT INTO ACCEPTDISPLAYDTLS VALUES(71,'EDId','EDId',0,0,71,71,2,2,0,8,1,1,' ',' ',' ',' ',0,0,0,0,' ',' ',' ',1,' ',' ')
+-GO-
+INSERT INTO ACCEPTDISPLAYDTLS VALUES(72,'CalPriceFacVal','CalPriceFacVal',0,0,72,72,4,4,0,8,2,2,' ',' ',' ',' ',0,0,0,0,' ',' ',' ',1,' ',' ')
+-GO-
+INSERT INTO ACCEPTDISPLAYDTLS VALUES(73,'CalEDVal','CalEDVal',0,0,73,73,4,4,0,8,2,2,' ',' ',' ',' ',0,0,0,0,' ',' ',' ',1,' ',' ')
+-GO-
+INSERT INTO ACCEPTDISPLAYDTLS VALUES(74,'Merch Id','Merch Id',0,0,74,74,2,2,0,8,1,1,' ',' ',' ',' ',0,0,0,0,' ',' ',' ',1,' ',' ')
+-GO-
+INSERT INTO ACCEPTDISPLAYDTLS VALUES(75,'T1 Desc','T1 Desc',0,0,75,75,2,2,0,8,1,1,' ',' ',' ',' ',0,0,0,0,' ',' ',' ',1,' ',' ')
+-GO-
+INSERT INTO ACCEPTDISPLAYDTLS VALUES(76,'T1 Type','T1 Type',0,0,76,76,2,2,0,5,1,1,' ',' ',' ',' ',0,0,0,0,' ',' ',' ',1,' ',' ')
+-GO-
+INSERT INTO ACCEPTDISPLAYDTLS VALUES(77,'T1 Der. Fm','T1 Der. Fm',0,0,77,77,2,2,0,8,1,1,' ',' ',' ',' ',0,0,0,0,' ',' ',' ',1,' ',' ')
+-GO-
+INSERT INTO ACCEPTDISPLAYDTLS VALUES(78,'T1 TI or TE','T1 TI or TE',0,0,78,78,3,3,0,5,1,1,' ',' ',' ',' ',0,0,0,0,' ',' ',' ',1,' ',' ')
+-GO-
+INSERT INTO ACCEPTDISPLAYDTLS VALUES(79,'T1 Comp Per','T1 Comp Per',0,0,79,79,4,4,0,5,2,2,' ',' ',' ',' ',0,0,0,0,' ',' ',' ',1,' ',' ')
+-GO-
+INSERT INTO ACCEPTDISPLAYDTLS VALUES(80,'T2 Desc','T2 Desc',0,0,80,80,2,2,0,8,1,1,' ',' ',' ',' ',0,0,0,0,' ',' ',' ',1,' ',' ')
+-GO-
+INSERT INTO ACCEPTDISPLAYDTLS VALUES(81,'T2 Type','T2 Type',0,0,81,81,2,2,0,5,1,1,' ',' ',' ',' ',0,0,0,0,' ',' ',' ',1,' ',' ')
+-GO-
+INSERT INTO ACCEPTDISPLAYDTLS VALUES(82,'T2 Der. Fm','T2 Der. Fm',0,0,82,82,2,2,0,8,1,1,' ',' ',' ',' ',0,0,0,0,' ',' ',' ',1,' ',' ')
+-GO-
+INSERT INTO ACCEPTDISPLAYDTLS VALUES(83,'T2 TI or TE','T2 TI or TE',0,0,83,83,3,3,0,5,1,1,' ',' ',' ',' ',0,0,0,0,' ',' ',' ',1,' ',' ')
+-GO-
+INSERT INTO ACCEPTDISPLAYDTLS VALUES(84,'T2 Comp Per','T2 Comp Per',0,0,84,84,4,4,0,5,2,2,' ',' ',' ',' ',0,0,0,0,' ',' ',' ',1,' ',' ')
+-GO-
+INSERT INTO ACCEPTDISPLAYDTLS VALUES(85,'T3 Desc','T3 Desc',0,0,85,85,2,2,0,8,1,1,' ',' ',' ',' ',0,0,0,0,' ',' ',' ',1,' ',' ')
+-GO-
+INSERT INTO ACCEPTDISPLAYDTLS VALUES(86,'T3 Type','T3 Type',0,0,86,86,2,2,0,5,1,1,' ',' ',' ',' ',0,0,0,0,' ',' ',' ',1,' ',' ')
+-GO-
+INSERT INTO ACCEPTDISPLAYDTLS VALUES(87,'T3 Der. Fm','T3 Der. Fm',0,0,87,87,2,2,0,8,1,1,' ',' ',' ',' ',0,0,0,0,' ',' ',' ',1,' ',' ')
+-GO-
+INSERT INTO ACCEPTDISPLAYDTLS VALUES(88,'T3 TI or TE','T3 TI or TE',0,0,88,88,3,3,0,5,1,1,' ',' ',' ',' ',0,0,0,0,' ',' ',' ',1,' ',' ')
+-GO-
+INSERT INTO ACCEPTDISPLAYDTLS VALUES(89,'T3 Comp Per','T3 Comp Per',0,0,89,89,4,4,0,5,2,2,' ',' ',' ',' ',0,0,0,0,' ',' ',' ',1,' ',' ')
+-GO-
+INSERT INTO ACCEPTDISPLAYDTLS VALUES(90,'T4 Desc','T4 Desc',0,0,90,90,2,2,0,8,1,1,' ',' ',' ',' ',0,0,0,0,' ',' ',' ',1,' ',' ')
+-GO-
+INSERT INTO ACCEPTDISPLAYDTLS VALUES(91,'T4 Type','T4 Type',0,0,91,91,2,2,0,5,1,1,' ',' ',' ',' ',0,0,0,0,' ',' ',' ',1,' ',' ')
+-GO-
+INSERT INTO ACCEPTDISPLAYDTLS VALUES(92,'T4 Der. Fm','T4 Der. Fm',0,0,92,92,2,2,0,8,1,1,' ',' ',' ',' ',0,0,0,0,' ',' ',' ',1,' ',' ')
+-GO-
+INSERT INTO ACCEPTDISPLAYDTLS VALUES(93,'T4 TI or TE','T4 TI or TE',0,0,93,93,3,3,0,5,1,1,' ',' ',' ',' ',0,0,0,0,' ',' ',' ',1,' ',' ')
+-GO-
+INSERT INTO ACCEPTDISPLAYDTLS VALUES(94,'T4 Comp Per','T4 Comp Per',0,0,94,94,4,4,0,5,2,2,' ',' ',' ',' ',0,0,0,0,' ',' ',' ',1,' ',' ')
+-GO-
+INSERT INTO ACCEPTDISPLAYDTLS VALUES(95,'T5 Desc','T5 Desc',0,0,95,95,2,2,0,8,1,1,' ',' ',' ',' ',0,0,0,0,' ',' ',' ',1,' ',' ')
+-GO-
+INSERT INTO ACCEPTDISPLAYDTLS VALUES(96,'T5 Type','T5 Type',0,0,96,96,2,2,0,5,1,1,' ',' ',' ',' ',0,0,0,0,' ',' ',' ',1,' ',' ')
+-GO-
+INSERT INTO ACCEPTDISPLAYDTLS VALUES(97,'T5 Der. Fm','T5 Der. Fm',0,0,97,97,2,2,0,8,1,1,' ',' ',' ',' ',0,0,0,0,' ',' ',' ',1,' ',' ')
+-GO-
+INSERT INTO ACCEPTDISPLAYDTLS VALUES(98,'T5 TI or TE','T5 TI or TE',0,0,98,98,3,3,0,5,1,1,' ',' ',' ',' ',0,0,0,0,' ',' ',' ',1,' ',' ')
+-GO-
+INSERT INTO ACCEPTDISPLAYDTLS VALUES(99,'T5 Comp Per','T5 Comp Per',0,0,99,99,4,4,0,5,2,2,' ',' ',' ',' ',0,0,0,0,' ',' ',' ',1,' ',' ')
+-GO-
+INSERT INTO ACCEPTDISPLAYDTLS VALUES(100,'Dealer Price','Dealer Price',0,0,100,100,4,4,0,5,2,2,' ',' ',' ',' ',0,0,0,0,' ',' ',' ',1,' ',' ')
+-GO-
+INSERT INTO ACCEPTDISPLAYDTLS VALUES(101,'OriTVForTIItems','OriTVForTIItems',0,0,101,101,4,4,8.4,8.4,2,2,' ',' ',' ',' ',0,0,0,0,' ',' ',' ',1,' ',' ')
+-GO-
+INSERT INTO ACCEPTDISPLAYDTLS VALUES(102,'Rate-OriTaxForTI','Rate-OriTaxForTI',0,0,102,102,4,4,8.4,8.4,2,2,' ',' ',' ',' ',0,0,0,0,' ',' ',' ',1,' ',' ')
+-GO-
+INSERT INTO ACCEPTDISPLAYDTLS VALUES(103,'Dummy1','Dummy1',0,0,103,103,4,4,8.4,8.4,2,2,' ',' ',' ',' ',0,0,0,0,' ',' ',' ',1,' ',' ')
+-GO-
+INSERT INTO ACCEPTDISPLAYDTLS VALUES(104,'Dummy2','Dummy2',0,0,104,104,4,4,8.4,8.4,2,2,' ',' ',' ',' ',0,0,0,0,' ',' ',' ',1,' ',' ')
+-GO-
+Insert into ACCEPTDISPLAYDTLS VALUES(105,'DocEntBFTaxAddOn','DocEntBFTaxAddOn',0,0,105,105,4,4,0.0,8.0,2,2,'','','','',0.0,0.0,0.0,0.0,'','','',1,'','')
+-GO-
+Insert into ACCEPTDISPLAYDTLS VALUES(106,'DocEntAFTaxAddOn','DocEntAFTaxAddOn',0,0,106,106,4,4,0.0,8.0,2,2,'','','','',0.0,0.0,0.0,0.0,'','','',1,'','')
+-GO-
+Insert into ACCEPTDISPLAYDTLS VALUES(107,'DocEntBFTaxDedn','DocEntBFTaxDedn',0,0,107,107,4,4,0.0,8.0,2,2,'','','','',0.0,0.0,0.0,0.0,'','','',1,'','')
+-GO-
+Insert into ACCEPTDISPLAYDTLS VALUES(108,'DocEntAFTaxDedn','DocEntAFTaxDedn',0,0,108,108,4,4,0.0,8.0,2,2,'','','','',0.0,0.0,0.0,0.0,'','','',1,'','')
+-GO-
+Insert into ACCEPTDISPLAYDTLS VALUES(109,'Dummy3','Dummy3',0,0,109,109,1,1,0.0,8.0,2,2,'','','','',0.0,0.0,0.0,0.0,'','','',1,'','')
+-GO-
+Insert into ACCEPTDISPLAYDTLS VALUES(110,'Dummy4','Dummy4',0,0,110,110,1,1,0.0,8.0,2,2,'','','','',0.0,0.0,0.0,0.0,'','','',1,'','')
+-GO-
+INSERT INTO ACCEPTDISPLAYDTLS VALUES(111,'ParentRowIndex','ParentRowIndex',0,0,111,111,1,1,0,0,2,2,' ',' ',' ',' ',0,0,0,0,' ',' ',' ',1,' ',' ')
+-GO-
+INSERT INTO ACCEPTDISPLAYDTLS VALUES(112,'SalesPromoSlabNo','SalesPromoSlabNo',0,0,112,112,1,1,0,0,2,2,' ',' ',' ',' ',0,0,0,0,' ',' ',' ',1,' ',' ')
+-GO-
+INSERT INTO ACCEPTDISPLAYDTLS VALUES(113,'SalesPromoRemarks','SalesPromoRemarks',0,0,113,113,2,2,0,0,2,2,' ',' ',' ',' ',0,0,0,0,' ',' ',' ',1,' ',' ')
+-GO-
+INSERT INTO ACCEPTDISPLAYDTLS VALUES(114,'PromoType','PromoType',0,0,114,114,1,1,0,0,2,2,' ',' ',' ',' ',0,0,0,0,' ',' ',' ',1,' ',' ')
+-GO-
+INSERT INTO ACCEPTDISPLAYDTLS VALUES(115,'PromoDefType','PromoDefType',0,0,115,115,1,1,0,0,2,2,' ',' ',' ',' ',0,0,0,0,' ',' ',' ',1,' ',' ')
+-GO-
+INSERT INTO ACCEPTDISPLAYDTLS VALUES(116,'PromoItemLevelOfferVal','PromoItemLevelOfferVal',0,0,116,116,1,1,0,0,2,2,' ',' ',' ',' ',0,0,0,0,' ',' ',' ',1,' ',' ')
+-GO-
+INSERT INTO ACCEPTDISPLAYDTLS VALUES(117,'PromoItemlLevelDiscDtls','PromoItemlLevelDiscDtls',0,0,117,117,2,2,0,0,2,2,' ',' ',' ',' ',0,0,0,0,' ',' ',' ',1,' ',' ')
+-GO-
+INSERT INTO ACCEPTDISPLAYDTLS VALUES(118,'PromoItemGroup','PromoItemGroup',0,0,118,118,1,1,0,0,2,2,' ',' ',' ',' ',0,0,0,0,' ',' ',' ',1,' ',' ')
+-GO-
+INSERT INTO ACCEPTDISPLAYDTLS VALUES(119,'PromoFlgItemLevel','PromoFlgItemLevel',0,0,119,119,1,1,0,0,2,2,' ',' ',' ',' ',0,0,0,0,' ',' ',' ',1,' ',' ')
+-GO-
+INSERT INTO ACCEPTDISPLAYDTLS VALUES(120,'PromoFlgBillLevel','PromoFlgBillLevel',0,0,120,120,1,1,0,0,2,2,' ',' ',' ',' ',0,0,0,0,' ',' ',' ',1,' ',' ')
+-GO-
+INSERT INTO ACCEPTDISPLAYDTLS VALUES(121,'PromoSetSrlNo','PromoSetSrlNo',0,0,121,121,1,2,0,0,2,2,' ',' ',' ',' ',0,0,0,0,' ',' ',' ',1,' ',' ')
+-GO-
+INSERT INTO ACCEPTDISPLAYDTLS VALUES(122,'PromoOfferItemType','PromoOfferItemType',0,0,122,122,1,1,0,0,2,2,' ',' ',' ',' ',0,0,0,0,' ',' ',' ',1,' ',' ')
+-GO-
+INSERT INTO ACCEPTDISPLAYDTLS VALUES(123,'LinkPOFromLoc','LinkPOFromLoc',0,0,123,123,2,2,0,0,2,2,' ',' ',' ',' ',0,0,0,0,' ',' ',' ',1,' ',' ')
+-GO-
+INSERT INTO ACCEPTDISPLAYDTLS VALUES(124,'LinkPoType','LinkPoType',0,0,124,124,1,1,0,0,2,2,' ',' ',' ',' ',0,0,0,0,' ',' ',' ',1,' ',' ')
+-GO-
+INSERT INTO ACCEPTDISPLAYDTLS VALUES(125,'LinkPoPrefix','LinkPoPrefix',0,0,125,125,2,2,0,0,2,2,' ',' ',' ',' ',0,0,0,0,' ',' ',' ',1,' ',' ')
+-GO-
+INSERT INTO ACCEPTDISPLAYDTLS VALUES(126,'LinkPoNumber','LinkPoNumber',0,0,126,126,1,1,0,0,2,2,' ',' ',' ',' ',0,0,0,0,' ',' ',' ',1,' ',' ')
+-GO-
+INSERT INTO ACCEPTDISPLAYDTLS VALUES(127,'LinkPoEntrySrlno','LinkPoEntrySrlno',0,0,127,127,1,1,0,0,2,2,' ',' ',' ',' ',0,0,0,0,' ',' ',' ',1,' ',' ')
+-GO-
+INSERT INTO ACCEPTDISPLAYDTLS VALUES(128,'LinkPoEntrySubSrlno','LinkPoEntrySubSrlno',0,0,128,128,1,1,0,0,2,2,' ',' ',' ',' ',0,0,0,0,' ',' ',' ',1,' ',' ')
+-GO-
+INSERT INTO ACCEPTDISPLAYDTLS VALUES(129,'OrdDocType','OrdDocType',0,0,129,129,1,1,0,0,2,2,' ',' ',' ',' ',0,0,0,0,' ',' ',' ',1,' ',' ')
+-GO-
+INSERT INTO ACCEPTDISPLAYDTLS VALUES(130,'OrdDocNoPrefix','OrdDocNoPrefix',0,0,130,130,2,2,0,0,2,2,' ',' ',' ',' ',0,0,0,0,' ',' ',' ',1,' ',' ')
+-GO-
+INSERT INTO ACCEPTDISPLAYDTLS VALUES(131,'OrdDocNo','OrdDocNo',0,0,131,131,1,1,0,0,2,2,' ',' ',' ',' ',0,0,0,0,' ',' ',' ',1,' ',' ')
+-GO-
+INSERT INTO ACCEPTDISPLAYDTLS VALUES(132,'OrdEntSrlNo','OrdEntSrlNo',0,0,132,132,1,1,0,0,2,2,' ',' ',' ',' ',0,0,0,0,' ',' ',' ',1,' ',' ')
+-GO-
+INSERT INTO ACCEPTDISPLAYDTLS VALUES(133,'OrdEntSubSrlNo','OrdEntSubSrlNo',0,0,133,133,1,1,0,0,2,2,' ',' ',' ',' ',0,0,0,0,' ',' ',' ',1,' ',' ')
+-GO-
+INSERT INTO ACCEPTDISPLAYDTLS VALUES(134,'ServiceItem','ServiceItem',0,0,134,134,1,1,0,0,2,2,' ',' ',' ',' ',0,0,0,0,' ',' ',' ',1,' ',' ')
+-GO-
+INSERT INTO ACCEPTDISPLAYDTLS VALUES(135,'Taxrevisionid','Taxrevisionid',0,0,135,135,1,1,0,0,2,2,' ',' ',' ',' ',0,0,0,0,' ',' ',' ',1,' ',' ')
+-GO-
+INSERT INTO ACCEPTDISPLAYDTLS VALUES(136,'AddonTaxComp1','AddonTaxComp1',0,0,136,136,4,4,0,0,2,2,' ',' ',' ',' ',0,0,0,0,' ',' ',' ',1,' ',' ')
+-GO-
+INSERT INTO ACCEPTDISPLAYDTLS VALUES(137,'AddonTaxComp2','AddonTaxComp2',0,0,137,137,4,4,0,0,2,2,' ',' ',' ',' ',0,0,0,0,' ',' ',' ',1,' ',' ')
+-GO-
+INSERT INTO ACCEPTDISPLAYDTLS VALUES(138,'AddonTaxComp3','AddonTaxComp3',0,0,138,138,4,4,0,0,2,2,' ',' ',' ',' ',0,0,0,0,' ',' ',' ',1,' ',' ')
+-GO-
+INSERT INTO ACCEPTDISPLAYDTLS VALUES(139,'AddonTaxComp4','AddonTaxComp4',0,0,139,139,4,4,0,0,2,2,' ',' ',' ',' ',0,0,0,0,' ',' ',' ',1,' ',' ')
+-GO-
+INSERT INTO ACCEPTDISPLAYDTLS VALUES(140,'AddonTaxComp5','AddonTaxComp5',0,0,140,140,4,4,0,0,2,2,' ',' ',' ',' ',0,0,0,0,' ',' ',' ',1,' ',' ')
+-GO-
+update AcceptDisplaydtls set AcptVisible=0, DispVisible=0 where [index]=45
+-GO-
+update AcceptDisplaydtls set AcptVisible=0, DispVisible=0 where [index]=28
+-GO-
+update acceptdisplaydtls set DispVisible=0, Acptvisible=0 where [index] = 69
+-GO-
+update acceptdisplaydtls set Dispwidth =20, Acptwidth=20 where [index] in (1,2)
+-GO-

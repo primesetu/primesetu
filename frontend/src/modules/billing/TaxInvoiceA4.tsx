@@ -31,23 +31,33 @@ export default function TaxInvoiceA4({ bill, onPrinted }: { bill: any, onPrinted
 
   if (!bill) return null;
 
-  // HSN-wise Summary Calculation (All inputs are in paise)
+  // HSN-wise Summary Calculation using backend-provided tax_details
   const hsnSummary = (bill.items || []).reduce((acc: any, item: any) => {
-    const hsn = item.product?.hsn || '6403';
-    const unitPrice = item.unit_price || item.mrp || 0;
-    const taxable = item.qty * unitPrice * (1 - item.discount_per / 100);
-    const taxRate = item.tax_per || item.tax_rate || 18;
-    const taxAmt = taxable - (taxable / (1 + taxRate / 100));
+    const hsn = item.hsn_code || 'N/A';
+    const taxable = (item.qty * (item.unit_price || item.mrp || 0)) * (1 - (item.discount_per || 0) / 100);
+    const taxDetails = item.tax_details || {};
     
     if (!acc[hsn]) {
       acc[hsn] = { hsn, taxable: 0, cgst: 0, sgst: 0, igst: 0, totalTax: 0 };
     }
-    acc[hsn].taxable += taxable - taxAmt;
-    acc[hsn].cgst += taxAmt / 2;
-    acc[hsn].sgst += taxAmt / 2;
-    acc[hsn].totalTax += taxAmt;
+    
+    acc[hsn].taxable += taxable;
+    
+    // Sum up tax components from the JSON field
+    if (Array.isArray(taxDetails.components)) {
+      taxDetails.components.forEach((c: any) => {
+        const amt = parseFloat(c.amount) || 0;
+        if (c.name.toUpperCase().includes('CGST')) acc[hsn].cgst += amt;
+        else if (c.name.toUpperCase().includes('SGST')) acc[hsn].sgst += amt;
+        else if (c.name.toUpperCase().includes('IGST')) acc[hsn].igst += amt;
+        acc[hsn].totalTax += amt;
+      });
+    }
+    
     return acc;
   }, {});
+
+  const isInterstate = Object.values(hsnSummary).some((s: any) => s.igst > 0);
 
   return (
     <div className="hidden print:block absolute inset-0 bg-white text-black font-sans p-8 w-[210mm] min-h-[297mm] z-[9999]">
@@ -164,8 +174,14 @@ export default function TaxInvoiceA4({ bill, onPrinted }: { bill: any, onPrinted
                <tr>
                   <th className="border border-black p-1">HSN/SAC</th>
                   <th className="border border-black p-1">Taxable Value</th>
-                  <th className="border border-black p-1">CGST</th>
-                  <th className="border border-black p-1">SGST</th>
+                  {isInterstate ? (
+                    <th className="border border-black p-1">IGST</th>
+                  ) : (
+                    <>
+                      <th className="border border-black p-1">CGST</th>
+                      <th className="border border-black p-1">SGST</th>
+                    </>
+                  )}
                   <th className="border border-black p-1">Total Tax</th>
                </tr>
             </thead>
@@ -173,10 +189,16 @@ export default function TaxInvoiceA4({ bill, onPrinted }: { bill: any, onPrinted
                {Object.values(hsnSummary).map((s: any) => (
                  <tr key={s.hsn}>
                     <td className="border border-black p-1">{s.hsn}</td>
-                    <td className="border border-black p-1">{formatCurrency(Math.round(s.taxable))}</td>
-                    <td className="border border-black p-1">{formatCurrency(Math.round(s.cgst))}</td>
-                    <td className="border border-black p-1">{formatCurrency(Math.round(s.sgst))}</td>
-                    <td className="border border-black p-1 font-black">{formatCurrency(Math.round(s.totalTax))}</td>
+                    <td className="border border-black p-1">{formatCurrency(s.taxable)}</td>
+                    {isInterstate ? (
+                      <td className="border border-black p-1">{formatCurrency(s.igst)}</td>
+                    ) : (
+                      <>
+                        <td className="border border-black p-1">{formatCurrency(s.cgst)}</td>
+                        <td className="border border-black p-1">{formatCurrency(s.sgst)}</td>
+                      </>
+                    )}
+                    <td className="border border-black p-1 font-black">{formatCurrency(s.totalTax)}</td>
                  </tr>
                ))}
             </tbody>

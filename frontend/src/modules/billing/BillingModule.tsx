@@ -5,6 +5,7 @@ import { Button } from '@/components/ui/SovereignUI'
 import { motion, AnimatePresence } from 'framer-motion'
 import DesktopBilling from './DesktopBilling'
 import MobileBilling from './MobileBilling'
+import { useSysParams } from '@/hooks/useSysParams'
 
 interface BillItem {
   id: string
@@ -23,6 +24,7 @@ interface BillItem {
   disc_amt: number
   tax_amt: number
   total: number
+  salesman?: string
 }
 
 function BillingModule() {
@@ -42,6 +44,13 @@ function BillingModule() {
   const [billDiscount, setBillDiscount] = useState(0)
   const [dateTime, setDateTime] = useState(new Date().toLocaleString())
   const [isMobile, setIsMobile] = useState(false)
+  const [fieldMask, setFieldMask] = useState<any[]>([])
+
+  // ── SYSPARAM SYNC ──
+  const { getParam } = useSysParams()
+  const isCustomerMandatory = getParam('InBillingCustSelectionCompulsary', 0) === 1
+  const isSalesmanMandatory = getParam('SMSelectionCompulsary', 0) === 1
+  const isRoundingActive = getParam('PONetValueRndOff', 0) === 1 // Fallback to PO rounding if billing not found
 
   const totals = useMemo(() => {
     const itemTotal = items.reduce((acc, curr) => ({
@@ -52,9 +61,10 @@ function BillingModule() {
       net: acc.net + (Number(curr.total) || 0)
     }), { items: 0, qty: 0, gross: 0, disc: 0, net: 0 })
 
-    const finalNet = Math.max(0, itemTotal.net - billDiscount)
+    const finalNetRaw = Math.max(0, itemTotal.net - billDiscount)
+    const finalNet = isRoundingActive ? Math.round(finalNetRaw) : finalNetRaw
     return { ...itemTotal, billDisc: billDiscount, finalNet }
-  }, [items, billDiscount])
+  }, [items, billDiscount, isRoundingActive])
 
   // ── GLOBAL SHORTCUTS ──
   useEffect(() => {
@@ -82,12 +92,30 @@ function BillingModule() {
     return () => window.removeEventListener('resize', checkMobile)
   }, [])
 
+  const isSearchingRef = useRef(false)
+
+  // ── FIELD MASK SYNC ──
+  useEffect(() => {
+    async function loadMask() {
+      try {
+        const mask = await api.config.getLegacyMask(2100) // Sales Billing
+        if (mask && mask.length > 0) setFieldMask(mask)
+      } catch (err) { console.error("Failed to load legacy mask:", err) }
+    }
+    loadMask()
+  }, [])
+
   const commitLine = async () => {
     const searchVal = activeEntry.stock_no.trim()
-    if (!searchVal || isSearching) return
+    if (!searchVal || isSearchingRef.current) return
     
-    // Check for Duplicate Scan (Auto-Increment Qty)
-    const existingIndex = items.findIndex(i => i.stock_no === searchVal)
+    // Immediately lock to prevent rapid "Enter" keypress duplicates
+    isSearchingRef.current = true
+    
+    // Check for Duplicate Scan (Auto-Increment Qty ONLY if Discount matches)
+    const activeDisc = activeEntry.disc_per || 0
+    const existingIndex = items.findIndex(i => i.stock_no === searchVal && i.disc_per === activeDisc)
+    
     if (existingIndex > -1) {
       setItems(prev => {
         const newItems = [...prev]
@@ -98,6 +126,9 @@ function BillingModule() {
         return newItems
       })
       setActiveEntry({ stock_no: '', qty: 1, rate: 0, disc_per: 0 })
+      
+      // Release lock after a short delay to debounce key hold
+      setTimeout(() => { isSearchingRef.current = false }, 150)
       return
     }
 
@@ -109,7 +140,7 @@ function BillingModule() {
         const item = inventoryItems[0]
         const rate = (item.mrp_paise || 0) / 100
         const qty = activeEntry.qty || 1
-        const disc_per = activeEntry.disc_per || 0
+        const disc_per = activeDisc
         const disc_amt = (rate * qty * disc_per) / 100
         const total = (rate * qty) - disc_amt
 
@@ -124,15 +155,29 @@ function BillingModule() {
           subclass2: item.subclass2 || '',
           colour: item.colour || '',
           size: item.size || '',
-          rate, qty, disc_per, disc_amt, tax_amt: 0, total
+          rate, qty, disc_per, disc_amt, tax_amt: 0, total, salesman: salesman || ''
         }, ...prev])
         setActiveEntry({ stock_no: '', qty: 1, rate: 0, disc_per: 0 })
       } else { alert("SKU Not Found") }
-    } catch (err) { console.error(err) } finally { setIsSearching(false) }
+    } catch (err) { console.error(err) } finally { 
+      setIsSearching(false)
+      // Allow slight debounce for API path too
+      setTimeout(() => { isSearchingRef.current = false }, 150)
+    }
   }
 
   const handleFinalize = async (paymentMode: 'CASH' | 'CARD', amount: number) => {
     if (items.length === 0 || isFinalizing) return
+
+    // ── SYSPARAM VALIDATION ──
+    if (isCustomerMandatory && !customer.phone.trim()) {
+      alert("ERROR: Customer Selection is Mandatory as per System Parameters.")
+      return
+    }
+    if (isSalesmanMandatory && !salesman.trim()) {
+      alert("ERROR: Sales Personnel Selection is Mandatory as per System Parameters.")
+      return
+    }
     setIsFinalizing(true)
     const billData = {
       type: "Sales",
@@ -183,6 +228,8 @@ function BillingModule() {
           handleFinalize={handleFinalize} customer={customer} setCustomer={setCustomer}
           salesman={salesman} setSalesman={setSalesman} billNo={billNo} dateTime={dateTime}
           billDiscount={billDiscount} setBillDiscount={setBillDiscount}
+          isCustomerMandatory={isCustomerMandatory} isSalesmanMandatory={isSalesmanMandatory}
+          fieldMask={fieldMask}
         />
       ) : (
         <DesktopBilling 
@@ -191,6 +238,8 @@ function BillingModule() {
           setShowSettle={setShowSettle} customer={customer} setCustomer={setCustomer}
           salesman={salesman} setSalesman={setSalesman} billNo={billNo} dateTime={dateTime}
           billDiscount={billDiscount} setBillDiscount={setBillDiscount}
+          isCustomerMandatory={isCustomerMandatory} isSalesmanMandatory={isSalesmanMandatory}
+          fieldMask={fieldMask}
         />
       )}
 

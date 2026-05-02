@@ -1,11 +1,13 @@
 import asyncio
-from app.core.database import engine
 from sqlalchemy import text
+from app.core.database import AsyncSessionLocal
 
-async def main():
-    async with engine.connect() as conn:
-        res = await conn.execute(text("SELECT table_name, column_name, data_type FROM information_schema.columns WHERE table_schema = 'public' AND column_name LIKE '%id'"))
-        for row in res.fetchall():
-            print(f"{row[0]}.{row[1]}: {row[2]}")
+async def check_schema():
+    async with AsyncSessionLocal() as session:
+        result = await session.execute(text("SELECT trntype, columnname, dispcap, dispvisible, disppos FROM shoper9.acceptdisplaydtls WHERE trntype = 1200 ORDER BY disppos"))
+        rows = result.all()
+        for row in rows:
+            print(row)
 
-asyncio.run(main())
+if __name__ == "__main__":
+    asyncio.run(check_schema())

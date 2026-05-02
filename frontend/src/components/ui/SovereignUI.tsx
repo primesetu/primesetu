@@ -3,6 +3,7 @@ import { clsx, type ClassValue } from 'clsx';
 import { twMerge } from 'tailwind-merge';
 import { X } from 'lucide-react';
 import { AgGridReact } from 'ag-grid-react';
+import { themeQuartz } from 'ag-grid-community';
 import { ColDef } from 'ag-grid-community';
 
 // AG Grid CSS and Modules handled globally in main.tsx/index.css
@@ -325,7 +326,7 @@ interface DataTableProps<T> {
   onRowDoubleClicked?: (params: any) => void;
   pagination?: boolean;
   paginationPageSize?: number;
-  enableRangeSelection?: boolean;
+  cellSelection?: boolean;
   className?: string;
   pinnedTopRowData?: any[];
 }
@@ -347,38 +348,43 @@ export function DataTable<T>({
   className,
   pagination = false,
   paginationPageSize = 20,
-  enableRangeSelection = false
+  cellSelection = false
 }: DataTableProps<T>) {
   const { isInstitutional } = useTheme();
   
   const agColumns: ColDef[] = React.useMemo(() => {
-    return columns.map((col: any) => ({
-      headerName: col.header,
-      field: col.field || (typeof col.accessor === 'string' ? col.accessor : undefined),
-      cellRenderer: typeof col.accessor === 'function' ? (params: any) => {
-        if (!params.data) return null;
-        return col.accessor(params.data, params.node.rowIndex);
-      } : undefined,
-      valueGetter: typeof col.accessor === 'string' ? (params: any) => params.data[col.accessor] : undefined,
-      editable: col.editable,
-      width: col.width,
-      sortable: true,
-      filter: true,
-      resizable: true,
-      flex: col.flex || (col.width ? undefined : 1),
-      pinned: col.pinned,
-      cellClass: cn(
-        'font-medium text-[13px]',
-        col.align === 'center' && 'text-center',
-        col.align === 'right' && 'text-right',
-        col.className
-      ),
-      headerClass: cn(
-        'font-black text-[10px] uppercase tracking-widest',
-        col.align === 'center' && 'text-center',
-        col.align === 'right' && 'text-right'
-      )
-    }));
+    return columns.map((col: any) => {
+      const isStringAccessor = typeof col.accessor === 'string';
+      const isFnAccessor = typeof col.accessor === 'function';
+      return {
+        headerName: col.header,
+        field: col.field || (isStringAccessor ? col.accessor : undefined),
+        cellRenderer: isFnAccessor ? (params: any) => {
+          if (!params.data) return null;
+          return col.accessor(params.data, params.node.rowIndex);
+        } : undefined,
+        // Only use valueGetter when there's NO string field — avoids AG Grid v33 conflict
+        valueGetter: undefined,
+        editable: col.editable,
+        width: col.width,
+        sortable: true,
+        filter: true,
+        resizable: true,
+        flex: col.flex || (col.width ? undefined : 1),
+        pinned: col.pinned,
+        cellClass: cn(
+          'font-medium text-[13px]',
+          col.align === 'center' && 'text-center',
+          col.align === 'right' && 'text-right',
+          col.className
+        ),
+        headerClass: cn(
+          'font-black text-[10px] uppercase tracking-widest',
+          col.align === 'center' && 'text-center',
+          col.align === 'right' && 'text-right'
+        )
+      };
+    });
   }, [columns]);
 
   const defaultColDef = useMemo(() => ({
@@ -389,7 +395,7 @@ export function DataTable<T>({
   return (
     <div className={cn("flex-1 flex flex-col overflow-hidden border border-[var(--border-subtle)] bg-[var(--surface)] shadow-inner", className)}>
       <div 
-        className={cn("w-full h-full min-h-[300px] ag-theme-quartz", !isInstitutional && "ag-theme-quartz-dark")} 
+        className={cn("w-full h-full min-h-[300px]", !isInstitutional && "dark")} 
         style={{ 
           '--ag-background-color': 'transparent',
           '--ag-header-background-color': isInstitutional ? 'rgba(248, 249, 250, 0.5)' : 'rgba(30, 41, 59, 0.5)',
@@ -407,6 +413,7 @@ export function DataTable<T>({
         } as React.CSSProperties}
       >
         <AgGridReact
+          theme={themeQuartz}
           rowData={loading ? [] : data}
           columnDefs={agColumns}
           defaultColDef={defaultColDef}
@@ -424,7 +431,7 @@ export function DataTable<T>({
           rowSelection={{ mode: 'singleRow' }}
           pagination={pagination}
           paginationPageSize={paginationPageSize}
-          enableRangeSelection={enableRangeSelection}
+          cellSelection={cellSelection}
         />
       </div>
     </div>

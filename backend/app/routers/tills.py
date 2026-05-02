@@ -14,6 +14,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import select, update
 from app.core.database import get_db
 from app.models.base import Till, Transaction
+from app.models.legacy_s9 import Tillshiftdtls as TillSession, Poscashtrn as PosCashTrn
 from app.schemas.tills import TillCreate, TillResponse, TillUpdateStatus, CashLiftCreate
 from app.core.security import get_current_user, UserContext
 from typing import List
@@ -60,11 +61,22 @@ async def open_till(
         raise HTTPException(status_code=404, detail="Till not found")
     
     till.status = "Open"
-    till.current_cashier_id = data.cashier_id or current_user.user_id
-    till.last_opening_at = datetime.now()
+    # Create a legacy shift entry
+    session = TillSession(
+        tilltrndt=datetime.now().date(),
+        nodeid=till.code,
+        shiftno="1", # Default shift
+        shiftstarttime=datetime.now(),
+        cashierid=data.cashier_id or current_user.user_id,
+        tillid=till.code,
+        shiftstatus="O", # Open
+        vacompcode=current_user.store_id,
+        vauid=current_user.user_id
+    )
+    db.add(session)
     
     await db.commit()
-    return {"status": "success", "message": f"Till {till.code} opened"}
+    return {"status": "success", "message": f"Till {till.code} opened in Shoper9"}
 
 @router.post("/{till_id}/close")
 async def close_till(
@@ -79,12 +91,20 @@ async def close_till(
         raise HTTPException(status_code=404, detail="Till not found")
     
     till.status = "Closed"
-    till.current_cashier_id = None
-    till.last_closing_at = datetime.now()
-    till.cash_collected = 0.0 # Reset for next session
+    
+    # Close legacy shift
+    stmt = select(TillSession).where(
+        TillSession.nodeid == till.code,
+        TillSession.shiftstatus == "O",
+        TillSession.vacompcode == current_user.store_id
+    )
+    session = (await db.execute(stmt)).scalar_one_or_none()
+    if session:
+        session.shiftstatus = "C" # Closed
+        session.shiftendtime = datetime.now()
     
     await db.commit()
-    return {"status": "success", "message": f"Till {till.code} closed"}
+    return {"status": "success", "message": f"Till {till.code} closed in Shoper9"}
 
 @router.post("/{till_id}/lift")
 async def cash_lift(
@@ -99,11 +119,19 @@ async def cash_lift(
     if not till:
         raise HTTPException(status_code=404, detail="Till not found")
     
-    if till.cash_collected < lift_data.amount:
-        raise HTTPException(status_code=400, detail="Insufficient cash in till for lift")
-    
-    till.cash_collected -= lift_data.amount
-    # Log the lift in a separate Audit table if needed
+    # Log the lift in Shoper9 poscashtrn
+    lift_trn = PosCashTrn(
+        entrytype=20, # Cash Lift type code in legacy often
+        ctrlno=random.randint(10000, 99999), # Should use CounterManager later
+        entsrlno=1,
+        docdt=datetime.now(),
+        doctime=datetime.now(),
+        loccurrpaidamt=lift_data.amount,
+        cashierid=current_user.user_id,
+        vacompcode=current_user.store_id,
+        vauid=current_user.user_id
+    )
+    db.add(lift_trn)
     
     await db.commit()
-    return {"status": "success", "amount_lifted": lift_data.amount, "remaining_cash": till.cash_collected}
+    return {"status": "success", "amount_lifted": lift_data.amount}

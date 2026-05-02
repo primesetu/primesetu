@@ -20,7 +20,11 @@ class PaymentModeDetail(BaseModel):
     ref_no: Optional[str] = None
 
 class BillItemCreate(BaseModel):
-    product_id: uuid.UUID
+    # Legacy Shoper9 stockno (primary key for lookup)
+    stock_no: Optional[str] = Field(None, description="Shoper9 stockno (preferred)")
+    descr: Optional[str] = Field(None, description="Item description (denormalized)")
+    # Retained for backward compatibility
+    product_id: Optional[uuid.UUID] = Field(None, description="UUID (legacy, deprecated)")
     qty: float = Field(..., description="Quantity (decimal supported)")
     unit_price: int = Field(..., description="Unit price in paise (integer)")
     discount_per: int = Field(0, description="Discount percentage as integer")
@@ -55,7 +59,8 @@ class SlipResponse(BaseModel):
 
 class TransactionItemRead(BaseModel):
     id: uuid.UUID
-    product_id: uuid.UUID
+    product_id: Optional[uuid.UUID] = None
+    stock_no: Optional[str] = None
     qty: float
     mrp: int
     discount_per: int

@@ -18,7 +18,7 @@ from datetime import date, datetime
 
 from app.core.database import get_db
 from app.core.security import require_auth, CurrentUser
-from app.models import Partner, CustomerLedger, LoyaltyLedger
+from app.models.legacy_s9 import Customers, Mailinglist
 from app.schemas.customer import (
     CustomerCreate, CustomerResponse, CustomerLookupResponse,
     LedgerEntryResponse, LoyaltyRedeemRequest
@@ -108,38 +108,45 @@ async def create_customer(
     await db.refresh(new_customer)
     return new_customer
 
-@router.get("/lookup", response_model=CustomerLookupResponse)
+@router.get("/lookup")
 async def lookup_customer(
     phone: str = Query(..., min_length=10),
     current_user: CurrentUser = Depends(require_auth),
     db: AsyncSession = Depends(get_db)
 ):
     """
-    POS Hot Path: Quick lookup by phone.
+    POS Hot Path: Quick lookup by phone from Shoper9 Customers + Mailinglist.
     Returns loyalty and outstanding balance.
     """
-    result = await db.execute(
-        text("""
-            SELECT
-                p.id, p.code, p.name, p.phone,
-                p.loyalty_points, p.price_group_id, p.credit_limit_paise,
-                COALESCE(SUM(cl.amount_paise), 0) AS outstanding_paise
-            FROM public.partners p
-            LEFT JOIN public.customer_ledger cl
-                ON cl.partner_id = p.id AND cl.store_id = :store_id
-            WHERE p.store_id = :store_id
-              AND p.phone = :phone
-              AND p.partner_type IN ('customer','both')
-              AND p.is_active = true
-            GROUP BY p.id
-            LIMIT 1
-        """),
-        {"store_id": current_user.store_id, "phone": phone}
+    stmt = (
+        select(
+            Customers.code,
+            Customers.nm,
+            Mailinglist.mobilephone,
+            Customers.loyaltypgmcd,
+            Customers.creditlimit
+        )
+        .join(Mailinglist, Customers.maillistsrlno == Mailinglist.recno)
+        .where(Mailinglist.mobilephone == phone)
     )
-    customer = result.mappings().first()
+    
+    result = await db.execute(stmt)
+    customer = result.first()
+    
     if not customer:
         return {"found": False}
-    return {"found": True, **dict(customer)}
+        
+    return {
+        "found": True,
+        "id": customer.code,
+        "code": customer.code,
+        "name": customer.nm,
+        "phone": customer.mobilephone,
+        "loyalty_points": 0, # Need to fetch from loyalty transaction table
+        "price_group_id": None,
+        "outstanding_paise": 0, # Need to fetch from Customer Outstanding table
+        "credit_limit_paise": int((customer.creditlimit or 0) * 100)
+    }
 
 @router.get("/{customer_id}/ledger", response_model=List[LedgerEntryResponse])
 async def get_customer_ledger(
@@ -217,55 +224,73 @@ async def redeem_loyalty(
         "new_balance": customer.loyalty_points
     }
 
-@router.get("/search", response_model=List[CustomerResponse])
+@router.get("/search")
 async def search_customers(
     q: str = Query(..., min_length=2),
     current_user: CurrentUser = Depends(require_auth),
     db: AsyncSession = Depends(get_db)
 ):
     """
-    Institutional search for customers by name, phone, or code.
+    Institutional search for customers from Shoper9 by name, phone, or code.
     Returns a list of matching customer profiles.
     """
     search_term = f"%{q}%"
-    stmt = select(Partner).where(
-        Partner.store_id == current_user.store_id,
-        Partner.partner_type.in_(["customer", "both"]),
-        and_(
-            Partner.is_active == True,
-            (Partner.name.ilike(search_term)) | 
-            (Partner.phone.ilike(search_term)) | 
-            (Partner.code.ilike(search_term))
+    stmt = (
+        select(Customers, Mailinglist)
+        .join(Mailinglist, Customers.maillistsrlno == Mailinglist.recno)
+        .where(
+            or_(
+                Customers.nm.ilike(search_term),
+                Mailinglist.mobilephone.ilike(search_term),
+                Customers.code.ilike(search_term)
+            )
         )
-    ).limit(50)
+        .limit(50)
+    )
     
     result = await db.execute(stmt)
-    partners = result.scalars().all()
+    rows = result.all()
     
-    # Enrich with outstanding balance
-    enriched = []
-    for p in partners:
-        # For demo/MVP, we'll just map. In production, use a join/agg query.
-        enriched.append(p)
+    items = []
+    for customer, mail in rows:
+        items.append({
+            "id": customer.code,
+            "code": customer.code,
+            "name": customer.nm,
+            "phone": mail.mobilephone,
+            "loyalty_points": 0,
+            "is_active": True,
+            "created_at": datetime.now(),
+            "outstanding_paise": 0
+        })
         
-    return enriched
+    return items
 
-@router.get("/{code}", response_model=CustomerResponse)
+@router.get("/{code}")
 async def get_customer_by_code(
     code: str,
     current_user: CurrentUser = Depends(require_auth),
     db: AsyncSession = Depends(get_db)
 ):
-    """Fetch a single customer by their institutional code."""
-    stmt = select(Partner).where(
-        Partner.store_id == current_user.store_id,
-        Partner.code == code,
-        Partner.partner_type.in_(["customer", "both"])
+    """Fetch a single customer from Shoper9 by their institutional code."""
+    stmt = (
+        select(Customers, Mailinglist)
+        .join(Mailinglist, Customers.maillistsrlno == Mailinglist.recno)
+        .where(Customers.code == code)
     )
     result = await db.execute(stmt)
-    customer = result.scalar_one_or_none()
+    row = result.first()
     
-    if not customer:
+    if not row:
         raise HTTPException(status_code=404, detail=f"Customer '{code}' not found")
-        
-    return customer
+    
+    customer, mail = row
+    return {
+        "id": customer.code,
+        "code": customer.code,
+        "name": customer.nm,
+        "phone": mail.mobilephone,
+        "loyalty_points": 0,
+        "is_active": True,
+        "created_at": datetime.now()
+    }

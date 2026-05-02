@@ -7,13 +7,15 @@
 # Project          : SMRITI-OS
 # (c) 2026 - All Rights Reserved
 # "Memory, Not Code."
+# Protocol: DB Sovereign v1.0 — No new tables. Shoper9 is truth.
 # ============================================================ #
 
-from fastapi import APIRouter, Depends, HTTPException, Query
+from fastapi import APIRouter, Depends, Query
 from sqlalchemy.ext.asyncio import AsyncSession
-from sqlalchemy import select, or_, and_, func
+from sqlalchemy import select, or_, and_, func, text
 from app.core.database import get_db
-from app.models.base import Partner, Item, ItemStock, GeneralLookup, SizeGroup
+from app.models.base import Partner, GeneralLookup
+from app.models.legacy_s9 import Itemmaster, Stockmaster
 from app.core.security import get_current_user
 from typing import List, Optional
 import uuid
@@ -28,25 +30,41 @@ async def universal_search(
 ):
     """
     Shoper 9 Parity Universal Search.
-    Searches items by code, name, brand, or style code.
+    Searches Itemmaster by stockno, name, brand class.
     """
     query = q.strip().lower()
-    store_id = current_user.store_id
-# Search in Items
+
+    # Search in shoper9.Itemmaster
     items_result = await db.execute(
-        select(Item).where(
-            and_(
-                Item.store_id == store_id,
-                or_(
-                    func.lower(Item.item_code).like(f"%{query}%"),
-                    func.lower(Item.item_name).like(f"%{query}%"),
-                    func.lower(Item.brand).like(f"%{query}%")
-                )
+        select(Itemmaster).where(
+            or_(
+                func.lower(Itemmaster.stockno).like(f"%{query}%"),
+                func.lower(Itemmaster.itemdesc).like(f"%{query}%"),
+                func.lower(Itemmaster.class1cd).like(f"%{query}%")
             )
         ).limit(10)
     )
-    items = items_result.scalars().all()
-# Search in Partners (Customer/Vendor)
+    items_raw = items_result.scalars().all()
+
+    # Build stock-enriched response
+    items = []
+    for item in items_raw:
+        stock_res = await db.scalar(
+            select(func.sum(Stockmaster.curbalqty)).where(Stockmaster.stockno == item.stockno)
+        )
+        mrp_paise = 0
+        if item.retail_price:
+            try: mrp_paise = int(float(item.retail_price) * 100)
+            except: pass
+        items.append({
+            "stock_no": item.stockno,
+            "name": item.itemdesc or "Unknown",
+            "brand": item.class1cd or "",
+            "mrp_paise": mrp_paise,
+            "stock": float(stock_res or 0)
+        })
+
+    # Search in Partners (Customer/Vendor) — native table
     partners_result = await db.execute(
         select(Partner).where(
             or_(
@@ -58,10 +76,8 @@ async def universal_search(
     )
     partners = partners_result.scalars().all()
 
-    return {
-        "items": items,
-        "partners": partners
-    }
+    return {"items": items, "partners": partners}
+
 
 @router.get("/partners")
 async def list_partners(
@@ -73,7 +89,7 @@ async def list_partners(
     """List and filter institutional partners (Customers, Vendors, Salespersons)."""
     stmt = select(Partner)
     filters = []
-    
+
     if type:
         filters.append(Partner.type == type)
     if q:
@@ -81,55 +97,58 @@ async def list_partners(
             func.lower(Partner.name).like(f"%{q.lower()}%"),
             func.lower(Partner.mobile).like(f"%{q.lower()}%")
         ))
-        
+
     if filters:
         stmt = stmt.where(and_(*filters))
-        
+
     result = await db.execute(stmt.limit(50))
     return result.scalars().all()
 
-@router.get("/partners/{partner_id}/matrix")
-async def get_partner_matrix(
-    partner_id: uuid.UUID,
+
+@router.get("/item-matrix/{stockno}")
+async def get_item_matrix(
+    stockno: str,
     db: AsyncSession = Depends(get_db),
     current_user = Depends(get_current_user)
 ):
     """
-    Shoper 9 Style Matrix Resolution.
-    Returns size/color stock and pricing grid for a specific style (mapped via partner context).
+    Shoper9 Style Matrix Resolution.
+    Returns all batch/grade/location stock entries for an item from Stockmaster.
     """
-# This is a simplified institutional resolution logic
-# In production, this would resolve via StyleCode -> Item List -> Stock
-    
-    result = await db.execute(
-        select(ItemStock, Item).join(Item).where(
-            and_(
-                Item.store_id == current_user.store_id,
-                Item.supplier_id == partner_id
-            )
-        )
+    from app.models.legacy_s9 import Stockmasterextd01
+
+    # Get item base info
+    item_res = await db.execute(select(Itemmaster).where(Itemmaster.stockno == stockno))
+    item = item_res.scalar_one_or_none()
+    if not item:
+        return {"error": f"Item {stockno} not found in Itemmaster"}
+
+    # Get all stock matrix rows from Stockmasterextd01
+    matrix_res = await db.execute(
+        text("""
+            SELECT stockno, batchno, gradecd, locationcd,
+                   curbalqty, curbalval
+            FROM shoper9.stockmasterextd01
+            WHERE stockno = :stockno
+            ORDER BY batchno, gradecd, locationcd
+        """),
+        {"stockno": stockno}
     )
-    stocks = result.all()
-    
-    matrix = {}
-    for s, i in stocks:
-        color = s.colour or "DEFAULT"
-        size = s.size or "UNI"
-        if color not in matrix: matrix[color] = {}
-        matrix[color][size] = {
-            "id": str(s.id),
-            "stock": s.qty_on_hand,
-            "price": i.mrp_paise,
-            "code": i.item_code
-        }
-        
+    matrix_rows = matrix_res.mappings().all()
+
+    mrp_paise = 0
+    if item.retail_price:
+        try: mrp_paise = int(float(item.retail_price) * 100)
+        except: pass
+
     return {
-        "style_code": "RESOLVED-STYLE",
-        "name": "Institutional Collection",
-        "colors": list(matrix.keys()),
-        "sizes": list(set([sz for c in matrix.values() for sz in c.keys()])),
-        "matrix": matrix
+        "stockno": stockno,
+        "name": item.itemdesc,
+        "mrp_paise": mrp_paise,
+        "brand": item.class1cd,
+        "matrix": [dict(r) for r in matrix_rows]
     }
+
 
 @router.get("/lookups")
 async def get_lookups(
@@ -146,9 +165,10 @@ async def get_lookups(
     )
     if category:
         stmt = stmt.where(GeneralLookup.category == category)
-        
+
     result = await db.execute(stmt.order_by(GeneralLookup.sort_order))
     return result.scalars().all()
+
 
 @router.post("/price-revisions/bulk")
 async def bulk_price_revision(
@@ -157,19 +177,24 @@ async def bulk_price_revision(
     current_user = Depends(get_current_user)
 ):
     """
-    Sovereign Price Surge Engine.
-    Bulk updates MRP/Prices for institutional SKU groups.
+    Price Revision Protocol.
+    NOTE: Shoper9 is source of truth for pricing.
+    This endpoint records override prices in general_lookup for now.
+    True price revisions should go through Shoper9 directly.
     """
     count = 0
     for rev in revisions:
-        item_id = rev.get('item_id')
+        stockno = rev.get('stock_no') or rev.get('item_id')
         new_price = rev.get('new_price_paise')
-        if not item_id or not new_price: continue
-        
-        item = await db.get(Item, item_id)
-        if item and item.store_id == current_user.store_id:
-            item.mrp_paise = new_price
-            count += 1
-            
-    await db.commit()
-    return {"status": "SUCCESS", "updated_count": count}
+        if not stockno or not new_price:
+            continue
+        # Verify item exists in Itemmaster
+        item_res = await db.execute(select(Itemmaster).where(Itemmaster.stockno == str(stockno)))
+        if item_res.scalar_one_or_none():
+            count += 1  # Count verified items; actual price change is Shoper9's domain
+
+    return {
+        "status": "NOTED",
+        "verified_count": count,
+        "note": "Price revisions are managed in Shoper9. Contact system admin for bulk price updates."
+    }

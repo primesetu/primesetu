@@ -56,6 +56,11 @@ const STATIC_FALLBACK_MENU: MenuItem[] = [
   { id: 'tills',       label: 'Till Management',    route: 'tills',       module: 'tills',       required_permission: 'finance.till',      category: 'POS',       children: [], shortcut: undefined },
   { id: 'dayend',      label: 'Day End Closure',    route: 'dayend',      module: 'dayend',      required_permission: 'billing.dayend',    category: 'POS',       children: [], shortcut: 'F12' },
   
+  { id: 'sales_journal',    label: 'Sales Journal',      route: 'sales_journal',    module: 'sales_journal',    required_permission: 'billing.view',      category: 'TRANSACTIONS', children: [], shortcut: undefined },
+  { id: 'purchase_journal', label: 'Purchase Journal',   route: 'purchase_journal', module: 'purchase_journal', required_permission: 'inventory.view',    category: 'TRANSACTIONS', children: [], shortcut: undefined },
+  { id: 'stock_ledger',     label: 'Stock Ledger',       route: 'stock_ledger',     module: 'stock_ledger',     required_permission: 'inventory.view',    category: 'TRANSACTIONS', children: [], shortcut: undefined },
+  { id: 'purchase_entry',   label: 'Purchase Entry',     route: 'purchase_entry',   module: 'purchase_entry',   required_permission: 'inventory.view',    category: 'TRANSACTIONS', children: [], shortcut: undefined },
+
   { id: 'item_master', label: 'Item Master',        route: 'item_master', module: 'item_master', required_permission: 'catalogue.view',   category: 'CATALOGUE', children: [], shortcut: undefined },
   { id: 'customers',   label: 'Customer Master',    route: 'customers',   module: 'customers',   required_permission: 'crm.view',          category: 'CATALOGUE', children: [], shortcut: undefined },
   { id: 'vendors',     label: 'Vendor Master',      route: 'vendors',     module: 'vendors',     required_permission: 'catalogue.view',   category: 'CATALOGUE', children: [], shortcut: undefined },
@@ -79,6 +84,7 @@ const STATIC_FALLBACK_MENU: MenuItem[] = [
   { id: 'ho',          label: 'HO Sync',            route: 'ho',          module: 'ho',          required_permission: 'ho.view',           category: 'HO',        children: [], shortcut: undefined },
   { id: 'settings',    label: 'System Config',      route: 'settings',    module: 'settings',    required_permission: 'settings.view',     category: 'SYSTEM',    children: [], shortcut: 'F10' },
   { id: 'security',    label: 'Security',           route: 'security',    module: 'security',    required_permission: 'settings.security', category: 'SYSTEM',    children: [], shortcut: undefined },
+  { id: 'table_viewer',label: 'DB Explorer',        route: 'table_viewer',module: 'table_viewer',required_permission: 'settings.view',     category: 'SYSTEM',    children: [], shortcut: undefined },
 ];
 
 export const fetchMenu = async (): Promise<MenuItem[]> => {

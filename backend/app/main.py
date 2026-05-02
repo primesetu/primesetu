@@ -16,8 +16,9 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import select, func
 from app.core.database import engine, Base, get_db
 from app.models import (
-    Till, Item, Transaction, Store, Alert, Scheme, ItemStock
+    Till, Transaction, Store, Alert
 )
+from app.models.legacy_s9 import Itemmaster, Stockmaster
 from app.schemas.common import DashboardStats
 from app.core.security import CurrentUser, require_auth
 from typing import List
@@ -46,13 +47,13 @@ app.add_middleware(
 )
 
 from app.routers import (
-    onboarding, item_master, customer, barcode, 
-    price_group,    purchase, inventory, billing, 
-    ho, flexible_reports, users, menu, extensions, finance, schemes, security, reporting,
-    store, inventory_audit, stock_ledger, department, configuration, warehouse, intelligence,
-    legacy, masks
+    onboarding, barcode, 
+    purchase, inventory, billing, 
+    users, menu, extensions, finance, schemes, security, reporting,
+    store, inventory_audit, stock_ledger, department, 
+    legacy, masks, item_master, customer, ho
 )
-from app.routers.gstr1 import router as gstr1_router
+# from app.routers.gstr1 import router as gstr1_router
 
 # Core & Management
 app.include_router(onboarding.router)
@@ -63,10 +64,10 @@ app.include_router(legacy.router)
 
 # Masters
 app.include_router(item_master.router, prefix="/api/v1")
-app.include_router(department.router, prefix="/api/v1")
-app.include_router(configuration.router, prefix="/api/v1")
 app.include_router(customer.router, prefix="/api/v1")
-app.include_router(price_group.router, prefix="/api/v1")
+app.include_router(department.router, prefix="/api/v1")
+# app.include_router(configuration.router, prefix="/api/v1")
+# app.include_router(price_group.router, prefix="/api/v1")
 app.include_router(barcode.router, prefix="/api/v1")
 app.include_router(masks.router, prefix="/api/v1")
 app.include_router(menu.router, prefix="/api/v1/menu")
@@ -81,13 +82,13 @@ app.include_router(finance.router)
 app.include_router(schemes.router)
 app.include_router(security.router)
 app.include_router(reporting.router)
-app.include_router(warehouse.router)
-app.include_router(intelligence.router)
+# app.include_router(warehouse.router)
+# app.include_router(intelligence.router)
 
 # Reports & Sync
 app.include_router(ho.router, prefix="/api/v1/ho")
-app.include_router(flexible_reports.router)
-app.include_router(gstr1_router, prefix="/api/v1/accounts") # Align with frontend /accounts/gstr1
+# app.include_router(flexible_reports.router)
+# app.include_router(gstr1_router, prefix="/api/v1/accounts") 
 
 @app.on_event("startup")
 async def startup():
@@ -126,20 +127,17 @@ async def get_dashboard_stats(
     store_id = current_user.store_id
 
     sku_count = await db.scalar(
-        select(func.count(Item.id))
-        .where(Item.store_id == store_id, Item.is_active == True)
+        select(func.count(Itemmaster.stockno))
     )
 
     low_stock = await db.scalar(
-        select(func.count(ItemStock.id))
-        .where(ItemStock.store_id == store_id,
-               ItemStock.qty_on_hand < ItemStock.reorder_level)
+        select(func.count(Stockmaster.stockno))
+        .where(Stockmaster.curbalqty < 5) # Default low stock threshold
     )
 
     today_revenue = await db.scalar(
         select(func.coalesce(func.sum(Transaction.net_payable), 0))
-        .where(Transaction.store_id == store_id,
-               func.date(Transaction.created_at) == date.today(),
+        .where(func.date(Transaction.created_at) == date.today(),
                Transaction.status == "Finalized")
     )
 

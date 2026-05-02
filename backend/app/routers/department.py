@@ -9,15 +9,16 @@
 # "Memory, Not Code."
 # ============================================================ #
 
-from fastapi import APIRouter, Depends, HTTPException, status
+from fastapi import APIRouter, Depends, HTTPException, status, Query
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import select
 from typing import List, Optional
 from uuid import UUID
 
 from app.core.database import get_db
+from app.models.legacy_s9 import Genlookup
+from app.models.base import Department
 from app.core.security import require_auth, CurrentUser
-from app.models import Department
 from pydantic import BaseModel
 
 router = APIRouter(prefix="/departments", tags=["departments"])
@@ -57,22 +58,32 @@ async def create_department(
     await db.refresh(new_dept)
     return new_dept
 
-@router.get("/", response_model=List[DepartmentResponse])
+@router.get("/")
 async def list_departments(
-    level: Optional[int] = None,
-    parent_id: Optional[UUID] = None,
+    level: Optional[int] = Query(None, description="Shoper9 recid (65=Class, 66=Subclass)"),
+    parent_id: Optional[str] = None,
     current_user: CurrentUser = Depends(require_auth),
     db: AsyncSession = Depends(get_db)
 ):
     """
-    List departments with optional level/parent filtering.
-    Used for Class1 -> Class2 combo selection.
+    List departments from Shoper9 GeneralLookup.
+    Default recid is 65 (Class1/Department).
     """
-    stmt = select(Department).where(Department.store_id == current_user.store_id)
-    if level:
-        stmt = stmt.where(Department.level == level)
-    if parent_id:
-        stmt = stmt.where(Department.parent_id == parent_id)
-        
-    result = await db.execute(stmt.order_by(Department.name))
-    return result.scalars().all()
+    recid = level or 65
+    stmt = select(GeneralLookup).where(GeneralLookup.recid == recid)
+    
+    # parent_id filtering for subclass would require complex logic or class12combo join
+    # For now, just return all for the level.
+    
+    result = await db.execute(stmt.order_by(GeneralLookup.descr))
+    rows = result.scalars().all()
+    
+    return [
+        {
+            "id": row.code,
+            "code": row.code,
+            "name": row.descr,
+            "level": 1 if recid == 65 else 2,
+            "shoper_recid": row.recid
+        } for row in rows
+    ]

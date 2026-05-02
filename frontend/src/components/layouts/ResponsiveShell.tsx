@@ -16,7 +16,8 @@ import {
   User,
   Monitor,
   Sun,
-  Moon
+  Moon,
+  Database
 } from 'lucide-react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { cn } from '@/lib/utils'
@@ -47,6 +48,7 @@ const NAV_ITEMS: NavItem[] = [
   { id: 'sales', label: 'Terminal', icon: ShoppingCart, shortcut: 'F2', color: 'text-emerald-500' },
   { id: 'inventory', label: 'Inventory', icon: Package, shortcut: 'F9', color: 'text-amber-500' },
   { id: 'reports', label: 'Analytics', icon: History, shortcut: 'F12', color: 'text-purple-500' },
+  { id: 'table_viewer', label: 'DB Explorer', icon: Database, shortcut: 'F4', color: 'text-rose-500' },
   { id: 'settings', label: 'System', icon: Settings, shortcut: 'F10', color: 'text-slate-500' },
 ]
 
@@ -77,8 +79,14 @@ export default function ResponsiveShell({
     setTheme(theme === 'LIGHT' ? 'DARK' : 'LIGHT')
   }
 
-  // ── EXCLUSIVE MODES (Billing Fullscreen) ──
-  const isExclusive = activeTab === 'sales'
+  // ── EXCLUSIVE MODES (Transactional Fullscreen) ──
+  const isExclusive = [
+    'sales', 
+    'purchase_entry', 
+    'purchase_journal', 
+    'sales_journal', 
+    'stock_ledger'
+  ].includes(activeTab);
 
   // ── DESKTOP RENDERING (The Original "Feel") ──
   if (!isMobile) {

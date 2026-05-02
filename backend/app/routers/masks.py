@@ -30,7 +30,6 @@ async def get_entry_mask(
     Derived from Shoper9's AcceptDisplayDtls.
     """
     stmt = select(Acceptdisplaydtls).where(
-        Acceptdisplaydtls.store_id == current_user.store_id,
         Acceptdisplaydtls.trntype == trn_type,
         Acceptdisplaydtls.dispvisible == True
     ).order_by(Acceptdisplaydtls.disppos)

@@ -18,7 +18,7 @@ from datetime import date, datetime
 
 from app.core.database import get_db
 from app.core.security import require_auth, CurrentUser
-from app.models import Item, ItemPriceLevel, ItemStock, SizeGroup
+from app.models.legacy_s9 import Itemmaster, Stockmaster
 from app.schemas.item_master import (
     ItemCreate, ItemResponse, PriceLevelUpdate, 
     StockMatrixEntry, StockMatrixResponse,
@@ -96,10 +96,10 @@ async def create_item(
     await db.refresh(new_item)
     return new_item
 
-@router.get("/", response_model=List[ItemResponse])
+@router.get("/")
 async def list_items(
     search: Optional[str] = Query(None, description="Search by code or name"),
-    department_id: Optional[UUID] = None,
+    department_id: Optional[str] = None,
     is_active: bool = True,
     limit: int = 50,
     offset: int = 0,
@@ -107,76 +107,83 @@ async def list_items(
     db: AsyncSession = Depends(get_db)
 ):
     """
-    List items with pagination and search.
-    Includes total stock across all variants.
+    List items from Shoper9 Itemmaster with pagination and search.
+    Includes total stock across all locations.
     """
-    # Subquery for total stock
+    # Subquery for total stock from Stockmaster
     stock_subq = (
         select(
-            ItemStock.item_id,
-            func.sum(ItemStock.qty_on_hand).label("total_stock")
+            Stockmaster.stockno,
+            func.sum(Stockmaster.curbalqty).label("total_stock")
         )
-        .where(ItemStock.store_id == current_user.store_id)
-        .group_by(ItemStock.item_id)
+        .group_by(Stockmaster.stockno)
         .subquery()
     )
 
     query = (
-        select(Item, func.coalesce(stock_subq.c.total_stock, 0))
-        .outerjoin(stock_subq, Item.id == stock_subq.c.item_id)
-        .where(Item.store_id == current_user.store_id)
-        .where(Item.is_active == is_active)
+        select(Itemmaster, func.coalesce(stock_subq.c.total_stock, 0))
+        .outerjoin(stock_subq, Itemmaster.stockno == stock_subq.c.stockno)
     )
 
     if search:
         query = query.where(
             or_(
-                Item.item_code.ilike(f"%{search}%"),
-                Item.item_name.ilike(f"%{search}%")
+                Itemmaster.stockno.ilike(f"%{search}%"),
+                Itemmaster.itemdesc.ilike(f"%{search}%"),
+                Itemmaster.sfield1.ilike(f"%{search}%")
             )
         )
     
     if department_id:
-        query = query.where(Item.department_id == department_id)
+        query = query.where(Itemmaster.class1cd == department_id)
 
-    query = query.order_by(Item.item_name).limit(limit).offset(offset)
+    query = query.order_by(Itemmaster.itemdesc).limit(limit).offset(offset)
     
     result = await db.execute(query)
     items = []
     for row in result:
         item, total_stock = row
-        item.total_stock = total_stock
-        items.append(item)
+        items.append({
+            "id": item.stockno,
+            "item_code": item.stockno,
+            "item_name": item.itemdesc,
+            "department_id": item.class1cd,
+            "brand": item.class2cd,
+            "mrp_paise": int((item.retail_price or 0) * 100),
+            "gst_rate": 0, # Shoper9 handles this in tax tables
+            "hsn_code": "N/A", # Need to fetch from HSN table
+            "is_active": True,
+            "total_stock": int(total_stock or 0),
+            "created_at": datetime.now()
+        })
     
     return items
 
-@router.get("/{item_id}/stock-matrix", response_model=StockMatrixResponse)
+@router.get("/{stockno}/stock-matrix")
 async def get_stock_matrix(
-    item_id: UUID,
+    stockno: str,
     current_user: CurrentUser = Depends(require_auth),
     db: AsyncSession = Depends(get_db)
 ):
     """
-    Returns the size x colour stock grid for a specific item.
+    Returns the location-wise stock for a specific item from Shoper9.
     """
     result = await db.execute(
-        select(ItemStock)
-        .where(
-            ItemStock.item_id == item_id,
-            ItemStock.store_id == current_user.store_id
-        )
+        select(Stockmaster)
+        .where(Stockmaster.stockno == stockno)
     )
     stocks = result.scalars().all()
     
     matrix = [
-        StockMatrixEntry(
-            size=s.size,
-            colour=s.colour,
-            qty_on_hand=s.qty_on_hand
-        ) for s in stocks
+        {
+            "size": "ALL", # Shoper9 often flattens size or uses separate stockno for variants
+            "colour": "ALL",
+            "qty_on_hand": int(s.curbalqty or 0),
+            "location": s.locnid
+        } for s in stocks
     ]
     
-    return StockMatrixResponse(item_id=item_id, matrix=matrix)
+    return {"item_id": stockno, "matrix": matrix}
 
 @router.patch("/{item_id}/price", status_code=status.HTTP_200_OK)
 async def update_price_level(

@@ -17,28 +17,11 @@ from typing import List, Optional
 from pydantic import BaseModel, ConfigDict
 from app.core.database import get_db
 from app.core.security import get_current_user, UserContext
-from app.models.base import Base
-from sqlalchemy import String, Integer, Boolean, ForeignKey
+from app.models.base import MenuItem
+from app.models.security import VaGroup, VaGroupPermission, VaUserGroup
+from sqlalchemy import String, Integer, Boolean, ForeignKey, join
 
-# ------------------------------------------------------------
-# LOCAL MODEL (Temporary - per "Do NOT touch any other file" rule)
-# ------------------------------------------------------------
-class MenuItem(Base):
-    __tablename__ = "menu_items"
-    __table_args__ = {'extend_existing': True}
-
-    id: Mapped[str] = mapped_column(String, primary_key=True)
-    label: Mapped[str] = mapped_column(String)
-    route: Mapped[str] = mapped_column(String)
-    icon: Mapped[Optional[str]] = mapped_column(String, nullable=True)
-    module: Mapped[str] = mapped_column(String)
-    required_permission: Mapped[str] = mapped_column(String)
-    category: Mapped[Optional[str]] = mapped_column(String, nullable=True)
-    parent_id: Mapped[Optional[str]] = mapped_column(String, ForeignKey("menu_items.id"), nullable=True)
-    tenant_id: Mapped[str] = mapped_column(String)
-    sort_order: Mapped[int] = mapped_column(Integer, default=0)
-    is_active: Mapped[bool] = mapped_column(Boolean, default=True)
-    shortcut: Mapped[Optional[str]] = mapped_column(String, nullable=True)
+# Model is now in app.models.base
 
 # ------------------------------------------------------------
 # SCHEMAS (Pydantic v2)
@@ -110,7 +93,39 @@ async def get_menu(
     if not current_user:
         return [MenuItemResponse(**item) for item in STATIC_MENU]
 
+    # ── Authenticated: return store-filtered & permission-filtered menu ──
     try:
+        # 1. Resolve user's permissions from database
+        # We join VaUserGroup -> VaGroup -> VaGroupPermission
+        perm_query = select(VaGroupPermission.permission).select_from(
+            join(VaUserGroup, VaGroup, VaUserGroup.group_id == VaGroup.id)
+            .join(VaGroupPermission, VaGroup.id == VaGroupPermission.group_id)
+        ).where(
+            and_(
+                VaUserGroup.user_id == current_user.user_id,
+                VaGroupPermission.is_allowed == True
+            )
+        )
+        
+        perm_result = await db.execute(perm_query)
+        user_perms = set(perm_result.scalars().all())
+
+        # If user has no explicit group permissions, use role as fallback if it matches a group name
+        if not user_perms:
+            # Fallback: check permissions for a group named after the role
+            fallback_perm_query = select(VaGroupPermission.permission).select_from(
+                join(VaGroup, VaGroupPermission, VaGroup.id == VaGroupPermission.group_id)
+            ).where(
+                and_(
+                    VaGroup.name == current_user.role,
+                    VaGroup.store_id == current_user.store_id,
+                    VaGroupPermission.is_allowed == True
+                )
+            )
+            fallback_res = await db.execute(fallback_perm_query)
+            user_perms = set(fallback_res.scalars().all())
+
+        # 2. Query Menu Items
         query = select(MenuItem).where(
             and_(
                 MenuItem.is_active == True,
@@ -124,12 +139,20 @@ async def get_menu(
         result = await db.execute(query)
         db_items = result.scalars().all()
 
-        # If DB has no menu items yet, fall back to static menu
-        if not db_items:
-            return [MenuItemResponse(**item) for item in STATIC_MENU]
+        # 3. Filter by permission
+        # If DB has no menu items yet, use STATIC_MENU (filtered by permission)
+        source_items = db_items if db_items else [MenuItem(**item, tenant_id='SYSTEM') for item in STATIC_MENU]
+        
+        # Always allow 'dashboard.view' as a base
+        user_perms.add('dashboard.view')
 
-        item_map = {
-            item.id: MenuItemResponse(
+        item_map = {}
+        for item in source_items:
+            # Check permission
+            if item.required_permission not in user_perms and current_user.role != 'admin':
+                continue
+
+            item_map[item.id] = MenuItemResponse(
                 id=item.id,
                 label=item.label,
                 route=item.route,
@@ -140,11 +163,12 @@ async def get_menu(
                 shortcut=item.shortcut,
                 children=[]
             )
-            for item in db_items
-        }
 
         root_items = []
-        for item in db_items:
+        for item in source_items:
+            if item.id not in item_map:
+                continue
+                
             menu_node = item_map[item.id]
             if item.parent_id and item.parent_id in item_map:
                 item_map[item.parent_id].children.append(menu_node)

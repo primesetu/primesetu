@@ -15,11 +15,15 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import select, func, desc, and_
 from sqlalchemy.orm import selectinload, joinedload
 from app.core.database import get_db
-from app.models.base import Transaction, TransactionItem, Item, ItemStock, Customer, Till, Partner, LoyaltyLedger
+from app.models.base import Transaction, TransactionItem, Customer, Till, Partner, LoyaltyLedger
 from app.schemas.billing import TransactionRead, TransactionCreate
 from typing import List, Optional, Dict, Any
 from decimal import Decimal, ROUND_HALF_UP
 from app.core.security import require_auth, CurrentUser
+from app.core.counters import CounterManager
+from app.services.config import ConfigService
+from app.services.tax_service import TaxService
+from app.models.legacy_s9 import Itemmaster, Stockmaster
 
 router = APIRouter(prefix="/api/v1/billing", tags=["billing"])
 
@@ -40,7 +44,7 @@ async def get_transaction_history(
             Transaction.store_id == current_user.store_id,
             Transaction.status == status
         ))
-        .options(selectinload(Transaction.items).joinedload(TransactionItem.item))
+        .options(selectinload(Transaction.items))
         .order_by(desc(Transaction.created_at))
         .limit(limit)
     )
@@ -83,7 +87,7 @@ async def suspend_transaction(
         # Create Line Item (no inventory update for suspended bills)
         new_item = TransactionItem(
             transaction_id=new_txn.id,
-            product_id=item_in.product_id,
+            stock_no=item_in.stock_no,
             qty=item_in.qty,
             mrp=item_in.unit_price,
             discount_per=item_in.discount_per,
@@ -100,8 +104,8 @@ async def suspend_transaction(
     await db.commit()
     await db.refresh(new_txn)
     
-    # Reload with items and product details for the response
-    stmt = select(Transaction).where(Transaction.id == new_txn.id).options(selectinload(Transaction.items).joinedload(TransactionItem.item))
+    # Reload with items for the response
+    stmt = select(Transaction).where(Transaction.id == new_txn.id).options(selectinload(Transaction.items))
     res = await db.execute(stmt)
     return res.scalar_one()
 
@@ -115,7 +119,7 @@ async def recall_suspended(
     stmt = (
         select(Transaction)
         .where(and_(Transaction.id == txn_id, Transaction.store_id == current_user.store_id))
-        .options(selectinload(Transaction.items).joinedload(TransactionItem.item))
+        .options(selectinload(Transaction.items))
     )
     result = await db.execute(stmt)
     txn = result.scalar_one_or_none()
@@ -148,19 +152,29 @@ async def finalize_transaction(
 ):
     """
     Finalize a sales transaction.
-    - Validates stock availability.
-    - Deducts inventory.
-    - Generates bill number.
+    - Looks up items from Shoper9 Itemmaster (source of truth).
+    - Stores denormalized item data for historical record.
     - Sovereign Store Isolation via current_user.store_id.
     """
     store_id = current_user.store_id
     
-    # 1. Resolve Bill Number (Use client-side if provided, else generate)
+    # Check StockOutActionInBill policy
+    stock_action = await ConfigService.get_stock_out_action(db, store_id)
+    
+    # 1. Resolve Institutional Control Number & Bill Number
+    try:
+        trn_ctrl_no = await CounterManager.get_next_ctrl_no(db, "2100")
+    except Exception as e:
+        # Fallback logic requested by user: Sync with max(trnctrlno)
+        res = await db.execute(text("SELECT COALESCE(MAX(trnctrlno), 0) + 1 FROM shoper9.stktrnhdr WHERE trntype = 2100"))
+        trn_ctrl_no = res.scalar()
+        # Update genlookup to this new number to prevent future conflicts
+        await db.execute(text("UPDATE shoper9.genlookup SET number = :n WHERE recid = 101 AND code = '2100'"), {"n": trn_ctrl_no})
+
     new_bill_no = txn_in.bill_no
     if not new_bill_no:
-        today_str = func.to_char(func.now(), 'YYYYMMDD')
-        bill_prefix = f"B-{store_id}-{today_str}-"
-        new_bill_no = f"{bill_prefix}{uuid.uuid4().hex[:4].upper()}"
+        bill_prefix = f"B-{store_id}-"
+        new_bill_no = f"{bill_prefix}{trn_ctrl_no}"
  
     # 2. Create Transaction Header
     new_txn = Transaction(
@@ -174,8 +188,7 @@ async def finalize_transaction(
         cashier_id=current_user.id,
         till_id=txn_in.till_id,
         shoper_recid=txn_in.shoper_recid,
-        # Using description or generic field if model doesn't have salesperson yet
-        # We can store salesman_id in extra metadata or a dedicated field if exists
+        external_id=str(trn_ctrl_no),
         notes=f"Salesman: {txn_in.salesman_id}" if txn_in.salesman_id else None
     )
     
@@ -183,47 +196,85 @@ async def finalize_transaction(
     tax_total = 0
     disc_total = 0
     
-    # 3. Process Items & Inventory
+    # 3. Process Items
     for item_in in txn_in.items:
-        # Fetch Item Master & Stock
-        item = await db.get(Item, item_in.product_id)
-        if not item:
-            raise HTTPException(status_code=404, detail=f"[SMRITI-OS] Item {item_in.product_id} not found")
-
-        # Calculations in PAISE (Integers only)
+        # Resolve item details from Shoper9 Itemmaster by stock_no
+        item_name = item_in.descr or "Unknown Item"
+        item_brand = "SMRITI"
+        
+        if item_in.stock_no:
+            legacy_res = await db.execute(
+                select(Itemmaster).where(Itemmaster.stockno == item_in.stock_no)
+            )
+            legacy_item = legacy_res.scalar_one_or_none()
+            if legacy_item:
+                item_name = legacy_item.itemdesc or item_name
+                item_brand = legacy_item.class1cd or item_brand
+                
+                # STOCK CHECKING LOGIC
+                if stock_action in ["Block", "Warn"]:
+                    stock_qty = await db.scalar(
+                        select(func.sum(Stockmaster.curbalqty)).where(Stockmaster.stockno == item_in.stock_no)
+                    )
+                    if (stock_qty or 0) < item_in.qty:
+                        if stock_action == "Block":
+                            raise HTTPException(
+                                status_code=400, 
+                                detail=f"Stock for '{item_in.stock_no}' is insufficient (Available: {stock_qty or 0}). Blocked by policy."
+                            )
+                        # "Warn" can be handled by adding a flag to the response or logging it
+                        # Here we just log it for the sovereign audit trail
+                        print(f"WARNING: Out of stock for {item_in.stock_no} (Store: {store_id})")
+        
+        # ── GST COMPLIANCE INTEGRATION ──
+        # Formula parity with Shoper9 logic (Inclusive vs Exclusive)
+        tax_info = await TaxService.get_item_tax_info(db, item_in.stock_no, txn_in.customer_id)
+        
         line_gross_paise = int(item_in.qty * item_in.unit_price)
         line_disc_paise = int(Decimal(str(line_gross_paise * (item_in.discount_per / 100))).quantize(Decimal('1'), rounding=ROUND_HALF_UP))
-        line_net_paise = line_gross_paise - line_disc_paise
+        line_base_for_tax = line_gross_paise - line_disc_paise
         
-        # GST Resolution
-        tax_rate = item_in.tax_per / 100
-        line_tax_paise = int(Decimal(str(line_net_paise - (line_net_paise / (1 + tax_rate)))).quantize(Decimal('1'), rounding=ROUND_HALF_UP))
+        line_tax_paise = 0
+        line_tax_details = {}
         
-        # Update running totals
+        if "error" not in tax_info:
+            is_inc = tax_info.get("is_inclusive", False)
+            hsn_code = tax_info.get("hsn_code")
+            
+            for component in tax_info.get("tax_rates", []):
+                rate = component["rate"]
+                name = component["name"]
+                
+                # Calculate tax for this component
+                comp_tax = TaxService.calculate_tax(Decimal(line_base_for_tax), rate, is_inc)
+                comp_tax_paise = int(comp_tax.quantize(Decimal('1'), rounding=ROUND_HALF_UP))
+                
+                line_tax_paise += comp_tax_paise
+                line_tax_details[name] = comp_tax_paise
+
+        line_net_paise = line_base_for_tax
+        if not tax_info.get("is_inclusive", False):
+            line_net_paise += line_tax_paise
+        
         subtotal += line_gross_paise
         tax_total += line_tax_paise
         disc_total += line_disc_paise
         
-        # Create Line Item
+        # Create Line Item (Shoper9 parity — no FK dependency)
         new_item = TransactionItem(
             transaction_id=new_txn.id,
-            product_id=item_in.product_id,
+            stock_no=item_in.stock_no,
+            item_name=item_name,
+            item_brand=item_brand,
             qty=item_in.qty,
             mrp=item_in.unit_price,
             discount_per=item_in.discount_per,
             tax_amount=line_tax_paise,
-            net_amount=line_net_paise
+            net_amount=line_net_paise,
+            hsn_code=tax_info.get("hsn_code"),
+            tax_details=line_tax_details
         )
         new_txn.items.append(new_item)
-        
-        # 4. Inventory Deduction (Sovereign Guard)
-        stock_stmt = select(ItemStock).where(
-            and_(ItemStock.item_id == item_in.product_id, ItemStock.store_id == store_id)
-        )
-        stock_res = await db.execute(stock_stmt)
-        stock = stock_res.scalar_one_or_none()
-        if stock:
-            stock.qty_on_hand -= item_in.qty
 
     new_txn.subtotal = subtotal
     new_txn.tax_total = tax_total
@@ -258,8 +309,8 @@ async def finalize_transaction(
 
     await db.commit()
     
-    # Return enriched transaction
-    stmt = select(Transaction).where(Transaction.id == new_txn.id).options(selectinload(Transaction.items).joinedload(TransactionItem.item))
+    # Return enriched transaction (no joinedload on item — uses denormalized fields)
+    stmt = select(Transaction).where(Transaction.id == new_txn.id).options(selectinload(Transaction.items))
     res = await db.execute(stmt)
     return res.scalar_one()
 

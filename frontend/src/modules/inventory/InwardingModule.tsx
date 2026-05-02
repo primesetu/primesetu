@@ -8,9 +8,10 @@
  * © 2026 — All Rights Reserved
  * "Memory, Not Code."
  * ============================================================ */
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { motion } from 'framer-motion'
-import { PackagePlus, ClipboardList, Save, X, Trash2 } from 'lucide-react'
+import { PackagePlus, ClipboardList, Save, X, Trash2, Search } from 'lucide-react'
+import { api } from '@/api/client'
 
 interface SizeQty {
   size: string
@@ -19,7 +20,7 @@ interface SizeQty {
 
 interface InwardItem {
   id: string
-  artNo: string
+  stockno: string
   name: string
   brand: string
   cost: number
@@ -28,27 +29,85 @@ interface InwardItem {
 }
 
 export default function InwardingModule({ onClose }: { onClose: () => void }) {
-  // const [vendor, setVendor] = useState('')
-  // const [docNo, setDocNo] = useState('')
+  const [vendors, setVendors] = useState<any[]>([])
+  const [selectedVendor, setSelectedVendor] = useState('')
+  const [billNo, setBillNo] = useState('')
+  const [billDate, setBillDate] = useState(new Date().toISOString().split('T')[0])
+  
   const [items, setItems] = useState<InwardItem[]>([])
   const [isSaving, setIsSaving] = useState(false)
   const [activeArtNo, setActiveArtNo] = useState('')
+  const [isSearching, setIsSearching] = useState(false)
   
   const defaultSizes = ['6', '7', '8', '9', '10', '11']
 
-  const addArtNo = () => {
+  useEffect(() => {
+    api.purchase.getVendors().then(setVendors)
+  }, [])
+
+  const addArtNo = async () => {
     if (!activeArtNo) return
-    const newItem: InwardItem = {
-      id: Math.random().toString(36),
-      artNo: activeArtNo,
-      name: 'Sample Footwear Design',
-      brand: 'Nexus',
-      cost: 1200,
-      mrp: 2499,
-      sizes: defaultSizes.map(s => ({ size: s, qty: 0 }))
+    setIsSearching(true)
+    try {
+      const searchResults = await api.inventory.search(activeArtNo)
+      if (searchResults && searchResults.length > 0) {
+        const product = searchResults[0]
+        const newItem: InwardItem = {
+          id: Math.random().toString(36),
+          stockno: product.stockno,
+          name: product.itemdesc,
+          brand: product.brand_name || 'Generic',
+          cost: product.cost_price || 0,
+          mrp: product.retail_price || 0,
+          sizes: defaultSizes.map(s => ({ size: s, qty: 0 }))
+        }
+        setItems([newItem, ...items])
+      } else {
+        alert("Art No not found in Item Master!")
+      }
+    } catch (error) {
+      console.error("Search failed:", error)
+    } finally {
+      setIsSearching(false)
+      setActiveArtNo('')
     }
-    setItems([newItem, ...items])
-    setActiveArtNo('')
+  }
+
+  const handlePost = async () => {
+    if (!selectedVendor || !billNo || items.length === 0) {
+      alert("Please fill Vendor, Bill No and add at least one item.")
+      return
+    }
+
+    setIsSaving(true)
+    try {
+      const payload = {
+        vendor_code: selectedVendor,
+        bill_no: billNo,
+        bill_date: billDate,
+        items: items.map(item => ({
+          stockno: item.stockno,
+          qty: item.sizes.reduce((acc, s) => acc + s.qty, 0),
+          rate: item.cost,
+          mrp: item.mrp
+        })).filter(i => i.qty > 0)
+      }
+
+      if (payload.items.length === 0) {
+        alert("Enter quantities for at least one size!")
+        setIsSaving(false)
+        return
+      }
+
+      const res = await api.purchase.finalizeGRN(payload)
+      alert(`GI Successfully Posted! GRN No: ${res.grn_no}`)
+      onClose()
+    } catch (error) {
+      console.error("Post failed:", error)
+      alert("Failed to post Inward. Check console.")
+    } finally {
+      setIsSaving(false)
+    }
   }
 
   const updateSizeQty = (itemId: string, size: string, qty: number) => {
@@ -96,17 +155,35 @@ export default function InwardingModule({ onClose }: { onClose: () => void }) {
         <div className="p-8 grid grid-cols-1 md:grid-cols-12 gap-6 bg-cream/30 border-b border-border">
           <div className="md:col-span-3">
             <label className="text-[10px] font-black text-navy/40 uppercase tracking-widest block mb-2">Vendor / Supplier</label>
-            <select className="w-full bg-white border border-border rounded-xl px-5 py-4 text-xs font-bold text-navy outline-none focus:border-gold transition-all shadow-sm">
-              <option>Select Vendor...</option>
-              <option>Nexus Lifestyle Pvt Ltd</option>
-              <option>Citywalk International</option>
+            <select 
+              value={selectedVendor}
+              onChange={(e) => setSelectedVendor(e.target.value)}
+              className="w-full bg-white border border-border rounded-xl px-5 py-4 text-xs font-bold text-navy outline-none focus:border-gold transition-all shadow-sm"
+            >
+              <option value="">Select Vendor...</option>
+              {vendors.map(v => <option key={v.code} value={v.code}>{v.name}</option>)}
             </select>
           </div>
           <div className="md:col-span-2">
             <label className="text-[10px] font-black text-navy/40 uppercase tracking-widest block mb-2">Invoice / Doc No</label>
-            <input type="text" placeholder="INV-001" className="w-full bg-white border border-border rounded-xl px-5 py-4 text-xs font-bold text-navy outline-none focus:border-gold transition-all shadow-sm" />
+            <input 
+              type="text" 
+              value={billNo}
+              onChange={(e) => setBillNo(e.target.value)}
+              placeholder="INV-001" 
+              className="w-full bg-white border border-border rounded-xl px-5 py-4 text-xs font-bold text-navy outline-none focus:border-gold transition-all shadow-sm" 
+            />
           </div>
-          <div className="md:col-span-4">
+          <div className="md:col-span-2">
+            <label className="text-[10px] font-black text-navy/40 uppercase tracking-widest block mb-2">Invoice Date</label>
+            <input 
+              type="date" 
+              value={billDate}
+              onChange={(e) => setBillDate(e.target.value)}
+              className="w-full bg-white border border-border rounded-xl px-5 py-4 text-xs font-bold text-navy outline-none focus:border-gold transition-all shadow-sm" 
+            />
+          </div>
+          <div className="md:col-span-3">
             <label className="text-[10px] font-black text-navy/40 uppercase tracking-widest block mb-2">Enter Art No / Design No</label>
             <div className="flex gap-2">
               <input 
@@ -114,13 +191,16 @@ export default function InwardingModule({ onClose }: { onClose: () => void }) {
                 value={activeArtNo}
                 onChange={(e) => setActiveArtNo(e.target.value)}
                 onKeyDown={(e) => e.key === 'Enter' && addArtNo()}
-                placeholder="TYPE ART NO AND PRESS ENTER..." 
+                placeholder={isSearching ? "Searching..." : "TYPE ART NO..."}
+                disabled={isSearching}
                 className="flex-1 bg-white border-2 border-navy/5 rounded-xl px-6 py-4 text-sm font-black text-navy outline-none focus:border-gold transition-all uppercase placeholder:text-navy/20" 
               />
-              <button onClick={addArtNo} className="bg-navy text-white px-6 rounded-xl font-black text-[10px] uppercase tracking-widest">Add</button>
+              <button onClick={addArtNo} className="bg-navy text-white px-6 rounded-xl font-black text-[10px] uppercase tracking-widest">
+                <Search className="w-4 h-4" />
+              </button>
             </div>
           </div>
-          <div className="md:col-span-3 flex items-end justify-end">
+          <div className="md:col-span-2 flex items-end justify-end">
              <div className="text-right">
                 <div className="text-[9px] font-black text-muted uppercase tracking-widest">Total Qty</div>
                 <div className="text-3xl font-serif font-black text-navy">{totalQty} <span className="text-sm font-sans text-muted">Pcs</span></div>
@@ -143,10 +223,10 @@ export default function InwardingModule({ onClose }: { onClose: () => void }) {
                   <div className="flex items-center justify-between mb-6">
                     <div className="flex items-center gap-6">
                       <div className="w-12 h-12 bg-navy text-gold rounded-2xl flex items-center justify-center font-serif text-xl font-black shadow-lg">
-                        {item.artNo[0]}
+                        {item.stockno[0]}
                       </div>
                       <div>
-                        <div className="text-lg font-black text-navy uppercase tracking-tight">{item.artNo} - {item.name}</div>
+                        <div className="text-lg font-black text-navy uppercase tracking-tight">{item.stockno} - {item.name}</div>
                         <div className="text-[10px] font-black text-muted uppercase tracking-widest">Brand: {item.brand} | Cost: ₹{item.cost} | MRP: ₹{item.mrp}</div>
                       </div>
                     </div>
@@ -195,10 +275,8 @@ export default function InwardingModule({ onClose }: { onClose: () => void }) {
               Draft Save
             </button>
             <button 
-              onClick={() => {
-                setIsSaving(true)
-                setTimeout(() => { alert('GI Successfully Posted to Sovereign DB!'); onClose() }, 1000)
-              }}
+              onClick={handlePost}
+              disabled={isSaving}
               className="bg-gold text-navy px-12 py-5 rounded-[2rem] font-black text-xs tracking-widest shadow-2xl hover:scale-105 transition-all flex items-center gap-3 uppercase"
             >
               <Save className="w-5 h-5" /> {isSaving ? 'Posting...' : 'Post Inward (GI) [F10]'}
@@ -209,7 +287,3 @@ export default function InwardingModule({ onClose }: { onClose: () => void }) {
     </div>
   )
 }
-
-
-
-

@@ -2,9 +2,9 @@
  * SMRITI-OS — Desktop Terminal (Industrial Mode)
  * Zero Cloud · Sovereign · AI-Governed
  * ============================================================ */
-import React, { useRef, useEffect } from 'react'
+import React, { useRef, useEffect, useMemo } from 'react'
 import { AgGridReact } from 'ag-grid-react'
-import { ColDef } from 'ag-grid-community'
+import { ColDef, themeQuartz } from 'ag-grid-community'
 import { Barcode, Trash2, FileText, User, UserCheck, Calendar, Clock, Tag } from 'lucide-react'
 import { Button, Badge } from '@/components/ui/SovereignUI'
 
@@ -25,6 +25,9 @@ interface DesktopBillingProps {
   dateTime: string
   billDiscount: number
   setBillDiscount: (val: number) => void
+  isCustomerMandatory?: boolean
+  isSalesmanMandatory?: boolean
+  fieldMask?: any[]
 }
 
 export default function DesktopBilling({
@@ -43,7 +46,10 @@ export default function DesktopBilling({
   billNo,
   dateTime,
   billDiscount,
-  setBillDiscount
+  setBillDiscount,
+  isCustomerMandatory,
+  isSalesmanMandatory,
+  fieldMask = []
 }: DesktopBillingProps) {
   const entryRef = useRef<HTMLInputElement>(null)
   const gridRef = useRef<AgGridReact>(null)
@@ -52,19 +58,83 @@ export default function DesktopBilling({
     entryRef.current?.focus()
   }, [])
 
-  const columnDefs: ColDef[] = [
-    { field: 'stock_no', headerName: 'STOCK NO', width: 140 },
-    { field: 'descr', headerName: 'DESCRIPTION', flex: 1 },
-    { field: 'rate', headerName: 'RATE', width: 100, valueFormatter: (p: any) => (p.value || 0).toFixed(2) },
-    { field: 'qty', headerName: 'QTY', width: 80, editable: true },
-    { field: 'disc_per', headerName: 'DISC %', width: 80, editable: true },
-    { field: 'total', headerName: 'TOTAL', width: 120, valueFormatter: (p: any) => (p.value || 0).toFixed(2) },
-    { headerName: '', width: 50, cellRenderer: (p: any) => (
-      <button onClick={() => setItems(prev => prev.filter(i => i.id !== p.data.id))} className="text-red-400 p-2 hover:bg-red-500/10 rounded-full transition-all">
-        <Trash2 size={14} />
-      </button>
-    )}
-  ]
+  const columnDefs = useMemo(() => {
+    // If mask is available, we follow it, but we FORCE requested fields if they are missing
+    let activeMask = [...fieldMask]
+    
+    const requestedFields = [
+      { field: 'StockNo', headerName: 'STOCK NO', width: 140, visible: true },
+      { field: 'ItemDescription', headerName: 'DESCRIPTION', width: 250, visible: true },
+      { field: 'Qty', headerName: 'QTY', width: 80, visible: true },
+      { field: 'Rate', headerName: 'RATE', width: 100, visible: true },
+      { field: 'Total', headerName: 'TOTAL', width: 120, visible: true },
+      { field: 'Sizecd', headerName: 'SIZE', width: 60 },
+      { field: 'AC1', headerName: 'SUB-1', width: 100 },
+      { field: 'AC2', headerName: 'SUB-2', width: 100 },
+      { field: 'SalesStaff', headerName: 'SALESMAN', width: 100 }
+    ]
+
+    requestedFields.forEach(rf => {
+      if (!activeMask.find(m => m.field.toLowerCase() === rf.field.toLowerCase())) {
+        activeMask.push(rf)
+      }
+    })
+
+    if (activeMask && activeMask.length > 0) {
+      return [
+        ...activeMask.map(m => ({
+          headerName: m.headerName.toUpperCase(),
+          field: m.field === 'StockNo' ? 'stock_no' : 
+                 m.field === 'ItemDescription' ? 'descr' :
+                 m.field === 'GradeCd' ? 'grade' :
+                 m.field === 'Sizecd' ? 'size' :
+                 m.field === 'AC1' ? 'subclass1' :
+                 m.field === 'AC2' ? 'subclass2' :
+                 m.field === 'SalesStaff' ? 'salesman' :
+                 m.field === 'Rate' ? 'rate' :
+                 m.field === 'Qty' ? 'qty' :
+                 m.field === 'Total' ? 'total' :
+                 m.field === 'ItemValue' ? 'item_value' :
+                 m.field === 'DiscAmt' ? 'disc_amt' :
+                 m.field === 'DiscPerc' ? 'disc_per' :
+                 m.field.toLowerCase(),
+          width: m.width || 120,
+          hide: m.visible === false,
+          sortable: false,
+          valueGetter: m.field === 'ItemValue' ? (p: any) => p.data ? (p.data.rate * p.data.qty) : 0 : undefined,
+          cellStyle: { borderRight: '1px solid var(--border-subtle)' },
+          cellRenderer: (params: any) => {
+             if (m.field === 'Rate' || m.field === 'Total' || m.field === 'DiscAmt' || m.field === 'ItemValue') {
+               return <span className="font-mono text-[var(--primary)]">₹{Number(params.value || 0).toLocaleString()}</span>
+             }
+             return params.value
+          }
+        })),
+        { headerName: 'ACTIONS', width: 80, cellRenderer: (p: any) => (
+          <button 
+            key="delete-btn"
+            onClick={() => setItems(prev => prev.filter(i => i.id !== p.data.id))} 
+            className="text-red-400 p-2 hover:bg-red-500/10 rounded-full transition-all"
+          >
+            <Trash2 size={14} />
+          </button>
+        )}
+      ]
+    }
+
+    return [
+      { headerName: 'STOCK NO', field: 'stock_no', flex: 1.5, cellStyle: { borderRight: '1px solid var(--border-subtle)' } },
+      { headerName: 'DESCRIPTION', field: 'descr', flex: 3, cellStyle: { borderRight: '1px solid var(--border-subtle)' } },
+      { headerName: 'RATE', field: 'rate', flex: 1, valueFormatter: (p: any) => `₹${p.value}`, cellStyle: { borderRight: '1px solid var(--border-subtle)' } },
+      { headerName: 'QTY', field: 'qty', flex: 0.8, editable: true, cellStyle: { borderRight: '1px solid var(--border-subtle)', backgroundColor: 'rgba(52, 211, 153, 0.05)' } },
+      { headerName: 'TOTAL', field: 'total', flex: 1, valueFormatter: (p: any) => `₹${p.value}`, cellStyle: { fontWeight: 'bold' } },
+      { headerName: '', width: 50, cellRenderer: (p: any) => (
+        <button onClick={() => setItems(prev => prev.filter(i => i.id !== p.data.id))} className="text-red-400 p-2 hover:bg-red-500/10 rounded-full transition-all">
+          <Trash2 size={14} />
+        </button>
+      )}
+    ]
+  }, [fieldMask, setItems])
 
   return (
     <div className="flex flex-col h-full bg-[var(--background)]">
@@ -88,19 +158,21 @@ export default function DesktopBilling({
               <User size={14} className="text-[var(--primary)]" />
               <input 
                 className="bg-transparent border-none outline-none text-[10px] font-black uppercase w-32 placeholder:opacity-30" 
-                placeholder="CUSTOMER MOBILE"
+                placeholder={isCustomerMandatory ? "CUSTOMER (REQUIRED)" : "CUSTOMER MOBILE"}
                 value={customer.phone}
                 onChange={e => setCustomer({...customer, phone: e.target.value})}
               />
+              {isCustomerMandatory && <span className="text-red-500 text-[10px] font-bold">*</span>}
            </div>
            <div className="flex items-center gap-2 bg-[var(--surface-container-low)] border border-[var(--border-subtle)] rounded-lg px-3 py-1.5">
               <UserCheck size={14} className="text-emerald-500" />
               <input 
                 className="bg-transparent border-none outline-none text-[10px] font-black uppercase w-32 placeholder:opacity-30" 
-                placeholder="SALES PERSONNEL"
+                placeholder={isSalesmanMandatory ? "SALESMAN (REQUIRED)" : "SALES PERSONNEL"}
                 value={salesman}
                 onChange={e => setSalesman(e.target.value)}
               />
+              {isSalesmanMandatory && <span className="text-red-500 text-[10px] font-bold">*</span>}
            </div>
            <Badge variant="info">F8: SETTLE</Badge>
         </div>
@@ -108,12 +180,12 @@ export default function DesktopBilling({
       
       <main className="flex-1 p-6 overflow-hidden flex flex-col gap-4">
         {/* Main Grid Area */}
-        <div className="flex-1 ag-theme-quartz w-full h-full rounded-xl overflow-hidden border border-[var(--border-subtle)] shadow-xl">
+        <div className="flex-1 w-full h-full rounded-xl overflow-hidden border border-[var(--border-subtle)] shadow-xl">
           <AgGridReact 
+            theme={themeQuartz}
             ref={gridRef} 
             rowData={items} 
             columnDefs={columnDefs} 
-            theme="legacy" 
             onGridReady={p => p.api.sizeColumnsToFit()} 
           />
         </div>

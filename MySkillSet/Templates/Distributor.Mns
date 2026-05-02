@@ -1,0 +1,52 @@
+delete from vaMenu where MnuNo = 0 and MenuOpt = 200
+-GO-
+delete from vaMenu where MnuNo = 200
+-GO-
+delete from vaMenu where MnuNo = 250
+-GO-
+delete from vaMenu where MnuNo = 260
+-GO-
+delete from vaMenu where MnuNo = 100 and MenuOpt = 104
+-GO-
+delete from vaMenu where MnuNo = 100 and MenuOpt = 105
+-GO-
+delete from vaMenu where MnuNo = 100 and MenuOpt = 108
+-GO-
+delete from vaMenu where MnuNo = 100 and MenuOpt = 109
+-GO-
+delete from vaMenu where MnuNo = 400 and MenuOpt = 460
+-GO-
+delete from vaMenu where MnuNo = 460 
+-GO-
+delete from vaMenu where MnuNo = 470 and MenuOpt = 476
+-GO-
+delete from vaMenu where MnuNo = 600 and MenuOpt = 610
+-GO-
+update vaMenu Set MnuCap = 'Invoice' Where MnuNo = 100 and MenuOpt = 101
+-GO-
+Insert into vamenu (MnuNo, MenuOPt, MnuName, MnuCap, MnuPgm, ExeName, MnuWght, AllowWhenTrnClosed, Pgmopt, DbInfo, MenuIcon, Menusep, MenuBold) values (100,120,'Sales','DC Generation','M',' ',0,0,0,'0',' ',0,0)
+-GO-
+Insert into vamenu (MnuNo, MenuOPt, MnuName, MnuCap, MnuPgm, ExeName, MnuWght, AllowWhenTrnClosed, Pgmopt, DbInfo, MenuIcon, Menusep, MenuBold) values (120,121,'DC Generation','Sales DC','P','SR115500.EXE',0,0,8,'0',' ',0,0)
+-GO-
+Insert into vamenu (MnuNo, MenuOPt, MnuName, MnuCap, MnuPgm, ExeName, MnuWght, AllowWhenTrnClosed, Pgmopt, DbInfo, MenuIcon, Menusep, MenuBold) values (120,122,'DC Generation','Approval Issue DC','P','SR115500.EXE',0,0,9,'0',' ',0,0)
+-GO-
+Insert into vamenu (MnuNo, MenuOPt, MnuName, MnuCap, MnuPgm, ExeName, MnuWght, AllowWhenTrnClosed, Pgmopt, DbInfo, MenuIcon, Menusep, MenuBold) values (120,123,'DC Generation','Transport Receipt Entry','P','SD400800.EXE',0,0,8,'0',' ',0,0)
+-GO-
+Insert into vamenu (MnuNo, MenuOPt, MnuName, MnuCap, MnuPgm, ExeName, MnuWght, AllowWhenTrnClosed, Pgmopt, DbInfo, MenuIcon, Menusep, MenuBold) values (120,124,'DC Generation','Conversion of Sales DC to Approval Issue DC','P','SD100500.EXE',0,0,0,'0',' ',0,0)
+-GO-
+insert into vavertable (ExeSrl,ExeID,ExeSkip,ExeVer,ExeMinor,ExeSubRel) values (0,'SR115500.EXE','N','9','1','123')
+-GO-
+insert into vavertable (ExeSrl,ExeID,ExeSkip,ExeVer,ExeMinor,ExeSubRel) values (0,'SR115500.EXE','N','9','1','123')
+-GO-
+insert into vavertable (ExeSrl,ExeID,ExeSkip,ExeVer,ExeMinor,ExeSubRel) values (0,'SD100500.EXE','N','9','1','123')
+-GO-
+insert into vavertable (ExeSrl,ExeID,ExeSkip,ExeVer,ExeMinor,ExeSubRel) values (0,'SD400800.EXE','N','9','1','123')
+-GO-
+Update VaMenu Set PgmOpt = 4 Where MnuNo = 800 and MenuOpt = 801
+-GO-
+Update VaMenu Set PgmOpt = 6 Where MnuNo = 800 and MenuOpt = 802
+-GO-
+Insert into vamenu (MnuNo, MenuOPt, MnuName, MnuCap, MnuPgm, ExeName, MnuWght, AllowWhenTrnClosed, Pgmopt, DbInfo, MenuIcon, Menusep, MenuBold, MultiInstance) values (	380,382,'Purchase Order','Consolidation','P','SE100900.EXE',0,0,3,'0','',0,0,0)
+-GO-
+insert into vavertable (ExeSrl,ExeID,ExeSkip,ExeVer,ExeMinor,ExeSubRel) values (0,'SE100900.EXE','N','9','1','123')
+-GO-

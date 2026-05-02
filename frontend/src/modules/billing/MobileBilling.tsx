@@ -4,7 +4,7 @@
  * ============================================================ */
 import React, { useRef, useState, useEffect } from 'react'
 import { AgGridReact } from 'ag-grid-react'
-import { ColDef } from 'ag-grid-community'
+import { ColDef, themeQuartz } from 'ag-grid-community'
 import { Barcode, Trash2, X, User, UserCheck, Tag, Loader2, Maximize2, Minimize2 } from 'lucide-react'
 import { Button } from '@/components/ui/SovereignUI'
 import { motion, AnimatePresence } from 'framer-motion'
@@ -30,12 +30,16 @@ interface MobileBillingProps {
   dateTime: string
   billDiscount: number
   setBillDiscount: (val: number) => void
+  isCustomerMandatory?: boolean
+  isSalesmanMandatory?: boolean
+  fieldMask?: any[]
 }
 
 export default function MobileBilling({
   items, setItems, activeEntry, setActiveEntry, commitLine, handleKeyDown, totals,
   showSettle, setShowSettle, isFinalizing, handleFinalize, customer, setCustomer,
-  salesman, setSalesman, billNo, dateTime, billDiscount, setBillDiscount
+  salesman, setSalesman, billNo, dateTime, billDiscount, setBillDiscount,
+  isCustomerMandatory, isSalesmanMandatory, fieldMask
 }: MobileBillingProps) {
   const entryRef = useRef<HTMLInputElement>(null)
   const [paymentMode, setPaymentMode] = useState<'CASH' | 'CARD'>('CASH')
@@ -108,11 +112,11 @@ export default function MobileBilling({
       </div>
 
       {/* B2B AG GRID ENGINE (Mobile Optimized) */}
-      <div className="flex-1 relative ag-theme-quartz bg-[var(--surface-container-lowest)]">
+      <div className="flex-1 relative bg-[var(--surface-container-lowest)]">
         <AgGridReact 
+          theme={themeQuartz}
           rowData={items} 
           columnDefs={columnDefs} 
-          theme="legacy"
           rowHeight={48}
           headerHeight={36}
           suppressHorizontalScroll={false}

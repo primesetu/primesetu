@@ -25,6 +25,7 @@ import { syncEngine } from './lib/SyncEngine';
 import { supabase } from './lib/supabase';
 import Login from './modules/auth/Login';
 import ResponsiveShell from './components/layouts/ResponsiveShell';
+import SovereignDesktop from './components/layouts/SovereignDesktop';
 import { useTheme } from './hooks/useTheme';
 
 const PrimeSetu: React.FC = () => {
@@ -92,6 +93,14 @@ const PrimeSetu: React.FC = () => {
     setIsRightCollapsed(prev => !prev);
   }, { enableOnFormTags: true, preventDefault: true });
 
+  const [layoutMode, setLayoutMode] = useState<'STANDARD' | 'SOVEREIGN'>('STANDARD');
+
+  // LAYOUT MODE TOGGLE (Alt+D)
+  useHotkeys('alt+d', (e) => {
+    e.preventDefault();
+    setLayoutMode(prev => prev === 'STANDARD' ? 'SOVEREIGN' : 'STANDARD');
+  }, { enableOnFormTags: true, preventDefault: true });
+
   const handleLogin = (role: string) => {
     setUser({
       name: 'System Admin (Bypass)',
@@ -139,11 +148,15 @@ const PrimeSetu: React.FC = () => {
     });
 
     const handleToggleSidebar = () => setIsCollapsed(prev => !prev);
+    const handleToggleLayout = () => setLayoutMode(prev => prev === 'STANDARD' ? 'SOVEREIGN' : 'STANDARD');
+    
     window.addEventListener('toggleSidebar', handleToggleSidebar);
+    window.addEventListener('toggleLayout', handleToggleLayout);
     
     return () => {
       subscription.unsubscribe();
       window.removeEventListener('toggleSidebar', handleToggleSidebar);
+      window.removeEventListener('toggleLayout', handleToggleLayout);
     };
   }, []);
 
@@ -153,6 +166,12 @@ const PrimeSetu: React.FC = () => {
   };
 
   if (!user) return <Login onLogin={handleLogin} />;
+
+  if (layoutMode === 'SOVEREIGN') {
+    return (
+      <SovereignDesktop onExit={() => setLayoutMode('STANDARD')} />
+    );
+  }
 
   return (
     <ResponsiveShell 

@@ -25,9 +25,13 @@ import {
   Layers,
   Info
 } from 'lucide-react'
+import { AgGridReact } from 'ag-grid-react'
+import { ColDef, ModuleRegistry, ClientSideRowModelModule, TextFilterModule, NumberFilterModule } from 'ag-grid-community'
+
+ModuleRegistry.registerModules([ClientSideRowModelModule, TextFilterModule, NumberFilterModule])
+
 import { 
   Button, 
-  DataTable, 
   Input, 
   Badge,
   Card
@@ -67,73 +71,107 @@ export default function ItemMasterModule() {
     fetchItems()
   }, [])
 
-  const columns = useMemo(() => [
+  const colDefs: ColDef[] = useMemo(() => [
     {
-      header: "ITEM CODE / SKU",
-      accessor: (item: any) => (
-        <div className="flex flex-col">
-          <span className="font-serif font-black text-[var(--accent)] text-sm tracking-tight">{item.item_code}</span>
-          <span className="text-[9px] font-bold text-[var(--text-tertiary)] uppercase">{item.hsn_code || 'NO HSN'}</span>
-        </div>
-      ),
-      width: 180,
-      pinned: 'left' as const
-    },
-    {
-      header: "ITEM DESCRIPTION",
-      accessor: (item: any) => (
-        <div className="flex flex-col">
-          <span className="text-xs font-black text-[var(--text-primary)] uppercase truncate w-64">{item.item_name}</span>
-          <div className="flex gap-2 mt-1">
-             <span className="text-[8px] font-black px-1.5 py-0.5 bg-[var(--surface-elevated)] border border-[var(--border-subtle)] text-[var(--text-tertiary)] rounded-sm">
-                {item.brand || 'NO BRAND'}
-             </span>
-             <span className="text-[8px] font-black px-1.5 py-0.5 bg-[var(--accent)]/10 text-[var(--accent)] rounded-sm">
-                {item.department?.name || 'GEN'}
-             </span>
+      headerName: "ITEM CODE / SKU",
+      field: "item_code",
+      cellRenderer: (params: any) => {
+        const item = params.data;
+        if (!item) return null;
+        return (
+          <div className="flex flex-col justify-center h-full">
+            <span className="font-serif font-black text-[var(--accent)] text-sm tracking-tight leading-none">{item.item_code}</span>
+            <span className="text-[9px] font-bold text-[var(--text-tertiary)] uppercase leading-none mt-1">{item.hsn_code || 'NO HSN'}</span>
           </div>
-        </div>
-      ),
-      flex: 2
+        );
+      },
+      width: 180,
+      pinned: 'left',
+      filter: true
     },
     {
-      header: "MRP",
-      accessor: (item: any) => (
-        <span className="font-serif font-black text-[var(--text-primary)]">
-          ₹{(item.mrp_paise / 100).toLocaleString('en-IN', { minimumFractionDigits: 2 })}
-        </span>
-      ),
+      headerName: "ITEM DESCRIPTION",
+      field: "item_name",
+      cellRenderer: (params: any) => {
+        const item = params.data;
+        if (!item) return null;
+        return (
+          <div className="flex flex-col justify-center h-full">
+            <span className="text-xs font-black text-[var(--text-primary)] uppercase truncate w-full leading-none">{item.item_name}</span>
+            <div className="flex gap-2 mt-1">
+               <span className="text-[8px] font-black px-1.5 py-0.5 bg-[var(--surface-elevated)] border border-[var(--border-subtle)] text-[var(--text-tertiary)] rounded-sm leading-none">
+                  {item.brand || 'NO BRAND'}
+               </span>
+               <span className="text-[8px] font-black px-1.5 py-0.5 bg-[var(--accent)]/10 text-[var(--accent)] rounded-sm leading-none">
+                  {item.department?.name || 'GEN'}
+               </span>
+            </div>
+          </div>
+        );
+      },
+      flex: 1,
+      minWidth: 300,
+      filter: true
+    },
+    {
+      headerName: "MRP",
+      field: "mrp_paise",
+      cellRenderer: (params: any) => {
+        const item = params.data;
+        if (!item) return null;
+        return (
+          <div className="flex items-center justify-end h-full">
+            <span className="font-serif font-black text-[var(--text-primary)]">
+              ₹{(item.mrp_paise / 100).toLocaleString('en-IN', { minimumFractionDigits: 2 })}
+            </span>
+          </div>
+        );
+      },
       width: 120,
-      className: 'text-right'
+      type: 'numericColumn'
     },
     {
-      header: "CUR BAL",
-      accessor: (item: any) => (
-        <Badge variant={item.total_stock > 10 ? 'success' : item.total_stock > 0 ? 'warning' : 'danger'} className="font-serif font-black">
-          {item.total_stock}
-        </Badge>
-      ),
+      headerName: "CUR BAL",
+      field: "total_stock",
+      cellRenderer: (params: any) => {
+        const item = params.data;
+        if (!item) return null;
+        return (
+          <div className="flex items-center justify-center h-full">
+            <Badge variant={item.total_stock > 10 ? 'success' : item.total_stock > 0 ? 'warning' : 'danger'} className="font-serif font-black">
+              {item.total_stock}
+            </Badge>
+          </div>
+        );
+      },
       width: 100,
-      className: 'text-center'
+      type: 'numericColumn'
     },
     {
-      header: "ACTION",
-      accessor: (item: any) => (
-        <div className="flex justify-end">
-           <Button 
-            variant="ghost" 
-            size="sm" 
-            onClick={() => { setSelectedItem(item); setActiveView('details'); }}
-            className="text-[10px] font-black uppercase tracking-widest text-[var(--text-tertiary)] hover:text-[var(--accent)]"
-          >
-            DETAILS <ChevronRight size={12} className="ml-1" />
-           </Button>
-        </div>
-      ),
+      headerName: "ACTION",
+      colId: "action",
+      cellRenderer: (params: any) => {
+        const item = params.data;
+        if (!item) return null;
+        return (
+          <div className="flex items-center justify-end h-full">
+             <Button 
+              variant="ghost" 
+              size="sm" 
+              onClick={() => { setSelectedItem(item); setActiveView('details'); }}
+              className="text-[10px] font-black uppercase tracking-widest text-[var(--text-tertiary)] hover:text-[var(--accent)]"
+            >
+              DETAILS <ChevronRight size={12} className="ml-1" />
+             </Button>
+          </div>
+        );
+      },
       width: 120,
-      pinned: 'right' as const
+      pinned: 'right',
+      sortable: false,
+      filter: false
     }
-  ], [])
+  ], []);
 
   return (
     <div className="flex flex-col gap-8 animate-in fade-in slide-in-from-bottom-4 duration-700">
@@ -192,14 +230,19 @@ export default function ItemMasterModule() {
            </Button>
         </div>
 
-        <div className="h-[600px]">
-           <DataTable 
-             data={items.filter(i => 
-               i.item_code.toLowerCase().includes(search.toLowerCase()) || 
-               i.item_name.toLowerCase().includes(search.toLowerCase())
+        <div className={cn("h-[600px] w-full", isInstitutional ? "ag-theme-quartz" : "ag-theme-quartz-dark")}>
+           <AgGridReact 
+             rowData={items.filter(i => 
+               i.item_code?.toLowerCase().includes(search.toLowerCase()) || 
+               i.item_name?.toLowerCase().includes(search.toLowerCase())
              )}
-             columns={columns}
-             loading={loading}
+             columnDefs={colDefs}
+             rowHeight={56}
+             headerHeight={40}
+             suppressCellFocus={true}
+             enableCellTextSelection={true}
+             overlayLoadingTemplate={`<span class="text-xs font-black uppercase text-[var(--text-tertiary)]">Loading Item Master DNA...</span>`}
+             overlayNoRowsTemplate={`<span class="text-xs font-black uppercase text-[var(--text-tertiary)]">No SKUs found matching query.</span>`}
            />
         </div>
       </div>

@@ -1,0 +1,293 @@
+
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:var(--font-sans)}
+#desktop{width:100%;min-height:580px;background:linear-gradient(135deg,#1a1f3a 0%,#0f1628 100%);position:relative;overflow:hidden;border-radius:var(--border-radius-lg)}
+#wallpaper-pattern{position:absolute;inset:0;opacity:0.04;background-image:repeating-linear-gradient(45deg,#fff 0,#fff 1px,transparent 0,transparent 50%);background-size:20px 20px}
+#main-area{position:absolute;inset:0;bottom:48px;display:flex;align-items:flex-end;padding:16px}
+#taskbar{position:absolute;bottom:0;left:0;right:0;height:48px;background:rgba(15,22,40,0.95);backdrop-filter:blur(10px);border-top:0.5px solid rgba(255,255,255,0.1);display:flex;align-items:center;gap:4px;padding:0 8px;z-index:100}
+#start-btn{height:36px;min-width:36px;background:rgba(99,153,34,0.9);border:none;border-radius:6px;cursor:pointer;display:flex;align-items:center;justify-content:center;padding:0 12px;gap:6px;color:#fff;font-size:13px;font-weight:500;transition:background 0.15s;flex-shrink:0}
+#start-btn:hover{background:rgba(99,153,34,1)}
+#start-btn .grid{display:grid;grid-template-columns:1fr 1fr;gap:2px;width:14px;height:14px}
+#start-btn .grid span{background:#fff;border-radius:1px;display:block}
+.taskbar-window{height:36px;border-radius:6px;border:0.5px solid rgba(255,255,255,0.15);background:rgba(255,255,255,0.08);cursor:pointer;display:flex;align-items:center;padding:0 10px;gap:6px;color:rgba(255,255,255,0.85);font-size:12px;transition:background 0.15s;white-space:nowrap;position:relative}
+.taskbar-window:hover{background:rgba(255,255,255,0.14)}
+.taskbar-window.active{background:rgba(255,255,255,0.18);border-color:rgba(255,255,255,0.3)}
+.tw-dot{width:6px;height:6px;border-radius:50%;flex-shrink:0}
+.taskbar-divider{width:0.5px;background:rgba(255,255,255,0.1);height:28px;margin:0 4px;flex-shrink:0}
+#clock{margin-left:auto;color:rgba(255,255,255,0.7);font-size:12px;text-align:right;flex-shrink:0;padding-right:4px}
+
+#start-menu{position:absolute;bottom:52px;left:8px;width:680px;background:rgba(15,22,40,0.97);border:0.5px solid rgba(255,255,255,0.12);border-radius:10px;display:none;z-index:200;overflow:hidden;box-shadow:0 -4px 40px rgba(0,0,0,0.6)}
+#start-menu.open{display:flex}
+#sm-sidebar{width:180px;border-right:0.5px solid rgba(255,255,255,0.08);padding:12px 0;flex-shrink:0;background:rgba(0,0,0,0.2)}
+.sm-item{padding:9px 16px;cursor:pointer;display:flex;align-items:center;gap:10px;color:rgba(255,255,255,0.75);font-size:13px;transition:background 0.12s;border-left:3px solid transparent}
+.sm-item:hover,.sm-item.active{background:rgba(255,255,255,0.07);color:#fff;border-left-color:rgba(99,153,34,0.8)}
+.sm-icon{width:20px;height:20px;border-radius:4px;display:flex;align-items:center;justify-content:center;font-size:11px;flex-shrink:0}
+#sm-content{flex:1;overflow:hidden;display:flex;flex-direction:column}
+#sm-header{padding:14px 16px 10px;border-bottom:0.5px solid rgba(255,255,255,0.07)}
+#sm-header h3{color:#fff;font-size:14px;font-weight:500}
+#sm-header p{color:rgba(255,255,255,0.45);font-size:11px;margin-top:2px}
+#sm-grid{padding:12px;display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;overflow-y:auto;flex:1}
+.sm-tile{background:rgba(255,255,255,0.06);border:0.5px solid rgba(255,255,255,0.1);border-radius:8px;padding:12px;cursor:pointer;transition:background 0.12s;display:flex;flex-direction:column;gap:6px}
+.sm-tile:hover{background:rgba(255,255,255,0.12);border-color:rgba(255,255,255,0.2)}
+.sm-tile-icon{width:28px;height:28px;border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:14px}
+.sm-tile-label{color:#fff;font-size:12px;font-weight:500;line-height:1.3}
+.sm-tile-desc{color:rgba(255,255,255,0.4);font-size:10px;line-height:1.3}
+
+.window-panel{position:absolute;border-radius:8px;border:0.5px solid rgba(255,255,255,0.12);background:rgba(20,28,50,0.97);display:flex;flex-direction:column;box-shadow:0 8px 40px rgba(0,0,0,0.5);min-width:280px;overflow:hidden}
+.window-panel.hidden{display:none}
+.win-titlebar{height:36px;background:rgba(0,0,0,0.3);display:flex;align-items:center;padding:0 12px;gap:8px;cursor:move;flex-shrink:0;border-bottom:0.5px solid rgba(255,255,255,0.07)}
+.win-title{color:rgba(255,255,255,0.8);font-size:12px;font-weight:500;flex:1}
+.win-ctrl{width:10px;height:10px;border-radius:50%;cursor:pointer;border:none;flex-shrink:0}
+.win-close{background:#e74c3c}.win-min{background:#f39c12}.win-max{background:#2ecc71}
+.win-body{padding:12px;flex:1;overflow:auto}
+.win-row{display:flex;align-items:center;justify-content:space-between;padding:7px 0;border-bottom:0.5px solid rgba(255,255,255,0.05);font-size:12px}
+.win-row:last-child{border-bottom:none}
+.win-label{color:rgba(255,255,255,0.5)}
+.win-val{color:#fff;font-weight:500}
+.win-badge{padding:2px 7px;border-radius:4px;font-size:10px;font-weight:500}
+.badge-green{background:rgba(46,204,113,0.2);color:#2ecc71}
+.badge-amber{background:rgba(243,156,18,0.2);color:#f39c12}
+.badge-red{background:rgba(231,76,60,0.2);color:#e74c3c}
+.badge-blue{background:rgba(52,152,219,0.2);color:#3498db}
+</style>
+
+<div id="desktop">
+  <div id="wallpaper-pattern"></div>
+  <div id="main-area" id="windows-area">
+    <div class="window-panel" id="win-finance" style="left:20px;top:20px;width:300px">
+      <div class="win-titlebar">
+        <button class="win-ctrl win-close" onclick="closeWin('finance')"></button>
+        <button class="win-ctrl win-min"></button>
+        <button class="win-ctrl win-max"></button>
+        <span class="win-title" style="margin-left:6px">Finance — P&amp;L Overview</span>
+      </div>
+      <div class="win-body">
+        <div class="win-row"><span class="win-label">Revenue (Q2)</span><span class="win-val">₹84.2 Cr</span></div>
+        <div class="win-row"><span class="win-label">EBITDA</span><span class="win-val">₹21.1 Cr</span></div>
+        <div class="win-row"><span class="win-label">Budget utilisation</span><span class="win-val"><span class="win-badge badge-amber">78%</span></span></div>
+        <div class="win-row"><span class="win-label">Outstanding invoices</span><span class="win-val"><span class="win-badge badge-red">14 pending</span></span></div>
+        <div class="win-row"><span class="win-label">GST filing</span><span class="win-val"><span class="win-badge badge-green">Filed</span></span></div>
+      </div>
+    </div>
+    <div class="window-panel hidden" id="win-hr" style="left:340px;top:20px;width:280px">
+      <div class="win-titlebar">
+        <button class="win-ctrl win-close" onclick="closeWin('hr')"></button>
+        <button class="win-ctrl win-min"></button>
+        <button class="win-ctrl win-max"></button>
+        <span class="win-title" style="margin-left:6px">HR — Workforce Summary</span>
+      </div>
+      <div class="win-body">
+        <div class="win-row"><span class="win-label">Total headcount</span><span class="win-val">1,284</span></div>
+        <div class="win-row"><span class="win-label">Open positions</span><span class="win-val"><span class="win-badge badge-blue">37</span></span></div>
+        <div class="win-row"><span class="win-label">Attrition (TTM)</span><span class="win-val"><span class="win-badge badge-amber">11.4%</span></span></div>
+        <div class="win-row"><span class="win-label">Pending appraisals</span><span class="win-val"><span class="win-badge badge-red">52</span></span></div>
+        <div class="win-row"><span class="win-label">Training compliance</span><span class="win-val"><span class="win-badge badge-green">94%</span></span></div>
+      </div>
+    </div>
+    <div class="window-panel hidden" id="win-ops" style="left:20px;top:240px;width:300px">
+      <div class="win-titlebar">
+        <button class="win-ctrl win-close" onclick="closeWin('ops')"></button>
+        <button class="win-ctrl win-min"></button>
+        <button class="win-ctrl win-max"></button>
+        <span class="win-title" style="margin-left:6px">Operations — Plant Status</span>
+      </div>
+      <div class="win-body">
+        <div class="win-row"><span class="win-label">Line uptime</span><span class="win-val"><span class="win-badge badge-green">97.2%</span></span></div>
+        <div class="win-row"><span class="win-label">Active work orders</span><span class="win-val">142</span></div>
+        <div class="win-row"><span class="win-label">Quality rejections</span><span class="win-val"><span class="win-badge badge-amber">1.8%</span></span></div>
+        <div class="win-row"><span class="win-label">Maintenance alerts</span><span class="win-val"><span class="win-badge badge-red">3 critical</span></span></div>
+        <div class="win-row"><span class="win-label">Inventory coverage</span><span class="win-val">18 days</span></div>
+      </div>
+    </div>
+    <div class="window-panel hidden" id="win-crm" style="left:340px;top:240px;width:280px">
+      <div class="win-titlebar">
+        <button class="win-ctrl win-close" onclick="closeWin('crm')"></button>
+        <button class="win-ctrl win-min"></button>
+        <button class="win-ctrl win-max"></button>
+        <span class="win-title" style="margin-left:6px">CRM — Pipeline</span>
+      </div>
+      <div class="win-body">
+        <div class="win-row"><span class="win-label">Pipeline value</span><span class="win-val">₹23.5 Cr</span></div>
+        <div class="win-row"><span class="win-label">Deals closing (30d)</span><span class="win-val"><span class="win-badge badge-green">18</span></span></div>
+        <div class="win-row"><span class="win-label">At-risk deals</span><span class="win-val"><span class="win-badge badge-red">7</span></span></div>
+        <div class="win-row"><span class="win-label">Avg deal cycle</span><span class="win-val">34 days</span></div>
+        <div class="win-row"><span class="win-label">NPS score</span><span class="win-val"><span class="win-badge badge-green">72</span></span></div>
+      </div>
+    </div>
+  </div>
+
+  <div id="taskbar">
+    <button id="start-btn" onclick="toggleStart()">
+      <div class="grid"><span></span><span></span><span></span><span></span></div>
+      Start
+    </button>
+    <div class="taskbar-divider"></div>
+    <div class="taskbar-window active" id="tw-finance" onclick="toggleWin('finance')">
+      <div class="tw-dot" style="background:#3498db"></div>Finance
+    </div>
+    <div class="taskbar-window" id="tw-hr" onclick="toggleWin('hr')">
+      <div class="tw-dot" style="background:#9b59b6"></div>HR
+    </div>
+    <div class="taskbar-window" id="tw-ops" onclick="toggleWin('ops')">
+      <div class="tw-dot" style="background:#e67e22"></div>Operations
+    </div>
+    <div class="taskbar-window" id="tw-crm" onclick="toggleWin('crm')">
+      <div class="tw-dot" style="background:#1abc9c"></div>CRM
+    </div>
+    <div id="clock">10:42 AM<br><span style="font-size:10px;opacity:0.5">2 May 2026</span></div>
+  </div>
+
+  <div id="start-menu">
+    <div id="sm-sidebar">
+      <div style="padding:12px 16px 10px;border-bottom:0.5px solid rgba(255,255,255,0.07);margin-bottom:6px">
+        <div style="width:32px;height:32px;border-radius:50%;background:rgba(99,153,34,0.3);display:flex;align-items:center;justify-content:center;color:#fff;font-size:12px;font-weight:500;margin-bottom:6px">AS</div>
+        <div style="color:#fff;font-size:12px;font-weight:500">Arjun Shah</div>
+        <div style="color:rgba(255,255,255,0.4);font-size:10px">CFO · Acme Corp</div>
+      </div>
+      <div class="sm-item active" onclick="setModule('finance',this)">
+        <div class="sm-icon" style="background:rgba(52,152,219,0.2);color:#3498db">F</div>Finance
+      </div>
+      <div class="sm-item" onclick="setModule('hr',this)">
+        <div class="sm-icon" style="background:rgba(155,89,182,0.2);color:#9b59b6">H</div>HR
+      </div>
+      <div class="sm-item" onclick="setModule('ops',this)">
+        <div class="sm-icon" style="background:rgba(230,126,34,0.2);color:#e67e22">O</div>Operations
+      </div>
+      <div class="sm-item" onclick="setModule('crm',this)">
+        <div class="sm-icon" style="background:rgba(26,188,156,0.2);color:#1abc9c">C</div>CRM
+      </div>
+      <div class="sm-item" onclick="setModule('scm',this)">
+        <div class="sm-icon" style="background:rgba(231,76,60,0.2);color:#e74c3c">S</div>Supply Chain
+      </div>
+      <div class="sm-item" onclick="setModule('it',this)">
+        <div class="sm-icon" style="background:rgba(243,156,18,0.2);color:#f39c12">I</div>IT &amp; Admin
+      </div>
+      <div class="sm-item" onclick="setModule('compliance',this)">
+        <div class="sm-icon" style="background:rgba(149,165,166,0.2);color:#95a5a6">L</div>Compliance
+      </div>
+    </div>
+    <div id="sm-content">
+      <div id="sm-header">
+        <h3 id="sm-module-title">Finance</h3>
+        <p id="sm-module-desc">Accounts, budgets, payroll &amp; reporting</p>
+      </div>
+      <div id="sm-grid"></div>
+    </div>
+  </div>
+</div>
+
+<script>
+const modules={
+  finance:{title:'Finance',desc:'Accounts, budgets, payroll & reporting',tiles:[
+    {icon:'📊',label:'P&L Dashboard',desc:'Revenue, costs & margins'},
+    {icon:'💳',label:'Accounts Payable',desc:'Vendor invoices & payments'},
+    {icon:'📥',label:'Accounts Receivable',desc:'Customer billing & collections'},
+    {icon:'💰',label:'Budgeting',desc:'Annual & quarterly budgets'},
+    {icon:'📑',label:'Tax & GST',desc:'Filing, returns & compliance'},
+    {icon:'🏦',label:'Treasury',desc:'Cash flow & investments'},
+  ]},
+  hr:{title:'HR',desc:'People, payroll & workforce planning',tiles:[
+    {icon:'👥',label:'Org Chart',desc:'Team structure & reporting'},
+    {icon:'🧑‍💼',label:'Recruitment',desc:'Jobs, pipeline & offers'},
+    {icon:'📅',label:'Leave & Attendance',desc:'Leave management & timesheets'},
+    {icon:'⭐',label:'Performance',desc:'Goals, reviews & appraisals'},
+    {icon:'💵',label:'Payroll',desc:'Salary processing & payslips'},
+    {icon:'📚',label:'Learning',desc:'Courses & certifications'},
+  ]},
+  ops:{title:'Operations',desc:'Manufacturing, logistics & quality',tiles:[
+    {icon:'🏭',label:'Production Planning',desc:'MRP & scheduling'},
+    {icon:'📦',label:'Inventory',desc:'Stock levels & movements'},
+    {icon:'🔧',label:'Maintenance',desc:'CMMS & asset management'},
+    {icon:'✅',label:'Quality Control',desc:'Inspections & non-conformances'},
+    {icon:'🚚',label:'Dispatch',desc:'Outbound logistics & tracking'},
+    {icon:'📉',label:'OEE Analytics',desc:'Overall equipment efficiency'},
+  ]},
+  crm:{title:'CRM',desc:'Sales pipeline, customers & support',tiles:[
+    {icon:'🔍',label:'Lead Management',desc:'Capture, qualify & assign'},
+    {icon:'📈',label:'Pipeline',desc:'Deals & stages'},
+    {icon:'📞',label:'Customer 360',desc:'Full account history'},
+    {icon:'🎫',label:'Support Tickets',desc:'Cases & SLA tracking'},
+    {icon:'📣',label:'Campaigns',desc:'Email & nurture workflows'},
+    {icon:'🤝',label:'Contracts',desc:'Agreements & renewals'},
+  ]},
+  scm:{title:'Supply Chain',desc:'Procurement, vendors & logistics',tiles:[
+    {icon:'🛒',label:'Purchase Orders',desc:'Requisitions & approvals'},
+    {icon:'🏪',label:'Vendor Portal',desc:'Supplier management'},
+    {icon:'🗺️',label:'Logistics Tracking',desc:'Shipments & ETAs'},
+    {icon:'🔄',label:'Demand Planning',desc:'Forecasts & replenishment'},
+    {icon:'📋',label:'RFQ Management',desc:'Quotes & comparisons'},
+    {icon:'⚠️',label:'Risk Monitor',desc:'Supply risk indicators'},
+  ]},
+  it:{title:'IT & Admin',desc:'Infrastructure, helpdesk & access',tiles:[
+    {icon:'🖥️',label:'Asset Registry',desc:'Hardware & software inventory'},
+    {icon:'🎫',label:'IT Helpdesk',desc:'Incidents & service requests'},
+    {icon:'🔐',label:'Access Control',desc:'Roles, permissions & SSO'},
+    {icon:'☁️',label:'Cloud Resources',desc:'AWS/Azure monitoring'},
+    {icon:'🔒',label:'Security',desc:'Alerts & vulnerability mgmt'},
+    {icon:'📡',label:'Network',desc:'Uptime & bandwidth monitoring'},
+  ]},
+  compliance:{title:'Compliance',desc:'Regulatory, audit & legal tracking',tiles:[
+    {icon:'📜',label:'Regulatory Calendar',desc:'Filing deadlines & status'},
+    {icon:'🔎',label:'Audit Trail',desc:'Full activity log & evidence'},
+    {icon:'⚖️',label:'Legal Matters',desc:'Cases, notices & contracts'},
+    {icon:'🛡️',label:'Policy Library',desc:'SOPs & policy documents'},
+    {icon:'📊',label:'Risk Register',desc:'Risks & mitigations'},
+    {icon:'🏅',label:'Certifications',desc:'ISO, SOC & license tracking'},
+  ]},
+};
+
+let startOpen=false;
+function toggleStart(){
+  startOpen=!startOpen;
+  document.getElementById('start-menu').style.display=startOpen?'flex':'none';
+  if(startOpen)setModule('finance',document.querySelector('.sm-item.active'));
+}
+function setModule(key,el){
+  document.querySelectorAll('.sm-item').forEach(i=>i.classList.remove('active'));
+  if(el)el.classList.add('active');
+  const m=modules[key];
+  document.getElementById('sm-module-title').textContent=m.title;
+  document.getElementById('sm-module-desc').textContent=m.desc;
+  const g=document.getElementById('sm-grid');
+  g.innerHTML=m.tiles.map(t=>`
+    <div class="sm-tile" onclick="openFromMenu('${key}')">
+      <div class="sm-tile-icon">${t.icon}</div>
+      <div class="sm-tile-label">${t.label}</div>
+      <div class="sm-tile-desc">${t.desc}</div>
+    </div>`).join('');
+}
+function openFromMenu(key){
+  startOpen=false;
+  document.getElementById('start-menu').style.display='none';
+  const winId='win-'+key;
+  const tw='tw-'+key;
+  const el=document.getElementById(winId);
+  const twEl=document.getElementById(tw);
+  if(el){
+    el.classList.remove('hidden');
+    if(twEl)twEl.classList.add('active');
+  }
+}
+function toggleWin(key){
+  const el=document.getElementById('win-'+key);
+  const tw=document.getElementById('tw-'+key);
+  if(!el)return;
+  const hidden=el.classList.contains('hidden');
+  el.classList.toggle('hidden',!hidden);
+  if(tw)tw.classList.toggle('active',hidden);
+}
+function closeWin(key){
+  const el=document.getElementById('win-'+key);
+  const tw=document.getElementById('tw-'+key);
+  if(el)el.classList.add('hidden');
+  if(tw)tw.classList.remove('active');
+}
+document.addEventListener('click',function(e){
+  if(startOpen&&!e.target.closest('#start-menu')&&!e.target.closest('#start-btn')){
+    startOpen=false;
+    document.getElementById('start-menu').style.display='none';
+  }
+});
+setModule('finance',null);
+</script>

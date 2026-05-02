@@ -240,13 +240,12 @@ export default function ResponsiveShell({
               </div>
 
               <div className="flex items-center gap-6">
-                 <div className="flex items-center gap-2 text-[var(--text-tertiary)] hover:text-[var(--text-primary)] transition-colors cursor-pointer">
+                 <button 
+                   onClick={() => window.dispatchEvent(new CustomEvent('toggleLayout'))}
+                   className="flex items-center gap-2 px-4 py-2 bg-emerald-500/10 text-emerald-500 border border-emerald-500/20 rounded-xl text-[10px] font-black uppercase tracking-widest hover:bg-emerald-500 hover:text-white transition-all shadow-lg shadow-emerald-500/10"
+                 >
                     <Monitor size={14} />
-                    <span className="text-[10px] font-black uppercase tracking-widest">Terminal V2.0</span>
-                 </div>
-                 <button className="relative p-2 text-[var(--text-tertiary)] hover:text-[var(--text-primary)] transition-colors">
-                    <Bell size={18} />
-                    <span className="absolute top-2 right-2 w-1.5 h-1.5 bg-red-500 rounded-full border border-[var(--background)]" />
+                    Sovereign UI
                  </button>
                  <div className="h-8 w-px bg-[var(--border-subtle)]" />
                  <div className="flex flex-col items-end">
@@ -256,6 +255,25 @@ export default function ResponsiveShell({
               </div>
             </header>
           )}
+
+          {/* Floating Fullscreen Toggle (Bottom Right) */}
+          <button 
+            onClick={() => {
+              if (!document.fullscreenElement) {
+                document.documentElement.requestFullscreen();
+              } else {
+                if (document.exitFullscreen) {
+                  document.exitFullscreen();
+                }
+              }
+            }}
+            className="fixed bottom-6 right-6 p-3 bg-white border border-[var(--border-subtle)] rounded-full text-[var(--text-tertiary)] hover:text-[var(--primary)] hover:border-[var(--primary)] shadow-xl transition-all z-[1000]"
+            title="Toggle Fullscreen"
+          >
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+              <path d="M15 3h6v6M9 21H3v-6M21 15v6h-6M3 9V3h6" />
+            </svg>
+          </button>
 
           {/* PAGE CONTENT */}
           <section 

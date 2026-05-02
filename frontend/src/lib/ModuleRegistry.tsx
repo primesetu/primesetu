@@ -8,6 +8,7 @@
  * © 2026 — All Rights Reserved
  * "Memory, Not Code."
  * ============================================================ */
+import React, { lazy } from "react";
 import {
   LayoutDashboard,
   ShoppingCart,
@@ -42,53 +43,53 @@ import {
 } from "lucide-react";
 
 // Module Lazy/Dynamic Imports
-import TillManagement from "../modules/billing/TillManagement";
-import PriceManagement from "../modules/billing/PriceManagement";
-import ComingSoon from "../components/ComingSoon";
-import ManagementDashboard from "../modules/dashboard/ManagementDashboard";
-import BillingModule from "../modules/billing/BillingModule";
-import MasterRegistry from "../modules/catalogue/CatalogRegistry";
-import ItemMasterModule from "../modules/inventory/ItemMasterModule";
-import InventoryModule from "../modules/inventory/InventoryModule";
-import AnalyticsModule from "../modules/analytics/AnalyticsModule";
-import ConfigModule from "../modules/settings/ConfigModule";
-import HOSyncModule from "../modules/ho/HOSyncModule";
-import ProcurementModule from "../modules/inventory/ProcurementModule";
-import TransactionsModule from "../modules/billing/TransactionsModule";
-import DayEndModule from "../modules/billing/DayEndModule";
-import ReturnsDashboard from "../modules/billing/ReturnsDashboard";
-import CustomerMaster from "../modules/catalogue/CustomerMaster";
-import BarcodeStudio from "../modules/inventory/BarcodeStudio";
-import SchemesModule from "../modules/schemes/SchemesModule";
-import DailySalesBook from "../modules/analytics/DailySalesBook";
-import VendorMaster from "../modules/catalogue/VendorMaster";
-import PersonnelMaster from "../modules/catalogue/PersonnelMaster";
-import LoyaltyModule from "../modules/catalogue/LoyaltyModule";
-import StockReports from "../modules/analytics/StockReports";
-import TaxRegister from "../modules/analytics/TaxRegister";
-import AlertsModule from "../modules/alerts/AlertsModule";
-import SecurityModule from "../modules/settings/SecurityModule";
-import HousekeepingModule from "../modules/settings/HousekeepingModule";
-import StockMovement from "../modules/inventory/StockMovement";
-import HSNManager from "../modules/catalogue/HSNManager";
-import PrintTemplateCenter from "../modules/settings/PrintTemplateCenter";
-import StoreOnboarding from "../modules/onboarding/StoreOnboarding";
-import CompliancePanel from "../modules/compliance/CompliancePanel";
-import PriceGroups from "../modules/catalogue/PriceGroups";
-import InventoryAudit from "../modules/inventory/InventoryAudit";
-import GRNProcessor from "../modules/inventory/GRNProcessor";
-import FinanceHub from "../modules/accounts/FinanceHub";
-import SalesDrilldownModule from "../modules/analytics/SalesDrilldownModule";
-import WarehouseDashboard from "../modules/inventory/WarehouseDashboard";
-import StockTransfer from "../modules/inventory/StockTransfer";
-import IntelligenceCockpit from "../modules/intelligence/IntelligenceCockpit";
-import LegacyExplorer from "../modules/intelligence/LegacyExplorer";
-import TableViewerModule from "../modules/settings/TableViewerModule";
-import SystemParameters from "../modules/setup/SystemParameters";
-import PurchaseJournal from "../modules/transactions/PurchaseJournal";
-import SalesJournal from "../modules/transactions/SalesJournal";
-import StockLedgerJournal from "../modules/transactions/StockLedgerJournal";
-import PurchaseEntry from "../modules/transactions/PurchaseEntry";
+const TillManagement = lazy(() => import("../modules/billing/TillManagement"));
+const PriceManagement = lazy(() => import("../modules/billing/PriceManagement"));
+const ComingSoon = lazy(() => import("../components/ComingSoon"));
+const ManagementDashboard = lazy(() => import("../modules/dashboard/ManagementDashboard"));
+const BillingModule = lazy(() => import("../modules/billing/BillingModule"));
+const MasterRegistry = lazy(() => import("../modules/catalogue/CatalogRegistry"));
+const ItemMasterModule = lazy(() => import("../modules/inventory/ItemMasterModule"));
+const InventoryModule = lazy(() => import("../modules/inventory/InventoryModule"));
+const AnalyticsModule = lazy(() => import("../modules/analytics/AnalyticsModule"));
+const ConfigModule = lazy(() => import("../modules/settings/ConfigModule"));
+const HOSyncModule = lazy(() => import("../modules/ho/HOSyncModule"));
+const ProcurementModule = lazy(() => import("../modules/inventory/ProcurementModule"));
+const TransactionsModule = lazy(() => import("../modules/billing/TransactionsModule"));
+const DayEndModule = lazy(() => import("../modules/billing/DayEndModule"));
+const ReturnsDashboard = lazy(() => import("../modules/billing/ReturnsDashboard"));
+const CustomerMaster = lazy(() => import("../modules/catalogue/CustomerMaster"));
+const BarcodeStudio = lazy(() => import("../modules/inventory/BarcodeStudio"));
+const SchemesModule = lazy(() => import("../modules/schemes/SchemesModule"));
+const DailySalesBook = lazy(() => import("../modules/analytics/DailySalesBook"));
+const VendorMaster = lazy(() => import("../modules/catalogue/VendorMaster"));
+const PersonnelMaster = lazy(() => import("../modules/catalogue/PersonnelMaster"));
+const LoyaltyModule = lazy(() => import("../modules/catalogue/LoyaltyModule"));
+const StockReports = lazy(() => import("../modules/analytics/StockReports"));
+const TaxRegister = lazy(() => import("../modules/analytics/TaxRegister"));
+const AlertsModule = lazy(() => import("../modules/alerts/AlertsModule"));
+const SecurityModule = lazy(() => import("../modules/settings/SecurityModule"));
+const HousekeepingModule = lazy(() => import("../modules/settings/HousekeepingModule"));
+const StockMovement = lazy(() => import("../modules/inventory/StockMovement"));
+const HSNManager = lazy(() => import("../modules/catalogue/HSNManager"));
+const PrintTemplateCenter = lazy(() => import("../modules/settings/PrintTemplateCenter"));
+const StoreOnboarding = lazy(() => import("../modules/onboarding/StoreOnboarding"));
+const CompliancePanel = lazy(() => import("../modules/compliance/CompliancePanel"));
+const PriceGroups = lazy(() => import("../modules/catalogue/PriceGroups"));
+const InventoryAudit = lazy(() => import("../modules/inventory/InventoryAudit"));
+const GRNProcessor = lazy(() => import("../modules/inventory/GRNProcessor"));
+const FinanceHub = lazy(() => import("../modules/accounts/FinanceHub"));
+const SalesDrilldownModule = lazy(() => import("../modules/analytics/SalesDrilldownModule"));
+const WarehouseDashboard = lazy(() => import("../modules/inventory/WarehouseDashboard"));
+const StockTransfer = lazy(() => import("../modules/inventory/StockTransfer"));
+const IntelligenceCockpit = lazy(() => import("../modules/intelligence/IntelligenceCockpit"));
+const LegacyExplorer = lazy(() => import("../modules/intelligence/LegacyExplorer"));
+const TableViewerModule = lazy(() => import("../modules/settings/TableViewerModule"));
+const SystemParameters = lazy(() => import("../modules/setup/SystemParameters"));
+const PurchaseJournal = lazy(() => import("../modules/transactions/PurchaseJournal"));
+const SalesJournal = lazy(() => import("../modules/transactions/SalesJournal"));
+const StockLedgerJournal = lazy(() => import("../modules/transactions/StockLedgerJournal"));
+const PurchaseEntry = lazy(() => import("../modules/transactions/PurchaseEntry"));
 
 export interface ModuleDefinition {
   id: string;

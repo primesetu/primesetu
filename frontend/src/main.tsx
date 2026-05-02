@@ -51,15 +51,19 @@ ModuleRegistry.registerModules([
 // Initialize i18n
 import './lib/i18n'
 
-// Unregister all stale Service Workers (PWA removed — POS requires live connectivity)
-if ('serviceWorker' in navigator) {
-  navigator.serviceWorker.getRegistrations().then((registrations) => {
-    for (const registration of registrations) {
-      registration.unregister()
-      console.log('[SMRITI-OS] Stale SW unregistered:', registration.scope)
+// ── PWA Advanced Initialization ──
+import { registerSW } from 'virtual:pwa-register'
+
+const updateSW = registerSW({
+  onNeedRefresh() {
+    if (confirm('[SMRITI-OS UPDATE]\n\nA new institutional update is available.\nReload the terminal now?')) {
+      updateSW(true)
     }
-  })
-}
+  },
+  onOfflineReady() {
+    console.log('[SMRITI-OS] Enterprise PWA installed and ready for resilient operations.')
+  },
+})
 
 const queryClient = new QueryClient({
   defaultOptions: {

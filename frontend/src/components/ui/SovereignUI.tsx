@@ -394,24 +394,7 @@ export function DataTable<T>({
 
   return (
     <div className={cn("flex-1 flex flex-col overflow-hidden border border-[var(--border-subtle)] bg-[var(--surface)] shadow-inner", className)}>
-      <div 
-        className={cn("w-full h-full min-h-[300px]", !isInstitutional && "dark")} 
-        style={{ 
-          '--ag-background-color': 'transparent',
-          '--ag-header-background-color': isInstitutional ? 'rgba(248, 249, 250, 0.5)' : 'rgba(30, 41, 59, 0.5)',
-          '--ag-header-foreground-color': isInstitutional ? '#1e293b' : '#f8f9fa',
-          '--ag-data-color': isInstitutional ? '#1e293b' : '#f8f9fa',
-          '--ag-odd-row-background-color': 'rgba(255, 255, 255, 0.02)',
-          '--ag-border-color': 'var(--border-subtle)',
-          '--ag-row-hover-color': 'var(--surface-elevated)',
-          '--ag-selected-row-background-color': 'rgba(var(--primary-rgb), 0.15)',
-          '--ag-font-family': 'var(--font-primary)',
-          '--ag-font-size': '13px',
-          '--ag-grid-size': '6px',
-          '--ag-list-item-height': '40px',
-          '--ag-border-radius': '0px'
-        } as React.CSSProperties}
-      >
+      <div className={cn("w-full h-full min-h-[300px]", isInstitutional ? "ag-theme-quartz" : "ag-theme-quartz-dark")} >
         <AgGridReact
           theme={themeQuartz}
           rowData={loading ? [] : data}

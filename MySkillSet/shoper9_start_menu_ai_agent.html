@@ -1,0 +1,384 @@
+
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:var(--font-sans)}
+#desktop{width:100%;min-height:600px;background:#0d1117;position:relative;overflow:hidden;border-radius:var(--border-radius-lg)}
+#wp{position:absolute;inset:0;opacity:0.03;background-image:repeating-linear-gradient(45deg,#fff 0,#fff 1px,transparent 0,transparent 50%);background-size:20px 20px}
+#main{position:absolute;inset:0;bottom:48px;padding:12px;display:flex;gap:10px;flex-wrap:wrap;align-items:flex-start;align-content:flex-start}
+
+.win{position:relative;border-radius:8px;border:0.5px solid rgba(255,255,255,0.1);background:rgba(18,26,46,0.98);display:flex;flex-direction:column;overflow:hidden;width:310px}
+.win.hidden{display:none}
+.wtb{height:32px;background:rgba(0,0,0,0.4);display:flex;align-items:center;padding:0 10px;gap:6px;flex-shrink:0;border-bottom:0.5px solid rgba(255,255,255,0.06)}
+.wt{color:rgba(255,255,255,0.8);font-size:11px;font-weight:500;flex:1}
+.wc{width:9px;height:9px;border-radius:50%;cursor:pointer;border:none;flex-shrink:0}
+.wc-r{background:#e74c3c}.wc-y{background:#f1c40f}.wc-g{background:#2ecc71}
+.wb{padding:10px;flex:1}
+.wr{display:flex;align-items:center;justify-content:space-between;padding:5px 0;border-bottom:0.5px solid rgba(255,255,255,0.04);font-size:11px}
+.wr:last-child{border-bottom:none}
+.wl{color:rgba(255,255,255,0.45)}
+.wv{color:#fff;font-weight:500}
+.bx{padding:2px 6px;border-radius:3px;font-size:10px;font-weight:500}
+.bg{background:rgba(46,204,113,0.2);color:#2ecc71}
+.ba{background:rgba(241,196,15,0.2);color:#f1c40f}
+.br{background:rgba(231,76,60,0.2);color:#e74c3c}
+.bb{background:rgba(52,152,219,0.2);color:#3498db}
+
+#taskbar{position:absolute;bottom:0;left:0;right:0;height:48px;background:rgba(8,14,28,0.97);border-top:0.5px solid rgba(255,255,255,0.08);display:flex;align-items:center;gap:4px;padding:0 8px;z-index:100}
+#sb{height:36px;background:#1a5276;border:none;border-radius:6px;cursor:pointer;display:flex;align-items:center;padding:0 12px;gap:7px;color:#fff;font-size:12px;font-weight:500;flex-shrink:0;transition:background 0.15s}
+#sb:hover{background:#21618c}
+.sg{display:grid;grid-template-columns:1fr 1fr;gap:2px;width:12px;height:12px}
+.sg span{background:#fff;border-radius:1px;display:block}
+.tw{height:36px;border-radius:6px;border:0.5px solid rgba(255,255,255,0.12);background:rgba(255,255,255,0.06);cursor:pointer;display:flex;align-items:center;padding:0 9px;gap:5px;color:rgba(255,255,255,0.8);font-size:11px;transition:background 0.15s;white-space:nowrap}
+.tw:hover,.tw.on{background:rgba(255,255,255,0.14);border-color:rgba(255,255,255,0.25)}
+.td{width:0.5px;background:rgba(255,255,255,0.08);height:26px;margin:0 3px;flex-shrink:0}
+.tdot{width:6px;height:6px;border-radius:50%;flex-shrink:0}
+#clk{margin-left:auto;color:rgba(255,255,255,0.6);font-size:11px;text-align:right;flex-shrink:0;padding-right:2px;line-height:1.5}
+
+#sm{position:absolute;bottom:52px;left:8px;width:700px;background:rgba(10,16,32,0.98);border:0.5px solid rgba(255,255,255,0.1);border-radius:10px;display:none;z-index:200;overflow:hidden}
+#sm.open{display:flex;flex-direction:column}
+#sm-top{display:flex;height:360px}
+#sm-sidebar{width:170px;border-right:0.5px solid rgba(255,255,255,0.07);padding:8px 0;flex-shrink:0;overflow-y:auto}
+.si{padding:8px 12px;cursor:pointer;display:flex;align-items:center;gap:8px;color:rgba(255,255,255,0.65);font-size:12px;transition:background 0.1s;border-left:3px solid transparent}
+.si:hover,.si.on{background:rgba(255,255,255,0.06);color:#fff;border-left-color:#1a5276}
+.sico{width:18px;height:18px;border-radius:4px;display:flex;align-items:center;justify-content:center;font-size:10px;flex-shrink:0}
+#sm-right{flex:1;display:flex;flex-direction:column;min-width:0}
+#sm-hdr{padding:12px 14px 8px;border-bottom:0.5px solid rgba(255,255,255,0.07)}
+#sm-hdr h3{color:#fff;font-size:13px;font-weight:500}
+#sm-hdr p{color:rgba(255,255,255,0.4);font-size:10px;margin-top:2px}
+#sm-grid{padding:10px;display:grid;grid-template-columns:1fr 1fr 1fr;gap:6px;overflow-y:auto;flex:1}
+.stile{background:rgba(255,255,255,0.05);border:0.5px solid rgba(255,255,255,0.08);border-radius:7px;padding:10px;cursor:pointer;transition:background 0.1s;display:flex;flex-direction:column;gap:4px}
+.stile:hover{background:rgba(255,255,255,0.1);border-color:rgba(255,255,255,0.18)}
+.stile-ico{font-size:16px}
+.stile-lbl{color:#fff;font-size:11px;font-weight:500;line-height:1.3}
+.stile-desc{color:rgba(255,255,255,0.35);font-size:10px;line-height:1.3}
+
+#agent-bar{border-top:0.5px solid rgba(255,255,255,0.07);padding:8px 10px;display:flex;gap:6px;align-items:center;background:rgba(0,0,0,0.3)}
+#agent-lbl{font-size:10px;color:#2ecc71;font-weight:500;white-space:nowrap;flex-shrink:0}
+#ai-input{flex:1;height:30px;border:0.5px solid rgba(255,255,255,0.15);border-radius:5px;padding:0 10px;font-size:11px;background:rgba(255,255,255,0.06);color:#fff;outline:none}
+#ai-btn{height:30px;padding:0 12px;border-radius:5px;border:0.5px solid rgba(26,82,118,0.8);background:rgba(26,82,118,0.6);color:#fff;font-size:11px;cursor:pointer;white-space:nowrap;transition:background 0.12s}
+#ai-btn:hover{background:rgba(26,82,118,0.9)}
+
+#agent-toast{position:absolute;bottom:54px;right:10px;width:270px;background:rgba(10,16,32,0.98);border:0.5px solid rgba(255,255,255,0.12);border-radius:8px;padding:10px 12px;display:none;z-index:300}
+#agent-toast.show{display:block}
+.at-hdr{display:flex;align-items:center;gap:6px;margin-bottom:6px}
+.at-dot{width:7px;height:7px;border-radius:50%;background:#2ecc71;animation:pulse 1.5s infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:0.3}}
+.at-title{color:#fff;font-size:11px;font-weight:500}
+.at-steps{display:flex;flex-direction:column;gap:3px;margin-bottom:6px}
+.at-step{font-size:10px;padding:2px 6px;border-radius:3px;border:0.5px solid transparent}
+.at-done{color:#2ecc71;border-color:rgba(46,204,113,0.3);background:rgba(46,204,113,0.08)}
+.at-run{color:#f1c40f;border-color:rgba(241,196,15,0.3);background:rgba(241,196,15,0.08);animation:blink 0.7s infinite}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:0.4}}
+.at-wait{color:rgba(255,255,255,0.3);border-color:rgba(255,255,255,0.06)}
+.at-result{font-size:10px;color:rgba(255,255,255,0.7);line-height:1.5;border-top:0.5px solid rgba(255,255,255,0.07);padding-top:6px}
+</style>
+
+<div id="desktop">
+<div id="wp"></div>
+<div id="main">
+  <div class="win" id="w-pos">
+    <div class="wtb"><button class="wc wc-r" onclick="cw('pos')"></button><button class="wc wc-y"></button><button class="wc wc-g"></button><span class="wt">Shoper 9 POS — Store Billing</span></div>
+    <div class="wb">
+      <div class="wr"><span class="wl">Today's sales</span><span class="wv">₹3,84,200</span></div>
+      <div class="wr"><span class="wl">Bills raised</span><span class="wv">142</span></div>
+      <div class="wr"><span class="wl">Active tills</span><span class="wv"><span class="bx bg">4 open</span></span></div>
+      <div class="wr"><span class="wl">Returns today</span><span class="wv"><span class="bx ba">7 items</span></span></div>
+      <div class="wr"><span class="wl">Cash in till</span><span class="wv">₹48,500</span></div>
+      <div class="wr"><span class="wl">Pending advance slips</span><span class="wv"><span class="bx ba">3</span></span></div>
+    </div>
+  </div>
+  <div class="win hidden" id="w-ho">
+    <div class="wtb"><button class="wc wc-r" onclick="cw('ho')"></button><button class="wc wc-y"></button><button class="wc wc-g"></button><span class="wt">Shoper 9 HO — Head Office</span></div>
+    <div class="wb">
+      <div class="wr"><span class="wl">Active stores</span><span class="wv">24</span></div>
+      <div class="wr"><span class="wl">Pending indents</span><span class="wv"><span class="bx ba">18</span></span></div>
+      <div class="wr"><span class="wl">Consolidated POs</span><span class="wv">6 generated</span></div>
+      <div class="wr"><span class="wl">Data sync status</span><span class="wv"><span class="bx bg">All synced</span></span></div>
+      <div class="wr"><span class="wl">Price revision alerts</span><span class="wv"><span class="bx br">2 pending</span></span></div>
+      <div class="wr"><span class="wl">Scheme broadcasts</span><span class="wv">1 active</span></div>
+    </div>
+  </div>
+  <div class="win hidden" id="w-wh">
+    <div class="wtb"><button class="wc wc-r" onclick="cw('wh')"></button><button class="wc wc-y"></button><button class="wc wc-g"></button><span class="wt">Shoper 9 — Warehouse / Godown</span></div>
+    <div class="wb">
+      <div class="wr"><span class="wl">Total SKUs</span><span class="wv">84,200</span></div>
+      <div class="wr"><span class="wl">Inward GRNs today</span><span class="wv">12</span></div>
+      <div class="wr"><span class="wl">Outward dispatches</span><span class="wv">9</span></div>
+      <div class="wr"><span class="wl">Low stock alerts</span><span class="wv"><span class="bx br">37 items</span></span></div>
+      <div class="wr"><span class="wl">Stock transfer requests</span><span class="wv"><span class="bx ba">5 pending</span></span></div>
+      <div class="wr"><span class="wl">Barcode labels queued</span><span class="wv">120</span></div>
+    </div>
+  </div>
+  <div class="win hidden" id="w-dist">
+    <div class="wtb"><button class="wc wc-r" onclick="cw('dist')"></button><button class="wc wc-y"></button><button class="wc wc-g"></button><span class="wt">Shoper 9 Distributor</span></div>
+    <div class="wb">
+      <div class="wr"><span class="wl">Distributor orders</span><span class="wv">34</span></div>
+      <div class="wr"><span class="wl">Pending delivery</span><span class="wv"><span class="bx ba">11</span></span></div>
+      <div class="wr"><span class="wl">Credit exposure</span><span class="wv">₹12.4 Cr</span></div>
+      <div class="wr"><span class="wl">Outstanding payments</span><span class="wv"><span class="bx br">₹3.2 Cr</span></span></div>
+      <div class="wr"><span class="wl">Return requests</span><span class="wv">4</span></div>
+      <div class="wr"><span class="wl">Scheme eligibility</span><span class="wv"><span class="bx bg">8 qualified</span></span></div>
+    </div>
+  </div>
+  <div class="win hidden" id="w-cat">
+    <div class="wtb"><button class="wc wc-r" onclick="cw('cat')"></button><button class="wc wc-y"></button><button class="wc wc-g"></button><span class="wt">Catalogue Management</span></div>
+    <div class="wb">
+      <div class="wr"><span class="wl">Active catalogues</span><span class="wv">14</span></div>
+      <div class="wr"><span class="wl">Products in catalogue</span><span class="wv">1,24,800</span></div>
+      <div class="wr"><span class="wl">Price lists</span><span class="wv">6</span></div>
+      <div class="wr"><span class="wl">Pending price updates</span><span class="wv"><span class="bx ba">280 items</span></span></div>
+      <div class="wr"><span class="wl">GS1/GTIN items</span><span class="wv"><span class="bx bb">3,400</span></span></div>
+      <div class="wr"><span class="wl">Variants configured</span><span class="wv">Size / Colour / Style</span></div>
+    </div>
+  </div>
+  <div class="win hidden" id="w-mis">
+    <div class="wtb"><button class="wc wc-r" onclick="cw('mis')"></button><button class="wc wc-y"></button><button class="wc wc-g"></button><span class="wt">MIS Reports — Tally Shoper 9</span></div>
+    <div class="wb">
+      <div class="wr"><span class="wl">Store-wise sales</span><span class="wv">₹2.1 Cr today</span></div>
+      <div class="wr"><span class="wl">Top selling SKU</span><span class="wv">SKU-40821</span></div>
+      <div class="wr"><span class="wl">Slow movers</span><span class="wv"><span class="bx ba">142 items</span></span></div>
+      <div class="wr"><span class="wl">Shrinkage %</span><span class="wv"><span class="bx br">1.4%</span></span></div>
+      <div class="wr"><span class="wl">Scheme redemptions</span><span class="wv">₹84,200</span></div>
+      <div class="wr"><span class="wl">Tally ERP sync</span><span class="wv"><span class="bx bg">Synced</span></span></div>
+    </div>
+  </div>
+</div>
+
+<div id="taskbar">
+  <button id="sb" onclick="toggleSM()">
+    <div class="sg"><span></span><span></span><span></span><span></span></div>
+    Shoper 9
+  </button>
+  <div class="td"></div>
+  <div class="tw on" id="tw-pos" onclick="tw('pos')"><div class="tdot" style="background:#3498db"></div>POS</div>
+  <div class="tw" id="tw-ho" onclick="tw('ho')"><div class="tdot" style="background:#9b59b6"></div>HO</div>
+  <div class="tw" id="tw-wh" onclick="tw('wh')"><div class="tdot" style="background:#e67e22"></div>Warehouse</div>
+  <div class="tw" id="tw-dist" onclick="tw('dist')"><div class="tdot" style="background:#1abc9c"></div>Distributor</div>
+  <div class="tw" id="tw-cat" onclick="tw('cat')"><div class="tdot" style="background:#e74c3c"></div>Catalogue</div>
+  <div class="tw" id="tw-mis" onclick="tw('mis')"><div class="tdot" style="background:#f39c12"></div>MIS</div>
+  <div id="clk">10:42 AM<br><span style="font-size:9px;opacity:0.5">02 May 2026</span></div>
+</div>
+
+<div id="sm">
+  <div id="sm-top">
+    <div id="sm-sidebar">
+      <div style="padding:10px 12px 8px;border-bottom:0.5px solid rgba(255,255,255,0.07);margin-bottom:4px">
+        <div style="width:28px;height:28px;border-radius:50%;background:#1a5276;display:flex;align-items:center;justify-content:center;color:#fff;font-size:10px;font-weight:500;margin-bottom:4px">S9</div>
+        <div style="color:#fff;font-size:11px;font-weight:500">Shoper 9</div>
+        <div style="color:rgba(255,255,255,0.35);font-size:9px">Tally Retail & Warehouse</div>
+      </div>
+      <div class="si on" onclick="setMod('pos',this)"><div class="sico" style="background:rgba(52,152,219,0.2);color:#3498db">P</div>POS / Billing</div>
+      <div class="si" onclick="setMod('ho',this)"><div class="sico" style="background:rgba(155,89,182,0.2);color:#9b59b6">H</div>Head Office</div>
+      <div class="si" onclick="setMod('wh',this)"><div class="sico" style="background:rgba(230,126,34,0.2);color:#e67e22">W</div>Warehouse</div>
+      <div class="si" onclick="setMod('dist',this)"><div class="sico" style="background:rgba(26,188,156,0.2);color:#1abc9c">D</div>Distributor</div>
+      <div class="si" onclick="setMod('cat',this)"><div class="sico" style="background:rgba(231,76,60,0.2);color:#e74c3c">C</div>Catalogue</div>
+      <div class="si" onclick="setMod('inv',this)"><div class="sico" style="background:rgba(241,196,15,0.2);color:#f1c40f">I</div>Inventory</div>
+      <div class="si" onclick="setMod('scheme',this)"><div class="sico" style="background:rgba(46,204,113,0.2);color:#2ecc71">S</div>Schemes & Offers</div>
+      <div class="si" onclick="setMod('mis',this)"><div class="sico" style="background:rgba(149,165,166,0.2);color:#95a5a6">M</div>MIS Reports</div>
+      <div class="si" onclick="setMod('tally',this)"><div class="sico" style="background:rgba(26,82,118,0.2);color:#5dade2">T</div>Tally ERP Sync</div>
+    </div>
+    <div id="sm-right">
+      <div id="sm-hdr"><h3 id="sm-ttl">POS / Billing</h3><p id="sm-desc">Till management, billing, returns & advance slips</p></div>
+      <div id="sm-grid"></div>
+    </div>
+  </div>
+  <div id="agent-bar">
+    <span id="agent-lbl">AI AGENT</span>
+    <input id="ai-input" placeholder='Ask Shoper 9 agent e.g. "Show low stock items in all stores"' />
+    <button id="ai-btn" onclick="runAgent()">Run</button>
+  </div>
+</div>
+
+<div id="agent-toast">
+  <div class="at-hdr"><div class="at-dot"></div><span class="at-title" id="at-title">Agent running...</span></div>
+  <div class="at-steps" id="at-steps"></div>
+  <div class="at-result" id="at-result" style="display:none"></div>
+</div>
+</div>
+
+<script>
+const mods={
+  pos:{title:'POS / Billing',desc:'Till management, billing, returns & advance slips',tiles:[
+    {i:'🧾',l:'New Bill',d:'Fast billing with barcode scan'},
+    {i:'🔄',l:'Sales Return',d:'Item-level return processing'},
+    {i:'💵',l:'Till Management',d:'Open / close / cash lift'},
+    {i:'📋',l:'Advance Slips',d:'Pre-order & expected sales'},
+    {i:'🏷️',l:'Price Override',d:'Supervisor price change'},
+    {i:'🎟️',l:'Coupon Redemption',d:'Apply discount coupons'},
+  ]},
+  ho:{title:'Head Office',desc:'Centralised indent, PO & multi-store management',tiles:[
+    {i:'🏬',l:'Store Dashboard',d:'All 24 stores overview'},
+    {i:'📦',l:'Indent Management',d:'Approve store indents'},
+    {i:'📄',l:'Consolidated PO',d:'Generate multi-store POs'},
+    {i:'🔔',l:'Alerts Broadcast',d:'Price revision & promos'},
+    {i:'🔁',l:'Data Replication',d:'Sync schedule & status'},
+    {i:'📊',l:'HO MIS Report',d:'Cross-store performance'},
+  ]},
+  wh:{title:'Warehouse / Godown',desc:'GRN, dispatch, stock transfer & barcode printing',tiles:[
+    {i:'📥',l:'GRN Entry',d:'Goods received note'},
+    {i:'📤',l:'Stock Dispatch',d:'Outward to stores'},
+    {i:'🔁',l:'Stock Transfer',d:'Inter-store movement'},
+    {i:'⚠️',l:'Low Stock Alert',d:'Reorder point items'},
+    {i:'🏷️',l:'Barcode Printing',d:'Generate & print labels'},
+    {i:'🗂️',l:'Physical Stock',d:'Counting & reconciliation'},
+  ]},
+  dist:{title:'Distributor',desc:'Distributor orders, credit & scheme eligibility',tiles:[
+    {i:'🤝',l:'Distributor Orders',d:'Order capture & status'},
+    {i:'💳',l:'Credit Management',d:'Limits & outstanding'},
+    {i:'🚚',l:'Delivery Schedule',d:'Pending dispatches'},
+    {i:'💰',l:'Payment Collection',d:'Receipts & dues'},
+    {i:'🎁',l:'Scheme Eligibility',d:'Check scheme qualification'},
+    {i:'📑',l:'Distributor Report',d:'Sales & returns summary'},
+  ]},
+  cat:{title:'Catalogue Management',desc:'Products, price lists, variants & GS1/GTIN',tiles:[
+    {i:'📚',l:'Product Catalogue',d:'1.2L+ SKU management'},
+    {i:'💲',l:'Price List',d:'MRP, wholesale & retail'},
+    {i:'🎨',l:'Variants',d:'Size / colour / style'},
+    {i:'🌐',l:'GS1/GTIN',d:'International barcode setup'},
+    {i:'🔄',l:'Price Update',d:'Bulk price revision'},
+    {i:'🏢',l:'Supply Chain Map',d:'Zone → State → Store'},
+  ]},
+  inv:{title:'Inventory Management',desc:'Stock queries, SKU tracking & purchase orders',tiles:[
+    {i:'📊',l:'Stock Summary',d:'Real-time across godowns'},
+    {i:'🔍',l:'SKU Query',d:'Item-wise availability'},
+    {i:'📝',l:'Purchase Order',d:'Raise & track POs'},
+    {i:'📦',l:'Goods Receipt',d:'GRN & quality check'},
+    {i:'🔁',l:'Stock Movement',d:'Inward / outward log'},
+    {i:'📉',l:'Slow Movers',d:'Ageing stock report'},
+  ]},
+  scheme:{title:'Schemes & Offers',desc:'Discount schemes, promos & coupon management',tiles:[
+    {i:'🎯',l:'Create Scheme',d:'Item / category / bill level'},
+    {i:'🏷️',l:'Discount Coupons',d:'Generate & issue coupons'},
+    {i:'📅',l:'Scheme Calendar',d:'Active & upcoming promos'},
+    {i:'🔔',l:'Broadcast Scheme',d:'Push to all showrooms'},
+    {i:'📈',l:'Scheme Analysis',d:'Redemption vs target'},
+    {i:'⭐',l:'Loyalty Points',d:'Customer reward config'},
+  ]},
+  mis:{title:'MIS Reports',desc:'Store-wise, item-wise & Tally-integrated reports',tiles:[
+    {i:'📊',l:'Sales Dashboard',d:'Today / MTD / YTD'},
+    {i:'🏬',l:'Store-wise Sales',d:'Compare all outlets'},
+    {i:'📦',l:'Inventory Report',d:'Stock valuation & ageing'},
+    {i:'🔄',l:'Shrinkage Report',d:'Loss & variance analysis'},
+    {i:'💰',l:'Collection Report',d:'Cash / card / UPI split'},
+    {i:'🧮',l:'Tally Reports',d:'View Shoper in Tally ERP'},
+  ]},
+  tally:{title:'Tally ERP Sync',desc:'Auto sync with TallyPrime / Tally ERP 9',tiles:[
+    {i:'🔄',l:'Sync Now',d:'Push data to Tally ERP'},
+    {i:'📋',l:'Sync Schedule',d:'Auto sync configuration'},
+    {i:'✅',l:'Sync Status',d:'Last sync & error log'},
+    {i:'🧾',l:'Voucher Transfer',d:'Sales / purchase vouchers'},
+    {i:'👤',l:'Master Sync',d:'Items & ledgers'},
+    {i:'📤',l:'Export Format',d:'XML / CSV / TXT config'},
+  ]},
+};
+
+const agentCmds=[
+  [['low stock','reorder','out of stock'],{mod:'wh',win:'wh',intent:'stock alert query',steps:['Auth check','Load Warehouse module','Scan all godowns','Apply reorder filter','Rank by criticality'],result:'37 SKUs below reorder level across 3 godowns. Top 3 critical: SKU-40821 (0 units), SKU-11204 (2 units), SKU-88312 (4 units). POs auto-suggested.'}],
+  [['today.*sale','sales today','billing today','pos.*sale'],{mod:'pos',win:'pos',intent:'daily sales query',steps:['Auth check','Load POS module','Query bill log','Aggregate by store','Compute totals'],result:'Today\'s sales: ₹3,84,200 across 142 bills. Top category: Apparel ₹1.2L. Payment split: Cash 42%, Card 38%, UPI 20%.'}],
+  [['pending indent','store indent','ho indent'],{mod:'ho',win:'ho',intent:'indent management',steps:['Auth check','Load HO module','Pull store indents','Filter: pending status','Render for approval'],result:'18 pending indents from 7 stores. Highest volume: Store #12 Mumbai (42 items), Store #7 Pune (28 items). Ready to generate consolidated PO.'}],
+  [['price.*update','price.*revisi','bulk price'],{mod:'cat',win:'cat',intent:'price revision task',steps:['Auth check','Load Catalogue module','Load pending revisions','Validate MRP compliance','Queue broadcast'],result:'280 items pending price update. 12 items flagged: new MRP below cost price. Broadcast to stores scheduled for 6:00 PM.'}],
+  [['sync.*tally','tally.*sync','export.*tally'],{mod:'tally',win:'mis',intent:'Tally ERP sync',steps:['Auth check','Load sync module','Prepare voucher batch','Validate master match','Push to Tally ERP 9'],result:'Sync complete. 142 sales vouchers, 12 GRNs transferred. 1 error: Ledger mismatch for "Zara Returns" — manual fix required.'}],
+  [['scheme','offer','promo','coupon','discount'],{mod:'scheme',win:'mis',intent:'scheme status query',steps:['Auth check','Load Schemes module','Fetch active promos','Compute redemption %','Render dashboard'],result:'2 active schemes: "Summer Flat 30%" (142 redemptions, ₹84,200 value), "Buy 2 Get 1" (38 redemptions). Scheme ends in 3 days — alert sent to all stores.'}],
+  [['grn','goods receiv','inward','warehouse receiv'],{mod:'wh',win:'wh',intent:'GRN processing',steps:['Auth check','Load Warehouse module','Open GRN entry','Map PO references','Update godown stock'],result:'12 GRNs processed today. Total items received: 4,820 units across 6 vendors. 1 discrepancy: PO #WH-2024-891 — 40 units short. Vendor notified.'}],
+  [['till','cash in till','cash lift','end of day','eod'],{mod:'pos',win:'pos',intent:'till management',steps:['Auth check','Load POS module','Query all tills','Compute cash totals','Prepare EOD summary'],result:'4 tills active. Till 1: ₹48,500 (cash limit ₹50,000 — alert triggered). Recommended cash lift: ₹20,000 from Till 1 before EOD.'}],
+  [['distributor','credit','outstanding','dealer'],{mod:'dist',win:'dist',intent:'distributor credit check',steps:['Auth check','Load Distributor module','Pull credit ledgers','Flag overdue accounts','Rank by exposure'],result:'3 distributors over credit limit: Raj Traders (₹1.4Cr / ₹1.2Cr limit), Metro Dist (₹82L / ₹75L limit). Hold on new orders recommended.'}],
+  [['mis','report','dashboard','summary'],{mod:'mis',win:'mis',intent:'MIS report generation',steps:['Auth check','Load MIS module','Aggregate store data','Compute KPIs','Generate report'],result:'MIS ready. Store #5 Andheri: top performer ₹42L MTD. Slow movers: 142 items >90 days. Shrinkage: 1.4% — above 1.0% benchmark. Report exported to PDF.'}],
+];
+
+let smOpen=false,busy=false;
+
+function toggleSM(){
+  smOpen=!smOpen;
+  document.getElementById('sm').className=smOpen?'open':'';
+  if(smOpen)setMod('pos',document.querySelector('.si.on'));
+}
+function setMod(key,el){
+  document.querySelectorAll('.si').forEach(i=>i.classList.remove('on'));
+  if(el)el.classList.add('on');
+  const m=mods[key];
+  if(!m)return;
+  document.getElementById('sm-ttl').textContent=m.title;
+  document.getElementById('sm-desc').textContent=m.desc;
+  const g=document.getElementById('sm-grid');
+  g.innerHTML=m.tiles.map(t=>`<div class="stile" onclick="openWin('${key}')"><div class="stile-ico">${t.i}</div><div class="stile-lbl">${t.l}</div><div class="stile-desc">${t.d}</div></div>`).join('');
+}
+function openWin(key){
+  const map={pos:'pos',ho:'ho',wh:'wh',dist:'dist',cat:'cat',inv:'wh',scheme:'mis',mis:'mis',tally:'mis'};
+  const wk=map[key]||key;
+  smOpen=false;document.getElementById('sm').className='';
+  showWin(wk);
+}
+function showWin(k){
+  const el=document.getElementById('w-'+k);
+  const tel=document.getElementById('tw-'+k);
+  if(el){el.classList.remove('hidden');if(tel)tel.classList.add('on');}
+}
+function cw(k){
+  const el=document.getElementById('w-'+k);
+  const tel=document.getElementById('tw-'+k);
+  if(el)el.classList.add('hidden');
+  if(tel)tel.classList.remove('on');
+}
+function tw(k){
+  const el=document.getElementById('w-'+k);
+  if(!el)return;
+  const hidden=el.classList.contains('hidden');
+  el.classList.toggle('hidden',!hidden);
+  document.getElementById('tw-'+k).classList.toggle('on',hidden);
+}
+function runAgent(){
+  if(busy)return;
+  const inp=document.getElementById('ai-input');
+  const txt=inp.value.trim().toLowerCase();
+  if(!txt)return;
+  inp.value='';
+  const match=agentCmds.find(([kws])=>kws.some(k=>new RegExp(k).test(txt)));
+  if(!match){
+    showToast('Shoper 9 Agent','Unknown command',[],`Command not mapped. Try: "show low stock", "sync with Tally", "pending indents", "today's sales", "active schemes", "GRN status", "till cash summary", "distributor credit".`);
+    return;
+  }
+  const [,cfg]=match;
+  busy=true;
+  document.getElementById('ai-btn').disabled=true;
+  showToast('Shoper 9 Agent — '+cfg.intent,null,cfg.steps,null);
+  highlightMod(cfg.mod);
+  let i=0;
+  function next(){
+    updateStep(i-1,'done');updateStep(i,'run');i++;
+    if(i<=cfg.steps.length)setTimeout(next,350+Math.random()*150);
+    else{
+      updateStep(cfg.steps.length-1,'done');
+      setTimeout(()=>{
+        document.getElementById('at-result').style.display='block';
+        document.getElementById('at-result').textContent=cfg.result;
+        showWin(cfg.win);
+        busy=false;document.getElementById('ai-btn').disabled=false;
+      },300);
+    }
+  }
+  setTimeout(next,200);
+}
+function showToast(title,subtitle,steps,result){
+  const t=document.getElementById('agent-toast');
+  document.getElementById('at-title').textContent=title;
+  const st=document.getElementById('at-steps');
+  st.innerHTML=steps.map((s,i)=>`<div class="at-step at-wait" id="ats-${i}">${s}</div>`).join('');
+  const r=document.getElementById('at-result');
+  r.style.display=result?'block':'none';
+  r.textContent=result||'';
+  t.className='show';
+  setTimeout(()=>{if(!busy)t.className='';},8000);
+}
+function updateStep(i,state){
+  const el=document.getElementById('ats-'+i);
+  if(el)el.className='at-step at-'+state;
+}
+function highlightMod(key){
+  document.querySelectorAll('.si').forEach(el=>el.classList.toggle('on',el.textContent.trim().toLowerCase().startsWith(key[0])));
+}
+document.addEventListener('click',e=>{
+  if(smOpen&&!e.target.closest('#sm')&&!e.target.closest('#sb')){smOpen=false;document.getElementById('sm').className='';}
+});
+document.getElementById('ai-input').addEventListener('keydown',e=>{if(e.key==='Enter')runAgent();});
+setMod('pos',null);
+</script>

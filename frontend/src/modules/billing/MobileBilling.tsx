@@ -21,7 +21,7 @@ interface MobileBillingProps {
   showSettle: boolean
   setShowSettle: (val: boolean) => void
   isFinalizing: boolean
-  handleFinalize: (mode: 'CASH' | 'CARD', amount: number) => Promise<void>
+  handleFinalize: (payments: any[]) => Promise<void>
   customer: { name: string, phone: string }
   setCustomer: (val: { name: string, phone: string }) => void
   salesman: string
@@ -163,7 +163,7 @@ export default function MobileBilling({
                 <button onClick={() => setPaymentMode('CARD')} className={cn("h-16 border-2 rounded-2xl font-black transition-all", paymentMode === 'CARD' ? "border-[var(--primary)] bg-[var(--primary)]/10 text-[var(--primary)]" : "border-[var(--border-subtle)] opacity-40")}>CARD / UPI</button>
               </div>
 
-              <Button onClick={() => handleFinalize(paymentMode, totals.finalNet)} disabled={isFinalizing} className="w-full h-16 bg-[var(--primary)] text-white font-black uppercase rounded-2xl text-lg shadow-xl">
+              <Button onClick={() => handleFinalize([{ id: paymentMode, amount: totals.finalNet * 100 }])} disabled={isFinalizing} className="w-full h-16 bg-[var(--primary)] text-white font-black uppercase rounded-2xl text-lg shadow-xl">
                 {isFinalizing ? <Loader2 className="animate-spin" /> : `PAY ₹${totals.finalNet.toLocaleString()}`}
               </Button>
             </motion.div>

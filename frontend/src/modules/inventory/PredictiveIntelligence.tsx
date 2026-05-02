@@ -30,7 +30,11 @@ export const PredictiveIntelligence: React.FC = () => {
     );
   }
 
-  const stats = data as {
+  const stats = (data || {
+    stockout_forecast_count: 0,
+    top_category: 'N/A',
+    predicted_days: 0
+  }) as {
     stockout_forecast_count: number;
     top_category: string;
     predicted_days: number;

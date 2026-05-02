@@ -22,11 +22,11 @@ export default function InventoryAuditReport({ audit, onClose }: AuditReportProp
   if (!audit) return null;
 
   const stats = {
-    totalItems: audit.items?.length || 0,
-    totalQty: audit.items?.reduce((acc: number, item: any) => acc + item.physical_qty, 0) || 0,
-    shortages: audit.items?.filter((item: any) => item.physical_qty < item.system_qty).length || 0,
-    surplus: audit.items?.filter((item: any) => item.physical_qty > item.system_qty).length || 0,
-    varianceQty: audit.items?.reduce((acc: number, item: any) => acc + (item.physical_qty - item.system_qty), 0) || 0,
+    totalItems: audit.entries?.length || 0,
+    totalQty: audit.entries?.reduce((acc: number, entry: any) => acc + entry.physical_qty, 0) || 0,
+    shortages: audit.entries?.filter((entry: any) => entry.physical_qty < entry.book_qty).length || 0,
+    surplus: audit.entries?.filter((entry: any) => entry.physical_qty > entry.book_qty).length || 0,
+    varianceQty: audit.entries?.reduce((acc: number, entry: any) => acc + (entry.physical_qty - entry.book_qty), 0) || 0,
   };
 
   // ── VARIANCE COLUMNS ──
@@ -35,8 +35,8 @@ export default function InventoryAuditReport({ audit, onClose }: AuditReportProp
       header: "ITEM PROTOCOL DETAIL",
       accessor: (item: any) => (
         <div className="flex flex-col py-2">
-          <span className="font-black text-navy uppercase leading-none">{item.product_name || 'Generic Article'}</span>
-          <span className="text-[9px] text-navy/30 font-mono mt-1 uppercase tracking-widest">{item.item_id}</span>
+          <span className="font-black text-navy uppercase leading-none">{item.item_name || 'Generic Article'}</span>
+          <span className="text-[9px] text-navy/30 font-mono mt-1 uppercase tracking-widest">{item.stock_no}</span>
         </div>
       ),
       flex: 2,
@@ -54,8 +54,8 @@ export default function InventoryAuditReport({ audit, onClose }: AuditReportProp
       className: 'text-center'
     },
     {
-      header: "SYSTEM QTY",
-      accessor: 'system_qty',
+      header: "BOOK QTY",
+      accessor: 'book_qty',
       width: 120,
       className: 'text-right font-mono font-black text-navy/30'
     },
@@ -68,7 +68,7 @@ export default function InventoryAuditReport({ audit, onClose }: AuditReportProp
     {
       header: "VARIANCE",
       accessor: (item: any) => {
-        const v = item.physical_qty - item.system_qty;
+        const v = item.physical_qty - item.book_qty;
         return (
           <span className={`font-mono font-black ${
             v === 0 ? 'text-navy/10' : v < 0 ? 'text-rose-500' : 'text-emerald-500'
@@ -132,7 +132,7 @@ export default function InventoryAuditReport({ audit, onClose }: AuditReportProp
             <Text variant="xs" className="font-black text-navy/30 uppercase tracking-[0.4em] mb-8">Detailed Variance Ledger</Text>
             <Card className="flex-1 bg-white rounded-[3.5rem] border-none shadow-2xl overflow-hidden">
                <DataTable 
-                 data={audit.items || []} 
+                 data={audit.entries || []} 
                  columns={columns} 
                  overlayNoRowsTemplate={`
                    <div class="flex flex-col items-center justify-center opacity-10 h-full">

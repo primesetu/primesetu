@@ -377,6 +377,27 @@ class LoyaltyLedger(Base):
     created_at: Mapped[datetime] = mapped_column(DateTime, server_default=text("now()"))
 
 
+class CreditNote(Base):
+    __tablename__ = "credit_notes"
+
+    id: Mapped[uuid.UUID] = mapped_column(
+        primary_key=True, server_default=text("gen_random_uuid()")
+    )
+    store_id: Mapped[str] = mapped_column(String, ForeignKey("stores.id"))
+    customer_id: Mapped[uuid.UUID] = mapped_column(ForeignKey("partners.id"))
+    note_no: Mapped[str] = mapped_column(String, unique=True)
+    original_sale_id: Mapped[Optional[uuid.UUID]] = mapped_column(ForeignKey("transactions.id"))
+    
+    amount_paise: Mapped[int] = mapped_column(Integer)
+    balance_paise: Mapped[int] = mapped_column(Integer)
+    
+    issue_date: Mapped[datetime] = mapped_column(DateTime, server_default=text("now()"))
+    expiry_date: Mapped[Optional[datetime]] = mapped_column(DateTime, nullable=True)
+    status: Mapped[str] = mapped_column(String, default="Active")  # Active, FullyUtilized, Expired, Cancelled
+    
+    created_at: Mapped[datetime] = mapped_column(DateTime, server_default=text("now()"))
+
+
 class Alert(Base):
     __tablename__ = "alerts"
 

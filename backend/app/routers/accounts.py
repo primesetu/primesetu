@@ -13,8 +13,8 @@ from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import select, func, and_
 from app.core.database import get_db
-from app.models.base import Transaction, TransactionItem, Item, Partner
-from app.core.security import get_current_user
+from app.models.base import Transaction, TransactionItem, Item, Partner, CreditNote
+from app.core.security import require_auth
 from typing import List, Optional
 import uuid
 from datetime import datetime
@@ -65,16 +65,19 @@ async def get_gstr1_summary(
 @router.get("/tally-export/xml")
 async def generate_tally_xml(
     db: AsyncSession = Depends(get_db),
-    current_user = Depends(get_current_user)
+    current_user = Depends(require_auth)
 ):
     """
-    Institutional Tally Bridge.
-    Produces Shoper 9 compatible <ENVELOPE> XML for Voucher import.
+    Sovereign Tally Bridge: Industrial XML Export.
+    Produces Shoper 9 compatible <ENVELOPE> with full Item & Tax breakdown.
     """
     store_id = current_user.store_id
-# Fetch today's transactions
-    result = await db.execute(
-        select(Transaction).where(
+    
+    # Fetch today's transactions with items
+    stmt = (
+        select(Transaction)
+        .options(joinedload(Transaction.items))
+        .where(
             and_(
                 Transaction.store_id == store_id,
                 Transaction.status == "Finalized",
@@ -82,31 +85,56 @@ async def generate_tally_xml(
             )
         )
     )
-    txns = result.scalars().all()
-# Minimal Shoper 9 / Tally XML Template
+    result = await db.execute(stmt)
+    txns = result.unique().scalars().all()
+
     xml_content = f"""<ENVELOPE>
   <HEADER>
     <TALLYREQUEST>Import Data</TALLYREQUEST>
   </HEADER>
   <BODY>
     <IMPORTDATA>
-      <REQUESTDESC>
-        <REPORTNAME>Vouchers</REPORTNAME>
-      </REQUESTDESC>
+      <REQUESTDESC><REPORTNAME>Vouchers</REPORTNAME></REQUESTDESC>
       <REQUESTDATA>
 """
     for txn in txns:
         date_str = txn.created_at.strftime('%Y%m%d')
+        net_amt = txn.net_payable / 100
+        tax_amt = txn.tax_amount / 100
+        salesman = txn.salesman_id or "GENERAL"
+        
         xml_content += f"""        <TALLYMESSAGE xmlns:UDF="TallyUDF">
           <VOUCHER VCHTYPE="Sales" ACTION="Create">
             <DATE>{date_str}</DATE>
             <VOUCHERNUMBER>{txn.bill_no}</VOUCHERNUMBER>
             <PARTYLEDGERNAME>Cash Sales</PARTYLEDGERNAME>
             <EFFECTIVEDATE>{date_str}</EFFECTIVEDATE>
+            <NARRATION>Staff: {salesman} | SMRITI-OS Export</NARRATION>
+            
+            <!-- Dr Cash / Party -->
+            <ALLLEDGERENTRIES.LIST>
+              <LEDGERNAME>Cash</LEDGERNAME>
+              <ISDEEMEDPOSITIVE>Yes</ISDEEMEDPOSITIVE>
+              <AMOUNT>-{net_amt:.2f}</AMOUNT>
+            </ALLLEDGERENTRIES.LIST>
+            
+            <!-- Cr Sales -->
             <ALLLEDGERENTRIES.LIST>
               <LEDGERNAME>Sales Account</LEDGERNAME>
               <ISDEEMEDPOSITIVE>No</ISDEEMEDPOSITIVE>
-              <AMOUNT>{txn.net_payable / 100:.2f}</AMOUNT>
+              <AMOUNT>{(net_amt - tax_amt):.2f}</AMOUNT>
+            </ALLLEDGERENTRIES.LIST>
+            
+            <!-- Cr GST -->
+            <ALLLEDGERENTRIES.LIST>
+              <LEDGERNAME>Output CGST</LEDGERNAME>
+              <ISDEEMEDPOSITIVE>No</ISDEEMEDPOSITIVE>
+              <AMOUNT>{(tax_amt / 2):.2f}</AMOUNT>
+            </ALLLEDGERENTRIES.LIST>
+            <ALLLEDGERENTRIES.LIST>
+              <LEDGERNAME>Output SGST</LEDGERNAME>
+              <ISDEEMEDPOSITIVE>No</ISDEEMEDPOSITIVE>
+              <AMOUNT>{(tax_amt / 2):.2f}</AMOUNT>
             </ALLLEDGERENTRIES.LIST>
           </VOUCHER>
         </TALLYMESSAGE>
@@ -125,8 +153,35 @@ async def generate_tally_xml(
 async def issue_credit_note(
     data: dict,
     db: AsyncSession = Depends(get_db),
-    current_user = Depends(get_current_user)
+    current_user = Depends(require_auth)
 ):
     """Issue a new institutional credit note for sales return."""
-# Simplified logic for refactor
-    return {"status": "SUCCESS", "note_no": f"CN-{uuid.uuid4().hex[:6].upper()}"}
+    note_no = f"CN-{uuid.uuid4().hex[:6].upper()}"
+    new_cn = CreditNote(
+        store_id=current_user.store_id,
+        customer_id=uuid.UUID(data['customer_id']),
+        note_no=note_no,
+        original_sale_id=uuid.UUID(data['sale_id']) if 'sale_id' in data else None,
+        amount_paise=data['amount_paise'],
+        balance_paise=data['amount_paise'],
+        status="Active"
+    )
+    db.add(new_cn)
+    await db.commit()
+    return {"status": "SUCCESS", "note_no": note_no, "amount": data['amount_paise']}
+
+@router.get("/credit-notes/{customer_id}")
+async def get_customer_credit_notes(
+    customer_id: str,
+    db: AsyncSession = Depends(get_db),
+    current_user = Depends(require_auth)
+):
+    """Fetch active credit notes for a customer."""
+    stmt = select(CreditNote).where(
+        and_(
+            CreditNote.customer_id == uuid.UUID(customer_id),
+            CreditNote.status == "Active"
+        )
+    )
+    result = await db.execute(stmt)
+    return result.scalars().all()

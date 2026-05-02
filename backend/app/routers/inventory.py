@@ -24,6 +24,7 @@ from app.models.legacy_s9 import (
     Itemmaster, Stockmaster, 
     Phystkhdr as AuditSession, Phystkdtls as AuditEntry
 )
+from app.models import Transaction, TransactionItem
 from app.schemas.common import ProductRead, PredictiveStats
 from app.schemas.item_master import AdvancedSearchRequest, SearchFilter
 from pydantic import BaseModel
@@ -300,7 +301,7 @@ async def get_predictive_insights(
             brand_sales[brand] = brand_sales.get(brand, 0.0) + velocity
             
         if velocity > 0:
-            doc = float(qty) / velocity
+            doc = float(qty or 0) / velocity
             total_doc += doc
             doc_count += 1
             if doc < 7: risk_count += 1
@@ -373,14 +374,19 @@ async def get_audit_session(
     
     entries = []
     for e, name in entries_res:
+        # Fetch actual book stock for variance calculation
+        stock_stmt = select(func.sum(Stockmaster.curbalqty)).where(Stockmaster.stockno == e.stkno)
+        book_qty = (await db.execute(stock_stmt)).scalar() or 0
+        
         entries.append({
             "id": e.smriti_id,
             "stock_no": e.stkno,
             "item_name": name,
             "size": e.c1,
             "colour": e.c2,
-            "book_qty": e.phystkqty, # Note: in legacy this might be physical qty actually
-            "physical_qty": e.phystkqty
+            "book_qty": float(book_qty),
+            "physical_qty": float(e.phystkqty or 0),
+            "variance": float((e.phystkqty or 0) - (book_qty or 0))
         })
     
     return {
@@ -450,7 +456,10 @@ async def finalize_audit_session(
     db: AsyncSession = Depends(get_db),
     current_user: CurrentUser = Depends(require_auth)
 ):
-    """Finalize audit results. (Note: Sovereign protocol forbids direct Stockmaster mutation for now)."""
+    """
+    Finalize audit results: Updates Stockmaster and seals the session.
+    Atomic Reconciliation Logic.
+    """
     session_stmt = select(AuditSession).where(
         AuditSession.smriti_id == int(session_id),
         AuditSession.vacompcode == current_user.store_id
@@ -460,9 +469,29 @@ async def finalize_audit_session(
     if not session:
         raise HTTPException(status_code=400, detail="Invalid session")
     
-    # In Shoper9, "finalizing" usually involves updating stockmaster or setting a flag.
-    # For now, we just mark the header's end time.
+    # 1. Fetch all physical counts
+    entries_stmt = select(AuditEntry).where(AuditEntry.phystkbatchno == session.phystkbatchno)
+    entries = (await db.execute(entries_stmt)).scalars().all()
+    
+    # 2. Update Stockmaster atomically
+    for entry in entries:
+        # Find the stock record
+        stock_stmt = select(Stockmaster).where(Stockmaster.stockno == entry.stkno)
+        stock_rec = (await db.execute(stock_stmt)).scalar_one_or_none()
+        
+        if stock_rec:
+            # Variance calculation
+            old_qty = stock_rec.curbalqty or 0
+            new_qty = entry.phystkqty or 0
+            
+            # Atomic mutation
+            stock_rec.curbalqty = new_qty
+            stock_rec.lastupdatedt = datetime.now()
+            
+            # TODO: Create a Transaction (Type 1500 - Stock Correction) for accounting
+            
+    # 3. Seal the session
     session.batchenddt = datetime.now()
     
     await db.commit()
-    return {"status": "success", "message": "Inventory audit submitted. Shoper9 phystkhdr updated."}
+    return {"status": "success", "message": f"Stock reconciled for {len(entries)} items. Stockmaster Updated."}

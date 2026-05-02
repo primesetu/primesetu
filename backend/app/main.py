@@ -124,35 +124,58 @@ async def get_dashboard_stats(
     db: AsyncSession = Depends(get_db),
     current_user: CurrentUser = Depends(require_auth),
 ):
+    """
+    Sovereign Dashboard Intelligence.
+    Aggregates real-time stats from synchronized Shoper9 tables.
+    """
     store_id = current_user.store_id
 
+    # Active SKUs in this store (from Stockmaster)
     sku_count = await db.scalar(
-        select(func.count(Itemmaster.stockno))
+        select(func.count(Stockmaster.stockno))
+        .where(Stockmaster.vacompcode == store_id)
     )
 
+    # Low Stock Alerts (Stock < 5 units)
     low_stock = await db.scalar(
         select(func.count(Stockmaster.stockno))
-        .where(Stockmaster.curbalqty < 5) # Default low stock threshold
+        .where(
+            and_(
+                Stockmaster.vacompcode == store_id,
+                Stockmaster.curbalqty < 5
+            )
+        )
     )
 
+    # Today's Revenue (Finalized Bills)
     today_revenue = await db.scalar(
         select(func.coalesce(func.sum(Transaction.net_payable), 0))
-        .where(func.date(Transaction.created_at) == date.today(),
-               Transaction.status == "Finalized")
+        .where(
+            and_(
+                Transaction.store_id == store_id,
+                func.date(Transaction.created_at) == date.today(),
+                Transaction.status == "Finalized"
+            )
+        )
     )
 
+    # Bills Issued Today
     bills_today = await db.scalar(
         select(func.count(Transaction.id))
-        .where(Transaction.store_id == store_id,
-               func.date(Transaction.created_at) == date.today(),
-               Transaction.status == "Finalized")
+        .where(
+            and_(
+                Transaction.store_id == store_id,
+                func.date(Transaction.created_at) == date.today(),
+                Transaction.status == "Finalized"
+            )
+        )
     )
 
     return DashboardStats(
         today_revenue=int(today_revenue or 0),
-        active_skus=sku_count or 0,
-        bills_today=bills_today or 0,
-        low_stock_alerts=low_stock or 0,
+        active_skus=int(sku_count or 0),
+        bills_today=int(bills_today or 0),
+        low_stock_alerts=int(low_stock or 0),
         revenue_change=0.0,
         sku_change=0
     )

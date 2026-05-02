@@ -12,10 +12,10 @@
 import uuid
 from fastapi import APIRouter, Depends, HTTPException, Query
 from sqlalchemy.ext.asyncio import AsyncSession
-from sqlalchemy import select, func, desc, and_
+from sqlalchemy import select, func, desc, and_, or_
 from sqlalchemy.orm import selectinload, joinedload
 from app.core.database import get_db
-from app.models.base import Transaction, TransactionItem, Customer, Till, Partner, LoyaltyLedger
+from app.models.base import Transaction, TransactionItem, Customer, Till, Partner, LoyaltyLedger, CreditNote
 from app.schemas.billing import TransactionRead, TransactionCreate
 from typing import List, Optional, Dict, Any
 from decimal import Decimal, ROUND_HALF_UP
@@ -23,7 +23,8 @@ from app.core.security import require_auth, CurrentUser
 from app.core.counters import CounterManager
 from app.services.config import ConfigService
 from app.services.tax_service import TaxService
-from app.models.legacy_s9 import Itemmaster, Stockmaster
+from app.services.promo_service import PromoService
+from app.models.legacy_s9 import Itemmaster, Stockmaster, Personnel, Pospaymodes
 
 router = APIRouter(prefix="/api/v1/billing", tags=["billing"])
 
@@ -344,6 +345,29 @@ async def get_day_end_summary(
         "status": "Ready for Reconcile"
     }
 
+@router.get("/search")
+async def search_bills(
+    q: str = Query(..., min_length=2),
+    db: AsyncSession = Depends(get_db),
+    current_user = Depends(require_auth)
+):
+    """Search for historical bills by Bill No or Customer ID."""
+    search_term = f"%{q}%"
+    stmt = (
+        select(Transaction)
+        .where(and_(
+            Transaction.store_id == current_user.store_id,
+            or_(
+                Transaction.bill_no.ilike(search_term),
+                Transaction.customer_id.ilike(search_term)
+            )
+        ))
+        .options(selectinload(Transaction.items))
+        .limit(20)
+    )
+    result = await db.execute(stmt)
+    return result.scalars().all()
+
 @router.post("/day-end/finalize")
 async def finalize_day_end(
     db: AsyncSession = Depends(get_db),
@@ -351,3 +375,68 @@ async def finalize_day_end(
 ):
     """Sovereign Seal of Day-End."""
     return {"status": "SUCCESS", "message": "[SMRITI-OS] Day End Sealed for " + current_user.store_id}
+
+@router.get("/personnel")
+async def get_personnel(
+    db: AsyncSession = Depends(get_db),
+    current_user: CurrentUser = Depends(require_auth)
+):
+    """Fetch Active Sales Personnel for the current store from Shoper9."""
+    store_id = current_user.store_id
+    
+    # Shoper9 Logic: activeflag=1 and allowinbilling=1
+    # Filtering by vacompcode (Store ID) to fix "Not Matching" issues
+    stmt = (
+        select(Personnel)
+        .where(
+            and_(
+                Personnel.activeflag == 1, 
+                Personnel.allowinbilling == 1,
+                Personnel.vacompcode == store_id
+            )
+        )
+        .order_by(Personnel.nm)
+    )
+    
+    result = await db.execute(stmt)
+    rows = result.scalars().all()
+    
+    # If no store-specific personnel, fallback to all active personnel (common in some setups)
+    if not rows:
+        result = await db.execute(
+            select(Personnel)
+            .where(and_(Personnel.activeflag == 1, Personnel.allowinbilling == 1))
+            .limit(50)
+        )
+        rows = result.scalars().all()
+
+    return [{"id": r.code.strip(), "name": (r.nm or "").strip().upper(), "code": r.code.strip()} for r in rows]
+
+@router.get("/paymodes")
+async def get_paymodes(
+    db: AsyncSession = Depends(get_db),
+    current_user = Depends(require_auth)
+):
+    """Fetch Active Payment Modes from Shoper9."""
+    result = await db.execute(select(Pospaymodes).order_by(Pospaymodes.pospaymodenm))
+    rows = result.scalars().all()
+    return [{"id": r.pospaymodecd, "name": r.pospaymodenm, "type": r.paymodetype} for r in rows]
+
+@router.post("/calculate-promos")
+async def calculate_promos(
+    txn_in: TransactionCreate,
+    db: AsyncSession = Depends(get_db),
+    current_user = Depends(require_auth)
+):
+    """Evaluate potential discounts for the current cart."""
+    items = [i.model_dump() for i in txn_in.items]
+    gross_total = sum(i['qty'] * i['unit_price'] for i in items)
+    
+    result = await PromoService.evaluate_promotions(db, items, Decimal(gross_total) / 100)
+    
+    # Convert Decimals to Float/Int for JSON
+    return {
+        "applied_promos": result["applied_promos"],
+        "item_discounts": {k: float(v["amount"]) for k, v in result["item_discounts"].items()},
+        "bill_discount": float(result["bill_discount"])
+    }

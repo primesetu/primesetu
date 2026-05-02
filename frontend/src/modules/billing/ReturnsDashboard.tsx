@@ -44,6 +44,13 @@ export default function ReturnsDashboard() {
   const [creditNotes, setCreditNotes] = useState<CreditNote[]>([]);
   const [advances, setAdvances] = useState<AdvanceRecord[]>([]);
   const [loading, setLoading] = useState(false);
+  
+  // ── RETURN WORKFLOW STATE ──
+  const [isReturnMode, setIsReturnMode] = useState(false);
+  const [billSearch, setBillSearch] = useState('');
+  const [billResults, setBillResults] = useState<any[]>([]);
+  const [selectedBill, setSelectedBill] = useState<any | null>(null);
+  const [returnItems, setReturnItems] = useState<any[]>([]);
 
   // Search customers
   const handleSearch = async (e: React.FormEvent) => {
@@ -72,12 +79,51 @@ export default function ReturnsDashboard() {
     try {
       setLoading(true);
       const cnRes = await api.accounts.getCustomerCreditNotes(customer.id);
-      setCreditNotes(cnRes || []);
+      // Map paise to rupees for UI
+      setCreditNotes(cnRes?.map((cn: any) => ({
+        note_no: cn.note_no,
+        balance: cn.balance_paise / 100,
+        expiry: cn.expiry_date || '2099-12-31'
+      })) || []);
     } catch (err) {
       console.error(err);
     } finally {
       setLoading(false);
     }
+  };
+
+  const handleBillSearch = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!billSearch.trim()) return;
+    try {
+      setLoading(true);
+      const res = await api.billing.getBill(billSearch);
+      setBillResults(res || []);
+    } catch (err) { console.error(err); }
+    finally { setLoading(false); }
+  };
+
+  const handleProcessReturn = async () => {
+    if (!selectedCustomer || returnItems.length === 0) return;
+    
+    const returnTotal = returnItems.reduce((acc, item) => acc + (item.net_amount * (item.return_qty || 0)), 0);
+    
+    try {
+      setLoading(true);
+      await api.accounts.issueCreditNote({
+        customer_id: selectedCustomer.id,
+        sale_id: selectedBill.id,
+        amount_paise: returnTotal,
+        items: returnItems.filter(i => (i.return_qty || 0) > 0)
+      });
+      alert("Credit Note Issued Successfully!");
+      setIsReturnMode(false);
+      setSelectedBill(null);
+      setReturnItems([]);
+      // Refresh customer data
+      handleSelectCustomer(selectedCustomer);
+    } catch (err) { alert("Failed to issue credit note."); }
+    finally { setLoading(false); }
   };
 
   const formatCurrency = (val: number) => 
@@ -153,19 +199,107 @@ export default function ReturnsDashboard() {
                   </div>
                 </div>
               </div>
-              
-              <button className="btn-pay h-touch px-8 gap-2 bg-rose-600 hover:bg-rose-700 text-white border-b-4 border-rose-800 shadow-rose-600/30">
-                <RotateCcw className="w-5 h-5" /> Initiate Return [F4]
-              </button>
             </div>
-
-            <div className="flex-1 overflow-auto p-8 bg-cream/10 custom-scrollbar">
-              <h4 className="text-lg font-black text-navy uppercase tracking-widest flex items-center gap-2 mb-6">
-                <FileText className="w-5 h-5 text-saffron" /> Active Credit Notes
-              </h4>
-
+            <div className="flex-1 overflow-auto p-6">
               {loading ? (
                 <div className="flex justify-center p-10"><div className="w-10 h-10 border-4 border-navy border-t-transparent rounded-full animate-spin" /></div>
+              ) : isReturnMode ? (
+                /* ── RETURN WORKFLOW UI ── */
+                <div className="space-y-6">
+                   {!selectedBill ? (
+                     <div className="bg-bg-float border-2 border-border rounded-2xl p-8">
+                        <h5 className="text-xl font-black text-navy mb-4">Find Original Bill</h5>
+                        <form onSubmit={handleBillSearch} className="flex gap-4">
+                           <input 
+                             className="flex-1 h-touch bg-white border border-border rounded-xl px-6 font-mono text-lg outline-none focus:border-brand-navy"
+                             placeholder="Enter Bill Number..."
+                             value={billSearch}
+                             onChange={e => setBillSearch(e.target.value)}
+                           />
+                           <button type="submit" className="btn-pay px-8 bg-navy text-white">SEARCH</button>
+                        </form>
+
+                        <div className="mt-8 space-y-3">
+                           {billResults.map(b => (
+                             <button 
+                               key={b.id}
+                               onClick={() => {
+                                 setSelectedBill(b);
+                                 setReturnItems(b.items.map((i: any) => ({ ...i, return_qty: 0 })));
+                               }}
+                               className="w-full flex justify-between items-center p-4 rounded-xl border border-border hover:bg-cream/20"
+                             >
+                                <div className="text-left">
+                                   <div className="font-black text-navy uppercase">{b.bill_no}</div>
+                                   <div className="text-xs font-bold text-muted">{new Date(b.created_at).toLocaleDateString()}</div>
+                                </div>
+                                <div className="font-mono font-black text-navy">₹{b.net_payable / 100}</div>
+                             </button>
+                           ))}
+                        </div>
+                     </div>
+                   ) : (
+                     <div className="bg-bg-float border-2 border-border rounded-2xl overflow-hidden">
+                        <div className="p-6 bg-navy text-white flex justify-between items-center">
+                           <div>
+                              <div className="text-[10px] font-black uppercase tracking-widest opacity-60">Bill Items for Return</div>
+                              <div className="text-lg font-serif font-black">{selectedBill.bill_no}</div>
+                           </div>
+                           <button onClick={() => setSelectedBill(null)} className="text-xs font-black uppercase opacity-60 hover:opacity-100">Change Bill</button>
+                        </div>
+                        <div className="p-6">
+                           <table className="w-full text-left">
+                              <thead className="text-[10px] font-black uppercase text-muted border-b border-border">
+                                 <tr>
+                                    <th className="py-3">Stock No</th>
+                                    <th>Item Name</th>
+                                    <th className="text-right">Qty Sold</th>
+                                    <th className="text-right">Return Qty</th>
+                                    <th className="text-right">Return Val</th>
+                                 </tr>
+                              </thead>
+                              <tbody className="text-sm font-bold text-navy">
+                                 {returnItems.map((item, idx) => (
+                                   <tr key={idx} className="border-b border-border/50">
+                                      <td className="py-4 font-mono">{item.stock_no}</td>
+                                      <td>{item.item_name}</td>
+                                      <td className="text-right font-mono">{item.qty}</td>
+                                      <td className="text-right">
+                                         <input 
+                                           type="number"
+                                           max={item.qty}
+                                           className="w-20 bg-cream/30 border border-border rounded-lg p-2 text-right outline-none focus:border-brand-navy"
+                                           value={item.return_qty}
+                                           onChange={e => {
+                                             const val = Math.min(item.qty, parseInt(e.target.value) || 0);
+                                             setReturnItems(prev => prev.map((it, i) => i === idx ? { ...it, return_qty: val } : it));
+                                           }}
+                                         />
+                                      </td>
+                                      <td className="text-right font-mono text-rose-600">
+                                         ₹{(item.net_amount * (item.return_qty || 0)) / 100}
+                                      </td>
+                                   </tr>
+                                 ))}
+                              </tbody>
+                           </table>
+
+                           <div className="mt-8 flex justify-between items-center bg-rose-50 p-6 rounded-2xl border border-rose-100">
+                              <div>
+                                 <div className="text-[10px] font-black uppercase tracking-widest text-rose-600">Total Credit Amount</div>
+                                 <div className="text-3xl font-black text-navy">
+                                    ₹{returnItems.reduce((acc, i) => acc + (i.net_amount * (i.return_qty || 0)), 0) / 100}
+                                 </div>
+                              </div>
+                              <div className="flex gap-4">
+                                 <button onClick={() => setIsReturnMode(false)} className="px-8 py-3 font-black uppercase text-muted hover:text-navy">CANCEL</button>
+                                 <button onClick={handleProcessReturn} className="btn-pay px-8 bg-rose-600 text-white shadow-rose-600/20">ISSUE CREDIT NOTE</button>
+                              </div>
+                           </div>
+                        </div>
+                     </div>
+                   )}
+                </div>
               ) : creditNotes.length > 0 ? (
                 <div className="grid grid-cols-2 gap-6">
                   {creditNotes.map((cn, idx) => (

@@ -71,7 +71,7 @@ const InventoryAudit: React.FC = () => {
   });
 
   const addEntryMutation = useMutation({
-    mutationFn: (data: { item_id: string; size: string; colour: string; physical_qty: number }) => 
+    mutationFn: (data: { stock_no: string; size: string; colour: string; physical_qty: number }) => 
       api.inventory.addAuditEntry(activeSession.id, data),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['audit-session', activeSession?.id] });
@@ -140,7 +140,7 @@ const InventoryAudit: React.FC = () => {
       const product = Array.isArray(results) ? results.find((p: any) => p.code === barcode || p.barcode === barcode) : null;
       if (product) {
         addEntryMutation.mutate({ 
-          item_id: product.id, 
+          stock_no: product.id, 
           size: product.size || 'UNI', 
           colour: product.colour || 'NOS',
           physical_qty: 1 
@@ -392,7 +392,7 @@ const InventoryAudit: React.FC = () => {
         onSelect={(item) => {
           if (activeSession) {
             addEntryMutation.mutate({ 
-              item_id: item.id, 
+              stock_no: item.id, 
               size: item.size || 'UNI', 
               colour: item.colour || 'NOS',
               physical_qty: 1 

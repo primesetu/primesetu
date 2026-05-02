@@ -39,15 +39,20 @@ async def get_entry_mask(
     
     mask = []
     for row in rows:
+        field_type = "text"
+        if "qty" in row.columnname.lower(): field_type = "number"
+        elif "rate" in row.columnname.lower() or "amt" in row.columnname.lower() or "total" in row.columnname.lower(): field_type = "readonly"
+        elif "disc" in row.columnname.lower(): field_type = "number"
+        elif "salesstaff" in row.columnname.lower(): field_type = "staff_select"
+        elif "stockno" in row.columnname.lower(): field_type = "barcode"
+
         mask.append({
             "field_key": row.columnname,
             "label": row.dispcap or row.acptcap or row.columnname,
-            "type": "barcode" if "barcode" in row.columnname.lower() else 
-                    "number" if row.columnname.lower() in ["qty", "disc_per", "mrp"] else 
-                    "readonly" if not row.acptvisible else "text",
+            "type": field_type,
             "visible": True,
             "order": row.disppos,
-            "width_px": (row.dispwidth * 8) if row.dispwidth else 100,
+            "width_px": (row.dispwidth * 12) if row.dispwidth else 100, # Increased multiplier for modern high-res screens
             "placeholder": f"Enter {row.dispcap or row.columnname}",
             "mandatory": True if row.acptvisible else False
         })

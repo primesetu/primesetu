@@ -94,6 +94,10 @@ export const api = {
     createSlip: (data: any) => apiClient.post('/billing/slips', data).then(r => r.data),
     deleteSlip: (id: string) => apiClient.delete(`/billing/slips/${id}`).then(r => r.data),
     convertSlip: (id: string) => apiClient.post(`/billing/slips/${id}/convert`).then(r => r.data),
+    getPersonnel: () => apiClient.get('/billing/personnel').then(r => r.data),
+    getPayModes: () => apiClient.get('/billing/paymodes').then(r => r.data),
+    searchCustomers: (q: string) => apiClient.get('/customers/search', { params: { q } }).then(r => r.data),
+    calculatePromos: (data: any) => apiClient.post('/billing/calculate-promos', data).then(r => r.data),
   },
   accounts: {
     issueCreditNote: (data: any) => apiClient.post('/accounts/credit-notes', data).then(r => r.data),

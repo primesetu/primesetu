@@ -5,6 +5,7 @@ import { Button } from '@/components/ui/SovereignUI'
 import { motion, AnimatePresence } from 'framer-motion'
 import DesktopBilling from './DesktopBilling'
 import MobileBilling from './MobileBilling'
+import MultiModePayment from './MultiModePayment'
 import { useSysParams } from '@/hooks/useSysParams'
 
 interface BillItem {
@@ -20,6 +21,7 @@ interface BillItem {
   size: string
   rate: number
   qty: number
+  disc_cd: string
   disc_per: number
   disc_amt: number
   tax_amt: number
@@ -27,11 +29,23 @@ interface BillItem {
   salesman?: string
 }
 
+interface Personnel {
+  id: string
+  name: string
+  code: string
+}
+
+interface PayMode {
+  id: string
+  name: string
+  type: string
+}
+
 function BillingModule() {
   const { theme } = useTheme()
   const [items, setItems] = useState<BillItem[]>([])
   const [isSearching, setIsSearching] = useState(false)
-  const [activeEntry, setActiveEntry] = useState({ stock_no: '', qty: 1, rate: 0, disc_per: 0 })
+  const [activeEntry, setActiveEntry] = useState({ stock_no: '', qty: 1, rate: 0, disc_cd: '', disc_per: 0, descr: '' })
   const [showSettle, setShowSettle] = useState(false)
   const [showPrint, setShowPrint] = useState(false)
   const [lastBill, setLastBill] = useState<any>(null)
@@ -45,6 +59,12 @@ function BillingModule() {
   const [dateTime, setDateTime] = useState(new Date().toLocaleString())
   const [isMobile, setIsMobile] = useState(false)
   const [fieldMask, setFieldMask] = useState<any[]>([])
+  
+  // ── METADATA STATE ──
+  const [personnelList, setPersonnelList] = useState<Personnel[]>([])
+  const [payModesList, setPayModesList] = useState<PayMode[]>([])
+  const [customerResults, setCustomerResults] = useState<any[]>([])
+  const [isLoadingMetadata, setIsLoadingMetadata] = useState(true)
 
   // ── SYSPARAM SYNC ──
   const { getParam } = useSysParams()
@@ -73,7 +93,7 @@ function BillingModule() {
       if (e.key === 'Escape') { 
         if (showSettle) setShowSettle(false)
         else if (showPrint) setShowPrint(false)
-        else setActiveEntry({ stock_no: '', qty: 1, rate: 0, disc_per: 0 })
+        else setActiveEntry({ stock_no: '', qty: 1, rate: 0, disc_cd: '', disc_per: 0, descr: '' })
       }
     }
     window.addEventListener('keydown', handleGlobalKeys)
@@ -105,6 +125,33 @@ function BillingModule() {
     loadMask()
   }, [])
 
+  // ── METADATA LOAD ──
+  useEffect(() => {
+    async function loadMetadata() {
+      try {
+        const [personnel, paymodes] = await Promise.all([
+          api.billing.getPersonnel(),
+          api.billing.getPayModes()
+        ])
+        setPersonnelList(personnel)
+        setPayModesList(paymodes)
+      } catch (err) { console.error("Metadata load failed:", err) }
+      finally { setIsLoadingMetadata(false) }
+    }
+    loadMetadata()
+  }, [])
+
+  const handleCustomerSearch = async (q: string) => {
+    if (q.length < 3) {
+      setCustomerResults([])
+      return
+    }
+    try {
+      const results = await api.billing.searchCustomers(q)
+      setCustomerResults(results)
+    } catch (err) { console.error(err) }
+  }
+
   const commitLine = async () => {
     const searchVal = activeEntry.stock_no.trim()
     if (!searchVal || isSearchingRef.current) return
@@ -125,7 +172,7 @@ function BillingModule() {
         item.total = (item.rate * item.qty) - item.disc_amt
         return newItems
       })
-      setActiveEntry({ stock_no: '', qty: 1, rate: 0, disc_per: 0 })
+      setActiveEntry({ stock_no: '', qty: 1, rate: 0, disc_cd: '', disc_per: 0, descr: '' })
       
       // Release lock after a short delay to debounce key hold
       setTimeout(() => { isSearchingRef.current = false }, 150)
@@ -155,9 +202,9 @@ function BillingModule() {
           subclass2: item.subclass2 || '',
           colour: item.colour || '',
           size: item.size || '',
-          rate, qty, disc_per, disc_amt, tax_amt: 0, total, salesman: salesman || ''
+          rate, qty, disc_cd: activeEntry.disc_cd || '', disc_per, disc_amt, tax_amt: 0, total, salesman: salesman || ''
         }, ...prev])
-        setActiveEntry({ stock_no: '', qty: 1, rate: 0, disc_per: 0 })
+        setActiveEntry({ stock_no: '', qty: 1, rate: 0, disc_cd: '', disc_per: 0, descr: '' })
       } else { alert("SKU Not Found") }
     } catch (err) { console.error(err) } finally { 
       setIsSearching(false)
@@ -166,23 +213,61 @@ function BillingModule() {
     }
   }
 
-  const handleFinalize = async (paymentMode: 'CASH' | 'CARD', amount: number) => {
+  // ── PROMOTION RECALCULATION ──
+  useEffect(() => {
+    if (items.length === 0) return
+    
+    const calculateAppliedPromos = async () => {
+      try {
+        const payload = {
+          type: "Sales",
+          items: items.map(i => ({ 
+            stock_no: i.stock_no,
+            qty: i.qty, 
+            unit_price: Math.round(i.rate * 100)
+          }))
+        }
+        const result = await api.billing.calculatePromos(payload)
+        
+        // Apply item-level discounts to the local state
+        setItems(prev => prev.map(i => {
+          const disc = result.item_discounts[i.stock_no]
+          if (disc !== undefined) {
+             const newTotal = (i.rate * i.qty) - disc
+             return { ...i, disc_amt: disc, total: newTotal }
+          }
+          return i
+        }))
+        
+        // Apply bill-level discount
+        if (result.bill_discount > 0) {
+          setBillDiscount(result.bill_discount)
+        }
+      } catch (err) { console.error("Promo calculation failed:", err) }
+    }
+    
+    const debounceTimer = setTimeout(calculateAppliedPromos, 500)
+    return () => clearTimeout(debounceTimer)
+  }, [items.length]) // Trigger on item count change to avoid loops on internal update
+
+  const handleFinalize = async (payments: any[]) => {
     if (items.length === 0 || isFinalizing) return
 
     // ── SYSPARAM VALIDATION ──
     if (isCustomerMandatory && !customer.phone.trim()) {
-      alert("ERROR: Customer Selection is Mandatory as per System Parameters.")
+      alert("ERROR: Customer Selection is Mandatory.")
       return
     }
     if (isSalesmanMandatory && !salesman.trim()) {
-      alert("ERROR: Sales Personnel Selection is Mandatory as per System Parameters.")
+      alert("ERROR: Sales Personnel Selection is Mandatory.")
       return
     }
+    
     setIsFinalizing(true)
     const billData = {
       type: "Sales",
       bill_no: billNo,
-      customer_phone: customer.phone,
+      customer_id: customer.phone, // Assuming phone/code as ID for now
       salesman_id: salesman,
       items: items.map(i => ({ 
         product_id: i.real_id, 
@@ -191,10 +276,9 @@ function BillingModule() {
         qty: i.qty, 
         unit_price: Math.round(i.rate * 100), 
         discount_per: i.disc_per, 
-        tax_per: 18,
         total: i.total
       })),
-      payments: [{ mode: paymentMode, amount: Math.round(amount * 100) }],
+      payments: payments.map(p => ({ mode: p.id, amount: p.amount })),
       bill_discount: Math.round(billDiscount * 100),
       totals
     }
@@ -239,9 +323,23 @@ function BillingModule() {
           salesman={salesman} setSalesman={setSalesman} billNo={billNo} dateTime={dateTime}
           billDiscount={billDiscount} setBillDiscount={setBillDiscount}
           isCustomerMandatory={isCustomerMandatory} isSalesmanMandatory={isSalesmanMandatory}
-          fieldMask={fieldMask}
+          personnelList={personnelList}
+          customerResults={customerResults}
+          onCustomerSearch={handleCustomerSearch}
         />
       )}
+
+      {/* ── SETTLEMENT ENGINE ── */}
+      <AnimatePresence>
+        {showSettle && (
+          <MultiModePayment 
+            totalAmount={totals.finalNet * 100} 
+            onClose={() => setShowSettle(false)}
+            onComplete={(payments) => handleFinalize(payments)}
+            payModes={payModesList}
+          />
+        )}
+      </AnimatePresence>
 
       {/* ── THERMAL PRINT PREVIEW MODAL ── */}
       <AnimatePresence>

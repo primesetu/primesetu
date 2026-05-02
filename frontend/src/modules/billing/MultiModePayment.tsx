@@ -27,20 +27,35 @@ interface PaymentMode {
 export default function MultiModePayment({ 
   totalAmount, 
   onClose, 
-  onComplete 
+  onComplete,
+  payModes = []
 }: { 
   totalAmount: number, 
   onClose: () => void, 
-  onComplete: (payments: any[]) => void 
+  onComplete: (payments: any[]) => void,
+  payModes?: any[]
 }) {
   const { isInstitutional } = useTheme();
-  const [payments, setPayments] = useState<PaymentMode[]>([
-    { id: 'CASH', label: 'Cash', icon: Wallet, amount: 0 },
-    { id: 'CARD', label: 'Credit/Debit Card', icon: CreditCard, amount: 0, refNo: '' },
-    { id: 'UPI', label: 'UPI / QR', icon: QrCode, amount: 0, refNo: '' },
-    { id: 'CN', label: 'Credit Note', icon: Ticket, amount: 0, refNo: '' },
-    { id: 'ADVANCE', label: 'Advance Adjusted', icon: UserCheck, amount: 0, refNo: '' }
-  ])
+  
+  const [payments, setPayments] = useState<PaymentMode[]>(() => {
+    if (payModes && payModes.length > 0) {
+      return payModes.map(pm => ({
+        id: pm.id,
+        label: pm.name,
+        icon: pm.id.toLowerCase().includes('cash') ? Wallet : 
+              pm.id.toLowerCase().includes('card') ? CreditCard :
+              pm.id.toLowerCase().includes('upi') ? QrCode :
+              pm.id.toLowerCase().includes('cn') ? Ticket : Wallet,
+        amount: 0
+      }))
+    }
+    // Fallback
+    return [
+      { id: 'CASH', label: 'Cash', icon: Wallet, amount: 0 },
+      { id: 'CARD', label: 'Credit/Debit Card', icon: CreditCard, amount: 0, refNo: '' },
+      { id: 'UPI', label: 'UPI / QR', icon: QrCode, amount: 0, refNo: '' }
+    ]
+  })
 
   const [activeMode, setActiveMode] = useState<string>('CASH')
   const [tempAmount, setTempAmount] = useState<string>('')

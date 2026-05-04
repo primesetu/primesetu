@@ -47,6 +47,11 @@ class CurrentUser:
     role: str           # cashier | manager | admin
     full_name: Optional[str] = None
 
+    @property
+    def id(self) -> str:
+        """Alias for compatibility with legacy routers."""
+        return self.user_id
+
 
 # .. Core JWT verifier .........................................................
 def _decode_token(token: str) -> dict:

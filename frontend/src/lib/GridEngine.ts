@@ -236,7 +236,7 @@ export function buildColDefs(
       const isQty = QTY_FIELDS.has(fieldLower);
 
       const col: ColDef = {
-        headerName: m.headerName.toUpperCase(),
+        headerName: (m.headerName || fieldName || '').toUpperCase(),
         field: dataKey,
         width: m.width || 120,
         sortable: true,
@@ -255,7 +255,8 @@ export function buildColDefs(
       col.valueGetter = (params: any) => {
         const item = params.data;
         if (!item) return '';
-        return item[dataKey] ?? item[m.field] ?? item[m.field.toLowerCase()] ?? '';
+        const lowerField = (m.field || fieldName || '').toLowerCase();
+        return item[dataKey] ?? item[m.field || ''] ?? item[lowerField] ?? '';
       };
 
       // ── Value Formatter: currency fields ────────────────────────────────

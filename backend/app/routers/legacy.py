@@ -104,13 +104,14 @@ async def get_legacy_table_data(
     result = await db.execute(query)
     rows = result.scalars().all()
 
-    # 6. Serialise
+    # 6. Serialise with JSON safety
+    from fastapi.encoders import jsonable_encoder
     data = []
     for row in rows:
         row_dict = {}
         for column in target_model.__table__.columns:
             row_dict[column.name] = getattr(row, column.name)
-        data.append(row_dict)
+        data.append(jsonable_encoder(row_dict))
 
     return {
         "table": table_name,

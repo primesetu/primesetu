@@ -228,8 +228,9 @@ export function buildColDefs(
     .filter(m => m.visible)
     .sort((a, b) => a.pos - b.pos)
     .map(m => {
-      const fieldLower = m.field.toLowerCase();
-      const dataKey = resolveDataKey(m.field);
+      const fieldName = m.field || (m as any).field_key || (m as any).ColumnName || '';
+      const fieldLower = fieldName.toLowerCase();
+      const dataKey = resolveDataKey(fieldName);
       const isDescription = DESCRIPTION_FIELDS.has(fieldLower);
       const isCurrency = CURRENCY_FIELDS.has(fieldLower);
       const isQty = QTY_FIELDS.has(fieldLower);

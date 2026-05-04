@@ -47,25 +47,25 @@ async def get_entry_mask(
         elif "stockno" in row.columnname.lower(): field_type = "barcode"
 
         mask.append({
-            "field_key": row.columnname,
-            "label": row.dispcap or row.acptcap or row.columnname,
+            "field": row.columnname,
+            "headerName": row.dispcap or row.acptcap or row.columnname,
             "type": field_type,
             "visible": True,
-            "order": row.disppos,
-            "width_px": (row.dispwidth * 12) if row.dispwidth else 100, # Increased multiplier for modern high-res screens
+            "pos": row.disppos,
+            "width": (row.dispwidth * 12) if row.dispwidth else 100, # Increased multiplier for modern high-res screens
             "placeholder": f"Enter {row.dispcap or row.columnname}",
             "mandatory": True if row.acptvisible else False
         })
     
-    # If no mask found, return a default billing mask for 1300
-    if not mask and trn_type == 1300:
+    # If no mask found, return a default billing mask for 2100 (Sales)
+    if not mask:
         return [
-            {"field_key": "barcode", "label": "Barcode", "type": "barcode", "visible": True, "order": 1, "width_px": 150, "placeholder": "Scan Item..."},
-            {"field_key": "description", "label": "Item Description", "type": "readonly", "visible": True, "order": 2, "width_px": 0},
-            {"field_key": "qty", "label": "Qty", "type": "number", "visible": True, "order": 3, "width_px": 80, "min": 1},
-            {"field_key": "mrp", "label": "MRP", "type": "readonly", "visible": True, "order": 4, "width_px": 100},
-            {"field_key": "disc_per", "label": "Disc %", "type": "number", "visible": True, "order": 5, "width_px": 80, "max": 100},
-            {"field_key": "value", "label": "Value", "type": "readonly", "visible": True, "order": 6, "width_px": 120}
+            {"field": "barcode", "headerName": "Barcode", "type": "barcode", "visible": True, "pos": 1, "width": 150, "placeholder": "Scan Item..."},
+            {"field": "description", "headerName": "Item Description", "type": "readonly", "visible": True, "pos": 2, "width": 300},
+            {"field": "qty", "headerName": "Qty", "type": "number", "visible": True, "pos": 3, "width": 80, "min": 1},
+            {"field": "rate", "headerName": "Rate", "type": "readonly", "visible": True, "pos": 4, "width": 100},
+            {"field": "disc_per", "headerName": "Disc %", "type": "number", "visible": True, "pos": 5, "width": 80, "max": 100},
+            {"field": "total", "headerName": "Total", "type": "readonly", "visible": True, "pos": 6, "width": 120}
         ]
         
     return mask

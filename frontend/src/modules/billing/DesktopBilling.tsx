@@ -1,13 +1,23 @@
 /* ============================================================
- * PrimeSetu — Shoper9-Based Retail OS
+ * SMRITI-OS — Shoper9-Based Retail OS
  * Zero Cloud · Sovereign · AI-Governed
- * System Architect : Jawahar R. M. | © 2026
+ * ============================================================
+ * System Architect : Jawahar R Mallah
+ * Organisation     : AITDL Network
+ * Project          : SMRITI-OS
+ * © 2026 — All Rights Reserved
+ * "Memory, Not Code."
  * ============================================================ */
+
 import React, { useRef, useEffect, useMemo } from 'react'
-import { Barcode, Trash2, FileText, User, UserCheck, Calendar, Clock } from 'lucide-react'
-import { Button, Badge } from '@/components/ui/SovereignUI'
+import { 
+  Barcode, Trash2, FileText, User, UserCheck, 
+  Calendar, Clock, LayoutGrid, Receipt, 
+  Settings, CreditCard, Users, Hash
+} from 'lucide-react'
+import { Button, Badge, cn } from '@/components/ui/SovereignUI'
 import { AgGridReact } from 'ag-grid-react'
-import { ColDef, themeQuartz } from 'ag-grid-community'
+import { themeQuartz } from 'ag-grid-community'
 import { buildColDefs } from '@/lib/GridEngine'
 import { api } from '@/api/client'
 
@@ -36,6 +46,10 @@ interface DesktopBillingProps {
   fieldMask?: any[]
 }
 
+/**
+ * SMRITI-OS High-Fidelity Sovereign Billing Terminal
+ * Replicates the exact functional layout of Shoper9 POS.
+ */
 export default function DesktopBilling({
   items, setItems, activeEntry, setActiveEntry,
   commitLine, handleKeyDown, totals, setShowSettle,
@@ -45,45 +59,59 @@ export default function DesktopBilling({
   personnelList = [], customerResults = [], onCustomerSearch, fieldMask
 }: DesktopBillingProps) {
   const entryRef = useRef<HTMLInputElement>(null)
-  useEffect(() => { entryRef.current?.focus() }, [])
+  
+  // Focus the stock input on mount
+  useEffect(() => { 
+    const focusTimer = setTimeout(() => entryRef.current?.focus(), 100);
+    return () => clearTimeout(focusTimer);
+  }, [])
 
+  // Dynamic Column Definitions based on Shoper9 Metadata
   const columnDefs = useMemo(() => {
     if (!fieldMask || fieldMask.length === 0) {
       return [
-        { field: 'StockNo', headerName: 'STOCK NO', width: 120, pinned: 'left' as const },
-        { field: 'ItemDesc', headerName: 'ITEM DESCRIPTION', flex: 1, minWidth: 150 },
-        { field: 'Qty', headerName: 'QTY', width: 70, editable: true },
-        { field: 'Retail_Price', headerName: 'RATE', width: 100, valueFormatter: (p: any) => (p.value || 0).toFixed(2) },
-        { field: 'disc_per', headerName: 'D%', width: 60, editable: true },
-        { field: 'total', headerName: 'TOTAL', width: 110, valueFormatter: (p: any) => (p.value || 0).toFixed(2) },
-        { headerName: '', width: 50, pinned: 'right' as const, cellRenderer: (p: any) => (
-          <button onClick={async () => {
-            const id = p.data?.id;
-            setItems(prev => prev.filter(i => i.id !== id));
-            try { await api.billing.removeFromDraft(id); } catch(e) {}
-          }} className="text-red-500 p-2 opacity-0 group-hover:opacity-100 hover:bg-red-500/10 rounded transition-all">
-            <Trash2 size={14} />
-          </button>
-        )}
+        { field: 'stock_no', headerName: 'STOCK NO', width: 130, pinned: 'left' as const, cellClass: 'font-mono' },
+        { field: 'descr', headerName: 'ITEM DESCRIPTION', flex: 1, minWidth: 200 },
+        { field: 'qty', headerName: 'QTY', width: 80, editable: true, cellClass: 'text-right font-mono' },
+        { field: 'rate', headerName: 'RATE', width: 110, cellClass: 'text-right font-mono', valueFormatter: (p: any) => (p.value || 0).toFixed(2) },
+        { field: 'disc_per', headerName: 'DISC %', width: 90, editable: true, cellClass: 'text-right font-mono text-amber-600' },
+        { field: 'total', headerName: 'AMOUNT', width: 130, cellClass: 'text-right font-bold text-[var(--primary)]', valueFormatter: (p: any) => (p.value || 0).toFixed(2) },
+        { 
+          headerName: '', width: 50, pinned: 'right' as const, 
+          cellRenderer: (p: any) => (
+            <div className="w-full h-full flex items-center justify-center">
+              <button onClick={async (e) => {
+                e.stopPropagation();
+                const id = p.data?.id;
+                setItems(prev => prev.filter(i => i.id !== id));
+                try { await api.billing.removeFromDraft(id); } catch(e) {}
+              }} className="p-2 text-red-500/40 hover:text-red-500 hover:bg-red-50 rounded transition-all">
+                <Trash2 size={14} />
+              </button>
+            </div>
+          )
+        }
       ];
     }
     
-    const baseCols = buildColDefs(fieldMask, {
-      colDefMerge: {
-        qty: { editable: true },
-        disc_per: { editable: true },
-      }
-    });
-
     return [
-      ...baseCols,
+      ...buildColDefs(fieldMask, {
+        colDefMerge: {
+          qty: { editable: true, cellClass: 'text-right font-mono' },
+          disc_per: { editable: true, cellClass: 'text-right font-mono text-amber-600' },
+          rate: { cellClass: 'text-right font-mono' },
+          stock_no: { pinned: 'left' as const, cellClass: 'font-mono' },
+          total: { cellClass: 'text-right font-bold text-[var(--primary)]' }
+        }
+      }),
       {
-        headerName: '', width: 50, pinned: 'right' as const, cellRenderer: (p: any) => (
+        headerName: '', width: 50, pinned: 'right' as const,
+        cellRenderer: (p: any) => (
           <button onClick={async () => {
             const id = p.data?.id;
             setItems(prev => prev.filter(i => i.id !== id));
             try { await api.billing.removeFromDraft(id); } catch(e) {}
-          }} className="text-red-500 p-2 hover:bg-red-500/10 rounded transition-all">
+          }} className="w-full h-full flex items-center justify-center text-red-500/40 hover:text-red-500 hover:bg-red-50 transition-all">
             <Trash2 size={14} />
           </button>
         )
@@ -91,337 +119,357 @@ export default function DesktopBilling({
     ] as any[];
   }, [fieldMask, setItems]);
 
-  // Derived values for active entry
-  const entryValue = (activeEntry.Retail_Price || 0) * (activeEntry.Qty || 1)
+  // Calculations
+  const entryValue = (activeEntry.rate || 0) * (activeEntry.qty || 1)
   const entryDiscAmt = (entryValue * (activeEntry.disc_per || 0)) / 100
   const entryTotal = entryValue - entryDiscAmt
-
-  // Summary
-  const schemeDisc = totals.disc || 0
-  const gstAmt = (totals.net || 0) * 0.05 // default 5%, will come from item later
   const today = dateTime.split(',')[0]
   const time = dateTime.split(',')[1]
 
-  const inputCls = "bg-[var(--surface-container-low)] border border-[var(--border-subtle)] rounded px-1.5 py-1 text-[11px] font-black uppercase outline-none focus:border-[var(--primary)] transition-all"
-  const labelCls = "block text-[9px] font-black uppercase text-[var(--text-tertiary)] mb-0.5 tracking-widest"
+  const inputCls = "h-8 bg-white border border-slate-300 rounded-sm px-2 text-[12px] font-bold uppercase outline-none focus:border-[var(--primary)] focus:ring-1 focus:ring-[var(--primary)]/20 transition-all shadow-sm"
+  const labelCls = "block text-[10px] font-black uppercase text-slate-500 mb-1 tracking-tight"
+  const sectionTitleCls = "text-[9px] font-black uppercase tracking-[0.2em] text-slate-400 mb-3 border-b border-slate-100 pb-1"
 
   return (
-    <div className="flex flex-col h-full bg-[var(--background)]">
+    <div className="flex flex-col h-full bg-[#f8fafc] overflow-hidden select-none">
 
-      {/* ── HEADER ── */}
-      <header className="bg-[var(--surface)] border-b border-[var(--border-subtle)] px-4 py-2 space-y-2">
-        {/* Row 1: Brand + Bill meta */}
-        <div className="flex items-center justify-between">
-          <div className="flex items-center gap-4">
-            <div className="flex items-center gap-2 font-black uppercase tracking-widest text-sm">
-              <FileText size={16} className="text-[var(--primary)]" />
-              PrimeSetu POS
-              <span className="text-[var(--primary)] ml-1 font-mono">INV #{billNo}</span>
+      {/* ── TOP ACTION BAR ── */}
+      <div className="h-10 bg-slate-900 flex items-center justify-between px-4 shrink-0">
+        <div className="flex items-center gap-4">
+          <div className="flex items-center gap-2 text-white font-black text-xs tracking-widest">
+            <div className="w-6 h-6 bg-[var(--primary)] rounded flex items-center justify-center">
+              <Receipt size={14} />
             </div>
-            <div className="h-5 w-px bg-[var(--border-subtle)]" />
-            <div className="flex items-center gap-3 text-[10px] font-bold uppercase text-[var(--text-tertiary)]">
-              <span className="flex items-center gap-1"><Calendar size={12} />{today}</span>
-              <span className="flex items-center gap-1"><Clock size={12} />{time}</span>
-            </div>
+            SMRITI-OS <span className="text-slate-500 font-medium">|</span> BILLING TERMINAL
           </div>
-          <div className="flex items-center gap-2">
-            <Badge variant="info">F8: SETTLE</Badge>
-            <Badge variant="warn">F12: SUSPEND</Badge>
+          <div className="flex items-center gap-3 ml-4">
+             <Badge variant="muted" className="bg-slate-800 text-slate-400 border-none font-mono tracking-tighter">V9.0.4.S</Badge>
+             <Badge variant="success" className="bg-emerald-500/10 text-emerald-500 border-emerald-500/20">ONLINE</Badge>
           </div>
         </div>
-
-        {/* Row 2: All Shoper9 header fields */}
-        <div className="grid grid-cols-12 gap-3 items-end">
-          {/* Bill Type */}
-          <div className="col-span-1">
-            <label className={labelCls}>Bill Type</label>
-            <select className={inputCls + " w-full"}>
-              <option value="product">Product</option>
-              <option value="service">Service</option>
-            </select>
+        <div className="flex items-center gap-6">
+          <div className="flex items-center gap-4 text-[10px] font-bold text-slate-400">
+             <span className="flex items-center gap-1.5"><Calendar size={12} className="text-slate-600"/>{today}</span>
+             <span className="flex items-center gap-1.5"><Clock size={12} className="text-slate-600"/>{time}</span>
           </div>
+          <div className="h-4 w-px bg-slate-700 mx-2" />
+          <button className="text-slate-400 hover:text-white transition-colors"><Settings size={16} /></button>
+        </div>
+      </div>
 
-          {/* Transaction Type */}
-          <div className="col-span-1">
-            <label className={labelCls}>Txn Type</label>
-            <select className={inputCls + " w-full"}>
-              <option value="cash">Cash</option>
-              <option value="credit">Credit</option>
-            </select>
-          </div>
-
-          {/* Bill Date */}
-          <div className="col-span-2">
-            <label className={labelCls}>Bill Date</label>
-            <input type="date" defaultValue={new Date().toISOString().split('T')[0]} className={inputCls + " w-full"} />
-          </div>
-
-          {/* Till / Counter */}
-          <div className="col-span-2">
-            <label className={labelCls}>Till / Counter</label>
-            <select className={inputCls + " w-full"}>
-              <option>Till 1 — Entrance</option>
-              <option selected>Till 2 — Main</option>
-              <option>Till 3 — Express</option>
-            </select>
-          </div>
-
-          {/* Customer Code (searchable) */}
-          <div className="col-span-2 relative">
-            <label className={labelCls}>
-              <User size={9} className="inline mr-1" />
-              Customer Code {isCustomerMandatory && <span className="text-red-500">*</span>}
-            </label>
-            <input
-              className={inputCls + " w-full"}
-              placeholder="Code / Mobile [F2]"
-              value={customer.phone}
-              onChange={e => { setCustomer({ ...customer, phone: e.target.value }); onCustomerSearch?.(e.target.value) }}
-              onFocus={() => onCustomerSearch?.(customer.phone || '')}
-            />
-            {customerResults.length > 0 && (
-              <div className="absolute top-full left-0 w-72 bg-[var(--surface)] border border-[var(--border-subtle)] shadow-2xl rounded z-50 mt-1 max-h-40 overflow-y-auto">
-                {customerResults.map((c: any) => (
-                  <button key={c.code} onClick={() => { setCustomer({ name: c.name, phone: c.phone }); onCustomerSearch?.("") }}
-                    className="w-full text-left p-2 hover:bg-[var(--primary)] hover:text-white transition-colors border-b border-[var(--border-subtle)] last:border-0">
-                    <p className="text-[10px] font-black uppercase">{c.name}</p>
-                    <p className="text-[8px] opacity-60 font-mono">{c.phone} | {c.code}</p>
-                  </button>
-                ))}
+      {/* ── MASTER HEADER ── */}
+      <div className="bg-white border-b border-slate-200 p-4 shadow-sm z-10">
+        <div className="grid grid-cols-12 gap-6">
+          
+          {/* Section 1: Bill Configuration */}
+          <div className="col-span-3 border-r border-slate-100 pr-6">
+            <h3 className={sectionTitleCls}>Bill Configuration</h3>
+            <div className="grid grid-cols-2 gap-3">
+              <div>
+                <label className={labelCls}>Bill Type</label>
+                <select className={inputCls + " w-full appearance-none"}>
+                  <option>PRODUCT</option>
+                  <option>SERVICE</option>
+                </select>
               </div>
-            )}
+              <div>
+                <label className={labelCls}>Txn Mode</label>
+                <select className={inputCls + " w-full appearance-none"}>
+                  <option>CASH</option>
+                  <option>CREDIT</option>
+                </select>
+              </div>
+              <div className="col-span-2">
+                <label className={labelCls}>Doc Number</label>
+                <div className="flex gap-1">
+                   <input className={inputCls + " w-16 bg-slate-50 text-center"} value="S9" readOnly />
+                   <input className={inputCls + " flex-1 font-mono tracking-widest text-[var(--primary)]"} value={billNo} readOnly />
+                </div>
+              </div>
+            </div>
           </div>
 
-          {/* Customer Name — auto resolved, readonly */}
-          <div className="col-span-2">
-            <label className={labelCls}>Customer Name</label>
-            <input
-              className={inputCls + " w-full bg-[var(--border-subtle)]/30 cursor-not-allowed"}
-              placeholder="Auto-resolved"
-              value={customer.name}
-              readOnly
-            />
+          {/* Section 2: Customer Lifecycle */}
+          <div className="col-span-6 border-r border-slate-100 px-6">
+            <h3 className={sectionTitleCls}>Customer Identification</h3>
+            <div className="grid grid-cols-12 gap-3">
+              <div className="col-span-4 relative">
+                <label className={labelCls}>Code / Mobile <span className="text-blue-500 font-black ml-1">[F2]</span></label>
+                <div className="relative">
+                  <User size={12} className="absolute left-2.5 top-1/2 -translate-y-1/2 text-slate-400" />
+                  <input
+                    className={inputCls + " w-full pl-8 font-mono"}
+                    placeholder="ENTER CODE..."
+                    value={customer.phone}
+                    onChange={e => { setCustomer({ ...customer, phone: e.target.value }); onCustomerSearch?.(e.target.value) }}
+                    onFocus={() => onCustomerSearch?.(customer.phone || '')}
+                  />
+                </div>
+                {customerResults.length > 0 && (
+                  <div className="absolute top-full left-0 w-80 bg-white border border-slate-200 shadow-2xl rounded-md z-[100] mt-1 max-h-48 overflow-y-auto ring-4 ring-black/5">
+                    {customerResults.map((c: any) => (
+                      <button key={c.code} onClick={() => { setCustomer({ name: c.name, phone: c.phone }); onCustomerSearch?.("") }}
+                        className="w-full text-left p-3 hover:bg-[var(--primary)] hover:text-white transition-all border-b border-slate-50 last:border-0 group">
+                        <div className="flex justify-between items-center">
+                          <span className="text-[11px] font-black uppercase">{c.name}</span>
+                          <span className="text-[9px] font-mono opacity-60 group-hover:opacity-100">{c.phone}</span>
+                        </div>
+                      </button>
+                    ))}
+                  </div>
+                )}
+              </div>
+              <div className="col-span-8">
+                <label className={labelCls}>Registered Customer Name</label>
+                <input
+                  className={inputCls + " w-full bg-slate-50 italic text-slate-500"}
+                  value={customer.name || "UNREGISTERED WALK-IN"}
+                  readOnly
+                />
+              </div>
+              <div className="col-span-12 flex gap-2">
+                 <button className="text-[9px] font-black text-blue-600 hover:underline uppercase tracking-tight">+ Create New Profile</button>
+                 <span className="text-slate-300">|</span>
+                 <button className="text-[9px] font-black text-blue-600 hover:underline uppercase tracking-tight">View Points History</button>
+              </div>
+            </div>
           </div>
 
-          {/* Salesman */}
-          <div className="col-span-2">
-            <label className={labelCls}>
-              <UserCheck size={9} className="inline mr-1 text-emerald-500" />
-              Salesman {isSalesmanMandatory && <span className="text-red-500">*</span>}
-            </label>
-            <select className={inputCls + " w-full"} value={salesman} onChange={e => setSalesman(e.target.value)}>
-              <option value="">SELECT STAFF</option>
-              {personnelList.map((p: any) => <option key={p.id} value={p.id}>{p.name.toUpperCase()}</option>)}
-            </select>
+          {/* Section 3: Session Intelligence */}
+          <div className="col-span-3 pl-6">
+            <h3 className={sectionTitleCls}>Station Info</h3>
+            <div className="space-y-3">
+              <div>
+                <label className={labelCls}>Assigned Salesman</label>
+                <div className="relative">
+                  <UserCheck size={12} className="absolute left-2.5 top-1/2 -translate-y-1/2 text-emerald-500" />
+                  <select className={inputCls + " w-full pl-8 appearance-none"} value={salesman} onChange={e => setSalesman(e.target.value)}>
+                    <option value="">(SELECT STAFF)</option>
+                    {personnelList.map((p: any) => <option key={p.id} value={p.id}>{p.name.toUpperCase()}</option>)}
+                  </select>
+                </div>
+              </div>
+              <div className="flex items-center justify-between">
+                 <span className="text-[10px] font-bold text-slate-500 uppercase">Counter:</span>
+                 <span className="text-[10px] font-black text-slate-900 uppercase">POS-MAIN-02</span>
+              </div>
+            </div>
           </div>
         </div>
-      </header>
+      </div>
 
-      <main className="flex-1 flex flex-col overflow-hidden p-3 gap-3">
-        {/* ── ITEM GRID (Shoper9 column order) ── */}
-        <div className="flex-1 bg-[var(--surface)] rounded-xl border border-[var(--border-subtle)] overflow-hidden shadow-sm flex flex-col">
-          <div className="flex-1 relative bg-[var(--surface-container-lowest)]">
+      <main className="flex-1 flex flex-col p-4 gap-4 overflow-hidden">
+        
+        {/* ── DYNAMIC ENTRY ROW (Top Alignment) ── */}
+        <div className="bg-slate-800 rounded-xl p-4 shadow-xl border border-slate-700 ring-1 ring-white/5">
+          <div className="grid grid-cols-[40px_160px_1fr_100px_80px_100px_80px_80px_100px_100px_auto] gap-3 items-end">
+            <div>
+              <label className={labelCls + " text-slate-400"}>S.No</label>
+              <div className="h-8 flex items-center justify-center bg-slate-700 rounded text-[12px] font-black text-slate-400 border border-slate-600">
+                {items.length + 1}
+              </div>
+            </div>
+
+            <div className="relative">
+              <label className={labelCls + " text-slate-400"}>Stock Number <span className="text-amber-400 font-black ml-1">[F1]</span></label>
+              <div className="relative">
+                <Barcode size={14} className="absolute left-2.5 top-1/2 -translate-y-1/2 text-amber-500" />
+                <input ref={entryRef} id="input-stock" 
+                  className="h-8 w-full bg-slate-900 border border-slate-600 rounded-sm px-3 pl-9 text-[13px] font-mono font-bold text-white uppercase outline-none focus:border-amber-500 focus:ring-2 focus:ring-amber-500/20 transition-all placeholder:text-slate-600"
+                  value={activeEntry.stock_no}
+                  onChange={e => setActiveEntry({ ...activeEntry, stock_no: e.target.value.toUpperCase() })}
+                  onKeyDown={e => handleKeyDown(e, 'stock')}
+                  placeholder="SCAN BARCODE..." autoFocus />
+              </div>
+            </div>
+
+            <div>
+              <label className={labelCls + " text-slate-400"}>Item Description</label>
+              <input className="h-8 w-full bg-slate-700/50 border border-slate-600 rounded-sm px-3 text-[12px] font-bold text-slate-300 uppercase outline-none cursor-not-allowed"
+                value={activeEntry.descr || ''} readOnly placeholder="AUTO-RESOLVING..." />
+            </div>
+
+            <div>
+              <label className={labelCls + " text-slate-400 text-right"}>Rate / MRP</label>
+              <input type="number" className="h-8 w-full bg-slate-900 border border-slate-600 rounded-sm px-3 text-[12px] font-mono font-bold text-white text-right outline-none focus:border-amber-500"
+                value={activeEntry.rate || ''}
+                onChange={e => setActiveEntry({ ...activeEntry, rate: Number(e.target.value) })}
+                onKeyDown={e => handleKeyDown(e, 'rate')} />
+            </div>
+
+            <div>
+              <label className={labelCls + " text-slate-400 text-right"}>Qty</label>
+              <input type="number" className="h-8 w-full bg-slate-900 border border-slate-600 rounded-sm px-3 text-[12px] font-mono font-bold text-white text-right outline-none focus:border-amber-500"
+                value={activeEntry.qty}
+                onChange={e => setActiveEntry({ ...activeEntry, qty: Number(e.target.value) })}
+                onKeyDown={e => handleKeyDown(e, 'qty')} />
+            </div>
+
+            <div>
+              <label className={labelCls + " text-slate-400 text-right"}>Gross Val</label>
+              <input className="h-8 w-full bg-slate-700/50 border border-slate-600 rounded-sm px-3 text-[12px] font-mono font-bold text-slate-400 text-right outline-none cursor-not-allowed"
+                value={entryValue.toFixed(2)} readOnly />
+            </div>
+
+            <div className="relative">
+              <label className={labelCls + " text-slate-400 text-center"}>Disc %</label>
+              <input type="number" className="h-8 w-full bg-slate-900 border border-slate-600 rounded-sm px-3 text-[12px] font-mono font-bold text-amber-500 text-right outline-none focus:border-amber-500"
+                value={activeEntry.disc_per}
+                onChange={e => setActiveEntry({ ...activeEntry, disc_per: Number(e.target.value) })}
+                onKeyDown={e => handleKeyDown(e, 'disc_per')} />
+            </div>
+
+            <div>
+              <label className={labelCls + " text-slate-400 text-right"}>Disc Amt</label>
+              <input className="h-8 w-full bg-slate-700/50 border border-slate-600 rounded-sm px-3 text-[12px] font-mono font-bold text-amber-500 text-right outline-none cursor-not-allowed"
+                value={entryDiscAmt.toFixed(2)} readOnly />
+            </div>
+
+            <div>
+              <label className={labelCls + " text-slate-400 text-right"}>Net Total</label>
+              <input className="h-8 w-full bg-slate-700/50 border border-slate-600 rounded-sm px-3 text-[12px] font-mono font-bold text-emerald-400 text-right outline-none cursor-not-allowed"
+                value={entryTotal.toFixed(2)} readOnly />
+            </div>
+
+            <div>
+              <label className={labelCls + " text-slate-400 text-center"}>Line Staff</label>
+              <select className="h-8 w-full bg-slate-900 border border-slate-600 rounded-sm px-2 text-[11px] font-bold text-white uppercase outline-none focus:border-amber-500 appearance-none"
+                value={activeEntry.salesman || salesman}
+                onChange={e => setActiveEntry({ ...activeEntry, salesman: e.target.value })}
+                onKeyDown={e => handleKeyDown(e, 'salesman')}>
+                <option value="">-</option>
+                {personnelList.map((p: any) => <option key={p.id} value={p.id}>{p.name.toUpperCase()}</option>)}
+              </select>
+            </div>
+
+            <Button onClick={commitLine}
+              className="h-8 bg-amber-500 hover:bg-amber-600 text-slate-950 font-black uppercase px-4 rounded shadow-lg transition-transform active:scale-95 text-[10px]">
+              ADD LINE (↵)
+            </Button>
+          </div>
+        </div>
+
+        {/* ── MAIN TRANSACTION GRID ── */}
+        <div className="flex-1 bg-white rounded-xl border border-slate-200 overflow-hidden shadow-inner flex flex-col">
+          <div className="h-8 bg-slate-100 border-b border-slate-200 flex items-center px-4 justify-between">
+             <div className="flex items-center gap-2 text-[9px] font-black text-slate-500 uppercase tracking-widest">
+                <LayoutGrid size={12} className="text-slate-400" />
+                Live Billing Journal
+             </div>
+             <div className="flex items-center gap-4">
+                <span className="text-[9px] font-black text-slate-400 uppercase">Columns: Standard Institutional Parity (V2)</span>
+             </div>
+          </div>
+          <div className="flex-1 relative ag-theme-smriti">
             <AgGridReact 
               theme={themeQuartz}
               rowData={items} 
               columnDefs={columnDefs} 
-              rowHeight={44}
-              headerHeight={36}
+              rowHeight={38}
+              headerHeight={34}
               suppressHorizontalScroll={false}
-              suppressMovableColumns={true} // LOCK: Institutional Parity
-              suppressDragLeaveHidesColumns={true}
+              suppressMovableColumns={true}
               onGridReady={p => p.api.sizeColumnsToFit()}
-              overlayNoRowsTemplate='<div style="padding:48px;text-align:center;color:var(--text-tertiary);font-style:italic;font-size:14px;">Scan a product or enter Stock No below to begin...</div>'
+              overlayNoRowsTemplate='<div class="text-[11px] font-black uppercase text-slate-300 tracking-[0.5em] mt-12">Waiting for first item scan...</div>'
             />
           </div>
-
-          {/* ── BILL FOOTER SUMMARY (Shoper9 style) ── */}
-          <div className="bg-[var(--surface-container-low)] border-t border-[var(--border-subtle)] flex justify-between items-end p-3 flex-shrink-0">
-            {/* Left: item/qty counters */}
-            <div className="flex items-end gap-6">
-              <div>
-                <span className="block text-[9px] font-black uppercase text-[var(--text-tertiary)] mb-0.5">Total Items</span>
-                <span className="text-2xl font-black text-[var(--primary)]">{totals.items || 0}</span>
-              </div>
-              <div>
-                <span className="block text-[9px] font-black uppercase text-[var(--text-tertiary)] mb-0.5">Total Qty</span>
-                <span className="text-2xl font-black text-[var(--primary)]">{totals.qty || 0}</span>
-              </div>
-              <div className="pl-4 border-l border-[var(--border-subtle)]">
-                <span className="inline-block px-2 py-1 bg-amber-100 text-amber-700 text-[9px] font-black rounded uppercase border border-amber-200">
-                  Status: {items.length > 0 ? 'DRAFT' : 'EMPTY'}
-                </span>
-              </div>
-            </div>
-
-            {/* Right: totals breakdown */}
-            <div className="flex gap-6 items-end">
-              <div className="w-64 space-y-1 text-[11px]">
-                <div className="flex justify-between">
-                  <span className="text-[var(--text-tertiary)]">Gross Value</span>
-                  <span className="font-bold">₹{(totals.gross || 0).toFixed(2)}</span>
+          
+          {/* ── DENSE FOOTER SUMMARY ── */}
+          <div className="bg-slate-50 border-t border-slate-200 p-4 flex justify-between items-start shrink-0">
+             {/* Stats Block */}
+             <div className="grid grid-cols-2 gap-8 pr-12 border-r border-slate-200">
+                <div className="text-center">
+                   <div className="text-[9px] font-black text-slate-400 uppercase mb-1">Items</div>
+                   <div className="text-2xl font-mono font-black text-slate-900 leading-none">{totals.items || 0}</div>
                 </div>
-                <div className="flex justify-between text-amber-600">
-                  <span>Item Discount</span>
-                  <span>−₹{schemeDisc.toFixed(2)}</span>
+                <div className="text-center">
+                   <div className="text-[9px] font-black text-slate-400 uppercase mb-1">Quantity</div>
+                   <div className="text-2xl font-mono font-black text-slate-900 leading-none">{totals.qty || 0}</div>
                 </div>
-                <div className="flex justify-between text-blue-600">
-                  <span>Bill Discount</span>
-                  <div className="flex items-center gap-1">
-                    <span>−₹</span>
-                    <input type="number" className="w-16 text-right bg-transparent border-b border-blue-300 outline-none text-[11px] font-black"
-                      value={billDiscount} onChange={e => setBillDiscount(Number(e.target.value))} />
-                  </div>
+             </div>
+
+             {/* Values Breakdown */}
+             <div className="flex-1 px-12 grid grid-cols-4 gap-8 border-r border-slate-200">
+                <div>
+                   <div className="text-[9px] font-black text-slate-400 uppercase mb-1">Gross Value</div>
+                   <div className="text-[13px] font-mono font-bold text-slate-600">₹{(totals.gross || 0).toFixed(2)}</div>
                 </div>
-                <div className="flex justify-between text-[var(--text-tertiary)]">
-                  <span>GST (est.)</span>
-                  <span>₹{gstAmt.toFixed(2)}</span>
+                <div>
+                   <div className="text-[9px] font-black text-amber-600 uppercase mb-1">Item Disc</div>
+                   <div className="text-[13px] font-mono font-bold text-amber-600">−₹{(totals.disc || 0).toFixed(2)}</div>
                 </div>
-                <div className="flex justify-between pt-1 border-t border-[var(--border-subtle)] text-[var(--primary)]">
-                  <span className="font-black uppercase">Net Amount</span>
-                  <span className="text-xl font-black">₹{(totals.finalNet || 0).toLocaleString()}</span>
+                <div>
+                   <div className="text-[9px] font-black text-blue-600 uppercase mb-1">Bill Disc <span className="ml-1 opacity-40 font-normal underline cursor-pointer">[F9]</span></div>
+                   <div className="flex items-center gap-1">
+                      <span className="text-[13px] font-mono font-bold text-blue-600">−₹</span>
+                      <input type="number" 
+                        className="w-16 bg-transparent border-b border-blue-200 outline-none text-[13px] font-mono font-bold text-blue-600 focus:border-blue-500"
+                        value={billDiscount} 
+                        onChange={e => setBillDiscount(Number(e.target.value))} />
+                   </div>
                 </div>
-              </div>
+                <div>
+                   <div className="text-[9px] font-black text-slate-400 uppercase mb-1">Net GST</div>
+                   <div className="text-[13px] font-mono font-bold text-slate-600">₹{((totals.net || 0) * 0.05).toFixed(2)}</div>
+                </div>
+             </div>
 
-              <Button onClick={() => setShowSettle(true)}
-                className="h-12 bg-[var(--primary)] text-white font-black px-8 rounded-lg shadow-lg hover:scale-[1.02] transition-all text-sm">
-                SETTLE (F8)
-              </Button>
-            </div>
-          </div>
-        </div>
-
-        {/* ── DIRECT ENTRY ROW (Moved to Bottom - Shoper9 style) ── */}
-        <div className="bg-[var(--surface)] border-t-2 border-[var(--primary)] rounded-xl px-4 py-3 flex-shrink-0 shadow-lg">
-          <div className="grid grid-cols-[40px_130px_1fr_80px_60px_80px_70px_60px_80px_90px_90px_auto] gap-2 items-end">
-
-            <div>
-              <label className={labelCls}>S.No</label>
-              <input className={inputCls + " w-full text-center bg-[var(--border-subtle)]/30 cursor-not-allowed"} value={items.length + 1} readOnly />
-            </div>
-
-            {/* Stock No (Always Visible) */}
-            <div>
-              <label className={labelCls}>Stock No <span className="text-[var(--primary)]">[F1]</span></label>
-              <div className="relative">
-                <Barcode size={14} className="absolute left-2 top-1/2 -translate-y-1/2 text-[var(--primary)]" />
-                <input ref={entryRef} id="input-stock" className={inputCls + " w-full pl-7"}
-                  value={activeEntry.stock_no}
-                  onChange={e => setActiveEntry({ ...activeEntry, stock_no: e.target.value.toUpperCase() })}
-                  onKeyDown={e => handleKeyDown(e, 'stock')}
-                  placeholder="SCAN..." autoFocus />
-              </div>
-            </div>
-
-            {/* Item Description (Usually Read-only) */}
-            <div className={(!fieldMask || fieldMask.some(m => m.field.toLowerCase().includes('desc') && m.visible)) ? '' : 'hidden'}>
-              <label className={labelCls}>Item Description</label>
-              <input id="input-descr" className={inputCls + " w-full bg-[var(--border-subtle)]/30 cursor-not-allowed"}
-                value={activeEntry.descr || ''} readOnly placeholder="Auto-filled" />
-            </div>
-
-            {/* Rate / MRP */}
-            <div className={(!fieldMask || fieldMask.some(m => ['rate', 'mrp', 'retail_price'].includes(m.field.toLowerCase()) && m.visible)) ? '' : 'hidden'}>
-              <label className={labelCls + " text-right"}>Rate</label>
-              <input type="number" id="input-rate" className={inputCls + " w-full text-right"}
-                value={activeEntry.rate || ''}
-                onChange={e => setActiveEntry({ ...activeEntry, rate: Number(e.target.value) })}
-                onKeyDown={e => handleKeyDown(e, 'rate')} placeholder="0.00" 
-                readOnly={fieldMask?.find(m => ['rate', 'mrp', 'retail_price'].includes(m.field.toLowerCase()))?.editable === false} />
-            </div>
-
-            {/* Qty */}
-            <div className={(!fieldMask || fieldMask.some(m => m.field.toLowerCase() === 'qty' && m.visible)) ? '' : 'hidden'}>
-              <label className={labelCls + " text-right"}>Qty</label>
-              <input type="number" id="input-qty" className={inputCls + " w-full text-right"}
-                value={activeEntry.qty}
-                onChange={e => setActiveEntry({ ...activeEntry, qty: Number(e.target.value) })}
-                onKeyDown={e => handleKeyDown(e, 'qty')} 
-                readOnly={fieldMask?.find(m => m.field.toLowerCase() === 'qty')?.editable === false} />
-            </div>
-
-            {/* Value (Calculated) */}
-            <div>
-              <label className={labelCls + " text-right"}>Value</label>
-              <input className={inputCls + " w-full text-right bg-[var(--border-subtle)]/30 cursor-not-allowed"}
-                value={entryValue.toFixed(2)} readOnly />
-            </div>
-
-            {/* Disc Cd */}
-            <div className={(!fieldMask || fieldMask.some(m => m.field.toLowerCase().includes('disc_cd') && m.visible)) ? '' : 'hidden'}>
-              <label className={labelCls + " text-center"}>Disc Cd</label>
-              <input id="input-disc_cd" className={inputCls + " w-full text-center"}
-                value={activeEntry.disc_cd || ''}
-                onChange={e => setActiveEntry({ ...activeEntry, disc_cd: e.target.value.toUpperCase() })}
-                onKeyDown={e => handleKeyDown(e, 'disc_cd')}
-                placeholder="-" />
-            </div>
-
-            {/* Disc % */}
-            <div className={(!fieldMask || fieldMask.some(m => (m.field.toLowerCase().includes('discper') || m.field.toLowerCase() === 'disc_per') && m.visible)) ? '' : 'hidden'}>
-              <label className={labelCls + " text-right"}>Disc %</label>
-              <input type="number" id="input-disc_per" className={inputCls + " w-full text-right text-amber-600"}
-                value={activeEntry.disc_per}
-                onChange={e => setActiveEntry({ ...activeEntry, disc_per: Number(e.target.value) })}
-                onKeyDown={e => handleKeyDown(e, 'disc_per')} 
-                readOnly={fieldMask?.find(m => m.field.toLowerCase().includes('disc_per'))?.editable === false} />
-            </div>
-
-            {/* Disc Amt (Calculated) */}
-            <div className={(!fieldMask || fieldMask.some(m => m.field.toLowerCase().includes('discamt') && m.visible)) ? '' : 'hidden'}>
-              <label className={labelCls + " text-right"}>Disc Amt</label>
-              <input className={inputCls + " w-full text-right bg-[var(--border-subtle)]/30 cursor-not-allowed text-amber-600"}
-                value={entryDiscAmt.toFixed(2)} readOnly />
-            </div>
-
-            {/* Total (Calculated) */}
-            <div>
-              <label className={labelCls + " text-right"}>Total</label>
-              <input className={inputCls + " w-full text-right font-black bg-[var(--border-subtle)]/30 cursor-not-allowed text-[var(--primary)]"}
-                value={entryTotal.toFixed(2)} readOnly />
-            </div>
-
-            {/* Staff / Salesman */}
-            <div className={(!fieldMask || fieldMask.some(m => ['staff', 'salesman'].includes(m.field.toLowerCase()) && m.visible)) ? '' : 'hidden'}>
-              <label className={labelCls + " text-center"}>Staff</label>
-              <select id="input-salesman" className={inputCls + " w-full"} value={activeEntry.salesman || salesman}
-                onChange={e => setActiveEntry({ ...activeEntry, salesman: e.target.value })}
-                onKeyDown={e => handleKeyDown(e, 'salesman')}>
-                <option value="">-</option>
-                {personnelList.map((p: any) => <option key={p.id} value={p.id}>{p.name.slice(0, 6).toUpperCase()}</option>)}
-              </select>
-            </div>
-
-            <Button onClick={() => { commitLine(); document.getElementById('input-stock')?.focus() }}
-              className="h-9 bg-[var(--primary)] text-white font-black uppercase px-4 rounded-lg text-[10px] whitespace-nowrap">
-              ADD (↵)
-            </Button>
+             {/* Final Settlement Block */}
+             <div className="pl-12 min-w-[280px]">
+                <div className="bg-white border-2 border-[var(--primary)] rounded-lg p-3 shadow-lg relative overflow-hidden">
+                   <div className="absolute top-0 right-0 p-1 opacity-5">
+                      <Hash size={40} />
+                   </div>
+                   <div className="flex justify-between items-center mb-1">
+                      <span className="text-[10px] font-black text-slate-400 uppercase tracking-widest">Payable Net</span>
+                      <Badge variant="info" className="bg-[var(--primary)] text-white border-none text-[8px] h-4">FINAL</Badge>
+                   </div>
+                   <div className="text-3xl font-mono font-black text-[var(--primary)] flex items-baseline gap-1">
+                      <span className="text-lg">₹</span>
+                      {(totals.finalNet || 0).toLocaleString(undefined, { minimumFractionDigits: 2 })}
+                   </div>
+                   <button 
+                     onClick={() => setShowSettle(true)}
+                     className="w-full mt-3 h-10 bg-[var(--primary)] hover:bg-blue-700 text-white font-black uppercase text-[11px] rounded transition-all shadow-md flex items-center justify-center gap-2 group">
+                     <CreditCard size={14} className="group-hover:rotate-12 transition-transform" />
+                     Settle Bill (F8)
+                   </button>
+                </div>
+             </div>
           </div>
         </div>
       </main>
 
-      {/* ── FUNCTION KEY FOOTER BAR (Shoper9 style) ── */}
-      <footer className="bg-slate-900 flex overflow-x-auto h-9 border-t border-slate-700 divide-x divide-slate-700 flex-shrink-0">
+      {/* ── INSTITUTIONAL HOTKEY BAR ── */}
+      <div className="h-10 bg-slate-900 border-t border-slate-800 flex shrink-0 divide-x divide-slate-800 shadow-[0_-4px_20px_rgba(0,0,0,0.3)]">
         {[
-          { key: 'F1', label: 'NEW LINE' },
-          { key: 'F2', label: 'CUSTOMER' },
-          { key: 'F3', label: 'GO TO' },
-          { key: 'F7', label: 'EXACT CASH' },
-          { key: 'F8', label: 'SETTLE', active: true },
-          { key: 'F9', label: 'TOTALS' },
-          { key: 'F12', label: 'SUSPEND' },
-        ].map(({ key, label, active }) => (
+          { key: 'F1', label: 'ADD ROW', color: 'text-amber-500' },
+          { key: 'F2', label: 'CUST LOOKUP', color: 'text-blue-500' },
+          { key: 'F3', label: 'EDIT QTY' },
+          { key: 'F6', label: 'PROMO DTLS', color: 'text-purple-400' },
+          { key: 'F7', label: 'EXACT CASH', color: 'text-emerald-500' },
+          { key: 'F8', label: 'PAYMENT MODES', color: 'text-[var(--primary)]', active: true },
+          { key: 'F9', label: 'BILL DISCOUNT' },
+          { key: 'F12', label: 'SUSPEND BILL', color: 'text-rose-500' },
+        ].map(({ key, label, color, active }) => (
           <button key={key}
             onClick={key === 'F8' ? () => setShowSettle(true) : undefined}
-            className={`px-3 h-full flex items-center font-bold text-[10px] tracking-widest uppercase transition-colors outline-none
-              ${active ? 'bg-slate-700 text-amber-400' : 'text-slate-300 hover:bg-slate-800'}`}>
-            {key}: {label}
+            className={cn(
+              "px-4 h-full flex flex-col justify-center transition-all outline-none border-t-2 border-transparent",
+              active ? "bg-slate-800 border-t-[var(--primary)]" : "hover:bg-slate-800 hover:border-t-slate-700"
+            )}>
+            <div className={cn("text-[10px] font-black leading-none mb-1", active ? "text-white" : color || "text-slate-400")}>{key}</div>
+            <div className="text-[8px] font-bold text-slate-500 uppercase tracking-tighter whitespace-nowrap">{label}</div>
           </button>
         ))}
-        <div className="flex-1 flex justify-end items-center px-4">
-          <span className="text-slate-500 text-[9px] uppercase tracking-wide">PrimeSetu Sovereign POS · Shoper9 Mode</span>
+        <div className="flex-1 flex justify-end items-center px-6 gap-3">
+           <div className="flex flex-col items-end">
+              <span className="text-[8px] font-black text-slate-600 uppercase tracking-[0.3em]">Sovereign Node</span>
+              <span className="text-[9px] font-mono font-bold text-slate-400">GKP-TERMINAL-02</span>
+           </div>
+           <div className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse shadow-[0_0_8px_rgba(16,185,129,0.5)]" />
         </div>
-      </footer>
+      </div>
     </div>
   )
 }

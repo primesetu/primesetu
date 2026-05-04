@@ -359,7 +359,7 @@ function BillingModule() {
           onCustomerSearch={handleCustomerSearch}
           fieldMask={fieldMask}
         />
-      ) || <div>Loading Sovereign Terminal...</div>}
+      )}
 
       <AnimatePresence>
         {showSettle && (

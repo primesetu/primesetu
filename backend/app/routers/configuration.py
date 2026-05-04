@@ -25,41 +25,67 @@ from app.schemas.configuration import (
     CategoryPolicyRead, CategoryPolicyBase
 )
 
+from app.models.sovereign import SmritiAD, SmritiParam, SmritiDocNo
+
 router = APIRouter(prefix="/config", tags=["configuration"])
 
-# --- UI Field Configuration (AcceptDisplayDtls Parity) ---
+# --- Sovereign Configuration APIs ---
 
-@router.get("/legacy-mask/{trn_type}")
-async def get_legacy_mask(
+@router.get("/sovereign-mask/{trn_type}")
+async def get_sovereign_mask(
     trn_type: int,
     current_user: CurrentUser = Depends(require_auth),
     db: AsyncSession = Depends(get_db)
 ):
     """
-    Fetch the legacy Shoper 9 display mask for a transaction type.
-    This bridge allows SMRITI-OS to honor institutional field captions and visibility.
+    Fetch the sovereign display mask (from SmritiAD) for a transaction type.
+    Replaces legacy-mask endpoint.
     """
-    stmt = select(Acceptdisplaydtls).where(
-        Acceptdisplaydtls.trntype == trn_type
-    ).order_by(Acceptdisplaydtls.disppos)
+    stmt = select(SmritiAD).where(
+        SmritiAD.trntype == trn_type
+    ).order_by(SmritiAD.position)
     
     result = await db.execute(stmt)
     rows = result.scalars().all()
     
-    # Map to a standardized format for the frontend SovereignUI
     mask = []
     for row in rows:
         mask.append({
-            "field": row.columnname,
-            "headerName": row.dispcap or row.acptcap or row.columnname,
-            "visible": row.dispvisible,
-            "editable": row.acptvisible, # If you can accept it, it's editable
-            "width": row.dispwidth * 10 if row.dispwidth else 150, # Scale factor for modern UI
-            "align": "left" if row.dispalign == 1 else "right" if row.dispalign == 2 else "center",
-            "pos": row.disppos
+            "field": row.column_name,
+            "headerName": row.dispcap or row.acptcap or row.column_name,
+            "visible": row.visible,
+            "editable": not row.is_mandatory, # Placeholder logic
+            "width": row.width * 10 if row.width else 150,
+            "pos": row.position
         })
     
     return mask
+
+@router.get("/sysparam")
+async def get_sovereign_sysparams(
+    category: Optional[str] = None,
+    current_user: CurrentUser = Depends(require_auth),
+    db: AsyncSession = Depends(get_db)
+):
+    """Fetch sovereign system parameters (SmritiParam)."""
+    stmt = select(SmritiParam)
+    if category:
+        stmt = stmt.where(SmritiParam.category == category)
+    
+    result = await db.execute(stmt)
+    rows = result.scalars().all()
+    return rows
+
+@router.get("/docno/{trn_type}")
+async def get_sovereign_docno(
+    trn_type: int,
+    current_user: CurrentUser = Depends(require_auth),
+    db: AsyncSession = Depends(get_db)
+):
+    """Fetch sovereign document prefix configuration (SmritiDocNo)."""
+    stmt = select(SmritiDocNo).where(SmritiDocNo.trn_type == trn_type)
+    result = await db.execute(stmt)
+    return result.scalars().all()
 
 @router.get("/ui-fields/{screen_name}", response_model=List[UIFieldConfigRead])
 async def get_ui_field_configs(

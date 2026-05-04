@@ -125,6 +125,29 @@ function BillingModule() {
     loadMask()
   }, [])
 
+  // ── DRAFT (xtemp) RESTORATION ──
+  useEffect(() => {
+    async function restoreDraft() {
+      try {
+        const draftItems = await api.billing.getDraft()
+        if (draftItems && draftItems.length > 0) {
+          setItems(draftItems.map((i: any) => ({
+            id: i.id, // Database ID
+            stock_no: i.StockNo,
+            descr: i.ItemDesc,
+            rate: i.Retail_Price,
+            qty: i.Qty,
+            disc_per: i.disc_per,
+            disc_amt: (i.Retail_Price * i.Qty * i.disc_per) / 100,
+            total: (i.Retail_Price * i.Qty) * (1 - i.disc_per / 100),
+            salesman: i.salesman
+          })))
+        }
+      } catch (err) { console.error("Draft restoration failed:", err) }
+    }
+    restoreDraft()
+  }, [])
+
   // ── METADATA LOAD ──
   useEffect(() => {
     async function loadMetadata() {
@@ -142,76 +165,127 @@ function BillingModule() {
   }, [])
 
   const handleCustomerSearch = async (q: string) => {
-    if (q.length < 3) {
-      setCustomerResults([])
-      return
-    }
     try {
       const results = await api.billing.searchCustomers(q)
       setCustomerResults(results)
     } catch (err) { console.error(err) }
   }
 
-  const commitLine = async () => {
-    const searchVal = activeEntry.stock_no.trim()
-    if (!searchVal || isSearchingRef.current) return
+  const handleFieldKeyDown = (e: React.KeyboardEvent, currentField: string) => {
+    if (e.key === 'Enter') {
+      e.preventDefault();
+      
+      // Determine the next field based on fieldMask or defaults
+      const fields = ['stock', 'qty', 'rate', 'disc_per', 'salesman'];
+      const currentIdx = fields.indexOf(currentField);
+      
+      if (currentField === 'stock') {
+        // Trigger item search on Enter in Stock field
+        commitLine(true); // Search only
+      } else if (currentIdx < fields.length - 1) {
+        // Move to next field
+        const nextField = fields[currentIdx + 1];
+        document.getElementById(`input-${nextField}`)?.focus();
+      } else {
+        // Last field, commit to grid
+        commitLine(false);
+      }
+    }
     
-    // Immediately lock to prevent rapid "Enter" keypress duplicates
-    isSearchingRef.current = true
+    if (e.key === 'F1') {
+      e.preventDefault();
+      setActiveEntry({ stock_no: '', qty: 1, rate: 0, disc_cd: '', disc_per: 0, descr: '' });
+      document.getElementById('input-stock')?.focus();
+    }
+  };
+
+  const commitLine = async (searchOnly: boolean = false) => {
+    const searchVal = activeEntry.stock_no.trim();
+    if (!searchVal || isSearchingRef.current) return;
     
-    // Check for Duplicate Scan (Auto-Increment Qty ONLY if Discount matches)
-    const activeDisc = activeEntry.disc_per || 0
-    const existingIndex = items.findIndex(i => i.stock_no === searchVal && i.disc_per === activeDisc)
+    // If it's just a search, fetch details and stop
+    if (searchOnly) {
+      setIsSearching(true);
+      try {
+        const results = await api.inventory.search(searchVal);
+        const inventoryItems = Array.isArray(results) ? results : (results.data || []);
+        if (inventoryItems.length > 0) {
+          const item = inventoryItems[0];
+          setActiveEntry(prev => ({
+            ...prev,
+            descr: item.name,
+            rate: (item.mrp_paise || 0) / 100,
+          }));
+          // Move focus to Qty
+          setTimeout(() => document.getElementById('input-qty')?.focus(), 10);
+        } else {
+          alert("SKU Not Found");
+        }
+      } catch (err) {
+        console.error(err);
+      } finally {
+        setIsSearching(false);
+      }
+      return;
+    }
+
+    // Final commit to grid
+    isSearchingRef.current = true;
+    const activeDisc = activeEntry.disc_per || 0;
+    const existingIndex = items.findIndex(i => i.stock_no === searchVal && i.disc_per === activeDisc);
     
     if (existingIndex > -1) {
       setItems(prev => {
-        const newItems = [...prev]
-        const item = newItems[existingIndex]
-        item.qty += activeEntry.qty || 1
-        item.disc_amt = (item.rate * item.qty * item.disc_per) / 100
-        item.total = (item.rate * item.qty) - item.disc_amt
-        return newItems
-      })
-      setActiveEntry({ stock_no: '', qty: 1, rate: 0, disc_cd: '', disc_per: 0, descr: '' })
-      
-      // Release lock after a short delay to debounce key hold
-      setTimeout(() => { isSearchingRef.current = false }, 150)
-      return
+        const newItems = [...prev];
+        const item = newItems[existingIndex];
+        item.qty += activeEntry.qty || 1;
+        item.disc_amt = (item.rate * item.qty * item.disc_per) / 100;
+        item.total = (item.rate * item.qty) - item.disc_amt;
+        return newItems;
+      });
+      setActiveEntry({ stock_no: '', qty: 1, rate: 0, disc_cd: '', disc_per: 0, descr: '' });
+      setTimeout(() => { 
+        isSearchingRef.current = false;
+        document.getElementById('input-stock')?.focus();
+      }, 150);
+      return;
     }
 
-    setIsSearching(true)
+    // New item commit
+    const rate = activeEntry.rate;
+    const qty = activeEntry.qty || 1;
+    const disc_per = activeDisc;
+    const disc_amt = (rate * qty * disc_per) / 100;
+    const total = (rate * qty) - disc_amt;
+
+    const newItem = {
+      id: crypto.randomUUID(),
+      real_id: searchVal, // Temporary, will be updated by draft
+      stock_no: searchVal,
+      descr: activeEntry.descr,
+      dept: '', brand: '', subclass1: '', subclass2: '', colour: '', size: '',
+      rate, qty, disc_cd: activeEntry.disc_cd || '', disc_per, disc_amt, tax_amt: 0, total, salesman: salesman || ''
+    };
+
     try {
-      const results = await api.inventory.search(searchVal)
-      const inventoryItems = Array.isArray(results) ? results : (results.data || [])
-      if (inventoryItems.length > 0) {
-        const item = inventoryItems[0]
-        const rate = (item.mrp_paise || 0) / 100
-        const qty = activeEntry.qty || 1
-        const disc_per = activeDisc
-        const disc_amt = (rate * qty * disc_per) / 100
-        const total = (rate * qty) - disc_amt
+      const draftRes = await api.billing.addToDraft({
+        StockNo: newItem.stock_no,
+        ItemDesc: newItem.descr,
+        Qty: newItem.qty,
+        Retail_Price: newItem.rate,
+        disc_per: newItem.disc_per,
+        salesman: newItem.salesman
+      });
+      if (draftRes.id) newItem.id = draftRes.id;
+    } catch (e) { console.error("Draft save failed", e); }
 
-        setItems(prev => [{
-          id: crypto.randomUUID(),
-          real_id: item.id,
-          stock_no: item.code,
-          descr: item.name,
-          dept: item.department || '',
-          brand: item.brand || '',
-          subclass1: item.subclass1 || '',
-          subclass2: item.subclass2 || '',
-          colour: item.colour || '',
-          size: item.size || '',
-          rate, qty, disc_cd: activeEntry.disc_cd || '', disc_per, disc_amt, tax_amt: 0, total, salesman: salesman || ''
-        }, ...prev])
-        setActiveEntry({ stock_no: '', qty: 1, rate: 0, disc_cd: '', disc_per: 0, descr: '' })
-      } else { alert("SKU Not Found") }
-    } catch (err) { console.error(err) } finally { 
-      setIsSearching(false)
-      // Allow slight debounce for API path too
-      setTimeout(() => { isSearchingRef.current = false }, 150)
-    }
-  }
+    setItems(prev => [newItem, ...prev]);
+    setActiveEntry({ stock_no: '', qty: 1, rate: 0, disc_cd: '', disc_per: 0, descr: '' });
+    setTimeout(() => { 
+      isSearchingRef.current = false;
+      document.getElementById('input-stock')?.focus();
+    }, 150);
+  };
 
   // ── PROMOTION RECALCULATION ──
   useEffect(() => {
@@ -326,6 +400,7 @@ function BillingModule() {
           personnelList={personnelList}
           customerResults={customerResults}
           onCustomerSearch={handleCustomerSearch}
+          fieldMask={fieldMask}
         />
       )}
 

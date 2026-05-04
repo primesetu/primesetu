@@ -98,6 +98,10 @@ export const api = {
     getPayModes: () => apiClient.get('/billing/paymodes').then(r => r.data),
     searchCustomers: (q: string) => apiClient.get('/customers/search', { params: { q } }).then(r => r.data),
     calculatePromos: (data: any) => apiClient.post('/billing/calculate-promos', data).then(r => r.data),
+    getDraft: () => apiClient.get('/billing/draft').then(r => r.data),
+    addToDraft: (data: any) => apiClient.post('/billing/draft', data).then(r => r.data),
+    removeFromDraft: (id: string) => apiClient.delete(`/billing/draft/${id}`).then(r => r.data),
+    clearDraft: () => apiClient.delete('/billing/draft/clear').then(r => r.data),
   },
   accounts: {
     issueCreditNote: (data: any) => apiClient.post('/accounts/credit-notes', data).then(r => r.data),

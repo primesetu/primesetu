@@ -77,7 +77,7 @@ export function useGridMask(trnType: number, options?: GridEngineOptions): UseGr
     async function fetchMask() {
       try {
         setLoading(true);
-        const response = await apiClient.get<GridField[]>(`/api/v1/config/legacy-mask/${trnType}`);
+        const response = await apiClient.get<GridField[]>(`/api/v1/config/sovereign-mask/${trnType}`);
         const data = Array.isArray(response.data) ? response.data : [];
         maskCache.set(trnType, data);
         if (!cancelled) {

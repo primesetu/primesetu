@@ -57,6 +57,14 @@ class SlipResponse(BaseModel):
     slip_id: uuid.UUID
     total: int = Field(..., description="Total amount in paise (integer)")
 
+class DraftItemCreate(BaseModel):
+    StockNo: str
+    ItemDesc: Optional[str] = None
+    Qty: float
+    Retail_Price: float
+    disc_per: float = 0
+    salesman: Optional[str] = None
+
 class TransactionItemRead(BaseModel):
     id: uuid.UUID
     product_id: Optional[uuid.UUID] = None

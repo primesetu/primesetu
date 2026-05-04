@@ -16,7 +16,7 @@
  * No module should contain its own mapMaskToColDefs implementation.
  *
  * Architecture:
- *   AcceptDisplayDtls (DB) → /api/v1/config/legacy-mask/:trnType (API)
+ *   AcceptDisplayDtls (DB) → /api/v1/config/sovereign-mask/:trnType (API)
  *     → GridField[] (useGridMask hook) → buildColDefs() → ColDef[]
  *       → <DataTable columns={colDefs as any} />
  * ============================================================ */
@@ -68,19 +68,21 @@ export interface GridEngineOptions {
 
 const FIELD_MAP: Record<string, string> = {
   // Barcode / Item Code
-  'barcode':           'code',
-  'itemcode':          'code',
-  'item_code':         'code',
-  'stockno':           'code',
-  'barcodevalue':      'code',
+  'barcode':           'stock_no',
+  'itemcode':          'stock_no',
+  'item_code':         'stock_no',
+  'stockno':           'stock_no',
+  'barcodevalue':      'stock_no',
+  'stock_no':          'stock_no',
 
   // Item Description / Name
-  'itemdescription':   'name',
-  'description':       'name',
-  'itemname':          'name',
-  'itemdesc':          'name',
-  'item_name':         'name',
-  'nm':                'name',
+  'itemdescription':   'descr',
+  'description':       'descr',
+  'itemname':          'descr',
+  'itemdesc':          'descr',
+  'item_name':         'descr',
+  'descr':             'descr',
+  'nm':                'descr',
 
   // Qty
   'qty':               'qty',
@@ -88,98 +90,93 @@ const FIELD_MAP: Record<string, string> = {
   'docqty':            'qty',
   'actqty':            'qty',
 
-  // MRP / Rate (Paise)
-  'mrp':               'mrp',
-  'rate':              'mrp',
-  'unitprice':         'mrp',
-  'itemrate':          'mrp',
-  'itemrate_paise':    'mrp',
-  'mrp_paise':         'mrp',
+  // MRP / Rate
+  'mrp':               'rate',
+  'rate':              'rate',
+  'unitprice':         'rate',
+  'itemrate':          'rate',
+  'retail_price':      'rate',
+  'mrp_paise':         'mrp_paise',
+  'itemrate_paise':    'mrp_paise',
 
   // Discount
-  'discper':           'discount_per',
-  'disc_per':          'discount_per',
-  'discountper':       'discount_per',
-  'discountpercent':   'discount_per',
+  'discper':           'disc_per',
+  'disc_per':          'disc_per',
+  'discountper':       'disc_per',
+  'discountpercent':   'disc_per',
+  'discamt':           'disc_amt',
+  'disc_amt':          'disc_amt',
+  'discountamt':       'disc_amt',
+  'disc_cd':           'disc_cd',
+  'disccode':          'disc_cd',
 
-  // Line Total / Net Value (Paise)
+  // Tax
+  'taxper':            'tax_per',
+  'tax_per':           'tax_per',
+  'taxamt':            'tax_amt',
+  'tax_amt':           'tax_amt',
+
+  // Line Total / Net Value
   'value':             'total',
   'netvalue':          'total',
   'itemvalue':         'total',
   'total':             'total',
   'net_value':         'total',
+  'net_amount':        'total',
 
   // Staff / Sales Person
-  'staff':             'staff',
-  'salespersoncd':     'staff',
-  'salesstaff':        'staff',
-  'salesperid':        'staff',
+  'staff':             'salesman',
+  'salespersoncd':     'salesman',
+  'salesstaff':        'salesman',
+  'salesperid':        'salesman',
+  'salesman':          'salesman',
 
-  // Size
+  // Size / Colour / Style
   'size':              'size',
   'sizecd':            'size',
-
-  // Colour
   'colour':            'colour',
   'color':             'colour',
   'colourcd':          'colour',
-  'colorcode':         'colour',
-
-  // Style / Article
   'style':             'style',
   'articleno':         'style',
   'stylecode':         'style',
-  'merchid':           'style',
 
   // GRN / PO Specific
   'unitcostpaise':     'unit_cost_paise',
   'costrate':          'unit_cost_paise',
   'unitcost':          'unit_cost_paise',
-
   'qtyordered':        'qty_ordered',
-  'docqtyord':         'qty_ordered',
-  'orderedqty':        'qty_ordered',
-
   'qtyreceived':       'qty_received',
-  'actqtyrcvd':        'qty_received',
-  'receivedqty':       'qty_received',
-
   'batchno':           'batch_no',
-  'batchsrlno':        'batch_no',
-  'batch_no':          'batch_no',
-
   'expdate':           'exp_date',
-  'expirydt':          'exp_date',
-  'exp_date':          'exp_date',
-  'expirydate':        'exp_date',
-
   'mfgdate':           'mfg_date',
-  'manufacturedt':     'mfg_date',
-  'mfg_date':          'mfg_date',
 
   // Physical Stock / Audit
-  'systemqty':         'system_qty',
+  'systemqty':         'book_qty',
+  'sysqty':            'book_qty',
+  'bookqty':           'book_qty',
+  'book_qty':          'book_qty',
   'physicalqty':       'physical_qty',
-  'sys_qty':           'system_qty',
-  'phy_qty':           'physical_qty',
+  'phyqty':            'physical_qty',
+  'physical_qty':      'physical_qty',
   'variance':          'variance',
 };
 
 // ─── Currency Fields (display as ₹ formatted from paise) ───────────────────
 const CURRENCY_FIELDS = new Set([
-  'mrp', 'rate', 'unitprice', 'itemrate', 'value', 'netvalue', 'total',
-  'itemvalue', 'net_value', 'unitcostpaise', 'costrate', 'unitcost'
+  'rate', 'total', 'disc_amt', 'tax_amt', 'unit_cost_paise', 'mrp_paise',
+  'value', 'netvalue', 'itemvalue', 'net_value', 'costrate', 'unitcost'
 ]);
 
 // ─── Quantity Fields (center-aligned, bold) ────────────────────────────────
 const QTY_FIELDS = new Set([
-  'qty', 'quantity', 'docqty', 'actqty', 'qtyordered', 'qtyreceived',
-  'systemqty', 'physicalqty', 'variance'
+  'qty', 'quantity', 'docqty', 'actqty', 'qty_ordered', 'qty_received',
+  'book_qty', 'physical_qty', 'variance'
 ]);
 
 // ─── Description Fields (multi-line rich renderer) ─────────────────────────
 const DESCRIPTION_FIELDS = new Set([
-  'itemdescription', 'description', 'itemname', 'itemdesc', 'item_name', 'nm'
+  'itemdescription', 'description', 'itemname', 'itemdesc', 'item_name', 'nm', 'descr'
 ]);
 
 /**
@@ -200,11 +197,11 @@ function buildDescriptionRenderer() {
     // Use the module-level React import — no dynamic require needed
     return React.createElement('div', { className: 'flex flex-col py-1.5 leading-tight' },
       React.createElement('div', { className: 'flex items-center gap-2 mb-0.5' },
-        React.createElement('span', { className: 'font-black text-on-surface uppercase text-[13px]' }, item.name),
+        React.createElement('span', { className: 'font-black text-on-surface uppercase text-[13px]' }, item.descr || item.name),
         item.size && React.createElement('span', { className: 'text-[8px] font-black bg-surface-container border border-outline-variant px-1' }, item.size)
       ),
       React.createElement('div', { className: 'flex items-center gap-3 text-[10px] text-on-surface-variant' },
-        item.code && React.createElement('span', { className: 'font-mono bg-surface-container-low px-1' }, item.code),
+        item.stock_no && React.createElement('span', { className: 'font-mono bg-surface-container-low px-1' }, item.stock_no),
         item.style && React.createElement('span', { className: 'font-bold' }, `ART: ${item.style}`),
         (item.subclass1 || item.subclass2) && React.createElement('span', { className: 'italic' },
           `(${[item.subclass1, item.subclass2].filter(Boolean).join(' / ')})`
@@ -217,7 +214,7 @@ function buildDescriptionRenderer() {
 /**
  * Institutional AG-Grid ColDef builder from AcceptDisplayDtls GridField[].
  *
- * @param mask - GridField[] from useGridMask() / /api/v1/config/legacy-mask/:trnType
+ * @param mask - GridField[] from useGridMask() / /api/v1/config/sovereign-mask/:trnType
  * @param options - Optional renderer overrides and ColDef merge patches
  * @returns AG-Grid ColDef[] ready to pass to <DataTable columns={colDefs as any} />
  */
@@ -265,7 +262,10 @@ export function buildColDefs(
         col.valueFormatter = (params: any) => {
           const val = params.value;
           if (val == null || val === '') return '—';
-          return formatCurrency(Number(val));
+          // Sovereign Rule: If data key doesn't end in _paise, it's assumed to be in Rupees.
+          // Convert to paise for the authoritative formatCurrency tool.
+          const paise = dataKey.endsWith('_paise') ? Number(val) : Math.round(Number(val) * 100);
+          return formatCurrency(paise);
         };
       }
 

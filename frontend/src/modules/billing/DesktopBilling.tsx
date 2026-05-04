@@ -6,6 +6,10 @@
 import React, { useRef, useEffect, useMemo } from 'react'
 import { Barcode, Trash2, FileText, User, UserCheck, Calendar, Clock } from 'lucide-react'
 import { Button, Badge } from '@/components/ui/SovereignUI'
+import { AgGridReact } from 'ag-grid-react'
+import { ColDef, themeQuartz } from 'ag-grid-community'
+import { buildColDefs } from '@/lib/GridEngine'
+import { api } from '@/api/client'
 
 interface DesktopBillingProps {
   items: any[]
@@ -29,6 +33,7 @@ interface DesktopBillingProps {
   personnelList?: any[]
   customerResults?: any[]
   onCustomerSearch?: (q: string) => void
+  fieldMask?: any[]
 }
 
 export default function DesktopBilling({
@@ -37,13 +42,57 @@ export default function DesktopBilling({
   customer, setCustomer, salesman, setSalesman,
   billNo, dateTime, billDiscount, setBillDiscount,
   isCustomerMandatory, isSalesmanMandatory,
-  personnelList = [], customerResults = [], onCustomerSearch
+  personnelList = [], customerResults = [], onCustomerSearch, fieldMask
 }: DesktopBillingProps) {
   const entryRef = useRef<HTMLInputElement>(null)
   useEffect(() => { entryRef.current?.focus() }, [])
 
+  const columnDefs = useMemo(() => {
+    if (!fieldMask || fieldMask.length === 0) {
+      return [
+        { field: 'StockNo', headerName: 'STOCK NO', width: 120, pinned: 'left' as const },
+        { field: 'ItemDesc', headerName: 'ITEM DESCRIPTION', flex: 1, minWidth: 150 },
+        { field: 'Qty', headerName: 'QTY', width: 70, editable: true },
+        { field: 'Retail_Price', headerName: 'RATE', width: 100, valueFormatter: (p: any) => (p.value || 0).toFixed(2) },
+        { field: 'disc_per', headerName: 'D%', width: 60, editable: true },
+        { field: 'total', headerName: 'TOTAL', width: 110, valueFormatter: (p: any) => (p.value || 0).toFixed(2) },
+        { headerName: '', width: 50, pinned: 'right' as const, cellRenderer: (p: any) => (
+          <button onClick={async () => {
+            const id = p.data?.id;
+            setItems(prev => prev.filter(i => i.id !== id));
+            try { await api.billing.removeFromDraft(id); } catch(e) {}
+          }} className="text-red-500 p-2 opacity-0 group-hover:opacity-100 hover:bg-red-500/10 rounded transition-all">
+            <Trash2 size={14} />
+          </button>
+        )}
+      ];
+    }
+    
+    const baseCols = buildColDefs(fieldMask, {
+      colDefMerge: {
+        qty: { editable: true },
+        disc_per: { editable: true },
+      }
+    });
+
+    return [
+      ...baseCols,
+      {
+        headerName: '', width: 50, pinned: 'right' as const, cellRenderer: (p: any) => (
+          <button onClick={async () => {
+            const id = p.data?.id;
+            setItems(prev => prev.filter(i => i.id !== id));
+            try { await api.billing.removeFromDraft(id); } catch(e) {}
+          }} className="text-red-500 p-2 hover:bg-red-500/10 rounded transition-all">
+            <Trash2 size={14} />
+          </button>
+        )
+      }
+    ] as any[];
+  }, [fieldMask, setItems]);
+
   // Derived values for active entry
-  const entryValue = (activeEntry.rate || 0) * (activeEntry.qty || 1)
+  const entryValue = (activeEntry.Retail_Price || 0) * (activeEntry.Qty || 1)
   const entryDiscAmt = (entryValue * (activeEntry.disc_per || 0)) / 100
   const entryTotal = entryValue - entryDiscAmt
 
@@ -128,6 +177,7 @@ export default function DesktopBilling({
               placeholder="Code / Mobile [F2]"
               value={customer.phone}
               onChange={e => { setCustomer({ ...customer, phone: e.target.value }); onCustomerSearch?.(e.target.value) }}
+              onFocus={() => onCustomerSearch?.(customer.phone || '')}
             />
             {customerResults.length > 0 && (
               <div className="absolute top-full left-0 w-72 bg-[var(--surface)] border border-[var(--border-subtle)] shadow-2xl rounded z-50 mt-1 max-h-40 overflow-y-auto">
@@ -168,149 +218,21 @@ export default function DesktopBilling({
       </header>
 
       <main className="flex-1 flex flex-col overflow-hidden p-3 gap-3">
-
-        {/* ── DIRECT ENTRY ROW (Shoper9 style) ── */}
-        <div className="bg-[var(--surface)] border-b-2 border-[var(--primary)] rounded-xl px-4 py-3 flex-shrink-0 shadow-lg">
-          <div className="grid grid-cols-[40px_130px_1fr_80px_60px_80px_70px_60px_80px_90px_90px_auto] gap-2 items-end">
-
-            <div>
-              <label className={labelCls}>S.No</label>
-              <input className={inputCls + " w-full text-center bg-[var(--border-subtle)]/30 cursor-not-allowed"} value={items.length + 1} readOnly />
-            </div>
-
-            <div>
-              <label className={labelCls}>Stock No <span className="text-[var(--primary)]">[F1]</span></label>
-              <div className="relative">
-                <Barcode size={14} className="absolute left-2 top-1/2 -translate-y-1/2 text-[var(--primary)]" />
-                <input ref={entryRef} className={inputCls + " w-full pl-7"}
-                  value={activeEntry.stock_no}
-                  onChange={e => setActiveEntry({ ...activeEntry, stock_no: e.target.value.toUpperCase() })}
-                  onKeyDown={e => handleKeyDown(e, 'stock')}
-                  placeholder="SCAN..." autoFocus />
-              </div>
-            </div>
-
-            <div>
-              <label className={labelCls}>Item Description</label>
-              <input className={inputCls + " w-full bg-[var(--border-subtle)]/30 cursor-not-allowed"}
-                value={activeEntry.descr || ''} readOnly placeholder="Auto-filled" />
-            </div>
-
-            <div>
-              <label className={labelCls + " text-right"}>Rate</label>
-              <input type="number" className={inputCls + " w-full text-right"}
-                value={activeEntry.rate || ''}
-                onChange={e => setActiveEntry({ ...activeEntry, rate: Number(e.target.value) })}
-                onKeyDown={e => handleKeyDown(e, 'rate')} placeholder="0.00" />
-            </div>
-
-            <div>
-              <label className={labelCls + " text-right"}>Qty</label>
-              <input type="number" className={inputCls + " w-full text-right"}
-                value={activeEntry.qty}
-                onChange={e => setActiveEntry({ ...activeEntry, qty: Number(e.target.value) })}
-                onKeyDown={e => handleKeyDown(e, 'qty')} />
-            </div>
-
-            <div>
-              <label className={labelCls + " text-right"}>Value</label>
-              <input className={inputCls + " w-full text-right bg-[var(--border-subtle)]/30 cursor-not-allowed"}
-                value={entryValue.toFixed(2)} readOnly />
-            </div>
-
-            <div>
-              <label className={labelCls + " text-center"}>Disc Cd</label>
-              <input className={inputCls + " w-full text-center"}
-                value={activeEntry.disc_cd || ''}
-                onChange={e => setActiveEntry({ ...activeEntry, disc_cd: e.target.value.toUpperCase() })}
-                onKeyDown={e => handleKeyDown(e, 'disc_cd')}
-                placeholder="-" />
-            </div>
-
-            <div>
-              <label className={labelCls + " text-right"}>Disc %</label>
-              <input type="number" className={inputCls + " w-full text-right text-amber-600"}
-                value={activeEntry.disc_per}
-                onChange={e => setActiveEntry({ ...activeEntry, disc_per: Number(e.target.value) })}
-                onKeyDown={e => handleKeyDown(e, 'disc')} />
-            </div>
-
-            <div>
-              <label className={labelCls + " text-right"}>Disc Amt</label>
-              <input className={inputCls + " w-full text-right bg-[var(--border-subtle)]/30 cursor-not-allowed text-amber-600"}
-                value={entryDiscAmt.toFixed(2)} readOnly />
-            </div>
-
-            <div>
-              <label className={labelCls + " text-right"}>Total</label>
-              <input className={inputCls + " w-full text-right font-black bg-[var(--border-subtle)]/30 cursor-not-allowed text-[var(--primary)]"}
-                value={entryTotal.toFixed(2)} readOnly />
-            </div>
-
-            <div>
-              <label className={labelCls + " text-center"}>Staff</label>
-              <select className={inputCls + " w-full"} value={activeEntry.salesman || salesman}
-                onChange={e => setActiveEntry({ ...activeEntry, salesman: e.target.value })}>
-                <option value="">-</option>
-                {personnelList.map((p: any) => <option key={p.id} value={p.id}>{p.name.slice(0, 6).toUpperCase()}</option>)}
-              </select>
-            </div>
-
-            <Button onClick={() => { commitLine(); entryRef.current?.focus() }}
-              className="h-9 bg-[var(--primary)] text-white font-black uppercase px-4 rounded-lg text-[10px] whitespace-nowrap">
-              ADD (↵)
-            </Button>
-          </div>
-        </div>
-
         {/* ── ITEM GRID (Shoper9 column order) ── */}
         <div className="flex-1 bg-[var(--surface)] rounded-xl border border-[var(--border-subtle)] overflow-hidden shadow-sm flex flex-col">
-          <div className="overflow-auto flex-1">
-            <table className="w-full text-left border-collapse whitespace-nowrap">
-              <thead className="bg-[var(--surface-container-low)] sticky top-0 z-10 border-b border-[var(--border-subtle)]">
-                <tr>
-                  {['#', 'STOCK NO', 'ITEM DESCRIPTION', 'RATE', 'QTY', 'VALUE', 'D.CD', 'DISC %', 'DISC AMT', 'TOTAL', 'STAFF', ''].map((h, i) => (
-                    <th key={i} className="px-2 py-2 text-[9px] font-black uppercase tracking-widest text-[var(--text-tertiary)] border-r border-[var(--border-subtle)] last:border-r-0 text-right first:text-center [&:nth-child(3)]:text-left">
-                      {h}
-                    </th>
-                  ))}
-                </tr>
-              </thead>
-              <tbody className="divide-y divide-[var(--border-subtle)]">
-                {items.length === 0 ? (
-                  <tr>
-                    <td colSpan={12} className="py-16 text-center text-[var(--text-tertiary)] italic text-sm">
-                      Scan a product or enter Stock No above to begin...
-                    </td>
-                  </tr>
-                ) : items.map((item: any, idx: number) => {
-                  const val = (item.rate || 0) * (item.qty || 0)
-                  return (
-                    <tr key={item.id} className="hover:bg-[var(--surface-container-low)] group transition-colors">
-                      <td className="px-2 py-1.5 text-center text-[10px] text-[var(--text-tertiary)] border-r border-[var(--border-subtle)]">{idx + 1}</td>
-                      <td className="px-2 py-1.5 text-[11px] font-bold border-r border-[var(--border-subtle)]">{item.stock_no}</td>
-                      <td className="px-2 py-1.5 text-[11px] border-r border-[var(--border-subtle)] max-w-[200px] truncate">{item.descr}</td>
-                      <td className="px-2 py-1.5 text-right text-[11px] border-r border-[var(--border-subtle)]">₹{(item.rate || 0).toFixed(2)}</td>
-                      <td className="px-2 py-1.5 text-right text-[11px] font-bold border-r border-[var(--border-subtle)]">{item.qty}</td>
-                      <td className="px-2 py-1.5 text-right text-[11px] border-r border-[var(--border-subtle)] text-[var(--text-tertiary)]">₹{val.toFixed(2)}</td>
-                      <td className="px-2 py-1.5 text-center text-[10px] border-r border-[var(--border-subtle)] text-[var(--text-tertiary)]">{item.disc_cd || '—'}</td>
-                      <td className="px-2 py-1.5 text-right text-[11px] border-r border-[var(--border-subtle)] text-amber-600">{(item.disc_per || 0).toFixed(1)}%</td>
-                      <td className="px-2 py-1.5 text-right text-[11px] border-r border-[var(--border-subtle)] text-amber-600">₹{(item.disc_amt || 0).toFixed(2)}</td>
-                      <td className="px-2 py-1.5 text-right text-[11px] font-black border-r border-[var(--border-subtle)] text-[var(--primary)]">₹{(item.total || 0).toFixed(2)}</td>
-                      <td className="px-2 py-1.5 text-center text-[10px] border-r border-[var(--border-subtle)] text-[var(--text-tertiary)]">
-                        {item.salesman ? personnelList.find((p: any) => p.id === item.salesman)?.name?.slice(0, 6) || item.salesman : '—'}
-                      </td>
-                      <td className="px-2 py-1.5 text-center">
-                        <button onClick={() => setItems(prev => prev.filter(i => i.id !== item.id))}
-                          className="text-red-400 p-1 hover:bg-red-500/10 rounded transition-all opacity-0 group-hover:opacity-100">
-                          <Trash2 size={12} />
-                        </button>
-                      </td>
-                    </tr>
-                  )
-                })}
-              </tbody>
-            </table>
+          <div className="flex-1 relative bg-[var(--surface-container-lowest)]">
+            <AgGridReact 
+              theme={themeQuartz}
+              rowData={items} 
+              columnDefs={columnDefs} 
+              rowHeight={44}
+              headerHeight={36}
+              suppressHorizontalScroll={false}
+              suppressMovableColumns={true} // LOCK: Institutional Parity
+              suppressDragLeaveHidesColumns={true}
+              onGridReady={p => p.api.sizeColumnsToFit()}
+              overlayNoRowsTemplate='<div style="padding:48px;text-align:center;color:var(--text-tertiary);font-style:italic;font-size:14px;">Scan a product or enter Stock No below to begin...</div>'
+            />
           </div>
 
           {/* ── BILL FOOTER SUMMARY (Shoper9 style) ── */}
@@ -366,6 +288,114 @@ export default function DesktopBilling({
                 SETTLE (F8)
               </Button>
             </div>
+          </div>
+        </div>
+
+        {/* ── DIRECT ENTRY ROW (Moved to Bottom - Shoper9 style) ── */}
+        <div className="bg-[var(--surface)] border-t-2 border-[var(--primary)] rounded-xl px-4 py-3 flex-shrink-0 shadow-lg">
+          <div className="grid grid-cols-[40px_130px_1fr_80px_60px_80px_70px_60px_80px_90px_90px_auto] gap-2 items-end">
+
+            <div>
+              <label className={labelCls}>S.No</label>
+              <input className={inputCls + " w-full text-center bg-[var(--border-subtle)]/30 cursor-not-allowed"} value={items.length + 1} readOnly />
+            </div>
+
+            {/* Stock No (Always Visible) */}
+            <div>
+              <label className={labelCls}>Stock No <span className="text-[var(--primary)]">[F1]</span></label>
+              <div className="relative">
+                <Barcode size={14} className="absolute left-2 top-1/2 -translate-y-1/2 text-[var(--primary)]" />
+                <input ref={entryRef} id="input-stock" className={inputCls + " w-full pl-7"}
+                  value={activeEntry.stock_no}
+                  onChange={e => setActiveEntry({ ...activeEntry, stock_no: e.target.value.toUpperCase() })}
+                  onKeyDown={e => handleKeyDown(e, 'stock')}
+                  placeholder="SCAN..." autoFocus />
+              </div>
+            </div>
+
+            {/* Item Description (Usually Read-only) */}
+            <div className={(!fieldMask || fieldMask.some(m => m.field.toLowerCase().includes('desc') && m.visible)) ? '' : 'hidden'}>
+              <label className={labelCls}>Item Description</label>
+              <input id="input-descr" className={inputCls + " w-full bg-[var(--border-subtle)]/30 cursor-not-allowed"}
+                value={activeEntry.descr || ''} readOnly placeholder="Auto-filled" />
+            </div>
+
+            {/* Rate / MRP */}
+            <div className={(!fieldMask || fieldMask.some(m => ['rate', 'mrp', 'retail_price'].includes(m.field.toLowerCase()) && m.visible)) ? '' : 'hidden'}>
+              <label className={labelCls + " text-right"}>Rate</label>
+              <input type="number" id="input-rate" className={inputCls + " w-full text-right"}
+                value={activeEntry.rate || ''}
+                onChange={e => setActiveEntry({ ...activeEntry, rate: Number(e.target.value) })}
+                onKeyDown={e => handleKeyDown(e, 'rate')} placeholder="0.00" 
+                readOnly={fieldMask?.find(m => ['rate', 'mrp', 'retail_price'].includes(m.field.toLowerCase()))?.editable === false} />
+            </div>
+
+            {/* Qty */}
+            <div className={(!fieldMask || fieldMask.some(m => m.field.toLowerCase() === 'qty' && m.visible)) ? '' : 'hidden'}>
+              <label className={labelCls + " text-right"}>Qty</label>
+              <input type="number" id="input-qty" className={inputCls + " w-full text-right"}
+                value={activeEntry.qty}
+                onChange={e => setActiveEntry({ ...activeEntry, qty: Number(e.target.value) })}
+                onKeyDown={e => handleKeyDown(e, 'qty')} 
+                readOnly={fieldMask?.find(m => m.field.toLowerCase() === 'qty')?.editable === false} />
+            </div>
+
+            {/* Value (Calculated) */}
+            <div>
+              <label className={labelCls + " text-right"}>Value</label>
+              <input className={inputCls + " w-full text-right bg-[var(--border-subtle)]/30 cursor-not-allowed"}
+                value={entryValue.toFixed(2)} readOnly />
+            </div>
+
+            {/* Disc Cd */}
+            <div className={(!fieldMask || fieldMask.some(m => m.field.toLowerCase().includes('disc_cd') && m.visible)) ? '' : 'hidden'}>
+              <label className={labelCls + " text-center"}>Disc Cd</label>
+              <input id="input-disc_cd" className={inputCls + " w-full text-center"}
+                value={activeEntry.disc_cd || ''}
+                onChange={e => setActiveEntry({ ...activeEntry, disc_cd: e.target.value.toUpperCase() })}
+                onKeyDown={e => handleKeyDown(e, 'disc_cd')}
+                placeholder="-" />
+            </div>
+
+            {/* Disc % */}
+            <div className={(!fieldMask || fieldMask.some(m => (m.field.toLowerCase().includes('discper') || m.field.toLowerCase() === 'disc_per') && m.visible)) ? '' : 'hidden'}>
+              <label className={labelCls + " text-right"}>Disc %</label>
+              <input type="number" id="input-disc_per" className={inputCls + " w-full text-right text-amber-600"}
+                value={activeEntry.disc_per}
+                onChange={e => setActiveEntry({ ...activeEntry, disc_per: Number(e.target.value) })}
+                onKeyDown={e => handleKeyDown(e, 'disc_per')} 
+                readOnly={fieldMask?.find(m => m.field.toLowerCase().includes('disc_per'))?.editable === false} />
+            </div>
+
+            {/* Disc Amt (Calculated) */}
+            <div className={(!fieldMask || fieldMask.some(m => m.field.toLowerCase().includes('discamt') && m.visible)) ? '' : 'hidden'}>
+              <label className={labelCls + " text-right"}>Disc Amt</label>
+              <input className={inputCls + " w-full text-right bg-[var(--border-subtle)]/30 cursor-not-allowed text-amber-600"}
+                value={entryDiscAmt.toFixed(2)} readOnly />
+            </div>
+
+            {/* Total (Calculated) */}
+            <div>
+              <label className={labelCls + " text-right"}>Total</label>
+              <input className={inputCls + " w-full text-right font-black bg-[var(--border-subtle)]/30 cursor-not-allowed text-[var(--primary)]"}
+                value={entryTotal.toFixed(2)} readOnly />
+            </div>
+
+            {/* Staff / Salesman */}
+            <div className={(!fieldMask || fieldMask.some(m => ['staff', 'salesman'].includes(m.field.toLowerCase()) && m.visible)) ? '' : 'hidden'}>
+              <label className={labelCls + " text-center"}>Staff</label>
+              <select id="input-salesman" className={inputCls + " w-full"} value={activeEntry.salesman || salesman}
+                onChange={e => setActiveEntry({ ...activeEntry, salesman: e.target.value })}
+                onKeyDown={e => handleKeyDown(e, 'salesman')}>
+                <option value="">-</option>
+                {personnelList.map((p: any) => <option key={p.id} value={p.id}>{p.name.slice(0, 6).toUpperCase()}</option>)}
+              </select>
+            </div>
+
+            <Button onClick={() => { commitLine(); document.getElementById('input-stock')?.focus() }}
+              className="h-9 bg-[var(--primary)] text-white font-black uppercase px-4 rounded-lg text-[10px] whitespace-nowrap">
+              ADD (↵)
+            </Button>
           </div>
         </div>
       </main>

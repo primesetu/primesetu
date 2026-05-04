@@ -13,12 +13,13 @@ from fastapi import FastAPI, Depends, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import FileResponse, Response
 from sqlalchemy.ext.asyncio import AsyncSession
-from sqlalchemy import select, func
+from sqlalchemy import select, func, and_
 from app.core.database import engine, Base, get_db
 from app.models import (
     Till, Transaction, Store, Alert
 )
 from app.models.legacy_s9 import Itemmaster, Stockmaster
+from app.models import sovereign
 from app.schemas.common import DashboardStats
 from app.core.security import CurrentUser, require_auth
 from typing import List
@@ -46,13 +47,16 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+api_prefix = "/api/v1"
+
 from app.routers import (
     onboarding, barcode, 
     purchase, inventory, billing, 
     users, menu, extensions, finance, schemes, security, reporting,
     store, inventory_audit, stock_ledger, department, 
-    legacy, masks, item_master, customer, ho
+    legacy, masks, item_master, customer, ho, settings, master
 )
+from app.routers import schema as schema_router
 # from app.routers.gstr1 import router as gstr1_router
 
 # Core & Management
@@ -63,14 +67,14 @@ app.include_router(extensions.router, prefix="/api/v1/extensions")
 app.include_router(legacy.router)
 
 # Masters
-app.include_router(item_master.router, prefix="/api/v1")
-app.include_router(customer.router, prefix="/api/v1")
-app.include_router(department.router, prefix="/api/v1")
-# app.include_router(configuration.router, prefix="/api/v1")
-# app.include_router(price_group.router, prefix="/api/v1")
-app.include_router(barcode.router, prefix="/api/v1")
-app.include_router(masks.router, prefix="/api/v1")
-app.include_router(menu.router, prefix="/api/v1/menu")
+app.include_router(item_master.router, prefix=api_prefix)
+app.include_router(settings.router, prefix=api_prefix)
+app.include_router(master.router, prefix=api_prefix)
+app.include_router(customer.router, prefix=api_prefix)
+app.include_router(department.router, prefix=api_prefix)
+app.include_router(barcode.router, prefix=api_prefix)
+app.include_router(masks.router, prefix=api_prefix)
+app.include_router(menu.router, prefix=api_prefix + "/menu")
 
 # Operational
 app.include_router(billing.router)
@@ -87,6 +91,9 @@ app.include_router(reporting.router)
 
 # Reports & Sync
 app.include_router(ho.router, prefix="/api/v1/ho")
+
+# Schema Studio — Introspection & Provisioning
+app.include_router(schema_router.router, prefix="/api/v1")
 # app.include_router(flexible_reports.router)
 # app.include_router(gstr1_router, prefix="/api/v1/accounts") 
 
@@ -181,4 +188,4 @@ async def get_dashboard_stats(
     )
 
 if __name__ == "__main__":
-    uvicorn.run("main:app", host="0.0.0.0", port=8000, reload=True)
+    uvicorn.run("app.main:app", host="0.0.0.0", port=8000, reload=True)

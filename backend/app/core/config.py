@@ -7,13 +7,24 @@
 from pydantic_settings import BaseSettings
 
 class Settings(BaseSettings):
-    database_url: str
+    database_url: str          # Supabase / Postgres URL
     supabase_url: str
     supabase_service_role_key: str
     jwt_secret: str
-    supabase_jwt_secret: str = ""   # Alias loaded from SUPABASE_JWT_SECRET in .env
+    supabase_jwt_secret: str = ""
     anthropic_api_key: str = ""
     environment: str = "development"
+
+    # ── HYBRID MODE DNA ──
+    # Options: "CLOUD" (Supabase) | "SOVEREIGN" (Local MSSQL)
+    storage_mode: str = "CLOUD" 
+    
+    # Legacy MSSQL Settings
+    mssql_server: str = "AITDL"
+    mssql_database: str = "SHOPER9WH1"
+    mssql_user: str = "sa"
+    mssql_password: str = "netmanthan@123"
+    mssql_driver: str = "SQL Server"
 
     class Config:
         env_file = ".env"

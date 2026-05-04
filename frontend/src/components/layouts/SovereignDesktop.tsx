@@ -228,6 +228,7 @@ const SovereignDesktop: React.FC<{ onExit: () => void }> = ({ onExit }) => {
       { i: '🔐', l: 'Security Controls', d: 'Permissions & audit log', mid: 'housekeep' },
       { i: '🔍', l: 'DB Explorer', d: 'Raw data introspection', mid: 'table_viewer' },
       { i: '⚙️', l: 'System Params', d: 'Config constants', mid: 'sysparams' },
+      { i: '🛡️', l: 'Architect Console', d: 'Unified Sync & Hybrid Config', mid: 'architect_config' },
     ]}
   };
 
@@ -316,11 +317,22 @@ const SovereignDesktop: React.FC<{ onExit: () => void }> = ({ onExit }) => {
         </div>
         <div className="h-[22px] w-[0.5px] bg-[#dde1e8] mx-1" />
         <div className="sov-role-pill">Business Owner / CXO</div>
-        <div className="sov-topbar-right">
+        <div className="sov-topbar-right flex items-center gap-2">
           <div className="sov-user-chip">
             <div className="sov-user-av">SA</div>
             <span className="sov-user-name">System Administrator</span>
           </div>
+          <button 
+            onClick={async () => {
+              (window as any).__isLoggingOut = true;
+              await import('@/lib/supabase').then(m => m.supabase.auth.signOut());
+              window.location.reload();
+            }}
+            className="w-7 h-7 flex items-center justify-center rounded bg-red-500/10 text-red-600 hover:bg-red-500 hover:text-white transition-all ml-2"
+            title="Sign Out"
+          >
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path><polyline points="16 17 21 12 16 7"></polyline><line x1="21" y1="12" x2="9" y2="12"></line></svg>
+          </button>
         </div>
       </div>
 

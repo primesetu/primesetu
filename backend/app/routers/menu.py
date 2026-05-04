@@ -75,8 +75,11 @@ STATIC_MENU = [
     {"id": "vouchers",   "label": "Gift Vouchers",     "route": "vouchers",   "module": "vouchers",   "required_permission": "billing.vouchers", "category": "FINANCE",    "icon": "FileText",        "shortcut": None, "children": []},
     
     {"id": "ho",         "label": "HO Sync",           "route": "ho",         "module": "ho",         "required_permission": "ho.view",          "category": "HO",         "icon": "Globe",           "shortcut": None, "children": []},
-    {"id": "settings",   "label": "System Config",     "route": "settings",   "module": "settings",   "required_permission": "settings.view",    "category": "SYSTEM",     "icon": "Settings",        "shortcut": "F10","children": []},
-    {"id": "security",   "label": "Security",          "route": "security",   "module": "security",   "required_permission": "settings.security","category": "SYSTEM",     "icon": "ShieldCheck",     "shortcut": None, "children": []},
+    {"id": "hybrid_storage",  "label": "Hybrid Storage",   "route": "hybrid_storage",  "module": "hybrid_storage",  "required_permission": "settings.view",    "category": "SYSTEM", "icon": "Database",    "shortcut": None,  "children": []},
+    {"id": "architect_config", "label": "SMRITI Config",    "route": "architect_config", "module": "architect_config", "required_permission": "settings.view",    "category": "SYSTEM", "icon": "ShieldCheck", "shortcut": "F7",   "children": []},
+    {"id": "architect",        "label": "Architect Explorer","route": "/jawaharmallah",  "module": "architect",        "required_permission": "architect.view",    "category": "SYSTEM", "icon": "Code2",       "shortcut": "Alt+A","children": []},
+    {"id": "settings",         "label": "System Config",    "route": "settings",         "module": "settings",         "required_permission": "settings.view",    "category": "SYSTEM", "icon": "Settings",    "shortcut": "F10",  "children": []},
+    {"id": "security",         "label": "Security",         "route": "security",         "module": "security",         "required_permission": "settings.security","category": "SYSTEM", "icon": "ShieldCheck", "shortcut": None,   "children": []},
 ]
 
 @router.get("", response_model=List[MenuItemResponse])
@@ -140,8 +143,14 @@ async def get_menu(
         db_items = result.scalars().all()
 
         # 3. Filter by permission
-        # If DB has no menu items yet, use STATIC_MENU (filtered by permission)
-        source_items = db_items if db_items else [MenuItem(**item, tenant_id='SYSTEM') for item in STATIC_MENU]
+        # Merge DB items with core STATIC_MENU items
+        source_items = list(db_items)
+        db_item_ids = {item.id for item in source_items}
+        
+        for static_item in STATIC_MENU:
+            if static_item['id'] not in db_item_ids:
+                # Add static item if not overridden by DB
+                source_items.append(MenuItem(**static_item, tenant_id='SYSTEM'))
         
         # Always allow 'dashboard.view' as a base
         user_perms.add('dashboard.view')
@@ -149,7 +158,7 @@ async def get_menu(
         item_map = {}
         for item in source_items:
             # Check permission
-            if item.required_permission not in user_perms and current_user.role != 'admin':
+            if item.required_permission not in user_perms and current_user.role.lower() != 'admin':
                 continue
 
             item_map[item.id] = MenuItemResponse(

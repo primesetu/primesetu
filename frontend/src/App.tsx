@@ -27,6 +27,8 @@ import Login from './modules/auth/Login';
 import ResponsiveShell from './components/layouts/ResponsiveShell';
 import SovereignDesktop from './components/layouts/SovereignDesktop';
 import { useTheme } from './hooks/useTheme';
+import { Routes, Route, useLocation } from 'react-router-dom';
+import ArchitectExplorer from './modules/architect/ArchitectExplorer';
 
 const PrimeSetu: React.FC = () => {
   useSovereignShortcuts();
@@ -53,6 +55,7 @@ const PrimeSetu: React.FC = () => {
     };
 
     const handleBeforeUnload = (e: BeforeUnloadEvent) => {
+      if ((window as any).__isLoggingOut) return;
       e.preventDefault();
       e.returnValue = ''; 
     };
@@ -149,14 +152,19 @@ const PrimeSetu: React.FC = () => {
 
     const handleToggleSidebar = () => setIsCollapsed(prev => !prev);
     const handleToggleLayout = () => setLayoutMode(prev => prev === 'STANDARD' ? 'SOVEREIGN' : 'STANDARD');
+    const handleNavigate = (e: any) => {
+      if (e.detail) setActiveTab(e.detail);
+    };
     
     window.addEventListener('toggleSidebar', handleToggleSidebar);
     window.addEventListener('toggleLayout', handleToggleLayout);
+    window.addEventListener('navigate', handleNavigate);
     
     return () => {
       subscription.unsubscribe();
       window.removeEventListener('toggleSidebar', handleToggleSidebar);
       window.removeEventListener('toggleLayout', handleToggleLayout);
+      window.removeEventListener('navigate', handleNavigate);
     };
   }, []);
 
@@ -164,6 +172,19 @@ const PrimeSetu: React.FC = () => {
     const component = COMPONENT_MAP[activeTab] || COMPONENT_MAP['dashboard'];
     return component;
   };
+
+  const location = useLocation();
+  const isArchitectPath = location.pathname.startsWith('/jawaharmallah');
+
+  // If on Architect path, render the Explorer directly
+  if (isArchitectPath) {
+    return (
+      <Routes>
+        <Route path="/jawaharmallah" element={<ArchitectExplorer />} />
+        <Route path="/jawaharmallah/:module" element={<ArchitectExplorer />} />
+      </Routes>
+    );
+  }
 
   if (!user) return <Login onLogin={handleLogin} />;
 

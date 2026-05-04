@@ -112,6 +112,22 @@ export const Card = ({ variant = 'elevated', className, ...props }: CardProps) =
   );
 };
 
+export const CardHeader = ({ className, ...props }: React.HTMLAttributes<HTMLDivElement>) => (
+  <div className={cn('p-6 space-y-1.5', className)} {...props} />
+);
+
+export const CardTitle = ({ className, ...props }: React.HTMLAttributes<HTMLHeadingElement>) => (
+  <h3 className={cn('text-lg font-bold leading-none tracking-tight', className)} {...props} />
+);
+
+export const CardDescription = ({ className, ...props }: React.HTMLAttributes<HTMLParagraphElement>) => (
+  <p className={cn('text-sm text-[var(--text-secondary)]', className)} {...props} />
+);
+
+export const CardContent = ({ className, ...props }: React.HTMLAttributes<HTMLDivElement>) => (
+  <div className={cn('p-6 pt-0', className)} {...props} />
+);
+
 // 6. Typography
 interface TextProps extends React.HTMLAttributes<HTMLSpanElement> {
   variant?: 'h1' | 'h2' | 'h3' | 'p' | 'xs' | 'sm' | 'label' | 'hint';
@@ -158,6 +174,34 @@ export const Badge = ({
     </span>
   );
 };
+
+// 7.5 Switch & Progress
+export const Switch = ({ checked, onCheckedChange, className }: { checked?: boolean; onCheckedChange?: (val: boolean) => void; className?: string }) => (
+  <button 
+    role="switch"
+    aria-checked={checked}
+    onClick={() => onCheckedChange?.(!checked)}
+    className={cn(
+      "relative inline-flex h-6 w-11 shrink-0 cursor-pointer items-center rounded-full border-2 border-transparent transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background disabled:cursor-not-allowed disabled:opacity-50",
+      checked ? "bg-[var(--primary)]" : "bg-slate-700",
+      className
+    )}
+  >
+    <span className={cn(
+      "pointer-events-none block h-5 w-5 rounded-full bg-white shadow-lg ring-0 transition-transform",
+      checked ? "translate-x-5" : "translate-x-0"
+    )} />
+  </button>
+);
+
+export const Progress = ({ value = 0, className }: { value?: number; className?: string }) => (
+  <div className={cn("relative h-2 w-full overflow-hidden rounded-full bg-slate-800", className)}>
+    <div 
+      className="h-full w-full flex-1 bg-[var(--primary)] transition-all" 
+      style={{ transform: `translateX(-${100 - (value || 0)}%)` }} 
+    />
+  </div>
+);
 
 // 8. Portal System
 import { createPortal } from 'react-dom';

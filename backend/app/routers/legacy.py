@@ -9,6 +9,7 @@ from sqlalchemy import select, func, text
 from typing import List, Optional, Any, Dict
 import app.models.legacy_s9 as legacy_models
 import app.models.legacy_sys as sys_models
+import app.models.sovereign as sovereign_models
 from app.core.database import get_db
 from app.core.security import require_auth, optional_auth, CurrentUser
 
@@ -35,6 +36,12 @@ async def list_legacy_tables():
         attr = getattr(legacy_models, attr_name)
         if hasattr(attr, "__tablename__"):
             tables.append(attr.__tablename__)
+    
+    for attr_name in dir(sovereign_models):
+        attr = getattr(sovereign_models, attr_name)
+        if hasattr(attr, "__tablename__"):
+            tables.append(attr.__tablename__)
+            
     return sorted(list(set(tables)))
 
 @router.get("/{table_name}")
@@ -58,6 +65,13 @@ async def get_legacy_table_data(
         if hasattr(attr, "__tablename__") and attr.__tablename__ == table_name.lower():
             target_model = attr
             break
+            
+    if not target_model:
+        for attr_name in dir(sovereign_models):
+            attr = getattr(sovereign_models, attr_name)
+            if hasattr(attr, "__tablename__") and attr.__tablename__ == table_name.lower():
+                target_model = attr
+                break
             
     if not target_model:
         raise HTTPException(status_code=404, detail="Table not found.")
@@ -115,6 +129,13 @@ async def get_legacy_schema(table_name: str):
         if hasattr(attr, "__tablename__") and attr.__tablename__ == table_name.lower():
             target_model = attr
             break
+            
+    if not target_model:
+        for attr_name in dir(sovereign_models):
+            attr = getattr(sovereign_models, attr_name)
+            if hasattr(attr, "__tablename__") and attr.__tablename__ == table_name.lower():
+                target_model = attr
+                break
             
     if not target_model:
         raise HTTPException(status_code=404, detail="Table not found.")

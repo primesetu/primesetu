@@ -20,6 +20,7 @@ from sqlalchemy import (
     ForeignKey,
     JSON,
     ARRAY,
+    func,
 )
 from sqlalchemy.dialects.postgresql import UUID
 from sqlalchemy.orm import Mapped, mapped_column, relationship
@@ -27,6 +28,7 @@ from app.core.database import Base
 from datetime import datetime
 from typing import List, Dict, Any, Optional
 import uuid
+from decimal import Decimal
 
 
 class Store(Base):
@@ -138,11 +140,26 @@ class Customer(Base):
 
 class Till(Base):
     __tablename__ = "tills"
-
     id: Mapped[int] = mapped_column(Integer, primary_key=True)
     store_id: Mapped[str] = mapped_column(String, ForeignKey("stores.id"))
     name: Mapped[str] = mapped_column(String)
     cash_collected: Mapped[int] = mapped_column(Integer, default=0)
+
+class DraftBillItem(Base):
+    __tablename__ = "draft_bill_items"
+    id: Mapped[uuid.UUID] = mapped_column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
+    user_id: Mapped[uuid.UUID] = mapped_column(UUID(as_uuid=True), ForeignKey("users.id"), nullable=True)
+    session_id: Mapped[Optional[str]] = mapped_column(String, nullable=True)
+    stock_no: Mapped[str] = mapped_column(String, nullable=False)
+    item_desc: Mapped[Optional[str]] = mapped_column(String, nullable=True)
+    qty: Mapped[Decimal] = mapped_column(Numeric(10, 3), default=Decimal("1.000"))
+    retail_price: Mapped[Optional[Decimal]] = mapped_column(Numeric(10, 2), nullable=True)
+    disc_cd: Mapped[Optional[str]] = mapped_column(String, nullable=True)
+    disc_per: Mapped[Decimal] = mapped_column(Numeric(5, 2), default=Decimal("0.00"))
+    tax_per: Mapped[Decimal] = mapped_column(Numeric(5, 2), default=Decimal("0.00"))
+    salesman_id: Mapped[Optional[str]] = mapped_column(String, nullable=True)
+    created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now())
+    updated_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now(), onupdate=func.now())
 
 
 class Transaction(Base):

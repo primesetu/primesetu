@@ -199,7 +199,7 @@ export default function TableViewerModule() {
         </div>
 
         {/* Data Grid Area */}
-        <div className="flex-1 overflow-hidden bg-[var(--background)] relative">
+        <div className="flex-1 min-h-0 bg-[var(--background)] relative">
            {!selectedTable ? (
              <div className="absolute inset-0 flex flex-col items-center justify-center opacity-20">
                 <Database size={80} className="mb-6 text-[var(--text-tertiary)]" />
@@ -210,15 +210,27 @@ export default function TableViewerModule() {
                 <RefreshCw className="animate-spin text-[var(--accent)] opacity-50" size={32} />
              </div>
            ) : (
-             <div className="absolute inset-0">
+             <div className={cn(
+               "absolute inset-0",
+               theme === 'DARK' ? 'ag-theme-quartz-dark' : 'ag-theme-quartz'
+             )}>
                 <AgGridReact
                   theme={themeQuartz}
                   rowData={filteredData}
                   columnDefs={agColDefs}
                   rowHeight={40}
                   headerHeight={36}
-                  defaultColDef={{ sortable: true, filter: true, resizable: true }}
+                  defaultColDef={{ 
+                    sortable: true, 
+                    filter: true, 
+                    resizable: true,
+                    flex: 1,
+                    minWidth: 100
+                  }}
                   animateRows={true}
+                  pagination={true}
+                  paginationPageSize={25}
+                  paginationPageSizeSelector={[25, 50, 100]}
                   rowSelection={{ mode: 'singleRow' }}
                   overlayNoRowsTemplate='<div style="padding:32px;text-align:center;opacity:0.4;font-size:11px;font-weight:900;text-transform:uppercase;letter-spacing:0.3em">No Records in Table</div>'
                 />

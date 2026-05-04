@@ -1,0 +1,230 @@
+[2026-05-03 14:46:10] --- SHOPER 9 ACTIVITY RECORDER STARTING ---
+[2026-05-03 14:46:10] Logging to: D:\IMP\GitHub\primesetu\backend\shoper9_activity_log.txt
+[2026-05-03 14:46:10] Connected to Database: SHOPER9WH1
+[2026-05-03 14:46:10]   Initial Count [SHOPER9WH1.StkTrnHdr]: 2653
+[2026-05-03 14:46:10]   Initial Count [SHOPER9WH1.POSCashTrn]: 0
+[2026-05-03 14:46:10]   Initial Count [SHOPER9WH1.SaleTrnHdr]: 0
+[2026-05-03 14:46:10]   Initial Count [SHOPER9WH1.ItemMaster]: 22105
+[2026-05-03 14:46:10] Connected to Database: SHOPER9X01
+[2026-05-03 14:46:10]   Initial Count [SHOPER9X01.StkTrnHdr]: 5256
+[2026-05-03 14:46:10]   Initial Count [SHOPER9X01.POSCashTrn]: 5277
+[2026-05-03 14:46:10]   Initial Count [SHOPER9X01.SaleTrnHdr]: 5205
+[2026-05-03 14:46:11]   Initial Count [SHOPER9X01.ItemMaster]: 39354
+[2026-05-03 14:46:11] Connected to Database: Shoper9CSW
+[2026-05-03 14:46:11]   Initial Count [Shoper9CSW.StkTrnHdr]: 20706
+[2026-05-03 14:46:11]   Initial Count [Shoper9CSW.POSCashTrn]: 20866
+[2026-05-03 14:46:11]   Initial Count [Shoper9CSW.SaleTrnHdr]: 40279
+[2026-05-03 14:46:11]   Initial Count [Shoper9CSW.ItemMaster]: 43866
+[2026-05-03 14:46:11] 
+--- MONITORING ACTIVE ---
+[2026-05-03 14:47:31] QUERY in SHOPER9WH1 (SPID 60): Python
+[2026-05-03 14:47:31] SQL: SELECT COLUMN_NAME, DATA_TYPE, IS_NULLABLE, CHARACTER_MAXIMUM_LENGTH, NUMERIC_PRECISION, NUMERIC_SCALE
+                FROM INFORMATION_SCHEMA.COLUMNS 
+                WHERE TABLE_NAME = 'TallyMasterInfo'
+                ORDER BY ORDINAL_POSITION...
+[2026-05-03 14:47:31] ------------------------------
+[2026-05-03 14:47:32] QUERY in SHOPER9WH1 (SPID 60): Python
+[2026-05-03 14:47:32] SQL: SELECT COUNT(*) FROM [ExportSysparam]...
+[2026-05-03 14:47:32] ------------------------------
+[2026-05-03 14:47:34] QUERY in SHOPER9WH1 (SPID 60): Python
+[2026-05-03 14:47:34] SQL: SELECT COLUMN_NAME, DATA_TYPE, IS_NULLABLE, CHARACTER_MAXIMUM_LENGTH, NUMERIC_PRECISION, NUMERIC_SCALE
+                FROM INFORMATION_SCHEMA.COLUMNS 
+                WHERE TABLE_NAME = 'SzHdrs'
+                ORDER BY ORDINAL_POSITION...
+[2026-05-03 14:47:34] ------------------------------
+[2026-05-03 14:47:36] QUERY in SHOPER9WH1 (SPID 60): Python
+[2026-05-03 14:47:36] SQL: SELECT COUNT(*) FROM [StockTrnSummary]...
+[2026-05-03 14:47:36] ------------------------------
+[2026-05-03 14:47:37] QUERY in SHOPER9WH1 (SPID 60): Python
+[2026-05-03 14:47:37] SQL: SELECT * FROM [StockTrnSummary]...
+[2026-05-03 14:47:37] ------------------------------
+[2026-05-03 14:47:39] QUERY in SHOPER9WH1 (SPID 60): Python
+[2026-05-03 14:47:39] SQL: SELECT COUNT(*) FROM [Vendors]...
+[2026-05-03 14:47:39] ------------------------------
+[2026-05-03 14:47:40] QUERY in SHOPER9WH1 (SPID 60): Python
+[2026-05-03 14:47:40] SQL: SELECT COLUMN_NAME, DATA_TYPE, IS_NULLABLE, CHARACTER_MAXIMUM_LENGTH, NUMERIC_PRECISION, NUMERIC_SCALE
+                FROM INFORMATION_SCHEMA.COLUMNS 
+                WHERE TABLE_NAME = 'VersionDtls'
+                ORDER BY ORDINAL_POSITION...
+[2026-05-03 14:47:40] ------------------------------
+[2026-05-03 14:47:44] QUERY in SHOPER9WH1 (SPID 60): Python
+[2026-05-03 14:47:44] SQL: SELECT COLUMN_NAME, DATA_TYPE, IS_NULLABLE, CHARACTER_MAXIMUM_LENGTH, NUMERIC_PRECISION, NUMERIC_SCALE
+                FROM INFORMATION_SCHEMA.COLUMNS 
+                WHERE TABLE_NAME = 'BaseCompTemplate'
+                ORDER BY ORDINAL_POSITION...
+[2026-05-03 14:47:44] ------------------------------
+[2026-05-03 14:47:52] QUERY in SHOPER9WH1 (SPID 60): Python
+[2026-05-03 14:47:52] SQL: SELECT COLUMN_NAME, DATA_TYPE, IS_NULLABLE, CHARACTER_MAXIMUM_LENGTH, NUMERIC_PRECISION, NUMERIC_SCALE
+                FROM INFORMATION_SCHEMA.COLUMNS 
+                WHERE TABLE_NAME = 'ExpectedTrnRcpts'
+                ORDER BY ORDINAL_POSITION...
+[2026-05-03 14:47:52] ------------------------------
+[2026-05-03 14:47:57] QUERY in SHOPER9WH1 (SPID 60): Python
+[2026-05-03 14:47:57] SQL: SELECT COLUMN_NAME, DATA_TYPE, IS_NULLABLE, CHARACTER_MAXIMUM_LENGTH, NUMERIC_PRECISION, NUMERIC_SCALE
+                FROM INFORMATION_SCHEMA.COLUMNS 
+                WHERE TABLE_NAME = 'InPackSlipTrn'
+                ORDER BY ORDINAL_POSITION...
+[2026-05-03 14:47:57] ------------------------------
+[2026-05-03 14:47:58] QUERY in SHOPER9WH1 (SPID 60): Python
+[2026-05-03 14:47:58] SQL: SELECT * FROM [ItemMaster]...
+[2026-05-03 14:47:58] ------------------------------
+[2026-05-03 14:48:04] QUERY in SHOPER9WH1 (SPID 60): Python
+[2026-05-03 14:48:04] SQL: SELECT COUNT(*) FROM [LogAgentActivity]...
+[2026-05-03 14:48:04] ------------------------------
+[2026-05-03 14:48:07] QUERY in SHOPER9WH1 (SPID 60): Python
+[2026-05-03 14:48:07] SQL: SELECT COLUMN_NAME, DATA_TYPE, IS_NULLABLE, CHARACTER_MAXIMUM_LENGTH, NUMERIC_PRECISION, NUMERIC_SCALE
+                FROM INFORMATION_SCHEMA.COLUMNS 
+                WHERE TABLE_NAME = 'TillAcceptDisplaydtls'
+                ORDER BY ORDINAL_POSITION...
+[2026-05-03 14:48:07] ------------------------------
+[2026-05-03 14:48:10] QUERY in SHOPER9WH1 (SPID 60): Python
+[2026-05-03 14:48:10] SQL: SELECT COUNT(*) FROM [POSActivityLogHdr]...
+[2026-05-03 14:48:10] ------------------------------
+[2026-05-03 14:48:26] QUERY in SHOPER9WH1 (SPID 60): Python
+[2026-05-03 14:48:26] SQL: SELECT COUNT(*) FROM [TRNStockAudit]...
+[2026-05-03 14:48:26] ------------------------------
+[2026-05-03 14:48:29] QUERY in SHOPER9WH1 (SPID 60): Python
+[2026-05-03 14:48:29] SQL: SELECT COLUMN_NAME, DATA_TYPE, IS_NULLABLE, CHARACTER_MAXIMUM_LENGTH, NUMERIC_PRECISION, NUMERIC_SCALE
+                FROM INFORMATION_SCHEMA.COLUMNS 
+                WHERE TABLE_NAME = 'PromoLogGetItemGrpDtls'
+                ORDER BY ORDINAL_POSITION...
+[2026-05-03 14:48:29] ------------------------------
+[2026-05-03 14:48:30] QUERY in SHOPER9WH1 (SPID 60): Python
+[2026-05-03 14:48:30] SQL: SELECT COLUMN_NAME, DATA_TYPE, IS_NULLABLE, CHARACTER_MAXIMUM_LENGTH, NUMERIC_PRECISION, NUMERIC_SCALE
+                FROM INFORMATION_SCHEMA.COLUMNS 
+                WHERE TABLE_NAME = 'SISStatus'
+                ORDER BY ORDINAL_POSITION...
+[2026-05-03 14:48:30] ------------------------------
+[2026-05-03 14:48:32] QUERY in SHOPER9WH1 (SPID 60): Python
+[2026-05-03 14:48:32] SQL: SELECT COLUMN_NAME, DATA_TYPE, IS_NULLABLE, CHARACTER_MAXIMUM_LENGTH, NUMERIC_PRECISION, NUMERIC_SCALE
+                FROM INFORMATION_SCHEMA.COLUMNS 
+                WHERE TABLE_NAME = 'PromoMnApplCustDtls'
+                ORDER BY ORDINAL_POSITION...
+[2026-05-03 14:48:32] ------------------------------
+[2026-05-03 14:48:42] QUERY in SHOPER9WH1 (SPID 60): Python
+[2026-05-03 14:48:42] SQL: SELECT COLUMN_NAME, DATA_TYPE, IS_NULLABLE, CHARACTER_MAXIMUM_LENGTH, NUMERIC_PRECISION, NUMERIC_SCALE
+                FROM INFORMATION_SCHEMA.COLUMNS 
+                WHERE TABLE_NAME = 'SchemesDefinitionHdr'
+                ORDER BY ORDINAL_POSITION...
+[2026-05-03 14:48:42] ------------------------------
+[2026-05-03 14:48:44] QUERY in SHOPER9WH1 (SPID 60): Python
+[2026-05-03 14:48:44] SQL: SELECT COUNT(*) FROM [PhyTmpStockTakingSC]...
+[2026-05-03 14:48:44] ------------------------------
+[2026-05-03 14:48:45] QUERY in SHOPER9WH1 (SPID 60): Python
+[2026-05-03 14:48:45] SQL: SELECT COUNT(*) FROM [PtInvoiceDtl]...
+[2026-05-03 14:48:45] ------------------------------
+[2026-05-03 14:48:50] QUERY in Shoper9CSW (SPID 88): SHOPER Retail Solutions - Point-Of-Sale (P.O.S)
+[2026-05-03 14:48:50] SQL: select Distinct code,Descr from GenLookUp , ItemMaster where ItemMaster.Class1Cd=GenLookUp.Code And ItemMaster.IsInventoryItem=1 And GenLookUp.Recid=1...
+[2026-05-03 14:48:50] ------------------------------
+[2026-05-03 14:48:53] QUERY in SHOPER9WH1 (SPID 60): Python
+[2026-05-03 14:48:53] SQL: SELECT COUNT(*) FROM [PtInvoiceHdr]...
+[2026-05-03 14:48:53] ------------------------------
+[2026-05-03 14:48:57] QUERY in SHOPER9WH1 (SPID 60): Python
+[2026-05-03 14:48:57] SQL: SELECT COUNT(*) FROM [PurchOrdTrl]...
+[2026-05-03 14:48:57] ------------------------------
+[2026-05-03 14:48:59] QUERY in SHOPER9WH1 (SPID 60): Python
+[2026-05-03 14:48:59] SQL: SELECT COUNT(*) FROM [PurchaseTaxCat]...
+[2026-05-03 14:48:59] ------------------------------
+[2026-05-03 14:48:59] QUERY in Shoper9CSW (SPID 88): SHOPER Retail Solutions - Point-Of-Sale (P.O.S)
+[2026-05-03 14:48:59] SQL: Update Tmp Set Tmp.Curbalqty = SM.Curbalqty, curvalue = SM.Curbalqty * Tmp.CurrCost from StockMaster SM, TmpNormalDetRepsuper Tmp Where Tmp.StockNo = SM.StockNo...
+[2026-05-03 14:48:59] ------------------------------
+[2026-05-03 14:49:00] QUERY in Shoper9CSW (SPID 88): SHOPER Retail Solutions - Point-Of-Sale (P.O.S)
+[2026-05-03 14:49:00] SQL: Update Tmp Set subclass1cdDesc = SubClass1Desc from TmpNormalDetRepsuper Tmp,SubClass1Cat SUB1 Where SUB1.Class1Cd = TMP.Class1Cd and SUB1.Class2Cd = Tmp.Class2Cd and Sub1.SubClass1Cd = Tmp.SubClass1Cd...
+[2026-05-03 14:49:00] ------------------------------
+[2026-05-03 14:49:01] QUERY in Shoper9CSW (SPID 88): SHOPER Retail Solutions - Point-Of-Sale (P.O.S)
+[2026-05-03 14:49:01] SQL: Update Tmp Set subclass2cdDesc = SubClass2Desc from TmpNormalDetRepsuper Tmp,SubClass2Cat SUB2 Where SUB2.Class1Cd = TMP.Class1Cd and SUB2.Class2Cd = Tmp.Class2Cd and Sub2.SubClass2Cd = Tmp.SubClass2Cd...
+[2026-05-03 14:49:01] ------------------------------
+[2026-05-03 14:49:02] QUERY in SHOPER9WH1 (SPID 60): Python
+[2026-05-03 14:49:02] SQL: SELECT COUNT(*) FROM [PriceRange]...
+[2026-05-03 14:49:02] ------------------------------
+[2026-05-03 14:49:02] QUERY in Shoper9CSW (SPID 88): SHOPER Retail Solutions - Point-Of-Sale (P.O.S)
+[2026-05-03 14:49:02] SQL: Update TmpNormalDetRepsuper Set class1cdDesc = (SELECT DESCR FROM GENLOOKUP WHERE RECID=1 AND CODE=Class1Cd)...
+[2026-05-03 14:49:02] ------------------------------
+[2026-05-03 14:49:03] QUERY in Shoper9CSW (SPID 88): SHOPER Retail Solutions - Point-Of-Sale (P.O.S)
+[2026-05-03 14:49:03] SQL: select Class1Cd,Class1CdDesc,Class2Cd,Class2CdDesc,StockNo,SubClass1Cd,SubClass2Cd,SizeCd,CurrCost,CurbalQty,CurValue,ItemDesc from TmpNormalDetRepsuper Where curbalqty > 0  order by Class1Cd...
+[2026-05-03 14:49:03] ------------------------------
+[2026-05-03 14:49:10] QUERY in SHOPER9WH1 (SPID 60): Python
+[2026-05-03 14:49:10] SQL: SELECT * FROM [StkTrnHdr]...
+[2026-05-03 14:49:10] ------------------------------
+[2026-05-03 14:49:13] QUERY in SHOPER9WH1 (SPID 60): Python
+[2026-05-03 14:49:13] SQL: SELECT COLUMN_NAME, DATA_TYPE, IS_NULLABLE, CHARACTER_MAXIMUM_LENGTH, NUMERIC_PRECISION, NUMERIC_SCALE
+                FROM INFORMATION_SCHEMA.COLUMNS 
+                WHERE TABLE_NAME = 'StockMaster'
+                ORDER BY ORDINAL_POSITION...
+[2026-05-03 14:49:13] ------------------------------
+[2026-05-03 14:49:15] QUERY in Shoper9CSW (SPID 72): SHOPER Retail Solutions - Point-Of-Sale (P.O.S)
+[2026-05-03 14:49:15] SQL: Update xtempTempItemdtlssuper001 set Rate=3990 where Stockno='G0000001332' and Srlno=0...
+[2026-05-03 14:49:15] ------------------------------
+[2026-05-03 14:49:19] QUERY in Shoper9CSW (SPID 72): SHOPER Retail Solutions - Point-Of-Sale (P.O.S)
+[2026-05-03 14:49:19] SQL: Update TmpStockReserved2100super set PhyQtyOut = b.PhyQtyOut From TmpStockReserved2100super a, (Select SourceCompCode,RefTrnType,RefTrnCtrlNo, Stockno, SUM(DocQty) PhyQtyOut from DeliveryNoteDtls  Where IsNull(DCRefTrnCtrlNo, 0) > 0 Group by SourceCompCode,RefTrnType,RefTrnCtrlNo, Stockno) b   Where a.SourceCompCode = b.SourceCompCode And a.Trntype = b.RefTrnType And a.TrnCtrlNo = b.RefTrnCtrlNo And a.Stockno = b.Stockno...
+[2026-05-03 14:49:19] ------------------------------
+[2026-05-03 14:49:35] QUERY in SHOPER9WH1 (SPID 60): Python
+[2026-05-03 14:49:35] SQL: SELECT COUNT(*) FROM [PriceRevisionHistory]...
+[2026-05-03 14:49:35] ------------------------------
+[2026-05-03 14:51:14] QUERY in SHOPER9X01 (SPID 82): SHOPER Retail Solutions - Point-Of-Sale (P.O.S)
+[2026-05-03 14:51:14] SQL: SELECT * FROM SYSCOLUMNS WHERE NAME LIKE 'WSLINK' AND ID IN (SELECT ID FROM SYSOBJECTS WHERE TYPE = 'U' AND NAME = 'VENDORS')...
+[2026-05-03 14:51:14] ------------------------------
+[2026-05-03 14:51:31] QUERY in SHOPER9X01 (SPID 82): SHOPER Retail Solutions - Point-Of-Sale (P.O.S)
+[2026-05-03 14:51:31] SQL: Insert Into ExtdMailingList  (RecNo,AddressType,Nm,Addr1,Addr2,Addr3,Addr4,Addr5,Locality,PostalCd,Country,Zone,State,City,OffPhone,HomePhone,MobilePhone,FaxNo, Email,Email2,Email3,Contact,CatType,CatCd,DefaultAddress,DateInsert,LastUpdatedDate,VAUid,VActr,VATermId,VACompCode) Select RecNo,AddressType,Nm,Addr1,Addr2,Addr3,Addr4,Addr5,Locality,PostalCd,Country,Zone,State,City,OffPhone,HomePhone,MobilePhone,FaxNo, Email,Email2,Email3,Contact,CatType,CatCd,DefaultAddress,DateInsert,LastUpdatedDate,...
+[2026-05-03 14:51:31] ------------------------------
+[2026-05-03 14:51:48] QUERY in SHOPER9X01 (SPID 89): SHOPER Retail Solutions - Point-Of-Sale (P.O.S)
+[2026-05-03 14:51:48] SQL: select Distinct code,Descr from GenLookUp , ItemMaster where ItemMaster.Class1Cd=GenLookUp.Code And ItemMaster.IsInventoryItem=1 And GenLookUp.Recid=1...
+[2026-05-03 14:51:48] ------------------------------
+[2026-05-03 14:51:54] QUERY in SHOPER9X01 (SPID 89): SHOPER Retail Solutions - Point-Of-Sale (P.O.S)
+[2026-05-03 14:51:54] SQL: Update Tmp Set subclass1cdDesc = SubClass1Desc from TmpNormalDetRepsuper Tmp,SubClass1Cat SUB1 Where SUB1.Class1Cd = TMP.Class1Cd and SUB1.Class2Cd = Tmp.Class2Cd and Sub1.SubClass1Cd = Tmp.SubClass1Cd...
+[2026-05-03 14:51:54] ------------------------------
+[2026-05-03 14:51:55] QUERY in SHOPER9X01 (SPID 89): SHOPER Retail Solutions - Point-Of-Sale (P.O.S)
+[2026-05-03 14:51:55] SQL: Update Tmp Set subclass2cdDesc = SubClass2Desc from TmpNormalDetRepsuper Tmp,SubClass2Cat SUB2 Where SUB2.Class1Cd = TMP.Class1Cd and SUB2.Class2Cd = Tmp.Class2Cd and Sub2.SubClass2Cd = Tmp.SubClass2Cd...
+[2026-05-03 14:51:55] ------------------------------
+[2026-05-03 14:51:56] QUERY in SHOPER9X01 (SPID 89): SHOPER Retail Solutions - Point-Of-Sale (P.O.S)
+[2026-05-03 14:51:56] SQL: Update  TmpNormalDetRepsuper Set class2cdDesc = (SELECT DESCR FROM GENLOOKUP WHERE RECID=2 AND CODE=Class2Cd)...
+[2026-05-03 14:51:56] ------------------------------
+[2026-05-03 14:52:11] QUERY in SHOPER9X01 (SPID 71): SHOPER Retail Solutions - Point-Of-Sale (P.O.S)
+[2026-05-03 14:52:11] SQL: Create Table TmpStockReserved2100super (SourceCompCode Varchar(16),DestCompCode Varchar(16),TrnType Int, TrnCtrlNo Int,StockNo Varchar(32),ItemTag1 Varchar(128),DocQty Money default 0,ServicedQty Money default 0,PhyQtyOut Money default 0,DeliveredQty Money default 0,RejectedQty Money default 0,RescheduleQty Money default 0,ReservedQty Money default 0)...
+[2026-05-03 14:52:11] ------------------------------
+[2026-05-03 14:52:13] QUERY in SHOPER9X01 (SPID 71): SHOPER Retail Solutions - Point-Of-Sale (P.O.S)
+[2026-05-03 14:52:13] SQL: Set datefirst 7 SELECT SPI.StockNo,SPI.BatchSrlno,pmh.SalesPromoCode,SPI.PromoDescription,SPI.BuyOrGetId,SPI.SetNo,SPI.ShoperDate,SPI.ApplicableHappyHours,SPI.HappyHoursStartTime,SPI.HappyHoursEndTime,SPI.Weekdays,SPI.ApplicableCustomers,SPI.DefinationType,SPI.FixedOrVariable,SPI.ItemLvlDiscountType,SPI.BuyingQuantity,SPI.BuyAndGetSameItems,SPI.ItemLvlDefVariesOnBuyingQty,SPI.ItemLvlBuyingRateValueCond,SPI.UseIMTable,SPI.ItemDiscPercent,SPI.ItemDiscAmount,SPI.ItemDiscountedRate,SPI.ItemMaxDiscPe...
+[2026-05-03 14:52:13] ------------------------------
+[2026-05-03 15:56:37] --- SHOPER 9 ACTIVITY RECORDER STARTING ---
+[2026-05-03 15:56:37] Logging to: D:\IMP\GitHub\primesetu\backend\shoper9_activity_log.txt
+[2026-05-03 15:56:37] Connected to Database: SHOPER9WH1
+[2026-05-03 15:56:37]   Initial Count [SHOPER9WH1.StkTrnHdr]: 2653
+[2026-05-03 15:56:37]   Initial Count [SHOPER9WH1.POSCashTrn]: 0
+[2026-05-03 15:56:37]   Initial Count [SHOPER9WH1.SaleTrnHdr]: 0
+[2026-05-03 15:56:37]   Initial Count [SHOPER9WH1.ItemMaster]: 22105
+[2026-05-03 15:56:38] Connected to Database: SHOPER9X01
+[2026-05-03 15:56:38]   Initial Count [SHOPER9X01.StkTrnHdr]: 5256
+[2026-05-03 15:56:38]   Initial Count [SHOPER9X01.POSCashTrn]: 5277
+[2026-05-03 15:56:38]   Initial Count [SHOPER9X01.SaleTrnHdr]: 5205
+[2026-05-03 15:56:39]   Initial Count [SHOPER9X01.ItemMaster]: 39354
+[2026-05-03 15:56:39] Connected to Database: Shoper9CSW
+[2026-05-03 15:56:40]   Initial Count [Shoper9CSW.StkTrnHdr]: 20706
+[2026-05-03 15:56:40]   Initial Count [Shoper9CSW.POSCashTrn]: 20866
+[2026-05-03 15:56:40]   Initial Count [Shoper9CSW.SaleTrnHdr]: 40279
+[2026-05-03 15:56:40]   Initial Count [Shoper9CSW.ItemMaster]: 43866
+[2026-05-03 15:56:40] 
+--- MONITORING ACTIVE ---
+[2026-05-03 15:57:41] QUERY in SHOPER9WH1 (SPID 68): Python
+[2026-05-03 15:57:41] SQL: SELECT COLUMN_NAME, DATA_TYPE, IS_NULLABLE, CHARACTER_MAXIMUM_LENGTH, NUMERIC_PRECISION, NUMERIC_SCALE
+                FROM INFORMATION_SCHEMA.COLUMNS 
+                WHERE TABLE_NAME = 'BAKTillAcceptDisplaydtls'
+                ORDER BY ORDINAL_POSITION...
+[2026-05-03 15:57:41] ------------------------------
+[2026-05-03 15:57:42] QUERY in SHOPER9WH1 (SPID 68): Python
+[2026-05-03 15:57:42] SQL: SELECT * FROM [StockTrnSummary]...
+[2026-05-03 15:57:42] ------------------------------
+[2026-05-03 15:57:53] QUERY in SHOPER9WH1 (SPID 68): Python
+[2026-05-03 15:57:53] SQL: SELECT COLUMN_NAME, DATA_TYPE, IS_NULLABLE, CHARACTER_MAXIMUM_LENGTH, NUMERIC_PRECISION, NUMERIC_SCALE
+                FROM INFORMATION_SCHEMA.COLUMNS 
+                WHERE TABLE_NAME = 'BakIncDefTable'
+                ORDER BY ORDINAL_POSITION...
+[2026-05-03 15:57:53] ------------------------------
+[2026-05-03 15:58:04] QUERY in SHOPER9WH1 (SPID 68): Python
+[2026-05-03 15:58:04] SQL: SELECT * FROM [ItemMaster]...
+[2026-05-03 15:58:04] ------------------------------
+[2026-05-03 16:00:18] QUERY in SHOPER9WH1 (SPID 54): Python
+[2026-05-03 16:00:18] SQL: SELECT COUNT(*) FROM [poscash]...
+[2026-05-03 16:00:18] ------------------------------
+[2026-05-03 16:07:24] QUERY in Shoper9CSW (SPID 62): Python
+[2026-05-03 16:07:24] SQL: SELECT name FROM sysobjects WHERE name LIKE '%Ver%' AND type='U'...
+[2026-05-03 16:07:24] ------------------------------

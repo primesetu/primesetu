@@ -114,6 +114,7 @@ const Sidebar: React.FC<SidebarProps> = ({
       'TRANSACTIONS': nonDashboardModules.filter(m => m.category === 'POS' || m.category === 'TRANSACTIONS'),
       'UTILITIES': nonDashboardModules.filter(m => m.category === 'WAREHOUSE'),
       'REPORTS': nonDashboardModules.filter(m => m.category === 'FINANCE'),
+      'SETTINGS': nonDashboardModules.filter(m => m.category === 'SYSTEM' || m.category === 'HO'),
     };
   }, [modules]);
 
@@ -238,6 +239,7 @@ const Sidebar: React.FC<SidebarProps> = ({
         {!isCollapsed && (
           <button
             onClick={async () => {
+              (window as any).__isLoggingOut = true;
               await supabase.auth.signOut();
               window.location.reload(); // Hard reset for clean logout pulse
             }}
@@ -249,7 +251,11 @@ const Sidebar: React.FC<SidebarProps> = ({
         )}
         {isCollapsed && (
           <button
-            onClick={() => supabase.auth.signOut().then(() => window.location.reload())}
+            onClick={async () => {
+              (window as any).__isLoggingOut = true;
+              await supabase.auth.signOut();
+              window.location.reload();
+            }}
             title="Logout"
             className="mt-2 p-2 rounded-lg text-error hover:bg-error/10 transition-all"
           >

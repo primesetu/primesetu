@@ -15,6 +15,11 @@ from .purchase import PurchaseOrder, PurchaseOrderItem, GRN, GRNItem
 from .config import PrefixConfig, PrefixMaster, PrefixTrnNo, PrefixTerminalGroup
 from .pricing import PriceRangeSetting, PriceRange, PriceRevision, PriceRevisionHistory
 from .ho import SyncPacket, RemoteCommand
+from .sovereign import (
+    SmritiAD, SmritiParam, SmritiLookup, SmritiLookupMap,
+    SmritiCombo, SmritiItem, SmritiStock, SmritiStaff,
+    SmritiPayMode, SmritiDocNo, SmritiSaleHdr, SmritiSaleDtl
+)
 
 __all__ = [
     "Base", "Store", "SystemParameter", "Customer", "Till", "Transaction",
@@ -24,7 +29,10 @@ __all__ = [
     "GRN", "GRNItem", "User", "LoyaltyLedger",
     "PrefixConfig", "PrefixMaster", "PrefixTrnNo", "PrefixTerminalGroup",
     "PriceRangeSetting", "PriceRange", "PriceRevision", "PriceRevisionHistory",
-    "Acceptdisplaydtls", "Alert", "SyncPacket", "RemoteCommand"
+    "Acceptdisplaydtls", "Alert", "SyncPacket", "RemoteCommand",
+    "SmritiAD", "SmritiParam", "SmritiLookup", "SmritiLookupMap",
+    "SmritiCombo", "SmritiItem", "SmritiStock", "SmritiStaff",
+    "SmritiPayMode", "SmritiDocNo", "SmritiSaleHdr", "SmritiSaleDtl"
 ]
 
 from .finance import TillSession, PosCashTrn, TillHardware

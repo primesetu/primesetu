@@ -1,0 +1,828 @@
+﻿000008	Allow Blank Size	AllowBlankSize
+000011	Extended Item Description applicable	ExtItemDescPresent
+000014	Shoper Opening Date	SHOPERSysDt
+000015	Shoper System Status	SHOPERSysStat
+00001A	Item Classification1 Caption	ItemClass1Cap
+00001B	Item Classification1 Code is Generated	ItemClass1CdGen
+00002A	Item Classification2 Caption	ItemClass2Cap
+00002B	Item Classification2 Code is Generated	ItemClass2CdGen
+000032	Multi Location Installation	MultiLocationsPresent
+000032B	Allow Selection of Prefix from a list of document prefixes in Billing	MultiplePfxSelectionAllowedInBilling
+000033	Default Location for Billing	DefaultLocationId
+000034	Partial Receipt Against Purchase Orders Allowed	AllowPurchOrdPartRcpt
+00003A	Item Sub-Classification1 Present	ItemSubClass1Present
+00003B	Item Sub-Classification1 Caption	ItemSubClass1Cap
+000040	Customer Code User Assigned	IsCustCodeAssigned
+00004A	Item Sub-Classification2 Present	ItemSubClass2Present
+00004B	Item Sub-Classification2 Caption	ItemSubClass2Cap
+00004C	Allow insertions to Sub-Classification2(Shade) on the fly	AllowNewSubClass2
+00005A	Item Size/Pack/UOM Present	ItemSizePresent
+00005B	Item Size/Pack/UOM Caption	ItemSizeCap
+00005C	Allow insertion of new Item Size on the fly	AllowNewSize
+00006A	Sub-classification1 (Style) unique across Classification1 (Product) and Classification2 (Brand)	ItemSubClass1IsUnique
+00006B	Maintain look-up for Sub-classification1(Style)	ItemSubClass1HasCat
+00006C	Minimum Length of Sub-classification1(Style)	ItemSubClass1MinLen
+00006D	Max Length of Sub-classification1(Style)	ItemSubClass1MaxLen
+00006E	Allow Insertions to Sub-classification1(Style) on the fly	AllowNewSubClass1
+00006F	Allow Blank Sub-classification1(Style)	AllowBlankSubClass1
+00007A	Maintain Sub-classification2(Shade) Catalogue	ItemSubClass2HasCat
+00007B	Sub-classification2(Shade) Unique across Classification1 (Product) and Classification2 (Brand)	ItemSubClass2IsUnique
+00007C	Allow Blank Sub-classification2(Shade)	AllowBlankSubClass2
+00009A	Retail Price Applicable Y/N	RetailPricePresent
+00009B	Allow Billing at Retail Price Y/N	AllowRetailBilling
+00009C	Retail Price is Tax Inclusive	IsRetailPriceTaxInc
+00010A	Dealer Price Applicable Y/N	DlrPricePresent
+00010B	Allow Billing at Dealer Price Y/N	AllowWSBilling
+00012A	Shoper Company Code	CompanyCode
+00012B	Shoper Company Name	CompanyName
+00012C	State (Local) Sales Tax Registration Number	LocalSTaxRegnNo
+00012D	Central (Federal) Sales Tax Registration Number	CentralSTaxRegnNo
+00013A	Shoper IN Files Path	InFilesPath
+00013B	Shoper Profile Files Path	ProfileFilesPath
+000150	Billing Stationery Type	BillFormType
+00016A	Size Groups Applicable	SizeGroupsPresent
+00016B	Size Group Look-Up Rec Id	SizeGroupRecId
+00018A	Batch Serial Number Applicable	BatchSrlNoPresent
+00018B	Allow Blank Batch Serial Number	AllowBlankBatchSrl
+00018C	Can Price Vary between Batch Serial Numbers	BatchSrlDiffPrice
+00018D	Maintain Batch Serial No. in Stock Transaction Summary	StkTrnSumHasBatchSrl
+00019A	Customer Classification1 Applicable	CustClass1Present
+00019B	Customer Classification1 Caption	CustClass1Cap
+00019C	Customer Classification1 Look-up Rec-Id	CustClass1RecId
+00020A	Customer Classification2 Applicable	CustClass2Present
+00020B	Customer Classification2 Caption	CustClass2Cap
+00020C	Customer Classification2 Look-up Rec-Id	CustClass2RecId
+00021A	Customer Classification3 Applicable	CustClass3Present
+00021B	Customer Classification3 Caption	CustClass3Cap
+00021C	Customer Classification3 Look-up Rec-Id	CustClass3RecId
+00022A	Customer Classification4 Applicable	CustClass4Present
+00022B	Customer Classification4 Caption	CustClass4Cap
+00022C	Customer Classification4 Look-up Rec-Id	CustClass4RecId
+00023A	Customer Classification5 Applicable	CustClass5Present
+00023B	Customer Classification5 Caption	CustClass5Cap
+00023C	Customer Classification5 Look-up Rec-Id	CustClass5RecId
+00024A	Shoper Application Segment	SHOPERAppSeg
+00024B	Jewellry Segment	IsJewellrySeg
+00026A	SHOPER Environment	SHOPEREnv
+00026R	Retail Environment True	IsRetailEnv
+00026W	Wholesale Environment True	IsWholeSaleEnv
+00028A	Stock Module Present	StockModulePresent
+00028B	Accounting Module Present	AccountsPresent
+00035A	Product-wise Sales Tax Applicable	ProdTaxTypePresent
+00035B	Product-wise Sales Tax Type Look-up Rec-Id	ProdTaxTypeRecId
+00036A	Source-wise Tax Grouping Applicable	SourceTaxTypePresent
+00036B	Source-wise Sales Tax Type Look-up Rec-Id	SourceTaxTypeRecId
+00037A	Destination-wise Tax Grouping Applicable	DestTaxTypePresent
+00037B	Destination-wise Sales Tax Type Look-up Rec-Id	DestTaxTypeRecId
+00038A	Goods Inward Physical Verification Applicable	GIRPhysVerPresent
+00038B	Allow Goods Inward without PO Reference	GIRWithoutPORef
+00039A	Location wise Stock Transaction Summary Maintained	StkTrnSumHasLocCd
+00041A	Customer Profile1 Used	CustProfile1Present
+00041B	Customer Profile1 Caption	CustProfile1Cap
+00041C	Customer Profile1 Look-Up Rec-Id	CustProfile1RecId
+00042A	Customer Profile2 Used	CustProfile2Present
+00042B	Customer Profile2 Caption	CustProfile2Cap
+00042C	Customer Profile2 Look-up Rec-Id	CustProfile2RecId
+00043A	Customer Profile3 Used	CustProfile3Present
+00043B	Customer Profile3 Caption	CustProfile3Cap
+00043C	Customer Profile3 Look-up Rec-Id	CustProfile3RecId
+00044A	Customer Profile4 Used	CustProfile4Present
+00044B	Customer Profile4 Caption	CustProfile4Cap
+00044C	Customer Profile4 Look-up Rec-Id	CustProfile4RecId
+00045A	Customer Profile5 Used	CustProfile5Present
+00045B	Customer Profile5 Caption	CustProfile5Cap
+00045C	Customer Profile5 Look-up Rec-Id	CustProfile5RecId
+00046A	Jewellry Segment Parameter: Is Gross Weight Variable	IsGrossWtVariable
+00046B	Jewellry Segment Parameter: Max Variation Allowed (%)	MaxGrossWtVar
+00047A	Item Analysis Code1 Present	ItemAnaCd1Present
+00047B	Item Analysis Code1 Caption	ItemAnaCd1Caption
+00047C	Item Analysis Code1 Look-up Rec Id	ItemAnaCd1RecId
+00048A	Item Analysis Code2  Present	ItemAnaCd2Present
+00048B	Item Analysis Code2 Caption	ItemAnaCd2Caption
+00048C	Item Analysis Code2 Look-up Rec Id	ItemAnaCd2RecId
+00050A	Item Analysis Code3  Present	ItemAnaCd3Present
+00050B	Item Analysis Code3 Caption	ItemAnaCd3Caption
+00050C	Item Analysis Code3 Look-up Rec Id	ItemAnaCd3RecId
+00051A	Item Analysis Code4  Present	ItemAnaCd4Present
+00051B	Item Analysis Code4 Caption	ItemAnaCd4Caption
+00051C	Item Analysis Code4 Look-up Rec Id	ItemAnaCd4RecId
+00052A	Item Analysis Code5  Present	ItemAnaCd5Present
+00052B	Item Analysis Code5 Caption	ItemAnaCd5Caption
+00052C	Item Analysis Code5 Look-up Rec Id	ItemAnaCd5RecId
+00053A	Item Super Classification1 Present	SuperClass1Present
+00053B	Item Super Classification1 Look-up Rec Id	SuperClass1RecId
+00053C	Item Super Classification1 Caption	SuperClass1Caption
+00054A	Item Super Classification2 Present	SuperClass2Present
+00054B	Item Super Classification2 Look-up Rec Id	SuperClass2RecId
+00054C	Item Super Classification2 Caption	SuperClass2Caption
+00055A	User Assigned Stock Number 	IsStkNoAssigned
+00055B	Stock Number generation methodology param	StockNoGen
+00056A	Discounts Applicable	DiscountPresent
+00056B	Discount Look-up Id	DiscRecId
+00057A	Add-ons Applicable in Billing	AddOnsPresent
+00057B	Add-ons Look-up Id	AddOnRecId
+00058A	Deductions Applicable in Billing	DednsPresent
+00058B	Deductions Look-up Id	DednsRecId
+00059A	Allow Multiple Price Factors in a bill for a single item	AllowMultiPrcFact
+00059B	Allow Multiple Discounts in a bill for a single Item	AllowMultiDiscount
+00060A	Allow User Selection for Rate of Issue (Outwards)	AllowDiffRatesInMiscIss
+00060B	Rate to be applied in Goods Outwards - Misc Issue (if above is False)	RateAppliedInMiscIss
+00060C	Rate to pre-display in Goods Outwards - Misc Issues (if above is 3)	RateDisplayedInMiscIss
+00061A	Least Saleable Quantity on Item Selection - Misc. Issue	ApplyLSQInMiscIss
+00061B	Stock check in Goods Outwards - Misc. Issue	StkChkInMiscIss
+00062A	Least Saleable Quantity on Item Selection in Purchase Returns	ApplyLSQInPurchRetn
+00062B	Stock check in Goods Outwards - Purchase Returns	StkChkInPurchRetn
+00062C	Apply Least Saleable Quantity on item selection in Goods Inwards	ApplyLSQInPurch
+00063A	Least Saleable Quantity on Item Selection in Transfer Out	ApplyLSQInTrfrOut
+00063B	Stock check in Goods Outwards - Transfer Out	StkChkInTrfrOut
+00064A	Least Saleable Quantity on Item Selection in Approval Issues	ApplyLSQInAppIss
+00064B	Stock check in Goods Outwards - Approval Issue	StkChkInAppIss
+00100A	Allow Service Billing	AllowServiceBilling
+00100B	Credit Billing Allowed	AllowCreditBilling
+00101A	Accept Customer Id in Billing	AcceptCustInBill
+00101B	Accept Sales Man Id in Bill	AcceptSalemanInBill
+00101C	Personnel Type applicable for Sales man	SalesmanPersonType
+00103A	Club Duplicate Items in Bill	ClubDupInBill
+00103B	Allow Service Items in a Product Bill	CanBillServiceWithProd
+00104A	Apply Least Saleable Quantity on Item Selection in Billing	ApplyLSQinBill
+00104B	Check Stock on Item Selection in Billing	ItemStockCheckInBill
+00104C	Stock Out Action in Billing	StockOutActionInBill
+00105A	Allow Rate Alteration in Billing	AllowRateAlterInBill
+00151A	Bill Header Line#1	BillHdrLine1
+00151B	Bill Header Line#2	BillHdrLine2
+00151C	Bill Header Line#3	BillHdrLine3
+00151D	Bill Header Line#4	BillHdrLine4
+00151E	Bill Header Line#5	BillHdrLine5
+00151F	Bill Header Line#6	BillHdrLine6
+00151G	Bill Header Line#7	BillHdrLine7
+00151H	Bill Header Line#8	BillHdrLine8
+00152A	Print Customer Name on Bill	PrintCustNameOnBill
+00152B	Print Sales Tax Regn No on Bill	PrintSTaxRegnNo
+00153A	Print Salesman Id on Bill	PrintSalesmanIdOnBill
+00153B	Print Copy Number on Bill Footer	PrintBillCopyNumber
+00153C	Print Time on Bill	PrintTimeOnBill
+00154A	Message to be Printed on Bill Footer Line#1	BillFooterMsgLine1
+00154B	Message to be Printed on Bill Footer Line#2	BillFooterMsgLine2
+00154C	Message to be Printed on Bill Footer Line#3	BillFooterMsgLine3
+00155A	Print Stock Number in Bill	PrintStkNoOnBill
+00155B	Formation of Item Description String printed on Bill	ItemDescOnBill
+00155C	No. of Decimal Places for Quantity	QtyDecimalDigits
+00155D	No. of Decimal Places for Value	ValDecimalDigits
+00155E	Print Item Level discount on Bill	PrintItemDisc
+00156A	POS Printer Device Name	POSPrinterDevice
+00156B	POS Printing ON	POSPrintingON
+00157A	Print Sales Tax on Bill	PrintSalesTaxOnBill
+00157B	Print Tax Break up on Bill	PrintTaxBreakUpOnBill
+00157C	Print Bill Type in the Main Heading of Bill (Cash Or Credit)	BillPrintMainHeading
+00157D	40 Column POS Printed Used	PosPrinter40Col
+00157E	Customer Display Unit Present	CustDisplayOn
+00157F	String displayed on Customer Display Unit	CustDisplayString
+00157G	Port Number used for Customer Display Unit	CustDisplayPort
+00157H	Is Size Wise Enabled In GIR/GOR	IsSizeWiseEnabled
+00158A	FlatFile1	FlatFile1
+00158B	FlatFileId1	FlatFileId1
+00158C	Subject of Mail	MsgString1
+00159A	FlatFile2	FlatFile2
+00159B	FlatFileId2	FlatFileId2
+00159C	Subject of Mail	MsgString2
+00160A	FlatFile3	FlatFile3
+00160B	FlatFileId3	FlatFileId3
+00160C	Subject of Mail	MsgString3
+00161A	User Name for Mail	UserName
+00161B	User Password for Mail	UserPassword
+00162A	Printer Supports Reverse Line Feed	PrinterSupportsReverseLF
+00162B	No of Lines to be Reversed	LinesToBeReversed
+00163A	Payin Slip Stationery	PSlipPrePrint
+00164A	Service Item Size Group ID	ServiceItemSizeGroup
+00164B	Service Item SizeCode Srl No	ServiceItemSizeCdSrl
+00165C	Default Entry Mode For Transactions	DefaultTrnEntryMode
+00165D	Item Details Printed in Audit Trial	ItemDetailsInAuditTrial
+00165E	System Counter Number	VaSysCounter
+00165F	Shoper-Care Client Installed	VaCareClientInstalled
+00165G	ReUse Same Credit Note Or Issue New Credit Note for balance value in Old Credit Note	ReUseCreditNote
+00166A	Allow customer classfications if customer code is not chosen	AcceptDemography
+00167A	Customer Demography#1 Present	Demography1Present
+00167B	Caption For Customer Demography#1	Demography1Caption
+00168A	Customer Demography#2 Present	Demography2Present
+00168B	Caption For Customer Demography#2	Demography2Caption
+00169A	Customer Demography#3 Present	Demography3Present
+00169B	Caption For Customer Demography#3	Demography3Caption
+00170A	Customer Demography#4 Present	Demography4Present
+00170B	Caption For Customer Demography#4	Demography4Caption
+00171A	Customer Demography#5 Present	Demography5Present
+00171B	Caption For Customer Demography#5	Demography5Caption
+00172A	Shop Prefix For Expected Transaction	ShopPrefix
+00173A	Re-Call Transaction(Slips) Loading Present In Billing	ReCallTransPresent
+00200A	Item Browse Description String Formation - 1	BrowseDescString1
+00200B	Item Browse Description String Formation - 2	BrowseDescString2
+00200c	Display Current Quantity in Item Browse for Billing	DisplayCurQtyInBrowse
+00200D	Maximum Rows in Item Browse	BrowseMaxRows
+00200E	Default Sorting Order Field in Item Browse	DefaultSortingOrderFieldInIB
+00200F	Code And Desc Order For Classfn Fields Displayed in Item Browse	ShowCodeAndDescOrderInIB
+00200G	Delimiting Char For Code And Desc Display In Items Browse	DelimitCharForCodeDescInIB
+00200H	Default Search Field in Item Browse	DefaultSearchFldInClassiBrowse
+00200X	Activate New Customer Browse	ActivateNewCustBrowse
+00200Y	Customer Browse Description String - 1	CBrowseDescString1
+00200Z	Customer Browse Description String - 2	CBrowseDescString2
+00201A	Advanced Query - Browse Description String - 1	AdvQryBrowseDescString1
+00201B	Advanced Query - Browse Description String - 2	AdvQryBrowseDescString2
+00201C	Browse Display Cur Qty For Items-Advanced Query	AdvQryCurQtyInBrowse
+00201X	Primary Cust Browse Field Selection - Adv. Query	CBrowseFieldSeleString1
+00211A	Flat File Transfer Through Mail	SendFFThruMail
+00211B	Flat File Transfer Through FTP	SendFFThruFTP
+00211C	Flat File Transfer Through Direct Copy	SendFFThruDCopy
+00212A	Server Name for FTP	FFileFTPServer
+00212B	User ID for FTP	FFileFTPUID
+00212C	User Password for FTP	FFileFTPUPwd
+00212D	IP Address for FTP	FFileFTPIP
+00213A	Direct Copy Path	FFileDCopyPath
+00400A	Valid Transactions in Goods Inwards	ValidTrnInGIR
+00401A	Valid Transactions in Goods Outwards	ValidTrnInGOR
+00402A	Apply UniformTax code in Goods Inwards	ApplyUniformTaxinGIR
+00403A	Print Size Wise AuditTrail	PrintSizeWiseAuditTrail
+00404A	Rate Acceptance in Goods Inwards	RateAlterationInGIR
+00405A	Rate Acceptance in Goods Outwards	RateAlterationInGOR
+00406A	Allow New Insertions in Goods Inwards(Item Fly)	AllowNewItemInGIR
+00407A	Allow New Insertions in Goods Outwards (Item Fly)	AllowNewItemInGOR
+00408A	Allow New Insertions in Billing(Item Fly)	AllowNewItemInBilling
+00409A	Rate Acceptance in Po in Goods Inwards	PoRateAlterationinGIR
+00410A	Permitted Operations Configuration for Goods Inwards	OperationsAllowedInGIR
+00411A	Permitted Operations for Goods Outwards	OperationsAllowedInGOR
+00412A	Print Receiver Address in Goods Outwards	PrintToAddressGOR
+00413A	Fields to be printed in Goods Inward Audit Trail	GIRAuditTrailFields
+00414A	Fields to be printed in Goods Outwards audit Trail	GORAuditTrailFields
+00414B	Fields to be Printed in Goods Outwards Audit Trail1	GORAuditTrailFields1
+00414C	Fields to be Printed in Goods Outwards Audit Trail2	GORAuditTrailFields2
+00414D	Fields to be Printed in Goods Outwards Audit Trail3	GORAuditTrailFields3
+00414E	Fields to be Printed in Goods Outwards Audit Trail4	GORAuditTrailFields4
+00415A	Add-ons & Deductions Included for Cost Appropriation in Goods Inwards	GIRIncAddonDednForCP
+00416A	Add-ons & Deductions Included for Cost Appropriation in Goods Outwards	GORIncAddonDednForCP
+00417A	Option For Holding Details in PTFile Invoice	HoldDtlPTFileInvoice
+00418A	Party Type Allowed in Misc., Receipts and Issues	OperationsAllowedForMultipleTbl
+00419A	Display PT File Information Details Using Browse	DisplayPTFileDetails
+00420A	StockNo Creation during PT File Loading	GIRStknoGeneration
+00421A	Grade Applicable for Stock No.	GradeApplicableForStkNo
+00421B	Company PT(XT) File In Path	CompXTFileInPath
+00421C	Company PT(XT) File Out Path	CompPTFileOutPath
+00421D	PT File Creation - Overwrite/ Append to File	PTFileToOverwriteOrAppend
+00421E	LSQ Applicable on Mutiples	ApplicableLSQMutiple
+00421F	Whether to Display Bale Details	BaleDtlsTobeDisplay
+00421G	Caption For Stock Module for Raymonds	CaptionForStkModule
+00422A	Allow Physical Stock Loading with Delimiter 	PhyStkLoadingWithDelimeter
+00422B	Show Directory Name for Physical Stock	PhyStkShowDirNm
+00422C	Physical Stock Loading Delimiter Character	PhyStkLoadingDelimeter
+00423A	Loading Applicable For Master and Stock	LoadingApplicableMaster
+00424A	Display Actual Qty From PTFile	DispActQtyFromPTFile
+00425A	Validate Classification & Po Dtls	ValidClassificationAndPoDtls
+00426A	Whether to Check PTInvoice or StkTrnHdr Table	WhetherCheckPTInvoiceOrSTHTable
+00426B	Delete Existent PT File Before Creation	WhetherBeforePTFileCreationDeleted
+00501A	Allowed Transactions in Billing Module	OperationsAllowedInPOS
+00502A	Allowed Transactions in Bill Returns	OptionsForReturn
+00503A	Plain Stationery Used in Billing	PlainStationeryUsed
+00504A	Returned Bill Details Printing Options	PrintReturnDetails
+00504B	Void Bill Details Printing Options	PrintVoidBillDetails
+00505A	Default Setting For Generate Credit Note Option In Billing	GenerateCreditNote
+00505B	Donot Prompt For Credit Note Generation If Bill Return Value Is Less Than Specified	MinValForCreditNote
+00506A	Print UserId in Bill Printing	PrintUsrIdBill
+00507A	Issue Cash Or Adjust/New Credit Note For Remaining Balance	IssueCash
+00508A	Print LST/CST Number	PrintSTRegnNO
+00509A	Number of lines Used for Header and Footer	POSPrintHdrFooterLines
+00510A	Printer Supports Auto Cut	PrinterAutoCutFeature
+00511A	Number of Blank Lines to be Printed	POSPrintBlankLines
+00512A	SmartCard Interface Used In Billing	SmartCardInstalled
+00513A	Maximum No.of lines to be printed in a bill	NoLinesInBill
+00513B	Print Header and Footer details for all pages	PrintHeaderInMultiplePage
+00513C	Bill Form Length (in Lines)	SetFormSize
+00514A	No.of Characters in a line for Extended Item Description	NoCharInLineExtItmDesc
+00515A	Item Foot Notes to be Printed In Bill	WashingCharPrintBill
+00516A	Print Item Wise Tax Break	PrnItemWiseTaxBreak
+00516B	Print Sales Tax Component	PrnSalesTaxComponent
+00516C	Print Sales Tax Caption	PrnSalesTaxCaption
+00516D	Print Sales Tax Amt or Rate	PrnSalesTaxAmtOrRate
+00516E	Print Border Line or Blank	PrnBorderLineOrBlank
+00516F	No. of Characters to Print the VAT Caption	NoCharPrnVATCaption
+00600A	Node Creation Allowed	NodeCreationAllowed
+00600B	Node Wise Numbering Allowed	NodeWiseNumAllowed
+00600C	Maintain Node-wise Devices In Billing	NodewiseDevices
+00600D	Node ID Role In Bill	NodeIDRoleInBill
+00600E	Node ID Role In Void Bill	NodeIDRoleInVoidBill
+00600F	Node ID Role In Return	NodeIDRoleInReturn
+00600G	Node ID Role In Void Return	NodeIDRoleInVoidRtn
+00600H	Node ID Role In Cash	NodeIDRoleInCash
+00600I	Node ID Role in Goods Inwards	NodeIDRoleInGIR
+00600J	Node ID Role In GOR	NodeIDRoleInGOR
+00600K	Node ID Role In Physical Stock	NodeIDRoleInPhyStk
+00600L	Node ID Role In Other Transactions	NodeIDRoleInOthers
+00700A	Payin Slip Caption	PayInSlipCaption
+00700B	Bank where Cheque is deposited	DepositBank
+00700C	Bank Address Line 1 (where Cheque is deposited)	DepositBankAddLine1
+00700D	Bank Address Line 2 (where Cheque is deposited)	DepositBankAddLine2
+00700E	Bank Address Line 3 (where Cheque is deposited)	DepositBankAddLine3
+00700F	Franchisee Name	FranName
+00700G	Card PIF Number	CardPIFNumber
+00700H	Cash PIF Number	CashPIFNumber
+00700I	Franchisee Code	FranchiseeCode
+00700J	Head Office Name	HoName
+00700K	Minimum days For Cash Overdue	CashMinDaysForOverDue
+00700L	Minimum days For Credit Overdue	CreditMinDaysForOverDue
+00700M	Interest Rate For Card Overdue	OverdueCreditInterestRate
+00700N	Interest Rate For Cash Overdue	OverdueCashInterestRate
+00700O	Card Overdue Balance	CreditOverdueBal
+00700P	Cash Overdue Balance	CashOverdueBal
+00700Q	Reduce From Cash Or Card A/c	CashOrCreditRtn
+00700R	Financial Year	FiscalYear
+00700S	Turn Over Tax Rate	TOTRate
+00700T	Calculation Of Sales Commission Report-Value computation for TOT	TOTValueSelection
+00800A	Stock No. Barcode Stripping Required in Billing	BarCodeStrip
+00800B	Stripping from Left Side of Stock No./ Barcode	StrippingLeftOrRight
+00800C	Stock No. Length in Barcode	StockNoLength
+00800D	Stripping Length in Barcode	StrippingLength
+00800E	StockNo Decoding Option	StockNoDecodingOption
+00800F	Default SKU Decoding (Padding) Rule	DefaultSKUDecodeRule
+00800G	Style Decoding Option	StyleDecodingOption
+00800H	Default Style Decoding (Padding) Rule	DefaultStyleDecodeRule
+00900A	Customer Display Type	CustDisplayType
+00900B	Cash Draw Present	CashDrawPresent
+01000A	Activate PO Suggested Order	PO_suggested_order
+01000B	Method followed for Demand Projection  In Suggested Order	PO_method_for_demand_Proj
+01000C	Time units for computing projection  In Suggested Order	PO_demand_proj_time_unit
+01000D	Number of units for computing projection in Suggested Order	PO_demand_proj_time_count
+01000E	Time units for computing average sale  In Suggested Order	PO_avg_sale_time_unit
+01000F	Number of units for computing average sale in Suggested Order	PO_avg_sale_time_count
+01000G	Maximum Stock Carrying value type in Suggested Order	PO_max_stock_val_type
+01000H	Maximum Stock Carrying value in Suggested Order	PO_max_stock_val_amt
+01100A	Expected Transaction Titles	EXPTTRNTITLE
+01100B	Min Lines For Expected Transaction Print	MinLinesForExptTrn
+01100C	Print Expected Transaction Header	PrintExptTrnHdr
+01100D	Print Expected Transaction Details	PrintExptTrnDtls
+01100E	Print Expected Transaction Footer	PrintExptTrnFtr
+01100F	Header Details Accepted in Expected Transactions	ACCEPTEDHDRDTLSINET
+01100G	Item Details Accepted in Expected Transactions	ACCEPTEDITEMDTLSINET
+01100H	Check Stock On Item Selection In Expected Transactions	ITEMSTOCKCHECKINET
+01100J	Expected Transaction Printing On	SlipPrintingOnOff
+01100K	Expected Transaction Form Length	ETFormLength
+01100L	Allow Re-print of Cancelled Expected Transactions	AllowReprintForCancelledET
+01100M	Print Expected Transaction Item Details	PrintExptTrnItemDtls
+01200A1	Display Column Headings 1 (0 to 20)	DispColHeading1
+01200A2	Display Column Headings 2 (21 to 40)	DispColHeading2
+01200A3	Display Column Headings 2 (41 to 45)	DispColHeading3
+01200B	Display Column Visible	DispColVisible
+01200C	Display Column Position	DispColPosition
+01200D	Display Column Data Type	DispColDataType
+01200E	Display Column Width	DispColWidth
+01200F	Display Column Align	DispColAlign
+01200G	Total Columns/Display Columns For Display	TotalColDispColForDisplay
+01300A1	Accept Column Headings 1 (0 to 20)	AccpColHeading1
+01300A2	Accept Column Headings 2 (21 to 40)	AccpColHeading2
+01300A3	Accept Column Headings 2 (41 to 44)	AccpColHeading3
+01300B	Accept Column Visible	AccpColVisible
+01300C	Accept Column Position	AccpColPosition
+01300D	Accept Column Data Type	AccpColDataType
+01300E	Accept Column Width	AccpColWidth
+01300F	Accept Column Align	AccpColAlign
+01300G	Total Columns/Accept Columns For Accept	TotalColAcptColForAccept
+02000A	Printer Device Name Setting Required	PrnDeviceNmSetting
+02000B	Printer Device Port (COM Port)	PrnDevicePortNm
+02000C	Printer Device Port Band	PrnDevicePortBand
+02001A	Printer Normal	PrnEscNormal
+02001B	Printer Compressed	PrnEscCompressed
+02001C	Printer Double Width	PrnEscDoubleWidth
+02001D	Printer Normal Emphazised	PrnEscNormalEmp
+02001E	Printer Compressed Emphazised	PrnEscCompressedEmp
+02001F	Printer Double Width Emphazised	PrnEscDoubleWidthEmp
+02002A	Printer Normal For IBM POS Machines	PrnEscNormal#DeviceId
+02002B	Printer Compressed For IBM POS Machines	PrnEscCompressed#DeviceId
+02002C	Printer Double Width For IBM POS Machines	PrnEscDoubleWidth#DeviceId
+02002D	Printer Normal Emphazised For IBM POS Machines	PrnEscNormalEmp#DeviceId
+02002E	Printer Compressed Emphazised For IBM POS Machines	PrnEscCompressedEmp#DeviceId
+02002F	Printer Double Width Emphazised For IBM POS Machines	PrnEscDoubleWidthEmp#DeviceId
+12346	Whether to Print Party Stk Doc No as Invoice or DC	WhetherPrintPartyStkDocNoasInvoiceorDC
+800001	ID file - Value Computation for Sales Fields	IDValueSelection
+800002	Franchisee - Credit Card Sales Return Handling	FrnchCreditReturn
+800003	Local Application Path	LocalAppDcPath
+800004	Mail Id Of The Sender	FromMailId
+800005	Store And Floor DB Names	StoreFloorDbNms
+800008	Overwrite Loaded PO Details	POImportAllowOverWrite
+800009	Activate Stock No Browse in All PO fields	ActivateStkBrowseInPO
+800010	Allow Customer Insertions on the Fly in Billing	CustomerInsertionsOnTheFly
+800011	Permitted Operations for Customer Catalogue	OperationsAllowedInCustCat
+800012A	Walk-in - Time Display Format	WalkInTimeDisplayFormat
+800012B	Walk-in - Interval	WalkInInterval
+800012C	Walk-in - Allow Internal to Edit	WalkInAllowInternalToEdit
+800012D	Walk-in - Start Time	WalkInStartTime
+800012E	Walk-in - End Time	WalkInEndTime
+800012F	Walk-in - Allow To Edit Date	WalkInAllowDtEdit
+800012G	Display Percentage of Sales In Daily Sales Report	PercentageOfSale
+800013	Default Setting for Sales Man Selection in Billing	ActivateItemwiseSalesman
+800014	ID/IM File - SKU Formation	IDIMSkuFormation
+800015A	WEB Server Settings	WebServerSettings1
+800015B	Web Server Settings for Download File	WebServerSettings2
+800016A	Number of Report Header Lines to be Printed	RPTPgHdrPrintLines
+800017A	Report Header Line#1	RPTPgHdr1
+800017B	Report Header Line#2	RPTPgHdr2
+800017C	Report Header Line#3	RPTPgHdr3
+800017D	Report Header Line#4	RPTPgHdr4
+800017E	Report Header Line#5	RPTPgHdr5
+800017F	Report Header Line#6	RPTPgHdr6
+800018A	Font Details of Report Header Line#1	RPTPgHdr1Font
+800018B	Font Details of Report Header Line#2	RPTPgHdr2Font
+800018C	Font Details of Report Header Line#3	RPTPgHdr3Font
+800018D	Font Details of Report Header Line#4	RPTPgHdr4Font
+800018E	Font Details of Report Header Line#5	RPTPgHdr5Font
+800018F	Font Details of Report Header Line#6	RPTPgHdr6Font
+800019A	Font Details of Report Header Line#7	RPTPgHdr7Font
+800019B	Font Details of PageNo,PrintDate,ShoperDate	RPTPgHdr8Font
+800020A	Print Report Generation Date	RPTPrintDates
+800021	General Discount Reason Configuration in Billing	GenDiscReasonOpt
+800022	General Discount Activation Option(s) And  Value Type(s) In Billing	GenDiscActOptAndValType
+800022A	Customer Mandatory in Cash Payouts / Receipts	DispCustomerFldCashRcptsPayouts
+800023	Discount Configuration in Billing	ShowAllDiscounts
+800024	Pricing Master Import/Export Key Match	PMKeyMatch
+800025	Auto Price Revision Update	AutoPriceRevisionUpdate
+800026	In PO Details Report Which Qty Fields To Show	InPORptWhichQtyFldsToShow
+800027	Accepting Customer In Expected Tranactions	AcceptCustInReCall
+800028	Print Expected Transactions in Condensed Mode	PrintReCallTrnInCondensedMode
+800029	Print Discount Percentage and Amount In Header	PrintDiscPercAndAmt
+800030	Print Raymond Shop Number	PrintRaymondShopNo
+800031	Apply LSQ For Line Item Calculation In Billing	ApplyLSQForLineItemCal
+800031A	Print Classification Code/ Description in Qlty Field	PrintClassificationCodeDescInQltyFld
+800032	Calculate General Discount on Specified Value Rather Than Bill Value	ApplyGenDiscOnSpfdVal
+800033	Number of Blank Lines to be Printed at End of Slip Printing	NoOfBlankLinesInSlips
+800034	Num Of Records Reserved For Last Piece Disc(Item Spc Disc) In SF Table	MaxRecForLPDInSFTable
+800036	Year Opening Date	YOPDate
+800037	Promt Error Message In Billing Updation	PromtErrMsgInBillingUpd
+800037A	Whether Computed Cost to be Edited in Pricing Master	WhetherCompCostEditPricingMaster
+800038	Default Payment Mode in Billing (Payment Details Frame)	DefaultPayModeInBilling
+800039	Show Expected Transaction Title in Report	ShowExptTrnTitleReport
+800040	Whether to Display Sales Person Code or Job Worker Code	WhetherDisplaySalePersonCdOrTailorCd
+800041	Selective Updation of Price Revision	SelectiveUpdatePriceRevision
+800042	Print Small Credit Note In Any Stationery	PrintSmallCreditNote
+800043	Goods Outwards Audit Trail Footer Details	GORAuditTrailFooterDtls
+900000	Week Starting Information	WeekStartDate
+B45-0601-0000144	Include All Receipt Reasons	IncludeAllRcptReasons
+B61-0700-0000122	Print Discount Percentage/Amount And VAT Details	PrnDiscPercAmtAndVATDetails
+B64-0601-0000005	Luxury Tax Calculation	LuxuryTaxCalculation
+B64-0601-0000028	Vendor Type for Luxury Tax Report	VendorTypeLuxTaxReport
+SR1-0601-0000001	Expected Transaction Header Details Mandatory	ETHDRDTLSCOMPULSARY
+SR1-0601-0000002	Expected Transaction Item Details Mandatory	ETITEMDTLSCOMPULSARY
+SR1-0601-0000025	Print In Compressed Mode For POS40 Column	PrintCompressedModePOS40Column
+SR1-0601-0000027	Service Bill Caption to be Printed	PrintServiceCaptionInBill
+SR1-0602-0000012	Show Item Browse Automatically For Matching Stock Nos (Based On Starting Chars Entered)	SKUExtdMatchMethod
+SR1-0602-0000014	Search Item Price Factors For Stock No/Item Classification In Billing	SearchRetailPriceCutForSKU
+SR1-0602-0000017	Sales Man Selection Mandatory in Billing	SMSelectionCompulsary
+SR1-0602-0000021	Default Item Entry Mode in Billing (SKU Wise Or Style,Shade and Size Wise)	DefaultEntryModeInBilling
+SR1-0602-0000040	Cut-off Price (MRP) of Item to be Blocked from Billing	CutOffPriceOfItemToBlockBilling
+SR1-0602-0000043	Sales Factor Id Used For Quantity Wise Discount Which Can Be Used For Item Spc. Discounts In Billing	QtyDiscIdUsedInBilling
+SR1-0602-0000067	Item Details To be Shown In Billing Status Bar	ItemDtlsToShowInStatusBar
+SR1-0602-0000078	Bill Printing in Goods Outwards Transaction	BillPrintGORTransaction
+SR1-0602-0000079	Print Bill Type as Cash or Reason Code in Goods Outwards	PrnBillTypeCashOrRsnCdGOR
+SR1-0602-0000096	Default Search For Item Specific Discounts In Billing	SearchItemSpcDiscounts
+SR1-0602-0000102	Delivery Challan Printing Type	DCPrintingType
+SR1-0602-0000103	Print SKU Wise or Item Wise	PrnSKUORItemWise
+SR1-0602-0000104	Re-Calculate for Sales Tax in Bill Printing	ReCalculateSalesTaxBillPrinting
+SR1-0603-0000086	Customer Selection Mandatory in Billing	InBillingCustSelectionCompulsary
+SR1-0603-0000087	Additional Transactions Considered For Stock Check Along With Stock Master In Billing/Slips	InBillingTrnsConsideredForStockCheck
+SR1-0603-0000113	Whether DC to Print from Invoice	WhetherDCToPrintFromInvoice
+SR1-0603-0000114	Whether DC to Print in Compressed Mode	WhetherDcToPrintCompressedMode
+SR1-0603-0000115	Caption to Print in Distributor	CaptionPrintDistributor
+SR1-0603-0000118	Component Caption to Print in Distributor	CompCaptionPrintDistributor
+SR1-0700-0000123	Print Customer Address Remarks and Discount in Bill	PrintDiscCustAddrRmksInPOS
+SR1-0701-0000125	Printing Template Folder	PrintingTemplateFolder
+SR1-0701-0000126	Default Printing Template File Path	PrintingTemplateDefault
+SR1-0701-0000127	Default Printing Control File Path	PrintingTemplateControl
+SR1-0701-0000128	Default Printing Conditional File Path	PrintingTemplateCondition
+SR1-0701-0000129	Multiple Printing templates Active	PrintingMultipleTemplateActive
+SR1-0701-0000130	Temporary folder to write all temp files during generalized printing	GetTmpFilePath
+SR1-0701-0000131	No of Copies to be Printed	NoOfCopies
+SR1-0701-0000134	Whether to Print Credit Note in Same Page or Not	WhetherPrintCreditNoteSamePageNot
+SR1-0701-0000143	Location Of The ConfigFile.INI Used In Bill Printing	ConfigPathFile
+SR1-0702-0000001	Auto generate Bill Suspension Number	BillSuspensionDocNoGenOrAccepted
+SR1-0702-0000002	Print Bill Suspension	PrintBillSuspension
+SR1-0702-0000158	DC Print based on Class1/Class2 or SubClass1/SubClass2	DCPrintOnC1C2OrSC1SC2
+SR1-0702-0000159	Bill Prefix Definition Setting	BillPrefixDefSetting
+SR1-0702-0000163	Cash Receipt/ Payout Printing Mode	CashRcptPayoutBillFormType
+SR1-0702-0000166	Tolerance for Tax Rate in Inward and Outward	ToleranceTaxRate
+SR1-0702-0000167	Print Preview	PrintPreview
+SR1-0702-0000171	Use Common Prefix for Billing Across All Terminals 	CommonPrefixusedAcrossAllterminals
+SR1-0702-0000172	Item Level Net Amt Calculation Requried	ItemLvlNetAmtCalcReq
+SR1-0702-0000173	Validation for the Expected Transaction Customer	ValidateETCustomer
+SR1-0702-0000174	Validation for the Advance Receipt Customer	ValidateAdvRecpCustomer
+SR1-0730-0000181	Validate Quantity and Rate Range in Goods Inwards	ValidateQtyAndRateRangeInGIR
+SR1-0730-0000182	Validate Quantity and Rate Range in Goods Outwards	ValidateQtyAndRateRangeInGOR
+SR1-0730-0000183	Validate Quantity and Rate Range In Billing	ValidateQtyAndRateRangeInBilling
+SR1-0730-0000274	Auto Selection of Discount Code During Item Entry	Autoselectionofdiscountcode
+SR1-0730-0000286	Allow reactivation of slips from cancelled bills	AllowReactivationOfSlips
+SR1-0730-0000287	Allow deletion of items from recalled documents	AllowDeletionOfItemsFromRecalledDocuments
+SR1-0901-0000297	DC Printing in Graphic Printer	DCPrintingInGraphicPrinter
+SR1-0901-0000303	Apply Bill Level Discount first	FirstCalculateBillLvlDisc
+SR1-0901-0000312	Allow rate Alteration in service billing	AllowRateAlterInServiceBill
+SR1-0901-0000315	Expected Transaction-Slip Printing Type	ExpTrnSlipPrintingType
+SR1-0901-0000323	DC-Print Header In All Pages	DCPrintHeaderInAllPages
+SR2-0600-0000003	Report Name Of The Style Code Delimiter Concept And Key Word Used	StyleCdDelimtRptName
+SR2-0600-0000004	Common Style Code Delimiter Indicator Position For All Product Brand Combination	CmnStylDelimIndPos
+SR2-0700-0000124	Whether Create TT File For Distributor Or Retail	WhetherCreateTTFileDistributorOrRetail
+SR2-0702-0000152	List of Payment Mode Including Franchise Transactions	ListPaymentModeIncludingFranchiseTransaction
+SR3-0600-0000020	Caption for Add-ons/ Deductions	CaptionForAddonsDedns
+SR3-0600-0000029	PT File Loading From Shoper In-Path	PTFileLoadingFromShoperINPath
+SR3-0602-0000046	Whether PT File With Delimeter or Not	WhetherPTFileWithDelimeterorNot
+SR3-0602-0000047	Display PT File Delimeter	DisplayPTFileDelimeter
+SR3-0602-0000048	Whether PT File Details Taken From Browse or Not	WhetherPTFileDetailsFromBrowseorNot
+SR3-0602-0000049	Default Grade Code to be Updated	DefaultGradeCdUpdated
+SR3-0602-0000050	Source Tax Type in Inwards	SrcTaxTypeInInwards
+SR3-0602-0000051	Valid Transactions in Physical Verification	ValidTrnInPhysicalVerification
+SR3-0602-0000052	Apply LSQ in Physical Verification	ApplyLSQinPhysicalVerification
+SR3-0602-0000053	Club duplicated items in Physical Verification	ClubDuplicateInPhysicalVerification
+SR3-0602-0000069	Retail Price Alteration in Goods Inwards	RetailPriceAlterationInGIR
+SR3-0602-0000081	Tolerance Factor In Goods Inwards	ToleranceFactorGIR
+SR3-0602-0000082	Whether to Display Stock Discrepancy Report in Goods Inwards	DispStkDisprecancyReportInGIR
+SR3-0602-0000083	Reason Code Applicable In Goods Outwards	ReasonCdApplicabilityInGOR
+SR3-0602-0000088	Display Computed Stock While Stock Recording	CompStkForPhyStkRecord
+SR3-0602-0000089	Display Retail Price & Current Cost	DispMRPCurrCostForPhyStkRecord
+SR3-0602-0000090	Physical Stock Taking Commence Status	PhyStkTakingCommenceStatus
+SR3-0602-0000091	Physical Stock Taking Scope	PhyStkTakingScope
+SR3-0602-0000092	Physical Stock Taking Process	PhyStkTakingProcess
+SR3-0602-0000093	Physical Stock Taking Scope ID	PhyStkTakingScopeID
+SR3-0602-0000094	Display Column Details in Physical Verification	DispDtlsInPhysicalVerification
+SR3-0602-0000100	Whether to Create PT File Based On Invoice or DC	WhetherPTFileBasedOnInvoiceorDC
+SR3-0602-0000106	Editing Goods Inwards Document after Day Close	EditGIRDocumentAfterDayClose
+SR3-0602-0000107	Disable PT File Loading in Goods Inwards	AllowPTFileLoadingInGIR
+SR3-0602-0000108	DC Number Validation Present	DCNoValidationPresent
+SR3-0602-0000109	Print DC Detail in Goods Outwards	PrintDCDtlsinGOR
+SR3-0602-0000110	Import Goods Inwards into Goods Outwards	ImportGIRIntoGOR
+SR3-0700-0000116	Goods Outwards Printing Type	GORPrintingType
+SR3-0700-0000117	Goods Inwards Printing Type	GIRPrintingType
+SR3-0700-0000119	Whether VAT Invoice or Not in GIR/GOR	WhetherVATInvoiceorNotinGIRGOR
+SR3-0700-0000121	Accept Column for VAT Details in GIR/GOR	AcceptColVATDetailsinGIRGOR
+SR3-0701-0000131	Rate To Display in Goods Outward - Transfer Out	RateDisplayedInTransferOut
+SR3-0701-0000132	Flat File Creation based on PartyId or Company Code	FlatFileCreationBasedPartyIdorCompCd
+SR3-0701-0000138	Load PT File Into Other File Option	LoadPTFileIntoOtherOption
+SR3-0701-0000141	Allow PDT File Loading in Goods Inwards/Goods Outwards/Physical Verification	AllowPDTFileLoading
+SR3-0730-0000223	Purchase Order Stockno,class1cd,class2cd,subclass1cd,subclass2cd,sizecd to Print	POSKUformatatrributeprint
+SR3-0730-0000224	Purchase Order Mode of Printing ( 0 inkjet ,1 means dot matrix)	POprintmode
+SR3-0730-0000225	PO/Indent SKU Rate ( 1 Retail Price, 2 Dealer Price, 3 Current Cost, 4 Last Purchase Price)	SKUPORateFlag
+SR3-0730-0000247	Delete Suspension Details as Part of Day-Begin Process	DelSuspensionInDayBegin
+SR3-0730-0000267	Allow PO/Indent Configuration	AllowPOConfig
+SR3-0730-0000277	Company Code which has to be recorded in the PT file(s) created.	CompanyCodeforFlatFile
+SR3-0730-0000278	Company name which has to be recorded in the PT file(s) created.	CompanyNameforFlatFile
+SR3-0730-0000281	Allow Rate Alteration in PO/Indent Conversion	POtoSOConvRateAlter
+SR3-0730-0000283	Allow Dealer Price Zero during Pricing Master Import	AllowDealerPriceZeroPMImport
+SR3-0730-0000288	PO print margin specification for Laser/inkjet print	POprintmarginGUI
+SR3-0730-0000289	Show all pending POs for the selected party in PO browse	ShowAllPendingPosInPOBrowse
+SR3-0901-0000299	Purchase Order or Indent is mandatory in Goods Inwards	PurchaseOrderMandatoryInGIR
+SR3-0901-0000314	Print Audit Trail Title  in Goods Inwards	PrnAuditTrailTitleInGIR
+SR4-0601-0000026	Report Page Length (in Lines)	RPTPrintPageLength
+SR4-0601-0000029	Compute Stock Closing Balance on Retail Price / Cost Price	ClsStkValOnMRPCP
+SR4-0602-0000022	Show Cash And Card Details In Sales Summary Report	ShowCashAndCardDtlsInSalesSumm
+SR4-0602-0000023	Show % Of Sales In Daily Sales Book	ShowPerOfSalesInDailySalesBook
+SR4-0602-0000024	Credit Cards Commisionwise Breakup Required In Counterwise Summary ?	CCCommwiseBreakupReq
+SR4-0602-0000058	Transcation Types to be used for Stock Ageing Inwards	StkAgingInwardsTrnTypes
+SR4-0602-0000059	Transaction Types to be used for Stock Ageing Outwards	StkAgingOutwardsTrnTypes
+SR4-0602-0000060	Transaction Types to be used for Sales Ageing	StkAgingSalesTrnTypes
+SR4-0602-0000061	Continuation Delimiter Used in Printing Label	LabelPrintContdDelimiter
+SR4-0602-0000063	Customer Label Print Configuration	FieldsPrintCustomerLabel
+SR4-0602-0000095	Display the Current Stock in Attribute Wise Sale Report	DispCurBalQtyinAttrWiseSalesRep
+SR4-0702-0000185	Cost Price Inclusive of Tax	GIRIncTaxForCP
+SR4-0702-0000186	Select Price to be displayed in Rate field for Purchase (Cost / Last Purchase Price)	DispCPOrLPPInRateFieldForPurchase
+SR4-0702-0000187	Mode of Sales Promotion Applicability in Billing	ModeOfSPAppInBilling
+SR4-0730-0000184	List Of Prefixes Blocked In Sales Promotion Catalogue	ListOfPfxsBlockedInSPCat
+SR4-0730-0000276	Auto Generate Sales Promotion Code	AutoGenSalesPromoCode
+SR4-0730-0000290	Item Description for Style Catalogue	ItemDescSubClass1Cat
+SR4-0904-0000001	If Price Revisions Are Applicable, Activate Immediately	PriceRevisionAppRules
+SR4-6000-0000008	Whether Sale Tax Percentage depend upon Parameter or SaleTax Catalog	BasedOnParameterorSaleTaxCatalog
+SR4-6000-0000009	Sales Tax Percentage For Audit Report(Arvind-VIIB)	SalesTaxPercentageAuditReport
+SR4-6000-0000054	List Of Class2Cds which belongs to Gift Voucher Report	GetGVRClass2Cds
+SR4-9111-0000333	Catalogue – For Item Level Fixed Discounts/Offers – Default behaviour for Lowest/Highest Priced Item	LowestHighestPricedItem
+SR5-0600-0000010	AST Export Based On Date Or VaCtr	ASTExportBasedOnDateOrVactr
+SR5-0600-0000013	Sleep Timer Set For AST Import	ASTImportSetSleepTimer
+SR5-0600-0000018	Export Entire StockTrnSummary For IM	ExportEntireStkTrnSummaryForIM
+SR5-0600-0000019	Update Patch Date & Release Number	UpdtPatchDtReleaseNo
+SR5-0601-0000006	IM Flat File Creation Date	IMFileCreationDate
+SR5-0601-0000007	Check IM File Date Updated In IM File Or Send Flat File To Ho	CheckIMFileToUpdated
+SR5-0601-0000011	During IM-ID File Creation Skipped Record or Default Record	CheckIMFileSkippedOrDefaultRecord
+SR5-0601-0000016	Tally Accounting Interface Generation Number	TallyInterfaceGenerationNumber
+SR5-0602-0000017	Walk-in - Extended Information	WalkinExtendedInformation
+SR5-0602-0000041	Update Tax Automatically in Pricing Master Import	PMImportAutoTaxUpdation
+SR5-0602-0000042	Franchisee Checks During Day End	FranchCheckForDayEnd
+SR5-0602-0000044	Allow Day Open Date	AllowDayOpenDate
+SR5-0602-0000045	Allow POS Payment Modes Modification Date For Other Dates	AllPOSPaymentModeModifyForOthDates
+SR5-0602-0000065	Year Ending Month	YearEndMonthNo
+SR5-0602-0000066	Update Sysparam and Genlookup Counter During Day End	UpdateSysparamGenlookupCtrDayEnd
+SR5-0602-0000070	Print Details of Customer Label Line#1	CustLblLine1Font
+SR5-0602-0000071	Print Details of Customer Label Line#2	CustLblLine2Font
+SR5-0602-0000072	Print Details of Customer Label Line#3	CustLblLine3Font
+SR5-0602-0000073	Print Details of Customer Label Line#4	CustLblLine4Font
+SR5-0602-0000074	Print Details of Customer Label Line#5	CustLblLine5Font
+SR5-0602-0000075	Print Details of Customer Label Line#6	CustLblLine6Font
+SR5-0602-0000076	Print Details of Customer Label Line#7	CustLblLine7Font
+SR5-0602-0000077	Print Details of Customer Label Line#8	CustLblLine8Font
+SR5-0602-0000084	Franchisee Checks Applicable During Day End	FranchCheckApplicableInDayEnd
+SR5-0602-0000101	Option For Conversion Of Sale DC To Approval DC In Day End	SalesDcConvGraceDays
+SR5-0602-0000105	Additional Columns Exist for General Price Revision	AddlColsExistForGenPriceRev
+SR5-0602-0000111	Validate Against MOP Vs Current Stock Qty	ValidateMOPVsCurrentStkQty
+SR5-0701-0000130	Flat File Creation in App Path Out or DBOut Directory	FlatFileCreationAppPathOutShareDir
+SR5-0701-0000133	Whether to display Customer Code or Name in Tally	WhetherCdOrNameinTally
+SR5-0701-0000135	Convert Negative Stock to Misc. Receipt	ConvertNegStkToMiscRcpt
+SR5-0701-0000136	Whether to display Alias for Account Name in Tally	WhetherAliasOrNotInTally
+SR5-0701-0000137	PM Import and GIR - Update TAX automatically	DefaultTaxInclusiveUpdateInPMGIR
+SR5-0701-0000139	Tolerance Factor In Day Begin for Qty And Value	ToleranceFactorDayBeginQtyValue
+SR5-0701-0000140	Enable Common PT File Creation	CommonPTFileCreationEnabled
+SR5-0702-0000145	AST Export Path	ASTExportPath
+SR5-0702-0000146	AST Import Path	ASTImportPath
+SR5-0702-0000147	AST BackUp Path	ASTBackUpPath
+SR5-0702-0000148	AST DSN Name	ASTDSNName
+SR5-0702-0000149	Tables to be excluded during export to replication1	TempTableToSkipFromAST1
+SR5-0702-0000150	Tables to be excluded during export to replication2	TempTableToSkipFromAST2
+SR5-0702-0000153	Tally IP Address	TallyIPAddress
+SR5-0702-0000154	Tally Company Name	TallyCompanyName
+SR5-0702-0000155	Tally Port No	TallyPortNo
+SR5-0702-0000156	Option to Export Sales Transaction to Tally	OptionExportSalesTransTally
+SR5-0702-0000157	Actual Quantity in Flat File Creation	MoveActualQtyInFlatFile
+SR5-0702-0000160	FTP Remote Path For Uploading the Files	FFileFTPREMOTESENDPATH
+SR5-0702-0000161	FTP IS Passive mode	FFileFTPPASSIVEMODE
+SR5-0702-0000164	Flat File Party Code Based on Franchise Code	InFlatFilePartyCdBasedOnFranchCdOrCompCd
+SR5-0702-0000168	Export Entire Stock Transaction Summary in Day End Process	ExportEntireStkTrnSummaryForDayEnd
+SR5-0702-0000170	No. of Days Backup to be Preserved	NoOfDaysBackupToBePreserved
+SR5-0730-0000188	Print To Address in  Goods Inwards	PrintToAddressGIR
+SR5-0730-0000189	Loading / Storing Path for Barcode Design Templates	PathBarcodeDesignTemplates
+SR5-0730-0000190	Display Actual Quantity and Doc Quantity for PO Pre-fill	DispActQtyDocQtyForPOPrefill
+SR5-0730-0000191	Split Quantity If Actual Qty is More than PO Qty	SplitActQtyIfMoreThanPOQty
+SR5-0730-0000192	Auto Pre-fill PO details in Goods Inwards (Only for POs based on stock number)	PrefillPODetailsInGIR
+SR5-0730-0000193	Re Open PO when GIR Document Edited or Deleted If PO is Closed	ReOpenPOWhenGIREditOrDelete
+SR5-0730-0000194	Validate Flat File PO Ref. with POS PO Ref.	ValidateFlatFilePORefInGIR
+SR5-0730-0000195	Validate Data during Pricing Master Import	ValidateDataDuringPMImport
+SR5-0730-0000226	Running No for Data Extract Transaction File	RunNoDataExtract
+SR5-0730-0000227	Wait Time for Data Extraction Before Data Polling	ExtractDataWaitTime
+SR5-0730-0000228	Flat File thru On Line	SendFFThruOnLine
+SR5-0730-0000229	Server Name for On Line Data Sync	FFileOnLineServer
+SR5-0730-0000230	Subject Line for POS generated Mails to HO	FFileMailSubjectHO
+SR5-0730-0000231	Subject Line of Mails to be Downloaded at POS	FFileMailSubjectPOS
+SR5-0730-0000232	Subject Line of Mail Acknowledgement From HO	FFileMailAckSubjectHO
+SR5-0730-0000233	Message for Mail From HO	FFileMessageHO
+SR5-0730-0000234	Message for Mail From POS	FFileMessagePOS
+SR5-0730-0000235	Message for Mail Ack From HO	FFileMessageAckHO
+SR5-0730-0000236	File Type for Downloading at HO	FFileTypeDownHO
+SR5-0730-0000237	File Type for Downloading at POS	FFileTypeDownPOS
+SR5-0730-0000238	Stock Visibility Browse Description String Formation - 1	SVBrowseDescString1
+SR5-0730-0000239	Stock Visibility Browse Description String Formation - 2	SVBrowseDescString2
+SR5-0730-0000240	Display Current Quantity in Stock Visibility Browse	SVDisplayCurQtyInBrowse
+SR5-0730-0000241	Maximum Rows in Stock Visibility Browse	SVBrowseMaxRows
+SR5-0730-0000242	Default Sorting Order in Stock Visibility Browse	SVDefaultSortingOrderFieldInIB
+SR5-0730-0000243	Code And Desc Order For Classfn Fields Displayed in Stock Visibility Browse	SVShowCodeAndDescOrderInIB
+SR5-0730-0000244	Delimiter Character for Code and Description Display in Stock Visibility Browse	SVDelimitCharForCodeDescInIB
+SR5-0730-0000245	Default Searching Field(CodeOrDesc) in Stock Visibility Browse	SVDefaultSearchFldInClassiBrowse
+SR5-0730-0000246	Additional Tables to be Included During Sync.	AdlTablesToSync
+SR5-0730-0000248	Connection Time Out in Seconds	ConnectionTimeOut
+SR5-0730-0000249	Command Time Out in Seconds	CommandTimeOut
+SR5-0730-0000250	Database Version	DBVersion
+SR5-0730-0000251	TCP Version	TCPVersion
+SR5-0730-0000252	Purchase Order Printint format	POPrintFormat
+SR5-0730-0000253	Upload Folder for FTP	FFileFTPUpFolder
+SR5-0730-0000254	Download Folder for FTP	FFileFTPDownFolder
+SR5-0730-0000255	DialUp Check for FTP	FFileFTPDialUpCheck
+SR5-0730-0000256	Upload Folder for Direct Copy	FFileDCopyUpFolder
+SR5-0730-0000257	Download Folder for Direct Copy	FFileDCopyDownFolder
+SR5-0730-0000258	HO Email Id	FFileEmailId
+SR5-0730-0000259	File Type for HO	FFileTypeHO
+SR5-0730-0000260	File Type for POS	FFileTypePOS
+SR5-0730-0000261	Subject for Resync Request From HO	FFileMailResyncSubjectHO
+SR5-0730-0000262	Message for Resync Request From HO	FFileMessageResyncHO
+SR5-0730-0000263	Shoper Temporary Backup Path	BackupPath
+SR5-0730-0000264	Default Size Group Id	DefaultSizeGroupId
+SR5-0730-0000265	Free Items Mandatory in Billing	ValidateFreeItemsInBill
+SR5-0730-0000266	Free Items Billed at Value	FreeItemsBillAt
+SR5-0730-0000267	Number of digits to be Stored in credit card number	NoDigitStoredinCreditCardNo
+SR5-0730-0000268	Print Audit Trail Title  in Goods Outwards	PrnAuditTrailTitleInGOR
+SR5-0730-0000269	Print Tax Component Name and Description In VAT Summary	PrintTaxComponentNmDescInVATSummary
+SR5-0730-0000270	File Upload/download Retrying times	Fileuploaddownloadretrytimes
+SR5-0730-0000271	File Upload/download Retrying Delay interval seconds	Fileuploaddownloadretryinterval
+SR5-0730-0000272	Print Tax Type Description in VAT Summary	PrintTaxTypeDescInVATSummary
+SR5-0730-0000273	Allow SKU Rate Alteration in PO/Indent	SKUPORateAlter
+SR5-0730-0000275	Automatic Retain only Last n months for Data Archival	AutomaticRetainOnlyLastNMonthDataArchival
+SR5-0730-0000279	Extended Data Input Mode	ExtendedDataInputMode
+SR5-0730-0000280	Apply PO Rate with PO Reference in Inwards	ApplyPORateWithPORefInGIR
+SR5-0730-0000282	Extraction Zip file split size specification in KB	Extractzipsplitsize
+SR5-0730-0000285	DBVersion to be updated for POS Transactions	DBVersionUpdtInPOS
+SR5-0730-0000291	Shoper Live Update Backup Parameter	LUBackupParam
+SR5-0901-0000298	Path to move file after processing	ProcessedFilePath
+SR5-0901-0000300	DISPLAY NET AVALIABLE QUANTITY IN ITEM BROWSE FOR BILLING	DISPLAYNETQTYINBROWSE
+SR5-0901-0000302	Post Cost Center information to tally	PostCCToTally
+SR5-0901-0000310	Create detailed log file in tally mapping	TallyLogType
+SR6-0601-0000015	Customer Code Generation Format	CustomerCdGenerationFormat
+SR6-0601-0000017	Cut-Off Quantity For Excess Stock Handling	ExcStkHandlingCutOffQty
+SR6-0601-0000018	Conversion Factor For Excess Stock Handling	ExcStkConvFactor
+SR6-0601-0000019	Print Counter Summary Report	PrintCounterSummRpt
+SR6-0602-0000055	Display SubClass1 and SubClass2 Description in Item Master Entry	DispSubClass12Desc
+SR6-0602-0000056	Configure Display of Analysis Code in Item Master Entry	DispCodeDescOrBothForAnalCode
+SR6-0602-0000057	Display Common Field in top or Spread  in Item Master Entry	DispCommonFldTopOrSpread
+SR6-0602-0000062	Activate the Multiple Selection in Customer Browse	ActivateMulSelectCustomerBrowse
+SR6-0602-0000064	Order By Class Code for Goods Register	OrderByC2C1ForGoodsReg
+SR6-0602-0000068	Accept Document Remarks in Bill	AcceptDocRemarksInBilling
+SR6-0602-0000080	Image Applicable at Style or SKU level	PMImageHeirarchyLevel
+SR6-0602-0000112	StockNo used for Handling Bill Jumping	SKUforHandlingBillJump
+SR6-0701-0000142	Item Master Creation - (1) Record By Record Insertion Or (0) Bulk Insert	InsertStockNoLineItemLevel
+SR6-0702-0000144	Accept Quantity in Item Master Entry	AcceptQtyInItemMasterEntry
+SR6-0702-0000151	Sales Factor Rec. Id Auto Generation	SalesFactorRecIdAutoGen
+SR6-0702-0000162	Image ID Applicable in Item Master	ImageIDPresentInItemmaster
+SR6-0702-0000165	Shoper Image File Path	ShoperImageFilePath
+SR6-0702-000143A	Batch SrlNo For Item Master Entry	BatchSrlNoA
+SR6-0702-000143B	Batch SrlNo Rec-Id For Item Master Entry	BatchSrlNoB
+SR6-0702-000144A	Regular Indicator for ItemMaster Entry	RegIndA
+SR6-0702-000144B	Regular Indicator Rec-Id for ItemMaster Entry	RegIndB
+SR6-0730-0000175	Allowed Operations in Size Catalogue Management	OperationsAllowedInSizeCatManage
+SR6-0730-0000284	If Sales Promotions are Applicable to New Items Created, Activate Immediately	ActivateSalesPromosToNewItems
+SR6-0730-000196A	Item Analysis Code6 Present	ItemAnaCd6Present
+SR6-0730-000196B	Item Analysis Code6 Caption	ItemAnaCd6Caption
+SR6-0730-000196C	Item Analysis Code6 Look-up Rec Id	ItemAnaCd6RecId
+SR6-0730-000197A	Item Analysis Code7 Present	ItemAnaCd7Present
+SR6-0730-000197B	Item Analysis Code7 Caption	ItemAnaCd7Caption
+SR6-0730-000197C	Item Analysis Code7 Look-up Rec Id	ItemAnaCd7RecId
+SR6-0730-000198A	Item Analysis Code8 Present	ItemAnaCd8Present
+SR6-0730-000198B	Item Analysis Code8 Caption	ItemAnaCd8Caption
+SR6-0730-000198C	Item Analysis Code8 Look-up Rec Id	ItemAnaCd8RecId
+SR6-0730-000199A	Item Analysis Code9 Present	ItemAnaCd9Present
+SR6-0730-000199B	Item Analysis Code9 Caption	ItemAnaCd9Caption
+SR6-0730-000199C	Item Analysis Code9 Look-up Rec Id	ItemAnaCd9RecId
+SR6-0730-000200A	Item Analysis Code10 Present	ItemAnaCd10Present
+SR6-0730-000200B	Item Analysis Code10 Caption	ItemAnaCd10Caption
+SR6-0730-000200C	Item Analysis Code10 Look-up Rec Id	ItemAnaCd10RecId
+SR6-0730-000201A	Item Analysis Code11 Present	ItemAnaCd11Present
+SR6-0730-000201B	Item Analysis Code11 Caption	ItemAnaCd11Caption
+SR6-0730-000201C	Item Analysis Code11 Look-up Rec Id	ItemAnaCd11RecId
+SR6-0730-000202A	Item Analysis Code12 Present	ItemAnaCd12Present
+SR6-0730-000202B	Item Analysis Code12 Caption	ItemAnaCd12Caption
+SR6-0730-000202C	Item Analysis Code12 Look-up Rec Id	ItemAnaCd12RecId
+SR6-0730-000203A	Item Analysis Code13 Present	ItemAnaCd13Present
+SR6-0730-000203B	Item Analysis Code13 Caption	ItemAnaCd13Caption
+SR6-0730-000203C	Item Analysis Code13 Look-up Rec Id	ItemAnaCd13RecId
+SR6-0730-000204A	Item Analysis Code14 Present	ItemAnaCd14Present
+SR6-0730-000204B	Item Analysis Code14 Caption	ItemAnaCd14Caption
+SR6-0730-000204C	Item Analysis Code14 Look-up Rec Id	ItemAnaCd14RecId
+SR6-0730-000205A	Item Analysis Code15 Present	ItemAnaCd15Present
+SR6-0730-000205B	Item Analysis Code15 Caption	ItemAnaCd15Caption
+SR6-0730-000205C	Item Analysis Code15 Look-up Rec Id	ItemAnaCd15RecId
+SR6-0730-000206A	Item Analysis Code16 Present	ItemAnaCd16Present
+SR6-0730-000206B	Item Analysis Code16 Caption	ItemAnaCd16Caption
+SR6-0730-000206C	Item Analysis Code16 Look-up Rec Id	ItemAnaCd16RecId
+SR6-0730-000207A	Item Analysis Code17 Present	ItemAnaCd17Present
+SR6-0730-000207B	Item Analysis Code17 Caption	ItemAnaCd17Caption
+SR6-0730-000207C	Item Analysis Code17 Look-up Rec Id	ItemAnaCd17RecId
+SR6-0730-000208A	Item Analysis Code18 Present	ItemAnaCd18Present
+SR6-0730-000208B	Item Analysis Code18 Caption	ItemAnaCd18Caption
+SR6-0730-000208C	Item Analysis Code18 Look-up Rec Id	ItemAnaCd18RecId
+SR6-0730-000209A	Item Analysis Code19 Present	ItemAnaCd19Present
+SR6-0730-000209B	Item Analysis Code19 Caption	ItemAnaCd19Caption
+SR6-0730-000209C	Item Analysis Code19 Look-up Rec Id	ItemAnaCd19RecId
+SR6-0730-000210A	Item Analysis Code20 Present	ItemAnaCd20Present
+SR6-0730-000210B	Item Analysis Code20 Caption	ItemAnaCd20Caption
+SR6-0730-000210C	Item Analysis Code20 Look-up Rec Id	ItemAnaCd20RecId
+SR6-0730-000211A	Item Analysis Code21 Present	ItemAnaCd21Present
+SR6-0730-000211B	Item Analysis Code21 Caption	ItemAnaCd21Caption
+SR6-0730-000211C	Item Analysis Code21 Look-up Rec Id	ItemAnaCd21RecId
+SR6-0730-000212A	Item Analysis Code22 Present	ItemAnaCd22Present
+SR6-0730-000212B	Item Analysis Code22 Caption	ItemAnaCd22Caption
+SR6-0730-000212C	Item Analysis Code22 Look-up Rec Id	ItemAnaCd22RecId
+SR6-0730-000213A	Item Analysis Code23 Present	ItemAnaCd23Present
+SR6-0730-000213B	Item Analysis Code23 Caption	ItemAnaCd23Caption
+SR6-0730-000213C	Item Analysis Code23 Look-up Rec Id	ItemAnaCd23RecId
+SR6-0730-000214A	Item Analysis Code24 Present	ItemAnaCd24Present
+SR6-0730-000214B	Item Analysis Code24 Caption	ItemAnaCd24Caption
+SR6-0730-000214C	Item Analysis Code24 Look-up Rec Id	ItemAnaCd24RecId
+SR6-0730-000215A	Item Analysis Code25 Present	ItemAnaCd25Present
+SR6-0730-000215B	Item Analysis Code25 Caption	ItemAnaCd25Caption
+SR6-0730-000215C	Item Analysis Code25 Look-up Rec Id	ItemAnaCd25RecId
+SR6-0730-000216A	Item Analysis Code26 Present	ItemAnaCd26Present
+SR6-0730-000216B	Item Analysis Code26 Caption	ItemAnaCd26Caption
+SR6-0730-000216C	Item Analysis Code26 Look-up Rec Id	ItemAnaCd26RecId
+SR6-0730-000217A	Item Analysis Code27 Present	ItemAnaCd27Present
+SR6-0730-000217B	Item Analysis Code27 Caption	ItemAnaCd27Caption
+SR6-0730-000217C	Item Analysis Code27 Look-up Rec Id	ItemAnaCd27RecId
+SR6-0730-000218A	Item Analysis Code28 Present	ItemAnaCd28Present
+SR6-0730-000218B	Item Analysis Code28 Caption	ItemAnaCd28Caption
+SR6-0730-000218C	Item Analysis Code28 Look-up Rec Id	ItemAnaCd28RecId
+SR6-0730-000219A	Item Analysis Code29 Present	ItemAnaCd29Present
+SR6-0730-000219B	Item Analysis Code29 Caption	ItemAnaCd29Caption
+SR6-0730-000219C	Item Analysis Code29 Look-up Rec Id	ItemAnaCd29RecId
+SR6-0730-000220A	Item Analysis Code30 Present	ItemAnaCd30Present
+SR6-0730-000220B	Item Analysis Code30 Caption	ItemAnaCd30Caption
+SR6-0730-000220C	Item Analysis Code30 Look-up Rec Id	ItemAnaCd30RecId
+SR6-0730-000221A	Item Analysis Code31 Present	ItemAnaCd31Present
+SR6-0730-000221B	Item Analysis Code31 Caption	ItemAnaCd31Caption
+SR6-0730-000221C	Item Analysis Code31 Look-up Rec Id	ItemAnaCd31RecId
+SR6-0730-000222A	Item Analysis Code32 Present	ItemAnaCd32Present
+SR6-0730-000222B	Item Analysis Code32 Caption	ItemAnaCd32Caption
+SR6-0730-000222C	Item Analysis Code32 Look-up Rec Id	ItemAnaCd32RecId
+SR6-0901-0000304	Caption for Address1	Address1Cap
+SR6-0901-0000305	Caption for Address2	Address2Cap
+SR6-0901-0000306	Caption for Address3	Address3Cap
+SR6-0901-0000307	Caption for Address4	Address4Cap
+SR6-0901-0000308	Caption for Address5	Address5Cap
+SR6-0901-0000309	Caption for Default Address	DefaultAddressCap
+SR7-0700-0000120	Company TIN Number	CompanyTINNumber
+SR7-0701-0000002	Tax Cal. Method In Billing : First Remove Tax From Sale Value & Apply Discounts, Then Cal. Tax Value	ForTIItemsInBillingSVIsIncOfTax
+SR7-0730-0000176	Franchisee Year Opening Setting	FranchiseeYearOpeningSetting
+SR7-0730-0000177	No. of Digits for Pay-in Slip Number	SetLengthPaySlipNoCashCredit
+SR7-0730-0000178	Use Same Pay-in Slip for Cash & Credit	SamePayInSlipUsedCashCredit
+SR7-0730-0000179	HO and Franchisee Code	HOCodeFranchiseCode
+SR7-0730-0000180	Cash/ Credit Payment to HO Configuration	PaymentHOByCashAndCredit
+SR7-0901-0000313	Pay Slip Printing Type	PaySlipPrintingType
+SR7-0913-0000313	PAY MODES CONSIDERED UNDER CASH SALES	PAYMODESCONSIDEREDUNDERCASHSALES

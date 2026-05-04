@@ -15,8 +15,8 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import select, func, desc, and_, or_
 from sqlalchemy.orm import selectinload, joinedload
 from app.core.database import get_db
-from app.models.base import Transaction, TransactionItem, Customer, Till, Partner, LoyaltyLedger, CreditNote
-from app.schemas.billing import TransactionRead, TransactionCreate
+from app.models.base import Transaction, TransactionItem, Customer, Till, Partner, LoyaltyLedger, CreditNote, DraftBillItem
+from app.schemas.billing import TransactionRead, TransactionCreate, DraftItemCreate
 from typing import List, Optional, Dict, Any
 from decimal import Decimal, ROUND_HALF_UP
 from app.core.security import require_auth, CurrentUser
@@ -27,6 +27,74 @@ from app.services.promo_service import PromoService
 from app.models.legacy_s9 import Itemmaster, Stockmaster, Personnel, Pospaymodes
 
 router = APIRouter(prefix="/api/v1/billing", tags=["billing"])
+
+# ── DRAFTING (xtemp) LOGIC ──
+
+@router.get("/draft", response_model=List[Dict[str, Any]])
+async def get_draft_items(
+    db: AsyncSession = Depends(get_db),
+    current_user: CurrentUser = Depends(require_auth)
+):
+    """Fetch current session's draft items (Institutional Parity with xtempGrid)."""
+    stmt = select(DraftBillItem).where(DraftBillItem.user_id == current_user.id).order_by(DraftBillItem.created_at)
+    result = await db.execute(stmt)
+    items = result.scalars().all()
+    return [{
+        "id": str(i.id),
+        "StockNo": i.stock_no,
+        "ItemDesc": i.item_desc,
+        "Qty": float(i.qty),
+        "Retail_Price": float(i.retail_price or 0),
+        "disc_per": float(i.disc_per),
+        "salesman": i.salesman_id
+    } for i in items]
+
+@router.post("/draft")
+async def add_to_draft(
+    item_in: DraftItemCreate,
+    db: AsyncSession = Depends(get_db),
+    current_user: CurrentUser = Depends(require_auth)
+):
+    """Saves an item to the draft table (Immediate Persistence like Shoper9)."""
+    new_draft = DraftBillItem(
+        user_id=current_user.id,
+        stock_no=item_in.StockNo,
+        item_desc=item_in.ItemDesc,
+        qty=Decimal(str(item_in.Qty)),
+        retail_price=Decimal(str(item_in.Retail_Price or 0)),
+        disc_per=Decimal(str(item_in.disc_per or 0)),
+        salesman_id=item_in.salesman
+    )
+    db.add(new_draft)
+    await db.commit()
+    return {"status": "SUCCESS", "id": str(new_draft.id)}
+
+@router.delete("/draft/{item_id}")
+async def remove_from_draft(
+    item_id: uuid.UUID,
+    db: AsyncSession = Depends(get_db),
+    current_user: CurrentUser = Depends(require_auth)
+):
+    """Removes a single item from the draft."""
+    stmt = select(DraftBillItem).where(and_(DraftBillItem.id == item_id, DraftBillItem.user_id == current_user.id))
+    res = await db.execute(stmt)
+    item = res.scalar_one_or_none()
+    if item:
+        await db.delete(item)
+        await db.commit()
+    return {"status": "SUCCESS"}
+
+@router.delete("/draft/clear")
+async def clear_draft(
+    db: AsyncSession = Depends(get_db),
+    current_user: CurrentUser = Depends(require_auth)
+):
+    """Clears the entire draft session."""
+    from sqlalchemy import delete
+    stmt = delete(DraftBillItem).where(DraftBillItem.user_id == current_user.id)
+    await db.execute(stmt)
+    await db.commit()
+    return {"status": "SUCCESS"}
 
 @router.get("/history", response_model=List[TransactionRead])
 async def get_transaction_history(
@@ -310,6 +378,12 @@ async def finalize_transaction(
 
     await db.commit()
     
+    # ── AUTO-CLEAR DRAFT (xtemp drop) ──
+    # Once finalized, the temporary session data is no longer needed.
+    from sqlalchemy import delete
+    await db.execute(delete(DraftBillItem).where(DraftBillItem.user_id == current_user.id))
+    await db.commit()
+
     # Return enriched transaction (no joinedload on item — uses denormalized fields)
     stmt = select(Transaction).where(Transaction.id == new_txn.id).options(selectinload(Transaction.items))
     res = await db.execute(stmt)
@@ -405,7 +479,6 @@ async def get_personnel(
     if not rows:
         result = await db.execute(
             select(Personnel)
-            .where(and_(Personnel.activeflag == 1, Personnel.allowinbilling == 1))
             .limit(50)
         )
         rows = result.scalars().all()

@@ -226,41 +226,41 @@ async def redeem_loyalty(
 
 @router.get("/search")
 async def search_customers(
-    q: str = Query(..., min_length=2),
+    q: str = Query(default=""),
     current_user: CurrentUser = Depends(require_auth),
     db: AsyncSession = Depends(get_db)
 ):
     """
-    Institutional search for customers from Shoper9 by name, phone, or code.
+    Institutional search for customers from modern 'customers' table.
     Returns a list of matching customer profiles.
     """
-    search_term = f"%{q}%"
-    stmt = (
-        select(Customers, Mailinglist)
-        .join(Mailinglist, Customers.maillistsrlno == Mailinglist.recno)
-        .where(
+    from app.models.base import Customer
+    from sqlalchemy import or_
+
+    stmt = select(Customer).limit(50)
+
+    if q:
+        search_term = f"%{q}%"
+        stmt = stmt.where(
             or_(
-                Customers.nm.ilike(search_term),
-                Mailinglist.mobilephone.ilike(search_term),
-                Customers.code.ilike(search_term)
+                Customer.name.ilike(search_term),
+                Customer.mobile.ilike(search_term)
             )
         )
-        .limit(50)
-    )
     
     result = await db.execute(stmt)
-    rows = result.all()
+    rows = result.scalars().all()
     
     items = []
-    for customer, mail in rows:
+    for customer in rows:
         items.append({
-            "id": customer.code,
-            "code": customer.code,
-            "name": customer.nm,
-            "phone": mail.mobilephone,
-            "loyalty_points": 0,
+            "id": str(customer.id),
+            "code": str(customer.id)[:8],
+            "name": customer.name or "Unknown",
+            "phone": customer.mobile,
+            "loyalty_points": customer.loyalty_points or 0,
             "is_active": True,
-            "created_at": datetime.now(),
+            "created_at": customer.created_at,
             "outstanding_paise": 0
         })
         

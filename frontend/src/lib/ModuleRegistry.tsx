@@ -89,7 +89,9 @@ const SystemParameters = lazy(() => import("../modules/setup/SystemParameters"))
 const PurchaseJournal = lazy(() => import("../modules/transactions/PurchaseJournal"));
 const SalesJournal = lazy(() => import("../modules/transactions/SalesJournal"));
 const StockLedgerJournal = lazy(() => import("../modules/transactions/StockLedgerJournal"));
+const HybridStorageManager = lazy(() => import("../modules/settings/HybridStorageManager"));
 const PurchaseEntry = lazy(() => import("../modules/transactions/PurchaseEntry"));
+const ArchitectControlCenter = lazy(() => import("../modules/settings/ArchitectControlCenter"));
 
 export interface ModuleDefinition {
   id: string;
@@ -122,6 +124,24 @@ export const MODULES: ModuleDefinition[] = [
     shortcut: "F1",
     showInSidebar: true,
     category: "POS",
+  },
+  {
+    id: "architect_config",
+    label: "SMRITI Config",
+    icon: ShieldCheck,
+    component: <ArchitectControlCenter />,
+    roles: ["OWNER"],
+    showInSidebar: true,
+    category: "SYSTEM",
+  },
+  {
+    id: "hybrid_storage",
+    label: "Hybrid Storage",
+    icon: Database,
+    component: <HybridStorageManager />,
+    roles: ["OWNER"],
+    showInSidebar: false,
+    category: "SYSTEM",
   },
   {
     id: "intelligence",
@@ -228,7 +248,7 @@ export const MODULES: ModuleDefinition[] = [
     icon: Database,
     component: <TableViewerModule />,
     roles: ["OWNER", "MANAGER"],
-    showInSidebar: true,
+    showInSidebar: false,
     category: "SYSTEM",
   },
   {
@@ -325,6 +345,8 @@ export const COMPONENT_MAP: Record<string, React.ReactNode> = {
   sales_journal: <SalesJournal />,
   stock_ledger: <StockLedgerJournal />,
   purchase_entry: <PurchaseEntry />,
+  hybrid_storage: <HybridStorageManager />,
+  architect_config: <ArchitectControlCenter />,
 };
 
 export const ICON_MAP: Record<string, any> = {
@@ -374,4 +396,5 @@ export const ICON_MAP: Record<string, any> = {
   sales_journal: BookOpen,
   stock_ledger: ArrowRightLeft,
   purchase_entry: PackagePlus,
+  architect_config: ShieldCheck,
 };

@@ -13,8 +13,9 @@ import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { 
   Search, X, LayoutDashboard, User, Package, 
-  ScanBarcode, Clock, UserCheck, Tag, ShoppingBag 
+  ScanBarcode, Clock, UserCheck, Tag, ShoppingBag, Command 
 } from 'lucide-react';
+import { cn } from '../lib/utils';
 
 import { ICON_MAP } from '../lib/ModuleRegistry';
 import { fetchMenu, MenuItem } from '../api/menuService';
@@ -33,6 +34,7 @@ export default function CommandBar({ isOpen, onClose, onNavigate, initialContext
   const [results, setResults] = useState<any[]>([]);
   const [loading, setLoading] = useState(false);
   const [history, setHistory] = useState<any[]>([]);
+  const [selectedIndex, setSelectedIndex] = useState(0);
 
   useEffect(() => {
     const saved = localStorage.getItem('SMRITI-OS_cmd_history');
@@ -60,6 +62,10 @@ export default function CommandBar({ isOpen, onClose, onNavigate, initialContext
     label: `${initialContext.charAt(0).toUpperCase() + initialContext.slice(1)} Zoom` 
   } : null;
 
+  const displayResults = initialContext ? results : commands.filter(c => 
+    c.label.toLowerCase().includes(query.toLowerCase())
+  );
+
   useEffect(() => {
     // 1. Load Menu Commands (Global Context)
     fetchMenu().then(menu => {
@@ -70,6 +76,7 @@ export default function CommandBar({ isOpen, onClose, onNavigate, initialContext
             id: item.id,
             type: 'command',
             label: item.label,
+            category: item.category || 'General',
             icon: ICON_MAP[item.module] || LayoutDashboard,
             shortcut: item.shortcut || '',
             tab: item.id,
@@ -86,6 +93,7 @@ export default function CommandBar({ isOpen, onClose, onNavigate, initialContext
           id: 'onboarding',
           type: 'command',
           label: 'Store Onboarding (Phase 3)',
+          category: 'SYSTEM',
           icon: ICON_MAP['onboarding'],
           shortcut: 'Shift+O',
           tab: 'onboarding',
@@ -98,6 +106,7 @@ export default function CommandBar({ isOpen, onClose, onNavigate, initialContext
           id: 'gstr1',
           type: 'command',
           label: 'GSTR-1 Compliance Export',
+          category: 'FINANCE',
           icon: ICON_MAP['gstr1'],
           shortcut: 'Ctrl+G',
           tab: 'gstr1',
@@ -110,10 +119,35 @@ export default function CommandBar({ isOpen, onClose, onNavigate, initialContext
 
     const handleKeyDown = (e: KeyboardEvent) => {
       if (e.key === 'Escape') onClose();
+      
+      if (isOpen) {
+        if (e.key === 'ArrowDown') {
+          e.preventDefault();
+          setSelectedIndex(prev => (prev + 1) % Math.max(1, displayResults.length));
+        } else if (e.key === 'ArrowUp') {
+          e.preventDefault();
+          setSelectedIndex(prev => (prev - 1 + displayResults.length) % Math.max(1, displayResults.length));
+        } else if (e.key === 'Enter' && displayResults[selectedIndex]) {
+          const item = displayResults[selectedIndex];
+          if (item.type === 'command') {
+            addToHistory(item);
+            onNavigate(item.tab);
+          } else if (item.data) {
+            // Handle context-specific selection if needed
+            console.log('Selected:', item.data);
+          }
+          onClose();
+        }
+      }
     };
     window.addEventListener('keydown', handleKeyDown);
     return () => window.removeEventListener('keydown', handleKeyDown);
-  }, [onClose, isOpen]);
+  }, [onClose, isOpen, displayResults, selectedIndex]);
+
+  // Reset index on query change
+  useEffect(() => {
+    setSelectedIndex(0);
+  }, [query]);
 
   // 2. Handle Context-Aware Search (Zoom)
   useEffect(() => {
@@ -178,10 +212,6 @@ export default function CommandBar({ isOpen, onClose, onNavigate, initialContext
 
   if (!isOpen) return null;
 
-  const displayResults = initialContext ? results : commands.filter(c => 
-    c.label.toLowerCase().includes(query.toLowerCase())
-  );
-
   return (
     <AnimatePresence>
       <div className="fixed inset-0 z-[20000] flex items-start justify-center pt-[15vh] px-4">
@@ -228,9 +258,12 @@ export default function CommandBar({ isOpen, onClose, onNavigate, initialContext
 
           {/* Results Area */}
           <div className="p-4 max-h-[450px] overflow-y-auto custom-scrollbar">
-            <div className="px-4 py-2 text-[10px] font-black text-navy/40 uppercase tracking-widest flex justify-between">
-              <span>{initialContext ? `Zoom Mode: ${initialContext}` : 'Quick Navigation'}</span>
-              <span>{displayResults.length} Results</span>
+            <div className="px-4 py-2 text-[10px] font-black text-navy/40 uppercase tracking-widest flex justify-between items-center border-b border-navy/5 mb-2">
+              <span className="flex items-center gap-2">
+                <div className="w-1.5 h-1.5 bg-gold rounded-full animate-pulse" />
+                {initialContext ? `Sovereign Zoom: ${initialContext}` : 'Global Command Registry'}
+              </span>
+              <span className="bg-navy/5 px-2 py-0.5 rounded-full">{displayResults.length} Matches</span>
             </div>
             
             <div className="space-y-1 mt-2">
@@ -248,7 +281,10 @@ export default function CommandBar({ isOpen, onClose, onNavigate, initialContext
                       className="w-full flex items-center gap-4 px-6 py-3 rounded-2xl hover:bg-amber-50 transition-all group"
                     >
                       <div className="w-8 h-8 bg-amber-100 rounded-xl flex items-center justify-center text-amber-600 group-hover:bg-amber-400 group-hover:text-white transition-all">
-                        <item.icon size={16} />
+                        {(() => {
+                          const IconComponent = typeof item.icon === 'function' || (item.icon && item.icon.$$typeof) ? item.icon : (ICON_MAP[item.tab] || Search);
+                          return <IconComponent size={16} />;
+                        })()}
                       </div>
                       <span className="flex-1 text-left text-sm font-bold text-navy/70 group-hover:text-navy">{item.label}</span>
                       <span className="text-[9px] font-black text-muted/40 uppercase tracking-widest">Recent</span>
@@ -259,38 +295,105 @@ export default function CommandBar({ isOpen, onClose, onNavigate, initialContext
               </div>
             )}
 
-            {displayResults.length === 0 && query && (
-                <div className="px-6 py-12 text-center text-muted/40 font-medium italic">
-                  No matches found in this context.
-                </div>
-              )}
-
-              {displayResults.map((item) => (
-                <button
-                  key={item.id}
-                  onClick={() => {
-                    if (item.type === 'command') {
-                      addToHistory(item);
-                      onNavigate(item.tab);
-                    }
-                    onClose();
-                  }}
-                  className="w-full flex items-center gap-4 px-6 py-4 rounded-2xl hover:bg-cream transition-all group"
-                >
-                  <div className="w-12 h-12 bg-navy/5 rounded-2xl flex items-center justify-center text-navy group-hover:bg-navy group-hover:text-white transition-all shadow-sm">
-                    <item.icon size={22} />
-                  </div>
-                  <div className="flex-1 text-left">
-                    <div className="text-[14px] font-bold text-navy group-hover:translate-x-1 transition-transform">{item.label}</div>
-                    <div className="text-[10px] text-muted font-medium mt-0.5">{item.sub || item.description}</div>
-                  </div>
-                  {item.shortcut && (
-                    <div className="px-3 py-1 bg-cream border border-border rounded-lg text-[9px] font-black text-muted group-hover:border-navy/20 transition-all">
-                      {item.shortcut}
+            {(() => {
+              if (displayResults.length === 0 && query) {
+                return (
+                  <div className="px-6 py-12 text-center">
+                    <div className="w-12 h-12 bg-red-50 rounded-full flex items-center justify-center mx-auto mb-4">
+                      <X className="w-6 h-6 text-red-400" />
                     </div>
-                  )}
-                </button>
-              ))}
+                    <div className="text-sm font-bold text-navy opacity-40 italic">
+                      No matches found for "{query}"
+                    </div>
+                  </div>
+                );
+              }
+
+              // Group Results by Category
+              const preferredOrder = ['POS', 'TRANSACTIONS', 'CATALOGUE', 'WAREHOUSE', 'FINANCE', 'HO', 'SYSTEM', 'General'];
+              const groups = displayResults.reduce((acc: Record<string, any[]>, item) => {
+                const cat = item.category || 'General';
+                if (!acc[cat]) acc[cat] = [];
+                acc[cat].push(item);
+                return acc;
+              }, {});
+
+              const sortedCategories = Object.keys(groups).sort((a, b) => {
+                const idxA = preferredOrder.indexOf(a);
+                const idxB = preferredOrder.indexOf(b);
+                if (idxA !== -1 && idxB !== -1) return idxA - idxB;
+                if (idxA !== -1) return -1;
+                if (idxB !== -1) return 1;
+                return a.localeCompare(b);
+              });
+
+              // Track global index for selection highlighting
+              let globalIdxCounter = 0;
+
+              return sortedCategories.map(category => (
+                <div key={category} className="mb-6">
+                  <div className="px-4 py-2 flex items-center gap-2 mb-1">
+                    <span className="text-[10px] font-black text-navy/30 uppercase tracking-[0.2em]">{category}</span>
+                    <div className="h-px flex-1 bg-navy/5" />
+                  </div>
+                  <div className="space-y-1">
+                    {groups[category].map((item) => {
+                      const isSelected = globalIdxCounter === selectedIndex;
+                      const currentIdx = globalIdxCounter;
+                      globalIdxCounter++;
+                      
+                      return (
+                        <button
+                          key={item.id}
+                          onMouseEnter={() => setSelectedIndex(currentIdx)}
+                          onClick={() => {
+                            if (item.type === 'command') {
+                              addToHistory(item);
+                              onNavigate(item.tab);
+                            }
+                            onClose();
+                          }}
+                          className={cn(
+                            "w-full flex items-center gap-4 px-6 py-3 rounded-2xl transition-all group border",
+                            isSelected 
+                              ? "bg-navy text-white border-navy shadow-lg shadow-navy/20 scale-[1.02] z-10" 
+                              : "bg-transparent text-navy border-transparent hover:bg-cream"
+                          )}
+                        >
+                          <div className={cn(
+                            "w-10 h-10 rounded-xl flex items-center justify-center transition-all",
+                            isSelected ? "bg-white/20 text-white" : "bg-navy/5 text-navy group-hover:bg-navy group-hover:text-white"
+                          )}>
+                            {(() => {
+                              const IconComponent = typeof item.icon === 'function' || (item.icon && item.icon.$$typeof) ? item.icon : (ICON_MAP[item.tab] || Search);
+                              return <IconComponent size={18} />;
+                            })()}
+                          </div>
+                          <div className="flex-1 text-left">
+                            <div className={cn(
+                              "text-[13px] font-bold transition-transform",
+                              isSelected ? "text-white" : "text-navy"
+                            )}>{item.label}</div>
+                            <div className={cn(
+                              "text-[9px] font-medium mt-0.5 opacity-60",
+                              isSelected ? "text-white/70" : "text-muted"
+                            )}>{item.sub || item.description}</div>
+                          </div>
+                          {item.shortcut && (
+                            <div className={cn(
+                              "px-2 py-0.5 border rounded-lg text-[8px] font-black transition-all",
+                              isSelected ? "bg-white/10 border-white/20 text-white" : "bg-cream border-border text-muted/60"
+                            )}>
+                              {item.shortcut}
+                            </div>
+                          )}
+                        </button>
+                      );
+                    })}
+                  </div>
+                </div>
+              ));
+            })()}
             </div>
           </div>
 

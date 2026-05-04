@@ -9,6 +9,7 @@ import { Barcode, Trash2, X, User, UserCheck, Tag, Loader2, Maximize2, Minimize2
 import { Button } from '@/components/ui/SovereignUI'
 import { motion, AnimatePresence } from 'framer-motion'
 import { cn } from '@/lib/utils'
+import { buildColDefs } from '@/lib/GridEngine'
 
 interface MobileBillingProps {
   items: any[]
@@ -46,19 +47,41 @@ export default function MobileBilling({
   const [showMetadata, setShowMetadata] = useState(false)
   const [isGridExpanded, setIsGridExpanded] = useState(false)
 
-  const columnDefs: ColDef[] = [
-    { field: 'stock_no', headerName: 'SKU', width: 100, pinned: 'left' },
-    { field: 'descr', headerName: 'DESC', flex: 1, minWidth: 150 },
-    { field: 'qty', headerName: 'QTY', width: 70, editable: true },
-    { field: 'rate', headerName: 'RATE', width: 90, valueFormatter: (p: any) => (p.value || 0).toFixed(2) },
-    { field: 'disc_per', headerName: 'D%', width: 60, editable: true },
-    { field: 'total', headerName: 'TOTAL', width: 100, valueFormatter: (p: any) => (p.value || 0).toFixed(2) },
-    { headerName: '', width: 50, pinned: 'right', cellRenderer: (p: any) => (
-      <button onClick={() => setItems(prev => prev.filter(i => i.id !== p.data.id))} className="text-red-500 p-2">
-        <Trash2 size={14} />
-      </button>
-    )}
-  ]
+  const columnDefs = React.useMemo(() => {
+    if (!fieldMask || fieldMask.length === 0) {
+      return [
+        { field: 'stock_no', headerName: 'SKU', width: 100, pinned: 'left' as const },
+        { field: 'descr', headerName: 'DESC', flex: 1, minWidth: 150 },
+        { field: 'qty', headerName: 'QTY', width: 70, editable: true },
+        { field: 'rate', headerName: 'RATE', width: 90, valueFormatter: (p: any) => (p.value || 0).toFixed(2) },
+        { field: 'disc_per', headerName: 'D%', width: 60, editable: true },
+        { field: 'total', headerName: 'TOTAL', width: 100, valueFormatter: (p: any) => (p.value || 0).toFixed(2) },
+        { headerName: '', width: 50, pinned: 'right' as const, cellRenderer: (p: any) => (
+          <button onClick={() => setItems(prev => prev.filter(i => i.id !== p.data?.id))} className="text-red-500 p-2">
+            <Trash2 size={14} />
+          </button>
+        )}
+      ];
+    }
+    
+    const baseCols = buildColDefs(fieldMask, {
+      colDefMerge: {
+        qty: { editable: true },
+        disc_per: { editable: true },
+      }
+    });
+
+    return [
+      ...baseCols,
+      {
+        headerName: '', width: 50, pinned: 'right' as const, cellRenderer: (p: any) => (
+          <button onClick={() => setItems(prev => prev.filter(i => i.id !== p.data?.id))} className="text-red-500 p-2">
+            <Trash2 size={14} />
+          </button>
+        )
+      }
+    ] as any[];
+  }, [fieldMask, setItems]);
 
   return (
     <div className="flex flex-col h-full bg-[var(--background)] overflow-hidden">

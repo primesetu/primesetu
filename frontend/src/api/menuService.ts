@@ -49,7 +49,7 @@ const initDB = async (): Promise<IDBPDatabase> => {
  * Static fallback menu — mirrors MODULES in ModuleRegistry.
  * Used when: (a) no auth token, (b) API unreachable, (c) IndexedDB empty.
  */
-const STATIC_FALLBACK_MENU: MenuItem[] = [
+export const STATIC_FALLBACK_MENU: MenuItem[] = [
   { id: 'dashboard',   label: 'Overview',          route: 'dashboard',   module: 'dashboard',   required_permission: 'dashboard.view',    category: 'POS',       children: [], shortcut: undefined },
   { id: 'sales',       label: 'Billing (POS)',      route: 'sales',       module: 'sales',       required_permission: 'billing.view',      category: 'POS',       children: [], shortcut: 'F1' },
   { id: 'returns',     label: 'Sales Returns',      route: 'returns',     module: 'returns',     required_permission: 'billing.returns',   category: 'POS',       children: [], shortcut: undefined },
@@ -84,7 +84,9 @@ const STATIC_FALLBACK_MENU: MenuItem[] = [
   { id: 'ho',          label: 'HO Sync',            route: 'ho',          module: 'ho',          required_permission: 'ho.view',           category: 'HO',        children: [], shortcut: undefined },
   { id: 'settings',    label: 'System Config',      route: 'settings',    module: 'settings',    required_permission: 'settings.view',     category: 'SYSTEM',    children: [], shortcut: 'F10' },
   { id: 'security',    label: 'Security',           route: 'security',    module: 'security',    required_permission: 'settings.security', category: 'SYSTEM',    children: [], shortcut: undefined },
-  { id: 'table_viewer',label: 'DB Explorer',        route: 'table_viewer',module: 'table_viewer',required_permission: 'settings.view',     category: 'SYSTEM',    children: [], shortcut: undefined },
+  { id: 'table_viewer',    label: 'DB Explorer',     route: 'table_viewer',    module: 'table_viewer',    required_permission: 'settings.view', category: 'SYSTEM', children: [], shortcut: undefined },
+  { id: 'hybrid_storage',  label: 'Hybrid Storage',  route: 'hybrid_storage',  module: 'hybrid_storage',  required_permission: 'settings.view', category: 'SYSTEM', children: [], shortcut: undefined },
+  { id: 'architect_config',label: 'SMRITI Config',   route: 'architect_config',module: 'architect_config',required_permission: 'settings.view', category: 'SYSTEM', children: [], shortcut: 'F7' },
 ];
 
 export const fetchMenu = async (): Promise<MenuItem[]> => {

@@ -1,0 +1,23 @@
+===== FarPoint Technologies, Inc =====
+===== Begin of Excel Export =====
+5/3/2026 - 16:01
+
+Col	Row	Information
+___	___	___________
+		Export Excel File: D:\IMP\GitHub\primesetu\VersionCompat.xls.
+-	-	102:Excel reads the AllowDragDrop, AutoClipboard, and EditEnterAction properties from the registry. If you modify these properties in Spread, the changes are not saved at export.
+1		173:Custom headers are not exported to Excel. 
+2		173:Custom headers are not exported to Excel. 
+3		173:Custom headers are not exported to Excel. 
+4		173:Custom headers are not exported to Excel. 
+5		173:Custom headers are not exported to Excel. 
+6		173:Custom headers are not exported to Excel. 
+7		173:Custom headers are not exported to Excel. 
+8		173:Custom headers are not exported to Excel. 
+9		173:Custom headers are not exported to Excel. 
+10		173:Custom headers are not exported to Excel. 
+11		173:Custom headers are not exported to Excel. 
+12		173:Custom headers are not exported to Excel. 
+
+===== End of Excel Export =====
+===== FarPoint Technologies, Inc =====

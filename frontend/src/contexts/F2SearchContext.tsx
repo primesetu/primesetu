@@ -8,18 +8,19 @@ import { api } from '@/api/client'
 // ─── Field Types ───────────────────────────────────────────────────────────
 // Add data-f2="items|customers|documents|vendors|lookups" to any input to
 // enable context-aware F2 search for that field.
-export type F2FieldType = 'items' | 'customers' | 'documents' | 'vendors' | 'lookups' | null
+export type F2FieldType = 'items' | 'customers' | 'documents' | 'vendors' | 'lookups' | 'classifications' | null
 
 interface F2SearchState {
   open: boolean
   fieldType: F2FieldType
+  category: string
   targetEl: HTMLElement | null
-  openSearch: (fieldType: F2FieldType, targetEl: HTMLElement | null) => void
+  openSearch: (fieldType: F2FieldType, targetEl: HTMLElement | null, category?: string) => void
   closeSearch: () => void
 }
 
 const F2SearchContext = createContext<F2SearchState>({
-  open: false, fieldType: null, targetEl: null,
+  open: false, fieldType: null, category: '', targetEl: null,
   openSearch: () => {}, closeSearch: () => {}
 })
 
@@ -28,17 +29,20 @@ export const useF2Search = () => useContext(F2SearchContext)
 export function F2SearchProvider({ children }: { children: ReactNode }) {
   const [open, setOpen] = useState(false)
   const [fieldType, setFieldType] = useState<F2FieldType>(null)
+  const [category, setCategory] = useState('')
   const [targetEl, setTargetEl] = useState<HTMLElement | null>(null)
 
-  const openSearch = useCallback((type: F2FieldType, el: HTMLElement | null) => {
+  const openSearch = useCallback((type: F2FieldType, el: HTMLElement | null, cat: string = '') => {
     setFieldType(type)
     setTargetEl(el)
+    setCategory(cat)
     setOpen(true)
   }, [])
 
   const closeSearch = useCallback(() => {
     setOpen(false)
     setFieldType(null)
+    setCategory('')
   }, [])
 
   // Global F2 / F11 listener — detect active element's data-f2 attribute
@@ -51,14 +55,16 @@ export function F2SearchProvider({ children }: { children: ReactNode }) {
       // Walk up DOM to find data-f2 attribute
       let el: HTMLElement | null = active
       let f2type: string | null = null
+      let f2cat: string | null = null
       while (el && !f2type) {
         f2type = el.getAttribute?.('data-f2') ?? null
+        f2cat = el.getAttribute?.('data-f2-category') ?? null
         el = el.parentElement
       }
 
       if (f2type) {
         e.preventDefault()
-        openSearch(f2type as F2FieldType, active)
+        openSearch(f2type as F2FieldType, active, f2cat ?? '')
       }
     }
     window.addEventListener('keydown', handler)
@@ -66,7 +72,7 @@ export function F2SearchProvider({ children }: { children: ReactNode }) {
   }, [openSearch])
 
   return (
-    <F2SearchContext.Provider value={{ open, fieldType, targetEl, openSearch, closeSearch }}>
+    <F2SearchContext.Provider value={{ open, fieldType, category, targetEl, openSearch, closeSearch }}>
       {children}
     </F2SearchContext.Provider>
   )
@@ -74,11 +80,11 @@ export function F2SearchProvider({ children }: { children: ReactNode }) {
 
 // ─── Global F2 Overlay Component ───────────────────────────────────────────
 import { motion, AnimatePresence } from 'framer-motion'
-import { Search, X, User, ShoppingBag, FileText, Building2, List } from 'lucide-react'
+import { Search, X, User, ShoppingBag, FileText, Building2, List, ShieldCheck } from 'lucide-react'
 
 const FIELD_CONFIG: Record<NonNullable<F2FieldType>, {
   title: string; icon: JSX.Element; placeholder: string; color: string
-  fetchFn: (q: string) => Promise<any[]>
+  fetchFn: (q: string, category?: string) => Promise<any[]>
   columns: { key: string; label: string; width: string; render?: (v: any) => string }[]
 }> = {
   items: {
@@ -150,20 +156,40 @@ const FIELD_CONFIG: Record<NonNullable<F2FieldType>, {
     icon: <List className="w-5 h-5 text-gray-400" />,
     placeholder: 'Search categories, brands, sizes...',
     color: 'border-gray-400',
-    fetchFn: async (q) => {
-      try { return await api.catalogue.getLookups(q) } catch { return [] }
+    fetchFn: async (q, cat) => {
+      try { return await api.catalogue.getLookups(cat || q) } catch { return [] }
     },
     columns: [
       { key: 'category', label: 'Category', width: '140px' },
       { key: 'code',     label: 'Code',     width: '100px' },
-      { key: 'name',     label: 'Name',     width: '1fr' },
-      { key: 'value',    label: 'Value',    width: '120px' },
+      { key: 'label',    label: 'Name',     width: '1fr' },
+      { key: 'is_active', label: 'Active',   width: '80px', render: v => v ? 'YES' : 'NO' },
+    ]
+  },
+  classifications: {
+    title: 'Classification Search',
+    icon: <ShieldCheck className="w-5 h-5 text-rose-400" />,
+    placeholder: 'Search Class1/Class2 combinations...',
+    color: 'border-rose-400',
+    fetchFn: async (q) => {
+      try { 
+        const res = await api.legacy.getData('class12combo', { search: q });
+        // Handle both legacy array response and new paginated object response
+        return Array.isArray(res.data) ? res.data : (res.data?.data || []);
+      } catch { return [] }
+    },
+    columns: [
+      { key: 'class1cd',     label: 'Dept (Class1)', width: '150px' },
+      { key: 'class2cd',     label: 'Brand (Class2)', width: '150px' },
+      { key: 'superclass1',  label: 'Class3',         width: '1fr' },
+      { key: 'billable',     label: 'Billable',       width: '80px', render: v => v ? 'YES' : 'NO' },
+      { key: 'sizegroup',    label: 'Size Grp',       width: '100px' },
     ]
   }
 }
 
 export function GlobalF2SearchOverlay() {
-  const { open, fieldType, targetEl, closeSearch } = useF2Search()
+  const { open, fieldType, category, targetEl, closeSearch } = useF2Search()
   const [searchQ, setSearchQ] = useState('')
   const [allResults, setAllResults] = useState<any[]>([])
   const [loading, setLoading] = useState(false)
@@ -176,9 +202,9 @@ export function GlobalF2SearchOverlay() {
     setAllResults([])
     setLoading(true)
     const cfg = FIELD_CONFIG[fieldType]
-    cfg.fetchFn('').then(r => { setAllResults(r); setLoading(false) }).catch(() => setLoading(false))
+    cfg.fetchFn('', category).then(r => { setAllResults(r); setLoading(false) }).catch(() => setLoading(false))
     setTimeout(() => inputRef.current?.focus(), 60)
-  }, [open, fieldType])
+  }, [open, fieldType, category])
 
   // Escape to close
   useEffect(() => {
@@ -201,7 +227,7 @@ export function GlobalF2SearchOverlay() {
     if (tag === 'input' || tag === 'textarea') {
       try {
         const nativeInputValueSetter = Object.getOwnPropertyDescriptor(window.HTMLInputElement.prototype, 'value')?.set
-        const bestValue = row.mobile ?? row.code ?? row.name ?? row.bill_no ?? ''
+        const bestValue = row.code ?? row.label ?? row.mobile ?? row.name ?? row.class1cd ?? row.bill_no ?? ''
         nativeInputValueSetter?.call(targetEl, bestValue)
         if (typeof Event !== 'undefined') {
           targetEl.dispatchEvent(new Event('input', { bubbles: true }))

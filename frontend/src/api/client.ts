@@ -59,6 +59,7 @@ export const api = {
     generateInternal: (itemId: string) => apiClient.post('/barcodes/generate-internal', { item_id: itemId, is_primary: true, barcode_type: 'CODE128' }).then(r => r.data),
     generateEAN13: (itemId: string) => apiClient.post('/barcodes/generate-ean13', { item_id: itemId, is_primary: true, barcode_type: 'EAN13' }).then(r => r.data),
     printBarcode: (data: any) => apiClient.post('/barcodes/print', data).then(r => r.data),
+    bulkUpdate: (items: any[]) => apiClient.post('/inventory/bulk-update', { items }).then(r => r.data),
   },
   procurement: {
     getSuggestions: () => apiClient.get('/procurement/reorder-suggestions').then(r => r.data),
@@ -218,6 +219,7 @@ export const api = {
     getData: (table: string, params?: any) => apiClient.get(`/legacy/${table}`, { params }).then(r => r.data),
     getSchema: (table: string) => apiClient.get(`/legacy/${table}/schema`).then(r => r.data),
     patchData: (table: string, id: string, data: any) => apiClient.patch(`/legacy/${table}/${id}`, data).then(r => r.data),
+    bulkUpdate: (table: string, items: any[]) => apiClient.post(`/legacy/${table}/bulk`, items).then(r => r.data),
   }
 }
 

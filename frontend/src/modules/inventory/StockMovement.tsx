@@ -26,6 +26,7 @@ import {
   Card, 
   Text 
 } from '@/components/ui/SovereignUI';
+import { exportToExcel } from '@/utils/excelUtils';
 
 export default function StockMovement() {
   const [filter, setFilter] = useState('ALL');
@@ -36,6 +37,24 @@ export default function StockMovement() {
     { id: 3, type: 'IN', ref: 'RET-0052', item: 'Nexus Cotton Tee', qty: 1, date: '2026-04-24 01:20 PM', source: 'RETURNS', running_stock: 1245 },
     { id: 4, type: 'OUT', ref: 'INV-10246', item: 'Nike Air Max 270', qty: 2, date: '2026-04-24 02:45 PM', source: 'POS T2', running_stock: 1243 },
   ].filter(m => filter === 'ALL' || m.type === filter), [filter]);
+
+  const handleExport = () => {
+    const exportData = movements.map(m => ({
+      "Timestamp": m.date,
+      "Reference No": m.ref,
+      "Item Description": m.item,
+      "Movement Type": m.type,
+      "Quantity": m.qty,
+      "Source/Dest": m.source,
+      "Running Stock": m.running_stock
+    }));
+
+    exportToExcel(
+      exportData, 
+      `Stock_Movement_${new Date().toISOString().split('T')[0]}`, 
+      "Movement Ledger"
+    );
+  };
 
   // ── GRID COLUMNS ──
   const columns = useMemo(() => [
@@ -119,7 +138,12 @@ export default function StockMovement() {
           </p>
         </div>
         <div className="flex gap-4">
-          <Button variant="sec" size="lg" className="h-14 px-8 rounded-[2rem] gap-3">
+          <Button 
+            variant="sec" 
+            size="lg" 
+            onClick={handleExport}
+            className="h-14 px-8 rounded-[2rem] gap-3"
+          >
             <Download size={18} /> EXPORT EXCEL
           </Button>
           <Button variant="pri" size="lg" className="h-14 px-10 rounded-[2rem] bg-navy text-white gap-3 shadow-2xl">

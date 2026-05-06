@@ -36,9 +36,10 @@ const Sidebar: React.FC<SidebarProps> = ({
   const categoryMap: Record<string, string> = {
     'POS': 'Operations', 'WAREHOUSE': 'Inventory',
     'CATALOGUE': 'Catalogue', 'FINANCE': 'Finance',
-    'HO': 'Network', 'SYSTEM': 'Settings'
+    'HO': 'Network', 'SYSTEM': 'Settings',
+    'TRANSACTIONS': 'Transactions'
   };
-  const catOrder = ['POS', 'WAREHOUSE', 'CATALOGUE', 'FINANCE', 'HO', 'SYSTEM'];
+  const catOrder = ['POS', 'TRANSACTIONS', 'WAREHOUSE', 'CATALOGUE', 'FINANCE', 'HO', 'SYSTEM'];
   
   const categories = useMemo(() => {
     const unique = Array.from(new Set(modules.map(m => m.category).filter(Boolean)));
@@ -74,22 +75,28 @@ const Sidebar: React.FC<SidebarProps> = ({
         onClick={() => onSelect(item.id)}
         title={item.label}
         className={cn(
-          "relative group flex items-center w-full gap-3 px-4 py-2.5 transition-all duration-100 text-left min-h-[44px]", // POS Standards
+          "relative group flex items-center w-full gap-3 px-4 py-2.5 transition-all duration-200 text-left min-h-[44px] border-b border-white/[0.03]", 
           isActive
-            ? "bg-white/15 text-[var(--accent)] font-bold"
-            : "text-[var(--aside-text-dim)] hover:bg-white/5 hover:text-[var(--aside-text)]"
+            ? "bg-white/[0.12] text-white font-black shadow-inner"
+            : "text-[var(--aside-text-dim)] hover:bg-white/[0.08] hover:text-white"
         )}
       >
-        {/* Active Indicator */}
+        {/* Golden Aura Indicator */}
         {isActive && (
-          <motion.div
-            layoutId="sidebar-active"
-            className="absolute left-0 top-0 bottom-0 w-1 bg-[var(--primary)]"
-          />
+          <>
+            <motion.div
+              layoutId="sidebar-active-aura"
+              className="absolute inset-0 bg-[var(--gold)]/5 blur-md"
+            />
+            <motion.div
+              layoutId="sidebar-active-line"
+              className="absolute left-0 top-1 bottom-1 w-1 bg-[var(--gold)] shadow-[0_0_10px_rgba(242,155,18,0.5)] rounded-r-full"
+            />
+          </>
         )}
 
-        <div className={cn("flex flex-col items-center justify-center", isCollapsed ? "mx-auto" : "shrink-0")}>
-          <Icon size={isCollapsed ? 20 : 16} strokeWidth={isActive ? 2.5 : 1.5} />
+        <div className={cn("flex flex-col items-center justify-center transition-transform group-hover:scale-110", isCollapsed ? "mx-auto" : "shrink-0")}>
+          <Icon size={isCollapsed ? 20 : 15} strokeWidth={isActive ? 2.5 : 1.5} className={cn(isActive ? "text-[var(--gold)]" : "opacity-40")} />
         </div>
 
         {!isCollapsed && (
@@ -128,8 +135,8 @@ const Sidebar: React.FC<SidebarProps> = ({
         )}
         style={{ 
           width: isCollapsed ? 64 : 256,
-          background: 'var(--aside-bg)',
-          boxShadow: `calc(4px * ${isCollapsed ? 0 : 1}) 0 20px var(--aside-glow)`
+          background: 'var(--aside-gradient)',
+          boxShadow: `calc(10px * ${isCollapsed ? 0 : 1}) 0 30px rgba(0,0,0,0.5)`
         }}
       >
       {/* ── NAVIGATION ── */}

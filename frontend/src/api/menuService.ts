@@ -59,19 +59,21 @@ export const STATIC_FALLBACK_MENU: MenuItem[] = [
   { id: 'sales_journal',    label: 'Sales Journal',      route: 'sales_journal',    module: 'sales_journal',    required_permission: 'billing.view',      category: 'TRANSACTIONS', children: [], shortcut: undefined },
   { id: 'purchase_journal', label: 'Purchase Journal',   route: 'purchase_journal', module: 'purchase_journal', required_permission: 'inventory.view',    category: 'TRANSACTIONS', children: [], shortcut: undefined },
   { id: 'stock_ledger',     label: 'Stock Ledger',       route: 'stock_ledger',     module: 'stock_ledger',     required_permission: 'inventory.view',    category: 'TRANSACTIONS', children: [], shortcut: undefined },
-  { id: 'purchase_entry',   label: 'Purchase Entry',     route: 'purchase_entry',   module: 'purchase_entry',   required_permission: 'inventory.view',    category: 'TRANSACTIONS', children: [], shortcut: undefined },
+  { id: 'purchase_entry',   label: 'Purchase Workbench',     route: 'purchase_entry',   module: 'purchase_entry',   required_permission: 'inventory.view',    category: 'TRANSACTIONS', children: [], shortcut: undefined },
 
   { id: 'item_master', label: 'Item Master',        route: 'item_master', module: 'item_master', required_permission: 'catalogue.view',   category: 'CATALOGUE', children: [], shortcut: undefined },
+  { id: 'item_workbench', label: 'Bulk Item Entry',  route: 'item_workbench', module: 'item_workbench', required_permission: 'catalogue.edit', category: 'CATALOGUE', children: [], shortcut: 'F6' },
   { id: 'customers',   label: 'Customer Master',    route: 'customers',   module: 'customers',   required_permission: 'crm.view',          category: 'CATALOGUE', children: [], shortcut: undefined },
   { id: 'vendors',     label: 'Vendor Master',      route: 'vendors',     module: 'vendors',     required_permission: 'catalogue.view',   category: 'CATALOGUE', children: [], shortcut: undefined },
-  { id: 'price',       label: 'Price Master',       route: 'price',       module: 'price',       required_permission: 'catalogue.price',   category: 'CATALOGUE', children: [], shortcut: undefined },
+  { id: 'chainstores', label: 'Inter-Store',        route: 'chainstores', module: 'chainstores', required_permission: 'catalogue.view',   category: 'CATALOGUE', children: [], shortcut: undefined },
+  { id: 'price',       label: 'Price Workbench',    route: 'price',       module: 'price',       required_permission: 'catalogue.price',   category: 'CATALOGUE', children: [], shortcut: undefined },
   { id: 'schemes',     label: 'Promotions',         route: 'schemes',     module: 'schemes',     required_permission: 'catalogue.schemes', category: 'CATALOGUE', children: [], shortcut: undefined },
   { id: 'loyalty',     label: 'Loyalty Program',    route: 'loyalty',     module: 'loyalty',     required_permission: 'crm.loyalty',       category: 'CATALOGUE', children: [], shortcut: undefined },
   { id: 'personnel',   label: 'Personnel Master',   route: 'personnel',   module: 'personnel',   required_permission: 'catalogue.view',    category: 'CATALOGUE', children: [], shortcut: undefined },
   { id: 'hsn',         label: 'HSN Manager',        route: 'hsn',         module: 'hsn',         required_permission: 'catalogue.view',    category: 'CATALOGUE', children: [], shortcut: undefined },
 
   { id: 'inventory',   label: 'Stock Status',       route: 'inventory',   module: 'inventory',   required_permission: 'inventory.view',    category: 'WAREHOUSE', children: [], shortcut: 'F9' },
-  { id: 'grn',         label: 'Goods Inward (GRN)', route: 'grn',         module: 'grn',         required_permission: 'inventory.grn',     category: 'WAREHOUSE', children: [], shortcut: undefined },
+  { id: 'grn',         label: 'Goods Inward (GRN)', route: 'grn',         module: 'grn',         required_permission: 'inventory.grn',     category: 'TRANSACTIONS', children: [], shortcut: undefined },
   { id: 'procurement', label: 'Purchase Orders',    route: 'procurement', module: 'procurement', required_permission: 'inventory.po',      category: 'WAREHOUSE', children: [], shortcut: undefined },
   { id: 'movement',    label: 'Stock Movement',     route: 'movement',    module: 'movement',    required_permission: 'inventory.view',    category: 'WAREHOUSE', children: [], shortcut: undefined },
   { id: 'reconcile',   label: 'Physical Audit',     route: 'reconcile',   module: 'reconcile',   required_permission: 'inventory.audit',   category: 'WAREHOUSE', children: [], shortcut: undefined },
@@ -87,6 +89,7 @@ export const STATIC_FALLBACK_MENU: MenuItem[] = [
   { id: 'table_viewer',    label: 'DB Explorer',     route: 'table_viewer',    module: 'table_viewer',    required_permission: 'settings.view', category: 'SYSTEM', children: [], shortcut: undefined },
   { id: 'hybrid_storage',  label: 'Hybrid Storage',  route: 'hybrid_storage',  module: 'hybrid_storage',  required_permission: 'settings.view', category: 'SYSTEM', children: [], shortcut: undefined },
   { id: 'architect_config',label: 'SMRITI Config',   route: 'architect_config',module: 'architect_config',required_permission: 'settings.view', category: 'SYSTEM', children: [], shortcut: 'F7' },
+  { id: 'spreadsheet',     label: 'Sovereign Audit', route: 'spreadsheet',     module: 'spreadsheet',     required_permission: 'settings.view', category: 'SYSTEM', children: [], shortcut: undefined },
 ];
 
 export const fetchMenu = async (): Promise<MenuItem[]> => {

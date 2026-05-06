@@ -72,15 +72,19 @@ export default function TopBar({
         style={{ width: 'var(--sw)' }}
       >
         <div className="flex items-center gap-3 overflow-hidden">
-          <div className="w-6 h-6 rounded bg-white flex items-center justify-center shrink-0">
-            <span className="text-[10px] font-black text-[var(--primary)]">S</span>
+          <div className="w-6 h-6 rounded-sm bg-white flex items-center justify-center shrink-0 shadow-[0_0_15px_rgba(255,255,255,0.3)]">
+            <span className="text-[10px] font-black text-[#1a4a48]">S</span>
           </div>
           <div className="flex flex-col overflow-hidden transition-opacity duration-300">
-            <span className="text-[11px] font-black leading-tight tracking-tight whitespace-nowrap u-uppercase text-white">
-              SMRITI-OS
-            </span>
-            <span className="text-[8px] font-black text-[var(--gold)] whitespace-nowrap u-uppercase tracking-widest">
-              Institutional
+            <div className="flex items-center gap-2">
+              <span className="text-[11px] font-black leading-tight tracking-widest whitespace-nowrap u-uppercase text-white">
+                SMRITI-OS
+              </span>
+              {/* Sovereign Connectivity Pulse */}
+              <div className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse shadow-[0_0_8px_rgba(52,211,153,0.8)]" title="Sovereign Ledger: Connected" />
+            </div>
+            <span className="text-[7px] font-black text-[var(--gold)] whitespace-nowrap u-uppercase tracking-[0.3em]">
+              Architect Core v2.4
             </span>
           </div>
         </div>
@@ -173,18 +177,19 @@ export default function TopBar({
       {/* ── Breadcrumb / Center Area ── */}
       <div className="flex-1 flex items-stretch h-full overflow-hidden">
         {theme === 'LIGHT' ? (
-          <button
-            onClick={() => setIsCommandBarOpen?.(true)}
-            className="flex-1 flex items-center justify-center gap-4 hover:bg-white/5 transition-all group"
-          >
-            <div className="flex items-center gap-2">
-               <span className="text-[10px] font-black uppercase tracking-widest text-white/40">GO TO</span>
-               <div className="flex items-center gap-2 px-2 py-0.5 bg-white/10 border border-white/10">
-                 <Search size={10} className="text-[var(--gold)]" />
-                 <span className="text-[10px] font-mono font-bold" style={{ color: 'var(--gold)' }}>Alt+G</span>
-               </div>
-            </div>
-          </button>
+        <button
+          onClick={() => setIsCommandBarOpen?.(true)}
+          className="mx-12 flex-1 flex items-center max-w-2xl px-6 rounded-full bg-white/5 border border-white/10 hover:bg-white/10 hover:border-white/20 transition-all group"
+        >
+          <Search size={14} className="text-white/30 group-hover:text-[var(--gold)] transition-colors" />
+          <span className="ml-4 text-[11px] font-bold text-white/20 group-hover:text-white/40 tracking-widest uppercase">
+            Execute Sovereign Command...
+          </span>
+          <div className="ml-auto flex items-center gap-2 opacity-20 group-hover:opacity-100 transition-opacity">
+            <span className="text-[9px] font-mono font-bold text-white px-1.5 py-0.5 rounded bg-white/10">Alt</span>
+            <span className="text-[9px] font-mono font-bold text-white px-1.5 py-0.5 rounded bg-white/10 text-[var(--gold)]">G</span>
+          </div>
+        </button>
         ) : (
           <div className="flex-1 flex items-center px-6 gap-1.5 text-xs text-[var(--text-tertiary)]">
             <span>SMRITI-OS</span>

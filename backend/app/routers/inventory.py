@@ -31,6 +31,23 @@ from pydantic import BaseModel
 
 router = APIRouter(prefix="/api/v1/inventory", tags=["inventory"])
 
+class BulkUpdateItem(BaseModel):
+    id: str # StockNo
+    item_name: Optional[str] = None
+    barcode: Optional[str] = None
+    brand: Optional[str] = None
+    department: Optional[str] = None
+    subclass1: Optional[str] = None
+    colour: Optional[str] = None
+    size: Optional[str] = None
+    mrp_paise: Optional[int] = None
+    sales_price: Optional[int] = None
+    cost_price: Optional[int] = None
+    hsn_code: Optional[str] = None
+
+class BulkUpdateRequest(BaseModel):
+    items: List[BulkUpdateItem]
+
 @router.get("")
 async def list_inventory(
     db: AsyncSession = Depends(get_db),
@@ -495,3 +512,61 @@ async def finalize_audit_session(
     
     await db.commit()
     return {"status": "success", "message": f"Stock reconciled for {len(entries)} items. Stockmaster Updated."}
+
+@router.post("/bulk-update")
+async def bulk_update_inventory(
+    req: BulkUpdateRequest,
+    db: AsyncSession = Depends(get_db),
+    current_user: CurrentUser = Depends(require_auth)
+):
+    """
+    Sovereign Bulk Synchronizer: Updates authoritative Shoper 9 Itemmaster tables.
+    """
+    updated_count = 0
+    created_count = 0
+    for item_data in req.items:
+        # Find the item by StockNo (id)
+        stmt = select(Itemmaster).where(Itemmaster.stockno == item_data.id)
+        result = await db.execute(stmt)
+        item = result.scalar_one_or_none()
+        
+        if item:
+            # UPDATE existing
+            if item_data.item_name is not None: item.itemdesc = item_data.item_name
+            if item_data.barcode is not None: item.sfield1 = item_data.barcode
+            if item_data.brand is not None: item.class2cd = item_data.brand 
+            if item_data.department is not None: item.class1cd = item_data.department
+            if item_data.subclass1 is not None: item.subclass1cd = item_data.subclass1
+            if item_data.colour is not None: item.subclass2cd = item_data.colour
+            if item_data.size is not None: item.sizecd = item_data.size
+            if item_data.mrp_paise is not None: item.retail_price = float(item_data.mrp_paise) / 100.0
+            if item_data.sales_price is not None: item.saleprice = float(item_data.sales_price) / 100.0
+            if item_data.cost_price is not None: item.currentcost = float(item_data.cost_price) / 100.0
+            if item_data.hsn_code is not None: item.sfield2 = item_data.hsn_code
+            updated_count += 1
+        else:
+            # CREATE new
+            new_item = Itemmaster(
+                stockno=item_data.id,
+                itemdesc=item_data.item_name or "NEW ITEM",
+                sfield1=item_data.barcode,
+                class2cd=item_data.brand or "SMRITI",
+                class1cd=item_data.department or "GENERAL",
+                subclass1cd=item_data.subclass1,
+                subclass2cd=item_data.colour,
+                sizecd=item_data.size,
+                retail_price=float(item_data.mrp_paise or 0) / 100.0,
+                saleprice=float(item_data.sales_price or 0) / 100.0,
+                currentcost=float(item_data.cost_price or 0) / 100.0,
+                sfield2=item_data.hsn_code
+            )
+            db.add(new_item)
+            created_count += 1
+            
+    await db.commit()
+    return {
+        "status": "success", 
+        "updated_count": updated_count,
+        "created_count": created_count,
+        "message": f"Ledger Updated: {updated_count} existing items modified, {created_count} new items created."
+    }

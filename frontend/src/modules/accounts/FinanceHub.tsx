@@ -21,6 +21,7 @@ import {
 } from 'lucide-react';
 import { api } from '@/api/client';
 import { formatCurrency } from '@/utils/currency';
+import { exportToExcel } from '@/utils/excelUtils';
 import { 
   Button, 
   Card, 
@@ -62,6 +63,26 @@ export default function FinanceHub() {
     } catch (err) {
       alert('Accounting Export Failed');
     }
+  };
+
+  const handleGstExport = () => {
+    if (!gstrData.length) return;
+    
+    const exportData = gstrData.map(row => ({
+      "HSN/SAC Code": row.hsn,
+      "Description": row.description,
+      "GST Rate (%)": row.rate,
+      "Taxable Value": row.taxable_val,
+      "CGST": row.cgst,
+      "SGST": row.sgst,
+      "Total Tax": row.cgst + row.sgst
+    }));
+
+    exportToExcel(
+      exportData, 
+      `GSTR1_Summary_${new Date().toISOString().split('T')[0]}`, 
+      "HSN Summary"
+    );
   };
 
   // ── HSN COLUMNS ──
@@ -160,7 +181,11 @@ export default function FinanceHub() {
                   <ShieldCheck size={24} className="text-brand-gold" />
                   <Text variant="xs" className="font-black uppercase tracking-[0.4em]">HSN / SAC Wise Summary (GSTR-1 Protocol)</Text>
                </div>
-               <Button variant="sec" className="h-12 px-6 rounded-xl bg-white/10 text-white border-none hover:bg-white/20 font-black text-[10px] uppercase tracking-widest gap-2">
+               <Button 
+                variant="sec" 
+                onClick={handleGstExport}
+                className="h-12 px-6 rounded-xl bg-white/10 text-white border-none hover:bg-white/20 font-black text-[10px] uppercase tracking-widest gap-2"
+               >
                  <FileSpreadsheet size={16} /> Export Excel
                </Button>
             </div>

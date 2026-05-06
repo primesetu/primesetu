@@ -52,17 +52,21 @@ STATIC_MENU = [
     {"id": "tills",      "label": "Till Management",   "route": "tills",      "module": "tills",      "required_permission": "finance.till",     "category": "POS",        "icon": "Monitor",         "shortcut": None, "children": []},
     {"id": "dayend",     "label": "Day End Closure",   "route": "dayend",     "module": "dayend",     "required_permission": "billing.dayend",   "category": "POS",        "icon": "Lock",            "shortcut": "F12","children": []},
     
+    {"id": "purchase_entry", "label": "Purchase Workbench", "route": "purchase_entry", "module": "purchase_entry", "required_permission": "inventory.view", "category": "TRANSACTIONS", "icon": "PackagePlus", "shortcut": None, "children": []},
+    {"id": "sales_journal",    "label": "Sales Journal",      "route": "sales_journal",    "module": "sales_journal",    "required_permission": "billing.view",      "category": "TRANSACTIONS", "icon": "BookOpen", "shortcut": None, "children": []},
+    {"id": "purchase_journal", "label": "Purchase Journal",   "route": "purchase_journal", "module": "purchase_journal", "required_permission": "inventory.view",    "category": "TRANSACTIONS", "icon": "BookOpen", "shortcut": None, "children": []},
+    {"id": "stock_ledger",     "label": "Stock Ledger",       "route": "stock_ledger",     "module": "stock_ledger",     "required_permission": "inventory.view",    "category": "TRANSACTIONS", "icon": "ArrowRightLeft", "shortcut": None, "children": []},
     {"id": "item_master","label": "Item Master",       "route": "item_master","module": "item_master","required_permission": "catalogue.view",   "category": "CATALOGUE",  "icon": "Package",         "shortcut": None, "children": []},
     {"id": "customers",  "label": "Customer Master",   "route": "customers",  "module": "customers",  "required_permission": "crm.view",         "category": "CATALOGUE",  "icon": "UserSquare2",     "shortcut": None, "children": []},
     {"id": "vendors",    "label": "Vendor Master",     "route": "vendors",    "module": "vendors",    "required_permission": "catalogue.view",   "category": "CATALOGUE",  "icon": "Truck",           "shortcut": None, "children": []},
-    {"id": "price",      "label": "Price Master",      "route": "price",      "module": "price",      "required_permission": "catalogue.price",  "category": "CATALOGUE",  "icon": "DollarSign",      "shortcut": None, "children": []},
+    {"id": "price",      "label": "Price Workbench",      "route": "price",      "module": "price",      "required_permission": "catalogue.price",  "category": "CATALOGUE",  "icon": "DollarSign",      "shortcut": None, "children": []},
     {"id": "schemes",    "label": "Promotions",        "route": "schemes",    "module": "schemes",    "required_permission": "catalogue.schemes","category": "CATALOGUE",  "icon": "Tag",             "shortcut": None, "children": []},
     {"id": "loyalty",    "label": "Loyalty Program",   "route": "loyalty",    "module": "loyalty",    "required_permission": "crm.loyalty",      "category": "CATALOGUE",  "icon": "Trophy",          "shortcut": None, "children": []},
     {"id": "personnel",  "label": "Personnel Master",  "route": "personnel",  "module": "personnel",  "required_permission": "catalogue.view",   "category": "CATALOGUE",  "icon": "UserSquare2",     "shortcut": None, "children": []},
-    {"id": "hsn",        "label": "HSN Manager",       "route": "hsn",        "module": "hsn",        "required_permission": "catalogue.view",   "category": "CATALOGUE",  "icon": "Tag",             "shortcut": None, "children": []},
+    {"id": "hsn",        "label": "HSN Manager",       "route": "hsn",        "module": "hsn",        "required_permission": "catalogue.view",   "category": "CATALOGUE",  "icon": "FileSpreadsheet", "shortcut": None, "children": []},
+    {"id": "accounts",   "label": "Account Master",    "route": "accounts",   "module": "accounts",   "required_permission": "catalogue.view",   "category": "CATALOGUE",  "icon": "Database",        "shortcut": None, "children": []},
     
     {"id": "inventory",  "label": "Stock Status",      "route": "inventory",  "module": "inventory",  "required_permission": "inventory.view",   "category": "WAREHOUSE",  "icon": "Package",         "shortcut": "F9", "children": []},
-    {"id": "grn",        "label": "Goods Inward (GRN)","route": "grn",        "module": "grn",        "required_permission": "inventory.grn",    "category": "WAREHOUSE",  "icon": "Truck",           "shortcut": None, "children": []},
     {"id": "procurement","label": "Purchase Orders",   "route": "procurement","module": "procurement","required_permission": "inventory.po",     "category": "WAREHOUSE",  "icon": "ShoppingBag",     "shortcut": None, "children": []},
     {"id": "movement",   "label": "Stock Movement",    "route": "movement",   "module": "movement",   "required_permission": "inventory.view",   "category": "WAREHOUSE",  "icon": "History",         "shortcut": None, "children": []},
     {"id": "transfer",   "label": "Store Transfers",   "route": "transfer",   "module": "transfer",   "required_permission": "inventory.transfer","category":"WAREHOUSE",  "icon": "ArrowLeftRight",  "shortcut": None, "children": []},
@@ -80,6 +84,7 @@ STATIC_MENU = [
     {"id": "architect",        "label": "Architect Explorer","route": "/jawaharmallah",  "module": "architect",        "required_permission": "architect.view",    "category": "SYSTEM", "icon": "Code2",       "shortcut": "Alt+A","children": []},
     {"id": "settings",         "label": "System Config",    "route": "settings",         "module": "settings",         "required_permission": "settings.view",    "category": "SYSTEM", "icon": "Settings",    "shortcut": "F10",  "children": []},
     {"id": "security",         "label": "Security",         "route": "security",         "module": "security",         "required_permission": "settings.security","category": "SYSTEM", "icon": "ShieldCheck", "shortcut": None,   "children": []},
+    {"id": "spreadsheet",      "label": "Sovereign Audit",  "route": "spreadsheet",      "module": "spreadsheet",      "required_permission": "settings.view",    "category": "SYSTEM", "icon": "FileText",    "shortcut": None,   "children": []},
 ]
 
 @router.get("", response_model=List[MenuItemResponse])

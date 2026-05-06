@@ -83,30 +83,46 @@ const StatusBar: React.FC<StatusBarProps> = ({ activeTab }) => {
         {/* HO Pulse Indicator — live */}
         <div 
           onClick={() => setShowSync(true)}
-          className="flex items-center gap-3 px-4 cursor-pointer hover:bg-white/10 transition-all h-full"
+          className="flex items-center gap-3 px-6 cursor-pointer hover:bg-white/10 transition-all h-full group"
         >
           <div className="flex gap-0.5 items-end h-3">
-            {[1, 2, 3].map(i => (
+            {[1, 2, 3, 4].map(i => (
               <div
                 key={i}
                 className={`w-0.5 rounded-none transition-all ${sync.status === 'online' ? 'animate-pulse' : ''}`}
                 style={{
-                  height: `${6 + i * 2}px`,
-                  background: pulseColor,
+                  height: `${4 + i * 2}px`,
+                  background: sync.status === 'online' ? 'var(--gold)' : pulseColor,
                   animationDelay: `${i * 180}ms`,
                   opacity: sync.status === 'syncing' ? 0.4 : 1
                 }}
               />
             ))}
           </div>
-          <div className="text-[9px] font-black uppercase tracking-wider leading-none" style={{ color: pulseColor }}>
-            {pulseLabel}
+          <div className="flex flex-col">
+            <div className="text-[8px] font-black uppercase tracking-wider leading-none" style={{ color: pulseColor }}>
+              {pulseLabel}
+            </div>
+            <div className="text-[6px] font-bold text-white/40 uppercase mt-0.5">Sovereign Latency: 12ms</div>
           </div>
         </div>
 
+        {/* Retail Velocity Ticker */}
+        <div className="flex items-center gap-4 px-6 border-l border-white/10 bg-black/20">
+           <div className="flex flex-col items-end">
+              <span className="text-[10px] font-mono font-black text-[var(--gold)]">₹2,84,930.00</span>
+              <span className="text-[6px] font-bold text-white/30 uppercase">Today's Velocity</span>
+           </div>
+           <div className="w-px h-6 bg-white/5" />
+           <div className="flex flex-col items-end">
+              <span className="text-[10px] font-mono font-black text-emerald-400">142</span>
+              <span className="text-[6px] font-bold text-white/30 uppercase">TXN Count</span>
+           </div>
+        </div>
+
         {/* Node identity */}
-        <div className="text-[9px] font-black uppercase tracking-widest px-4 flex items-center h-full text-white/50">
-          {sync.nodeId || 'PST-X01'} · NODE v2.0
+        <div className="text-[8px] font-black uppercase tracking-[0.2em] px-6 flex items-center h-full text-white/40 bg-white/5">
+          {sync.nodeId || 'PST-X01'} // CORE v2.4 // {new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' })}
         </div>
       </div>
 

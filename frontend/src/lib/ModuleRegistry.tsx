@@ -40,6 +40,8 @@ import {
   ArrowRightLeft,
   PackagePlus,
   Home,
+  FileSpreadsheet,
+  UserCheck,
 } from "lucide-react";
 
 // Module Lazy/Dynamic Imports
@@ -49,7 +51,7 @@ const ComingSoon = lazy(() => import("../components/ComingSoon"));
 const ManagementDashboard = lazy(() => import("../modules/dashboard/ManagementDashboard"));
 const BillingModule = lazy(() => import("../modules/billing/BillingModule"));
 const MasterRegistry = lazy(() => import("../modules/catalogue/CatalogRegistry"));
-const ItemMasterModule = lazy(() => import("../modules/inventory/ItemMasterModule"));
+const ItemMaster = lazy(() => import("../modules/inventory/ItemMaster"));
 const InventoryModule = lazy(() => import("../modules/inventory/InventoryModule"));
 const AnalyticsModule = lazy(() => import("../modules/analytics/AnalyticsModule"));
 const ConfigModule = lazy(() => import("../modules/settings/ConfigModule"));
@@ -90,8 +92,15 @@ const PurchaseJournal = lazy(() => import("../modules/transactions/PurchaseJourn
 const SalesJournal = lazy(() => import("../modules/transactions/SalesJournal"));
 const StockLedgerJournal = lazy(() => import("../modules/transactions/StockLedgerJournal"));
 const HybridStorageManager = lazy(() => import("../modules/settings/HybridStorageManager"));
+const PurchaseWorkbench = lazy(() => import("../modules/transactions/PurchaseWorkbench"));
+const PriceRevisionWorkbench = lazy(() => import("../modules/catalogue/PriceRevisionWorkbench"));
 const PurchaseEntry = lazy(() => import("../modules/transactions/PurchaseEntry"));
 const ArchitectControlCenter = lazy(() => import("../modules/settings/ArchitectControlCenter"));
+const SovereignSpreadsheet = lazy(() => import("../modules/tools/SovereignSpreadsheet"));
+
+const CatalogueMasterWorkbench = lazy(() => import("../modules/inventory/CatalogueMasterWorkbench"));
+
+const navigateBack = () => window.dispatchEvent(new CustomEvent("navigate", { detail: "dashboard" }));
 
 export interface ModuleDefinition {
   id: string;
@@ -153,15 +162,6 @@ export const MODULES: ModuleDefinition[] = [
     category: "POS",
   },
   {
-    id: "grn",
-    label: "Inward (GRN)",
-    icon: Truck,
-    component: <GRNProcessor />,
-    roles: ["OWNER", "MANAGER"],
-    showInSidebar: true,
-    category: "WAREHOUSE",
-  },
-  {
     id: "returns",
     label: "Outward (Returns)",
     icon: RotateCcw,
@@ -174,7 +174,16 @@ export const MODULES: ModuleDefinition[] = [
     id: "item_master",
     label: "Item Master",
     icon: Package,
-    component: <ItemMasterModule />,
+    component: <ItemMaster />,
+    roles: ["OWNER", "MANAGER"],
+    showInSidebar: true,
+    category: "CATALOGUE",
+  },
+  {
+    id: "item_workbench",
+    label: "Bulk Item Entry",
+    icon: Zap,
+    component: <ItemMaster initialWorkbenchMode={true} />,
     roles: ["OWNER", "MANAGER"],
     showInSidebar: true,
     category: "CATALOGUE",
@@ -207,10 +216,73 @@ export const MODULES: ModuleDefinition[] = [
     category: "HO",
   },
   {
+    id: "customers",
+    label: "Customer Master",
+    icon: UserSquare2,
+    component: <CatalogueMasterWorkbench onBack={navigateBack} initialEntity="CUSTOMER" />,
+    roles: ["OWNER", "MANAGER"],
+    showInSidebar: true,
+    category: "CATALOGUE",
+  },
+  {
+    id: "vendors",
+    label: "Vendor Master",
+    icon: Truck,
+    component: <CatalogueMasterWorkbench onBack={navigateBack} initialEntity="VENDOR" />,
+    roles: ["OWNER", "MANAGER"],
+    showInSidebar: true,
+    category: "CATALOGUE",
+  },
+  {
+    id: "chainstores",
+    label: "Inter-Store",
+    icon: Store,
+    component: <CatalogueMasterWorkbench onBack={navigateBack} initialEntity="CHAINSTORE" />,
+    roles: ["OWNER", "MANAGER"],
+    showInSidebar: true,
+    category: "CATALOGUE",
+  },
+  {
+    id: "personnel",
+    label: "Personnel Master",
+    icon: UserSquare2,
+    component: <CatalogueMasterWorkbench onBack={navigateBack} initialEntity="SALESSTAFF" />,
+    roles: ["OWNER", "MANAGER"],
+    showInSidebar: true,
+    category: "CATALOGUE",
+  },
+  {
+    id: "hsn",
+    label: "HSN Manager",
+    icon: FileSpreadsheet,
+    component: <CatalogueMasterWorkbench onBack={navigateBack} initialEntity="HSN" />,
+    roles: ["OWNER", "MANAGER"],
+    showInSidebar: true,
+    category: "CATALOGUE",
+  },
+  {
+    id: "accounts",
+    label: "Account Master",
+    icon: Database,
+    component: <CatalogueMasterWorkbench onBack={navigateBack} initialEntity="ACCOUNTS" />,
+    roles: ["OWNER", "MANAGER"],
+    showInSidebar: true,
+    category: "CATALOGUE",
+  },
+  {
     id: "schemes",
     label: "Promotions",
     icon: Trophy,
     component: <SchemesModule />,
+    roles: ["OWNER", "MANAGER"],
+    showInSidebar: true,
+    category: "CATALOGUE",
+  },
+  {
+    id: "price",
+    label: "Price Workbench",
+    icon: DollarSign,
+    component: <PriceRevisionWorkbench onBack={navigateBack} />,
     roles: ["OWNER", "MANAGER"],
     showInSidebar: true,
     category: "CATALOGUE",
@@ -289,12 +361,21 @@ export const MODULES: ModuleDefinition[] = [
   },
   {
     id: "purchase_entry",
-    label: "Purchase Entry",
+    label: "Purchase Workbench",
     icon: PackagePlus,
-    component: <PurchaseEntry />,
+    component: <PurchaseWorkbench onBack={navigateBack} />,
     roles: ["OWNER", "MANAGER"],
     showInSidebar: true,
     category: "TRANSACTIONS",
+  },
+  {
+    id: "spreadsheet",
+    label: "Sovereign Audit",
+    icon: FileText,
+    component: <SovereignSpreadsheet />,
+    roles: ["OWNER", "MANAGER"],
+    showInSidebar: true,
+    category: "SYSTEM",
   },
 ];
 
@@ -307,16 +388,18 @@ export const COMPONENT_MAP: Record<string, React.ReactNode> = {
   movement: <StockMovement />,
   dayend: <DayEndModule />,
   tills: <TillManagement />,
-  price: <PriceManagement />,
+  price: <PriceRevisionWorkbench onBack={navigateBack} />,
   registry: <MasterRegistry />,
   ho: <HOSyncModule />,
   analytics: <AnalyticsModule />,
   intelligence: <IntelligenceCockpit />,
   settings: <ConfigModule />,
-  item_master: <ItemMasterModule />,
-  customers: <CustomerMaster />,
-  vendors: <VendorMaster />,
-  personnel: <PersonnelMaster />,
+  item_master: <ItemMaster />,
+  item_workbench: <ItemMaster initialWorkbenchMode={true} />,
+  customers: <CatalogueMasterWorkbench onBack={navigateBack} initialEntity="CUSTOMER" />,
+  vendors: <CatalogueMasterWorkbench onBack={navigateBack} initialEntity="VENDOR" />,
+  personnel: <CatalogueMasterWorkbench onBack={navigateBack} initialEntity="SALESSTAFF" />,
+  chainstores: <CatalogueMasterWorkbench onBack={navigateBack} initialEntity="CHAINSTORE" />,
   loyalty: <LoyaltyModule />,
   barcode: <BarcodeStudio />,
   schemes: <SchemesModule />,
@@ -326,8 +409,8 @@ export const COMPONENT_MAP: Record<string, React.ReactNode> = {
   alerts: <AlertsModule />,
   security: <SecurityModule />,
   housekeep: <HousekeepingModule />,
-  hsn: <HSNManager />,
-  grn: <GRNProcessor />,
+  hsn: <CatalogueMasterWorkbench onBack={navigateBack} initialEntity="HSN" />,
+  accounts: <CatalogueMasterWorkbench onBack={navigateBack} initialEntity="ACCOUNTS" />,
   transfer: <StockMovement />,
   vouchers: <FinanceHub />,
   reconcile: <InventoryAudit />,
@@ -344,9 +427,10 @@ export const COMPONENT_MAP: Record<string, React.ReactNode> = {
   purchase_journal: <PurchaseJournal />,
   sales_journal: <SalesJournal />,
   stock_ledger: <StockLedgerJournal />,
-  purchase_entry: <PurchaseEntry />,
+  purchase_entry: <PurchaseWorkbench onBack={navigateBack} />,
   hybrid_storage: <HybridStorageManager />,
   architect_config: <ArchitectControlCenter />,
+  spreadsheet: <SovereignSpreadsheet />,
 };
 
 export const ICON_MAP: Record<string, any> = {
@@ -365,8 +449,10 @@ export const ICON_MAP: Record<string, any> = {
   intelligence: BarChart3,
   settings: Settings,
   item_master: Package,
+  item_workbench: Zap,
   customers: UserSquare2,
   vendors: Truck,
+  chainstores: Store,
   personnel: UserSquare2,
   loyalty: Trophy,
   barcode: Package,
@@ -377,8 +463,8 @@ export const ICON_MAP: Record<string, any> = {
   alerts: AlertCircle,
   security: ShieldCheck,
   housekeep: Construction,
-  hsn: Tag,
-  grn: Truck,
+  hsn: FileSpreadsheet,
+  accounts: Database,
   transfer: History,
   vouchers: FileText,
   promotions: Trophy,

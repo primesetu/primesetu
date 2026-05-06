@@ -22,13 +22,17 @@ import {
   BarChart3,
   Boxes,
   Zap,
-  Filter
+  Filter,
+  FileSpreadsheet,
+  LayoutGrid
 } from "lucide-react";
 import { useHotkeys } from "react-hotkeys-hook";
 
 import { DataTable } from "../../components/ui/SovereignUI";
 import { formatCurrency } from "../../utils/currency";
 import ItemForm from "./ItemForm";
+import ItemMasterWorkbench from "./ItemMasterWorkbench";
+import CatalogueMasterWorkbench from "./CatalogueMasterWorkbench";
 import { usePermission } from "../../hooks/usePermission";
 import { useOfflineFallback } from "../../hooks/useOfflineFallback";
 import { apiClient } from "../../api/client";
@@ -45,9 +49,15 @@ interface Item {
   is_active: boolean;
 }
 
-const ItemMaster: React.FC = () => {
+interface ItemMasterProps {
+  initialWorkbenchMode?: boolean;
+}
+
+const ItemMaster: React.FC<ItemMasterProps> = ({ initialWorkbenchMode = false }) => {
   const [searchTerm, setSearchTerm] = useState("");
   const [isFormOpen, setIsFormOpen] = useState(false);
+  const [isWorkbenchMode, setIsWorkbenchMode] = useState(initialWorkbenchMode);
+  const [isCatWorkbenchMode, setIsCatWorkbenchMode] = useState(false);
   const [selectedItemId, setSelectedItemId] = useState<string | null>(null);
   const searchInputRef = useRef<HTMLInputElement>(null);
   const { hasPermission } = usePermission();
@@ -127,115 +137,132 @@ const ItemMaster: React.FC = () => {
           </div>
           <button className="p-5 bg-bg-float rounded-2xl text-text-secondary/40 hover:text-text-primary border border-border shadow-sm transition-all"><Filter size={20} /></button>
           {hasPermission('catalog.edit') && (
-            <button 
-              onClick={() => {
-                setSelectedItemId(null);
-                setIsFormOpen(true);
-              }}
-              className="flex items-center gap-4 bg-brand-saffron text-white px-10 py-5 rounded-[2rem] font-black text-[11px] uppercase tracking-widest shadow-2xl shadow-brand-saffron/20 hover:scale-105 active:scale-95 transition-all"
-            >
-              <Plus size={20} strokeWidth={3} />
-              Add Item <span className="opacity-40 ml-1 text-[9px]">[F4]</span>
-            </button>
+            <>
+              <button 
+                onClick={() => window.open('/catworkbench', '_blank', 'width=1200,height=800')}
+                className="flex items-center gap-4 bg-brand-navy text-white px-8 py-5 rounded-[2rem] font-black text-[11px] uppercase tracking-widest shadow-2xl hover:scale-105 active:scale-95 transition-all border border-white/10"
+              >
+                <FileSpreadsheet size={18} className="text-blue-400" />
+                Cat. Master
+              </button>
+              <button 
+                onClick={() => window.open('/workbench', '_blank', 'width=1200,height=800')}
+                className="flex items-center gap-4 bg-navy text-white px-8 py-5 rounded-[2rem] font-black text-[11px] uppercase tracking-widest shadow-2xl hover:scale-105 active:scale-95 transition-all border border-white/10"
+              >
+                <FileSpreadsheet size={18} className="text-emerald-400" />
+                Item Master
+              </button>
+              <button 
+                onClick={() => {
+                  setSelectedItemId(null);
+                  setIsFormOpen(true);
+                }}
+                className="flex items-center gap-4 bg-brand-saffron text-white px-10 py-5 rounded-[2rem] font-black text-[11px] uppercase tracking-widest shadow-2xl shadow-brand-saffron/20 hover:scale-105 active:scale-95 transition-all"
+              >
+                <Plus size={20} strokeWidth={3} />
+                Add Item <span className="opacity-40 ml-1 text-[9px]">[F4]</span>
+              </button>
+            </>
           )}
         </div>
       </div>
 
-      {/* KPI Cards */}
-      <div className="grid grid-cols-4 gap-8">
-        {[
-          { label: 'Total SKUs', val: items.length.toString(), icon: Boxes, color: 'navy' },
-          { label: 'Stock Value', val: '₹1.2Cr', icon: BarChart3, color: 'gold' },
-          { label: 'Low Stock', val: '24 Items', icon: ShieldAlert, color: 'saffron' },
-          { label: 'Active Sync', val: 'Live', icon: Zap, color: 'green' }
-        ].map((kpi, idx) => (
-          <div key={idx} className="bg-bg-elevated rounded-[40px] p-10 border border-border shadow-xl relative overflow-hidden transition-all hover:-translate-y-2 hover:shadow-2xl group">
-             <div className="flex justify-between items-start mb-6">
-                <div className={`w-12 h-12 rounded-2xl flex items-center justify-center ${kpi.color === 'navy' ? 'bg-brand-navy text-white shadow-lg' : kpi.color === 'gold' ? 'bg-brand-gold/10 text-brand-gold' : kpi.color === 'saffron' ? 'bg-brand-saffron/10 text-brand-saffron' : 'bg-emerald-50 text-emerald-600'}`}>
-                   <kpi.icon size={22} />
-                </div>
-                <span className="text-[10px] font-black text-text-secondary/40 uppercase tracking-[0.3em]">{kpi.label}</span>
-             </div>
-             <div className="text-4xl font-serif font-black text-text-primary tracking-tight">{kpi.val}</div>
+      {/* Main Content Area */}
+        {/* KPI Cards */}
+        <div className="grid grid-cols-4 gap-8">
+            {[
+              { label: 'Total SKUs', val: items.length.toString(), icon: Boxes, color: 'navy' },
+              { label: 'Stock Value', val: '₹1.2Cr', icon: BarChart3, color: 'gold' },
+              { label: 'Low Stock', val: '24 Items', icon: ShieldAlert, color: 'saffron' },
+              { label: 'Active Sync', val: 'Live', icon: Zap, color: 'green' }
+            ].map((kpi, idx) => (
+              <div key={idx} className="bg-bg-elevated rounded-[40px] p-10 border border-border shadow-xl relative overflow-hidden transition-all hover:-translate-y-2 hover:shadow-2xl group">
+                 <div className="flex justify-between items-start mb-6">
+                    <div className={`w-12 h-12 rounded-2xl flex items-center justify-center ${kpi.color === 'navy' ? 'bg-brand-navy text-white shadow-lg' : kpi.color === 'gold' ? 'bg-brand-gold/10 text-brand-gold' : kpi.color === 'saffron' ? 'bg-brand-saffron/10 text-brand-saffron' : 'bg-emerald-50 text-emerald-600'}`}>
+                       <kpi.icon size={22} />
+                    </div>
+                    <span className="text-[10px] font-black text-text-secondary/40 uppercase tracking-[0.3em]">{kpi.label}</span>
+                 </div>
+                 <div className="text-4xl font-serif font-black text-text-primary tracking-tight">{kpi.val}</div>
+              </div>
+            ))}
           </div>
-        ))}
-      </div>
 
-      {/* List Container */}
-      <div className="bg-white rounded-[50px] border border-navy/5 shadow-2xl overflow-hidden mt-10">
-        <DataTable
-          data={items}
-          loading={isLoading}
-          columns={[
-            { 
-              header: 'SKU Protocol', 
-              accessor: (item: Item) => (
-                <div className="py-4">
-                  <span className="bg-bg-input text-text-primary px-4 py-2 rounded-xl font-mono text-[12px] font-black uppercase shadow-sm">
-                    {item.item_code}
-                  </span>
-                </div>
-              ),
-              className: 'px-12'
-            },
-            { 
-              header: 'Description', 
-              accessor: (item: Item) => (
-                <div className="py-4">
-                  <div className="text-base font-black text-navy uppercase tracking-tight">{item.item_name}</div>
-                  <div className="text-[10px] font-bold text-navy/30 uppercase tracking-widest mt-2 flex items-center gap-2">
-                    {item.brand || "UNBRANDED"} · {item.department || "GENERAL"}
-                  </div>
-                </div>
-              ),
-              className: 'px-12'
-            },
-            { 
-              header: 'In-Hand Stock', 
-              accessor: (item: Item) => (
-                <span className={`px-5 py-2.5 rounded-xl text-[10px] font-black uppercase tracking-widest shadow-sm ${item.total_stock > 10 ? 'bg-emerald-50 text-emerald-600' : 'bg-rose-50 text-rose-500'}`}>
-                  {item.total_stock} Units
-                </span>
-              ),
-              align: 'center',
-              className: 'px-12'
-            },
-            { 
-              header: 'MRP (Paise)', 
-              accessor: (item: Item) => formatCurrency(item.mrp_paise), 
-              align: 'right', 
-              className: 'px-12 font-mono text-base font-black text-text-primary' 
-            },
-            { 
-              header: 'Tax Matrix', 
-              accessor: (item: Item) => `${item.gst_rate}% GST`, 
-              align: 'center', 
-              className: 'px-12 font-mono text-[12px] font-black text-text-secondary/60' 
-            },
-            { 
-              header: 'Actions', 
-              accessor: (item: Item) => (
-                <div className="flex items-center justify-end gap-3 py-4">
-                  <button 
-                    onClick={() => {
-                      setSelectedItemId(item.id);
-                      setIsFormOpen(true);
-                    }}
-                    className="p-4 bg-bg-float text-text-primary rounded-2xl hover:bg-brand-navy hover:text-white transition-all shadow-sm border border-border"
-                  >
-                    <RefreshCw size={20} />
-                  </button>
-                  <button className="p-4 bg-bg-float text-text-secondary/20 hover:text-brand-saffron hover:bg-brand-saffron/10 rounded-2xl transition-all border border-border">
-                    <MoreVertical size={22} />
-                  </button>
-                </div>
-              ),
-              align: 'right',
-              className: 'px-12'
-            }
-          ]}
-        />
-      </div>
+          {/* List Container */}
+          <div className="bg-white rounded-[50px] border border-navy/5 shadow-2xl overflow-hidden mt-10">
+            <DataTable
+              data={items}
+              loading={isLoading}
+              columns={[
+                { 
+                  header: 'SKU Protocol', 
+                  accessor: (item: Item) => (
+                    <div className="py-4">
+                      <span className="bg-bg-input text-text-primary px-4 py-2 rounded-xl font-mono text-[12px] font-black uppercase shadow-sm">
+                        {item.item_code}
+                      </span>
+                    </div>
+                  ),
+                  className: 'px-12'
+                },
+                { 
+                  header: 'Description', 
+                  accessor: (item: Item) => (
+                    <div className="py-4">
+                      <div className="text-base font-black text-navy uppercase tracking-tight">{item.item_name}</div>
+                      <div className="text-[10px] font-bold text-navy/30 uppercase tracking-widest mt-2 flex items-center gap-2">
+                        {item.brand || "UNBRANDED"} · {item.department || "GENERAL"}
+                      </div>
+                    </div>
+                  ),
+                  className: 'px-12'
+                },
+                { 
+                  header: 'In-Hand Stock', 
+                  accessor: (item: Item) => (
+                    <span className={`px-5 py-2.5 rounded-xl text-[10px] font-black uppercase tracking-widest shadow-sm ${item.total_stock > 10 ? 'bg-emerald-50 text-emerald-600' : 'bg-rose-50 text-rose-500'}`}>
+                      {item.total_stock} Units
+                    </span>
+                  ),
+                  align: 'center',
+                  className: 'px-12'
+                },
+                { 
+                  header: 'MRP (Paise)', 
+                  accessor: (item: Item) => formatCurrency(item.mrp_paise), 
+                  align: 'right', 
+                  className: 'px-12 font-mono text-base font-black text-text-primary' 
+                },
+                { 
+                  header: 'Tax Matrix', 
+                  accessor: (item: Item) => `${item.gst_rate}% GST`, 
+                  align: 'center', 
+                  className: 'px-12 font-mono text-[12px] font-black text-text-secondary/60' 
+                },
+                { 
+                  header: 'Actions', 
+                  accessor: (item: Item) => (
+                    <div className="flex items-center justify-end gap-3 py-4">
+                      <button 
+                        onClick={() => {
+                          setSelectedItemId(item.id);
+                          setIsFormOpen(true);
+                        }}
+                        className="p-4 bg-bg-float text-text-primary rounded-2xl hover:bg-brand-navy hover:text-white transition-all shadow-sm border border-border"
+                      >
+                        <RefreshCw size={20} />
+                      </button>
+                      <button className="p-4 bg-bg-float text-text-secondary/20 hover:text-brand-saffron hover:bg-brand-saffron/10 rounded-2xl transition-all border border-border">
+                        <MoreVertical size={22} />
+                      </button>
+                    </div>
+                  ),
+                  align: 'right',
+                  className: 'px-12'
+                }
+              ]}
+            />
+          </div>
 
       {/* Item Form Slide-over */}
       {isFormOpen && (

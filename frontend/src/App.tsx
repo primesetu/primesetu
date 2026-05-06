@@ -29,6 +29,8 @@ import SovereignDesktop from './components/layouts/SovereignDesktop';
 import { useTheme } from './hooks/useTheme';
 import { Routes, Route, useLocation } from 'react-router-dom';
 import ArchitectExplorer from './modules/architect/ArchitectExplorer';
+import ItemMasterWorkbench from './modules/inventory/ItemMasterWorkbench';
+import CatalogueMasterWorkbench from './modules/inventory/CatalogueMasterWorkbench';
 
 const PrimeSetu: React.FC = () => {
   useSovereignShortcuts();
@@ -175,6 +177,23 @@ const PrimeSetu: React.FC = () => {
 
   const location = useLocation();
   const isArchitectPath = location.pathname.startsWith('/jawaharmallah');
+  const isWorkbenchPath = location.pathname === '/workbench';
+  const isCatWorkbenchPath = location.pathname === '/catworkbench';
+  const isPopoutPath = location.pathname.startsWith('/popout/');
+
+  // Standalone Popout Logic
+  if (isPopoutPath) {
+    const moduleId = location.pathname.split('/')[2];
+    const PopoutComponent = COMPONENT_MAP[moduleId];
+
+    if (!PopoutComponent) return <div className="p-8 text-red-500 font-black">404: MODULE NOT FOUND IN SOVEREIGN REGISTRY</div>;
+
+    return (
+      <div className="h-screen w-screen bg-[var(--background)] p-0 overflow-hidden">
+        {PopoutComponent}
+      </div>
+    );
+  }
 
   // If on Architect path, render the Explorer directly
   if (isArchitectPath) {

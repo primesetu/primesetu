@@ -5,7 +5,7 @@
 
 from fastapi import APIRouter, Depends, HTTPException, Query
 from sqlalchemy.ext.asyncio import AsyncSession
-from sqlalchemy import select, func, text
+from sqlalchemy import select, func, text, or_, String
 from typing import List, Optional, Any, Dict
 import app.models.legacy_s9 as legacy_models
 import app.models.legacy_sys as sys_models
@@ -44,20 +44,14 @@ async def list_legacy_tables():
             
     return sorted(list(set(tables)))
 
-@router.get("/{table_name}")
-async def get_legacy_table_data(
+@router.post("/{table_name}/bulk")
+async def bulk_update_legacy_data(
     table_name: str,
-    limit: int = Query(50, le=500),
-    offset: int = 0,
-    search_col: Optional[str] = None,
-    search_val: Optional[str] = None,
-    operator_code: str = "S10", # Default to 'Contains'
+    payload: List[Dict[str, Any]],
+    current_user: CurrentUser = Depends(require_auth),
     db: AsyncSession = Depends(get_db)
 ):
-    """
-    Universal Shoper 9 Data Reader with Template-Based Search.
-    Uses VACompCode for multi-tenant isolation if present.
-    """
+    """Bulk Insert/Update with MailingList awareness."""
     # 1. Resolve Model
     target_model = None
     for attr_name in dir(legacy_models):
@@ -67,57 +61,132 @@ async def get_legacy_table_data(
             break
             
     if not target_model:
-        for attr_name in dir(sovereign_models):
-            attr = getattr(sovereign_models, attr_name)
-            if hasattr(attr, "__tablename__") and attr.__tablename__ == table_name.lower():
-                target_model = attr
-                break
+        raise HTTPException(status_code=404, detail="Table not found.")
+
+    mailing_list_fields = ["streetaddr", "town", "postalcd", "state", "country", "locality", "mobilephone", "email"]
+    
+    results = []
+    for item in payload:
+        # Check if record exists
+        pk_val = item.get("code") or item.get("id")
+        if not pk_val: continue
+        
+        stmt = select(target_model).where(getattr(target_model, "code" if hasattr(target_model, "code") else "id") == pk_val)
+        res = await db.execute(stmt)
+        row = res.scalar_one_or_none()
+        
+        if not row:
+            row = target_model()
+            # Set primary key
+            if hasattr(target_model, "code"): setattr(row, "code", pk_val)
+            elif hasattr(target_model, "id"): setattr(row, "id", pk_val)
+            db.add(row)
+            
+        # Update main fields
+        for k, v in item.items():
+            if hasattr(row, k.lower()) and k.lower() not in ["code", "id", "maillistsrlno", "maillstsrlno"]:
+                setattr(row, k.lower(), v)
+        
+        # Handle MailingList if needed
+        mail_col = "maillistsrlno" if hasattr(row, "maillistsrlno") else ("maillstsrlno" if hasattr(row, "maillstsrlno") else None)
+        if mail_col:
+            m_data = {k.lower(): v for k, v in item.items() if k.lower() in mailing_list_fields}
+            if m_data:
+                m_row = None
+                srl_no = getattr(row, mail_col)
+                if srl_no:
+                    m_res = await db.execute(select(legacy_models.Mailinglist).where(legacy_models.Mailinglist.recno == srl_no))
+                    m_row = m_res.scalar_one_or_none()
+                
+                if not m_row:
+                    # Get next recno
+                    max_rec = await db.scalar(select(func.max(legacy_models.Mailinglist.recno))) or 0
+                    m_row = legacy_models.Mailinglist(recno=max_rec + 1)
+                    db.add(m_row)
+                    setattr(row, mail_col, m_row.recno)
+                
+                for mk, mv in m_data.items():
+                    if hasattr(m_row, mk): setattr(m_row, mk, mv)
+                    
+        results.append(pk_val)
+        
+    await db.commit()
+    return {"status": "success", "count": len(results)}
+
+@router.get("/{table_name}")
+async def get_legacy_table_data(
+    table_name: str,
+    limit: int = Query(50, le=500),
+    offset: int = 0,
+    search: Optional[str] = Query(None, alias="search"),
+    filters: Optional[str] = Query(None), # JSON-encoded dict of field:value
+    db: AsyncSession = Depends(get_db)
+):
+    """Unified Reader with MailingList integration and Dynamic Filtering."""
+    target_model = None
+    for attr_name in dir(legacy_models):
+        attr = getattr(legacy_models, attr_name)
+        if hasattr(attr, "__tablename__") and attr.__tablename__ == table_name.lower():
+            target_model = attr
+            break
             
     if not target_model:
         raise HTTPException(status_code=404, detail="Table not found.")
 
-    # 2. Build Query
+    # Build Base Query
     query = select(target_model)
+    
+    # Auto-join MailingList if applicable
+    mail_col_name = "maillistsrlno" if hasattr(target_model, "maillistsrlno") else ("maillstsrlno" if hasattr(target_model, "maillstsrlno") else None)
+    has_mail = mail_col_name is not None
+    if has_mail:
+        mail_attr = getattr(target_model, mail_col_name)
+        query = select(target_model, legacy_models.Mailinglist).select_from(target_model).outerjoin(legacy_models.Mailinglist, mail_attr == legacy_models.Mailinglist.recno)
 
-    # 3. Apply Search Filter based on Shoper 9 Codes (Retail.Gl)
-    if search_col and search_val:
-        if hasattr(target_model, search_col):
-            col_attr = getattr(target_model, search_col)
-            op = OPERATOR_MAP.get(operator_code, "contains")
-            
-            if op == "=": query = query.where(col_attr == search_val)
-            elif op == "!=": query = query.where(col_attr != search_val)
-            elif op == ">": query = query.where(col_attr > search_val)
-            elif op == ">=": query = query.where(col_attr >= search_val)
-            elif op == "<": query = query.where(col_attr < search_val)
-            elif op == "<=": query = query.where(col_attr <= search_val)
-            elif op == "starts": query = query.where(col_attr.ilike(f"{search_val}%"))
-            elif op == "ends": query = query.where(col_attr.ilike(f"%{search_val}"))
-            else: query = query.where(col_attr.ilike(f"%{search_val}%")) # Contains
+    # 1. Apply Dynamic Filters (Exact Matches)
+    if filters:
+        try:
+            import json
+            filter_dict = json.loads(filters)
+            for k, v in filter_dict.items():
+                if hasattr(target_model, k):
+                    query = query.where(getattr(target_model, k) == v)
+        except: pass
 
-    # 4. Total Count
-    count_query = select(func.count()).select_from(target_model)
-    total_count = await db.scalar(count_query)
+    # 2. Apply Search Logic (ILike)
+    if search and search != "*":
+        filters = []
+        for column in target_model.__table__.columns:
+            if isinstance(column.type, (String, legacy_models.String)) or "CHAR" in str(column.type).upper():
+                filters.append(getattr(target_model, column.name).ilike(f"%{search}%"))
+        
+        if has_mail:
+            for column in legacy_models.Mailinglist.__table__.columns:
+                if isinstance(column.type, (String, legacy_models.String)) or "CHAR" in str(column.type).upper():
+                    filters.append(getattr(legacy_models.Mailinglist, column.name).ilike(f"%{search}%"))
+        
+        if filters:
+            query = query.where(or_(*filters))
 
-    # 5. Fetch Data
+    # Fetch
     query = query.offset(offset).limit(limit)
     result = await db.execute(query)
-    rows = result.scalars().all()
-
-    # 6. Serialise with JSON safety
-    from fastapi.encoders import jsonable_encoder
+    
     data = []
-    for row in rows:
-        row_dict = {}
-        for column in target_model.__table__.columns:
-            row_dict[column.name] = getattr(row, column.name)
-        data.append(jsonable_encoder(row_dict))
+    if has_mail:
+        for row, m_row in result.all():
+            d = {c.name: getattr(row, c.name) for c in target_model.__table__.columns}
+            if m_row:
+                for mc in legacy_models.Mailinglist.__table__.columns:
+                    if mc.name not in ["recno", "nm"]: # don't overwrite name if already in main table
+                        d[mc.name] = getattr(m_row, mc.name)
+            data.append(d)
+    else:
+        for row in result.scalars().all():
+            data.append({c.name: getattr(row, c.name) for c in target_model.__table__.columns})
 
     return {
         "table": table_name,
-        "total": total_count,
-        "limit": limit,
-        "offset": offset,
         "data": data
     }
 

@@ -295,6 +295,7 @@ export default function ItemMasterWorkbench({ initialData = [], onBack }: { init
   const [isSaving, setIsSaving] = useState(false);
   const [isPulling, setIsPulling] = useState(false);
   const [isFullscreen, setIsFullscreen] = useState(false);
+  const [zoomLevel, setZoomLevel] = useState(100);
   const [showMatrixGenerator, setShowMatrixGenerator] = useState(false);
   const [matrixConfig, setMatrixConfig] = useState({ styleCode: "", baseName: "", colours: "", sizes: "", mrp: "", sp: "", cp: "" });
   const [filterText, setFilterText] = useState("");
@@ -894,8 +895,13 @@ export default function ItemMasterWorkbench({ initialData = [], onBack }: { init
           >
             <ExternalLink size={20} />
           </button>
+          <div className="flex items-center gap-2 border border-[var(--border-subtle)] rounded-2xl p-1 bg-[var(--background)] h-12">
+            <button onClick={() => setZoomLevel(z => Math.max(50, z - 10))} className="w-8 h-full rounded-xl hover:bg-[var(--surface-elevated)] flex items-center justify-center font-black text-[var(--text-tertiary)]">-</button>
+            <span className="text-xs font-black w-12 text-center text-[var(--text-primary)]">{zoomLevel}%</span>
+            <button onClick={() => setZoomLevel(z => Math.min(200, z + 10))} className="w-8 h-full rounded-xl hover:bg-[var(--surface-elevated)] flex items-center justify-center font-black text-[var(--text-tertiary)]">+</button>
+          </div>
           <div>
-            <h2 className="text-xl font-black text-[var(--text-primary)] uppercase tracking-tighter flex items-center gap-3">
+            <h2 className="text-xl font-black text-[var(--text-primary)] uppercase tracking-tighter flex items-center gap-3 ml-2">
               <FileSpreadsheet className="text-[var(--accent)]" size={24} />
               Item Master Workbench
             </h2>
@@ -1342,7 +1348,10 @@ export default function ItemMasterWorkbench({ initialData = [], onBack }: { init
       )}
 
       {/* Grid Container */}
-      <div className="flex-1 overflow-auto bg-[var(--background-alt)] relative z-0">
+      <div 
+        className="flex-1 overflow-auto bg-[var(--background-alt)] relative z-0"
+        style={{ zoom: `${zoomLevel}%` }}
+      >
         {Object.keys(gridData).length === 0 && !isPulling && rowsCount === 0 && (
           <div className="absolute inset-0 flex flex-col items-center justify-center bg-white/50 backdrop-blur-sm z-[1000]">
             <LayoutGrid size={48} className="text-on-surface/10 mb-4" />
@@ -1359,50 +1368,52 @@ export default function ItemMasterWorkbench({ initialData = [], onBack }: { init
             </div>
           </div>
         )}
-        <table className="border-collapse table-fixed select-none">
+        <table className="border-collapse table-fixed select-none bg-white dark:bg-slate-900 shadow-sm">
           <thead className="sticky top-0 z-20">
-            <tr className="bg-[var(--surface-elevated)]">
-              <th className="w-10 border-b border-r border-[var(--border-subtle)] p-2">
+            <tr className="bg-slate-100 dark:bg-slate-800">
+              <th className="w-10 border-b border-r border-slate-300 dark:border-slate-700 p-2 text-center">
                 <input 
                   type="checkbox" 
-                  checked={selectedRows.size === rowsCount}
+                  checked={selectedRows.size === rowsCount && rowsCount > 0}
                   onChange={(e) => {
                     if (e.target.checked) setSelectedRows(new Set(Array.from({length: rowsCount}, (_, i) => i+1)));
                     else setSelectedRows(new Set());
                   }}
-                  className="rounded border-[var(--border-subtle)]"
+                  className="rounded border-slate-300"
                 />
               </th>
-              <th className="w-12 border-b border-r border-[var(--border-subtle)] p-2 text-[10px] text-[var(--text-tertiary)] font-black uppercase">#</th>
+              <th className="w-12 border-b border-r border-slate-300 dark:border-slate-700 p-2 text-sm text-slate-500 font-semibold text-center">#</th>
               {currentSchema.map((col, ci) => (
                 <th 
                   key={ci} 
-                  style={{ width: col.width }}
-                  className="border-b border-r border-[var(--border-subtle)] p-3 text-left text-[10px] text-[var(--text-tertiary)] font-black uppercase tracking-widest"
+                  style={{ width: col.width, minWidth: col.width }}
+                  className="border-b border-r border-slate-300 dark:border-slate-700 p-2 text-left text-sm text-slate-700 dark:text-slate-300 font-semibold align-middle"
                 >
                   <div className="flex items-center justify-between">
                     <span>{col.label} {col.required && <span className="text-rose-500">*</span>}</span>
                   </div>
                 </th>
               ))}
-              <th className="flex-1 border-b border-[var(--border-subtle)]"></th>
+              <th className="w-12 border-b border-r border-slate-300 dark:border-slate-700 p-2 text-center text-sm font-semibold text-slate-500">Del</th>
+              <th className="flex-1 border-b border-slate-300 dark:border-slate-700 bg-slate-100 dark:bg-slate-800"></th>
             </tr>
             {showColumnFilters && (
-              <tr className="bg-[var(--background)]">
-                <th className="border-b border-r border-[var(--border-subtle)]"></th>
-                <th className="border-b border-r border-[var(--border-subtle)]"></th>
+              <tr className="bg-slate-50 dark:bg-slate-800/50">
+                <th className="border-b border-r border-slate-300 dark:border-slate-700"></th>
+                <th className="border-b border-r border-slate-300 dark:border-slate-700"></th>
                 {currentSchema.map((col, ci) => (
-                  <th key={ci} className="border-b border-r border-[var(--border-subtle)] p-1">
+                  <th key={ci} className="border-b border-r border-slate-300 dark:border-slate-700 p-1">
                     <input 
                       type="text"
-                      className="w-full bg-[var(--surface-elevated)] border border-[var(--border-subtle)] rounded-lg px-2 py-1 text-[9px] font-bold text-[var(--text-primary)] outline-none focus:border-[var(--accent)]"
+                      className="w-full bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-700 rounded px-2 py-1 text-sm font-normal outline-none focus:border-blue-500"
                       placeholder={`Filter...`}
                       value={columnFilters[ci] || ""}
                       onChange={(e) => setColumnFilters(prev => ({ ...prev, [ci]: e.target.value }))}
                     />
                   </th>
                 ))}
-                <th className="border-b border-[var(--border-subtle)]"></th>
+                <th className="border-b border-r border-slate-300 dark:border-slate-700"></th>
+                <th className="border-b border-slate-300 dark:border-slate-700"></th>
               </tr>
             )}
           </thead>
@@ -1429,24 +1440,23 @@ export default function ItemMasterWorkbench({ initialData = [], onBack }: { init
                 <tr 
                   key={r} 
                   className={cn(
-                    "group transition-colors",
-                    validationErrors[r] ? "bg-rose-500/10" : "hover:bg-[var(--accent)]/5",
+                    "group transition-none",
                     deletedRows.has(r) ? "opacity-40 grayscale italic line-through decoration-rose-500" : "",
-                    selectedRows.has(r) ? "bg-[var(--accent)]/10" : ""
+                    selectedRows.has(r) ? "bg-blue-50/50 dark:bg-blue-900/10" : ""
                   )}
                   title={validationErrors[r]}
                 >
-                  <td className="border-r border-b border-[var(--border-subtle)] p-2 text-center">
+                  <td className="border-r border-b border-slate-300 dark:border-slate-700 p-1 text-center bg-slate-50 dark:bg-slate-800/80 cursor-pointer" onClick={() => toggleRowSelection(r)}>
                     <input 
                       type="checkbox" 
                       checked={selectedRows.has(r)}
-                      onChange={() => toggleRowSelection(r)}
-                      className="rounded border-[var(--border-subtle)]"
+                      onChange={() => {}}
+                      className="rounded border-slate-300 pointer-events-none"
                     />
                   </td>
                   <td className={cn(
-                    "border-r border-b border-[var(--border-subtle)] p-2 text-center text-[10px] font-bold relative",
-                    validationErrors[r] ? "bg-rose-500 text-white" : "bg-[var(--surface-elevated)] text-[var(--text-tertiary)]",
+                    "border-r border-b border-slate-300 dark:border-slate-700 p-1 text-center text-sm font-semibold relative select-none",
+                    validationErrors[r] ? "bg-rose-500 text-white" : "bg-slate-100 dark:bg-slate-800 text-slate-500",
                     modifiedRows.has(r) && !validationErrors[r] ? "border-l-4 border-l-amber-500" : ""
                   )}>
                     {r}
@@ -1469,8 +1479,9 @@ export default function ItemMasterWorkbench({ initialData = [], onBack }: { init
                         onClick={() => { setSelectedCell({ r, c: ci }); setEditingCell(null); }}
                         onDoubleClick={() => startEditing(r, ci)}
                         className={cn(
-                          "border-r border-b border-[var(--border-subtle)] relative p-0 transition-all",
-                          isSelected ? 'bg-[var(--accent)]/10' : ''
+                          "border-r border-b border-slate-300 dark:border-slate-700 relative p-0 transition-none cursor-cell",
+                          col.readonly ? "bg-slate-50 dark:bg-slate-800/50" : "bg-white dark:bg-slate-900",
+                          isSelected ? 'bg-blue-50 dark:bg-blue-900/20' : ''
                         )}
                       >
                         {isEditing ? (
@@ -1482,35 +1493,35 @@ export default function ItemMasterWorkbench({ initialData = [], onBack }: { init
                             onBlur={finishEditing}
                             data-f2={col.f2Type || (activeSheet === "Master Attributes" ? "" : "lookups")}
                             data-f2-category={col.f2Category || ""}
-                            className="w-full h-full bg-[var(--surface-elevated)] text-[var(--text-primary)] px-3 py-2 text-xs font-bold border-none outline-none ring-2 ring-[var(--accent)] inset-0 z-10"
+                            className="w-full h-full bg-white dark:bg-slate-900 text-slate-900 dark:text-slate-100 px-2 text-sm font-medium border-none outline-none ring-2 ring-blue-500 absolute inset-0 z-10"
                           />
                         ) : (
                           <div className={cn(
-                            "px-3 py-2 text-xs truncate",
-                            col.readonly ? 'opacity-30' : '',
-                            value === "" ? 'text-[var(--text-tertiary)] italic' : 'text-[var(--text-primary)] font-bold'
+                            "px-2 py-1 text-sm truncate min-h-[28px] flex items-center",
+                            col.readonly ? 'opacity-50' : '',
+                            value === "" ? 'text-slate-400 italic' : 'text-slate-900 dark:text-slate-100 font-medium'
                           )}>
-                            {value === "" ? (isSelected ? "" : col.label.toLowerCase() + "...") : value}
+                            {value === "" ? (isSelected ? "" : "") : value}
                           </div>
                         )}
                         {isSelected && !isEditing && (
-                          <div className="absolute inset-0 border-2 border-[var(--accent)] pointer-events-none" />
+                          <div className="absolute inset-0 border-2 border-blue-500 pointer-events-none z-10" />
                         )}
                       </td>
                     );
                   })}
-                  <td className="border-b border-[var(--border-subtle)] p-2 text-center w-12">
+                  <td className="border-b border-r border-slate-300 dark:border-slate-700 p-1 text-center w-12 bg-white dark:bg-slate-900">
                      <button 
                        onClick={() => markForDeletion(r)}
                        className={cn(
-                         "p-1.5 rounded-lg transition-all",
-                         deletedRows.has(r) ? "bg-rose-500 text-white" : "text-rose-500 hover:bg-rose-500 hover:text-white opacity-0 group-hover:opacity-100"
+                         "p-1 rounded transition-all w-full flex items-center justify-center",
+                         deletedRows.has(r) ? "bg-rose-500 text-white" : "text-rose-500 hover:bg-rose-50 hover:text-rose-600 opacity-20 hover:opacity-100"
                        )}
                      >
-                       <Trash2 size={12} />
+                       <Trash2 size={16} />
                      </button>
                   </td>
-                  <td className="border-b border-[var(--border-subtle)] flex-1"></td>
+                  <td className="border-b border-slate-300 dark:border-slate-700 flex-1 bg-slate-50 dark:bg-slate-800"></td>
                 </tr>
               );
             })}

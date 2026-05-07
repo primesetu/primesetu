@@ -97,6 +97,10 @@ const ItemMaster: React.FC<ItemMasterProps> = ({ initialWorkbenchMode = false })
     }
   }, { enableOnFormTags: true });
 
+  if (isWorkbenchMode) {
+    return <ItemMasterWorkbench initialData={[]} onBack={() => setIsWorkbenchMode(false)} />;
+  }
+
   return (
     <div className="space-y-6 animate-in fade-in duration-700 pb-20">
       {/* Breadcrumb Pattern */}

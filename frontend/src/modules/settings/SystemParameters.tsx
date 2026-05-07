@@ -17,13 +17,12 @@ import { Button } from '@/components/ui/SovereignUI'
 
 interface ParamData {
   id: string
-  prmid: string
+  paramcode: string
+  descr: string
   prmval: string
   prmstatus: string
-  // Merged fields
-  prmtitle?: string
-  prmcategory?: string
-  prmtype?: string
+  category: string
+  prmtype: string
 }
 
 export default function SystemParameters() {
@@ -39,23 +38,37 @@ export default function SystemParameters() {
   const fetchData = async () => {
     try {
       setLoading(true)
-      // 1. Fetch the actual values (SysParam)
-      const valuesRes = await api.legacy.getData('sysparam')
-      // 2. Fetch the metadata (SysParamExtd)
-      const metaRes = await api.legacy.getData('sysparamextd')
+      const valuesRes = await api.legacy.getData('sysparam', { limit: 1000 })
 
-      const merged = valuesRes.data.map((v: any) => {
-        const meta = metaRes.data.find((m: any) => m.prmid === v.prmid)
+      const merged: ParamData[] = valuesRes.data.map((v: any) => {
+        let val = ''
+        let type = 'STRING'
+        if (v.boolean !== null) {
+          val = v.boolean ? '1' : '0'
+          type = 'BOOL'
+        } else if (v.intg !== null) {
+          val = String(v.intg)
+          type = 'NUMBER'
+        } else if (v.txt !== null) {
+          val = v.txt
+        } else if (v.cur !== null) {
+          val = String(v.cur)
+          type = 'NUMBER'
+        }
+
         return {
-          ...v,
-          prmtitle: meta?.prmtitle || v.prmid,
-          prmcategory: meta?.prmcategory || 'GENERAL',
-          prmtype: meta?.prmtype || 'STRING'
+          id: v.id,
+          paramcode: v.paramcode || 'UNKNOWN',
+          descr: v.descr || v.paramcode,
+          prmval: val,
+          prmstatus: '1',
+          category: v.category || v.catdescr || 'GENERAL',
+          prmtype: type
         }
       })
 
       setParams(merged)
-      const cats = Array.from(new Set(merged.map((m: any) => m.prmcategory))) as string[]
+      const cats = Array.from(new Set(merged.map((m: any) => m.category))).sort() as string[]
       setCategories(cats)
       if (cats.length > 0) setActiveCategory(cats[0])
     } catch (err) {
@@ -74,7 +87,12 @@ export default function SystemParameters() {
     setParams(prev => prev.map(item => item.id === p.id ? { ...item, prmval: newVal } : item))
     
     try {
-      await api.legacy.patchData('sysparam', p.id, { prmval: newVal })
+      const payload: any = {}
+      if (p.prmtype === 'BOOL') payload.boolean = newVal === '1'
+      else if (p.prmtype === 'NUMBER') payload.intg = parseInt(newVal, 10) || 0
+      else payload.txt = newVal
+
+      await api.legacy.patchData('sysparam', p.id, payload)
     } catch (err) {
       console.error("Sync failure", err)
       // Rollback
@@ -91,7 +109,7 @@ export default function SystemParameters() {
     )
   }
 
-  const filteredParams = params.filter(p => p.prmcategory === activeCategory)
+  const filteredParams = params.filter(p => p.category === activeCategory)
 
   return (
     <div className="flex flex-col gap-8 animate-in fade-in duration-500">
@@ -126,11 +144,11 @@ export default function SystemParameters() {
             </div>
             
             <div className="text-[9px] font-black text-[var(--text-tertiary)] uppercase tracking-tighter mb-1 opacity-60">
-              {p.prmid}
+              {p.paramcode}
             </div>
             
             <h4 className="text-sm font-black text-[var(--text-primary)] mb-4 leading-tight uppercase tracking-tight">
-              {p.prmtitle}
+              {p.descr}
             </h4>
 
             <div className="mt-auto pt-4 flex justify-between items-center">

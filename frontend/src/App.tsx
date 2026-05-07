@@ -195,6 +195,23 @@ const PrimeSetu: React.FC = () => {
     );
   }
 
+  // Standalone Workbench Logic
+  if (isWorkbenchPath) {
+    return (
+      <div className="h-screen w-screen bg-[var(--background)] p-0 overflow-hidden">
+        <ItemMasterWorkbench initialData={[]} onBack={() => window.close()} />
+      </div>
+    );
+  }
+
+  if (isCatWorkbenchPath) {
+    return (
+      <div className="h-screen w-screen bg-[var(--background)] p-0 overflow-hidden">
+        <CatalogueMasterWorkbench onBack={() => window.close()} />
+      </div>
+    );
+  }
+
   // If on Architect path, render the Explorer directly
   if (isArchitectPath) {
     return (

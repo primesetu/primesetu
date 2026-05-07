@@ -87,7 +87,7 @@ const StockTransfer = lazy(() => import("../modules/inventory/StockTransfer"));
 const IntelligenceCockpit = lazy(() => import("../modules/intelligence/IntelligenceCockpit"));
 const LegacyExplorer = lazy(() => import("../modules/intelligence/LegacyExplorer"));
 const TableViewerModule = lazy(() => import("../modules/settings/TableViewerModule"));
-const SystemParameters = lazy(() => import("../modules/setup/SystemParameters"));
+const SystemParameters = lazy(() => import("../modules/settings/SystemParameters"));
 const PurchaseJournal = lazy(() => import("../modules/transactions/PurchaseJournal"));
 const SalesJournal = lazy(() => import("../modules/transactions/SalesJournal"));
 const StockLedgerJournal = lazy(() => import("../modules/transactions/StockLedgerJournal"));
@@ -393,7 +393,6 @@ export const COMPONENT_MAP: Record<string, React.ReactNode> = {
   ho: <HOSyncModule />,
   analytics: <AnalyticsModule />,
   intelligence: <IntelligenceCockpit />,
-  settings: <ConfigModule />,
   item_master: <ItemMaster />,
   item_workbench: <ItemMaster initialWorkbenchMode={true} />,
   customers: <CatalogueMasterWorkbench onBack={navigateBack} initialEntity="CUSTOMER" />,
@@ -411,13 +410,11 @@ export const COMPONENT_MAP: Record<string, React.ReactNode> = {
   housekeep: <HousekeepingModule />,
   hsn: <CatalogueMasterWorkbench onBack={navigateBack} initialEntity="HSN" />,
   accounts: <CatalogueMasterWorkbench onBack={navigateBack} initialEntity="ACCOUNTS" />,
-  transfer: <StockMovement />,
+  transfer: <StockTransfer />,   // stock transfer (wh window)
   vouchers: <FinanceHub />,
   reconcile: <InventoryAudit />,
-  tally: <FinanceHub />,
   print: <PrintTemplateCenter />,
   onboarding: <StoreOnboarding />,
-  gstr1: <FinanceHub />,
   pricegroups: <PriceGroups />,
   warehouse_os: <WarehouseDashboard />,
   stock_transfer: <StockTransfer />,

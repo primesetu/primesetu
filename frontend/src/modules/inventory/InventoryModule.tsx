@@ -16,7 +16,6 @@ import {
 import { useLanguage } from '@/hooks/useLanguage'
 import { api } from '@/api/client'
 import PhysicalStockModule from './PhysicalStockModule'
-import BulkItemMaster from './BulkItemMaster'
 import BarcodeStudio from './BarcodeStudio'
 import InwardingModule from './InwardingModule'
 import { PredictiveIntelligence } from './PredictiveIntelligence'
@@ -124,7 +123,7 @@ export default function InventoryModule() {
       </nav>
 
       {/* Module Components */}
-      {isImporting && <BulkItemMaster onClose={() => setIsImporting(false)} />}
+      {/* Bulk import now via ItemMaster Workbench (Start Menu → Masters → Item Master) */}
       {isPrintingBarcodes && <BarcodeStudio onClose={() => setIsPrintingBarcodes(false)} initialItems={items.slice(0, 5)} />}
       {isAddingStock && <InwardingModule onClose={() => setIsAddingStock(false)} />}
       {isAuditing && <PhysicalStockModule onClose={() => setIsAuditing(false)} />}

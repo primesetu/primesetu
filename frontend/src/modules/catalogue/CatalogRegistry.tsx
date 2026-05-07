@@ -28,7 +28,7 @@ import {
 import { motion, AnimatePresence } from 'framer-motion';
 
 // Sub-Modules
-import ItemMaster from './ItemMaster';
+import ItemMaster from '../inventory/ItemMaster';
 import CustomerMaster from './CustomerMaster';
 import VendorMaster from './VendorMaster';
 import PriceGroups from './PriceGroups';
@@ -66,14 +66,14 @@ export default function CatalogRegistry() {
     }
 
     switch (activeTab) {
-      case 'items': return <ItemMaster onOpenMatrix={setViewStyle} />;
+      case 'items': return <ItemMaster />;
       case 'matrix': return <StyleMatrix styleCode="SELECT_STYLE" onBack={() => setActiveTab('items')} />;
       case 'revisions': return <PriceRevisionCockpit />;
       case 'customers': return <CustomerMaster />;
       case 'vendors': return <VendorMaster />;
       case 'pricing': return <PriceGroups />;
       case 'personnel': return <PersonnelMaster />;
-      default: return <ItemMaster onOpenMatrix={setViewStyle} />;
+      default: return <ItemMaster />;
     }
   };
 

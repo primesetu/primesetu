@@ -38,73 +38,166 @@ import {
 import { api } from "../../api/client";
 import { cn } from "@/lib/utils";
 
-// ── Shoper 9 master field registry (all possible catalogue fields)
+// ── S9 Master Field Registry — exact Shoper9 column names (Start to Product Creations.sql)
+// Key names map 1:1 to backend Itemmaster model columns
 const ALL_FIELDS = [
-  { key: "item_code",    label: "Stock No",       required: true,  type: "text",   f2Type: undefined, f2Category: undefined, width: 120 },
-  { key: "item_name",    label: "Description",    required: true,  type: "text",   f2Type: undefined, f2Category: undefined, width: 250 },
-  { key: "barcode",      label: "Barcode/EAN",    required: false, type: "text",   f2Type: undefined, f2Category: undefined, width: 140 },
-  { key: "department",   label: "Class1/Dept",    required: false, type: "text",   f2Type: "lookups", f2Category: "CLASS1",  width: 120 },
-  { key: "brand",        label: "Class2/Brand",   required: false, type: "text",   f2Type: "lookups", f2Category: "CLASS2",  width: 120 },
-  { key: "subclass1",    label: "Sub-Class1",     required: false, type: "text",   f2Type: "lookups", f2Category: "SUBCLASS1", width: 120 },
-  { key: "colour",       label: "Colour",         required: false, type: "text",   f2Type: "lookups", f2Category: "COLOUR",  width: 100 },
-  { key: "size",         label: "Size",           required: false, type: "text",   f2Type: "lookups", f2Category: "SIZE",    width: 80 },
-  { key: "mrp_paise",    label: "MRP",            required: false, type: "number", f2Type: undefined, f2Category: undefined, width: 90 },
-  { key: "sales_price",  label: "Sales Price",    required: false, type: "number", f2Type: undefined, f2Category: undefined, width: 100 },
-  { key: "cost_price",   label: "Cost Price",     required: false, type: "number", f2Type: undefined, f2Category: undefined, width: 100 },
-  { key: "markup_percent",label: "Markup %",      required: false, type: "number", f2Type: undefined, f2Category: undefined, width: 90 },
-  { key: "tax_percent",  label: "Tax %",          required: false, type: "number", f2Type: undefined, f2Category: undefined, width: 80 },
-  { key: "hsn_code",     label: "HSN Code",       required: false, type: "text",   f2Type: undefined, f2Category: undefined, width: 100 },
-  { key: "vendor_code",  label: "Pref. Vendor",   required: false, type: "text",   f2Type: "vendors", f2Category: undefined, width: 120 },
-  { key: "total_stock",  label: "Stock Qty",      required: false, type: "number", f2Type: undefined, f2Category: undefined, width: 80, readonly: true },
+  // ── Identity ─────────────────────────────────────────────
+  { key: "stockno",         label: "Stock No",        required: true,  type: "text",   width: 120 },
+  { key: "itemdesc",        label: "Description",     required: true,  type: "text",   width: 250 },
+  { key: "sfield1",         label: "Barcode/EAN",     required: false, type: "text",   width: 140 },
+  { key: "batchsrlno",      label: "Batch Sr No",     required: false, type: "number", width: 80 },
+  // ── Classification ───────────────────────────────────────
+  { key: "class1cd",        label: "Product",         required: false, type: "text",   f2Type: "lookups", f2Category: "CLASS1",    width: 120 },
+  { key: "class2cd",        label: "Brand",           required: false, type: "text",   f2Type: "lookups", f2Category: "CLASS2",    width: 120 },
+  { key: "subclass1cd",     label: "Style",           required: false, type: "text",   f2Type: "lookups", f2Category: "SUBCLASS1", width: 120 },
+  { key: "subclass2cd",     label: "Shade",           required: false, type: "text",   f2Type: "lookups", f2Category: "SUBCLASS2", width: 100 },
+  { key: "sizecd",          label: "Size",            required: false, type: "text",   f2Type: "lookups", f2Category: "SIZE",      width: 80  },
+  // ── Pricing ───────────────────────────────────────────────
+  { key: "retail_price",    label: "MRP",             required: false, type: "number", width: 90  },
+  { key: "dealer_price",    label: "Dealer Price",    required: false, type: "number", width: 100 },
+  { key: "currentcost",     label: "Cost Price",      required: false, type: "number", width: 100 },
+  { key: "finalmrp",        label: "Final MRP",       required: false, type: "number", width: 90  },
+  { key: "rtlmarkup",       label: "Retail Markup %", required: false, type: "number", width: 100 },
+  { key: "dlrmarkup",       label: "Dealer Markup %", required: false, type: "number", width: 100 },
+  // ── Tax ──────────────────────────────────────────────────
+  { key: "prodtaxtype",     label: "GST Slab",        required: false, type: "text",   f2Type: "lookups", f2Category: "TAXTYPE",   width: 90  },
+  { key: "srctaxtype",      label: "Source Tax",      required: false, type: "text",   width: 90  },
+  { key: "isrptaxinclusive",label: "Tax Incl (Y/N)",  required: false, type: "text",   width: 90  },
+  // ── Attributes (AnalCodes) ────────────────────────────────
+  { key: "analcode1",       label: "Fibre",           required: false, type: "text",   f2Type: "lookups", f2Category: "AC1",  width: 100 },
+  { key: "analcode2",       label: "Finish",          required: false, type: "text",   f2Type: "lookups", f2Category: "AC2",  width: 100 },
+  { key: "analcode3",       label: "Colour Base",     required: false, type: "text",   f2Type: "lookups", f2Category: "AC3",  width: 100 },
+  { key: "analcode4",       label: "Styling",         required: false, type: "text",   f2Type: "lookups", f2Category: "AC4",  width: 100 },
+  { key: "analcode5",       label: "Usage",           required: false, type: "text",   f2Type: "lookups", f2Category: "AC5",  width: 100 },
+  { key: "analcode6",       label: "AC6",             required: false, type: "text",   width: 90  },
+  { key: "analcode7",       label: "AC7",             required: false, type: "text",   width: 90  },
+  { key: "analcode8",       label: "AC8",             required: false, type: "text",   width: 90  },
+  { key: "analcode9",       label: "AC9",             required: false, type: "text",   width: 90  },
+  { key: "analcode10",      label: "AC10",            required: false, type: "text",   width: 90  },
+  { key: "analcode32",      label: "HSN Code",        required: false, type: "text",   width: 100 },
+  // ── Vendor ───────────────────────────────────────────────
+  { key: "prefvendorid",    label: "Pref. Vendor",    required: false, type: "text",   f2Type: "vendors", width: 120 },
+  // ── Flags ────────────────────────────────────────────────
+  { key: "isinventoryitem", label: "Inventory (Y/N)", required: false, type: "text",   width: 90  },
+  { key: "isbillable",      label: "Billable (Y/N)",  required: false, type: "text",   width: 90  },
+  { key: "isservice",       label: "Service (Y/N)",   required: false, type: "text",   width: 90  },
+  { key: "regularind",      label: "Regular Item",    required: false, type: "number", width: 90  },
+  { key: "leastsalableqty", label: "L.S.Q",           required: false, type: "number", width: 80  },
+  // ── Reorder ───────────────────────────────────────────────
+  { key: "reordlvl",        label: "Reorder Level",  required: false, type: "number", width: 100 },
+  { key: "eoq",             label: "EOQ",             required: false, type: "number", width: 80  },
+  { key: "minordqty",       label: "Min. Order Qty",  required: false, type: "number", width: 100 },
+  // ── Grade / Grade ─────────────────────────────────────────
+  { key: "gradecd",         label: "Grade",           required: false, type: "text",   width: 90  },
+  // ── Image / Dates ─────────────────────────────────────────
+  { key: "imageid",         label: "Image ID",        required: false, type: "text",   width: 100 },
+  { key: "mfgdate",         label: "Mfg Date",        required: false, type: "text",   width: 100 },
+  { key: "expdate",         label: "Exp Date",        required: false, type: "text",   width: 100 },
+  // ── Stock (read-only from Stockmaster) ───────────────────
+  { key: "total_stock",     label: "Stock Qty",       required: false, type: "number", width: 80, readonly: true },
 ];
 
-const MANDATORY_KEYS = ["item_code", "item_name"];
-const DEFAULT_SELECTED = ["item_code", "item_name", "barcode", "department", "brand", "colour", "size", "mrp_paise", "sales_price"];
+// S9 mandatory fields for new items
+const MANDATORY_KEYS = ["stockno", "itemdesc"];
+const DEFAULT_SELECTED = ["stockno", "itemdesc", "sfield1", "class1cd", "class2cd", "subclass1cd", "subclass2cd", "sizecd", "retail_price", "dealer_price", "prodtaxtype", "analcode32", "total_stock"];
 
-// Legacy schemas kept for Classification / Attributes sheets
+// ── Sheet schemas — each maps to its S9 table ─────────────────────────────
 const SCHEMAS = {
+  // Common Fields: defaults applied to all new items
   COMMON_FIELDS: [
-    { key: "department", label: "Default Dept", width: 120, f2Type: "lookups", f2Category: "CLASS1" },
-    { key: "brand", label: "Default Brand", width: 120, f2Type: "lookups", f2Category: "CLASS2" },
-    { key: "subclass1", label: "Def. Sub-Class1", width: 120, f2Type: "lookups", f2Category: "SUBCLASS1" },
-    { key: "colour", label: "Def. Colour", width: 120, f2Type: "lookups", f2Category: "COLOUR" },
-    { key: "hsn_code", label: "Def. HSN", width: 120 },
-    { key: "vendor_code", label: "Def. Vendor", width: 120, f2Type: "vendors" },
-    { key: "tax_percent", label: "Def. Tax %", width: 100, type: "number" },
-    { key: "markup_percent", label: "Def. Markup %", width: 120, type: "number" }
+    { key: "class1cd",    label: "Default Product",  width: 120, f2Type: "lookups", f2Category: "CLASS1"    },
+    { key: "class2cd",    label: "Default Brand",    width: 120, f2Type: "lookups", f2Category: "CLASS2"    },
+    { key: "subclass1cd",label: "Default Style",    width: 120, f2Type: "lookups", f2Category: "SUBCLASS1" },
+    { key: "subclass2cd",label: "Default Shade",    width: 120, f2Type: "lookups", f2Category: "SUBCLASS2" },
+    { key: "analcode32", label: "Default HSN",      width: 120 },
+    { key: "prefvendorid",label: "Default Vendor",  width: 120, f2Type: "vendors" },
+    { key: "prodtaxtype",label: "Default GST Slab", width: 120, f2Type: "lookups", f2Category: "TAXTYPE"   },
+    { key: "rtlmarkup",  label: "Default Markup %", width: 120, type: "number" },
   ],
+  // ItemMaster → Itemmaster table (S9 exact columns)
   ITEM_MASTER: [
-    { key: "item_code", label: "Stock No", width: 120, required: true },
-    { key: "item_name", label: "Description", width: 250, required: true },
-    { key: "barcode", label: "Barcode/EAN", width: 140 },
-    { key: "brand", label: "Brand", width: 100, f2Type: "lookups", f2Category: "CLASS2" },
-    { key: "department", label: "Dept/Class1", width: 100, f2Type: "lookups", f2Category: "CLASS1" },
-    { key: "subclass1", label: "Sub-Class1", width: 100, f2Type: "lookups", f2Category: "SUBCLASS1" },
-    { key: "colour", label: "Colour", width: 100, f2Type: "lookups", f2Category: "COLOUR" },
-    { key: "size", label: "Size", width: 80, f2Type: "lookups", f2Category: "SIZE" },
-    { key: "mrp_paise", label: "MRP", width: 80, type: "number" },
-    { key: "sales_price", label: "Sales Price", width: 100, type: "number" },
-    { key: "cost_price", label: "Cost Price", width: 100, type: "number" },
-    { key: "hsn_code", label: "HSN", width: 100 },
-    { key: "total_stock", label: "Stock", width: 70, type: "number", readonly: true },
+    { key: "stockno",         label: "Stock No",      width: 130, required: true },
+    { key: "itemdesc",        label: "Description",   width: 250, required: true },
+    { key: "sfield1",         label: "Barcode/EAN",   width: 140 },
+    { key: "class1cd",        label: "Product",       width: 110, f2Type: "lookups", f2Category: "CLASS1"    },
+    { key: "class2cd",        label: "Brand",         width: 110, f2Type: "lookups", f2Category: "CLASS2"    },
+    { key: "subclass1cd",     label: "Style",         width: 110, f2Type: "lookups", f2Category: "SUBCLASS1" },
+    { key: "subclass2cd",     label: "Shade",         width: 110, f2Type: "lookups", f2Category: "SUBCLASS2" },
+    { key: "sizecd",          label: "Size",          width: 80,  f2Type: "lookups", f2Category: "SIZE"      },
+    { key: "retail_price",    label: "MRP",           width: 90,  type: "number" },
+    { key: "dealer_price",    label: "Dealer Price",  width: 100, type: "number" },
+    { key: "currentcost",     label: "Cost",          width: 100, type: "number" },
+    { key: "prodtaxtype",     label: "GST Slab",      width: 90,  f2Type: "lookups", f2Category: "TAXTYPE"   },
+    { key: "analcode32",      label: "HSN Code",      width: 100 },
+    { key: "rtlmarkup",       label: "Markup %",      width: 90,  type: "number" },
+    { key: "isinventoryitem", label: "Inventory",     width: 80  },
+    { key: "isbillable",      label: "Billable",      width: 80  },
+    { key: "isservice",       label: "Service",       width: 80  },
+    { key: "total_stock",     label: "Stock",         width: 70,  type: "number", readonly: true },
   ],
-  CLASSIFICATION: [
-    { key: "class12combo", label: "Class12Combo", width: 180, required: true, readonly: true },
-    { key: "dept", label: "Class1 (Dept)", width: 150, required: true, f2Type: "lookups", f2Category: "CLASS1" },
-    { key: "brand", label: "Class2 (Brand)", width: 150, required: true, f2Type: "lookups", f2Category: "CLASS2" },
-    { key: "product", label: "Class3 (Product)", width: 150, f2Type: "lookups", f2Category: "CLASS3" },
-    { key: "size_group", label: "Size Group", width: 120, f2Type: "lookups", f2Category: "SIZEGROUP" },
-    { key: "tax_percent", label: "Tax %", width: 80, type: "number" },
-    { key: "vendor_code", label: "Pref. Vendor", width: 120, f2Type: "vendors" },
-    { key: "markup_percent", label: "Markup %", width: 80, type: "number" },
+  // CLASS12COMBO → class12combo table
+  CLASS12COMBO: [
+    { key: "class1cd",        label: "Product (Class1)", width: 150, required: true,  f2Type: "lookups", f2Category: "CLASS1"  },
+    { key: "class2cd",        label: "Brand (Class2)",   width: 150, required: true,  f2Type: "lookups", f2Category: "CLASS2"  },
+    { key: "sizegroup",       label: "Size Group",       width: 120,                  f2Type: "lookups", f2Category: "SIZEGROUP" },
+    { key: "prodtaxtype",     label: "GST Slab",         width: 100,                  f2Type: "lookups", f2Category: "TAXTYPE" },
+    { key: "billable",        label: "Billable",         width: 80,  type: "number" },
+    { key: "retailmarkup",    label: "Retail Markup %",  width: 110, type: "number" },
+    { key: "dealermarkup",    label: "Dealer Markup %",  width: 110, type: "number" },
+    { key: "prefvendorid",    label: "Pref Vendor",      width: 120, f2Type: "vendors" },
+    { key: "superclass1",     label: "Department",       width: 120, f2Type: "lookups", f2Category: "SUPERCLASS1" },
+    { key: "superclass2",     label: "Buyer",            width: 120, f2Type: "lookups", f2Category: "SUPERCLASS2" },
+    { key: "isconsignmentitem",label: "Consignment",     width: 90,  type: "number" },
   ],
+  // SUBCLASS1CAT → subclass1cat table (Style + 32 AnalCodes)
+  SUBCLASS1CAT: [
+    { key: "class1cd",    label: "Product",     width: 120, required: true,  f2Type: "lookups", f2Category: "CLASS1"    },
+    { key: "class2cd",    label: "Brand",       width: 120, required: true,  f2Type: "lookups", f2Category: "CLASS2"    },
+    { key: "subclass1cd",label: "Style Code",  width: 120, required: true  },
+    { key: "subclass1desc",label: "Style Desc", width: 180 },
+    { key: "prodtaxtype",label: "GST Slab",    width: 90,  f2Type: "lookups", f2Category: "TAXTYPE" },
+    { key: "analcode1",  label: "Fibre",       width: 100, f2Type: "lookups", f2Category: "AC1" },
+    { key: "analcode2",  label: "Finish",      width: 100, f2Type: "lookups", f2Category: "AC2" },
+    { key: "analcode3",  label: "Colour Base", width: 100, f2Type: "lookups", f2Category: "AC3" },
+    { key: "analcode4",  label: "Styling",     width: 100, f2Type: "lookups", f2Category: "AC4" },
+    { key: "analcode5",  label: "Usage",       width: 100, f2Type: "lookups", f2Category: "AC5" },
+    { key: "analcode6",  label: "AC6",         width: 90  },
+    { key: "analcode7",  label: "AC7",         width: 90  },
+    { key: "analcode8",  label: "AC8",         width: 90  },
+    { key: "analcode9",  label: "AC9",         width: 90  },
+    { key: "analcode10", label: "AC10",        width: 90  },
+    { key: "analcode11", label: "AC11",        width: 90  },
+    { key: "analcode12", label: "AC12",        width: 90  },
+    { key: "analcode13", label: "AC13",        width: 90  },
+    { key: "analcode32", label: "HSN Code",    width: 100 },
+  ],
+  // SUBCLASS2CAT → subclass2cat table (Shade/Colour)
+  SUBCLASS2CAT: [
+    { key: "class1cd",    label: "Product",     width: 120, required: true,  f2Type: "lookups", f2Category: "CLASS1" },
+    { key: "class2cd",    label: "Brand",       width: 120, required: true,  f2Type: "lookups", f2Category: "CLASS2" },
+    { key: "subclass2cd",label: "Shade Code",  width: 120, required: true  },
+    { key: "subclass2desc",label: "Shade Desc", width: 200 },
+  ],
+  // SIZECAT → sizecat table
+  SIZECAT: [
+    { key: "class1cd",          label: "Product",       width: 120, required: true,  f2Type: "lookups", f2Category: "CLASS1" },
+    { key: "class2cd",          label: "Brand",         width: 120, required: true,  f2Type: "lookups", f2Category: "CLASS2" },
+    { key: "sizecd",            label: "Size Code",     width: 100, required: true  },
+    { key: "sizegroupid",       label: "Size Group ID", width: 120, f2Type: "lookups", f2Category: "SIZEGROUP" },
+    { key: "ispivotalsize",     label: "Pivotal Size",  width: 90,  type: "number" },
+    { key: "sizegroupsrlno",    label: "Size Srl No",   width: 90,  type: "number" },
+    { key: "idealstockratioqty",label: "Ideal Qty",     width: 90,  type: "number" },
+    { key: "convsizecd",        label: "Conv. Size",    width: 100 },
+    { key: "convfactor",        label: "Conv. Factor",  width: 90,  type: "number" },
+  ],
+  // GenLookup attributes
   ATTRIBUTES: [
-    { key: "LookupType", label: "Lookup Type (Category)", width: 250, required: true },
-    { key: "LookupCode", label: "Lookup Code", width: 150, required: true },
-    { key: "LookupDesc", label: "Description", width: 300, required: true },
-    { key: "SortOrder", label: "Sort Order", width: 100, type: "number" },
-    { key: "Active", label: "Active (Y/N)", width: 100 },
-  ]
+    { key: "recid",  label: "RecId (Category)", width: 150, required: true, type: "number" },
+    { key: "code",   label: "Lookup Code",      width: 150, required: true },
+    { key: "descr",  label: "Description",      width: 300, required: true },
+    { key: "number", label: "Sort Order",       width: 100, type: "number" },
+    { key: "flag",   label: "Active Flag",      width: 100 },
+  ],
 };
 
 export default function ItemMasterWorkbench({ initialData = [], onBack }: { initialData: any[], onBack: () => void }) {
@@ -114,10 +207,13 @@ export default function ItemMasterWorkbench({ initialData = [], onBack }: { init
     const saved = localStorage.getItem(STORAGE_KEY);
     
     const defaultSheets = {
-      "Common Fields": { schema: "COMMON_FIELDS", gridData: {}, rowsCount: 1, modifiedRows: [], deletedRows: [], validationErrors: {} },
-      "Item Master": { schema: "ITEM_MASTER", gridData: {}, rowsCount: 50, modifiedRows: [], deletedRows: [], validationErrors: {} },
-      "Item Classification": { schema: "CLASSIFICATION", gridData: {}, rowsCount: 20, modifiedRows: [], deletedRows: [], validationErrors: {} },
-      "Master Attributes": { schema: "ATTRIBUTES", gridData: {}, rowsCount: 30, modifiedRows: [], deletedRows: [], validationErrors: {} }
+      "Common Fields":  { schema: "COMMON_FIELDS",  gridData: {}, rowsCount: 1,  modifiedRows: [], deletedRows: [], validationErrors: {} },
+      "Item Master":    { schema: "ITEM_MASTER",    gridData: {}, rowsCount: 50, modifiedRows: [], deletedRows: [], validationErrors: {} },
+      "CLASS12COMBO":   { schema: "CLASS12COMBO",   gridData: {}, rowsCount: 20, modifiedRows: [], deletedRows: [], validationErrors: {} },
+      "SUBCLASS1CAT":   { schema: "SUBCLASS1CAT",   gridData: {}, rowsCount: 20, modifiedRows: [], deletedRows: [], validationErrors: {} },
+      "SUBCLASS2CAT":   { schema: "SUBCLASS2CAT",   gridData: {}, rowsCount: 20, modifiedRows: [], deletedRows: [], validationErrors: {} },
+      "SIZECAT":        { schema: "SIZECAT",        gridData: {}, rowsCount: 20, modifiedRows: [], deletedRows: [], validationErrors: {} },
+      "Master Attributes": { schema: "ATTRIBUTES", gridData: {}, rowsCount: 30, modifiedRows: [], deletedRows: [], validationErrors: {} },
     };
 
     if (saved) {
@@ -395,34 +491,30 @@ export default function ItemMasterWorkbench({ initialData = [], onBack }: { init
 
   const applyCommonFields = () => {
     if (activeSheet !== "Item Master") return;
-    
+
     const commonSheet = sheets["Common Fields"];
-    if (!commonSheet || !commonSheet.gridData) {
+    if (!commonSheet?.gridData) {
       showToast("No common fields defined.", 'error');
       return;
     }
 
+    // Build defaults map from Common Fields sheet (S9 key names)
     const commonData = commonSheet.gridData;
-    const defaults: Record<string, string> = {
-      department: commonData["1-0"] || "",
-      brand: commonData["1-1"] || "",
-      subclass1: commonData["1-2"] || "",
-      colour: commonData["1-3"] || "",
-      hsn_code: commonData["1-4"] || "",
-      vendor_code: commonData["1-5"] || "",
-      tax_percent: commonData["1-6"] || "",
-      markup_percent: commonData["1-7"] || ""
-    };
+    const defaults: Record<string, string> = {};
+    SCHEMAS.COMMON_FIELDS.forEach((col: any, ci: number) => {
+      const val = commonData[`1-${ci}`];
+      if (val) defaults[col.key] = val;
+    });
 
     const newGridData = { ...gridData };
     const newModified = new Set(modifiedRows);
-    const targetRows = selectedRows.size > 0 
-      ? Array.from(selectedRows) 
+    const targetRows = selectedRows.size > 0
+      ? Array.from(selectedRows)
       : Array.from({ length: rowsCount }, (_, i) => i + 1);
 
     let appliedCount = 0;
-    targetRows.forEach(r => {
-      SCHEMAS.ITEM_MASTER.forEach((col, ci) => {
+    targetRows.forEach((r: number) => {
+      SCHEMAS.ITEM_MASTER.forEach((col: any, ci: number) => {
         if (defaults[col.key] && !newGridData[`${r}-${ci}`]) {
           newGridData[`${r}-${ci}`] = defaults[col.key];
           newModified.add(r);
@@ -433,9 +525,9 @@ export default function ItemMasterWorkbench({ initialData = [], onBack }: { init
 
     if (appliedCount > 0) {
       updateActiveSheet({ gridData: newGridData, modifiedRows: Array.from(newModified) });
-      showToast(`Applied defaults to ${targetRows.length} rows (${appliedCount} cells).`, 'success');
+      showToast(`Applied common defaults to ${targetRows.length} rows (${appliedCount} cells filled).`, 'success');
     } else {
-      showToast("No empty fields to fill or no defaults set.", 'error');
+      showToast("No empty fields to fill, or no defaults set in Common Fields.", 'error');
     }
   };
 
@@ -579,12 +671,20 @@ export default function ItemMasterWorkbench({ initialData = [], onBack }: { init
   };
 
   const handleAddSheet = () => {
-    const type = prompt("Enter sheet type (1: Item Master, 2: Classification, 3: Attributes):", "1");
-    let schemaType = "ITEM_MASTER";
-    if (type === "2") schemaType = "CLASSIFICATION";
-    if (type === "3") schemaType = "ATTRIBUTES";
-
-    const name = `Custom Sheet ${Object.keys(sheets).length + 1}`;
+    const SHEET_TYPES: Record<string, string> = {
+      "1": "ITEM_MASTER",
+      "2": "CLASS12COMBO",
+      "3": "SUBCLASS1CAT",
+      "4": "SUBCLASS2CAT",
+      "5": "SIZECAT",
+      "6": "ATTRIBUTES",
+    };
+    const type = prompt(
+      "Enter sheet type:\n1: Item Master\n2: CLASS12COMBO\n3: SUBCLASS1CAT\n4: SUBCLASS2CAT\n5: SIZECAT\n6: Master Attributes",
+      "1"
+    );
+    const schemaType = SHEET_TYPES[type || "1"] || "ITEM_MASTER";
+    const name = `${schemaType} ${Object.keys(sheets).length + 1}`;
     setSheets(prev => ({
       ...prev,
       [name]: { schema: schemaType, gridData: {}, rowsCount: 50, modifiedRows: [], deletedRows: [], validationErrors: {} }
@@ -617,84 +717,41 @@ export default function ItemMasterWorkbench({ initialData = [], onBack }: { init
   const handlePullData = async () => {
     setIsPulling(true);
     try {
-      const searchQuery = serverSearch.trim() || "*"; 
-      
-      // Determine target table and key mapping based on active sheet
-      let tableName = 'itemmaster';
-      let keyMap: Record<string, string> = {
-        stockno: 'item_code',
-        itemdesc: 'item_name',
-        sfield1: 'barcode',
-        class1cd: 'department',
-        class2cd: 'brand',
-        subclass1cd: 'subclass1',
-        subclass2cd: 'colour',
-        sizecd: 'size',
-        retail_price: 'mrp_paise',
-        dealer_price: 'sales_price',
-        currentcost: 'cost_price',
-        sfield2: 'hsn_code'
-      };
+      const searchQuery = serverSearch.trim() || "*";
 
-      if (activeSheet === "Item Classification") {
-        tableName = 'class12combo';
-        keyMap = {
-          class1cd: 'dept',
-          class2cd: 'brand',
-          superclass1: 'product',
-          sizegroup: 'size_group',
-          prodtaxtype: 'tax_percent',
-          prefvendorid: 'vendor_code',
-          retailmarkup: 'markup_percent'
-        };
-      } else if (activeSheet === "Master Attributes") {
-        tableName = 'general_lookup';
-        keyMap = {
-          category: 'LookupType',
-          code: 'LookupCode',
-          label: 'LookupDesc',
-          sort_order: 'SortOrder',
-          is_active: 'Active'
-        };
-      }
+      // S9 table routing — each sheet pulls from its own table
+      const SHEET_TABLE: Record<string, string> = {
+        "Item Master":    "itemmaster",
+        "Common Fields":  "itemmaster",
+        "CLASS12COMBO":   "class12combo",
+        "SUBCLASS1CAT":   "subclass1cat",
+        "SUBCLASS2CAT":   "subclass2cat",
+        "SIZECAT":        "sizecat",
+        "Master Attributes": "genlookup",
+      };
+      const tableName = SHEET_TABLE[activeSheet] || "itemmaster";
 
       const response = await api.legacy.getData(tableName, { search: searchQuery, limit: 100 });
-      const newData: any = {};
-      
-      // The API returns { total: X, data: [...], table: Y }
       const rows = Array.isArray(response.data) ? response.data : (response.data?.data || []);
 
       if (rows.length === 0) {
-        showToast(`No records found in ${tableName} for this query.`, 'error');
+        showToast(`No records found in ${tableName}.`, 'error');
         return;
       }
-      
+
+      const newData: any = {};
       rows.forEach((item: any, ri: number) => {
-        currentSchema.forEach((col, ci) => {
-          // Find if there's a legacy key for this column
-          const legacyKey = Object.keys(keyMap).find(k => keyMap[k] === col.key) || col.key;
-          let val = item[legacyKey] ?? "";
-          
-          // Custom transformations
-          if (activeSheet === "Item Master") {
-            if (col.key === 'mrp_paise' && val !== "") {
-              val = Math.round(parseFloat(val) * 100);
-            }
-          } else if (activeSheet === "Item Classification") {
-            if (col.key === 'class12combo') {
-              val = `${item.class1cd || ''}/${item.class2cd || ''}`;
-            }
-          } else if (activeSheet === "Master Attributes") {
-            if (col.key === 'Active') {
-              val = val === true || val === 'Y' || val === 1 ? 'Y' : 'N';
-            }
-          }
-          
+        currentSchema.forEach((col: any, ci: number) => {
+          // Keys now match S9 column names directly — no mapping needed
+          let val = item[col.key] ?? item[col.key.toLowerCase()] ?? "";
+          // Booleans to Y/N for display
+          if (typeof val === 'boolean') val = val ? 'Y' : 'N';
           newData[`${ri + 1}-${ci}`] = val;
         });
       });
+
       updateActiveSheet({ gridData: newData });
-      showToast(`Successfully pulled ${rows.length} records from ${tableName}.`, 'success');
+      showToast(`Pulled ${rows.length} records from ${tableName}.`, 'success');
     } catch (err) {
       showToast("Pull failed: " + err, 'error');
     } finally {
@@ -711,14 +768,14 @@ export default function ItemMasterWorkbench({ initialData = [], onBack }: { init
     setValidationErrors({});
     setIsSaving(true);
     try {
-      const itemsToUpdate = [];
+      const itemsToSave: any[] = [];
       const errors: Record<number, string> = {};
 
       for (let r = 1; r <= rowsCount; r++) {
         const item: any = {};
         let hasData = false;
-        
-        currentSchema.forEach((col, ci) => {
+
+        currentSchema.forEach((col: any, ci: number) => {
           const val = gridData[`${r}-${ci}`];
           if (val !== undefined && val !== "") {
             item[col.key] = col.type === "number" ? Number(val) : val;
@@ -726,62 +783,81 @@ export default function ItemMasterWorkbench({ initialData = [], onBack }: { init
           }
         });
 
-        if (hasData) {
-          // DYNAMIC SCHEMA VALIDATION
-          const rowErrors = [];
-          currentSchema.forEach((col) => {
-            if (col.required && !item[col.key]) {
-              rowErrors.push(`${col.label} is Required.`);
-            }
-          });
-          
-          // Contextual numeric checks
-          if (item.mrp_paise !== undefined && item.mrp_paise <= 0) {
-            rowErrors.push("MRP must be greater than zero.");
-          }
-          if (item.tax_percent !== undefined && (item.tax_percent < 0 || item.tax_percent > 100)) {
-            rowErrors.push("Tax % must be valid.");
-          }
-          
-          if (rowErrors.length > 0) {
-            errors[r] = rowErrors.join(" | ");
-          }
+        if (!hasData) continue;
 
-          if (initialData[r - 1]?.id) item.id = initialData[r - 1].id;
-          else item.id = item.item_code; 
+        // Schema validation
+        const rowErrors: string[] = [];
+        currentSchema.forEach((col: any) => {
+          if (col.required && !item[col.key]) rowErrors.push(`${col.label} is required.`);
+        });
+        if (rowErrors.length > 0) errors[r] = rowErrors.join(" | ");
 
-          itemsToUpdate.push(item);
-        }
+        itemsToSave.push(item);
       }
 
       if (Object.keys(errors).length > 0) {
         setValidationErrors(errors);
-        showToast("Validation failed. Please check highlighted rows.", 'error');
+        showToast("Validation failed. Check highlighted rows.", 'error');
         setIsSaving(false);
         return;
       }
-
-      if (itemsToUpdate.length === 0) {
+      if (itemsToSave.length === 0) {
         showToast("No data to commit.", 'error');
         setIsSaving(false);
         return;
       }
 
-      console.log("Synchronizing items to Ledger...", itemsToUpdate);
-      
-      const response = await api.inventory.bulkUpdate(itemsToUpdate);
-      
+      // Route to correct API based on active sheet
+      let response: any;
+      if (activeSheet === "Item Master" || activeSheet === "Common Fields") {
+        // S9 cascade: POST /api/v1/items/batch — full pipeline
+        // GenLookup → CLASS12COMBO → SUBCLASS1CAT → SUBCLASS2CAT → SIZECAT → ItemMaster → StockMaster
+        response = await api.items.batchCreate({
+          items: itemsToSave,
+          omit_duplicates: true,
+          cascade_class12: true,
+          cascade_subclasses: true,
+          cascade_sizecat: true,
+          sync_genlookup: true,
+        });
+        showToast(
+          `Committed: ${response?.success_count ?? itemsToSave.length} items. ` +
+          `Skipped: ${response?.skipped_count ?? 0}.`, 'success'
+        );
+      } else if (activeSheet === "CLASS12COMBO") {
+        response = await api.legacy.bulkUpsert("class12combo", itemsToSave);
+        showToast(`CLASS12COMBO: ${itemsToSave.length} rows committed.`, 'success');
+      } else if (activeSheet === "SUBCLASS1CAT") {
+        response = await api.legacy.bulkUpsert("subclass1cat", itemsToSave);
+        showToast(`SUBCLASS1CAT: ${itemsToSave.length} rows committed.`, 'success');
+      } else if (activeSheet === "SUBCLASS2CAT") {
+        response = await api.legacy.bulkUpsert("subclass2cat", itemsToSave);
+        showToast(`SUBCLASS2CAT: ${itemsToSave.length} rows committed.`, 'success');
+      } else if (activeSheet === "SIZECAT") {
+        response = await api.legacy.bulkUpsert("sizecat", itemsToSave);
+        showToast(`SIZECAT: ${itemsToSave.length} rows committed.`, 'success');
+      } else if (activeSheet === "Master Attributes") {
+        response = await api.items.syncLookup({ items: itemsToSave });
+        showToast(`Master Attributes: ${itemsToSave.length} rows committed.`, 'success');
+      } else {
+        response = await api.inventory.bulkUpdate(itemsToSave);
+        showToast(`${itemsToSave.length} rows synchronized.`, 'success');
+      }
+
       localStorage.removeItem(STORAGE_KEY);
-      showToast(response.message || `Successfully synchronized ${itemsToUpdate.length} items.`, 'success');
       setTimeout(onBack, 1500);
     } catch (err: any) {
-      // Handle 422 and other API errors
-      let errorMsg = "Synchronization failed.";
-      if (err.response?.status === 422) {
-        errorMsg = "Data Format Error (422): Some fields have invalid values. Check Stock Numbers and Prices.";
-      }
-      showToast(errorMsg, 'error');
-      console.error(err);
+      const status = err?.response?.status;
+      const detail = err?.response?.data?.detail || "";
+      showToast(
+        status === 422
+          ? `Validation Error (422): ${detail || "Check field values."}`
+          : status === 409
+          ? `Conflict (409): ${detail || "Duplicate StockNo detected."}`
+          : "Synchronization failed: " + (detail || err?.message || err),
+        'error'
+      );
+      console.error("[SMRITI-OS handleSave]", err);
     } finally {
       setIsSaving(false);
     }

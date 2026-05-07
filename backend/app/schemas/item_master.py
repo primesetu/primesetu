@@ -407,3 +407,16 @@ class ItemMasterConfigEntry(BaseModel):
 
 class ItemCaptionsResponse(BaseModel):
     captions: dict = Field(default_factory=dict, description="{'class1cd': 'Product', 'class2cd': 'Brand', ...}")
+
+# ────────────────────────────────────────────────────────────
+# SEARCH SCHEMA
+# ────────────────────────────────────────────────────────────
+
+class SearchFilter(BaseModel):
+    field: str
+    operator: str
+    value: str
+
+class AdvancedSearchRequest(BaseModel):
+    filters: List[SearchFilter]
+    logic: str = "AND"

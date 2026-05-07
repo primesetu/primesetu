@@ -225,13 +225,13 @@ export const api = {
   },
   items: {
     // S9 cascade pipeline: GenLookup → CLASS12COMBO → SUBCLASS1CAT → SUBCLASS2CAT → SIZECAT → ItemMaster → StockMaster
-    batchCreate: (payload: any) => apiClient.post('/api/v1/items/batch', payload).then(r => r.data),
-    syncLookup: (payload: any) => apiClient.post('/api/v1/items/lookup/sync', payload).then(r => r.data),
-    getCaptions: () => apiClient.get('/api/v1/items/captions').then(r => r.data),
-    list: (params?: any) => apiClient.get('/api/v1/items/', { params }).then(r => r.data),
-    get: (stockno: string) => apiClient.get(`/api/v1/items/${stockno}`).then(r => r.data),
-    updatePrice: (stockno: string, data: any) => apiClient.patch(`/api/v1/items/${stockno}/price`, data).then(r => r.data),
-    getStockMatrix: (stockno: string) => apiClient.get(`/api/v1/items/${stockno}/stock-matrix`).then(r => r.data),
+    batchCreate: (payload: any) => apiClient.post('/items/batch', payload).then(r => r.data),
+    syncLookup: (payload: any) => apiClient.post('/items/lookup/sync', payload).then(r => r.data),
+    getCaptions: () => apiClient.get('/items/captions').then(r => r.data),
+    list: (params?: any) => apiClient.get('/items/', { params }).then(r => r.data),
+    get: (stockno: string) => apiClient.get(`/items/${stockno}`).then(r => r.data),
+    updatePrice: (stockno: string, data: any) => apiClient.patch(`/items/${stockno}/price`, data).then(r => r.data),
+    getStockMatrix: (stockno: string) => apiClient.get(`/items/${stockno}/stock-matrix`).then(r => r.data),
   }
 }
 

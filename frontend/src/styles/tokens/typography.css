@@ -1,0 +1,17 @@
+/* tokens/typography.css — type scale */
+:root {
+  --font-sans: var(--font-sans-fallback, 'Inter', system-ui, sans-serif);
+  --font-mono: 'JetBrains Mono', 'Fira Code', monospace;
+  
+  --text-xs: 10px;
+  --text-sm: 11px;
+  --text-base: 12px;
+  --text-md: 13px;
+  --text-lg: 14px;
+  --text-xl: 16px;
+
+  --fw-regular: 400;
+  --fw-medium: 600;
+  --fw-bold: 700;
+  --fw-extrabold: 800;
+}

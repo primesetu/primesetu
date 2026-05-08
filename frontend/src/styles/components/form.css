@@ -1,0 +1,15 @@
+/* components/form.css — Forms and Inputs */
+.sov-ag-input {
+  flex: 1;
+  height: 36px;
+  border: 1px solid var(--color-border-focus);
+  border-radius: var(--radius-lg);
+  padding: 0 14px;
+  font-size: var(--text-base);
+  font-weight: var(--fw-medium);
+  background: var(--color-white);
+  color: var(--color-text-primary);
+  outline: none;
+  transition: all var(--transition-fast);
+}
+.sov-ag-input:focus { border-color: var(--color-primary); box-shadow: 0 0 0 2px rgba(26, 58, 92, 0.1); }

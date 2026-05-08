@@ -9,7 +9,7 @@
  * "Memory, Not Code."
  * ============================================================ */
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNodeSync } from '@/hooks/useNodeSync';
 import { cn } from '@/lib/utils';
 import { 
@@ -28,6 +28,17 @@ const StatusBar: React.FC<StatusBarProps> = ({ activeTab }) => {
   const { theme } = useTheme();
   const [showSync, setShowSync] = useState(false);
   const isInstitutional = theme === 'LIGHT';
+
+  // Live clock — ticks every second (smriti_os_lite pattern)
+  const [liveClock, setLiveClock] = useState(() =>
+    new Date().toLocaleTimeString('en-IN', { hour: '2-digit', minute: '2-digit', second: '2-digit' })
+  );
+  useEffect(() => {
+    const id = setInterval(() => {
+      setLiveClock(new Date().toLocaleTimeString('en-IN', { hour: '2-digit', minute: '2-digit', second: '2-digit' }));
+    }, 1000);
+    return () => clearInterval(id);
+  }, []);
 
   const HOTKEYS = [
     { key: 'F1',  label: 'Help',     icon: HelpCircle },
@@ -122,7 +133,7 @@ const StatusBar: React.FC<StatusBarProps> = ({ activeTab }) => {
 
         {/* Node identity */}
         <div className="text-[8px] font-black uppercase tracking-[0.2em] px-6 flex items-center h-full text-white/40 bg-white/5">
-          {sync.nodeId || 'PST-X01'} // CORE v2.4 // {new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' })}
+          {sync.nodeId || 'PST-X01'} // CORE v2.4 // <span className="text-[var(--accent)] tabular-nums">{liveClock}</span>
         </div>
       </div>
 

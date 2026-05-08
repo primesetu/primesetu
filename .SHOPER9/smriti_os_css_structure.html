@@ -1,0 +1,367 @@
+
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: 'IBM Plex Mono', 'Fira Code', monospace; background: transparent; color: var(--color-text-primary); font-size: 12px; }
+
+  .tree { padding: 12px 0; }
+
+  .folder-root { margin-bottom: 6px; }
+
+  .folder-label {
+    display: flex; align-items: center; gap: 8px;
+    padding: 5px 10px; cursor: pointer; border-radius: 6px;
+    transition: background 0.12s; user-select: none;
+  }
+  .folder-label:hover { background: var(--color-background-secondary); }
+
+  .folder-icon { font-size: 13px; }
+  .folder-name { font-size: 12px; font-weight: 500; color: var(--color-text-primary); }
+  .folder-desc { font-size: 10px; color: var(--color-text-tertiary); margin-left: auto; padding-left: 8px; }
+
+  .tag {
+    font-size: 9px; font-weight: 600; padding: 2px 6px; border-radius: 4px;
+    letter-spacing: 0.05em; text-transform: uppercase; white-space: nowrap;
+  }
+  .tag-core    { background: rgba(61,124,255,0.12); color: #185FA5; border: 1px solid rgba(61,124,255,0.2); }
+  .tag-tokens  { background: rgba(155,109,255,0.12); color: #534AB7; border: 1px solid rgba(155,109,255,0.2); }
+  .tag-comp    { background: rgba(34,201,122,0.1); color: #0F6E56; border: 1px solid rgba(34,201,122,0.2); }
+  .tag-page    { background: rgba(245,166,35,0.1); color: #854F0B; border: 1px solid rgba(245,166,35,0.2); }
+  .tag-util    { background: rgba(88,88,100,0.12); color: #444; border: 1px solid rgba(88,88,100,0.2); }
+  .tag-brand   { background: rgba(240,75,75,0.1); color: #A32D2D; border: 1px solid rgba(240,75,75,0.2); }
+
+  .children {
+    padding-left: 20px;
+    border-left: 1px solid var(--color-border-tertiary);
+    margin-left: 18px;
+    overflow: hidden;
+    transition: max-height 0.25s ease;
+  }
+  .children.collapsed { max-height: 0 !important; }
+
+  .file-row {
+    display: flex; align-items: center; gap: 8px;
+    padding: 4px 10px; border-radius: 5px;
+    cursor: pointer; transition: background 0.1s;
+  }
+  .file-row:hover { background: var(--color-background-secondary); }
+  .file-icon { font-size: 11px; opacity: 0.6; }
+  .file-name { font-size: 11.5px; color: var(--color-text-secondary); }
+  .file-name .ext { color: var(--color-text-tertiary); }
+  .file-desc { font-size: 10px; color: var(--color-text-tertiary); margin-left: auto; }
+
+  .chevron { font-size: 10px; color: var(--color-text-tertiary); transition: transform 0.2s; margin-left: 2px; }
+  .chevron.open { transform: rotate(90deg); }
+
+  .section-gap { height: 6px; }
+
+  .detail-box {
+    margin: 10px 8px 12px;
+    background: var(--color-background-secondary);
+    border: 0.5px solid var(--color-border-tertiary);
+    border-radius: 8px;
+    padding: 12px 14px;
+    font-size: 11px;
+    color: var(--color-text-secondary);
+    line-height: 1.7;
+  }
+  .detail-box .detail-title {
+    font-size: 11px; font-weight: 600;
+    color: var(--color-text-primary); margin-bottom: 6px;
+  }
+  .detail-box code {
+    background: var(--color-background-primary);
+    border: 0.5px solid var(--color-border-tertiary);
+    border-radius: 3px; padding: 1px 5px;
+    font-size: 10.5px; font-family: inherit;
+    color: var(--color-text-primary);
+  }
+
+  .root-path {
+    font-size: 13px; font-weight: 600; color: var(--color-text-primary);
+    padding: 8px 10px 12px;
+    display: flex; align-items: center; gap: 6px;
+    border-bottom: 0.5px solid var(--color-border-tertiary);
+    margin-bottom: 6px;
+  }
+</style>
+
+<div class="tree">
+  <div class="root-path">📁 src/ &nbsp;<span style="font-size:10px;color:var(--color-text-tertiary);font-weight:400">— Smriti-OS theming structure</span></div>
+
+  <!-- STYLES FOLDER -->
+  <div class="folder-root" id="f-styles">
+    <div class="folder-label" onclick="toggle('styles')">
+      <span class="chevron open" id="chev-styles">▶</span>
+      <span class="folder-icon">📂</span>
+      <span class="folder-name">styles/</span>
+      <span class="tag tag-core">CORE</span>
+      <span class="folder-desc">Sab theming yahan se aata hai</span>
+    </div>
+    <div class="children" id="ch-styles" style="max-height:2000px">
+
+      <!-- tokens -->
+      <div class="folder-root" id="f-tokens">
+        <div class="folder-label" onclick="toggle('tokens')">
+          <span class="chevron open" id="chev-tokens">▶</span>
+          <span class="folder-icon">📂</span>
+          <span class="folder-name">tokens/</span>
+          <span class="tag tag-tokens">TOKENS</span>
+          <span class="folder-desc">Design primitives — single source of truth</span>
+        </div>
+        <div class="children" id="ch-tokens" style="max-height:2000px">
+          <div class="file-row" onclick="showDetail('colors')">
+            <span class="file-icon">📄</span>
+            <span class="file-name">colors<span class="ext">.css</span></span>
+            <span class="file-desc">--color-primary, --color-success, --color-danger…</span>
+          </div>
+          <div class="file-row" onclick="showDetail('typography')">
+            <span class="file-icon">📄</span>
+            <span class="file-name">typography<span class="ext">.css</span></span>
+            <span class="file-desc">--font-sans, --font-mono, --text-xs → --text-2xl</span>
+          </div>
+          <div class="file-row" onclick="showDetail('spacing')">
+            <span class="file-icon">📄</span>
+            <span class="file-name">spacing<span class="ext">.css</span></span>
+            <span class="file-desc">--space-1 → --space-16 (4px base grid)</span>
+          </div>
+          <div class="file-row" onclick="showDetail('radius')">
+            <span class="file-icon">📄</span>
+            <span class="file-name">radius<span class="ext">.css</span></span>
+            <span class="file-desc">--radius-sm, --radius-md, --radius-lg, --radius-pill</span>
+          </div>
+          <div class="file-row" onclick="showDetail('shadows')">
+            <span class="file-icon">📄</span>
+            <span class="file-name">shadows<span class="ext">.css</span></span>
+            <span class="file-desc">--shadow-sm, --shadow-md (elevation levels)</span>
+          </div>
+          <div class="file-row" onclick="showDetail('zindex')">
+            <span class="file-icon">📄</span>
+            <span class="file-name">z-index<span class="ext">.css</span></span>
+            <span class="file-desc">--z-dropdown, --z-modal, --z-toast</span>
+          </div>
+          <div class="file-row" onclick="showDetail('motion')">
+            <span class="file-icon">📄</span>
+            <span class="file-name">motion<span class="ext">.css</span></span>
+            <span class="file-desc">--duration-fast, --ease-out, @keyframes definitions</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="section-gap"></div>
+
+      <!-- branding -->
+      <div class="folder-root" id="f-brand">
+        <div class="folder-label" onclick="toggle('brand')">
+          <span class="chevron open" id="chev-brand">▶</span>
+          <span class="folder-icon">📂</span>
+          <span class="folder-name">brand/</span>
+          <span class="tag tag-brand">BRAND</span>
+          <span class="folder-desc">Smriti-OS identity</span>
+        </div>
+        <div class="children" id="ch-brand" style="max-height:2000px">
+          <div class="file-row" onclick="showDetail('brand-colors')">
+            <span class="file-icon">📄</span>
+            <span class="file-name">brand-colors<span class="ext">.css</span></span>
+            <span class="file-desc">--brand-blue, --brand-navy, --brand-accent</span>
+          </div>
+          <div class="file-row" onclick="showDetail('brand-fonts')">
+            <span class="file-icon">📄</span>
+            <span class="file-name">brand-fonts<span class="ext">.css</span></span>
+            <span class="file-desc">@font-face, --font-display (IBM Plex Sans)</span>
+          </div>
+          <div class="file-row" onclick="showDetail('logo')">
+            <span class="file-icon">📄</span>
+            <span class="file-name">logo<span class="ext">.css</span></span>
+            <span class="file-desc">.logo sizes, spacing, clearzone rules</span>
+          </div>
+          <div class="file-row" onclick="showDetail('theme-dark')">
+            <span class="file-icon">📄</span>
+            <span class="file-name">theme-dark<span class="ext">.css</span></span>
+            <span class="file-desc">[data-theme="dark"] overrides</span>
+          </div>
+          <div class="file-row" onclick="showDetail('theme-light')">
+            <span class="file-icon">📄</span>
+            <span class="file-name">theme-light<span class="ext">.css</span></span>
+            <span class="file-desc">:root defaults (light mode)</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="section-gap"></div>
+
+      <!-- base -->
+      <div class="folder-root" id="f-base">
+        <div class="folder-label" onclick="toggle('base')">
+          <span class="chevron open" id="chev-base">▶</span>
+          <span class="folder-icon">📂</span>
+          <span class="folder-name">base/</span>
+          <span class="tag tag-util">BASE</span>
+          <span class="folder-desc">Reset + global styles</span>
+        </div>
+        <div class="children" id="ch-base" style="max-height:2000px">
+          <div class="file-row"><span class="file-icon">📄</span><span class="file-name">reset<span class="ext">.css</span></span><span class="file-desc">normalize, box-sizing, margin resets</span></div>
+          <div class="file-row"><span class="file-icon">📄</span><span class="file-name">root<span class="ext">.css</span></span><span class="file-desc">:root { all CSS variables assembled here }</span></div>
+          <div class="file-row"><span class="file-icon">📄</span><span class="file-name">typography<span class="ext">.css</span></span><span class="file-desc">h1–h6, p, a, code, pre global styles</span></div>
+          <div class="file-row"><span class="file-icon">📄</span><span class="file-name">scrollbar<span class="ext">.css</span></span><span class="file-desc">custom scrollbar (ERP tables mein zaroori)</span></div>
+        </div>
+      </div>
+
+      <div class="section-gap"></div>
+
+      <!-- components -->
+      <div class="folder-root" id="f-comp">
+        <div class="folder-label" onclick="toggle('comp')">
+          <span class="chevron open" id="chev-comp">▶</span>
+          <span class="folder-icon">📂</span>
+          <span class="folder-name">components/</span>
+          <span class="tag tag-comp">COMPONENTS</span>
+          <span class="folder-desc">Per-component CSS modules</span>
+        </div>
+        <div class="children" id="ch-comp" style="max-height:2000px">
+          <div class="file-row"><span class="file-icon">📄</span><span class="file-name">button<span class="ext">.module.css</span></span><span class="file-desc">.btn-primary, .btn-ghost, .btn-danger</span></div>
+          <div class="file-row"><span class="file-icon">📄</span><span class="file-name">table<span class="ext">.module.css</span></span><span class="file-desc">.data-table, .table-row, .table-header</span></div>
+          <div class="file-row"><span class="file-icon">📄</span><span class="file-name">badge<span class="ext">.module.css</span></span><span class="file-desc">.status-ok, .status-warn, .status-err</span></div>
+          <div class="file-row"><span class="file-icon">📄</span><span class="file-name">card<span class="ext">.module.css</span></span><span class="file-desc">.panel, .kpi-card, .kpi-card--blue</span></div>
+          <div class="file-row"><span class="file-icon">📄</span><span class="file-name">sidebar<span class="ext">.module.css</span></span><span class="file-desc">.nav-item, .nav-section, .nav-badge</span></div>
+          <div class="file-row"><span class="file-icon">📄</span><span class="file-name">modal<span class="ext">.module.css</span></span><span class="file-desc">.modal-overlay, .modal-box</span></div>
+          <div class="file-row"><span class="file-icon">📄</span><span class="file-name">form<span class="ext">.module.css</span></span><span class="file-desc">.input, .select, .checkbox, .label</span></div>
+          <div class="file-row"><span class="file-icon">📄</span><span class="file-name">toast<span class="ext">.module.css</span></span><span class="file-desc">.toast, .toast--success, .toast--error</span></div>
+        </div>
+      </div>
+
+      <div class="section-gap"></div>
+
+      <!-- pages -->
+      <div class="folder-root" id="f-pages">
+        <div class="folder-label" onclick="toggle('pages')">
+          <span class="chevron open" id="chev-pages">▶</span>
+          <span class="folder-icon">📂</span>
+          <span class="folder-name">pages/</span>
+          <span class="tag tag-page">PAGES</span>
+          <span class="folder-desc">Page-specific overrides only</span>
+        </div>
+        <div class="children" id="ch-pages" style="max-height:2000px">
+          <div class="file-row"><span class="file-icon">📄</span><span class="file-name">dashboard<span class="ext">.module.css</span></span><span class="file-desc">KPI grid layout, chart areas</span></div>
+          <div class="file-row"><span class="file-icon">📄</span><span class="file-name">inventory<span class="ext">.module.css</span></span><span class="file-desc">product table, filter bar</span></div>
+          <div class="file-row"><span class="file-icon">📄</span><span class="file-name">warehouse<span class="ext">.module.css</span></span><span class="file-desc">zone map, heatmap grid</span></div>
+          <div class="file-row"><span class="file-icon">📄</span><span class="file-name">reports<span class="ext">.module.css</span></span><span class="file-desc">print layout, chart wrappers</span></div>
+        </div>
+      </div>
+
+      <div class="section-gap"></div>
+
+      <!-- utils -->
+      <div class="folder-root" id="f-utils">
+        <div class="folder-label" onclick="toggle('utils')">
+          <span class="chevron open" id="chev-utils">▶</span>
+          <span class="folder-icon">📂</span>
+          <span class="folder-name">utils/</span>
+          <span class="tag tag-util">UTILS</span>
+          <span class="folder-desc">Helper classes (sparingly)</span>
+        </div>
+        <div class="children" id="ch-utils" style="max-height:2000px">
+          <div class="file-row"><span class="file-icon">📄</span><span class="file-name">flex<span class="ext">.css</span></span><span class="file-desc">.flex, .flex-col, .items-center, .gap-2</span></div>
+          <div class="file-row"><span class="file-icon">📄</span><span class="file-name">text<span class="ext">.css</span></span><span class="file-desc">.text-muted, .text-mono, .truncate</span></div>
+          <div class="file-row"><span class="file-icon">📄</span><span class="file-name">visibility<span class="ext">.css</span></span><span class="file-desc">.sr-only, .hidden, .print-only</span></div>
+        </div>
+      </div>
+
+      <div class="section-gap"></div>
+      <div class="file-row" style="padding-left:10px">
+        <span class="file-icon">📄</span>
+        <span class="file-name" style="color:var(--color-text-primary);font-weight:600">index<span class="ext">.css</span></span>
+        <span class="file-desc">@import sabhi files — single entry point</span>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- DETAIL BOX -->
+  <div class="detail-box" id="detail-box" style="display:none">
+    <div class="detail-title" id="detail-title"></div>
+    <div id="detail-body"></div>
+  </div>
+
+</div>
+
+<script>
+const details = {
+  colors: {
+    title: "tokens/colors.css — color system",
+    body: `<code>--color-primary: #3d7cff;</code><br>
+<code>--color-primary-dark: #2459d4;</code><br>
+<code>--color-success: #22c97a;</code><br>
+<code>--color-warning: #f5a623;</code><br>
+<code>--color-danger: #f04b4b;</code><br>
+<code>--color-info: #16c8b8;</code><br><br>
+<b>Rule:</b> Sirf yahan define karo. Components mein directly <code>#hex</code> mat likho — hamesha <code>var(--color-*)</code> use karo.`
+  },
+  typography: {
+    title: "tokens/typography.css — type scale",
+    body: `<code>--font-sans: 'IBM Plex Sans', sans-serif;</code><br>
+<code>--font-mono: 'IBM Plex Mono', monospace;</code><br>
+<code>--text-xs: 10px;</code> <code>--text-sm: 12px;</code><br>
+<code>--text-base: 13px;</code> <code>--text-md: 14px;</code><br>
+<code>--text-lg: 16px;</code> <code>--text-xl: 20px;</code><br>
+<code>--fw-regular: 400;</code> <code>--fw-medium: 500;</code> <code>--fw-bold: 600;</code><br><br>
+<b>ERP tip:</b> Numeric data → mono font. Labels → sans. Headings → sans 500. Tables mein 600 mat use karo — bahut heavy lagta hai.`
+  },
+  spacing: {
+    title: "tokens/spacing.css — 4px base grid",
+    body: `<code>--space-1: 4px;</code> <code>--space-2: 8px;</code> <code>--space-3: 12px;</code><br>
+<code>--space-4: 16px;</code> <code>--space-5: 20px;</code> <code>--space-6: 24px;</code><br>
+<code>--space-8: 32px;</code> <code>--space-10: 40px;</code> <code>--space-12: 48px;</code><br><br>
+<b>Rule:</b> Sirf in values use karo. <code>padding: 13px</code> nahi — <code>var(--space-3)</code> use karo. Isse sab elements aligned lagenge.`
+  },
+  'brand-colors': {
+    title: "brand/brand-colors.css — Smriti-OS identity",
+    body: `Yeh token colors ka extension hai — sirf brand-specific values:<br><br>
+<code>--brand-primary: var(--color-primary);</code><br>
+<code>--brand-dark: #0d0f14;</code><br>
+<code>--brand-surface: #13161d;</code><br><br>
+<b>Why alag?</b> Agar kabhi rebrand karna ho toh sirf yeh file change karni padegi — baaki sab automatically update ho jayega.`
+  },
+  'theme-dark': {
+    title: "brand/theme-dark.css — dark mode overrides",
+    body: `<code>[data-theme="dark"] {</code><br>
+&nbsp;&nbsp;<code>--bg-0: #0d0f14;</code><br>
+&nbsp;&nbsp;<code>--bg-1: #13161d;</code><br>
+&nbsp;&nbsp;<code>--text-primary: #e8eaf0;</code><br>
+&nbsp;&nbsp;<code>--border: #2a2f42;</code><br>
+<code>}</code><br><br>
+<b>Tip:</b> JS se <code>document.body.dataset.theme = 'dark'</code> set karo — pure CSS toggle, no component changes needed.`
+  },
+  'brand-fonts': {
+    title: "brand/brand-fonts.css — font loading",
+    body: `<code>@import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@300;400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap');</code><br><br>
+<b>ERP best practice:</b> Self-host karo fonts — Google Fonts CDN pe depend mat karo production mein. <code>@font-face</code> use karo local files ke liye.`
+  },
+  radius: {
+    title: "tokens/radius.css",
+    body: `<code>--radius-sm: 4px;</code> — badges, tags<br>
+<code>--radius-md: 6px;</code> — buttons, inputs<br>
+<code>--radius-lg: 8px;</code> — cards, panels<br>
+<code>--radius-xl: 12px;</code> — modals, sidebars<br>
+<code>--radius-pill: 999px;</code> — status dots<br><br>
+<b>ERP rule:</b> Dense layout mein <code>--radius-sm</code> aur <code>--radius-md</code> zyada use honga. Bade radius soft aur consumer-app jaisa lagta hai.`
+  }
+};
+
+function toggle(id) {
+  const ch = document.getElementById('ch-' + id);
+  const chev = document.getElementById('chev-' + id);
+  if (!ch) return;
+  ch.classList.toggle('collapsed');
+  chev.classList.toggle('open');
+}
+
+function showDetail(key) {
+  const box = document.getElementById('detail-box');
+  const title = document.getElementById('detail-title');
+  const body = document.getElementById('detail-body');
+  if (!details[key]) return;
+  title.textContent = details[key].title;
+  body.innerHTML = details[key].body;
+  box.style.display = 'block';
+}
+</script>

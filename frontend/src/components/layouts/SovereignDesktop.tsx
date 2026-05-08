@@ -5,7 +5,7 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { cn } from '@/lib/utils';
-import '@/styles/sovereign-desktop.css';
+import '@/styles/index.css';
 import { COMPONENT_MAP } from '@/lib/ModuleRegistry';
 import { api } from '@/api/client';
 import { ClassicStartMenu, AgentToastData } from './ClassicStartMenu';

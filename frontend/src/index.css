@@ -727,3 +727,116 @@
 .ag-theme-quartz .ag-row {
   border-bottom: 1px solid var(--border-subtle) !important;
 }
+
+/* ═══════════════════════════════════════════════════════════════
+   SMRITI-OS LITE PATTERNS — Adopted from smriti_os_lite.html
+   Source: .SHOPER9/smriti_os_lite.html audit (May 2026)
+   ═══════════════════════════════════════════════════════════════ */
+
+/* ── 1. Metric Card — Top Accent Line ─────────────────────────
+   2px sovereign accent on card top edge, colour reflects status  */
+.c-card--metric {
+  border-top: 2px solid var(--primary) !important;
+  border-radius: 0 !important;
+}
+.c-card--metric.is-warn   { border-top-color: var(--warning) !important; }
+.c-card--metric.is-danger { border-top-color: var(--danger)  !important; }
+.c-card--metric.is-accent { border-top-color: var(--accent)  !important; }
+
+/* ── 2. Metric Label — UPPERCASE + Letter-Spacing ─────────────  */
+.c-metric__label {
+  font-size: 9.5px;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.07em;
+  color: var(--text-tertiary);
+  margin-bottom: 3px;
+}
+
+/* ── 3. Metric Value — JetBrains Mono ──────────────────────────
+   All KPI numbers rendered in mono for digit-width stability    */
+.c-metric__value {
+  font-family: var(--font-mono);
+  font-size: 19px;
+  font-weight: 500;
+  color: var(--text-primary);
+  line-height: 1.2;
+}
+.c-metric__trend {
+  font-family: var(--font-mono);
+  font-size: 9.5px;
+  margin-top: 2px;
+}
+.c-metric__trend.is-up   { color: var(--secondary); }
+.c-metric__trend.is-down { color: var(--danger);    }
+
+/* ── 4. Selective Mono — Numeric/Code Table Cells Only ─────────
+   Apply .is-numeric / .is-amount / .is-code to <td> in tables.
+   Names, categories stay Inter. Only digits get JetBrains Mono. */
+.c-table td.is-numeric,
+.c-table td.is-amount,
+.c-table td.is-code,
+td.mn {
+  font-family: var(--font-mono);
+  font-size: 11px;
+}
+
+/* ── 5. Card Header — UPPERCASE Title + Subtle Elevated BG ─────  */
+.c-card__header {
+  padding: 9px 13px;
+  background: var(--surface-container-low);
+  border-bottom: 1px solid var(--border-subtle);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.c-card__title {
+  font-size: 10.5px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--text-secondary);
+}
+
+/* ── 9. Table Header — Tighter / More Muted ────────────────────
+   9px + 0.07em spacing makes column labels recede, data shines  */
+.c-table th {
+  font-size: 9px !important;
+  font-weight: 600 !important;
+  letter-spacing: 0.07em !important;
+  color: var(--text-tertiary) !important;
+}
+
+/* ── 10. Light Sidebar Theme Variant ───────────────────────────
+   Toggle with: <aside data-sidebar="light">
+   Suitable for high-ambient-light retail floor environments     */
+[data-sidebar="light"] aside,
+aside[data-sidebar="light"] {
+  background: #f0faf9 !important;
+  background-image: none !important;
+  border-right: 1px solid #d0eeec !important;
+  box-shadow: none !important;
+}
+[data-sidebar="light"] aside .nav-item,
+aside[data-sidebar="light"] .nav-item {
+  color: #4a7a78 !important;
+}
+[data-sidebar="light"] aside .nav-item:hover,
+aside[data-sidebar="light"] .nav-item:hover {
+  color: var(--primary) !important;
+  background: rgba(0,140,133,0.05) !important;
+}
+[data-sidebar="light"] aside .nav-item.active,
+aside[data-sidebar="light"] .nav-item.active {
+  color: var(--primary) !important;
+  background: rgba(0,140,133,0.08) !important;
+  border-left-color: var(--accent) !important;
+}
+[data-sidebar="light"] aside .nav-label,
+aside[data-sidebar="light"] .nav-label {
+  color: #8ab3b1 !important;
+}
+[data-sidebar="light"] aside .brand,
+aside[data-sidebar="light"] .brand { color: #1a3332 !important; }
+[data-sidebar="light"] aside .user-name,
+aside[data-sidebar="light"] .user-name { color: #4a7a78 !important; }

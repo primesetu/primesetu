@@ -1,0 +1,34 @@
+/* index.css — Single entry point */
+@import './tokens/colors.css';
+@import './tokens/typography.css';
+@import './tokens/spacing.css';
+@import './tokens/radius.css';
+@import './tokens/shadows.css';
+@import './tokens/motion.css';
+
+@import './base/reset.css';
+@import './base/root.css';
+@import './brand/brand-fonts.css';
+@import './brand/brand-colors.css';
+@import './brand/theme-light.css';
+@import './brand/theme-dark.css';
+@import './base/typography.css';
+@import './base/scrollbar.css';
+
+@import './components/layout.css';
+@import './components/button.css';
+@import './components/table.css';
+@import './components/badge.css';
+@import './components/card.css';
+@import './components/sidebar.css';
+@import './components/modal.css';
+@import './components/form.css';
+
+@import './pages/dashboard.css';
+@import './pages/inventory.css';
+@import './pages/warehouse.css';
+@import './pages/reports.css';
+
+@import './utils/flex.css';
+@import './utils/text.css';
+@import './utils/visibility.css';

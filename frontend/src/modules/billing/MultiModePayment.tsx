@@ -11,7 +11,7 @@
 
 import React, { useState } from 'react'
 import { motion } from 'framer-motion'
-import { Wallet, CreditCard, QrCode, Ticket, UserCheck, X, CheckCircle2, ChevronRight, Calculator } from 'lucide-react'
+import { Wallet, CreditCard, QrCode, Ticket, BookOpen, UserCheck, X, CheckCircle2, ChevronRight, Calculator } from 'lucide-react'
 import { cn } from '@/lib/utils'
 import { formatCurrency, toPaise } from '@/utils/currency'
 import { useTheme } from '@/hooks/useTheme'
@@ -49,11 +49,12 @@ export default function MultiModePayment({
         amount: 0
       }))
     }
-    // Fallback
+    // Fallback — 4 modes matching Shoper9 billing standard
     return [
-      { id: 'CASH', label: 'Cash', icon: Wallet, amount: 0 },
-      { id: 'CARD', label: 'Credit/Debit Card', icon: CreditCard, amount: 0, refNo: '' },
-      { id: 'UPI', label: 'UPI / QR', icon: QrCode, amount: 0, refNo: '' }
+      { id: 'CASH', label: 'Cash',              icon: Wallet,     amount: 0 },
+      { id: 'UPI',  label: 'UPI / QR',           icon: QrCode,     amount: 0, refNo: '' },
+      { id: 'CARD', label: 'Credit/Debit Card',  icon: CreditCard, amount: 0, refNo: '' },
+      { id: 'CRED', label: 'Credit / Udhar',     icon: BookOpen,   amount: 0 },  // Khata — Shoper9 parity
     ]
   })
 

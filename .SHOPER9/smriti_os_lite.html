@@ -1,0 +1,311 @@
+
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap');
+*{box-sizing:border-box;margin:0;padding:0;}
+:root{
+  --primary:#008c85;--accent:#f29b12;--danger:#eb5757;--warning:#f2994a;--blue:#2f80ed;--green:#2e7d32;
+  --sidebar-bg:#f0faf9;--sidebar-border:#d0eeec;--sidebar-w:180px;
+  --topbar-bg:#ffffff;--topbar-border:#e2f0ef;
+  --surface:#ffffff;--surface-2:#f7fafa;--surface-3:#eef6f5;
+  --border:#ddecea;--border-strong:#b8dbd9;
+  --text-1:#1a3332;--text-2:#4a7a78;--text-3:#8ab3b1;
+  --font-sans:'Inter',system-ui,sans-serif;--font-mono:'JetBrains Mono',monospace;
+}
+body{font-family:var(--font-sans);}
+.shell{display:flex;flex-direction:column;border:1px solid var(--border-strong);overflow:hidden;background:var(--surface-3);}
+.shell-body{display:flex;height:580px;}
+
+.sidebar{width:var(--sidebar-w);min-width:var(--sidebar-w);background:var(--sidebar-bg);border-right:1px solid var(--sidebar-border);display:flex;flex-direction:column;}
+.logo{padding:0 14px;height:46px;display:flex;align-items:center;gap:8px;border-bottom:1px solid var(--sidebar-border);}
+.logo-mark{width:24px;height:24px;background:var(--primary);display:flex;align-items:center;justify-content:center;}
+.logo-mark i{font-size:13px;color:#fff;}
+.logo-name{font-size:13px;font-weight:600;color:var(--text-1);}
+.logo-tag{font-size:9px;color:var(--text-3);background:rgba(0,140,133,0.1);color:var(--primary);padding:1px 5px;border-radius:0;font-weight:500;}
+.nav{flex:1;padding:8px 0;}
+.nav-lbl{font-size:9px;color:var(--text-3);letter-spacing:1.1px;padding:8px 13px 4px;text-transform:uppercase;font-weight:500;}
+.ni{display:flex;align-items:center;gap:8px;padding:7px 13px;cursor:pointer;font-size:12px;color:var(--text-2);border-left:2px solid transparent;transition:all 0.12s;}
+.ni:hover{color:var(--primary);background:rgba(0,140,133,0.05);}
+.ni.on{color:var(--primary);background:rgba(0,140,133,0.08);border-left-color:var(--accent);font-weight:500;}
+.ni i{font-size:14px;}
+.sidebar-foot{padding:10px 13px;border-top:1px solid var(--sidebar-border);display:flex;align-items:center;gap:8px;}
+.uav{width:26px;height:26px;background:var(--primary);display:flex;align-items:center;justify-content:center;font-size:9px;font-weight:600;color:#fff;}
+.uname{font-size:11px;color:var(--text-1);font-weight:500;}
+.urole{font-size:9.5px;color:var(--text-3);}
+
+.main{flex:1;display:flex;flex-direction:column;overflow:hidden;min-width:0;}
+.topbar{height:46px;background:var(--topbar-bg);border-bottom:1px solid var(--topbar-border);display:flex;align-items:center;justify-content:space-between;padding:0 18px;flex-shrink:0;}
+.ptitle{font-size:13px;font-weight:600;color:var(--text-1);}
+.tb-right{display:flex;align-items:center;gap:8px;}
+.tb-search{font-size:11.5px;padding:5px 10px;border:1px solid var(--border-strong);background:var(--surface-2);color:var(--text-1);width:140px;}
+.tb-date{font-size:10.5px;color:var(--text-3);font-family:var(--font-mono);}
+.btn-p{background:var(--primary);color:#fff;border:none;padding:0 12px;height:30px;font-size:11.5px;font-weight:500;cursor:pointer;display:flex;align-items:center;gap:5px;font-family:var(--font-sans);}
+.btn-p:hover{background:#006e69;}
+
+.content{flex:1;overflow-y:auto;padding:14px 16px;}
+.screen{display:none;} .screen.on{display:block;}
+
+.metrics{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:12px;}
+.mc{background:var(--surface);border:1px solid var(--border);padding:11px 13px;border-top:2px solid var(--primary);}
+.mc-lbl{font-size:9.5px;color:var(--text-3);text-transform:uppercase;letter-spacing:0.07em;margin-bottom:3px;}
+.mc-val{font-size:19px;font-weight:500;color:var(--text-1);font-family:var(--font-mono);}
+.mc-sub{font-size:9.5px;margin-top:2px;font-family:var(--font-mono);}
+.t-up{color:var(--green);} .t-dn{color:var(--danger);}
+
+.card{background:var(--surface);border:1px solid var(--border);margin-bottom:10px;}
+.ch{padding:9px 13px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;background:var(--surface-2);}
+.ct{font-size:10.5px;font-weight:600;color:var(--text-2);text-transform:uppercase;letter-spacing:0.06em;}
+
+.tbl{width:100%;border-collapse:collapse;}
+.tbl th{background:var(--surface-2);padding:7px 12px;text-align:left;font-size:9px;font-weight:600;color:var(--text-3);border-bottom:1px solid var(--border);text-transform:uppercase;letter-spacing:0.07em;}
+.tbl td{padding:8px 12px;border-bottom:1px solid var(--border);color:var(--text-1);font-size:11.5px;}
+.tbl tr:last-child td{border-bottom:none;}
+.tbl tr:hover td{background:var(--surface-2);}
+.mn{font-family:var(--font-mono);font-size:11px;}
+.pill{display:inline-block;padding:1px 7px;font-size:9.5px;font-weight:600;letter-spacing:0.03em;}
+.pg{background:rgba(46,125,50,0.08);color:#2e7d32;}
+.pa{background:rgba(242,155,18,0.1);color:#8a6400;}
+.pr{background:rgba(235,87,87,0.1);color:#c0392b;}
+.pb{background:rgba(47,128,237,0.08);color:#2f80ed;}
+
+.two{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
+.brow{display:flex;align-items:center;gap:7px;margin-bottom:7px;}
+.blbl{font-size:10px;color:var(--text-2);width:30px;flex-shrink:0;}
+.bbg{flex:1;background:var(--surface-3);height:16px;overflow:hidden;}
+.bfill{height:100%;background:var(--primary);display:flex;align-items:center;padding-left:6px;}
+.bval{font-size:9px;color:rgba(255,255,255,0.9);font-family:var(--font-mono);}
+
+.pos-wrap{display:grid;grid-template-columns:1fr 260px;gap:10px;height:460px;}
+.pos-left{display:flex;flex-direction:column;overflow:hidden;}
+.filters{display:flex;gap:5px;margin-bottom:8px;flex-wrap:wrap;}
+.bf{font-size:10.5px;padding:4px 9px;border:1px solid var(--border-strong);background:var(--surface);color:var(--text-2);cursor:pointer;font-family:var(--font-sans);}
+.bf.af{background:var(--primary);color:#fff;border-color:var(--primary);}
+.pigs{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;overflow-y:auto;}
+.pi{background:var(--surface);border:1px solid var(--border);padding:9px 7px;cursor:pointer;text-align:center;}
+.pi:hover{border-color:var(--primary);}
+.pi-ic{font-size:18px;color:var(--primary);margin-bottom:3px;}
+.pi-nm{font-size:10px;font-weight:500;color:var(--text-1);line-height:1.3;}
+.pi-pr{font-size:11px;color:var(--primary);font-family:var(--font-mono);margin-top:2px;}
+
+.cart{background:var(--surface);border:1px solid var(--border);display:flex;flex-direction:column;}
+.cart-hd{padding:9px 12px;border-bottom:1px solid var(--border);font-size:10.5px;font-weight:600;color:var(--text-2);background:var(--surface-2);text-transform:uppercase;letter-spacing:0.05em;}
+.cart-ci{padding:7px 11px;border-bottom:1px solid var(--border);}
+.cart-ci input{width:100%;font-size:11px;padding:5px 8px;border:1px solid var(--border-strong);background:var(--surface-2);color:var(--text-1);font-family:var(--font-sans);}
+.cbody{flex:1;overflow-y:auto;}
+.crow{display:flex;align-items:center;gap:5px;padding:6px 11px;border-bottom:1px solid var(--border);font-size:11px;}
+.crow:last-child{border-bottom:none;}
+.cn{flex:1;color:var(--text-1);font-size:10.5px;}
+.cq{background:var(--surface-2);border:1px solid var(--border);padding:1px 6px;font-size:10px;font-family:var(--font-mono);}
+.cp{font-size:10.5px;font-family:var(--font-mono);color:var(--text-2);min-width:44px;text-align:right;}
+.cfoot{border-top:1px solid var(--border-strong);padding:10px 12px;}
+.cl{display:flex;justify-content:space-between;font-size:10.5px;color:var(--text-3);margin-bottom:4px;font-family:var(--font-mono);}
+.ctot{display:flex;justify-content:space-between;font-size:13.5px;font-weight:600;color:var(--text-1);margin:7px 0;border-top:1px solid var(--border);padding-top:7px;font-family:var(--font-mono);}
+.pmethods{display:grid;grid-template-columns:1fr 1fr;gap:5px;margin-bottom:6px;}
+.bpt{padding:5px;font-size:10.5px;border:1px solid var(--border-strong);background:var(--surface);color:var(--text-2);cursor:pointer;font-family:var(--font-sans);}
+.bpt.sel{border-color:var(--primary);background:rgba(0,140,133,0.07);color:var(--primary);}
+.paybtn{width:100%;background:var(--primary);color:#fff;border:none;height:40px;font-size:12.5px;font-weight:600;cursor:pointer;letter-spacing:0.03em;font-family:var(--font-sans);}
+.paybtn:hover{background:#006e69;}
+
+.inv-top{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:12px;}
+
+.statusbar{height:24px;background:var(--primary);display:flex;align-items:center;padding:0 14px;gap:16px;flex-shrink:0;}
+.sb{font-size:9.5px;font-weight:600;color:rgba(255,255,255,0.85);display:flex;align-items:center;gap:4px;font-family:var(--font-mono);}
+.sd{width:5px;height:5px;background:var(--accent);border-radius:50%;}
+</style>
+
+<h2 class="sr-only">SMRITI-OS Lite — light theme retail ERP with Dashboard, POS, and Inventory</h2>
+
+<div class="shell">
+<div class="shell-body">
+
+<div class="sidebar">
+  <div class="logo">
+    <div class="logo-mark"><i class="ti ti-building-store" aria-hidden="true"></i></div>
+    <div>
+      <div style="display:flex;align-items:center;gap:5px;">
+        <span class="logo-name">RetailPro</span>
+        <span class="logo-tag">LITE</span>
+      </div>
+    </div>
+  </div>
+  <div class="nav">
+    <div class="nav-lbl">Main</div>
+    <div class="ni on" onclick="go('dash',this)"><i class="ti ti-layout-dashboard"></i>Dashboard</div>
+    <div class="ni" onclick="go('pos',this)"><i class="ti ti-receipt"></i>Point of Sale</div>
+    <div class="nav-lbl">Stock</div>
+    <div class="ni" onclick="go('inv',this)"><i class="ti ti-package"></i>Inventory</div>
+  </div>
+  <div class="sidebar-foot">
+    <div class="uav">RA</div>
+    <div>
+      <div class="uname">Ravi Admin</div>
+      <div class="urole">Super Admin</div>
+    </div>
+  </div>
+</div>
+
+<div class="main">
+  <div class="topbar">
+    <div class="ptitle" id="ptitle">Dashboard</div>
+    <div class="tb-right">
+      <input class="tb-search" type="text" placeholder="Search...">
+      <span class="tb-date">08 May 2026</span>
+      <button class="btn-p"><i class="ti ti-plus" style="font-size:11px"></i>New Bill</button>
+    </div>
+  </div>
+  <div class="content">
+
+    <!-- DASHBOARD -->
+    <div class="screen on" id="sc-dash">
+      <div class="metrics">
+        <div class="mc"><div class="mc-lbl">Today's Sales</div><div class="mc-val">₹84,320</div><div class="mc-sub t-up"><i class="ti ti-trending-up" style="font-size:9px"></i> +12% vs yesterday</div></div>
+        <div class="mc"><div class="mc-lbl">Total Orders</div><div class="mc-val">142</div><div class="mc-sub t-up"><i class="ti ti-trending-up" style="font-size:9px"></i> +8 today</div></div>
+        <div class="mc" style="border-top-color:var(--warning);"><div class="mc-lbl">Low Stock</div><div class="mc-val" style="color:var(--warning);">7</div><div class="mc-sub t-dn"><i class="ti ti-alert-triangle" style="font-size:9px"></i> Reorder needed</div></div>
+        <div class="mc"><div class="mc-lbl">Monthly Revenue</div><div class="mc-val">₹9.2L</div><div class="mc-sub t-up"><i class="ti ti-trending-up" style="font-size:9px"></i> +6% MoM</div></div>
+      </div>
+      <div class="two">
+        <div class="card">
+          <div class="ch"><span class="ct">Weekly Sales (₹)</span></div>
+          <div style="padding:11px 13px;">
+            <div class="brow"><div class="blbl">Mon</div><div class="bbg"><div class="bfill" style="width:60%"><span class="bval">60K</span></div></div></div>
+            <div class="brow"><div class="blbl">Tue</div><div class="bbg"><div class="bfill" style="width:75%"><span class="bval">75K</span></div></div></div>
+            <div class="brow"><div class="blbl">Wed</div><div class="bbg"><div class="bfill" style="width:50%"><span class="bval">50K</span></div></div></div>
+            <div class="brow"><div class="blbl">Thu</div><div class="bbg"><div class="bfill" style="width:88%"><span class="bval">88K</span></div></div></div>
+            <div class="brow"><div class="blbl">Fri</div><div class="bbg"><div class="bfill" style="width:84%"><span class="bval">84K</span></div></div></div>
+            <div class="brow"><div class="blbl">Sat</div><div class="bbg"><div class="bfill" style="width:95%"><span class="bval">95K</span></div></div></div>
+            <div class="brow"><div class="blbl">Sun</div><div class="bbg"><div class="bfill" style="width:70%"><span class="bval">70K</span></div></div></div>
+          </div>
+        </div>
+        <div class="card">
+          <div class="ch"><span class="ct">Recent Transactions</span></div>
+          <table class="tbl">
+            <thead><tr><th>Bill</th><th>Customer</th><th>Amount</th><th>Status</th></tr></thead>
+            <tbody>
+              <tr><td class="mn">#B-1042</td><td>Suresh Kumar</td><td class="mn">₹2,340</td><td><span class="pill pg">Paid</span></td></tr>
+              <tr><td class="mn">#B-1041</td><td>Priya Sharma</td><td class="mn">₹890</td><td><span class="pill pg">Paid</span></td></tr>
+              <tr><td class="mn">#B-1040</td><td>Raju Patel</td><td class="mn">₹5,120</td><td><span class="pill pa">Pending</span></td></tr>
+              <tr><td class="mn">#B-1039</td><td>Anita Singh</td><td class="mn">₹1,200</td><td><span class="pill pg">Paid</span></td></tr>
+              <tr><td class="mn">#B-1038</td><td>Mohan Das</td><td class="mn">₹3,780</td><td><span class="pill pr">Overdue</span></td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+      <div class="card">
+        <div class="ch"><span class="ct">Top Products Today</span></div>
+        <table class="tbl">
+          <thead><tr><th>Product</th><th>Category</th><th>Qty</th><th>Revenue</th><th>Stock</th></tr></thead>
+          <tbody>
+            <tr><td>Basmati Rice 5kg</td><td>Grocery</td><td class="mn">42</td><td class="mn">₹12,600</td><td><span class="pill pg">248</span></td></tr>
+            <tr><td>Surf Excel 1kg</td><td>FMCG</td><td class="mn">38</td><td class="mn">₹7,220</td><td><span class="pill pg">150</span></td></tr>
+            <tr><td>Colgate 200g</td><td>Personal Care</td><td class="mn">31</td><td class="mn">₹4,030</td><td><span class="pill pa">22</span></td></tr>
+            <tr><td>Amul Butter 500g</td><td>Dairy</td><td class="mn">27</td><td class="mn">₹5,400</td><td><span class="pill pr">5</span></td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- POS -->
+    <div class="screen" id="sc-pos">
+      <div class="pos-wrap">
+        <div class="pos-left">
+          <div class="filters">
+            <button class="bf af">All</button>
+            <button class="bf">Grocery</button>
+            <button class="bf">FMCG</button>
+            <button class="bf">Dairy</button>
+            <button class="bf">Beverages</button>
+          </div>
+          <div class="pigs">
+            <div class="pi"><div class="pi-ic"><i class="ti ti-basket" aria-hidden="true"></i></div><div class="pi-nm">Basmati Rice 5kg</div><div class="pi-pr">₹300</div></div>
+            <div class="pi"><div class="pi-ic"><i class="ti ti-droplet" aria-hidden="true"></i></div><div class="pi-nm">Surf Excel 1kg</div><div class="pi-pr">₹190</div></div>
+            <div class="pi"><div class="pi-ic"><i class="ti ti-egg" aria-hidden="true"></i></div><div class="pi-nm">Amul Butter 500g</div><div class="pi-pr">₹200</div></div>
+            <div class="pi"><div class="pi-ic"><i class="ti ti-bottle" aria-hidden="true"></i></div><div class="pi-nm">Colgate 200g</div><div class="pi-pr">₹130</div></div>
+            <div class="pi"><div class="pi-ic"><i class="ti ti-wheat" aria-hidden="true"></i></div><div class="pi-nm">Atta 10kg</div><div class="pi-pr">₹450</div></div>
+            <div class="pi"><div class="pi-ic"><i class="ti ti-coffee" aria-hidden="true"></i></div><div class="pi-nm">Bru Coffee 200g</div><div class="pi-pr">₹220</div></div>
+            <div class="pi"><div class="pi-ic"><i class="ti ti-salad" aria-hidden="true"></i></div><div class="pi-nm">Dal Toor 1kg</div><div class="pi-pr">₹140</div></div>
+            <div class="pi"><div class="pi-ic"><i class="ti ti-milk" aria-hidden="true"></i></div><div class="pi-nm">Amul Milk 1L</div><div class="pi-pr">₹62</div></div>
+            <div class="pi"><div class="pi-ic"><i class="ti ti-lemon" aria-hidden="true"></i></div><div class="pi-nm">Real Juice 1L</div><div class="pi-pr">₹110</div></div>
+          </div>
+        </div>
+        <div class="cart">
+          <div class="cart-hd"><i class="ti ti-shopping-cart" style="margin-right:5px;color:var(--accent)" aria-hidden="true"></i>Bill #B-1043</div>
+          <div class="cart-ci"><input type="text" placeholder="Customer name / phone"></div>
+          <div class="cbody">
+            <div class="crow"><span class="cn">Basmati Rice 5kg</span><span class="cq">x2</span><span class="cp">₹600</span></div>
+            <div class="crow"><span class="cn">Surf Excel 1kg</span><span class="cq">x1</span><span class="cp">₹190</span></div>
+            <div class="crow"><span class="cn">Colgate 200g</span><span class="cq">x3</span><span class="cp">₹390</span></div>
+            <div class="crow"><span class="cn">Amul Milk 1L</span><span class="cq">x2</span><span class="cp">₹124</span></div>
+          </div>
+          <div class="cfoot">
+            <div class="cl"><span>Subtotal</span><span>₹1,304</span></div>
+            <div class="cl"><span>GST (5%)</span><span>₹65</span></div>
+            <div class="cl"><span>Discount</span><span style="color:var(--green)">-₹50</span></div>
+            <div class="ctot"><span>Total</span><span>₹1,319</span></div>
+            <div class="pmethods">
+              <button class="bpt"><i class="ti ti-cash" style="font-size:11px"></i> Cash</button>
+              <button class="bpt sel"><i class="ti ti-device-mobile" style="font-size:11px"></i> UPI</button>
+              <button class="bpt"><i class="ti ti-credit-card" style="font-size:11px"></i> Card</button>
+              <button class="bpt"><i class="ti ti-clock" style="font-size:11px"></i> Credit</button>
+            </div>
+            <button class="paybtn"><i class="ti ti-check" style="font-size:12px;margin-right:5px" aria-hidden="true"></i>Pay ₹1,319</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- INVENTORY -->
+    <div class="screen" id="sc-inv">
+      <div class="metrics">
+        <div class="mc"><div class="mc-lbl">Total Products</div><div class="mc-val">1,284</div></div>
+        <div class="mc" style="border-top-color:var(--warning);"><div class="mc-lbl">Low Stock</div><div class="mc-val" style="color:var(--warning);">7</div></div>
+        <div class="mc" style="border-top-color:var(--danger);"><div class="mc-lbl">Out of Stock</div><div class="mc-val" style="color:var(--danger);">3</div></div>
+        <div class="mc"><div class="mc-lbl">Stock Value</div><div class="mc-val">₹18.4L</div></div>
+      </div>
+      <div class="card">
+        <div class="ch">
+          <span class="ct">Product Inventory</span>
+          <button class="btn-p" style="height:26px;font-size:10.5px;"><i class="ti ti-plus" style="font-size:10px"></i>Add Product</button>
+        </div>
+        <table class="tbl">
+          <thead><tr><th>SKU</th><th>Product Name</th><th>Category</th><th>MRP</th><th>Cost</th><th>Stock</th><th>Status</th><th></th></tr></thead>
+          <tbody>
+            <tr><td class="mn">SKU-001</td><td>Basmati Rice 5kg</td><td>Grocery</td><td class="mn">₹350</td><td class="mn">₹290</td><td class="mn">248</td><td><span class="pill pg">In Stock</span></td><td><i class="ti ti-edit" style="cursor:pointer;color:var(--primary);font-size:13px" aria-hidden="true"></i></td></tr>
+            <tr><td class="mn">SKU-002</td><td>Surf Excel 1kg</td><td>FMCG</td><td class="mn">₹210</td><td class="mn">₹180</td><td class="mn">150</td><td><span class="pill pg">In Stock</span></td><td><i class="ti ti-edit" style="cursor:pointer;color:var(--primary);font-size:13px" aria-hidden="true"></i></td></tr>
+            <tr><td class="mn">SKU-003</td><td>Colgate 200g</td><td>Personal Care</td><td class="mn">₹145</td><td class="mn">₹120</td><td class="mn">22</td><td><span class="pill pa">Low Stock</span></td><td><i class="ti ti-edit" style="cursor:pointer;color:var(--primary);font-size:13px" aria-hidden="true"></i></td></tr>
+            <tr><td class="mn">SKU-004</td><td>Amul Butter 500g</td><td>Dairy</td><td class="mn">₹225</td><td class="mn">₹195</td><td class="mn">5</td><td><span class="pill pr">Low Stock</span></td><td><i class="ti ti-edit" style="cursor:pointer;color:var(--primary);font-size:13px" aria-hidden="true"></i></td></tr>
+            <tr><td class="mn">SKU-005</td><td>Bru Coffee 200g</td><td>Beverages</td><td class="mn">₹250</td><td class="mn">₹210</td><td class="mn">0</td><td><span class="pill pr">Out of Stock</span></td><td><i class="ti ti-edit" style="cursor:pointer;color:var(--primary);font-size:13px" aria-hidden="true"></i></td></tr>
+            <tr><td class="mn">SKU-006</td><td>Atta 10kg</td><td>Grocery</td><td class="mn">₹490</td><td class="mn">₹420</td><td class="mn">87</td><td><span class="pill pg">In Stock</span></td><td><i class="ti ti-edit" style="cursor:pointer;color:var(--primary);font-size:13px" aria-hidden="true"></i></td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+  </div>
+</div>
+</div>
+
+<div class="statusbar">
+  <div class="sb"><div class="sd"></div>RetailPro LITE</div>
+  <div class="sb" style="color:rgba(255,255,255,0.5)">|</div>
+  <div class="sb">Andheri Branch</div>
+  <div class="sb" style="color:rgba(255,255,255,0.5)">|</div>
+  <div class="sb" id="sclock">08 May 2026</div>
+  <div style="margin-left:auto" class="sb" style="color:rgba(255,255,255,0.7)"><i class="ti ti-wifi" style="font-size:11px;margin-right:3px" aria-hidden="true"></i>Online</div>
+</div>
+</div>
+
+<script>
+const labels={dash:'Dashboard',pos:'Point of Sale',inv:'Inventory'};
+function go(id,el){
+  document.querySelectorAll('.screen').forEach(s=>s.classList.remove('on'));
+  document.querySelectorAll('.ni').forEach(n=>n.classList.remove('on'));
+  document.getElementById('sc-'+id).classList.add('on');
+  el.classList.add('on');
+  document.getElementById('ptitle').textContent=labels[id];
+}
+function tick(){
+  const n=new Date();
+  const t=n.toLocaleTimeString('en-IN',{hour:'2-digit',minute:'2-digit',second:'2-digit'});
+  document.getElementById('sclock').textContent=t;
+}
+setInterval(tick,1000); tick();
+</script>

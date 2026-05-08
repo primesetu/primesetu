@@ -32,6 +32,7 @@ export default function Dashboard() {
       icon: TrendingUp,
       accent: 'var(--secondary)',
       accentBg: 'var(--secondary)/10',
+      metricVariant: '',           // default teal top-border
     },
     {
       label: 'Active SKUs',
@@ -40,6 +41,7 @@ export default function Dashboard() {
       icon: Package,
       accent: 'var(--primary)',
       accentBg: 'var(--primary)/10',
+      metricVariant: '',
     },
     {
       label: 'Bills Today',
@@ -48,6 +50,7 @@ export default function Dashboard() {
       icon: Receipt,
       accent: 'var(--accent)',
       accentBg: 'var(--accent)/10',
+      metricVariant: 'is-accent',  // gold top-border
     },
     {
       label: 'Low Stock Alerts',
@@ -56,6 +59,7 @@ export default function Dashboard() {
       icon: AlertTriangle,
       accent: 'var(--danger)',
       accentBg: 'var(--danger)/10',
+      metricVariant: 'is-danger',  // red top-border
     },
   ]
 
@@ -94,7 +98,10 @@ export default function Dashboard() {
           <motion.div
             key={i}
             variants={item}
-            className="card-base p-[var(--space-4)] cursor-default group transition-colors hover:border-[var(--border-default)]"
+            className={cn(
+              "card-base c-card--metric p-[var(--space-4)] cursor-default group transition-colors hover:border-[var(--border-default)]",
+              kpi.metricVariant
+            )}
           >
             <div className="flex items-start justify-between mb-[var(--space-4)]">
               <div 

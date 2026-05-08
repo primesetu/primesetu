@@ -1,0 +1,50 @@
+/* components/badge.css — Badges and chips */
+.sov-badge {
+  padding: 3px 10px;
+  border-radius: var(--radius-sm);
+  font-size: var(--text-xs);
+  font-weight: var(--fw-extrabold);
+  text-transform: uppercase;
+}
+.sov-badge-green { background: var(--color-success-bg); color: var(--color-success-text); }
+.sov-badge-yellow { background: var(--color-warning-bg); color: var(--color-warning-text); }
+.sov-badge-red { background: var(--color-danger-bg); color: var(--color-danger-text); }
+.sov-badge-blue { background: var(--color-info-bg); color: var(--color-info-text); }
+
+.sov-role-pill {
+  padding: 4px 14px;
+  border-radius: var(--radius-pill);
+  background: var(--color-info-bg);
+  color: var(--color-text-primary);
+  font-size: var(--text-sm);
+  font-weight: var(--fw-bold);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.sov-user-chip {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 4px 12px;
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--color-border);
+  background: var(--color-white);
+  cursor: pointer;
+  transition: all var(--transition-fast);
+}
+.sov-user-chip:hover { background: var(--color-surface-hover); border-color: var(--color-border-focus); }
+
+.sov-user-av {
+  width: 24px;
+  height: 24px;
+  border-radius: var(--radius-circle);
+  background: var(--color-primary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--color-white);
+  font-size: var(--text-xs);
+  font-weight: var(--fw-bold);
+}
+.sov-user-name { font-size: var(--text-base); color: var(--color-text-primary); font-weight: var(--fw-bold); }

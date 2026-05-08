@@ -1,0 +1,38 @@
+/* tokens/colors.css — color system */
+:root {
+  --color-primary: #1a3a5c;
+  --color-primary-hover: #22496e;
+  
+  --color-bg-body: #e8edf5;
+  --color-bg-grid: #c4cfe0;
+  
+  --color-surface: rgba(255,255,255,0.97);
+  --color-surface-hover: #f8f9fb;
+  --color-surface-active: #edf2fa;
+  
+  --color-border: #dde1e8;
+  --color-border-light: #eef0f4;
+  --color-border-focus: #ccd8ed;
+
+  --color-text-primary: #1a3a5c;
+  --color-text-secondary: #4a5568;
+  --color-text-tertiary: #8a9bb0;
+
+  --color-success-bg: #e8f8f2;
+  --color-success-text: #0a6644;
+  --color-success-border: #9fe1cb;
+  
+  --color-warning-bg: #fef9e6;
+  --color-warning-text: #7a4900;
+  --color-warning-border: #fac775;
+  
+  --color-danger-bg: #fdeaea;
+  --color-danger-text: #7a1f1f;
+  --color-danger-icon: #e74c3c;
+  
+  --color-info-bg: #e8f0fa;
+  --color-info-text: #1a3a5c;
+  --color-info-border: #b8cceb;
+  
+  --color-white: #ffffff;
+}

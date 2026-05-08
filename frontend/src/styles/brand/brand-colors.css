@@ -1,0 +1,5 @@
+/* brand/brand-colors.css — brand identity */
+:root {
+  --brand-navy: var(--color-primary);
+  --brand-white: var(--color-white);
+}

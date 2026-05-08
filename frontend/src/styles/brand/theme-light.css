@@ -1,0 +1,5 @@
+/* brand/theme-light.css — light mode */
+:root {
+  --theme-bg: var(--color-bg-body);
+  --theme-text: var(--color-text-primary);
+}

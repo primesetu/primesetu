@@ -1,0 +1,7 @@
+/* base/typography.css — Global typography */
+body {
+  font-family: var(--font-sans);
+  color: var(--color-text-primary);
+  font-size: var(--text-base);
+  -webkit-font-smoothing: antialiased;
+}

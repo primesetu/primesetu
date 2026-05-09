@@ -32,7 +32,6 @@ import { DataTable } from "../../components/ui/SovereignUI";
 import { formatCurrency } from "../../utils/currency";
 import ItemForm from "./ItemForm";
 import ItemMasterWorkbench from "./ItemMasterWorkbench";
-import CatalogueMasterWorkbench from "./CatalogueMasterWorkbench";
 import { usePermission } from "../../hooks/usePermission";
 import { useOfflineFallback } from "../../hooks/useOfflineFallback";
 import { apiClient } from "../../api/client";
@@ -57,10 +56,15 @@ const ItemMaster: React.FC<ItemMasterProps> = ({ initialWorkbenchMode = false })
   const [searchTerm, setSearchTerm] = useState("");
   const [isFormOpen, setIsFormOpen] = useState(false);
   const [isWorkbenchMode, setIsWorkbenchMode] = useState(initialWorkbenchMode);
-  const [isCatWorkbenchMode, setIsCatWorkbenchMode] = useState(false);
   const [selectedItemId, setSelectedItemId] = useState<string | null>(null);
   const searchInputRef = useRef<HTMLInputElement>(null);
   const { hasPermission } = usePermission();
+
+  const [debouncedSearchTerm, setDebouncedSearchTerm] = useState("");
+  React.useEffect(() => {
+    const timer = setTimeout(() => setDebouncedSearchTerm(searchTerm), 400);
+    return () => clearTimeout(timer);
+  }, [searchTerm]);
 
   // 1. Fetch Items with Offline Fallback via sovereign apiClient
   const { 
@@ -68,15 +72,25 @@ const ItemMaster: React.FC<ItemMasterProps> = ({ initialWorkbenchMode = false })
     loading: isLoading, 
     isOfflineData 
   } = useOfflineFallback<Item[]>(
-    `items_${searchTerm}`,
+    isWorkbenchMode ? null : `items_${debouncedSearchTerm}`,
     async () => {
-      const response = await apiClient.get<Item[]>(`/items/?search=${searchTerm}`);
+      const response = await apiClient.get<Item[]>(`/items/?search=${debouncedSearchTerm}`);
       return response.data;
     },
     []
   );
 
-  // 2. Permission Guard
+  // 2. Hotkeys
+  useHotkeys("f3", (e) => { e.preventDefault(); searchInputRef.current?.focus(); }, { enableOnFormTags: true });
+  useHotkeys("f4", (e) => { 
+    e.preventDefault(); 
+    if (hasPermission('catalog.edit')) {
+      setSelectedItemId(null);
+      setIsFormOpen(true);
+    }
+  }, { enableOnFormTags: true });
+
+  // 3. Permission Guard
   if (!hasPermission('catalog.view')) {
     return (
       <div className="flex flex-col items-center justify-center h-[60vh] text-center">
@@ -87,22 +101,12 @@ const ItemMaster: React.FC<ItemMasterProps> = ({ initialWorkbenchMode = false })
     );
   }
 
-  // 3. Hotkeys
-  useHotkeys("f3", (e) => { e.preventDefault(); searchInputRef.current?.focus(); }, { enableOnFormTags: true });
-  useHotkeys("f4", (e) => { 
-    e.preventDefault(); 
-    if (hasPermission('catalog.edit')) {
-      setSelectedItemId(null);
-      setIsFormOpen(true);
-    }
-  }, { enableOnFormTags: true });
-
   if (isWorkbenchMode) {
     return <ItemMasterWorkbench initialData={[]} onBack={() => setIsWorkbenchMode(false)} />;
   }
 
   return (
-    <div className="space-y-6 animate-in fade-in duration-700 pb-20">
+    <div className="space-y-6 animate-in fade-in duration-700">
       {/* Breadcrumb Pattern */}
       <nav className="flex items-center gap-2 text-[10px] font-black uppercase tracking-widest text-navy/20 mb-4">
          <span>Home</span> <ChevronRight size={10} />
@@ -143,14 +147,14 @@ const ItemMaster: React.FC<ItemMasterProps> = ({ initialWorkbenchMode = false })
           {hasPermission('catalog.edit') && (
             <>
               <button 
-                onClick={() => window.open('/catworkbench', '_blank', 'width=1200,height=800')}
+                onClick={() => window.open(window.location.origin + '/catworkbench', '_blank', 'width=1200,height=800')}
                 className="flex items-center gap-4 bg-brand-navy text-white px-8 py-5 rounded-[2rem] font-black text-[11px] uppercase tracking-widest shadow-2xl hover:scale-105 active:scale-95 transition-all border border-white/10"
               >
                 <FileSpreadsheet size={18} className="text-blue-400" />
                 Cat. Master
               </button>
               <button 
-                onClick={() => window.open('/workbench', '_blank', 'width=1200,height=800')}
+                onClick={() => window.open(window.location.origin + '/workbench', '_blank', 'width=1200,height=800')}
                 className="flex items-center gap-4 bg-navy text-white px-8 py-5 rounded-[2rem] font-black text-[11px] uppercase tracking-widest shadow-2xl hover:scale-105 active:scale-95 transition-all border border-white/10"
               >
                 <FileSpreadsheet size={18} className="text-emerald-400" />
@@ -175,9 +179,9 @@ const ItemMaster: React.FC<ItemMasterProps> = ({ initialWorkbenchMode = false })
         {/* KPI Cards */}
         <div className="grid grid-cols-4 gap-8">
             {[
-              { label: 'Total SKUs', val: items.length.toString(), icon: Boxes, color: 'navy' },
-              { label: 'Stock Value', val: '₹1.2Cr', icon: BarChart3, color: 'gold' },
-              { label: 'Low Stock', val: '24 Items', icon: ShieldAlert, color: 'saffron' },
+              { label: 'Total SKUs (Page)', val: items.length.toString(), icon: Boxes, color: 'navy' },
+              { label: 'Stock Value', val: '—', icon: BarChart3, color: 'gold' }, // TODO: Fetch real stock value
+              { label: 'Low Stock', val: '—', icon: ShieldAlert, color: 'saffron' }, // TODO: Fetch real low stock count
               { label: 'Active Sync', val: 'Live', icon: Zap, color: 'green' }
             ].map((kpi, idx) => (
               <div key={idx} className="bg-bg-elevated rounded-[40px] p-10 border border-border shadow-xl relative overflow-hidden transition-all hover:-translate-y-2 hover:shadow-2xl group">

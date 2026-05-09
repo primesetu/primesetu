@@ -12,7 +12,7 @@ import { ClassicStartMenu, AgentToastData } from './ClassicStartMenu';
 import { useWindowManager } from '@/hooks/useWindowManager';
 import { usePopout } from '@/hooks/usePopout';
 
-const WIN_LABELS: Record<string, { label: string; color: string }> = {
+const WIN_LABELS = {
   pos:      { label: 'POS',         color: '#1a3a5c' },
   ho:       { label: 'Head Office', color: '#5b6abf' },
   wh:       { label: 'Warehouse',   color: '#e67e22' },
@@ -20,24 +20,28 @@ const WIN_LABELS: Record<string, { label: string; color: string }> = {
   cat:      { label: 'Catalogue',   color: '#e74c3c' },
   mis:      { label: 'MIS',         color: '#8e44ad' },
   settings: { label: 'Settings',    color: '#4a5568' },
-};
+} satisfies Record<string, { label: string; color: string }>;
+
+let cachedSovereignData: any = null;
+let sovereignDataPromise: Promise<any> | null = null;
 
 // Real data fetched once on mount for the summary cards
 function useSovereignData() {
-  const [data, setData] = useState<any>({});
+  const [data, setData] = useState<any>(cachedSovereignData || {});
+  
   useEffect(() => {
-    const load = async () => {
-      try {
-        const [billing, alerts, warehouse, vendors, schemes, ho, stats] = await Promise.allSettled([
-          api.billing.getDayEndSummary(),
-          api.inventory.getAlerts(),
-          api.warehouse.getDashboard(),
-          api.vendors.list(),
-          api.schemes.list(),
-          api.ho.getStatus(),
-          api.dashboard.getStats(),
-        ]);
-        setData({
+    if (cachedSovereignData) return;
+    if (!sovereignDataPromise) {
+      sovereignDataPromise = Promise.allSettled([
+        api.billing.getDayEndSummary(),
+        api.inventory.getAlerts(),
+        api.warehouse.getDashboard(),
+        api.vendors.list(),
+        api.schemes.list(),
+        api.ho.getStatus(),
+        api.dashboard.getStats(),
+      ]).then(([billing, alerts, warehouse, vendors, schemes, ho, stats]) => {
+        cachedSovereignData = {
           billing:   billing.status   === 'fulfilled' ? billing.value   : null,
           alerts:    alerts.status    === 'fulfilled' ? alerts.value    : null,
           warehouse: warehouse.status === 'fulfilled' ? warehouse.value : null,
@@ -45,11 +49,16 @@ function useSovereignData() {
           schemes:   schemes.status   === 'fulfilled' ? schemes.value   : null,
           ho:        ho.status        === 'fulfilled' ? ho.value        : null,
           stats:     stats.status     === 'fulfilled' ? stats.value     : null,
-        });
-      } catch { /* silent — summary cards degrade gracefully */ }
-    };
-    load();
+        };
+        return cachedSovereignData;
+      }).catch(() => { /* silent — summary cards degrade gracefully */ });
+    }
+    
+    sovereignDataPromise.then(res => {
+      if (res) setData(res);
+    });
   }, []);
+  
   return data;
 }
 
@@ -57,7 +66,7 @@ const fmt = (n: any, prefix = '') => n != null ? `${prefix}${Number(n).toLocaleS
 const fmtCr = (n: any) => n != null ? `₹${(Number(n)/10000000).toFixed(2)} Cr` : '—';
 
 interface WindowProps {
-  id: string;
+  id: keyof typeof WIN_LABELS;
   title: string;
   isOpen: boolean;
   isMinimized: boolean;
@@ -75,10 +84,13 @@ const Window: React.FC<WindowProps & { onMaximize: (id: string) => void, isMaxim
 }) => {
   // If popped out: render invisible placeholder so React keeps the component alive for state preservation
   if (isPoppedOut) {
+    const ActiveComponent = activeModuleId ? COMPONENT_MAP[activeModuleId] : null;
     return (
       <div style={{ display: 'none' }} id={`w-${id}-popout-placeholder`}>
         {/* Module kept mounted to preserve any internal state when popped out */}
-        {activeModuleId && COMPONENT_MAP[activeModuleId] ? null : children}
+        <React.Suspense fallback={null}>
+          {ActiveComponent ?? children}
+        </React.Suspense>
       </div>
     );
   }
@@ -147,6 +159,7 @@ const Window: React.FC<WindowProps & { onMaximize: (id: string) => void, isMaxim
         (isMaximized || activeModuleId) ? "module-host" : ""
       )}>
         <React.Suspense fallback={<div className="flex items-center justify-center h-full text-[#1a3a5c] font-black uppercase tracking-widest text-[10px] animate-pulse">Loading Module...</div>}>
+          {/* If a module is active, it takes over the window content, silently replacing the summary cards (children). */}
           {ActiveComponent ?? children}
         </React.Suspense>
       </div>
@@ -156,6 +169,10 @@ const Window: React.FC<WindowProps & { onMaximize: (id: string) => void, isMaxim
 
 
 
+/**
+ * SovereignDesktop
+ * @param onExit - Callback triggered to exit the desktop environment (e.g. returning to standard shell or signing out)
+ */
 const SovereignDesktop: React.FC<{ onExit: () => void }> = ({ onExit }) => {
   const [smOpen, setSmOpen] = useState(false);
   const { openWins, minWins, maxWins, activeWinModule, toggleWin, toggleMin, toggleMax, closeWin } = useWindowManager();
@@ -166,20 +183,32 @@ const SovereignDesktop: React.FC<{ onExit: () => void }> = ({ onExit }) => {
   // When popup closes, restore the window in the desktop
   const handlePopoutClosed = useCallback((winKey: string) => {
     // The window was in "minimized" state while popped out — restore it
-    toggleMin(winKey);
-  }, [toggleMin]);
+    if (minWins.includes(winKey)) {
+      toggleMin(winKey);
+    }
+  }, [minWins, toggleMin]);
 
   const { poppedOut, launchPopout, closePopout } = usePopout(handlePopoutClosed);
 
   useEffect(() => {
-    const timer = setInterval(() => setCurrentTime(new Date()), 60000);
-    return () => clearInterval(timer);
+    let timer: ReturnType<typeof setInterval>;
+    const msUntilNextMinute = 60000 - (Date.now() % 60000);
+    
+    const timeout = setTimeout(() => {
+      setCurrentTime(new Date());
+      timer = setInterval(() => setCurrentTime(new Date()), 60000);
+    }, msUntilNextMinute);
+
+    return () => {
+      clearTimeout(timeout);
+      if (timer) clearInterval(timer);
+    };
   }, []);
 
 
 
   return (
-    <div className="sov-desktop-container">
+    <div className="sov-desktop-container h-screen overflow-hidden">
       {/* TOPBAR */}
       <div className="sov-topbar">
         <div className="sov-logo">
@@ -308,13 +337,19 @@ const SovereignDesktop: React.FC<{ onExit: () => void }> = ({ onExit }) => {
               const color = mod.color;
               const label = mod.label;
               // Pick a live metric per window
+              const alertsCount = fmt(Array.isArray(sovData.alerts) ? sovData.alerts.length : null);
+              const vendorsCount = fmt(Array.isArray(sovData.vendors) ? sovData.vendors.length : null);
+              const skuCount = fmt(sovData.stats?.total_products);
+              const posMetric = fmt(sovData.billing?.total_amount, '₹');
+              const misMetric = fmtCr(sovData.stats?.sales_mtd);
+
               const metric: Record<string, string> = {
-                pos:      fmt(sovData.billing?.total_amount, '₹') || 'Billing',
-                ho:       sovData.ho?.sync_status || 'HO',
-                wh:       `${fmt(Array.isArray(sovData.alerts) ? sovData.alerts.length : null)} alerts`,
-                dist:     `${fmt(Array.isArray(sovData.vendors) ? sovData.vendors.length : null)} vendors`,
-                cat:      `${fmt(sovData.stats?.total_products)} SKUs`,
-                mis:      fmtCr(sovData.stats?.sales_mtd) || 'MIS',
+                pos:      posMetric !== '—' ? posMetric : label,
+                ho:       sovData.ho?.sync_status || label,
+                wh:       alertsCount !== '—' ? `${alertsCount} alerts` : label,
+                dist:     vendorsCount !== '—' ? `${vendorsCount} vendors` : label,
+                cat:      skuCount !== '—' ? `${skuCount} SKUs` : label,
+                mis:      misMetric !== '—' ? misMetric : label,
                 settings: 'Online',
               };
               return (
@@ -352,11 +387,12 @@ const SovereignDesktop: React.FC<{ onExit: () => void }> = ({ onExit }) => {
         <div className="h-[24px] w-[0.5px] bg-[#dde1e8] mx-2" />
         
         {openWins.map(winKey => {
-          const mod = WIN_LABELS[winKey] || { label: winKey.toUpperCase(), color: '#1a3a5c' };
+          const mod = WIN_LABELS[winKey as keyof typeof WIN_LABELS] || { label: winKey.toUpperCase(), color: '#1a3a5c' };
+          const isMin = minWins.includes(winKey);
           return (
             <div 
               key={winKey} 
-              className="sov-task-tab on"
+              className={cn("sov-task-tab on", isMin && "opacity-50")}
               onClick={() => toggleWin(winKey)}
             >
               <div className="sov-tab-dot" style={{ backgroundColor: mod.color }} />

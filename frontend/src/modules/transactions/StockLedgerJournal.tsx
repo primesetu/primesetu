@@ -157,7 +157,7 @@ const StockLedgerJournal: React.FC = () => {
 
       <div className="flex-1 flex gap-6 overflow-hidden">
         {/* Main Grid */}
-        <div className="flex-1 flex flex-col glass border border-white/20 rounded-[2rem] overflow-hidden shadow-2xl bg-white/50">
+        <div className="flex-1 flex flex-col glass border border-white/20 rounded-[2rem] overflow-hidden shadow-2xl bg-[var(--surface)]/50 dark:bg-[var(--surface-elevated)]/50">
           <DataTable 
             data={data}
             columns={columns}

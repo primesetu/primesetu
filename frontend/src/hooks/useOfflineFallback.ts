@@ -35,7 +35,7 @@ const initDB = async (): Promise<IDBPDatabase> => {
  * If network fails or offline, returns the last known good state from Sovereign storage.
  */
 export function useOfflineFallback<T>(
-  key: string,
+  key: string | null,
   fetcher: () => Promise<T>,
   initialData: T
 ) {
@@ -45,6 +45,8 @@ export function useOfflineFallback<T>(
   const [isOfflineData, setIsOfflineData] = useState(false);
 
   useEffect(() => {
+    if (!key) return;
+    
     let isMounted = true;
 
     const loadData = async () => {

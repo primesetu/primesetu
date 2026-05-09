@@ -45,11 +45,15 @@
     --warning:  var(--color-orange-500);
     --accent: #f29b12;
     --gold: #f29b12;
+    --accent-dark: #1a2340;
+    --navy-deep: #1a2340;
     
     /* Backgrounds — Smriti Elevation */
     --surface: #ffffff;
     --background: #f0f2f5; 
+    --background-alt: #f8fafc;
     --surface-elevated: #ffffff;
+    --surface-muted: #f8fafc;
     --surface-container-low: #f8fafc;
     --surface-container: #f1f5f9;
     --surface-container-high: #e2e8f0;
@@ -147,6 +151,7 @@
     --primary: #3b82f6;
     --primary-rgb: 59, 130, 246;
     --background: #0a0c10;
+    --background-alt: #0d1117;
     --surface: #0f1117;
     --surface-elevated: #161b22;
     --surface-container-low: #0d1117;
@@ -156,6 +161,7 @@
 
     --bg-base: #0a0c10;
     --bg-elevated: #0f1117;
+    --surface-muted: #161b22;
     --bg-overlay: rgba(10, 12, 16, 0.9);
     --bg-float: #161b22;
 
@@ -171,6 +177,8 @@
     --aside-bg: #0d1117;
     --aside-text: #f0f6fc;
     --aside-text-dim: #8b949e;
+    --accent-dark: #f0f6fc;
+    --navy-deep: #3b82f6;
   }
 
   /* 🧱 ROOT STACKING CONTEXTS */
@@ -207,6 +215,7 @@
     border-radius: 0px !important;
     transition: all 0.2s ease-in-out;
     background-color: var(--surface);
+    color: var(--text-primary);
   }
 
   input:focus, select:focus, textarea:focus {
@@ -218,6 +227,7 @@
   button:hover {
     border-color: var(--accent) !important;
     background: color-mix(in srgb, var(--accent) 5%, transparent);
+    color: var(--text-primary);
   }
 
   aside { 
@@ -329,7 +339,7 @@
 
   input, select, textarea {
     font: inherit;
-    color: inherit;
+    color: var(--text-primary);
     background: transparent;
     border: 1px solid var(--border-default);
     outline: none;
@@ -360,8 +370,8 @@
   }
   
   /* 🔤 TYPOGRAPHY GOVERNANCE */
-  .text-navy { color: var(--accent-dark) !important; }
-  [class*="text-navy/"] { color: var(--accent-dark) !important; opacity: 0.6 !important; } /* Force visibility for opaque variants */
+  .text-navy { color: var(--text-primary) !important; }
+  /* Note: text-navy/* opacity variants are handled by Tailwind's built-in opacity utility */
   
   .bg-brand-navy { background-color: var(--accent-dark) !important; }
   .text-brand-gold { color: var(--accent) !important; }
@@ -414,6 +424,18 @@
     text-transform: uppercase;
     font-size: 11px;
     letter-spacing: 0.05em;
+  }
+
+  /* ── CARD BASE (Used by Dashboard bento-grid) ── */
+  .card-base {
+    background-color: var(--surface);
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-md);
+    color: var(--text-primary);
+    transition: border-color 150ms;
+  }
+  .card-base:hover {
+    border-color: var(--border-default);
   }
 
   /* ── CARDS ── */
@@ -698,7 +720,9 @@
   --ag-border-color: var(--border-default);
   --ag-row-border-color: var(--border-subtle);
   --ag-header-background-color: var(--surface-muted);
-  --ag-header-foreground-color: var(--text-tertiary);
+  --ag-header-foreground-color: var(--text-primary);
+  --ag-foreground-color: var(--text-primary);
+  --ag-data-color: var(--text-primary);
   --ag-font-family: var(--font-primary);
   --ag-font-size: 11px;
   --ag-header-height: 32px;

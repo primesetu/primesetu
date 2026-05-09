@@ -2,4 +2,14 @@
 :root {
   --theme-bg: var(--color-bg-body);
   --theme-text: var(--color-text-primary);
+
+  /* Smriti Elevation Tokens */
+  --surface: #ffffff;
+  --background: #f0f2f5; 
+  --background-alt: #f8fafc;
+  --surface-elevated: #ffffff;
+  --surface-container-low: #f8fafc;
+  --surface-container: #f1f5f9;
+  --surface-container-high: #e2e8f0;
+  --surface-container-highest: #cbd5e1;
 }

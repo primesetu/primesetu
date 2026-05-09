@@ -1,5 +1,5 @@
 /* brand/theme-dark.css — dark mode overrides */
-[data-theme="dark"] {
+[data-theme="DARK"] {
   --color-bg-body: #0a1118;
   --color-bg-grid: #1a2a3a;
   
@@ -16,4 +16,14 @@
   --color-text-tertiary: #4a5568;
   
   --color-white: #121c26;
+
+  /* Smriti Elevation Tokens */
+  --surface: #0f1117;
+  --background: #0a0c10;
+  --background-alt: #0d1117;
+  --surface-elevated: #161b22;
+  --surface-container-low: #0d1117;
+  --surface-container: #161b22;
+  --surface-container-high: #21262d;
+  --surface-container-highest: #30363d;
 }

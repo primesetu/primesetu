@@ -1,0 +1,542 @@
+  
+**SMRITI OS**
+
+Retail ERP Platform
+
+Technical & Functional Documentation
+
+Version 1.0  —  May 2026
+
+*Inspired by Shoper 9 | Built for the Modern Retail Era*
+
+# **Table of Contents**
+
+# **1\. Product Overview**
+
+Smriti OS is a comprehensive Retail ERP platform inspired by Shoper 9's proven retail workflow. It is designed for modern multi-store retail businesses requiring cloud connectivity, offline resilience, and cross-device operation.
+
+## **1.1 Product Identity**
+
+| Product Name | Smriti OS |
+| :---- | :---- |
+| **Category** | Retail ERP Software |
+| **Inspired By** | Shoper 9 (Tally's Retail Management Software) |
+| **Version** | 1.0 |
+| **Document Date** | May 2026 |
+| **Target Market** | Single & Multi-store Retail Businesses |
+
+## **1.2 Product Vision**
+
+To deliver a retail ERP that is faster, more flexible, and more modern than Shoper 9, while preserving the familiar workflow that retail businesses already know and trust.
+
+## **1.3 Deployment Modes**
+
+Smriti OS supports two deployment modes to serve different customer segments:
+
+| Mode | Description | Target Customer |
+| :---- | :---- | :---- |
+| White Label | Smriti OS runs on top of Shoper 9 as a branding and extension layer | Existing Shoper 9 license holders |
+| Standalone | Fully independent ERP built on its own codebase, inspired by Shoper 9 workflow | New customers, no Shoper 9 dependency |
+
+## **1.4 Core Modules**
+
+| Module | Equivalent | Description |
+| :---- | :---- | :---- |
+| Smriti OS — Retail & Warehouse | Shoper 9 Retail | Store-level POS, inventory, purchase, warehouse |
+| Smriti OS — Head Office | Shoper 9 HO | Centralized control, MIS, inter-store management |
+
+# **2\. Infrastructure Architecture**
+
+## **2.1 Architecture Overview**
+
+| Architecture Type | Hybrid (Local \+ Cloud) |
+| :---- | :---- |
+| **Database** | PostgreSQL 15+ |
+| **Platform Support** | Windows, Web Browser, Android, iOS, Tablet |
+| **Connectivity** | Online & Offline both supported |
+| **Deployment** | Single Store & Multi-Store both supported |
+
+## **2.2 Hybrid Architecture Layers**
+
+The hybrid architecture ensures stores can operate fully offline while synchronizing with the cloud Head Office when connectivity is available.
+
+| Layer | Technology | Purpose |
+| :---- | :---- | :---- |
+| Local Store | PostgreSQL on store server / machine | Full offline operations |
+| Cloud HO | PostgreSQL on cloud server | Central sync, HO control, MIS |
+| Sync Engine | Delta sync via Celery \+ Redis | Auto sync on reconnect |
+| Conflict Resolution | Timestamp based \+ HO overrides | Handles sync conflicts |
+
+## **2.3 Platform Support**
+
+| Device | Mode | Optimized For | Key Feature |
+| :---- | :---- | :---- | :---- |
+| Windows PC | Desktop App (Electron) | Full ERP | Local server embedded |
+| Web Browser | Full Web App (React) | All modules | Cross-platform |
+| Android | Mobile App (React Native) | POS \+ Reports | Barcode scanning |
+| iOS | Mobile App (React Native) | POS \+ Reports | Payment integration |
+| Tablet | Web / Mobile App | POS | Touch optimized UI |
+
+## **2.4 Connectivity Modes**
+
+| Mode | Behavior | Data Handling |
+| :---- | :---- | :---- |
+| Online | Real-time sync with cloud and HO | Immediate push/pull |
+| Offline | Full operations on local PostgreSQL | Queued for sync |
+| Reconnect | Auto sync of all pending transactions | Delta sync only |
+| Conflict | Smart merge with HO priority override | Alert for manual resolve |
+
+## **2.5 Multi-Store Architecture**
+
+Each store operates as an independent node with its own local PostgreSQL instance. All stores sync to the central cloud HO server.
+
+| Store Type | Setup | Sync |
+| :---- | :---- | :---- |
+| Single Store | Local DB \+ optional cloud | Optional cloud backup |
+| Multi-Store | Each store has local DB | All sync to HO cloud |
+| Head Office | Cloud PostgreSQL | Receives all store data |
+
+# **3\. Complete Technology Stack**
+
+## **3.1 Backend**
+
+| Component | Technology | Version | Purpose |
+| :---- | :---- | :---- | :---- |
+| Framework | FastAPI (Python) | Latest | Core API engine |
+| ORM | SQLAlchemy \+ Alembic | 2.x | DB models & migrations |
+| Validation | Pydantic | v2 | Data validation & serialization |
+| Authentication | JWT \+ OAuth2 | \- | Multi-user, multi-store login |
+| Background Jobs | Celery | Latest | Sync tasks, scheduled jobs |
+| Message Broker | Redis | 7.x | Job queue \+ caching |
+| Real-time | WebSockets (FastAPI) | \- | Live POS, stock updates |
+| File Handling | Python-multipart | \- | Uploads, imports, exports |
+
+## **3.2 Database**
+
+| Component | Technology | Level | Purpose |
+| :---- | :---- | :---- | :---- |
+| Primary DB | PostgreSQL 15+ | All levels | All transactional data |
+| Local DB | PostgreSQL | Store | Offline operations |
+| Cloud DB | PostgreSQL (RDS) | HO | Centralized sync & HO |
+| Cache | Redis | All | Sessions, fast lookups |
+| Search | PostgreSQL Full Text / Meilisearch | All | Item & customer search |
+| Migrations | Alembic | All | Schema version control |
+
+## **3.3 Sync Engine**
+
+| Component | Technology | Purpose |
+| :---- | :---- | :---- |
+| Sync Strategy | Delta Sync | Only changed records sync |
+| Change Tracking | PostgreSQL WAL / Triggers | Detect data changes |
+| Sync Scheduler | Celery Beat | Auto sync intervals |
+| Conflict Resolution | Timestamp \+ Priority rules | HO overrides store on conflict |
+| Sync Status Tracking | Redis | Track pending/completed sync |
+
+## **3.4 Frontend — Web**
+
+| Component | Technology | Purpose |
+| :---- | :---- | :---- |
+| Framework | React.js (Vite) | Web application |
+| UI Library | Tailwind CSS \+ shadcn/ui | Clean, fast UI |
+| State Management | Zustand | Global state |
+| API Client | Axios \+ React Query | API calls & caching |
+| Offline Support | IndexedDB \+ Service Worker | PWA offline mode |
+| Grid / Spreadsheet | React Data Grid (Adazzle) | Excel-like data entry |
+| Form UI | React Hook Form \+ shadcn/ui | Single record forms |
+| Import/Export | SheetJS | Excel .xlsx import & export |
+| Charts & Reports | Recharts | Visual reports & analytics |
+
+## **3.5 Desktop Application**
+
+| Component | Technology | Purpose |
+| :---- | :---- | :---- |
+| Framework | Electron.js | Wrap web app as Windows desktop |
+| Local Server | Embedded FastAPI | Run backend locally |
+| Local Database | PostgreSQL (embedded) | Offline data store |
+| Printer Support | Electron Print API | Receipt & barcode printing |
+| Hardware | SerialPort / USB libs | Barcode scanner, cash drawer |
+
+## **3.6 Mobile Application**
+
+| Component | Technology | Purpose |
+| :---- | :---- | :---- |
+| Framework | React Native | Android \+ iOS |
+| Navigation | React Navigation | Screen routing |
+| Offline | SQLite (local) \+ sync | Mobile offline support |
+| Barcode | React Native Camera | Scan items |
+| Payments | Razorpay / PayTM SDK | UPI, card payments |
+| Push Alerts | Firebase FCM | Stock alerts, sync status |
+
+## **3.7 Cloud & DevOps**
+
+| Component | Technology | Purpose |
+| :---- | :---- | :---- |
+| Cloud Provider | AWS / Azure | Hosting infrastructure |
+| App Server | EC2 / App Service | FastAPI hosting |
+| DB Server | RDS PostgreSQL | Managed cloud database |
+| Cache Server | ElastiCache Redis | Managed Redis |
+| Storage | S3 / Blob Storage | Files, backups, images |
+| CDN | CloudFront | Fast static asset delivery |
+| Containerization | Docker | Consistent deployments |
+| Orchestration | Docker Compose / Kubernetes | Multi-service management |
+| CI/CD | GitHub Actions | Auto build & deploy |
+| Monitoring | Sentry \+ Grafana | Error tracking & metrics |
+
+## **3.8 Security**
+
+| Component | Technology | Purpose |
+| :---- | :---- | :---- |
+| Authentication | JWT \+ Refresh Tokens | Secure login |
+| Authorization | Role Based Access Control (RBAC) | User permissions |
+| Encryption | AES-256 | Sensitive data encryption |
+| Transport Security | SSL/TLS (HTTPS) | Secure communication |
+| API Security | Rate Limiting \+ CORS | Prevent abuse |
+| Audit Log | PostgreSQL Triggers | Track all data changes |
+
+## **3.9 Hardware Integration**
+
+| Hardware | Protocol / Method | Notes |
+| :---- | :---- | :---- |
+| Barcode Scanner | USB HID / Serial | Plug and play support |
+| Receipt Printer | ESC/POS Protocol | All major brands |
+| Cash Drawer | ESC/POS Trigger | Via receipt printer port |
+| Weighing Scale | Serial Port (RS232) | Auto weight capture |
+| Payment Terminal | SDK Integration | Razorpay / PayTM / Pine Labs |
+| Label Printer | ZPL / TSPL Protocol | Barcode & price labels |
+
+# **4\. UI/UX Design System**
+
+## **4.1 Data Entry Philosophy — Hybrid Approach**
+
+Smriti OS adopts a hybrid data entry approach combining the speed of spreadsheet-style grid editing with the detail of traditional form views. Users can toggle between both modes at any time.
+
+| Mode | When To Use | Technology |
+| :---- | :---- | :---- |
+| Grid View (Default) | Bulk entry, bulk editing, price updates, quick changes | React Data Grid (Adazzle) |
+| Form View | Detailed single record, new item with images, complex fields | React Hook Form \+ shadcn/ui |
+| Excel Import | Bulk data upload from .xlsx files | SheetJS |
+| Excel Export | Download data as .xlsx for offline editing | SheetJS |
+
+## **4.2 Grid Technology — React Data Grid (Adazzle)**
+
+| Library | React Data Grid by Adazzle |
+| :---- | :---- |
+| **License** | MIT (Free forever) |
+| **Excel Feel** | Inline edit, copy-paste, keyboard navigation |
+| **React Integration** | Native React component |
+| **Performance** | Virtual scrolling — handles large datasets |
+| **Heavy Data Fallback** | Glide Data Grid (for 50,000+ items) |
+| **Import / Export** | SheetJS (.xlsx) |
+
+# **5\. Centralized Theme Management**
+
+## **5.1 Overview**
+
+Smriti OS features a fully centralized theme management system allowing Head Office to control branding across all stores, while allowing stores limited customization within defined boundaries.
+
+## **5.2 Three-Level Theme Control**
+
+| Level | Controlled By | Scope |
+| :---- | :---- | :---- |
+| Level 1 — System | Smriti OS (Developer) | Base themes — Dark, Light, High Contrast. Cannot be deleted. |
+| Level 2 — Head Office | HO Admin | Client branding — logo, colors, font, layout. Pushed to all stores. |
+| Level 3 — Store | Store Manager | Local tweaks only — font size, density, POS skin. Within HO limits. |
+
+## **5.3 Theme Components**
+
+| Component | Includes | Configurable By | Example |
+| :---- | :---- | :---- | :---- |
+| Colors | Primary, secondary, accent, background, text, error, success | HO \+ Store | \#1E40AF (blue primary) |
+| Typography | Font family, sizes (xs/sm/base/lg), weights | HO \+ Store | Inter, 15px base |
+| Layout | Density, border radius, sidebar width, row height | HO \+ Store | Comfortable / Compact |
+| Branding | Logo, favicon, app name, login background, invoice logo | HO only | Client logo URL |
+| POS Skin | Classic / Modern / Minimal, grid/list layout, button size | Store | Touch optimized |
+
+## **5.4 Technical Implementation**
+
+| Component | Technology | Detail |
+| :---- | :---- | :---- |
+| Theme Storage | PostgreSQL JSON columns | Themes and assignments stored in DB |
+| Theme Delivery | FastAPI endpoint | Served per store on load |
+| Frontend Apply | CSS Variables \+ React Context | Instant update without reload |
+| Live Preview | React state injection | Preview before applying |
+| Push to Stores | WebSocket / Sync Engine | HO pushes theme to all stores |
+| Cache | Redis | Theme cached per store for fast load |
+
+## **5.5 Theme Permissions**
+
+| Role | Create Themes | Edit Themes | Push to Stores | Apply Theme |
+| :---- | :---- | :---- | :---- | :---- |
+| System Admin | Yes (System) | Yes (All) | Yes | Yes |
+| HO Admin | Yes (HO) | Yes (HO) | Yes | Yes |
+| Store Manager | No | Minor tweaks | No | Yes (allowed only) |
+| Cashier | No | No | No | No |
+
+# **6\. Menu Management & Role-Based Access Control**
+
+## **6.1 Overview**
+
+Smriti OS provides a fully configurable menu management system. Every menu item can be relabeled, shown/hidden, and assigned specific access levels per role or per user. Head Office can push menu configurations to all stores.
+
+## **6.2 Access Levels**
+
+| Access Level | What User Can Do | UI Behavior |
+| :---- | :---- | :---- |
+| No Access | Cannot see the menu at all | Menu hidden completely |
+| View Only | Can open and view records | No add/edit/delete buttons |
+| Read-Write | Can view, add, and edit records | No delete button |
+| Full Access | Can view, add, edit, delete, and export | All buttons visible |
+
+## **6.3 Three-Level Menu Control**
+
+| Level | Controlled By | Capability |
+| :---- | :---- | :---- |
+| Level 1 — System | Developer | Master menu list defined. System menus cannot be deleted. |
+| Level 2 — Head Office | HO Admin | Enable/disable menus, relabel, restrict per role. Pushed to stores. |
+| Level 3 — Store | Store Manager | Further restrict within HO limits. Assign to users/roles. |
+
+## **6.4 Default Roles**
+
+| Role | Level | Description |
+| :---- | :---- | :---- |
+| Super Admin | System | Full access to everything |
+| HO Admin | Head Office | Full HO access |
+| HO Manager | Head Office | View \+ reports only |
+| Store Manager | Store | Full store access |
+| Cashier | Store | POS billing only |
+| Stock Manager | Store | Inventory management only |
+| Purchase Manager | Store | Purchase and GRN only |
+| Accountant | Store | Reports and day-end only |
+| Custom Role | Any | User-defined permissions |
+
+## **6.5 Default Role Access Matrix**
+
+| Menu | Super Admin | HO Admin | Store Manager | Cashier |
+| :---- | :---- | :---- | :---- | :---- |
+| Dashboard | Full | Full | Full | View |
+| Item Master | Full | Full | Read-Write | None |
+| Customer Master | Full | Full | Read-Write | View |
+| POS / Billing | Full | View | Full | Full |
+| Purchase & GRN | Full | View | Full | None |
+| Stock Transfer | Full | View | Full | None |
+| Reports | Full | Full | Full | None |
+| Day End | Full | View | Full | View |
+| Theme Manager | Full | Full | None | None |
+| Menu Manager | Full | Full | None | None |
+| HO Module | Full | Full | None | None |
+
+## **6.6 Access Inheritance Rules**
+
+| Super Admin | Cannot be restricted by anyone |
+| :---- | :---- |
+| **HO Admin** | Cannot exceed Super Admin access |
+| **Store Manager** | Cannot exceed HO configuration limits |
+| **Individual User** | Cannot exceed their assigned Role access |
+
+## **6.7 Technical Implementation**
+
+| Component | Technology | Detail |
+| :---- | :---- | :---- |
+| Menu Storage | PostgreSQL | menus, menu\_configs, role\_menu\_access tables |
+| Access Check — Backend | FastAPI middleware decorator | @require\_access('menu\_name', 'level') |
+| Access Check — Frontend | React route guards | ProtectedRoute component per menu |
+| Button Visibility | React conditional render | hasAccess() helper function |
+| Push to Stores | Sync Engine | HO config synced to all stores |
+| Cache | Redis per role per store | Fast access check on every request |
+
+# **7\. Database Strategy**
+
+## **7.1 Approach — Inspired Schema**
+
+Rather than copying Shoper 9's schema exactly (which carries legal risk and technical debt from its legacy SQL Server / single-store design), Smriti OS uses an Inspired Schema approach: field names and business logic are preserved from Shoper 9, but the schema is redesigned for PostgreSQL, multi-store, cloud, and offline sync.
+
+## **7.2 Why Not Exact Copy**
+
+| Issue | Shoper 9 Schema | Smriti OS Requirement |
+| :---- | :---- | :---- |
+| Legal | Tally intellectual property | Inspired redesign — no legal risk |
+| Database | SQL Server (MSSQL) | PostgreSQL — different data types |
+| Architecture | Single store, LAN only | Multi-store, cloud \+ offline |
+| IDs | INT IDENTITY | UUID for distributed systems |
+| Sync | No sync columns | sync\_status, synced\_at needed |
+| Audit | No audit trail | created\_by, updated\_by, timestamps |
+| Multi-tenant | No company isolation | company\_id on every table |
+| Soft Delete | Hard deletes | is\_deleted flag for data safety |
+
+## **7.3 Schema Conversion Plan (Using MSSQL Profiler)**
+
+The recommended approach is to capture Shoper 9's live schema and query patterns using MSSQL Profiler, then convert cleanly to PostgreSQL.
+
+| Step | Action | Output |
+| :---- | :---- | :---- |
+| 1 | Run schema query on Shoper 9 MSSQL to extract all tables, columns, data types | Full table list with column definitions |
+| 2 | Run relationship query to capture all foreign keys and joins | Entity relationship map |
+| 3 | Extract all stored procedures | Business logic reference |
+| 4 | Run MSSQL Profiler during key transactions (billing, GRN, stock transfer, day-end) | Exact queries Shoper 9 fires |
+| 5 | Map MSSQL data types to PostgreSQL equivalents | Data type mapping table |
+| 6 | Generate PostgreSQL DDL (CREATE TABLE statements) | PostgreSQL schema |
+| 7 | Add minimal mandatory columns (company\_id, sync, audit) | Final Smriti OS schema |
+| 8 | Generate SQLAlchemy ORM models from schema | FastAPI ready models |
+
+## **7.4 Data Type Mapping — MSSQL to PostgreSQL**
+
+| MSSQL Type | PostgreSQL Type | Notes |
+| :---- | :---- | :---- |
+| INT IDENTITY | SERIAL or UUID | UUID preferred for distributed systems |
+| NVARCHAR(n) | VARCHAR(n) | Direct equivalent |
+| NVARCHAR(MAX) | TEXT | Unlimited text |
+| DATETIME | TIMESTAMPTZ | With timezone for multi-region |
+| SMALLDATETIME | TIMESTAMP | Without timezone |
+| DECIMAL(p,s) | NUMERIC(p,s) | Direct equivalent |
+| FLOAT | DOUBLE PRECISION | Direct equivalent |
+| BIT | BOOLEAN | true/false |
+| IMAGE | TEXT (S3 URL) | Store files in S3, URL in DB |
+| UNIQUEIDENTIFIER | UUID | Direct equivalent |
+| MONEY | NUMERIC(18,2) | Precise decimal |
+| TINYINT | SMALLINT | Small integer |
+| VARBINARY | BYTEA | Binary data |
+
+## **7.5 Mandatory Columns Added to Every Table**
+
+| company\_id | UUID — Multi-tenant isolation |
+| :---- | :---- |
+| **store\_id** | UUID — Store level isolation (nullable for HO tables) |
+| **sync\_status** | VARCHAR — pending / synced / conflict |
+| **synced\_at** | TIMESTAMPTZ — last successful sync timestamp |
+| **is\_deleted** | BOOLEAN DEFAULT FALSE — soft delete flag |
+| **created\_by** | UUID — user who created the record |
+| **updated\_by** | UUID — user who last updated the record |
+| **created\_at** | TIMESTAMPTZ DEFAULT NOW() |
+| **updated\_at** | TIMESTAMPTZ DEFAULT NOW() |
+| **uuid** | UUID DEFAULT gen\_random\_uuid() — distributed unique ID |
+
+# **8\. Module Architecture Overview**
+
+## **8.1 Smriti OS — Retail & Warehouse Modules**
+
+| \# | Module | Key Features | Users | Status |
+| :---- | :---- | :---- | :---- | :---- |
+| 1 | Masters | Item, Customer, Supplier, Category, Brand, Tax, Unit, Warehouse | All | To Define |
+| 2 | POS / Billing | Fast billing, barcode, multi-payment, hold bill | Cashier, Manager | To Define |
+| 3 | Purchase & GRN | PO, GRN, supplier management, purchase returns | Purchase Manager | To Define |
+| 4 | Inventory Management | Stock in/out, adjustments, valuation, batch/serial | Stock Manager | To Define |
+| 5 | Warehouse Management | Rack/bin, stock transfer, inward/outward challan | Stock Manager | To Define |
+| 6 | Sales Returns | Returns, exchanges, damage stock | Cashier, Manager | To Define |
+| 7 | Schemes & Promotions | Discounts, offers, loyalty, combo schemes | Manager, HO | To Define |
+| 8 | Day-End & Shift | Cash reconciliation, shift reports, day close | Manager, Cashier | To Define |
+| 9 | Reports & Analytics | Sales, purchase, stock, customer, financial reports | Manager, HO | To Define |
+| 10 | User & Role Management | Users, roles, permissions, access control | Admin, Manager | To Define |
+| 11 | Hardware Integration | Printer, scanner, cash drawer, scale, terminal | System | To Define |
+| 12 | Sync & Offline | Offline queue, sync status, conflict management | System | To Define |
+
+## **8.2 Smriti OS — Head Office Modules**
+
+| \# | Module | Key Features |
+| :---- | :---- | :---- |
+| 1 | Branch Management | Add/manage stores, store settings, store users |
+| 2 | Centralized Masters | Push item master, pricing, tax to all stores |
+| 3 | Schemes & Pricing | Central pricing rules, scheme push to stores |
+| 4 | Inter-Branch Transfers | Stock transfers between stores |
+| 5 | MIS Reports | Consolidated sales, stock, purchase across all stores |
+| 6 | Theme & Menu Control | Push themes and menu configs to all stores |
+| 7 | User & Role Control | Central user management across stores |
+| 8 | Sync Management | Monitor sync status of all stores |
+
+# **9\. Masters — Planned List**
+
+Masters are the foundation of all transactions in Smriti OS. The following masters are planned for Module 1:
+
+| \# | Master Name | Purpose | Level | Status |
+| :---- | :---- | :---- | :---- | :---- |
+| 1 | Company Master | Business info, branches, GST details | System | To Define |
+| 2 | Item Master | Products / SKUs — core item catalog | HO \+ Store | To Define |
+| 3 | Category Master | Item categories and sub-categories | HO \+ Store | To Define |
+| 4 | Brand Master | Item brands / manufacturers | HO \+ Store | To Define |
+| 5 | Unit Master | Units of measure — pcs, kg, ltr, box | HO \+ Store | To Define |
+| 6 | Tax Master | GST slabs, cess, tax groups | HO | To Define |
+| 7 | Customer Master | Retail and wholesale customers, loyalty | Store | To Define |
+| 8 | Supplier Master | Vendors, distributors, supplier terms | HO \+ Store | To Define |
+| 9 | Warehouse Master | Store locations, godowns | HO \+ Store | To Define |
+| 10 | Rack / Bin Master | Warehouse rack and bin locations | Store | To Define |
+| 11 | User Master | Staff accounts, roles, permissions | HO \+ Store | To Define |
+| 12 | Payment Mode Master | Cash, card, UPI, credit, cheque | HO \+ Store | To Define |
+| 13 | Bank Master | Company bank accounts | HO \+ Store | To Define |
+| 14 | Department Master | Store departments | HO \+ Store | To Define |
+| 15 | Season / Collection | Fashion retail — season and collection | HO | To Define |
+
+# **10\. Architecture Decisions Log**
+
+All key architectural and technology decisions made during the Smriti OS design process are recorded here for reference.
+
+| \# | Decision | Options Considered | Choice Made | Reason |
+| :---- | :---- | :---- | :---- | :---- |
+| 1 | Architecture | Cloud only, Local only, Hybrid | Hybrid | Offline resilience \+ central control |
+| 2 | Database | MySQL, SQL Server, PostgreSQL | PostgreSQL | Best for cloud, JSON, performance |
+| 3 | Backend Framework | Node.js, Django, FastAPI | FastAPI | Async, fast, auto-docs, Python ecosystem |
+| 4 | Web Frontend | Vue, Angular, React | React.js (Vite) | Largest ecosystem, best component library |
+| 5 | Desktop App | Native Windows, Tauri, Electron | Electron | Reuse web codebase, faster development |
+| 6 | Mobile App | Native, Flutter, React Native | React Native | Shared codebase with web React |
+| 7 | Grid Component | AG Grid, Handsontable, React Data Grid | React Data Grid (Adazzle) | MIT license, Excel-like, lightweight |
+| 8 | Excel Import/Export | Papa Parse, SheetJS | SheetJS | Best .xlsx support |
+| 9 | Schema Approach | Exact Shoper 9 copy, Inspired | Inspired Schema | No legal risk, PostgreSQL optimized |
+| 10 | Schema Source | Manual design, MSSQL Profiler | MSSQL Profiler capture | Exact business logic, no guesswork |
+| 11 | UI Entry Mode | Forms only, Grid only, Hybrid | Hybrid | Speed \+ detail for all user types |
+| 12 | Sync Strategy | Full sync, Delta sync | Delta sync | Minimal data transfer, faster sync |
+
+# **11\. Next Steps**
+
+## **11.1 Immediate Actions**
+
+| Priority | Action | Detail |
+| :---- | :---- | :---- |
+| P1 | MSSQL Profiler Capture | Capture Shoper 9 schema, stored procedures, and live query traces for key transactions |
+| P2 | Schema Conversion | Convert captured MSSQL schema to PostgreSQL with minimal additions |
+| P3 | Module 1 — Masters | Define all 15 masters in detail with fields, validations, and workflows |
+| P4 | Module 2 — POS/Billing | Define POS module with all billing flows |
+| P5 | Database ERD | Create full entity relationship diagram from converted schema |
+
+## **11.2 MSSQL Profiler Capture Instructions**
+
+To capture Shoper 9's schema for conversion, run the following operations on your Shoper 9 SQL Server:
+
+* Run schema extraction query to get all tables and columns
+
+* Run foreign key query to capture all relationships
+
+* Extract all stored procedures
+
+* Run MSSQL Profiler while performing: new item creation, billing/POS, GRN/purchase, stock transfer, day-end closing, reports
+
+* Share the captured output for conversion to PostgreSQL
+
+## **11.3 Module Development Sequence**
+
+| Phase | Modules | Dependency |
+| :---- | :---- | :---- |
+| Phase 1 — Foundation | Infrastructure setup, Masters, User & Role Management | None |
+| Phase 2 — Core Transactions | POS/Billing, Purchase & GRN, Sales Returns | Masters complete |
+| Phase 3 — Inventory | Inventory Management, Warehouse Management | Transactions complete |
+| Phase 4 — Controls | Schemes & Promotions, Day-End & Shift | Core transactions complete |
+| Phase 5 — Intelligence | Reports & Analytics, MIS | All modules complete |
+| Phase 6 — Head Office | Full HO module with all store controls | Retail module complete |
+
+# **Appendix — Tech Stack Summary**
+
+| Layer | Technology |
+| :---- | :---- |
+| **Backend** | FastAPI (Python) \+ SQLAlchemy \+ Pydantic v2 \+ Alembic |
+| **Background Jobs** | Celery \+ Redis |
+| **Real-time** | WebSockets (FastAPI) |
+| **Database** | PostgreSQL 15+ (Local \+ Cloud RDS) |
+| **Cache** | Redis |
+| **Web Frontend** | React.js (Vite) \+ Tailwind CSS \+ shadcn/ui \+ Zustand |
+| **Grid / Data Entry** | React Data Grid (Adazzle) \+ SheetJS |
+| **Form Entry** | React Hook Form \+ shadcn/ui |
+| **Desktop App** | Electron.js \+ Embedded FastAPI |
+| **Mobile App** | React Native (Android \+ iOS) |
+| **Cloud** | AWS / Azure |
+| **Containers** | Docker \+ Docker Compose / Kubernetes |
+| **CI/CD** | GitHub Actions |
+| **Monitoring** | Sentry \+ Grafana |
+| **Security** | JWT \+ RBAC \+ AES-256 \+ SSL/TLS |
+

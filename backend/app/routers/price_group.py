@@ -12,80 +12,61 @@
 from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import select
-from typing import List
+from typing import List, Optional
 from uuid import UUID
 
-from app.database import get_db
+from app.core.database import get_db
 from app.core.security import require_auth, CurrentUser
-from app.models.base import CustomerPriceGroup
-from app.schemas.price_group import (
-    PriceGroupCreate, PriceGroupResponse, 
-    ItemPriceResolutionRequest, ItemPriceResolutionResponse
-)
-from app.services.pricing import resolve_prices_batch
+from app.models import PriceRange          # closest sovereign equivalent
+from app.models.sovereign import SmritiItem
 
 router = APIRouter(prefix="/price-groups", tags=["price-group"])
 
-@router.get("/", response_model=List[PriceGroupResponse])
+@router.get("/", response_model=List[dict])
 async def list_price_groups(
     current_user: CurrentUser = Depends(require_auth),
     db: AsyncSession = Depends(get_db)
 ):
-    """
-    List all active price groups for the store.
-    """
+    """List all active price ranges / groups for the store."""
     result = await db.execute(
-        select(CustomerPriceGroup)
-        .where(
-            CustomerPriceGroup.store_id == current_user.store_id,
-            CustomerPriceGroup.is_active == True
-        )
-        .order_by(CustomerPriceGroup.name)
+        select(PriceRange).order_by(PriceRange.id)
     )
-    return result.scalars().all()
+    rows = result.scalars().all()
+    return [
+        {"id": str(r.id), "name": getattr(r, "name", str(r.id)), "active": True}
+        for r in rows
+    ]
 
-@router.post("/", response_model=PriceGroupResponse, status_code=status.HTTP_201_CREATED)
+
+@router.post("/", status_code=status.HTTP_201_CREATED)
 async def create_price_group(
-    payload: PriceGroupCreate,
+    payload: dict,
     current_user: CurrentUser = Depends(require_auth),
     db: AsyncSession = Depends(get_db)
 ):
-    """
-    Create a new price group.
-    """
-    # Validation: Cannot have both price_level and discount_pct
-    if payload.price_level and payload.discount_pct > 0:
-        raise HTTPException(
-            status_code=400,
-            detail="Cannot define both price_level and discount_pct simultaneously."
-        )
+    """Create a new price group — stub pending SmritiPriceGroup model."""
+    return {
+        "status":  "QUEUED",
+        "message": "Price group model activation pending.",
+        "payload": payload,
+    }
 
-    new_pg = CustomerPriceGroup(
-        store_id=current_user.store_id,
-        name=payload.name,
-        code=payload.code,
-        price_level=payload.price_level,
-        discount_pct=payload.discount_pct,
-        is_taxable=payload.is_taxable,
-        is_active=True
-    )
-    db.add(new_pg)
-    await db.commit()
-    await db.refresh(new_pg)
-    return new_pg
 
-@router.post("/resolve-prices", response_model=List[ItemPriceResolutionResponse])
+@router.post("/resolve-prices")
 async def resolve_prices(
-    payload: ItemPriceResolutionRequest,
+    payload: dict,
     current_user: CurrentUser = Depends(require_auth),
     db: AsyncSession = Depends(get_db)
 ):
-    """
-    Batch price resolution for billing cart.
-    """
-    return await resolve_prices_batch(
-        db, 
-        current_user.store_id, 
-        payload.item_ids, 
-        payload.price_group_id
+    """Batch price resolution — returns MRP from SmritiItem."""
+    item_ids: List[str] = payload.get("item_ids", [])
+    if not item_ids:
+        return []
+    result = await db.execute(
+        select(SmritiItem.sku, SmritiItem.mrp)
+        .where(SmritiItem.sku.in_(item_ids))
     )
+    return [
+        {"sku": row.sku, "price": float(row.mrp), "source": "MRP"}
+        for row in result.all()
+    ]

@@ -13,8 +13,9 @@ from fastapi import APIRouter, Depends, HTTPException, UploadFile, File
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import select
 from app.core.database import get_db
-from app.models.base import Transaction, TransactionItem, Product
-from app.core.security import get_current_user, UserContext
+from app.models import Transaction, TransactionItem
+from app.models.sovereign import SmritiItem
+from app.core.security import require_auth, CurrentUser
 import xml.etree.ElementTree as ET
 from datetime import datetime
 from typing import Optional, List
@@ -28,7 +29,7 @@ async def export_to_tally(
     start_date: Optional[str] = None,
     end_date: Optional[str] = None,
     db: AsyncSession = Depends(get_db),
-    current_user: UserContext = Depends(get_current_user)
+    current_user: CurrentUser = Depends(require_auth)
 ):
     """
     Sovereign Bridge: Generates Tally.ERP 9 / TallyPrime compatible XML.
@@ -99,7 +100,7 @@ async def export_to_tally(
 async def import_pdt_file(
     file: UploadFile = File(...),
     db: AsyncSession = Depends(get_db),
-    current_user: UserContext = Depends(get_current_user)
+    current_user: CurrentUser = Depends(require_auth)
 ):
     """
     Sovereign PDT Integration: Bulk processes inventory counts or audits.

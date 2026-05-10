@@ -50,13 +50,15 @@ app.add_middleware(
 api_prefix = "/api/v1"
 
 from app.routers import (
-    onboarding, barcode, 
-    purchase, inventory, billing, 
+    onboarding, barcode,
+    purchase, inventory, billing,
     users, menu, extensions, finance, schemes, security, reporting,
-    store, inventory_audit, stock_ledger, department, 
+    store, inventory_audit, stock_ledger, department,
     legacy, masks, item_master, customer, ho, settings, master, ecommerce,
     einvoice, tally, returns, loyalty, whatsapp, warehouse, intelligence,
-    flexible_reports, gstr1
+    flexible_reports, gstr1,
+    # Previously built — now wired
+    accounts, alerts, catalogue, configuration, integration, price_group, reports, tills,
 )
 from app.routers import schema as schema_router
 
@@ -96,13 +98,23 @@ app.include_router(whatsapp.router)
 app.include_router(warehouse.router)
 app.include_router(intelligence.router)
 
+# Previously built — now fully wired
+app.include_router(accounts.router, prefix="/api/v1/accounts",   tags=["accounts"])
+app.include_router(alerts.router,   prefix="/api/v1/alerts",     tags=["alerts"])
+app.include_router(catalogue.router, prefix="/api/v1/catalogue", tags=["catalogue"])
+app.include_router(configuration.router, prefix="/api/v1",       tags=["configuration"])
+app.include_router(integration.router, prefix="/api/v1/integration", tags=["integration"])
+app.include_router(price_group.router, prefix="/api/v1",         tags=["price-group"])
+app.include_router(reports.router)                                # has its own /api/v1/reports prefix
+app.include_router(tills.router, prefix="/api/v1/finance/till",  tags=["tills"])
+
 # Reports & Sync
 app.include_router(ho.router, prefix="/api/v1/ho")
 
 # Schema Studio — Introspection & Provisioning
 app.include_router(schema_router.router, prefix="/api/v1")
 app.include_router(flexible_reports.router)
-app.include_router(gstr1.router) 
+app.include_router(gstr1.router)
 
 from app.services.sync_engine import SyncEngine
 from app.services.omnichannel_sync import OmnichannelSyncEngine

@@ -59,7 +59,7 @@ export default function PriceRevisionWorkbench({ onBack }: PriceRevisionWorkbenc
     try {
       // In a real app, this would fetch from /api/v1/inventory/prices
       // For now, we fetch items and map them
-      const res = await api.inventory.search('');
+      const res = await api.legacy.getData('itemmaster', { limit: 100 });
       const data = Array.isArray(res) ? res : (res?.data || []);
       
       const mapped = data.map((item: any) => ({

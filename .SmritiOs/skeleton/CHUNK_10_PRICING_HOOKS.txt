@@ -1,0 +1,144 @@
+﻿================================================================
+SMRITI-OS v3.0 — SKELETON CHUNK 10: PRICING STRATEGY & HOOKS
+================================================================
+
+─── PRICING MODELS (Section 16) ────────────────────────────────
+Model          | Target                    | Price Structure                     | Best For
+SaaS Monthly   | Small retailers, 1-3 str  | Rs.2,999 – Rs.4,999/store/month     | Startups, low upfront
+SaaS Annual    | Growing chains, 3-10 str  | Rs.24,999 – Rs.39,999/store/year    | Established retailers
+One-Time Lic.  | Large chains, 10+ stores  | Rs.49,999 – Rs.99,999/store + AMC   | Chains owning license
+White Label    | Shoper 9/Tally resellers  | Custom — revenue share or wholesale  | Implementation partners
+Enterprise     | Large groups, 50+ stores  | Custom + dedicated support SLA       | Corporates, franchises
+
+─── MODULE ADD-ONS ──────────────────────────────────────────────
+Add-On Module            | Price                    | Notes
+E-Commerce Integration   | Rs.999/month per store   | All platform connectors
+WhatsApp Integration     | Rs.499/month + per-msg   | BSP charges extra
+Advanced Analytics / BI  | Rs.1,499/month per co.   | Across all stores
+Tally Sync               | Rs.499/month per co.     | All Tally versions
+Extra Store (SaaS)       | Rs.1,999/month per store | Beyond base plan
+
+─── COMPETITIVE POSITIONING ────────────────────────────────────
+Competitor   | Price Range              | Smriti OS Advantage
+Shoper 9     | Rs.15k – Rs.80k one-time | Cloud + mobile + offline — higher value
+Ginesys      | Rs.50k – Rs.3L+/year     | 60-70% lower cost, familiar S9 workflow
+Logic ERP    | Rs.30k – Rs.1.5L         | Modern UI, mobile, all devices
+ERPNext      | Free + Rs.1.5L impl.     | India-specific, easier, better support
+Zoho Inv.    | Rs.4k – Rs.20k/month     | GST-native, Tally sync, offline-first
+
+─── GO-TO-MARKET STRATEGY (Section 17) ─────────────────────────
+Primary Channel: Shoper 9 + Tally reseller network
+Strategy      : Convert existing resellers from S9 → Smriti OS
+
+Partner Types:
+  Shoper 9 Resellers  → Already know S9 workflow, same customer base
+  Tally Partners      → Want retail ERP to offer alongside Tally
+  IT Integrators      → System integration, hardware supply, support
+  Retail Consultants  → Advisory + implementation for retail chains
+
+================================================================
+
+SKELETON CHUNK 10B — ALL FRONTEND HOOKS
+================================================================
+
+─── HOOKS (src/hooks/) ─────────────────────────────────────────
+Hook                   | File                      | Purpose
+useGridKeyboard        | useGridKeyboard.ts        | Arrow nav, Shift+Arrow, Ctrl+Enter fill, F2 edit
+useGridMask            | useGridMask.ts            | Load S9 AcceptDisplayDtls → schema-driven grid
+useLiveMasks           | useLiveMasks.ts           | Real-time field config from backend
+useValidationMask      | useValidationMask.ts      | Shoper9 validation rules per field
+useZoneCMask           | useZoneCMask.ts           | Zone C (right panel) field config
+useOfflineFallback     | useOfflineFallback.ts     | IndexedDB fallback when backend unreachable
+useSyncQueue           | useSyncQueue.ts           | Queue mutations for background sync
+usePermission          | usePermission.ts          | RBAC permission check
+usePermissionMask      | usePermissionMask.ts      | Module-level permission mask
+useTheme               | useTheme.tsx              | Light/Dark/SMRITI-OS theme switching
+useLanguage            | useLanguage.tsx           | i18n translations (Hindi/English)
+useWindowManager       | useWindowManager.ts       | Popout window management
+usePopout              | usePopout.ts              | Launch modules in independent windows
+useStore               | useStore.ts               | Current store config from Supabase
+useWarehouse           | useWarehouse.ts           | Multi-location warehouse operations
+useMenu                | useMenu.ts                | Dynamic sidebar menu from registry
+useNodeSync            | useNodeSync.ts            | HO multi-node synchronization
+useSession             | useSession.ts             | Auth session management
+useSysParams           | useSysParams.ts           | System parameters fetch & cache
+useOfflineCart         | useOfflineCart.ts         | Offline cart persistence (IndexedDB)
+useOfflineStatus       | useOfflineStatus.ts       | Network online/offline detection
+useReplayEngine        | useReplayEngine.ts        | Replay queued offline transactions
+useOverrideEngine      | useOverrideEngine.ts      | Module behavior override hooks
+useSovereignHotkeys    | useSovereignHotkeys.ts    | Global F-key and sovereign shortcuts
+useSovereignShortcuts  | useSovereignShortcuts.ts  | Extended shortcut management
+useValidator           | useValidator.ts           | Client-side field validation
+
+─── STATE MANAGEMENT (useSovereignStore) ────────────────────────
+File: src/store/useSovereignStore.ts
+Library: Zustand
+Storage: localStorage (key: "smriti_workbench_draft")
+
+Interface:
+  sheets: Record<string, SheetState>     All workbench sheets
+  activeSheet: string                    Active tab (default: "ITEM")
+  zoomLevel: number                      Grid zoom 50-200% (default: 100)
+
+SheetState:
+  gridData: Record<string, any>          {"{row}-{col}": value} — O(1) access
+  modifiedRows: Set<number>              Rows with unsaved changes
+  deletedRows: Set<number>               Rows marked for deletion
+  rowsCount: number                      Row count (default: 50)
+  schema: string                         Schema key → SCHEMAS map
+
+Actions:
+  setActiveSheet(name)
+  setZoomLevel(level)
+  updateSheet(name, updates)             Auto-saves to localStorage
+  addSheet(name, initialState?)
+  deleteSheet(name)
+  resetStore()                           Clears localStorage + state
+
+─── WORKBENCH SHEETS (Item Master) ──────────────────────────────
+Tab    | Schema Key      | Purpose
+COMMON | COMMON_FIELDS   | Shared fields (Brand, GST, HSN) — 1 row only
+ITEM   | ITEM_MASTER     | Main item entry — 100 rows default
+CL12   | CLASS12COMBO    | Class 1 / Class 2 mapping
+SC1    | SUBCLASS1CAT    | Style / SubClass1 names
+SC2    | SUBCLASS2CAT    | Shade / SubClass2 names
+SIZE   | SIZECAT         | Size categories
+ATTRS  | ATTRIBUTES      | Master attribute key-value pairs
+
+─── PRINT TEMPLATES ─────────────────────────────────────────────
+Template          | File                           | Format
+Tax Invoice A4    | billing/TaxInvoiceA4.tsx       | A4 PDF (jsPDF)
+Tax Invoice B2B   | billing/TaxInvoiceB2B.tsx      | A4 PDF + IRN/QR
+Credit Note A4    | billing/CreditNoteA4.tsx       | A4 PDF
+Thermal Receipt   | billing/ThermalReceipt.tsx     | 80mm ESC/POS thermal
+Day End Report    | billing/DayEndReport.tsx       | A4 summary
+
+─── OFFLINE ARCHITECTURE ────────────────────────────────────────
+Browser
+  IndexedDB (offlineVault.ts)
+    ├── drafts        ← Suspended bills, PO drafts
+    ├── products      ← Product cache for offline billing
+    └── sync_queue    ← Pending mutations for sync
+
+  Service Worker (Workbox PWA)
+    ├── Cache-first   ← Static assets (JS/CSS/fonts)
+    └── Network-first ← API calls (queue on offline)
+
+  useSyncQueue.ts     ← Background retry on reconnect
+
+─── BUILD & DEPLOY ──────────────────────────────────────────────
+Commands:
+  npm run dev         Vite dev server (port 5173)
+  npm run build       tsc -b && vite build → dist/
+  git add -A; git commit -m "msg"; git push
+
+Deploy Targets:
+  Frontend  → Cloudflare Pages (dist/ folder)
+  Backend   → Render (FastAPI Python)
+  Database  → Supabase (PostgreSQL)
+  Auth      → Supabase Auth (JWT Bearer)
+
+Build Output (latest): 338 chunks, ~25 seconds, 0 TypeScript errors
+Main chunk: index.js 1.88MB (expected for full ERP)
+Largest modules: BillingModule 46KB, InventoryAudit 30KB, BarcodeStudio 31KB
+================================================================

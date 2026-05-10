@@ -16,6 +16,7 @@ import {
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useHotkeys } from 'react-hotkeys-hook';
+import { ThemePicker } from './components/ThemePicker';
 
 import { COMPONENT_MAP } from './lib/ModuleRegistry';
 import { useMenu } from './hooks/useMenu';
@@ -31,6 +32,7 @@ import { Routes, Route, useLocation } from 'react-router-dom';
 import ArchitectExplorer from './modules/architect/ArchitectExplorer';
 import ItemMasterWorkbench from './modules/inventory/ItemMasterWorkbench';
 import CatalogueMasterWorkbench from './modules/inventory/CatalogueMasterWorkbench';
+import EcommerceStorefront from './pages/ecommerce/Storefront';
 
 const PrimeSetu: React.FC = () => {
   useSovereignShortcuts();
@@ -40,6 +42,7 @@ const PrimeSetu: React.FC = () => {
   const [isCollapsed, setIsCollapsed] = useState(false);
   const [isRightCollapsed, setIsRightCollapsed] = useState(false);
   const [isCommandBarOpen, setIsCommandBarOpen] = useState(false);
+  const [isThemePickerOpen, setIsThemePickerOpen] = useState(false);
   const [searchContext, setSearchContext] = useState<string | null>(null);
   const [user, setUser] = useState<{ name: string, role: string, store_id?: string } | null>(null);
   const [selectedInstance, setSelectedInstance] = useState('X01');
@@ -104,6 +107,12 @@ const PrimeSetu: React.FC = () => {
   useHotkeys('alt+d', (e) => {
     e.preventDefault();
     setLayoutMode(prev => prev === 'STANDARD' ? 'SOVEREIGN' : 'STANDARD');
+  }, { enableOnFormTags: true, preventDefault: true });
+
+  // THEME PICKER (Alt+T)
+  useHotkeys('alt+t', (e) => {
+    e.preventDefault();
+    setIsThemePickerOpen(prev => !prev);
   }, { enableOnFormTags: true, preventDefault: true });
 
   const handleLogin = (role: string) => {
@@ -179,6 +188,7 @@ const PrimeSetu: React.FC = () => {
   const isArchitectPath = location.pathname.startsWith('/jawaharmallah');
   const isWorkbenchPath = location.pathname === '/workbench';
   const isCatWorkbenchPath = location.pathname === '/catworkbench';
+  const isEcommercePath = location.pathname.startsWith('/ecommerce');
   const isPopoutPath = location.pathname.startsWith('/popout/');
 
   // Standalone Popout Logic
@@ -212,6 +222,11 @@ const PrimeSetu: React.FC = () => {
     );
   }
 
+  // Standalone Ecommerce Storefront
+  if (isEcommercePath) {
+    return <EcommerceStorefront />;
+  }
+
   // If on Architect path, render the Explorer directly
   if (isArchitectPath) {
     return (
@@ -238,9 +253,11 @@ const PrimeSetu: React.FC = () => {
       nodeType={nodeType}
       setNodeType={setNodeType}
       setIsCommandBarOpen={setIsCommandBarOpen}
+      setIsThemePickerOpen={setIsThemePickerOpen}
       isRightCollapsed={isRightCollapsed}
       setIsRightCollapsed={setIsRightCollapsed}
     >
+      {isThemePickerOpen && <ThemePicker onClose={() => setIsThemePickerOpen(false)} />}
       <CommandBar 
         isOpen={isCommandBarOpen} 
         onClose={() => {

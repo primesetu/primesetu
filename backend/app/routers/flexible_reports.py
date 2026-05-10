@@ -14,7 +14,8 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import select, func, extract
 from app.core.database import get_db
 from app.core.security import require_auth, CurrentUser
-from app.models import Transaction, TransactionItem, Item, Department
+from app.models.base import Transaction, TransactionItem, Department
+from app.models.legacy_s9 import Itemmaster
 from pydantic import BaseModel
 from typing import List, Dict, Any, Optional
 
@@ -40,9 +41,9 @@ async def generate_flexible_report(
     
     # Map dimension names to model attributes
     DIMENSION_MAP = {
-        "brand": Item.brand,
-        "department": Department.name,
-        "hsn": Item.hsn_code,
+        "brand": Itemmaster.class1cd,
+        "department": Itemmaster.class2cd,
+        "hsn": Itemmaster.class3cd, # or actual hsn
         "store": Transaction.store_id,
         "month": extract("month", Transaction.created_at),
         "year": extract("year", Transaction.created_at),
@@ -75,9 +76,8 @@ async def generate_flexible_report(
     # Construct Dynamic Query
     stmt = (
         select(*(group_fields + agg_fields))
-        .join(TransactionItem, TransactionItem.product_id == Item.id)
+        .join(TransactionItem, TransactionItem.stock_no == Itemmaster.stockno)
         .join(Transaction, Transaction.id == TransactionItem.transaction_id)
-        .join(Department, Department.id == Item.department_id)
         .where(Transaction.store_id == store_id)
         .where(Transaction.status == "Finalized")
     )

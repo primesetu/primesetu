@@ -1,0 +1,111 @@
+﻿================================================================
+SMRITI-OS v3.0 — SKELETON CHUNK 06: DATABASE STRATEGY
+================================================================
+Approach: INSPIRED SCHEMA (not a copy of Shoper 9)
+Reason  : Field names/business logic preserved from S9 where practical,
+          but redesigned for PostgreSQL, multi-store, cloud, offline sync.
+
+─── WHY NOT AN EXACT COPY ──────────────────────────────────────
+Issue        | Shoper 9 Schema          | Smriti OS Requirement
+Legal        | Tally IP                 | Inspired redesign — no legal risk
+Database     | SQL Server (MSSQL)       | PostgreSQL — different data types
+Architecture | Single store, LAN only   | Multi-store, cloud + offline sync
+Identifiers  | INT IDENTITY (sequential)| UUID for distributed systems
+Sync         | No sync columns          | sync_status, synced_at on every table
+Audit Trail  | No audit columns         | created_by, updated_by, timestamps
+Multi-tenant | No company isolation     | company_id on every table
+Soft Delete  | Hard deletes             | is_deleted flag for data safety
+
+─── SCHEMA CONVERSION PLAN (MSSQL Profiler Approach) ───────────
+Step | Action                                          | Output
+1    | Extract schema from Shoper 9 MSSQL              | Table list + column defs
+2    | Capture foreign key relationships               | Entity relationship map
+3    | Extract stored procedures + business logic      | Business logic reference
+4    | Run MSSQL Profiler during billing/GRN/transfer  | Exact queries per transaction
+5    | Map MSSQL data types to PostgreSQL              | Data type mapping table
+6    | Generate PostgreSQL DDL (CREATE TABLE)          | PostgreSQL schema DDL
+7    | Add mandatory columns to every table            | Final Smriti OS schema
+8    | Generate SQLAlchemy ORM models from schema      | FastAPI-ready Python models
+
+─── DATA TYPE MAPPING (MSSQL → PostgreSQL) ─────────────────────
+MSSQL Type       | PostgreSQL Type    | Notes
+INT IDENTITY     | SERIAL or UUID     | UUID preferred for distributed systems
+NVARCHAR(n)      | VARCHAR(n)         | Direct equivalent
+NVARCHAR(MAX)    | TEXT               | Unlimited text
+DATETIME         | TIMESTAMPTZ        | With timezone for multi-region
+SMALLDATETIME    | TIMESTAMP          | Without timezone
+DECIMAL(p,s)     | NUMERIC(p,s)       | Direct equivalent — preferred for money
+FLOAT            | DOUBLE PRECISION   | Direct equivalent
+BIT              | BOOLEAN            | true/false
+IMAGE            | TEXT (S3 URL)      | Store files in S3, URL ref in DB
+UNIQUEIDENTIFIER | UUID               | Direct equivalent
+MONEY            | NUMERIC(18,2)      | NEVER use FLOAT for money
+TINYINT          | SMALLINT           | Small integer values
+VARBINARY        | BYTEA              | Binary data
+
+─── MANDATORY COLUMNS (every table) ────────────────────────────
+Column      | Type                        | Purpose
+company_id  | UUID NOT NULL               | Multi-tenant isolation
+store_id    | UUID (nullable for HO)      | Store level isolation
+sync_status | VARCHAR                     | Values: pending/synced/conflict
+synced_at   | TIMESTAMPTZ                 | Last successful sync timestamp
+is_deleted  | BOOLEAN DEFAULT FALSE       | Soft delete — never hard delete
+created_by  | UUID                        | User who created this record
+updated_by  | UUID                        | User who last updated this record
+created_at  | TIMESTAMPTZ DEFAULT NOW()   | Auto-set on insert
+updated_at  | TIMESTAMPTZ DEFAULT NOW()   | Auto-updated on every change
+uuid        | UUID DEFAULT gen_random_uuid()| Distributed unique identifier
+
+─── DATABASE ENUMS (current Supabase schema) ────────────────────
+Enum          | Values
+bill_status   | draft / confirmed / cancelled
+stock_status  | ok / low / critical / out
+user_role     | owner / manager / cashier / viewer
+scheme_type   | flat / percent / bxgy / combo
+ledger_type   | sale / purchase / payment / receipt / journal
+sync_packet   | BILL / RETURNS / STOCK_ADJUST / PO
+
+─── CURRENT SUPABASE TABLES ────────────────────────────────────
+Table       | Key Fields
+stores      | id, name, code, address, gstin, created_at
+users       | id, store_id, email, full_name, role, active
+products    | id, store_id, name, sku, barcode, mrp, hsn, gst_percent
+stock       | id, store_id, product_id, qty, reorder_level, status
+bills       | id, store_id, bill_no, bill_date, customer, till_id, total
+bill_items  | id, bill_id, product_id, qty, mrp, discount, amount
+schemes     | id, store_id, name, type, value, min_qty, active, dates
+ledger      | id, store_id, type, amount, party_name, ref_id, narration
+ai_outputs  | id, store_id, prompt_hash, output, critic_score
+sync_log    | id, packet_id, packet_type, payload, store_id
+
+─── SHOPER 9 ITEM MASTER FIELD MAPPING ─────────────────────────
+Field Key     | Label          | S9 Column      | Type
+stockno       | Stock No       | stockno        | text, required
+itemdesc      | Description    | itemdesc       | text, required
+sfield1       | Barcode/EAN    | sfield1        | text
+class1cd      | Product        | class1cd       | lookup PRODUCT
+class2cd      | Brand          | class2cd       | lookup BRAND
+subclass1cd   | Style          | subclass1cd    | lookup STYLE
+subclass2cd   | Shade          | subclass2cd    | lookup SHADE
+size          | Size           | size           | lookup SIZE
+analcode32    | HSN Code       | analcode32     | text
+retail_price  | MRP            | retail_price   | number
+dealer_price  | Dealer Price   | dealer_price   | number
+prodtaxtype   | GST Slab %     | prodtaxtype    | number
+total_stock   | Stock Qty      | total_stock    | number, readonly
+currentcost   | Cost Price     | currentcost    | number
+batch_sr_no   | Batch Sr No    | batch_sr_no    | text
+analcode1-10  | Custom Attrs   | analcode1-10   | text
+vendor_code   | Pref. Vendor   | vendor_code    | text
+reorder_level | Reorder Level  | reorder_level  | number
+eoq           | EOQ            | eoq            | number
+inventory_yn  | Inventory Y/N  | inventory_yn   | text
+billable_yn   | Billable Y/N   | billable_yn    | text
+
+─── S9 CASCADE PIPELINE ────────────────────────────────────────
+GenLookup → CLASS12COMBO → SUBCLASS1CAT → SUBCLASS2CAT → SIZECAT
+         → ItemMaster → StockMaster
+
+API: POST /api/v1/items/batch (batchCreate)
+     POST /api/v1/items/lookup/sync (syncLookup)
+================================================================

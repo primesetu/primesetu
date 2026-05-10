@@ -8,10 +8,16 @@
 
 @import './base/reset.css';
 @import './base/root.css';
+@import './base/theme-bridge.css';
 @import './brand/brand-fonts.css';
 @import './brand/brand-colors.css';
 @import './brand/theme-light.css';
 @import './brand/theme-dark.css';
+@import './brand/theme-high-contrast.css';
+@import './brand/theme-modern-sleek.css';
+@import './brand/theme-obsidian.css';
+@import './brand/theme-ibm-surepos.css';
+@import './brand/theme-clinical.css';
 @import './base/typography.css';
 @import './base/scrollbar.css';
 
@@ -23,6 +29,7 @@
 @import './components/sidebar.css';
 @import './components/modal.css';
 @import './components/form.css';
+@import './components/theme-picker.css';
 
 @import './pages/dashboard.css';
 @import './pages/inventory.css';

@@ -30,7 +30,8 @@ from sqlalchemy import select, func
 from sqlalchemy.orm import selectinload
 from app.core.database import get_db
 from app.core.security import get_current_user, UserContext
-from app.models.base import Transaction, TransactionItem, Item, Store
+from app.models.base import Transaction, TransactionItem, Store
+from app.models.sovereign import SmritiItem as Item
 from datetime import datetime
 from typing import Optional
 import csv

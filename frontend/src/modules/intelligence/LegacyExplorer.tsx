@@ -15,8 +15,7 @@ import { supabase } from '@/lib/supabase';
 
 import { Text, Input, Badge, Button, Card, DataTable } from '@/components/ui/SovereignUI'
 import { themeQuartz } from 'ag-grid-community';
-
-const API_BASE = import.meta.env.VITE_API_URL || 'http://localhost:8000';
+import { apiClient } from '@/api/client';
 
 const LegacyExplorer: React.FC = () => {
   const [tables, setTables] = useState<string[]>([]);
@@ -33,12 +32,8 @@ const LegacyExplorer: React.FC = () => {
   useEffect(() => {
     const fetchTables = async () => {
       try {
-        const { data: { session } } = await supabase.auth.getSession();
-        const response = await fetch(`${API_BASE}/api/v1/legacy/tables`, {
-          headers: { 'Authorization': `Bearer ${session?.access_token}` }
-        });
-        const data = await response.json();
-        setTables(data);
+        const response = await apiClient.get('/legacy/tables');
+        setTables(response.data);
       } catch (err) {
         console.error("Failed to fetch legacy tables", err);
       }
@@ -51,22 +46,17 @@ const LegacyExplorer: React.FC = () => {
     if (!selectedTable) return;
     setLoading(true);
     try {
-      const { data: { session } } = await supabase.auth.getSession();
-      const headers = { 'Authorization': `Bearer ${session?.access_token}` };
-
       // Data fetch
-      const dataRes = await fetch(`${API_BASE}/api/v1/legacy/${selectedTable}?limit=100`, { headers });
-      const dataJson = await dataRes.json();
-      setRowData(dataJson.data);
-      setTotalRows(dataJson.total);
+      const dataRes = await apiClient.get(`/legacy/${selectedTable}?limit=100`);
+      setRowData(dataRes.data.data);
+      setTotalRows(dataRes.data.total);
 
       // Schema fetch
-      const schemaRes = await fetch(`${API_BASE}/api/v1/legacy/${selectedTable}/schema`, { headers });
-      const schemaJson = await schemaRes.json();
-      setSchema(schemaJson.columns);
+      const schemaRes = await apiClient.get(`/legacy/${selectedTable}/schema`);
+      setSchema(schemaRes.data.columns);
 
       // Dynamic Column Definitions for AG-Grid
-      const cols = schemaJson.columns.map((c: any) => ({
+      const cols = schemaRes.data.columns.map((c: any) => ({
         field: c.name,
         headerName: c.name.toUpperCase(),
         sortable: true,

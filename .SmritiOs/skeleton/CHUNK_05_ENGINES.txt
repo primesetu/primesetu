@@ -1,0 +1,81 @@
+﻿================================================================
+SMRITI-OS v3.0 — SKELETON CHUNK 05: REUSABLE ENGINE ARCHITECTURE
+================================================================
+Core Principle: "Build 10 engines — not 100 modules."
+All ERP screens follow: Grid + Filters + Form + Search + Export + Permissions
+Only FIELDS, WORKFLOWS, and BUSINESS RULES change between modules.
+
+─── THE 5 CORE REUSABLE ENGINES ────────────────────────────────
+Engine              | Component          | Config Points                | Benefit
+Universal Grid      | <AppGrid />        | columns, APIs, filters, sort | One component all list screens
+Universal Form      | <AppForm /> + JSON | fields array: name/type/val  | Auto-render inputs from schema
+Universal CRUD      | FastAPI Router     | GET/POST/PUT/DELETE/LIST/EXPORT | Zero repeat code
+Universal RBAC      | Permission MW      | view/create/edit/delete/export per role | Same check everywhere
+Universal Report    | Recharts+SheetJS   | filters, export, print, dates | Uniform report experience
+
+─── OLD WAY vs SMRITI-OS WAY ───────────────────────────────────
+Old Way : Design UI → Forms → APIs → Validation → REPEAT per module
+          Result  : Inconsistent UI, bugs per module, slow delivery
+
+Smart Way: Build engines → Define JSON schema → Module auto-generated
+           Result  : Consistent UI, rapid delivery, easy maintenance
+
+─── SCHEMA EXAMPLE (Item Master as config) ──────────────────────
+{
+  "module": "item_master",
+  "table": "items",
+  "fields": [
+    { "name": "stockno",     "label": "Stock No",    "type": "text",   "required": true },
+    { "name": "itemdesc",    "label": "Description", "type": "text",   "required": true },
+    { "name": "class1cd",    "label": "Product",     "type": "lookup", "source": "PRODUCT" },
+    { "name": "class2cd",    "label": "Brand",       "type": "lookup", "source": "BRAND" },
+    { "name": "retail_price","label": "MRP",         "type": "number", "f2Type": "numeric" },
+    { "name": "prodtaxtype", "label": "GST %",       "type": "number", "f2Type": "numeric" },
+    { "name": "sfield1",     "label": "Barcode/EAN", "type": "text"                       }
+  ],
+  "permissions": { "view": "all", "create": "MANAGER+", "delete": "OWNER" }
+}
+
+─── WHAT CANNOT BE REUSED (Custom Business Logic) ───────────────
+Domain                    | Why Custom Code Required
+POS / Billing Engine      | Discounts, multi-tax, rounding, returns, holds
+Inventory Movement Engine | Stock in/out, inter-store, batch, FIFO/LIFO
+GST Rules Engine          | CGST/SGST/IGST splits, HSN, e-invoice, RCM
+Sync Engine               | Delta sync, conflict resolution, offline queue
+Promotions/Pricing Engine | BxGy, tier pricing, loyalty redemption
+
+─── ENGINE OVERRIDE STRATEGY (Layered) ──────────────────────────
+Layer               | Description                            | Owner
+Core Engine         | Universal — NEVER modified directly    | Architecture team
+Module Config       | Schema/metadata defining standard beh  | Module developers
+Module Overrides    | Hooks extending specific engine behav  | Module developers
+Client Extensions   | Isolated per-client — outside core     | Implementation partners
+
+─── AI-AUGMENTED WORKFLOW ───────────────────────────────────────
+Owner   | Responsibility
+Humans  | Architecture + business logic (GST rules, sync logic, pricing)
+Schemas | Define structure (fields, types, validations, relationships)
+AI      | Generate repetitive implementation from schemas at high speed
+        | (forms, CRUD scaffolding, validation, API scaffolding, tests)
+
+Rule: AI accelerates speed. Humans control correctness. Neither replaces the other.
+
+─── CURRENT IMPLEMENTATION ENGINES ─────────────────────────────
+Engine File                              | Role
+src/lib/GridEngine.ts                    | Dynamic grid rendering + schema mapping
+src/components/sovereign/SovereignGrid.tsx| Excel spreadsheet grid (custom)
+src/hooks/useGridKeyboard.ts             | Keyboard nav + Shift+Arrow + Ctrl+Enter fill
+src/hooks/useGridMask.ts                 | Shoper9 AcceptDisplayDtls schema loader
+src/hooks/useValidationMask.ts           | Shoper9 validation rules per field
+src/hooks/useLiveMasks.ts                | Real-time field config from backend
+src/lib/SyncEngine.ts                    | Background sync queue
+src/lib/offlineVault.ts                  | IndexedDB offline storage
+src/lib/ThemeEngine.ts                   | Theme switching (CSS vars + data-theme)
+src/store/useSovereignStore.ts           | Zustand: multi-sheet workbench state
+
+─── ARCHITECTURAL STANCE ────────────────────────────────────────
+Strategy: MODULAR MONOLITH FIRST
+Evolve to service separation ONLY where operational scale requires it.
+Avoids: premature microservices, distributed system overhead,
+        unnecessary infrastructure cost.
+================================================================

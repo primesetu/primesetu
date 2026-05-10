@@ -15,6 +15,7 @@
   --color-text-secondary: #8a9bb0;
   --color-text-tertiary: #4a5568;
   
+  /* --color-white remapped so bg-white components pick up dark surface */
   --color-white: #121c26;
 
   /* Smriti Elevation Tokens */
@@ -26,4 +27,21 @@
   --surface-container: #161b22;
   --surface-container-high: #21262d;
   --surface-container-highest: #30363d;
+
+  /* Sprint A: Dark-correct shadows */
+  --shadow-sm:      0 1px 4px  rgba(0,0,0,0.30);
+  --shadow-md:      0 4px 24px rgba(0,0,0,0.40);
+  --shadow-lg:      0 8px 32px rgba(0,0,0,0.50);
+  --shadow-topbar:  0 1px 20px rgba(0,0,0,0.35);
+  --shadow-taskbar: 0 -1px 20px rgba(0,0,0,0.30);
+  --shadow-menu:    0 20px 60px rgba(0,0,0,0.55);
+  --shadow-toast:   0 15px 40px rgba(0,0,0,0.45);
+
+  /* Sprint A: Zero-radius enforcement (Institutional Square) */
+  --radius-sm:   0px;
+  --radius-md:   0px;
+  --radius-lg:   0px;
+  --radius-xl:   0px;
+  --radius-2xl:  0px;
+  --radius-pill: 2px;
 }

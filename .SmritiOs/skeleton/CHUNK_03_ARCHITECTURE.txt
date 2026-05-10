@@ -1,0 +1,92 @@
+﻿================================================================
+SMRITI-OS v3.0 — SKELETON CHUNK 03: INFRASTRUCTURE ARCHITECTURE
+================================================================
+
+─── ARCHITECTURE TYPE ──────────────────────────────────────────
+Type              : Hybrid (Local PostgreSQL + Cloud PostgreSQL)
+Each store        : Independent node with own local PostgreSQL
+Sync              : Delta sync to central cloud HO server
+Offline           : Stores run FULLY offline — sync auto on reconnect
+
+─── HYBRID ARCHITECTURE LAYERS ─────────────────────────────────
+Layer           | Technology              | Purpose
+Local Store     | PostgreSQL on store PC  | Full offline ops — no internet
+Cloud HO        | PostgreSQL on cloud     | Central sync, HO control, MIS
+Sync Engine     | Celery + Redis          | Auto sync — only changed records
+Conflict Res.   | Timestamp + HO override | Handles sync conflicts cleanly
+
+─── PLATFORM SUPPORT ───────────────────────────────────────────
+Device        | Mode                   | Key Feature
+Windows PC    | Desktop (Electron)     | Local server embedded — offline
+Web Browser   | Full Web App (React)   | Cross-platform, no install
+Android       | Mobile (React Native)  | Barcode scanning, UPI payments
+iOS           | Mobile (React Native)  | Payment integration, touch POS
+Tablet        | Web/Mobile             | Touch-optimized, large buttons
+
+─── CONNECTIVITY MODES ─────────────────────────────────────────
+Mode      | Behavior                        | Data Handling
+Online    | Real-time sync with cloud & HO  | Immediate push/pull
+Offline   | Full ops on local PostgreSQL    | All transactions queued for sync
+Reconnect | Auto sync all pending           | Delta sync only — minimal transfer
+Conflict  | Smart merge — HO priority       | Alert raised for manual resolve
+
+─── MULTI-STORE ARCHITECTURE ───────────────────────────────────
+Store Type    | Setup                       | Sync
+Single Store  | Local DB + optional cloud   | Optional cloud backup
+Multi-Store   | Each store has own local DB | All stores sync to HO cloud
+Head Office   | Cloud PostgreSQL            | Receives & consolidates all data
+
+─── THEME MANAGEMENT (3-LEVEL) ─────────────────────────────────
+Level              | Controlled By     | Scope
+Level 1 — System   | Developer         | Base themes: Dark, Light, HighContrast
+Level 2 — HO       | HO Admin          | Client branding: logo, colors, fonts
+Level 3 — Store    | Store Manager     | Local tweaks within HO limits
+
+Theme Storage    : PostgreSQL JSON columns
+Theme Delivery   : FastAPI endpoint per store on app load
+Frontend Apply   : CSS Variables + React Context (instant, no reload)
+Live Preview     : React state injection
+Push to Stores   : WebSocket / Sync Engine
+Cache            : Redis per store (invalidated on update)
+
+─── MENU MANAGEMENT (3-LEVEL) ──────────────────────────────────
+Level              | Controlled By     | Capability
+Level 1 — System   | Developer         | Master menu — cannot be deleted
+Level 2 — HO       | HO Admin          | Enable/disable, relabel, restrict
+Level 3 — Store    | Store Manager     | Further restrict within HO limits
+
+─── CURRENT FRONTEND ROUTING ───────────────────────────────────
+/                        → Login / Store Onboarding
+/dashboard               → ManagementDashboard
+/workbench               → ItemMaster (list view)
+/workbench/itemmaster    → ItemMasterWorkbench (spreadsheet mode)
+/{moduleId}              → Dynamic module from COMPONENT_MAP
+
+Navigation: window.dispatchEvent(new CustomEvent("navigate", { detail: moduleId }))
+
+─── PROVIDER STACK (main.tsx) ──────────────────────────────────
+BrowserRouter
+  └─ QueryClientProvider      (React Query — staleTime: 60s, retry: 1)
+      └─ LanguageProvider     (i18n)
+          └─ ThemeProvider    (CSS vars + data-theme attribute)
+              └─ F2SearchProvider  (Global F2 item lookup overlay)
+                  └─ App
+                      └─ GlobalF2SearchOverlay
+
+─── PWA INITIALIZATION ─────────────────────────────────────────
+Library    : vite-plugin-pwa + Workbox
+Prompts    : User confirm on update available
+Offline    : "Enterprise PWA installed" console log
+SW Strategy: Cache-first static, Network-first API
+
+─── AG-GRID MODULES REGISTERED ─────────────────────────────────
+ClientSideRowModelModule
+ColumnAutoSizeModule
+ValidationModule
+PaginationModule
+CellStyleModule
+TextEditorModule
+RowSelectionModule
+TextFilterModule / NumberFilterModule / DateFilterModule
+CustomFilterModule
+================================================================

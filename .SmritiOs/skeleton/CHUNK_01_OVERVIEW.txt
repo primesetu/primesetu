@@ -1,0 +1,72 @@
+﻿================================================================
+SMRITI-OS v3.0 — SKELETON CHUNK 01: PRODUCT OVERVIEW
+================================================================
+Architect : Jawahar R. Mallah | AITDL Network | contact@aitdl.com
+Website   : https://aitdl.in
+Status    : Living Document — Active Development
+
+─── 1. PRODUCT IDENTITY ────────────────────────────────────────
+Product Name     : Smriti OS
+Category         : Retail ERP Software
+Version          : 3.0 (May 2026)
+Inspired By      : Shoper 9 (Tally's Retail Management Software)
+Tagline          : "Memory, Not Code."
+Target Market    : Single & Multi-store Retail Businesses (India)
+
+─── 2. PRODUCT VISION ──────────────────────────────────────────
+Deliver a retail ERP faster, more flexible, and more modern than
+Shoper 9 — preserving the familiar Shoper 9 workflow that retail
+businesses already know and trust.
+
+─── 3. DEPLOYMENT MODES ────────────────────────────────────────
+Mode          | Description                          | Target Customer
+White Label   | Smriti OS runs ON TOP of Shoper 9   | Existing S9 license holders
+Standalone    | Fully independent ERP (S9-inspired)  | New customers — no S9 needed
+
+─── 4. CORE PRODUCT AREAS ──────────────────────────────────────
+Area                          | S9 Equivalent     | Scope
+Smriti OS — Retail/Warehouse  | Shoper 9 Retail   | POS, inventory, purchase, WH
+Smriti OS — Head Office       | Shoper 9 HO       | Centralized, MIS, inter-store
+
+─── 5. WHAT'S NEW IN v3.0 ──────────────────────────────────────
+Change                          | Type
+Section numbering fixed         | Fix
+Language consistency            | Fix
+Appendix repositioned           | Fix
+Module 17 — E-Commerce Integ.  | NEW (Flipkart, Amazon, Meesho, Shopify)
+Module 18 — Loyalty & CRM       | NEW (points, tiers, CRM workflows)
+Section 16 — Pricing Strategy   | NEW (SaaS, one-time, white-label)
+Section 17 — Partner Strategy   | NEW (Shoper9/Tally reseller GTM)
+
+─── 6. ROLES ───────────────────────────────────────────────────
+Role             | Level        | Description
+Super Admin      | System       | Full access — unrestricted
+HO Admin         | Head Office  | Full HO — manages all stores
+HO Manager       | Head Office  | View/reports only
+Store Manager    | Store        | Full retail ops
+Cashier          | Store        | POS billing + returns only
+Stock Manager    | Store        | Inventory — no billing
+Purchase Manager | Store        | Purchase/GRN only
+Accountant       | Store        | Reports/day-end — no transactions
+Custom Role      | Any          | User-defined flexible permissions
+
+─── 7. ACCESS LEVEL DEFINITIONS ────────────────────────────────
+No Access   → Menu hidden completely
+View Only   → No add/edit/delete buttons
+Read-Write  → No delete button
+Full Access → All buttons + export visible
+
+─── ACCESS MATRIX (Default) ────────────────────────────────────
+Menu            | SuperAdmin | HO Admin | Mgr   | Cashier | Stock
+Dashboard       | Full       | Full     | Full  | View    | View
+Item Master     | Full       | Full     | RW    | None    | View
+Customer Master | Full       | Full     | RW    | View    | None
+POS / Billing   | Full       | View     | Full  | Full    | None
+Purchase/GRN    | Full       | View     | Full  | None    | Full
+Stock Transfer  | Full       | View     | Full  | None    | Full
+Reports         | Full       | Full     | Full  | None    | View
+Day End         | Full       | View     | Full  | View    | None
+Theme Manager   | Full       | Full     | None  | None    | None
+Menu Manager    | Full       | Full     | None  | None    | None
+HO Module       | Full       | Full     | None  | None    | None
+================================================================

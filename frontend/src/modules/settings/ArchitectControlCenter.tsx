@@ -10,17 +10,16 @@ import {
   CloudLightning, RefreshCcw, ArrowRight, Wifi, WifiOff,
   HardDrive, Share2, Lock, Terminal, CheckCircle2, AlertCircle,
   Settings, Monitor, ArrowRightLeft, Layers, Plus, Download,
-  Copy, ChevronRight, FlaskConical, PackagePlus
+  Copy, ChevronRight, FlaskConical, PackagePlus, Palette
 } from 'lucide-react';
 import { 
   Card, CardContent, CardHeader, CardTitle, CardDescription,
   Button, Badge, Flex, Grid, Container, Text, Divider, Switch
 } from '@/components/ui/SovereignUI';
-
-const API = import.meta.env.VITE_API_URL || 'http://127.0.0.1:8000';
+import { apiClient } from '@/api/client';
 
 type DeployMode = 'LOCAL' | 'CLOUD' | 'HYBRID';
-type Tab = 'deploy' | 'connect' | 'database' | 'telemetry' | 'schema' | 'config';
+type Tab = 'deploy' | 'connect' | 'database' | 'telemetry' | 'schema' | 'config' | 'theme';
 
 function cn(...c: any[]) { return c.filter(Boolean).join(' '); }
 
@@ -113,16 +112,16 @@ const ArchitectControlCenter: React.FC = () => {
   useEffect(() => {
     if (activeTab === 'config') {
       // Fetch SysParam categories
-      fetch(`${API}/api/v1/settings/sysparams/categories`)
-        .then(res => res.json())
+      apiClient.get('/settings/sysparams/categories')
+        .then(res => res.data)
         .then(data => {
           setCategories(data);
           if (data.length > 0 && !selectedCategory) setSelectedCategory(data[0].code);
         });
       
       // Fetch GenLookUp types
-      fetch(`${API}/api/v1/settings/genlookups/types`)
-        .then(res => res.json())
+      apiClient.get('/settings/genlookups/types')
+        .then(res => res.data)
         .then(data => {
           setLookupTypes(data);
           if (data.length > 0 && !selectedLookupType) setSelectedLookupType(data[0]);
@@ -133,8 +132,8 @@ const ArchitectControlCenter: React.FC = () => {
   useEffect(() => {
     if (selectedLookupType && configSubTab === 'lookups') {
       setIsLookupLoading(true);
-      fetch(`${API}/api/v1/settings/genlookups/${selectedLookupType}`)
-        .then(res => res.json())
+      apiClient.get(`/settings/genlookups/${selectedLookupType}`)
+        .then(res => res.data)
         .then(data => {
           setLookups(data);
           setIsLookupLoading(false);
@@ -145,8 +144,8 @@ const ArchitectControlCenter: React.FC = () => {
   useEffect(() => {
     if (selectedCategory) {
       setIsConfigLoading(true);
-      fetch(`${API}/api/v1/settings/sysparams/${selectedCategory}`)
-        .then(res => res.json())
+      apiClient.get(`/settings/sysparams/${selectedCategory}`)
+        .then(res => res.data)
         .then(data => {
           setParams(data);
           setIsConfigLoading(false);
@@ -156,11 +155,7 @@ const ArchitectControlCenter: React.FC = () => {
 
   const updateParam = async (id: string, field: string, value: any) => {
     try {
-      await fetch(`${API}/api/v1/settings/sysparams/${id}`, {
-        method: 'PUT',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ [field]: value })
-      });
+      await apiClient.put(`/settings/sysparams/${id}`, { [field]: value });
       // Optimistic update
       setParams(prev => prev.map(p => p.id === id ? { ...p, [field]: value } : p));
     } catch (err) {
@@ -198,8 +193,8 @@ const ArchitectControlCenter: React.FC = () => {
   const fetchTables = useCallback(async () => {
     setLoadingTables(true);
     try {
-      const res = await fetch(`${API}/api/v1/schema/shoper9/tables`);
-      const data = await res.json();
+      const res = await apiClient.get('/schema/shoper9/tables');
+      const data = res.data;
       setS9Tables(data.tables || []);
     } catch (e) {
       setS9Tables([]);
@@ -213,8 +208,8 @@ const ArchitectControlCenter: React.FC = () => {
     setTableStructure(null);
     setGeneratedDDL('');
     try {
-      const res = await fetch(`${API}/api/v1/schema/shoper9/tables/${tableName}`);
-      const data = await res.json();
+      const res = await apiClient.get(`/schema/shoper9/tables/${tableName}`);
+      const data = res.data;
       setTableStructure(data);
     } catch {}
   };
@@ -224,8 +219,8 @@ const ArchitectControlCenter: React.FC = () => {
     setDdlLoading(true);
     try {
       // No enhancements — exact 1:1 Shoper9 original structure
-      const res = await fetch(`${API}/api/v1/schema/generate-ddl/${selectedTable}?target_schema=shoper9&add_enhancements=false`);
-      const data = await res.json();
+      const res = await apiClient.get(`/schema/generate-ddl/${selectedTable}?target_schema=shoper9&add_enhancements=false`);
+      const data = res.data;
       setGeneratedDDL(data.ddl || '');
     } catch {}
     setDdlLoading(false);
@@ -243,11 +238,10 @@ const ArchitectControlCenter: React.FC = () => {
     setProvisionLog(['⏳ Starting provisioning...']);
     try {
       // Uses shoper9 schema — exact original table structure, no new tables
-      const res = await fetch(
-        `${API}/api/v1/schema/provision?client_id=${newClientId}&client_name=${encodeURIComponent(newClientName)}&schema_name=${newSchemaName}&include_seed=true`,
-        { method: 'POST' }
+      const res = await apiClient.post(
+        `/schema/provision?client_id=${newClientId}&client_name=${encodeURIComponent(newClientName)}&schema_name=${newSchemaName}&include_seed=true`
       );
-      const data = await res.json();
+      const data = res.data;
       setProvisionLog(data.log || [JSON.stringify(data)]);
     } catch (e: any) {
       setProvisionLog(['❌ Error: ' + e.message]);
@@ -260,11 +254,10 @@ const ArchitectControlCenter: React.FC = () => {
     setMssqlProvisionLoading(true);
     setProvisionLog([`⏳ Starting MSSQL DB creation for SMRITISETU${mssqlStoreCode}...`]);
     try {
-      const res = await fetch(
-        `${API}/api/v1/schema/provision-mssql?store_code=${encodeURIComponent(mssqlStoreCode)}`,
-        { method: 'POST' }
+      const res = await apiClient.post(
+        `/schema/provision-mssql?store_code=${encodeURIComponent(mssqlStoreCode)}`
       );
-      const data = await res.json();
+      const data = res.data;
       setProvisionLog(data.log || [JSON.stringify(data)]);
     } catch (e: any) {
       setProvisionLog(['❌ Error: ' + e.message]);
@@ -278,6 +271,7 @@ const ArchitectControlCenter: React.FC = () => {
     { id: 'database',  label: 'DB Provisioning',  icon: Database },
     { id: 'schema',    label: 'Schema Studio',    icon: Terminal },
     { id: 'config',    label: 'System Config',    icon: Settings },
+    { id: 'theme',     label: 'Theme Manager',    icon: Palette },
   ];
 
   const selectedMode = DEPLOY_MODES.find(m => m.id === deployMode)!;
@@ -1148,6 +1142,75 @@ const ArchitectControlCenter: React.FC = () => {
                 </>
               )}
             </div>
+          </div>
+        )}
+
+        {/* ── TAB 6: THEME MANAGER ── */}
+        {activeTab === 'theme' && (
+          <div className="space-y-6 max-w-5xl">
+            <div className="rounded-2xl bg-gradient-to-r from-pink-500/10 to-orange-500/10 border border-pink-500/20 p-5 flex items-start gap-4">
+              <div className="w-12 h-12 rounded-xl bg-pink-500/20 flex items-center justify-center shrink-0">
+                <Palette className="text-pink-400" size={24} />
+              </div>
+              <div>
+                <div className="font-black text-base uppercase italic tracking-tight">Institutional Theme Architect</div>
+                <p className="text-xs text-[var(--text-secondary)] opacity-70 mt-1 leading-relaxed">
+                  Design tokens define the visual structure of SMRITI-OS. Control border radius, primary colors, and structural styling centrally. 
+                  Changes pushed here are instantly broadcasted to all active Point of Sale terminals.
+                </p>
+              </div>
+            </div>
+
+            <Grid cols={2} gap={6}>
+              <Card className="border-[var(--border-subtle)] p-6 space-y-5 bg-black/20">
+                <Flex gap={3} itemsCenter>
+                  <Palette size={16} className="text-pink-500" />
+                  <Text variant="h3" className="text-sm uppercase tracking-widest font-black">Design Tokens</Text>
+                </Flex>
+
+                <div>
+                  <label className="text-[10px] font-black uppercase opacity-50 block mb-2">Color Palette (Brand)</label>
+                  <select className="w-full bg-black/50 border border-[var(--border-subtle)] rounded-none px-3 py-2 text-xs font-mono focus:outline-none focus:border-pink-500 transition-colors">
+                    <option value="emerald">Institutional Emerald (Default)</option>
+                    <option value="blue">Sovereign Blue</option>
+                    <option value="purple">Premium Violet</option>
+                    <option value="red">High-Contrast Red</option>
+                  </select>
+                </div>
+
+                <div>
+                  <label className="text-[10px] font-black uppercase opacity-50 block mb-2">Border Radius Compliance</label>
+                  <select className="w-full bg-black/50 border border-[var(--border-subtle)] rounded-none px-3 py-2 text-xs font-mono focus:outline-none focus:border-pink-500 transition-colors">
+                    <option value="none">Zero Radius (Institutional Square)</option>
+                    <option value="sm">Subtle Curve (2px)</option>
+                    <option value="md">Modern Soft (6px)</option>
+                  </select>
+                </div>
+
+                <div>
+                  <label className="text-[10px] font-black uppercase opacity-50 block mb-2">Typography Pack</label>
+                  <select className="w-full bg-black/50 border border-[var(--border-subtle)] rounded-none px-3 py-2 text-xs font-mono focus:outline-none focus:border-pink-500 transition-colors">
+                    <option value="jetbrains">JetBrains Mono + Inter</option>
+                    <option value="fira">Fira Code + Roboto</option>
+                    <option value="system">System Default</option>
+                  </select>
+                </div>
+                
+                <Button className="w-full bg-pink-600 hover:bg-pink-500 border-2 border-pink-800 rounded-none shadow-[4px_4px_0px_0px_rgba(15,23,42,1)] text-white font-black uppercase py-6 transition-all active:translate-x-1 active:translate-y-1 active:shadow-none">
+                  <Activity size={16} className="mr-2" /> Broadcast Theme to Store Nodes
+                </Button>
+              </Card>
+
+              <Card className="border-[var(--border-subtle)] p-6 bg-black/20 flex flex-col items-center justify-center space-y-4">
+                 <div className="w-full max-w-xs border-2 border-slate-900 bg-white p-4 shadow-[8px_8px_0px_0px_rgba(15,23,42,1)] rounded-none relative">
+                    <div className="absolute top-0 right-0 bg-emerald-500 text-white font-black text-[9px] px-2 py-0.5 uppercase">Live Preview</div>
+                    <div className="text-emerald-700 font-mono font-black text-sm mb-2 uppercase">Institutional POS</div>
+                    <input className="w-full border-2 border-slate-900 h-10 mb-2 px-2 font-mono text-sm outline-none focus:bg-emerald-50" placeholder="SKU001" readOnly/>
+                    <button className="w-full bg-slate-900 text-white font-black uppercase h-10 border-2 border-slate-900 hover:bg-slate-800 transition-colors">Commit Entry</button>
+                 </div>
+                 <Text variant="xs" className="opacity-50 text-center w-64">This preview represents the exact UI rendered on the cashier terminals under the current config.</Text>
+              </Card>
+            </Grid>
           </div>
         )}
 

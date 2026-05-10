@@ -1,0 +1,41 @@
+/* brand/theme-high-contrast.css — strict accessibility mode */
+[data-theme="HIGH-CONTRAST"] {
+  --color-primary: #FFFF00; /* Pure High-Vis Yellow */
+  --color-primary-hover: #FFFFFF;
+  
+  --color-bg-body: #000000; /* Absolute Black */
+  --color-bg-grid: #000000;
+  
+  --color-surface: #000000;
+  --color-surface-hover: #000000;
+  --color-surface-active: #000000;
+  
+  --color-border: #FFFFFF; /* Pure White borders */
+  --color-border-light: #FFFF00;
+  --color-border-focus: #FFFF00;
+
+  --color-text-primary: #FFFFFF;
+  --color-text-secondary: #FFFF00;
+  --color-text-tertiary: #FFFFFF;
+
+  --color-success-bg: #000000;
+  --color-success-text: #00FF00;
+  
+  --color-warning-bg: #000000;
+  --color-warning-text: #FFFF00;
+  
+  --color-danger-bg: #000000;
+  --color-danger-text: #FF0000;
+  
+  --color-white: #000000;
+
+  /* Smriti Elevation Tokens */
+  --surface: #000000;
+  --background: #000000;
+  --background-alt: #000000;
+  --surface-elevated: #000000;
+  --surface-container-low: #000000;
+  --surface-container: #000000;
+  --surface-container-high: #000000;
+  --surface-container-highest: #000000;
+}

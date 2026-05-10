@@ -1,0 +1,130 @@
+﻿================================================================
+SMRITI-OS v3.0 — SKELETON CHUNK 08: DESIGN SYSTEM
+================================================================
+Aesthetic: "Institutional Square" — Zero border-radius, JetBrains Mono for numerics
+
+─── COLOR PALETTE (LIGHT MODE) ─────────────────────────────────
+Token                    | Value                   | Usage
+--primary                | teal-500 (#008C85)      | Buttons, active states
+--primary-rgb            | 0, 140, 133             | Color mixing
+--secondary              | #2e7d32                 | Success, positive changes
+--danger                 | red-500                 | Errors, alerts
+--warning                | orange-500              | Warnings
+--accent / --gold        | #f29b12                 | Gold accent, highlights
+--accent-dark            | #1a2340                 | Dark navy text
+--navy-deep              | #1a2340                 | Deep navy
+--surface                | #ffffff                 | Card backgrounds
+--surface-elevated       | #ffffff                 | Elevated cards
+--surface-muted          | #f8fafc                 | Muted surface
+--background             | #f0f2f5                 | Page background
+--background-alt         | #f8fafc                 | Alt background
+--aside-bg               | #1a4a48                 | Sidebar (dark teal)
+--aside-text             | #e8f5f4                 | Sidebar text
+--text-primary           | #1e293b                 | Body text
+--text-secondary         | #475569                 | Muted text
+--text-tertiary          | #64748b                 | Placeholder text
+--text-disabled          | #94a3b8                 | Disabled text
+--border-subtle          | rgba(26,74,72,0.08)     | Subtle borders
+--border-default         | rgba(26,74,72,0.15)     | Default borders
+--green                  | #10b981                 | Stock healthy
+--amber                  | #f59e0b                 | Warning
+--red                    | #ef4444                 | Critical/danger
+--blue                   | #3b82f6                 | Info
+
+─── COLOR PALETTE (DARK MODE — data-theme="DARK") ──────────────
+--primary                | #3b82f6
+--background             | #0a0c10
+--surface                | #0f1117
+--surface-elevated       | #161b22
+--text-primary           | #f0f6fc
+--text-secondary         | #8b949e
+--aside-bg               | #0d1117
+--border-default         | rgba(255,255,255,0.1)
+--accent-dark            | #f0f6fc
+--navy-deep              | #3b82f6
+
+─── TYPOGRAPHY ─────────────────────────────────────────────────
+Token          | Value                                    | Usage
+--font-primary | Inter                                    | All body text
+--font-mono    | JetBrains Mono, Fira Code, ui-monospace  | ALL numeric/monetary data
+               | (Shoper 9 parity for transactional data) |
+
+Font Scale:
+2xs: 11px/16px  xs: 12px/16px  sm: 13px/20px  md: 14px/20px
+lg: 16px/24px  xl: 20px/28px  2xl: 24px/32px  3xl: 32px/40px
+
+─── SPACING TOKENS ─────────────────────────────────────────────
+--space-1: 4px   --space-2: 8px   --space-3: 12px  --space-4: 16px
+--space-5: 20px  --space-6: 24px  --space-8: 32px  --space-10: 40px
+
+─── LAYOUT CONSTANTS ───────────────────────────────────────────
+Sidebar width    : 256px
+Topbar height    : 48px
+Status bar       : 28px
+Input height     : 56px (standard), 44px (POS)
+Button min-height: 44px (POS ergonomics)
+Border radius    : 0px EVERYWHERE (Institutional Square)
+
+─── TAILWIND ALIASES ────────────────────────────────────────────
+Tailwind Class         | CSS Variable
+navy                   | var(--text-primary)        ← text-navy
+navy-light             | var(--bg-overlay)
+saffron                | var(--accent)
+gold                   | var(--amber)
+accent                 | var(--accent)
+surface                | var(--bg-overlay)
+primary                | var(--primary)
+on-surface             | var(--text-primary)
+on-surface-variant     | var(--text-secondary)
+status-green           | var(--green)
+status-amber           | var(--amber)
+status-red             | var(--red)
+aside-bg               | var(--aside-bg)
+aside-text             | var(--aside-text)
+
+─── KEY CSS CLASSES ─────────────────────────────────────────────
+.card-base         | bg:surface, border:subtle, color:text-primary, hover border
+.c-card            | bg:surface, border:subtle, radius:md, padding:space-4
+.c-button          | sovereign button base
+.c-input           | sovereign input base
+.c-card--metric    | KPI card variant
+.text-navy         | color: var(--text-primary) !important
+.bg-brand-navy     | background: var(--accent-dark) !important
+
+─── GLOBAL FORM RULES ───────────────────────────────────────────
+input, select, textarea, button:
+  border: 1px solid var(--border-default)
+  border-radius: 0px !important
+  background: var(--surface)
+  color: var(--text-primary)          ← Critical for visibility
+
+button:hover:
+  background: color-mix(accent 5%, transparent)
+  color: var(--text-primary)          ← Critical — prevents invisible hover text
+
+─── SOVEREIGN GRID AESTHETICS ───────────────────────────────────
+Header row   : bg #1a4a48 (dark teal), text white, UPPERCASE
+Selected cell: 2px primary border + bg tint
+Range select : bg rgba(primary, 0.12)
+Fill handle  : 8x8 blue square at bottom-right of selection
+Edit input   : bg:surface + text:text-primary (explicit, not inherited)
+Row numbers  : col 0, bg white/surface, dark text
+Bottom tabs  : dark teal bg, white text
+
+─── SovereignGrid KEYBOARD SHORTCUTS ────────────────────────────
+Action              | Key
+Navigate            | Arrow Keys
+Range Select        | Shift + Arrow
+Block Select        | Click + Shift+Click
+Select All          | Ctrl+A
+Edit Cell           | F2 or direct typing
+Commit Edit         | Enter / Tab
+Cancel Edit         | Escape
+Delete Cell         | Delete / Backspace
+Copy (TSV)          | Ctrl+C
+Paste               | Ctrl+V
+Range Fill          | Ctrl+Enter (fills entire selected range)
+Fill Handle Drag    | Drag blue ■ at selection corner
+Linear Increment    | Numeric fill on fill-handle drag
+Pattern Repeat      | Non-numeric fill on fill-handle drag
+================================================================

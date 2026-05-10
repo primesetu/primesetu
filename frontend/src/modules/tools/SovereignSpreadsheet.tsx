@@ -219,57 +219,57 @@ export default function SovereignSpreadsheet() {
   const selCol = selected ? selected[0] : null;
 
   return (
-    <div className="flex flex-col h-full bg-[#0f1117] text-[#e2e8f0] font-mono select-none">
+    <div className="flex flex-col h-full bg-[var(--color-bg-body)] text-[var(--color-text-primary)] font-mono select-none">
       {/* Header */}
-      <div className="bg-[#1a1d2e] border-b border-[#2d3154] px-4 flex items-center gap-3 h-[52px]">
+      <div className="bg-[var(--color-surface)] border-b border-[var(--color-border)] px-4 flex items-center gap-3 h-[52px]">
         <div className="flex items-center gap-2">
-          <div className="w-7 h-7 bg-gradient-to-br from-emerald-400 to-blue-500 rounded-md flex items-center justify-center text-[#0f1117] text-sm font-bold">X</div>
+          <div className="w-7 h-7 bg-gradient-to-br from-[var(--color-primary)] to-[var(--color-info-border)] rounded-md flex items-center justify-center text-[var(--color-white)] text-sm font-bold">X</div>
           <input 
             value={fileName} 
             onChange={e => setFileName(e.target.value)}
-            className="bg-transparent border-none text-[#e2e8f0] text-sm font-semibold w-40 outline-none" 
+            className="bg-transparent border-none text-[var(--color-text-primary)] text-sm font-semibold w-40 outline-none" 
           />
-          <span className={`text-[10px] px-2 py-0.5 rounded-full border ${saved ? 'text-emerald-400 bg-emerald-400/10 border-emerald-400/20' : 'text-amber-400 bg-amber-400/10 border-amber-400/20'}`}>
+          <span className={`text-[10px] px-2 py-0.5 rounded-full border ${saved ? 'text-emerald-500 bg-emerald-500/10 border-emerald-500/20' : 'text-amber-500 bg-amber-500/10 border-amber-500/20'}`}>
             {saved ? "● saved" : "○ unsaved"}
           </span>
         </div>
         <div className="flex-1" />
         <div className="flex gap-2">
-          <button onClick={undo} disabled={histIdx === 0} className="px-3 py-1 border border-[#2d3154] rounded-md text-sm hover:bg-[#2d3154] disabled:opacity-30">↩</button>
-          <button onClick={redo} disabled={histIdx >= history.length - 1} className="px-3 py-1 border border-[#2d3154] rounded-md text-sm hover:bg-[#2d3154] disabled:opacity-30">↪</button>
+          <button onClick={undo} disabled={histIdx === 0} className="px-3 py-1 border border-[var(--color-border)] rounded-md text-sm hover:bg-[var(--color-surface-hover)] disabled:opacity-30">↩</button>
+          <button onClick={redo} disabled={histIdx >= history.length - 1} className="px-3 py-1 border border-[var(--color-border)] rounded-md text-sm hover:bg-[var(--color-surface-hover)] disabled:opacity-30">↪</button>
         </div>
-        <label className="bg-[#1e2235] border border-[#2d3154] px-3 py-1.5 rounded-md text-xs cursor-pointer hover:bg-[#2d3154] transition-colors">
+        <label className="bg-[var(--color-surface-hover)] border border-[var(--color-border)] px-3 py-1.5 rounded-md text-xs cursor-pointer hover:bg-[var(--color-surface-active)] transition-colors">
           Open CSV <input type="file" accept=".csv" onChange={loadCSV} className="hidden" />
         </label>
-        <button onClick={downloadCSV} className="bg-gradient-to-br from-emerald-400 to-blue-500 text-[#0f1117] px-4 py-1.5 rounded-md text-xs font-bold hover:brightness-110 transition-all">⬇ Save CSV</button>
+        <button onClick={downloadCSV} className="bg-gradient-to-br from-[var(--color-primary)] to-[var(--color-info-border)] text-[var(--color-white)] px-4 py-1.5 rounded-md text-xs font-bold hover:brightness-110 transition-all">⬇ Save CSV</button>
         <button onClick={clearAll} className="px-3 py-1.5 border border-rose-500/20 text-rose-500 rounded-md text-xs hover:bg-rose-500/10">Clear</button>
       </div>
 
       {/* Toolbar */}
-      <div className="bg-[#13162a] border-b border-[#1e2235] px-4 py-1.5 flex items-center gap-2">
+      <div className="bg-[var(--color-surface-active)] border-b border-[var(--color-border-light)] px-4 py-1.5 flex items-center gap-2">
         {TOOLBAR_BTNS.map(({ icon, title, style: s, value, off }) => (
           <button 
             key={title} 
             onClick={() => toggleStyle(s, value, off)} 
             title={title}
-            className={`w-8 h-7 flex items-center justify-center border border-[#2d3154] rounded-md text-sm transition-colors ${selected && styles[selected]?.[s] === value ? 'bg-[#2d3154] text-white' : 'text-slate-400 hover:bg-[#1e2235]'}`}
+            className={`w-8 h-7 flex items-center justify-center border border-[var(--color-border)] rounded-md text-sm transition-colors ${selected && styles[selected]?.[s] === value ? 'bg-[var(--color-border)] text-[var(--color-text-primary)]' : 'text-[var(--color-text-secondary)] hover:bg-[var(--color-surface-hover)]'}`}
           >
             {icon}
           </button>
         ))}
-        <div className="w-px h-5 bg-[#2d3154] mx-1" />
+        <div className="w-px h-5 bg-[var(--color-border)] mx-1" />
         {[["⬅", "left"], ["≡", "center"], ["➡", "right"]].map(([icon, a]) => (
           <button 
             key={a} 
             onClick={() => setAlign(a)} 
             title={`Align ${a}`}
-            className={`w-8 h-7 flex items-center justify-center border border-[#2d3154] rounded-md text-sm transition-colors ${selected && styles[selected]?.textAlign === a ? 'bg-[#2d3154] text-white' : 'text-slate-400 hover:bg-[#1e2235]'}`}
+            className={`w-8 h-7 flex items-center justify-center border border-[var(--color-border)] rounded-md text-sm transition-colors ${selected && styles[selected]?.textAlign === a ? 'bg-[var(--color-border)] text-[var(--color-text-primary)]' : 'text-[var(--color-text-secondary)] hover:bg-[var(--color-surface-hover)]'}`}
           >
             {icon}
           </button>
         ))}
-        <div className="w-px h-5 bg-[#2d3154] mx-1" />
-        <span className="text-[10px] text-slate-500 font-bold uppercase italic mr-1">fx</span>
+        <div className="w-px h-5 bg-[var(--color-border)] mx-1" />
+        <span className="text-[10px] text-[var(--color-text-secondary)] font-bold uppercase italic mr-1">fx</span>
         <input 
           ref={barRef}
           value={editing ? editVal : (selected ? (data[selected] || "") : "")}
@@ -277,27 +277,28 @@ export default function SovereignSpreadsheet() {
           onKeyDown={handleKey}
           onBlur={finishEdit}
           placeholder="Enter value or formula..."
-          className="flex-1 max-w-[500px] bg-[#0f1117] border border-[#2d3154] rounded-md text-[#e2e8f0] px-3 py-1 text-xs outline-none focus:border-blue-500/50"
+          className="flex-1 max-w-[500px] bg-[var(--color-surface)] border border-[var(--color-border)] rounded-md text-[var(--color-text-primary)] px-3 py-1 text-xs outline-none focus:border-[var(--color-primary)] transition-colors"
         />
-        {selected && <span className="text-[10px] text-emerald-400 font-bold ml-2">{selected}</span>}
+        {selected && <span className="text-[10px] text-[var(--color-primary)] font-bold ml-2">{selected}</span>}
       </div>
 
       {/* Grid Container */}
-      <div className="flex-1 overflow-auto">
-        <table className="w-full border-collapse table-fixed">
+      <div className="flex-1 overflow-auto bg-[var(--color-bg-grid)]">
+        <table className="w-full border-collapse table-fixed bg-[var(--color-surface)]">
           <thead className="sticky top-0 z-20">
             <tr>
-              <th className="w-[46px] bg-[#1a1d2e] border-r border-[#2d3154] border-b border-[#2d3154] sticky left-0 z-30"></th>
+              <th className="w-[46px] bg-[var(--color-surface-active)] border-r border-[var(--color-border)] border-b border-[var(--color-border)] sticky left-0 z-30"></th>
               {COLS.map(c => (
                 <th 
                   key={c} 
                   style={{ width: colWidths[c] || 120, minWidth: colWidths[c] || 120 }}
-                  className={`bg-[#1a1d2e] border-r border-[#1e2235] border-b border-[#2d3154] text-[10px] font-bold py-1.5 relative ${selCol === c ? 'text-emerald-400' : 'text-slate-500'}`}
+                  className={`bg-[var(--color-surface-active)] border-r border-[var(--color-border-light)] border-b border-[var(--color-border)] text-[10px] font-bold py-1.5 relative ${selCol === c ? 'text-[var(--color-primary)]' : 'text-[var(--color-text-secondary)]'}`}
                 >
                   {c}
                   <div 
                     onMouseDown={(e) => onResizeStart(e, c)}
-                    className={`absolute right-0 top-0 bottom-0 w-1 cursor-col-resize hover:bg-blue-500/40 z-10 transition-colors ${resizing.current?.col === c ? 'bg-blue-500' : ''}`}
+                    className={`absolute right-0 top-0 bottom-0 w-1 cursor-col-resize hover:bg-[var(--color-primary)] z-10 transition-colors ${resizing.current?.col === c ? 'bg-[var(--color-primary)]' : ''}`}
+                    style={{ opacity: 0.5 }}
                   />
                 </th>
               ))}
@@ -307,8 +308,8 @@ export default function SovereignSpreadsheet() {
             {Array.from({ length: ROWS }, (_, ri) => {
               const r = ri + 1;
               return (
-                <tr key={r} className="h-7">
-                  <td className={`bg-[#1a1d2e] border-r border-[#2d3154] border-b border-[#1e2235] text-[10px] text-center sticky left-0 z-10 ${selRow === r ? 'text-emerald-400' : 'text-slate-600'}`}>
+                <tr key={r} className="h-7 hover:bg-[var(--color-surface-hover)]">
+                  <td className={`bg-[var(--color-surface-active)] border-r border-[var(--color-border)] border-b border-[var(--color-border-light)] text-[10px] text-center sticky left-0 z-10 ${selRow === r ? 'text-[var(--color-primary)]' : 'text-[var(--color-text-secondary)]'}`}>
                     {r}
                   </td>
                   {COLS.map(c => {
@@ -325,10 +326,10 @@ export default function SovereignSpreadsheet() {
                         onDoubleClick={() => startEdit(r, c)}
                         style={{ 
                           width: colWidths[c] || 120,
-                          backgroundColor: isSel ? '#1e2a4a' : 'transparent',
-                          borderColor: isSel ? '#3b82f6' : '#1a1d2e'
+                          backgroundColor: isSel ? 'var(--color-surface-active)' : 'transparent',
+                          borderColor: isSel ? 'var(--color-primary)' : 'var(--color-border-light)'
                         }}
-                        className={`border relative cursor-cell overflow-hidden transition-colors ${isSel ? 'border-2 z-10' : 'border-[#1a1d2e]'}`}
+                        className={`border relative cursor-cell overflow-hidden transition-colors ${isSel ? 'border-2 z-10 shadow-sm' : ''}`}
                       >
                         {isEdit ? (
                           <input 
@@ -338,15 +339,15 @@ export default function SovereignSpreadsheet() {
                             onKeyDown={handleKey}
                             onBlur={finishEdit}
                             style={cellStyle}
-                            className="w-full h-full bg-[#1e2a4a] text-[#e2e8f0] px-2 text-xs outline-none"
+                            className="w-full h-full bg-[var(--color-surface-active)] text-[var(--color-text-primary)] px-2 text-xs outline-none"
                           />
                         ) : (
                           <div 
                             style={{
                               ...cellStyle,
                               textAlign: cellStyle.textAlign || (isNum ? "right" : "left"),
-                              color: display === "#ERR" ? "#ef4444" : (isNum && display < 0 ? "#ef4444" : (isNum ? "#10b981" : "#e2e8f0")),
-                              backgroundColor: isNum && display < 0 ? "#ef444411" : "transparent"
+                              color: display === "#ERR" ? "var(--color-danger-text)" : (isNum && display < 0 ? "var(--color-danger-text)" : (isNum ? "var(--color-success-text)" : "var(--color-text-primary)")),
+                              backgroundColor: isNum && display < 0 ? "var(--color-danger-bg)" : "transparent"
                             }}
                             className="px-2 text-xs leading-7 truncate"
                           >
@@ -364,12 +365,12 @@ export default function SovereignSpreadsheet() {
       </div>
 
       {/* Status Bar */}
-      <div className="bg-[#1a1d2e] border-t border-[#2d3154] px-4 h-7 flex items-center gap-5 text-[10px] text-slate-500">
+      <div className="bg-[var(--color-surface)] border-t border-[var(--color-border)] px-4 h-7 flex items-center gap-5 text-[10px] text-[var(--color-text-secondary)]">
         <span className="font-bold">{ROWS} ROWS × {COLS.length} COLS</span>
         {selected && (
           <div className="flex gap-4 items-center">
-            <span>SELECTED: <span className="text-emerald-400 font-bold">{selected}</span></span>
-            <div className="w-px h-3 bg-[#2d3154]" />
+            <span>SELECTED: <span className="text-[var(--color-primary)] font-bold">{selected}</span></span>
+            <div className="w-px h-3 bg-[var(--color-border)]" />
             <span className="uppercase opacity-50">Sovereign Audit Protocol Active</span>
           </div>
         )}

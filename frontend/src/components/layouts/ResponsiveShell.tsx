@@ -19,7 +19,8 @@ import {
   Moon,
   Database,
   ShieldCheck,
-  ChevronDown
+  ChevronDown,
+  Palette
 } from 'lucide-react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { cn } from '@/lib/utils'
@@ -105,6 +106,7 @@ interface ResponsiveShellProps {
   nodeType?: 'RETAIL' | 'HO' | 'WAREHOUSE'
   setNodeType?: (type: 'RETAIL' | 'HO' | 'WAREHOUSE') => void
   setIsCommandBarOpen?: (val: boolean) => void
+  setIsThemePickerOpen?: (val: boolean) => void
   isRightCollapsed?: boolean
   setIsRightCollapsed?: (val: boolean) => void
 }
@@ -127,10 +129,11 @@ export default function ResponsiveShell({
   nodeType = 'RETAIL',
   setNodeType,
   setIsCommandBarOpen,
+  setIsThemePickerOpen,
   isRightCollapsed,
   setIsRightCollapsed
 }: ResponsiveShellProps) {
-  const { theme, setTheme } = useTheme()
+  const { theme, setTheme, themeMeta } = useTheme()
   const [isMobile, setIsMobile] = useState(false)
    const [isCollapsed, setIsCollapsed] = useState(false)
   const [isScrolled, setIsScrolled] = useState(false)
@@ -356,15 +359,24 @@ export default function ResponsiveShell({
 
             {/* Footer Actions / Theme Toggle */}
             <div className="p-4 border-t border-[var(--border-subtle)] shrink-0 space-y-4">
+               {/* Theme Picker Trigger */}
                <button 
-                onClick={toggleTheme}
+                onClick={() => setIsThemePickerOpen?.(true)}
+                title="Open Theme Manager (Alt+T)"
                 className={cn(
-                  "flex items-center gap-3 w-full h-12 rounded-xl bg-[var(--surface-container-low)] border border-[var(--border-subtle)] hover:bg-[var(--surface-container)] transition-all group overflow-hidden",
+                  "flex items-center gap-3 w-full h-12 bg-[var(--surface-container-low)] border border-[var(--border-subtle)] hover:bg-[var(--surface-container)] hover:border-[var(--color-primary,#06b6d4)] transition-all group overflow-hidden",
                   isCollapsed ? "justify-center" : "px-4"
                 )}
                >
-                  {theme === 'LIGHT' ? <Moon size={18} className="text-slate-500" /> : <Sun size={18} className="text-amber-400" />}
-                  {!isCollapsed && <span className="text-[10px] font-black uppercase tracking-widest text-[var(--text-secondary)]">{theme === 'LIGHT' ? 'Dark Mode' : 'Light Mode'}</span>}
+                  <Palette size={18} className="text-[var(--color-primary,#06b6d4)] group-hover:rotate-12 transition-transform duration-300" />
+                  {!isCollapsed && (
+                    <div className="flex flex-1 items-center justify-between">
+                      <span className="text-[10px] font-black uppercase tracking-widest text-[var(--color-text-secondary,#94a3b8)]">
+                        {themeMeta?.label || 'Theme'}
+                      </span>
+                      <span className="text-[8px] font-mono bg-[var(--surface-container-high)] px-1.5 py-0.5 border border-[var(--color-border)] text-[var(--color-text-tertiary)]">Alt+T</span>
+                    </div>
+                  )}
                </button>
 
                <div className={cn(
@@ -438,18 +450,27 @@ export default function ResponsiveShell({
                  </div>
               </div>
 
-              <div className="flex items-center gap-6">
+              <div className="flex items-center gap-4">
+                 {/* Theme Picker Button */}
+                 <button
+                   onClick={() => setIsThemePickerOpen?.(true)}
+                   title="Theme Manager (Alt+T)"
+                   className="flex items-center gap-2 px-3 py-2 bg-[var(--color-primary,#06b6d4)]/10 text-[var(--color-primary,#06b6d4)] border border-[var(--color-primary,#06b6d4)]/25 text-[10px] font-black uppercase tracking-widest hover:bg-[var(--color-primary,#06b6d4)] hover:text-white transition-all"
+                 >
+                    <Palette size={14} />
+                    {themeMeta?.label || 'Theme'}
+                 </button>
                  <button 
                    onClick={() => window.dispatchEvent(new CustomEvent('toggleLayout'))}
-                   className="flex items-center gap-2 px-4 py-2 bg-emerald-500/10 text-emerald-500 border border-emerald-500/20 rounded-xl text-[10px] font-black uppercase tracking-widest hover:bg-emerald-500 hover:text-white transition-all shadow-lg shadow-emerald-500/10"
+                   className="flex items-center gap-2 px-3 py-2 bg-emerald-500/10 text-emerald-500 border border-emerald-500/20 text-[10px] font-black uppercase tracking-widest hover:bg-emerald-500 hover:text-white transition-all"
                  >
                     <Monitor size={14} />
-                    Sovereign UI
+                    Sovereign
                  </button>
                  <div className="h-8 w-px bg-[var(--border-subtle)]" />
                  <div className="flex flex-col items-end">
-                    <span className="text-[14px] font-black text-[var(--text-primary)] tracking-widest leading-none">PRIMESETU</span>
-                    <span className="text-[7px] font-black text-[var(--primary)] tracking-[0.3em] uppercase mt-1 opacity-60">Sovereign Retail Tech</span>
+                    <span className="text-[14px] font-black text-[var(--color-text-primary,#f8fafc)] tracking-widest leading-none">PRIMESETU</span>
+                    <span className="text-[7px] font-black text-[var(--color-primary,#06b6d4)] tracking-[0.3em] uppercase mt-1 opacity-60">Sovereign Retail Tech</span>
                  </div>
               </div>
             </header>

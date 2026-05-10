@@ -52,6 +52,9 @@ async def bulk_update_legacy_data(
     db: AsyncSession = Depends(get_db)
 ):
     """Bulk Insert/Update with MailingList awareness."""
+    import json
+    from datetime import datetime
+    
     # 1. Resolve Model
     target_model = None
     for attr_name in dir(legacy_models):
@@ -68,24 +71,33 @@ async def bulk_update_legacy_data(
     results = []
     for item in payload:
         # Check if record exists
-        pk_val = item.get("code") or item.get("id")
+        pk_val = item.get("code") or item.get("id") or item.get("stockno")
         if not pk_val: continue
         
-        stmt = select(target_model).where(getattr(target_model, "code" if hasattr(target_model, "code") else "id") == pk_val)
+        # Primary key mapping hack for legacy schemas
+        pk_field = "stockno" if hasattr(target_model, "stockno") else ("code" if hasattr(target_model, "code") else "id")
+        stmt = select(target_model).where(getattr(target_model, pk_field) == pk_val)
         res = await db.execute(stmt)
         row = res.scalar_one_or_none()
         
+        is_new = False
         if not row:
+            is_new = True
             row = target_model()
-            # Set primary key
-            if hasattr(target_model, "code"): setattr(row, "code", pk_val)
-            elif hasattr(target_model, "id"): setattr(row, "id", pk_val)
+            setattr(row, pk_field, pk_val)
             db.add(row)
+            
+        old_values = {}
+        new_values = {}
             
         # Update main fields
         for k, v in item.items():
-            if hasattr(row, k.lower()) and k.lower() not in ["code", "id", "maillistsrlno", "maillstsrlno"]:
-                setattr(row, k.lower(), v)
+            if hasattr(row, k.lower()) and k.lower() not in ["code", "id", "stockno", "maillistsrlno", "maillstsrlno"]:
+                old_val = getattr(row, k.lower())
+                if old_val != v:
+                    old_values[k.lower()] = str(old_val) if old_val is not None else None
+                    new_values[k.lower()] = str(v) if v is not None else None
+                    setattr(row, k.lower(), v)
         
         # Handle MailingList if needed
         mail_col = "maillistsrlno" if hasattr(row, "maillistsrlno") else ("maillstsrlno" if hasattr(row, "maillstsrlno") else None)
@@ -106,7 +118,25 @@ async def bulk_update_legacy_data(
                     setattr(row, mail_col, m_row.recno)
                 
                 for mk, mv in m_data.items():
-                    if hasattr(m_row, mk): setattr(m_row, mk, mv)
+                    if hasattr(m_row, mk):
+                        old_m_val = getattr(m_row, mk)
+                        if old_m_val != mv:
+                            old_values[f"mail_{mk}"] = str(old_m_val) if old_m_val is not None else None
+                            new_values[f"mail_{mk}"] = str(mv) if mv is not None else None
+                            setattr(m_row, mk, mv)
+                            
+        # Write Audit Log
+        if new_values:
+            from app.models.sovereign import SmritiAuditLog
+            audit = SmritiAuditLog(
+                entity_type=table_name.upper(),
+                entity_id=str(pk_val),
+                action="CREATE" if is_new else "UPDATE",
+                user_id=current_user.id if current_user else "SYSTEM",
+                old_value=json.dumps(old_values) if not is_new else None,
+                new_value=json.dumps(new_values)
+            )
+            db.add(audit)
                     
         results.append(pk_val)
         

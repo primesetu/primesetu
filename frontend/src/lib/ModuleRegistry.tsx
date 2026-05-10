@@ -42,7 +42,10 @@ import {
   Home,
   FileSpreadsheet,
   UserCheck,
+  Award,
+  MessageCircle,
 } from "lucide-react";
+
 
 // Module Lazy/Dynamic Imports
 const TillManagement = lazy(() => import("../modules/billing/TillManagement"));
@@ -59,10 +62,10 @@ const HOSyncModule = lazy(() => import("../modules/ho/HOSyncModule"));
 const ProcurementModule = lazy(() => import("../modules/inventory/ProcurementModule"));
 const TransactionsModule = lazy(() => import("../modules/billing/TransactionsModule"));
 const DayEndModule = lazy(() => import("../modules/billing/DayEndModule"));
-const ReturnsDashboard = lazy(() => import("../modules/billing/ReturnsDashboard"));
+const ReturnsDashboard = lazy(() => import("../modules/returns/ReturnsDesk"));
 const CustomerMaster = lazy(() => import("../modules/catalogue/CustomerMaster"));
 const BarcodeStudio = lazy(() => import("../modules/inventory/BarcodeStudio"));
-const SchemesModule = lazy(() => import("../modules/schemes/SchemesModule"));
+const SchemesModule = lazy(() => import("../modules/schemes/SchemesBuilder"));
 const DailySalesBook = lazy(() => import("../modules/analytics/DailySalesBook"));
 const VendorMaster = lazy(() => import("../modules/catalogue/VendorMaster"));
 const PersonnelMaster = lazy(() => import("../modules/catalogue/PersonnelMaster"));
@@ -82,7 +85,7 @@ const InventoryAudit = lazy(() => import("../modules/inventory/InventoryAudit"))
 const GRNProcessor = lazy(() => import("../modules/inventory/GRNProcessor"));
 const FinanceHub = lazy(() => import("../modules/accounts/FinanceHub"));
 const SalesDrilldownModule = lazy(() => import("../modules/analytics/SalesDrilldownModule"));
-const WarehouseDashboard = lazy(() => import("../modules/inventory/WarehouseDashboard"));
+const WarehouseDashboard = lazy(() => import("../modules/warehouse/WarehouseModule"));
 const StockTransfer = lazy(() => import("../modules/inventory/StockTransfer"));
 const IntelligenceCockpit = lazy(() => import("../modules/intelligence/IntelligenceCockpit"));
 const LegacyExplorer = lazy(() => import("../modules/intelligence/LegacyExplorer"));
@@ -99,19 +102,31 @@ const ArchitectControlCenter = lazy(() => import("../modules/settings/ArchitectC
 const SovereignSpreadsheet = lazy(() => import("../modules/tools/SovereignSpreadsheet"));
 
 const CatalogueMasterWorkbench = lazy(() => import("../modules/inventory/CatalogueMasterWorkbench"));
+const ECommerceModule = lazy(() => import("../modules/ecommerce/ECommerceModule"));
+const LoyaltyCRM = lazy(() => import("../modules/loyalty/LoyaltyCRM"));
+const WhatsAppCentre = lazy(() => import("../modules/whatsapp/WhatsAppCentre"));
+
 
 const navigateBack = () => window.dispatchEvent(new CustomEvent("navigate", { detail: "dashboard" }));
+
+// v3.0 — 9 Roles (expanded from legacy 3)
+export type SmritiOSRole =
+  | "SUPER_ADMIN" | "HO_ADMIN" | "HO_MANAGER"
+  | "STORE_MANAGER" | "CASHIER" | "STOCK_MANAGER"
+  | "PURCHASE_MANAGER" | "ACCOUNTANT" | "CUSTOM"
+  // Legacy aliases (backward compat)
+  | "OWNER" | "MANAGER";
 
 export interface ModuleDefinition {
   id: string;
   label: string;
   icon: any;
   component: React.ReactNode;
-  roles: ("OWNER" | "MANAGER" | "CASHIER")[];
+  roles: SmritiOSRole[];
   shortcut?: string;
   showInSidebar: boolean;
   description?: string;
-  category: "POS" | "WAREHOUSE" | "CATALOGUE" | "FINANCE" | "HO" | "SYSTEM" | "TRANSACTIONS";
+  category: "POS" | "WAREHOUSE" | "CATALOGUE" | "FINANCE" | "HO" | "SYSTEM" | "TRANSACTIONS" | "ECOMMERCE";
 }
 
 export const MODULES: ModuleDefinition[] = [
@@ -279,6 +294,25 @@ export const MODULES: ModuleDefinition[] = [
     category: "CATALOGUE",
   },
   {
+    id: "loyalty_crm",
+    label: "Loyalty & CRM",
+    icon: Award,
+    component: <LoyaltyCRM />,
+    roles: ["OWNER", "MANAGER", "STORE_MANAGER"],
+    showInSidebar: true,
+    category: "CATALOGUE",
+  },
+  {
+    id: "whatsapp",
+    label: "WhatsApp Alerts",
+    icon: MessageCircle,
+    component: <WhatsAppCentre />,
+    roles: ["OWNER", "MANAGER"],
+    showInSidebar: true,
+    category: "SYSTEM",
+  },
+
+  {
     id: "price",
     label: "Price Workbench",
     icon: DollarSign,
@@ -373,9 +407,31 @@ export const MODULES: ModuleDefinition[] = [
     label: "Sovereign Audit",
     icon: FileText,
     component: <SovereignSpreadsheet />,
-    roles: ["OWNER", "MANAGER"],
+    roles: ["OWNER", "MANAGER", "SUPER_ADMIN", "HO_ADMIN", "STORE_MANAGER"],
     showInSidebar: true,
     category: "SYSTEM",
+  },
+  // ── Module 17: E-Commerce Integration (v3.0) ────────────────
+  {
+    id: "ecommerce",
+    label: "E-Commerce",
+    icon: Globe,
+    component: <ECommerceModule />,
+    roles: ["OWNER", "MANAGER", "SUPER_ADMIN", "HO_ADMIN", "HO_MANAGER", "STORE_MANAGER"],
+    showInSidebar: true,
+    description: "Flipkart · Amazon · Meesho · Shopify sync",
+    category: "ECOMMERCE",
+  },
+  // ── Module 18: Loyalty & CRM (v3.0) ────────────────────────
+  {
+    id: "loyalty",
+    label: "Loyalty & CRM",
+    icon: Trophy,
+    component: <LoyaltyModule />,
+    roles: ["OWNER", "MANAGER", "SUPER_ADMIN", "HO_ADMIN", "HO_MANAGER", "STORE_MANAGER"],
+    showInSidebar: true,
+    description: "Customer 360, Tiers, & Campaigns",
+    category: "CATALOGUE",
   },
 ];
 
@@ -428,6 +484,7 @@ export const COMPONENT_MAP: Record<string, React.ReactNode> = {
   hybrid_storage: <HybridStorageManager />,
   architect_config: <ArchitectControlCenter />,
   spreadsheet: <SovereignSpreadsheet />,
+  ecommerce: <ECommerceModule />,
 };
 
 export const ICON_MAP: Record<string, any> = {

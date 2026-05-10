@@ -113,6 +113,14 @@ export default function TaxInvoiceB2B({ bill, onPrinted }: B2BInvoiceProps) {
           <div className="flex flex-col items-end">
             <div className="bg-black text-white px-10 py-4 text-3xl font-black uppercase tracking-[0.2em]">Tax Invoice</div>
             <div className="mt-4 grid grid-cols-2 gap-x-8 gap-y-1 text-right">
+              {bill.irn && (
+                <>
+                  <span className="text-[10px] font-black uppercase text-gray-400">IRN</span>
+                  <span className="text-[9px] font-mono tracking-tighter truncate w-48" title={bill.irn}>{bill.irn}</span>
+                  <span className="text-[10px] font-black uppercase text-gray-400">Ack No / Date</span>
+                  <span className="text-[10px] font-mono">{bill.irn_ack_no} / {bill.irn_ack_dt ? new Date(bill.irn_ack_dt).toLocaleDateString('en-IN') : ''}</span>
+                </>
+              )}
               <span className="text-[10px] font-black uppercase text-gray-400">Invoice No</span>
               <span className="text-sm font-black">{bill.bill_number}</span>
               <span className="text-[10px] font-black uppercase text-gray-400">Date</span>
@@ -253,7 +261,11 @@ export default function TaxInvoiceB2B({ bill, onPrinted }: B2BInvoiceProps) {
                 <QrCode size={40} strokeWidth={1} />
                 <div className="text-[8px] font-bold">
                    <p className="uppercase opacity-50">E-Invoice QR Verification</p>
-                   <p className="font-mono mt-1 italic tracking-tighter truncate w-32">{bill.id}</p>
+                   {bill.qr_code_data ? (
+                     <p className="font-mono mt-1 italic tracking-tighter w-48 text-[7px] leading-tight break-all">{bill.qr_code_data}</p>
+                   ) : (
+                     <p className="font-mono mt-1 italic tracking-tighter truncate w-32">{bill.id}</p>
+                   )}
                 </div>
              </div>
           </div>

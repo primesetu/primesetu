@@ -1,0 +1,49 @@
+/* brand/theme-clinical.css — Sterile Pharmacy / Dispensary Mode */
+[data-theme="CLINICAL"] {
+  --color-primary: #0f4c81; /* Clinical Blue */
+  --color-primary-hover: #0a365c;
+
+  --color-bg-body: #f4f6f8;
+  --color-bg-grid: #ffffff;
+
+  --color-surface: #ffffff;
+  --color-surface-hover: #f8fafc;
+  --color-surface-active: #f1f5f9;
+
+  --color-border: #e2e8f0;
+  --color-border-light: #f1f5f9;
+  --color-border-focus: #0f4c81;
+
+  --color-text-primary: #0f172a;
+  --color-text-secondary: #475569;
+  --color-text-tertiary: #94a3b8;
+
+  /* High-contrast dispensing alerts */
+  --color-success-bg: #ecfdf5;
+  --color-success-text: #059669;
+  --color-success-border: #6ee7b7;
+
+  --color-warning-bg: #fffbeb;
+  --color-warning-text: #d97706;
+  --color-warning-border: #fcd34d;
+
+  --color-danger-bg: #fef2f2;
+  --color-danger-text: #dc2626;
+  --color-danger-icon: #ef4444;
+
+  --color-info-bg: #eff6ff;
+  --color-info-text: #0f4c81;
+  --color-info-border: #93c5fd;
+
+  --color-white: #ffffff;
+
+  /* Elevation */
+  --surface: #ffffff;
+  --background: #f4f6f8;
+  --background-alt: #f8fafc;
+  --surface-elevated: #ffffff;
+  --surface-container-low: #f8fafc;
+  --surface-container: #f1f5f9;
+  --surface-container-high: #e2e8f0;
+  --surface-container-highest: #cbd5e1;
+}

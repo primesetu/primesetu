@@ -17,7 +17,7 @@ from typing import List, Dict, Any
 
 from app.core.database import get_db
 from app.core.security import require_auth, CurrentUser
-from app.models import Transaction, TransactionItem, Item, ItemStock
+from app.models.sovereign import SmritiItem, SmritiStock, SmritiSaleHdr, SmritiSaleDtl
 
 router = APIRouter(prefix="/api/v1/intelligence", tags=["intelligence"])
 
@@ -36,43 +36,38 @@ async def get_days_of_cover(
     # 1. Get Sales Velocity (Last 30 Days)
     velocity_stmt = (
         select(
-            TransactionItem.product_id,
-            func.sum(TransactionItem.qty).label("total_sold")
+            SmritiSaleDtl.sku,
+            func.sum(SmritiSaleDtl.qty).label("total_sold")
         )
-        .join(Transaction, Transaction.id == TransactionItem.transaction_id)
+        .join(SmritiSaleHdr, SmritiSaleHdr.bill_no == SmritiSaleDtl.bill_no)
         .where(
-            and_(
-                Transaction.store_id == store_id,
-                Transaction.status == "Finalized",
-                Transaction.created_at >= thirty_days_ago
-            )
+            SmritiSaleHdr.bill_date >= thirty_days_ago
         )
-        .group_by(TransactionItem.product_id)
+        .group_by(SmritiSaleDtl.sku)
     )
     velocity_res = await db.execute(velocity_stmt)
-    velocity_map = {row.product_id: row.total_sold / 30.0 for row in velocity_res}
+    velocity_map = {row.sku: float(row.total_sold) / 30.0 for row in velocity_res}
 
     # 2. Get Current Stock Levels
     stock_stmt = (
         select(
-            Item.id,
-            Item.item_name,
-            Item.sku_code,
-            Item.brand,
-            func.sum(ItemStock.qty_on_hand).label("current_stock")
+            SmritiItem.sku,
+            SmritiItem.name,
+            SmritiItem.class1,
+            func.sum(SmritiStock.on_hand).label("current_stock")
         )
-        .join(ItemStock, ItemStock.item_id == Item.id)
-        .where(ItemStock.store_id == store_id)
-        .group_by(Item.id)
+        .join(SmritiStock, SmritiStock.sku == SmritiItem.sku)
+        .where(SmritiStock.store_id == store_id)
+        .group_by(SmritiItem.sku, SmritiItem.name, SmritiItem.class1)
     )
     stock_res = await db.execute(stock_stmt)
     
     analysis = []
     for row in stock_res:
-        velocity = velocity_map.get(row.id, 0.0)
+        velocity = velocity_map.get(row.sku, 0.0)
         doc = 999 # Infinity for zero velocity
         if velocity > 0:
-            doc = round(row.current_stock / velocity, 1)
+            doc = round(float(row.current_stock) / velocity, 1)
         
         status = "HEALTHY"
         if doc < 7: status = "CRITICAL"
@@ -81,11 +76,11 @@ async def get_days_of_cover(
         elif velocity == 0: status = "DEAD"
 
         analysis.append({
-            "id": str(row.id),
-            "sku": row.sku_code,
-            "name": row.item_name,
-            "brand": row.brand,
-            "stock": row.current_stock,
+            "id": row.sku,
+            "sku": row.sku,
+            "name": row.name,
+            "brand": row.class1 or "Unknown",
+            "stock": float(row.current_stock),
             "velocity": round(velocity, 2),
             "doc": doc,
             "status": status

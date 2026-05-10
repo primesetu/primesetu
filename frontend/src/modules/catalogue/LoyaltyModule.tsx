@@ -1,177 +1,306 @@
 /* ============================================================
- * SMRITI-OS — Shoper9-Based Retail OS
- * Zero Cloud · Sovereign · AI-Governed
+ * SMRITI-OS — Module 18: Loyalty & CRM
+ * Tier management, customer 360 view, CRM campaigns
+ * v3.0 Architecture — "Retain and Reward natively"
  * ============================================================ */
-
 import React, { useState } from 'react';
-import { 
-  Trophy, 
-  Target, 
-  TrendingUp, 
-  Users, 
-  Search, 
-  ArrowUpRight, 
-  ArrowDownRight,
-  Gift,
-  Star,
-  Zap
+import {
+  Trophy, Target, TrendingUp, Users, Search, 
+  Gift, Star, Zap, UserSquare2, Crown, 
+  MessageCircle, BarChart3, Clock, Settings
 } from 'lucide-react';
-import { motion } from 'framer-motion';
 
-export default function LoyaltyModule() {
-  const [filter, setFilter] = useState('ALL');
+type Tab = 'dashboard' | 'customers' | 'tiers' | 'campaigns';
 
-  const tiers = [
-    { name: 'SILVER', color: 'bg-slate-400', textColor: 'text-slate-900', multiplier: '1.0x', threshold: '0 - 2,500' },
-    { name: 'GOLD', color: 'bg-amber-400', textColor: 'text-amber-950', multiplier: '1.5x', threshold: '2,501 - 10,000' },
-    { name: 'PLATINUM', color: 'bg-indigo-400', textColor: 'text-indigo-950', multiplier: '2.0x', threshold: '10,001+' }
-  ];
+const TABS: { id: Tab; label: string; icon: React.ReactNode }[] = [
+  { id: 'dashboard', label: 'Loyalty Dashboard', icon: <BarChart3 size={14} /> },
+  { id: 'customers', label: 'Customer 360',      icon: <Users size={14} /> },
+  { id: 'tiers',     label: 'Tier Management',   icon: <Crown size={14} /> },
+  { id: 'campaigns', label: 'CRM Campaigns',     icon: <MessageCircle size={14} /> },
+];
 
-  const recentTxns = [
-    { id: 1, type: 'ACCRUE', member: 'Rahul Sharma', points: '+124', date: '10m ago', tier: 'GOLD' },
-    { id: 2, type: 'REDEEM', member: 'Priya Patel', points: '-500', date: '45m ago', tier: 'PLATINUM' },
-    { id: 3, type: 'ACCRUE', member: 'Amit Varma', points: '+42', date: '2h ago', tier: 'SILVER' },
-  ];
+const TIERS = [
+  { id: 'bronze',   name: 'Bronze',   color: '#8b4513', req: 'Default',        pts: '1 pt / ₹100',   benefits: 'Standard benefits' },
+  { id: 'silver',   name: 'Silver',   color: '#94a3b8', req: '₹10,000 / yr',   pts: '1.5 pt / ₹100', benefits: 'Birthday bonus, Early sale' },
+  { id: 'gold',     name: 'Gold',     color: '#f59e0b', req: '₹50,000 / yr',   pts: '2 pt / ₹100',   benefits: 'Priority service, Exclusive discounts' },
+  { id: 'platinum', name: 'Platinum', color: '#6366f1', req: '₹1,00,000 / yr', pts: '3 pt / ₹100',   benefits: 'VIP events, Dedicated support' },
+];
 
-  return (
-    <div className="p-8 space-y-10 max-w-7xl mx-auto">
-      <header className="flex justify-between items-end">
-        <div>
-          <h1 className="text-4xl font-serif font-black text-navy flex items-center gap-4">
-            <Trophy className="w-12 h-12 text-brand-gold" />
-            CRM & Loyalty Protocol
-          </h1>
-          <p className="text-xs text-muted font-bold uppercase tracking-[0.2em] mt-3">Engagement Engine · Tier-Based Accrual Active</p>
+const MOCK_CUSTOMERS = [
+  { id: 'CUST-001', name: 'Rahul Sharma', phone: '9876543210', tier: 'gold',     points: 4500,  spend: 52400, lastVisit: '2 days ago' },
+  { id: 'CUST-002', name: 'Priya Patel',  phone: '9876543211', tier: 'platinum', points: 12400, spend: 115000,lastVisit: '5 days ago' },
+  { id: 'CUST-003', name: 'Amit Varma',   phone: '9876543212', tier: 'silver',   points: 850,   spend: 14200, lastVisit: '12 days ago' },
+  { id: 'CUST-004', name: 'Sneha Gupta',  phone: '9876543213', tier: 'bronze',   points: 120,   spend: 4500,  lastVisit: '1 month ago' },
+];
+
+const MOCK_CAMPAIGNS = [
+  { id: 'CAMP-1', name: 'Diwali Bonanza',  segment: 'All Members',    type: 'WhatsApp', sent: 12400, conv: '4.2%', status: 'COMPLETED' },
+  { id: 'CAMP-2', name: 'Win-back Lapsed', segment: 'Inactive > 90d', type: 'SMS',      sent: 3200,  conv: '1.8%', status: 'ACTIVE' },
+  { id: 'CAMP-3', name: 'Platinum VIP',    segment: 'Platinum Only',  type: 'WhatsApp', sent: 145,   conv: '-',    status: 'DRAFT' },
+];
+
+// ── Dashboard Tab ────────────────────────────────────────────
+const DashboardTab: React.FC = () => (
+  <div style={{ padding: 24 }}>
+    <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4,1fr)', gap: 16, marginBottom: 24 }}>
+      {[
+        { label: 'Total Members', value: '12,402', icon: <Users size={16} color="#3b82f6" /> },
+        { label: 'Points Issued (YTD)', value: '1.4M', icon: <Gift size={16} color="#f59e0b" /> },
+        { label: 'Points Redeemed', value: '840K', icon: <Trophy size={16} color="#10b981" /> },
+        { label: 'Redemption Rate', value: '60%', icon: <Zap size={16} color="#ef4444" /> },
+      ].map((k) => (
+        <div key={k.label} style={{ background: 'var(--surface)', border: '1px solid var(--border-default)', padding: 20 }}>
+          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 12 }}>
+            <div style={{ fontSize: 12, color: 'var(--text-secondary)', fontWeight: 600 }}>{k.label}</div>
+            {k.icon}
+          </div>
+          <div style={{ fontSize: 24, fontWeight: 800, fontFamily: 'var(--font-mono)', color: 'var(--text-primary)' }}>{k.value}</div>
         </div>
-        
-        <div className="flex gap-4">
-          <button className="bg-white border-2 border-border px-8 py-4 rounded-2xl font-black text-[10px] uppercase tracking-widest hover:bg-cream transition-all flex items-center gap-2">
-            <Gift className="w-4 h-4" /> Redemption Rules
-          </button>
-          <button className="bg-navy text-white px-10 py-4 rounded-2xl font-black text-[10px] uppercase tracking-widest shadow-xl hover:bg-navy/90 transition-all flex items-center gap-2">
-            <Star className="w-4 h-4" /> Configure Campaigns
-          </button>
-        </div>
-      </header>
+      ))}
+    </div>
 
-      {/* Tier Summary Grid */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-        {tiers.map((tier, i) => (
-          <motion.div 
-            key={i}
-            whileHover={{ y: -5 }}
-            className="glass p-10 rounded-[3rem] shadow-xl border border-white/50 relative overflow-hidden"
-          >
-            <div className={`absolute top-0 right-0 w-32 h-32 ${tier.color} opacity-5 blur-[40px]`} />
-            <div className="flex justify-between items-start mb-10">
-              <span className={`px-5 py-2 rounded-xl text-[10px] font-black uppercase tracking-widest ${tier.color} ${tier.textColor}`}>
-                {tier.name}
-              </span>
-              <span className="text-2xl font-serif font-black text-navy">{tier.multiplier}</span>
-            </div>
-            <p className="text-[10px] font-black text-muted uppercase tracking-widest mb-1">Points Threshold</p>
-            <div className="text-xl font-black text-navy mb-6">{tier.threshold}</div>
-            <div className="flex items-center gap-2 text-[9px] font-black text-emerald-600 uppercase tracking-tighter">
-              <TrendingUp className="w-3 h-3" /> 12% Growth this month
-            </div>
-          </motion.div>
-        ))}
+    <div style={{ display: 'grid', gridTemplateColumns: '2fr 1fr', gap: 16 }}>
+      {/* Tier Distribution */}
+      <div style={{ background: 'var(--surface)', border: '1px solid var(--border-default)', padding: 20 }}>
+        <h3 style={{ fontSize: 13, fontWeight: 700, color: 'var(--text-primary)', marginBottom: 20, textTransform: 'uppercase', letterSpacing: '0.05em' }}>Tier Distribution</h3>
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
+          {TIERS.map((t, i) => {
+            const pct = [60, 25, 12, 3][i];
+            return (
+              <div key={t.id} style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
+                <div style={{ width: 80, fontSize: 11, fontWeight: 700, color: t.color }}>{t.name}</div>
+                <div style={{ flex: 1, height: 8, background: 'var(--surface-muted)', borderRadius: 0 }}>
+                  <div style={{ width: `${pct}%`, height: '100%', background: t.color }} />
+                </div>
+                <div style={{ width: 40, textAlign: 'right', fontSize: 11, fontFamily: 'var(--font-mono)', color: 'var(--text-secondary)' }}>{pct}%</div>
+              </div>
+            );
+          })}
+        </div>
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-10">
-        {/* Member Pulse */}
-        <div className="lg:col-span-2 glass rounded-[3rem] p-10 shadow-2xl">
-          <div className="flex justify-between items-center mb-10">
-            <h3 className="text-xl font-serif font-black text-navy uppercase tracking-tight">Active Member Ledger</h3>
-            <div className="relative">
-              <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-muted" />
-              <input 
-                type="text" 
-                placeholder="Search Member..."
-                className="pl-12 pr-6 py-3 bg-cream/30 border-2 border-transparent focus:border-brand-gold/30 rounded-full outline-none text-xs font-bold transition-all w-64"
-              />
-            </div>
-          </div>
-
-          <div className="space-y-4">
-            {recentTxns.map((row, i) => (
-              <div key={i} className="flex items-center justify-between p-6 bg-white/50 hover:bg-white rounded-3xl transition-all border border-transparent hover:border-brand-gold/10 group">
-                <div className="flex items-center gap-6">
-                  <div className={`w-12 h-12 rounded-2xl flex items-center justify-center font-black text-xs uppercase ${
-                    row.tier === 'PLATINUM' ? 'bg-indigo-100 text-indigo-600' : 
-                    row.tier === 'GOLD' ? 'bg-amber-100 text-amber-600' : 'bg-slate-100 text-slate-600'
-                  }`}>
-                    {row.member.charAt(0)}
-                  </div>
-                  <div>
-                    <h4 className="font-bold text-navy group-hover:text-indigo-600 transition-colors">{row.member}</h4>
-                    <p className="text-[10px] text-muted font-bold uppercase tracking-widest mt-1">{row.tier} MEMBER · {row.date}</p>
-                  </div>
-                </div>
-                <div className="flex items-center gap-10">
-                  <div className="text-right">
-                    <div className={`text-lg font-black ${row.type === 'ACCRUE' ? 'text-emerald-600' : 'text-rose-600'}`}>
-                      {row.points}
-                    </div>
-                    <div className="text-[9px] font-black text-muted uppercase tracking-tighter">{row.type}</div>
-                  </div>
-                  <button className="p-3 bg-cream rounded-xl opacity-0 group-hover:opacity-100 transition-opacity">
-                    <ArrowUpRight className="w-4 h-4 text-muted" />
-                  </button>
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-
-        {/* Global Stats */}
-        <div className="panel rounded-[3rem] p-10 shadow-2xl" style={{ background: 'var(--bg-float)', color: 'var(--text-primary)' }}>
-          <h3 className="text-xl font-serif font-black uppercase tracking-tight mb-10" style={{ color: 'var(--text-primary)' }}>Global CRM Health</h3>
-          <div className="space-y-10">
-            <div>
-              <div className="flex justify-between items-end mb-4">
-                <p className="text-[10px] font-black text-white/40 uppercase tracking-widest">Total Active Members</p>
-                <p className="text-3xl font-black">12,402</p>
-              </div>
-              <div className="h-2 bg-white/10 rounded-full overflow-hidden">
-                <div className="h-full bg-brand-gold w-[70%]" />
-              </div>
-            </div>
-
-            <div className="grid grid-cols-2 gap-6">
-              <div className="p-6 bg-white/5 rounded-2xl border border-white/5">
-                <Zap className="w-5 h-5 text-brand-gold mb-4" />
-                <p className="text-[9px] font-black text-white/40 uppercase tracking-widest mb-1">Redemption Rate</p>
-                <div className="text-xl font-black">24.5%</div>
-              </div>
-              <div className="p-6 bg-white/5 rounded-2xl border border-white/5">
-                <Target className="w-5 h-5 text-indigo-400 mb-4" />
-                <p className="text-[9px] font-black text-white/40 uppercase tracking-widest mb-1">Retention Rate</p>
-                <div className="text-xl font-black">88.2%</div>
-              </div>
-            </div>
-
-            <div className="pt-6 border-t border-white/10">
-              <h4 className="text-[10px] font-black uppercase tracking-widest text-white/40 mb-6">Tier Distribution</h4>
-              <div className="space-y-4">
-                {['SILVER', 'GOLD', 'PLATINUM'].map((t, idx) => (
-                  <div key={t} className="flex items-center justify-between">
-                    <span className="text-[10px] font-black uppercase tracking-tighter">{t}</span>
-                    <div className="flex-1 mx-4 h-1 bg-white/5 rounded-full overflow-hidden">
-                      <div className={`h-full ${idx === 2 ? 'bg-indigo-400' : idx === 1 ? 'bg-amber-400' : 'bg-slate-400'}`} style={{ width: `${60 - idx*20}%` }} />
-                    </div>
-                    <span className="text-[10px] font-mono text-white/40">{60 - idx*20}%</span>
-                  </div>
-                ))}
-              </div>
-            </div>
-          </div>
+      {/* Quick Actions */}
+      <div style={{ background: 'var(--surface)', border: '1px solid var(--border-default)', padding: 20 }}>
+        <h3 style={{ fontSize: 13, fontWeight: 700, color: 'var(--text-primary)', marginBottom: 20, textTransform: 'uppercase', letterSpacing: '0.05em' }}>Quick Actions</h3>
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
+          <button style={{ padding: '10px', background: 'var(--primary)', color: '#fff', border: 'none', cursor: 'pointer', fontSize: 12, fontWeight: 600, display: 'flex', alignItems: 'center', gap: 8 }}>
+            <MessageCircle size={14} /> New WhatsApp Campaign
+          </button>
+          <button style={{ padding: '10px', background: 'var(--surface-muted)', color: 'var(--text-primary)', border: '1px solid var(--border-default)', cursor: 'pointer', fontSize: 12, fontWeight: 600, display: 'flex', alignItems: 'center', gap: 8 }}>
+            <Star size={14} /> Create Bonus Event
+          </button>
+          <button style={{ padding: '10px', background: 'var(--surface-muted)', color: 'var(--text-primary)', border: '1px solid var(--border-default)', cursor: 'pointer', fontSize: 12, fontWeight: 600, display: 'flex', alignItems: 'center', gap: 8 }}>
+            <Settings size={14} /> Loyalty Settings
+          </button>
         </div>
       </div>
     </div>
+  </div>
+);
+
+// ── Customer 360 Tab ─────────────────────────────────────────
+const Customer360Tab: React.FC = () => (
+  <div style={{ padding: 24 }}>
+    <div style={{ display: 'flex', gap: 16, marginBottom: 20 }}>
+      <div style={{ position: 'relative', flex: 1, maxWidth: 400 }}>
+        <Search size={14} style={{ position: 'absolute', left: 10, top: '50%', transform: 'translateY(-50%)', color: 'var(--text-tertiary)' }} />
+        <input 
+          type="text" 
+          placeholder="Search by Name, Phone, or ID..." 
+          style={{ width: '100%', height: 36, paddingLeft: 32, fontSize: 13, border: '1px solid var(--border-default)', background: 'var(--surface)', color: 'var(--text-primary)', outline: 'none' }}
+        />
+      </div>
+      <button style={{ padding: '0 16px', height: 36, background: 'var(--primary)', color: '#fff', border: 'none', cursor: 'pointer', fontSize: 12, fontWeight: 600 }}>
+        Search
+      </button>
+    </div>
+
+    <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: 13 }}>
+      <thead>
+        <tr style={{ background: '#1a4a48', color: '#fff' }}>
+          {['ID', 'Name', 'Phone', 'Tier', 'Points', 'Total Spend', 'Last Visit', 'Action'].map((h) => (
+            <th key={h} style={{ padding: '10px 14px', textAlign: 'left', fontSize: 11, fontWeight: 700, letterSpacing: '0.05em' }}>{h}</th>
+          ))}
+        </tr>
+      </thead>
+      <tbody>
+        {MOCK_CUSTOMERS.map((c, i) => {
+          const tierInfo = TIERS.find(t => t.id === c.tier);
+          return (
+            <tr key={c.id} style={{ background: i % 2 === 0 ? 'var(--surface)' : 'var(--surface-muted)', borderBottom: '1px solid var(--border-subtle)' }}>
+              <td style={{ padding: '10px 14px', fontFamily: 'var(--font-mono)', color: 'var(--text-secondary)' }}>{c.id}</td>
+              <td style={{ padding: '10px 14px', fontWeight: 600, color: 'var(--text-primary)' }}>{c.name}</td>
+              <td style={{ padding: '10px 14px', fontFamily: 'var(--font-mono)', color: 'var(--text-secondary)' }}>{c.phone}</td>
+              <td style={{ padding: '10px 14px' }}>
+                <span style={{ fontSize: 11, fontWeight: 700, color: tierInfo?.color, padding: '2px 8px', background: `${tierInfo?.color}15`, textTransform: 'uppercase' }}>
+                  {tierInfo?.name}
+                </span>
+              </td>
+              <td style={{ padding: '10px 14px', fontFamily: 'var(--font-mono)', color: 'var(--primary)', fontWeight: 700 }}>{c.points.toLocaleString()}</td>
+              <td style={{ padding: '10px 14px', fontFamily: 'var(--font-mono)' }}>₹{c.spend.toLocaleString()}</td>
+              <td style={{ padding: '10px 14px', color: 'var(--text-tertiary)', fontSize: 12 }}>{c.lastVisit}</td>
+              <td style={{ padding: '10px 14px' }}>
+                <button style={{ padding: '4px 10px', fontSize: 11, cursor: 'pointer', background: 'var(--surface-muted)', border: '1px solid var(--border-default)', color: 'var(--text-primary)' }}>
+                  View 360
+                </button>
+              </td>
+            </tr>
+          );
+        })}
+      </tbody>
+    </table>
+  </div>
+);
+
+// ── Tiers Tab ────────────────────────────────────────────────
+const TiersTab: React.FC = () => (
+  <div style={{ padding: 24 }}>
+    <div style={{ fontSize: 13, color: 'var(--text-secondary)', marginBottom: 24 }}>
+      Configure earning rules, redemption limits, and tier thresholds. (Pushed to all stores via HO)
+    </div>
+    
+    <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4,1fr)', gap: 16 }}>
+      {TIERS.map((t) => (
+        <div key={t.id} style={{ background: 'var(--surface)', border: `1px solid ${t.color}`, padding: 20 }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 16 }}>
+            <Crown size={20} color={t.color} />
+            <span style={{ fontSize: 16, fontWeight: 800, color: t.color, textTransform: 'uppercase', letterSpacing: '0.05em' }}>{t.name}</span>
+          </div>
+          
+          <div style={{ display: 'flex', flexDirection: 'column', gap: 12, fontSize: 12 }}>
+            <div>
+              <div style={{ color: 'var(--text-tertiary)', fontSize: 10, textTransform: 'uppercase', marginBottom: 2 }}>Requirement</div>
+              <div style={{ fontWeight: 600, color: 'var(--text-primary)' }}>{t.req}</div>
+            </div>
+            <div>
+              <div style={{ color: 'var(--text-tertiary)', fontSize: 10, textTransform: 'uppercase', marginBottom: 2 }}>Earn Rate</div>
+              <div style={{ fontWeight: 600, color: 'var(--primary)' }}>{t.pts}</div>
+            </div>
+            <div>
+              <div style={{ color: 'var(--text-tertiary)', fontSize: 10, textTransform: 'uppercase', marginBottom: 2 }}>Benefits</div>
+              <div style={{ color: 'var(--text-secondary)' }}>{t.benefits}</div>
+            </div>
+          </div>
+          
+          <button style={{ marginTop: 20, width: '100%', height: 32, background: 'transparent', border: `1px solid ${t.color}`, color: t.color, cursor: 'pointer', fontSize: 12, fontWeight: 600 }}>
+            Edit Tier
+          </button>
+        </div>
+      ))}
+    </div>
+  </div>
+);
+
+// ── Campaigns Tab ────────────────────────────────────────────
+const CampaignsTab: React.FC = () => (
+  <div style={{ padding: 24 }}>
+    <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 20 }}>
+      <div style={{ display: 'flex', gap: 10 }}>
+        {['All', 'Active', 'Drafts', 'Completed'].map((filter, i) => (
+          <button key={filter} style={{
+            padding: '6px 14px', fontSize: 12, cursor: 'pointer',
+            background: i === 0 ? 'var(--primary)' : 'var(--surface)',
+            color: i === 0 ? '#fff' : 'var(--text-secondary)',
+            border: '1px solid var(--border-default)', fontWeight: i === 0 ? 600 : 400
+          }}>
+            {filter}
+          </button>
+        ))}
+      </div>
+      <button style={{ padding: '6px 16px', background: 'var(--primary)', color: '#fff', border: 'none', cursor: 'pointer', fontSize: 12, fontWeight: 600 }}>
+        + Create Campaign
+      </button>
+    </div>
+
+    <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: 13 }}>
+      <thead>
+        <tr style={{ background: '#1a4a48', color: '#fff' }}>
+          {['Campaign ID', 'Name', 'Target Segment', 'Channel', 'Sent To', 'Conversion', 'Status', 'Action'].map((h) => (
+            <th key={h} style={{ padding: '10px 14px', textAlign: 'left', fontSize: 11, fontWeight: 700, letterSpacing: '0.05em' }}>{h}</th>
+          ))}
+        </tr>
+      </thead>
+      <tbody>
+        {MOCK_CAMPAIGNS.map((c, i) => (
+          <tr key={c.id} style={{ background: i % 2 === 0 ? 'var(--surface)' : 'var(--surface-muted)', borderBottom: '1px solid var(--border-subtle)' }}>
+            <td style={{ padding: '10px 14px', fontFamily: 'var(--font-mono)', color: 'var(--text-secondary)' }}>{c.id}</td>
+            <td style={{ padding: '10px 14px', fontWeight: 600, color: 'var(--text-primary)' }}>{c.name}</td>
+            <td style={{ padding: '10px 14px', color: 'var(--text-secondary)' }}>{c.segment}</td>
+            <td style={{ padding: '10px 14px' }}>
+              <span style={{ fontSize: 11, padding: '2px 8px', background: 'var(--surface)', border: '1px solid var(--border-default)', color: 'var(--text-primary)' }}>
+                {c.type}
+              </span>
+            </td>
+            <td style={{ padding: '10px 14px', fontFamily: 'var(--font-mono)', color: 'var(--text-primary)' }}>{c.sent.toLocaleString()}</td>
+            <td style={{ padding: '10px 14px', fontFamily: 'var(--font-mono)', color: 'var(--primary)', fontWeight: 600 }}>{c.conv}</td>
+            <td style={{ padding: '10px 14px' }}>
+              <span style={{ 
+                fontSize: 11, fontWeight: 700, padding: '2px 8px', 
+                background: c.status === 'ACTIVE' ? 'rgba(16,185,129,0.1)' : c.status === 'COMPLETED' ? 'rgba(59,130,246,0.1)' : 'rgba(148,163,184,0.1)',
+                color: c.status === 'ACTIVE' ? '#10b981' : c.status === 'COMPLETED' ? '#3b82f6' : 'var(--text-secondary)'
+              }}>
+                {c.status}
+              </span>
+            </td>
+            <td style={{ padding: '10px 14px' }}>
+              <button style={{ padding: '4px 10px', fontSize: 11, cursor: 'pointer', background: 'transparent', border: '1px solid var(--border-default)', color: 'var(--text-primary)' }}>
+                {c.status === 'DRAFT' ? 'Edit' : 'View Stats'}
+              </button>
+            </td>
+          </tr>
+        ))}
+      </tbody>
+    </table>
+  </div>
+);
+
+// ── Main Loyalty Module ──────────────────────────────────────
+export const LoyaltyModule: React.FC = () => {
+  const [activeTab, setActiveTab] = useState<Tab>('dashboard');
+
+  const tabContent: Record<Tab, React.ReactNode> = {
+    dashboard: <DashboardTab />,
+    customers: <Customer360Tab />,
+    tiers:     <TiersTab />,
+    campaigns: <CampaignsTab />,
+  };
+
+  return (
+    <div style={{ height: '100%', display: 'flex', flexDirection: 'column', background: 'var(--background)', fontFamily: 'var(--font-primary)' }}>
+      {/* Header */}
+      <div style={{ background: '#1a4a48', padding: '14px 24px', display: 'flex', alignItems: 'center', gap: 16, borderBottom: '2px solid var(--accent)' }}>
+        <Trophy size={20} color="var(--accent)" />
+        <div>
+          <div style={{ fontSize: 15, fontWeight: 800, color: '#fff', letterSpacing: '0.05em' }}>LOYALTY & CRM PROTOCOL</div>
+          <div style={{ fontSize: 11, color: 'rgba(255,255,255,0.6)' }}>Module 18 · Points · Tiers · WhatsApp Campaigns</div>
+        </div>
+      </div>
+
+      {/* Tabs */}
+      <div style={{ display: 'flex', borderBottom: '1px solid var(--border-default)', background: 'var(--surface)' }}>
+        {TABS.map((t) => (
+          <button
+            key={t.id}
+            onClick={() => setActiveTab(t.id)}
+            style={{
+              padding: '10px 18px', fontSize: 12, fontWeight: activeTab === t.id ? 700 : 400,
+              cursor: 'pointer', background: activeTab === t.id ? 'var(--primary)' : 'transparent',
+              color: activeTab === t.id ? '#fff' : 'var(--text-secondary)',
+              border: 'none', borderBottom: activeTab === t.id ? '2px solid var(--primary)' : '2px solid transparent',
+              display: 'flex', alignItems: 'center', gap: 6,
+            }}
+          >
+            {t.icon}{t.label}
+          </button>
+        ))}
+      </div>
+
+      {/* Content */}
+      <div style={{ flex: 1, overflowY: 'auto' }}>
+        {tabContent[activeTab]}
+      </div>
+    </div>
   );
-}
+};
 
-
-
-
+export default LoyaltyModule;

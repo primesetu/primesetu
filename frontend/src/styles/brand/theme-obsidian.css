@@ -1,0 +1,58 @@
+/* brand/theme-obsidian.css — Luxury. Sovereign Gold on True Obsidian */
+[data-theme="OBSIDIAN"] {
+  --color-primary: #d4af37; /* Sovereign Gold */
+  --color-primary-hover: #f3e5ab;
+
+  --color-bg-body: #050505;
+  --color-bg-grid: #0a0a0a;
+
+  --color-surface: rgba(12, 12, 12, 0.92);
+  --color-surface-hover: #141414;
+  --color-surface-active: #1c1c1c;
+
+  --color-border: #242424;
+  --color-border-light: #181818;
+  --color-border-focus: #d4af37;
+
+  --color-text-primary: #ffffff;
+  --color-text-secondary: #a3a3a3;
+  --color-text-tertiary: #525252;
+
+  --color-success-bg: rgba(16, 185, 129, 0.08);
+  --color-success-text: #6ee7b7;
+
+  --color-warning-bg: rgba(212, 175, 55, 0.1);
+  --color-warning-text: #d4af37;
+
+  --color-danger-bg: rgba(239, 68, 68, 0.08);
+  --color-danger-text: #fca5a5;
+
+  --color-white: #ffffff;
+
+  /* Elevation */
+  --surface: #080808;
+  --background: #000000;
+  --background-alt: #050505;
+  --surface-elevated: #101010;
+  --surface-container-low: #0a0a0a;
+  --surface-container: #101010;
+  --surface-container-high: #181818;
+  --surface-container-highest: #222222;
+
+  /* Sprint A: Gold-tinted deep shadows */
+  --shadow-sm:      0 1px 6px  rgba(0,0,0,0.60);
+  --shadow-md:      0 4px 28px rgba(0,0,0,0.65);
+  --shadow-lg:      0 8px 40px rgba(0,0,0,0.70);
+  --shadow-topbar:  0 1px 24px rgba(0,0,0,0.55);
+  --shadow-taskbar: 0 -1px 20px rgba(0,0,0,0.50);
+  --shadow-menu:    0 20px 60px rgba(212,175,55,0.06), 0 20px 60px rgba(0,0,0,0.75);
+  --shadow-toast:   0 15px 40px rgba(0,0,0,0.65);
+
+  /* Sprint A: Zero-radius — Luxury is defined by clean edges */
+  --radius-sm:   0px;
+  --radius-md:   0px;
+  --radius-lg:   0px;
+  --radius-xl:   0px;
+  --radius-2xl:  0px;
+  --radius-pill: 1px;
+}

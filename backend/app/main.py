@@ -54,10 +54,11 @@ from app.routers import (
     purchase, inventory, billing, 
     users, menu, extensions, finance, schemes, security, reporting,
     store, inventory_audit, stock_ledger, department, 
-    legacy, masks, item_master, customer, ho, settings, master
+    legacy, masks, item_master, customer, ho, settings, master, ecommerce,
+    einvoice, tally, returns, loyalty, whatsapp, warehouse, intelligence,
+    flexible_reports, gstr1
 )
 from app.routers import schema as schema_router
-# from app.routers.gstr1 import router as gstr1_router
 
 # Core & Management
 app.include_router(onboarding.router)
@@ -86,22 +87,43 @@ app.include_router(finance.router)
 app.include_router(schemes.router)
 app.include_router(security.router)
 app.include_router(reporting.router)
-# app.include_router(warehouse.router)
-# app.include_router(intelligence.router)
+app.include_router(ecommerce.router, prefix="/api/v1")
+app.include_router(einvoice.router, prefix="/api/v1")
+app.include_router(tally.router, prefix="/api/v1")
+app.include_router(returns.router)
+app.include_router(loyalty.router)
+app.include_router(whatsapp.router)
+app.include_router(warehouse.router)
+app.include_router(intelligence.router)
 
 # Reports & Sync
 app.include_router(ho.router, prefix="/api/v1/ho")
 
 # Schema Studio — Introspection & Provisioning
 app.include_router(schema_router.router, prefix="/api/v1")
-# app.include_router(flexible_reports.router)
-# app.include_router(gstr1_router, prefix="/api/v1/accounts") 
+app.include_router(flexible_reports.router)
+app.include_router(gstr1.router) 
+
+from app.services.sync_engine import SyncEngine
+from app.services.omnichannel_sync import OmnichannelSyncEngine
+import asyncio
 
 @app.on_event("startup")
 async def startup():
     async with engine.begin() as conn:
         await conn.run_sync(Base.metadata.create_all)
     print("[SMRITI-OS] Database connected and schema verified.")
+    
+    # Initialize Delta-Sync Engine
+    try:
+        await SyncEngine.install_sync_schema()
+        asyncio.create_task(SyncEngine.run_push_worker())
+        print("[SMRITI-OS] Delta-Sync Engine online.")
+        
+        asyncio.create_task(OmnichannelSyncEngine.run_marketplace_worker())
+        print("[SMRITI-OS] Omnichannel Marketplace Engine online.")
+    except Exception as e:
+        print(f"[SMRITI-OS] Failed to start Sync Engines: {e}")
 
 @app.get("/")
 async def read_index():

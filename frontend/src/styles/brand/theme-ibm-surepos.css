@@ -1,0 +1,48 @@
+/* brand/theme-ibm-surepos.css — IBM 4690 / SurePOS Classic Enterprise */
+[data-theme="IBM_SUREPOS"] {
+  --color-primary: #0f62fe; /* IBM Core Blue */
+  --color-primary-hover: #0043ce;
+
+  --color-bg-body: #e0e0e0; /* Battleship Grey */
+  --color-bg-grid: #f4f4f4;
+
+  --color-surface: #ffffff;
+  --color-surface-hover: #f4f4f4;
+  --color-surface-active: #e0e0e0;
+
+  --color-border: #8d8d8d;
+  --color-border-light: #c6c6c6;
+  --color-border-focus: #0f62fe;
+
+  --color-text-primary: #161616;
+  --color-text-secondary: #525252;
+  --color-text-tertiary: #8d8d8d;
+
+  --color-success-bg: #defbe6;
+  --color-success-text: #198038;
+  --color-success-border: #42be65;
+
+  --color-warning-bg: #fcf4d6;
+  --color-warning-text: #8e6a00;
+  --color-warning-border: #f1c21b;
+
+  --color-danger-bg: #fff1f1;
+  --color-danger-text: #da1e28;
+  --color-danger-icon: #da1e28;
+
+  --color-info-bg: #edf5ff;
+  --color-info-text: #0f62fe;
+  --color-info-border: #78a9ff;
+
+  --color-white: #ffffff;
+
+  /* Elevation */
+  --surface: #ffffff;
+  --background: #e0e0e0;
+  --background-alt: #f4f4f4;
+  --surface-elevated: #ffffff;
+  --surface-container-low: #f4f4f4;
+  --surface-container: #e0e0e0;
+  --surface-container-high: #c6c6c6;
+  --surface-container-highest: #a8a8a8;
+}

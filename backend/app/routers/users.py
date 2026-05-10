@@ -36,6 +36,26 @@ async def get_me(
         raise HTTPException(status_code=404, detail="User profile not found")
     return user
 
+@router.patch("/me/preferences", response_model=UserResponse)
+async def update_preferences(
+    payload: dict,
+    db: AsyncSession = Depends(get_db),
+    current_user: CurrentUser = Depends(require_auth)
+):
+    """Updates the user's local UI preferences (Theme, etc.)"""
+    result = await db.execute(select(User).where(User.id == current_user.id))
+    user = result.scalar_one_or_none()
+    if not user:
+        raise HTTPException(status_code=404, detail="User profile not found")
+    
+    # Merge existing preferences with new ones
+    current_prefs = user.preferences or {}
+    user.preferences = {**current_prefs, **payload}
+    
+    await db.commit()
+    await db.refresh(user)
+    return user
+
 @router.get("/", response_model=List[UserResponse])
 async def list_users(
     db: AsyncSession = Depends(get_db),

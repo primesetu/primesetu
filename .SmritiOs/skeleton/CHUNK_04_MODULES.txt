@@ -1,0 +1,74 @@
+﻿================================================================
+SMRITI-OS v3.0 — SKELETON CHUNK 04: MODULE ARCHITECTURE (18 MODULES)
+================================================================
+
+─── RETAIL & WAREHOUSE MODULES ─────────────────────────────────
+#  | Module                  | Key Features                           | Users           | Priority
+1  | Masters                 | Item, Customer, Supplier, Category,    | All             | CRITICAL
+   |                         | Brand, Tax, Unit, Warehouse, Rack      |                 |
+2  | POS / Billing           | Fast billing, barcode, multi-payment,  | Cashier, Mgr    | CRITICAL
+   |                         | hold bill, split bill                  |                 |
+3  | Purchase & GRN          | PO, GRN, supplier mgmt, returns        | Purchase Mgr    | CRITICAL
+4  | Inventory Management    | Stock in/out, adjustments, valuation,  | Stock Mgr       | CRITICAL
+   |                         | batch/serial tracking                  |                 |
+5  | Warehouse Management    | Rack/bin mapping, transfer, challans   | Stock Mgr       | HIGH
+6  | Sales Returns & Exchange| Returns, exchanges, damage, credit notes| Cashier, Mgr   | CRITICAL
+7  | Schemes & Promotions    | Discounts, offers, loyalty, combo      | Mgr, HO         | HIGH
+8  | Day-End & Shift         | Cash reconciliation, shift reports     | Mgr, Cashier    | CRITICAL
+9  | Reports & Analytics     | Sales, purchase, stock, customer, fin  | Mgr, HO         | CRITICAL
+10 | User & Role Management  | Users, roles, permissions per store    | Admin, Mgr      | CRITICAL
+11 | Hardware Integration    | Printer, scanner, drawer, scale, term  | System          | HIGH
+12 | Sync & Offline          | Offline queue, sync status, conflicts  | System          | CRITICAL
+13 | GST & Tax Compliance    | CGST/SGST/IGST, HSN, GSTR-1/3B        | All             | CRITICAL
+14 | E-Invoice & E-Way Bill  | IRN, QR code, NIC API, e-way bill      | Mgr, System     | CRITICAL
+15 | Tally Sync              | Voucher push, master mapping, API      | Accountant      | HIGH
+16 | WhatsApp Integration    | Bill on WA, alerts, loyalty updates    | Mgr, System     | HIGH
+17 | E-Commerce Integration  | Flipkart, Amazon, Meesho, Shopify      | Mgr, HO         | HIGH
+18 | Loyalty & CRM           | Points engine, tiers, CRM workflows    | Mgr, HO         | MEDIUM
+
+─── HEAD OFFICE MODULES ────────────────────────────────────────
+#  | Module                   | Key Features
+1  | Branch Management        | Add/manage stores, settings, users
+2  | Centralized Masters      | Push item master, pricing, tax to all stores
+3  | Schemes & Pricing Control| Central pricing rules, push to stores
+4  | Inter-Branch Transfers   | Stock transfer requests/approvals
+5  | MIS Reports              | Consolidated sales/stock/purchase all stores
+6  | Theme & Menu Control     | Push themes/menu configs to stores
+7  | Central User Management  | User creation, role assignment all stores
+8  | Sync Management          | Monitor sync, pending queue, errors
+
+─── CURRENT IMPLEMENTATION STATUS (in codebase) ────────────────
+Module ID         | File                                       | Status
+dashboard         | modules/dashboard/ManagementDashboard.tsx  | ✅ Live
+sales             | modules/billing/BillingModule.tsx          | ✅ Live
+returns           | modules/billing/ReturnsDashboard.tsx       | ✅ Live
+item_master       | modules/inventory/ItemMaster.tsx           | ✅ Live
+item_workbench    | modules/inventory/ItemMasterWorkbench.tsx  | ✅ Live
+inventory         | modules/inventory/InventoryModule.tsx      | ✅ Live
+purchase_entry    | modules/transactions/PurchaseWorkbench.tsx | ✅ Live
+purchase_journal  | modules/transactions/PurchaseJournal.tsx   | ✅ Live
+sales_journal     | modules/transactions/SalesJournal.tsx      | ✅ Live
+stock_ledger      | modules/transactions/StockLedgerJournal.tsx| ✅ Live
+reconcile         | modules/inventory/InventoryAudit.tsx       | ✅ Live
+warehouse_os      | modules/inventory/WarehouseDashboard.tsx   | ✅ Live
+stock_transfer    | modules/inventory/StockTransfer.tsx        | ✅ Live
+barcode           | modules/inventory/BarcodeStudio.tsx        | ✅ Live
+schemes           | modules/schemes/SchemesModule.tsx          | ✅ Live
+price             | modules/catalogue/PriceRevisionWorkbench   | ✅ Live
+pricegroups       | modules/catalogue/PriceGroups.tsx          | ✅ Live
+customers         | CatalogueMasterWorkbench (CUSTOMER)        | ✅ Live
+vendors           | CatalogueMasterWorkbench (VENDOR)          | ✅ Live
+hsn               | CatalogueMasterWorkbench (HSN)             | ✅ Live
+accounts          | CatalogueMasterWorkbench (ACCOUNTS)        | ✅ Live
+dayend            | modules/billing/DayEndModule.tsx           | ✅ Live
+tills             | modules/billing/TillManagement.tsx         | ✅ Live
+analytics         | modules/analytics/AnalyticsModule.tsx      | ✅ Live
+salesrep          | modules/analytics/SalesDrilldownModule.tsx | ✅ Live
+compliance        | modules/compliance/CompliancePanel.tsx     | ✅ Live
+finance           | modules/accounts/FinanceHub.tsx            | ✅ Live
+intelligence      | modules/intelligence/IntelligenceCockpit   | ✅ Live
+ho                | modules/ho/HOSyncModule.tsx                | ✅ Live
+loyalty           | modules/catalogue/LoyaltyModule.tsx        | ✅ Live (basic)
+ecommerce         | —                                          | 🔲 TODO (Module 17)
+loyalty_crm       | —                                          | 🔲 TODO (Module 18 full)
+================================================================

@@ -83,6 +83,11 @@ class SmritiItem(Base):
     cost_price: Mapped[Numeric] = mapped_column(Numeric(19, 4), default=0)
     hsn_code: Mapped[Optional[str]] = mapped_column(String(20))
     is_active: Mapped[bool] = mapped_column(Boolean, default=True)
+    # E-Commerce / Web attributes
+    image_url: Mapped[Optional[str]] = mapped_column(String(500), nullable=True)
+    description_html: Mapped[Optional[str]] = mapped_column(String, nullable=True)
+    is_featured: Mapped[bool] = mapped_column(Boolean, default=False)
+    
     last_sync: Mapped[datetime] = mapped_column(DateTime, default=datetime.utcnow)
 
 class SmritiStock(Base):
@@ -135,6 +140,18 @@ class SmritiSaleHdr(Base):
     total_qty: Mapped[Numeric] = mapped_column(Numeric(19, 4))
     net_amount: Mapped[Numeric] = mapped_column(Numeric(19, 4))
     staff_code: Mapped[Optional[str]] = mapped_column(String(20))
+    
+    # E-Invoice / NIC Integration
+    irn: Mapped[Optional[str]] = mapped_column(String(64), nullable=True)
+    irn_ack_no: Mapped[Optional[str]] = mapped_column(String(50), nullable=True)
+    irn_ack_dt: Mapped[Optional[datetime]] = mapped_column(DateTime, nullable=True)
+    qr_code_data: Mapped[Optional[str]] = mapped_column(String, nullable=True)
+
+    # Tally Sync
+    tally_synced: Mapped[bool] = mapped_column(Boolean, default=False)
+    tally_synced_at: Mapped[Optional[datetime]] = mapped_column(DateTime, nullable=True)
+    tally_retry_count: Mapped[int] = mapped_column(Integer, default=0)
+
     last_sync: Mapped[datetime] = mapped_column(DateTime, default=datetime.utcnow)
 
 class SmritiSaleDtl(Base):
@@ -149,3 +166,15 @@ class SmritiSaleDtl(Base):
     disc_amount: Mapped[Numeric] = mapped_column(Numeric(19, 4), default=0)
     tax_amount: Mapped[Numeric] = mapped_column(Numeric(19, 4), default=0)
     last_sync: Mapped[datetime] = mapped_column(DateTime, default=datetime.utcnow)
+
+class SmritiAuditLog(Base):
+    __tablename__ = 'smriti_audit_log'
+    
+    id: Mapped[int] = mapped_column(Integer, primary_key=True, autoincrement=True)
+    entity_type: Mapped[str] = mapped_column(String(50), index=True)
+    entity_id: Mapped[str] = mapped_column(String(100), index=True)
+    action: Mapped[str] = mapped_column(String(50))
+    user_id: Mapped[Optional[str]] = mapped_column(String(100))
+    old_value: Mapped[Optional[str]] = mapped_column(String, nullable=True)
+    new_value: Mapped[Optional[str]] = mapped_column(String, nullable=True)
+    timestamp: Mapped[datetime] = mapped_column(DateTime, default=datetime.utcnow)

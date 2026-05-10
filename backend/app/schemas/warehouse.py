@@ -9,18 +9,12 @@ from uuid import UUID
 from typing import List, Optional
 
 class StockAdjustmentRequest(BaseModel):
-    item_id: UUID
-    size: Optional[str] = None
-    colour: Optional[str] = None
-    batch_no: Optional[str] = None
+    sku: str
     qty_change: int
     reason_code: str # DAMAGE, GIFT, RETURN, ADJUSTMENT
 
 class StockTransferItem(BaseModel):
-    item_id: UUID
-    size: Optional[str] = None
-    colour: Optional[str] = None
-    batch_no: Optional[str] = None
+    sku: str
     qty: int
 
 class StockTransferRequest(BaseModel):
@@ -30,9 +24,6 @@ class StockTransferRequest(BaseModel):
     notes: Optional[str] = None
 
 class BinAssignmentRequest(BaseModel):
-    item_id: UUID
-    size: Optional[str] = None
-    colour: Optional[str] = None
-    batch_no: Optional[str] = None
+    sku: str
     bin_location: str
     shelf_no: Optional[str] = None

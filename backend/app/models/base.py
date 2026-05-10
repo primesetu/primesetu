@@ -83,6 +83,9 @@ class User(Base):
     shoper_recid: Mapped[Optional[int]] = mapped_column(
         Integer, nullable=True, index=True
     )
+    preferences: Mapped[Dict[str, Any]] = mapped_column(
+        JSON, default={}
+    )
     created_at: Mapped[datetime] = mapped_column(DateTime, server_default=text("now()"))
 
 

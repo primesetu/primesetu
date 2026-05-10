@@ -5,7 +5,7 @@
   left: 0;
   right: 0;
   height: var(--layout-topbar-height);
-  background: rgba(255,255,255,0.92);
+  background: var(--color-surface);
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
   border-bottom: 1px solid var(--color-border);
@@ -30,7 +30,7 @@
   left: 0;
   right: 0;
   height: var(--layout-taskbar-height);
-  background: rgba(255,255,255,0.92);
+  background: var(--color-surface);
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
   border-top: 1px solid var(--color-border);
@@ -94,7 +94,7 @@
   align-items: center;
   gap: var(--space-2);
   padding: 6px;
-  background: rgba(255, 255, 255, 0.7);
+  background: var(--color-surface);
   backdrop-filter: blur(20px);
   -webkit-backdrop-filter: blur(20px);
   border: 1px solid var(--color-border-light);
@@ -109,7 +109,7 @@
   align-items: center;
   gap: 8px;
   padding: 0 12px;
-  background: var(--color-white);
+  background: var(--color-surface);
   border: 1px solid var(--color-border-light);
   border-radius: var(--radius-pill);
   cursor: pointer;

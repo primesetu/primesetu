@@ -17,6 +17,9 @@ class UserUpdate(BaseModel):
     role: Optional[str] = Field(None, pattern="^(cashier|manager|admin)$")
     active: Optional[bool] = None
 
+class UserPreferencesUpdate(BaseModel):
+    preferences: dict
+
 class UserResponse(BaseModel):
     model_config = ConfigDict(from_attributes=True)
     id: str
@@ -25,4 +28,5 @@ class UserResponse(BaseModel):
     full_name: Optional[str]
     role: str
     active: bool
+    preferences: dict
     created_at: datetime

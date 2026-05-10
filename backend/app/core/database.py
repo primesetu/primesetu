@@ -38,6 +38,20 @@ if settings.storage_mode == "SOVEREIGN":
             raise
         finally:
             db.close()
+            
+    from contextlib import asynccontextmanager
+    @asynccontextmanager
+    async def get_db_session():
+        # Fake async for MSSQL parity
+        db = SessionLocal()
+        try:
+            yield db
+            db.commit()
+        except Exception:
+            db.rollback()
+            raise
+        finally:
+            db.close()
 else:
     # ── CLOUD ENGINE (Supabase / Postgres) ──
     engine = create_async_engine(
@@ -59,6 +73,12 @@ else:
                 raise
             finally:
                 await session.close()
+
+    from contextlib import asynccontextmanager
+    @asynccontextmanager
+    async def get_db_session():
+        async with AsyncSessionLocal() as session:
+            yield session
 
 class Base(DeclarativeBase):
     pass

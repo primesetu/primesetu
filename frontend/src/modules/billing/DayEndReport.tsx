@@ -2,8 +2,9 @@
  * SMRITI-OS — Shoper9-Based Retail OS
  * Zero Cloud · Sovereign · AI-Governed
  * ============================================================ */
-import React from 'react';
+import React, { useState } from 'react';
 import { formatCurrency } from '@/utils/currency';
+import { api } from '@/api/client';
 
 interface DayEndStats {
   cash: number;
@@ -24,10 +25,29 @@ interface DayEndReportProps {
     address?: string;
     gstin?: string;
   };
+  tallySyncStatus?: { synced: number; pending: number; failed: number };
 }
 
-export const DayEndReport = React.forwardRef<HTMLDivElement, DayEndReportProps>(({ stats, declaredCash, variance, store }, ref) => {
+export const DayEndReport = React.forwardRef<HTMLDivElement, DayEndReportProps>(({ stats, declaredCash, variance, store, tallySyncStatus }, ref) => {
   const now = new Date();
+  const [tally, setTally] = useState(tallySyncStatus || { synced: 0, pending: 0, failed: 0 });
+  const [syncRunning, setSyncRunning] = useState(false);
+  const [syncMsg, setSyncMsg] = useState<string | null>(null);
+
+  const handleTallySync = async () => {
+    setSyncRunning(true);
+    setSyncMsg(null);
+    try {
+      const res = await api.tally.runSync();
+      setSyncMsg(res?.message || 'Sync cycle completed.');
+      const status = await api.tally.getStatus();
+      setTally(status);
+    } catch (e: any) {
+      setSyncMsg('Tally sync failed — check gateway connectivity.');
+    } finally {
+      setSyncRunning(false);
+    }
+  };
   
   return (
     <div ref={ref} className="p-12 text-navy font-mono text-[10px] leading-relaxed max-w-[800px] mx-auto bg-white print:p-8">
@@ -125,6 +145,41 @@ export const DayEndReport = React.forwardRef<HTMLDivElement, DayEndReportProps>(
             </span>
           </div>
         </div>
+      </div>
+
+      {/* Tally Sync Panel — non-printable */}
+      <div className="mb-8 print:hidden">
+        <h3 className="font-black uppercase tracking-widest text-[9px] opacity-40 mb-4">Tally Accounting Sync</h3>
+        <div style={{ display: 'flex', gap: 16, marginBottom: 12 }}>
+          {[
+            { label: 'Synced', value: tally.synced, color: '#10b981' },
+            { label: 'Pending', value: tally.pending, color: '#f59e0b' },
+            { label: 'Failed', value: tally.failed, color: '#ef4444' },
+          ].map((k) => (
+            <div key={k.label} style={{
+              flex: 1, padding: '12px 16px',
+              border: `1px solid ${k.color}40`,
+              background: `${k.color}08`,
+            }}>
+              <div style={{ fontSize: 24, fontWeight: 800, fontFamily: 'monospace', color: k.color }}>{k.value}</div>
+              <div style={{ fontSize: 11, color: '#64748b', marginTop: 4 }}>{k.label} Invoices</div>
+            </div>
+          ))}
+        </div>
+        {syncMsg && (
+          <div style={{ fontSize: 12, color: '#10b981', marginBottom: 8, fontWeight: 600 }}>{syncMsg}</div>
+        )}
+        <button
+          onClick={handleTallySync}
+          disabled={syncRunning}
+          style={{
+            padding: '8px 20px', fontSize: 12, fontWeight: 700, cursor: syncRunning ? 'not-allowed' : 'pointer',
+            background: syncRunning ? '#94a3b8' : '#0f766e', color: '#fff',
+            border: 'none', borderRadius: 0, display: 'flex', alignItems: 'center', gap: 8,
+          }}
+        >
+          {syncRunning ? '⏳ Syncing...' : '⇅ Push All Pending to Tally'}
+        </button>
       </div>
 
       {/* Audit Footnotes */}

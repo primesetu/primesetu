@@ -1,0 +1,56 @@
+﻿================================================================
+SMRITI-OS v3.0 — MASTER SKELETON INDEX
+================================================================
+Generated : 2026-05-10
+Location  : D:\IMP\GitHub\primesetu\.SmritiOs\skeleton\
+Based on  : SmritiOS_Documentation_v3.0.docx + live codebase
+
+─── CHUNK FILES ────────────────────────────────────────────────
+File                         | Contents
+CHUNK_01_OVERVIEW.txt        | Product identity, vision, deployment modes, RBAC roles, access matrix
+CHUNK_02_TECH_STACK.txt      | Backend, DB, frontend, desktop (Electron), mobile (RN), cloud, security, hardware
+CHUNK_03_ARCHITECTURE.txt   | Hybrid arch, sync engine, theme/menu 3-level control, routing, PWA
+CHUNK_04_MODULES.txt         | All 18 modules (Retail + HO) — features, users, priority, implementation status
+CHUNK_05_ENGINES.txt         | 5 reusable engines, schema-driven approach, override strategy, AI workflow
+CHUNK_06_DATABASE.txt        | Inspired schema, S9→PG type mapping, mandatory columns, Supabase tables, S9 field map
+CHUNK_07_API.txt             | ALL 70+ API endpoints (method + path + purpose), full coverage
+CHUNK_08_DESIGN_SYSTEM.txt  | CSS tokens (light/dark), typography, spacing, layout, Tailwind aliases, grid aesthetics
+CHUNK_09_GST_INTEGRATIONS.txt| GST (Module 13), E-Invoice (14), Tally (15), WhatsApp (16), E-Commerce (17), Loyalty CRM (18)
+CHUNK_10_PRICING_HOOKS.txt   | Pricing models, competitive positioning, GTM strategy, all hooks, state, print, offline, build
+
+─── QUICK REFERENCE ────────────────────────────────────────────
+Topic                    | Chunk
+Architecture overview    | 01, 03
+Complete tech stack      | 02
+All 18 modules           | 04
+Reusable engine pattern  | 05
+Database design          | 06
+All API endpoints        | 07
+Design system/CSS        | 08
+GST + all integrations   | 09
+Pricing / GTM            | 10
+All hooks                | 10
+State management         | 10
+Build & deploy           | 10
+
+─── STATUS SUMMARY ─────────────────────────────────────────────
+Implemented (✅): 35+ modules live in codebase
+TODO (🔲)       : Module 17 (E-Commerce), Module 18 (full Loyalty CRM),
+                  Electron desktop app, React Native mobile app,
+                  Celery+Redis sync engine, AWS/Azure cloud migration
+
+─── DESIGN PHILOSOPHY ──────────────────────────────────────────
+1. Zero Cloud possible (local PostgreSQL)
+2. Shoper 9 workflow parity (institutional, not trendy)
+3. Offline-first PWA (IndexedDB + Service Worker)
+4. AI-augmented development (schema → module auto-generation)
+5. Modular monolith first (no premature microservices)
+6. India-first (GST-native, Tally sync, WhatsApp, UPI)
+7. "Memory, Not Code." — everything is configurable, not hardcoded
+
+─── CONTACT ────────────────────────────────────────────────────
+System Architect : Jawahar R. Mallah
+Organisation     : AITDL Network
+Email            : contact@aitdl.com | jawahar@aitdl.com
+Website          : https://aitdl.in
+================================================================

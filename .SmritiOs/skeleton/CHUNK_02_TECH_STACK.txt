@@ -1,0 +1,110 @@
+﻿================================================================
+SMRITI-OS v3.0 — SKELETON CHUNK 02: COMPLETE TECH STACK
+================================================================
+
+─── BACKEND ────────────────────────────────────────────────────
+Component        | Technology              | Version | Purpose
+Framework        | FastAPI (Python)        | Latest  | Core API — async, auto-docs
+ORM              | SQLAlchemy + Alembic    | 2.x     | DB models & migrations
+Validation       | Pydantic                | v2      | Data validation/serialization
+Auth             | JWT + OAuth2            | —       | Multi-user secure login
+Background Jobs  | Celery                  | Latest  | Sync tasks, scheduled reports
+Message Broker   | Redis                   | 7.x     | Job queue + caching
+Real-time        | WebSockets (FastAPI)    | —       | Live POS updates, alerts
+File Handling    | python-multipart        | —       | Uploads, imports, exports
+
+─── DATABASE ───────────────────────────────────────────────────
+Component   | Technology              | Level  | Purpose
+Primary DB  | PostgreSQL 15+          | All    | All transactional data
+Local DB    | PostgreSQL              | Store  | Offline ops at store level
+Cloud DB    | PostgreSQL (RDS)        | HO     | Centralized sync & HO data
+Cache       | Redis                   | All    | Sessions, fast lookups
+Search      | PostgreSQL FTS / Meilisearch | All | Item & customer search
+Migrations  | Alembic                 | All    | Schema version control
+
+─── SYNC ENGINE ────────────────────────────────────────────────
+Component           | Technology              | Purpose
+Sync Strategy       | Delta Sync              | Only changed records — minimal data
+Change Tracking     | PostgreSQL WAL/Triggers | Detect changes at DB level
+Sync Scheduler      | Celery Beat             | Auto sync on intervals when online
+Conflict Resolution | Timestamp + Priority    | HO overrides store on conflict
+Sync Status         | Redis                   | Track pending/synced/failed per store
+
+─── FRONTEND — WEB (CURRENT IMPLEMENTATION) ────────────────────
+Component       | Technology              | Purpose
+Framework       | React 18 + Vite 6       | Web application
+Styling         | Tailwind CSS 4 + Vanilla CSS | SMRITI-OS design tokens
+State           | Zustand                 | Global state management
+API Client      | Axios + React Query     | API calls & caching
+Offline         | IndexedDB + ServiceWorker | PWA offline mode
+Grid Engine     | Custom SovereignGrid.tsx | Excel-like spreadsheet (custom)
+Form UI         | Custom SovereignUI.tsx  | Design system component library
+Import/Export   | SheetJS (xlsx)          | .xlsx import & export
+Charts          | Recharts                | Analytics dashboards
+Animation       | Framer Motion           | Page/component animations
+Grid (AG)       | AG-Grid Community       | Advanced data tables
+Auth            | Supabase JWT            | Authentication
+
+NOTE (v3.0 doc target): Replace custom grid with React Data Grid (Adazzle)
+NOTE (v3.0 doc target): Add shadcn/ui as form component library
+
+─── FRONTEND — TARGET (per v3.0 doc) ──────────────────────────
+Component   | Technology                  | Purpose
+Grid        | React Data Grid (Adazzle)   | MIT, Excel-like, virtual scroll
+Form        | React Hook Form + shadcn/ui | Detailed single-record forms
+Heavy Data  | Glide Data Grid             | 50,000+ items fallback
+
+─── DESKTOP APPLICATION ────────────────────────────────────────
+Component       | Technology         | Purpose
+Framework       | Electron.js        | Wraps web app as Windows desktop
+Local Server    | Embedded FastAPI   | Run backend locally without internet
+Local Database  | PostgreSQL (embed) | Offline data store at store level
+Printer         | Electron Print API | Receipt & barcode printing
+Hardware        | SerialPort / USB   | Barcode scanner, cash drawer, scale
+
+─── MOBILE APPLICATION ─────────────────────────────────────────
+Component   | Technology             | Purpose
+Framework   | React Native           | Android + iOS from single codebase
+Navigation  | React Navigation       | Screen routing
+Offline     | SQLite (local) + sync  | Mobile offline support
+Barcode     | React Native Camera    | Scan via phone camera
+Payments    | Razorpay / PayTM SDK   | UPI, card, wallet payments
+Push Alerts | Firebase FCM           | Stock alerts, sync status
+
+─── CLOUD & DEVOPS ─────────────────────────────────────────────
+Component       | Technology              | Purpose
+Cloud Provider  | AWS / Azure             | Hosting infrastructure
+App Server      | EC2 / App Service       | FastAPI backend hosting
+DB Server       | RDS PostgreSQL          | Managed cloud database
+Cache Server    | ElastiCache Redis       | Managed Redis
+Storage         | S3 / Blob Storage       | Files, backups, item images
+CDN             | CloudFront              | Fast static asset delivery
+Containers      | Docker                  | Consistent deployment
+Orchestration   | Docker Compose / K8s    | Multi-service management
+CI/CD           | GitHub Actions          | Auto build, test & deploy
+Monitoring      | Sentry + Grafana        | Error tracking & metrics
+
+CURRENT ACTUAL DEPLOY:
+  Frontend  → Cloudflare Pages (dist/)
+  Backend   → Render (FastAPI)
+  DB        → Supabase (PostgreSQL)
+  Auth      → Supabase Auth (JWT)
+
+─── SECURITY ───────────────────────────────────────────────────
+Component     | Technology           | Purpose
+Auth          | JWT + Refresh Tokens | Secure login + session management
+Authorization | RBAC                 | Granular user permissions
+Encryption    | AES-256              | Sensitive data at rest
+Transport     | SSL/TLS (HTTPS)      | Secure transit
+API Security  | Rate Limiting + CORS | Prevent abuse
+Audit Log     | PostgreSQL Triggers  | Track all changes w/ user & timestamp
+
+─── HARDWARE INTEGRATION ───────────────────────────────────────
+Hardware        | Protocol          | Notes
+Barcode Scanner | USB HID / Serial  | Plug-and-play — all major brands
+Receipt Printer | ESC/POS           | Epson, TVS, Citizen, Posiflex
+Cash Drawer     | ESC/POS Trigger   | Via receipt printer port
+Weighing Scale  | Serial (RS232)    | Auto weight capture at POS
+Payment Term.   | SDK Integration   | Razorpay/PayTM/PineLabs/HDFC
+Label Printer   | ZPL / TSPL        | Barcode & price label printing
+================================================================

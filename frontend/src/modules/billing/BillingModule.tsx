@@ -353,11 +353,9 @@ function BillingModule() {
           setShowSettle={setShowSettle} customer={customer} setCustomer={setCustomer}
           salesman={salesman} setSalesman={setSalesman} billNo={billNo} dateTime={dateTime}
           billDiscount={billDiscount} setBillDiscount={setBillDiscount}
-          isCustomerMandatory={isCustomerMandatory} isSalesmanMandatory={isSalesmanMandatory}
           personnelList={personnelList}
           customerResults={customerResults}
           onCustomerSearch={handleCustomerSearch}
-          fieldMask={fieldMask}
         />
       )}
 

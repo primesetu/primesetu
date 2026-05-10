@@ -384,39 +384,125 @@ async def finalize_transaction(
     await db.execute(delete(DraftBillItem).where(DraftBillItem.user_id == current_user.id))
     await db.commit()
 
+    # ── LOYALTY ACCRUAL (post-commit, non-blocking) ──
+    loyalty_summary = {}
+    if txn_in.customer_id and new_txn.net_payable > 0:
+        try:
+            from app.services.loyalty_engine import LoyaltyEngine
+            loyalty_summary = await LoyaltyEngine.accrue(
+                db=db,
+                store_id=store_id,
+                partner_id=txn_in.customer_id,
+                sale_id=new_txn.id,
+                net_amount_paise=new_txn.net_payable,
+            )
+            await db.commit()
+        except Exception as _le:
+            pass  # Never block billing on loyalty failures
+
+    # ── WHATSAPP RECEIPT (fire-and-forget) ──
+    import asyncio
+    async def _fire_wa_receipt():
+        try:
+            from app.services.whatsapp_gateway import get_gateway
+            import os
+            gw = get_gateway()
+            mobile = loyalty_summary.get("mobile") or ""
+            if mobile:
+                await gw.send_bill_receipt(
+                    mobile=mobile,
+                    bill_no=new_txn.bill_no or "",
+                    store_name=store_id,
+                    total_rs=float(new_txn.net_payable) / 100,
+                    points_earned=loyalty_summary.get("earned", 0),
+                    points_balance=loyalty_summary.get("balance", 0),
+                )
+                if loyalty_summary.get("tier_upgraded"):
+                    await gw.send_tier_upgrade(
+                        mobile=mobile,
+                        customer_name=loyalty_summary.get("partner_name", ""),
+                        old_tier=loyalty_summary.get("old_tier", ""),
+                        new_tier=loyalty_summary.get("tier", ""),
+                        store_name=store_id,
+                    )
+        except Exception:
+            pass
+    asyncio.create_task(_fire_wa_receipt())
+
     # Return enriched transaction (no joinedload on item — uses denormalized fields)
     stmt = select(Transaction).where(Transaction.id == new_txn.id).options(selectinload(Transaction.items))
     res = await db.execute(stmt)
     return res.scalar_one()
+
 
 @router.get("/day-end/summary")
 async def get_day_end_summary(
     db: AsyncSession = Depends(get_db),
     current_user = Depends(require_auth)
 ):
-    """Institutional Day-End Summary."""
+    """Institutional Z-Report Data Engine — full payment-mode breakdown."""
     store_id = current_user.store_id
-    
+
     stats = await db.execute(
         select(
             func.count(Transaction.id).label("bill_count"),
-            func.sum(Transaction.net_payable).label("total_sales"),
-            func.sum(Transaction.tax_total).label("total_tax")
-        ).where(
-            and_(
-                Transaction.store_id == store_id,
-                Transaction.status == "Finalized",
-                func.date(Transaction.created_at) == func.current_date()
-            )
-        )
+            func.coalesce(func.sum(Transaction.net_payable), 0).label("total_sales"),
+            func.coalesce(func.sum(Transaction.tax_total), 0).label("total_tax"),
+            func.coalesce(func.sum(Transaction.discount_total), 0).label("total_discounts"),
+        ).where(and_(
+            Transaction.store_id == store_id,
+            Transaction.status == "Finalized",
+            func.date(Transaction.created_at) == func.current_date()
+        ))
     )
     res = stats.one()
-    
+
+    txn_res = await db.execute(
+        select(Transaction.payments).where(and_(
+            Transaction.store_id == store_id,
+            Transaction.status == "Finalized",
+            func.date(Transaction.created_at) == func.current_date()
+        ))
+    )
+    payment_rows = txn_res.scalars().all()
+
+    breakdown: dict = {"CASH": 0, "CARD": 0, "UPI": 0, "CREDIT": 0, "OTHER": 0}
+    for pmt in payment_rows:
+        if not pmt or not isinstance(pmt, dict):
+            continue
+        for mode, detail in pmt.items():
+            amt = detail.get("amount", 0) if isinstance(detail, dict) else 0
+            m = str(mode).upper()
+            if "CASH" in m:
+                breakdown["CASH"] += amt
+            elif any(x in m for x in ["CARD", "DEBIT"]):
+                breakdown["CARD"] += amt
+            elif any(x in m for x in ["UPI", "WALLET", "QR"]):
+                breakdown["UPI"] += amt
+            else:
+                breakdown["OTHER"] += amt
+
+    returns_res = await db.execute(
+        select(func.coalesce(func.sum(Transaction.net_payable), 0)).where(and_(
+            Transaction.store_id == store_id,
+            Transaction.type == "Return",
+            func.date(Transaction.created_at) == func.current_date()
+        ))
+    )
+    total_returns = returns_res.scalar() or 0
+
     return {
         "bill_count": res.bill_count or 0,
-        "total_sales_paise": res.total_sales or 0,
-        "total_tax_paise": res.total_tax or 0,
-        "status": "Ready for Reconcile"
+        "total_revenue": float((res.total_sales or 0) / 100),
+        "total_tax": float((res.total_tax or 0) / 100),
+        "total_discounts": float((res.total_discounts or 0) / 100),
+        "total_returns": float(total_returns / 100),
+        "cash": float(breakdown["CASH"] / 100),
+        "card": float(breakdown["CARD"] / 100),
+        "upi": float(breakdown["UPI"] / 100),
+        "credit": float(breakdown["CREDIT"] / 100),
+        "other": float(breakdown["OTHER"] / 100),
+        "status": "Ready for Z-Seal",
     }
 
 @router.get("/search")
@@ -444,11 +530,54 @@ async def search_bills(
 
 @router.post("/day-end/finalize")
 async def finalize_day_end(
+    declared_cash: float = 0.0,
     db: AsyncSession = Depends(get_db),
     current_user = Depends(require_auth)
 ):
-    """Sovereign Seal of Day-End."""
-    return {"status": "SUCCESS", "message": "[SMRITI-OS] Day End Sealed for " + current_user.store_id}
+    """
+    Sovereign Z-Seal: records declared cash, computes variance,
+    writes a permanent audit record to SmritiParam.
+    """
+    from datetime import date
+    today = date.today()
+    store_id = current_user.store_id
+
+    summary = await get_day_end_summary(db=db, current_user=current_user)
+    system_cash = summary["cash"]
+    variance = round(declared_cash - system_cash, 2)
+
+    z_record = {
+        "store_id": store_id,
+        "z_date": today.isoformat(),
+        "sealed_by": str(current_user.id),
+        "sealed_at": datetime.utcnow().isoformat(),
+        "bill_count": summary["bill_count"],
+        "total_revenue": summary["total_revenue"],
+        "total_tax": summary["total_tax"],
+        "total_returns": summary["total_returns"],
+        "cash_system": system_cash,
+        "cash_declared": declared_cash,
+        "cash_variance": variance,
+        "card": summary["card"],
+        "upi": summary["upi"],
+    }
+
+    from app.models.sovereign import SmritiParam
+    db.add(SmritiParam(
+        param_code=f"Z_SEAL_{store_id}_{today.isoformat()}",
+        descr=f"Day-End Z-Seal for {today.isoformat()}",
+        value_txt=str(z_record),
+        category="DAY_END"
+    ))
+    await db.commit()
+
+    return {
+        "status": "SEALED",
+        "z_number": f"Z-{store_id}-{today.strftime('%Y%m%d')}",
+        "variance": variance,
+        "message": f"Day sealed for {today.isoformat()}. Cash variance: Rs.{abs(variance):,.2f} {'(Short)' if variance < 0 else '(Excess)' if variance > 0 else '(Balanced)'}",
+        "record": z_record,
+    }
 
 @router.get("/personnel")
 async def get_personnel(

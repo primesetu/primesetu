@@ -1,0 +1,95 @@
+/* base/theme-bridge.css
+ * ============================================================
+ * Smriti-OS Theme Bridge Layer
+ * Sprint B: Global Tailwind bg-white / bg-black interceptors
+ *
+ * This file intercepts the most common Tailwind utility classes
+ * that bypass the ThemeEngine and redirects them to CSS variables.
+ *
+ * Applies ONLY under dark/sleek themes — light themes retain
+ * their natural white/light surfaces.
+ * ============================================================ */
+
+/* ── Dark Themes: remap bg-white → surface token ── */
+[data-theme="DARK"] .bg-white,
+[data-theme="MODERN_SLEEK"] .bg-white,
+[data-theme="OBSIDIAN"] .bg-white,
+[data-theme="HIGH-CONTRAST"] .bg-white {
+  background-color: var(--color-surface) !important;
+}
+
+/* ── Dark Themes: remap text on white → primary text ── */
+[data-theme="DARK"] .text-black,
+[data-theme="MODERN_SLEEK"] .text-black,
+[data-theme="OBSIDIAN"] .text-black,
+[data-theme="HIGH-CONTRAST"] .text-black {
+  color: var(--color-text-primary) !important;
+}
+
+/* ── Dark Themes: remap bg-slate-50 / bg-gray-50 ── */
+[data-theme="DARK"] .bg-slate-50,
+[data-theme="DARK"] .bg-gray-50,
+[data-theme="DARK"] .bg-zinc-50,
+[data-theme="MODERN_SLEEK"] .bg-slate-50,
+[data-theme="MODERN_SLEEK"] .bg-gray-50,
+[data-theme="OBSIDIAN"] .bg-slate-50,
+[data-theme="OBSIDIAN"] .bg-gray-50 {
+  background-color: var(--surface-container-low) !important;
+}
+
+/* ── Dark Themes: remap bg-slate-100 ── */
+[data-theme="DARK"] .bg-slate-100,
+[data-theme="MODERN_SLEEK"] .bg-slate-100,
+[data-theme="OBSIDIAN"] .bg-slate-100 {
+  background-color: var(--surface-container) !important;
+}
+
+/* ── Dark Themes: remap border-white → border token ── */
+[data-theme="DARK"] .border-white,
+[data-theme="MODERN_SLEEK"] .border-white,
+[data-theme="OBSIDIAN"] .border-white,
+[data-theme="HIGH-CONTRAST"] .border-white {
+  border-color: var(--color-border) !important;
+}
+
+/* ── Dark Themes: remap text-slate-600/700/800/900 → theme text ── */
+[data-theme="DARK"] .text-slate-900,
+[data-theme="DARK"] .text-slate-800,
+[data-theme="MODERN_SLEEK"] .text-slate-900,
+[data-theme="MODERN_SLEEK"] .text-slate-800,
+[data-theme="OBSIDIAN"] .text-slate-900,
+[data-theme="OBSIDIAN"] .text-slate-800 {
+  color: var(--color-text-primary) !important;
+}
+
+[data-theme="DARK"] .text-slate-600,
+[data-theme="DARK"] .text-slate-700,
+[data-theme="MODERN_SLEEK"] .text-slate-600,
+[data-theme="MODERN_SLEEK"] .text-slate-700,
+[data-theme="OBSIDIAN"] .text-slate-600,
+[data-theme="OBSIDIAN"] .text-slate-700 {
+  color: var(--color-text-secondary) !important;
+}
+
+/* ── Dark Themes: remap border-slate-200/300 → border token ── */
+[data-theme="DARK"] .border-slate-200,
+[data-theme="DARK"] .border-slate-300,
+[data-theme="MODERN_SLEEK"] .border-slate-200,
+[data-theme="MODERN_SLEEK"] .border-slate-300,
+[data-theme="OBSIDIAN"] .border-slate-200,
+[data-theme="OBSIDIAN"] .border-slate-300 {
+  border-color: var(--color-border) !important;
+}
+
+/* ── HIGH_CONTRAST: Special overrides ── */
+[data-theme="HIGH-CONTRAST"] .bg-slate-50,
+[data-theme="HIGH-CONTRAST"] .bg-slate-100,
+[data-theme="HIGH-CONTRAST"] .bg-slate-200 {
+  background-color: #000000 !important;
+}
+
+[data-theme="HIGH-CONTRAST"] .text-slate-600,
+[data-theme="HIGH-CONTRAST"] .text-slate-500,
+[data-theme="HIGH-CONTRAST"] .text-slate-400 {
+  color: #FFFF00 !important;
+}

@@ -1,0 +1,176 @@
+﻿================================================================
+SMRITI-OS v3.0 — SKELETON CHUNK 07: API ENDPOINTS (Full Map)
+================================================================
+Base URL : VITE_BACKEND_URL or http://127.0.0.1:8000
+Prefix   : /api/v1
+Auth     : Supabase Bearer JWT (injected via Axios interceptor)
+
+─── DASHBOARD ──────────────────────────────────────────────────
+GET  /dashboard/stats               KPI: revenue, bills, SKUs, alerts
+
+─── ITEMS (Shoper9 Cascade Pipeline) ───────────────────────────
+GET    /items/                      List all items
+GET    /items/{stockno}             Get single item
+POST   /items/batch                 Batch create (S9 cascade)
+POST   /items/lookup/sync           Sync GenLookup entries
+GET    /items/captions              Field captions (S9 AcceptDisplayDtls)
+PATCH  /items/{stockno}/price       Update price
+GET    /items/{stockno}/stock-matrix Size/shade matrix
+
+─── INVENTORY ──────────────────────────────────────────────────
+GET    /inventory                   Full inventory list
+GET    /inventory/search?q=         Search items
+POST   /inventory/advanced-search   Filtered search (filters[], logic)
+GET    /inventory/alerts            Low stock alerts
+GET    /inventory/predictive        AI predictions
+GET    /inventory/predictive/{id}   Prediction for single item
+POST   /inventory/audit/sessions    Create audit session
+GET    /inventory/audit/sessions    List sessions
+GET    /inventory/audit/sessions/{id}  Get session
+POST   /inventory/audit/sessions/{id}/entries   Add audit entry
+POST   /inventory/audit/sessions/{id}/finalize  Submit audit
+POST   /inventory/bulk-update       Bulk stock update {items[]}
+POST   /barcodes/generate-internal  Generate internal barcode
+POST   /barcodes/generate-ean13     Generate EAN-13
+POST   /barcodes/print              Print barcode
+
+─── PRODUCTS (Legacy) ──────────────────────────────────────────
+POST   /products                    Create product
+PATCH  /products/{id}               Update product
+DELETE /products/{id}               Delete product
+POST   /products/bulk               Bulk create
+
+─── BILLING (POS) ──────────────────────────────────────────────
+POST   /billing/finalize            Complete sale
+GET    /billing/history             Bill history
+GET    /billing/day-end/summary     Day end KPIs
+POST   /billing/day-end/finalize    Close day
+POST   /billing/suspend             Suspend bill
+GET    /billing/suspended           List suspended bills
+POST   /billing/suspended/{id}/recall  Recall suspended bill
+DELETE /billing/suspended/{id}      Delete suspended
+GET    /billing/search/{billNo}     Search bill
+GET    /billing/slips               Quotation slips
+POST   /billing/slips               Create slip
+DELETE /billing/slips/{id}          Delete slip
+POST   /billing/slips/{id}/convert  Convert slip to bill
+GET    /billing/personnel           Sales staff list
+GET    /billing/paymodes            Payment modes
+GET    /customers/search?q=         Customer search for POS
+POST   /billing/calculate-promos    Apply promotions {cart}
+GET    /billing/draft               Get draft cart
+POST   /billing/draft               Add to draft cart
+DELETE /billing/draft/{id}          Remove from draft
+DELETE /billing/draft/clear         Clear entire draft
+
+─── PURCHASE / GRN ─────────────────────────────────────────────
+POST   /purchase/                   Create PO
+GET    /purchase/                   List POs
+POST   /purchase/grn                Process GRN
+GET    /purchase/grn/history        GRN history
+GET    /purchase/grn/{ctrlNo}/lines GRN line items
+POST   /purchase/grn/finalize       Finalize GRN
+GET    /purchase/vendors?q=         Vendor search
+
+─── CATALOGUE ──────────────────────────────────────────────────
+GET    /catalogue/partners?type=    Customers/Vendors/Staff (CUSTOMER|VENDOR|SALESSTAFF)
+GET    /catalogue/lookups?category= GenLookup (Class, SubClass, Size)
+GET    /catalogue/universal-search?q= Cross-entity search
+GET    /catalogue/partners/{id}/matrix Partner matrix
+POST   /catalogue/price-revisions/bulk Bulk price revision
+
+─── LEGACY (Shoper9 MDB Bridge) ────────────────────────────────
+GET    /legacy/tables               List all S9 tables
+GET    /legacy/{table}              Read S9 table data
+GET    /legacy/{table}/schema       Table schema
+PATCH  /legacy/{table}/{id}         Update S9 record
+POST   /legacy/{table}/bulk         Bulk upsert (alias: bulkUpsert)
+
+─── STOCK LEDGER ───────────────────────────────────────────────
+GET    /stock-ledger/transactions          All stock movements
+GET    /stock-ledger/transactions/{ctrlNo} Single transaction
+
+─── FINANCE / ACCOUNTS ─────────────────────────────────────────
+POST   /accounts/credit-notes             Issue credit note
+GET    /accounts/credit-notes/{customerId} Customer credit notes
+POST   /accounts/advances                 Receive advance payment
+GET    /accounts/gstr1/summary            GSTR-1 summary
+GET    /accounts/tally-export/xml         Tally XML export
+GET    /tally/export?start_date=&end_date= Tally export (date range)
+GET    /gstr1/export?month=&year=&fmt=    GSTR-1 export (json/csv)
+GET    /finance/till                      List tills
+POST   /finance/till                      Create till
+POST   /finance/till/{id}/open            Open till {opening_amount}
+POST   /finance/till/{id}/close           Close till
+POST   /finance/till/{id}/lift            Cash lift {amount}
+
+─── MASKS / CONFIG (Shoper9 field configuration) ────────────────
+GET    /masks/entry?trn_type=       Entry field mask
+GET    /masks/validation?trn_type=  Validation rules
+GET    /masks/hotkeys?trn_type=     Keyboard shortcuts
+GET    /masks/zone_c?trn_type=      Zone C (right panel) config
+GET    /masks/permissions?trn_type= Permission mask
+GET    /config/ui-fields/{screen}   UI field metadata
+POST   /config/ui-fields            Upsert field config
+GET    /config/print-templates      List print templates
+POST   /config/print-templates      Create print template
+GET    /config/attribute-aliases    List attribute aliases
+POST   /config/attribute-aliases    Upsert attribute alias
+
+─── WAREHOUSE ──────────────────────────────────────────────────
+GET    /warehouse/dashboard         WH KPIs
+GET    /warehouse/stores            Store list
+POST   /warehouse/transfer          Stock transfer
+POST   /warehouse/adjustment        Stock adjustment
+POST   /warehouse/bin-assignment    Bin assignment
+
+─── SECURITY / USERS ───────────────────────────────────────────
+GET    /users/                      List users
+POST   /users/                      Create user
+PUT    /users/{id}                  Update user (also: deactivate)
+GET    /users/me                    Current user profile
+GET    /security/groups             Permission groups
+POST   /security/groups             Create group
+POST   /security/assign             Assign user to group
+
+─── DEPARTMENTS ────────────────────────────────────────────────
+GET    /departments/?level=&parent_id=  List departments
+POST   /departments/                    Create department
+
+─── SCHEMES ────────────────────────────────────────────────────
+GET    /schemes                     List schemes
+POST   /schemes                     Create scheme
+
+─── HO / MULTI-STORE ───────────────────────────────────────────
+GET    /ho/status                   HO sync status
+POST   /ho/pulse                    Send pulse {data}
+POST   /ho/execute-command/{id}     Execute HO command
+POST   /ho/sync                     Trigger sync
+
+─── INTELLIGENCE / AI ──────────────────────────────────────────
+GET    /intelligence/doc            AI documentation
+GET    /intelligence/risk-summary   Risk summary
+
+─── REPORTS ────────────────────────────────────────────────────
+GET    /reports/sales-by-attribute?attribute=  Sales by attribute
+GET    /reports/sales-summary                  Sales summary
+GET    /reports/inventory-valuation            Inventory valuation
+POST   /reports/flexible/                      Flexible report {config}
+
+─── REPORTING ENGINE ───────────────────────────────────────────
+GET    /reporting/templates         List report templates
+POST   /reporting/templates         Create template
+GET    /reporting/configs           List configs
+POST   /reporting/configs           Create config
+
+─── STORE ──────────────────────────────────────────────────────
+GET    /store/settings              Store settings
+PATCH  /store/settings              Update store settings
+
+─── ONBOARDING ─────────────────────────────────────────────────
+POST   /onboarding/store            Register new store
+
+─── INTEGRATION ────────────────────────────────────────────────
+GET    /tally/export                Tally export (date filtered)
+POST   /integration/pdt-import      Import PDT file (multipart)
+================================================================

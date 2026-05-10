@@ -75,3 +75,76 @@ async def create_promo(
         .options(selectinload(PromoHeader.bill_discounts), selectinload(PromoHeader.buy_get_rules))
     )
     return result.scalar_one()
+
+
+@router.get("/{promo_id}", response_model=PromoHeaderResponse)
+async def get_promo(
+    promo_id: int,
+    db: AsyncSession = Depends(get_db),
+    current_user: CurrentUser = Depends(require_auth),
+):
+    """Get a single promotion with all rules."""
+    result = await db.execute(
+        select(PromoHeader)
+        .where(PromoHeader.id == promo_id, PromoHeader.store_id == current_user.store_id)
+        .options(selectinload(PromoHeader.bill_discounts), selectinload(PromoHeader.buy_get_rules))
+    )
+    promo = result.scalar_one_or_none()
+    if not promo:
+        raise HTTPException(status_code=404, detail="Promotion not found.")
+    return promo
+
+
+@router.patch("/{promo_id}/activate")
+async def activate_promo(
+    promo_id: int,
+    db: AsyncSession = Depends(get_db),
+    current_user: CurrentUser = Depends(require_auth),
+):
+    """Activate a promotion (HO can push live)."""
+    result = await db.execute(
+        select(PromoHeader).where(PromoHeader.id == promo_id, PromoHeader.store_id == current_user.store_id)
+    )
+    promo = result.scalar_one_or_none()
+    if not promo:
+        raise HTTPException(status_code=404, detail="Promotion not found.")
+    promo.is_active = True
+    await db.commit()
+    return {"status": "ACTIVE", "promo_code": promo.promo_code}
+
+
+@router.patch("/{promo_id}/deactivate")
+async def deactivate_promo(
+    promo_id: int,
+    db: AsyncSession = Depends(get_db),
+    current_user: CurrentUser = Depends(require_auth),
+):
+    """Deactivate / pause a promotion."""
+    result = await db.execute(
+        select(PromoHeader).where(PromoHeader.id == promo_id, PromoHeader.store_id == current_user.store_id)
+    )
+    promo = result.scalar_one_or_none()
+    if not promo:
+        raise HTTPException(status_code=404, detail="Promotion not found.")
+    promo.is_active = False
+    await db.commit()
+    return {"status": "INACTIVE", "promo_code": promo.promo_code}
+
+
+@router.delete("/{promo_id}")
+async def delete_promo(
+    promo_id: int,
+    db: AsyncSession = Depends(get_db),
+    current_user: CurrentUser = Depends(require_auth),
+):
+    """Hard delete a promotion (only if never applied to a transaction)."""
+    result = await db.execute(
+        select(PromoHeader).where(PromoHeader.id == promo_id, PromoHeader.store_id == current_user.store_id)
+    )
+    promo = result.scalar_one_or_none()
+    if not promo:
+        raise HTTPException(status_code=404, detail="Promotion not found.")
+    await db.delete(promo)
+    await db.commit()
+    return {"status": "DELETED", "promo_id": promo_id}
+

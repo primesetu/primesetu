@@ -125,6 +125,7 @@ export const api = {
     list: () => apiClient.get('/schemes').then(r => r.data),
     create: (data: any) => apiClient.post('/schemes', data).then(r => r.data),
   },
+
   ho: {
     getStatus: () => apiClient.get('/ho/status').then(r => r.data),
     pulse: (data: any) => apiClient.post('/ho/pulse', data).then(r => r.data),
@@ -232,7 +233,35 @@ export const api = {
     get: (stockno: string) => apiClient.get(`/items/${stockno}`).then(r => r.data),
     updatePrice: (stockno: string, data: any) => apiClient.patch(`/items/${stockno}/price`, data).then(r => r.data),
     getStockMatrix: (stockno: string) => apiClient.get(`/items/${stockno}/stock-matrix`).then(r => r.data),
-  }
+  },
+  tally: {
+    getStatus: () => apiClient.get('/tally/status').then(r => r.data),
+    pushBill: (billNo: string) => apiClient.post(`/tally/push/${billNo}`).then(r => r.data),
+    runSync: () => apiClient.post('/tally/sync/run').then(r => r.data),
+    gatewayHealth: (url?: string) => apiClient.get('/tally/gateway/health', { params: { gateway_url: url } }).then(r => r.data),
+  },
+  loyalty: {
+    getProfile: (partnerId: string) => apiClient.get(`/loyalty/profile/${partnerId}`).then(r => r.data),
+    search: (q: string) => apiClient.get('/loyalty/search', { params: { q } }).then(r => r.data),
+    redeem: (data: { partner_id: string; points: number; bill_total_paise: number }) => apiClient.post('/loyalty/redeem', data).then(r => r.data),
+    adjust: (data: { partner_id: string; points: number; reason: string }) => apiClient.post('/loyalty/adjust', data).then(r => r.data),
+    batchUpgrade: () => apiClient.post('/loyalty/batch-upgrade').then(r => r.data),
+    getTiers: () => apiClient.get('/loyalty/tiers').then(r => r.data),
+  },
+  whatsapp: {
+    getConfig: () => apiClient.get('/whatsapp/config').then(r => r.data),
+    updateConfig: (data: any) => apiClient.post('/whatsapp/config', data).then(r => r.data),
+    getStatus: () => apiClient.get('/whatsapp/status').then(r => r.data),
+    sendReceipt: (data: any) => apiClient.post('/whatsapp/send/receipt', data).then(r => r.data),
+    sendDayEnd: (data: any) => apiClient.post('/whatsapp/send/day-end', data).then(r => r.data),
+    sendLowStock: (data: any) => apiClient.post('/whatsapp/send/low-stock', data).then(r => r.data),
+  },
+  ecommerce: {
+    getProducts: () => apiClient.get('/ecommerce/products').then(r => r.data),
+    checkout: (data: any) => apiClient.post('/ecommerce/checkout', data).then(r => r.data),
+    getOrders: () => apiClient.get('/ecommerce/orders').then(r => r.data),
+    syncInventory: () => apiClient.post('/ecommerce/sync/inventory').then(r => r.data),
+  },
 }
 
 

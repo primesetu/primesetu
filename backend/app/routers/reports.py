@@ -25,37 +25,57 @@ router = APIRouter(prefix="/api/v1/reports", tags=["reports"])
 
 @router.get("/sales-summary")
 async def get_sales_summary(
+    start_date: Optional[str] = None,
+    end_date: Optional[str] = None,
     db: AsyncSession = Depends(get_db),
     current_user: CurrentUser = Depends(require_auth)
 ):
     """
     Sovereign Intelligence: Fetches high-level sales KPI data.
     """
+    filters = [
+        Transaction.store_id == current_user.store_id,
+        Transaction.status == "Finalized"
+    ]
+    if start_date:
+        try: filters.append(Transaction.created_at >= datetime.fromisoformat(start_date))
+        except: pass
+    if end_date:
+        try: filters.append(Transaction.created_at <= datetime.fromisoformat(end_date) + timedelta(days=1))
+        except: pass
+
     stmt_totals = (
         select(
             func.count(Transaction.id).label("bills"),
             func.sum(Transaction.net_payable).label("revenue")
         )
-        .where(and_(
-            Transaction.store_id == current_user.store_id,
-            Transaction.status == "Finalized"
-        ))
+        .where(and_(*filters))
     )
     totals_res = (await db.execute(stmt_totals)).fetchone()
     revenue = float(totals_res.revenue or 0.0) / 100.0 # Convert from Paise
     bills = int(totals_res.bills or 0)
 
     seven_days_ago = datetime.now() - timedelta(days=7)
+    trend_filters = [
+        Transaction.store_id == current_user.store_id,
+        Transaction.status == "Finalized"
+    ]
+    if start_date:
+        try: trend_filters.append(Transaction.created_at >= datetime.fromisoformat(start_date))
+        except: pass
+    elif not end_date:
+        trend_filters.append(Transaction.created_at >= seven_days_ago)
+
+    if end_date:
+        try: trend_filters.append(Transaction.created_at <= datetime.fromisoformat(end_date) + timedelta(days=1))
+        except: pass
+
     stmt_trend = (
         select(
             func.date(Transaction.created_at).label("date"),
             func.sum(Transaction.net_payable).label("amount")
         )
-        .where(and_(
-            Transaction.store_id == current_user.store_id,
-            Transaction.status == "Finalized",
-            Transaction.created_at >= seven_days_ago
-        ))
+        .where(and_(*trend_filters))
         .group_by(func.date(Transaction.created_at))
         .order_by(func.date(Transaction.created_at))
     )
@@ -71,6 +91,8 @@ async def get_sales_summary(
 @router.get("/sales-by-attribute")
 async def get_sales_by_attribute(
     attribute: str = "category", # size, colour, brand, category
+    start_date: Optional[str] = None,
+    end_date: Optional[str] = None,
     db: AsyncSession = Depends(get_db),
     current_user: CurrentUser = Depends(require_auth)
 ):
@@ -90,6 +112,17 @@ async def get_sales_by_attribute(
 
     attr_field = attr_map[attribute]
 
+    filters = [
+        Transaction.store_id == current_user.store_id,
+        Transaction.status == "Finalized"
+    ]
+    if start_date:
+        try: filters.append(Transaction.created_at >= datetime.fromisoformat(start_date))
+        except: pass
+    if end_date:
+        try: filters.append(Transaction.created_at <= datetime.fromisoformat(end_date) + timedelta(days=1))
+        except: pass
+
     stmt = (
         select(
             attr_field.label("label"),
@@ -98,10 +131,8 @@ async def get_sales_by_attribute(
         )
         .join(Itemmaster, TransactionItem.stock_no == Itemmaster.stockno)
         .join(Transaction, Transaction.id == TransactionItem.transaction_id)
-        .where(and_(
-            Transaction.store_id == current_user.store_id,
-            Transaction.status == "Finalized"
-        ))
+        .where(and_(*filters))
+
         .group_by(attr_field)
         .order_by(func.sum(TransactionItem.net_amount).desc())
     )

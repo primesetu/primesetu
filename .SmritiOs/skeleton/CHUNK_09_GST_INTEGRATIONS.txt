@@ -1,0 +1,153 @@
+﻿================================================================
+SMRITI-OS v3.0 — SKELETON CHUNK 09: GST, TALLY, WHATSAPP, ECOMMERCE
+================================================================
+
+─── MODULE 13: GST & TAX COMPLIANCE ────────────────────────────
+Coverage:
+  Multi-GSTIN support per store/branch
+  Tax: CGST, SGST, IGST, UTGST, Cess (auto-determined by transaction)
+  HSN/SAC mandatory on every item — searchable HSN master
+  GST Slabs: 0%, 5%, 12%, 18%, 28% + Cess (configurable per item)
+  Composition Scheme support
+  Reverse Charge Mechanism (RCM)
+  ITC tracking + GSTR-2A/2B reconciliation
+
+TAX DETERMINATION LOGIC:
+  Same State (Intra-state)        → CGST + SGST
+  Different State (Inter-state)   → IGST
+  Union Territory                 → CGST + UTGST
+  Unregistered Buyer (B2C)        → B2C rules, no ITC
+  Composition Dealer              → Fixed % on turnover
+  Reverse Charge Mechanism        → Buyer pays tax
+
+GST RETURNS SUPPORT:
+  GSTR-1   | Monthly/Quarterly | All sales invoices & credit notes
+  GSTR-3B  | Monthly           | Summary tax liability
+  GSTR-2A/2B | Monthly         | Purchase reconciliation
+  GSTR-9   | Annual            | Full year consolidated
+  CMP-08   | Quarterly         | Composition dealers only
+
+GST FILING METHODS:
+  GSP (GST Suvidha Provider)    → Direct API to GSTN via GSP partner
+  EaseMyGST / ClearTax          → Third-party filing platform
+  NIC Portal API                → E-invoice + E-way bill
+  Manual Export                 → JSON/Excel for offline GST portal filing
+
+─── MODULE 14: E-INVOICE & E-WAY BILL ──────────────────────────
+E-INVOICE:
+  IRN Generation   : Auto via IRP (Invoice Registration Portal)
+  QR Code          : Auto-embedded on invoice print (legally required)
+  Cancellation     : Within 24 hours via NIC API + reason logging
+  Threshold        : Above government-notified turnover limit
+  Scope            : B2B transactions only (B2C exempt)
+  Retry            : Auto retry + full error log for failed IRN
+
+E-WAY BILL:
+  Auto Generation  : GRN, inter-store transfer, sales > Rs.50,000
+  Part B Update    : Vehicle number update after generation
+  Cancellation     : Within 24 hours via API
+  Extension        : For transit delays beyond validity period
+  Bulk Generation  : Multiple invoices in one action
+  Integration      : NIC E-Way Bill API (direct portal)
+
+─── MODULE 15: TALLY SYNC ──────────────────────────────────────
+TRANSACTION SYNC FLOW:
+  Smriti OS → Tally Voucher Type
+  Sales Invoice        → Sales Voucher
+  Purchase/GRN         → Purchase Voucher
+  Payment Received     → Receipt Voucher
+  Payment Made         → Payment Voucher
+  Credit Note          → Credit Note
+  Debit Note           → Debit Note
+  Stock Journal        → Stock Journal
+  Day End Cash         → Cash Ledger Entry
+  GST Summary          → GST Ledgers
+
+SYNC METHODS:
+  Tally XML Push   : Generate Tally XML → auto import via Tally gateway
+  TallyPrime API   : Direct REST API (TallyPrime 3.0+ only)
+  CSV/Excel Export : Manual import file (older Tally ERP 9 users)
+  ODBC             : Direct DB connection (advanced/enterprise)
+
+MASTER MAPPING:
+  Customer Master  → Ledger (Sundry Debtors group)
+  Supplier Master  → Ledger (Sundry Creditors group)
+  Item Master      → Stock Item
+  Category         → Stock Group
+  Warehouse        → Godown
+  Payment Mode     → Ledger (Bank or Cash)
+  Tax Master       → Tax Ledger (GST groups)
+
+─── MODULE 16: WHATSAPP INTEGRATION ────────────────────────────
+Feature           | Trigger           | Recipient    | Detail
+Bill on WhatsApp  | After billing     | Customer     | PDF invoice immediately
+Payment Receipt   | After payment     | Customer     | Amount + balance
+Order Confirm     | New order         | Customer     | Order details
+Low Stock Alert   | Stock < minimum   | Store Mgr    | Item, qty, min level
+Day End Summary   | Day close         | Store Owner  | Sales, cash breakdown
+Scheme/Offers     | Manual/scheduled  | Customer list| Bulk promo message
+Loyalty Points    | After transaction | Customer     | Points earned + balance
+Payment Reminder  | Credit due date   | Customer     | Outstanding + due date
+GRN Alert         | Stock received    | Purchase Mgr | GRN details
+Sync Status       | Sync complete/fail| Admin        | Store name + error details
+
+BSP PROVIDERS:
+  WhatsApp Business API (Meta) | Official | Per message | Global
+  Twilio                       | Global   | Per message | Global
+  Gupshup                      | Indian   | Per message | India-specific
+  Interakt                     | Indian   | Monthly     | India, retail-focused
+  WATI                         | Indian   | Monthly     | India, easy setup
+
+─── MODULE 17: E-COMMERCE INTEGRATION (NEW in v3.0) ────────────
+Platform    | API                  | Key Sync                          | Priority
+Flipkart    | Flipkart Seller API  | Orders, inventory, returns, price | CRITICAL
+Amazon India| Amazon SP-API        | Orders, inventory, returns, FBA   | CRITICAL
+Meesho      | Meesho Supplier API  | Orders, inventory, dispatch       | HIGH
+Shopify     | Shopify REST/GraphQL | Products, orders, inventory, CRM  | HIGH
+WooCommerce | WooCommerce REST     | Products, orders, inventory       | MEDIUM
+Unicommerce | Unicommerce API      | Multi-channel order management    | MEDIUM
+
+SYNC FEATURES:
+  Inventory Sync         : Real-time stock levels → all platforms (prevents oversell)
+  Order Pull             : All platform orders → Smriti OS single fulfillment screen
+  Price Sync             : Price changes → all platforms automatically
+  Return Sync            : Platform returns → sales returns in inventory
+  Product Listing        : Create listings from Smriti OS item master
+  Dispatch Updates       : Shipment/tracking → pushed back to platforms
+  Multi-warehouse        : Route orders to nearest/specified warehouse
+  Settlement Reconcile   : Match platform settlements to Smriti OS sales
+
+ARCHITECTURE:
+  Platform Connectors   : REST API clients per platform
+  Order Queue           : Celery + Redis (async order processing)
+  Inventory Publisher   : WebSocket + Celery Beat (near real-time stock push)
+  Error Handling        : Retry queue + Sentry alerts
+  Reconciliation Engine : Custom Python module
+
+─── MODULE 18: LOYALTY & CRM (NEW in v3.0) ─────────────────────
+LOYALTY ENGINE:
+  Points Earning   : Configurable per rupee — different rates per category
+  Points Redemption: At billing — min/max redemption limits
+  Customer Tiers   : Bronze/Silver/Gold/Platinum — auto-upgrade on spend
+  Tier Benefits    : Higher earn rates, exclusive discounts, priority service
+  Bonus Events     : Double points weekends, birthdays, festivals
+  Points Expiry    : 6 months / 1 year / never (configurable)
+  Points Transfer  : Optional — between family members
+  HO Control       : Loyalty scheme defined at HO → all stores
+
+TIER STRUCTURE:
+  Bronze   | Default         | 1 pt/Rs.100   | Standard
+  Silver   | Rs.10,000/yr    | 1.5 pt/Rs.100 | Birthday bonus, early sale access
+  Gold     | Rs.50,000/yr    | 2 pt/Rs.100   | Priority service, exclusive discounts
+  Platinum | Rs.1,00,000/yr  | 3 pt/Rs.100   | VIP events, dedicated support, best rates
+
+CRM FEATURES:
+  Customer 360 View    : Full history, points, tier, prefs, comms log (all stores)
+  Purchase History     : All transactions across all stores linked to customer
+  Birthday/Anniversary : Auto WhatsApp + offer trigger on special dates
+  Win-back Campaigns   : Auto-identify lapsed customers → re-engagement offer
+  Segmentation         : By tier, spend range, category preference, location
+  Bulk Communication   : WhatsApp + SMS campaigns to segments
+  Feedback Collection  : Post-purchase WhatsApp — sentiment tracking
+  Credit Management    : Customer credit limit, outstanding, payment reminders
+================================================================

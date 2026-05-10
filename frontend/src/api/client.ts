@@ -262,6 +262,9 @@ export const api = {
     getOrders: () => apiClient.get('/ecommerce/orders').then(r => r.data),
     syncInventory: () => apiClient.post('/ecommerce/sync/inventory').then(r => r.data),
   },
+  offline: {
+    getStatus: () => apiClient.get('/offline/status').then(r => r.data),
+  },
 }
 
 

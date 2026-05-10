@@ -10,6 +10,7 @@ import { api } from '@/api/client';
 import { ClassicStartMenu, AgentToastData } from './ClassicStartMenu';
 import { useWindowManager } from '@/hooks/useWindowManager';
 import { usePopout } from '@/hooks/usePopout';
+import SyncStatusBadge from '@/components/SyncStatusBadge';
 
 const WIN_LABELS = {
   pos:      { label: 'POS',         color: '#1a3a5c' },
@@ -218,6 +219,8 @@ const SovereignDesktop: React.FC<{ onExit: () => void }> = ({ onExit }) => {
         <div className="h-[22px] w-[0.5px] bg-[#dde1e8] mx-1" />
         <div className="sov-role-pill">Business Owner / CXO</div>
         <div className="sov-topbar-right flex items-center gap-2">
+          <SyncStatusBadge />
+          <div className="h-[22px] w-[0.5px] bg-[#dde1e8] mx-1" />
           <div className="sov-user-chip">
             <div className="sov-user-av">SA</div>
             <span className="sov-user-name">System Administrator</span>

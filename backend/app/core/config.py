@@ -16,10 +16,23 @@ class Settings(BaseSettings):
     environment: str = "development"
 
     # ── HYBRID MODE DNA ──
-    # Options: "CLOUD" (Supabase) | "SOVEREIGN" (Local MSSQL)
-    storage_mode: str = "CLOUD" 
-    
-    # Legacy MSSQL Settings
+    # Options:
+    #   "CLOUD"          → Supabase / PostgreSQL (primary cloud production mode)
+    #   "SOVEREIGN"      → Local MSSQL (Shoper9 legacy bridge)
+    #   "LOCAL_POSTGRES" → Local PostgreSQL (offline/LAN mode — same engine as cloud)
+    #
+    # LOCAL_POSTGRES is the recommended offline mode. It uses an identical
+    # PostgreSQL schema locally (via asyncpg), ensuring zero type friction
+    # on sync — unlike SQLite which has loose typing and limited SQL support.
+    storage_mode: str = "CLOUD"
+
+    # ── LOCAL POSTGRES Configuration (OFFLINE mode) ──
+    # Install PostgreSQL locally: https://www.postgresql.org/download/
+    # Then create a DB: createdb smriti_local
+    local_database_url: str = "postgresql+asyncpg://postgres:postgres@localhost:5432/smriti_local"
+    offline_sync_interval: int = 30  # Seconds between cloud sync attempts
+
+    # ── Legacy MSSQL Settings ──
     mssql_server: str = "AITDL"
     mssql_database: str = "SHOPER9WH1"
     mssql_user: str = "sa"

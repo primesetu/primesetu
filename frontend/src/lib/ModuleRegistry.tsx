@@ -105,6 +105,7 @@ const CatalogueMasterWorkbench = lazy(() => import("../modules/inventory/Catalog
 const ECommerceModule = lazy(() => import("../modules/ecommerce/ECommerceModule"));
 const LoyaltyCRM = lazy(() => import("../modules/loyalty/LoyaltyCRM"));
 const WhatsAppCentre = lazy(() => import("../modules/whatsapp/WhatsAppCentre"));
+const OfflineSetupPanel = lazy(() => import("../modules/settings/OfflineSetupPanel"));
 
 
 const navigateBack = () => window.dispatchEvent(new CustomEvent("navigate", { detail: "dashboard" }));
@@ -433,6 +434,17 @@ export const MODULES: ModuleDefinition[] = [
     description: "Customer 360, Tiers, & Campaigns",
     category: "CATALOGUE",
   },
+  // ── Module 19: Offline / Local PostgreSQL Setup ───────────────────────────
+  {
+    id: "offline_setup",
+    label: "Offline DB Setup",
+    icon: Database,
+    component: <OfflineSetupPanel />,
+    roles: ["OWNER", "SUPER_ADMIN", "HO_ADMIN"],
+    showInSidebar: true,
+    description: "Local PostgreSQL engine configuration & sync monitor",
+    category: "SYSTEM",
+  },
 ];
 
 export const COMPONENT_MAP: Record<string, React.ReactNode> = {
@@ -485,6 +497,7 @@ export const COMPONENT_MAP: Record<string, React.ReactNode> = {
   architect_config: <ArchitectControlCenter />,
   spreadsheet: <SovereignSpreadsheet />,
   ecommerce: <ECommerceModule />,
+  offline_setup: <OfflineSetupPanel />,
 };
 
 export const ICON_MAP: Record<string, any> = {

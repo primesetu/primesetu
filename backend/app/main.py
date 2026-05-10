@@ -106,24 +106,39 @@ app.include_router(gstr1.router)
 
 from app.services.sync_engine import SyncEngine
 from app.services.omnichannel_sync import OmnichannelSyncEngine
+from app.services.offline_sync import offline_sync_engine
+from app.core.config import settings
 import asyncio
 
 @app.on_event("startup")
 async def startup():
     async with engine.begin() as conn:
         await conn.run_sync(Base.metadata.create_all)
-    print("[SMRITI-OS] Database connected and schema verified.")
-    
-    # Initialize Delta-Sync Engine
-    try:
-        await SyncEngine.install_sync_schema()
-        asyncio.create_task(SyncEngine.run_push_worker())
-        print("[SMRITI-OS] Delta-Sync Engine online.")
-        
-        asyncio.create_task(OmnichannelSyncEngine.run_marketplace_worker())
-        print("[SMRITI-OS] Omnichannel Marketplace Engine online.")
-    except Exception as e:
-        print(f"[SMRITI-OS] Failed to start Sync Engines: {e}")
+    print(f"[SMRITI-OS] Database connected. Mode: {settings.storage_mode}")
+
+    # ── LOCAL_POSTGRES: Initialize local PG queue ──
+    if settings.storage_mode == "LOCAL_POSTGRES":
+        await offline_sync_engine.initialize()
+        await offline_sync_engine.start()
+        print("[SMRITI-OS] Local PostgreSQL Sync Engine started.")
+
+    # ── Cloud/Sovereign: Initialize cloud sync engines ──
+    else:
+        try:
+            await SyncEngine.install_sync_schema()
+            asyncio.create_task(SyncEngine.run_push_worker())
+            print("[SMRITI-OS] Delta-Sync Engine online.")
+
+            asyncio.create_task(OmnichannelSyncEngine.run_marketplace_worker())
+            print("[SMRITI-OS] Omnichannel Marketplace Engine online.")
+        except Exception as e:
+            print(f"[SMRITI-OS] Failed to start Sync Engines: {e}")
+
+@app.on_event("shutdown")
+async def shutdown():
+    if settings.storage_mode == "LOCAL_POSTGRES":
+        await offline_sync_engine.stop()
+        print("[SMRITI-OS] Local PostgreSQL Sync Engine stopped.")
 
 @app.get("/")
 async def read_index():
@@ -145,8 +160,22 @@ async def health_check(db: AsyncSession = Depends(get_db)):
         "status": "online",
         "version": "1.0.0",
         "phase": 2,
+        "storage_mode": settings.storage_mode,
         "database": db_status
     }
+
+@app.get("/api/v1/offline/status")
+async def offline_status():
+    """Local PostgreSQL sync queue summary for the frontend status badge."""
+    if settings.storage_mode != "LOCAL_POSTGRES":
+        return {
+            "mode": settings.storage_mode,
+            "is_online": True,
+            "pending": 0,
+            "synced": 0,
+            "failed": 0,
+        }
+    return await offline_sync_engine.get_status()
 
 @app.get("/api/v1/dashboard/stats", response_model=DashboardStats)
 async def get_dashboard_stats(

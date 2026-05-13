@@ -20,3 +20,13 @@ __pycache__/
 scratch/
 
 skills/
+
+# Data dump artifacts (bulk import debug files)
+failed_batch.json
+*_batch.json
+backend/tables.json
+backend/openapi.json
+backend/mssql_shortcuts_data.json
+backend/mssql_vamenu_data.json
+backend/shoper9_activity_log.txt
+backend/trace_output.txt

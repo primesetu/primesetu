@@ -31,17 +31,22 @@ STATUS_FAILED  = "FAILED"
 # ── Sync Queue DDL (in local PostgreSQL) ────────────────────
 QUEUE_DDL = """
 CREATE TABLE IF NOT EXISTS smriti_sync_queue (
-    id          BIGSERIAL PRIMARY KEY,
-    table_name  TEXT      NOT NULL,
-    operation   TEXT      NOT NULL,   -- INSERT | UPDATE | DELETE
-    record_json JSONB     NOT NULL,   -- Changed row as JSONB (native Postgres)
-    status      TEXT      NOT NULL DEFAULT 'PENDING',
-    retry_count INT       NOT NULL DEFAULT 0,
-    created_at  TIMESTAMPTZ NOT NULL DEFAULT NOW(),
-    synced_at   TIMESTAMPTZ
+    id           BIGSERIAL PRIMARY KEY,
+    table_name   TEXT        NOT NULL,
+    operation    TEXT        NOT NULL,   -- INSERT | UPDATE | DELETE
+    record_json  JSONB       NOT NULL,   -- Changed row as JSONB (native Postgres)
+    pk_column    TEXT        NOT NULL DEFAULT 'id', -- Primary key column name for DELETE ops
+    status       TEXT        NOT NULL DEFAULT 'PENDING',
+    retry_count  INT         NOT NULL DEFAULT 0,
+    next_retry   TIMESTAMPTZ NOT NULL DEFAULT NOW(), -- Exponential backoff gate
+    created_at   TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+    synced_at    TIMESTAMPTZ
 );
-CREATE INDEX IF NOT EXISTS idx_sync_queue_status ON smriti_sync_queue (status, id);
+CREATE INDEX IF NOT EXISTS idx_sync_queue_status ON smriti_sync_queue (status, next_retry, id);
 """
+
+# Exponential backoff delays per retry attempt (seconds)
+RETRY_BACKOFF_SECS = [0, 30, 120, 300, 900]  # up to 15 min on 4th retry
 
 
 # ── Connectivity Probe ───────────────────────────────────────
@@ -109,20 +114,32 @@ class OfflineSyncEngine:
         logger.info("[OfflineSync] Local PG queue initialized.")
 
     # ── Public API ───────────────────────────────────────────
-    async def enqueue(self, table_name: str, operation: str, record: dict):
+    async def enqueue(self, table_name: str, operation: str, record: dict, pk_column: str = "id"):
         """
         Call after any local PG write to register it for cloud sync.
 
+        Args:
+            table_name: Target Supabase table name.
+            operation:  INSERT | UPDATE | DELETE
+            record:     Full row dict (for DELETE, must include pk_column value).
+            pk_column:  Primary key column name for DELETE URL construction.
+
         Example:
             await offline_sync.enqueue("smriti_sale_hdr", "INSERT", sale_dict)
+            await offline_sync.enqueue("smriti_item", "DELETE", {"sku": "XYZ"}, pk_column="sku")
         """
         async with self._local_session() as session:
             await session.execute(
                 text("""
-                    INSERT INTO smriti_sync_queue (table_name, operation, record_json)
-                    VALUES (:tbl, :op, CAST(:rec AS JSONB))
+                    INSERT INTO smriti_sync_queue (table_name, operation, record_json, pk_column)
+                    VALUES (:tbl, :op, CAST(:rec AS JSONB), :pk_col)
                 """),
-                {"tbl": table_name, "op": operation, "rec": json.dumps(record, default=str)}
+                {
+                    "tbl": table_name,
+                    "op": operation,
+                    "rec": json.dumps(record, default=str),
+                    "pk_col": pk_column,
+                }
             )
             await session.commit()
 
@@ -156,52 +173,79 @@ class OfflineSyncEngine:
 
     # ── Flush to Supabase REST ────────────────────────────────
     async def _flush_queue(self):
+        """
+        Fetch PENDING rows with FOR UPDATE SKIP LOCKED so that if two flush
+        cycles ever run concurrently (e.g. after a crash-restart overlap) they
+        never double-process the same row. The lock is held only for the
+        duration of the status update within the same transaction.
+        """
         async with self._local_session() as session:
+            # SKIP LOCKED: rows being processed by another session are skipped,
+            # preventing duplicate PK violations on the Supabase upsert.
             result = await session.execute(
                 text("""
-                    SELECT id, table_name, operation, record_json
+                    SELECT id, table_name, operation, record_json, pk_column
                     FROM smriti_sync_queue
-                    WHERE status = 'PENDING' AND retry_count < 5
+                    WHERE status = 'PENDING'
+                      AND retry_count < 5
+                      AND next_retry <= NOW()
                     ORDER BY id
                     LIMIT 100
+                    FOR UPDATE SKIP LOCKED
                 """)
             )
             rows = result.fetchall()
 
-        if not rows:
-            return
+            if not rows:
+                await session.rollback()
+                return
+
+            # Mark all selected rows as IN_PROGRESS within the same transaction
+            # so concurrent flusher sessions see them as locked.
+            ids = [r[0] for r in rows]
+            await session.execute(
+                text("UPDATE smriti_sync_queue SET status='IN_PROGRESS' WHERE id = ANY(:ids)"),
+                {"ids": ids}
+            )
+            await session.commit()
 
         logger.info(f"[OfflineSync] Flushing {len(rows)} records to Supabase...")
 
         async with httpx.AsyncClient(timeout=15) as client:
             for row in rows:
-                row_id, table, operation, record = row
+                row_id, table, operation, record, pk_column = row
                 record_dict = record if isinstance(record, dict) else json.loads(record)
 
                 try:
                     url = f"{self._cloud_base}/rest/v1/{table}"
 
                     if operation in ("INSERT", "UPDATE"):
+                        # Supabase PostgREST: Prefer merge-duplicates → safe upsert
                         resp = await client.post(url, headers=self._cloud_headers, json=record_dict)
                     elif operation == "DELETE":
-                        # Use primary key for delete — try common PK patterns
-                        pk_val = (
-                            record_dict.get("id")
-                            or record_dict.get("bill_no")
-                            or record_dict.get("sku")
-                        )
+                        # Use the registered pk_column (not a guess) for the filter
+                        pk_val = record_dict.get(pk_column)
+                        if pk_val is None:
+                            logger.warning(
+                                f"[OfflineSync] DELETE row {row_id}: pk_column '{pk_column}' "
+                                f"not found in record — skipping to avoid full-table delete."
+                            )
+                            await self._set_status(row_id, STATUS_FAILED, current_retry=0)
+                            continue
                         resp = await client.delete(
-                            f"{url}?id=eq.{pk_val}",
+                            f"{url}?{pk_column}=eq.{pk_val}",
                             headers=self._cloud_headers
                         )
                     else:
+                        logger.warning(f"[OfflineSync] Unknown operation '{operation}' for row {row_id}, skipping.")
+                        await self._set_status(row_id, STATUS_FAILED, current_retry=0)
                         continue
 
                     ok = resp.status_code in (200, 201, 204)
                     await self._set_status(row_id, STATUS_SYNCED if ok else STATUS_FAILED)
 
                     if ok:
-                        logger.debug(f"[OfflineSync] ✓ {operation} → {table} (id={row_id})")
+                        logger.debug(f"[OfflineSync] ✓ {operation} → {table} (queue_id={row_id})")
                     else:
                         logger.warning(
                             f"[OfflineSync] ✗ {operation} → {table} "
@@ -209,19 +253,41 @@ class OfflineSyncEngine:
                         )
 
                 except Exception as e:
-                    logger.error(f"[OfflineSync] Exception row {row_id}: {e}")
+                    logger.error(f"[OfflineSync] Exception queue_id={row_id}: {e}")
                     await self._set_status(row_id, STATUS_FAILED)
 
-    async def _set_status(self, row_id: int, status: str):
+    async def _set_status(self, row_id: int, status: str, current_retry: int = -1):
+        """Update row status with exponential backoff on failure."""
         async with self._local_session() as session:
             if status == STATUS_SYNCED:
                 await session.execute(
-                    text("UPDATE smriti_sync_queue SET status='SYNCED', synced_at=NOW() WHERE id=:id"),
+                    text("""
+                        UPDATE smriti_sync_queue
+                        SET status='SYNCED', synced_at=NOW()
+                        WHERE id=:id
+                    """),
                     {"id": row_id}
                 )
             else:
+                # Compute next_retry with exponential backoff
+                backoff_sql = (
+                    "NOW() + INTERVAL '" +
+                    " seconds' * LEAST(retry_count, 4) * 60"
+                )
                 await session.execute(
-                    text("UPDATE smriti_sync_queue SET status='FAILED', retry_count=retry_count+1 WHERE id=:id"),
+                    text(f"""
+                        UPDATE smriti_sync_queue
+                        SET status='PENDING',
+                            retry_count = retry_count + 1,
+                            next_retry  = CASE
+                                WHEN retry_count = 0 THEN NOW() + INTERVAL '30 seconds'
+                                WHEN retry_count = 1 THEN NOW() + INTERVAL '2 minutes'
+                                WHEN retry_count = 2 THEN NOW() + INTERVAL '5 minutes'
+                                WHEN retry_count = 3 THEN NOW() + INTERVAL '15 minutes'
+                                ELSE NOW() + INTERVAL '60 minutes'
+                            END
+                        WHERE id=:id
+                    """),
                     {"id": row_id}
                 )
             await session.commit()

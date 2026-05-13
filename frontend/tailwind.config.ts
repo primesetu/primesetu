@@ -124,12 +124,14 @@ export default {
 
       // ── Border Radius ─────────────────────────────────────
       borderRadius: {
-        'sm':   '6px',
-        'md':   '8px',
-        'lg':   '12px',
-        'xl':   '16px',
-        '2xl':  '20px',
-        '3xl':  '24px',
+        'none': '0px',
+        'sm':   '0px',
+        'md':   '0px',
+        'lg':   '0px',
+        'xl':   '0px',
+        '2xl':  '0px',
+        '3xl':  '0px',
+        'full': '9999px',
       },
 
       // ── Box Shadows (dark-mode aware) ─────────────────────

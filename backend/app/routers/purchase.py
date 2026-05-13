@@ -205,11 +205,10 @@ async def get_item_stock_ledger(
             d.batchno,
             d.gradecd,
             d.locationcd
-        FROM shoper9.stktrndtls d
-        JOIN shoper9.stktrnhdr h
+        FROM {settings.legacy_schema}.stktrndtls d
+        JOIN {settings.legacy_schema}.stktrnhdr h
             ON h.trntype = d.trntype AND h.trnctrlno = d.trnctrlno
         WHERE d.stockno = :stockno
-          AND d.docentvoidind = FALSE
         ORDER BY h.docdt DESC, d.trnctrlno DESC
         LIMIT :limit
     """)

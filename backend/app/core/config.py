@@ -24,7 +24,7 @@ class Settings(BaseSettings):
     # LOCAL_POSTGRES is the recommended offline mode. It uses an identical
     # PostgreSQL schema locally (via asyncpg), ensuring zero type friction
     # on sync — unlike SQLite which has loose typing and limited SQL support.
-    storage_mode: str = "CLOUD"
+    storage_mode: str = "LOCAL_POSTGRES"
 
     # ── LOCAL POSTGRES Configuration (OFFLINE mode) ──
     # Install PostgreSQL locally: https://www.postgresql.org/download/
@@ -38,6 +38,15 @@ class Settings(BaseSettings):
     mssql_user: str = "sa"
     mssql_password: str = "netmanthan@123"
     mssql_driver: str = "SQL Server"
+
+    # ── Legacy Schema Configuration (PostgreSQL side) ──
+    # The schema name in PostgreSQL where legacy data is mirrored.
+    # Default is 'shoper9', but can be 's9', 'legacy', etc.
+    legacy_schema: str = "shoper9"
+    
+    @property
+    def LEGACY_SCHEMA(self) -> str:
+        return self.legacy_schema
 
     class Config:
         env_file = ".env"

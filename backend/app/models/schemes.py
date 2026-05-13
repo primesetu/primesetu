@@ -40,9 +40,9 @@ class PromoBuyGet(Base):
 
     id = Column(PGUUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
     promo_id = Column(PGUUID(as_uuid=True), ForeignKey("promo_header.id", ondelete="CASCADE"), nullable=False)
-    buy_item_id = Column(PGUUID(as_uuid=True), ForeignKey("items.id"), nullable=True)
+    buy_item_id = Column(String, ForeignKey("smriti_item.sku"), nullable=True)
     buy_qty = Column(Integer, nullable=False)
-    get_item_id = Column(PGUUID(as_uuid=True), ForeignKey("items.id"), nullable=True)
+    get_item_id = Column(String, ForeignKey("smriti_item.sku"), nullable=True)
     get_qty = Column(Integer, nullable=False)
     get_disc_pct = Column(Integer, nullable=False, default=100)
     created_at = Column(DateTime(timezone=True), server_default=text("now()"), nullable=False)

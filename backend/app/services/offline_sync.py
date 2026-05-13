@@ -120,7 +120,7 @@ class OfflineSyncEngine:
             await session.execute(
                 text("""
                     INSERT INTO smriti_sync_queue (table_name, operation, record_json)
-                    VALUES (:tbl, :op, :rec::jsonb)
+                    VALUES (:tbl, :op, CAST(:rec AS JSONB))
                 """),
                 {"tbl": table_name, "op": operation, "rec": json.dumps(record, default=str)}
             )

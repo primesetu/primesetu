@@ -49,6 +49,7 @@ class Store(Base):
         String, ForeignKey("stores.id"), nullable=True
     )
     is_active: Mapped[bool] = mapped_column(Boolean, default=True)
+    tenant_id: Mapped[str] = mapped_column(String, default="SYSTEM", index=True)
 
     # TRANSFER PRICING DNA (ChainStores Parity)
     buying_factor: Mapped[float] = mapped_column(Numeric(10, 4), default=1.0000)
@@ -79,6 +80,7 @@ class User(Base):
     email: Mapped[str] = mapped_column(String, nullable=False)
     full_name: Mapped[Optional[str]] = mapped_column(String, nullable=True)
     role: Mapped[str] = mapped_column(String, default="cashier")
+    tenant_id: Mapped[str] = mapped_column(String, default="SYSTEM", index=True)
     active: Mapped[bool] = mapped_column(Boolean, default=True)
     shoper_recid: Mapped[Optional[int]] = mapped_column(
         Integer, nullable=True, index=True
@@ -105,6 +107,7 @@ class MenuItem(Base):
     tenant_id: Mapped[str] = mapped_column(String, default="SYSTEM")
     sort_order: Mapped[int] = mapped_column(Integer, default=0)
     is_active: Mapped[bool] = mapped_column(Boolean, default=True)
+    required_sysparam: Mapped[Optional[str]] = mapped_column(String, nullable=True)
     shortcut: Mapped[Optional[str]] = mapped_column(String, nullable=True)
     metadata_json: Mapped[Dict[str, Any]] = mapped_column(
         JSON, name="metadata", default={}
@@ -122,6 +125,7 @@ class SystemParameter(Base):
     int_val: Mapped[int] = mapped_column(Integer, nullable=True)
     str_val: Mapped[str] = mapped_column(String, nullable=True)
     float_val: Mapped[float] = mapped_column(Numeric(15, 2), nullable=True)
+    tenant_id: Mapped[str] = mapped_column(String, default="SYSTEM", index=True)
     created_at: Mapped[datetime] = mapped_column(DateTime, server_default=text("now()"))
 
 
@@ -129,12 +133,13 @@ class Customer(Base):
     __tablename__ = "customers"
 
     id: Mapped[uuid.UUID] = mapped_column(
-        primary_key=True, server_default=text("gen_random_uuid()")
+        UUID(as_uuid=True), primary_key=True, server_default=text("gen_random_uuid()")
     )
     mobile: Mapped[str] = mapped_column(String, unique=True)
     name: Mapped[str] = mapped_column(String, nullable=True)
     email: Mapped[str] = mapped_column(String, nullable=True)
     loyalty_points: Mapped[int] = mapped_column(Integer, default=0)
+    tenant_id: Mapped[str] = mapped_column(String, default="SYSTEM", index=True)
     shoper_recid: Mapped[Optional[int]] = mapped_column(
         Integer, nullable=True, index=True
     )
@@ -169,7 +174,7 @@ class Transaction(Base):
     __tablename__ = "transactions"
 
     id: Mapped[uuid.UUID] = mapped_column(
-        primary_key=True, server_default=text("gen_random_uuid()")
+        UUID(as_uuid=True), primary_key=True, server_default=text("gen_random_uuid()")
     )
     bill_no: Mapped[str] = mapped_column(
         String, unique=True, nullable=True
@@ -209,6 +214,7 @@ class Transaction(Base):
     external_id: Mapped[Optional[str]] = mapped_column(
         String, nullable=True, index=True
     )  # For Shoper 9 DocNo
+    tenant_id: Mapped[str] = mapped_column(String, default="SYSTEM", index=True)
     created_at: Mapped[datetime] = mapped_column(DateTime, server_default=text("now()"))
     updated_at: Mapped[datetime] = mapped_column(
         DateTime, server_default=text("now()"), onupdate=text("now()")
@@ -223,7 +229,7 @@ class TransactionItem(Base):
     __tablename__ = "transaction_items"
 
     id: Mapped[uuid.UUID] = mapped_column(
-        primary_key=True, server_default=text("gen_random_uuid()")
+        UUID(as_uuid=True), primary_key=True, server_default=text("gen_random_uuid()")
     )
     transaction_id: Mapped[uuid.UUID] = mapped_column(
         ForeignKey("transactions.id", ondelete="CASCADE")
@@ -257,7 +263,7 @@ class GeneralLookup(Base):
     __tablename__ = "general_lookup"
 
     id: Mapped[uuid.UUID] = mapped_column(
-        primary_key=True, server_default=text("gen_random_uuid()")
+        UUID(as_uuid=True), primary_key=True, server_default=text("gen_random_uuid()")
     )
     store_id: Mapped[Optional[str]] = mapped_column(
         String, ForeignKey("stores.id", ondelete="CASCADE"), nullable=True
@@ -276,7 +282,7 @@ class Department(Base):
     __tablename__ = "departments"
 
     id: Mapped[uuid.UUID] = mapped_column(
-        primary_key=True, server_default=text("gen_random_uuid()")
+        UUID(as_uuid=True), primary_key=True, server_default=text("gen_random_uuid()")
     )
     store_id: Mapped[str] = mapped_column(
         String, ForeignKey("stores.id", ondelete="CASCADE"), nullable=False
@@ -304,7 +310,7 @@ class InventoryAudit(Base):
     __tablename__ = "inventory_audits"
 
     id: Mapped[uuid.UUID] = mapped_column(
-        primary_key=True, server_default=text("gen_random_uuid()")
+        UUID(as_uuid=True), primary_key=True, server_default=text("gen_random_uuid()")
     )
     audit_no: Mapped[str] = mapped_column(String, unique=True)
     store_id: Mapped[str] = mapped_column(String, ForeignKey("stores.id"))
@@ -323,7 +329,7 @@ class InventoryAuditItem(Base):
     __tablename__ = "inventory_audit_items"
 
     id: Mapped[uuid.UUID] = mapped_column(
-        primary_key=True, server_default=text("gen_random_uuid()")
+        UUID(as_uuid=True), primary_key=True, server_default=text("gen_random_uuid()")
     )
     audit_id: Mapped[uuid.UUID] = mapped_column(
         ForeignKey("inventory_audits.id", ondelete="CASCADE")
@@ -346,7 +352,7 @@ class Partner(Base):
     __tablename__ = "partners"
 
     id: Mapped[uuid.UUID] = mapped_column(
-        primary_key=True, server_default=text("gen_random_uuid()")
+        UUID(as_uuid=True), primary_key=True, server_default=text("gen_random_uuid()")
     )
     type: Mapped[Optional[str]] = mapped_column(String, nullable=True)
     code: Mapped[Optional[str]] = mapped_column(String, nullable=True)
@@ -364,6 +370,7 @@ class Partner(Base):
     )  # SILVER, GOLD, PLATINUM
 
     is_active: Mapped[bool] = mapped_column(Boolean, default=True)
+    tenant_id: Mapped[str] = mapped_column(String, default="SYSTEM", index=True)
     external_id: Mapped[Optional[str]] = mapped_column(
         String, nullable=True, index=True
     )  # For Shoper 9 PartyId
@@ -377,7 +384,7 @@ class LoyaltyLedger(Base):
     __tablename__ = "loyalty_ledger"
 
     id: Mapped[uuid.UUID] = mapped_column(
-        primary_key=True, server_default=text("gen_random_uuid()")
+        UUID(as_uuid=True), primary_key=True, server_default=text("gen_random_uuid()")
     )
     store_id: Mapped[str] = mapped_column(
         String, ForeignKey("stores.id", ondelete="CASCADE"), nullable=False
@@ -401,7 +408,7 @@ class CreditNote(Base):
     __tablename__ = "credit_notes"
 
     id: Mapped[uuid.UUID] = mapped_column(
-        primary_key=True, server_default=text("gen_random_uuid()")
+        UUID(as_uuid=True), primary_key=True, server_default=text("gen_random_uuid()")
     )
     store_id: Mapped[str] = mapped_column(String, ForeignKey("stores.id"))
     customer_id: Mapped[uuid.UUID] = mapped_column(ForeignKey("partners.id"))

@@ -11,6 +11,7 @@
 
 import { useState, useEffect, useRef, useCallback } from 'react';
 import { api } from '@/api/client';
+import { useSovereignStore } from '@/store/useSovereignStore';
 
 export type SyncStatus = 'online' | 'syncing' | 'offline';
 
@@ -33,28 +34,30 @@ export function useNodeSync(): NodeSyncState {
   });
 
   const intervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
+  const isForcedOffline = useSovereignStore(state => state.isForcedOffline);
 
   const checkPulse = useCallback(async () => {
+    // isForcedOffline is in deps — closure is never stale
+    if (isForcedOffline) {
+      setState(prev => ({ ...prev, status: 'offline', latencyMs: null }));
+      return;
+    }
+
     const t0 = Date.now();
     try {
-      // Sovereign Pulse: Send local heartbeat and get remote commands
       const data = await api.ho.pulse({
         transaction_count: 0,
-        pending_sync_packets: 0, // Should be fetched from local DB/sync engine
+        pending_sync_packets: 0,
         last_sync_id: null
       });
 
       const latencyMs = Date.now() - t0;
-      
-      // Execute any pending remote commands
+
       if (data.commands && data.commands.length > 0) {
         console.log(`[SMRITI-OS] HO Pulse: ${data.commands.length} commands received.`);
         for (const cmd of data.commands) {
-          try {
-            await api.ho.executeCommand(cmd.id);
-          } catch (cmdErr) {
-            console.error(`[SMRITI-OS] Command ${cmd.id} execution failed:`, cmdErr);
-          }
+          try { await api.ho.executeCommand(cmd.id); }
+          catch (cmdErr) { console.error(`[SMRITI-OS] Command ${cmd.id} failed:`, cmdErr); }
         }
       }
 
@@ -68,15 +71,23 @@ export function useNodeSync(): NodeSyncState {
     } catch {
       setState(prev => ({ ...prev, status: 'offline', latencyMs: null }));
     }
-  }, []);
+  }, [isForcedOffline]); // ← isForcedOffline in deps — NO stale closure
 
   useEffect(() => {
+    if (isForcedOffline) {
+      // User chose offline — kill heartbeat, stay offline until they click Online
+      if (intervalRef.current) clearInterval(intervalRef.current);
+      setState(prev => ({ ...prev, status: 'offline', latencyMs: null }));
+      return;
+    }
+
+    // Back online — start fresh heartbeat immediately
     checkPulse();
     intervalRef.current = setInterval(checkPulse, HEARTBEAT_INTERVAL_MS);
     return () => {
       if (intervalRef.current) clearInterval(intervalRef.current);
     };
-  }, [checkPulse]);
+  }, [checkPulse, isForcedOffline]);
 
   return state;
 }

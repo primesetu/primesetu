@@ -45,6 +45,7 @@ class CurrentUser:
     store_id: str       # From user_metadata
     email: str
     role: str           # cashier | manager | admin
+    tenant_id: str = "SYSTEM" # Default to SYSTEM for legacy/sovereign
     full_name: Optional[str] = None
 
     @property
@@ -142,6 +143,7 @@ def _build_user(payload: dict) -> CurrentUser:
 
     user_id  = payload.get("sub")
     store_id = meta.get("store_id")
+    tenant_id = meta.get("tenant_id", "SYSTEM")
 
     if not user_id:
         raise HTTPException(status_code=401, detail="[SMRITI-OS] Token missing 'sub'.")
@@ -154,16 +156,36 @@ def _build_user(payload: dict) -> CurrentUser:
         store_id=store_id,
         email=payload.get("email", ""),
         role=meta.get("role", "cashier"),
+        tenant_id=tenant_id,
         full_name=meta.get("full_name"),
     )
 
 
 # .. FastAPI dependencies ......................................................
 async def require_auth(
-    credentials: HTTPAuthorizationCredentials = Depends(_bearer),
+    credentials: Optional[HTTPAuthorizationCredentials] = Depends(_bearer_optional),
     db: AsyncSession = Depends(get_db)
 ) -> CurrentUser:
-    """Dependency: any authenticated user. Raises 401 if token is missing/invalid."""
+    """Dependency: any authenticated user. Raises 401 if token is missing/invalid (except in Offline mode)."""
+    # [SMRITI OFFLINE STRATEGY]
+    # If we are running as a Sovereign Node (Offline), bypass Supabase JWT validation immediately.
+    if settings.storage_mode == "LOCAL_POSTGRES":
+        return CurrentUser(
+            user_id="00000000-0000-0000-0000-000000000000",
+            store_id="11",
+            email="offline@smriti.local",
+            role="admin",
+            tenant_id=os.environ.get("TENANT_ID", "SYSTEM"),
+            full_name="Offline Administrator"
+        )
+
+    if not credentials:
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail="[SMRITI-OS] Authentication credentials missing.",
+            headers={"WWW-Authenticate": "Bearer"},
+        )
+
     token = credentials.credentials
     payload = _decode_token(token)
     
@@ -194,6 +216,7 @@ async def require_auth(
                         store_id=user_obj.store_id,
                         email=user_obj.email,
                         role=user_obj.role,
+                        tenant_id=user_obj.tenant_id,
                         full_name=user_obj.full_name
                     )
             except Exception as db_err:

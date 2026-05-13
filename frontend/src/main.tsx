@@ -74,6 +74,8 @@ const queryClient = new QueryClient({
   },
 })
 
+import { ConnectivityGuard } from './components/common/ConnectivityGuard'
+
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
     <BrowserRouter future={{ v7_startTransition: true, v7_relativeSplatPath: true }}>
@@ -81,7 +83,9 @@ createRoot(document.getElementById('root')!).render(
         <LanguageProvider>
           <ThemeProvider>
             <F2SearchProvider>
-              <App />
+              <ConnectivityGuard>
+                <App />
+              </ConnectivityGuard>
               <GlobalF2SearchOverlay />
             </F2SearchProvider>
           </ThemeProvider>

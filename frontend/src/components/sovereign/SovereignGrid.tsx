@@ -1,7 +1,8 @@
-import React, { useState, useMemo, useCallback, useEffect } from "react";
+import React, { useMemo, useCallback, useRef, useEffect } from "react";
 import { cn } from "@/lib/utils";
 import { Trash2, DownloadCloud, CheckSquare, Square } from "lucide-react";
-import { useGridKeyboard } from "@/hooks/useGridKeyboard";
+import { AgGridReact } from "ag-grid-react";
+import type { ColDef, GridReadyEvent, CellValueChangedEvent, RowClassParams } from "ag-grid-community";
 
 export interface GridColumn {
   key: string;
@@ -16,26 +17,23 @@ export interface GridColumn {
 }
 
 interface SovereignGridProps {
-  data: Record<string, any>;
+  data: any[];
   schema: GridColumn[];
-  rowsCount: number;
-  zoomLevel: number;
-  modifiedRows: Set<number>;
-  deletedRows: Set<number>;
-  selectedRows: Set<number>;
-  setSelectedRows: (rows: Set<number>) => void;
-  validationErrors?: Record<number, boolean>;
-  onCellChange: (r: number, c: number, val: any) => void;
-  onRowDelete?: (r: number) => void;
-  onPaste?: (r: number, c: number, text: string) => void;
+  zoomLevel?: number;
+  modifiedRows: Set<string | number>;
+  deletedRows: Set<string | number>;
+  selectedRows: Set<string | number>;
+  setSelectedRows: (rows: Set<string | number>) => void;
+  validationErrors?: Record<string | number, boolean>;
+  onCellChange: (rowIndex: number, field: string, value: any, rowData: any) => void;
+  onRowDelete?: (rowIndex: number) => void;
   title?: string;
 }
 
 export const SovereignGrid = ({
   data,
   schema,
-  rowsCount,
-  zoomLevel,
+  zoomLevel = 100,
   modifiedRows,
   deletedRows,
   selectedRows,
@@ -43,468 +41,218 @@ export const SovereignGrid = ({
   validationErrors = {},
   onCellChange,
   onRowDelete,
-  onPaste,
   title = "Sheet",
 }: SovereignGridProps) => {
-  const [selectedCell, setSelectedCell] = useState<{
-    r: number;
-    c: number;
-  } | null>(null);
-  const [anchorCell, setAnchorCell] = useState<{ r: number; c: number } | null>(null);
-  const [selectionRange, setSelectionRange] = useState<{
-    r1: number;
-    c1: number;
-    r2: number;
-    c2: number;
-  } | null>(null);
-  const [nonContiguousCells, setNonContiguousCells] = useState<Set<string>>(new Set());
-  const [isDragging, setIsDragging] = useState(false);
-  const [editValue, setEditValue] = useState("");
-  const [isFillDragging, setIsFillDragging] = useState(false);
-  const [fillRange, setFillRange] = useState<{
-    r1: number;
-    c1: number;
-    r2: number;
-    c2: number;
-  } | null>(null);
+  const gridRef = useRef<AgGridReact>(null);
 
-  const getCellsInRange = (r1: number, c1: number, r2: number, c2: number) => {
-    const cells: { r: number; c: number }[] = [];
-    const minR = Math.min(r1, r2);
-    const maxR = Math.max(r1, r2);
-    const minC = Math.min(c1, c2);
-    const maxC = Math.max(c1, c2);
-    for (let r = minR; r <= maxR; r++) {
-      for (let c = minC; c <= maxC; c++) {
-        cells.push({ r, c });
+  const colDefs = useMemo<ColDef[]>(() => {
+    const defs: ColDef[] = [
+      {
+        headerName: "#",
+        valueGetter: (p) => (p.node?.rowIndex ?? 0) + 1,
+        width: 60,
+        pinned: "left",
+        editable: false,
+        suppressMovable: true,
+        headerCheckboxSelection: true,
+        checkboxSelection: true,
+        cellStyle: {
+          color: "var(--text-secondary, rgba(255,255,255,0.4))",
+          fontSize: "11px",
+          fontFamily: "var(--font-mono, monospace)",
+          textAlign: "center",
+          fontWeight: "900",
+        },
+      },
+    ];
+
+    schema.forEach((col) => {
+      const def: ColDef = {
+        field: col.key,
+        headerName: col.label,
+        width: col.width ? parseInt(col.width) : 150,
+        editable: !col.readonly,
+        sortable: true,
+        filter: true,
+        resizable: true,
+        cellStyle: (p) => {
+          let style: any = {
+            fontFamily: col.type === "number" ? "var(--font-mono, monospace)" : "inherit",
+            fontSize: "12px",
+            fontWeight: "700",
+            color: "rgba(255,255,255,0.8)",
+          };
+          if (col.readonly) {
+            style.opacity = 0.5;
+            style.fontStyle = "italic";
+            style.fontWeight = "400";
+          }
+          if (col.required && !p.value) {
+            style.borderLeft = "2px solid #ef4444";
+          }
+          if (modifiedRows.has(p.node?.rowIndex ?? -1)) {
+            style.color = "#fbbf24"; // amber-400
+          }
+          return style;
+        },
+      };
+
+      if (col.type === "number") {
+        def.type = "numericColumn";
+        def.valueFormatter = (p) =>
+          p.value == null || isNaN(p.value) ? "" : Number(p.value).toLocaleString("en-IN");
       }
-    }
-    return cells;
-  };
 
-  const [editingCell, setEditingCell] = useState<{
-    r: number;
-    c: number;
-  } | null>(null);
-
-  const startEditing = useCallback((r: number, c: number, initialChar?: string) => {
-    if (schema[c]?.readonly) return;
-    
-    // If we have a range and start typing, fill the entire range
-    if (initialChar && selectionRange) {
-      const cells = getCellsInRange(selectionRange.r1, selectionRange.c1, selectionRange.r2, selectionRange.c2);
-      cells.forEach(cell => {
-        if (!schema[cell.c].readonly) {
-          const val = schema[cell.c].type === 'number' ? Number(initialChar) : initialChar.toUpperCase();
-          onCellChange(cell.r, cell.c, val);
-        }
-      });
-      return;
-    }
-
-    setEditingCell({ r, c });
-    setEditValue(initialChar ?? data[`${r}-${c}`] ?? "");
-  }, [schema, data, selectionRange, onCellChange]);
-
-  const finishEditing = useCallback(() => {
-    if (editingCell) {
-      onCellChange(editingCell.r, editingCell.c, editValue);
-      setEditingCell(null);
-    }
-  }, [editingCell, editValue, onCellChange]);
-
-  // Export CSV Logic
-  const handleExportCSV = useCallback(() => {
-    const rowsToExport =
-      selectedRows.size > 0
-        ? Array.from(selectedRows).sort((a, b) => a - b)
-        : Array.from({ length: rowsCount }, (_, i) => i + 1).filter(
-            (r) => !deletedRows.has(r),
-          );
-
-    const headers = schema.map((col) => `"${col.label}"`).join(",");
-    const rows: string[] = [];
-
-    rowsToExport.forEach((r) => {
-      const hasData = schema.some((_, ci) => data[`${r}-${ci}`]);
-      if (!hasData) return;
-      const row = schema
-        .map((_, ci) => {
-          const val = data[`${r}-${ci}`] ?? "";
-          return `"${String(val).replace(/"/g, '""')}"`;
-        })
-        .join(",");
-      rows.push(row);
+      defs.push(def);
     });
 
-    if (rows.length === 0) return;
+    // Action column
+    defs.push({
+      headerName: "",
+      width: 60,
+      pinned: "right",
+      editable: false,
+      sortable: false,
+      filter: false,
+      cellRenderer: (p: any) => {
+        return (
+          <button
+            onClick={() => onRowDelete && onRowDelete(p.node?.rowIndex ?? -1)}
+            className="w-full h-full flex items-center justify-center text-white/20 hover:text-rose-500 transition-colors"
+          >
+            <Trash2 size={14} />
+          </button>
+        );
+      },
+    });
 
-    const csv = [headers, ...rows].join("\n");
-    const blob = new Blob([csv], { type: "text/csv;charset=utf-8;" });
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement("a");
-    a.href = url;
-    a.download = `${title.replace(/\s+/g, "_")}_${new Date().toISOString().slice(0, 10)}.csv`;
-    a.click();
-    URL.revokeObjectURL(url);
-  }, [selectedRows, rowsCount, deletedRows, schema, data, title]);
+    return defs;
+  }, [schema, modifiedRows, onRowDelete]);
 
-  // Connect Keyboard Hook
-  useGridKeyboard({
-    selectedCell,
-    setSelectedCell,
-    editingCell,
-    setEditingCell,
-    rowsCount,
-    columnsCount: schema.length,
-    startEditing,
-    finishEditing,
-    handleCellChange: (r, c, val) => {
-      // If we have a range and hit delete, clear the range
-      if (val === "" && selectionRange) {
-        const cells = getCellsInRange(selectionRange.r1, selectionRange.c1, selectionRange.r2, selectionRange.c2);
-        cells.forEach(cell => onCellChange(cell.r, cell.c, ""));
-      } else {
-        onCellChange(r, c, val);
+  const defaultColDef = useMemo<ColDef>(() => ({
+    resizable: true,
+    sortable: true,
+  }), []);
+
+  const onCellValueChanged = useCallback(
+    (e: CellValueChangedEvent) => {
+      if (e.rowIndex !== null) {
+        onCellChange(e.rowIndex, e.colDef.field!, e.newValue, e.data);
       }
     },
-    anchorCell,
-    setAnchorCell,
-    selectionRange,
-    setSelectionRange,
-    editValue
-  });
+    [onCellChange]
+  );
 
-  // Range Selection Handlers
-  const handleCellMouseDown = (r: number, c: number, e: React.MouseEvent) => {
-    if (e.button !== 0) return; // Only left click
-    
-    if (e.ctrlKey || e.metaKey) {
-      const key = `${r}-${c}`;
-      const next = new Set(nonContiguousCells);
-      if (next.has(key)) next.delete(key);
-      else next.add(key);
-      setNonContiguousCells(next);
-      return;
+  const onSelectionChanged = useCallback(() => {
+    const selectedNodes = gridRef.current?.api.getSelectedNodes();
+    if (selectedNodes) {
+      const selected = new Set<number>();
+      selectedNodes.forEach((node) => {
+        if (node.rowIndex !== null) selected.add(node.rowIndex);
+      });
+      setSelectedRows(selected);
     }
+  }, [setSelectedRows]);
 
-    setEditingCell(null);
-    setNonContiguousCells(new Set());
-    
-    if (e.shiftKey && anchorCell) {
-      setSelectionRange({ r1: anchorCell.r, c1: anchorCell.c, r2: r, c2: c });
-      setSelectedCell({ r, c });
-    } else {
-      setAnchorCell({ r, c });
-      setSelectedCell({ r, c });
-      setSelectionRange({ r1: r, c1: c, r2: r, c2: c });
-      setIsDragging(true);
-    }
-  };
-
-  const handleCellMouseEnter = (r: number, c: number) => {
-    if (isDragging && anchorCell) {
-      setSelectionRange({ r1: anchorCell.r, c1: anchorCell.c, r2: r, c2: c });
-      setSelectedCell({ r, c });
-    }
-    if (isFillDragging && selectionRange) {
-      const { r1, c1, r2, c2 } = selectionRange;
-      const maxR = Math.max(r1, r2);
-      const maxC = Math.max(c1, c2);
-      const minR = Math.min(r1, r2);
-      const minC = Math.min(c1, c2);
-
-      // Determine drag direction (vertical or horizontal)
-      if (r > maxR) {
-        setFillRange({ r1: maxR + 1, c1: minC, r2: r, c2: maxC });
-      } else if (c > maxC) {
-        setFillRange({ r1: minR, c1: maxC + 1, r2: maxR, c2: c });
-      } else {
-        setFillRange(null);
+  const getRowClass = useCallback(
+    (params: RowClassParams) => {
+      if (params.node.rowIndex !== null) {
+        if (validationErrors[params.node.rowIndex]) return "bg-rose-500/10";
+        if (modifiedRows.has(params.node.rowIndex)) return "bg-amber-500/5 border-l-2 border-amber-500";
       }
-    }
-  };
+      return "";
+    },
+    [validationErrors, modifiedRows]
+  );
 
-  const handleMouseUp = useCallback(() => {
-    if (isFillDragging && fillRange && selectionRange) {
-      const { r1, c1, r2, c2 } = selectionRange;
-      const minR = Math.min(r1, r2);
-      const maxR = Math.max(r1, r2);
-      const minC = Math.min(c1, c2);
-      const maxC = Math.max(c1, c2);
+  const handleExportCSV = useCallback(() => {
+    gridRef.current?.api.exportDataAsCsv({ fileName: `${title.replace(/ /g, "_")}_Export.csv` });
+  }, [title]);
 
-      const fr1 = fillRange.r1;
-      const fc1 = fillRange.c1;
-      const fr2 = fillRange.r2;
-      const fc2 = fillRange.c2;
-
-      const fMinR = Math.min(fr1, fr2);
-      const fMaxR = Math.max(fr1, fr2);
-      const fMinC = Math.min(fc1, fc2);
-      const fMaxC = Math.max(fc1, fc2);
-
-      const sourceWidth = maxC - minC + 1;
-      const sourceHeight = maxR - minR + 1;
-
-      for (let r = fMinR; r <= fMaxR; r++) {
-        for (let c = fMinC; c <= fMaxC; c++) {
-          // Identify source cell within selectionRange
-          // Pattern repeats
-          const sourceR = minR + ((r - fMinR) % sourceHeight);
-          const sourceC = minC + ((c - fMinC) % sourceWidth);
-          let val = data[`${sourceR}-${sourceC}`] ?? "";
-
-          // Linear increment if numbers and dragging vertically
-          if (typeof val === 'number' && sourceHeight === 1 && fMaxR > maxR) {
-             val = val + (r - maxR);
-          }
-
-          if (!schema[c].readonly) {
-            onCellChange(r, c, val);
-          }
-        }
-      }
-    }
-
-    setIsDragging(false);
-    setIsFillDragging(false);
-    setFillRange(null);
-  }, [isFillDragging, fillRange, selectionRange, data, onCellChange, schema]);
+  // Transform data to only show non-deleted rows
+  // To keep index matching, we pass the data as is, and filter by function if needed, 
+  // but to preserve index mapping for onCellChange it is easier to not filter out the array elements 
+  // but just hide them. AG-Grid has `isExternalFilterPresent` / `doesExternalFilterPass`
+  const isExternalFilterPresent = useCallback(() => deletedRows.size > 0, [deletedRows]);
+  const doesExternalFilterPass = useCallback(
+    (node: any) => {
+      return !deletedRows.has(node.rowIndex);
+    },
+    [deletedRows]
+  );
 
   useEffect(() => {
-    window.addEventListener("mouseup", handleMouseUp);
-    return () => window.removeEventListener("mouseup", handleMouseUp);
-  }, [handleMouseUp]);
+    gridRef.current?.api?.onFilterChanged();
+  }, [deletedRows]);
 
-  // Copy Range Logic
-  const handleCopy = useCallback((e: ClipboardEvent) => {
-    if (editingCell || !selectionRange) return;
-    
-    const { r1, c1, r2, c2 } = selectionRange;
-    const minR = Math.min(r1, r2);
-    const maxR = Math.max(r1, r2);
-    const minC = Math.min(c1, c2);
-    const maxC = Math.max(c1, c2);
-
-    let tsv = "";
-    for (let r = minR; r <= maxR; r++) {
-      let row = "";
-      for (let c = minC; c <= maxC; c++) {
-        row += (data[`${r}-${c}`] ?? "") + (c === maxC ? "" : "\t");
-      }
-      tsv += row + (r === maxR ? "" : "\n");
-    }
-
-    e.clipboardData?.setData("text/plain", tsv);
-    e.preventDefault();
-  }, [editingCell, selectionRange, data]);
-
-  useEffect(() => {
-    window.addEventListener("copy", handleCopy);
-    return () => window.removeEventListener("copy", handleCopy);
-  }, [handleCopy]);
-  
-  // Paste Logic
-  const handlePaste = useCallback((e: ClipboardEvent) => {
-    // Only paste if a cell is selected and we are NOT currently editing (to avoid double paste in input)
-    if (!selectedCell || editingCell) return;
-    
-    // Check if the target is NOT an input (to allow normal pasting inside editing input)
-    if (document.activeElement?.tagName === "INPUT") return;
-
-    const text = e.clipboardData?.getData("text");
-    if (text && onPaste) {
-      onPaste(selectedCell.r, selectedCell.c, text);
-      e.preventDefault();
-    }
-  }, [editingCell, selectedCell, onPaste]);
-
-  React.useEffect(() => {
-    window.addEventListener("paste", handlePaste);
-    return () => window.removeEventListener("paste", handlePaste);
-  }, [handlePaste]);
-
-  const isAllSelected =
-    selectedRows.size === rowsCount - deletedRows.size && rowsCount > 0;
+  const isAllSelected = selectedRows.size > 0 && selectedRows.size === data.length - deletedRows.size;
 
   return (
-    <div className="flex-1 min-h-0 flex flex-col bg-[var(--background-alt)]">
-      {/* Grid Toolbar */}
-      <div className="h-10 border-b border-[var(--border-subtle)] px-4 flex items-center justify-between bg-[var(--surface-container-low)] shrink-0">
+    <div className="flex-1 min-h-0 flex flex-col bg-[#020617]">
+      {/* Grid Toolbar — Glassmorphic */}
+      <div className="h-10 border-b border-white/5 px-4 flex items-center justify-between bg-[#0f172a]/80 backdrop-blur-xl shrink-0 z-30">
         <div className="flex items-center gap-4">
           <button
             onClick={() => {
-              if (isAllSelected) setSelectedRows(new Set());
-              else
-                setSelectedRows(
-                  new Set(
-                    Array.from({ length: rowsCount }, (_, i) => i + 1).filter(
-                      (r) => !deletedRows.has(r),
-                    ),
-                  ),
-                );
+              if (isAllSelected) {
+                gridRef.current?.api.deselectAll();
+              } else {
+                gridRef.current?.api.selectAllFiltered();
+              }
             }}
-            className="flex items-center gap-2 text-[10px] font-black uppercase tracking-widest text-slate-500 hover:text-primary transition-colors"
+            className="flex items-center gap-3 text-[9px] font-black uppercase tracking-widest text-white/40 hover:text-blue-400 transition-all"
           >
-            {isAllSelected ? (
-              <CheckSquare size={14} className="text-primary" />
-            ) : (
-              <Square size={14} />
-            )}
+            {isAllSelected ? <CheckSquare size={14} className="text-blue-500" /> : <Square size={14} />}
             Select All
           </button>
-          <div className="w-px h-4 bg-slate-200 dark:bg-slate-700 mx-2" />
-          <span className="text-[10px] font-black uppercase tracking-widest text-slate-400">
-            {selectedRows.size} Selected
+          <div className="w-px h-4 bg-white/5 mx-2" />
+          <span className="text-[9px] font-black uppercase tracking-[0.2em] text-white/20">
+            {selectedRows.size} SKUs Isolated
           </span>
         </div>
         <button
           onClick={handleExportCSV}
-          className="flex items-center gap-2 text-[10px] font-black uppercase tracking-widest text-emerald-600 hover:text-emerald-700 transition-colors"
+          className="flex items-center gap-2 text-[9px] font-black uppercase tracking-[0.2em] text-emerald-400/70 hover:text-emerald-400 transition-all"
         >
           <DownloadCloud size={14} />
-          Export CSV
+          Export Sovereign Ledger
         </button>
       </div>
 
-      {/* Scroll Container */}
-      <div className="flex-1 min-h-0 overflow-auto relative z-0">
-        <div style={{ zoom: `${zoomLevel}%` }}>
-          <table className="border-collapse table-fixed select-none bg-[var(--surface)] shadow-sm text-[var(--text-primary)]">
-            <thead className="sticky top-0 z-20">
-              <tr className="bg-[var(--surface-container-low)]">
-                <th className="w-12 bg-[var(--aside-bg)] text-white text-[10px] font-black uppercase tracking-[0.2em] px-4 py-3 border-r border-white/10 text-center sticky top-0 left-0 z-20">
-                  #
-                </th>
-                {schema.map((col, i) => (
-                  <th
-                    key={i}
-                    style={{ width: col.width || "150px" }}
-                    className="bg-[var(--aside-bg)] text-white text-[10px] font-black uppercase tracking-[0.2em] px-4 py-3 border-r border-white/10 text-left sticky top-0 z-10"
-                  >
-                    {col.label}
-                  </th>
-                ))}
-                <th className="w-16 border-b border-[var(--border-subtle)] p-2"></th>
-              </tr>
-            </thead>
-            <tbody>
-              {Array.from({ length: rowsCount }, (_, i) => i + 1).map((r) => {
-                if (deletedRows.has(r)) return null;
-                const isRowSelected = selectedRows.has(r);
-
-                return (
-                  <tr
-                    key={r}
-                    className={cn(
-                      "group transition-colors border-b border-[var(--border-subtle)] text-[var(--text-primary)]",
-                      validationErrors[r]
-                        ? "bg-rose-50 dark:bg-rose-900/10"
-                        : "hover:bg-[var(--surface-container-low)]",
-                      isRowSelected && "bg-[var(--primary)]/5",
-                    )}
-                  >
-                    <td
-                      onClick={() => {
-                        const newSelection = new Set(selectedRows);
-                        if (isRowSelected) newSelection.delete(r);
-                        else newSelection.add(r);
-                        setSelectedRows(newSelection);
-                      }}
-                      className={cn(
-                        "border-r border-b border-[var(--border-subtle)] p-1 text-center text-[10px] font-bold relative cursor-pointer",
-                        modifiedRows.has(r)
-                          ? "bg-amber-50 text-amber-600 border-l-4 border-l-amber-500"
-                          : "bg-[var(--surface-container-low)] text-[var(--text-tertiary)]",
-                        isRowSelected && "bg-[var(--primary)] text-white",
-                      )}
-                    >
-                      {r}
-                    </td>
-                    {schema.map((col, ci) => {
-                      const isEditing =
-                        editingCell?.r === r && editingCell?.c === ci;
-                      const isSelected =
-                        selectedCell?.r === r && selectedCell?.c === ci;
-                      const val = data[`${r}-${ci}`] ?? "";
-
-                      return (
-                        <td
-                          key={ci}
-                          onMouseDown={(e) => handleCellMouseDown(r, ci, e)}
-                          onMouseEnter={() => handleCellMouseEnter(r, ci)}
-                          onDoubleClick={() => startEditing(r, ci)}
-                          className={cn(
-                            "border-r border-b border-[var(--border-subtle)] relative p-0 cursor-cell h-8",
-                            isSelected && "ring-2 ring-inset ring-blue-500 z-20",
-                            (selectionRange && 
-                              r >= Math.min(selectionRange.r1, selectionRange.r2) && 
-                              r <= Math.max(selectionRange.r1, selectionRange.r2) &&
-                              ci >= Math.min(selectionRange.c1, selectionRange.c2) &&
-                              ci <= Math.max(selectionRange.c1, selectionRange.c2)) 
-                              ? "bg-blue-50 dark:bg-blue-900/20" 
-                              : (fillRange && 
-                                 r >= Math.min(fillRange.r1, fillRange.r2) && 
-                                 r <= Math.max(fillRange.r1, fillRange.r2) &&
-                                 ci >= Math.min(fillRange.c1, fillRange.c2) &&
-                                 ci <= Math.max(fillRange.c1, fillRange.c2))
-                                ? "bg-blue-100/50 dark:bg-blue-800/20 border-2 border-dashed border-blue-400"
-                                : nonContiguousCells.has(`${r}-${ci}`) 
-                                  ? "bg-blue-100 dark:bg-blue-800/30"
-                                  : "bg-[var(--surface)]",
-                          )}
-                        >
-                          {/* Fill Handle */}
-                          {!isEditing && selectionRange && r === Math.max(selectionRange.r1, selectionRange.r2) && ci === Math.max(selectionRange.c1, selectionRange.c2) && (
-                            <div 
-                              className="absolute bottom-[-4px] right-[-4px] w-2.5 h-2.5 bg-blue-600 border border-white z-30 cursor-crosshair shadow-sm hover:scale-125 transition-transform"
-                              onMouseDown={(e) => {
-                                e.stopPropagation();
-                                setIsFillDragging(true);
-                                setFillRange(null);
-                              }}
-                            />
-                          )}
-
-                          {isEditing ? (
-                            <input
-                              autoFocus
-                              className="absolute inset-0 w-full h-full px-3 text-sm font-bold bg-[var(--surface)] text-[var(--text-primary)] outline-none border-2 border-[var(--primary)] shadow-xl z-20"
-                              value={editValue}
-                            onChange={(e) => {
-                                const col = schema[editingCell?.c ?? 0];
-                                setEditValue(col?.type === 'number' ? e.target.value : e.target.value.toUpperCase());
-                              }}
-                              onBlur={finishEditing}
-                            />
-                          ) : (
-                             <div
-                               className={cn(
-                                 "px-3 text-[12px] font-medium truncate py-1.5 font-mono tracking-tight",
-                                 "text-[var(--text-primary)]",
-                                 col.readonly && "opacity-50 font-normal italic",
-                               )}
-                            >
-                               {typeof val === 'number' && isNaN(val) ? "0.00" : (val ?? "")}
-                            </div>
-                          )}
-                        </td>
-                      );
-                    })}
-                    <td className="border-b border-[var(--border-subtle)] text-center">
-                      <button
-                        onClick={() => onRowDelete?.(r)}
-                        className="p-2 text-[var(--text-tertiary)] hover:text-rose-500 opacity-0 group-hover:opacity-100 transition-all"
-                      >
-                        <Trash2 size={14} />
-                      </button>
-                    </td>
-                  </tr>
-                );
-              })}
-            </tbody>
-          </table>
-        </div>
+      {/* Grid Container */}
+      <div 
+        className="flex-1 min-h-0 ag-theme-alpine-dark w-full"
+        style={{
+          zoom: `${zoomLevel}%`,
+          "--ag-background-color": "transparent",
+          "--ag-header-background-color": "rgba(15, 23, 42, 0.95)",
+          "--ag-header-foreground-color": "rgba(255, 255, 255, 0.5)",
+          "--ag-odd-row-background-color": "rgba(255, 255, 255, 0.02)",
+          "--ag-row-hover-color": "rgba(59, 130, 246, 0.05)",
+          "--ag-selected-row-background-color": "rgba(59, 130, 246, 0.1)",
+          "--ag-font-family": "var(--font-primary, sans-serif)",
+          "--ag-font-size": "11px",
+          "--ag-border-color": "rgba(255, 255, 255, 0.05)",
+          "--ag-row-border-color": "rgba(255, 255, 255, 0.02)",
+          "--ag-cell-horizontal-border": "none",
+        } as React.CSSProperties}
+      >
+        <AgGridReact
+          ref={gridRef}
+          rowData={data}
+          columnDefs={colDefs}
+          defaultColDef={defaultColDef}
+          rowSelection="multiple"
+          onCellValueChanged={onCellValueChanged}
+          onSelectionChanged={onSelectionChanged}
+          getRowClass={getRowClass}
+          isExternalFilterPresent={isExternalFilterPresent}
+          doesExternalFilterPass={doesExternalFilterPass}
+          animateRows
+          enableCellTextSelection
+          suppressCellFocus={false}
+          stopEditingWhenCellsLoseFocus
+        />
       </div>
     </div>
   );

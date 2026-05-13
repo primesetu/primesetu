@@ -1,0 +1,3474 @@
+[
+    {
+        "TABLE_NAME": "AcceptDisplayDtls",
+        "COLUMN_NAME": "trntype",
+        "DATA_TYPE": "int",
+        "CHARACTER_MAXIMUM_LENGTH": null,
+        "IS_NULLABLE": "NO"
+    },
+    {
+        "TABLE_NAME": "AcceptDisplayDtls",
+        "COLUMN_NAME": "Index",
+        "DATA_TYPE": "int",
+        "CHARACTER_MAXIMUM_LENGTH": null,
+        "IS_NULLABLE": "NO"
+    },
+    {
+        "TABLE_NAME": "AcceptDisplayDtls",
+        "COLUMN_NAME": "AcptCap",
+        "DATA_TYPE": "varchar",
+        "CHARACTER_MAXIMUM_LENGTH": 50,
+        "IS_NULLABLE": "YES"
+    },
+    {
+        "TABLE_NAME": "AcceptDisplayDtls",
+        "COLUMN_NAME": "DispCap",
+        "DATA_TYPE": "varchar",
+        "CHARACTER_MAXIMUM_LENGTH": 50,
+        "IS_NULLABLE": "YES"
+    },
+    {
+        "TABLE_NAME": "AcceptDisplayDtls",
+        "COLUMN_NAME": "AcptVisible",
+        "DATA_TYPE": "bit",
+        "CHARACTER_MAXIMUM_LENGTH": null,
+        "IS_NULLABLE": "YES"
+    },
+    {
+        "TABLE_NAME": "AcceptDisplayDtls",
+        "COLUMN_NAME": "DispVisible",
+        "DATA_TYPE": "bit",
+        "CHARACTER_MAXIMUM_LENGTH": null,
+        "IS_NULLABLE": "YES"
+    },
+    {
+        "TABLE_NAME": "AcceptDisplayDtls",
+        "COLUMN_NAME": "AcptPos",
+        "DATA_TYPE": "int",
+        "CHARACTER_MAXIMUM_LENGTH": null,
+        "IS_NULLABLE": "YES"
+    },
+    {
+        "TABLE_NAME": "AcceptDisplayDtls",
+        "COLUMN_NAME": "DispPos",
+        "DATA_TYPE": "int",
+        "CHARACTER_MAXIMUM_LENGTH": null,
+        "IS_NULLABLE": "YES"
+    },
+    {
+        "TABLE_NAME": "AcceptDisplayDtls",
+        "COLUMN_NAME": "AcptDataType",
+        "DATA_TYPE": "int",
+        "CHARACTER_MAXIMUM_LENGTH": null,
+        "IS_NULLABLE": "YES"
+    },
+    {
+        "TABLE_NAME": "AcceptDisplayDtls",
+        "COLUMN_NAME": "DispDataType",
+        "DATA_TYPE": "int",
+        "CHARACTER_MAXIMUM_LENGTH": null,
+        "IS_NULLABLE": "YES"
+    },
+    {
+        "TABLE_NAME": "AcceptDisplayDtls",
+        "COLUMN_NAME": "AcptWidth",
+        "DATA_TYPE": "real",
+        "CHARACTER_MAXIMUM_LENGTH": null,
+        "IS_NULLABLE": "YES"
+    },
+    {
+        "TABLE_NAME": "AcceptDisplayDtls",
+        "COLUMN_NAME": "DispWidth",
+        "DATA_TYPE": "real",
+        "CHARACTER_MAXIMUM_LENGTH": null,
+        "IS_NULLABLE": "YES"
+    },
+    {
+        "TABLE_NAME": "AcceptDisplayDtls",
+        "COLUMN_NAME": "AcptAlign",
+        "DATA_TYPE": "int",
+        "CHARACTER_MAXIMUM_LENGTH": null,
+        "IS_NULLABLE": "YES"
+    },
+    {
+        "TABLE_NAME": "AcceptDisplayDtls",
+        "COLUMN_NAME": "DispAlign",
+        "DATA_TYPE": "int",
+        "CHARACTER_MAXIMUM_LENGTH": null,
+        "IS_NULLABLE": "YES"
+    },
+    {
+        "TABLE_NAME": "AcceptDisplayDtls",
+        "COLUMN_NAME": "AcptFontName",
+        "DATA_TYPE": "varchar",
+        "CHARACTER_MAXIMUM_LENGTH": 50,
+        "IS_NULLABLE": "YES"
+    },
+    {
+        "TABLE_NAME": "AcceptDisplayDtls",
+        "COLUMN_NAME": "DispFontName",
+        "DATA_TYPE": "varchar",
+        "CHARACTER_MAXIMUM_LENGTH": 50,
+        "IS_NULLABLE": "YES"
+    },
+    {
+        "TABLE_NAME": "AcceptDisplayDtls",
+        "COLUMN_NAME": "AcptFourColour",
+        "DATA_TYPE": "varchar",
+        "CHARACTER_MAXIMUM_LENGTH": 50,
+        "IS_NULLABLE": "YES"
+    },
+    {
+        "TABLE_NAME": "AcceptDisplayDtls",
+        "COLUMN_NAME": "DispFourColour",
+        "DATA_TYPE": "varchar",
+        "CHARACTER_MAXIMUM_LENGTH": 50,
+        "IS_NULLABLE": "YES"
+    },
+    {
+        "TABLE_NAME": "AcceptDisplayDtls",
+        "COLUMN_NAME": "AcptFontSize",
+        "DATA_TYPE": "real",
+        "CHARACTER_MAXIMUM_LENGTH": null,
+        "IS_NULLABLE": "YES"
+    },
+    {
+        "TABLE_NAME": "AcceptDisplayDtls",
+        "COLUMN_NAME": "DispFontSize",
+        "DATA_TYPE": "real",
+        "CHARACTER_MAXIMUM_LENGTH": null,
+        "IS_NULLABLE": "YES"
+    },
+    {
+        "TABLE_NAME": "AcceptDisplayDtls",
+        "COLUMN_NAME": "AcptRowHight",
+        "DATA_TYPE": "real",
+        "CHARACTER_MAXIMUM_LENGTH": null,
+        "IS_NULLABLE": "YES"
+    },
+    {
+        "TABLE_NAME": "AcceptDisplayDtls",
+        "COLUMN_NAME": "DispRowHight",
+        "DATA_TYPE": "real",
+        "CHARACTER_MAXIMUM_LENGTH": null,
+        "IS_NULLABLE": "YES"
+    },
+    {
+        "TABLE_NAME": "AcceptDisplayDtls",
+        "COLUMN_NAME": "AcptBackColour",
+        "DATA_TYPE": "varchar",
+        "CHARACTER_MAXIMUM_LENGTH": 50,
+        "IS_NULLABLE": "YES"
+    },
+    {
+        "TABLE_NAME": "AcceptDisplayDtls",
+        "COLUMN_NAME": "DispBackColour",
+        "DATA_TYPE": "varchar",
+        "CHARACTER_MAXIMUM_LENGTH": 50,
+        "IS_NULLABLE": "YES"
+    },
+    {
+        "TABLE_NAME": "AcceptDisplayDtls",
+        "COLUMN_NAME": "VAUid",
+        "DATA_TYPE": "varchar",
+        "CHARACTER_MAXIMUM_LENGTH": 32,
+        "IS_NULLABLE": "YES"
+    },
+    {
+        "TABLE_NAME": "AcceptDisplayDtls",
+        "COLUMN_NAME": "VActr",
+        "DATA_TYPE": "int",
+        "CHARACTER_MAXIMUM_LENGTH": null,
+        "IS_NULLABLE": "YES"
+    },
+    {
+        "TABLE_NAME": "AcceptDisplayDtls",
+        "COLUMN_NAME": "VATermId",
+        "DATA_TYPE": "varchar",
+        "CHARACTER_MAXIMUM_LENGTH": 32,
+        "IS_NULLABLE": "YES"
+    },
+    {
+        "TABLE_NAME": "AcceptDisplayDtls",
+        "COLUMN_NAME": "VACompCode",
+        "DATA_TYPE": "varchar",
+        "CHARACTER_MAXIMUM_LENGTH": 16,
+        "IS_NULLABLE": "YES"
+    },
+    {
+        "TABLE_NAME": "AcceptDisplayDtls",
+        "COLUMN_NAME": "columnName",
+        "DATA_TYPE": "varchar",
+        "CHARACTER_MAXIMUM_LENGTH": 50,
+        "IS_NULLABLE": "YES"
+    },
+    {
+        "TABLE_NAME": "AcceptDisplayDtls",
+        "COLUMN_NAME": "FieldInd",
+        "DATA_TYPE": "int",
+        "CHARACTER_MAXIMUM_LENGTH": null,
+        "IS_NULLABLE": "YES"
+    },
+    {
+        "TABLE_NAME": "AcceptDisplayDtls",
+        "COLUMN_NAME": "CustmTableName",
+        "DATA_TYPE": "varchar",
+        "CHARACTER_MAXIMUM_LENGTH": 64,
+        "IS_NULLABLE": "YES"
+    },
+    {
+        "TABLE_NAME": "AcceptDisplayDtls",
+        "COLUMN_NAME": "LinkId",
+        "DATA_TYPE": "int",
+        "CHARACTER_MAXIMUM_LENGTH": null,
+        "IS_NULLABLE": "YES"
+    },
+    {
+        "TABLE_NAME": "AcceptDisplayDtls",
+        "COLUMN_NAME": "AcptFontBold",
+        "DATA_TYPE": "bit",
+        "CHARACTER_MAXIMUM_LENGTH": null,
+        "IS_NULLABLE": "YES"
+    },
+    {
+        "TABLE_NAME": "AcceptDisplayDtls",
+        "COLUMN_NAME": "DispFontBold",
+        "DATA_TYPE": "bit",
+        "CHARACTER_MAXIMUM_LENGTH": null,
+        "IS_NULLABLE": "YES"
+    },
+    {
+        "TABLE_NAME": "ItemMaster",
+        "COLUMN_NAME": "StockNo",
+        "DATA_TYPE": "varchar",
+        "CHARACTER_MAXIMUM_LENGTH": 32,
+        "IS_NULLABLE": "NO"
+    },
+    {
+        "TABLE_NAME": "ItemMaster",
+        "COLUMN_NAME": "BatchSrlNo",
+        "DATA_TYPE": "varchar",
+        "CHARACTER_MAXIMUM_LENGTH": 16,
+        "IS_NULLABLE": "NO"
+    },
+    {
+        "TABLE_NAME": "ItemMaster",
+        "COLUMN_NAME": "Class1Cd",
+        "DATA_TYPE": "varchar",
+        "CHARACTER_MAXIMUM_LENGTH": 16,
+        "IS_NULLABLE": "YES"
+    },
+    {
+        "TABLE_NAME": "ItemMaster",
+        "COLUMN_NAME": "Class2Cd",
+        "DATA_TYPE": "varchar",
+        "CHARACTER_MAXIMUM_LENGTH": 16,
+        "IS_NULLABLE": "YES"
+    },
+    {
+        "TABLE_NAME": "ItemMaster",
+        "COLUMN_NAME": "SubClass1Cd",
+        "DATA_TYPE": "varchar",
+        "CHARACTER_MAXIMUM_LENGTH": 16,
+        "IS_NULLABLE": "YES"
+    },
+    {
+        "TABLE_NAME": "ItemMaster",
+        "COLUMN_NAME": "SubClass2Cd",
+        "DATA_TYPE": "varchar",
+        "CHARACTER_MAXIMUM_LENGTH": 16,
+        "IS_NULLABLE": "YES"
+    },
+    {
+        "TABLE_NAME": "ItemMaster",
+        "COLUMN_NAME": "SizeCd",
+        "DATA_TYPE": "varchar",
+        "CHARACTER_MAXIMUM_LENGTH": 16,
+        "IS_NULLABLE": "YES"
+    },
+    {
+        "TABLE_NAME": "ItemMaster",
+        "COLUMN_NAME": "LeastSalableQty",
+        "DATA_TYPE": "money",
+        "CHARACTER_MAXIMUM_LENGTH": null,
+        "IS_NULLABLE": "YES"
+    },
+    {
+        "TABLE_NAME": "ItemMaster",
+        "COLUMN_NAME": "UseJwlPricing",
+        "DATA_TYPE": "bit",
+        "CHARACTER_MAXIMUM_LENGTH": null,
+        "IS_NULLABLE": "YES"
+    },
+    {
+        "TABLE_NAME": "ItemMaster",
+        "COLUMN_NAME": "Retail_Price",
+        "DATA_TYPE": "money",
+        "CHARACTER_MAXIMUM_LENGTH": null,
+        "IS_NULLABLE": "YES"
+    },
+    {
+        "TABLE_NAME": "ItemMaster",
+        "COLUMN_NAME": "Dealer_Price",
+        "DATA_TYPE": "money",
+        "CHARACTER_MAXIMUM_LENGTH": null,
+        "IS_NULLABLE": "YES"
+    },
+    {
+        "TABLE_NAME": "ItemMaster",
+        "COLUMN_NAME": "ProdTaxType",
+        "DATA_TYPE": "varchar",
+        "CHARACTER_MAXIMUM_LENGTH": 16,
+        "IS_NULLABLE": "YES"
+    },
+    {
+        "TABLE_NAME": "ItemMaster",
+        "COLUMN_NAME": "SrcTaxType",
+        "DATA_TYPE": "varchar",
+        "CHARACTER_MAXIMUM_LENGTH": 16,
+        "IS_NULLABLE": "YES"
+    },
+    {
+        "TABLE_NAME": "ItemMaster",
+        "COLUMN_NAME": "IsInventoryItem",
+        "DATA_TYPE": "bit",
+        "CHARACTER_MAXIMUM_LENGTH": null,
+        "IS_NULLABLE": "YES"
+    },
+    {
+        "TABLE_NAME": "ItemMaster",
+        "COLUMN_NAME": "IsRPTaxInclusive",
+        "DATA_TYPE": "bit",
+        "CHARACTER_MAXIMUM_LENGTH": null,
+        "IS_NULLABLE": "YES"
+    },
+    {
+        "TABLE_NAME": "ItemMaster",
+        "COLUMN_NAME": "ItemDesc",
+        "DATA_TYPE": "varchar",
+        "CHARACTER_MAXIMUM_LENGTH": 60,
+        "IS_NULLABLE": "YES"
+    },
+    {
+        "TABLE_NAME": "ItemMaster",
+        "COLUMN_NAME": "ExtDescPresent",
+        "DATA_TYPE": "bit",
+        "CHARACTER_MAXIMUM_LENGTH": null,
+        "IS_NULLABLE": "YES"
+    },
+    {
+        "TABLE_NAME": "ItemMaster",
+        "COLUMN_NAME": "RegularInd",
+        "DATA_TYPE": "varchar",
+        "CHARACTER_MAXIMUM_LENGTH": 2,
+        "IS_NULLABLE": "YES"
+    },
+    {
+        "TABLE_NAME": "ItemMaster",
+        "COLUMN_NAME": "ReordLvl",
+        "DATA_TYPE": "real",
+        "CHARACTER_MAXIMUM_LENGTH": null,
+        "IS_NULLABLE": "YES"
+    },
+    {
+        "TABLE_NAME": "ItemMaster",
+        "COLUMN_NAME": "EOQ",
+        "DATA_TYPE": "real",
+        "CHARACTER_MAXIMUM_LENGTH": null,
+        "IS_NULLABLE": "YES"
+    },
+    {
+        "TABLE_NAME": "ItemMaster",
+        "COLUMN_NAME": "MinOrdQty",
+        "DATA_TYPE": "real",
+        "CHARACTER_MAXIMUM_LENGTH": null,
+        "IS_NULLABLE": "YES"
+    },
+    {
+        "TABLE_NAME": "ItemMaster",
+        "COLUMN_NAME": "LastPurchPrice",
+        "DATA_TYPE": "money",
+        "CHARACTER_MAXIMUM_LENGTH": null,
+        "IS_NULLABLE": "YES"
+    },
+    {
+        "TABLE_NAME": "ItemMaster",
+        "COLUMN_NAME": "CurrentCost",
+        "DATA_TYPE": "money",
+        "CHARACTER_MAXIMUM_LENGTH": null,
+        "IS_NULLABLE": "YES"
+    },
+    {
+        "TABLE_NAME": "ItemMaster",
+        "COLUMN_NAME": "JwlMetalInd",
+        "DATA_TYPE": "varchar",
+        "CHARACTER_MAXIMUM_LENGTH": 2,
+        "IS_NULLABLE": "YES"
+    },
+    {
+        "TABLE_NAME": "ItemMaster",
+        "COLUMN_NAME": "JwlCaratage",
+        "DATA_TYPE": "int",
+        "CHARACTER_MAXIMUM_LENGTH": null,
+        "IS_NULLABLE": "YES"
+    },
+    {
+        "TABLE_NAME": "ItemMaster",
+        "COLUMN_NAME": "JwlGrossWt",
+        "DATA_TYPE": "real",
+        "CHARACTER_MAXIMUM_LENGTH": null,
+        "IS_NULLABLE": "YES"
+    },
+    {
+        "TABLE_NAME": "ItemMaster",
+        "COLUMN_NAME": "JwlStoneWt",
+        "DATA_TYPE": "real",
+        "CHARACTER_MAXIMUM_LENGTH": null,
+        "IS_NULLABLE": "YES"
+    },
+    {
+        "TABLE_NAME": "ItemMaster",
+        "COLUMN_NAME": "JwlWtFactor",
+        "DATA_TYPE": "real",
+        "CHARACTER_MAXIMUM_LENGTH": null,
+        "IS_NULLABLE": "YES"
+    },
+    {
+        "TABLE_NAME": "ItemMaster",
+        "COLUMN_NAME": "JwlRateFactor",
+        "DATA_TYPE": "money",
+        "CHARACTER_MAXIMUM_LENGTH": null,
+        "IS_NULLABLE": "YES"
+    },
+    {
+        "TABLE_NAME": "ItemMaster",
+        "COLUMN_NAME": "JwlStoneVal",
+        "DATA_TYPE": "money",
+        "CHARACTER_MAXIMUM_LENGTH": null,
+        "IS_NULLABLE": "YES"
+    },
+    {
+        "TABLE_NAME": "ItemMaster",
+        "COLUMN_NAME": "JwlMakeCharge",
+        "DATA_TYPE": "money",
+        "CHARACTER_MAXIMUM_LENGTH": null,
+        "IS_NULLABLE": "YES"
+    },
+    {
+        "TABLE_NAME": "ItemMaster",
+        "COLUMN_NAME": "JwlValFactor",
+        "DATA_TYPE": "money",
+        "CHARACTER_MAXIMUM_LENGTH": null,
+        "IS_NULLABLE": "YES"
+    },
+    {
+        "TABLE_NAME": "ItemMaster",
+        "COLUMN_NAME": "AnalCode1",
+        "DATA_TYPE": "varchar",
+        "CHARACTER_MAXIMUM_LENGTH": 16,
+        "IS_NULLABLE": "YES"
+    },
+    {
+        "TABLE_NAME": "ItemMaster",
+        "COLUMN_NAME": "AnalCode2",
+        "DATA_TYPE": "varchar",
+        "CHARACTER_MAXIMUM_LENGTH": 16,
+        "IS_NULLABLE": "YES"
+    },
+    {
+        "TABLE_NAME": "ItemMaster",
+        "COLUMN_NAME": "AnalCode3",
+        "DATA_TYPE": "varchar",
+        "CHARACTER_MAXIMUM_LENGTH": 16,
+        "IS_NULLABLE": "YES"
+    },
+    {
+        "TABLE_NAME": "ItemMaster",
+        "COLUMN_NAME": "AnalCode4",
+        "DATA_TYPE": "varchar",
+        "CHARACTER_MAXIMUM_LENGTH": 16,
+        "IS_NULLABLE": "YES"
+    },
+    {
+        "TABLE_NAME": "ItemMaster",
+        "COLUMN_NAME": "AnalCode5",
+        "DATA_TYPE": "varchar",
+        "CHARACTER_MAXIMUM_LENGTH": 16,
+        "IS_NULLABLE": "YES"
+    },
+    {
+        "TABLE_NAME": "ItemMaster",
+        "COLUMN_NAME": "AnalCode6",
+        "DATA_TYPE": "varchar",
+        "CHARACTER_MAXIMUM_LENGTH": 16,
+        "IS_NULLABLE": "YES"
+    },
+    {
+        "TABLE_NAME": "ItemMaster",
+        "COLUMN_NAME": "AnalCode7",
+        "DATA_TYPE": "varchar",
+        "CHARACTER_MAXIMUM_LENGTH": 16,
+        "IS_NULLABLE": "YES"
+    },
+    {
+        "TABLE_NAME": "ItemMaster",
+        "COLUMN_NAME": "AnalCode8",
+        "DATA_TYPE": "varchar",
+        "CHARACTER_MAXIMUM_LENGTH": 16,
+        "IS_NULLABLE": "YES"
+    },
+    {
+        "TABLE_NAME": "ItemMaster",
+        "COLUMN_NAME": "AnalCode9",
+        "DATA_TYPE": "varchar",
+        "CHARACTER_MAXIMUM_LENGTH": 16,
+        "IS_NULLABLE": "YES"
+    },
+    {
+        "TABLE_NAME": "ItemMaster",
+        "COLUMN_NAME": "AnalCode10",
+        "DATA_TYPE": "varchar",
+        "CHARACTER_MAXIMUM_LENGTH": 16,
+        "IS_NULLABLE": "YES"
+    },
+    {
+        "TABLE_NAME": "ItemMaster",
+        "COLUMN_NAME": "AnalCode11",
+        "DATA_TYPE": "varchar",
+        "CHARACTER_MAXIMUM_LENGTH": 16,
+        "IS_NULLABLE": "YES"
+    },
+    {
+        "TABLE_NAME": "ItemMaster",
+        "COLUMN_NAME": "AnalCode12",
+        "DATA_TYPE": "varchar",
+        "CHARACTER_MAXIMUM_LENGTH": 16,
+        "IS_NULLABLE": "YES"
+    },
+    {
+        "TABLE_NAME": "ItemMaster",
+        "COLUMN_NAME": "AnalCode13",
+        "DATA_TYPE": "varchar",
+        "CHARACTER_MAXIMUM_LENGTH": 16,
+        "IS_NULLABLE": "YES"
+    },
+    {
+        "TABLE_NAME": "ItemMaster",
+        "COLUMN_NAME": "AnalCode14",
+        "DATA_TYPE": "varchar",
+        "CHARACTER_MAXIMUM_LENGTH": 16,
+        "IS_NULLABLE": "YES"
+    },
+    {
+        "TABLE_NAME": "ItemMaster",
+        "COLUMN_NAME": "AnalCode15",
+        "DATA_TYPE": "varchar",
+        "CHARACTER_MAXIMUM_LENGTH": 16,
+        "IS_NULLABLE": "YES"
+    },
+    {
+        "TABLE_NAME": "ItemMaster",
+        "COLUMN_NAME": "AnalCode16",
+        "DATA_TYPE": "varchar",
+        "CHARACTER_MAXIMUM_LENGTH": 16,
+        "IS_NULLABLE": "YES"
+    },
+    {
+        "TABLE_NAME": "ItemMaster",
+        "COLUMN_NAME": "AnalCode17",
+        "DATA_TYPE": "varchar",
+        "CHARACTER_MAXIMUM_LENGTH": 16,
+        "IS_NULLABLE": "YES"
+    },
+    {
+        "TABLE_NAME": "ItemMaster",
+        "COLUMN_NAME": "AnalCode18",
+        "DATA_TYPE": "varchar",
+        "CHARACTER_MAXIMUM_LENGTH": 16,
+        "IS_NULLABLE": "YES"
+    },
+    {
+        "TABLE_NAME": "ItemMaster",
+        "COLUMN_NAME": "AnalCode19",
+        "DATA_TYPE": "varchar",
+        "CHARACTER_MAXIMUM_LENGTH": 16,
+        "IS_NULLABLE": "YES"
+    },
+    {
+        "TABLE_NAME": "ItemMaster",
+        "COLUMN_NAME": "AnalCode20",
+        "DATA_TYPE": "varchar",
+        "CHARACTER_MAXIMUM_LENGTH": 16,
+        "IS_NULLABLE": "YES"
+    },
+    {
+        "TABLE_NAME": "ItemMaster",
+        "COLUMN_NAME": "AnalCode21",
+        "DATA_TYPE": "varchar",
+        "CHARACTER_MAXIMUM_LENGTH": 16,
+        "IS_NULLABLE": "YES"
+    },
+    {
+        "TABLE_NAME": "ItemMaster",
+        "COLUMN_NAME": "AnalCode22",
+        "DATA_TYPE": "varchar",
+        "CHARACTER_MAXIMUM_LENGTH": 16,
+        "IS_NULLABLE": "YES"
+    },
+    {
+        "TABLE_NAME": "ItemMaster",
+        "COLUMN_NAME": "AnalCode23",
+        "DATA_TYPE": "varchar",
+        "CHARACTER_MAXIMUM_LENGTH": 16,
+        "IS_NULLABLE": "YES"
+    },
+    {
+        "TABLE_NAME": "ItemMaster",
+        "COLUMN_NAME": "AnalCode24",
+        "DATA_TYPE": "varchar",
+        "CHARACTER_MAXIMUM_LENGTH": 16,
+        "IS_NULLABLE": "YES"
+    },
+    {
+        "TABLE_NAME": "ItemMaster",
+        "COLUMN_NAME": "AnalCode25",
+        "DATA_TYPE": "varchar",
+        "CHARACTER_MAXIMUM_LENGTH": 16,
+        "IS_NULLABLE": "YES"
+    },
+    {
+        "TABLE_NAME": "ItemMaster",
+        "COLUMN_NAME": "AnalCode26",
+        "DATA_TYPE": "varchar",
+        "CHARACTER_MAXIMUM_LENGTH": 16,
+        "IS_NULLABLE": "YES"
+    },
+    {
+        "TABLE_NAME": "ItemMaster",
+        "COLUMN_NAME": "AnalCode27",
+        "DATA_TYPE": "varchar",
+        "CHARACTER_MAXIMUM_LENGTH": 16,
+        "IS_NULLABLE": "YES"
+    },
+    {
+        "TABLE_NAME": "ItemMaster",
+        "COLUMN_NAME": "AnalCode28",
+        "DATA_TYPE": "varchar",
+        "CHARACTER_MAXIMUM_LENGTH": 16,
+        "IS_NULLABLE": "YES"
+    },
+    {
+        "TABLE_NAME": "ItemMaster",
+        "COLUMN_NAME": "AnalCode29",
+        "DATA_TYPE": "varchar",
+        "CHARACTER_MAXIMUM_LENGTH": 16,
+        "IS_NULLABLE": "YES"
+    },
+    {
+        "TABLE_NAME": "ItemMaster",
+        "COLUMN_NAME": "AnalCode30",
+        "DATA_TYPE": "varchar",
+        "CHARACTER_MAXIMUM_LENGTH": 16,
+        "IS_NULLABLE": "YES"
+    },
+    {
+        "TABLE_NAME": "ItemMaster",
+        "COLUMN_NAME": "AnalCode31",
+        "DATA_TYPE": "varchar",
+        "CHARACTER_MAXIMUM_LENGTH": 16,
+        "IS_NULLABLE": "YES"
+    },
+    {
+        "TABLE_NAME": "ItemMaster",
+        "COLUMN_NAME": "AnalCode32",
+        "DATA_TYPE": "varchar",
+        "CHARACTER_MAXIMUM_LENGTH": 16,
+        "IS_NULLABLE": "YES"
+    },
+    {
+        "TABLE_NAME": "ItemMaster",
+        "COLUMN_NAME": "MfgDate",
+        "DATA_TYPE": "datetime",
+        "CHARACTER_MAXIMUM_LENGTH": null,
+        "IS_NULLABLE": "YES"
+    },
+    {
+        "TABLE_NAME": "ItemMaster",
+        "COLUMN_NAME": "ExpDate",
+        "DATA_TYPE": "datetime",
+        "CHARACTER_MAXIMUM_LENGTH": null,
+        "IS_NULLABLE": "YES"
+    },
+    {
+        "TABLE_NAME": "ItemMaster",
+        "COLUMN_NAME": "ShelfLife",
+        "DATA_TYPE": "int",
+        "CHARACTER_MAXIMUM_LENGTH": null,
+        "IS_NULLABLE": "YES"
+    },
+    {
+        "TABLE_NAME": "ItemMaster",
+        "COLUMN_NAME": "ImagePresent",
+        "DATA_TYPE": "bit",
+        "CHARACTER_MAXIMUM_LENGTH": null,
+        "IS_NULLABLE": "YES"
+    },
+    {
+        "TABLE_NAME": "ItemMaster",
+        "COLUMN_NAME": "IsBillable",
+        "DATA_TYPE": "bit",
+        "CHARACTER_MAXIMUM_LENGTH": null,
+        "IS_NULLABLE": "YES"
+    },
+    {
+        "TABLE_NAME": "ItemMaster",
+        "COLUMN_NAME": "IsService",
+        "DATA_TYPE": "bit",
+        "CHARACTER_MAXIMUM_LENGTH": null,
+        "IS_NULLABLE": "YES"
+    },
+    {
+        "TABLE_NAME": "ItemMaster",
+        "COLUMN_NAME": "RtlMarkUp",
+        "DATA_TYPE": "money",
+        "CHARACTER_MAXIMUM_LENGTH": null,
+        "IS_NULLABLE": "YES"
+    },
+    {
+        "TABLE_NAME": "ItemMaster",
+        "COLUMN_NAME": "DlrMarkUp",
+        "DATA_TYPE": "money",
+        "CHARACTER_MAXIMUM_LENGTH": null,
+        "IS_NULLABLE": "YES"
+    },
+    {
+        "TABLE_NAME": "ItemMaster",
+        "COLUMN_NAME": "VAUid",
+        "DATA_TYPE": "varchar",
+        "CHARACTER_MAXIMUM_LENGTH": 32,
+        "IS_NULLABLE": "YES"
+    },
+    {
+        "TABLE_NAME": "ItemMaster",
+        "COLUMN_NAME": "VActr",
+        "DATA_TYPE": "int",
+        "CHARACTER_MAXIMUM_LENGTH": null,
+        "IS_NULLABLE": "YES"
+    },
+    {
+        "TABLE_NAME": "ItemMaster",
+        "COLUMN_NAME": "VATermId",
+        "DATA_TYPE": "varchar",
+        "CHARACTER_MAXIMUM_LENGTH": 32,
+        "IS_NULLABLE": "YES"
+    },
+    {
+        "TABLE_NAME": "ItemMaster",
+        "COLUMN_NAME": "VACompCode",
+        "DATA_TYPE": "varchar",
+        "CHARACTER_MAXIMUM_LENGTH": 16,
+        "IS_NULLABLE": "YES"
+    },
+    {
+        "TABLE_NAME": "ItemMaster",
+        "COLUMN_NAME": "CCStockNo",
+        "DATA_TYPE": "varchar",
+        "CHARACTER_MAXIMUM_LENGTH": 40,
+        "IS_NULLABLE": "YES"
+    },
+    {
+        "TABLE_NAME": "ItemMaster",
+        "COLUMN_NAME": "GradeCd",
+        "DATA_TYPE": "varchar",
+        "CHARACTER_MAXIMUM_LENGTH": 16,
+        "IS_NULLABLE": "YES"
+    },
+    {
+        "TABLE_NAME": "ItemMaster",
+        "COLUMN_NAME": "ImageID",
+        "DATA_TYPE": "varchar",
+        "CHARACTER_MAXIMUM_LENGTH": 256,
+        "IS_NULLABLE": "YES"
+    },
+    {
+        "TABLE_NAME": "ItemMaster",
+        "COLUMN_NAME": "SField1",
+        "DATA_TYPE": "varchar",
+        "CHARACTER_MAXIMUM_LENGTH": 8,
+        "IS_NULLABLE": "YES"
+    },
+    {
+        "TABLE_NAME": "ItemMaster",
+        "COLUMN_NAME": "SField2",
+        "DATA_TYPE": "varchar",
+        "CHARACTER_MAXIMUM_LENGTH": 8,
+        "IS_NULLABLE": "YES"
+    },
+    {
+        "TABLE_NAME": "ItemMaster",
+        "COLUMN_NAME": "SField3",
+        "DATA_TYPE": "varchar",
+        "CHARACTER_MAXIMUM_LENGTH": 8,
+        "IS_NULLABLE": "YES"
+    },
+    {
+        "TABLE_NAME": "ItemMaster",
+        "COLUMN_NAME": "SField4",
+        "DATA_TYPE": "varchar",
+        "CHARACTER_MAXIMUM_LENGTH": 8,
+        "IS_NULLABLE": "YES"
+    },
+    {
+        "TABLE_NAME": "ItemMaster",
+        "COLUMN_NAME": "SField5",
+        "DATA_TYPE": "varchar",
+        "CHARACTER_MAXIMUM_LENGTH": 8,
+        "IS_NULLABLE": "YES"
+    },
+    {
+        "TABLE_NAME": "ItemMaster",
+        "COLUMN_NAME": "NField1",
+        "DATA_TYPE": "int",
+        "CHARACTER_MAXIMUM_LENGTH": null,
+        "IS_NULLABLE": "YES"
+    },
+    {
+        "TABLE_NAME": "ItemMaster",
+        "COLUMN_NAME": "NField2",
+        "DATA_TYPE": "int",
+        "CHARACTER_MAXIMUM_LENGTH": null,
+        "IS_NULLABLE": "YES"
+    },
+    {
+        "TABLE_NAME": "ItemMaster",
+        "COLUMN_NAME": "NField3",
+        "DATA_TYPE": "int",
+        "CHARACTER_MAXIMUM_LENGTH": null,
+        "IS_NULLABLE": "YES"
+    },
+    {
+        "TABLE_NAME": "ItemMaster",
+        "COLUMN_NAME": "NField4",
+        "DATA_TYPE": "int",
+        "CHARACTER_MAXIMUM_LENGTH": null,
+        "IS_NULLABLE": "YES"
+    },
+    {
+        "TABLE_NAME": "ItemMaster",
+        "COLUMN_NAME": "NField5",
+        "DATA_TYPE": "int",
+        "CHARACTER_MAXIMUM_LENGTH": null,
+        "IS_NULLABLE": "YES"
+    },
+    {
+        "TABLE_NAME": "ItemMaster",
+        "COLUMN_NAME": "DField1",
+        "DATA_TYPE": "datetime",
+        "CHARACTER_MAXIMUM_LENGTH": null,
+        "IS_NULLABLE": "YES"
+    },
+    {
+        "TABLE_NAME": "ItemMaster",
+        "COLUMN_NAME": "DField2",
+        "DATA_TYPE": "datetime",
+        "CHARACTER_MAXIMUM_LENGTH": null,
+        "IS_NULLABLE": "YES"
+    },
+    {
+        "TABLE_NAME": "ItemMaster",
+        "COLUMN_NAME": "DField3",
+        "DATA_TYPE": "datetime",
+        "CHARACTER_MAXIMUM_LENGTH": null,
+        "IS_NULLABLE": "YES"
+    },
+    {
+        "TABLE_NAME": "ItemMaster",
+        "COLUMN_NAME": "BField1",
+        "DATA_TYPE": "bit",
+        "CHARACTER_MAXIMUM_LENGTH": null,
+        "IS_NULLABLE": "YES"
+    },
+    {
+        "TABLE_NAME": "ItemMaster",
+        "COLUMN_NAME": "BField2",
+        "DATA_TYPE": "bit",
+        "CHARACTER_MAXIMUM_LENGTH": null,
+        "IS_NULLABLE": "YES"
+    },
+    {
+        "TABLE_NAME": "ItemMaster",
+        "COLUMN_NAME": "MerchId",
+        "DATA_TYPE": "varchar",
+        "CHARACTER_MAXIMUM_LENGTH": 16,
+        "IS_NULLABLE": "YES"
+    },
+    {
+        "TABLE_NAME": "ItemMaster",
+        "COLUMN_NAME": "DiscId",
+        "DATA_TYPE": "int",
+        "CHARACTER_MAXIMUM_LENGTH": null,
+        "IS_NULLABLE": "YES"
+    },
+    {
+        "TABLE_NAME": "ItemMaster",
+        "COLUMN_NAME": "DiscPer",
+        "DATA_TYPE": "int",
+        "CHARACTER_MAXIMUM_LENGTH": null,
+        "IS_NULLABLE": "YES"
+    },
+    {
+        "TABLE_NAME": "ItemMaster",
+        "COLUMN_NAME": "DiscAmt",
+        "DATA_TYPE": "int",
+        "CHARACTER_MAXIMUM_LENGTH": null,
+        "IS_NULLABLE": "YES"
+    },
+    {
+        "TABLE_NAME": "ItemMaster",
+        "COLUMN_NAME": "DiscSQLQry",
+        "DATA_TYPE": "varchar",
+        "CHARACTER_MAXIMUM_LENGTH": 32,
+        "IS_NULLABLE": "YES"
+    },
+    {
+        "TABLE_NAME": "ItemMaster",
+        "COLUMN_NAME": "PriceFactorId",
+        "DATA_TYPE": "int",
+        "CHARACTER_MAXIMUM_LENGTH": null,
+        "IS_NULLABLE": "YES"
+    },
+    {
+        "TABLE_NAME": "ItemMaster",
+        "COLUMN_NAME": "PriceFactorPer",
+        "DATA_TYPE": "int",
+        "CHARACTER_MAXIMUM_LENGTH": null,
+        "IS_NULLABLE": "YES"
+    },
+    {
+        "TABLE_NAME": "ItemMaster",
+        "COLUMN_NAME": "PriceFactorAmt",
+        "DATA_TYPE": "int",
+        "CHARACTER_MAXIMUM_LENGTH": null,
+        "IS_NULLABLE": "YES"
+    },
+    {
+        "TABLE_NAME": "ItemMaster",
+        "COLUMN_NAME": "PriceFactorSQLQry",
+        "DATA_TYPE": "varchar",
+        "CHARACTER_MAXIMUM_LENGTH": 32,
+        "IS_NULLABLE": "YES"
+    },
+    {
+        "TABLE_NAME": "ItemMaster",
+        "COLUMN_NAME": "AddOnId",
+        "DATA_TYPE": "int",
+        "CHARACTER_MAXIMUM_LENGTH": null,
+        "IS_NULLABLE": "YES"
+    },
+    {
+        "TABLE_NAME": "ItemMaster",
+        "COLUMN_NAME": "AddOnPer",
+        "DATA_TYPE": "money",
+        "CHARACTER_MAXIMUM_LENGTH": null,
+        "IS_NULLABLE": "YES"
+    },
+    {
+        "TABLE_NAME": "ItemMaster",
+        "COLUMN_NAME": "AddOnAmt",
+        "DATA_TYPE": "money",
+        "CHARACTER_MAXIMUM_LENGTH": null,
+        "IS_NULLABLE": "YES"
+    },
+    {
+        "TABLE_NAME": "ItemMaster",
+        "COLUMN_NAME": "AddOnSQLQry",
+        "DATA_TYPE": "varchar",
+        "CHARACTER_MAXIMUM_LENGTH": 32,
+        "IS_NULLABLE": "YES"
+    },
+    {
+        "TABLE_NAME": "ItemMaster",
+        "COLUMN_NAME": "DednId",
+        "DATA_TYPE": "int",
+        "CHARACTER_MAXIMUM_LENGTH": null,
+        "IS_NULLABLE": "YES"
+    },
+    {
+        "TABLE_NAME": "ItemMaster",
+        "COLUMN_NAME": "DednPer",
+        "DATA_TYPE": "money",
+        "CHARACTER_MAXIMUM_LENGTH": null,
+        "IS_NULLABLE": "YES"
+    },
+    {
+        "TABLE_NAME": "ItemMaster",
+        "COLUMN_NAME": "DednAmt",
+        "DATA_TYPE": "money",
+        "CHARACTER_MAXIMUM_LENGTH": null,
+        "IS_NULLABLE": "YES"
+    },
+    {
+        "TABLE_NAME": "ItemMaster",
+        "COLUMN_NAME": "DednSQLQry",
+        "DATA_TYPE": "varchar",
+        "CHARACTER_MAXIMUM_LENGTH": 32,
+        "IS_NULLABLE": "YES"
+    },
+    {
+        "TABLE_NAME": "ItemMaster",
+        "COLUMN_NAME": "EDId",
+        "DATA_TYPE": "int",
+        "CHARACTER_MAXIMUM_LENGTH": null,
+        "IS_NULLABLE": "YES"
+    },
+    {
+        "TABLE_NAME": "ItemMaster",
+        "COLUMN_NAME": "EDPer",
+        "DATA_TYPE": "money",
+        "CHARACTER_MAXIMUM_LENGTH": null,
+        "IS_NULLABLE": "YES"
+    },
+    {
+        "TABLE_NAME": "ItemMaster",
+        "COLUMN_NAME": "EDAmt",
+        "DATA_TYPE": "money",
+        "CHARACTER_MAXIMUM_LENGTH": null,
+        "IS_NULLABLE": "YES"
+    },
+    {
+        "TABLE_NAME": "ItemMaster",
+        "COLUMN_NAME": "EDSQLQry",
+        "DATA_TYPE": "varchar",
+        "CHARACTER_MAXIMUM_LENGTH": 32,
+        "IS_NULLABLE": "YES"
+    },
+    {
+        "TABLE_NAME": "ItemMaster",
+        "COLUMN_NAME": "FinalMRP",
+        "DATA_TYPE": "money",
+        "CHARACTER_MAXIMUM_LENGTH": null,
+        "IS_NULLABLE": "YES"
+    },
+    {
+        "TABLE_NAME": "ItemMaster",
+        "COLUMN_NAME": "IsConsignmentItem",
+        "DATA_TYPE": "bit",
+        "CHARACTER_MAXIMUM_LENGTH": null,
+        "IS_NULLABLE": "YES"
+    },
+    {
+        "TABLE_NAME": "ItemMaster",
+        "COLUMN_NAME": "FlgStockTake",
+        "DATA_TYPE": "int",
+        "CHARACTER_MAXIMUM_LENGTH": null,
+        "IS_NULLABLE": "YES"
+    },
+    {
+        "TABLE_NAME": "ItemMaster",
+        "COLUMN_NAME": "FlgRateAlterable",
+        "DATA_TYPE": "int",
+        "CHARACTER_MAXIMUM_LENGTH": null,
+        "IS_NULLABLE": "YES"
+    },
+    {
+        "TABLE_NAME": "ItemMaster",
+        "COLUMN_NAME": "FlgStockChkAppl",
+        "DATA_TYPE": "int",
+        "CHARACTER_MAXIMUM_LENGTH": null,
+        "IS_NULLABLE": "YES"
+    },
+    {
+        "TABLE_NAME": "ItemMaster",
+        "COLUMN_NAME": "StockTolerance",
+        "DATA_TYPE": "money",
+        "CHARACTER_MAXIMUM_LENGTH": null,
+        "IS_NULLABLE": "YES"
+    },
+    {
+        "TABLE_NAME": "ItemMaster",
+        "COLUMN_NAME": "Dateinsert",
+        "DATA_TYPE": "datetime",
+        "CHARACTER_MAXIMUM_LENGTH": null,
+        "IS_NULLABLE": "YES"
+    },
+    {
+        "TABLE_NAME": "ItemMaster",
+        "COLUMN_NAME": "Lastupdateddate",
+        "DATA_TYPE": "datetime",
+        "CHARACTER_MAXIMUM_LENGTH": null,
+        "IS_NULLABLE": "YES"
+    },
+    {
+        "TABLE_NAME": "ItemMaster",
+        "COLUMN_NAME": "BatchApplicable",
+        "DATA_TYPE": "tinyint",
+        "CHARACTER_MAXIMUM_LENGTH": null,
+        "IS_NULLABLE": "YES"
+    },
+    {
+        "TABLE_NAME": "ItemMaster",
+        "COLUMN_NAME": "GradeApplicable",
+        "DATA_TYPE": "tinyint",
+        "CHARACTER_MAXIMUM_LENGTH": null,
+        "IS_NULLABLE": "YES"
+    },
+    {
+        "TABLE_NAME": "ItemMaster",
+        "COLUMN_NAME": "LocationApplicable",
+        "DATA_TYPE": "tinyint",
+        "CHARACTER_MAXIMUM_LENGTH": null,
+        "IS_NULLABLE": "YES"
+    },
+    {
+        "TABLE_NAME": "ItemMaster",
+        "COLUMN_NAME": "BatchNoFlag",
+        "DATA_TYPE": "tinyint",
+        "CHARACTER_MAXIMUM_LENGTH": null,
+        "IS_NULLABLE": "YES"
+    },
+    {
+        "TABLE_NAME": "StkTrnDtls",
+        "COLUMN_NAME": "TrnType",
+        "DATA_TYPE": "int",
+        "CHARACTER_MAXIMUM_LENGTH": null,
+        "IS_NULLABLE": "NO"
+    },
+    {
+        "TABLE_NAME": "StkTrnDtls",
+        "COLUMN_NAME": "TrnCtrlNo",
+        "DATA_TYPE": "int",
+        "CHARACTER_MAXIMUM_LENGTH": null,
+        "IS_NULLABLE": "NO"
+    },
+    {
+        "TABLE_NAME": "StkTrnDtls",
+        "COLUMN_NAME": "DocNoPrefix",
+        "DATA_TYPE": "varchar",
+        "CHARACTER_MAXIMUM_LENGTH": 8,
+        "IS_NULLABLE": "NO"
+    },
+    {
+        "TABLE_NAME": "StkTrnDtls",
+        "COLUMN_NAME": "DocNo",
+        "DATA_TYPE": "int",
+        "CHARACTER_MAXIMUM_LENGTH": null,
+        "IS_NULLABLE": "NO"
+    },
+    {
+        "TABLE_NAME": "StkTrnDtls",
+        "COLUMN_NAME": "DocRsnCd",
+        "DATA_TYPE": "varchar",
+        "CHARACTER_MAXIMUM_LENGTH": 16,
+        "IS_NULLABLE": "YES"
+    },
+    {
+        "TABLE_NAME": "StkTrnDtls",
+        "COLUMN_NAME": "DocDt",
+        "DATA_TYPE": "datetime",
+        "CHARACTER_MAXIMUM_LENGTH": null,
+        "IS_NULLABLE": "YES"
+    },
+    {
+        "TABLE_NAME": "StkTrnDtls",
+        "COLUMN_NAME": "EntSrlNo",
+        "DATA_TYPE": "int",
+        "CHARACTER_MAXIMUM_LENGTH": null,
+        "IS_NULLABLE": "NO"
+    },
+    {
+        "TABLE_NAME": "StkTrnDtls",
+        "COLUMN_NAME": "StockNo",
+        "DATA_TYPE": "varchar",
+        "CHARACTER_MAXIMUM_LENGTH": 32,
+        "IS_NULLABLE": "YES"
+    },
+    {
+        "TABLE_NAME": "StkTrnDtls",
+        "COLUMN_NAME": "BatchSrlNo",
+        "DATA_TYPE": "varchar",
+        "CHARACTER_MAXIMUM_LENGTH": 16,
+        "IS_NULLABLE": "YES"
+    },
+    {
+        "TABLE_NAME": "StkTrnDtls",
+        "COLUMN_NAME": "LocnId",
+        "DATA_TYPE": "varchar",
+        "CHARACTER_MAXIMUM_LENGTH": 16,
+        "IS_NULLABLE": "YES"
+    },
+    {
+        "TABLE_NAME": "StkTrnDtls",
+        "COLUMN_NAME": "OrdDocType",
+        "DATA_TYPE": "int",
+        "CHARACTER_MAXIMUM_LENGTH": null,
+        "IS_NULLABLE": "YES"
+    },
+    {
+        "TABLE_NAME": "StkTrnDtls",
+        "COLUMN_NAME": "OrdDocNoPrefix",
+        "DATA_TYPE": "varchar",
+        "CHARACTER_MAXIMUM_LENGTH": 8,
+        "IS_NULLABLE": "YES"
+    },
+    {
+        "TABLE_NAME": "StkTrnDtls",
+        "COLUMN_NAME": "OrdDocNo",
+        "DATA_TYPE": "int",
+        "CHARACTER_MAXIMUM_LENGTH": null,
+        "IS_NULLABLE": "YES"
+    },
+    {
+        "TABLE_NAME": "StkTrnDtls",
+        "COLUMN_NAME": "OrdEntSrlNo",
+        "DATA_TYPE": "int",
+        "CHARACTER_MAXIMUM_LENGTH": null,
+        "IS_NULLABLE": "YES"
+    },
+    {
+        "TABLE_NAME": "StkTrnDtls",
+        "COLUMN_NAME": "OrdEntSubSrlNo",
+        "DATA_TYPE": "int",
+        "CHARACTER_MAXIMUM_LENGTH": null,
+        "IS_NULLABLE": "YES"
+    },
+    {
+        "TABLE_NAME": "StkTrnDtls",
+        "COLUMN_NAME": "RefDocType",
+        "DATA_TYPE": "int",
+        "CHARACTER_MAXIMUM_LENGTH": null,
+        "IS_NULLABLE": "YES"
+    },
+    {
+        "TABLE_NAME": "StkTrnDtls",
+        "COLUMN_NAME": "RefDocNoPrefix",
+        "DATA_TYPE": "varchar",
+        "CHARACTER_MAXIMUM_LENGTH": 8,
+        "IS_NULLABLE": "YES"
+    },
+    {
+        "TABLE_NAME": "StkTrnDtls",
+        "COLUMN_NAME": "RefDocNo",
+        "DATA_TYPE": "varchar",
+        "CHARACTER_MAXIMUM_LENGTH": 32,
+        "IS_NULLABLE": "YES"
+    },
+    {
+        "TABLE_NAME": "StkTrnDtls",
+        "COLUMN_NAME": "RefEntSrlNo",
+        "DATA_TYPE": "int",
+        "CHARACTER_MAXIMUM_LENGTH": null,
+        "IS_NULLABLE": "YES"
+    },
+    {
+        "TABLE_NAME": "StkTrnDtls",
+        "COLUMN_NAME": "DocQty",
+        "DATA_TYPE": "real",
+        "CHARACTER_MAXIMUM_LENGTH": null,
+        "IS_NULLABLE": "YES"
+    },
+    {
+        "TABLE_NAME": "StkTrnDtls",
+        "COLUMN_NAME": "PhyQtyIn",
+        "DATA_TYPE": "real",
+        "CHARACTER_MAXIMUM_LENGTH": null,
+        "IS_NULLABLE": "YES"
+    },
+    {
+        "TABLE_NAME": "StkTrnDtls",
+        "COLUMN_NAME": "PhyQtyOut",
+        "DATA_TYPE": "real",
+        "CHARACTER_MAXIMUM_LENGTH": null,
+        "IS_NULLABLE": "YES"
+    },
+    {
+        "TABLE_NAME": "StkTrnDtls",
+        "COLUMN_NAME": "StkUpdtRate",
+        "DATA_TYPE": "money",
+        "CHARACTER_MAXIMUM_LENGTH": null,
+        "IS_NULLABLE": "YES"
+    },
+    {
+        "TABLE_NAME": "StkTrnDtls",
+        "COLUMN_NAME": "StkUpdtValueIn",
+        "DATA_TYPE": "money",
+        "CHARACTER_MAXIMUM_LENGTH": null,
+        "IS_NULLABLE": "YES"
+    },
+    {
+        "TABLE_NAME": "StkTrnDtls",
+        "COLUMN_NAME": "StkUpdtValueOut",
+        "DATA_TYPE": "money",
+        "CHARACTER_MAXIMUM_LENGTH": null,
+        "IS_NULLABLE": "YES"
+    },
+    {
+        "TABLE_NAME": "StkTrnDtls",
+        "COLUMN_NAME": "DocEntRate",
+        "DATA_TYPE": "money",
+        "CHARACTER_MAXIMUM_LENGTH": null,
+        "IS_NULLABLE": "YES"
+    },
+    {
+        "TABLE_NAME": "StkTrnDtls",
+        "COLUMN_NAME": "DocEntValue",
+        "DATA_TYPE": "money",
+        "CHARACTER_MAXIMUM_LENGTH": null,
+        "IS_NULLABLE": "YES"
+    },
+    {
+        "TABLE_NAME": "StkTrnDtls",
+        "COLUMN_NAME": "DocEntTotDisc",
+        "DATA_TYPE": "money",
+        "CHARACTER_MAXIMUM_LENGTH": null,
+        "IS_NULLABLE": "YES"
+    },
+    {
+        "TABLE_NAME": "StkTrnDtls",
+        "COLUMN_NAME": "DocEntValAftDisc",
+        "DATA_TYPE": "money",
+        "CHARACTER_MAXIMUM_LENGTH": null,
+        "IS_NULLABLE": "YES"
+    },
+    {
+        "TABLE_NAME": "StkTrnDtls",
+        "COLUMN_NAME": "DocEntTax",
+        "DATA_TYPE": "money",
+        "CHARACTER_MAXIMUM_LENGTH": null,
+        "IS_NULLABLE": "YES"
+    },
+    {
+        "TABLE_NAME": "StkTrnDtls",
+        "COLUMN_NAME": "DocEntAddons",
+        "DATA_TYPE": "money",
+        "CHARACTER_MAXIMUM_LENGTH": null,
+        "IS_NULLABLE": "YES"
+    },
+    {
+        "TABLE_NAME": "StkTrnDtls",
+        "COLUMN_NAME": "DocEntDedns",
+        "DATA_TYPE": "money",
+        "CHARACTER_MAXIMUM_LENGTH": null,
+        "IS_NULLABLE": "YES"
+    },
+    {
+        "TABLE_NAME": "StkTrnDtls",
+        "COLUMN_NAME": "DocEntNetValue",
+        "DATA_TYPE": "money",
+        "CHARACTER_MAXIMUM_LENGTH": null,
+        "IS_NULLABLE": "YES"
+    },
+    {
+        "TABLE_NAME": "StkTrnDtls",
+        "COLUMN_NAME": "PhysQtyReturned",
+        "DATA_TYPE": "real",
+        "CHARACTER_MAXIMUM_LENGTH": null,
+        "IS_NULLABLE": "YES"
+    },
+    {
+        "TABLE_NAME": "StkTrnDtls",
+        "COLUMN_NAME": "DocEntBefTaxAddons",
+        "DATA_TYPE": "money",
+        "CHARACTER_MAXIMUM_LENGTH": null,
+        "IS_NULLABLE": "YES"
+    },
+    {
+        "TABLE_NAME": "StkTrnDtls",
+        "COLUMN_NAME": "DocEntBefTaxDedns",
+        "DATA_TYPE": "money",
+        "CHARACTER_MAXIMUM_LENGTH": null,
+        "IS_NULLABLE": "YES"
+    },
+    {
+        "TABLE_NAME": "StkTrnDtls",
+        "COLUMN_NAME": "DocEntAftTaxAddons",
+        "DATA_TYPE": "money",
+        "CHARACTER_MAXIMUM_LENGTH": null,
+        "IS_NULLABLE": "YES"
+    },
+    {
+        "TABLE_NAME": "StkTrnDtls",
+        "COLUMN_NAME": "DocEntAftTaxDedns",
+        "DATA_TYPE": "money",
+        "CHARACTER_MAXIMUM_LENGTH": null,
+        "IS_NULLABLE": "YES"
+    },
+    {
+        "TABLE_NAME": "StkTrnDtls",
+        "COLUMN_NAME": "DocEntDisc",
+        "DATA_TYPE": "money",
+        "CHARACTER_MAXIMUM_LENGTH": null,
+        "IS_NULLABLE": "YES"
+    },
+    {
+        "TABLE_NAME": "StkTrnDtls",
+        "COLUMN_NAME": "DocEntDiscId",
+        "DATA_TYPE": "varchar",
+        "CHARACTER_MAXIMUM_LENGTH": 32,
+        "IS_NULLABLE": "YES"
+    },
+    {
+        "TABLE_NAME": "StkTrnDtls",
+        "COLUMN_NAME": "DocEntBillDisc",
+        "DATA_TYPE": "money",
+        "CHARACTER_MAXIMUM_LENGTH": null,
+        "IS_NULLABLE": "YES"
+    },
+    {
+        "TABLE_NAME": "StkTrnDtls",
+        "COLUMN_NAME": "DocEntVoidInd",
+        "DATA_TYPE": "bit",
+        "CHARACTER_MAXIMUM_LENGTH": null,
+        "IS_NULLABLE": "YES"
+    },
+    {
+        "TABLE_NAME": "StkTrnDtls",
+        "COLUMN_NAME": "ItemTaxType",
+        "DATA_TYPE": "varchar",
+        "CHARACTER_MAXIMUM_LENGTH": 16,
+        "IS_NULLABLE": "YES"
+    },
+    {
+        "TABLE_NAME": "StkTrnDtls",
+        "COLUMN_NAME": "CustTaxType",
+        "DATA_TYPE": "varchar",
+        "CHARACTER_MAXIMUM_LENGTH": 16,
+        "IS_NULLABLE": "YES"
+    },
+    {
+        "TABLE_NAME": "StkTrnDtls",
+        "COLUMN_NAME": "SrcTaxType",
+        "DATA_TYPE": "varchar",
+        "CHARACTER_MAXIMUM_LENGTH": 16,
+        "IS_NULLABLE": "YES"
+    },
+    {
+        "TABLE_NAME": "StkTrnDtls",
+        "COLUMN_NAME": "TaxComp1",
+        "DATA_TYPE": "money",
+        "CHARACTER_MAXIMUM_LENGTH": null,
+        "IS_NULLABLE": "YES"
+    },
+    {
+        "TABLE_NAME": "StkTrnDtls",
+        "COLUMN_NAME": "TaxComp2",
+        "DATA_TYPE": "money",
+        "CHARACTER_MAXIMUM_LENGTH": null,
+        "IS_NULLABLE": "YES"
+    },
+    {
+        "TABLE_NAME": "StkTrnDtls",
+        "COLUMN_NAME": "TaxComp3",
+        "DATA_TYPE": "money",
+        "CHARACTER_MAXIMUM_LENGTH": null,
+        "IS_NULLABLE": "YES"
+    },
+    {
+        "TABLE_NAME": "StkTrnDtls",
+        "COLUMN_NAME": "TaxComp4",
+        "DATA_TYPE": "money",
+        "CHARACTER_MAXIMUM_LENGTH": null,
+        "IS_NULLABLE": "YES"
+    },
+    {
+        "TABLE_NAME": "StkTrnDtls",
+        "COLUMN_NAME": "TaxComp5",
+        "DATA_TYPE": "money",
+        "CHARACTER_MAXIMUM_LENGTH": null,
+        "IS_NULLABLE": "YES"
+    },
+    {
+        "TABLE_NAME": "StkTrnDtls",
+        "COLUMN_NAME": "RetnReasonCd",
+        "DATA_TYPE": "varchar",
+        "CHARACTER_MAXIMUM_LENGTH": 16,
+        "IS_NULLABLE": "YES"
+    },
+    {
+        "TABLE_NAME": "StkTrnDtls",
+        "COLUMN_NAME": "FwdRefTrnType",
+        "DATA_TYPE": "int",
+        "CHARACTER_MAXIMUM_LENGTH": null,
+        "IS_NULLABLE": "YES"
+    },
+    {
+        "TABLE_NAME": "StkTrnDtls",
+        "COLUMN_NAME": "FwdRefCtrlNo",
+        "DATA_TYPE": "int",
+        "CHARACTER_MAXIMUM_LENGTH": null,
+        "IS_NULLABLE": "YES"
+    },
+    {
+        "TABLE_NAME": "StkTrnDtls",
+        "COLUMN_NAME": "FwdRefDocEntSrlNo",
+        "DATA_TYPE": "int",
+        "CHARACTER_MAXIMUM_LENGTH": null,
+        "IS_NULLABLE": "YES"
+    },
+    {
+        "TABLE_NAME": "StkTrnDtls",
+        "COLUMN_NAME": "BackRefTrnType",
+        "DATA_TYPE": "int",
+        "CHARACTER_MAXIMUM_LENGTH": null,
+        "IS_NULLABLE": "YES"
+    },
+    {
+        "TABLE_NAME": "StkTrnDtls",
+        "COLUMN_NAME": "BackRefCtrlNo",
+        "DATA_TYPE": "int",
+        "CHARACTER_MAXIMUM_LENGTH": null,
+        "IS_NULLABLE": "YES"
+    },
+    {
+        "TABLE_NAME": "StkTrnDtls",
+        "COLUMN_NAME": "BackRefDocEntSrlNo",
+        "DATA_TYPE": "int",
+        "CHARACTER_MAXIMUM_LENGTH": null,
+        "IS_NULLABLE": "YES"
+    },
+    {
+        "TABLE_NAME": "StkTrnDtls",
+        "COLUMN_NAME": "BillPassInd",
+        "DATA_TYPE": "int",
+        "CHARACTER_MAXIMUM_LENGTH": null,
+        "IS_NULLABLE": "YES"
+    },
+    {
+        "TABLE_NAME": "StkTrnDtls",
+        "COLUMN_NAME": "VAUid",
+        "DATA_TYPE": "varchar",
+        "CHARACTER_MAXIMUM_LENGTH": 32,
+        "IS_NULLABLE": "YES"
+    },
+    {
+        "TABLE_NAME": "StkTrnDtls",
+        "COLUMN_NAME": "VActr",
+        "DATA_TYPE": "int",
+        "CHARACTER_MAXIMUM_LENGTH": null,
+        "IS_NULLABLE": "YES"
+    },
+    {
+        "TABLE_NAME": "StkTrnDtls",
+        "COLUMN_NAME": "VATermId",
+        "DATA_TYPE": "varchar",
+        "CHARACTER_MAXIMUM_LENGTH": 32,
+        "IS_NULLABLE": "YES"
+    },
+    {
+        "TABLE_NAME": "StkTrnDtls",
+        "COLUMN_NAME": "VACompCode",
+        "DATA_TYPE": "varchar",
+        "CHARACTER_MAXIMUM_LENGTH": 16,
+        "IS_NULLABLE": "YES"
+    },
+    {
+        "TABLE_NAME": "StkTrnDtls",
+        "COLUMN_NAME": "SalesPersonCd",
+        "DATA_TYPE": "varchar",
+        "CHARACTER_MAXIMUM_LENGTH": 32,
+        "IS_NULLABLE": "YES"
+    },
+    {
+        "TABLE_NAME": "StkTrnDtls",
+        "COLUMN_NAME": "ItemwiseDiscReason",
+        "DATA_TYPE": "varchar",
+        "CHARACTER_MAXIMUM_LENGTH": 250,
+        "IS_NULLABLE": "YES"
+    },
+    {
+        "TABLE_NAME": "StkTrnDtls",
+        "COLUMN_NAME": "ExptTrnType",
+        "DATA_TYPE": "int",
+        "CHARACTER_MAXIMUM_LENGTH": null,
+        "IS_NULLABLE": "YES"
+    },
+    {
+        "TABLE_NAME": "StkTrnDtls",
+        "COLUMN_NAME": "ExptTrnDocPfx",
+        "DATA_TYPE": "varchar",
+        "CHARACTER_MAXIMUM_LENGTH": 16,
+        "IS_NULLABLE": "YES"
+    },
+    {
+        "TABLE_NAME": "StkTrnDtls",
+        "COLUMN_NAME": "ExptTrnDocNo",
+        "DATA_TYPE": "int",
+        "CHARACTER_MAXIMUM_LENGTH": null,
+        "IS_NULLABLE": "YES"
+    },
+    {
+        "TABLE_NAME": "StkTrnDtls",
+        "COLUMN_NAME": "ExptTrnDocSrlNo",
+        "DATA_TYPE": "int",
+        "CHARACTER_MAXIMUM_LENGTH": null,
+        "IS_NULLABLE": "YES"
+    },
+    {
+        "TABLE_NAME": "StkTrnDtls",
+        "COLUMN_NAME": "ExptTrnDocSubSrlNo",
+        "DATA_TYPE": "int",
+        "CHARACTER_MAXIMUM_LENGTH": null,
+        "IS_NULLABLE": "YES"
+    },
+    {
+        "TABLE_NAME": "StkTrnDtls",
+        "COLUMN_NAME": "EUPCode",
+        "DATA_TYPE": "varchar",
+        "CHARACTER_MAXIMUM_LENGTH": 50,
+        "IS_NULLABLE": "YES"
+    },
+    {
+        "TABLE_NAME": "StkTrnDtls",
+        "COLUMN_NAME": "ApplPoint",
+        "DATA_TYPE": "int",
+        "CHARACTER_MAXIMUM_LENGTH": null,
+        "IS_NULLABLE": "YES"
+    },
+    {
+        "TABLE_NAME": "StkTrnDtls",
+        "COLUMN_NAME": "ValuComp",
+        "DATA_TYPE": "int",
+        "CHARACTER_MAXIMUM_LENGTH": null,
+        "IS_NULLABLE": "YES"
+    },
+    {
+        "TABLE_NAME": "StkTrnDtls",
+        "COLUMN_NAME": "ItemMRPBillTm",
+        "DATA_TYPE": "money",
+        "CHARACTER_MAXIMUM_LENGTH": null,
+        "IS_NULLABLE": "YES"
+    },
+    {
+        "TABLE_NAME": "StkTrnDtls",
+        "COLUMN_NAME": "ItemCurBalQty",
+        "DATA_TYPE": "money",
+        "CHARACTER_MAXIMUM_LENGTH": null,
+        "IS_NULLABLE": "YES"
+    },
+    {
+        "TABLE_NAME": "StkTrnDtls",
+        "COLUMN_NAME": "lngAISrlNo",
+        "DATA_TYPE": "int",
+        "CHARACTER_MAXIMUM_LENGTH": null,
+        "IS_NULLABLE": "YES"
+    },
+    {
+        "TABLE_NAME": "StkTrnDtls",
+        "COLUMN_NAME": "SField1",
+        "DATA_TYPE": "varchar",
+        "CHARACTER_MAXIMUM_LENGTH": 256,
+        "IS_NULLABLE": "YES"
+    },
+    {
+        "TABLE_NAME": "StkTrnDtls",
+        "COLUMN_NAME": "SField2",
+        "DATA_TYPE": "varchar",
+        "CHARACTER_MAXIMUM_LENGTH": 256,
+        "IS_NULLABLE": "YES"
+    },
+    {
+        "TABLE_NAME": "StkTrnDtls",
+        "COLUMN_NAME": "SField3",
+        "DATA_TYPE": "varchar",
+        "CHARACTER_MAXIMUM_LENGTH": 256,
+        "IS_NULLABLE": "YES"
+    },
+    {
+        "TABLE_NAME": "StkTrnDtls",
+        "COLUMN_NAME": "SField4",
+        "DATA_TYPE": "varchar",
+        "CHARACTER_MAXIMUM_LENGTH": 256,
+        "IS_NULLABLE": "YES"
+    },
+    {
+        "TABLE_NAME": "StkTrnDtls",
+        "COLUMN_NAME": "SField5",
+        "DATA_TYPE": "varchar",
+        "CHARACTER_MAXIMUM_LENGTH": 256,
+        "IS_NULLABLE": "YES"
+    },
+    {
+        "TABLE_NAME": "StkTrnDtls",
+        "COLUMN_NAME": "NField1",
+        "DATA_TYPE": "int",
+        "CHARACTER_MAXIMUM_LENGTH": null,
+        "IS_NULLABLE": "YES"
+    },
+    {
+        "TABLE_NAME": "StkTrnDtls",
+        "COLUMN_NAME": "NField2",
+        "DATA_TYPE": "int",
+        "CHARACTER_MAXIMUM_LENGTH": null,
+        "IS_NULLABLE": "YES"
+    },
+    {
+        "TABLE_NAME": "StkTrnDtls",
+        "COLUMN_NAME": "NField3",
+        "DATA_TYPE": "int",
+        "CHARACTER_MAXIMUM_LENGTH": null,
+        "IS_NULLABLE": "YES"
+    },
+    {
+        "TABLE_NAME": "StkTrnDtls",
+        "COLUMN_NAME": "NField4",
+        "DATA_TYPE": "int",
+        "CHARACTER_MAXIMUM_LENGTH": null,
+        "IS_NULLABLE": "YES"
+    },
+    {
+        "TABLE_NAME": "StkTrnDtls",
+        "COLUMN_NAME": "NField5",
+        "DATA_TYPE": "int",
+        "CHARACTER_MAXIMUM_LENGTH": null,
+        "IS_NULLABLE": "YES"
+    },
+    {
+        "TABLE_NAME": "StkTrnDtls",
+        "COLUMN_NAME": "DField1",
+        "DATA_TYPE": "datetime",
+        "CHARACTER_MAXIMUM_LENGTH": null,
+        "IS_NULLABLE": "YES"
+    },
+    {
+        "TABLE_NAME": "StkTrnDtls",
+        "COLUMN_NAME": "DField2",
+        "DATA_TYPE": "datetime",
+        "CHARACTER_MAXIMUM_LENGTH": null,
+        "IS_NULLABLE": "YES"
+    },
+    {
+        "TABLE_NAME": "StkTrnDtls",
+        "COLUMN_NAME": "DField3",
+        "DATA_TYPE": "datetime",
+        "CHARACTER_MAXIMUM_LENGTH": null,
+        "IS_NULLABLE": "YES"
+    },
+    {
+        "TABLE_NAME": "StkTrnDtls",
+        "COLUMN_NAME": "BField1",
+        "DATA_TYPE": "bit",
+        "CHARACTER_MAXIMUM_LENGTH": null,
+        "IS_NULLABLE": "YES"
+    },
+    {
+        "TABLE_NAME": "StkTrnDtls",
+        "COLUMN_NAME": "BField2",
+        "DATA_TYPE": "bit",
+        "CHARACTER_MAXIMUM_LENGTH": null,
+        "IS_NULLABLE": "YES"
+    },
+    {
+        "TABLE_NAME": "StkTrnDtls",
+        "COLUMN_NAME": "ItemLvlPriceFacId",
+        "DATA_TYPE": "int",
+        "CHARACTER_MAXIMUM_LENGTH": null,
+        "IS_NULLABLE": "YES"
+    },
+    {
+        "TABLE_NAME": "StkTrnDtls",
+        "COLUMN_NAME": "ItemLvlEDId",
+        "DATA_TYPE": "int",
+        "CHARACTER_MAXIMUM_LENGTH": null,
+        "IS_NULLABLE": "YES"
+    },
+    {
+        "TABLE_NAME": "StkTrnDtls",
+        "COLUMN_NAME": "DocEntPriceFactor",
+        "DATA_TYPE": "money",
+        "CHARACTER_MAXIMUM_LENGTH": null,
+        "IS_NULLABLE": "YES"
+    },
+    {
+        "TABLE_NAME": "StkTrnDtls",
+        "COLUMN_NAME": "stdTaxComp1Per",
+        "DATA_TYPE": "money",
+        "CHARACTER_MAXIMUM_LENGTH": null,
+        "IS_NULLABLE": "YES"
+    },
+    {
+        "TABLE_NAME": "StkTrnDtls",
+        "COLUMN_NAME": "DocEntED",
+        "DATA_TYPE": "money",
+        "CHARACTER_MAXIMUM_LENGTH": null,
+        "IS_NULLABLE": "YES"
+    },
+    {
+        "TABLE_NAME": "StkTrnDtls",
+        "COLUMN_NAME": "stdTaxComp2Per",
+        "DATA_TYPE": "money",
+        "CHARACTER_MAXIMUM_LENGTH": null,
+        "IS_NULLABLE": "YES"
+    },
+    {
+        "TABLE_NAME": "StkTrnDtls",
+        "COLUMN_NAME": "MerchId",
+        "DATA_TYPE": "varchar",
+        "CHARACTER_MAXIMUM_LENGTH": 16,
+        "IS_NULLABLE": "YES"
+    },
+    {
+        "TABLE_NAME": "StkTrnDtls",
+        "COLUMN_NAME": "stdTaxComp3Per",
+        "DATA_TYPE": "money",
+        "CHARACTER_MAXIMUM_LENGTH": null,
+        "IS_NULLABLE": "YES"
+    },
+    {
+        "TABLE_NAME": "StkTrnDtls",
+        "COLUMN_NAME": "stdTaxComp4Per",
+        "DATA_TYPE": "money",
+        "CHARACTER_MAXIMUM_LENGTH": null,
+        "IS_NULLABLE": "YES"
+    },
+    {
+        "TABLE_NAME": "StkTrnDtls",
+        "COLUMN_NAME": "stdTaxComp5Per",
+        "DATA_TYPE": "money",
+        "CHARACTER_MAXIMUM_LENGTH": null,
+        "IS_NULLABLE": "YES"
+    },
+    {
+        "TABLE_NAME": "StkTrnDtls",
+        "COLUMN_NAME": "stdTaxComp1Inc",
+        "DATA_TYPE": "bit",
+        "CHARACTER_MAXIMUM_LENGTH": null,
+        "IS_NULLABLE": "YES"
+    },
+    {
+        "TABLE_NAME": "StkTrnDtls",
+        "COLUMN_NAME": "stdTaxComp2Inc",
+        "DATA_TYPE": "bit",
+        "CHARACTER_MAXIMUM_LENGTH": null,
+        "IS_NULLABLE": "YES"
+    },
+    {
+        "TABLE_NAME": "StkTrnDtls",
+        "COLUMN_NAME": "stdTaxComp3Inc",
+        "DATA_TYPE": "bit",
+        "CHARACTER_MAXIMUM_LENGTH": null,
+        "IS_NULLABLE": "YES"
+    },
+    {
+        "TABLE_NAME": "StkTrnDtls",
+        "COLUMN_NAME": "stdTaxComp4Inc",
+        "DATA_TYPE": "bit",
+        "CHARACTER_MAXIMUM_LENGTH": null,
+        "IS_NULLABLE": "YES"
+    },
+    {
+        "TABLE_NAME": "StkTrnDtls",
+        "COLUMN_NAME": "stdTaxComp5Inc",
+        "DATA_TYPE": "bit",
+        "CHARACTER_MAXIMUM_LENGTH": null,
+        "IS_NULLABLE": "YES"
+    },
+    {
+        "TABLE_NAME": "StkTrnDtls",
+        "COLUMN_NAME": "BefCurBalQty",
+        "DATA_TYPE": "money",
+        "CHARACTER_MAXIMUM_LENGTH": null,
+        "IS_NULLABLE": "YES"
+    },
+    {
+        "TABLE_NAME": "StkTrnDtls",
+        "COLUMN_NAME": "BefCurBalVal",
+        "DATA_TYPE": "money",
+        "CHARACTER_MAXIMUM_LENGTH": null,
+        "IS_NULLABLE": "YES"
+    },
+    {
+        "TABLE_NAME": "StkTrnDtls",
+        "COLUMN_NAME": "AftCurBalQty",
+        "DATA_TYPE": "money",
+        "CHARACTER_MAXIMUM_LENGTH": null,
+        "IS_NULLABLE": "YES"
+    },
+    {
+        "TABLE_NAME": "StkTrnDtls",
+        "COLUMN_NAME": "AftCurBalVal",
+        "DATA_TYPE": "money",
+        "CHARACTER_MAXIMUM_LENGTH": null,
+        "IS_NULLABLE": "YES"
+    },
+    {
+        "TABLE_NAME": "StkTrnDtls",
+        "COLUMN_NAME": "PromoCode",
+        "DATA_TYPE": "varchar",
+        "CHARACTER_MAXIMUM_LENGTH": 32,
+        "IS_NULLABLE": "YES"
+    },
+    {
+        "TABLE_NAME": "StkTrnDtls",
+        "COLUMN_NAME": "PromoSlabSrlno",
+        "DATA_TYPE": "int",
+        "CHARACTER_MAXIMUM_LENGTH": null,
+        "IS_NULLABLE": "YES"
+    },
+    {
+        "TABLE_NAME": "StkTrnDtls",
+        "COLUMN_NAME": "PromoRemarks",
+        "DATA_TYPE": "varchar",
+        "CHARACTER_MAXIMUM_LENGTH": 256,
+        "IS_NULLABLE": "YES"
+    },
+    {
+        "TABLE_NAME": "StkTrnDtls",
+        "COLUMN_NAME": "PromoType",
+        "DATA_TYPE": "tinyint",
+        "CHARACTER_MAXIMUM_LENGTH": null,
+        "IS_NULLABLE": "YES"
+    },
+    {
+        "TABLE_NAME": "StkTrnDtls",
+        "COLUMN_NAME": "PromoDefType",
+        "DATA_TYPE": "tinyint",
+        "CHARACTER_MAXIMUM_LENGTH": null,
+        "IS_NULLABLE": "YES"
+    },
+    {
+        "TABLE_NAME": "StkTrnDtls",
+        "COLUMN_NAME": "PromoIssueTrnType",
+        "DATA_TYPE": "int",
+        "CHARACTER_MAXIMUM_LENGTH": null,
+        "IS_NULLABLE": "YES"
+    },
+    {
+        "TABLE_NAME": "StkTrnDtls",
+        "COLUMN_NAME": "PromoIssueTrnCtrlNo",
+        "DATA_TYPE": "int",
+        "CHARACTER_MAXIMUM_LENGTH": null,
+        "IS_NULLABLE": "YES"
+    },
+    {
+        "TABLE_NAME": "StkTrnDtls",
+        "COLUMN_NAME": "PromoFwdLinkType",
+        "DATA_TYPE": "int",
+        "CHARACTER_MAXIMUM_LENGTH": null,
+        "IS_NULLABLE": "YES"
+    },
+    {
+        "TABLE_NAME": "StkTrnDtls",
+        "COLUMN_NAME": "PromoFwdLinkCtrlNo",
+        "DATA_TYPE": "int",
+        "CHARACTER_MAXIMUM_LENGTH": null,
+        "IS_NULLABLE": "YES"
+    },
+    {
+        "TABLE_NAME": "StkTrnDtls",
+        "COLUMN_NAME": "PromoItemLevelOfferVal",
+        "DATA_TYPE": "money",
+        "CHARACTER_MAXIMUM_LENGTH": null,
+        "IS_NULLABLE": "YES"
+    },
+    {
+        "TABLE_NAME": "StkTrnDtls",
+        "COLUMN_NAME": "PromoItemlLevelDiscDtls",
+        "DATA_TYPE": "varchar",
+        "CHARACTER_MAXIMUM_LENGTH": 128,
+        "IS_NULLABLE": "YES"
+    },
+    {
+        "TABLE_NAME": "StkTrnDtls",
+        "COLUMN_NAME": "PromoItemGroup",
+        "DATA_TYPE": "tinyint",
+        "CHARACTER_MAXIMUM_LENGTH": null,
+        "IS_NULLABLE": "YES"
+    },
+    {
+        "TABLE_NAME": "StkTrnDtls",
+        "COLUMN_NAME": "PromoFlgItemLevel",
+        "DATA_TYPE": "tinyint",
+        "CHARACTER_MAXIMUM_LENGTH": null,
+        "IS_NULLABLE": "YES"
+    },
+    {
+        "TABLE_NAME": "StkTrnDtls",
+        "COLUMN_NAME": "PromoFlgBillLevel",
+        "DATA_TYPE": "tinyint",
+        "CHARACTER_MAXIMUM_LENGTH": null,
+        "IS_NULLABLE": "YES"
+    },
+    {
+        "TABLE_NAME": "StkTrnDtls",
+        "COLUMN_NAME": "PromoSetSrlNo",
+        "DATA_TYPE": "int",
+        "CHARACTER_MAXIMUM_LENGTH": null,
+        "IS_NULLABLE": "YES"
+    },
+    {
+        "TABLE_NAME": "StkTrnDtls",
+        "COLUMN_NAME": "PromoOfferItemType",
+        "DATA_TYPE": "tinyint",
+        "CHARACTER_MAXIMUM_LENGTH": null,
+        "IS_NULLABLE": "YES"
+    },
+    {
+        "TABLE_NAME": "StkTrnDtls",
+        "COLUMN_NAME": "ItemRemarks",
+        "DATA_TYPE": "varchar",
+        "CHARACTER_MAXIMUM_LENGTH": 256,
+        "IS_NULLABLE": "YES"
+    },
+    {
+        "TABLE_NAME": "StkTrnDtls",
+        "COLUMN_NAME": "DiscRate",
+        "DATA_TYPE": "money",
+        "CHARACTER_MAXIMUM_LENGTH": null,
+        "IS_NULLABLE": "YES"
+    },
+    {
+        "TABLE_NAME": "StkTrnDtls",
+        "COLUMN_NAME": "ServicedQty",
+        "DATA_TYPE": "money",
+        "CHARACTER_MAXIMUM_LENGTH": null,
+        "IS_NULLABLE": "YES"
+    },
+    {
+        "TABLE_NAME": "StkTrnDtls",
+        "COLUMN_NAME": "LinkPOFromLoc",
+        "DATA_TYPE": "varchar",
+        "CHARACTER_MAXIMUM_LENGTH": 32,
+        "IS_NULLABLE": "YES"
+    },
+    {
+        "TABLE_NAME": "StkTrnDtls",
+        "COLUMN_NAME": "LinkPoType",
+        "DATA_TYPE": "int",
+        "CHARACTER_MAXIMUM_LENGTH": null,
+        "IS_NULLABLE": "YES"
+    },
+    {
+        "TABLE_NAME": "StkTrnDtls",
+        "COLUMN_NAME": "LinkPoPrefix",
+        "DATA_TYPE": "varchar",
+        "CHARACTER_MAXIMUM_LENGTH": 50,
+        "IS_NULLABLE": "YES"
+    },
+    {
+        "TABLE_NAME": "StkTrnDtls",
+        "COLUMN_NAME": "LinkPoNumber",
+        "DATA_TYPE": "int",
+        "CHARACTER_MAXIMUM_LENGTH": null,
+        "IS_NULLABLE": "YES"
+    },
+    {
+        "TABLE_NAME": "StkTrnDtls",
+        "COLUMN_NAME": "LinkPoEntrySrlno",
+        "DATA_TYPE": "int",
+        "CHARACTER_MAXIMUM_LENGTH": null,
+        "IS_NULLABLE": "YES"
+    },
+    {
+        "TABLE_NAME": "StkTrnDtls",
+        "COLUMN_NAME": "LinkPoEntrySubSrlno",
+        "DATA_TYPE": "int",
+        "CHARACTER_MAXIMUM_LENGTH": null,
+        "IS_NULLABLE": "YES"
+    },
+    {
+        "TABLE_NAME": "StkTrnDtls",
+        "COLUMN_NAME": "LinkPoDelDate",
+        "DATA_TYPE": "datetime",
+        "CHARACTER_MAXIMUM_LENGTH": null,
+        "IS_NULLABLE": "YES"
+    },
+    {
+        "TABLE_NAME": "StkTrnDtls",
+        "COLUMN_NAME": "ServiceLoc",
+        "DATA_TYPE": "varchar",
+        "CHARACTER_MAXIMUM_LENGTH": 32,
+        "IS_NULLABLE": "YES"
+    },
+    {
+        "TABLE_NAME": "StkTrnDtls",
+        "COLUMN_NAME": "LinkEtTrntype",
+        "DATA_TYPE": "int",
+        "CHARACTER_MAXIMUM_LENGTH": null,
+        "IS_NULLABLE": "YES"
+    },
+    {
+        "TABLE_NAME": "StkTrnDtls",
+        "COLUMN_NAME": "LinkEtTrnCtrlno",
+        "DATA_TYPE": "int",
+        "CHARACTER_MAXIMUM_LENGTH": null,
+        "IS_NULLABLE": "YES"
+    },
+    {
+        "TABLE_NAME": "StkTrnDtls",
+        "COLUMN_NAME": "LinkEtDocSubSrlno",
+        "DATA_TYPE": "int",
+        "CHARACTER_MAXIMUM_LENGTH": null,
+        "IS_NULLABLE": "YES"
+    },
+    {
+        "TABLE_NAME": "StkTrnDtls",
+        "COLUMN_NAME": "TaxRevisionId",
+        "DATA_TYPE": "int",
+        "CHARACTER_MAXIMUM_LENGTH": null,
+        "IS_NULLABLE": "YES"
+    },
+    {
+        "TABLE_NAME": "StkTrnDtls",
+        "COLUMN_NAME": "ItemTaxFlag",
+        "DATA_TYPE": "int",
+        "CHARACTER_MAXIMUM_LENGTH": null,
+        "IS_NULLABLE": "YES"
+    },
+    {
+        "TABLE_NAME": "StkTrnDtls",
+        "COLUMN_NAME": "DocEntAddonsTax",
+        "DATA_TYPE": "money",
+        "CHARACTER_MAXIMUM_LENGTH": null,
+        "IS_NULLABLE": "YES"
+    },
+    {
+        "TABLE_NAME": "StkTrnDtls",
+        "COLUMN_NAME": "DocRndOffValue",
+        "DATA_TYPE": "money",
+        "CHARACTER_MAXIMUM_LENGTH": null,
+        "IS_NULLABLE": "YES"
+    },
+    {
+        "TABLE_NAME": "StkTrnDtls",
+        "COLUMN_NAME": "TaxAV1",
+        "DATA_TYPE": "money",
+        "CHARACTER_MAXIMUM_LENGTH": null,
+        "IS_NULLABLE": "YES"
+    },
+    {
+        "TABLE_NAME": "StkTrnDtls",
+        "COLUMN_NAME": "TaxAV2",
+        "DATA_TYPE": "money",
+        "CHARACTER_MAXIMUM_LENGTH": null,
+        "IS_NULLABLE": "YES"
+    },
+    {
+        "TABLE_NAME": "StkTrnDtls",
+        "COLUMN_NAME": "TaxAV3",
+        "DATA_TYPE": "money",
+        "CHARACTER_MAXIMUM_LENGTH": null,
+        "IS_NULLABLE": "YES"
+    },
+    {
+        "TABLE_NAME": "StkTrnDtls",
+        "COLUMN_NAME": "TaxAV4",
+        "DATA_TYPE": "money",
+        "CHARACTER_MAXIMUM_LENGTH": null,
+        "IS_NULLABLE": "YES"
+    },
+    {
+        "TABLE_NAME": "StkTrnDtls",
+        "COLUMN_NAME": "TaxAV5",
+        "DATA_TYPE": "money",
+        "CHARACTER_MAXIMUM_LENGTH": null,
+        "IS_NULLABLE": "YES"
+    },
+    {
+        "TABLE_NAME": "StkTrnDtls",
+        "COLUMN_NAME": "ProdServInd",
+        "DATA_TYPE": "int",
+        "CHARACTER_MAXIMUM_LENGTH": null,
+        "IS_NULLABLE": "YES"
+    },
+    {
+        "TABLE_NAME": "StkTrnDtls",
+        "COLUMN_NAME": "XS1",
+        "DATA_TYPE": "varchar",
+        "CHARACTER_MAXIMUM_LENGTH": 128,
+        "IS_NULLABLE": "YES"
+    },
+    {
+        "TABLE_NAME": "StkTrnDtls",
+        "COLUMN_NAME": "XS2",
+        "DATA_TYPE": "varchar",
+        "CHARACTER_MAXIMUM_LENGTH": 128,
+        "IS_NULLABLE": "YES"
+    },
+    {
+        "TABLE_NAME": "StkTrnDtls",
+        "COLUMN_NAME": "XS3",
+        "DATA_TYPE": "varchar",
+        "CHARACTER_MAXIMUM_LENGTH": 128,
+        "IS_NULLABLE": "YES"
+    },
+    {
+        "TABLE_NAME": "StkTrnDtls",
+        "COLUMN_NAME": "XS4",
+        "DATA_TYPE": "varchar",
+        "CHARACTER_MAXIMUM_LENGTH": 128,
+        "IS_NULLABLE": "YES"
+    },
+    {
+        "TABLE_NAME": "StkTrnDtls",
+        "COLUMN_NAME": "XS5",
+        "DATA_TYPE": "varchar",
+        "CHARACTER_MAXIMUM_LENGTH": 128,
+        "IS_NULLABLE": "YES"
+    },
+    {
+        "TABLE_NAME": "StkTrnDtls",
+        "COLUMN_NAME": "XS6",
+        "DATA_TYPE": "varchar",
+        "CHARACTER_MAXIMUM_LENGTH": 128,
+        "IS_NULLABLE": "YES"
+    },
+    {
+        "TABLE_NAME": "StkTrnDtls",
+        "COLUMN_NAME": "XS7",
+        "DATA_TYPE": "varchar",
+        "CHARACTER_MAXIMUM_LENGTH": 128,
+        "IS_NULLABLE": "YES"
+    },
+    {
+        "TABLE_NAME": "StkTrnDtls",
+        "COLUMN_NAME": "XS8",
+        "DATA_TYPE": "varchar",
+        "CHARACTER_MAXIMUM_LENGTH": 128,
+        "IS_NULLABLE": "YES"
+    },
+    {
+        "TABLE_NAME": "StkTrnDtls",
+        "COLUMN_NAME": "XI1",
+        "DATA_TYPE": "int",
+        "CHARACTER_MAXIMUM_LENGTH": null,
+        "IS_NULLABLE": "YES"
+    },
+    {
+        "TABLE_NAME": "StkTrnDtls",
+        "COLUMN_NAME": "XI2",
+        "DATA_TYPE": "int",
+        "CHARACTER_MAXIMUM_LENGTH": null,
+        "IS_NULLABLE": "YES"
+    },
+    {
+        "TABLE_NAME": "StkTrnDtls",
+        "COLUMN_NAME": "XI3",
+        "DATA_TYPE": "int",
+        "CHARACTER_MAXIMUM_LENGTH": null,
+        "IS_NULLABLE": "YES"
+    },
+    {
+        "TABLE_NAME": "StkTrnDtls",
+        "COLUMN_NAME": "XI4",
+        "DATA_TYPE": "int",
+        "CHARACTER_MAXIMUM_LENGTH": null,
+        "IS_NULLABLE": "YES"
+    },
+    {
+        "TABLE_NAME": "StkTrnDtls",
+        "COLUMN_NAME": "XM1",
+        "DATA_TYPE": "money",
+        "CHARACTER_MAXIMUM_LENGTH": null,
+        "IS_NULLABLE": "YES"
+    },
+    {
+        "TABLE_NAME": "StkTrnDtls",
+        "COLUMN_NAME": "XM2",
+        "DATA_TYPE": "money",
+        "CHARACTER_MAXIMUM_LENGTH": null,
+        "IS_NULLABLE": "YES"
+    },
+    {
+        "TABLE_NAME": "StkTrnDtls",
+        "COLUMN_NAME": "XM3",
+        "DATA_TYPE": "money",
+        "CHARACTER_MAXIMUM_LENGTH": null,
+        "IS_NULLABLE": "YES"
+    },
+    {
+        "TABLE_NAME": "StkTrnDtls",
+        "COLUMN_NAME": "XM4",
+        "DATA_TYPE": "money",
+        "CHARACTER_MAXIMUM_LENGTH": null,
+        "IS_NULLABLE": "YES"
+    },
+    {
+        "TABLE_NAME": "StkTrnDtls",
+        "COLUMN_NAME": "XD1",
+        "DATA_TYPE": "datetime",
+        "CHARACTER_MAXIMUM_LENGTH": null,
+        "IS_NULLABLE": "YES"
+    },
+    {
+        "TABLE_NAME": "StkTrnDtls",
+        "COLUMN_NAME": "XD2",
+        "DATA_TYPE": "datetime",
+        "CHARACTER_MAXIMUM_LENGTH": null,
+        "IS_NULLABLE": "YES"
+    },
+    {
+        "TABLE_NAME": "StkTrnDtls",
+        "COLUMN_NAME": "XD3",
+        "DATA_TYPE": "datetime",
+        "CHARACTER_MAXIMUM_LENGTH": null,
+        "IS_NULLABLE": "YES"
+    },
+    {
+        "TABLE_NAME": "StkTrnDtls",
+        "COLUMN_NAME": "XD4",
+        "DATA_TYPE": "datetime",
+        "CHARACTER_MAXIMUM_LENGTH": null,
+        "IS_NULLABLE": "YES"
+    },
+    {
+        "TABLE_NAME": "StkTrnDtls",
+        "COLUMN_NAME": "CS1",
+        "DATA_TYPE": "varchar",
+        "CHARACTER_MAXIMUM_LENGTH": 128,
+        "IS_NULLABLE": "YES"
+    },
+    {
+        "TABLE_NAME": "StkTrnDtls",
+        "COLUMN_NAME": "CS2",
+        "DATA_TYPE": "varchar",
+        "CHARACTER_MAXIMUM_LENGTH": 128,
+        "IS_NULLABLE": "YES"
+    },
+    {
+        "TABLE_NAME": "StkTrnDtls",
+        "COLUMN_NAME": "CS3",
+        "DATA_TYPE": "varchar",
+        "CHARACTER_MAXIMUM_LENGTH": 128,
+        "IS_NULLABLE": "YES"
+    },
+    {
+        "TABLE_NAME": "StkTrnDtls",
+        "COLUMN_NAME": "CS4",
+        "DATA_TYPE": "varchar",
+        "CHARACTER_MAXIMUM_LENGTH": 128,
+        "IS_NULLABLE": "YES"
+    },
+    {
+        "TABLE_NAME": "StkTrnDtls",
+        "COLUMN_NAME": "CS5",
+        "DATA_TYPE": "varchar",
+        "CHARACTER_MAXIMUM_LENGTH": 128,
+        "IS_NULLABLE": "YES"
+    },
+    {
+        "TABLE_NAME": "StkTrnDtls",
+        "COLUMN_NAME": "CS6",
+        "DATA_TYPE": "varchar",
+        "CHARACTER_MAXIMUM_LENGTH": 128,
+        "IS_NULLABLE": "YES"
+    },
+    {
+        "TABLE_NAME": "StkTrnDtls",
+        "COLUMN_NAME": "CS7",
+        "DATA_TYPE": "varchar",
+        "CHARACTER_MAXIMUM_LENGTH": 128,
+        "IS_NULLABLE": "YES"
+    },
+    {
+        "TABLE_NAME": "StkTrnDtls",
+        "COLUMN_NAME": "CS8",
+        "DATA_TYPE": "varchar",
+        "CHARACTER_MAXIMUM_LENGTH": 128,
+        "IS_NULLABLE": "YES"
+    },
+    {
+        "TABLE_NAME": "StkTrnDtls",
+        "COLUMN_NAME": "CI1",
+        "DATA_TYPE": "int",
+        "CHARACTER_MAXIMUM_LENGTH": null,
+        "IS_NULLABLE": "YES"
+    },
+    {
+        "TABLE_NAME": "StkTrnDtls",
+        "COLUMN_NAME": "CI2",
+        "DATA_TYPE": "int",
+        "CHARACTER_MAXIMUM_LENGTH": null,
+        "IS_NULLABLE": "YES"
+    },
+    {
+        "TABLE_NAME": "StkTrnDtls",
+        "COLUMN_NAME": "CI3",
+        "DATA_TYPE": "int",
+        "CHARACTER_MAXIMUM_LENGTH": null,
+        "IS_NULLABLE": "YES"
+    },
+    {
+        "TABLE_NAME": "StkTrnDtls",
+        "COLUMN_NAME": "CI4",
+        "DATA_TYPE": "int",
+        "CHARACTER_MAXIMUM_LENGTH": null,
+        "IS_NULLABLE": "YES"
+    },
+    {
+        "TABLE_NAME": "StkTrnDtls",
+        "COLUMN_NAME": "CM1",
+        "DATA_TYPE": "money",
+        "CHARACTER_MAXIMUM_LENGTH": null,
+        "IS_NULLABLE": "YES"
+    },
+    {
+        "TABLE_NAME": "StkTrnDtls",
+        "COLUMN_NAME": "CM2",
+        "DATA_TYPE": "money",
+        "CHARACTER_MAXIMUM_LENGTH": null,
+        "IS_NULLABLE": "YES"
+    },
+    {
+        "TABLE_NAME": "StkTrnDtls",
+        "COLUMN_NAME": "CM3",
+        "DATA_TYPE": "money",
+        "CHARACTER_MAXIMUM_LENGTH": null,
+        "IS_NULLABLE": "YES"
+    },
+    {
+        "TABLE_NAME": "StkTrnDtls",
+        "COLUMN_NAME": "CM4",
+        "DATA_TYPE": "money",
+        "CHARACTER_MAXIMUM_LENGTH": null,
+        "IS_NULLABLE": "YES"
+    },
+    {
+        "TABLE_NAME": "StkTrnDtls",
+        "COLUMN_NAME": "CD1",
+        "DATA_TYPE": "datetime",
+        "CHARACTER_MAXIMUM_LENGTH": null,
+        "IS_NULLABLE": "YES"
+    },
+    {
+        "TABLE_NAME": "StkTrnDtls",
+        "COLUMN_NAME": "CD2",
+        "DATA_TYPE": "datetime",
+        "CHARACTER_MAXIMUM_LENGTH": null,
+        "IS_NULLABLE": "YES"
+    },
+    {
+        "TABLE_NAME": "StkTrnDtls",
+        "COLUMN_NAME": "CD3",
+        "DATA_TYPE": "datetime",
+        "CHARACTER_MAXIMUM_LENGTH": null,
+        "IS_NULLABLE": "YES"
+    },
+    {
+        "TABLE_NAME": "StkTrnDtls",
+        "COLUMN_NAME": "CD4",
+        "DATA_TYPE": "datetime",
+        "CHARACTER_MAXIMUM_LENGTH": null,
+        "IS_NULLABLE": "YES"
+    },
+    {
+        "TABLE_NAME": "StkTrnDtls",
+        "COLUMN_NAME": "BatchNo",
+        "DATA_TYPE": "varchar",
+        "CHARACTER_MAXIMUM_LENGTH": 32,
+        "IS_NULLABLE": "YES"
+    },
+    {
+        "TABLE_NAME": "StkTrnDtls",
+        "COLUMN_NAME": "GradeCd",
+        "DATA_TYPE": "varchar",
+        "CHARACTER_MAXIMUM_LENGTH": 32,
+        "IS_NULLABLE": "YES"
+    },
+    {
+        "TABLE_NAME": "StkTrnDtls",
+        "COLUMN_NAME": "LocationCd",
+        "DATA_TYPE": "varchar",
+        "CHARACTER_MAXIMUM_LENGTH": 32,
+        "IS_NULLABLE": "YES"
+    },
+    {
+        "TABLE_NAME": "StkTrnDtls",
+        "COLUMN_NAME": "ServiceLocationCd",
+        "DATA_TYPE": "varchar",
+        "CHARACTER_MAXIMUM_LENGTH": 32,
+        "IS_NULLABLE": "YES"
+    },
+    {
+        "TABLE_NAME": "StkTrnDtls",
+        "COLUMN_NAME": "MinMOP",
+        "DATA_TYPE": "money",
+        "CHARACTER_MAXIMUM_LENGTH": null,
+        "IS_NULLABLE": "YES"
+    },
+    {
+        "TABLE_NAME": "StkTrnDtls",
+        "COLUMN_NAME": "MaxMop",
+        "DATA_TYPE": "money",
+        "CHARACTER_MAXIMUM_LENGTH": null,
+        "IS_NULLABLE": "YES"
+    },
+    {
+        "TABLE_NAME": "StkTrnHdr",
+        "COLUMN_NAME": "TrnType",
+        "DATA_TYPE": "int",
+        "CHARACTER_MAXIMUM_LENGTH": null,
+        "IS_NULLABLE": "NO"
+    },
+    {
+        "TABLE_NAME": "StkTrnHdr",
+        "COLUMN_NAME": "TrnCtrlNo",
+        "DATA_TYPE": "int",
+        "CHARACTER_MAXIMUM_LENGTH": null,
+        "IS_NULLABLE": "NO"
+    },
+    {
+        "TABLE_NAME": "StkTrnHdr",
+        "COLUMN_NAME": "DocNoPrefix",
+        "DATA_TYPE": "varchar",
+        "CHARACTER_MAXIMUM_LENGTH": 8,
+        "IS_NULLABLE": "YES"
+    },
+    {
+        "TABLE_NAME": "StkTrnHdr",
+        "COLUMN_NAME": "DocNo",
+        "DATA_TYPE": "int",
+        "CHARACTER_MAXIMUM_LENGTH": null,
+        "IS_NULLABLE": "YES"
+    },
+    {
+        "TABLE_NAME": "StkTrnHdr",
+        "COLUMN_NAME": "DocRsnCd",
+        "DATA_TYPE": "varchar",
+        "CHARACTER_MAXIMUM_LENGTH": 16,
+        "IS_NULLABLE": "YES"
+    },
+    {
+        "TABLE_NAME": "StkTrnHdr",
+        "COLUMN_NAME": "DocDt",
+        "DATA_TYPE": "datetime",
+        "CHARACTER_MAXIMUM_LENGTH": null,
+        "IS_NULLABLE": "YES"
+    },
+    {
+        "TABLE_NAME": "StkTrnHdr",
+        "COLUMN_NAME": "DocTime",
+        "DATA_TYPE": "datetime",
+        "CHARACTER_MAXIMUM_LENGTH": null,
+        "IS_NULLABLE": "YES"
+    },
+    {
+        "TABLE_NAME": "StkTrnHdr",
+        "COLUMN_NAME": "DocStat",
+        "DATA_TYPE": "varchar",
+        "CHARACTER_MAXIMUM_LENGTH": 4,
+        "IS_NULLABLE": "YES"
+    },
+    {
+        "TABLE_NAME": "StkTrnHdr",
+        "COLUMN_NAME": "PackCountDoc",
+        "DATA_TYPE": "int",
+        "CHARACTER_MAXIMUM_LENGTH": null,
+        "IS_NULLABLE": "YES"
+    },
+    {
+        "TABLE_NAME": "StkTrnHdr",
+        "COLUMN_NAME": "PackCountPhy",
+        "DATA_TYPE": "int",
+        "CHARACTER_MAXIMUM_LENGTH": null,
+        "IS_NULLABLE": "YES"
+    },
+    {
+        "TABLE_NAME": "StkTrnHdr",
+        "COLUMN_NAME": "PartyType",
+        "DATA_TYPE": "int",
+        "CHARACTER_MAXIMUM_LENGTH": null,
+        "IS_NULLABLE": "YES"
+    },
+    {
+        "TABLE_NAME": "StkTrnHdr",
+        "COLUMN_NAME": "PartyId",
+        "DATA_TYPE": "varchar",
+        "CHARACTER_MAXIMUM_LENGTH": 16,
+        "IS_NULLABLE": "YES"
+    },
+    {
+        "TABLE_NAME": "StkTrnHdr",
+        "COLUMN_NAME": "PartyStkDocNo",
+        "DATA_TYPE": "varchar",
+        "CHARACTER_MAXIMUM_LENGTH": 32,
+        "IS_NULLABLE": "YES"
+    },
+    {
+        "TABLE_NAME": "StkTrnHdr",
+        "COLUMN_NAME": "PartyStkDocDt",
+        "DATA_TYPE": "datetime",
+        "CHARACTER_MAXIMUM_LENGTH": null,
+        "IS_NULLABLE": "YES"
+    },
+    {
+        "TABLE_NAME": "StkTrnHdr",
+        "COLUMN_NAME": "OrdDocType",
+        "DATA_TYPE": "int",
+        "CHARACTER_MAXIMUM_LENGTH": null,
+        "IS_NULLABLE": "YES"
+    },
+    {
+        "TABLE_NAME": "StkTrnHdr",
+        "COLUMN_NAME": "OrdDocNoPrefix",
+        "DATA_TYPE": "varchar",
+        "CHARACTER_MAXIMUM_LENGTH": 8,
+        "IS_NULLABLE": "YES"
+    },
+    {
+        "TABLE_NAME": "StkTrnHdr",
+        "COLUMN_NAME": "OrdDocNo",
+        "DATA_TYPE": "int",
+        "CHARACTER_MAXIMUM_LENGTH": null,
+        "IS_NULLABLE": "YES"
+    },
+    {
+        "TABLE_NAME": "StkTrnHdr",
+        "COLUMN_NAME": "OrdDocDt",
+        "DATA_TYPE": "datetime",
+        "CHARACTER_MAXIMUM_LENGTH": null,
+        "IS_NULLABLE": "YES"
+    },
+    {
+        "TABLE_NAME": "StkTrnHdr",
+        "COLUMN_NAME": "AccDocTyp",
+        "DATA_TYPE": "int",
+        "CHARACTER_MAXIMUM_LENGTH": null,
+        "IS_NULLABLE": "YES"
+    },
+    {
+        "TABLE_NAME": "StkTrnHdr",
+        "COLUMN_NAME": "AccDocNo",
+        "DATA_TYPE": "varchar",
+        "CHARACTER_MAXIMUM_LENGTH": 32,
+        "IS_NULLABLE": "YES"
+    },
+    {
+        "TABLE_NAME": "StkTrnHdr",
+        "COLUMN_NAME": "AccDocDt",
+        "DATA_TYPE": "datetime",
+        "CHARACTER_MAXIMUM_LENGTH": null,
+        "IS_NULLABLE": "YES"
+    },
+    {
+        "TABLE_NAME": "StkTrnHdr",
+        "COLUMN_NAME": "TotDocValue",
+        "DATA_TYPE": "money",
+        "CHARACTER_MAXIMUM_LENGTH": null,
+        "IS_NULLABLE": "YES"
+    },
+    {
+        "TABLE_NAME": "StkTrnHdr",
+        "COLUMN_NAME": "TotDocDisc",
+        "DATA_TYPE": "money",
+        "CHARACTER_MAXIMUM_LENGTH": null,
+        "IS_NULLABLE": "YES"
+    },
+    {
+        "TABLE_NAME": "StkTrnHdr",
+        "COLUMN_NAME": "TotDocTax",
+        "DATA_TYPE": "money",
+        "CHARACTER_MAXIMUM_LENGTH": null,
+        "IS_NULLABLE": "YES"
+    },
+    {
+        "TABLE_NAME": "StkTrnHdr",
+        "COLUMN_NAME": "TotDocAddons",
+        "DATA_TYPE": "money",
+        "CHARACTER_MAXIMUM_LENGTH": null,
+        "IS_NULLABLE": "YES"
+    },
+    {
+        "TABLE_NAME": "StkTrnHdr",
+        "COLUMN_NAME": "TotDocDedns",
+        "DATA_TYPE": "money",
+        "CHARACTER_MAXIMUM_LENGTH": null,
+        "IS_NULLABLE": "YES"
+    },
+    {
+        "TABLE_NAME": "StkTrnHdr",
+        "COLUMN_NAME": "NetDocValue",
+        "DATA_TYPE": "money",
+        "CHARACTER_MAXIMUM_LENGTH": null,
+        "IS_NULLABLE": "YES"
+    },
+    {
+        "TABLE_NAME": "StkTrnHdr",
+        "COLUMN_NAME": "EnteredSizewise",
+        "DATA_TYPE": "bit",
+        "CHARACTER_MAXIMUM_LENGTH": null,
+        "IS_NULLABLE": "YES"
+    },
+    {
+        "TABLE_NAME": "StkTrnHdr",
+        "COLUMN_NAME": "TaxComp1",
+        "DATA_TYPE": "money",
+        "CHARACTER_MAXIMUM_LENGTH": null,
+        "IS_NULLABLE": "YES"
+    },
+    {
+        "TABLE_NAME": "StkTrnHdr",
+        "COLUMN_NAME": "TaxComp2",
+        "DATA_TYPE": "money",
+        "CHARACTER_MAXIMUM_LENGTH": null,
+        "IS_NULLABLE": "YES"
+    },
+    {
+        "TABLE_NAME": "StkTrnHdr",
+        "COLUMN_NAME": "TaxComp3",
+        "DATA_TYPE": "money",
+        "CHARACTER_MAXIMUM_LENGTH": null,
+        "IS_NULLABLE": "YES"
+    },
+    {
+        "TABLE_NAME": "StkTrnHdr",
+        "COLUMN_NAME": "TaxComp4",
+        "DATA_TYPE": "money",
+        "CHARACTER_MAXIMUM_LENGTH": null,
+        "IS_NULLABLE": "YES"
+    },
+    {
+        "TABLE_NAME": "StkTrnHdr",
+        "COLUMN_NAME": "TaxComp5",
+        "DATA_TYPE": "money",
+        "CHARACTER_MAXIMUM_LENGTH": null,
+        "IS_NULLABLE": "YES"
+    },
+    {
+        "TABLE_NAME": "StkTrnHdr",
+        "COLUMN_NAME": "FrwdRefTrnType",
+        "DATA_TYPE": "int",
+        "CHARACTER_MAXIMUM_LENGTH": null,
+        "IS_NULLABLE": "YES"
+    },
+    {
+        "TABLE_NAME": "StkTrnHdr",
+        "COLUMN_NAME": "FrwdRefCtrlNo",
+        "DATA_TYPE": "int",
+        "CHARACTER_MAXIMUM_LENGTH": null,
+        "IS_NULLABLE": "YES"
+    },
+    {
+        "TABLE_NAME": "StkTrnHdr",
+        "COLUMN_NAME": "BkwdRefTrnType",
+        "DATA_TYPE": "int",
+        "CHARACTER_MAXIMUM_LENGTH": null,
+        "IS_NULLABLE": "YES"
+    },
+    {
+        "TABLE_NAME": "StkTrnHdr",
+        "COLUMN_NAME": "BkwdRefCtrlNo",
+        "DATA_TYPE": "int",
+        "CHARACTER_MAXIMUM_LENGTH": null,
+        "IS_NULLABLE": "YES"
+    },
+    {
+        "TABLE_NAME": "StkTrnHdr",
+        "COLUMN_NAME": "DocVoidInd",
+        "DATA_TYPE": "int",
+        "CHARACTER_MAXIMUM_LENGTH": null,
+        "IS_NULLABLE": "YES"
+    },
+    {
+        "TABLE_NAME": "StkTrnHdr",
+        "COLUMN_NAME": "BilllvlDiscId",
+        "DATA_TYPE": "varchar",
+        "CHARACTER_MAXIMUM_LENGTH": 50,
+        "IS_NULLABLE": "YES"
+    },
+    {
+        "TABLE_NAME": "StkTrnHdr",
+        "COLUMN_NAME": "BillPassInd",
+        "DATA_TYPE": "int",
+        "CHARACTER_MAXIMUM_LENGTH": null,
+        "IS_NULLABLE": "YES"
+    },
+    {
+        "TABLE_NAME": "StkTrnHdr",
+        "COLUMN_NAME": "VAUid",
+        "DATA_TYPE": "varchar",
+        "CHARACTER_MAXIMUM_LENGTH": 32,
+        "IS_NULLABLE": "YES"
+    },
+    {
+        "TABLE_NAME": "StkTrnHdr",
+        "COLUMN_NAME": "VActr",
+        "DATA_TYPE": "int",
+        "CHARACTER_MAXIMUM_LENGTH": null,
+        "IS_NULLABLE": "YES"
+    },
+    {
+        "TABLE_NAME": "StkTrnHdr",
+        "COLUMN_NAME": "VATermId",
+        "DATA_TYPE": "varchar",
+        "CHARACTER_MAXIMUM_LENGTH": 32,
+        "IS_NULLABLE": "YES"
+    },
+    {
+        "TABLE_NAME": "StkTrnHdr",
+        "COLUMN_NAME": "VACompCode",
+        "DATA_TYPE": "varchar",
+        "CHARACTER_MAXIMUM_LENGTH": 16,
+        "IS_NULLABLE": "YES"
+    },
+    {
+        "TABLE_NAME": "StkTrnHdr",
+        "COLUMN_NAME": "DocRemarks",
+        "DATA_TYPE": "varchar",
+        "CHARACTER_MAXIMUM_LENGTH": 250,
+        "IS_NULLABLE": "YES"
+    },
+    {
+        "TABLE_NAME": "StkTrnHdr",
+        "COLUMN_NAME": "TotalLineItems",
+        "DATA_TYPE": "int",
+        "CHARACTER_MAXIMUM_LENGTH": null,
+        "IS_NULLABLE": "YES"
+    },
+    {
+        "TABLE_NAME": "StkTrnHdr",
+        "COLUMN_NAME": "SField1",
+        "DATA_TYPE": "varchar",
+        "CHARACTER_MAXIMUM_LENGTH": 256,
+        "IS_NULLABLE": "YES"
+    },
+    {
+        "TABLE_NAME": "StkTrnHdr",
+        "COLUMN_NAME": "SField2",
+        "DATA_TYPE": "varchar",
+        "CHARACTER_MAXIMUM_LENGTH": 256,
+        "IS_NULLABLE": "YES"
+    },
+    {
+        "TABLE_NAME": "StkTrnHdr",
+        "COLUMN_NAME": "SField3",
+        "DATA_TYPE": "varchar",
+        "CHARACTER_MAXIMUM_LENGTH": 256,
+        "IS_NULLABLE": "YES"
+    },
+    {
+        "TABLE_NAME": "StkTrnHdr",
+        "COLUMN_NAME": "SField4",
+        "DATA_TYPE": "varchar",
+        "CHARACTER_MAXIMUM_LENGTH": 256,
+        "IS_NULLABLE": "YES"
+    },
+    {
+        "TABLE_NAME": "StkTrnHdr",
+        "COLUMN_NAME": "SField5",
+        "DATA_TYPE": "varchar",
+        "CHARACTER_MAXIMUM_LENGTH": 256,
+        "IS_NULLABLE": "YES"
+    },
+    {
+        "TABLE_NAME": "StkTrnHdr",
+        "COLUMN_NAME": "NField1",
+        "DATA_TYPE": "int",
+        "CHARACTER_MAXIMUM_LENGTH": null,
+        "IS_NULLABLE": "YES"
+    },
+    {
+        "TABLE_NAME": "StkTrnHdr",
+        "COLUMN_NAME": "NField2",
+        "DATA_TYPE": "int",
+        "CHARACTER_MAXIMUM_LENGTH": null,
+        "IS_NULLABLE": "YES"
+    },
+    {
+        "TABLE_NAME": "StkTrnHdr",
+        "COLUMN_NAME": "NField3",
+        "DATA_TYPE": "int",
+        "CHARACTER_MAXIMUM_LENGTH": null,
+        "IS_NULLABLE": "YES"
+    },
+    {
+        "TABLE_NAME": "StkTrnHdr",
+        "COLUMN_NAME": "NField4",
+        "DATA_TYPE": "int",
+        "CHARACTER_MAXIMUM_LENGTH": null,
+        "IS_NULLABLE": "YES"
+    },
+    {
+        "TABLE_NAME": "StkTrnHdr",
+        "COLUMN_NAME": "NField5",
+        "DATA_TYPE": "int",
+        "CHARACTER_MAXIMUM_LENGTH": null,
+        "IS_NULLABLE": "YES"
+    },
+    {
+        "TABLE_NAME": "StkTrnHdr",
+        "COLUMN_NAME": "DField1",
+        "DATA_TYPE": "datetime",
+        "CHARACTER_MAXIMUM_LENGTH": null,
+        "IS_NULLABLE": "YES"
+    },
+    {
+        "TABLE_NAME": "StkTrnHdr",
+        "COLUMN_NAME": "DField2",
+        "DATA_TYPE": "datetime",
+        "CHARACTER_MAXIMUM_LENGTH": null,
+        "IS_NULLABLE": "YES"
+    },
+    {
+        "TABLE_NAME": "StkTrnHdr",
+        "COLUMN_NAME": "DField3",
+        "DATA_TYPE": "datetime",
+        "CHARACTER_MAXIMUM_LENGTH": null,
+        "IS_NULLABLE": "YES"
+    },
+    {
+        "TABLE_NAME": "StkTrnHdr",
+        "COLUMN_NAME": "BField1",
+        "DATA_TYPE": "bit",
+        "CHARACTER_MAXIMUM_LENGTH": null,
+        "IS_NULLABLE": "YES"
+    },
+    {
+        "TABLE_NAME": "StkTrnHdr",
+        "COLUMN_NAME": "BField2",
+        "DATA_TYPE": "bit",
+        "CHARACTER_MAXIMUM_LENGTH": null,
+        "IS_NULLABLE": "YES"
+    },
+    {
+        "TABLE_NAME": "StkTrnHdr",
+        "COLUMN_NAME": "ProdServInd",
+        "DATA_TYPE": "varchar",
+        "CHARACTER_MAXIMUM_LENGTH": 1,
+        "IS_NULLABLE": "YES"
+    },
+    {
+        "TABLE_NAME": "StkTrnHdr",
+        "COLUMN_NAME": "TotDocPriceFactor",
+        "DATA_TYPE": "money",
+        "CHARACTER_MAXIMUM_LENGTH": null,
+        "IS_NULLABLE": "YES"
+    },
+    {
+        "TABLE_NAME": "StkTrnHdr",
+        "COLUMN_NAME": "TotDocED",
+        "DATA_TYPE": "money",
+        "CHARACTER_MAXIMUM_LENGTH": null,
+        "IS_NULLABLE": "YES"
+    },
+    {
+        "TABLE_NAME": "StkTrnHdr",
+        "COLUMN_NAME": "TotDocEntBefTaxAddons",
+        "DATA_TYPE": "money",
+        "CHARACTER_MAXIMUM_LENGTH": null,
+        "IS_NULLABLE": "YES"
+    },
+    {
+        "TABLE_NAME": "StkTrnHdr",
+        "COLUMN_NAME": "TotDocEntBefTaxDedns",
+        "DATA_TYPE": "money",
+        "CHARACTER_MAXIMUM_LENGTH": null,
+        "IS_NULLABLE": "YES"
+    },
+    {
+        "TABLE_NAME": "StkTrnHdr",
+        "COLUMN_NAME": "TotDocEntAftTaxAddons",
+        "DATA_TYPE": "money",
+        "CHARACTER_MAXIMUM_LENGTH": null,
+        "IS_NULLABLE": "YES"
+    },
+    {
+        "TABLE_NAME": "StkTrnHdr",
+        "COLUMN_NAME": "TotDocEntAftTaxDedns",
+        "DATA_TYPE": "money",
+        "CHARACTER_MAXIMUM_LENGTH": null,
+        "IS_NULLABLE": "YES"
+    },
+    {
+        "TABLE_NAME": "StkTrnHdr",
+        "COLUMN_NAME": "PromoCode",
+        "DATA_TYPE": "varchar",
+        "CHARACTER_MAXIMUM_LENGTH": 32,
+        "IS_NULLABLE": "YES"
+    },
+    {
+        "TABLE_NAME": "StkTrnHdr",
+        "COLUMN_NAME": "PromoSlabSrlno",
+        "DATA_TYPE": "int",
+        "CHARACTER_MAXIMUM_LENGTH": null,
+        "IS_NULLABLE": "YES"
+    },
+    {
+        "TABLE_NAME": "StkTrnHdr",
+        "COLUMN_NAME": "PromoRemarks",
+        "DATA_TYPE": "varchar",
+        "CHARACTER_MAXIMUM_LENGTH": 256,
+        "IS_NULLABLE": "YES"
+    },
+    {
+        "TABLE_NAME": "StkTrnHdr",
+        "COLUMN_NAME": "PromoType",
+        "DATA_TYPE": "tinyint",
+        "CHARACTER_MAXIMUM_LENGTH": null,
+        "IS_NULLABLE": "YES"
+    },
+    {
+        "TABLE_NAME": "StkTrnHdr",
+        "COLUMN_NAME": "PromoDefType",
+        "DATA_TYPE": "tinyint",
+        "CHARACTER_MAXIMUM_LENGTH": null,
+        "IS_NULLABLE": "YES"
+    },
+    {
+        "TABLE_NAME": "StkTrnHdr",
+        "COLUMN_NAME": "PromoIssueTrnType",
+        "DATA_TYPE": "int",
+        "CHARACTER_MAXIMUM_LENGTH": null,
+        "IS_NULLABLE": "YES"
+    },
+    {
+        "TABLE_NAME": "StkTrnHdr",
+        "COLUMN_NAME": "PromoIssueTrnCtrlNo",
+        "DATA_TYPE": "int",
+        "CHARACTER_MAXIMUM_LENGTH": null,
+        "IS_NULLABLE": "YES"
+    },
+    {
+        "TABLE_NAME": "StkTrnHdr",
+        "COLUMN_NAME": "PromoFwdLinkType",
+        "DATA_TYPE": "int",
+        "CHARACTER_MAXIMUM_LENGTH": null,
+        "IS_NULLABLE": "YES"
+    },
+    {
+        "TABLE_NAME": "StkTrnHdr",
+        "COLUMN_NAME": "PromoFwdLinkCtrlNo",
+        "DATA_TYPE": "int",
+        "CHARACTER_MAXIMUM_LENGTH": null,
+        "IS_NULLABLE": "YES"
+    },
+    {
+        "TABLE_NAME": "StkTrnHdr",
+        "COLUMN_NAME": "PromoBillLevelOfferVal",
+        "DATA_TYPE": "money",
+        "CHARACTER_MAXIMUM_LENGTH": null,
+        "IS_NULLABLE": "YES"
+    },
+    {
+        "TABLE_NAME": "StkTrnHdr",
+        "COLUMN_NAME": "PromoItemLevelOfferVal",
+        "DATA_TYPE": "money",
+        "CHARACTER_MAXIMUM_LENGTH": null,
+        "IS_NULLABLE": "YES"
+    },
+    {
+        "TABLE_NAME": "StkTrnHdr",
+        "COLUMN_NAME": "PromoItemLevelDiscVal",
+        "DATA_TYPE": "money",
+        "CHARACTER_MAXIMUM_LENGTH": null,
+        "IS_NULLABLE": "YES"
+    },
+    {
+        "TABLE_NAME": "StkTrnHdr",
+        "COLUMN_NAME": "PromoBillLevelDiscDtls",
+        "DATA_TYPE": "varchar",
+        "CHARACTER_MAXIMUM_LENGTH": 128,
+        "IS_NULLABLE": "YES"
+    },
+    {
+        "TABLE_NAME": "StkTrnHdr",
+        "COLUMN_NAME": "ReasonCodeForCancel",
+        "DATA_TYPE": "varchar",
+        "CHARACTER_MAXIMUM_LENGTH": 50,
+        "IS_NULLABLE": "YES"
+    },
+    {
+        "TABLE_NAME": "StkTrnHdr",
+        "COLUMN_NAME": "GenDiscReason",
+        "DATA_TYPE": "varchar",
+        "CHARACTER_MAXIMUM_LENGTH": 250,
+        "IS_NULLABLE": "YES"
+    },
+    {
+        "TABLE_NAME": "StkTrnHdr",
+        "COLUMN_NAME": "LinkEtTrnType",
+        "DATA_TYPE": "int",
+        "CHARACTER_MAXIMUM_LENGTH": null,
+        "IS_NULLABLE": "YES"
+    },
+    {
+        "TABLE_NAME": "StkTrnHdr",
+        "COLUMN_NAME": "LinkEtTrnCtrlNo",
+        "DATA_TYPE": "int",
+        "CHARACTER_MAXIMUM_LENGTH": null,
+        "IS_NULLABLE": "YES"
+    },
+    {
+        "TABLE_NAME": "StkTrnHdr",
+        "COLUMN_NAME": "LinkPOVendor",
+        "DATA_TYPE": "varchar",
+        "CHARACTER_MAXIMUM_LENGTH": 16,
+        "IS_NULLABLE": "YES"
+    },
+    {
+        "TABLE_NAME": "StkTrnHdr",
+        "COLUMN_NAME": "TotRndOffValue",
+        "DATA_TYPE": "money",
+        "CHARACTER_MAXIMUM_LENGTH": null,
+        "IS_NULLABLE": "YES"
+    },
+    {
+        "TABLE_NAME": "StkTrnHdr",
+        "COLUMN_NAME": "TotDocAddonsTax",
+        "DATA_TYPE": "money",
+        "CHARACTER_MAXIMUM_LENGTH": null,
+        "IS_NULLABLE": "YES"
+    },
+    {
+        "TABLE_NAME": "StkTrnHdr",
+        "COLUMN_NAME": "SHOPERDBVER",
+        "DATA_TYPE": "int",
+        "CHARACTER_MAXIMUM_LENGTH": null,
+        "IS_NULLABLE": "YES"
+    },
+    {
+        "TABLE_NAME": "StkTrnHdr",
+        "COLUMN_NAME": "XS1",
+        "DATA_TYPE": "varchar",
+        "CHARACTER_MAXIMUM_LENGTH": 128,
+        "IS_NULLABLE": "YES"
+    },
+    {
+        "TABLE_NAME": "StkTrnHdr",
+        "COLUMN_NAME": "XS2",
+        "DATA_TYPE": "varchar",
+        "CHARACTER_MAXIMUM_LENGTH": 128,
+        "IS_NULLABLE": "YES"
+    },
+    {
+        "TABLE_NAME": "StkTrnHdr",
+        "COLUMN_NAME": "XS3",
+        "DATA_TYPE": "varchar",
+        "CHARACTER_MAXIMUM_LENGTH": 128,
+        "IS_NULLABLE": "YES"
+    },
+    {
+        "TABLE_NAME": "StkTrnHdr",
+        "COLUMN_NAME": "XS4",
+        "DATA_TYPE": "varchar",
+        "CHARACTER_MAXIMUM_LENGTH": 128,
+        "IS_NULLABLE": "YES"
+    },
+    {
+        "TABLE_NAME": "StkTrnHdr",
+        "COLUMN_NAME": "XS5",
+        "DATA_TYPE": "varchar",
+        "CHARACTER_MAXIMUM_LENGTH": 128,
+        "IS_NULLABLE": "YES"
+    },
+    {
+        "TABLE_NAME": "StkTrnHdr",
+        "COLUMN_NAME": "XS6",
+        "DATA_TYPE": "varchar",
+        "CHARACTER_MAXIMUM_LENGTH": 128,
+        "IS_NULLABLE": "YES"
+    },
+    {
+        "TABLE_NAME": "StkTrnHdr",
+        "COLUMN_NAME": "XS7",
+        "DATA_TYPE": "varchar",
+        "CHARACTER_MAXIMUM_LENGTH": 128,
+        "IS_NULLABLE": "YES"
+    },
+    {
+        "TABLE_NAME": "StkTrnHdr",
+        "COLUMN_NAME": "XS8",
+        "DATA_TYPE": "varchar",
+        "CHARACTER_MAXIMUM_LENGTH": 128,
+        "IS_NULLABLE": "YES"
+    },
+    {
+        "TABLE_NAME": "StkTrnHdr",
+        "COLUMN_NAME": "XI1",
+        "DATA_TYPE": "int",
+        "CHARACTER_MAXIMUM_LENGTH": null,
+        "IS_NULLABLE": "YES"
+    },
+    {
+        "TABLE_NAME": "StkTrnHdr",
+        "COLUMN_NAME": "XI2",
+        "DATA_TYPE": "int",
+        "CHARACTER_MAXIMUM_LENGTH": null,
+        "IS_NULLABLE": "YES"
+    },
+    {
+        "TABLE_NAME": "StkTrnHdr",
+        "COLUMN_NAME": "XI3",
+        "DATA_TYPE": "int",
+        "CHARACTER_MAXIMUM_LENGTH": null,
+        "IS_NULLABLE": "YES"
+    },
+    {
+        "TABLE_NAME": "StkTrnHdr",
+        "COLUMN_NAME": "XI4",
+        "DATA_TYPE": "int",
+        "CHARACTER_MAXIMUM_LENGTH": null,
+        "IS_NULLABLE": "YES"
+    },
+    {
+        "TABLE_NAME": "StkTrnHdr",
+        "COLUMN_NAME": "XM1",
+        "DATA_TYPE": "money",
+        "CHARACTER_MAXIMUM_LENGTH": null,
+        "IS_NULLABLE": "YES"
+    },
+    {
+        "TABLE_NAME": "StkTrnHdr",
+        "COLUMN_NAME": "XM2",
+        "DATA_TYPE": "money",
+        "CHARACTER_MAXIMUM_LENGTH": null,
+        "IS_NULLABLE": "YES"
+    },
+    {
+        "TABLE_NAME": "StkTrnHdr",
+        "COLUMN_NAME": "XM3",
+        "DATA_TYPE": "money",
+        "CHARACTER_MAXIMUM_LENGTH": null,
+        "IS_NULLABLE": "YES"
+    },
+    {
+        "TABLE_NAME": "StkTrnHdr",
+        "COLUMN_NAME": "XM4",
+        "DATA_TYPE": "money",
+        "CHARACTER_MAXIMUM_LENGTH": null,
+        "IS_NULLABLE": "YES"
+    },
+    {
+        "TABLE_NAME": "StkTrnHdr",
+        "COLUMN_NAME": "XD1",
+        "DATA_TYPE": "datetime",
+        "CHARACTER_MAXIMUM_LENGTH": null,
+        "IS_NULLABLE": "YES"
+    },
+    {
+        "TABLE_NAME": "StkTrnHdr",
+        "COLUMN_NAME": "XD2",
+        "DATA_TYPE": "datetime",
+        "CHARACTER_MAXIMUM_LENGTH": null,
+        "IS_NULLABLE": "YES"
+    },
+    {
+        "TABLE_NAME": "StkTrnHdr",
+        "COLUMN_NAME": "XD3",
+        "DATA_TYPE": "datetime",
+        "CHARACTER_MAXIMUM_LENGTH": null,
+        "IS_NULLABLE": "YES"
+    },
+    {
+        "TABLE_NAME": "StkTrnHdr",
+        "COLUMN_NAME": "XD4",
+        "DATA_TYPE": "datetime",
+        "CHARACTER_MAXIMUM_LENGTH": null,
+        "IS_NULLABLE": "YES"
+    },
+    {
+        "TABLE_NAME": "StkTrnHdr",
+        "COLUMN_NAME": "CS1",
+        "DATA_TYPE": "varchar",
+        "CHARACTER_MAXIMUM_LENGTH": 128,
+        "IS_NULLABLE": "YES"
+    },
+    {
+        "TABLE_NAME": "StkTrnHdr",
+        "COLUMN_NAME": "CS2",
+        "DATA_TYPE": "varchar",
+        "CHARACTER_MAXIMUM_LENGTH": 128,
+        "IS_NULLABLE": "YES"
+    },
+    {
+        "TABLE_NAME": "StkTrnHdr",
+        "COLUMN_NAME": "CS3",
+        "DATA_TYPE": "varchar",
+        "CHARACTER_MAXIMUM_LENGTH": 128,
+        "IS_NULLABLE": "YES"
+    },
+    {
+        "TABLE_NAME": "StkTrnHdr",
+        "COLUMN_NAME": "CS4",
+        "DATA_TYPE": "varchar",
+        "CHARACTER_MAXIMUM_LENGTH": 128,
+        "IS_NULLABLE": "YES"
+    },
+    {
+        "TABLE_NAME": "StkTrnHdr",
+        "COLUMN_NAME": "CS5",
+        "DATA_TYPE": "varchar",
+        "CHARACTER_MAXIMUM_LENGTH": 128,
+        "IS_NULLABLE": "YES"
+    },
+    {
+        "TABLE_NAME": "StkTrnHdr",
+        "COLUMN_NAME": "CS6",
+        "DATA_TYPE": "varchar",
+        "CHARACTER_MAXIMUM_LENGTH": 128,
+        "IS_NULLABLE": "YES"
+    },
+    {
+        "TABLE_NAME": "StkTrnHdr",
+        "COLUMN_NAME": "CS7",
+        "DATA_TYPE": "varchar",
+        "CHARACTER_MAXIMUM_LENGTH": 128,
+        "IS_NULLABLE": "YES"
+    },
+    {
+        "TABLE_NAME": "StkTrnHdr",
+        "COLUMN_NAME": "CS8",
+        "DATA_TYPE": "varchar",
+        "CHARACTER_MAXIMUM_LENGTH": 128,
+        "IS_NULLABLE": "YES"
+    },
+    {
+        "TABLE_NAME": "StkTrnHdr",
+        "COLUMN_NAME": "CI1",
+        "DATA_TYPE": "int",
+        "CHARACTER_MAXIMUM_LENGTH": null,
+        "IS_NULLABLE": "YES"
+    },
+    {
+        "TABLE_NAME": "StkTrnHdr",
+        "COLUMN_NAME": "CI2",
+        "DATA_TYPE": "int",
+        "CHARACTER_MAXIMUM_LENGTH": null,
+        "IS_NULLABLE": "YES"
+    },
+    {
+        "TABLE_NAME": "StkTrnHdr",
+        "COLUMN_NAME": "CI3",
+        "DATA_TYPE": "int",
+        "CHARACTER_MAXIMUM_LENGTH": null,
+        "IS_NULLABLE": "YES"
+    },
+    {
+        "TABLE_NAME": "StkTrnHdr",
+        "COLUMN_NAME": "CI4",
+        "DATA_TYPE": "int",
+        "CHARACTER_MAXIMUM_LENGTH": null,
+        "IS_NULLABLE": "YES"
+    },
+    {
+        "TABLE_NAME": "StkTrnHdr",
+        "COLUMN_NAME": "CM1",
+        "DATA_TYPE": "money",
+        "CHARACTER_MAXIMUM_LENGTH": null,
+        "IS_NULLABLE": "YES"
+    },
+    {
+        "TABLE_NAME": "StkTrnHdr",
+        "COLUMN_NAME": "CM2",
+        "DATA_TYPE": "money",
+        "CHARACTER_MAXIMUM_LENGTH": null,
+        "IS_NULLABLE": "YES"
+    },
+    {
+        "TABLE_NAME": "StkTrnHdr",
+        "COLUMN_NAME": "CM3",
+        "DATA_TYPE": "money",
+        "CHARACTER_MAXIMUM_LENGTH": null,
+        "IS_NULLABLE": "YES"
+    },
+    {
+        "TABLE_NAME": "StkTrnHdr",
+        "COLUMN_NAME": "CM4",
+        "DATA_TYPE": "money",
+        "CHARACTER_MAXIMUM_LENGTH": null,
+        "IS_NULLABLE": "YES"
+    },
+    {
+        "TABLE_NAME": "StkTrnHdr",
+        "COLUMN_NAME": "CD1",
+        "DATA_TYPE": "datetime",
+        "CHARACTER_MAXIMUM_LENGTH": null,
+        "IS_NULLABLE": "YES"
+    },
+    {
+        "TABLE_NAME": "StkTrnHdr",
+        "COLUMN_NAME": "CD2",
+        "DATA_TYPE": "datetime",
+        "CHARACTER_MAXIMUM_LENGTH": null,
+        "IS_NULLABLE": "YES"
+    },
+    {
+        "TABLE_NAME": "StkTrnHdr",
+        "COLUMN_NAME": "CD3",
+        "DATA_TYPE": "datetime",
+        "CHARACTER_MAXIMUM_LENGTH": null,
+        "IS_NULLABLE": "YES"
+    },
+    {
+        "TABLE_NAME": "StkTrnHdr",
+        "COLUMN_NAME": "CD4",
+        "DATA_TYPE": "datetime",
+        "CHARACTER_MAXIMUM_LENGTH": null,
+        "IS_NULLABLE": "YES"
+    },
+    {
+        "TABLE_NAME": "StockMaster",
+        "COLUMN_NAME": "StockNo",
+        "DATA_TYPE": "varchar",
+        "CHARACTER_MAXIMUM_LENGTH": 32,
+        "IS_NULLABLE": "NO"
+    },
+    {
+        "TABLE_NAME": "StockMaster",
+        "COLUMN_NAME": "BatchSrlNo",
+        "DATA_TYPE": "varchar",
+        "CHARACTER_MAXIMUM_LENGTH": 16,
+        "IS_NULLABLE": "NO"
+    },
+    {
+        "TABLE_NAME": "StockMaster",
+        "COLUMN_NAME": "LocnId",
+        "DATA_TYPE": "varchar",
+        "CHARACTER_MAXIMUM_LENGTH": 16,
+        "IS_NULLABLE": "NO"
+    },
+    {
+        "TABLE_NAME": "StockMaster",
+        "COLUMN_NAME": "YrOpBalQty",
+        "DATA_TYPE": "money",
+        "CHARACTER_MAXIMUM_LENGTH": null,
+        "IS_NULLABLE": "YES"
+    },
+    {
+        "TABLE_NAME": "StockMaster",
+        "COLUMN_NAME": "YrOpBalVal",
+        "DATA_TYPE": "money",
+        "CHARACTER_MAXIMUM_LENGTH": null,
+        "IS_NULLABLE": "YES"
+    },
+    {
+        "TABLE_NAME": "StockMaster",
+        "COLUMN_NAME": "CurBalQty",
+        "DATA_TYPE": "money",
+        "CHARACTER_MAXIMUM_LENGTH": null,
+        "IS_NULLABLE": "YES"
+    },
+    {
+        "TABLE_NAME": "StockMaster",
+        "COLUMN_NAME": "CurBalVal",
+        "DATA_TYPE": "money",
+        "CHARACTER_MAXIMUM_LENGTH": null,
+        "IS_NULLABLE": "YES"
+    },
+    {
+        "TABLE_NAME": "StockMaster",
+        "COLUMN_NAME": "VAUid",
+        "DATA_TYPE": "varchar",
+        "CHARACTER_MAXIMUM_LENGTH": 32,
+        "IS_NULLABLE": "YES"
+    },
+    {
+        "TABLE_NAME": "StockMaster",
+        "COLUMN_NAME": "VActr",
+        "DATA_TYPE": "int",
+        "CHARACTER_MAXIMUM_LENGTH": null,
+        "IS_NULLABLE": "YES"
+    },
+    {
+        "TABLE_NAME": "StockMaster",
+        "COLUMN_NAME": "VATermId",
+        "DATA_TYPE": "varchar",
+        "CHARACTER_MAXIMUM_LENGTH": 32,
+        "IS_NULLABLE": "YES"
+    },
+    {
+        "TABLE_NAME": "StockMaster",
+        "COLUMN_NAME": "VACompCode",
+        "DATA_TYPE": "varchar",
+        "CHARACTER_MAXIMUM_LENGTH": 16,
+        "IS_NULLABLE": "YES"
+    }
+]

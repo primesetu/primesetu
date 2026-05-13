@@ -12,13 +12,14 @@ from .base import Base
 from app.core.config import settings
 
 # ── HYBRID SCHEMA MAPPING ──
-# In Cloud mode, we use 'shoper9' schema prefix.
+# In Cloud mode, we use the configured legacy schema prefix (default 'shoper9').
 # In Sovereign mode (MSSQL), we usually don't use a schema prefix (default dbo).
-S9_SCHEMA = "shoper9" if settings.storage_mode == "CLOUD" else None
+S9_SCHEMA = settings.LEGACY_SCHEMA if settings.storage_mode in ("CLOUD", "LOCAL_POSTGRES") else None
 
 class Acceptdisplaydtls(Base):
     __tablename__ = 'acceptdisplaydtls'
     __table_args__ = {'schema': S9_SCHEMA, 'extend_existing': True}
+    tenant_id: Mapped[str] = mapped_column(String, default='SYSTEM', index=True)
 
     trntype: Mapped[Integer] = mapped_column(Integer, primary_key=True, nullable=False)
     index: Mapped[Integer] = mapped_column(Integer, primary_key=True, nullable=False)
@@ -58,6 +59,7 @@ class Acceptdisplaydtls(Base):
 class Accountsmaster(Base):
     __tablename__ = 'accountsmaster'
     __table_args__ = {'schema': S9_SCHEMA, 'extend_existing': True}
+    tenant_id: Mapped[str] = mapped_column(String, default='SYSTEM', index=True)
 
     type: Mapped[String] = mapped_column(String, primary_key=True, nullable=False)
     code: Mapped[String] = mapped_column(String, primary_key=True, nullable=False)
@@ -74,6 +76,7 @@ class Accountsmaster(Base):
 class Accountsummary(Base):
     __tablename__ = 'accountsummary'
     __table_args__ = {'schema': S9_SCHEMA, 'extend_existing': True}
+    tenant_id: Mapped[str] = mapped_column(String, default='SYSTEM', index=True)
 
     type: Mapped[String] = mapped_column(String, primary_key=True, nullable=False)
     code: Mapped[String] = mapped_column(String, primary_key=True, nullable=False)
@@ -92,6 +95,7 @@ class Accountsummary(Base):
 class Actualscheduletask(Base):
     __tablename__ = 'actualscheduletask'
     __table_args__ = {'schema': S9_SCHEMA, 'extend_existing': True}
+    tenant_id: Mapped[str] = mapped_column(String, default='SYSTEM', index=True)
 
     task_id: Mapped[String] = mapped_column(String, primary_key=True, nullable=False)
     task_subno: Mapped[Numeric(precision=18, scale=0)] = mapped_column(Numeric(precision=18, scale=0), primary_key=True, nullable=False)
@@ -117,6 +121,7 @@ class Actualscheduletask(Base):
 class Additionalchargedtls(Base):
     __tablename__ = 'additionalchargedtls'
     __table_args__ = {'schema': S9_SCHEMA, 'extend_existing': True}
+    tenant_id: Mapped[str] = mapped_column(String, default='SYSTEM', index=True)
 
     paymodecode: Mapped[String] = mapped_column(String, primary_key=True, nullable=False)
     schemecode: Mapped[String] = mapped_column(String, primary_key=True, nullable=False)
@@ -133,6 +138,7 @@ class Additionalchargedtls(Base):
 class Agencycatdtl(Base):
     __tablename__ = 'agencycatdtl'
     __table_args__ = {'schema': S9_SCHEMA, 'extend_existing': True}
+    tenant_id: Mapped[str] = mapped_column(String, default='SYSTEM', index=True)
 
     agencycode: Mapped[String] = mapped_column(String, primary_key=True, nullable=False)
     paymodetype: Mapped[Integer] = mapped_column(Integer, primary_key=True, nullable=False)
@@ -149,6 +155,7 @@ class Agencycatdtl(Base):
 class Agencycathdr(Base):
     __tablename__ = 'agencycathdr'
     __table_args__ = {'schema': S9_SCHEMA, 'extend_existing': True}
+    tenant_id: Mapped[str] = mapped_column(String, default='SYSTEM', index=True)
 
     agencyid: Mapped[String] = mapped_column(String, primary_key=True, nullable=False)
     agencynm: Mapped[Optional[String]] = mapped_column(String, nullable=True)
@@ -164,6 +171,7 @@ class Agencycathdr(Base):
 class Agentactivity(Base):
     __tablename__ = 'agentactivity'
     __table_args__ = {'schema': S9_SCHEMA, 'extend_existing': True}
+    tenant_id: Mapped[str] = mapped_column(String, default='SYSTEM', index=True)
 
     actvindex: Mapped[Integer] = mapped_column(Integer, primary_key=True, nullable=False)
     task_id: Mapped[String] = mapped_column(String, primary_key=True, nullable=False)
@@ -182,6 +190,7 @@ class Agentactivity(Base):
 class Baledtl(Base):
     __tablename__ = 'baledtl'
     __table_args__ = {'schema': S9_SCHEMA, 'extend_existing': True}
+    tenant_id: Mapped[str] = mapped_column(String, default='SYSTEM', index=True)
 
     suppcd: Mapped[String] = mapped_column(String, primary_key=True, nullable=False)
     dcno: Mapped[String] = mapped_column(String, primary_key=True, nullable=False)
@@ -196,6 +205,7 @@ class Baledtl(Base):
 class Basecomptemplate(Base):
     __tablename__ = 'basecomptemplate'
     __table_args__ = {'schema': S9_SCHEMA, 'extend_existing': True}
+    tenant_id: Mapped[str] = mapped_column(String, default='SYSTEM', index=True)
 
     tmplidno: Mapped[Integer] = mapped_column(Integer, primary_key=True, nullable=False)
     tmplextn: Mapped[Optional[String]] = mapped_column(String, nullable=True)
@@ -211,6 +221,7 @@ class Basecomptemplate(Base):
 class Billduestatusdtls(Base):
     __tablename__ = 'billduestatusdtls'
     __table_args__ = {'schema': S9_SCHEMA, 'extend_existing': True}
+    tenant_id: Mapped[str] = mapped_column(String, default='SYSTEM', index=True)
 
     sourcecompcode: Mapped[String] = mapped_column(String, primary_key=True, nullable=False)
     destcompcode: Mapped[String] = mapped_column(String, primary_key=True, nullable=False)
@@ -243,6 +254,7 @@ class Billduestatusdtls(Base):
 class Billduestatushdr(Base):
     __tablename__ = 'billduestatushdr'
     __table_args__ = {'schema': S9_SCHEMA, 'extend_existing': True}
+    tenant_id: Mapped[str] = mapped_column(String, default='SYSTEM', index=True)
 
     sourcecompcode: Mapped[String] = mapped_column(String, primary_key=True, nullable=False)
     destcompcode: Mapped[String] = mapped_column(String, primary_key=True, nullable=False)
@@ -268,6 +280,7 @@ class Billduestatushdr(Base):
 class Billpassdtls(Base):
     __tablename__ = 'billpassdtls'
     __table_args__ = {'schema': S9_SCHEMA, 'extend_existing': True}
+    tenant_id: Mapped[str] = mapped_column(String, default='SYSTEM', index=True)
 
     trntype: Mapped[Integer] = mapped_column(Integer, primary_key=True, nullable=False)
     trnctrlno: Mapped[Integer] = mapped_column(Integer, primary_key=True, nullable=False)
@@ -288,6 +301,7 @@ class Billpassdtls(Base):
 class Billpasshdr(Base):
     __tablename__ = 'billpasshdr'
     __table_args__ = {'schema': S9_SCHEMA, 'extend_existing': True}
+    tenant_id: Mapped[str] = mapped_column(String, default='SYSTEM', index=True)
 
     trntype: Mapped[Integer] = mapped_column(Integer, primary_key=True, nullable=False)
     trnctrlno: Mapped[Integer] = mapped_column(Integer, primary_key=True, nullable=False)
@@ -314,6 +328,7 @@ class Billpasshdr(Base):
 class Browsesettings(Base):
     __tablename__ = 'browsesettings'
     __table_args__ = {'schema': S9_SCHEMA, 'extend_existing': True}
+    tenant_id: Mapped[str] = mapped_column(String, default='SYSTEM', index=True)
 
     smriti_id: Mapped[int] = mapped_column(Integer, primary_key=True, autoincrement=True)
     browseid: Mapped[Optional[String]] = mapped_column(String, nullable=True)
@@ -343,6 +358,7 @@ class Browsesettings(Base):
 class Catalogsettings(Base):
     __tablename__ = 'catalogsettings'
     __table_args__ = {'schema': S9_SCHEMA, 'extend_existing': True}
+    tenant_id: Mapped[str] = mapped_column(String, default='SYSTEM', index=True)
 
     appname: Mapped[String] = mapped_column(String, primary_key=True, nullable=False)
     formname: Mapped[String] = mapped_column(String, primary_key=True, nullable=False)
@@ -366,6 +382,7 @@ class Catalogsettings(Base):
 class Chainstores(Base):
     __tablename__ = 'chainstores'
     __table_args__ = {'schema': S9_SCHEMA, 'extend_existing': True}
+    tenant_id: Mapped[str] = mapped_column(String, default='SYSTEM', index=True)
 
     code: Mapped[String] = mapped_column(String, primary_key=True, nullable=False)
     type: Mapped[Optional[Integer]] = mapped_column(Integer, nullable=True)
@@ -395,6 +412,7 @@ class Chainstores(Base):
 class Class12combo(Base):
     __tablename__ = 'class12combo'
     __table_args__ = {'schema': S9_SCHEMA, 'extend_existing': True}
+    tenant_id: Mapped[str] = mapped_column(String, default='SYSTEM', index=True)
 
     class1cd: Mapped[String] = mapped_column(String, primary_key=True, nullable=False)
     class2cd: Mapped[String] = mapped_column(String, primary_key=True, nullable=False)
@@ -437,6 +455,7 @@ class Class12combo(Base):
 class Class12locwise(Base):
     __tablename__ = 'class12locwise'
     __table_args__ = {'schema': S9_SCHEMA, 'extend_existing': True}
+    tenant_id: Mapped[str] = mapped_column(String, default='SYSTEM', index=True)
 
     class1cd: Mapped[String] = mapped_column(String, primary_key=True, nullable=False)
     class1cddesc: Mapped[Optional[String]] = mapped_column(String, nullable=True)
@@ -461,6 +480,7 @@ class Class12locwise(Base):
 class Commconfig(Base):
     __tablename__ = 'commconfig'
     __table_args__ = {'schema': S9_SCHEMA, 'extend_existing': True}
+    tenant_id: Mapped[str] = mapped_column(String, default='SYSTEM', index=True)
 
     synctype: Mapped[String] = mapped_column(String, primary_key=True, nullable=False)
     mode: Mapped[String] = mapped_column(String, primary_key=True, nullable=False)
@@ -474,6 +494,7 @@ class Commconfig(Base):
 class Compareqty(Base):
     __tablename__ = 'compareqty'
     __table_args__ = {'schema': S9_SCHEMA, 'extend_existing': True}
+    tenant_id: Mapped[str] = mapped_column(String, default='SYSTEM', index=True)
 
     smriti_id: Mapped[int] = mapped_column(Integer, primary_key=True, autoincrement=True)
     actqty: Mapped[Optional[Numeric(precision=19, scale=4)]] = mapped_column(Numeric(precision=19, scale=4), nullable=True)
@@ -483,6 +504,7 @@ class Compareqty(Base):
 class Confinschemedtls(Base):
     __tablename__ = 'confinschemedtls'
     __table_args__ = {'schema': S9_SCHEMA, 'extend_existing': True}
+    tenant_id: Mapped[str] = mapped_column(String, default='SYSTEM', index=True)
 
     paymodetype: Mapped[Integer] = mapped_column(Integer, primary_key=True, nullable=False)
     paymodecode: Mapped[String] = mapped_column(String, primary_key=True, nullable=False)
@@ -502,6 +524,7 @@ class Confinschemedtls(Base):
 class Crdtinvrcvdtls(Base):
     __tablename__ = 'crdtinvrcvdtls'
     __table_args__ = {'schema': S9_SCHEMA, 'extend_existing': True}
+    tenant_id: Mapped[str] = mapped_column(String, default='SYSTEM', index=True)
 
     recvtrntype: Mapped[Integer] = mapped_column(Integer, primary_key=True, nullable=False)
     recvctrlno: Mapped[Integer] = mapped_column(Integer, primary_key=True, nullable=False)
@@ -573,6 +596,7 @@ class Crdtinvrcvdtls(Base):
 class Crdtinvrcvhdr(Base):
     __tablename__ = 'crdtinvrcvhdr'
     __table_args__ = {'schema': S9_SCHEMA, 'extend_existing': True}
+    tenant_id: Mapped[str] = mapped_column(String, default='SYSTEM', index=True)
 
     recvtrntype: Mapped[Integer] = mapped_column(Integer, primary_key=True, nullable=False)
     recvctrlno: Mapped[Integer] = mapped_column(Integer, primary_key=True, nullable=False)
@@ -641,6 +665,7 @@ class Crdtinvrcvhdr(Base):
 class Crdtsalecustopbal(Base):
     __tablename__ = 'crdtsalecustopbal'
     __table_args__ = {'schema': S9_SCHEMA, 'extend_existing': True}
+    tenant_id: Mapped[str] = mapped_column(String, default='SYSTEM', index=True)
 
     trntype: Mapped[Integer] = mapped_column(Integer, primary_key=True, nullable=False)
     trnctrlno: Mapped[Integer] = mapped_column(Integer, primary_key=True, nullable=False)
@@ -658,6 +683,7 @@ class Crdtsalecustopbal(Base):
 class Crmfinalcustomer(Base):
     __tablename__ = 'crmfinalcustomer'
     __table_args__ = {'schema': S9_SCHEMA, 'extend_existing': True}
+    tenant_id: Mapped[str] = mapped_column(String, default='SYSTEM', index=True)
 
     queryname: Mapped[Optional[String]] = mapped_column(String, nullable=True)
     queryid: Mapped[String] = mapped_column(String, primary_key=True, nullable=False)
@@ -682,6 +708,7 @@ class Crmfinalcustomer(Base):
 class Crmqryinfo(Base):
     __tablename__ = 'crmqryinfo'
     __table_args__ = {'schema': S9_SCHEMA, 'extend_existing': True}
+    tenant_id: Mapped[str] = mapped_column(String, default='SYSTEM', index=True)
 
     queryid: Mapped[Integer] = mapped_column(Integer, primary_key=True, nullable=False)
     queryname: Mapped[Optional[String]] = mapped_column(String, nullable=True)
@@ -699,6 +726,7 @@ class Crmqryinfo(Base):
 class Crmqrystruc(Base):
     __tablename__ = 'crmqrystruc'
     __table_args__ = {'schema': S9_SCHEMA, 'extend_existing': True}
+    tenant_id: Mapped[str] = mapped_column(String, default='SYSTEM', index=True)
 
     queryid: Mapped[Integer] = mapped_column(Integer, primary_key=True, nullable=False)
     qrysrlno: Mapped[Integer] = mapped_column(Integer, primary_key=True, nullable=False)
@@ -716,6 +744,7 @@ class Crmqrystruc(Base):
 class Currencycat(Base):
     __tablename__ = 'currencycat'
     __table_args__ = {'schema': S9_SCHEMA, 'extend_existing': True}
+    tenant_id: Mapped[str] = mapped_column(String, default='SYSTEM', index=True)
 
     code: Mapped[String] = mapped_column(String, primary_key=True, nullable=False)
     nm: Mapped[Optional[String]] = mapped_column(String, nullable=True)
@@ -738,6 +767,7 @@ class Currencycat(Base):
 class Currencydenomination(Base):
     __tablename__ = 'currencydenomination'
     __table_args__ = {'schema': S9_SCHEMA, 'extend_existing': True}
+    tenant_id: Mapped[str] = mapped_column(String, default='SYSTEM', index=True)
 
     code: Mapped[String] = mapped_column(String, primary_key=True, nullable=False)
     srlno: Mapped[Integer] = mapped_column(Integer, primary_key=True, nullable=False)
@@ -754,6 +784,7 @@ class Currencydenomination(Base):
 class Customerimport(Base):
     __tablename__ = 'customerimport'
     __table_args__ = {'schema': S9_SCHEMA, 'extend_existing': True}
+    tenant_id: Mapped[str] = mapped_column(String, default='SYSTEM', index=True)
 
     smriti_id: Mapped[int] = mapped_column(Integer, primary_key=True, autoincrement=True)
     code: Mapped[Optional[String]] = mapped_column(String, nullable=True)
@@ -837,6 +868,7 @@ class Customerimport(Base):
 class Customers(Base):
     __tablename__ = 'customers'
     __table_args__ = {'schema': S9_SCHEMA, 'extend_existing': True}
+    tenant_id: Mapped[str] = mapped_column(String, default='SYSTEM', index=True)
 
     code: Mapped[String] = mapped_column(String, primary_key=True, nullable=False)
     nm: Mapped[Optional[String]] = mapped_column(String, nullable=True)
@@ -913,6 +945,7 @@ class Customers(Base):
 class Custpricegroups(Base):
     __tablename__ = 'custpricegroups'
     __table_args__ = {'schema': S9_SCHEMA, 'extend_existing': True}
+    tenant_id: Mapped[str] = mapped_column(String, default='SYSTEM', index=True)
 
     pricegrpcd: Mapped[String] = mapped_column(String, primary_key=True, nullable=False)
     pricegrpdesc: Mapped[Optional[String]] = mapped_column(String, nullable=True)
@@ -932,6 +965,7 @@ class Custpricegroups(Base):
 class Dashboardconfig(Base):
     __tablename__ = 'dashboardconfig'
     __table_args__ = {'schema': S9_SCHEMA, 'extend_existing': True}
+    tenant_id: Mapped[str] = mapped_column(String, default='SYSTEM', index=True)
 
     userid: Mapped[String] = mapped_column(String, primary_key=True, nullable=False)
     chartareacd: Mapped[String] = mapped_column(String, primary_key=True, nullable=False)
@@ -946,6 +980,7 @@ class Dashboardconfig(Base):
 class Datasyncconfig(Base):
     __tablename__ = 'datasyncconfig'
     __table_args__ = {'schema': S9_SCHEMA, 'extend_existing': True}
+    tenant_id: Mapped[str] = mapped_column(String, default='SYSTEM', index=True)
 
     hocompcd: Mapped[String] = mapped_column(String, primary_key=True, nullable=False)
     hocompnm: Mapped[Optional[String]] = mapped_column(String, nullable=True)
@@ -992,6 +1027,7 @@ class Datasyncconfig(Base):
 class Daybeginpgms(Base):
     __tablename__ = 'daybeginpgms'
     __table_args__ = {'schema': S9_SCHEMA, 'extend_existing': True}
+    tenant_id: Mapped[str] = mapped_column(String, default='SYSTEM', index=True)
 
     pgmindex: Mapped[Integer] = mapped_column(Integer, primary_key=True, nullable=False)
     pgmexe: Mapped[Optional[String]] = mapped_column(String, nullable=True)
@@ -1007,6 +1043,7 @@ class Daybeginpgms(Base):
 class Dayendpgms(Base):
     __tablename__ = 'dayendpgms'
     __table_args__ = {'schema': S9_SCHEMA, 'extend_existing': True}
+    tenant_id: Mapped[str] = mapped_column(String, default='SYSTEM', index=True)
 
     pgmindex: Mapped[Integer] = mapped_column(Integer, primary_key=True, nullable=False)
     pgmexe: Mapped[Optional[String]] = mapped_column(String, nullable=True)
@@ -1022,6 +1059,7 @@ class Dayendpgms(Base):
 class Dbtuningconfig(Base):
     __tablename__ = 'dbtuningconfig'
     __table_args__ = {'schema': S9_SCHEMA, 'extend_existing': True}
+    tenant_id: Mapped[str] = mapped_column(String, default='SYSTEM', index=True)
 
     srlno: Mapped[Integer] = mapped_column(Integer, primary_key=True, nullable=False)
     type: Mapped[String] = mapped_column(String, primary_key=True, nullable=False)
@@ -1041,6 +1079,7 @@ class Dbtuningconfig(Base):
 class Dcrefnodtls(Base):
     __tablename__ = 'dcrefnodtls'
     __table_args__ = {'schema': S9_SCHEMA, 'extend_existing': True}
+    tenant_id: Mapped[str] = mapped_column(String, default='SYSTEM', index=True)
 
     suppcd: Mapped[String] = mapped_column(String, primary_key=True, nullable=False)
     suppnm: Mapped[Optional[String]] = mapped_column(String, nullable=True)
@@ -1055,6 +1094,7 @@ class Dcrefnodtls(Base):
 class Deliveryadvicedtls(Base):
     __tablename__ = 'deliveryadvicedtls'
     __table_args__ = {'schema': S9_SCHEMA, 'extend_existing': True}
+    tenant_id: Mapped[str] = mapped_column(String, default='SYSTEM', index=True)
 
     sourcecompcode: Mapped[String] = mapped_column(String, primary_key=True, nullable=False)
     destcompcode: Mapped[String] = mapped_column(String, primary_key=True, nullable=False)
@@ -1102,6 +1142,7 @@ class Deliveryadvicedtls(Base):
 class Deliveryadvicehdr(Base):
     __tablename__ = 'deliveryadvicehdr'
     __table_args__ = {'schema': S9_SCHEMA, 'extend_existing': True}
+    tenant_id: Mapped[str] = mapped_column(String, default='SYSTEM', index=True)
 
     sourcecompcode: Mapped[String] = mapped_column(String, primary_key=True, nullable=False)
     trntype: Mapped[Integer] = mapped_column(Integer, primary_key=True, nullable=False)
@@ -1148,6 +1189,7 @@ class Deliveryadvicehdr(Base):
 class Deliverynotedtls(Base):
     __tablename__ = 'deliverynotedtls'
     __table_args__ = {'schema': S9_SCHEMA, 'extend_existing': True}
+    tenant_id: Mapped[str] = mapped_column(String, default='SYSTEM', index=True)
 
     trntype: Mapped[Integer] = mapped_column(Integer, primary_key=True, nullable=False)
     trnctrlno: Mapped[Integer] = mapped_column(Integer, primary_key=True, nullable=False)
@@ -1186,6 +1228,7 @@ class Deliverynotedtls(Base):
 class Deliverynotedtlsextd01(Base):
     __tablename__ = 'deliverynotedtlsextd01'
     __table_args__ = {'schema': S9_SCHEMA, 'extend_existing': True}
+    tenant_id: Mapped[str] = mapped_column(String, default='SYSTEM', index=True)
 
     sourcecompcode: Mapped[String] = mapped_column(String, primary_key=True, nullable=False)
     destcompcode: Mapped[String] = mapped_column(String, primary_key=True, nullable=False)
@@ -1211,6 +1254,7 @@ class Deliverynotedtlsextd01(Base):
 class Deliverynotehdr(Base):
     __tablename__ = 'deliverynotehdr'
     __table_args__ = {'schema': S9_SCHEMA, 'extend_existing': True}
+    tenant_id: Mapped[str] = mapped_column(String, default='SYSTEM', index=True)
 
     trntype: Mapped[Integer] = mapped_column(Integer, primary_key=True, nullable=False)
     trnctrlno: Mapped[Integer] = mapped_column(Integer, primary_key=True, nullable=False)
@@ -1235,6 +1279,7 @@ class Deliverynotehdr(Base):
 class Discountdtls72(Base):
     __tablename__ = 'discountdtls72'
     __table_args__ = {'schema': S9_SCHEMA, 'extend_existing': True}
+    tenant_id: Mapped[str] = mapped_column(String, default='SYSTEM', index=True)
 
     recno: Mapped[Integer] = mapped_column(Integer, primary_key=True, nullable=False)
     type: Mapped[Optional[Integer]] = mapped_column(Integer, nullable=True)
@@ -1299,6 +1344,7 @@ class Discountdtls72(Base):
 class Downloadparams(Base):
     __tablename__ = 'downloadparams'
     __table_args__ = {'schema': S9_SCHEMA, 'extend_existing': True}
+    tenant_id: Mapped[str] = mapped_column(String, default='SYSTEM', index=True)
 
     dayenddate: Mapped[DateTime] = mapped_column(DateTime, primary_key=True, nullable=False)
     controlno: Mapped[Integer] = mapped_column(Integer, primary_key=True, nullable=False)
@@ -1311,6 +1357,7 @@ class Downloadparams(Base):
 class Errole(Base):
     __tablename__ = 'errole'
     __table_args__ = {'schema': S9_SCHEMA, 'extend_existing': True}
+    tenant_id: Mapped[str] = mapped_column(String, default='SYSTEM', index=True)
 
     smriti_id: Mapped[int] = mapped_column(Integer, primary_key=True, autoincrement=True)
     errfrom: Mapped[Numeric(precision=18, scale=0)] = mapped_column(Numeric(precision=18, scale=0), nullable=False)
@@ -1320,6 +1367,7 @@ class Errole(Base):
 class Eventextnfieldconfig(Base):
     __tablename__ = 'eventextnfieldconfig'
     __table_args__ = {'schema': S9_SCHEMA, 'extend_existing': True}
+    tenant_id: Mapped[str] = mapped_column(String, default='SYSTEM', index=True)
 
     programid: Mapped[String] = mapped_column(String, primary_key=True, nullable=False)
     eventid: Mapped[String] = mapped_column(String, primary_key=True, nullable=False)
@@ -1335,6 +1383,7 @@ class Eventextnfieldconfig(Base):
 class Eventextnkeyvalueconfig(Base):
     __tablename__ = 'eventextnkeyvalueconfig'
     __table_args__ = {'schema': S9_SCHEMA, 'extend_existing': True}
+    tenant_id: Mapped[str] = mapped_column(String, default='SYSTEM', index=True)
 
     programid: Mapped[String] = mapped_column(String, primary_key=True, nullable=False)
     eventid: Mapped[String] = mapped_column(String, primary_key=True, nullable=False)
@@ -1350,6 +1399,7 @@ class Eventextnkeyvalueconfig(Base):
 class Exchangeolditems(Base):
     __tablename__ = 'exchangeolditems'
     __table_args__ = {'schema': S9_SCHEMA, 'extend_existing': True}
+    tenant_id: Mapped[str] = mapped_column(String, default='SYSTEM', index=True)
 
     trntype: Mapped[Integer] = mapped_column(Integer, primary_key=True, nullable=False)
     trnctrlno: Mapped[Integer] = mapped_column(Integer, primary_key=True, nullable=False)
@@ -1365,6 +1415,7 @@ class Exchangeolditems(Base):
 class Excisedutycomponents(Base):
     __tablename__ = 'excisedutycomponents'
     __table_args__ = {'schema': S9_SCHEMA, 'extend_existing': True}
+    tenant_id: Mapped[str] = mapped_column(String, default='SYSTEM', index=True)
 
     edcode: Mapped[Integer] = mapped_column(Integer, primary_key=True, nullable=False)
     orderno: Mapped[Optional[Integer]] = mapped_column(Integer, nullable=True)
@@ -1383,6 +1434,7 @@ class Excisedutycomponents(Base):
 class Excisedutydtls(Base):
     __tablename__ = 'excisedutydtls'
     __table_args__ = {'schema': S9_SCHEMA, 'extend_existing': True}
+    tenant_id: Mapped[str] = mapped_column(String, default='SYSTEM', index=True)
 
     docno: Mapped[Integer] = mapped_column(Integer, primary_key=True, nullable=False)
     srlno: Mapped[Integer] = mapped_column(Integer, primary_key=True, nullable=False)
@@ -1425,6 +1477,7 @@ class Excisedutydtls(Base):
 class Expectedtrnaddonded(Base):
     __tablename__ = 'expectedtrnaddonded'
     __table_args__ = {'schema': S9_SCHEMA, 'extend_existing': True}
+    tenant_id: Mapped[str] = mapped_column(String, default='SYSTEM', index=True)
 
     trntype: Mapped[Integer] = mapped_column(Integer, primary_key=True, nullable=False)
     trnctrlno: Mapped[Integer] = mapped_column(Integer, primary_key=True, nullable=False)
@@ -1486,6 +1539,7 @@ class Expectedtrnaddonded(Base):
 class Expectedtrndtls(Base):
     __tablename__ = 'expectedtrndtls'
     __table_args__ = {'schema': S9_SCHEMA, 'extend_existing': True}
+    tenant_id: Mapped[str] = mapped_column(String, default='SYSTEM', index=True)
 
     trntype: Mapped[Integer] = mapped_column(Integer, primary_key=True, nullable=False)
     trnctrlno: Mapped[Integer] = mapped_column(Integer, primary_key=True, nullable=False)
@@ -1668,6 +1722,7 @@ class Expectedtrndtls(Base):
 class Expectedtrnhdr(Base):
     __tablename__ = 'expectedtrnhdr'
     __table_args__ = {'schema': S9_SCHEMA, 'extend_existing': True}
+    tenant_id: Mapped[str] = mapped_column(String, default='SYSTEM', index=True)
 
     trntype: Mapped[Integer] = mapped_column(Integer, primary_key=True, nullable=False)
     trnctrlno: Mapped[Integer] = mapped_column(Integer, primary_key=True, nullable=False)
@@ -1805,6 +1860,7 @@ class Expectedtrnhdr(Base):
 class Expectedtrnrcpts(Base):
     __tablename__ = 'expectedtrnrcpts'
     __table_args__ = {'schema': S9_SCHEMA, 'extend_existing': True}
+    tenant_id: Mapped[str] = mapped_column(String, default='SYSTEM', index=True)
 
     trntype: Mapped[Integer] = mapped_column(Integer, primary_key=True, nullable=False)
     trnctrlno: Mapped[Integer] = mapped_column(Integer, primary_key=True, nullable=False)
@@ -1890,6 +1946,7 @@ class Expectedtrnrcpts(Base):
 class Exportgenlookup(Base):
     __tablename__ = 'exportgenlookup'
     __table_args__ = {'schema': S9_SCHEMA, 'extend_existing': True}
+    tenant_id: Mapped[str] = mapped_column(String, default='SYSTEM', index=True)
 
     recid: Mapped[Integer] = mapped_column(Integer, primary_key=True, nullable=False)
     code: Mapped[String] = mapped_column(String, primary_key=True, nullable=False)
@@ -1907,6 +1964,7 @@ class Exportgenlookup(Base):
 class Exportsysparam(Base):
     __tablename__ = 'exportsysparam'
     __table_args__ = {'schema': S9_SCHEMA, 'extend_existing': True}
+    tenant_id: Mapped[str] = mapped_column(String, default='SYSTEM', index=True)
 
     id: Mapped[String] = mapped_column(String, primary_key=True, nullable=False)
     descr: Mapped[Optional[String]] = mapped_column(String, nullable=True)
@@ -1929,6 +1987,7 @@ class Exportsysparam(Base):
 class Expttrndtlsextd01(Base):
     __tablename__ = 'expttrndtlsextd01'
     __table_args__ = {'schema': S9_SCHEMA, 'extend_existing': True}
+    tenant_id: Mapped[str] = mapped_column(String, default='SYSTEM', index=True)
 
     trntype: Mapped[Integer] = mapped_column(Integer, primary_key=True, nullable=False)
     trnctrlno: Mapped[Integer] = mapped_column(Integer, primary_key=True, nullable=False)
@@ -1953,6 +2012,7 @@ class Expttrndtlsextd01(Base):
 class Extditemmaster(Base):
     __tablename__ = 'extditemmaster'
     __table_args__ = {'schema': S9_SCHEMA, 'extend_existing': True}
+    tenant_id: Mapped[str] = mapped_column(String, default='SYSTEM', index=True)
 
     stockno: Mapped[String] = mapped_column(String, primary_key=True, nullable=False)
     itemextdesc: Mapped[Optional[String]] = mapped_column(String, nullable=True)
@@ -1965,6 +2025,7 @@ class Extditemmaster(Base):
 class Extdmailinglist(Base):
     __tablename__ = 'extdmailinglist'
     __table_args__ = {'schema': S9_SCHEMA, 'extend_existing': True}
+    tenant_id: Mapped[str] = mapped_column(String, default='SYSTEM', index=True)
 
     recno: Mapped[Integer] = mapped_column(Integer, primary_key=True, nullable=False)
     addresstype: Mapped[String] = mapped_column(String, primary_key=True, nullable=False)
@@ -2001,6 +2062,7 @@ class Extdmailinglist(Base):
 class Extensionconfigexternal(Base):
     __tablename__ = 'extensionconfigexternal'
     __table_args__ = {'schema': S9_SCHEMA, 'extend_existing': True}
+    tenant_id: Mapped[str] = mapped_column(String, default='SYSTEM', index=True)
 
     recid: Mapped[Integer] = mapped_column(Integer, primary_key=True, nullable=False)
     programid: Mapped[String] = mapped_column(String, primary_key=True, nullable=False)
@@ -2022,6 +2084,7 @@ class Extensionconfigexternal(Base):
 class Extensionconfiginfo(Base):
     __tablename__ = 'extensionconfiginfo'
     __table_args__ = {'schema': S9_SCHEMA, 'extend_existing': True}
+    tenant_id: Mapped[str] = mapped_column(String, default='SYSTEM', index=True)
 
     trntype: Mapped[Integer] = mapped_column(Integer, primary_key=True, nullable=False)
     extnlevel: Mapped[Integer] = mapped_column(Integer, primary_key=True, nullable=False)
@@ -2040,6 +2103,7 @@ class Extensionconfiginfo(Base):
 class Extensionconfiginternal(Base):
     __tablename__ = 'extensionconfiginternal'
     __table_args__ = {'schema': S9_SCHEMA, 'extend_existing': True}
+    tenant_id: Mapped[str] = mapped_column(String, default='SYSTEM', index=True)
 
     recid: Mapped[Integer] = mapped_column(Integer, primary_key=True, nullable=False)
     programid: Mapped[String] = mapped_column(String, primary_key=True, nullable=False)
@@ -2061,6 +2125,7 @@ class Extensionconfiginternal(Base):
 class Extensionconfigtable(Base):
     __tablename__ = 'extensionconfigtable'
     __table_args__ = {'schema': S9_SCHEMA, 'extend_existing': True}
+    tenant_id: Mapped[str] = mapped_column(String, default='SYSTEM', index=True)
 
     trntype: Mapped[Integer] = mapped_column(Integer, primary_key=True, nullable=False)
     extlevel: Mapped[Integer] = mapped_column(Integer, primary_key=True, nullable=False)
@@ -2074,6 +2139,7 @@ class Extensionconfigtable(Base):
 class Extnpartnerinfo(Base):
     __tablename__ = 'extnpartnerinfo'
     __table_args__ = {'schema': S9_SCHEMA, 'extend_existing': True}
+    tenant_id: Mapped[str] = mapped_column(String, default='SYSTEM', index=True)
 
     partnerid: Mapped[String] = mapped_column(String, primary_key=True, nullable=False)
     partnername: Mapped[Optional[String]] = mapped_column(String, nullable=True)
@@ -2083,6 +2149,7 @@ class Extnpartnerinfo(Base):
 class Factorheader(Base):
     __tablename__ = 'factorheader'
     __table_args__ = {'schema': S9_SCHEMA, 'extend_existing': True}
+    tenant_id: Mapped[str] = mapped_column(String, default='SYSTEM', index=True)
 
     trntype: Mapped[Integer] = mapped_column(Integer, primary_key=True, nullable=False)
     name: Mapped[String] = mapped_column(String, primary_key=True, nullable=False)
@@ -2107,6 +2174,7 @@ class Factorheader(Base):
 class Featureintrodtls(Base):
     __tablename__ = 'featureintrodtls'
     __table_args__ = {'schema': S9_SCHEMA, 'extend_existing': True}
+    tenant_id: Mapped[str] = mapped_column(String, default='SYSTEM', index=True)
 
     featureid: Mapped[Integer] = mapped_column(Integer, primary_key=True, nullable=False)
     minverid: Mapped[Integer] = mapped_column(Integer, nullable=False)
@@ -2119,6 +2187,7 @@ class Featureintrodtls(Base):
 class Fileloadingstatus(Base):
     __tablename__ = 'fileloadingstatus'
     __table_args__ = {'schema': S9_SCHEMA, 'extend_existing': True}
+    tenant_id: Mapped[str] = mapped_column(String, default='SYSTEM', index=True)
 
     smriti_id: Mapped[int] = mapped_column(Integer, primary_key=True, autoincrement=True)
     file_name: Mapped[Optional[String]] = mapped_column(String, nullable=True)
@@ -2129,6 +2198,7 @@ class Fileloadingstatus(Base):
 class Filesfromho(Base):
     __tablename__ = 'filesfromho'
     __table_args__ = {'schema': S9_SCHEMA, 'extend_existing': True}
+    tenant_id: Mapped[str] = mapped_column(String, default='SYSTEM', index=True)
 
     infofile: Mapped[String] = mapped_column(String, primary_key=True, nullable=False)
     slno: Mapped[Integer] = mapped_column(Integer, primary_key=True, nullable=False)
@@ -2149,6 +2219,7 @@ class Filesfromho(Base):
 class Franchiseelog(Base):
     __tablename__ = 'franchiseelog'
     __table_args__ = {'schema': S9_SCHEMA, 'extend_existing': True}
+    tenant_id: Mapped[str] = mapped_column(String, default='SYSTEM', index=True)
 
     idtype: Mapped[String] = mapped_column(String, primary_key=True, nullable=False)
     shoperdt: Mapped[DateTime] = mapped_column(DateTime, primary_key=True, nullable=False)
@@ -2164,6 +2235,7 @@ class Franchiseelog(Base):
 class Franchiseetrans(Base):
     __tablename__ = 'franchiseetrans'
     __table_args__ = {'schema': S9_SCHEMA, 'extend_existing': True}
+    tenant_id: Mapped[str] = mapped_column(String, default='SYSTEM', index=True)
 
     trnacctype: Mapped[String] = mapped_column(String, primary_key=True, nullable=False)
     trntype: Mapped[String] = mapped_column(String, primary_key=True, nullable=False)
@@ -2189,6 +2261,7 @@ class Franchiseetrans(Base):
 class Franchiselstloadeddtls(Base):
     __tablename__ = 'franchiselstloadeddtls'
     __table_args__ = {'schema': S9_SCHEMA, 'extend_existing': True}
+    tenant_id: Mapped[str] = mapped_column(String, default='SYSTEM', index=True)
 
     smriti_id: Mapped[int] = mapped_column(Integer, primary_key=True, autoincrement=True)
     shoper_sysdt: Mapped[Optional[DateTime]] = mapped_column(DateTime, nullable=True)
@@ -2205,6 +2278,7 @@ class Franchiselstloadeddtls(Base):
 class Franmismatchlog(Base):
     __tablename__ = 'franmismatchlog'
     __table_args__ = {'schema': S9_SCHEMA, 'extend_existing': True}
+    tenant_id: Mapped[str] = mapped_column(String, default='SYSTEM', index=True)
 
     shoperdt: Mapped[DateTime] = mapped_column(DateTime, primary_key=True, nullable=False)
     paymode: Mapped[String] = mapped_column(String, primary_key=True, nullable=False)
@@ -2218,6 +2292,7 @@ class Franmismatchlog(Base):
 class Genlookup(Base):
     __tablename__ = 'genlookup'
     __table_args__ = {'schema': S9_SCHEMA, 'extend_existing': True}
+    tenant_id: Mapped[str] = mapped_column(String, default='SYSTEM', index=True)
 
     recid: Mapped[Integer] = mapped_column(Integer, primary_key=True, nullable=False)
     code: Mapped[String] = mapped_column(String, primary_key=True, nullable=False)
@@ -2233,6 +2308,7 @@ class Genlookup(Base):
 class Genlookupextd(Base):
     __tablename__ = 'genlookupextd'
     __table_args__ = {'schema': S9_SCHEMA, 'extend_existing': True}
+    tenant_id: Mapped[str] = mapped_column(String, default='SYSTEM', index=True)
 
     recid: Mapped[Integer] = mapped_column(Integer, primary_key=True, nullable=False)
     category: Mapped[Optional[String]] = mapped_column(String, nullable=True)
@@ -2253,6 +2329,7 @@ class Genlookupextd(Base):
 class Gs1dtls(Base):
     __tablename__ = 'gs1dtls'
     __table_args__ = {'schema': S9_SCHEMA, 'extend_existing': True}
+    tenant_id: Mapped[str] = mapped_column(String, default='SYSTEM', index=True)
 
     slno: Mapped[Integer] = mapped_column(Integer, primary_key=True, nullable=False)
     gs1idkey: Mapped[Optional[String]] = mapped_column(String, nullable=True)
@@ -2281,6 +2358,7 @@ class Gs1dtls(Base):
 class Hotkeys(Base):
     __tablename__ = 'hotkeys'
     __table_args__ = {'schema': S9_SCHEMA, 'extend_existing': True}
+    tenant_id: Mapped[str] = mapped_column(String, default='SYSTEM', index=True)
 
     formid: Mapped[Integer] = mapped_column(Integer, primary_key=True, nullable=False)
     formname: Mapped[Optional[String]] = mapped_column(String, nullable=True)
@@ -2297,6 +2375,7 @@ class Hotkeys(Base):
 class Incdeftable(Base):
     __tablename__ = 'incdeftable'
     __table_args__ = {'schema': S9_SCHEMA, 'extend_existing': True}
+    tenant_id: Mapped[str] = mapped_column(String, default='SYSTEM', index=True)
 
     incname: Mapped[String] = mapped_column(String, primary_key=True, nullable=False)
     docno: Mapped[Integer] = mapped_column(Integer, nullable=False)
@@ -2319,6 +2398,7 @@ class Incdeftable(Base):
 class Incentivegrpitemdtls(Base):
     __tablename__ = 'incentivegrpitemdtls'
     __table_args__ = {'schema': S9_SCHEMA, 'extend_existing': True}
+    tenant_id: Mapped[str] = mapped_column(String, default='SYSTEM', index=True)
 
     incname: Mapped[String] = mapped_column(String, primary_key=True, nullable=False)
     docno: Mapped[Integer] = mapped_column(Integer, nullable=False)
@@ -2339,6 +2419,7 @@ class Incentivegrpitemdtls(Base):
 class Incshrmperioddtls(Base):
     __tablename__ = 'incshrmperioddtls'
     __table_args__ = {'schema': S9_SCHEMA, 'extend_existing': True}
+    tenant_id: Mapped[str] = mapped_column(String, default='SYSTEM', index=True)
 
     incname: Mapped[String] = mapped_column(String, primary_key=True, nullable=False)
     docno: Mapped[Integer] = mapped_column(Integer, nullable=False)
@@ -2360,6 +2441,7 @@ class Incshrmperioddtls(Base):
 class Infotable(Base):
     __tablename__ = 'infotable'
     __table_args__ = {'schema': S9_SCHEMA, 'extend_existing': True}
+    tenant_id: Mapped[str] = mapped_column(String, default='SYSTEM', index=True)
 
     smriti_id: Mapped[int] = mapped_column(Integer, primary_key=True, autoincrement=True)
     tablename: Mapped[Optional[String]] = mapped_column(String, nullable=True)
@@ -2371,6 +2453,7 @@ class Infotable(Base):
 class Iniloadingerrorlog(Base):
     __tablename__ = 'iniloadingerrorlog'
     __table_args__ = {'schema': S9_SCHEMA, 'extend_existing': True}
+    tenant_id: Mapped[str] = mapped_column(String, default='SYSTEM', index=True)
 
     smriti_id: Mapped[int] = mapped_column(Integer, primary_key=True, autoincrement=True)
     runnumber: Mapped[Optional[Integer]] = mapped_column(Integer, nullable=True)
@@ -2385,6 +2468,7 @@ class Iniloadingerrorlog(Base):
 class Inpacksliphdr(Base):
     __tablename__ = 'inpacksliphdr'
     __table_args__ = {'schema': S9_SCHEMA, 'extend_existing': True}
+    tenant_id: Mapped[str] = mapped_column(String, default='SYSTEM', index=True)
 
     trntype: Mapped[Integer] = mapped_column(Integer, primary_key=True, nullable=False)
     trnctrlno: Mapped[Integer] = mapped_column(Integer, primary_key=True, nullable=False)
@@ -2444,6 +2528,7 @@ class Inpacksliphdr(Base):
 class Inpacksliptrn(Base):
     __tablename__ = 'inpacksliptrn'
     __table_args__ = {'schema': S9_SCHEMA, 'extend_existing': True}
+    tenant_id: Mapped[str] = mapped_column(String, default='SYSTEM', index=True)
 
     trntype: Mapped[Integer] = mapped_column(Integer, primary_key=True, nullable=False)
     trnctrlno: Mapped[Integer] = mapped_column(Integer, primary_key=True, nullable=False)
@@ -2503,6 +2588,7 @@ class Inpacksliptrn(Base):
 class Itemclassrestrict(Base):
     __tablename__ = 'itemclassrestrict'
     __table_args__ = {'schema': S9_SCHEMA, 'extend_existing': True}
+    tenant_id: Mapped[str] = mapped_column(String, default='SYSTEM', index=True)
 
     userid: Mapped[String] = mapped_column(String, primary_key=True, nullable=False)
     columnname: Mapped[String] = mapped_column(String, primary_key=True, nullable=False)
@@ -2517,6 +2603,7 @@ class Itemclassrestrict(Base):
 class Itemmapping(Base):
     __tablename__ = 'itemmapping'
     __table_args__ = {'schema': S9_SCHEMA, 'extend_existing': True}
+    tenant_id: Mapped[str] = mapped_column(String, default='SYSTEM', index=True)
 
     maptype: Mapped[String] = mapped_column(String, primary_key=True, nullable=False)
     hocode: Mapped[String] = mapped_column(String, primary_key=True, nullable=False)
@@ -2534,6 +2621,7 @@ class Itemmapping(Base):
 class Itemmappingrules(Base):
     __tablename__ = 'itemmappingrules'
     __table_args__ = {'schema': S9_SCHEMA, 'extend_existing': True}
+    tenant_id: Mapped[str] = mapped_column(String, default='SYSTEM', index=True)
 
     hocode: Mapped[String] = mapped_column(String, primary_key=True, nullable=False)
     hoattrib: Mapped[String] = mapped_column(String, primary_key=True, nullable=False)
@@ -2552,6 +2640,7 @@ class Itemmappingrules(Base):
 class Itemmaster(Base):
     __tablename__ = 'itemmaster'
     __table_args__ = {'schema': S9_SCHEMA, 'extend_existing': True}
+    tenant_id: Mapped[str] = mapped_column(String, default='SYSTEM', index=True)
 
     stockno: Mapped[String] = mapped_column(String, primary_key=True, nullable=False)
     batchsrlno: Mapped[String] = mapped_column(String, primary_key=True, nullable=False)
@@ -2684,6 +2773,7 @@ class Itemmaster(Base):
 class Itemmasterconfig(Base):
     __tablename__ = 'itemmasterconfig'
     __table_args__ = {'schema': S9_SCHEMA, 'extend_existing': True}
+    tenant_id: Mapped[str] = mapped_column(String, default='SYSTEM', index=True)
 
     fid: Mapped[String] = mapped_column(String, primary_key=True, nullable=False)
     fn: Mapped[Optional[String]] = mapped_column(String, nullable=True)
@@ -2712,6 +2802,7 @@ class Itemmasterconfig(Base):
 class Itemmasterextd01(Base):
     __tablename__ = 'itemmasterextd01'
     __table_args__ = {'schema': S9_SCHEMA, 'extend_existing': True}
+    tenant_id: Mapped[str] = mapped_column(String, default='SYSTEM', index=True)
 
     stockno: Mapped[String] = mapped_column(String, primary_key=True, nullable=False)
     batchno: Mapped[String] = mapped_column(String, primary_key=True, nullable=False)
@@ -2738,6 +2829,7 @@ class Itemmasterextd01(Base):
 class Itemmasterlog(Base):
     __tablename__ = 'itemmasterlog'
     __table_args__ = {'schema': S9_SCHEMA, 'extend_existing': True}
+    tenant_id: Mapped[str] = mapped_column(String, default='SYSTEM', index=True)
 
     smriti_id: Mapped[int] = mapped_column(Integer, primary_key=True, autoincrement=True)
     sysdate: Mapped[Optional[DateTime]] = mapped_column(DateTime, nullable=True)
@@ -2870,6 +2962,7 @@ class Itemmasterlog(Base):
 class Itemreclassconfig(Base):
     __tablename__ = 'itemreclassconfig'
     __table_args__ = {'schema': S9_SCHEMA, 'extend_existing': True}
+    tenant_id: Mapped[str] = mapped_column(String, default='SYSTEM', index=True)
 
     fldid: Mapped[String] = mapped_column(String, primary_key=True, nullable=False)
     flddbcolname: Mapped[Optional[String]] = mapped_column(String, nullable=True)
@@ -2897,6 +2990,7 @@ class Itemreclassconfig(Base):
 class Itemreclassdtls(Base):
     __tablename__ = 'itemreclassdtls'
     __table_args__ = {'schema': S9_SCHEMA, 'extend_existing': True}
+    tenant_id: Mapped[str] = mapped_column(String, default='SYSTEM', index=True)
 
     ircid: Mapped[String] = mapped_column(String, primary_key=True, nullable=False)
     srlno: Mapped[Integer] = mapped_column(Integer, primary_key=True, nullable=False)
@@ -2927,6 +3021,7 @@ class Itemreclassdtls(Base):
 class Itemreclassheader(Base):
     __tablename__ = 'itemreclassheader'
     __table_args__ = {'schema': S9_SCHEMA, 'extend_existing': True}
+    tenant_id: Mapped[str] = mapped_column(String, default='SYSTEM', index=True)
 
     ircid: Mapped[String] = mapped_column(String, primary_key=True, nullable=False)
     ircstatus: Mapped[Optional[Integer]] = mapped_column(Integer, nullable=True)
@@ -2958,6 +3053,7 @@ class Itemreclassheader(Base):
 class Itemsfromho(Base):
     __tablename__ = 'itemsfromho'
     __table_args__ = {'schema': S9_SCHEMA, 'extend_existing': True}
+    tenant_id: Mapped[str] = mapped_column(String, default='SYSTEM', index=True)
 
     guid: Mapped[Optional[String]] = mapped_column(String, nullable=True)
     hostockno: Mapped[String] = mapped_column(String, nullable=False)
@@ -3050,6 +3146,7 @@ class Itemsfromho(Base):
 class Itemtagconfig(Base):
     __tablename__ = 'itemtagconfig'
     __table_args__ = {'schema': S9_SCHEMA, 'extend_existing': True}
+    tenant_id: Mapped[str] = mapped_column(String, default='SYSTEM', index=True)
 
     trntype: Mapped[Integer] = mapped_column(Integer, primary_key=True, nullable=False)
     class1cd: Mapped[String] = mapped_column(String, primary_key=True, nullable=False)
@@ -3074,6 +3171,7 @@ class Itemtagconfig(Base):
 class Itemtagconfigfromho(Base):
     __tablename__ = 'itemtagconfigfromho'
     __table_args__ = {'schema': S9_SCHEMA, 'extend_existing': True}
+    tenant_id: Mapped[str] = mapped_column(String, default='SYSTEM', index=True)
 
     trntype: Mapped[Integer] = mapped_column(Integer, primary_key=True, nullable=False)
     class1cd: Mapped[String] = mapped_column(String, primary_key=True, nullable=False)
@@ -3098,6 +3196,7 @@ class Itemtagconfigfromho(Base):
 class Itemtagdtls(Base):
     __tablename__ = 'itemtagdtls'
     __table_args__ = {'schema': S9_SCHEMA, 'extend_existing': True}
+    tenant_id: Mapped[str] = mapped_column(String, default='SYSTEM', index=True)
 
     class1cd: Mapped[String] = mapped_column(String, primary_key=True, nullable=False)
     class2cd: Mapped[String] = mapped_column(String, primary_key=True, nullable=False)
@@ -3112,6 +3211,7 @@ class Itemtagdtls(Base):
 class Kpidtls(Base):
     __tablename__ = 'kpidtls'
     __table_args__ = {'schema': S9_SCHEMA, 'extend_existing': True}
+    tenant_id: Mapped[str] = mapped_column(String, default='SYSTEM', index=True)
 
     showroomcode: Mapped[String] = mapped_column(String, primary_key=True, nullable=False)
     showroomname: Mapped[Optional[String]] = mapped_column(String, nullable=True)
@@ -3167,6 +3267,7 @@ class Kpidtls(Base):
 class Logagentactivity(Base):
     __tablename__ = 'logagentactivity'
     __table_args__ = {'schema': S9_SCHEMA, 'extend_existing': True}
+    tenant_id: Mapped[str] = mapped_column(String, default='SYSTEM', index=True)
 
     logsrlno: Mapped[Integer] = mapped_column(Integer, primary_key=True, nullable=False)
     task_id: Mapped[Optional[String]] = mapped_column(String, nullable=True)
@@ -3186,6 +3287,7 @@ class Logagentactivity(Base):
 class Logdataextractdetail(Base):
     __tablename__ = 'logdataextractdetail'
     __table_args__ = {'schema': S9_SCHEMA, 'extend_existing': True}
+    tenant_id: Mapped[str] = mapped_column(String, default='SYSTEM', index=True)
 
     logsrlno: Mapped[Integer] = mapped_column(Integer, primary_key=True, nullable=False)
     runnumber: Mapped[Integer] = mapped_column(Integer, nullable=False)
@@ -3202,6 +3304,7 @@ class Logdataextractdetail(Base):
 class Logdataextractsummary(Base):
     __tablename__ = 'logdataextractsummary'
     __table_args__ = {'schema': S9_SCHEMA, 'extend_existing': True}
+    tenant_id: Mapped[str] = mapped_column(String, default='SYSTEM', index=True)
 
     runnumber: Mapped[Integer] = mapped_column(Integer, primary_key=True, nullable=False)
     shoper_sysdt: Mapped[DateTime] = mapped_column(DateTime, nullable=False)
@@ -3232,6 +3335,7 @@ class Logdataextractsummary(Base):
 class Logdatasync(Base):
     __tablename__ = 'logdatasync'
     __table_args__ = {'schema': S9_SCHEMA, 'extend_existing': True}
+    tenant_id: Mapped[str] = mapped_column(String, default='SYSTEM', index=True)
 
     logsrlno: Mapped[Integer] = mapped_column(Integer, primary_key=True, nullable=False)
     fileid: Mapped[Optional[String]] = mapped_column(String, nullable=True)
@@ -3249,6 +3353,7 @@ class Logdatasync(Base):
 class Logdbtuningconfig(Base):
     __tablename__ = 'logdbtuningconfig'
     __table_args__ = {'schema': S9_SCHEMA, 'extend_existing': True}
+    tenant_id: Mapped[str] = mapped_column(String, default='SYSTEM', index=True)
 
     srlno: Mapped[Integer] = mapped_column(Integer, primary_key=True, nullable=False)
     execdt: Mapped[Optional[DateTime]] = mapped_column(DateTime, nullable=True)
@@ -3265,6 +3370,7 @@ class Logdbtuningconfig(Base):
 class Logtilldtls(Base):
     __tablename__ = 'logtilldtls'
     __table_args__ = {'schema': S9_SCHEMA, 'extend_existing': True}
+    tenant_id: Mapped[str] = mapped_column(String, default='SYSTEM', index=True)
 
     tilltrndt: Mapped[DateTime] = mapped_column(DateTime, primary_key=True, nullable=False)
     nodeid: Mapped[String] = mapped_column(String, primary_key=True, nullable=False)
@@ -3282,6 +3388,7 @@ class Logtilldtls(Base):
 class Logtrnsctrlno(Base):
     __tablename__ = 'logtrnsctrlno'
     __table_args__ = {'schema': S9_SCHEMA, 'extend_existing': True}
+    tenant_id: Mapped[str] = mapped_column(String, default='SYSTEM', index=True)
 
     smriti_id: Mapped[int] = mapped_column(Integer, primary_key=True, autoincrement=True)
     code: Mapped[Optional[Integer]] = mapped_column(Integer, nullable=True)
@@ -3290,6 +3397,7 @@ class Logtrnsctrlno(Base):
 class Logwgsync(Base):
     __tablename__ = 'logwgsync'
     __table_args__ = {'schema': S9_SCHEMA, 'extend_existing': True}
+    tenant_id: Mapped[str] = mapped_column(String, default='SYSTEM', index=True)
 
     syncfilename: Mapped[String] = mapped_column(String, primary_key=True, nullable=False)
     shoperdt: Mapped[DateTime] = mapped_column(DateTime, primary_key=True, nullable=False)
@@ -3308,6 +3416,7 @@ class Logwgsync(Base):
 class Lstloadeddtls(Base):
     __tablename__ = 'lstloadeddtls'
     __table_args__ = {'schema': S9_SCHEMA, 'extend_existing': True}
+    tenant_id: Mapped[str] = mapped_column(String, default='SYSTEM', index=True)
 
     smriti_id: Mapped[int] = mapped_column(Integer, primary_key=True, autoincrement=True)
     shoper_sysdt: Mapped[Optional[DateTime]] = mapped_column(DateTime, nullable=True)
@@ -3324,6 +3433,7 @@ class Lstloadeddtls(Base):
 class Mailinglist(Base):
     __tablename__ = 'mailinglist'
     __table_args__ = {'schema': S9_SCHEMA, 'extend_existing': True}
+    tenant_id: Mapped[str] = mapped_column(String, default='SYSTEM', index=True)
 
     recno: Mapped[Integer] = mapped_column(Integer, primary_key=True, nullable=False)
     nm: Mapped[Optional[String]] = mapped_column(String, nullable=True)
@@ -3351,6 +3461,7 @@ class Mailinglist(Base):
 class Messagecentre(Base):
     __tablename__ = 'messagecentre'
     __table_args__ = {'schema': S9_SCHEMA, 'extend_existing': True}
+    tenant_id: Mapped[str] = mapped_column(String, default='SYSTEM', index=True)
 
     msgid: Mapped[String] = mapped_column(String, primary_key=True, nullable=False)
     msgsource: Mapped[String] = mapped_column(String, primary_key=True, nullable=False)
@@ -3373,6 +3484,7 @@ class Messagecentre(Base):
 class Messagecentrelog(Base):
     __tablename__ = 'messagecentrelog'
     __table_args__ = {'schema': S9_SCHEMA, 'extend_existing': True}
+    tenant_id: Mapped[str] = mapped_column(String, default='SYSTEM', index=True)
 
     msgid: Mapped[String] = mapped_column(String, primary_key=True, nullable=False)
     msgsource: Mapped[String] = mapped_column(String, primary_key=True, nullable=False)
@@ -3389,6 +3501,7 @@ class Messagecentrelog(Base):
 class Mismatchvalue(Base):
     __tablename__ = 'mismatchvalue'
     __table_args__ = {'schema': S9_SCHEMA, 'extend_existing': True}
+    tenant_id: Mapped[str] = mapped_column(String, default='SYSTEM', index=True)
 
     smriti_id: Mapped[int] = mapped_column(Integer, primary_key=True, autoincrement=True)
     shoper_sysdt: Mapped[Optional[DateTime]] = mapped_column(DateTime, nullable=True)
@@ -3405,6 +3518,7 @@ class Mismatchvalue(Base):
 class Missingdocno(Base):
     __tablename__ = 'missingdocno'
     __table_args__ = {'schema': S9_SCHEMA, 'extend_existing': True}
+    tenant_id: Mapped[str] = mapped_column(String, default='SYSTEM', index=True)
 
     trntype: Mapped[Integer] = mapped_column(Integer, primary_key=True, nullable=False)
     docnoprefix: Mapped[String] = mapped_column(String, primary_key=True, nullable=False)
@@ -3421,6 +3535,7 @@ class Missingdocno(Base):
 class Monthsummary(Base):
     __tablename__ = 'monthsummary'
     __table_args__ = {'schema': S9_SCHEMA, 'extend_existing': True}
+    tenant_id: Mapped[str] = mapped_column(String, default='SYSTEM', index=True)
 
     stockno: Mapped[String] = mapped_column(String, primary_key=True, nullable=False)
     batchno: Mapped[String] = mapped_column(String, primary_key=True, nullable=False)
@@ -3438,6 +3553,7 @@ class Monthsummary(Base):
 class Multipleprices(Base):
     __tablename__ = 'multipleprices'
     __table_args__ = {'schema': S9_SCHEMA, 'extend_existing': True}
+    tenant_id: Mapped[str] = mapped_column(String, default='SYSTEM', index=True)
 
     sourcecompcode: Mapped[String] = mapped_column(String, primary_key=True, nullable=False)
     docno: Mapped[Integer] = mapped_column(Integer, primary_key=True, nullable=False)
@@ -3505,6 +3621,7 @@ class Multipleprices(Base):
 class Onacccrdtntlinktbldtls(Base):
     __tablename__ = 'onacccrdtntlinktbldtls'
     __table_args__ = {'schema': S9_SCHEMA, 'extend_existing': True}
+    tenant_id: Mapped[str] = mapped_column(String, default='SYSTEM', index=True)
 
     trntype: Mapped[Integer] = mapped_column(Integer, primary_key=True, nullable=False)
     trnctrlno: Mapped[Integer] = mapped_column(Integer, primary_key=True, nullable=False)
@@ -3542,6 +3659,7 @@ class Onacccrdtntlinktbldtls(Base):
 class Onacccrdtntlinktblhdr(Base):
     __tablename__ = 'onacccrdtntlinktblhdr'
     __table_args__ = {'schema': S9_SCHEMA, 'extend_existing': True}
+    tenant_id: Mapped[str] = mapped_column(String, default='SYSTEM', index=True)
 
     trntype: Mapped[Integer] = mapped_column(Integer, primary_key=True, nullable=False)
     trnctrlno: Mapped[Integer] = mapped_column(Integer, primary_key=True, nullable=False)
@@ -3569,6 +3687,7 @@ class Onacccrdtntlinktblhdr(Base):
 class Paymodeacceptconfig(Base):
     __tablename__ = 'paymodeacceptconfig'
     __table_args__ = {'schema': S9_SCHEMA, 'extend_existing': True}
+    tenant_id: Mapped[str] = mapped_column(String, default='SYSTEM', index=True)
 
     trntype: Mapped[String] = mapped_column(String, primary_key=True, nullable=False)
     acptpaymode: Mapped[String] = mapped_column(String, primary_key=True, nullable=False)
@@ -3580,6 +3699,7 @@ class Paymodeacceptconfig(Base):
 class Paymodeacceptdisplaydtls(Base):
     __tablename__ = 'paymodeacceptdisplaydtls'
     __table_args__ = {'schema': S9_SCHEMA, 'extend_existing': True}
+    tenant_id: Mapped[str] = mapped_column(String, default='SYSTEM', index=True)
 
     paymode: Mapped[Integer] = mapped_column(Integer, primary_key=True, nullable=False)
     index: Mapped[Integer] = mapped_column(Integer, primary_key=True, nullable=False)
@@ -3616,6 +3736,7 @@ class Paymodeacceptdisplaydtls(Base):
 class Paymodeacceptdisplaydtlsextd(Base):
     __tablename__ = 'paymodeacceptdisplaydtlsextd'
     __table_args__ = {'schema': S9_SCHEMA, 'extend_existing': True}
+    tenant_id: Mapped[str] = mapped_column(String, default='SYSTEM', index=True)
 
     paymode: Mapped[Integer] = mapped_column(Integer, primary_key=True, nullable=False)
     index: Mapped[Integer] = mapped_column(Integer, primary_key=True, nullable=False)
@@ -3640,6 +3761,7 @@ class Paymodeacceptdisplaydtlsextd(Base):
 class Paymodeconfig(Base):
     __tablename__ = 'paymodeconfig'
     __table_args__ = {'schema': S9_SCHEMA, 'extend_existing': True}
+    tenant_id: Mapped[str] = mapped_column(String, default='SYSTEM', index=True)
 
     paymodetype: Mapped[Integer] = mapped_column(Integer, primary_key=True, nullable=False)
     paymodetypedesc: Mapped[String] = mapped_column(String, nullable=False)
@@ -3658,6 +3780,7 @@ class Paymodeconfig(Base):
 class Paytermscat(Base):
     __tablename__ = 'paytermscat'
     __table_args__ = {'schema': S9_SCHEMA, 'extend_existing': True}
+    tenant_id: Mapped[str] = mapped_column(String, default='SYSTEM', index=True)
 
     recno: Mapped[Integer] = mapped_column(Integer, primary_key=True, nullable=False)
     descr: Mapped[Optional[String]] = mapped_column(String, nullable=True)
@@ -3681,6 +3804,7 @@ class Paytermscat(Base):
 class Pcbilldtls(Base):
     __tablename__ = 'pcbilldtls'
     __table_args__ = {'schema': S9_SCHEMA, 'extend_existing': True}
+    tenant_id: Mapped[str] = mapped_column(String, default='SYSTEM', index=True)
 
     posentrytype: Mapped[Integer] = mapped_column(Integer, primary_key=True, nullable=False)
     posctrlno: Mapped[Integer] = mapped_column(Integer, primary_key=True, nullable=False)
@@ -3708,6 +3832,7 @@ class Pcbilldtls(Base):
 class Pdtfieldconfig(Base):
     __tablename__ = 'pdtfieldconfig'
     __table_args__ = {'schema': S9_SCHEMA, 'extend_existing': True}
+    tenant_id: Mapped[str] = mapped_column(String, default='SYSTEM', index=True)
 
     trntype: Mapped[Integer] = mapped_column(Integer, primary_key=True, nullable=False)
     fieldid: Mapped[String] = mapped_column(String, primary_key=True, nullable=False)
@@ -3720,6 +3845,7 @@ class Pdtfieldconfig(Base):
 class Personnel(Base):
     __tablename__ = 'personnel'
     __table_args__ = {'schema': S9_SCHEMA, 'extend_existing': True}
+    tenant_id: Mapped[str] = mapped_column(String, default='SYSTEM', index=True)
 
     code: Mapped[String] = mapped_column(String, primary_key=True, nullable=False)
     nm: Mapped[Optional[String]] = mapped_column(String, nullable=True)
@@ -3746,6 +3872,7 @@ class Personnel(Base):
 class Personnelshrmwise(Base):
     __tablename__ = 'personnelshrmwise'
     __table_args__ = {'schema': S9_SCHEMA, 'extend_existing': True}
+    tenant_id: Mapped[str] = mapped_column(String, default='SYSTEM', index=True)
 
     smcode: Mapped[String] = mapped_column(String, primary_key=True, nullable=False)
     shrmcode: Mapped[String] = mapped_column(String, primary_key=True, nullable=False)
@@ -3762,6 +3889,7 @@ class Personnelshrmwise(Base):
 class Pgmwisefeaturedtls(Base):
     __tablename__ = 'pgmwisefeaturedtls'
     __table_args__ = {'schema': S9_SCHEMA, 'extend_existing': True}
+    tenant_id: Mapped[str] = mapped_column(String, default='SYSTEM', index=True)
 
     featureid: Mapped[Integer] = mapped_column(Integer, primary_key=True, nullable=False)
     programid: Mapped[String] = mapped_column(String, primary_key=True, nullable=False)
@@ -3775,6 +3903,7 @@ class Pgmwisefeaturedtls(Base):
 class Phystkdl(Base):
     __tablename__ = 'phystkdl'
     __table_args__ = {'schema': S9_SCHEMA, 'extend_existing': True}
+    tenant_id: Mapped[str] = mapped_column(String, default='SYSTEM', index=True)
 
     stockno: Mapped[String] = mapped_column(String, primary_key=True, nullable=False)
     field2: Mapped[Optional[Integer]] = mapped_column(Integer, nullable=True)
@@ -3786,6 +3915,7 @@ class Phystkdl(Base):
 class Phystkdtls(Base):
     __tablename__ = 'phystkdtls'
     __table_args__ = {'schema': S9_SCHEMA, 'extend_existing': True}
+    tenant_id: Mapped[str] = mapped_column(String, default='SYSTEM', index=True)
 
     smriti_id: Mapped[int] = mapped_column(Integer, primary_key=True, autoincrement=True)
     phystkbatchno: Mapped[Optional[String]] = mapped_column(String, nullable=True)
@@ -3811,6 +3941,7 @@ class Phystkdtls(Base):
 class Phystkdtlsextd01(Base):
     __tablename__ = 'phystkdtlsextd01'
     __table_args__ = {'schema': S9_SCHEMA, 'extend_existing': True}
+    tenant_id: Mapped[str] = mapped_column(String, default='SYSTEM', index=True)
 
     smriti_id: Mapped[int] = mapped_column(Integer, primary_key=True, autoincrement=True)
     phystkbatchno: Mapped[Optional[String]] = mapped_column(String, nullable=True)
@@ -3846,6 +3977,7 @@ class Phystkdtlsextd01(Base):
 class Phystkhdr(Base):
     __tablename__ = 'phystkhdr'
     __table_args__ = {'schema': S9_SCHEMA, 'extend_existing': True}
+    tenant_id: Mapped[str] = mapped_column(String, default='SYSTEM', index=True)
 
     smriti_id: Mapped[int] = mapped_column(Integer, primary_key=True, autoincrement=True)
     phystkbatchno: Mapped[Optional[String]] = mapped_column(String, nullable=True)
@@ -3866,6 +3998,7 @@ class Phystkhdr(Base):
 class Phystocktakingitembkup(Base):
     __tablename__ = 'phystocktakingitembkup'
     __table_args__ = {'schema': S9_SCHEMA, 'extend_existing': True}
+    tenant_id: Mapped[str] = mapped_column(String, default='SYSTEM', index=True)
 
     scopeid: Mapped[Integer] = mapped_column(Integer, primary_key=True, nullable=False)
     stockno: Mapped[String] = mapped_column(String, primary_key=True, nullable=False)
@@ -3906,6 +4039,7 @@ class Phystocktakingitembkup(Base):
 class Phystocktakingitembkup01(Base):
     __tablename__ = 'phystocktakingitembkup01'
     __table_args__ = {'schema': S9_SCHEMA, 'extend_existing': True}
+    tenant_id: Mapped[str] = mapped_column(String, default='SYSTEM', index=True)
 
     scopeid: Mapped[Integer] = mapped_column(Integer, primary_key=True, nullable=False)
     entsrlno: Mapped[Integer] = mapped_column(Integer, primary_key=True, nullable=False)
@@ -3951,6 +4085,7 @@ class Phystocktakingitembkup01(Base):
 class Phystocktakingitembkup02(Base):
     __tablename__ = 'phystocktakingitembkup02'
     __table_args__ = {'schema': S9_SCHEMA, 'extend_existing': True}
+    tenant_id: Mapped[str] = mapped_column(String, default='SYSTEM', index=True)
 
     smriti_id: Mapped[int] = mapped_column(Integer, primary_key=True, autoincrement=True)
     scopeid: Mapped[Integer] = mapped_column(Integer, nullable=False)
@@ -3984,6 +4119,7 @@ class Phystocktakingitembkup02(Base):
 class Posactivitylogdtls(Base):
     __tablename__ = 'posactivitylogdtls'
     __table_args__ = {'schema': S9_SCHEMA, 'extend_existing': True}
+    tenant_id: Mapped[str] = mapped_column(String, default='SYSTEM', index=True)
 
     ctrlnumber: Mapped[Integer] = mapped_column(Integer, primary_key=True, nullable=False)
     systemdatetime: Mapped[Optional[DateTime]] = mapped_column(DateTime, nullable=True)
@@ -4004,6 +4140,7 @@ class Posactivitylogdtls(Base):
 class Posactivityloghdr(Base):
     __tablename__ = 'posactivityloghdr'
     __table_args__ = {'schema': S9_SCHEMA, 'extend_existing': True}
+    tenant_id: Mapped[str] = mapped_column(String, default='SYSTEM', index=True)
 
     ctrlnumber: Mapped[Integer] = mapped_column(Integer, primary_key=True, nullable=False)
     systemdatetime: Mapped[Optional[DateTime]] = mapped_column(DateTime, nullable=True)
@@ -4029,6 +4166,7 @@ class Posactivityloghdr(Base):
 class Poscashtrn(Base):
     __tablename__ = 'poscashtrn'
     __table_args__ = {'schema': S9_SCHEMA, 'extend_existing': True}
+    tenant_id: Mapped[str] = mapped_column(String, default='SYSTEM', index=True)
 
     entrytype: Mapped[Integer] = mapped_column(Integer, primary_key=True, nullable=False)
     ctrlno: Mapped[Integer] = mapped_column(Integer, primary_key=True, nullable=False)
@@ -4142,6 +4280,7 @@ class Poscashtrn(Base):
 class Poscashtrnextd01(Base):
     __tablename__ = 'poscashtrnextd01'
     __table_args__ = {'schema': S9_SCHEMA, 'extend_existing': True}
+    tenant_id: Mapped[str] = mapped_column(String, default='SYSTEM', index=True)
 
     entrytype: Mapped[Integer] = mapped_column(Integer, primary_key=True, nullable=False)
     ctrlno: Mapped[Integer] = mapped_column(Integer, primary_key=True, nullable=False)
@@ -4164,6 +4303,7 @@ class Poscashtrnextd01(Base):
 class Poslstloadeddtls(Base):
     __tablename__ = 'poslstloadeddtls'
     __table_args__ = {'schema': S9_SCHEMA, 'extend_existing': True}
+    tenant_id: Mapped[str] = mapped_column(String, default='SYSTEM', index=True)
 
     smriti_id: Mapped[int] = mapped_column(Integer, primary_key=True, autoincrement=True)
     shoper_sysdt: Mapped[Optional[DateTime]] = mapped_column(DateTime, nullable=True)
@@ -4180,6 +4320,7 @@ class Poslstloadeddtls(Base):
 class Posmodebalances(Base):
     __tablename__ = 'posmodebalances'
     __table_args__ = {'schema': S9_SCHEMA, 'extend_existing': True}
+    tenant_id: Mapped[str] = mapped_column(String, default='SYSTEM', index=True)
 
     smriti_id: Mapped[int] = mapped_column(Integer, primary_key=True, autoincrement=True)
     baltype: Mapped[Optional[String]] = mapped_column(String, nullable=True)
@@ -4195,6 +4336,7 @@ class Posmodebalances(Base):
 class Posmodedatadtls(Base):
     __tablename__ = 'posmodedatadtls'
     __table_args__ = {'schema': S9_SCHEMA, 'extend_existing': True}
+    tenant_id: Mapped[str] = mapped_column(String, default='SYSTEM', index=True)
 
     fld1: Mapped[Integer] = mapped_column(Integer, primary_key=True, nullable=False)
     fld2: Mapped[Optional[String]] = mapped_column(String, nullable=True)
@@ -4217,6 +4359,7 @@ class Posmodedatadtls(Base):
 class Pospaymodes(Base):
     __tablename__ = 'pospaymodes'
     __table_args__ = {'schema': S9_SCHEMA, 'extend_existing': True}
+    tenant_id: Mapped[str] = mapped_column(String, default='SYSTEM', index=True)
 
     paymodetype: Mapped[Integer] = mapped_column(Integer, primary_key=True, nullable=False)
     paymodecode: Mapped[String] = mapped_column(String, primary_key=True, nullable=False)
@@ -4295,6 +4438,7 @@ class Pospaymodes(Base):
 class Prefixconfig(Base):
     __tablename__ = 'prefixconfig'
     __table_args__ = {'schema': S9_SCHEMA, 'extend_existing': True}
+    tenant_id: Mapped[str] = mapped_column(String, default='SYSTEM', index=True)
 
     slno: Mapped[Integer] = mapped_column(Integer, primary_key=True, nullable=False)
     trntype: Mapped[String] = mapped_column(String, nullable=False)
@@ -4314,6 +4458,7 @@ class Prefixconfig(Base):
 class Prefixdoclog(Base):
     __tablename__ = 'prefixdoclog'
     __table_args__ = {'schema': S9_SCHEMA, 'extend_existing': True}
+    tenant_id: Mapped[str] = mapped_column(String, default='SYSTEM', index=True)
 
     smriti_id: Mapped[int] = mapped_column(Integer, primary_key=True, autoincrement=True)
     trntype: Mapped[Optional[String]] = mapped_column(String, nullable=True)
@@ -4329,6 +4474,7 @@ class Prefixdoclog(Base):
 class Prefixmaster(Base):
     __tablename__ = 'prefixmaster'
     __table_args__ = {'schema': S9_SCHEMA, 'extend_existing': True}
+    tenant_id: Mapped[str] = mapped_column(String, default='SYSTEM', index=True)
 
     trntype: Mapped[String] = mapped_column(String, primary_key=True, nullable=False)
     opid: Mapped[String] = mapped_column(String, primary_key=True, nullable=False)
@@ -4348,6 +4494,7 @@ class Prefixmaster(Base):
 class Prefixterminalgroups(Base):
     __tablename__ = 'prefixterminalgroups'
     __table_args__ = {'schema': S9_SCHEMA, 'extend_existing': True}
+    tenant_id: Mapped[str] = mapped_column(String, default='SYSTEM', index=True)
 
     terminalgroupid: Mapped[String] = mapped_column(String, primary_key=True, nullable=False)
     srlno: Mapped[Integer] = mapped_column(Integer, primary_key=True, nullable=False)
@@ -4362,6 +4509,7 @@ class Prefixterminalgroups(Base):
 class Prefixtrnlog(Base):
     __tablename__ = 'prefixtrnlog'
     __table_args__ = {'schema': S9_SCHEMA, 'extend_existing': True}
+    tenant_id: Mapped[str] = mapped_column(String, default='SYSTEM', index=True)
 
     fld1: Mapped[String] = mapped_column(String, primary_key=True, nullable=False)
     fld2: Mapped[String] = mapped_column(String, primary_key=True, nullable=False)
@@ -4375,6 +4523,7 @@ class Prefixtrnlog(Base):
 class Prefixtrnno(Base):
     __tablename__ = 'prefixtrnno'
     __table_args__ = {'schema': S9_SCHEMA, 'extend_existing': True}
+    tenant_id: Mapped[str] = mapped_column(String, default='SYSTEM', index=True)
 
     trntype: Mapped[String] = mapped_column(String, primary_key=True, nullable=False)
     actualprefix: Mapped[String] = mapped_column(String, primary_key=True, nullable=False)
@@ -4388,6 +4537,7 @@ class Prefixtrnno(Base):
 class Priceloadinglog(Base):
     __tablename__ = 'priceloadinglog'
     __table_args__ = {'schema': S9_SCHEMA, 'extend_existing': True}
+    tenant_id: Mapped[str] = mapped_column(String, default='SYSTEM', index=True)
 
     smriti_id: Mapped[int] = mapped_column(Integer, primary_key=True, autoincrement=True)
     shoperdt: Mapped[Optional[DateTime]] = mapped_column(DateTime, nullable=True)
@@ -4409,6 +4559,7 @@ class Priceloadinglog(Base):
 class Pricerange(Base):
     __tablename__ = 'pricerange'
     __table_args__ = {'schema': S9_SCHEMA, 'extend_existing': True}
+    tenant_id: Mapped[str] = mapped_column(String, default='SYSTEM', index=True)
 
     pricetype: Mapped[Integer] = mapped_column(Integer, primary_key=True, nullable=False)
     docnoprefix: Mapped[String] = mapped_column(String, primary_key=True, nullable=False)
@@ -4442,6 +4593,7 @@ class Pricerange(Base):
 class Pricerangecatdtls(Base):
     __tablename__ = 'pricerangecatdtls'
     __table_args__ = {'schema': S9_SCHEMA, 'extend_existing': True}
+    tenant_id: Mapped[str] = mapped_column(String, default='SYSTEM', index=True)
 
     prcatid: Mapped[Integer] = mapped_column(Integer, primary_key=True, nullable=False)
     srlno: Mapped[Integer] = mapped_column(Integer, primary_key=True, nullable=False)
@@ -4457,6 +4609,7 @@ class Pricerangecatdtls(Base):
 class Pricerangesettings(Base):
     __tablename__ = 'pricerangesettings'
     __table_args__ = {'schema': S9_SCHEMA, 'extend_existing': True}
+    tenant_id: Mapped[str] = mapped_column(String, default='SYSTEM', index=True)
 
     fldtype: Mapped[Integer] = mapped_column(Integer, primary_key=True, nullable=False)
     fldid: Mapped[Integer] = mapped_column(Integer, primary_key=True, nullable=False)
@@ -4476,6 +4629,7 @@ class Pricerangesettings(Base):
 class Pricerevision(Base):
     __tablename__ = 'pricerevision'
     __table_args__ = {'schema': S9_SCHEMA, 'extend_existing': True}
+    tenant_id: Mapped[str] = mapped_column(String, default='SYSTEM', index=True)
 
     sourcecompcode: Mapped[String] = mapped_column(String, primary_key=True, nullable=False)
     docno: Mapped[Integer] = mapped_column(Integer, primary_key=True, nullable=False)
@@ -4546,6 +4700,7 @@ class Pricerevision(Base):
 class Pricerevisionhistory(Base):
     __tablename__ = 'pricerevisionhistory'
     __table_args__ = {'schema': S9_SCHEMA, 'extend_existing': True}
+    tenant_id: Mapped[str] = mapped_column(String, default='SYSTEM', index=True)
 
     sourcecompcode: Mapped[String] = mapped_column(String, primary_key=True, nullable=False)
     docno: Mapped[Integer] = mapped_column(Integer, primary_key=True, nullable=False)
@@ -4622,6 +4777,7 @@ class Pricerevisionhistory(Base):
 class Printbusinesshandlermaster(Base):
     __tablename__ = 'printbusinesshandlermaster'
     __table_args__ = {'schema': S9_SCHEMA, 'extend_existing': True}
+    tenant_id: Mapped[str] = mapped_column(String, default='SYSTEM', index=True)
 
     bushandlerid: Mapped[String] = mapped_column(String, primary_key=True, nullable=False)
     bhlibfilepath: Mapped[String] = mapped_column(String, nullable=False)
@@ -4639,6 +4795,7 @@ class Printbusinesshandlermaster(Base):
 class Printconfigsetting(Base):
     __tablename__ = 'printconfigsetting'
     __table_args__ = {'schema': S9_SCHEMA, 'extend_existing': True}
+    tenant_id: Mapped[str] = mapped_column(String, default='SYSTEM', index=True)
 
     configsettingid: Mapped[String] = mapped_column(String, primary_key=True, nullable=False)
     configparamid: Mapped[String] = mapped_column(String, primary_key=True, nullable=False)
@@ -4657,6 +4814,7 @@ class Printconfigsetting(Base):
 class Printconfigsettingmaster(Base):
     __tablename__ = 'printconfigsettingmaster'
     __table_args__ = {'schema': S9_SCHEMA, 'extend_existing': True}
+    tenant_id: Mapped[str] = mapped_column(String, default='SYSTEM', index=True)
 
     configsettingid: Mapped[String] = mapped_column(String, primary_key=True, nullable=False)
     configsettingname: Mapped[String] = mapped_column(String, nullable=False)
@@ -4672,6 +4830,7 @@ class Printconfigsettingmaster(Base):
 class Printlinkedrefinterface(Base):
     __tablename__ = 'printlinkedrefinterface'
     __table_args__ = {'schema': S9_SCHEMA, 'extend_existing': True}
+    tenant_id: Mapped[str] = mapped_column(String, default='SYSTEM', index=True)
 
     linkedrefid: Mapped[String] = mapped_column(String, primary_key=True, nullable=False)
     linkedrefcaption: Mapped[Optional[String]] = mapped_column(String, nullable=True)
@@ -4690,6 +4849,7 @@ class Printlinkedrefinterface(Base):
 class Printlinkedreflookup(Base):
     __tablename__ = 'printlinkedreflookup'
     __table_args__ = {'schema': S9_SCHEMA, 'extend_existing': True}
+    tenant_id: Mapped[str] = mapped_column(String, default='SYSTEM', index=True)
 
     smriti_id: Mapped[int] = mapped_column(Integer, primary_key=True, autoincrement=True)
     trntypeidentifier: Mapped[Integer] = mapped_column(Integer, nullable=False)
@@ -4703,6 +4863,7 @@ class Printlinkedreflookup(Base):
 class Printnodetrnconfigmaster(Base):
     __tablename__ = 'printnodetrnconfigmaster'
     __table_args__ = {'schema': S9_SCHEMA, 'extend_existing': True}
+    tenant_id: Mapped[str] = mapped_column(String, default='SYSTEM', index=True)
 
     nodeid: Mapped[String] = mapped_column(String, primary_key=True, nullable=False)
     trntypeidentifier: Mapped[Integer] = mapped_column(Integer, primary_key=True, nullable=False)
@@ -4722,6 +4883,7 @@ class Printnodetrnconfigmaster(Base):
 class Printrenderermaster(Base):
     __tablename__ = 'printrenderermaster'
     __table_args__ = {'schema': S9_SCHEMA, 'extend_existing': True}
+    tenant_id: Mapped[str] = mapped_column(String, default='SYSTEM', index=True)
 
     renhandlerid: Mapped[String] = mapped_column(String, primary_key=True, nullable=False)
     renlibfilepath: Mapped[String] = mapped_column(String, nullable=False)
@@ -4739,6 +4901,7 @@ class Printrenderermaster(Base):
 class Printtemplateconfigdtls(Base):
     __tablename__ = 'printtemplateconfigdtls'
     __table_args__ = {'schema': S9_SCHEMA, 'extend_existing': True}
+    tenant_id: Mapped[str] = mapped_column(String, default='SYSTEM', index=True)
 
     linkrefid: Mapped[String] = mapped_column(String, primary_key=True, nullable=False)
     terminalid: Mapped[String] = mapped_column(String, primary_key=True, nullable=False)
@@ -4761,6 +4924,7 @@ class Printtemplateconfigdtls(Base):
 class Promoarapplcustdtls(Base):
     __tablename__ = 'promoarapplcustdtls'
     __table_args__ = {'schema': S9_SCHEMA, 'extend_existing': True}
+    tenant_id: Mapped[str] = mapped_column(String, default='SYSTEM', index=True)
 
     salespromocode: Mapped[String] = mapped_column(String, primary_key=True, nullable=False)
     srlno: Mapped[Integer] = mapped_column(Integer, primary_key=True, nullable=False)
@@ -4787,6 +4951,7 @@ class Promoarapplcustdtls(Base):
 class Promoarbilllvldiscdtls(Base):
     __tablename__ = 'promoarbilllvldiscdtls'
     __table_args__ = {'schema': S9_SCHEMA, 'extend_existing': True}
+    tenant_id: Mapped[str] = mapped_column(String, default='SYSTEM', index=True)
 
     salespromocode: Mapped[String] = mapped_column(String, primary_key=True, nullable=False)
     salespromosrlno: Mapped[Integer] = mapped_column(Integer, primary_key=True, nullable=False)
@@ -4809,6 +4974,7 @@ class Promoarbilllvldiscdtls(Base):
 class Promoarbuyitemgrpdtls(Base):
     __tablename__ = 'promoarbuyitemgrpdtls'
     __table_args__ = {'schema': S9_SCHEMA, 'extend_existing': True}
+    tenant_id: Mapped[str] = mapped_column(String, default='SYSTEM', index=True)
 
     salespromocode: Mapped[String] = mapped_column(String, primary_key=True, nullable=False)
     srlno: Mapped[Integer] = mapped_column(Integer, primary_key=True, nullable=False)
@@ -4889,6 +5055,7 @@ class Promoarbuyitemgrpdtls(Base):
 class Promoargetitemgrpdtls(Base):
     __tablename__ = 'promoargetitemgrpdtls'
     __table_args__ = {'schema': S9_SCHEMA, 'extend_existing': True}
+    tenant_id: Mapped[str] = mapped_column(String, default='SYSTEM', index=True)
 
     salespromocode: Mapped[String] = mapped_column(String, primary_key=True, nullable=False)
     srlno: Mapped[Integer] = mapped_column(Integer, primary_key=True, nullable=False)
@@ -4974,6 +5141,7 @@ class Promoargetitemgrpdtls(Base):
 class Promoarheader(Base):
     __tablename__ = 'promoarheader'
     __table_args__ = {'schema': S9_SCHEMA, 'extend_existing': True}
+    tenant_id: Mapped[str] = mapped_column(String, default='SYSTEM', index=True)
 
     salespromocode: Mapped[String] = mapped_column(String, primary_key=True, nullable=False)
     salespromosrlno: Mapped[Integer] = mapped_column(Integer, primary_key=True, nullable=False)
@@ -5028,6 +5196,7 @@ class Promoarheader(Base):
 class Promoaritemlvldiscdtls(Base):
     __tablename__ = 'promoaritemlvldiscdtls'
     __table_args__ = {'schema': S9_SCHEMA, 'extend_existing': True}
+    tenant_id: Mapped[str] = mapped_column(String, default='SYSTEM', index=True)
 
     salespromocode: Mapped[String] = mapped_column(String, primary_key=True, nullable=False)
     srlno: Mapped[Integer] = mapped_column(Integer, primary_key=True, nullable=False)
@@ -5058,6 +5227,7 @@ class Promoaritemlvldiscdtls(Base):
 class Promoarshowroomdtls(Base):
     __tablename__ = 'promoarshowroomdtls'
     __table_args__ = {'schema': S9_SCHEMA, 'extend_existing': True}
+    tenant_id: Mapped[str] = mapped_column(String, default='SYSTEM', index=True)
 
     salespromocode: Mapped[String] = mapped_column(String, primary_key=True, nullable=False)
     srlno: Mapped[Integer] = mapped_column(Integer, primary_key=True, nullable=False)
@@ -5081,6 +5251,7 @@ class Promoarshowroomdtls(Base):
 class Promologapplcustdtls(Base):
     __tablename__ = 'promologapplcustdtls'
     __table_args__ = {'schema': S9_SCHEMA, 'extend_existing': True}
+    tenant_id: Mapped[str] = mapped_column(String, default='SYSTEM', index=True)
 
     salespromocode: Mapped[String] = mapped_column(String, primary_key=True, nullable=False)
     srlno: Mapped[Integer] = mapped_column(Integer, primary_key=True, nullable=False)
@@ -5107,6 +5278,7 @@ class Promologapplcustdtls(Base):
 class Promologbilllvldiscdtls(Base):
     __tablename__ = 'promologbilllvldiscdtls'
     __table_args__ = {'schema': S9_SCHEMA, 'extend_existing': True}
+    tenant_id: Mapped[str] = mapped_column(String, default='SYSTEM', index=True)
 
     salespromocode: Mapped[String] = mapped_column(String, primary_key=True, nullable=False)
     srlno: Mapped[Integer] = mapped_column(Integer, primary_key=True, nullable=False)
@@ -5129,6 +5301,7 @@ class Promologbilllvldiscdtls(Base):
 class Promologbuyitemgrpdtls(Base):
     __tablename__ = 'promologbuyitemgrpdtls'
     __table_args__ = {'schema': S9_SCHEMA, 'extend_existing': True}
+    tenant_id: Mapped[str] = mapped_column(String, default='SYSTEM', index=True)
 
     salespromocode: Mapped[String] = mapped_column(String, primary_key=True, nullable=False)
     srlno: Mapped[Integer] = mapped_column(Integer, primary_key=True, nullable=False)
@@ -5209,6 +5382,7 @@ class Promologbuyitemgrpdtls(Base):
 class Promologgetitemgrpdtls(Base):
     __tablename__ = 'promologgetitemgrpdtls'
     __table_args__ = {'schema': S9_SCHEMA, 'extend_existing': True}
+    tenant_id: Mapped[str] = mapped_column(String, default='SYSTEM', index=True)
 
     salespromocode: Mapped[String] = mapped_column(String, primary_key=True, nullable=False)
     srlno: Mapped[Integer] = mapped_column(Integer, primary_key=True, nullable=False)
@@ -5294,6 +5468,7 @@ class Promologgetitemgrpdtls(Base):
 class Promologheader(Base):
     __tablename__ = 'promologheader'
     __table_args__ = {'schema': S9_SCHEMA, 'extend_existing': True}
+    tenant_id: Mapped[str] = mapped_column(String, default='SYSTEM', index=True)
 
     salespromocode: Mapped[String] = mapped_column(String, primary_key=True, nullable=False)
     salespromosrlno: Mapped[Integer] = mapped_column(Integer, primary_key=True, nullable=False)
@@ -5348,6 +5523,7 @@ class Promologheader(Base):
 class Promologitemlvldiscdtls(Base):
     __tablename__ = 'promologitemlvldiscdtls'
     __table_args__ = {'schema': S9_SCHEMA, 'extend_existing': True}
+    tenant_id: Mapped[str] = mapped_column(String, default='SYSTEM', index=True)
 
     salespromocode: Mapped[String] = mapped_column(String, primary_key=True, nullable=False)
     srlno: Mapped[Integer] = mapped_column(Integer, primary_key=True, nullable=False)
@@ -5378,6 +5554,7 @@ class Promologitemlvldiscdtls(Base):
 class Promologshowroomdtls(Base):
     __tablename__ = 'promologshowroomdtls'
     __table_args__ = {'schema': S9_SCHEMA, 'extend_existing': True}
+    tenant_id: Mapped[str] = mapped_column(String, default='SYSTEM', index=True)
 
     salespromocode: Mapped[String] = mapped_column(String, primary_key=True, nullable=False)
     srlno: Mapped[Integer] = mapped_column(Integer, primary_key=True, nullable=False)
@@ -5401,6 +5578,7 @@ class Promologshowroomdtls(Base):
 class Promomnapplcustdtls(Base):
     __tablename__ = 'promomnapplcustdtls'
     __table_args__ = {'schema': S9_SCHEMA, 'extend_existing': True}
+    tenant_id: Mapped[str] = mapped_column(String, default='SYSTEM', index=True)
 
     salespromocode: Mapped[String] = mapped_column(String, primary_key=True, nullable=False)
     srlno: Mapped[Integer] = mapped_column(Integer, primary_key=True, nullable=False)
@@ -5427,6 +5605,7 @@ class Promomnapplcustdtls(Base):
 class Promomnbilllvldiscdtls(Base):
     __tablename__ = 'promomnbilllvldiscdtls'
     __table_args__ = {'schema': S9_SCHEMA, 'extend_existing': True}
+    tenant_id: Mapped[str] = mapped_column(String, default='SYSTEM', index=True)
 
     salespromocode: Mapped[String] = mapped_column(String, primary_key=True, nullable=False)
     srlno: Mapped[Integer] = mapped_column(Integer, primary_key=True, nullable=False)
@@ -5449,6 +5628,7 @@ class Promomnbilllvldiscdtls(Base):
 class Promomnbuyitemgrpdtls(Base):
     __tablename__ = 'promomnbuyitemgrpdtls'
     __table_args__ = {'schema': S9_SCHEMA, 'extend_existing': True}
+    tenant_id: Mapped[str] = mapped_column(String, default='SYSTEM', index=True)
 
     salespromocode: Mapped[String] = mapped_column(String, primary_key=True, nullable=False)
     srlno: Mapped[Integer] = mapped_column(Integer, primary_key=True, nullable=False)
@@ -5530,6 +5710,7 @@ class Promomnbuyitemgrpdtls(Base):
 class Promomngetitemgrpdtls(Base):
     __tablename__ = 'promomngetitemgrpdtls'
     __table_args__ = {'schema': S9_SCHEMA, 'extend_existing': True}
+    tenant_id: Mapped[str] = mapped_column(String, default='SYSTEM', index=True)
 
     salespromocode: Mapped[String] = mapped_column(String, primary_key=True, nullable=False)
     srlno: Mapped[Integer] = mapped_column(Integer, primary_key=True, nullable=False)
@@ -5616,6 +5797,7 @@ class Promomngetitemgrpdtls(Base):
 class Promomnheader(Base):
     __tablename__ = 'promomnheader'
     __table_args__ = {'schema': S9_SCHEMA, 'extend_existing': True}
+    tenant_id: Mapped[str] = mapped_column(String, default='SYSTEM', index=True)
 
     salespromocode: Mapped[String] = mapped_column(String, primary_key=True, nullable=False)
     salespromosrlno: Mapped[Optional[Integer]] = mapped_column(Integer, nullable=True)
@@ -5677,6 +5859,7 @@ class Promomnheader(Base):
 class Promomnintermediate(Base):
     __tablename__ = 'promomnintermediate'
     __table_args__ = {'schema': S9_SCHEMA, 'extend_existing': True}
+    tenant_id: Mapped[str] = mapped_column(String, default='SYSTEM', index=True)
 
     smriti_id: Mapped[int] = mapped_column(Integer, primary_key=True, autoincrement=True)
     stockno: Mapped[Optional[String]] = mapped_column(String, nullable=True)
@@ -5713,6 +5896,7 @@ class Promomnintermediate(Base):
 class Promomnitemlvldiscdtls(Base):
     __tablename__ = 'promomnitemlvldiscdtls'
     __table_args__ = {'schema': S9_SCHEMA, 'extend_existing': True}
+    tenant_id: Mapped[str] = mapped_column(String, default='SYSTEM', index=True)
 
     salespromocode: Mapped[String] = mapped_column(String, primary_key=True, nullable=False)
     srlno: Mapped[Integer] = mapped_column(Integer, primary_key=True, nullable=False)
@@ -5743,6 +5927,7 @@ class Promomnitemlvldiscdtls(Base):
 class Promomnshowroomdtls(Base):
     __tablename__ = 'promomnshowroomdtls'
     __table_args__ = {'schema': S9_SCHEMA, 'extend_existing': True}
+    tenant_id: Mapped[str] = mapped_column(String, default='SYSTEM', index=True)
 
     salespromocode: Mapped[String] = mapped_column(String, primary_key=True, nullable=False)
     srlno: Mapped[Integer] = mapped_column(Integer, primary_key=True, nullable=False)
@@ -5766,6 +5951,7 @@ class Promomnshowroomdtls(Base):
 class Ptbrowsesuper(Base):
     __tablename__ = 'ptbrowsesuper'
     __table_args__ = {'schema': S9_SCHEMA, 'extend_existing': True}
+    tenant_id: Mapped[str] = mapped_column(String, default='SYSTEM', index=True)
 
     smriti_id: Mapped[int] = mapped_column(Integer, primary_key=True, autoincrement=True)
     source: Mapped[String] = mapped_column(String, nullable=False)
@@ -5783,6 +5969,7 @@ class Ptbrowsesuper(Base):
 class Ptdtlsuper(Base):
     __tablename__ = 'ptdtlsuper'
     __table_args__ = {'schema': S9_SCHEMA, 'extend_existing': True}
+    tenant_id: Mapped[str] = mapped_column(String, default='SYSTEM', index=True)
 
     smriti_id: Mapped[int] = mapped_column(Integer, primary_key=True, autoincrement=True)
     docid: Mapped[Optional[Integer]] = mapped_column(Integer, nullable=True)
@@ -5929,6 +6116,7 @@ class Ptdtlsuper(Base):
 class Pthdrsuper(Base):
     __tablename__ = 'pthdrsuper'
     __table_args__ = {'schema': S9_SCHEMA, 'extend_existing': True}
+    tenant_id: Mapped[str] = mapped_column(String, default='SYSTEM', index=True)
 
     smriti_id: Mapped[int] = mapped_column(Integer, primary_key=True, autoincrement=True)
     docid: Mapped[Optional[Integer]] = mapped_column(Integer, nullable=True)
@@ -5967,6 +6155,7 @@ class Pthdrsuper(Base):
 class Ptinvoicedtl(Base):
     __tablename__ = 'ptinvoicedtl'
     __table_args__ = {'schema': S9_SCHEMA, 'extend_existing': True}
+    tenant_id: Mapped[str] = mapped_column(String, default='SYSTEM', index=True)
 
     docid: Mapped[Optional[Integer]] = mapped_column(Integer, nullable=True)
     suppcode: Mapped[String] = mapped_column(String, primary_key=True, nullable=False)
@@ -6132,6 +6321,7 @@ class Ptinvoicedtl(Base):
 class Ptinvoiceextd01(Base):
     __tablename__ = 'ptinvoiceextd01'
     __table_args__ = {'schema': S9_SCHEMA, 'extend_existing': True}
+    tenant_id: Mapped[str] = mapped_column(String, default='SYSTEM', index=True)
 
     trntype: Mapped[Integer] = mapped_column(Integer, primary_key=True, nullable=False)
     suppcode: Mapped[String] = mapped_column(String, primary_key=True, nullable=False)
@@ -6155,6 +6345,7 @@ class Ptinvoiceextd01(Base):
 class Ptinvoicehdr(Base):
     __tablename__ = 'ptinvoicehdr'
     __table_args__ = {'schema': S9_SCHEMA, 'extend_existing': True}
+    tenant_id: Mapped[str] = mapped_column(String, default='SYSTEM', index=True)
 
     docid: Mapped[Optional[Integer]] = mapped_column(Integer, nullable=True)
     docno: Mapped[Optional[String]] = mapped_column(String, nullable=True)
@@ -6204,6 +6395,7 @@ class Ptinvoicehdr(Base):
 class Purchasetaxcat(Base):
     __tablename__ = 'purchasetaxcat'
     __table_args__ = {'schema': S9_SCHEMA, 'extend_existing': True}
+    tenant_id: Mapped[str] = mapped_column(String, default='SYSTEM', index=True)
 
     desttaxtype: Mapped[String] = mapped_column(String, primary_key=True, nullable=False)
     prodtaxtype: Mapped[String] = mapped_column(String, primary_key=True, nullable=False)
@@ -6262,6 +6454,7 @@ class Purchasetaxcat(Base):
 class Purchordconfig(Base):
     __tablename__ = 'purchordconfig'
     __table_args__ = {'schema': S9_SCHEMA, 'extend_existing': True}
+    tenant_id: Mapped[str] = mapped_column(String, default='SYSTEM', index=True)
 
     smriti_id: Mapped[int] = mapped_column(Integer, primary_key=True, autoincrement=True)
     classification: Mapped[String] = mapped_column(String, nullable=False)
@@ -6276,6 +6469,7 @@ class Purchordconfig(Base):
 class Purchorddtl(Base):
     __tablename__ = 'purchorddtl'
     __table_args__ = {'schema': S9_SCHEMA, 'extend_existing': True}
+    tenant_id: Mapped[str] = mapped_column(String, default='SYSTEM', index=True)
 
     potype: Mapped[Integer] = mapped_column(Integer, primary_key=True, nullable=False)
     ponoprefix: Mapped[String] = mapped_column(String, primary_key=True, nullable=False)
@@ -6421,6 +6615,7 @@ class Purchorddtl(Base):
 class Purchordhdr(Base):
     __tablename__ = 'purchordhdr'
     __table_args__ = {'schema': S9_SCHEMA, 'extend_existing': True}
+    tenant_id: Mapped[str] = mapped_column(String, default='SYSTEM', index=True)
 
     potype: Mapped[Integer] = mapped_column(Integer, primary_key=True, nullable=False)
     ponoprefix: Mapped[String] = mapped_column(String, primary_key=True, nullable=False)
@@ -6512,6 +6707,7 @@ class Purchordhdr(Base):
 class Purchordtrl(Base):
     __tablename__ = 'purchordtrl'
     __table_args__ = {'schema': S9_SCHEMA, 'extend_existing': True}
+    tenant_id: Mapped[str] = mapped_column(String, default='SYSTEM', index=True)
 
     ponoprefix: Mapped[String] = mapped_column(String, primary_key=True, nullable=False)
     poctrlno: Mapped[Integer] = mapped_column(Integer, primary_key=True, nullable=False)
@@ -6533,6 +6729,7 @@ class Purchordtrl(Base):
 class Purchplan(Base):
     __tablename__ = 'purchplan'
     __table_args__ = {'schema': S9_SCHEMA, 'extend_existing': True}
+    tenant_id: Mapped[str] = mapped_column(String, default='SYSTEM', index=True)
 
     smriti_id: Mapped[int] = mapped_column(Integer, primary_key=True, autoincrement=True)
     startdt: Mapped[Optional[DateTime]] = mapped_column(DateTime, nullable=True)
@@ -6572,6 +6769,7 @@ class Purchplan(Base):
 class Purgelogdtls(Base):
     __tablename__ = 'purgelogdtls'
     __table_args__ = {'schema': S9_SCHEMA, 'extend_existing': True}
+    tenant_id: Mapped[str] = mapped_column(String, default='SYSTEM', index=True)
 
     ctrlnumber: Mapped[Integer] = mapped_column(Integer, primary_key=True, nullable=False)
     srlno: Mapped[Integer] = mapped_column(Integer, primary_key=True, nullable=False)
@@ -6584,6 +6782,7 @@ class Purgelogdtls(Base):
 class Purgeloghdr(Base):
     __tablename__ = 'purgeloghdr'
     __table_args__ = {'schema': S9_SCHEMA, 'extend_existing': True}
+    tenant_id: Mapped[str] = mapped_column(String, default='SYSTEM', index=True)
 
     ctrlnumber: Mapped[Integer] = mapped_column(Integer, primary_key=True, nullable=False)
     purgedate: Mapped[Optional[DateTime]] = mapped_column(DateTime, nullable=True)
@@ -6595,6 +6794,7 @@ class Purgeloghdr(Base):
 class Reportconfigpreferences(Base):
     __tablename__ = 'reportconfigpreferences'
     __table_args__ = {'schema': S9_SCHEMA, 'extend_existing': True}
+    tenant_id: Mapped[str] = mapped_column(String, default='SYSTEM', index=True)
 
     userid: Mapped[String] = mapped_column(String, primary_key=True, nullable=False)
     taskid: Mapped[String] = mapped_column(String, primary_key=True, nullable=False)
@@ -6603,6 +6803,7 @@ class Reportconfigpreferences(Base):
 class Reportconfigsettings(Base):
     __tablename__ = 'reportconfigsettings'
     __table_args__ = {'schema': S9_SCHEMA, 'extend_existing': True}
+    tenant_id: Mapped[str] = mapped_column(String, default='SYSTEM', index=True)
 
     configid: Mapped[Integer] = mapped_column(Integer, primary_key=True, nullable=False)
     configurationname: Mapped[Optional[String]] = mapped_column(String, nullable=True)
@@ -6615,6 +6816,7 @@ class Reportconfigsettings(Base):
 class Reportdates(Base):
     __tablename__ = 'reportdates'
     __table_args__ = {'schema': S9_SCHEMA, 'extend_existing': True}
+    tenant_id: Mapped[str] = mapped_column(String, default='SYSTEM', index=True)
 
     sno: Mapped[String] = mapped_column(String, primary_key=True, nullable=False)
     type: Mapped[String] = mapped_column(String, nullable=False)
@@ -6626,6 +6828,7 @@ class Reportdates(Base):
 class Repsizecat(Base):
     __tablename__ = 'repsizecat'
     __table_args__ = {'schema': S9_SCHEMA, 'extend_existing': True}
+    tenant_id: Mapped[str] = mapped_column(String, default='SYSTEM', index=True)
 
     smriti_id: Mapped[int] = mapped_column(Integer, primary_key=True, autoincrement=True)
     userid: Mapped[Optional[String]] = mapped_column(String, nullable=True)
@@ -6658,6 +6861,7 @@ class Repsizecat(Base):
 class Rptselfilename(Base):
     __tablename__ = 'rptselfilename'
     __table_args__ = {'schema': S9_SCHEMA, 'extend_existing': True}
+    tenant_id: Mapped[str] = mapped_column(String, default='SYSTEM', index=True)
 
     exename: Mapped[String] = mapped_column(String, primary_key=True, nullable=False)
     descr: Mapped[Optional[String]] = mapped_column(String, nullable=True)
@@ -6675,6 +6879,7 @@ class Rptselfilename(Base):
 class Salesfactors(Base):
     __tablename__ = 'salesfactors'
     __table_args__ = {'schema': S9_SCHEMA, 'extend_existing': True}
+    tenant_id: Mapped[str] = mapped_column(String, default='SYSTEM', index=True)
 
     recno: Mapped[Integer] = mapped_column(Integer, primary_key=True, nullable=False)
     type: Mapped[Optional[Integer]] = mapped_column(Integer, nullable=True)
@@ -6738,6 +6943,7 @@ class Salesfactors(Base):
 class Salestaxcat(Base):
     __tablename__ = 'salestaxcat'
     __table_args__ = {'schema': S9_SCHEMA, 'extend_existing': True}
+    tenant_id: Mapped[str] = mapped_column(String, default='SYSTEM', index=True)
 
     desttaxtype: Mapped[String] = mapped_column(String, primary_key=True, nullable=False)
     prodtaxtype: Mapped[String] = mapped_column(String, primary_key=True, nullable=False)
@@ -6801,6 +7007,7 @@ class Salestaxcat(Base):
 class Salestaxrevision(Base):
     __tablename__ = 'salestaxrevision'
     __table_args__ = {'schema': S9_SCHEMA, 'extend_existing': True}
+    tenant_id: Mapped[str] = mapped_column(String, default='SYSTEM', index=True)
 
     taxrevisionid: Mapped[Integer] = mapped_column(Integer, primary_key=True, nullable=False)
     desttaxtype: Mapped[String] = mapped_column(String, primary_key=True, nullable=False)
@@ -6864,6 +7071,7 @@ class Salestaxrevision(Base):
 class Salestaxrevisionhistory(Base):
     __tablename__ = 'salestaxrevisionhistory'
     __table_args__ = {'schema': S9_SCHEMA, 'extend_existing': True}
+    tenant_id: Mapped[str] = mapped_column(String, default='SYSTEM', index=True)
 
     taxrevisionid: Mapped[Integer] = mapped_column(Integer, primary_key=True, nullable=False)
     desttaxtype: Mapped[String] = mapped_column(String, primary_key=True, nullable=False)
@@ -6927,6 +7135,7 @@ class Salestaxrevisionhistory(Base):
 class Saletrnhdr(Base):
     __tablename__ = 'saletrnhdr'
     __table_args__ = {'schema': S9_SCHEMA, 'extend_existing': True}
+    tenant_id: Mapped[str] = mapped_column(String, default='SYSTEM', index=True)
 
     saletrntype: Mapped[Integer] = mapped_column(Integer, primary_key=True, nullable=False)
     saletrnctrlno: Mapped[Integer] = mapped_column(Integer, primary_key=True, nullable=False)
@@ -7035,6 +7244,7 @@ class Saletrnhdr(Base):
 class Schemesdefinitiondtls(Base):
     __tablename__ = 'schemesdefinitiondtls'
     __table_args__ = {'schema': S9_SCHEMA, 'extend_existing': True}
+    tenant_id: Mapped[str] = mapped_column(String, default='SYSTEM', index=True)
 
     schemecode: Mapped[String] = mapped_column(String, primary_key=True, nullable=False)
     srlno: Mapped[Integer] = mapped_column(Integer, primary_key=True, nullable=False)
@@ -7092,6 +7302,7 @@ class Schemesdefinitiondtls(Base):
 class Schemesdefinitionhdr(Base):
     __tablename__ = 'schemesdefinitionhdr'
     __table_args__ = {'schema': S9_SCHEMA, 'extend_existing': True}
+    tenant_id: Mapped[str] = mapped_column(String, default='SYSTEM', index=True)
 
     schemecode: Mapped[String] = mapped_column(String, primary_key=True, nullable=False)
     schemedescr: Mapped[Optional[String]] = mapped_column(String, nullable=True)
@@ -7109,6 +7320,7 @@ class Schemesdefinitionhdr(Base):
 class Schemespointsslabs(Base):
     __tablename__ = 'schemespointsslabs'
     __table_args__ = {'schema': S9_SCHEMA, 'extend_existing': True}
+    tenant_id: Mapped[str] = mapped_column(String, default='SYSTEM', index=True)
 
     schemecode: Mapped[String] = mapped_column(String, primary_key=True, nullable=False)
     slabtype: Mapped[String] = mapped_column(String, primary_key=True, nullable=False)
@@ -7125,6 +7337,7 @@ class Schemespointsslabs(Base):
 class Seasonsmaster(Base):
     __tablename__ = 'seasonsmaster'
     __table_args__ = {'schema': S9_SCHEMA, 'extend_existing': True}
+    tenant_id: Mapped[str] = mapped_column(String, default='SYSTEM', index=True)
 
     seasonsname: Mapped[String] = mapped_column(String, primary_key=True, nullable=False)
     startdate: Mapped[Optional[DateTime]] = mapped_column(DateTime, nullable=True)
@@ -7143,6 +7356,7 @@ class Seasonsmaster(Base):
 class Seasonsmasterlog(Base):
     __tablename__ = 'seasonsmasterlog'
     __table_args__ = {'schema': S9_SCHEMA, 'extend_existing': True}
+    tenant_id: Mapped[str] = mapped_column(String, default='SYSTEM', index=True)
 
     smriti_id: Mapped[int] = mapped_column(Integer, primary_key=True, autoincrement=True)
     seasonsname: Mapped[String] = mapped_column(String, nullable=False)
@@ -7160,6 +7374,7 @@ class Seasonsmasterlog(Base):
 class Shoperscriptupdateinfo(Base):
     __tablename__ = 'shoperscriptupdateinfo'
     __table_args__ = {'schema': S9_SCHEMA, 'extend_existing': True}
+    tenant_id: Mapped[str] = mapped_column(String, default='SYSTEM', index=True)
 
     scriptid: Mapped[String] = mapped_column(String, primary_key=True, nullable=False)
     runsrl: Mapped[Integer] = mapped_column(Integer, primary_key=True, nullable=False)
@@ -7183,6 +7398,7 @@ class Shoperscriptupdateinfo(Base):
 class Shrmscript(Base):
     __tablename__ = 'shrmscript'
     __table_args__ = {'schema': S9_SCHEMA, 'extend_existing': True}
+    tenant_id: Mapped[str] = mapped_column(String, default='SYSTEM', index=True)
 
     scriptblockid: Mapped[Integer] = mapped_column(Integer, primary_key=True, nullable=False)
     srlno: Mapped[Integer] = mapped_column(Integer, primary_key=True, nullable=False)
@@ -7201,6 +7417,7 @@ class Shrmscript(Base):
 class Shrmscriptextd(Base):
     __tablename__ = 'shrmscriptextd'
     __table_args__ = {'schema': S9_SCHEMA, 'extend_existing': True}
+    tenant_id: Mapped[str] = mapped_column(String, default='SYSTEM', index=True)
 
     smriti_id: Mapped[int] = mapped_column(Integer, primary_key=True, autoincrement=True)
     scriptblockid: Mapped[Optional[Integer]] = mapped_column(Integer, nullable=True)
@@ -7215,6 +7432,7 @@ class Shrmscriptextd(Base):
 class Sisstatus(Base):
     __tablename__ = 'sisstatus'
     __table_args__ = {'schema': S9_SCHEMA, 'extend_existing': True}
+    tenant_id: Mapped[str] = mapped_column(String, default='SYSTEM', index=True)
 
     runno: Mapped[Integer] = mapped_column(Integer, primary_key=True, nullable=False)
     filenm: Mapped[Optional[String]] = mapped_column(String, nullable=True)
@@ -7239,6 +7457,7 @@ class Sisstatus(Base):
 class Sizecat(Base):
     __tablename__ = 'sizecat'
     __table_args__ = {'schema': S9_SCHEMA, 'extend_existing': True}
+    tenant_id: Mapped[str] = mapped_column(String, default='SYSTEM', index=True)
 
     class1cd: Mapped[String] = mapped_column(String, primary_key=True, nullable=False)
     class2cd: Mapped[String] = mapped_column(String, primary_key=True, nullable=False)
@@ -7257,6 +7476,7 @@ class Sizecat(Base):
 class Sizeentryfieldsconfig(Base):
     __tablename__ = 'sizeentryfieldsconfig'
     __table_args__ = {'schema': S9_SCHEMA, 'extend_existing': True}
+    tenant_id: Mapped[str] = mapped_column(String, default='SYSTEM', index=True)
 
     entrytype: Mapped[String] = mapped_column(String, primary_key=True, nullable=False)
     trntype: Mapped[Integer] = mapped_column(Integer, primary_key=True, nullable=False)
@@ -7278,6 +7498,7 @@ class Sizeentryfieldsconfig(Base):
 class Spdefsettings(Base):
     __tablename__ = 'spdefsettings'
     __table_args__ = {'schema': S9_SCHEMA, 'extend_existing': True}
+    tenant_id: Mapped[str] = mapped_column(String, default='SYSTEM', index=True)
 
     smriti_id: Mapped[int] = mapped_column(Integer, primary_key=True, autoincrement=True)
     keytype: Mapped[Optional[Integer]] = mapped_column(Integer, nullable=True)
@@ -7293,6 +7514,7 @@ class Spdefsettings(Base):
 class Stktrnaddldtls(Base):
     __tablename__ = 'stktrnaddldtls'
     __table_args__ = {'schema': S9_SCHEMA, 'extend_existing': True}
+    tenant_id: Mapped[str] = mapped_column(String, default='SYSTEM', index=True)
 
     trntype: Mapped[Integer] = mapped_column(Integer, primary_key=True, nullable=False)
     trnctrlno: Mapped[Optional[Integer]] = mapped_column(Integer, nullable=True)
@@ -7322,6 +7544,7 @@ class Stktrnaddldtls(Base):
 class Stktrnaddlhdr(Base):
     __tablename__ = 'stktrnaddlhdr'
     __table_args__ = {'schema': S9_SCHEMA, 'extend_existing': True}
+    tenant_id: Mapped[str] = mapped_column(String, default='SYSTEM', index=True)
 
     trntype: Mapped[Integer] = mapped_column(Integer, primary_key=True, nullable=False)
     trnctrlno: Mapped[Integer] = mapped_column(Integer, primary_key=True, nullable=False)
@@ -7349,6 +7572,7 @@ class Stktrnaddlhdr(Base):
 class Stktrndtls(Base):
     __tablename__ = 'stktrndtls'
     __table_args__ = {'schema': S9_SCHEMA, 'extend_existing': True}
+    tenant_id: Mapped[str] = mapped_column(String, default='SYSTEM', index=True)
 
     trntype: Mapped[Integer] = mapped_column(Integer, primary_key=True, nullable=False)
     trnctrlno: Mapped[Integer] = mapped_column(Integer, primary_key=True, nullable=False)
@@ -7549,6 +7773,7 @@ class Stktrndtls(Base):
 class Stktrndtlsextd01(Base):
     __tablename__ = 'stktrndtlsextd01'
     __table_args__ = {'schema': S9_SCHEMA, 'extend_existing': True}
+    tenant_id: Mapped[str] = mapped_column(String, default='SYSTEM', index=True)
 
     trntype: Mapped[Integer] = mapped_column(Integer, primary_key=True, nullable=False)
     trnctrlno: Mapped[Integer] = mapped_column(Integer, primary_key=True, nullable=False)
@@ -7574,6 +7799,7 @@ class Stktrndtlsextd01(Base):
 class Stktrneddtls(Base):
     __tablename__ = 'stktrneddtls'
     __table_args__ = {'schema': S9_SCHEMA, 'extend_existing': True}
+    tenant_id: Mapped[str] = mapped_column(String, default='SYSTEM', index=True)
 
     trntype: Mapped[Integer] = mapped_column(Integer, primary_key=True, nullable=False)
     trnctrlno: Mapped[Integer] = mapped_column(Integer, primary_key=True, nullable=False)
@@ -7609,6 +7835,7 @@ class Stktrneddtls(Base):
 class Stktrnedhdr(Base):
     __tablename__ = 'stktrnedhdr'
     __table_args__ = {'schema': S9_SCHEMA, 'extend_existing': True}
+    tenant_id: Mapped[str] = mapped_column(String, default='SYSTEM', index=True)
 
     trntype: Mapped[Integer] = mapped_column(Integer, primary_key=True, nullable=False)
     trnctrlno: Mapped[Integer] = mapped_column(Integer, primary_key=True, nullable=False)
@@ -7636,6 +7863,7 @@ class Stktrnedhdr(Base):
 class Stktrnhdr(Base):
     __tablename__ = 'stktrnhdr'
     __table_args__ = {'schema': S9_SCHEMA, 'extend_existing': True}
+    tenant_id: Mapped[str] = mapped_column(String, default='SYSTEM', index=True)
 
     trntype: Mapped[Integer] = mapped_column(Integer, primary_key=True, nullable=False)
     trnctrlno: Mapped[Integer] = mapped_column(Integer, primary_key=True, nullable=False)
@@ -7770,6 +7998,7 @@ class Stktrnhdr(Base):
 class Stockcreditnote(Base):
     __tablename__ = 'stockcreditnote'
     __table_args__ = {'schema': S9_SCHEMA, 'extend_existing': True}
+    tenant_id: Mapped[str] = mapped_column(String, default='SYSTEM', index=True)
 
     docnoprefix: Mapped[String] = mapped_column(String, primary_key=True, nullable=False)
     docno: Mapped[Integer] = mapped_column(Integer, primary_key=True, nullable=False)
@@ -7801,6 +8030,7 @@ class Stockcreditnote(Base):
 class Stockmaster(Base):
     __tablename__ = 'stockmaster'
     __table_args__ = {'schema': S9_SCHEMA, 'extend_existing': True}
+    tenant_id: Mapped[str] = mapped_column(String, default='SYSTEM', index=True)
 
     stockno: Mapped[String] = mapped_column(String, primary_key=True, nullable=False)
     batchsrlno: Mapped[String] = mapped_column(String, primary_key=True, nullable=False)
@@ -7817,6 +8047,7 @@ class Stockmaster(Base):
 class Stockmasterextd(Base):
     __tablename__ = 'stockmasterextd'
     __table_args__ = {'schema': S9_SCHEMA, 'extend_existing': True}
+    tenant_id: Mapped[str] = mapped_column(String, default='SYSTEM', index=True)
 
     stockno: Mapped[String] = mapped_column(String, primary_key=True, nullable=False)
     batchsrlno: Mapped[String] = mapped_column(String, primary_key=True, nullable=False)
@@ -7849,6 +8080,7 @@ class Stockmasterextd(Base):
 class Stockmasterextd01(Base):
     __tablename__ = 'stockmasterextd01'
     __table_args__ = {'schema': S9_SCHEMA, 'extend_existing': True}
+    tenant_id: Mapped[str] = mapped_column(String, default='SYSTEM', index=True)
 
     stockno: Mapped[String] = mapped_column(String, primary_key=True, nullable=False)
     batchno: Mapped[String] = mapped_column(String, primary_key=True, nullable=False)
@@ -7866,6 +8098,7 @@ class Stockmasterextd01(Base):
 class Stockmasterextd02(Base):
     __tablename__ = 'stockmasterextd02'
     __table_args__ = {'schema': S9_SCHEMA, 'extend_existing': True}
+    tenant_id: Mapped[str] = mapped_column(String, default='SYSTEM', index=True)
 
     stockno: Mapped[String] = mapped_column(String, primary_key=True, nullable=False)
     itemtag1: Mapped[String] = mapped_column(String, primary_key=True, nullable=False)
@@ -7883,6 +8116,7 @@ class Stockmasterextd02(Base):
 class Stockmasterextdopbal(Base):
     __tablename__ = 'stockmasterextdopbal'
     __table_args__ = {'schema': S9_SCHEMA, 'extend_existing': True}
+    tenant_id: Mapped[str] = mapped_column(String, default='SYSTEM', index=True)
 
     dateinsert: Mapped[Optional[DateTime]] = mapped_column(DateTime, nullable=True)
     shoperdate: Mapped[Optional[DateTime]] = mapped_column(DateTime, nullable=True)
@@ -7904,6 +8138,7 @@ class Stockmasterextdopbal(Base):
 class Stocktrnsummary(Base):
     __tablename__ = 'stocktrnsummary'
     __table_args__ = {'schema': S9_SCHEMA, 'extend_existing': True}
+    tenant_id: Mapped[str] = mapped_column(String, default='SYSTEM', index=True)
 
     stockno: Mapped[String] = mapped_column(String, primary_key=True, nullable=False)
     batchsrlno: Mapped[String] = mapped_column(String, primary_key=True, nullable=False)
@@ -7950,6 +8185,7 @@ class Stocktrnsummary(Base):
 class Subclass1cat(Base):
     __tablename__ = 'subclass1cat'
     __table_args__ = {'schema': S9_SCHEMA, 'extend_existing': True}
+    tenant_id: Mapped[str] = mapped_column(String, default='SYSTEM', index=True)
 
     class1cd: Mapped[String] = mapped_column(String, primary_key=True, nullable=False)
     class2cd: Mapped[String] = mapped_column(String, primary_key=True, nullable=False)
@@ -8000,6 +8236,7 @@ class Subclass1cat(Base):
 class Subclass2cat(Base):
     __tablename__ = 'subclass2cat'
     __table_args__ = {'schema': S9_SCHEMA, 'extend_existing': True}
+    tenant_id: Mapped[str] = mapped_column(String, default='SYSTEM', index=True)
 
     class1cd: Mapped[String] = mapped_column(String, primary_key=True, nullable=False)
     class2cd: Mapped[String] = mapped_column(String, primary_key=True, nullable=False)
@@ -8015,6 +8252,7 @@ class Subclass2cat(Base):
 class Sysparam(Base):
     __tablename__ = 'sysparam'
     __table_args__ = {'schema': S9_SCHEMA, 'extend_existing': True}
+    tenant_id: Mapped[str] = mapped_column(String, default='SYSTEM', index=True)
 
     id: Mapped[String] = mapped_column(String, primary_key=True, nullable=False)
     descr: Mapped[Optional[String]] = mapped_column(String, nullable=True)
@@ -8037,6 +8275,7 @@ class Sysparam(Base):
 class Sysparamextd(Base):
     __tablename__ = 'sysparamextd'
     __table_args__ = {'schema': S9_SCHEMA, 'extend_existing': True}
+    tenant_id: Mapped[str] = mapped_column(String, default='SYSTEM', index=True)
 
     id: Mapped[String] = mapped_column(String, primary_key=True, nullable=False)
     paramcode: Mapped[Optional[String]] = mapped_column(String, nullable=True)
@@ -8053,6 +8292,7 @@ class Sysparamextd(Base):
 class Sysparamlookup(Base):
     __tablename__ = 'sysparamlookup'
     __table_args__ = {'schema': S9_SCHEMA, 'extend_existing': True}
+    tenant_id: Mapped[str] = mapped_column(String, default='SYSTEM', index=True)
 
     smriti_id: Mapped[int] = mapped_column(Integer, primary_key=True, autoincrement=True)
     paramcode: Mapped[Optional[String]] = mapped_column(String, nullable=True)
@@ -8067,6 +8307,7 @@ class Sysparamlookup(Base):
 class Tallyexportedtrans(Base):
     __tablename__ = 'tallyexportedtrans'
     __table_args__ = {'schema': S9_SCHEMA, 'extend_existing': True}
+    tenant_id: Mapped[str] = mapped_column(String, default='SYSTEM', index=True)
 
     trntype: Mapped[Integer] = mapped_column(Integer, primary_key=True, nullable=False)
     voucherno: Mapped[String] = mapped_column(String, primary_key=True, nullable=False)
@@ -8081,6 +8322,7 @@ class Tallyexportedtrans(Base):
 class Tallyhsnrules(Base):
     __tablename__ = 'tallyhsnrules'
     __table_args__ = {'schema': S9_SCHEMA, 'extend_existing': True}
+    tenant_id: Mapped[str] = mapped_column(String, default='SYSTEM', index=True)
 
     mapid: Mapped[Integer] = mapped_column(Integer, primary_key=True, nullable=False)
     stockno: Mapped[Optional[String]] = mapped_column(String, nullable=True)
@@ -8101,6 +8343,7 @@ class Tallyhsnrules(Base):
 class Tallymappurchtaxcat(Base):
     __tablename__ = 'tallymappurchtaxcat'
     __table_args__ = {'schema': S9_SCHEMA, 'extend_existing': True}
+    tenant_id: Mapped[str] = mapped_column(String, default='SYSTEM', index=True)
 
     taxcomponent: Mapped[Numeric(precision=19, scale=4)] = mapped_column(Numeric(precision=19, scale=4), primary_key=True, nullable=False)
     mapname: Mapped[String] = mapped_column(String, primary_key=True, nullable=False)
@@ -8123,6 +8366,7 @@ class Tallymappurchtaxcat(Base):
 class Tallymapsettinginfo(Base):
     __tablename__ = 'tallymapsettinginfo'
     __table_args__ = {'schema': S9_SCHEMA, 'extend_existing': True}
+    tenant_id: Mapped[str] = mapped_column(String, default='SYSTEM', index=True)
 
     mapname: Mapped[String] = mapped_column(String, primary_key=True, nullable=False)
     poststartdate: Mapped[DateTime] = mapped_column(DateTime, primary_key=True, nullable=False)
@@ -8189,6 +8433,7 @@ class Tallymapsettinginfo(Base):
 class Tallymasterinfo(Base):
     __tablename__ = 'tallymasterinfo'
     __table_args__ = {'schema': S9_SCHEMA, 'extend_existing': True}
+    tenant_id: Mapped[str] = mapped_column(String, default='SYSTEM', index=True)
 
     alias: Mapped[String] = mapped_column(String, primary_key=True, nullable=False)
     shopermastername: Mapped[Optional[String]] = mapped_column(String, nullable=True)
@@ -8222,6 +8467,7 @@ class Tallymasterinfo(Base):
 class Tallypostingsettings(Base):
     __tablename__ = 'tallypostingsettings'
     __table_args__ = {'schema': S9_SCHEMA, 'extend_existing': True}
+    tenant_id: Mapped[str] = mapped_column(String, default='SYSTEM', index=True)
 
     trantype: Mapped[Integer] = mapped_column(Integer, primary_key=True, nullable=False)
     slno: Mapped[Integer] = mapped_column(Integer, primary_key=True, nullable=False)
@@ -8246,6 +8492,7 @@ class Tallypostingsettings(Base):
 class Tallyprintconfigdetails(Base):
     __tablename__ = 'tallyprintconfigdetails'
     __table_args__ = {'schema': S9_SCHEMA, 'extend_existing': True}
+    tenant_id: Mapped[str] = mapped_column(String, default='SYSTEM', index=True)
 
     configname: Mapped[String] = mapped_column(String, primary_key=True, nullable=False)
     paramname: Mapped[String] = mapped_column(String, primary_key=True, nullable=False)
@@ -8255,6 +8502,7 @@ class Tallyprintconfigdetails(Base):
 class Tallyprintconfigheader(Base):
     __tablename__ = 'tallyprintconfigheader'
     __table_args__ = {'schema': S9_SCHEMA, 'extend_existing': True}
+    tenant_id: Mapped[str] = mapped_column(String, default='SYSTEM', index=True)
 
     terminal: Mapped[String] = mapped_column(String, primary_key=True, nullable=False)
     trntype: Mapped[Integer] = mapped_column(Integer, primary_key=True, nullable=False)
@@ -8271,6 +8519,7 @@ class Tallyprintconfigheader(Base):
 class Tallyvchinfo(Base):
     __tablename__ = 'tallyvchinfo'
     __table_args__ = {'schema': S9_SCHEMA, 'extend_existing': True}
+    tenant_id: Mapped[str] = mapped_column(String, default='SYSTEM', index=True)
 
     vchid: Mapped[String] = mapped_column(String, primary_key=True, nullable=False)
     vchguid: Mapped[String] = mapped_column(String, primary_key=True, nullable=False)
@@ -8297,6 +8546,7 @@ class Tallyvchinfo(Base):
 class Tillacceptdisplaydtls(Base):
     __tablename__ = 'tillacceptdisplaydtls'
     __table_args__ = {'schema': S9_SCHEMA, 'extend_existing': True}
+    tenant_id: Mapped[str] = mapped_column(String, default='SYSTEM', index=True)
 
     tilltrntype: Mapped[Integer] = mapped_column(Integer, primary_key=True, nullable=False)
     tillindex: Mapped[Integer] = mapped_column(Integer, primary_key=True, nullable=False)
@@ -8330,6 +8580,7 @@ class Tillacceptdisplaydtls(Base):
 class Tilloperationjournaldtls(Base):
     __tablename__ = 'tilloperationjournaldtls'
     __table_args__ = {'schema': S9_SCHEMA, 'extend_existing': True}
+    tenant_id: Mapped[str] = mapped_column(String, default='SYSTEM', index=True)
 
     tilltrntype: Mapped[Integer] = mapped_column(Integer, primary_key=True, nullable=False)
     tilltrnctrlno: Mapped[Integer] = mapped_column(Integer, primary_key=True, nullable=False)
@@ -8397,6 +8648,7 @@ class Tilloperationjournaldtls(Base):
 class Tilloperationjournalhdr(Base):
     __tablename__ = 'tilloperationjournalhdr'
     __table_args__ = {'schema': S9_SCHEMA, 'extend_existing': True}
+    tenant_id: Mapped[str] = mapped_column(String, default='SYSTEM', index=True)
 
     tilltrntype: Mapped[Integer] = mapped_column(Integer, primary_key=True, nullable=False)
     tilltrnctrlno: Mapped[Integer] = mapped_column(Integer, primary_key=True, nullable=False)
@@ -8472,6 +8724,7 @@ class Tilloperationjournalhdr(Base):
 class Tillshiftdtls(Base):
     __tablename__ = 'tillshiftdtls'
     __table_args__ = {'schema': S9_SCHEMA, 'extend_existing': True}
+    tenant_id: Mapped[str] = mapped_column(String, default='SYSTEM', index=True)
 
     tilltrndt: Mapped[DateTime] = mapped_column(DateTime, primary_key=True, nullable=False)
     nodeid: Mapped[String] = mapped_column(String, primary_key=True, nullable=False)
@@ -8532,6 +8785,7 @@ class Tillshiftdtls(Base):
 class Tilltrnswisedenomination(Base):
     __tablename__ = 'tilltrnswisedenomination'
     __table_args__ = {'schema': S9_SCHEMA, 'extend_existing': True}
+    tenant_id: Mapped[str] = mapped_column(String, default='SYSTEM', index=True)
 
     tilltrntype: Mapped[Integer] = mapped_column(Integer, primary_key=True, nullable=False)
     tilltrnctrlno: Mapped[Integer] = mapped_column(Integer, primary_key=True, nullable=False)
@@ -8591,6 +8845,7 @@ class Tilltrnswisedenomination(Base):
 class Transactioncomponentsdtls(Base):
     __tablename__ = 'transactioncomponentsdtls'
     __table_args__ = {'schema': S9_SCHEMA, 'extend_existing': True}
+    tenant_id: Mapped[str] = mapped_column(String, default='SYSTEM', index=True)
 
     trntype: Mapped[Integer] = mapped_column(Integer, primary_key=True, nullable=False)
     trnsubtype: Mapped[Optional[Integer]] = mapped_column(Integer, nullable=True)
@@ -8605,6 +8860,7 @@ class Transactioncomponentsdtls(Base):
 class Tripsheetdtls(Base):
     __tablename__ = 'tripsheetdtls'
     __table_args__ = {'schema': S9_SCHEMA, 'extend_existing': True}
+    tenant_id: Mapped[str] = mapped_column(String, default='SYSTEM', index=True)
 
     trntype: Mapped[Integer] = mapped_column(Integer, primary_key=True, nullable=False)
     trnctrlno: Mapped[Integer] = mapped_column(Integer, primary_key=True, nullable=False)
@@ -8625,6 +8881,7 @@ class Tripsheetdtls(Base):
 class Tripsheethdr(Base):
     __tablename__ = 'tripsheethdr'
     __table_args__ = {'schema': S9_SCHEMA, 'extend_existing': True}
+    tenant_id: Mapped[str] = mapped_column(String, default='SYSTEM', index=True)
 
     trntype: Mapped[Integer] = mapped_column(Integer, primary_key=True, nullable=False)
     trnctrlno: Mapped[Integer] = mapped_column(Integer, primary_key=True, nullable=False)
@@ -8649,6 +8906,7 @@ class Tripsheethdr(Base):
 class Tripsheetstatusdtls(Base):
     __tablename__ = 'tripsheetstatusdtls'
     __table_args__ = {'schema': S9_SCHEMA, 'extend_existing': True}
+    tenant_id: Mapped[str] = mapped_column(String, default='SYSTEM', index=True)
 
     statusctrlno: Mapped[String] = mapped_column(String, primary_key=True, nullable=False)
     statusentsrlno: Mapped[Integer] = mapped_column(Integer, primary_key=True, nullable=False)
@@ -8682,6 +8940,7 @@ class Tripsheetstatusdtls(Base):
 class Trnstockaudit(Base):
     __tablename__ = 'trnstockaudit'
     __table_args__ = {'schema': S9_SCHEMA, 'extend_existing': True}
+    tenant_id: Mapped[str] = mapped_column(String, default='SYSTEM', index=True)
 
     smriti_id: Mapped[int] = mapped_column(Integer, primary_key=True, autoincrement=True)
     trntype: Mapped[Optional[Integer]] = mapped_column(Integer, nullable=True)
@@ -8707,6 +8966,7 @@ class Trnstockaudit(Base):
 class Userwiseitemconfig(Base):
     __tablename__ = 'userwiseitemconfig'
     __table_args__ = {'schema': S9_SCHEMA, 'extend_existing': True}
+    tenant_id: Mapped[str] = mapped_column(String, default='SYSTEM', index=True)
 
     userid: Mapped[String] = mapped_column(String, primary_key=True, nullable=False)
     fieldid_position: Mapped[Optional[String]] = mapped_column(String, nullable=True)
@@ -8721,6 +8981,7 @@ class Userwiseitemconfig(Base):
 class Vamenu(Base):
     __tablename__ = 'vamenu'
     __table_args__ = {'schema': S9_SCHEMA, 'extend_existing': True}
+    tenant_id: Mapped[str] = mapped_column(String, default='SYSTEM', index=True)
 
     smriti_id: Mapped[int] = mapped_column(Integer, primary_key=True, autoincrement=True)
     mnuno: Mapped[Optional[Integer]] = mapped_column(Integer, nullable=True)
@@ -8741,6 +9002,7 @@ class Vamenu(Base):
 class Vamenushortcut(Base):
     __tablename__ = 'vamenushortcut'
     __table_args__ = {'schema': S9_SCHEMA, 'extend_existing': True}
+    tenant_id: Mapped[str] = mapped_column(String, default='SYSTEM', index=True)
 
     smriti_id: Mapped[int] = mapped_column(Integer, primary_key=True, autoincrement=True)
     compcode: Mapped[Optional[String]] = mapped_column(String, nullable=True)
@@ -8763,6 +9025,7 @@ class Vamenushortcut(Base):
 class Vendoritems(Base):
     __tablename__ = 'vendoritems'
     __table_args__ = {'schema': S9_SCHEMA, 'extend_existing': True}
+    tenant_id: Mapped[str] = mapped_column(String, default='SYSTEM', index=True)
 
     vendcd: Mapped[String] = mapped_column(String, primary_key=True, nullable=False)
     recno: Mapped[Integer] = mapped_column(Integer, primary_key=True, nullable=False)
@@ -8777,6 +9040,7 @@ class Vendoritems(Base):
 class Vendors(Base):
     __tablename__ = 'vendors'
     __table_args__ = {'schema': S9_SCHEMA, 'extend_existing': True}
+    tenant_id: Mapped[str] = mapped_column(String, default='SYSTEM', index=True)
 
     code: Mapped[String] = mapped_column(String, primary_key=True, nullable=False)
     nm: Mapped[Optional[String]] = mapped_column(String, nullable=True)
@@ -8808,6 +9072,7 @@ class Vendors(Base):
 class Versiondtls(Base):
     __tablename__ = 'versiondtls'
     __table_args__ = {'schema': S9_SCHEMA, 'extend_existing': True}
+    tenant_id: Mapped[str] = mapped_column(String, default='SYSTEM', index=True)
 
     verid: Mapped[Integer] = mapped_column(Integer, primary_key=True, nullable=False)
     verdate: Mapped[DateTime] = mapped_column(DateTime, nullable=False)
@@ -8823,6 +9088,7 @@ class Versiondtls(Base):
 class Versionwisetblsscript(Base):
     __tablename__ = 'versionwisetblsscript'
     __table_args__ = {'schema': S9_SCHEMA, 'extend_existing': True}
+    tenant_id: Mapped[str] = mapped_column(String, default='SYSTEM', index=True)
 
     verid: Mapped[Integer] = mapped_column(Integer, primary_key=True, nullable=False)
     srlno: Mapped[Integer] = mapped_column(Integer, primary_key=True, nullable=False)
@@ -8835,6 +9101,7 @@ class Versionwisetblsscript(Base):
 class Walkin(Base):
     __tablename__ = 'walkin'
     __table_args__ = {'schema': S9_SCHEMA, 'extend_existing': True}
+    tenant_id: Mapped[str] = mapped_column(String, default='SYSTEM', index=True)
 
     walkinsysdate: Mapped[DateTime] = mapped_column(DateTime, primary_key=True, nullable=False)
     walkinintervalctr: Mapped[Integer] = mapped_column(Integer, primary_key=True, nullable=False)

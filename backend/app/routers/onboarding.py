@@ -12,7 +12,7 @@ from app.schemas import StoreRegistrationRequest
 from app.core.security import require_admin
 import httpx
 
-router = APIRouter(prefix="/api/v1/onboarding", tags=["onboarding"])
+router = APIRouter(prefix="/onboarding", tags=["onboarding"])
 
 @router.post("/store", status_code=status.HTTP_201_CREATED)
 async def onboard_store(

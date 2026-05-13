@@ -71,6 +71,7 @@ export const STATIC_FALLBACK_MENU: MenuItem[] = [
   { id: 'loyalty',     label: 'Loyalty Program',    route: 'loyalty',     module: 'loyalty',     required_permission: 'crm.loyalty',       category: 'CATALOGUE', children: [], shortcut: undefined },
   { id: 'personnel',   label: 'Personnel Master',   route: 'personnel',   module: 'personnel',   required_permission: 'catalogue.view',    category: 'CATALOGUE', children: [], shortcut: undefined },
   { id: 'hsn',         label: 'HSN Manager',        route: 'hsn',         module: 'hsn',         required_permission: 'catalogue.view',    category: 'CATALOGUE', children: [], shortcut: undefined },
+  { id: 'object_lookup', label: 'Object Lookup',     route: 'object_lookup', module: 'object_lookup', required_permission: 'catalogue.view', category: 'CATALOGUE', children: [], shortcut: undefined },
 
   { id: 'inventory',   label: 'Stock Status',       route: 'inventory',   module: 'inventory',   required_permission: 'inventory.view',    category: 'WAREHOUSE', children: [], shortcut: 'F9' },
   { id: 'grn',         label: 'Goods Inward (GRN)', route: 'grn',         module: 'grn',         required_permission: 'inventory.grn',     category: 'TRANSACTIONS', children: [], shortcut: undefined },

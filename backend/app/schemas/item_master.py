@@ -365,6 +365,7 @@ class BatchCreateResponse(BaseModel):
     items: List[ItemResponse] = []
     skipped_codes: List[str] = []
     cascade_summary: dict = Field(default_factory=dict)
+    last_error: Optional[str] = None
 
 
 # ────────────────────────────────────────────────────────────

@@ -5,7 +5,7 @@ from app.core.database import get_db
 from app.models.legacy_s9 import Sysparam, Genlookup
 from sqlalchemy import func
 
-router = APIRouter(prefix="/api/v1/settings", tags=["settings"])
+router = APIRouter(prefix="/settings", tags=["settings"])
 
 # ── SysParam Endpoints ────────────────────────────────────────
 

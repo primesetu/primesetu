@@ -8,13 +8,16 @@
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700;800;900&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@100;200;300;400;500;600;700;800&display=swap');
 
+@import './styles/index.css';
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
 
 /* 
  * ALL Legacy hardcoded CSS variables, components, and layout code 
  * have been migrated to the modular SMRITI Design Tokens system.
  * See: src/styles/
  */
-@import './styles/index.css';
+

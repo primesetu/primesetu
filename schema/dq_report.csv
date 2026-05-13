@@ -1,0 +1,5 @@
+Check,Count
+DQ1_Items_Null_StockNo,0
+DQ4_Bills_Null_Zero_Total,0
+DQ5_Orphan_StkTrnDtls,0
+DQ6_Negative_Stock,0

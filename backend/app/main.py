@@ -59,18 +59,20 @@ from app.routers import (
     flexible_reports, gstr1,
     # Previously built — now wired
     accounts, alerts, catalogue, configuration, integration, price_group, reports, tills,
+    item_classification,
 )
 from app.routers import schema as schema_router
 
 # Core & Management
-app.include_router(onboarding.router)
-app.include_router(store.router)
+app.include_router(onboarding.router, prefix=api_prefix)
+app.include_router(store.router, prefix=api_prefix)
 app.include_router(users.router)
 app.include_router(extensions.router, prefix="/api/v1/extensions")
-app.include_router(legacy.router)
+app.include_router(legacy.router, prefix=api_prefix)
 
 # Masters
 app.include_router(item_master.router, prefix=api_prefix)
+app.include_router(item_classification.router)            # SubClass1Cat, SubClass2Cat, SizeCat, ExtdItemMaster
 app.include_router(settings.router, prefix=api_prefix)
 app.include_router(master.router, prefix=api_prefix)
 app.include_router(customer.router, prefix=api_prefix)
@@ -124,6 +126,12 @@ import asyncio
 
 @app.on_event("startup")
 async def startup():
+    # DEBUG: Print all registered routes to verify pathing
+    print("[SMRITI-OS] Registered Routes:")
+    for route in app.routes:
+        if hasattr(route, 'path'):
+            print(f"  {route.path} [{','.join(route.methods)}]")
+
     async with engine.begin() as conn:
         await conn.run_sync(Base.metadata.create_all)
     print(f"[SMRITI-OS] Database connected. Mode: {settings.storage_mode}")
@@ -188,6 +196,22 @@ async def offline_status():
             "failed": 0,
         }
     return await offline_sync_engine.get_status()
+
+@app.post("/api/v1/offline/flush")
+async def offline_flush():
+    """
+    On-demand sync flush: immediately push all PENDING rows to Supabase.
+    Useful for operators who want to force a sync without waiting for the
+    30-second background loop.
+    """
+    if settings.storage_mode != "LOCAL_POSTGRES":
+        return {"status": "SKIPPED", "reason": f"mode={settings.storage_mode}"}
+    try:
+        await offline_sync_engine._flush_queue()
+        summary = await offline_sync_engine.get_status()
+        return {"status": "FLUSHED", "queue": summary}
+    except Exception as e:
+        return {"status": "ERROR", "detail": str(e)}
 
 @app.get("/api/v1/dashboard/stats", response_model=DashboardStats)
 async def get_dashboard_stats(

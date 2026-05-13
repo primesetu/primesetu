@@ -5,7 +5,7 @@
 
 import React, { createContext, useContext, useEffect, useState } from 'react';
 import { ThemeEngine, SmritiTheme, SmritiThemeMeta, SMRITI_THEMES } from '../lib/ThemeEngine';
-import { apiClient } from '../api/client';
+import { api } from '../api/client';
 
 interface ThemeContextType {
   theme: SmritiTheme;
@@ -42,9 +42,14 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
     // Sync theme to backend for Delta-Sync Cloud Hub Parity
     const syncToBackend = async () => {
       try {
-        await apiClient.patch('/users/me/preferences', { theme });
-      } catch (err) {
-        console.error('[ThemeEngine] Failed to sync theme to backend', err);
+        await api.users.updatePreferences({ theme });
+      } catch (err: any) {
+        // Silently ignore when backend is offline (ERR_CONNECTION_REFUSED) or auth errors
+        const isNetworkDown = !err.response;
+        const isAuthError = err.response?.status === 401 || err.response?.status === 403;
+        if (!isNetworkDown && !isAuthError) {
+          console.warn('[ThemeEngine] Background sync deferred:', err.message);
+        }
       }
     };
     syncToBackend();

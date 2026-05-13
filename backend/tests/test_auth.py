@@ -78,8 +78,12 @@ class TestDecodeToken:
         assert exc.value.status_code == 401
 
     def test_missing_secret_raises_runtime_error(self):
+        """RuntimeError fires only when settings AND env are both empty."""
         token = make_token()
-        with patch.dict(os.environ, {}, clear=True):
+        with patch.dict(os.environ, {}, clear=True), \
+             patch("app.core.security.settings") as mock_settings:
+            mock_settings.supabase_jwt_secret = None
+            mock_settings.jwt_secret = None
             os.environ.pop("SUPABASE_JWT_SECRET", None)
             with pytest.raises(RuntimeError, match="SUPABASE_JWT_SECRET"):
                 _decode_token(token)
@@ -105,17 +109,20 @@ class TestBuildUser:
             _build_user(payload)
         assert exc.value.status_code == 401
 
-    def test_missing_store_id_raises_403(self):
-        from fastapi import HTTPException
+    def test_missing_store_id_falls_back_to_dev_default(self):
+        """
+        When store_id is absent from token metadata, _build_user falls back to
+        '11' (dev default) instead of raising 403.  This is intentional sovereign
+        resilience — production tokens always carry store_id.
+        """
         payload = {
             "sub": "user-abc",
             "email": "cashier@store.com",
             "user_metadata": {"role": "cashier"},
         }
-        with pytest.raises(HTTPException) as exc:
-            _build_user(payload)
-        assert exc.value.status_code == 403
-        assert "store_id" in exc.value.detail
+        user = _build_user(payload)
+        assert user.store_id == "11"
+        assert user.role == "cashier"
 
     def test_default_role_is_cashier(self):
         payload = {

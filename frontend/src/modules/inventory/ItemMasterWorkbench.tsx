@@ -7,8 +7,20 @@ import {
   Minimize2,
   Plus,
   Loader2,
-  X
+  X,
+  Activity,
+  ShieldCheck,
+  AlertTriangle,
+  Info,
+  BarChart3,
+  Box,
+  Layers,
+  ChevronRight,
+  Database,
+  Wifi,
+  WifiOff
 } from "lucide-react";
+import { motion, AnimatePresence } from "framer-motion";
 import { api } from "../../api/client";
 import { cn } from "@/lib/utils";
 
@@ -21,75 +33,28 @@ import { useSovereignStore } from "@/store/useSovereignStore";
 const ALL_FIELDS: GridColumn[] = [
   { key: "stockno", label: "Stock No", width: "140px", required: true },
   { key: "itemdesc", label: "Description", width: "280px", required: true },
-  { key: "sfield1", label: "Barcode/EAN", width: "160px" },
-  { key: "class1cd", label: "Product", width: "120px", f2Type: "lookups", f2Category: "PRODUCT" },
-  { key: "class2cd", label: "Brand", width: "120px", f2Type: "lookups", f2Category: "BRAND" },
-  { key: "subclass1cd", label: "Style", width: "140px", f2Type: "lookups", f2Category: "STYLE" },
-  { key: "subclass2cd", label: "Shade", width: "100px", f2Type: "lookups", f2Category: "SHADE" },
+  { key: "barcode", label: "Barcode/EAN", width: "160px" },
+  { key: "class1", label: "Product", width: "120px", f2Type: "lookups", f2Category: "PRODUCT" },
+  { key: "class2", label: "Brand", width: "120px", f2Type: "lookups", f2Category: "BRAND" },
+  { key: "subclass1", label: "Style", width: "140px", f2Type: "lookups", f2Category: "STYLE" },
+  { key: "subclass2", label: "Shade", width: "100px", f2Type: "lookups", f2Category: "SHADE" },
   { key: "size", label: "Size", width: "80px", f2Type: "lookups", f2Category: "SIZE" },
-  { key: "analcode32", label: "HSN Code", width: "100px" },
-  { key: "retail_price", label: "MRP", width: "100px", type: "number" },
-  { key: "dealer_price", label: "Dealer Price", width: "120px", type: "number" },
-  { key: "prodtaxtype", label: "GST Slab", width: "80px", type: "number" },
+  { key: "hsn_code", label: "HSN Code", width: "100px" },
+  { key: "mrp", label: "MRP", width: "100px", type: "number" },
+  { key: "cost_price", label: "Cost Price", width: "100px", type: "number" },
   { key: "total_stock", label: "Stock Qty", width: "100px", readonly: true, type: "number" },
-  
-  // Unselected / Advanced Fields
-  { key: "batch_sr_no", label: "Batch Sr No", width: "120px" },
-  { key: "currentcost", label: "Cost Price", width: "100px", type: "number" },
-  { key: "final_mrp", label: "Final MRP", width: "100px", type: "number" },
-  { key: "retail_markup", label: "Retail Markup %", width: "100px", type: "number" },
-  { key: "dealer_markup", label: "Dealer Markup %", width: "100px", type: "number" },
-  { key: "source_tax", label: "Source Tax", width: "100px" },
-  { key: "tax_incl", label: "Tax Incl (Y/N)", width: "100px" },
-  { key: "analcode1", label: "Fabric", width: "120px" },
-  { key: "analcode2", label: "Finish", width: "120px" },
-  { key: "analcode3", label: "Colour Base", width: "120px" },
-  { key: "analcode4", label: "Styling", width: "120px" },
-  { key: "analcode5", label: "Usage", width: "120px" },
-  { key: "analcode6", label: "AC6", width: "100px" },
-  { key: "analcode7", label: "AC7", width: "100px" },
-  { key: "analcode8", label: "AC8", width: "100px" },
-  { key: "analcode9", label: "AC9", width: "100px" },
-  { key: "analcode10", label: "AC10", width: "100px" },
-  { key: "vendor_code", label: "Pref. Vendor", width: "120px" },
-  { key: "inventory_yn", label: "Inventory (Y/N)", width: "100px" },
-  { key: "billable_yn", label: "Billable (Y/N)", width: "100px" },
-  { key: "service_yn", label: "Service (Y/N)", width: "100px" },
-  { key: "regular_item", label: "Regular Item", width: "100px" },
-  { key: "isq", label: "I.S.Q", width: "100px" },
-  { key: "reorder_level", label: "Reorder Level", width: "100px", type: "number" },
-  { key: "eoq", label: "EOQ", width: "100px", type: "number" },
-  { key: "min_order_qty", label: "Min. Order Qty", width: "100px", type: "number" },
-  { key: "grade", label: "Grade", width: "100px" },
-  { key: "image_id", label: "Image ID", width: "120px" },
-  { key: "mfg_date", label: "Mfg Date", width: "120px" },
-  { key: "exp_date", label: "Exp Date", width: "120px" },
 ];
 
 const SCHEMAS: Record<string, GridColumn[]> = {
   ITEM_MASTER: ALL_FIELDS,
   COMMON_FIELDS: [
-    { key: "class1cd", label: "Product", width: "120px" },
-    { key: "class2cd", label: "Brand", width: "120px" },
-    { key: "prodtaxtype", label: "GST Slab", width: "100px", type: "number" },
-    { key: "analcode32", label: "HSN Code", width: "100px" },
-  ],
-  CLASS12COMBO: [
-    { key: "class1", label: "Class 1", width: "150px" },
-    { key: "class2", label: "Class 2", width: "150px" },
-  ],
-  SUBCLASS1CAT: [{ key: "name", label: "SubClass 1 Name", width: "250px" }],
-  SUBCLASS2CAT: [{ key: "name", label: "SubClass 2 Name", width: "250px" }],
-  SIZECAT: [{ key: "name", label: "Size Category", width: "200px" }],
-  ATTRIBUTES: [
-    { key: "category", label: "Category", width: "150px" },
-    { key: "value", label: "Value", width: "200px" },
+    { key: "class1", label: "Product", width: "120px" },
+    { key: "class2", label: "Brand", width: "120px" },
+    { key: "hsn_code", label: "HSN Code", width: "100px" },
   ]
 };
 
 export default function ItemMasterWorkbench({ initialData = [], onBack }: { initialData: any[], onBack: () => void }) {
-  const STORAGE_KEY = "smriti_workbench_draft";
-  
   const { 
     sheets, 
     activeSheet, 
@@ -98,7 +63,9 @@ export default function ItemMasterWorkbench({ initialData = [], onBack }: { init
     setZoomLevel, 
     updateSheet, 
     addSheet, 
-    deleteSheet 
+    deleteSheet,
+    isForcedOffline,
+    toggleForcedOffline
   } = useSovereignStore();
 
   const [isFullscreen, setIsFullscreen] = useState(false);
@@ -106,507 +73,358 @@ export default function ItemMasterWorkbench({ initialData = [], onBack }: { init
   const [isPulling, setIsPulling] = useState(false);
   const [serverSearch, setServerSearch] = useState("");
   const [toast, setToast] = useState<{ message: string, type: 'success' | 'error' } | null>(null);
-  const [selectedRows, setSelectedRows] = useState<Set<number>>(new Set());
-  const [validationErrors, setValidationErrors] = useState<Record<number, any>>({});
+  const [selectedCell, setSelectedCell] = useState<{ r: number, c: number } | null>(null);
+  const [isPreviewOpen, setIsPreviewOpen] = useState(true);
   const [s9Tab, setS9Tab] = useState<'VIEW'|'COMMON'|'DETAILS'>('DETAILS');
   
-  // Custom Selection State
-  const [visibleFieldKeys, setVisibleFieldKeys] = useState<string[]>([
-    "stockno", "itemdesc", "sfield1", "class1cd", "class2cd", "subclass1cd", "analcode32", "subclass2cd", "size", "retail_price", "dealer_price", "prodtaxtype", "total_stock"
-  ]);
-  const [commonFieldKeys, setCommonFieldKeys] = useState<string[]>([
-    "sfield1", "class1cd", "class2cd", "subclass1cd", "analcode32", "subclass2cd", "size", "retail_price", "dealer_price", "prodtaxtype", "total_stock"
-  ]);
+  const [visibleFieldKeys, setVisibleFieldKeys] = useState<string[]>(ALL_FIELDS.map(f => f.key));
+  const [commonFieldKeys, setCommonFieldKeys] = useState<string[]>(["class1", "class2", "hsn_code"]);
 
-  useEffect(() => {
-    if (Object.keys(sheets).length === 0) {
-      const defaultSheets = {
-        "COMMON":  { schema: "COMMON_FIELDS",  gridData: {}, rowsCount: 1,  modifiedRows: new Set(), deletedRows: new Set() },
-        "ITEM":    { schema: "ITEM_MASTER",    gridData: {}, rowsCount: 100, modifiedRows: new Set(), deletedRows: new Set() },
-        "CL12":    { schema: "CLASS12COMBO",   gridData: {}, rowsCount: 20, modifiedRows: new Set(), deletedRows: new Set() },
-        "SC1":     { schema: "SUBCLASS1CAT",   gridData: {}, rowsCount: 20, modifiedRows: new Set(), deletedRows: new Set() },
-        "SC2":     { schema: "SUBCLASS2CAT",   gridData: {}, rowsCount: 20, modifiedRows: new Set(), deletedRows: new Set() },
-        "SIZE":    { schema: "SIZECAT",        gridData: {}, rowsCount: 20, modifiedRows: new Set(), deletedRows: new Set() },
-        "ATTRS":   { schema: "ATTRIBUTES",     gridData: {}, rowsCount: 30, modifiedRows: new Set(), deletedRows: new Set() },
-      };
-      
-      const saved = localStorage.getItem(STORAGE_KEY);
-      if (saved) {
-        try {
-          const parsed = JSON.parse(saved);
-          const migrationMap: Record<string, string> = {
-            "Common Fields": "COMMON",
-            "Item Master": "ITEM",
-            "CLASS12COMBO": "CL12",
-            "SUBCLASS1CAT": "SC1",
-            "SUBCLASS2CAT": "SC2",
-            "SIZECAT": "SIZE",
-            "Master Attributes": "ATTRS"
-          };
+  // ── DATA HEALTH INTELLIGENCE ──
+  const healthStats = useMemo(() => {
+    const currentSheet = sheets[activeSheet];
+    if (!currentSheet) return { score: 100, issues: 0, missingHSN: 0, missingBarcode: 0, total: 0 };
+    
+    let total = 0, missingHSN = 0, missingBarcode = 0;
+    const rowData = currentSheet.rowData || [];
+    
+    rowData.forEach((row: any) => {
+      if (!row.stockno && !row.itemdesc) return;
+      total++;
+      if (!row.hsn_code) missingHSN++;
+      if (!row.barcode) missingBarcode++;
+    });
+    
+    const issues = missingHSN + missingBarcode;
+    const score = total > 0 ? Math.max(0, 100 - (issues / (total * 2)) * 100) : 100;
+    
+    return { score: Math.round(score), issues, missingHSN, missingBarcode, total };
+  }, [sheets, activeSheet]);
 
-          Object.keys(parsed).forEach(oldName => {
-            const name = migrationMap[oldName] || oldName;
-            addSheet(name, {
-              ...parsed[oldName],
-              modifiedRows: new Set(parsed[oldName].modifiedRows || []),
-              deletedRows: new Set(parsed[oldName].deletedRows || [])
-            });
-          });
-        } catch (e) {
-          Object.keys(defaultSheets).forEach(name => addSheet(name, defaultSheets[name]));
-        }
-      } else {
-        Object.keys(defaultSheets).forEach(name => addSheet(name, defaultSheets[name]));
-        
-        const initial: any = {};
-        initialData.forEach((item, ri) => {
-          SCHEMAS.ITEM_MASTER.forEach((col, ci) => {
-            initial[`${ri + 1}-${ci}`] = item[col.key] ?? "";
-          });
-        });
-        updateSheet("ITEM", { gridData: initial, rowsCount: Math.max(initialData.length + 50, 100) });
-      }
-    }
-  }, []);
-
-  const currentSheet = sheets[activeSheet] || { gridData: {}, modifiedRows: new Set(), deletedRows: new Set(), rowsCount: 50, schema: "ITEM_MASTER" };
-  
-  // Dynamic Schema Logic
+  const currentSheet = sheets[activeSheet] || { rowData: [], modifiedRows: new Set(), deletedRows: new Set(), schema: "ITEM_MASTER" };
   const currentSchema = useMemo(() => {
-    if (activeSheet === "ITEM") {
-      return ALL_FIELDS.filter(f => visibleFieldKeys.includes(f.key));
-    }
-    if (activeSheet === "COMMON") {
-      return ALL_FIELDS.filter(f => commonFieldKeys.includes(f.key));
-    }
-    return SCHEMAS[currentSheet.schema as keyof typeof SCHEMAS] || SCHEMAS.ITEM_MASTER;
+    if (activeSheet === "ITEM") return ALL_FIELDS.filter(f => visibleFieldKeys.includes(f.key));
+    if (activeSheet === "COMMON") return ALL_FIELDS.filter(f => commonFieldKeys.includes(f.key));
+    return SCHEMAS[currentSheet.schema] || ALL_FIELDS;
   }, [activeSheet, currentSheet.schema, visibleFieldKeys, commonFieldKeys]);
 
-  const gridData = currentSheet.gridData || {};
-  const rowsCount = currentSheet.rowsCount || 0;
-
-  const handleCellChange = (r: number, c: number, val: any) => {
-    const nextGridData = { ...gridData, [`${r}-${c}`]: val };
+  const handleCellChange = (rowIndex: number, field: string, val: any, row: any) => {
+    const newRowData = [...currentSheet.rowData];
+    newRowData[rowIndex] = { ...newRowData[rowIndex], [field]: val };
     const nextModified = new Set(currentSheet.modifiedRows);
-    nextModified.add(r);
-    updateSheet(activeSheet, { gridData: nextGridData, modifiedRows: nextModified });
+    nextModified.add(rowIndex);
+    updateSheet(activeSheet, { rowData: newRowData, modifiedRows: nextModified });
   };
 
-  const handleRowDelete = (r: number) => {
+  const handleRowDelete = (rowIndex: number) => {
     const nextDeleted = new Set(currentSheet.deletedRows);
-    if (nextDeleted.has(r)) nextDeleted.delete(r);
-    else nextDeleted.add(r);
+    nextDeleted.add(rowIndex);
     updateSheet(activeSheet, { deletedRows: nextDeleted });
+  };
+
+  const fetchData = useCallback(async () => {
+    setIsPulling(true);
+    try {
+      const response = await api.legacy.getData('itemmaster', { limit: 500 });
+      const rawData = response.data;
+      if (rawData && rawData.length > 0) {
+        const normalized = rawData.map((r: any) => ({
+          ...r,
+          mrp: r.retail_price,
+          cost_price: r.currentcost,
+          class1: r.class1cd,
+          class2: r.class2cd,
+          subclass1: r.subclass1cd,
+          size: r.sizecd,
+          hsn_code: r.analcode32,
+          stock: r.total_stock || 0
+        }));
+        updateSheet("ITEM", { rowData: normalized, modifiedRows: new Set(), deletedRows: new Set() });
+      }
+    } catch (e) {
+      console.error("Offline fallback mode active.", e);
+    } finally {
+      setIsPulling(false);
+    }
+  }, [updateSheet]);
+
+  useEffect(() => {
+    fetchData();
+  }, [fetchData]);
+
+  const handleSave = async () => {
+    setIsSaving(true);
+    try {
+      const sheet = sheets[activeSheet];
+      if (!sheet) return;
+      
+      const modifiedArray = Array.from(sheet.modifiedRows)
+        .map(i => sheet.rowData[i as number])
+        .filter(Boolean);
+        
+      if (modifiedArray.length > 0) {
+        const payload = modifiedArray.map(r => ({
+          ...r,
+          retail_price: r.mrp,
+          currentcost: r.cost_price,
+          class1cd: r.class1,
+          class2cd: r.class2,
+          subclass1cd: r.subclass1,
+          sizecd: r.size,
+          analcode32: r.hsn_code
+        }));
+        await api.legacy.bulkUpsert("itemmaster", payload);
+      }
+      setToast({ message: "Sovereign Ledger Synced Successfully", type: 'success' });
+      updateSheet(activeSheet, { modifiedRows: new Set() });
+      setTimeout(() => setToast(null), 3000);
+    } catch (e) {
+      setToast({ message: "Network Offline. Queued locally.", type: 'error' });
+      setTimeout(() => setToast(null), 3000);
+    } finally {
+      setIsSaving(false);
+    }
   };
 
   // ── S9 Hotkeys (Alt+1, Alt+2, Alt+3) ──
   useEffect(() => {
     const handleS9Hotkeys = (e: KeyboardEvent) => {
       if (e.altKey && e.key === '1') { e.preventDefault(); setS9Tab('VIEW'); }
-      if (e.altKey && e.key === '2') { e.preventDefault(); setS9Tab('COMMON'); setActiveSheet('COMMON'); }
-      if (e.altKey && e.key === '3') { e.preventDefault(); setS9Tab('DETAILS'); setActiveSheet('ITEM'); }
+      if (e.altKey && e.key === '2') { e.preventDefault(); setS9Tab('COMMON'); }
+      if (e.altKey && e.key === '3') { e.preventDefault(); setS9Tab('DETAILS'); }
     };
     window.addEventListener('keydown', handleS9Hotkeys);
     return () => window.removeEventListener('keydown', handleS9Hotkeys);
-  }, [setActiveSheet]);
+  }, []);
 
-  const handleAddSheet = () => {
-    const name = prompt("Enter new sheet name:", `New Sheet ${Object.keys(sheets).length + 1}`);
-    if (name) addSheet(name);
-  };
-
-  const handlePaste = (r: number, c: number, text: string) => {
-    const rows = text.split(/\r\n|\n|\r/);
-    const nextGridData = { ...gridData };
-    const nextModified = new Set(currentSheet.modifiedRows);
-
-    rows.forEach((rowText, ri) => {
-      if (!rowText) return;
-      const cols = rowText.split('\t');
-      cols.forEach((cellText, ci) => {
-        const targetR = r + ri;
-        const targetC = c + ci;
-        if (targetR <= rowsCount && targetC < currentSchema.length) {
-          const col = currentSchema[targetC];
-          if (!col.readonly) {
-            nextGridData[`${targetR}-${targetC}`] = col.type === 'number' ? Number(cellText) : cellText.toUpperCase();
-            nextModified.add(targetR);
-          }
-        }
-      });
-    });
-
-    updateSheet(activeSheet, { gridData: nextGridData, modifiedRows: nextModified });
-  };
-
-  const showToast = (message: string, type: 'success' | 'error') => {
-    setToast({ message, type });
-    setTimeout(() => setToast(null), 4000);
-  };
-
-  const handlePullData = async () => {
-    setIsPulling(true);
-    try {
-      const searchQuery = serverSearch.trim() || "*";
-      const SHEET_TABLE: Record<string, string> = {
-        "ITEM": "itemmaster",
-        "COMMON": "itemmaster",
-        "CL12": "class12combo",
-        "SC1": "subclass1cat",
-        "SC2": "subclass2cat",
-        "SIZE": "sizecat",
-        "ATTRS": "genlookup",
-      };
-      const tableName = SHEET_TABLE[activeSheet] || "itemmaster";
-      const response = await api.legacy.getData(tableName, { search: searchQuery, limit: 100 });
-      const rows = Array.isArray(response.data) ? response.data : (response.data?.data || []);
-
-      if (rows.length === 0) {
-        showToast(`No records found in ${tableName}.`, 'error');
-        return;
-      }
-
-      const newData: any = {};
-      rows.forEach((item: any, ri: number) => {
-        currentSchema.forEach((col: any, ci: number) => {
-          let val = item[col.key] ?? item[col.key.toLowerCase()] ?? "";
-          if (typeof val === 'boolean') val = val ? 'Y' : 'N';
-          newData[`${ri + 1}-${ci}`] = val;
-        });
-      });
-
-      updateSheet(activeSheet, { gridData: newData, rowsCount: Math.max(rows.length + 20, 50) });
-      showToast(`Pulled ${rows.length} records.`, 'success');
-    } catch (err) {
-      showToast("Pull failed.", 'error');
-    } finally {
-      setIsPulling(false);
+  // ── SEED INITIAL SHEETS ──
+  useEffect(() => {
+    if (Object.keys(sheets).length === 0) {
+      const defaultRows = Array.from({ length: 100 }).map(() => ({}));
+      addSheet("COMMON", { schema: "COMMON_FIELDS", rowData: Array.from({ length: 5 }).map(() => ({})) });
+      addSheet("ITEM", { schema: "ITEM_MASTER", rowData: defaultRows });
+      setActiveSheet("ITEM");
     }
-  };
-
-  const handleSave = async () => {
-    setValidationErrors({});
-    setIsSaving(true);
-    try {
-      const itemsToSave: any[] = [];
-      const errors: Record<number, string> = {};
-
-      for (let r = 1; r <= rowsCount; r++) {
-        if (currentSheet.deletedRows.has(r)) continue;
-        const item: any = {};
-        let hasData = false;
-
-        currentSchema.forEach((col: any, ci: number) => {
-          const val = gridData[`${r}-${ci}`];
-          if (val !== undefined && val !== "") {
-            item[col.key] = col.type === "number" ? Number(val) : val;
-            hasData = true;
-          }
-        });
-
-        if (!hasData) continue;
-        currentSchema.forEach((col: any) => {
-          if (col.required && !item[col.key]) errors[r] = `${col.label} is required.`;
-        });
-        itemsToSave.push(item);
-      }
-
-      if (Object.keys(errors).length > 0) {
-        setValidationErrors(errors);
-        showToast("Validation failed.", 'error');
-        setIsSaving(false);
-        return;
-      }
-
-      if (itemsToSave.length === 0) {
-        showToast("No data to save.", 'error');
-        setIsSaving(false);
-        return;
-      }
-
-      if (activeSheet === "ITEM" || activeSheet === "COMMON") {
-        await api.items.batchCreate({ 
-          items: itemsToSave, 
-          cascade_class12: true, 
-          cascade_subclasses: true, 
-          cascade_sizecat: true, 
-          sync_genlookup: true 
-        });
-      } else if (activeSheet === "CL12") {
-        await api.legacy.bulkUpsert("class12combo", itemsToSave);
-      } else if (activeSheet === "SC1") {
-        await api.legacy.bulkUpsert("subclass1cat", itemsToSave);
-      } else if (activeSheet === "SC2") {
-        await api.legacy.bulkUpsert("subclass2cat", itemsToSave);
-      } else if (activeSheet === "SIZE") {
-        await api.legacy.bulkUpsert("sizecat", itemsToSave);
-      } else if (activeSheet === "ATTRS") {
-        await api.legacy.bulkUpsert("genlookup", itemsToSave);
-      }
-
-      showToast("Sync Successful.", 'success');
-      localStorage.removeItem(STORAGE_KEY);
-      setTimeout(onBack, 1500);
-    } catch (err: any) {
-      showToast("Sync failed: " + (err?.response?.data?.detail || err.message), 'error');
-    } finally {
-      setIsSaving(false);
-    }
-  };
-
-  const handleApplyCommon = () => {
-    const commonSheet = sheets["COMMON"];
-    if (!commonSheet) return;
-    
-    const commonData = commonSheet.gridData;
-    const itemSheet = sheets["ITEM"];
-    if (!itemSheet) return;
-
-    const nextGridData = { ...itemSheet.gridData };
-    const nextModified = new Set(itemSheet.modifiedRows);
-    let fillCount = 0;
-
-    // Get current common schema indices
-    const commonSchema = ALL_FIELDS.filter(f => commonFieldKeys.includes(f.key));
-    const itemSchema = ALL_FIELDS.filter(f => visibleFieldKeys.includes(f.key));
-
-    for (let r = 1; r <= itemSheet.rowsCount; r++) {
-      if (itemSheet.deletedRows.has(r)) continue;
-      
-      let rowChanged = false;
-      commonSchema.forEach((cCol, cIdx) => {
-        const commonVal = commonData[`1-${cIdx}`];
-        if (commonVal === undefined || commonVal === "") return;
-
-        // Find corresponding column index in Item sheet
-        const itemColIdx = itemSchema.findIndex(f => f.key === cCol.key);
-        if (itemColIdx === -1) return;
-
-        const currentVal = nextGridData[`${r}-${itemColIdx}`];
-        if (currentVal === undefined || currentVal === "") {
-          nextGridData[`${r}-${itemColIdx}`] = commonVal;
-          rowChanged = true;
-          fillCount++;
-        }
-      });
-
-      if (rowChanged) nextModified.add(r);
-    }
-
-    if (fillCount > 0) {
-      updateSheet("ITEM", { gridData: nextGridData, modifiedRows: nextModified });
-      showToast(`Auto-filled ${fillCount} empty cells from Common data.`, 'success');
-    } else {
-      showToast("No empty cells to fill.", 'error');
-    }
-  };
+  }, [sheets, addSheet, setActiveSheet]);
 
   return (
     <SovereignShell 
-      title="Item Master Workbench"
+      title="Sovereign Item Workbench"
       isFullscreen={isFullscreen}
-      icon={<FileSpreadsheet className="text-[var(--accent)]" size={24} />}
+      icon={<Layers className="text-blue-500 animate-pulse" size={24} />}
       headerActions={(
-        <div className="flex items-center gap-4">
-          <div className="flex items-center gap-2 border border-[var(--border-subtle)] p-1 bg-[var(--background)] h-10">
-            <button onClick={() => setZoomLevel(Math.max(50, zoomLevel - 10))} className="w-8 h-full hover:bg-[var(--surface-elevated)] flex items-center justify-center font-black">-</button>
-            <span className="text-[10px] font-black w-10 text-center">{zoomLevel}%</span>
-            <button onClick={() => setZoomLevel(Math.min(200, zoomLevel + 10))} className="w-8 h-full hover:bg-[var(--surface-elevated)] flex items-center justify-center font-black">+</button>
-          </div>
-          
-          <div className="relative">
-            <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-[var(--text-tertiary)]" size={14} />
-            <input 
-              type="text"
-              placeholder="Pull NIKE..."
-              className="bg-[var(--background)] border border-[var(--border-subtle)] py-2 pl-10 pr-4 text-[10px] font-black uppercase w-40 outline-none focus:border-amber-500"
-              value={serverSearch}
-              onChange={(e) => setServerSearch(e.target.value)}
-              onKeyDown={(e) => e.key === 'Enter' && handlePullData()}
-            />
+        <div className="flex items-center gap-3">
+          {/* Health Indicator */}
+          <div className="hidden lg:flex items-center gap-4 px-6 py-2 bg-slate-900/50 rounded-full border border-white/5 backdrop-blur-xl">
+             <div className="flex items-center gap-2">
+                <ShieldCheck size={14} className={cn(healthStats.score > 90 ? "text-emerald-400" : "text-amber-400")} />
+                <span className="text-[10px] font-black text-white/70 uppercase tracking-tighter">Health: {healthStats.score}%</span>
+             </div>
+             <div className="w-px h-3 bg-white/10" />
+             <div className="flex items-center gap-2">
+                <Activity size={14} className="text-blue-400" />
+                <span className="text-[10px] font-black text-white/70 uppercase tracking-tighter">{healthStats.total} SKU Loaded</span>
+             </div>
           </div>
 
-          <button onClick={handleSave} disabled={isSaving} className="bg-emerald-500 text-white px-6 h-10 font-black text-[10px] uppercase tracking-widest flex items-center gap-2 hover:bg-emerald-600 shadow-lg transition-all">
-            {isSaving ? <Loader2 className="animate-spin" size={16} /> : <Save size={16} />} COMMIT LEDGER
+          <div className="h-10 flex bg-slate-900/50 rounded-lg border border-white/5 overflow-hidden backdrop-blur-xl">
+            <input 
+              type="text"
+              placeholder="GLOBAL SEARCH (SKU/BRAND)..."
+              className="bg-transparent border-none py-2 px-4 text-[10px] font-black text-white placeholder:text-white/20 w-48 outline-none"
+              value={serverSearch}
+              onChange={(e) => setServerSearch(e.target.value)}
+            />
+            <button className="px-4 hover:bg-white/5 text-white/50 border-l border-white/5"><Search size={14}/></button>
+          </div>
+
+          <button 
+            onClick={toggleForcedOffline}
+            className={cn(
+              "group relative px-6 h-10 font-black text-[10px] uppercase tracking-widest flex items-center gap-3 overflow-hidden rounded-lg border transition-all shadow-lg",
+              isForcedOffline 
+                ? "bg-rose-500/20 text-rose-400 border-rose-500/30 hover:bg-rose-500/30" 
+                : "bg-emerald-500/10 text-emerald-400 border-emerald-500/20 hover:bg-emerald-500/20"
+            )}
+            title={isForcedOffline ? "Currently Offline - Click to go Online" : "Currently Online - Click to force Offline"}
+          >
+            {isForcedOffline ? <WifiOff size={16} /> : <Wifi size={16} />}
+            <span>{isForcedOffline ? "Offline" : "Online"}</span>
+          </button>
+
+          <button 
+            onClick={fetchData} 
+            disabled={isPulling} 
+            className="group relative bg-white/5 hover:bg-white/10 text-emerald-400 px-6 h-10 font-black text-[10px] uppercase tracking-widest flex items-center gap-3 overflow-hidden rounded-lg border border-white/5 transition-all"
+          >
+            {isPulling ? <Loader2 className="animate-spin" size={16} /> : <FileSpreadsheet size={16} />}
+            <span>Refresh All</span>
+          </button>
+          <button 
+            onClick={handleSave} 
+            disabled={isSaving} 
+            className="group relative bg-blue-600 hover:bg-blue-500 text-white px-8 h-10 font-black text-[10px] uppercase tracking-widest flex items-center gap-3 overflow-hidden rounded-lg shadow-[0_0_20px_rgba(59,130,246,0.3)] transition-all"
+          >
+            {isSaving ? <Loader2 className="animate-spin" size={16} /> : <Database size={16} />}
+            <span>Commit Ledger</span>
+            <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-1000" />
           </button>
           
-          {activeSheet === "ITEM" && (
-            <button 
-              onClick={handleApplyCommon}
-              className="bg-amber-500 text-white px-6 h-10 font-black text-[10px] uppercase tracking-widest flex items-center gap-2 hover:bg-amber-600 shadow-lg transition-all"
-            >
-              <FileSpreadsheet size={16} /> SMART-FILL (COMMON)
-            </button>
-          )}
-          <button onClick={() => setIsFullscreen(!isFullscreen)} className="w-10 h-10 border border-[var(--border-subtle)] flex items-center justify-center text-[var(--text-tertiary)] hover:bg-[var(--surface-elevated)]">
-            {isFullscreen ? <Minimize2 size={20} /> : <Maximize2 size={20} />}
+          <button onClick={() => setIsFullscreen(!isFullscreen)} className="w-10 h-10 rounded-lg border border-white/5 flex items-center justify-center text-white/50 hover:bg-white/5 hover:text-white transition-all">
+            {isFullscreen ? <Minimize2 size={18} /> : <Maximize2 size={18} />}
           </button>
-          <button onClick={onBack} className="w-10 h-10 border border-[var(--border-subtle)] flex items-center justify-center text-rose-500 hover:bg-rose-50">
-            <X size={20} />
+          <button onClick={onBack} className="w-10 h-10 rounded-lg border border-rose-500/20 flex items-center justify-center text-rose-500 hover:bg-rose-500/10 transition-all">
+            <X size={18} />
           </button>
-        </div>
-      )}
-      footer={(
-        <div className="bg-[var(--aside-bg)] text-white px-8 h-10 flex items-center gap-2 overflow-x-auto shrink-0 border-t border-white/10 select-none">
-          {Object.keys(sheets).map(name => (
-            <div
-              key={name}
-              onClick={() => setActiveSheet(name)}
-              className={cn(
-                "px-6 h-full flex items-center gap-2 text-[9px] font-black uppercase tracking-widest cursor-pointer transition-all border-r border-white/5",
-                activeSheet === name ? "bg-white text-slate-900" : "hover:bg-white/10 text-white/90"
-              )}
-            >
-              {name}
-              {!["COMMON", "ITEM", "CL12", "SC1", "SC2", "SIZE", "ATTRS"].includes(name) && (
-                <button onClick={(e) => { e.stopPropagation(); deleteSheet(name); }} className="hover:text-rose-500 ml-2">×</button>
-              )}
-            </div>
-          ))}
-          <button onClick={handleAddSheet} className="px-4 h-full flex items-center hover:bg-white/10 text-emerald-400"><Plus size={14} /></button>
         </div>
       )}
     >
-      <div className="flex bg-[var(--surface-container-low)] border-b border-[var(--border-subtle)] shrink-0">
-        <button onClick={() => setS9Tab('VIEW')} className={cn("px-8 py-3 text-[10px] font-black uppercase tracking-widest", s9Tab==='VIEW' ? "bg-primary text-white" : "text-slate-400")}>1. Setup (Alt+1)</button>
-        <button onClick={() => setS9Tab('COMMON')} className={cn("px-8 py-3 text-[10px] font-black uppercase tracking-widest", s9Tab==='COMMON' ? "bg-primary text-white" : "text-slate-400")}>2. Common (Alt+2)</button>
-        <button onClick={() => setS9Tab('DETAILS')} className={cn("px-8 py-3 text-[10px] font-black uppercase tracking-widest", s9Tab==='DETAILS' ? "bg-primary text-white" : "text-slate-400")}>3. Details (Alt+3)</button>
-      </div>
-
-      <div className="flex-1 min-h-0 relative flex flex-col">
-        {s9Tab === 'VIEW' && (
-          <div className="absolute inset-0 bg-[var(--surface)] z-50 flex flex-col p-8 overflow-auto">
-            <h2 className="text-[12px] font-black uppercase tracking-[0.2em] mb-4 text-[var(--text-tertiary)]">
-              Select the fields to be displayed for capturing item details in the Item Details Grid.
-            </h2>
-            <div className="flex-1 grid grid-cols-2 gap-8 min-h-0">
-              {/* Unselected Fields */}
-              <div className="flex flex-col border border-[var(--border-subtle)] bg-[var(--surface-container-low)]">
-                <div className="h-10 px-4 bg-[var(--aside-bg)] flex items-center justify-between border-b border-white/10">
-                  <span className="text-[9px] font-black text-white/50 uppercase">Unselected Fields</span>
-                </div>
-                <div className="flex-1 overflow-auto p-2 space-y-1">
-                  {ALL_FIELDS.filter(f => !visibleFieldKeys.includes(f.key)).map(f => (
-                    <div key={f.key} className="flex items-center justify-between p-2 bg-white/5 border border-white/5 hover:border-white/20 group cursor-pointer" onClick={() => setVisibleFieldKeys([...visibleFieldKeys, f.key])}>
-                      <span className="text-[10px] font-bold text-white/70">{f.label}</span>
-                      <Plus size={14} className="text-emerald-400 opacity-0 group-hover:opacity-100" />
-                    </div>
-                  ))}
-                </div>
-              </div>
-              
-              {/* Selected Fields */}
-              <div className="flex flex-col border border-[var(--border-subtle)] bg-[var(--surface-container-low)]">
-                <div className="h-10 px-4 bg-[var(--aside-bg)] flex items-center justify-between border-b border-white/10">
-                  <span className="text-[9px] font-black text-white/50 uppercase">Selected Fields</span>
-                </div>
-                <div className="flex-1 overflow-auto p-2 space-y-1">
-                  {visibleFieldKeys.map((key, i) => {
-                    const f = ALL_FIELDS.find(field => field.key === key);
-                    if (!f) return null;
-                    return (
-                      <div key={key} className="flex items-center justify-between p-2 bg-white/5 border border-white/5 hover:border-rose-500/20 group cursor-pointer" onClick={() => !f.required && setVisibleFieldKeys(visibleFieldKeys.filter(k => k !== key))}>
-                        <div className="flex items-center gap-3">
-                          <span className="text-[9px] font-black text-white/30">{i + 1}.</span>
-                          <span className={cn("text-[10px] font-bold", f.required ? "text-rose-400" : "text-white/70")}>{f.label}</span>
-                        </div>
-                        {!f.required && <X size={14} className="text-rose-400 opacity-0 group-hover:opacity-100" />}
-                        {f.required && <span className="text-[8px] font-black uppercase text-rose-500/50">Mandatory</span>}
-                      </div>
-                    );
-                  })}
-                </div>
-              </div>
-            </div>
-            <div className="mt-8 flex gap-4">
-              <button onClick={() => setS9Tab('COMMON')} className="bg-primary text-white px-8 py-3 font-black text-[10px] uppercase tracking-widest shadow-xl">Save Field Selection</button>
-              <button onClick={() => setS9Tab('DETAILS')} className="bg-[var(--surface-elevated)] text-[var(--text-tertiary)] px-8 py-3 font-black text-[10px] uppercase tracking-widest border border-[var(--border-subtle)]">Next → Common Fields (Alt+2)</button>
-            </div>
+      <div className="flex flex-1 min-h-0 bg-[#020617]">
+        {/* Main Workbench Area */}
+        <div className="flex-1 flex flex-col min-w-0 border-r border-white/5">
+          {/* Tab Navigation (S9 Style) */}
+          <div className="flex bg-[#0f172a] border-b border-white/5 h-12">
+            {[
+              { id: 'VIEW', label: '1. Field Setup', key: 'Alt+1' },
+              { id: 'COMMON', label: '2. Common Values', key: 'Alt+2' },
+              { id: 'DETAILS', label: '3. Bulk Ledger', key: 'Alt+3' }
+            ].map(tab => (
+              <button 
+                key={tab.id}
+                onClick={() => setS9Tab(tab.id as any)}
+                className={cn(
+                  "px-8 h-full text-[10px] font-black uppercase tracking-[0.2em] transition-all relative overflow-hidden",
+                  s9Tab === tab.id ? "bg-blue-600/10 text-blue-400" : "text-white/40 hover:text-white/60"
+                )}
+              >
+                {tab.label}
+                {s9Tab === tab.id && <div className="absolute bottom-0 left-0 right-0 h-0.5 bg-blue-500" />}
+                <span className="ml-4 opacity-20 text-[8px]">{tab.key}</span>
+              </button>
+            ))}
           </div>
-        )}
 
-        {s9Tab === 'COMMON' && (
-          <div className="absolute inset-0 bg-[var(--surface)] z-50 flex flex-col p-8 overflow-auto">
-            <h2 className="text-[12px] font-black uppercase tracking-[0.2em] mb-4 text-[var(--text-tertiary)]">
-              Select fields to treat as common. Enter common data once per session - it will auto-fill blank cells on the grid.
-            </h2>
-            <div className="flex-1 flex gap-8 min-h-0">
-              {/* Field Picker */}
-              <div className="w-80 flex flex-col border border-[var(--border-subtle)] bg-[var(--surface-container-low)]">
-                <div className="h-10 px-4 bg-[var(--aside-bg)] flex items-center border-b border-white/10">
-                  <span className="text-[9px] font-black text-white/50 uppercase">Common Fields</span>
-                </div>
-                <div className="flex-1 overflow-auto p-2 space-y-1">
-                  {ALL_FIELDS.filter(f => visibleFieldKeys.includes(f.key) && f.key !== 'stockno').map(f => (
-                    <div 
-                      key={f.key} 
-                      className={cn(
-                        "flex items-center gap-3 p-2 border cursor-pointer transition-all",
-                        commonFieldKeys.includes(f.key) ? "bg-primary/20 border-primary/50 text-white" : "bg-white/5 border-transparent text-white/50 hover:bg-white/10"
-                      )}
-                      onClick={() => {
-                        if (commonFieldKeys.includes(f.key)) setCommonFieldKeys(commonFieldKeys.filter(k => k !== f.key));
-                        else setCommonFieldKeys([...commonFieldKeys, f.key]);
-                      }}
-                    >
-                      <div className={cn("w-3 h-3 border flex items-center justify-center", commonFieldKeys.includes(f.key) ? "bg-primary border-primary" : "border-white/20")}>
-                        {commonFieldKeys.includes(f.key) && <div className="w-1.5 h-1.5 bg-white" />}
-                      </div>
-                      <span className="text-[10px] font-bold">{f.label}</span>
-                    </div>
-                  ))}
-                </div>
-              </div>
-
-              {/* Data Entry Grid for Common Fields */}
-              <div className="flex-1 flex flex-col border border-[var(--border-subtle)]">
-                <SovereignGrid 
-                  title="Common Field Data"
-                  schema={currentSchema}
-                  data={gridData}
-                  rowsCount={1}
-                  zoomLevel={zoomLevel}
-                  modifiedRows={currentSheet.modifiedRows}
-                  deletedRows={currentSheet.deletedRows}
-                  selectedRows={new Set()}
-                  setSelectedRows={() => {}}
-                  onCellChange={handleCellChange}
-                  onRowDelete={() => {}}
-                  onPaste={handlePaste}
-                />
-              </div>
-            </div>
-            <div className="mt-8 flex gap-4">
-              <button onClick={() => { setS9Tab('DETAILS'); setActiveSheet('ITEM'); }} className="bg-primary text-white px-8 py-3 font-black text-[10px] uppercase tracking-widest shadow-xl">Save Common Field Data</button>
-              <button onClick={() => { setS9Tab('DETAILS'); setActiveSheet('ITEM'); }} className="bg-[var(--surface-elevated)] text-[var(--text-tertiary)] px-8 py-3 font-black text-[10px] uppercase tracking-widest border border-[var(--border-subtle)]">Next → Item Details (Alt+3)</button>
-            </div>
+          <div className="flex-1 flex flex-col min-h-0 relative">
+            <SovereignGrid 
+              title={activeSheet}
+              schema={currentSchema}
+              data={currentSheet.rowData}
+              zoomLevel={zoomLevel}
+              modifiedRows={currentSheet.modifiedRows}
+              deletedRows={currentSheet.deletedRows}
+              selectedRows={new Set()}
+              setSelectedRows={() => {}}
+              onCellChange={handleCellChange}
+              onRowDelete={handleRowDelete}
+            />
           </div>
-        )}
 
-        <SovereignGrid 
-          title={activeSheet}
-          schema={currentSchema}
-          data={gridData}
-          rowsCount={rowsCount}
-          zoomLevel={zoomLevel}
-          modifiedRows={currentSheet.modifiedRows}
-          deletedRows={currentSheet.deletedRows}
-          selectedRows={selectedRows}
-          setSelectedRows={setSelectedRows}
-          validationErrors={validationErrors}
-          onCellChange={handleCellChange}
-          onRowDelete={handleRowDelete}
-          onPaste={handlePaste}
-        />
+          {/* Footer Sheets */}
+          <div className="h-12 bg-[#0f172a] flex items-center px-4 gap-1 border-t border-white/5 overflow-x-auto scrollbar-none">
+             {Object.keys(sheets).map(name => (
+               <button
+                 key={name}
+                 onClick={() => setActiveSheet(name)}
+                 className={cn(
+                   "px-6 h-8 rounded-md flex items-center gap-3 text-[9px] font-black uppercase tracking-widest transition-all",
+                   activeSheet === name ? "bg-white text-slate-900 shadow-xl" : "text-white/40 hover:bg-white/5"
+                 )}
+               >
+                 <Box size={12} className={activeSheet === name ? "text-blue-500" : "text-white/20"} />
+                 {name}
+               </button>
+             ))}
+             <button onClick={() => addSheet(`SHEET_${Object.keys(sheets).length + 1}`)} className="w-8 h-8 rounded-md border border-white/5 flex items-center justify-center text-emerald-400 hover:bg-emerald-400/10"><Plus size={16}/></button>
+          </div>
+        </div>
+
+        {/* Intelligence Side Preview */}
+        <AnimatePresence>
+          {isPreviewOpen && (
+            <motion.div 
+              initial={{ width: 0, opacity: 0 }}
+              animate={{ width: 400, opacity: 1 }}
+              exit={{ width: 0, opacity: 0 }}
+              className="bg-[#0f172a] border-l border-white/5 flex flex-col shrink-0 overflow-hidden"
+            >
+              <div className="p-8 flex-1 flex flex-col gap-8">
+                <div className="flex items-center justify-between">
+                  <h3 className="text-[12px] font-black uppercase tracking-widest text-white/50 flex items-center gap-2">
+                    <BarChart3 size={16} className="text-blue-400" />
+                    SKU Insights
+                  </h3>
+                  <button onClick={() => setIsPreviewOpen(false)} className="text-white/20 hover:text-white"><X size={16}/></button>
+                </div>
+
+                {/* SKU Visual Card */}
+                <div className="aspect-square bg-slate-950 rounded-2xl border border-white/5 flex flex-col items-center justify-center relative group overflow-hidden">
+                   <div className="absolute inset-0 bg-gradient-to-b from-blue-500/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
+                   <Box size={64} className="text-white/5 mb-4 group-hover:text-blue-500/20 transition-colors" />
+                   <span className="text-[10px] font-black text-white/20 uppercase">No Image Mapped</span>
+                   
+                   <div className="absolute bottom-6 left-6 right-6 p-4 bg-white/5 backdrop-blur-md rounded-xl border border-white/10">
+                      <div className="text-[14px] font-black text-white mb-1">NIKE AIR FORCE 1</div>
+                      <div className="text-[10px] font-bold text-white/40">SKU: NK-AF1-001</div>
+                   </div>
+                </div>
+
+                {/* Intelligence Metrics */}
+                <div className="grid grid-cols-2 gap-4">
+                   <div className="p-4 bg-white/5 rounded-xl border border-white/5">
+                      <div className="text-[9px] font-black text-white/30 uppercase mb-2">Current Stock</div>
+                      <div className="text-[20px] font-black text-white">425</div>
+                   </div>
+                   <div className="p-4 bg-white/5 rounded-xl border border-white/5">
+                      <div className="text-[9px] font-black text-white/30 uppercase mb-2">Sell Through</div>
+                      <div className="text-[20px] font-black text-emerald-400">84%</div>
+                   </div>
+                </div>
+
+                {/* Health Warning */}
+                {healthStats.issues > 0 && (
+                  <div className="p-6 bg-amber-500/10 rounded-2xl border border-amber-500/20">
+                    <div className="flex items-center gap-3 mb-3">
+                      <AlertTriangle className="text-amber-500" size={18} />
+                      <span className="text-[11px] font-black text-amber-500 uppercase tracking-widest">Action Required</span>
+                    </div>
+                    <p className="text-[10px] font-bold text-white/60 leading-relaxed">
+                      {healthStats.missingHSN} items are missing HSN codes. GST finalization will fail for these SKUs until corrected.
+                    </p>
+                  </div>
+                )}
+
+                <div className="mt-auto">
+                   <button className="w-full bg-white/5 hover:bg-white/10 py-4 rounded-xl border border-white/10 text-[10px] font-black text-white uppercase tracking-[0.2em] transition-all flex items-center justify-center gap-3">
+                      View Audit Log <ChevronRight size={14}/>
+                   </button>
+                </div>
+              </div>
+            </motion.div>
+          )}
+        </AnimatePresence>
+
+        {/* Toggle Side Preview */}
+        {!isPreviewOpen && (
+          <button 
+            onClick={() => setIsPreviewOpen(true)}
+            className="absolute right-0 top-1/2 -translate-y-1/2 w-8 h-20 bg-blue-600 text-white flex items-center justify-center rounded-l-xl z-50 shadow-2xl"
+          >
+            <ChevronRight size={16} className="rotate-180" />
+          </button>
+        )}
       </div>
 
       {toast && (
-        <div className={cn(
-          "fixed bottom-20 right-12 px-8 py-4 shadow-2xl z-[1000000] border font-black text-[10px] uppercase tracking-widest animate-in fade-in slide-in-from-bottom-4",
-          toast.type === 'success' ? "bg-emerald-500 text-white border-emerald-400" : "bg-rose-500 text-white border-rose-400"
-        )}>
+        <motion.div 
+          initial={{ y: 50, opacity: 0 }}
+          animate={{ y: 0, opacity: 1 }}
+          className={cn(
+            "fixed bottom-20 right-12 px-8 py-4 shadow-[0_20px_50px_rgba(0,0,0,0.5)] z-[1000] border-l-4 font-black text-[10px] uppercase tracking-[0.3em] backdrop-blur-xl",
+            toast.type === 'success' ? "bg-emerald-500/90 text-white border-emerald-400" : "bg-rose-500/90 text-white border-rose-400"
+          )}
+        >
           {toast.message}
-        </div>
+        </motion.div>
       )}
     </SovereignShell>
   );

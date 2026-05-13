@@ -1,22 +1,39 @@
 /* tokens/colors.css — color system */
 :root {
-  --color-primary: #1a3a5c;
-  --color-primary-hover: #22496e;
+  --color-primary: #1E40AF;
+  --color-primary-hover: #1D4ED8;
+  --color-accent: #1E40AF;
+  --color-accent-hover: #1D4ED8;
   
-  --color-bg-body: #e8edf5;
-  --color-bg-grid: #c4cfe0;
+  --primary: var(--color-primary);
+  --accent: var(--color-accent);
   
-  --color-surface: rgba(255,255,255,0.97);
-  --color-surface-hover: #f8f9fb;
-  --color-surface-active: #edf2fa;
+  --color-bg-body: #020617;
+  --color-bg-grid: #0f172a;
   
-  --color-border: #dde1e8;
-  --color-border-light: #eef0f4;
-  --color-border-focus: #ccd8ed;
+  --color-surface: rgba(15, 23, 42, 0.8);
+  --color-surface-hover: rgba(30, 41, 59, 0.9);
+  --color-surface-active: rgba(51, 65, 85, 1);
+  
+  --color-glass-bg: rgba(255, 255, 255, 0.03);
+  --color-glass-border: rgba(255, 255, 255, 0.08);
+  
+  --color-border: rgba(255, 255, 255, 0.1);
+  --color-border-light: rgba(255, 255, 255, 0.05);
+  --color-border-focus: #3b82f6;
 
   --color-text-primary: #1a3a5c;
   --color-text-secondary: #4a5568;
   --color-text-tertiary: #8a9bb0;
+
+  /* Aliases for modern component bridge */
+  --text-primary: var(--color-text-primary);
+  --text-secondary: var(--color-text-secondary);
+  --text-tertiary: var(--color-text-tertiary);
+  
+  --background: var(--color-bg-body);
+  --surface: var(--color-surface);
+  --border-subtle: var(--color-border-light);
 
   --color-success-bg: #e8f8f2;
   --color-success-text: #0a6644;

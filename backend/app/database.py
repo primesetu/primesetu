@@ -1,50 +1,15 @@
 # ============================================================
-# SMRITI-OS - Shoper9-Based Retail OS
-# Zero Cloud . Sovereign . AI-Governed
+# SMRITI-OS - Sovereign Database Engine Proxy
+# This file is a proxy to app/core/database.py to ensure 
+# consistent STORAGE_MODE behavior across all components.
 # ============================================================
-# System Architect   :  Jawahar R Mallah
-# Organisation       :  AITDL Network
-# Project            :  SMRITI-OS
-# (c) 2026 - All Rights Reserved
-# "Memory, Not Code."
-# ============================================================ #
-
-from sqlalchemy.ext.asyncio import create_async_engine, AsyncSession, async_sessionmaker
-from sqlalchemy.orm import DeclarativeBase
-from pydantic_settings import BaseSettings, SettingsConfigDict
-
-class Settings(BaseSettings):
-    # Default to local postgres for dev, override via .env for Supabase
-    DATABASE_URL: str = "postgresql+asyncpg://postgres:postgres@localhost:5432/postgres"
-    model_config = SettingsConfigDict(env_file=".env", extra="ignore")
-
-settings = Settings()
-
-# High-performance Async Engine for Supabase
-engine = create_async_engine(
-    settings.DATABASE_URL,
-    echo=True,
-    future=True,
-    pool_size=20,
-    max_overflow=10
+from app.core.database import (
+    engine, 
+    AsyncSessionLocal, 
+    Base, 
+    get_db, 
+    get_db_session
 )
 
-AsyncSessionLocal = async_sessionmaker(
-    bind=engine,
-    class_=AsyncSession,
-    expire_on_commit=False
-)
-
-class Base(DeclarativeBase):
-    pass
-
-async def get_db():
-    async with AsyncSessionLocal() as session:
-        try:
-            yield session
-            await session.commit()
-        except Exception:
-            await session.rollback()
-            raise
-        finally:
-            await session.close()
+# Export for compatibility with existing imports
+async_session = AsyncSessionLocal

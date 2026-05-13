@@ -14,8 +14,9 @@ import { useNodeSync } from '@/hooks/useNodeSync';
 import { cn } from '@/lib/utils';
 import { 
   HelpCircle, Package, BarChart3, Box, Settings, Zap, 
-  Calendar, Building2, Terminal
+  Calendar, Building2, Terminal, Wifi, WifiOff
 } from 'lucide-react';
+import { useSovereignStore } from '@/store/useSovereignStore';
 import SyncManagerModal from './SyncManagerModal';
 import { useTheme } from '@/hooks/useTheme';
 
@@ -26,6 +27,7 @@ interface StatusBarProps {
 const StatusBar: React.FC<StatusBarProps> = ({ activeTab }) => {
   const sync = useNodeSync();
   const { theme } = useTheme();
+  const { isForcedOffline, toggleForcedOffline } = useSovereignStore();
   const [showSync, setShowSync] = useState(false);
   const isInstitutional = theme === 'LIGHT';
 
@@ -91,6 +93,19 @@ const StatusBar: React.FC<StatusBarProps> = ({ activeTab }) => {
       <div className="flex-1" />
 
       <div className="flex items-stretch h-full divide-x divide-white/10">
+        {/* Offline Toggle */}
+        <div 
+          onClick={toggleForcedOffline}
+          className="flex items-center justify-center px-4 cursor-pointer hover:bg-white/10 transition-all h-full"
+          title={isForcedOffline ? "Go Online" : "Force Offline"}
+        >
+          {isForcedOffline ? (
+             <WifiOff size={14} className="text-[var(--red)]" />
+          ) : (
+             <Wifi size={14} className="text-[var(--green)]" />
+          )}
+        </div>
+
         {/* HO Pulse Indicator — live */}
         <div 
           onClick={() => setShowSync(true)}

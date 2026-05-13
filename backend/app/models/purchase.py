@@ -35,7 +35,7 @@ class PurchaseOrderItem(Base):
 
     id: Mapped[uuid.UUID] = mapped_column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
     po_id: Mapped[uuid.UUID] = mapped_column(UUID(as_uuid=True), ForeignKey("purchase_orders.id"), nullable=False)
-    item_id: Mapped[uuid.UUID] = mapped_column(UUID(as_uuid=True), ForeignKey("items.id"), nullable=False)
+    item_id: Mapped[str] = mapped_column(String, ForeignKey("smriti_item.sku"), nullable=False)
     size: Mapped[str] = mapped_column(String, nullable=True)
     colour: Mapped[str] = mapped_column(String, nullable=True)
     qty_ordered: Mapped[int] = mapped_column(Integer, nullable=False)
@@ -67,7 +67,7 @@ class GRNItem(Base):
     id: Mapped[uuid.UUID] = mapped_column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
     grn_id: Mapped[uuid.UUID] = mapped_column(UUID(as_uuid=True), ForeignKey("grns.id"), nullable=False)
     po_item_id: Mapped[uuid.UUID] = mapped_column(UUID(as_uuid=True), ForeignKey("purchase_order_items.id"), nullable=True)
-    item_id: Mapped[uuid.UUID] = mapped_column(UUID(as_uuid=True), ForeignKey("items.id"), nullable=False)
+    item_id: Mapped[str] = mapped_column(String, ForeignKey("smriti_item.sku"), nullable=False)
     size: Mapped[str] = mapped_column(String, nullable=True)
     colour: Mapped[str] = mapped_column(String, nullable=True)
     qty_received: Mapped[int] = mapped_column(Integer, nullable=False)

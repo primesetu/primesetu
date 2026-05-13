@@ -550,4 +550,5 @@ export const ICON_MAP: Record<string, any> = {
   stock_ledger: ArrowRightLeft,
   purchase_entry: PackagePlus,
   architect_config: ShieldCheck,
+  object_lookup: Database,
 };

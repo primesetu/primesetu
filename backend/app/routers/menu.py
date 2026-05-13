@@ -64,6 +64,7 @@ STATIC_MENU = [
     {"id": "loyalty",    "label": "Loyalty Program",   "route": "loyalty",    "module": "loyalty",    "required_permission": "crm.loyalty",      "category": "CATALOGUE",  "icon": "Trophy",          "shortcut": None, "children": []},
     {"id": "personnel",  "label": "Personnel Master",  "route": "personnel",  "module": "personnel",  "required_permission": "catalogue.view",   "category": "CATALOGUE",  "icon": "UserSquare2",     "shortcut": None, "children": []},
     {"id": "hsn",        "label": "HSN Manager",       "route": "hsn",        "module": "hsn",        "required_permission": "catalogue.view",   "category": "CATALOGUE",  "icon": "FileSpreadsheet", "shortcut": None, "children": []},
+    {"id": "object_lookup", "label": "Object Lookup",     "route": "object_lookup", "module": "object_lookup", "required_permission": "catalogue.view", "category": "CATALOGUE", "icon": "Database", "shortcut": None, "children": []},
     {"id": "accounts",   "label": "Account Master",    "route": "accounts",   "module": "accounts",   "required_permission": "catalogue.view",   "category": "CATALOGUE",  "icon": "Database",        "shortcut": None, "children": []},
     
     {"id": "inventory",  "label": "Stock Status",      "route": "inventory",  "module": "inventory",  "required_permission": "inventory.view",   "category": "WAREHOUSE",  "icon": "Package",         "shortcut": "F9", "children": []},

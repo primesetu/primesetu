@@ -1,15 +1,17 @@
 /* tokens/typography.css — type scale */
 :root {
-  --font-sans: var(--font-sans-fallback, 'Inter', system-ui, sans-serif);
-  --font-mono: 'JetBrains Mono', 'Fira Code', monospace;
+  --font-sans: 'Inter', system-ui, -apple-system, sans-serif;
+  --font-mono: 'JetBrains Mono', 'Fira Code', 'Roboto Mono', monospace;
   
-  --text-xs: 10px;
-  --text-sm: 11px;
-  --text-base: 12px;
-  --text-md: 13px;
-  --text-lg: 14px;
-  --text-xl: 16px;
-
+  --font-size-xs: 0.7rem;
+  --font-size-sm: 0.8rem;
+  --font-size-base: 0.9rem;
+  --font-size-lg: 1rem;
+  --font-size-xl: 1.25rem;
+  
+  --font-weight-thin: 100;
+  --font-weight-bold: 700;
+  --font-weight-black: 900;
   --fw-regular: 400;
   --fw-medium: 600;
   --fw-bold: 700;

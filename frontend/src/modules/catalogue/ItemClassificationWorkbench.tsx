@@ -4,7 +4,7 @@ import {
   ShieldCheck, AlertTriangle, Box, ChevronRight, Settings2, Package, Percent
 } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
-import { api } from "@/api/client";
+import { api, apiClient } from "@/api/client";
 import { cn } from "@/lib/utils";
 
 // Sovereign Architecture Imports
@@ -23,9 +23,9 @@ export default function ItemClassificationWorkbench({ onBack }: { onBack?: () =>
   const [toast, setToast] = useState<{ message: string, type: 'success' | 'error' } | null>(null);
   
   const [classifications, setClassifications] = useState<any[]>([]);
-  const [modifiedRows, setModifiedRows] = useState<Set<number>>(new Set());
-  const [deletedRows, setDeletedRows] = useState<Set<number>>(new Set());
-  const [selectedRows, setSelectedRows] = useState<Set<number>>(new Set());
+  const [modifiedRows, setModifiedRows] = useState<Set<string | number>>(new Set());
+  const [deletedRows, setDeletedRows] = useState<Set<string | number>>(new Set());
+  const [selectedRows, setSelectedRows] = useState<Set<string | number>>(new Set());
   
   const [isPreviewOpen, setIsPreviewOpen] = useState(true);
 
@@ -49,7 +49,7 @@ export default function ItemClassificationWorkbench({ onBack }: { onBack?: () =>
   const fetchData = async () => {
     setIsPulling(true);
     try {
-      const response = await api.legacy.apiClient.get('/catalog/classifications/');
+      const response = await apiClient.get('/catalog/classifications/');
       setClassifications(response.data.data || []);
       setModifiedRows(new Set());
       setDeletedRows(new Set());
@@ -94,12 +94,12 @@ export default function ItemClassificationWorkbench({ onBack }: { onBack?: () =>
             // Very naive check for "is new" vs "update" -> we just try POST then PUT if needed
             // Ideally we'd know if it's a new row. For now, let's try POST.
             try {
-                await api.legacy.apiClient.post('/catalog/classifications/', row);
+                await apiClient.post('/catalog/classifications/', row);
             } catch (err: any) {
                 if (err.response && err.response.status === 400) {
                      // Might already exist, try update
                 }
-                await api.legacy.apiClient.put(`/catalog/classifications/${row.class1cd}/${row.class2cd}`, row);
+                await apiClient.put(`/catalog/classifications/${row.class1cd}/${row.class2cd}`, row);
             }
         }
       }

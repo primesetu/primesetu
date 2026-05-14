@@ -205,7 +205,7 @@ export default function ItemViewer() {
           </button>
 
           <button 
-            onClick={fetchItems}
+            onClick={() => fetchItems()}
             className="p-2 hover:bg-white/5 rounded-lg transition-colors group"
             title="Refresh Data"
           >

@@ -23,7 +23,7 @@ import {
   RibbonGroup, 
   RibbonButton 
 } from '@/components/ui/WorkbenchUI';
-import { api } from '@/api/client';
+import { api, apiClient } from '@/api/client';
 import { cn } from '@/lib/utils';
 import { motion, AnimatePresence } from 'framer-motion';
 import BarcodePrintPreview from '../tools/BarcodePrintPreview';
@@ -89,7 +89,7 @@ export default function PurchaseWorkbench({ onBack }: PurchaseWorkbenchProps) {
 
   useEffect(() => {
     // Fetch Barcode Templates
-    api.client.get('/barcode/templates').then(res => {
+    apiClient.get('/barcode/templates').then(res => {
       const templates = res.data || [];
       setPrintTemplates(templates);
       if (templates.length > 0) {
@@ -207,7 +207,7 @@ export default function PurchaseWorkbench({ onBack }: PurchaseWorkbenchProps) {
       <WorkbenchRibbon>
         <div className="flex items-center">
           <button
-            onClick={onBack}
+            onClick={() => onBack()}
             className="p-3 mr-2 rounded-xl hover:bg-slate-200 dark:hover:bg-slate-800 transition-all"
           >
             <ChevronLeft size={20} />

@@ -9,7 +9,7 @@ export interface GridColumn {
   label: string;
   width?: string;
   readonly?: boolean;
-  type?: "text" | "number" | "select";
+  type?: "text" | "number" | "select" | "boolean";
   options?: string[];
   required?: boolean;
   f2Type?: string;

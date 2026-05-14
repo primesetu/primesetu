@@ -15,10 +15,14 @@ const CLOUD_API = import.meta.env.VITE_BACKEND_URL ?? 'https://smriti-api.primes
 const LOCAL_API = 'http://127.0.0.1:8000'
 
 const getBaseUrl = () => {
+  // Determine Local IP dynamically
+  const hostname = typeof window !== 'undefined' ? window.location.hostname : '127.0.0.1';
+  const dynamicLocal = `http://${hostname}:8000`;
+  
   // [SMRITI SOVEREIGN OVERRIDE] 
   // User requested to ignore cloud. Force local node connectivity.
-  console.log('[Sovereign Mode] Force-Routing to local node:', LOCAL_API)
-  return LOCAL_API
+  console.log('[Sovereign Mode] Routing to node:', dynamicLocal);
+  return dynamicLocal;
 }
 
 // We don't hardcode BASE_URL here anymore because the toggle can change at runtime.
@@ -100,6 +104,7 @@ export const api = {
     generateInternal: (itemId: string) => apiClient.post('/barcodes/generate-internal', { item_id: itemId, is_primary: true, barcode_type: 'CODE128' }).then(r => r.data),
     generateEAN13: (itemId: string) => apiClient.post('/barcodes/generate-ean13', { item_id: itemId, is_primary: true, barcode_type: 'EAN13' }).then(r => r.data),
     printBarcode: (data: any) => apiClient.post('/barcodes/print', data).then(r => r.data),
+    printBarcodeBatch: (data: any) => apiClient.post('/barcodes/print-batch', data).then(r => r.data),
     bulkUpdate: (items: any[]) => apiClient.post('/inventory/bulk-update', { items }).then(r => r.data),
   },
   procurement: {
@@ -301,8 +306,11 @@ export const api = {
     getSizeCat: (class1cd: string, class2cd: string) =>
       apiClient.get('/items/sizecat', { params: { class1cd, class2cd, limit: 200 } }).then(r => r.data),
     // GET /items/class1list → distinct Class1 codes for Matrix Class1 selector
-    getClass1List: () =>
-      apiClient.get('/items/class1list').then(r => r.data),
+    getClass1List: (class2cd?: string) =>
+      apiClient.get('/items/class1list', { params: { class2cd } }).then(r => r.data),
+    // GET /items/class2list → distinct Class2 codes for a given Class1 (dependent dropdown)
+    getClass2List: (class1cd?: string) =>
+      apiClient.get('/items/class2list', { params: { class1cd } }).then(r => r.data),
   },
   tally: {
     getStatus: () => apiClient.get('/tally/status').then(r => r.data),

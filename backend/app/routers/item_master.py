@@ -108,6 +108,15 @@ def _s9_defaults(payload: ItemCreate, vauid: str, vacompcode: str) -> dict:
     d["vatermid"] = d.get("vatermid") or "."
     d["dateinsert"] = datetime.now()
     d["lastupdateddate"] = datetime.now()
+    
+    # Force string mapping for fields mapped as String in legacy_s9 but received as int
+    if d.get("regularind") is not None:
+        d["regularind"] = str(d["regularind"])
+        
+    # Force boolean mapping for fields mapped as Boolean in legacy_s9
+    if d.get("usejwlpricing") is not None:
+        d["usejwlpricing"] = bool(d["usejwlpricing"])
+        
     return d
 
 
@@ -500,19 +509,250 @@ async def get_sizecat(
 
 @router.get("/class1list")
 async def get_class1_list(
+    class2cd: Optional[str] = Query(None, description="Filter by Class2 to get dependent Class1 dropdown"),
     current_user: CurrentUser = Depends(require_auth),
     db: AsyncSession = Depends(get_db),
 ):
     """Fetch distinct Class1 (Product) codes from Class12combo master.
     Used to populate the Class1 selector in the Matrix Generator."""
-    result = await db.execute(
+    stmt = (
         select(Class12combo.class1cd)
         .where(Class12combo.tenant_id == current_user.tenant_id)
         .distinct()
         .limit(200)
     )
+    if class2cd:
+        stmt = stmt.where(Class12combo.class2cd == class2cd)
+        
+    result = await db.execute(stmt)
     codes = result.scalars().all()
     return [{"code": c, "descr": c} for c in codes if c]
+
+
+@router.get("/class2list")
+async def get_class2_list(
+    class1cd: Optional[str] = Query(None, description="Filter by Class1 to get dependent Class2 dropdown"),
+    current_user: CurrentUser = Depends(require_auth),
+    db: AsyncSession = Depends(get_db),
+):
+    """
+    Sovereign dependent-dropdown: returns Class2 (Brand) codes for a given Class1 (Product).
+    Used when user selects Product → drives Brand dropdown automatically.
+    Reads Class12combo (81 rows migrated).
+    """
+    stmt = (
+        select(Class12combo.class2cd)
+        .where(Class12combo.tenant_id == current_user.tenant_id)
+        .distinct()
+        .order_by(Class12combo.class2cd)
+        .limit(300)
+    )
+    if class1cd:
+        stmt = stmt.where(Class12combo.class1cd == class1cd)
+
+    result = await db.execute(stmt)
+    codes = result.scalars().all()
+    return [{"code": c, "descr": c} for c in codes if c]
+
+
+@router.get("/class-defaults")
+async def get_class_defaults(
+    class1cd: str = Query(..., description="Product / Class1 code"),
+    class2cd: str = Query(..., description="Brand / Class2 code"),
+    current_user: CurrentUser = Depends(require_auth),
+    db: AsyncSession = Depends(get_db),
+):
+    """
+    Sovereign auto-populate engine: returns all 7 inherited defaults when
+    Brand × Category combination is selected in new item creation.
+
+    Source: Class12combo (81 rows) + Subclass1cat + Subclass2cat + Sizecat
+    No hardcoding — reads directly from migrated S9 classification data.
+
+    Returns:
+      prod_tax_type     ← tax code (auto-fills prodtaxtype field)
+      retail_markup     ← markup % (auto-fills rtlmarkup field)
+      dealer_markup     ← dealer markup % (auto-fills dlrmarkup field)
+      pref_vendor       ← preferred vendor code (auto-fills prefvendorid)
+      batch_mode        ← batch applicable flag (0/1)
+      size_group        ← size group ID (drives size grid display)
+      is_billable       ← whether items in this combo are billable
+      size_options      ← list of available sizes for this combo
+      subclass1_options ← available sub-brands for this combo
+      subclass2_options ← available sub-categories for this combo
+      alt_vendors       ← up to 3 alternate vendors
+      stop_sale_days    ← stop sales N days before expiry (FMCG/pharma)
+      batch_exp_format  ← expiry date format code
+      grade_applicable  ← grade tracking required?
+      loc_applicable    ← multi-location tracking?
+    """
+    # ── 1. Fetch Class12Combo row (the primary defaults source) ──────────────
+    combo = await db.scalar(
+        select(Class12combo).where(
+            and_(
+                Class12combo.class1cd == class1cd,
+                Class12combo.class2cd == class2cd,
+                Class12combo.tenant_id == current_user.tenant_id,
+            )
+        )
+    )
+
+    if not combo:
+        # Return safe empty defaults — don't 404, allow new combo creation
+        return {
+            "found": False,
+            "class1cd": class1cd,
+            "class2cd": class2cd,
+            "prod_tax_type": None,
+            "retail_markup": 0.0,
+            "dealer_markup": 0.0,
+            "pref_vendor": None,
+            "alt_vendors": [],
+            "batch_mode": 0,
+            "size_group": None,
+            "is_billable": True,
+            "is_service": False,
+            "is_consignment": False,
+            "stop_sale_days": 0,
+            "batch_exp_format": None,
+            "grade_applicable": 0,
+            "loc_applicable": 0,
+            "size_options": [],
+            "subclass1_options": [],
+            "subclass2_options": [],
+            "hint": f"No combo row for {class1cd}/{class2cd}. New combo will be created on first item save.",
+        }
+
+    # ── 2. Fetch available sizes for this combo ───────────────────────────────
+    size_result = await db.execute(
+        select(Sizecat)
+        .where(
+            and_(
+                Sizecat.class1cd == class1cd,
+                Sizecat.class2cd == class2cd,
+                Sizecat.tenant_id == current_user.tenant_id,
+            )
+        )
+        .order_by(Sizecat.sizegroupsrlno, Sizecat.sizecd)
+    )
+    sizes = size_result.scalars().all()
+
+    # ── 3. Fetch available Sub-brands (Subclass1) ─────────────────────────────
+    sub1_result = await db.execute(
+        select(Subclass1cat.subclass1cd, Subclass1cat.subclass1desc)
+        .where(
+            and_(
+                Subclass1cat.class1cd == class1cd,
+                Subclass1cat.class2cd == class2cd,
+                Subclass1cat.tenant_id == current_user.tenant_id,
+            )
+        )
+        .order_by(Subclass1cat.subclass1cd)
+        .limit(100)
+    )
+    sub1_rows = sub1_result.all()
+
+    # ── 4. Fetch available Sub-categories (Subclass2) ─────────────────────────
+    sub2_result = await db.execute(
+        select(Subclass2cat.subclass2cd, Subclass2cat.subclass2desc)
+        .where(
+            and_(
+                Subclass2cat.class1cd == class1cd,
+                Subclass2cat.class2cd == class2cd,
+                Subclass2cat.tenant_id == current_user.tenant_id,
+            )
+        )
+        .order_by(Subclass2cat.subclass2cd)
+        .limit(100)
+    )
+    sub2_rows = sub2_result.all()
+
+    # ── 5. Build response ─────────────────────────────────────────────────────
+    return {
+        "found": True,
+        "class1cd": class1cd,
+        "class2cd": class2cd,
+
+        # ── The 7 Auto-populate Fields ──
+        "prod_tax_type":   combo.prodtaxtype,                         # → prodtaxtype field
+        "retail_markup":   float(combo.retailmarkup or 0),            # → rtlmarkup field
+        "dealer_markup":   float(combo.dealermarkup or 0),            # → dlrmarkup field
+        "pref_vendor":     combo.prefvendorid,                        # → preferred vendor
+        "batch_mode":      combo.batchapplicable or 0,                # → batchapplicable flag
+        "size_group":      combo.sizegroup,                           # → drives size grid
+        "is_billable":     bool(combo.billable) if combo.billable is not None else True,
+
+        # ── Extended Defaults ──
+        "is_service":        bool(combo.isservicecombo),
+        "is_consignment":    bool(combo.isconsignmentitem),
+        "grade_applicable":  combo.gradeapplicable or 0,
+        "loc_applicable":    combo.locationapplicable or 0,
+        "stop_sale_days":    combo.stopsalesbefexpdays or 0,
+        "batch_exp_format":  combo.batchexpformat,
+        "alt_vendors": [
+            v for v in [combo.altvendorid1, combo.altvendorid2, combo.altvendorid3]
+            if v
+        ],
+
+        # ── Dependent Options (pre-loaded for dropdowns) ──
+        "size_options": [
+            {
+                "code":         s.sizecd,
+                "descr":        s.sizecd,
+                "is_pivotal":   bool(s.ispivotalsize),
+                "group_id":     s.sizegroupid,
+                "group_srl":    s.sizegroupsrlno or 0,
+                "ideal_ratio":  s.idealstockratioqty or 1.0,
+            }
+            for s in sizes
+        ],
+        "subclass1_options": [
+            {"code": r.subclass1cd, "descr": r.subclass1desc or r.subclass1cd}
+            for r in sub1_rows
+        ],
+        "subclass2_options": [
+            {"code": r.subclass2cd, "descr": r.subclass2desc or r.subclass2cd}
+            for r in sub2_rows
+        ],
+    }
+
+
+@router.get("/sizes")
+async def get_sizes_for_combo(
+    class1cd: str = Query(...),
+    class2cd: str = Query(...),
+    current_user: CurrentUser = Depends(require_auth),
+    db: AsyncSession = Depends(get_db),
+):
+    """
+    Returns ordered size list for a Brand×Category combo.
+    Used to build the size-grid columns in the item entry matrix.
+    Sizecat.sizegroupsrlno defines display order (pivotal size first).
+    """
+    result = await db.execute(
+        select(Sizecat)
+        .where(
+            and_(
+                Sizecat.class1cd == class1cd,
+                Sizecat.class2cd == class2cd,
+                Sizecat.tenant_id == current_user.tenant_id,
+            )
+        )
+        .order_by(Sizecat.sizegroupsrlno, Sizecat.sizecd)
+    )
+    sizes = result.scalars().all()
+    return [
+        {
+            "code":        s.sizecd,
+            "descr":       s.sizecd,
+            "is_pivotal":  bool(s.ispivotalsize),
+            "group_id":    s.sizegroupid,
+            "group_srl":   s.sizegroupsrlno or 0,
+            "ideal_ratio": float(s.idealstockratioqty or 1.0),
+            "conv_factor": float(s.convfactor or 1.0),
+        }
+        for s in sizes
+    ]
 
 
 
@@ -862,9 +1102,22 @@ async def batch_create_items(
                         skipped_codes.append(item_data.stockno)
                         continue
                     else:
-                        # Skip but don't error the whole batch
-                        skipped_count += 1
-                        skipped_codes.append(item_data.stockno)
+                        # UPSERT: Update existing record
+                        item_dict = _s9_defaults(item_data, vauid, vacompcode)
+                        item_dict["batchsrlno"] = str(item_data.batchsrlno or 0)
+                        
+                        stmt = (
+                            update(Itemmaster)
+                            .where(
+                                Itemmaster.stockno == item_data.stockno,
+                                Itemmaster.tenant_id == current_user.tenant_id
+                            )
+                            .values(**item_dict)
+                        )
+                        await db.execute(stmt)
+                        # Optionally cascade again for updates? S9 usually doesn't cascade on simple updates,
+                        # but we can just mark it successful.
+                        success_count += 1
                         continue
 
                 # 2. Sequential Cascade

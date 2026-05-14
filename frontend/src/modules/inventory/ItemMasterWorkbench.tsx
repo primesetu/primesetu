@@ -23,36 +23,14 @@ import {
 import { motion, AnimatePresence } from "framer-motion";
 import { api } from "../../api/client";
 import { cn } from "@/lib/utils";
+import { useSysParams } from "@/hooks/useSysParams";
 
 // Sovereign Architecture Imports
 import { SovereignShell } from "@/components/sovereign/SovereignShell";
 import { SovereignGrid, GridColumn } from "@/components/sovereign/SovereignGrid";
 import { useSovereignStore } from "@/store/useSovereignStore";
 
-// ── S9 Master Field Registry — exact Shoper9 column names
-const ALL_FIELDS: GridColumn[] = [
-  { key: "stockno", label: "Stock No", width: "140px", required: true },
-  { key: "itemdesc", label: "Description", width: "280px", required: true },
-  { key: "barcode", label: "Barcode/EAN", width: "160px" },
-  { key: "class1", label: "Product", width: "120px", f2Type: "lookups", f2Category: "PRODUCT" },
-  { key: "class2", label: "Brand", width: "120px", f2Type: "lookups", f2Category: "BRAND" },
-  { key: "subclass1", label: "Style", width: "140px", f2Type: "lookups", f2Category: "STYLE" },
-  { key: "subclass2", label: "Shade", width: "100px", f2Type: "lookups", f2Category: "SHADE" },
-  { key: "size", label: "Size", width: "80px", f2Type: "lookups", f2Category: "SIZE" },
-  { key: "hsn_code", label: "HSN Code", width: "100px" },
-  { key: "mrp", label: "MRP", width: "100px", type: "number" },
-  { key: "cost_price", label: "Cost Price", width: "100px", type: "number" },
-  { key: "total_stock", label: "Stock Qty", width: "100px", readonly: true, type: "number" },
-];
-
-const SCHEMAS: Record<string, GridColumn[]> = {
-  ITEM_MASTER: ALL_FIELDS,
-  COMMON_FIELDS: [
-    { key: "class1", label: "Product", width: "120px" },
-    { key: "class2", label: "Brand", width: "120px" },
-    { key: "hsn_code", label: "HSN Code", width: "100px" },
-  ]
-};
+// Dynamic schema generation happens inside the component now
 
 export default function ItemMasterWorkbench({ initialData = [], onBack }: { initialData: any[], onBack: () => void }) {
   const { 
@@ -77,8 +55,93 @@ export default function ItemMasterWorkbench({ initialData = [], onBack }: { init
   const [isPreviewOpen, setIsPreviewOpen] = useState(true);
   const [s9Tab, setS9Tab] = useState<'VIEW'|'COMMON'|'DETAILS'>('DETAILS');
   
-  const [visibleFieldKeys, setVisibleFieldKeys] = useState<string[]>(ALL_FIELDS.map(f => f.key));
+  const { getParam, loading: paramsLoading } = useSysParams();
+  
+  // ── DYNAMIC SCHEMA FROM SYSPARAMS ──
+  const dynamicFields = useMemo(() => {
+    const fields: GridColumn[] = [
+      { key: "stockno", label: "Stock No", width: "140px", required: true },
+      { key: "itemdesc", label: "Description", width: "280px", required: true },
+      { key: "barcode", label: "Barcode/EAN", width: "160px" }
+    ];
+
+    // Classification 1
+    if (getParam("MaintainItemClass1", "1") === "1" || getParam("MaintainItemClass1", 1) === 1) {
+      fields.push({ 
+        key: "class1", 
+        label: getParam("ItemClass1Cap", "Product") as string, 
+        width: "120px", 
+        f2Type: "lookups", 
+        f2Category: "PRODUCT",
+        required: getParam("MandatoryItemClass1", "1") === "1" || getParam("MandatoryItemClass1", 1) === 1
+      });
+    }
+
+    // Classification 2
+    if (getParam("MaintainItemClass2", "1") === "1" || getParam("MaintainItemClass2", 1) === 1) {
+      fields.push({ 
+        key: "class2", 
+        label: getParam("ItemClass2Cap", "Brand") as string, 
+        width: "120px", 
+        f2Type: "lookups", 
+        f2Category: "BRAND",
+        required: getParam("MandatoryItemClass2", "1") === "1" || getParam("MandatoryItemClass2", 1) === 1
+      });
+    }
+
+    // Classification 3
+    if (getParam("MaintainItemClass3", "1") === "1" || getParam("MaintainItemClass3", 1) === 1) {
+      fields.push({ 
+        key: "subclass1", 
+        label: getParam("ItemClass3Cap", "Style") as string, 
+        width: "140px", 
+        f2Type: "lookups", 
+        f2Category: "STYLE",
+        required: getParam("MandatoryItemClass3", "1") === "1" || getParam("MandatoryItemClass3", 1) === 1
+      });
+    }
+
+    // Classification 4
+    if (getParam("MaintainItemClass4", "1") === "1" || getParam("MaintainItemClass4", 1) === 1) {
+      fields.push({ 
+        key: "subclass2", 
+        label: getParam("ItemClass4Cap", "Shade") as string, 
+        width: "100px", 
+        f2Type: "lookups", 
+        f2Category: "SHADE",
+        required: getParam("MandatoryItemClass4", "1") === "1" || getParam("MandatoryItemClass4", 1) === 1
+      });
+    }
+
+    // Classification 5
+    if (getParam("MaintainItemClass5", "1") === "1" || getParam("MaintainItemClass5", 1) === 1) {
+      fields.push({ 
+        key: "size", 
+        label: getParam("ItemClass5Cap", "Size") as string, 
+        width: "80px", 
+        f2Type: "lookups", 
+        f2Category: "SIZE",
+        required: getParam("MandatoryItemClass5", "1") === "1" || getParam("MandatoryItemClass5", 1) === 1
+      });
+    }
+
+    fields.push(
+      { key: "hsn_code", label: "HSN Code", width: "100px" },
+      { key: "mrp", label: "MRP", width: "100px", type: "number" },
+      { key: "cost_price", label: "Cost Price", width: "100px", type: "number" },
+      { key: "total_stock", label: "Stock Qty", width: "100px", readonly: true, type: "number" }
+    );
+
+    return fields;
+  }, [getParam]);
+
+  const [visibleFieldKeys, setVisibleFieldKeys] = useState<string[]>([]);
   const [commonFieldKeys, setCommonFieldKeys] = useState<string[]>(["class1", "class2", "hsn_code"]);
+
+  // Update visible fields when dynamicFields changes
+  useEffect(() => {
+    setVisibleFieldKeys(dynamicFields.map(f => f.key));
+  }, [dynamicFields]);
 
   // ── DATA HEALTH INTELLIGENCE ──
   const healthStats = useMemo(() => {
@@ -103,10 +166,15 @@ export default function ItemMasterWorkbench({ initialData = [], onBack }: { init
 
   const currentSheet = sheets[activeSheet] || { rowData: [], modifiedRows: new Set(), deletedRows: new Set(), schema: "ITEM_MASTER" };
   const currentSchema = useMemo(() => {
-    if (activeSheet === "ITEM") return ALL_FIELDS.filter(f => visibleFieldKeys.includes(f.key));
-    if (activeSheet === "COMMON") return ALL_FIELDS.filter(f => commonFieldKeys.includes(f.key));
-    return SCHEMAS[currentSheet.schema] || ALL_FIELDS;
-  }, [activeSheet, currentSheet.schema, visibleFieldKeys, commonFieldKeys]);
+    const schemas: Record<string, GridColumn[]> = {
+      ITEM_MASTER: dynamicFields,
+      COMMON_FIELDS: dynamicFields.filter(f => commonFieldKeys.includes(f.key))
+    };
+
+    if (activeSheet === "ITEM") return dynamicFields.filter(f => visibleFieldKeys.includes(f.key));
+    if (activeSheet === "COMMON") return schemas.COMMON_FIELDS;
+    return schemas[currentSheet.schema] || dynamicFields;
+  }, [activeSheet, currentSheet.schema, visibleFieldKeys, commonFieldKeys, dynamicFields]);
 
   const handleCellChange = (rowIndex: number, field: string, val: any, row: any) => {
     const newRowData = [...currentSheet.rowData];

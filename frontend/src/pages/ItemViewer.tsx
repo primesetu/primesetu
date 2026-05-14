@@ -38,7 +38,10 @@ import { useWindowStore } from '@/store/useWindowStore';
 export default function ItemViewer() {
   const { openWindow } = useWindowStore();
   const [rowData, setRowData] = useState<any[]>([]);
+  const [totalRows, setTotalRows] = useState(0);
   const [loading, setLoading] = useState(false);
+  const [page, setPage] = useState(0);
+  const [pageSize, setPageSize] = useState(500);
   // Default to last 30 days
   const [dateFilter, setDateFilter] = useState(() => {
     const d = new Date();
@@ -122,11 +125,13 @@ export default function ItemViewer() {
       if (fSubClass1) filters.subclass1cd = fSubClass1;
 
       const res = await api.legacy.getData('itemmaster', { 
-        limit: 500,
+        limit: pageSize,
+        offset: page * pageSize,
         filters: JSON.stringify(filters),
         search: searchQuery || undefined
       });
       setRowData(res.data);
+      setTotalRows(res.total || 0);
     } catch (e: any) {
       console.error("Fetch failed", e);
       alert("Error: " + (e.response?.data?.detail || e.message));
@@ -136,8 +141,12 @@ export default function ItemViewer() {
   };
 
   useEffect(() => {
-    fetchItems();
+    setPage(0);
   }, [dateFilter, fClass1, fClass2, fSubClass1, searchQuery]);
+
+  useEffect(() => {
+    fetchItems();
+  }, [dateFilter, fClass1, fClass2, fSubClass1, searchQuery, page, pageSize]);
 
   const onFilterTextChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setSearchQuery(e.target.value);
@@ -312,7 +321,25 @@ export default function ItemViewer() {
             <span>Sovereign Node Active</span>
           </div>
           <span>|</span>
-          <span>Records: {rowData.length}</span>
+          <span>Records: {rowData.length} of {totalRows.toLocaleString()}</span>
+          <span>|</span>
+          <div className="flex items-center gap-2">
+            <button 
+              disabled={page === 0} 
+              onClick={() => setPage(p => p - 1)}
+              className="px-2 py-0.5 bg-white/5 hover:bg-white/10 disabled:opacity-20 rounded"
+            >
+              Prev
+            </button>
+            <span className="text-indigo-400 font-bold">Page {page + 1}</span>
+            <button 
+              disabled={(page + 1) * pageSize >= totalRows} 
+              onClick={() => setPage(p => p + 1)}
+              className="px-2 py-0.5 bg-white/5 hover:bg-white/10 disabled:opacity-20 rounded"
+            >
+              Next
+            </button>
+          </div>
         </div>
         <div className="flex items-center gap-4">
           <span>Schema: Shoper9.ItemMaster</span>

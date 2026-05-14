@@ -16,10 +16,13 @@ import { FloatingWindow } from '../sovereign/FloatingWindow';
 import ItemViewer from '@/pages/ItemViewer';
 import CustomerMaster from '@/pages/CustomerMaster';
 import POS from '@/pages/POS';
-import ClassificationMaster from '@/pages/ClassificationMaster';
+import ItemClassificationWorkbench from '@/modules/catalogue/ItemClassificationWorkbench';
 import VendorMaster from '@/pages/VendorMaster';
 import ItemMaster from '@/pages/ItemMaster';
 import ObjectLookup from '@/pages/ObjectLookup';
+import BarcodeStudio from '@/modules/inventory/BarcodeStudio';
+import BarcodeDesigner from '@/modules/tools/BarcodeDesigner';
+import ConnectionSettings from '@/pages/ConnectionSettings';
 
 interface MenuItem {
   id: string;
@@ -40,10 +43,14 @@ const MENU_ITEMS: MenuItem[] = [
   { id: 'customer-master',       label: 'Customer Master',        icon: Users,           group: 'MASTERS' },
   { id: 'classification-master', label: 'Classification Manager', icon: Layers,          group: 'MASTERS' },
   { id: 'vendor-master',         label: 'Vendor Manager',         icon: User,            group: 'MASTERS' },
+  { id: 'barcode',               label: 'Barcode Studio',         icon: Package,         group: 'MASTERS' },
+
   { id: 'reports',        label: 'Reports',         icon: BarChart3,       group: 'ANALYTICS' },
   { id: 'day-end',        label: 'Day End',         icon: CalendarCheck,   group: 'ANALYTICS', required_sysparam: 'EnableDayEnd' },
   { id: 'theme-manager',  label: 'Theme Manager',   icon: Palette,         group: 'ADMIN' },
   { id: 'system-settings', label: 'System Parameters', icon: Settings,        group: 'ADMIN' },
+  { id: 'connection-settings', label: 'Connection Settings', icon: Database, group: 'ADMIN' },
+  { id: 'barcode-designer', label: 'Barcode Designer',    icon: Settings,        group: 'ADMIN' },
   { id: 'menu-manager',   label: 'Menu Manager',    icon: MenuIcon,        group: 'ADMIN' },
   { id: 'ho-module',      label: 'HO Module',       icon: Building2,       group: 'ADMIN',     required_sysparam: 'IsHeadOffice' },
 ];
@@ -51,7 +58,7 @@ const MENU_ITEMS: MenuItem[] = [
 const GROUPS = ['OPERATIONS', 'MASTERS', 'ANALYTICS', 'ADMIN'];
 
 // Pages that need full-bleed layout (manage their own padding/scroll)
-const FULL_BLEED_PAGES = ['pos', 'item-master', 'item-viewer', 'customer-master', 'classification-master', 'vendor-master', 'purchase', 'theme-manager', 'system-settings', 'object_lookup'];
+const FULL_BLEED_PAGES = ['pos', 'item-master', 'item-viewer', 'customer-master', 'classification-master', 'vendor-master', 'purchase', 'theme-manager', 'system-settings', 'connection-settings', 'object_lookup', 'barcode', 'barcode-designer'];
 
 interface SmritiShellProps {
   children: React.ReactNode;
@@ -100,9 +107,12 @@ const SmritiShell: React.FC<SmritiShellProps> = ({ children, activeTab, onTabCha
       case 'customer-master':       return <CustomerMaster />;
       case 'item-master':           return <ItemMaster />;
       case 'pos':                   return <POS />;
-      case 'classification-master': return <ClassificationMaster />;
+      case 'classification-master': return <ItemClassificationWorkbench />;
       case 'vendor-master':         return <VendorMaster />;
       case 'object_lookup':         return <ObjectLookup />;
+      case 'barcode':               return <BarcodeStudio />;
+      case 'barcode-designer':      return <BarcodeDesigner />;
+
       default: return <div className="p-10 text-center uppercase font-black opacity-20">Module: {type}</div>;
     }
   };

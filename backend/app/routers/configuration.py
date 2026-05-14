@@ -29,6 +29,26 @@ from app.models.sovereign import SmritiAD, SmritiParam, SmritiDocNo
 
 router = APIRouter(prefix="/config", tags=["configuration"])
 
+@router.post("/test-db")
+async def test_database_connection(
+    current_user: CurrentUser = Depends(require_auth),
+    db: AsyncSession = Depends(get_db)
+):
+    """
+    Test the database connection by executing a simple query.
+    This validates that the current credentials and host are reachable.
+    """
+    from sqlalchemy import text
+    try:
+        # Check if we can reach the DB and run a simple SELECT
+        await db.execute(text("SELECT 1"))
+        return {"status": "success", "message": "Database connection verified."}
+    except Exception as e:
+        raise HTTPException(
+            status_code=500, 
+            detail=f"Connection failed: {str(e)}"
+        )
+
 # --- Sovereign Configuration APIs ---
 
 @router.get("/sovereign-mask/{trn_type}")

@@ -16,7 +16,48 @@ from app.core.config import settings
 # In Sovereign mode (MSSQL), we usually don't use a schema prefix (default dbo).
 S9_SCHEMA = settings.LEGACY_SCHEMA if settings.storage_mode in ("CLOUD", "LOCAL_POSTGRES") else None
 
+
+class Genlookup(Base):
+    """
+    Universal Code→Description lookup registry.
+    RecID partitions:
+      1=Class1, 2=Class2, 51=SuperClass1, 52=SuperClass2,
+      53=SizeGroup, 54=ProdTaxType, 65–96=AnalCode1–32
+      101=TrnType names
+    """
+    __tablename__ = 'genlookup'
+    __table_args__ = {'schema': S9_SCHEMA, 'extend_existing': True}
+
+    recid: Mapped[Integer] = mapped_column(Integer, primary_key=True, nullable=False)
+    code: Mapped[String] = mapped_column(String, primary_key=True, nullable=False)
+    descr: Mapped[Optional[String]] = mapped_column(String, nullable=True)
+    number: Mapped[Optional[Integer]] = mapped_column(Integer, nullable=True)
+    vauid: Mapped[Optional[String]] = mapped_column(String, nullable=True)
+    vactr: Mapped[Optional[Integer]] = mapped_column(Integer, nullable=True)
+    vatermid: Mapped[Optional[String]] = mapped_column(String, nullable=True)
+    vacompcode: Mapped[Optional[String]] = mapped_column(String, nullable=True)
+
+
+class Genlookupextd(Base):
+    """
+    Extension satellite table for GenLookup entries.
+    Attaches extra metadata (IFSC codes, alternate codes, ERP mappings) to specific lookup values.
+    """
+    __tablename__ = 'genlookupextd'
+    __table_args__ = {'schema': S9_SCHEMA, 'extend_existing': True}
+
+    recid: Mapped[Integer] = mapped_column(Integer, primary_key=True, nullable=False)
+    code: Mapped[String] = mapped_column(String, primary_key=True, nullable=False)
+    extdcode1: Mapped[Optional[String]] = mapped_column(String, nullable=True)
+    extddescr1: Mapped[Optional[String]] = mapped_column(String, nullable=True)
+    extdcode2: Mapped[Optional[String]] = mapped_column(String, nullable=True)
+    extddescr2: Mapped[Optional[String]] = mapped_column(String, nullable=True)
+    vauid: Mapped[Optional[String]] = mapped_column(String, nullable=True)
+    vactr: Mapped[Optional[Integer]] = mapped_column(Integer, nullable=True)
+
+
 class Acceptdisplaydtls(Base):
+
     __tablename__ = 'acceptdisplaydtls'
     __table_args__ = {'schema': S9_SCHEMA, 'extend_existing': True}
     tenant_id: Mapped[str] = mapped_column(String, default='SYSTEM', index=True)

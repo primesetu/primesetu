@@ -4,7 +4,12 @@
 # (c) 2026 - All Rights Reserved
 # ============================================================
 
-from .legacy_s9 import Acceptdisplaydtls
+from .legacy_s9 import (
+    Acceptdisplaydtls, Genlookup, Genlookupextd,
+    Paymodeacceptdisplaydtls, Paymodeacceptdisplaydtlsextd, Tillacceptdisplaydtls,
+    Stktrndtls, Stktrnhdr, Stktrnaddldtls, Stktrnaddlhdr,
+    Pospaymodes as LegacyPospaymodes,
+)
 from .base import (
     Base, Store, SystemParameter, Customer, Till, Transaction, 
     TransactionItem, GeneralLookup, Department, 
@@ -36,7 +41,10 @@ __all__ = [
     "PrefixConfig", "PrefixMaster", "PrefixTrnNo", "PrefixTerminalGroup",
     "UIFieldConfig", "AttributeAlias", "CategoryPolicy",
     "PriceRangeSetting", "PriceRange", "PriceRevision", "PriceRevisionHistory",
-    "Acceptdisplaydtls", "Alert", "SyncPacket", "RemoteCommand",
+    "Acceptdisplaydtls", "Genlookup", "Genlookupextd",
+    "Paymodeacceptdisplaydtls", "Paymodeacceptdisplaydtlsextd", "Tillacceptdisplaydtls",
+    "Stktrndtls", "Stktrnhdr", "Stktrnaddldtls", "Stktrnaddlhdr", "LegacyPospaymodes",
+    "Alert", "SyncPacket", "RemoteCommand",
     "SmritiAD", "SmritiParam", "SmritiLookup", "SmritiLookupMap",
     "SmritiCombo", "SmritiItem", "SmritiStock", "SmritiStaff",
     "SmritiPayMode", "SmritiDocNo", "SmritiSaleHdr", "SmritiSaleDtl",
@@ -50,3 +58,5 @@ from .schemes import PromoHeader, PromoBillDisc, PromoBuyGet
 from .security import VaGroup, VaGroupPermission, VaGroupMenu, VaUserGroup
 
 from .reporting import PrintTemplate, PrintTemplateField, ReportConfig, ReportSchedule
+
+from .barcode import BarcodeTemplate

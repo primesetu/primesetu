@@ -225,3 +225,19 @@ class SmritiAuditLog(Base):
     old_value: Mapped[Optional[str]] = mapped_column(String, nullable=True)
     new_value: Mapped[Optional[str]] = mapped_column(String, nullable=True)
     timestamp: Mapped[datetime] = mapped_column(DateTime, default=datetime.utcnow)
+
+class SmritiBarcodeTemplate(Base):
+    """ Modernized Barcode Template Storage (Replaces .btf and .txt files) """
+    __tablename__ = 'smriti_barcode_template'
+    tenant_id: Mapped[str] = mapped_column(String, default='SYSTEM', index=True)
+    
+    id: Mapped[int] = mapped_column(Integer, primary_key=True, autoincrement=True)
+    name: Mapped[str] = mapped_column(String(100), unique=True, index=True)
+    description: Mapped[Optional[str]] = mapped_column(String(255), nullable=True)
+    printer_type: Mapped[str] = mapped_column(String(50), default='STANDARD', comment="STANDARD or THERMAL")
+    width_mm: Mapped[Float] = mapped_column(Float, default=50.0)
+    height_mm: Mapped[Float] = mapped_column(Float, default=25.0)
+    layout_json: Mapped[dict] = mapped_column(JSON, default=list) # Stores the visual nodes (text, barcode, image)
+    is_active: Mapped[bool] = mapped_column(Boolean, default=True)
+    created_at: Mapped[datetime] = mapped_column(DateTime, default=datetime.utcnow)
+    updated_at: Mapped[datetime] = mapped_column(DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)

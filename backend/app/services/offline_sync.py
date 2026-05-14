@@ -32,6 +32,7 @@ STATUS_FAILED  = "FAILED"
 QUEUE_DDL = """
 CREATE TABLE IF NOT EXISTS smriti_sync_queue (
     id           BIGSERIAL PRIMARY KEY,
+    tenant_id    VARCHAR(50) DEFAULT 'SYSTEM',
     table_name   TEXT        NOT NULL,
     operation    TEXT        NOT NULL,   -- INSERT | UPDATE | DELETE
     record_json  JSONB       NOT NULL,   -- Changed row as JSONB (native Postgres)

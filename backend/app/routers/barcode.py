@@ -11,16 +11,19 @@
 # Barcode: stockno IS the scan key. No separate barcode table needed.
 # ============================================================
 
+import logging
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import select, func, text
 from typing import Optional, List
+from pydantic import BaseModel
 
 from app.core.database import get_db
 from app.core.security import require_auth, CurrentUser
 from app.models.base import Store
 from app.models.legacy_s9 import Itemmaster, Stockmaster
 
+logger = logging.getLogger("smriti.barcode_router")
 router = APIRouter(prefix="/barcodes", tags=["barcode"])
 
 
@@ -190,8 +193,15 @@ async def print_barcode(
     db: AsyncSession = Depends(get_db)
 ):
     """
-    Print barcode label for a stockno.
-    Resolves item details from Itemmaster for label data.
+    Sovereign Print Engine — Hot Path.
+    Resolves item from Itemmaster, generates ZPL, sends raw TCP to printer.
+    
+    Payload:
+      - stock_no or barcode: item stockno
+      - printer_ip: override printer IP (fallback to store config)
+      - copies: number of labels (default 1)
+      - template_id: optional custom Barcode Designer template ID
+      - width_mm / height_mm: optional label dimensions
     """
     stockno = payload.get("stock_no") or payload.get("barcode")
     if not stockno:
@@ -203,32 +213,196 @@ async def print_barcode(
         raise HTTPException(status_code=404, detail=f"Item {stockno} not found")
 
     store = await db.get(Store, current_user.store_id)
-    printer_ip = payload.get("printer_ip") or (
-        store.metadata_json.get("label_printer_ip", "127.0.0.1") if store else "127.0.0.1"
-    )
-    copies = payload.get("copies", 1)
+    store_meta = getattr(store, "metadata_json", {}) or {}
+    printer_ip = payload.get("printer_ip") or store_meta.get("label_printer_ip", "127.0.0.1")
+    copies = int(payload.get("copies", 1))
+    width_mm = float(payload.get("width_mm", 38.0))
+    height_mm = float(payload.get("height_mm", 25.0))
 
     mrp_paise = 0
     if item.retail_price:
-        try: mrp_paise = int(float(item.retail_price) * 100)
-        except: pass
+        try:
+            mrp_paise = int(float(item.retail_price) * 100)
+        except Exception:
+            pass
+
+    from app.services.barcode import print_barcode_label, print_from_template
+    from app.models.sovereign import SmritiBarcodeTemplate
 
     try:
-        from app.services.barcode import print_barcode_label
-        success_count = 0
-        for _ in range(copies):
-            if print_barcode_label(
-                barcode=item.stockno,
-                barcode_type="CODE128",
-                item_name=item.itemdesc or "",
-                mrp_paise=mrp_paise,
-                size=item.sizecd or "",
-                colour=item.subclass2cd or "",
-                hsn_code=getattr(item, "hsncd", ""),
-                store_name=store.name if store else "",
-                printer_ip=printer_ip
-            ):
-                success_count += 1
-        return {"printed": success_count, "barcode": item.stockno}
+        # If a custom template_id is provided, use the designer layout
+        template_id = payload.get("template_id")
+        if template_id:
+            tpl_res = await db.execute(
+                select(SmritiBarcodeTemplate).where(SmritiBarcodeTemplate.id == template_id)
+            )
+            tpl = tpl_res.scalar_one_or_none()
+            if tpl:
+                item_data = {
+                    "sku": item.stockno,
+                    "name": item.itemdesc or "",
+                    "mrp": mrp_paise / 100.0,
+                    "class1": getattr(item, "class1cd", "") or "",
+                    "class2": getattr(item, "class2cd", "") or "",
+                    "barcode": item.stockno,
+                    "size": getattr(item, "sizecd", "") or "",
+                    "colour": getattr(item, "subclass2cd", "") or "",
+                    "hsn_code": getattr(item, "hsncd", "") or "",
+                    "store_name": store.name if store else "",
+                }
+                success = print_from_template(
+                    layout_json=tpl.layout_json,
+                    item_data=item_data,
+                    printer_ip=printer_ip,
+                    width_mm=tpl.width_mm,
+                    height_mm=tpl.height_mm,
+                    copies=copies,
+                )
+                return {"printed": copies if success else 0, "barcode": item.stockno, "mode": "template"}
+
+        # Default: standard fast-path ZPL label
+        success = print_barcode_label(
+            barcode=item.stockno,
+            barcode_type="CODE128",
+            item_name=item.itemdesc or "",
+            mrp_paise=mrp_paise,
+            size=getattr(item, "sizecd", "") or "",
+            colour=getattr(item, "subclass2cd", "") or "",
+            hsn_code=getattr(item, "hsncd", "") or "",
+            store_name=store.name if store else "",
+            printer_ip=printer_ip,
+            copies=copies,
+            width_mm=width_mm,
+            height_mm=height_mm,
+        )
+        return {"printed": copies if success else 0, "barcode": item.stockno, "mode": "standard"}
+
     except Exception as e:
+        logger.error(f"[SMRITI-PRINT] Exception: {e}")
         return {"printed": 0, "barcode": item.stockno, "error": str(e)}
+
+class PrintBatchItem(BaseModel):
+    stock_no: str
+    copies: int = 1
+
+class PrintBatchRequest(BaseModel):
+    items: List[PrintBatchItem]
+    printer_ip: Optional[str] = None
+    template_id: Optional[int] = None
+    raw_prn_template: Optional[str] = None
+    width_mm: float = 38.0
+    height_mm: float = 25.0
+
+@router.post("/print-batch")
+async def print_barcode_batch(
+    req: PrintBatchRequest,
+    current_user: CurrentUser = Depends(require_auth),
+    db: AsyncSession = Depends(get_db)
+):
+    """
+    Sovereign Print Engine — Batch Mode.
+    Resolves multiple items, generates concatenated ZPL, and sends raw TCP in a single socket session.
+    """
+    if not req.items:
+        raise HTTPException(status_code=400, detail="items list cannot be empty")
+
+    store = await db.get(Store, current_user.store_id)
+    store_meta = getattr(store, "metadata_json", {}) or {}
+    printer_ip = req.printer_ip or store_meta.get("label_printer_ip", "127.0.0.1")
+
+    from app.services.barcode import build_zpl_simple, build_zpl_from_layout, send_zpl_to_printer, process_raw_template
+    from app.models.sovereign import SmritiBarcodeTemplate
+
+    tpl = None
+    if req.template_id:
+        tpl_res = await db.execute(
+            select(SmritiBarcodeTemplate).where(SmritiBarcodeTemplate.id == req.template_id)
+        )
+        tpl = tpl_res.scalar_one_or_none()
+
+    full_zpl = ""
+    printed_count = 0
+    errors = []
+
+    for job in req.items:
+        stockno = job.stock_no
+        item_res = await db.execute(select(Itemmaster).where(Itemmaster.stockno == stockno))
+        item = item_res.scalar_one_or_none()
+        
+        if not item:
+            errors.append({"stock_no": stockno, "error": "Not found"})
+            continue
+            
+        mrp_paise = 0
+        if item.retail_price:
+            try: mrp_paise = int(float(item.retail_price) * 100)
+            except Exception: pass
+            
+        try:
+            if req.raw_prn_template:
+                item_data = {
+                    "ITEM_NAME": item.itemdesc or "",
+                    "MRP": mrp_paise / 100.0,
+                    "BARCODE": item.stockno,
+                    "SIZE": getattr(item, "sizecd", "") or "",
+                    "COLOUR": getattr(item, "subclass2cd", "") or "",
+                    "HSN": getattr(item, "hsncd", "") or "",
+                    "STORE": store.name if store else "",
+                }
+                # PRN files use dynamic injection, so we duplicate it per copy
+                zpl_bytes = process_raw_template(req.raw_prn_template, item_data)
+                zpl = zpl_bytes.decode('utf-8')
+                for _ in range(job.copies):
+                    full_zpl += zpl + "\n"
+                printed_count += job.copies
+            elif tpl:
+                item_data = {
+                    "sku": item.stockno,
+                    "name": item.itemdesc or "",
+                    "mrp": mrp_paise / 100.0,
+                    "class1": getattr(item, "class1cd", "") or "",
+                    "class2": getattr(item, "class2cd", "") or "",
+                    "barcode": item.stockno,
+                    "size": getattr(item, "sizecd", "") or "",
+                    "colour": getattr(item, "subclass2cd", "") or "",
+                    "hsn_code": getattr(item, "hsncd", "") or "",
+                    "store_name": store.name if store else "",
+                }
+                zpl = build_zpl_from_layout(
+                    layout_json=tpl.layout_json,
+                    item_data=item_data,
+                    width_mm=tpl.width_mm if tpl.width_mm else req.width_mm,
+                    height_mm=tpl.height_mm if tpl.height_mm else req.height_mm,
+                    copies=job.copies,
+                )
+                full_zpl += zpl + "\n"
+                printed_count += job.copies
+            else:
+                zpl = build_zpl_simple(
+                    barcode=item.stockno,
+                    barcode_type="CODE128",
+                    item_name=item.itemdesc or "",
+                    mrp_rupees=mrp_paise / 100.0,
+                    size=getattr(item, "sizecd", "") or "",
+                    colour=getattr(item, "subclass2cd", "") or "",
+                    hsn_code=getattr(item, "hsncd", "") or "",
+                    store_name=store.name if store else "",
+                    width_mm=req.width_mm,
+                    height_mm=req.height_mm,
+                    copies=job.copies,
+                )
+                full_zpl += zpl + "\n"
+                printed_count += job.copies
+        except Exception as e:
+            errors.append({"stock_no": stockno, "error": str(e)})
+
+    if full_zpl:
+        success = send_zpl_to_printer(full_zpl, printer_ip)
+        if not success:
+            raise HTTPException(status_code=500, detail="Failed to send to printer")
+
+    return {
+        "printed": printed_count,
+        "dispatched_items": len(req.items) - len(errors),
+        "errors": errors
+    }

@@ -78,7 +78,7 @@ export const STATIC_FALLBACK_MENU: MenuItem[] = [
   { id: 'procurement', label: 'Purchase Orders',    route: 'procurement', module: 'procurement', required_permission: 'inventory.po',      category: 'WAREHOUSE', children: [], shortcut: undefined },
   { id: 'movement',    label: 'Stock Movement',     route: 'movement',    module: 'movement',    required_permission: 'inventory.view',    category: 'WAREHOUSE', children: [], shortcut: undefined },
   { id: 'reconcile',   label: 'Physical Audit',     route: 'reconcile',   module: 'reconcile',   required_permission: 'inventory.audit',   category: 'WAREHOUSE', children: [], shortcut: undefined },
-  { id: 'barcode',     label: 'Barcode Studio',     route: 'barcode',     module: 'barcode',     required_permission: 'inventory.view',    category: 'WAREHOUSE', children: [], shortcut: undefined },
+  { id: 'barcode',     label: 'Barcode Studio',     route: 'barcode',     module: 'barcode',     required_permission: 'catalogue.view',    category: 'CATALOGUE', children: [], shortcut: undefined },
   
   { id: 'finance',     label: 'Finance Hub',        route: 'finance',     module: 'finance',     required_permission: 'finance.view',      category: 'FINANCE',   children: [], shortcut: undefined },
   { id: 'analytics',   label: 'Sales Reports',      route: 'analytics',   module: 'analytics',   required_permission: 'reports.view',      category: 'FINANCE',   children: [], shortcut: 'F3' },
@@ -90,6 +90,7 @@ export const STATIC_FALLBACK_MENU: MenuItem[] = [
   { id: 'table_viewer',    label: 'DB Explorer',     route: 'table_viewer',    module: 'table_viewer',    required_permission: 'settings.view', category: 'SYSTEM', children: [], shortcut: undefined },
   { id: 'hybrid_storage',  label: 'Hybrid Storage',  route: 'hybrid_storage',  module: 'hybrid_storage',  required_permission: 'settings.view', category: 'SYSTEM', children: [], shortcut: undefined },
   { id: 'architect_config',label: 'SMRITI Config',   route: 'architect_config',module: 'architect_config',required_permission: 'settings.view', category: 'SYSTEM', children: [], shortcut: 'F7' },
+  { id: 'barcode_designer',label: 'Barcode Designer',route: 'barcode_designer',module: 'barcode_designer',required_permission: 'settings.view', category: 'SYSTEM', children: [], shortcut: undefined },
   { id: 'spreadsheet',     label: 'Sovereign Audit', route: 'spreadsheet',     module: 'spreadsheet',     required_permission: 'settings.view', category: 'SYSTEM', children: [], shortcut: undefined },
 ];
 

@@ -24,7 +24,7 @@ from app.core.counters import CounterManager
 from app.services.config import ConfigService
 from app.services.tax_service import TaxService
 from app.services.promo_service import PromoService
-from app.models.legacy_s9 import Itemmaster, Stockmaster, Personnel, Pospaymodes
+from app.models.legacy_s9 import Itemmaster, Stockmaster, Personnel, Pospaymodes, Stktrnaddldtls, Stktrnaddlhdr
 
 router = APIRouter(prefix="/api/v1/billing", tags=["billing"])
 
@@ -329,7 +329,6 @@ async def finalize_transaction(
         tax_total += line_tax_paise
         disc_total += line_disc_paise
         
-        # Create Line Item (Shoper9 parity — no FK dependency)
         new_item = TransactionItem(
             transaction_id=new_txn.id,
             stock_no=item_in.stock_no,
@@ -344,6 +343,34 @@ async def finalize_transaction(
             tax_details=line_tax_details
         )
         new_txn.items.append(new_item)
+
+        # ── WRITE Stktrndtls row (S9 parity — sovereign ledger) ──────────────
+        # Captures: MRP snapshot, stock level at time of sale, salesperson, GST comps
+        # entsrlno = item sequence number within the bill (1-based)
+        s9_dtl = Stktrndtls(
+            trntype        = 2100,
+            trnctrlno      = trn_ctrl_no,
+            docnoprefix    = new_bill_no.split("/")[0] if "/" in new_bill_no else new_bill_no,
+            docno          = trn_ctrl_no,
+            entsrlno       = (txn_in.items.index(item_in) + 1),
+            stockno        = item_in.stock_no,
+            docqty         = item_in.qty,
+            docentrate     = float(item_in.unit_price) / 100,   # paise → rupees
+            docentvalue    = float(line_gross_paise) / 100,
+            docenttotdisc  = float(line_disc_paise) / 100,
+            docenttax      = float(line_tax_paise) / 100,
+            docentnetvalue = float(line_net_paise) / 100,
+            itemmrpbilltm  = float(item_in.unit_price) / 100,   # MRP snapshot
+            taxcomp1       = float(line_tax_details.get("CGST", 0)) / 100,
+            taxcomp2       = float(line_tax_details.get("SGST", 0)) / 100,
+            taxcomp3       = float(line_tax_details.get("IGST", 0)) / 100,
+            salespersoncd  = txn_in.salesman_id or None,
+            vauid          = str(current_user.id),
+            vacompcode     = store_id,
+            docentvoidind  = False,
+            tenant_id      = store_id,
+        )
+        db.add(s9_dtl)
 
     new_txn.subtotal = subtotal
     new_txn.tax_total = tax_total
@@ -377,12 +404,47 @@ async def finalize_transaction(
                 db.add(ledger_entry)
 
     await db.commit()
-    
+
     # ── AUTO-CLEAR DRAFT (xtemp drop) ──
-    # Once finalized, the temporary session data is no longer needed.
     from sqlalchemy import delete
     await db.execute(delete(DraftBillItem).where(DraftBillItem.user_id == current_user.id))
-    await db.commit()
+
+    # ── WRITE StkTrnAddlDtls (payment settlement rows — S9 parity) ──────────
+    # Each payment mode in the bill gets its own detail row, exactly as S9 does.
+    # This enables proper day-end cash reconciliation and payment-mode reporting.
+    if txn_in.payments:
+        ent_srl = 1
+        for payment in txn_in.payments:
+            mode_str  = str(payment.mode).upper()
+            paymode_type = 1  # default CASH
+            if any(x in mode_str for x in ["CARD", "DEBIT", "CREDIT"]):
+                paymode_type = 2
+            elif any(x in mode_str for x in ["CHEQUE", "CHQ"]):
+                paymode_type = 3
+            elif any(x in mode_str for x in ["UPI", "QR", "WALLET"]):
+                paymode_type = 4
+            elif "GIFT" in mode_str or "GV" in mode_str:
+                paymode_type = 5
+
+            addl_dtl = Stktrnaddldtls(
+                trntype      = 2100,
+                trnctrlno    = trn_ctrl_no,
+                trndocnoprefix = new_bill_no.split("/")[0] if "/" in new_bill_no else new_bill_no,
+                trndocno     = trn_ctrl_no,
+                entsrlno     = ent_srl,
+                type         = paymode_type,
+                code         = paymode_type,
+                descr        = payment.mode,
+                amount       = payment.amount / 100,       # convert paise→rupees
+                netvalue     = payment.amount / 100,
+                othertext    = payment.ref_no or None,     # AuthCode / UTR No
+                vauid        = str(current_user.id),
+                vacompcode   = store_id,
+            )
+            db.add(addl_dtl)
+            ent_srl += 1
+
+        await db.commit()
 
     # ── LOYALTY ACCRUAL (post-commit, non-blocking) ──
     loyalty_summary = {}
@@ -619,10 +681,21 @@ async def get_paymodes(
     db: AsyncSession = Depends(get_db),
     current_user = Depends(require_auth)
 ):
-    """Fetch Active Payment Modes from Shoper9."""
-    result = await db.execute(select(Pospaymodes).order_by(Pospaymodes.pospaymodenm))
+    """Fetch Active Payment Modes from Shoper9 (sovereign PosPaymodes table, 4 rows)."""
+    result = await db.execute(
+        select(Pospaymodes)
+        .where(Pospaymodes.isenabled.in_([True, 1]))
+        .order_by(Pospaymodes.paymodetype)
+    )
     rows = result.scalars().all()
-    return [{"id": r.pospaymodecd, "name": r.pospaymodenm, "type": r.paymodetype} for r in rows]
+    if not rows:
+        # Standard 3-mode fallback when PosPaymodes not yet configured
+        return [
+            {"id": "CASH", "name": "Cash",       "type": 1},
+            {"id": "CARD", "name": "Card/Debit", "type": 2},
+            {"id": "UPI",  "name": "UPI",        "type": 4},
+        ]
+    return [{"id": r.paymodecode, "name": r.paymodecode, "type": r.paymodetype} for r in rows]
 
 @router.post("/calculate-promos")
 async def calculate_promos(
@@ -635,10 +708,83 @@ async def calculate_promos(
     gross_total = sum(i['qty'] * i['unit_price'] for i in items)
     
     result = await PromoService.evaluate_promotions(db, items, Decimal(gross_total) / 100)
-    
-    # Convert Decimals to Float/Int for JSON
     return {
         "applied_promos": result["applied_promos"],
         "item_discounts": {k: float(v["amount"]) for k, v in result["item_discounts"].items()},
         "bill_discount": float(result["bill_discount"])
     }
+
+
+@router.get("/settlement/{ctrl_no}")
+async def get_bill_settlement(
+    ctrl_no: int,
+    db: AsyncSession = Depends(get_db),
+    current_user = Depends(require_auth),
+):
+    """
+    Sovereign Settlement Audit: returns StkTrnAddlDtls rows for a given bill.
+    Shows exactly how a bill was paid (cash, card, UPI, split) with auth codes.
+    """
+    stmt = (
+        select(Stktrnaddldtls)
+        .where(
+            and_(
+                Stktrnaddldtls.trntype == 2100,
+                Stktrnaddldtls.trnctrlno == ctrl_no,
+            )
+        )
+        .order_by(Stktrnaddldtls.entsrlno)
+    )
+    rows = (await db.execute(stmt)).scalars().all()
+
+    PAYMODE_NAMES = {1: "CASH", 2: "CARD", 3: "CHEQUE", 4: "UPI", 5: "GIFT_VOUCHER"}
+    return [{
+        "seq":       r.entsrlno,
+        "paymode":   PAYMODE_NAMES.get(r.type or 1, "OTHER"),
+        "code":      r.code,
+        "descr":     r.descr,
+        "amount":    float(r.amount or 0),
+        "ref":       r.othertext,     # AuthCode / UTR No
+        "coupon":    r.gvcouponno,    # Gift voucher / loyalty coupon
+    } for r in rows]
+
+
+@router.get("/s9lines/{ctrl_no}")
+async def get_s9_bill_lines(
+    ctrl_no: int,
+    db: AsyncSession = Depends(get_db),
+    current_user = Depends(require_auth),
+):
+    """
+    Returns Stktrndtls lines for a finalized bill — the sovereign S9 audit ledger.
+    Includes MRP snapshot, stock levels at time of sale, GST components.
+    """
+    stmt = (
+        select(Stktrndtls)
+        .where(
+            and_(
+                Stktrndtls.trntype == 2100,
+                Stktrndtls.trnctrlno == ctrl_no,
+            )
+        )
+        .order_by(Stktrndtls.entsrlno)
+    )
+    rows = (await db.execute(stmt)).scalars().all()
+    return [{
+        "srl":           r.entsrlno,
+        "stockno":       r.stockno,
+        "qty":           float(r.docqty or 0),
+        "rate":          float(r.docentrate or 0),
+        "value":         float(r.docentvalue or 0),
+        "disc":          float(r.docenttotdisc or 0),
+        "tax":           float(r.docenttax or 0),
+        "netvalue":      float(r.docentnetvalue or 0),
+        "mrp_at_sale":   float(r.itemmrpbilltm or 0),
+        "cgst":          float(r.taxcomp1 or 0),
+        "sgst":          float(r.taxcomp2 or 0),
+        "igst":          float(r.taxcomp3 or 0),
+        "salesperson":   r.salespersoncd,
+        "cashier":       r.vauid,
+        "store":         r.vacompcode,
+        "void":          bool(r.docentvoidind),
+    } for r in rows]

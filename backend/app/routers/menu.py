@@ -72,7 +72,7 @@ STATIC_MENU = [
     {"id": "movement",   "label": "Stock Movement",    "route": "movement",   "module": "movement",   "required_permission": "inventory.view",   "category": "WAREHOUSE",  "icon": "History",         "shortcut": None, "children": []},
     {"id": "transfer",   "label": "Store Transfers",   "route": "transfer",   "module": "transfer",   "required_permission": "inventory.transfer","category":"WAREHOUSE",  "icon": "ArrowLeftRight",  "shortcut": None, "children": []},
     {"id": "reconcile",  "label": "Physical Audit",    "route": "reconcile",  "module": "reconcile",  "required_permission": "inventory.audit",  "category": "WAREHOUSE",  "icon": "History",         "shortcut": None, "children": []},
-    {"id": "barcode",    "label": "Barcode Studio",    "route": "barcode",    "module": "barcode",    "required_permission": "inventory.view",   "category": "WAREHOUSE",  "icon": "Package",         "shortcut": None, "children": []},
+    {"id": "barcode",    "label": "Barcode Studio",    "route": "barcode",    "module": "barcode",    "required_permission": "catalogue.view",   "category": "CATALOGUE",  "icon": "Package",         "shortcut": None, "children": []},
     
     {"id": "finance",    "label": "Finance Hub",       "route": "finance",    "module": "finance",    "required_permission": "finance.view",     "category": "FINANCE",    "icon": "DollarSign",      "shortcut": None, "children": []},
     {"id": "analytics",  "label": "Sales Reports",     "route": "analytics",  "module": "analytics",  "required_permission": "reports.view",     "category": "FINANCE",    "icon": "BarChart3",       "shortcut": "F3", "children": []},
@@ -85,6 +85,7 @@ STATIC_MENU = [
     {"id": "architect",        "label": "Architect Explorer","route": "/jawaharmallah",  "module": "architect",        "required_permission": "architect.view",    "category": "SYSTEM", "icon": "Code2",       "shortcut": "Alt+A","children": []},
     {"id": "settings",         "label": "System Config",    "route": "settings",         "module": "settings",         "required_permission": "settings.view",    "category": "SYSTEM", "icon": "Settings",    "shortcut": "F10",  "children": []},
     {"id": "security",         "label": "Security",         "route": "security",         "module": "security",         "required_permission": "settings.security","category": "SYSTEM", "icon": "ShieldCheck", "shortcut": None,   "children": []},
+    {"id": "barcode_designer", "label": "Barcode Designer", "route": "barcode_designer", "module": "barcode_designer", "required_permission": "settings.view", "category": "SYSTEM", "icon": "QrCode", "shortcut": None, "children": []},
     {"id": "spreadsheet",      "label": "Sovereign Audit",  "route": "spreadsheet",      "module": "spreadsheet",      "required_permission": "settings.view",    "category": "SYSTEM", "icon": "FileText",    "shortcut": None,   "children": []},
 ]
 
@@ -164,7 +165,9 @@ async def get_menu(
         item_map = {}
         for item in source_items:
             # Check permission
-            if item.required_permission not in user_perms and current_user.role.lower() != 'admin':
+            # Check permission (Case-insensitive Admin check)
+            is_admin = current_user.role.upper() in ['ADMIN', 'SUPER_ADMIN', 'OWNER']
+            if item.required_permission not in user_perms and not is_admin:
                 continue
 
             item_map[item.id] = MenuItemResponse(

@@ -31,6 +31,17 @@ import uuid
 from decimal import Decimal
 
 
+class TimestampMixin:
+    created_at: Mapped[datetime] = mapped_column(DateTime, server_default=text("now()"))
+    updated_at: Mapped[datetime] = mapped_column(
+        DateTime, server_default=text("now()"), onupdate=text("now()")
+    )
+
+
+class TenantMixin:
+    tenant_id: Mapped[str] = mapped_column(String, default="SYSTEM", index=True)
+
+
 class Store(Base):
     __tablename__ = "stores"
 

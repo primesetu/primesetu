@@ -44,6 +44,8 @@ import {
   UserCheck,
   Award,
   MessageCircle,
+  Layers,
+  QrCode,
 } from "lucide-react";
 
 
@@ -100,7 +102,9 @@ const PriceRevisionWorkbench = lazy(() => import("../modules/catalogue/PriceRevi
 const PurchaseEntry = lazy(() => import("../modules/transactions/PurchaseEntry"));
 const ArchitectControlCenter = lazy(() => import("../modules/settings/ArchitectControlCenter"));
 const SovereignSpreadsheet = lazy(() => import("../modules/tools/SovereignSpreadsheet"));
+const BarcodeDesigner = lazy(() => import("../modules/tools/BarcodeDesigner"));
 
+const ItemClassificationWorkbench = lazy(() => import("../modules/catalogue/ItemClassificationWorkbench"));
 const CatalogueMasterWorkbench = lazy(() => import("../modules/inventory/CatalogueMasterWorkbench"));
 const ECommerceModule = lazy(() => import("../modules/ecommerce/ECommerceModule"));
 const LoyaltyCRM = lazy(() => import("../modules/loyalty/LoyaltyCRM"));
@@ -191,6 +195,15 @@ export const MODULES: ModuleDefinition[] = [
     label: "Item Master",
     icon: Package,
     component: <ItemMaster />,
+    roles: ["OWNER", "MANAGER"],
+    showInSidebar: true,
+    category: "CATALOGUE",
+  },
+  {
+    id: "item_classification",
+    label: "Item Classification",
+    icon: Layers,
+    component: <ItemClassificationWorkbench />,
     roles: ["OWNER", "MANAGER"],
     showInSidebar: true,
     category: "CATALOGUE",
@@ -445,6 +458,26 @@ export const MODULES: ModuleDefinition[] = [
     description: "Local PostgreSQL engine configuration & sync monitor",
     category: "SYSTEM",
   },
+  {
+    id: "barcode",
+    label: "Barcode Studio",
+    icon: Package,
+    component: <BarcodeStudio />,
+    roles: ["OWNER", "MANAGER", "CASHIER", "STOCK_MANAGER"],
+    showInSidebar: true,
+    description: "Sovereign Thermal Label Printing",
+    category: "CATALOGUE",
+  },
+  {
+    id: "barcode_designer",
+    label: "Barcode Designer",
+    icon: QrCode,
+    component: <BarcodeDesigner />,
+    roles: ["OWNER", "MANAGER", "SUPER_ADMIN"],
+    showInSidebar: true,
+    description: "Sovereign Barcode Print Templates",
+    category: "SYSTEM",
+  },
 ];
 
 export const COMPONENT_MAP: Record<string, React.ReactNode> = {
@@ -461,6 +494,7 @@ export const COMPONENT_MAP: Record<string, React.ReactNode> = {
   ho: <HOSyncModule />,
   analytics: <AnalyticsModule />,
   intelligence: <IntelligenceCockpit />,
+  item_classification: <ItemClassificationWorkbench />,
   item_master: <ItemMaster />,
   item_workbench: <ItemMaster initialWorkbenchMode={true} />,
   customers: <CatalogueMasterWorkbench onBack={navigateBack} initialEntity="CUSTOMER" />,
@@ -498,6 +532,7 @@ export const COMPONENT_MAP: Record<string, React.ReactNode> = {
   spreadsheet: <SovereignSpreadsheet />,
   ecommerce: <ECommerceModule />,
   offline_setup: <OfflineSetupPanel />,
+  barcode_designer: <BarcodeDesigner />,
 };
 
 export const ICON_MAP: Record<string, any> = {
@@ -515,6 +550,7 @@ export const ICON_MAP: Record<string, any> = {
   analytics: BarChart3,
   intelligence: BarChart3,
   settings: Settings,
+  item_classification: Layers,
   item_master: Package,
   item_workbench: Zap,
   customers: UserSquare2,
@@ -551,4 +587,5 @@ export const ICON_MAP: Record<string, any> = {
   purchase_entry: PackagePlus,
   architect_config: ShieldCheck,
   object_lookup: Database,
+  barcode_designer: QrCode,
 };

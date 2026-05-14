@@ -18,10 +18,13 @@ const PLACEHOLDER = (label: string) => (
   </div>
 );
 
-import ClassificationMaster from './pages/ClassificationMaster';
+import ItemClassificationWorkbench from './modules/catalogue/ItemClassificationWorkbench';
 import VendorMaster from './pages/VendorMaster';
 import ItemViewer from './pages/ItemViewer';
 import ObjectLookup from './pages/ObjectLookup';
+import BarcodeStudio from './modules/inventory/BarcodeStudio';
+import BarcodeDesigner from './modules/tools/BarcodeDesigner';
+import ConnectionSettings from './pages/ConnectionSettings';
 
 const App: React.FC = () => {
   const [activeTab, setActiveTab] = useState(() => {
@@ -35,14 +38,18 @@ const App: React.FC = () => {
       case 'item-master':           return <ItemMaster />;
       case 'item-viewer':           return <ItemViewer />;
       case 'customer-master':       return <CustomerMaster />;
-      case 'classification-master': return <ClassificationMaster />;
+      case 'classification-master': return <ItemClassificationWorkbench />;
       case 'vendor-master':         return <VendorMaster />;
       case 'pos':                   return <POS />;
       case 'purchase':              return <Purchase />;
       case 'reports':               return <Reports />;
       case 'theme-manager':         return <ThemeManager />;
       case 'system-settings':       return <SystemSettings />;
+      case 'connection-settings':   return <ConnectionSettings />;
       case 'object_lookup':         return <ObjectLookup />;
+      case 'barcode':               return <BarcodeStudio />;
+      case 'barcode-designer':      return <BarcodeDesigner />;
+
       case 'stock-transfer':  return PLACEHOLDER('Stock Transfer');
       case 'day-end':         return PLACEHOLDER('Day End & Shift Close');
       case 'menu-manager':    return PLACEHOLDER('Menu Manager');

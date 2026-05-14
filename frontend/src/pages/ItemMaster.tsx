@@ -13,10 +13,13 @@ import {
 import { 
   Save, Plus, Trash2, Search, RefreshCw, Layers, 
   Database, Hash, Barcode, CheckCircle, Check, AlertCircle,
-  AlertTriangle, Loader2, Zap, Settings, Activity, FileText, Grid3X3, X, Lock, Unlock, ChevronUp, ChevronDown, Copy, Sparkles
+  AlertTriangle, Loader2, Zap, Settings, Activity, FileText, Grid3X3, X, Lock, Unlock, ChevronUp, ChevronDown, Copy, Sparkles, Printer
 } from 'lucide-react';
 import { cn } from "@/lib/utils";
-import { api } from '@/api/client';
+import { api, apiClient } from '@/api/client';
+import BarcodePrintPreview from '../modules/tools/BarcodePrintPreview';
+import { useSysParams } from '@/hooks/useSysParams';
+import { useLookup } from '@/hooks/useLookup';
 
 ModuleRegistry.registerModules([AllCommunityModule]);
 
@@ -46,7 +49,9 @@ const smritiTheme = themeQuartz.withParams({
   headerTextColor: 'hsl(var(--outline))',
   rowHoverColor: 'rgba(var(--primary-rgb), 0.05)',
   selectedRowBackgroundColor: 'rgba(var(--primary-rgb), 0.1)',
-  fontFamily: 'inherit'
+  fontFamily: 'inherit',
+  rowBorder: '1px solid hsl(var(--outline-variant))',
+  pinnedRowBorder: '1px solid hsl(var(--outline-variant))',
 });
 
 export default function ItemMaster() {
@@ -66,7 +71,24 @@ export default function ItemMaster() {
   const [isMatrixOpen, setIsMatrixOpen] = useState(false);
   const [matrixSourceRow, setMatrixSourceRow] = useState<ItemRow | null>(null);
   const [viewFilter, setViewFilter] = useState<"all" | "modified">("modified");
+  
+  // Barcode Printing State
+  const [printTemplates, setPrintTemplates] = useState<any[]>([]);
+  const [showPrintModal, setShowPrintModal] = useState(false);
+  const [selectedPrintTemplate, setSelectedPrintTemplate] = useState<any | null>(null);
 
+  // System Parameters
+  const { getParam } = useSysParams();
+  const enableBarcodePrinting = getParam('ENABLE_BARCODE_PRINTING', true);
+  const defaultTemplateName = getParam('DEF_BARCODE_TEMPLATE', null);
+
+  // ── GenLookup Resolvers (Sovereign Data-Driven Dropdowns) ────────────────
+  const { options: class1Options, resolve: resolveClass1 } = useLookup(1);       // RecID 1 = Class1
+  const { options: class2Options, resolve: resolveClass2 } = useLookup(2);       // RecID 2 = Class2
+  const { options: analcode1Options, resolve: resolveAC1 } = useLookup(65);      // AnalCode1 (e.g. Color)
+  const { options: analcode2Options, resolve: resolveAC2 } = useLookup(66);      // AnalCode2 (e.g. Material)
+  const { options: analcode3Options, resolve: resolveAC3 } = useLookup(67);      // AnalCode3
+  const { options: sizeGroupOptions, resolve: resolveSizeGroup } = useLookup(53); // SizeGroup
 
   // ── Persistent Field Selection (Alt+1) ───────────────────────────────
   const [selectedFields, setSelectedFields] = useState<string[]>(() => {
@@ -96,6 +118,7 @@ export default function ItemMaster() {
   const [comboValues, setComboValues] = useState<any[]>([]);
   const [isFetchingCombo, setIsFetchingCombo] = useState(false);
   const [class1List, setClass1List] = useState<any[]>([]);
+  const [class2List, setClass2List] = useState<any[]>([]);
 
   // ── Matrix React State (M6: replace DOM getElementById) ──────────────
   const [matrixClass1, setMatrixClass1] = useState('');
@@ -108,13 +131,23 @@ export default function ItemMaster() {
   const [fastSizes, setFastSizes] = useState('');
   const [fastColors, setFastColors] = useState('');
 
-  // Fetch distinct class1 codes for Matrix Class1 selector
-  const fetchClass1List = async () => {
+  // Fetch distinct class1 codes (filtered by class2 if provided)
+  const fetchClass1List = async (class2cd?: string) => {
     try {
-      const res = await api.items.getClass1List();
+      const res = await api.items.getClass1List(class2cd);
       setClass1List(res || []);
     } catch (e) {
       console.error('Class1 list fetch failed', e);
+    }
+  };
+
+  // Fetch distinct class2 codes (filtered by class1 if provided)
+  const fetchClass2List = async (class1cd?: string) => {
+    try {
+      const res = await api.items.getClass2List(class1cd);
+      setClass2List(res || []);
+    } catch (e) {
+      console.error('Class2 list fetch failed', e);
     }
   };
 
@@ -189,6 +222,7 @@ export default function ItemMaster() {
     loadData();
     fetchMasters();
     fetchClass1List();
+    fetchClass2List();
   }, []);
 
   useEffect(() => {
@@ -256,6 +290,23 @@ export default function ItemMaster() {
           });
         }
       }
+      
+      // Fetch Barcode Templates
+      try {
+        const templatesRes = await apiClient.get('/barcode/templates');
+        const templates = templatesRes.data || [];
+        setPrintTemplates(templates);
+        if (templates.length > 0) {
+          if (defaultTemplateName) {
+            const matched = templates.find((t: any) => t.name === defaultTemplateName);
+            setSelectedPrintTemplate(matched || templates[0]);
+          } else {
+            setSelectedPrintTemplate(templates[0]);
+          }
+        }
+      } catch (err) {
+        console.error("Barcode Templates fetch failed", err);
+      }
     } catch (e) {
       console.error("Masters fetch failed", e);
     }
@@ -301,8 +352,8 @@ export default function ItemMaster() {
       // ── Step 1: Extract & Sync Lookups (Product/Brand/AnalCodes) ───
       const lookupItems: any[] = [];
       rowsToSave.forEach(r => {
-        if (r.class1) lookupItems.push({ recid: 'PRODUCT', code: r.class1, descr: r.class1 });
-        if (r.class2) lookupItems.push({ recid: 'BRAND', code: r.class2, descr: r.class2 });
+        if (r.class1) lookupItems.push({ recid: 1, code: r.class1, descr: r.class1 });
+        if (r.class2) lookupItems.push({ recid: 2, code: r.class2, descr: r.class2 });
         // Add active analcodes to lookup sync if needed...
       });
 
@@ -336,13 +387,16 @@ export default function ItemMaster() {
         return item;
       });
 
-      const res = await api.items.batchCreate({ items: payload });
-      if (res.success) {
+      const res = await api.items.batchCreate({ items: payload, omit_duplicates: false });
+      if (res.error_count === 0 && res.success_count > 0) {
         setToast({ msg: `Sovereign Sync Successful: ${res.success_count} items`, ok: true });
         setModified(new Set());
         loadData();
+      } else if (res.success_count > 0 || res.error_count > 0) {
+        setToast({ msg: `Sync Warning: ${res.success_count} saved, ${res.error_count} errors, ${res.skipped_count} skipped. ${res.last_error || ''}`, ok: false });
+        if (res.success_count > 0) setModified(new Set());
       } else {
-        setToast({ msg: `Sync Warning: ${res.success_count} saved, ${res.error_count} errors. ${res.last_error || ''}`, ok: false });
+        setToast({ msg: `SYNC WARNING: ${res.success_count} SAVED, ${res.error_count} ERRORS. ${res.skipped_count} SKIPPED.`, ok: false });
       }
     } catch (e: any) {
       setToast({ msg: e.message || "Network Error during Sync", ok: false });
@@ -370,7 +424,7 @@ export default function ItemMaster() {
       valueGetter: (p: any) => p.data.class2 || bulkDefaults.class2,
       hide: !selectedFields.includes('class2')
     },
-    { colId: 'size', field: 'size', headerName: 'Size', width: 80, hide: !selectedFields.includes('size'), valueGetter: p => p.data.size || bulkDefaults.size },
+    { colId: 'size', field: 'size', headerName: 'Size', width: 80, hide: !selectedFields.includes('size'), valueGetter: p => p.data.size || bulkDefaults.size, valueFormatter: p => resolveSizeGroup(p.value) || p.value },
     { 
       colId: 'mrp', field: 'mrp', headerName: 'Retail (₹)', type: 'numericColumn', cellClass: 'text-primary font-bold',
       valueGetter: (p: any) => p.data.mrp || bulkDefaults.mrp, hide: !selectedFields.includes('mrp')
@@ -388,20 +442,29 @@ export default function ItemMaster() {
     ...Array.from({ length: 36 }).map((_, i) => {
       const id = `analcode${i + 1}`;
       const caption = masters.captions[id] || masters.captions[id.toUpperCase()] || `Anal Code ${i + 1}`;
+      // Resolve recid for this analcode (1→RecID65, 2→RecID66, 3→RecID67, etc.)
+      const analRecid = i < 6 ? 65 + i : 7000 + (i - 6);
       const col: ColDef = {
-        colId: id, field: id, headerName: caption, width: 120, hide: !selectedFields.includes(id),
-        valueGetter: (p: any) => p.data[id] || (bulkDefaults[`use_${id}`] ? bulkDefaults[id] : null)
+        colId: id, field: id, headerName: caption, width: 140, hide: !selectedFields.includes(id),
+        valueGetter: (p: any) => p.data[id] || (bulkDefaults[`use_${id}`] ? bulkDefaults[id] : null),
+        // Show description from GenLookup if a match exists, else show raw code
+        valueFormatter: (p: any) => {
+          if (!p.value) return '';
+          // We can only sync resolve for analcode1–3 which are pre-fetched
+          if (i === 0) return resolveAC1(p.value) || p.value;
+          if (i === 1) return resolveAC2(p.value) || p.value;
+          if (i === 2) return resolveAC3(p.value) || p.value;
+          return p.value; // Others show raw code until lazy-fetched
+        }
       };
       return col;
     })
   ], [selectedFields, masters, bulkDefaults]);
 
   const commonFields = useMemo(() => {
-    const blacklist = ['stockno', 'itemdesc', 'barcode', 'batchsrlno'];
-    // Return all fields that have a caption OR are core mandatory fields
     const allPossible = [
-      { id: 'class1', name: masters.captions['class1cd'] || 'Product', type: 'select', options: masters.products },
-      { id: 'class2', name: masters.captions['class2cd'] || 'Brand', type: 'select', options: masters.brands },
+      { id: 'class1', name: masters.captions['class1cd'] || 'Category', type: 'select', options: class1Options.map(o => ({ code: o.code, descr: o.label })) },
+      { id: 'class2', name: masters.captions['class2cd'] || 'Brand', type: 'select', options: class2Options.map(o => ({ code: o.code, descr: o.label })) },
       { id: 'subclass1', name: masters.captions['subclass1cd'] || 'Section', type: 'text' },
       { id: 'subclass2', name: masters.captions['subclass2cd'] || 'Article', type: 'text' },
       { id: 'size', name: 'Size', type: 'text' },
@@ -415,12 +478,14 @@ export default function ItemMaster() {
         const id = `analcode${i+1}`;
         const caption = masters.captions[id] || masters.captions[id.toUpperCase()];
         if (!caption) return null;
+        if (i === 0 && analcode1Options.length > 0) return { id, name: caption, type: 'select', options: analcode1Options.map(o => ({ code: o.code, descr: o.label })) };
+        if (i === 1 && analcode2Options.length > 0) return { id, name: caption, type: 'select', options: analcode2Options.map(o => ({ code: o.code, descr: o.label })) };
+        if (i === 2 && analcode3Options.length > 0) return { id, name: caption, type: 'select', options: analcode3Options.map(o => ({ code: o.code, descr: o.label })) };
         return { id, name: caption, type: 'text' };
       })
     ].filter(Boolean) as any[];
-
     return allPossible;
-  }, [masters]);
+  }, [masters, class1Options, class2Options, analcode1Options, analcode2Options, analcode3Options]);
 
   // ── allPossibleFields: Flat string[] list of all configurable field IDs ──
   // This is the SINGLE SOURCE OF TRUTH for the VIEW tab classification panel.
@@ -527,14 +592,44 @@ export default function ItemMaster() {
                           <div className={cn("w-4 h-4 bg-white rounded-full transition-all", tempDefaults[`use_${f}`] ? "translate-x-6" : "translate-x-0")} />
                         </div>
                       </div>
-                      <input 
-                        type="text" 
-                        value={tempDefaults[f] || ""} 
-                        disabled={!tempDefaults[`use_${f}`]}
-                        onChange={e => setTempDefaults(prev => ({ ...prev, [f]: e.target.value }))}
-                        className={cn("w-full h-12 bg-surface-container/50 border border-outline-variant rounded-xl px-4 text-xs font-bold transition-all text-outline", !tempDefaults[`use_${f}`] && "opacity-30")}
-                        placeholder="Value..."
-                      />
+                      {f === 'class1' ? (
+                        <select
+                          value={tempDefaults[f] || ""}
+                          disabled={!tempDefaults[`use_${f}`]}
+                          onChange={e => {
+                            const val = e.target.value;
+                            setTempDefaults(prev => ({ ...prev, [f]: val }));
+                            fetchClass2List(val);
+                          }}
+                          className={cn("w-full h-12 bg-surface-container/50 border border-outline-variant rounded-xl px-4 text-xs font-bold transition-all text-outline", !tempDefaults[`use_${f}`] && "opacity-30")}
+                        >
+                          <option value="">-- Select Product --</option>
+                          {class1List.map((c: any) => <option key={c.code} value={c.code}>{c.descr || c.code}</option>)}
+                        </select>
+                      ) : f === 'class2' ? (
+                        <select
+                          value={tempDefaults[f] || ""}
+                          disabled={!tempDefaults[`use_${f}`]}
+                          onChange={e => {
+                            const val = e.target.value;
+                            setTempDefaults(prev => ({ ...prev, [f]: val }));
+                            fetchClass1List(val);
+                          }}
+                          className={cn("w-full h-12 bg-surface-container/50 border border-outline-variant rounded-xl px-4 text-xs font-bold transition-all text-outline", !tempDefaults[`use_${f}`] && "opacity-30")}
+                        >
+                          <option value="">-- All Brands --</option>
+                          {class2List.map((c: any) => <option key={c.code} value={c.code}>{c.descr || c.code}</option>)}
+                        </select>
+                      ) : (
+                        <input 
+                          type="text" 
+                          value={tempDefaults[f] || ""} 
+                          disabled={!tempDefaults[`use_${f}`]}
+                          onChange={e => setTempDefaults(prev => ({ ...prev, [f]: e.target.value }))}
+                          className={cn("w-full h-12 bg-surface-container/50 border border-outline-variant rounded-xl px-4 text-xs font-bold transition-all text-outline", !tempDefaults[`use_${f}`] && "opacity-30")}
+                          placeholder="Value..."
+                        />
+                      )}
                     </div>
                   ))}
                 {selectedFields.filter(f => !['stockno', 'itemdesc', 'barcode', 'batchsrlno'].includes(f)).length === 0 && (
@@ -570,6 +665,15 @@ export default function ItemMaster() {
                   <Zap size={14} />
                   {matrixSourceRow ? `Expand: ${String(matrixSourceRow.stockno).slice(0,12)}...` : 'Matrix'}
                 </button>
+                {enableBarcodePrinting && matrixSourceRow && printTemplates.length > 0 && (
+                  <button
+                    onClick={() => setShowPrintModal(true)}
+                    className="h-8 px-4 bg-surface-container-high border border-outline-variant text-[9px] font-black uppercase flex items-center gap-2 hover:bg-primary hover:text-white hover:border-primary transition-all text-outline"
+                  >
+                    <Printer size={14} />
+                    Print
+                  </button>
+                )}
                 <button onClick={() => {
                   const now = Date.now();
                   setRows([{ id: now, stockno: `NEW-${now}`, batchsrlno: '0', itemdesc: 'NEW ITEM', class1: '', class2: '', subclass1: '', subclass2: '', size: '', barcode: '', mrp: 0, cost: 0, hsn: '', gst: 0, stock: 0 }, ...rows]);
@@ -591,7 +695,7 @@ export default function ItemMaster() {
                 getRowId={p => String(p.data.id)}
                 isExternalFilterPresent={() => viewFilter === "modified"}
                 doesExternalFilterPass={n => modified.has(n.data.id)}
-                rowSelection="single"
+                rowSelection={{ mode: 'singleRow' }}
                 onRowSelected={e => {
                   if (e.node.isSelected()) {
                     setMatrixSourceRow(e.data as ItemRow);
@@ -606,6 +710,17 @@ export default function ItemMaster() {
       </div>
 
       {/* ── Matrix Generator Engine Modal ────────────────────────────── */}
+      {showPrintModal && selectedPrintTemplate && matrixSourceRow && (
+        <div className="z-[200] relative">
+          <BarcodePrintPreview 
+            template={selectedPrintTemplate}
+            items={[matrixSourceRow]}
+            copiesPerItem={1}
+            onClose={() => setShowPrintModal(false)}
+          />
+        </div>
+      )}
+
       {isMatrixOpen && (
         <div className="fixed inset-0 z-[100] flex items-center justify-center bg-black/70 backdrop-blur-md p-4">
           <div className="bg-surface w-full max-w-3xl shadow-2xl border border-outline-variant flex flex-col max-h-[92vh] rounded-xl overflow-hidden">
@@ -695,7 +810,13 @@ export default function ItemMaster() {
                     <label className="text-[9px] font-black uppercase text-outline/70 ml-1">{masters.captions['class1cd'] || 'Class1 / Product'}</label>
                     <select
                       value={matrixClass1}
-                      onChange={e => { setMatrixClass1(e.target.value); setComboValues([]); setSelectedCombos(new Set()); }}
+                      onChange={e => { 
+                        const val = e.target.value;
+                        setMatrixClass1(val); 
+                        setComboValues([]); 
+                        setSelectedCombos(new Set()); 
+                        fetchClass2List(val);
+                      }}
                       className="w-full h-11 bg-surface border-2 border-outline-variant focus:border-primary outline-none text-xs font-bold px-4 rounded-xl text-outline"
                     >
                       <option value="">-- Select Product --</option>
@@ -706,13 +827,22 @@ export default function ItemMaster() {
                   </div>
                   <div className="space-y-1.5">
                     <label className="text-[9px] font-black uppercase text-outline/70 ml-1">{masters.captions['class2cd'] || 'Class2 / Brand'} (Optional Filter)</label>
-                    <input
-                      type="text"
+                    <select
                       value={matrixClass2}
-                      onChange={e => setMatrixClass2(e.target.value)}
-                      placeholder="Brand code or leave blank for all"
-                      className="w-full h-11 bg-surface border-2 border-outline-variant focus:border-primary outline-none text-xs font-bold px-4 rounded-xl text-outline placeholder:font-normal placeholder:text-outline/40"
-                    />
+                      onChange={e => { 
+                        const val = e.target.value;
+                        setMatrixClass2(val); 
+                        setComboValues([]); 
+                        setSelectedCombos(new Set()); 
+                        fetchClass1List(val);
+                      }}
+                      className="w-full h-11 bg-surface border-2 border-outline-variant focus:border-primary outline-none text-xs font-bold px-4 rounded-xl text-outline"
+                    >
+                      <option value="">-- All Brands --</option>
+                      {class2List.map((c: any) => (
+                        <option key={c.code} value={c.code}>{c.descr || c.code}</option>
+                      ))}
+                    </select>
                   </div>
                   <button
                     onClick={() => fetchComboValues(matrixClass1, matrixClass2, matrixPivot)}
@@ -828,8 +958,37 @@ export default function ItemMaster() {
                             .map(f => (
                               <div key={f} className="space-y-1">
                                 <span className="text-[9px] font-black text-outline/70 uppercase ml-1">{masters.captions[f] || masters.captions[f.toUpperCase()] || f}</span>
-                                <input type="text" value={tempDefaults[`matrix_${f}`] || ''} onChange={e => setTempDefaults(p => ({...p, [`matrix_${f}`]: e.target.value}))}
-                                  className="w-full h-9 bg-surface border-2 border-outline-variant focus:border-primary outline-none text-xs font-bold px-3 rounded-lg text-outline" placeholder="..." />
+                                {f === 'analcode1' ? (
+                                  <select 
+                                    value={tempDefaults[`matrix_${f}`] || ''} 
+                                    onChange={e => setTempDefaults(p => ({...p, [`matrix_${f}`]: e.target.value}))}
+                                    className="w-full h-9 bg-surface border-2 border-outline-variant focus:border-primary outline-none text-xs font-bold px-3 rounded-lg text-outline"
+                                  >
+                                    <option value="">-- Select --</option>
+                                    {analcode1Options.map((o: any) => <option key={o.code} value={o.code}>{o.descr || o.code}</option>)}
+                                  </select>
+                                ) : f === 'analcode2' ? (
+                                  <select 
+                                    value={tempDefaults[`matrix_${f}`] || ''} 
+                                    onChange={e => setTempDefaults(p => ({...p, [`matrix_${f}`]: e.target.value}))}
+                                    className="w-full h-9 bg-surface border-2 border-outline-variant focus:border-primary outline-none text-xs font-bold px-3 rounded-lg text-outline"
+                                  >
+                                    <option value="">-- Select --</option>
+                                    {analcode2Options.map((o: any) => <option key={o.code} value={o.code}>{o.descr || o.code}</option>)}
+                                  </select>
+                                ) : f === 'analcode3' ? (
+                                  <select 
+                                    value={tempDefaults[`matrix_${f}`] || ''} 
+                                    onChange={e => setTempDefaults(p => ({...p, [`matrix_${f}`]: e.target.value}))}
+                                    className="w-full h-9 bg-surface border-2 border-outline-variant focus:border-primary outline-none text-xs font-bold px-3 rounded-lg text-outline"
+                                  >
+                                    <option value="">-- Select --</option>
+                                    {analcode3Options.map((o: any) => <option key={o.code} value={o.code}>{o.descr || o.code}</option>)}
+                                  </select>
+                                ) : (
+                                  <input type="text" value={tempDefaults[`matrix_${f}`] || ''} onChange={e => setTempDefaults(p => ({...p, [`matrix_${f}`]: e.target.value}))}
+                                    className="w-full h-9 bg-surface border-2 border-outline-variant focus:border-primary outline-none text-xs font-bold px-3 rounded-lg text-outline" placeholder="..." />
+                                )}
                               </div>
                             ))}
                         </div>
@@ -927,7 +1086,7 @@ export default function ItemMaster() {
                       </div>
                       <div className="space-y-2 flex-1">
                         <label className="text-[10px] font-black uppercase tracking-widest text-primary flex justify-between">
-                          <span>Colors / Article Array (Subclass 2)</span>
+                          <span>Colors Array (Analcode 1)</span>
                           <span className="text-outline/40">Comma Separated</span>
                         </label>
                         <textarea value={fastColors} onChange={e=>setFastColors(e.target.value)} className="w-full h-12 bg-surface border-2 border-outline-variant focus:border-primary text-xs font-bold p-3 rounded-xl outline-none" placeholder="e.g. Red, Blue, Black" />
@@ -988,7 +1147,7 @@ export default function ItemMaster() {
                     // Calculate fast fields mapping (map Size to 'size' and Color to 'subclass2')
                     const fastOverrides = matrixGenMode === 'fast' ? { 
                       ...(size ? { size } : {}), 
-                      ...(color ? { subclass2: color } : {}) 
+                      ...(color ? { analcode1: color } : {}) 
                     } : {};
 
                     const item: any = {
@@ -1021,10 +1180,23 @@ export default function ItemMaster() {
                     return item as ItemRow;
                   });
 
-                  setRows(prev => [...newRows, ...prev]);
+                  // Pre-flight collision warning check locally
+                  const existingStockNos = new Set(rows.map(r => r.stockno));
+                  const collisions = newRows.filter(r => existingStockNos.has(r.stockno));
+                  let finalRows = newRows;
+                  if (collisions.length > 0) {
+                    if (!window.confirm(`Warning: ${collisions.length} StockNos already exist in the grid and will be skipped. Continue?`)) {
+                      return;
+                    }
+                    finalRows = newRows.filter(r => !existingStockNos.has(r.stockno));
+                  }
+                  
+                  if (finalRows.length === 0) return;
+
+                  setRows(prev => [...finalRows, ...prev]);
                   setModified(prev => {
                     const next = new Set(prev);
-                    newRows.forEach(nr => next.add(nr.id));
+                    finalRows.forEach(nr => next.add(nr.id));
                     return next;
                   });
                   setViewFilter('modified');

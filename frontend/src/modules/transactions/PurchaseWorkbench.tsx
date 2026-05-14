@@ -15,7 +15,8 @@ import {
   Settings,
   History,
   ShoppingCart,
-  ExternalLink
+  ExternalLink,
+  Printer
 } from 'lucide-react';
 import { 
   WorkbenchRibbon, 
@@ -25,6 +26,9 @@ import {
 import { api } from '@/api/client';
 import { cn } from '@/lib/utils';
 import { motion, AnimatePresence } from 'framer-motion';
+import BarcodePrintPreview from '../tools/BarcodePrintPreview';
+import { useSysParams } from '@/hooks/useSysParams';
+import { useCaptions, usePayFields, TrnTypes } from '@/hooks/useScreenSchema';
 
 // ── TYPES ──────────────────────────────────────────────────────────────────
 
@@ -60,10 +64,44 @@ export default function PurchaseWorkbench({ onBack }: PurchaseWorkbenchProps) {
   const [isSearching, setIsSearching] = useState(false);
   const [searchMatches, setSearchMatches] = useState<any[]>([]);
 
+  // System Parameters
+  const { getParam } = useSysParams();
+  const enableBarcodePrinting = getParam('ENABLE_BARCODE_PRINTING', true);
+  const autoPrintOnGRN = getParam('AUTO_PRINT_ON_GRN', false);
+  const defaultTemplateName = getParam('DEF_BARCODE_TEMPLATE', null);
+
+  // ── SmritiScreen Engine — Sovereign S9 field config ──────────────────────
+  // Captions from AcceptDisplayDtls (trntype=2200 = Purchase)
+  const { resolve: resolveCaption } = useCaptions(TrnTypes.PURCHASE);
+  // Payment extra fields — active paymode (null = no payment panel open)
+  const [activePaymode, setActivePaymode] = useState<number | null>(null);
+  const { fields: payExtraFields } = usePayFields(activePaymode);
+
   // Refs
   const skuInputRef = useRef<HTMLInputElement>(null);
   const qtyInputRef = useRef<HTMLInputElement>(null);
   const gridEndRef = useRef<HTMLDivElement>(null);
+
+  // Print state
+  const [printTemplates, setPrintTemplates] = useState<any[]>([]);
+  const [showPrintModal, setShowPrintModal] = useState(false);
+  const [selectedPrintTemplate, setSelectedPrintTemplate] = useState<any | null>(null);
+
+  useEffect(() => {
+    // Fetch Barcode Templates
+    api.client.get('/barcode/templates').then(res => {
+      const templates = res.data || [];
+      setPrintTemplates(templates);
+      if (templates.length > 0) {
+        if (defaultTemplateName) {
+          const matched = templates.find((t: any) => t.name === defaultTemplateName);
+          setSelectedPrintTemplate(matched || templates[0]);
+        } else {
+          setSelectedPrintTemplate(templates[0]);
+        }
+      }
+    }).catch(console.error);
+  }, [defaultTemplateName]);
 
   // ── Business Logic ──
 
@@ -146,7 +184,12 @@ export default function PurchaseWorkbench({ onBack }: PurchaseWorkbenchProps) {
       };
       await api.purchase.finalizeGRN(payload);
       alert("Purchase Posted to Ledger successfully.");
-      setLines([]);
+      
+      if (autoPrintOnGRN && printTemplates.length > 0) {
+        setShowPrintModal(true);
+      } else {
+        setLines([]);
+      }
       setInvoiceNo('');
     } catch {
       alert("Posting failed.");
@@ -195,6 +238,23 @@ export default function PurchaseWorkbench({ onBack }: PurchaseWorkbenchProps) {
           <RibbonGroup label="Document">
             <RibbonButton icon={Search} label="S9 History" onClick={() => {}} />
             <RibbonButton icon={FileSpreadsheet} label="Import" onClick={() => {}} shortcut="Alt+I" />
+            {enableBarcodePrinting && (
+              <RibbonButton 
+                icon={Printer} 
+                label="Print Labels" 
+                onClick={() => {
+                  if(lines.length === 0) {
+                    alert('No items to print.');
+                    return;
+                  }
+                  if(printTemplates.length === 0) {
+                    alert('No barcode templates found. Create one in Barcode Designer first.');
+                    return;
+                  }
+                  setShowPrintModal(true);
+                }} 
+              />
+            )}
           </RibbonGroup>
 
           <RibbonGroup label="View">
@@ -292,12 +352,12 @@ export default function PurchaseWorkbench({ onBack }: PurchaseWorkbenchProps) {
             <thead className="sticky top-0 bg-slate-100 dark:bg-slate-800 z-10">
                <tr className="text-left border-b border-slate-200 dark:border-slate-700">
                   <th className="p-3 text-[10px] font-black uppercase text-slate-500 tracking-tighter w-12 text-center">#</th>
-                  <th className="p-3 text-[10px] font-black uppercase text-slate-500 tracking-tighter w-40">Stock No</th>
-                  <th className="p-3 text-[10px] font-black uppercase text-slate-500 tracking-tighter flex-1">Description</th>
-                  <th className="p-3 text-[10px] font-black uppercase text-slate-500 tracking-tighter w-24 text-right">Qty</th>
-                  <th className="p-3 text-[10px] font-black uppercase text-slate-500 tracking-tighter w-32 text-right">Rate</th>
+                  <th className="p-3 text-[10px] font-black uppercase text-slate-500 tracking-tighter w-40">{resolveCaption('stockno', 'Stock No')}</th>
+                  <th className="p-3 text-[10px] font-black uppercase text-slate-500 tracking-tighter flex-1">{resolveCaption('itemdesc', 'Description')}</th>
+                  <th className="p-3 text-[10px] font-black uppercase text-slate-500 tracking-tighter w-24 text-right">{resolveCaption('docqty', 'Qty')}</th>
+                  <th className="p-3 text-[10px] font-black uppercase text-slate-500 tracking-tighter w-32 text-right">{resolveCaption('docentrate', 'Rate')}</th>
                   <th className="p-3 text-[10px] font-black uppercase text-slate-500 tracking-tighter w-32 text-right">Tax Value</th>
-                  <th className="p-3 text-[10px] font-black uppercase text-slate-500 tracking-tighter w-40 text-right">Line Total</th>
+                  <th className="p-3 text-[10px] font-black uppercase text-slate-500 tracking-tighter w-40 text-right">{resolveCaption('docentnetvalue', 'Line Total')}</th>
                   <th className="p-3 text-[10px] font-black uppercase text-slate-500 tracking-tighter w-12"></th>
                </tr>
             </thead>
@@ -386,6 +446,27 @@ export default function PurchaseWorkbench({ onBack }: PurchaseWorkbenchProps) {
          </div>
          <div>SMRITI-OS SOVEREIGN ARCHIVE v2.1</div>
       </div>
+
+      {showPrintModal && selectedPrintTemplate && (
+        <div className="z-[200] relative">
+          <BarcodePrintPreview 
+            template={selectedPrintTemplate}
+            items={lines.flatMap(l => 
+              Array(l.qty).fill({
+                sku: l.stockNo,
+                name: l.description,
+                mrp: l.mrp,
+                barcode: l.stockNo, // default to stockNo if barcode absent
+                class1: '', // Cannot resolve from LineItem directly without full fetch
+                class2: '',
+                cost_price: l.rate
+              })
+            )}
+            copiesPerItem={1}
+            onClose={() => setShowPrintModal(false)}
+          />
+        </div>
+      )}
 
     </div>
   );

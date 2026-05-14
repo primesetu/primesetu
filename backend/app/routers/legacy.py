@@ -288,30 +288,19 @@ async def get_legacy_table_data(
         raise HTTPException(status_code=404, detail="Table not found.")
 
     # Build Base Query
-    query = select(target_model).where(target_model.tenant_id == current_user.tenant_id)
-
-    # Auto-join MailingList if applicable
-    mail_col_name = (
-        "maillistsrlno"
-        if hasattr(target_model, "maillistsrlno")
-        else ("maillstsrlno" if hasattr(target_model, "maillstsrlno") else None)
-    )
-    has_mail = mail_col_name is not None
-    if has_mail:
-        mail_attr = getattr(target_model, mail_col_name)
-        query = (
-            select(target_model, legacy_models.Mailinglist)
-            .select_from(target_model)
-            .outerjoin(
-                legacy_models.Mailinglist, 
-                and_(
-                    mail_attr == legacy_models.Mailinglist.recno,
-                    legacy_models.Mailinglist.tenant_id == current_user.tenant_id
-                )
+    # 1. Build Filter Clauses
+    filter_clauses = []
+    
+    # Tenant Isolation
+    if hasattr(target_model, "tenant_id"):
+        filter_clauses.append(
+            or_(
+                target_model.tenant_id == current_user.tenant_id,
+                target_model.tenant_id == 'SYSTEM'
             )
         )
 
-    # 1. Apply Dynamic Filters (Exact Matches)
+    # JSON Filters
     if filters:
         try:
             import json
@@ -320,9 +309,7 @@ async def get_legacy_table_data(
                 if hasattr(target_model, k):
                     column_attr = getattr(target_model, k)
                     if isinstance(v, str):
-                        # Detect if column is a date/time type
                         is_date_col = "DATE" in str(column_attr.type).upper() or "TIMESTAMP" in str(column_attr.type).upper()
-                        
                         clean_v = v
                         op = '=='
                         if v.startswith(('>=', '<=', '>', '<')):
@@ -330,58 +317,101 @@ async def get_legacy_table_data(
                             op = v[:op_len]
                             clean_v = v[op_len:].strip()
                         
-                        # Parse to datetime if it's a date column
                         target_val = clean_v
                         if is_date_col:
                             try:
-                                # Try common formats
                                 if ' ' in clean_v:
                                     target_val = datetime.strptime(clean_v, "%Y-%m-%d %H:%M:%S")
                                 else:
                                     target_val = datetime.fromisoformat(clean_v)
-                            except:
-                                # Fallback to string if parsing fails, let DB try
-                                pass
+                            except: pass
 
-                        if op == '>=':   query = query.where(column_attr >= target_val)
-                        elif op == '<=': query = query.where(column_attr <= target_val)
-                        elif op == '>':  query = query.where(column_attr > target_val)
-                        elif op == '<':  query = query.where(column_attr < target_val)
+                        if op == '>=':   filter_clauses.append(column_attr >= target_val)
+                        elif op == '<=': filter_clauses.append(column_attr <= target_val)
+                        elif op == '>':  filter_clauses.append(column_attr > target_val)
+                        elif op == '<':  filter_clauses.append(column_attr < target_val)
                         elif v.startswith('%') or v.endswith('%'):
-                            query = query.where(column_attr.ilike(v))
+                            filter_clauses.append(column_attr.ilike(v))
                         else:
-                            query = query.where(column_attr == target_val)
+                            filter_clauses.append(column_attr == target_val)
                     else:
-                        query = query.where(column_attr == v)
+                        filter_clauses.append(column_attr == v)
         except Exception as e:
             print(f"Filter error: {e}")
 
-    # 2. Apply Search Logic (Ultra-Fast Selective Search)
+    # 2. Apply Search Logic
+    search_filters = []
+    mail_col_name = (
+        "maillistsrlno"
+        if hasattr(target_model, "maillistsrlno")
+        else ("maillstsrlno" if hasattr(target_model, "maillstsrlno") else None)
+    )
+    has_mail = mail_col_name is not None
     if search and search != "*":
-        search_filters = []
-        # Target only the core master data columns for maximum speed
         target_cols = ["stockno", "itemdesc", "class1cd", "class2cd", "subclass1cd"]
-        
         for col_name in target_cols:
             if hasattr(target_model, col_name):
                 column_attr = getattr(target_model, col_name)
                 search_filters.append(column_attr.ilike(f"%{search}%"))
 
         if has_mail:
-            # For tables with mailing list (like Customer), search relevant fields
             for col_name in ["nm", "add1", "city"]:
                 if hasattr(legacy_models.Mailinglist, col_name):
                     search_filters.append(getattr(legacy_models.Mailinglist, col_name).ilike(f"%{search}%"))
 
-        if search_filters:
-            query = query.where(or_(*search_filters))
+    # 3. Finalize Base Queries
+    if has_mail:
+        query = (
+            select(target_model, legacy_models.Mailinglist)
+            .select_from(target_model)
+            .outerjoin(
+                legacy_models.Mailinglist, 
+                and_(
+                    getattr(target_model, mail_col_name) == legacy_models.Mailinglist.recno,
+                    or_(
+                        legacy_models.Mailinglist.tenant_id == current_user.tenant_id,
+                        legacy_models.Mailinglist.tenant_id == 'SYSTEM'
+                    )
+                )
+            )
+        )
+    else:
+        query = select(target_model)
 
-    # Fetch
+    # Apply Filters to main query
+    for clause in filter_clauses:
+        query = query.where(clause)
+    if search_filters:
+        query = query.where(or_(*search_filters))
+
+    # 4. Count Query (Mirroring Filters)
+    import time
+    from sqlalchemy import func
+    start_time = time.time()
+    
+    count_query = select(func.count()).select_from(target_model)
+    for clause in filter_clauses:
+        count_query = count_query.where(clause)
+    if search_filters:
+        count_query = count_query.where(or_(*search_filters))
+    
+    print(f"[DEBUG] Executing Count Query for {table_name}...")
+    total_res = await db.execute(count_query)
+    total_count = total_res.scalar()
+    print(f"[DEBUG] Count Query Finished: {total_count} rows (Took {time.time() - start_time:.2f}s)")
+
+    # 5. Fetch Data
+    fetch_start = time.time()
     query = query.offset(offset).limit(limit)
-    print(f"[DEBUG] Fetching {table_name}: {query}")
-    result = await db.execute(query)
-    all_rows = result.all()
-    print(f"[DEBUG] Found {len(all_rows)} rows.")
+    print(f"[DEBUG] Executing Data Query: offset={offset}, limit={limit}")
+    
+    try:
+        result = await db.execute(query)
+        all_rows = result.all()
+        print(f"[DEBUG] Data Query Finished: Found {len(all_rows)} (Took {time.time() - fetch_start:.2f}s)")
+    except Exception as e:
+        print(f"[DEBUG] EXECUTION ERROR: {e}")
+        raise HTTPException(status_code=500, detail=f"Query failed: {str(e)}")
 
     data = []
     if has_mail:
@@ -389,20 +419,17 @@ async def get_legacy_table_data(
             d = {c.name: getattr(row, c.name) for c in target_model.__table__.columns}
             if m_row:
                 for mc in legacy_models.Mailinglist.__table__.columns:
-                    if mc.name not in [
-                        "recno",
-                        "nm",
-                    ]:  # don't overwrite name if already in main table
+                    if mc.name not in ["recno", "nm"]:
                         d[mc.name] = getattr(m_row, mc.name)
             data.append(d)
     else:
         for row_tuple in all_rows:
-            row = row_tuple[0] # scalars() logic
+            row = row_tuple[0]
             data.append(
                 {c.name: getattr(row, c.name) for c in target_model.__table__.columns}
             )
 
-    return {"table": table_name, "data": data}
+    return {"table": table_name, "total": total_count, "data": data}
 
 
 @router.get("/{table_name}/schema")

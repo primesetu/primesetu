@@ -59,7 +59,7 @@ from app.routers import (
     flexible_reports, gstr1,
     # Previously built — now wired
     accounts, alerts, catalogue, configuration, integration, price_group, reports, tills,
-    item_classification,
+    item_classification, catalog_classifications, barcode_templates, lookup
 )
 from app.routers import schema as schema_router
 
@@ -73,12 +73,15 @@ app.include_router(legacy.router, prefix=api_prefix)
 # Masters
 app.include_router(item_master.router, prefix=api_prefix)
 app.include_router(item_classification.router)            # SubClass1Cat, SubClass2Cat, SizeCat, ExtdItemMaster
+app.include_router(catalog_classifications.router, prefix="/api/v1/catalog/classifications")
 app.include_router(settings.router, prefix=api_prefix)
 app.include_router(master.router, prefix=api_prefix)
 app.include_router(customer.router, prefix=api_prefix)
 app.include_router(department.router, prefix=api_prefix)
 app.include_router(barcode.router, prefix=api_prefix)
+app.include_router(barcode_templates.router, prefix=api_prefix)
 app.include_router(masks.router, prefix=api_prefix)
+app.include_router(lookup.router, prefix=api_prefix)   # GenLookup universal dropdown API
 app.include_router(menu.router, prefix=api_prefix + "/menu")
 
 # Operational

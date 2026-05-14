@@ -23,9 +23,9 @@ export default function ItemClassificationWorkbench({ onBack }: { onBack?: () =>
   const [toast, setToast] = useState<{ message: string, type: 'success' | 'error' } | null>(null);
   
   const [classifications, setClassifications] = useState<any[]>([]);
-  const [modifiedRows, setModifiedRows] = useState<Set<string | number>>(new Set());
-  const [deletedRows, setDeletedRows] = useState<Set<string | number>>(new Set());
-  const [selectedRows, setSelectedRows] = useState<Set<string | number>>(new Set());
+  const [modifiedRows, setModifiedRows] = useState<Set<number>>(new Set());
+  const [deletedRows, setDeletedRows] = useState<Set<number>>(new Set());
+  const [selectedRows, setSelectedRows] = useState<Set<number>>(new Set());
   
   const [isPreviewOpen, setIsPreviewOpen] = useState(true);
 
@@ -118,11 +118,10 @@ export default function ItemClassificationWorkbench({ onBack }: { onBack?: () =>
   
   const addRow = () => {
       setClassifications([{ class1cd: "", class2cd: "", billable: true, retailmarkup: 0 }, ...classifications]);
-      const nextModified = new Set(modifiedRows);
-      // Shift modified rows by 1
-      const shifted = new Set(Array.from(modifiedRows).map(i => i + 1));
-      shifted.add(0);
-      setModifiedRows(shifted);
+      const shift = (s: Set<number>) => new Set(Array.from(s).map(i => i + 1));
+      setModifiedRows(shift(modifiedRows).add(0));
+      setDeletedRows(shift(deletedRows));
+      setSelectedRows(shift(selectedRows));
   };
 
   // Preview Logic

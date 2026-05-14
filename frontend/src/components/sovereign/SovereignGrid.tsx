@@ -20,10 +20,10 @@ interface SovereignGridProps {
   data: any[];
   schema: GridColumn[];
   zoomLevel?: number;
-  modifiedRows: Set<string | number>;
-  deletedRows: Set<string | number>;
-  selectedRows: Set<string | number>;
-  setSelectedRows: (rows: Set<string | number>) => void;
+  modifiedRows: Set<number>;
+  deletedRows: Set<number>;
+  selectedRows: Set<number>;
+  setSelectedRows: (rows: Set<number>) => void;
   validationErrors?: Record<string | number, boolean>;
   onCellChange: (rowIndex: number, field: string, value: any, rowData: any) => void;
   onRowDelete?: (rowIndex: number) => void;

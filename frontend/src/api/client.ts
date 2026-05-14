@@ -347,6 +347,22 @@ export const api = {
   offline: {
     getStatus: () => apiClient.get('/offline/status').then(r => r.data),
   },
+  connectivity: {
+    healthCheck: async (url: string, signal?: AbortSignal) => {
+      try {
+        const response = await fetch(`${url}/api/v1/onboarding/health`, { 
+          signal,
+          headers: { 'Accept': 'application/json' }
+        });
+        if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+        const data = await response.json();
+        return data;
+      } catch (err: any) {
+        if (err.name === 'AbortError') throw err;
+        throw new Error(err.message || 'Node unreachable');
+      }
+    },
+  }
 }
 
 

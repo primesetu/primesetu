@@ -35,8 +35,7 @@ class SmritiAD(Base):
 class SmritiParam(Base):
     """ Modernized SysParam — full Shoper9 sysparam parity """
     __tablename__ = 'smriti_param'
-    tenant_id: Mapped[str] = mapped_column(String, default='SYSTEM', index=True)
-
+    tenant_id: Mapped[str] = mapped_column(String, primary_key=True, default='SYSTEM', index=True)
     param_code: Mapped[str] = mapped_column(String(100), primary_key=True)
     origin_id: Mapped[Optional[str]] = mapped_column(String(30), nullable=True, comment="Original Shoper9 Id e.g. SR1-0730-0000287")
     descr: Mapped[Optional[str]] = mapped_column(String(500), nullable=True)
@@ -47,8 +46,8 @@ class SmritiParam(Base):
     # Value storage — the active field is determined by opt_type
     value_txt: Mapped[Optional[str]] = mapped_column(String, nullable=True)
     value_bool: Mapped[bool] = mapped_column(Boolean, default=False)
-    value_int: Mapped[int] = mapped_column(Integer, default=0)
-    value_float: Mapped[Optional[float]] = mapped_column(Float, nullable=True)
+    value_int: Mapped[int] = mapped_column(Integer, default=0, comment="Store monetary values as paise. Preferred source for 'C' opt_type.")
+    value_float: Mapped[Optional[float]] = mapped_column(Float, nullable=True, comment="DEPRECATED: Use value_int for currency. Retained for Shoper9 parity only.")
 
     # Classification
     category: Mapped[Optional[str]] = mapped_column(String(100), nullable=True)
@@ -226,6 +225,34 @@ class SmritiAuditLog(Base):
     new_value: Mapped[Optional[str]] = mapped_column(String, nullable=True)
     timestamp: Mapped[datetime] = mapped_column(DateTime, default=datetime.utcnow)
 
+class SmritiStockMovement(Base):
+    __tablename__ = 'smriti_stock_movements'
+    tenant_id: Mapped[str] = mapped_column(String, default='SYSTEM', index=True)
+    id: Mapped[int] = mapped_column(Integer, primary_key=True, autoincrement=True)
+    sku: Mapped[str] = mapped_column(String(50), index=True)
+    store_id: Mapped[str] = mapped_column(String(20), index=True)
+    movement_type: Mapped[int] = mapped_column(Integer) # 10=SALE, 20=PURCHASE, 30=ADJUSTMENT, 40=WASTAGE
+    qty: Mapped[float] = mapped_column(Float)
+    reference_id: Mapped[Optional[str]] = mapped_column(String(100))
+    moved_at: Mapped[datetime] = mapped_column(DateTime, default=datetime.utcnow)
+
+class SmritiStockTransfer(Base):
+    """
+    Sovereign Inter-Store Transfer (IST) Registry.
+    Tracks rebalancing requests across the node network.
+    """
+    __tablename__ = 'smriti_stock_transfers'
+    tenant_id: Mapped[str] = mapped_column(String, default='SYSTEM', index=True)
+    id: Mapped[int] = mapped_column(Integer, primary_key=True, autoincrement=True)
+    sku: Mapped[str] = mapped_column(String(50), index=True)
+    from_store_id: Mapped[str] = mapped_column(String(20), index=True)
+    to_store_id: Mapped[str] = mapped_column(String(20), index=True)
+    qty: Mapped[float] = mapped_column(Float)
+    status: Mapped[str] = mapped_column(String(20), default="PENDING") # PENDING, APPROVED, SHIPPED, RECEIVED, CANCELLED
+    requested_at: Mapped[datetime] = mapped_column(DateTime, default=datetime.utcnow)
+    updated_at: Mapped[datetime] = mapped_column(DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
+    confirmed_by_id: Mapped[Optional[str]] = mapped_column(String(100))
+
 class SmritiBarcodeTemplate(Base):
     """ Modernized Barcode Template Storage (Replaces .btf and .txt files) """
     __tablename__ = 'smriti_barcode_template'
@@ -241,3 +268,24 @@ class SmritiBarcodeTemplate(Base):
     is_active: Mapped[bool] = mapped_column(Boolean, default=True)
     created_at: Mapped[datetime] = mapped_column(DateTime, default=datetime.utcnow)
     updated_at: Mapped[datetime] = mapped_column(DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
+
+class SmritiStockMovement(Base):
+    """
+    Modernized StockMovement — demand signal and inventory audit trail.
+    Used for Predictive Stockout (DoC) calculations.
+    """
+    __tablename__ = 'smriti_stock_movement'
+    tenant_id: Mapped[str] = mapped_column(String, default='SYSTEM', index=True)
+    
+    id: Mapped[int] = mapped_column(Integer, primary_key=True, autoincrement=True)
+    sku: Mapped[str] = mapped_column(String, index=True)
+    store_id: Mapped[str] = mapped_column(String, index=True)
+    
+    # Movement types: 10=SALE, 20=PURCHASE, 30=ADJUSTMENT, 40=WASTAGE
+    movement_type: Mapped[int] = mapped_column(SmallInteger, index=True)
+    qty: Mapped[Numeric] = mapped_column(Numeric(19, 4))
+    
+    reference_id: Mapped[Optional[str]] = mapped_column(String, nullable=True, comment="BillNo or GRNNo")
+    moved_at: Mapped[datetime] = mapped_column(DateTime, server_default=_NOW, index=True)
+    
+    last_sync: Mapped[Optional[datetime]] = mapped_column(DateTime, server_default=_NOW, nullable=True)

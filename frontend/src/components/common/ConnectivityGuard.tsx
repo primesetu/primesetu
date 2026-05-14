@@ -31,15 +31,20 @@ export const ConnectivityGuard: React.FC<{ children: React.ReactNode }> = ({ chi
   const { 
     state, 
     error, 
-    correlationId, 
-    startSwitchFlow, 
-    handleVerifyPin, 
-    applySwitch,
-    setError
+    context, 
+    initiateSwitch, 
+    verifyPin,
+    cancelSwitch
   } = useNodeSwitch(() => {
     setShowHub(false);
     setPendingNode(null);
+    setShowPin(false);
   });
+
+  const handleVerifyPin = async (pin: string) => {
+    await verifyPin(pin);
+    return { approved: true, correlationId: context?.correlationId || '' };
+  };
 
   const checkConnection = useCallback(async () => {
     setIsChecking(true);
@@ -63,13 +68,15 @@ export const ConnectivityGuard: React.FC<{ children: React.ReactNode }> = ({ chi
       setShowConfirm(true);
     } else {
       setShowPin(true);
-      startSwitchFlow();
+      initiateSwitch(url, id, 'Manual Switch');
     }
   };
 
   const handleConfirmed = () => {
+    if (!pendingNode) return;
+    setShowConfirm(false);
     setShowPin(true);
-    startSwitchFlow();
+    initiateSwitch(pendingNode.url, pendingNode.id, 'Forced Switch (Risk Acknowledged)');
   };
 
   const syncRisk = assessSyncRisk(syncEngine.getPendingCount());
@@ -116,13 +123,14 @@ export const ConnectivityGuard: React.FC<{ children: React.ReactNode }> = ({ chi
       {/* Security Override (PIN) */}
       <SecurityOverride 
         isOpen={showPin}
-        onClose={() => setShowPin(false)}
-        correlationId={correlationId}
+        onClose={() => {
+          setShowPin(false);
+          cancelSwitch();
+        }}
+        correlationId={context?.correlationId || ''}
         onVerify={handleVerifyPin}
-        onSuccess={(res) => {
-          if (pendingNode) {
-            applySwitch(pendingNode.url, pendingNode.id, `User Switch [CID: ${res.correlationId}]`);
-          }
+        onSuccess={() => {
+           // useNodeSwitch already calls commitSwitch() inside verifyPin
         }}
       />
 
@@ -132,7 +140,7 @@ export const ConnectivityGuard: React.FC<{ children: React.ReactNode }> = ({ chi
           <div className="w-12 h-12 border-4 border-primary/20 border-t-primary rounded-full animate-spin" />
           <div className="text-center space-y-1">
             <h3 className="text-sm font-black uppercase tracking-widest text-white">Switching Sovereign Node</h3>
-            <p className="text-[10px] text-white/40 font-mono">Migrating State Pulse... {correlationId}</p>
+            <p className="text-[10px] text-white/40 font-mono">Migrating State Pulse... {context?.correlationId}</p>
           </div>
         </div>
       )}

@@ -275,66 +275,186 @@ async def get_inventory_status(
         ]
     } for r in rows]
 
+from app.core.inventory.predictive import calc_days_of_cover, get_stockout_tier, get_reorder_days
+from app.schemas.common import StockoutForecast
+
+@router.get("/forecast", response_model=List[StockoutForecast])
+async def get_inventory_forecast(
+    tier: Optional[str] = None,
+    db: AsyncSession = Depends(get_db),
+    current_user: CurrentUser = Depends(require_auth)
+):
+    """
+    Detailed Stockout Forecast for all items.
+    Tiers: CRITICAL, WARNING, HEALTHY
+    """
+    store_id = current_user.store_id
+    reorder_days = await get_reorder_days(db)
+    
+    # Fetch all items with stock
+    stmt = select(SmritiStock).where(SmritiStock.store_id == store_id)
+    res = await db.execute(stmt)
+    stocks = res.scalars().all()
+    
+    forecasts = []
+    for s in stocks:
+        doc = await calc_days_of_cover(s.sku, store_id, db)
+        
+        # ADS calculation (re-fetch for reporting)
+        ads_cutoff = datetime.utcnow() - timedelta(days=30)
+        total_sold = await db.scalar(
+            select(func.sum(SmritiStockMovement.qty)).where(
+                and_(
+                    SmritiStockMovement.sku == s.sku,
+                    SmritiStockMovement.store_id == store_id,
+                    SmritiStockMovement.movement_type == 10,
+                    SmritiStockMovement.moved_at >= ads_cutoff
+                )
+            )
+        ) or 0
+        ads = float(total_sold) / 30.0
+        
+        if doc is None:
+            tier_val = "HEALTHY" # No sales signal = No predictable risk
+        else:
+            tier_val = await get_stockout_tier(doc, reorder_days)
+            
+        if tier and tier_val != tier.upper():
+            continue
+            
+        reorder_at = None
+        if doc:
+            reorder_at = datetime.utcnow() + timedelta(days=doc)
+
+        forecasts.append(StockoutForecast(
+            sku=s.sku,
+            current_qty=float(s.on_hand),
+            avg_daily=round(ads, 2),
+            doc=doc,
+            tier=tier_val,
+            reorder_at_date=reorder_at
+        ))
+        
+    return forecasts
+
 @router.get("/predictive", response_model=PredictiveStats)
 async def get_predictive_insights(
     db: AsyncSession = Depends(get_db), 
     current_user: CurrentUser = Depends(require_auth)
 ):
-    """AI-Governed procurement forecasting using Shoper 9 authoritative ledger."""
-    store_id = current_user.store_id
-    thirty_days_ago = datetime.now() - timedelta(days=30)
+    """
+    AI-Governed procurement forecasting using the hardened DoC engine.
+    """
+    forecasts = await get_inventory_forecast(db=db, current_user=current_user)
     
-    # 1. Sales Velocity from SMRITI Transactions
-    velocity_stmt = (
-        select(
-            TransactionItem.stock_no,
-            func.sum(TransactionItem.qty).label("total_sold")
-        )
-        .join(Transaction, Transaction.id == TransactionItem.transaction_id)
-        .where(Transaction.store_id == store_id)
-        .where(Transaction.created_at >= thirty_days_ago)
-        .group_by(TransactionItem.stock_no)
-    )
-    velocity_res = await db.execute(velocity_stmt)
-    velocities = {v.stock_no: float(v.total_sold) / 30.0 for v in velocity_res.all()}
-    
-    # 2. Current Stock from Stockmaster
-    stock_stmt = (
-        select(Itemmaster.stockno, Itemmaster.class1cd, func.sum(Stockmaster.curbalqty))
-        .join(Stockmaster, Stockmaster.stockno == Itemmaster.stockno)
-        .group_by(Itemmaster.stockno, Itemmaster.class1cd)
-    )
-    stock_res = await db.execute(stock_stmt)
-    stock_data = stock_res.all()
-    
-    risk_count = 0
-    total_doc = 0.0
-    doc_count = 0
-    brand_sales = {}
-    
-    for stock_no, brand, qty in stock_data:
-        velocity = velocities.get(stock_no, 0.0)
-        if brand:
-            brand_sales[brand] = brand_sales.get(brand, 0.0) + velocity
-            
-        if velocity > 0:
-            doc = float(qty or 0) / velocity
-            total_doc += doc
-            doc_count += 1
-            if doc < 7: risk_count += 1
-        elif (qty or 0) <= 0:
-            risk_count += 1
-            
-    top_brand = max(brand_sales, key=brand_sales.get) if brand_sales else "N/A"
-    avg_doc = total_doc / doc_count if doc_count > 0 else 0.0
+    risk_count = sum(1 for f in forecasts if f.tier == "CRITICAL")
+    avg_doc = sum(f.doc for f in forecasts if f.doc) / len([f for f in forecasts if f.doc]) if any(f.doc for f in forecasts) else 0
     
     return PredictiveStats(
         stockout_forecast_count=risk_count,
-        top_category=top_brand,
+        top_category="N/A", # [TODO] Aggregate by brand
         predicted_days=round(avg_doc, 1)
     )
 
-# --- AUDIT OPERATIONS ---
+from app.models.legacy_s9 import Chainstores
+from app.models.sovereign import SmritiStockTransfer
+from app.schemas.common import NetworkStock, ISTRequest, ISTRead
+
+@router.post("/ist/request", response_model=ISTRead)
+async def create_ist_request(
+    payload: ISTRequest,
+    db: AsyncSession = Depends(get_db),
+    current_user: CurrentUser = Depends(require_auth)
+):
+    """
+    Initiate a sovereign stock transfer request to a sister store.
+    """
+    new_request = SmritiStockTransfer(
+        sku=payload.sku,
+        from_store_id=payload.from_store_id,
+        to_store_id=current_user.store_id,
+        qty=payload.qty,
+        status="PENDING"
+    )
+    db.add(new_request)
+    await db.commit()
+    await db.refresh(new_request)
+    
+    # Audit Log
+    from app.models.sovereign import SmritiAuditLog
+    db.add(SmritiAuditLog(
+        entity_type="IST",
+        entity_id=str(new_request.id),
+        action="REQUEST_CREATED",
+        user_id=current_user.id,
+        new_value=json.dumps({"sku": payload.sku, "qty": payload.qty, "from": payload.from_store_id})
+    ))
+    await db.commit()
+    
+    return new_request
+
+@router.get("/ist/pending", response_model=List[ISTRead])
+async def list_pending_ist(
+    db: AsyncSession = Depends(get_db),
+    current_user: CurrentUser = Depends(require_auth)
+):
+    """
+    List all pending IST requests where the current store is a party.
+    """
+    stmt = select(SmritiStockTransfer).where(
+        or_(
+            SmritiStockTransfer.from_store_id == current_user.store_id,
+            SmritiStockTransfer.to_store_id == current_user.store_id
+        ),
+        SmritiStockTransfer.status == "PENDING"
+    )
+    res = await db.execute(stmt)
+    return res.scalars().all()
+
+@router.get("/{sku}/network-stock", response_model=List[NetworkStock])
+async def get_network_stock(
+    sku: str,
+    db: AsyncSession = Depends(get_db),
+    current_user: CurrentUser = Depends(require_auth)
+):
+    """
+    Look up stock for a specific SKU across the store network.
+    In production, this queries the HQ-synced network cache.
+    """
+    # 1. Fetch other stores in the chain
+    stmt = select(Chainstores).where(Chainstores.code != current_user.store_id)
+    res = await db.execute(stmt)
+    stores = res.scalars().all()
+    
+    # 2. Simulate/Fetch stock from other nodes (Relayed via HQ logic)
+    # [MOCK] For Phase 6.2 demonstration
+    import random
+    network_results = []
+    for s in stores:
+        qty = random.randint(0, 50)
+        doc = random.uniform(5, 45) if qty > 0 else 0
+        tier = "HEALTHY" if doc > 20 else ("WARNING" if doc > 10 else "CRITICAL")
+        
+        network_results.append(NetworkStock(
+            store_name=s.nm or f"Store {s.code}",
+            store_code=s.code,
+            on_hand=float(qty),
+            doc=round(doc, 1),
+            tier=tier,
+            distance_km=random.uniform(2, 15)
+        ))
+        
+    return network_results
+
+@router.post("/sync-movements")
+async def trigger_movement_sync(
+    db: AsyncSession = Depends(get_db),
+    current_user: CurrentUser = Depends(require_auth)
+):
+    """Backfill movements from sales history."""
+    from app.core.inventory.predictive import sync_movements_from_sales
+    await sync_movements_from_sales(db, current_user.store_id)
+    return {"status": "success", "message": "Movement log synchronized from sales history."}
 
 @router.post("/audit/sessions", status_code=201)
 async def create_audit_session(

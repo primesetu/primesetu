@@ -80,19 +80,66 @@ class StoreRegistrationRequest(BaseModel):
     admin_full_name: str = Field(..., max_length=200)
 
 class RemoteCommandRead(BaseModel):
-    id: uuid.UUID
+    id: str
     command_type: str
-    payload: str
+    payload: Optional[str] = None
     status: str
+    is_destructive: bool = False
+    requires_approval: bool = False
     model_config = ConfigDict(from_attributes=True)
 
 class PulseRequest(BaseModel):
     transaction_count: int
     pending_sync_packets: int
     last_sync_id: Optional[uuid.UUID] = None
+    
+    # [PHASE 6] Supply Chain Intelligence
+    critical_skus: int = 0
+    surplus_skus: int = 0
+    total_inventory_value: int = 0 # In paise
+
+class NodeHealth(BaseModel):
+    disk_percent: float
+    db_latency_ms: float
+    uptime_seconds: float
+    status: str # HEALTHY, DEGRADED, CRITICAL
 
 class PulseResponse(BaseModel):
     status: str
     server_time: datetime
     commands: List[RemoteCommandRead]
+    health: Optional[NodeHealth] = None
     message: Optional[str] = None
+    schema_version: str = "1.0.0"
+
+class StockoutForecast(BaseModel):
+    sku: str
+    current_qty: float
+    avg_daily: float
+    doc: Optional[float]
+    tier: str # CRITICAL, WARNING, HEALTHY
+    reorder_at_date: Optional[datetime] = None
+
+class NetworkStock(BaseModel):
+    store_name: str
+    store_code: str
+    on_hand: float
+    doc: Optional[float]
+    tier: str
+    distance_km: Optional[float] = None
+
+class ISTRequest(BaseModel):
+    sku: str
+    from_store_id: str
+    qty: float
+
+class ISTRead(BaseModel):
+    id: int
+    sku: str
+    from_store_id: str
+    to_store_id: str
+    qty: float
+    status: str
+    requested_at: datetime
+    updated_at: datetime
+    model_config = ConfigDict(from_attributes=True)

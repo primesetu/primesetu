@@ -42,13 +42,19 @@ export const apiClient = axios.create({
 
 import { useSovereignStore } from '@/store/useSovereignStore'
 
-// Inject Sovereign JWT into every request pulse and dynamically route based on Offline State
-apiClient.interceptors.request.use(async (config) => {
-  // Dynamically set the base URL before every request (Always local now)
+// Inject local JWT into every request + dynamically route based on Offline State
+apiClient.interceptors.request.use((config) => {
+  // Dynamically set the base URL before every request
   config.baseURL = `${getBaseUrl().replace(/\/$/, '')}/api/v1`
-  
-  // [SMRITI SOVEREIGN STRATEGY]
-  // Cloud ignored. Auth handled via local dummy session (require_auth bypass).
+
+  // [R1-D] Inject stored local JWT as Bearer token.
+  // In LOCAL_POSTGRES mode this token is issued by POST /api/v1/auth/local-login.
+  // In CLOUD mode this should be the Supabase session token (set externally).
+  const token = localStorage.getItem('smriti_local_token')
+  if (token) {
+    config.headers['Authorization'] = `Bearer ${token}`
+  }
+
   return config
 })
 
@@ -65,27 +71,30 @@ apiClient.interceptors.response.use(
   },
   (error) => {
     const setBackendAvailable = useSovereignStore.getState().setBackendAvailable;
-    
+
     // Check for network errors or timeout (backend down)
     if (!error.response || error.code === 'ERR_NETWORK' || error.code === 'ECONNABORTED') {
       console.error('[Sovereign Mode] Backend connection lost:', error.message);
       setBackendAvailable(false);
     }
 
-    // [SMRITI SOVEREIGN RESILIENCE] 
-    // If we get a 403 Forbidden on a GET request in local mode, 
-    // it's likely a JWT/Auth mismatch. Provide a safe fallback to prevent UI halts.
-    const isForcedOffline = localStorage.getItem('smriti_forced_offline_v1') === 'true';
-    if (error.response?.status === 403 && error.config?.method === 'get' && isForcedOffline) {
-      console.warn(`[Sovereign Mode] Auth mismatch (403) on ${error.config.url}. Returning empty fallback.`);
-      return { data: [], status: 200, statusText: 'OK', headers: {}, config: error.config };
+    // [R1-D] 401 Unauthorized → token has expired or is invalid.
+    // Clear it from localStorage so LocalAuthGuard triggers the login screen.
+    if (error.response?.status === 401) {
+      localStorage.removeItem('smriti_local_token')
+      console.warn('[SMRITI-OS] Session expired (401). Token cleared — re-authentication required.')
     }
-    
+
     return Promise.reject(error);
   }
 );
 
 export const api = {
+  auth: {
+    localStatus: () => apiClient.get('/auth/local-status').then(r => r.data),
+    localLogin: (username: string, pin: string, store_id?: string) =>
+      apiClient.post('/auth/local-login', { username, pin, store_id }).then(r => r.data),
+  },
   dashboard: {
     getStats: () => apiClient.get('/dashboard/stats').then(r => r.data),
   },
@@ -281,20 +290,12 @@ export const api = {
     patchData: (table: string, id: string, data: any) => apiClient.patch(`/legacy/${table}/${id}`, data).then(r => r.data),
     bulkUpdate: (table: string, items: any[]) => apiClient.post(`/legacy/${table}/bulk`, items).then(r => r.data),
     // Alias: bulkUpsert mirrors bulkUpdate for cascade sheet saves
-    bulkUpsert: async (table: string, items: any[]) => {
-      try {
-        const r = await apiClient.post(`/legacy/${table}/bulk`, items);
-        return r.data;
-      } catch (err: any) {
-        // [SMRITI OFFLINE STRATEGY] 
-        // If Supabase token expires (403), mock the local save so operations don't halt
-        if (err.response?.status === 403) {
-          console.warn(`[Sovereign Mode] Auth expired (403). Mocking local commit for table: ${table}.`);
-          return { success: true, count: items.length, mocked: true };
-        }
-        throw err;
-      }
-    },
+    // [R1-C] GOVERNANCE FIX: 403 errors now propagate correctly.
+    // A 403 on a bulk save means authentication has expired — this must
+    // surface to the operator, not silently succeed with mocked data.
+    // Data loss prevention is a higher priority than UI continuity.
+    bulkUpsert: (table: string, items: any[]) =>
+      apiClient.post(`/legacy/${table}/bulk`, items).then(r => r.data),
     saveMaster: (table: string, data: any) => apiClient.post(`/legacy/master/${table}`, data).then(r => r.data),
     deleteRecord: (table: string, filters: string) => apiClient.delete(`/legacy/${table}`, { params: { filters } }).then(r => r.data),
     runWave1Migration: () => apiClient.post('/legacy/migrate/wave1').then(r => r.data),

@@ -75,6 +75,7 @@ const queryClient = new QueryClient({
 })
 
 import { ConnectivityGuard } from './components/common/ConnectivityGuard'
+import LocalAuthGuard from './components/auth/LocalAuthGuard'
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
@@ -83,10 +84,13 @@ createRoot(document.getElementById('root')!).render(
         <LanguageProvider>
           <ThemeProvider>
             <F2SearchProvider>
-              <ConnectivityGuard>
-                <App />
-              </ConnectivityGuard>
-              <GlobalF2SearchOverlay />
+              {/* [R1-D] LocalAuthGuard enforces login in LOCAL_POSTGRES mode */}
+              <LocalAuthGuard>
+                <ConnectivityGuard>
+                  <App />
+                </ConnectivityGuard>
+                <GlobalF2SearchOverlay />
+              </LocalAuthGuard>
             </F2SearchProvider>
           </ThemeProvider>
         </LanguageProvider>

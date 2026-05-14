@@ -62,8 +62,9 @@ from app.routers import (
     item_classification, catalog_classifications, barcode_templates, lookup
 )
 from app.routers import schema as schema_router
+from app.routers import auth as auth_router
 
-# Core & Management
+app.include_router(auth_router.router)         # [R1-B] Local node JWT issuance
 app.include_router(onboarding.router, prefix=api_prefix)
 app.include_router(store.router, prefix=api_prefix)
 app.include_router(users.router)

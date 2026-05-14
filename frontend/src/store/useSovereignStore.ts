@@ -1,10 +1,18 @@
 import { create } from 'zustand';
+import { persist, createJSONStorage } from 'zustand/middleware';
 
 interface SheetState {
   rowData: any[];
-  modifiedRows: Set<string | number>;
-  deletedRows: Set<string | number>;
+  modifiedRows: Set<number>;
+  deletedRows: Set<number>;
   schema: string;
+}
+
+interface NodeSwitchEvent {
+  timestamp: string;
+  previousUrl: string | null;
+  newUrl: string | null;
+  reason: string;
 }
 
 interface SovereignState {
@@ -20,11 +28,17 @@ interface SovereignState {
   deleteSheet: (name: string) => void;
   resetStore: () => void;
   
-  // Network
+  // Network & Connectivity
   isForcedOffline: boolean;
   toggleForcedOffline: () => void;
   isBackendAvailable: boolean;
   setBackendAvailable: (available: boolean) => void;
+  
+  // [NEW] Connection Configuration
+  preferredBackendUrl: string | null;
+  setPreferredBackendUrl: (url: string | null, reason?: string) => void;
+  nodeSwitchHistory: NodeSwitchEvent[];
+  
   companyName: string;
   setCompanyName: (name: string) => void;
   companyAddress: string;
@@ -34,107 +48,123 @@ interface SovereignState {
   getParam: (code: string) => string | undefined;
 }
 
-const STORAGE_KEY = "smriti_workbench_draft_v2";
-const OFFLINE_KEY  = "smriti_forced_offline_v1";
-const COMPANY_KEY  = "smriti_company_name_v1";
+const STORAGE_KEY = "smriti_workbench_persistent_v3";
 
-// Read persisted offline preference — survives page refresh
-const loadForcedOffline = (): boolean => {
-  try { return localStorage.getItem(OFFLINE_KEY) === 'true'; }
-  catch { return false; }
-};
+export const useSovereignStore = create<SovereignState>()(
+  persist(
+    (set, get) => ({
+      sheets: {},
+      activeSheet: "ITEM",
+      zoomLevel: 100,
+      isForcedOffline: false,
+      isBackendAvailable: true,
+      
+      preferredBackendUrl: null,
+      nodeSwitchHistory: [],
+      
+      companyName: "SMRITI SOVEREIGN NODE",
+      companyAddress: "",
+      sysParams: [],
 
-const loadCompanyName = (): string => {
-  try { return localStorage.getItem(COMPANY_KEY) || "SMRITI SOVEREIGN NODE"; }
-  catch { return "SMRITI SOVEREIGN NODE"; }
-};
+      setActiveSheet: (name) => set({ activeSheet: name }),
+      setZoomLevel: (level) => set({ zoomLevel: level }),
+      
+      toggleForcedOffline: () => set((state) => ({ isForcedOffline: !state.isForcedOffline })),
+      
+      setBackendAvailable: (available) => set({ isBackendAvailable: available }),
+      
+      setPreferredBackendUrl: (url, reason = "Manual User Switch") => set((state) => {
+        const event: NodeSwitchEvent = {
+          timestamp: new Date().toISOString(),
+          previousUrl: state.preferredBackendUrl,
+          newUrl: url,
+          reason
+        };
+        console.log('[Sovereign Mode] Node Switched:', event);
+        return { 
+          preferredBackendUrl: url,
+          nodeSwitchHistory: [event, ...state.nodeSwitchHistory].slice(0, 50) // Keep last 50 events
+        };
+      }),
 
-const saveToLocal = (sheets: Record<string, SheetState>) => {
-  const toSave: any = {};
-  Object.entries(sheets).forEach(([k, v]) => {
-    if (!v) return;
-    toSave[k] = {
-      ...v,
-      modifiedRows: Array.from(v.modifiedRows || []),
-      deletedRows: Array.from(v.deletedRows || [])
-    };
-  });
-  localStorage.setItem(STORAGE_KEY, JSON.stringify(toSave));
-};
+      setCompanyName: (name) => set({ companyName: name }),
+      setCompanyAddress: (addr) => set({ companyAddress: addr }),
+      setSysParams: (params) => set({ sysParams: params }),
+      
+      getParam: (code) => {
+        const params = get().sysParams;
+        return params.find((p: any) => p.param_code === code)?.value_txt;
+      },
+      
+      updateSheet: (name, updates) => set((state) => {
+        const existing = state.sheets[name] || {
+          rowData: [],
+          modifiedRows: new Set<number>(),
+          deletedRows: new Set<number>(),
+          schema: "ITEM_MASTER"
+        };
+        return {
+          sheets: {
+            ...state.sheets,
+            [name]: { ...existing, ...updates }
+          }
+        };
+      }),
 
-export const useSovereignStore = create<SovereignState>((set) => ({
-  sheets: {},
-  activeSheet: "ITEM",
-  zoomLevel: 100,
-  isForcedOffline: loadForcedOffline(), // ← persisted — user controls this
-  isBackendAvailable: true,
-  companyName: loadCompanyName(),
-  companyAddress: "",
+      addSheet: (name, initialState) => set((state) => ({
+        sheets: {
+          ...state.sheets,
+          [name]: {
+            rowData: [],
+            modifiedRows: new Set<number>(),
+            deletedRows: new Set<number>(),
+            schema: "ITEM_MASTER",
+            ...initialState
+          }
+        }
+      })),
 
-  setActiveSheet: (name) => set({ activeSheet: name }),
-  setZoomLevel: (level) => set({ zoomLevel: level }),
-  toggleForcedOffline: () => set((state) => {
-    const next = !state.isForcedOffline;
-    try { localStorage.setItem(OFFLINE_KEY, String(next)); } catch {}
-    return { isForcedOffline: next };
-  }),
-  setBackendAvailable: (available) => set({ isBackendAvailable: available }),
-  setCompanyName: (name) => set(() => {
-    try { localStorage.setItem(COMPANY_KEY, name); } catch {}
-    return { companyName: name };
-  }),
-  setCompanyAddress: (addr) => set({ companyAddress: addr }),
-  sysParams: [],
-  setSysParams: (params) => set({ sysParams: params }),
-  getParam: (code) => {
-    const state = useSovereignStore.getState();
-    const p = state.sysParams.find((p: any) => p.param_code === code);
-    return p?.value_txt;
-  },
-  
-  updateSheet: (name, updates) => set((state) => {
-    const existing = state.sheets[name] || {
-      rowData: [],
-      modifiedRows: new Set<string | number>(),
-      deletedRows: new Set<string | number>(),
-      schema: "ITEM_MASTER"
-    };
-    const newSheets = {
-      ...state.sheets,
-      [name]: { ...existing, ...updates }
-    };
-    saveToLocal(newSheets);
-    return { sheets: newSheets };
-  }),
+      deleteSheet: (name) => set((state) => {
+        const newSheets = { ...state.sheets };
+        delete newSheets[name];
+        return {
+          sheets: newSheets,
+          activeSheet: state.activeSheet === name ? "ITEM" : state.activeSheet
+        };
+      }),
 
-  addSheet: (name, initialState) => set((state) => {
-    const newSheet: SheetState = {
-      rowData: [],
-      modifiedRows: new Set<string | number>(),
-      deletedRows: new Set<string | number>(),
-      schema: "ITEM_MASTER",
-      ...initialState
-    };
-    const newSheets = {
-      ...state.sheets,
-      [name]: newSheet
-    };
-    saveToLocal(newSheets);
-    return { sheets: newSheets };
-  }),
-
-  deleteSheet: (name) => set((state) => {
-    const newSheets = { ...state.sheets };
-    delete newSheets[name];
-    saveToLocal(newSheets);
-    return {
-      sheets: newSheets,
-      activeSheet: state.activeSheet === name ? "Item Master" : state.activeSheet
-    };
-  }),
-
-  resetStore: () => {
-    localStorage.removeItem(STORAGE_KEY);
-    set({ sheets: {}, activeSheet: "Item Master", zoomLevel: 100 });
-  }
-}));
+      resetStore: () => set({ 
+        sheets: {}, 
+        activeSheet: "ITEM", 
+        zoomLevel: 100, 
+        preferredBackendUrl: null,
+        nodeSwitchHistory: [] 
+      })
+    }),
+    {
+      name: STORAGE_KEY,
+      storage: createJSONStorage(() => localStorage),
+      // Handle Set serialization/deserialization
+      onRehydrateStorage: () => (state) => {
+        if (!state) return;
+        // Convert arrays back to Sets for each sheet
+        Object.values(state.sheets).forEach((sheet: any) => {
+          if (Array.isArray(sheet.modifiedRows)) sheet.modifiedRows = new Set(sheet.modifiedRows);
+          if (Array.isArray(sheet.deletedRows)) sheet.deletedRows = new Set(sheet.deletedRows);
+        });
+      },
+      partialize: (state) => {
+        // Convert Sets to arrays for storage
+        const sheetsCopy: any = {};
+        Object.entries(state.sheets).forEach(([k, v]) => {
+          sheetsCopy[k] = {
+            ...v,
+            modifiedRows: Array.from(v.modifiedRows),
+            deletedRows: Array.from(v.deletedRows)
+          };
+        });
+        return { ...state, sheets: sheetsCopy } as any;
+      }
+    }
+  )
+);

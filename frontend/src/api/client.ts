@@ -15,14 +15,18 @@ const CLOUD_API = import.meta.env.VITE_BACKEND_URL ?? 'https://smriti-api.primes
 const LOCAL_API = 'http://127.0.0.1:8000'
 
 const getBaseUrl = () => {
-  // Determine Local IP dynamically
-  const hostname = typeof window !== 'undefined' ? window.location.hostname : '127.0.0.1';
-  const dynamicLocal = `http://${hostname}:8000`;
+  const { preferredBackendUrl } = useSovereignStore.getState();
   
-  // [SMRITI SOVEREIGN OVERRIDE] 
-  // User requested to ignore cloud. Force local node connectivity.
-  console.log('[Sovereign Mode] Routing to node:', dynamicLocal);
-  return dynamicLocal;
+  // 1. [PRIORITY] User's Explicit Override (Manual / Tunnel / Cloud selection)
+  if (preferredBackendUrl) {
+    return preferredBackendUrl;
+  }
+
+  // 2. [FALLBACK] Local LAN Discovery (Zero Cloud Mode)
+  const hostname = typeof window !== 'undefined' ? window.location.hostname : '127.0.0.1';
+  const localUrl = `http://${hostname}:8000`;
+  
+  return localUrl;
 }
 
 // We don't hardcode BASE_URL here anymore because the toggle can change at runtime.

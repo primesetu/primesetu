@@ -11,8 +11,9 @@
 
 from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy.ext.asyncio import AsyncSession
-from sqlalchemy import select, update
+from sqlalchemy import select, update, and_
 from typing import List, Optional, Dict, Any
+import logging
 from uuid import UUID
 
 from app.core.database import get_db
@@ -272,15 +273,28 @@ async def update_sovereign_sysparam(
         raw = str(payload["value"])
         opt = (param.opt_type or "T").upper()
         if opt == "B":
-            param.value_bool = raw.lower() in ("true", "1", "yes")
+            param.value_bool = str(raw).lower() in ("true", "1", "yes", "t")
         elif opt == "I":
             try: param.value_int = int(float(raw))
-            except: param.value_int = 0
-        elif opt in ("S", "C"):
+            except (ValueError, TypeError): 
+                logging.error(f"Sysparam {param_code}: Invalid integer '{raw}'")
+                param.value_int = 0
+        elif opt == "C":
+            try: 
+                # [MANDATORY] Monetary values MUST be stored as integer paise.
+                # value_float is deprecated for currency operations.
+                param.value_int = int(round(float(raw) * 100))
+                param.value_float = float(raw)
+            except (ValueError, TypeError): 
+                logging.error(f"Sysparam {param_code}: Invalid currency '{raw}'")
+                param.value_int = 0
+        elif opt == "S":
             try: param.value_float = float(raw)
-            except: param.value_float = None
+            except (ValueError, TypeError): 
+                logging.error(f"Sysparam {param_code}: Invalid float '{raw}'")
+                param.value_float = None
         else:
-            param.value_txt = raw
+            param.value_txt = str(raw)
     
     await db.commit()
     return {

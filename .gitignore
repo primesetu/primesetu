@@ -1,1 +1,9 @@
+node_modules/
+dist/
+__pycache__/
+*.pyc
+.env
 *.tsbuildinfo
+.vscode/
+.pytest_cache/
+*.log

@@ -25,8 +25,14 @@ import ObjectLookup from './pages/ObjectLookup';
 import BarcodeStudio from './modules/inventory/BarcodeStudio';
 import BarcodeDesigner from './modules/tools/BarcodeDesigner';
 import ConnectionSettings from './pages/ConnectionSettings';
+import { useHoPulse } from './hooks/ho/useHoPulse';
+import GovernanceGuard from './modules/ho/GovernanceGuard';
 
 const App: React.FC = () => {
+  // ── [SMRITI GOVERNANCE] ───────────────────────────────────────────
+  // Periodic node health pulse & remote command retrieval
+  useHoPulse();
+
   const [activeTab, setActiveTab] = useState(() => {
     const params = new URLSearchParams(window.location.search);
     return params.get('tab') || 'dashboard';
@@ -61,6 +67,7 @@ const App: React.FC = () => {
   return (
     <SmritiShell activeTab={activeTab} onTabChange={setActiveTab}>
       {renderContent()}
+      <GovernanceGuard />
     </SmritiShell>
   );
 };

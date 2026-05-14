@@ -1,0 +1,11 @@
+{
+  "store_name": "Test Prime Store",
+  "store_code": "TPS01",
+  "address": "123 Sovereign Street, Mumbai",
+  "gstin": "27AAAAA0000A1Z5",
+  "phone": "9876543210",
+  "state_code": "27",
+  "admin_email": "tester@primesetu.io",
+  "admin_password": "TestPassword123",
+  "admin_full_name": "Test Admin"
+}

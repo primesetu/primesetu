@@ -17,15 +17,25 @@ from typing import List, Dict, Any, Optional
 from datetime import datetime, timedelta
 import uuid
 import random
+import json
 
 from app.core.database import get_db
 from app.core.security import require_auth, CurrentUser
 from app.models.legacy_s9 import (
-    Itemmaster, Stockmaster, 
+    Itemmaster, Stockmaster, Chainstores,
     Phystkhdr as AuditSession, Phystkdtls as AuditEntry
 )
+from app.models.sovereign import (
+    SmritiStock, SmritiStockMovement, SmritiStockTransfer, SmritiAuditLog
+)
 from app.models import Transaction, TransactionItem
-from app.schemas.common import ProductRead, PredictiveStats
+from app.schemas.common import (
+    ProductRead, PredictiveStats, StockoutForecast, 
+    NetworkStock, ISTRequest, ISTRead
+)
+from app.core.inventory.predictive import (
+    calc_days_of_cover, get_stockout_tier, get_reorder_days
+)
 from app.schemas.item_master import AdvancedSearchRequest, SearchFilter
 from pydantic import BaseModel
 
@@ -275,8 +285,6 @@ async def get_inventory_status(
         ]
     } for r in rows]
 
-from app.core.inventory.predictive import calc_days_of_cover, get_stockout_tier, get_reorder_days
-from app.schemas.common import StockoutForecast
 
 @router.get("/forecast", response_model=List[StockoutForecast])
 async def get_inventory_forecast(
@@ -356,9 +364,6 @@ async def get_predictive_insights(
         predicted_days=round(avg_doc, 1)
     )
 
-from app.models.legacy_s9 import Chainstores
-from app.models.sovereign import SmritiStockTransfer
-from app.schemas.common import NetworkStock, ISTRequest, ISTRead
 
 @router.post("/ist/request", response_model=ISTRead)
 async def create_ist_request(
@@ -381,7 +386,6 @@ async def create_ist_request(
     await db.refresh(new_request)
     
     # Audit Log
-    from app.models.sovereign import SmritiAuditLog
     db.add(SmritiAuditLog(
         entity_type="IST",
         entity_id=str(new_request.id),

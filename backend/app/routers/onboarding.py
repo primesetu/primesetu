@@ -5,6 +5,7 @@
 from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.exc import IntegrityError
+from sqlalchemy import select
 from app.core.database import get_db
 from app.core.config import settings
 from app.models import Store, User
@@ -91,4 +92,32 @@ async def onboard_store(
         "message": f"Store '{payload.store_name}' and admin user created successfully.",
         "store_id": store_id,
         "admin_user_id": auth_user_id
+    }
+
+@router.get("/health")
+async def onboarding_health(db: AsyncSession = Depends(get_db)):
+    """
+    Sovereign Capability Negotiation Endpoint.
+    Returns node-specific capabilities for institutional orchestration.
+    """
+    try:
+        await db.execute(select(1))
+        db_status = "connected"
+    except Exception:
+        db_status = "disconnected"
+
+    return {
+        "service": "smriti-os",
+        "status": "online",
+        "version": "1.0.0",
+        "sovereign_phase": "v3.2",
+        "schema_version": "s9",
+        "database": db_status,
+        "storage_mode": settings.storage_mode,
+        "features": [
+            "sovereign-connectivity",
+            "sync-risk-assessment",
+            "audit-logging-v1",
+            "rbac-pin-override"
+        ]
     }

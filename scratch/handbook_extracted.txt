@@ -1,0 +1,105 @@
+SMRITI OS
+Shoper9 → PostgreSQL
+Migration Handbook
+Technical Reference for Database Migration & Schema Design
+Version 2.0   |   May 2026
+Engine-First Architecture + Full Audit Protocol + Cutover Strategy
+Table of Contents
+What's New in Version 2.0
+Version 2.0 incorporates the Engine-First Architecture document, adds 4 new audit queries, full data quality pre-checks, idempotency guards, cutover strategy, and resolves all gaps identified in the v1.0 review.
+1.  Migration Philosophy
+1.1  Inspired Schema Approach
+SMRITI OS does not copy Shoper9's schema. It uses an Inspired Schema approach: field names and business logic are studied and preserved where practical, but the schema is redesigned from the ground up for PostgreSQL, multi-store cloud architecture, and offline sync. This eliminates legal risk and removes decades of technical debt from the legacy SQL Server single-store design.
+1.2  Core Design Decisions
+1.3  What Is Not Migrated
+1.4  The Sovereign Database Layer
+SMRITI OS uses sovereign.py as an intelligent proxy layer. It queries legacy Shoper9 data natively via the existing SQL Server connection while simultaneously exposing modern PostgreSQL-backed metadata (image_url, description_html, IRN, sync columns). This enables zero-data-loss migration for existing clients while delivering modern capabilities immediately — and is the single most important architectural advantage for GTM with existing Shoper9 clients.
+2.  Source Database Audit — Shoper9GKP
+2.1  Audit Scope
+Database: Shoper9GKP. All audit queries are executed in SSMS (SQL Server Management Studio). Results are exported to CSV and filed under schema/ as specified. Run all 11 queries before beginning any migration work.
+2.2  Audit Query Set — Structural (Q1–Q8)
+Query 1 — All Tables with Row Counts
+Query 2 — All Columns with Data Types
+Query 3 — Primary Keys
+Query 4 — Foreign Key Relationships
+Query 5 — Stored Procedures, Triggers, Functions, Views
+Query 6 — Identity / Auto-Increment Columns
+Query 7 — Computed Columns
+Query 8 — Non-Clustered Indexes
+2.3  Audit Query Set — Constraints (Q9–Q11)
+Query 9 — Nullable Column Audit (NEW)
+Identifies nullable columns in critical tables that SMRITI OS enforces as NOT NULL. Every row found here needs a placeholder resolution strategy before migration begins.
+Query 10 — Check Constraints — Business Rules in DB (NEW)
+Check constraints encode business rules directly in the database. These must be identified and converted to FastAPI Pydantic validators. If not identified, they silently block inserts during migration.
+Query 11 — Unique Constraints (NEW)
+Unique constraints define what cannot have duplicates — barcode uniqueness, GSTIN uniqueness, BillNo uniqueness. If not recreated in PostgreSQL, silent data quality failures occur post-migration.
+2.4  Data Quality Pre-Check Queries (NEW)
+DQ1 — Items with NULL or Empty Barcode
+DQ2 — Items with NULL HSN Code
+DQ3 — Customers with NULL Mobile
+DQ4 — Bills with NULL or Zero Total
+DQ5 — Orphan BillDetails
+DQ6 — Negative Stock Items
+DQ7 — Duplicate Barcodes
+DQ8 — StkTrnHdr TrnType Distribution (NEW)
+Identifies all discriminator values in StkTrnHdr. Any TrnType not in your router will be silently dropped during migration, meaning lost transaction records.
+2.5  Complete Output File Structure
+3.  Table Classification
+3.1  Classification Framework
+3.2  Critical Table Classifications
+4.  Type Mapping Decisions
+4.1  MSSQL → PostgreSQL Type Map
+These are the definitive type decisions for this project. Every developer must use this table when writing PostgreSQL DDL or SQLAlchemy models.
+4.2  Special Cases
+4.3  T-SQL to PostgreSQL Syntax Reference
+All T-SQL syntax found in Shoper9 stored procedures must be converted to their PostgreSQL equivalents when building FastAPI service methods.
+5.  Table-by-Table Migration Notes
+5.1  ItemMaster → SmritiItem
+Column Mapping
+5.2  StockMaster → stock_ledger (Recalculated)
+5.3  StkTrnHdr + StkTrnDtls → Multiple Flows
+5.4  CustomerMaster → CustomerMaster
+5.5  BillMaster + BillDetails → SmritiSaleHdr + SmritiSaleDtl
+Historical IRN Note: Historical bills migrated will have irn = NULL. The e-invoice mandate applies only to new transactions after go-live. Do not attempt to backfill IRNs for historical records.
+5.6  AcceptDisplayDtls → schemes.py (NEW in v2.0)
+AcceptDisplayDtls stores scheme rules in wide-row format with multiple typed fields. SMRITI OS normalizes this into a JSON rule payload per scheme type:
+6.  PostgreSQL Target Schema
+6.1  Mandatory Columns on Every Table
+Every table in SMRITI OS PostgreSQL carries these columns. They are added by sovereign.py base model inheritance and must never be omitted.
+6.2  legacy_id Retention Policy (NEW)
+legacy_id columns are retained for 90 days post go-live. After 90 days and successful Tally Sync validation, legacy_id columns are set to NULL. After 180 days they are dropped via an Alembic migration. This prevents them from becoming permanent technical debt while allowing sufficient time for cross-reference validation.
+7.  Migration Execution Plan
+7.1  Migration Waves
+Tables must be migrated in wave order to respect FK dependencies. Never migrate a table before all its FK parent tables are migrated and validated.
+7.2  Migration Script Pattern — With Idempotency Guard (v2.0)
+Every migration script must include an idempotency check. If the script crashes mid-wave and is re-run, it must not create duplicate records.
+7.3  Rollback Procedure
+If validation fails at any wave, rollback is clean because PostgreSQL tables are populated in waves with no circular dependencies:
+8.  Validation & Post-Migration Checks
+8.1  Validation Checklist Per Wave
+8.2  Go-Live Gate
+9.  Engine-First Architecture (from Engine Architecture v1.0)
+9.1  The Core Principle
+This section formalizes the Engine-First architecture philosophy into the migration handbook. It is not just a development philosophy — it directly impacts how the migrated schema is consumed by the application layer. Understanding this is essential for every developer working on the migration.
+9.2  What Changes vs What Stays the Same
+9.3  The 7 Core Engines
+9.4  Development Velocity Comparison
+9.5  What CANNOT Be Reused — Business Logic Layer
+Engine reuse applies to the UI and API scaffolding layer only. The real complexity — what makes SMRITI OS genuinely valuable — lives in the business logic layer and requires manual, careful implementation:
+9.6  Build Sequence — Engine-First
+10.  Cutover Strategy (NEW in v2.0)
+10.1  Overview
+A retail store cannot shut down for 3 days while migration runs. SMRITI OS uses a phased parallel-run cutover strategy that keeps the store operational throughout the entire migration process.
+10.2  Cutover Phases
+10.3  Go-Live Night Runbook
+Appendix A — Raw Audit Query Output Templates
+Paste the raw CSV exports from SSMS below after running the 11 audit queries on Shoper9GKP. Each section has a structured template.
+A.1  Table List with Row Counts (Query 1)
+A.2  Foreign Key Relationships (Query 4)
+A.3  Stored Procedures and Triggers (Query 5)
+A.4  Nullable Audit (Query 9 — NEW)
+A.5  Data Quality Report (DQ1–DQ8 — NEW)
+A.6  TrnType Distribution (DQ8 — NEW)
+Appendix B — AppForm JSON Schema Reference
+When building masters using the AppForm engine post-migration, use this JSON schema structure. The schema drives the UI automatically — no form coding required.
+Smriti OS Migration Handbook v2.0   |   AITDL Network   |   contact@aitdl.com   |   https://aitdl.in

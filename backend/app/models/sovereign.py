@@ -225,16 +225,6 @@ class SmritiAuditLog(Base):
     new_value: Mapped[Optional[str]] = mapped_column(String, nullable=True)
     timestamp: Mapped[datetime] = mapped_column(DateTime, default=datetime.utcnow)
 
-class SmritiStockMovement(Base):
-    __tablename__ = 'smriti_stock_movements'
-    tenant_id: Mapped[str] = mapped_column(String, default='SYSTEM', index=True)
-    id: Mapped[int] = mapped_column(Integer, primary_key=True, autoincrement=True)
-    sku: Mapped[str] = mapped_column(String(50), index=True)
-    store_id: Mapped[str] = mapped_column(String(20), index=True)
-    movement_type: Mapped[int] = mapped_column(Integer) # 10=SALE, 20=PURCHASE, 30=ADJUSTMENT, 40=WASTAGE
-    qty: Mapped[float] = mapped_column(Float)
-    reference_id: Mapped[Optional[str]] = mapped_column(String(100))
-    moved_at: Mapped[datetime] = mapped_column(DateTime, default=datetime.utcnow)
 
 class SmritiStockTransfer(Base):
     """

@@ -46,6 +46,11 @@ interface SovereignState {
   sysParams: any[];
   setSysParams: (params: any[]) => void;
   getParam: (code: string) => string | undefined;
+
+  // [NEW] Governance commands
+  pendingCommands: any[];
+  setPendingCommands: (commands: any[]) => void;
+  clearCommand: (id: string) => void;
 }
 
 const STORAGE_KEY = "smriti_workbench_persistent_v3";
@@ -65,6 +70,7 @@ export const useSovereignStore = create<SovereignState>()(
       companyName: "SMRITI SOVEREIGN NODE",
       companyAddress: "",
       sysParams: [],
+      pendingCommands: [],
 
       setActiveSheet: (name) => set({ activeSheet: name }),
       setZoomLevel: (level) => set({ zoomLevel: level }),
@@ -95,6 +101,11 @@ export const useSovereignStore = create<SovereignState>()(
         const params = get().sysParams;
         return params.find((p: any) => p.param_code === code)?.value_txt;
       },
+      
+      setPendingCommands: (commands) => set({ pendingCommands: commands }),
+      clearCommand: (id) => set((state) => ({ 
+        pendingCommands: state.pendingCommands.filter(c => c.id !== id) 
+      })),
       
       updateSheet: (name, updates) => set((state) => {
         const existing = state.sheets[name] || {

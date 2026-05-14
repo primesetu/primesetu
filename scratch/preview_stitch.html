@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Item Master Entry</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;900&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "surface-tint": "#4d607a",
+                        "secondary-container": "#ffb21d",
+                        "surface-container-low": "#f5f3f5",
+                        "outline": "#74777e",
+                        "background": "#fbf9fb",
+                        "surface": "#fbf9fb",
+                        "on-secondary-fixed-variant": "#614000",
+                        "tertiary-container": "#3d3f3f",
+                        "surface-variant": "#e4e2e4",
+                        "on-primary-fixed": "#061c34",
+                        "surface-container-highest": "#e4e2e4",
+                        "surface-container-high": "#e9e7ea",
+                        "on-secondary-fixed": "#281800",
+                        "outline-variant": "#c4c6ce",
+                        "surface-container-lowest": "#ffffff",
+                        "primary-fixed-dim": "#b4c8e6",
+                        "tertiary": "#27292a",
+                        "on-secondary-container": "#6b4800",
+                        "error": "#ba1a1a",
+                        "on-tertiary-container": "#a9aaaa",
+                        "on-error": "#ffffff",
+                        "on-primary-container": "#98acc9",
+                        "error-container": "#ffdad6",
+                        "primary-container": "#2d4059",
+                        "inverse-on-surface": "#f2f0f2",
+                        "on-tertiary": "#ffffff",
+                        "on-surface-variant": "#44474d",
+                        "on-primary-fixed-variant": "#354861",
+                        "on-background": "#1b1c1d",
+                        "primary": "#162a42",
+                        "tertiary-fixed": "#e2e2e2",
+                        "secondary": "#805600",
+                        "inverse-primary": "#b4c8e6",
+                        "secondary-fixed": "#ffddaf",
+                        "surface-container": "#efedf0",
+                        "tertiary-fixed-dim": "#c6c6c7",
+                        "on-tertiary-fixed-variant": "#454747",
+                        "on-primary": "#ffffff",
+                        "on-tertiary-fixed": "#1a1c1c",
+                        "on-error-container": "#93000a",
+                        "on-surface": "#1b1c1d",
+                        "on-secondary": "#ffffff",
+                        "secondary-fixed-dim": "#ffba44",
+                        "inverse-surface": "#303032",
+                        "surface-dim": "#dbd9dc",
+                        "surface-bright": "#fbf9fb",
+                        "primary-fixed": "#d3e4ff"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "unit": "4px",
+                        "header-height": "64px",
+                        "footer-height": "48px",
+                        "gutter": "16px",
+                        "margin-edge": "24px",
+                        "grid-cell-padding": "8px 12px"
+                    },
+                    "fontFamily": {
+                        "display-lg": ["Inter"],
+                        "label-caps": ["Inter"],
+                        "keyboard-shortcut": ["Inter"],
+                        "header-title": ["Inter"],
+                        "body-dense": ["Inter"],
+                        "data-tabular": ["Inter"]
+                    },
+                    "fontSize": {
+                        "display-lg": ["24px", {"lineHeight": "32px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                        "label-caps": ["11px", {"lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "700"}],
+                        "keyboard-shortcut": ["12px", {"lineHeight": "16px", "fontWeight": "600"}],
+                        "header-title": ["18px", {"lineHeight": "24px", "fontWeight": "600"}],
+                        "body-dense": ["13px", {"lineHeight": "18px", "fontWeight": "400"}],
+                        "data-tabular": ["14px", {"lineHeight": "20px", "fontWeight": "500"}]
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+<body class="bg-background text-on-background h-screen flex flex-col overflow-hidden font-body-dense">
+<!-- TopAppBar JSON Component -->
+<header class="bg-slate-800 dark:bg-slate-950 text-slate-200 dark:text-slate-100 font-sans tracking-tight text-sm uppercase font-bold docked full-width top-0 h-12 border-b border-slate-700 dark:border-slate-800 flat no shadows flex justify-between items-center w-full px-4 shrink-0">
+<div class="flex items-center gap-4">
+<span class="text-lg font-black text-white tracking-widest">Item Master Entry</span>
+<div class="relative flex items-center ml-4">
+<span class="material-symbols-outlined absolute left-2 text-outline-variant text-sm">search</span>
+<input class="bg-slate-900 border border-slate-700 rounded pl-8 pr-2 py-1 text-xs text-white focus:outline-none focus:border-secondary-container focus:ring-1 focus:ring-secondary-container transition-all w-64 placeholder-outline-variant" placeholder="Go To..." type="text"/>
+</div>
+</div>
+<div class="flex items-center gap-3">
+<button class="text-slate-400 hover:text-white transition-colors hover:bg-slate-700 dark:hover:bg-slate-900 p-1 rounded"><span class="material-symbols-outlined text-lg">settings</span></button>
+<button class="text-slate-400 hover:text-white transition-colors hover:bg-slate-700 dark:hover:bg-slate-900 p-1 rounded"><span class="material-symbols-outlined text-lg">help</span></button>
+<button class="text-slate-400 hover:text-white transition-colors hover:bg-slate-700 dark:hover:bg-slate-900 p-1 rounded"><span class="material-symbols-outlined text-lg">account_circle</span></button>
+</div>
+</header>
+<!-- Main Workspace -->
+<main class="flex-1 flex flex-col overflow-hidden p-gutter gap-4">
+<!-- Tabs -->
+<nav class="flex border-b border-outline-variant shrink-0">
+<button class="px-4 py-2 font-label-caps text-on-surface-variant hover:bg-surface-variant transition-colors border-t-[3px] border-transparent">
+                View <span class="font-keyboard-shortcut text-outline ml-1">(Alt+1)</span>
+</button>
+<button class="px-4 py-2 font-label-caps text-on-surface-variant hover:bg-surface-variant transition-colors border-t-[3px] border-transparent">
+                Common Fields <span class="font-keyboard-shortcut text-outline ml-1">(Alt+2)</span>
+</button>
+<button class="px-4 py-2 font-label-caps text-on-surface bg-surface-container-lowest border-t-[3px] border-secondary-container shadow-[0_-2px_4px_rgba(0,0,0,0.02)]">
+                Item Details <span class="font-keyboard-shortcut text-on-surface-variant ml-1">(Alt+3)</span>
+</button>
+</nav>
+<!-- Grid Header Actions -->
+<div class="flex justify-between items-center shrink-0">
+<div class="bg-primary-fixed text-on-primary-fixed px-3 py-1.5 rounded flex items-center gap-2 border border-primary-fixed-dim text-xs font-medium">
+<span class="material-symbols-outlined text-sm">content_paste</span>
+                Paste from Excel supported <span class="font-keyboard-shortcut opacity-75">(Ctrl+V)</span>
+</div>
+<label class="flex items-center gap-2 text-sm text-on-surface cursor-pointer hover:bg-surface-variant px-2 py-1 rounded transition-colors">
+<span class="material-symbols-outlined text-outline">view_column_2</span>
+<span class="font-medium">Frozen Columns</span>
+<input checked="" class="rounded border-outline text-primary focus:ring-primary h-4 w-4" type="checkbox"/>
+</label>
+</div>
+<!-- Data Grid -->
+<div class="flex-1 overflow-auto bg-surface-container-lowest border border-outline-variant rounded shadow-sm relative">
+<table class="w-full text-left border-collapse whitespace-nowrap">
+<thead class="sticky top-0 bg-surface-container-high z-10 font-label-caps text-on-surface shadow-[0_1px_0_rgba(0,0,0,0.1)]">
+<tr>
+<th class="p-grid-cell-padding border-r border-outline-variant/50 sticky left-0 z-20 bg-surface-container-high shadow-[1px_0_0_rgba(0,0,0,0.1)] w-8 text-center">#</th>
+<th class="p-grid-cell-padding border-r border-outline-variant/50 sticky left-8 z-20 bg-surface-container-high shadow-[1px_0_0_rgba(0,0,0,0.1)] w-32">Style</th>
+<th class="p-grid-cell-padding border-r border-outline-variant/50">Shade</th>
+<th class="p-grid-cell-padding border-r border-outline-variant/50">Size</th>
+<th class="p-grid-cell-padding border-r border-outline-variant/50 w-64">Description</th>
+<th class="p-grid-cell-padding border-r border-outline-variant/50 text-right">Retail Price</th>
+<th class="p-grid-cell-padding border-r border-outline-variant/50 text-right">Dealer Price</th>
+<th class="p-grid-cell-padding border-r border-outline-variant/50 text-right">Cost Price</th>
+<th class="p-grid-cell-padding border-r border-outline-variant/50 text-right">Tax (%)</th>
+<th class="p-grid-cell-padding border-r border-outline-variant/50">Fabric</th>
+<th class="p-grid-cell-padding border-r border-outline-variant/50">Pattern</th>
+<th class="p-grid-cell-padding">Styling</th>
+</tr>
+</thead>
+<tbody class="font-data-tabular text-on-surface">
+<!-- Row 1: Active Cell -->
+<tr class="border-b border-outline-variant/30 hover:bg-secondary-fixed/10 transition-colors bg-secondary-fixed/5">
+<td class="p-grid-cell-padding border-r border-outline-variant/50 sticky left-0 z-10 bg-surface-container-lowest text-outline-variant text-center text-xs">1</td>
+<td class="p-0 border-r border-outline-variant/50 sticky left-8 z-10 bg-surface-container-lowest">
+<input class="w-full h-full p-grid-cell-padding bg-transparent border-2 border-secondary-container outline-none text-on-surface font-data-tabular m-0 rounded-none shadow-[inset_0_0_0_1px_rgba(255,178,29,0.2)]" type="text" value="TSH-001-A"/>
+</td>
+<td class="p-grid-cell-padding border-r border-outline-variant/50">Navy Blue</td>
+<td class="p-grid-cell-padding border-r border-outline-variant/50">M</td>
+<td class="p-grid-cell-padding border-r border-outline-variant/50 text-on-surface-variant truncate max-w-[16rem]">Basic Crew Neck Tee</td>
+<td class="p-grid-cell-padding border-r border-outline-variant/50 text-right">24.99</td>
+<td class="p-grid-cell-padding border-r border-outline-variant/50 text-right">12.50</td>
+<td class="p-grid-cell-padding border-r border-outline-variant/50 text-right text-outline">8.00</td>
+<td class="p-grid-cell-padding border-r border-outline-variant/50 text-right">5.0</td>
+<td class="p-grid-cell-padding border-r border-outline-variant/50">100% Cotton</td>
+<td class="p-grid-cell-padding border-r border-outline-variant/50">Solid</td>
+<td class="p-grid-cell-padding">Slim Fit</td>
+</tr>
+<!-- Row 2 -->
+<tr class="border-b border-outline-variant/30 hover:bg-surface-variant/50 transition-colors">
+<td class="p-grid-cell-padding border-r border-outline-variant/50 sticky left-0 z-10 bg-surface-container-lowest text-outline-variant text-center text-xs">2</td>
+<td class="p-grid-cell-padding border-r border-outline-variant/50 sticky left-8 z-10 bg-surface-container-lowest">TSH-001-B</td>
+<td class="p-grid-cell-padding border-r border-outline-variant/50">Charcoal</td>
+<td class="p-grid-cell-padding border-r border-outline-variant/50">L</td>
+<td class="p-grid-cell-padding border-r border-outline-variant/50 text-on-surface-variant truncate max-w-[16rem]">Basic Crew Neck Tee</td>
+<td class="p-grid-cell-padding border-r border-outline-variant/50 text-right">24.99</td>
+<td class="p-grid-cell-padding border-r border-outline-variant/50 text-right">12.50</td>
+<td class="p-grid-cell-padding border-r border-outline-variant/50 text-right text-outline">8.00</td>
+<td class="p-grid-cell-padding border-r border-outline-variant/50 text-right">5.0</td>
+<td class="p-grid-cell-padding border-r border-outline-variant/50">100% Cotton</td>
+<td class="p-grid-cell-padding border-r border-outline-variant/50">Solid</td>
+<td class="p-grid-cell-padding">Slim Fit</td>
+</tr>
+<!-- Row 3 -->
+<tr class="border-b border-outline-variant/30 hover:bg-surface-variant/50 transition-colors bg-surface-container-low">
+<td class="p-grid-cell-padding border-r border-outline-variant/50 sticky left-0 z-10 bg-surface-container-low text-outline-variant text-center text-xs">3</td>
+<td class="p-grid-cell-padding border-r border-outline-variant/50 sticky left-8 z-10 bg-surface-container-low">DNM-104-X</td>
+<td class="p-grid-cell-padding border-r border-outline-variant/50">Washed Indigo</td>
+<td class="p-grid-cell-padding border-r border-outline-variant/50">32x32</td>
+<td class="p-grid-cell-padding border-r border-outline-variant/50 text-on-surface-variant truncate max-w-[16rem]">Classic Straight Leg Jean</td>
+<td class="p-grid-cell-padding border-r border-outline-variant/50 text-right">89.50</td>
+<td class="p-grid-cell-padding border-r border-outline-variant/50 text-right">45.00</td>
+<td class="p-grid-cell-padding border-r border-outline-variant/50 text-right text-outline">28.50</td>
+<td class="p-grid-cell-padding border-r border-outline-variant/50 text-right">8.5</td>
+<td class="p-grid-cell-padding border-r border-outline-variant/50">Denim 14oz</td>
+<td class="p-grid-cell-padding border-r border-outline-variant/50">Washed</td>
+<td class="p-grid-cell-padding">Straight</td>
+</tr>
+<!-- Row 4 -->
+<tr class="border-b border-outline-variant/30 hover:bg-surface-variant/50 transition-colors">
+<td class="p-grid-cell-padding border-r border-outline-variant/50 sticky left-0 z-10 bg-surface-container-lowest text-outline-variant text-center text-xs">4</td>
+<td class="p-grid-cell-padding border-r border-outline-variant/50 sticky left-8 z-10 bg-surface-container-lowest text-outline-variant italic">New...</td>
+<td class="p-grid-cell-padding border-r border-outline-variant/50"></td>
+<td class="p-grid-cell-padding border-r border-outline-variant/50"></td>
+<td class="p-grid-cell-padding border-r border-outline-variant/50"></td>
+<td class="p-grid-cell-padding border-r border-outline-variant/50"></td>
+<td class="p-grid-cell-padding border-r border-outline-variant/50"></td>
+<td class="p-grid-cell-padding border-r border-outline-variant/50"></td>
+<td class="p-grid-cell-padding border-r border-outline-variant/50"></td>
+<td class="p-grid-cell-padding border-r border-outline-variant/50"></td>
+<td class="p-grid-cell-padding border-r border-outline-variant/50"></td>
+<td class="p-grid-cell-padding"></td>
+</tr>
+</tbody>
+</table>
+</div>
+</main>
+<!-- Footer JSON Component -->
+<footer class="bg-slate-900 dark:bg-black text-slate-300 dark:text-slate-400 font-mono text-[11px] font-semibold fixed bottom-0 w-full h-10 border-t-2 border-slate-700 shadow-[0_-4px_6px_-1px_rgba(0,0,0,0.1)] flex items-center justify-start space-x-1 px-2 z-50 shrink-0">
+<!-- Replaced links with requested functional buttons -->
+<button class="text-slate-400 px-3 py-1 hover:bg-slate-800 dark:hover:bg-slate-900 hover:text-amber-400 Transition-all duration-150 ease-in-out border border-transparent hover:border-slate-700 rounded flex items-center gap-1">
+<span class="font-keyboard-shortcut text-[10px] opacity-70">[F2]</span> Add
+        </button>
+<button class="text-slate-400 px-3 py-1 hover:bg-slate-800 dark:hover:bg-slate-900 hover:text-amber-400 Transition-all duration-150 ease-in-out border border-transparent hover:border-slate-700 rounded flex items-center gap-1">
+<span class="font-keyboard-shortcut text-[10px] opacity-70">[F3]</span> Edit
+        </button>
+<button class="text-slate-400 px-3 py-1 hover:bg-slate-800 dark:hover:bg-slate-900 hover:text-amber-400 Transition-all duration-150 ease-in-out border border-transparent hover:border-slate-700 rounded flex items-center gap-1">
+<span class="font-keyboard-shortcut text-[10px] opacity-70">[F4]</span> Delete
+        </button>
+<div class="w-px h-4 bg-slate-700 mx-1"></div>
+<button class="bg-slate-700 text-white px-3 py-1 hover:bg-slate-600 Transition-all duration-150 ease-in-out rounded flex items-center gap-1">
+<span class="font-keyboard-shortcut text-[10px] text-amber-400">[F9]</span> Save
+        </button>
+<button class="text-slate-400 px-3 py-1 hover:bg-slate-800 dark:hover:bg-slate-900 hover:text-amber-400 Transition-all duration-150 ease-in-out border border-transparent hover:border-slate-700 rounded flex items-center gap-1">
+<span class="font-keyboard-shortcut text-[10px] opacity-70">[Esc]</span> Cancel
+        </button>
+<div class="flex-1"></div>
+<button class="text-slate-400 px-3 py-1 hover:bg-slate-800 dark:hover:bg-slate-900 hover:text-amber-400 Transition-all duration-150 ease-in-out border border-transparent hover:border-slate-700 rounded flex items-center gap-1">
+<span class="font-keyboard-shortcut text-[10px] opacity-70">[P]</span> Print
+        </button>
+<button class="text-slate-400 px-3 py-1 hover:bg-slate-800 dark:hover:bg-slate-900 hover:text-error Transition-all duration-150 ease-in-out border border-transparent hover:border-slate-700 rounded flex items-center gap-1">
+<span class="font-keyboard-shortcut text-[10px] opacity-70">[X]</span> Exit
+        </button>
+<span class="hidden">© 2024 Industrial Retail Systems</span>
+</footer>
+</body></html>

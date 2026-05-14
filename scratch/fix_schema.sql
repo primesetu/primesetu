@@ -1,0 +1,3 @@
+ALTER TABLE smriti_item ALTER COLUMN sku TYPE TEXT;
+ALTER TABLE smriti_item ALTER COLUMN name TYPE TEXT;
+ALTER TABLE smriti_item ALTER COLUMN image_url TYPE TEXT;

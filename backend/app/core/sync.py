@@ -44,7 +44,7 @@ from typing import Tuple
 logger = logging.getLogger("smriti.sync")
 
 
-async def enqueue(table_name: str, operation: str, record: dict, pk_column: str = "id") -> None:
+async def enqueue(table_name: str, operation: str, record: dict, pk_column: str = "id", idempotency_key: str = None) -> None:
     """
     Enqueue a local write for eventual cloud sync.
 
@@ -71,7 +71,7 @@ async def enqueue(table_name: str, operation: str, record: dict, pk_column: str 
 
     try:
         from app.services.offline_sync import offline_sync_engine
-        await offline_sync_engine.enqueue(table_name, operation, record, pk_column)
+        await offline_sync_engine.enqueue(table_name, operation, record, pk_column, idempotency_key)
         logger.debug(f"[Sync] Enqueued {operation} → {table_name} (pk={pk_column})")
     except Exception as exc:
         # CRITICAL: Never let sync failure block the billing write path.

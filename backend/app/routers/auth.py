@@ -37,7 +37,7 @@ import secrets
 from datetime import datetime, timedelta, timezone
 from typing import Optional
 
-from fastapi import APIRouter, HTTPException, status, Depends
+from fastapi import APIRouter, HTTPException, status, Depends, Request
 from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
 from pydantic import BaseModel
 from sqlalchemy.ext.asyncio import AsyncSession
@@ -124,6 +124,7 @@ async def get_auth_status():
 @router.post("/local-login", response_model=LocalLoginResponse)
 async def local_login(
     payload: LocalLoginRequest,
+    request: Request,
     db: AsyncSession = Depends(get_db),
 ):
     """
@@ -176,26 +177,82 @@ async def local_login(
     }
     mapped_role = LOCAL_ROLE_MAP.get(payload.username.lower())
 
+    ip_address = request.client.host if request.client else "unknown"
+    from app.models.sovereign import SmritiAuthAttempt
+    import logging
+    logger = logging.getLogger("smriti.auth")
+
+    # 1. Check if locked out
+    attempt_record = await db.scalar(
+        select(SmritiAuthAttempt).where(
+            SmritiAuthAttempt.username == payload.username.lower(),
+            SmritiAuthAttempt.ip_address == ip_address
+        )
+    )
+    if attempt_record and attempt_record.locked_until and attempt_record.locked_until > datetime.utcnow():
+        raise HTTPException(
+            status_code=status.HTTP_429_TOO_MANY_REQUESTS,
+            detail=f"[SMRITI-OS] Account locked until {attempt_record.locked_until.isoformat()} UTC due to too many failed attempts."
+        )
+
+    async def _handle_failure():
+        nonlocal attempt_record
+        if not attempt_record:
+            attempt_record = SmritiAuthAttempt(
+                username=payload.username.lower(),
+                ip_address=ip_address,
+                failed_count=1
+            )
+            db.add(attempt_record)
+        else:
+            attempt_record.failed_count += 1
+            attempt_record.last_attempt_at = datetime.utcnow()
+            
+            # Apply lockout curve: 3=1m, 5=15m, 10=1h
+            if attempt_record.failed_count >= 10:
+                attempt_record.locked_until = datetime.utcnow() + timedelta(hours=1)
+            elif attempt_record.failed_count >= 5:
+                attempt_record.locked_until = datetime.utcnow() + timedelta(minutes=15)
+            elif attempt_record.failed_count >= 3:
+                attempt_record.locked_until = datetime.utcnow() + timedelta(minutes=1)
+                
+        await db.commit()
+        
+        node_id_str = getattr(settings, "node_id", store_id)
+        logger.warning(
+            f"security_lockout: node_id={node_id_str} username={payload.username.lower()} "
+            f"ip={ip_address} failed_count={attempt_record.failed_count}"
+        )
+        
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail="[SMRITI-OS] Invalid PIN. Access denied.",
+            headers={"WWW-Authenticate": "Bearer"},
+        )
+
+    async def _handle_success():
+        if attempt_record:
+            attempt_record.failed_count = 0
+            attempt_record.locked_until = None
+            await db.commit()
+
     if mapped_role:
         if not secrets.compare_digest(payload.pin.strip(), admin_pin.strip()):
-            raise HTTPException(
-                status_code=status.HTTP_401_UNAUTHORIZED,
-                detail="[SMRITI-OS] Invalid PIN. Access denied.",
-                headers={"WWW-Authenticate": "Bearer"},
-            )
+            await _handle_failure()
+        
+        await _handle_success()
         # Use a stable UUID per role so audit logs are consistent
-        ROLE_UUID_MAP = {
-            "admin":             "00000000-0000-0000-0000-000000000001",
-            "manager":           "00000000-0000-0000-0000-000000000002",
-            "warehouse_manager": "00000000-0000-0000-0000-000000000003",
-        }
+        import uuid
+        node_id_str = getattr(settings, "node_id", store_id)
+        user_uuid = str(uuid.uuid5(uuid.NAMESPACE_DNS, f"{node_id_str}-{mapped_role}"))
+
         ROLE_NAME_MAP = {
             "admin":             "Store Administrator",
             "manager":           "Store Manager",
             "warehouse_manager": "Warehouse Manager",
         }
         token = _issue_local_jwt(
-            user_id=ROLE_UUID_MAP[mapped_role],
+            user_id=user_uuid,
             email=f"{payload.username.lower()}@smriti.local",
             role=mapped_role,
             store_id=store_id,
@@ -206,7 +263,7 @@ async def local_login(
             expires_in=_TOKEN_EXPIRY_HOURS * 3600,
             role=mapped_role,
             store_id=store_id,
-            user_id=ROLE_UUID_MAP[mapped_role],
+            user_id=user_uuid,
         )
 
     # ── Per-user path: look up User record in local DB ────────────────────────
@@ -233,11 +290,9 @@ async def local_login(
 
     # Validate PIN against admin PIN (until per-user PINs are implemented)
     if not secrets.compare_digest(payload.pin.strip(), admin_pin.strip()):
-        raise HTTPException(
-            status_code=status.HTTP_401_UNAUTHORIZED,
-            detail="[SMRITI-OS] Invalid PIN. Access denied.",
-            headers={"WWW-Authenticate": "Bearer"},
-        )
+        await _handle_failure()
+        
+    await _handle_success()
 
     token = _issue_local_jwt(
         user_id=str(user_obj.id),

@@ -27,11 +27,14 @@ logger = logging.getLogger("smriti.offline_sync")
 STATUS_PENDING = "PENDING"
 STATUS_SYNCED  = "SYNCED"
 STATUS_FAILED  = "FAILED"
+STATUS_FAILED_PERMANENTLY = "FAILED_PERMANENTLY"
 
 # ── Sync Queue DDL (in local PostgreSQL) ────────────────────
 QUEUE_DDL = """
 CREATE TABLE IF NOT EXISTS smriti_sync_queue (
     id           BIGSERIAL PRIMARY KEY,
+    packet_id    UUID        NOT NULL DEFAULT gen_random_uuid(),
+    idempotency_key TEXT,
     tenant_id    VARCHAR(50) DEFAULT 'SYSTEM',
     table_name   TEXT        NOT NULL,
     operation    TEXT        NOT NULL,   -- INSERT | UPDATE | DELETE
@@ -39,8 +42,11 @@ CREATE TABLE IF NOT EXISTS smriti_sync_queue (
     pk_column    TEXT        NOT NULL DEFAULT 'id', -- Primary key column name for DELETE ops
     status       TEXT        NOT NULL DEFAULT 'PENDING',
     retry_count  INT         NOT NULL DEFAULT 0,
+    last_error   TEXT,
+    error_class  TEXT,
     next_retry   TIMESTAMPTZ NOT NULL DEFAULT NOW(), -- Exponential backoff gate
     created_at   TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+    failed_at    TIMESTAMPTZ,
     synced_at    TIMESTAMPTZ
 );
 CREATE INDEX IF NOT EXISTS idx_sync_queue_status ON smriti_sync_queue (status, next_retry, id);
@@ -112,10 +118,23 @@ class OfflineSyncEngine:
                 s = stmt.strip()
                 if s:
                     await conn.execute(text(s))
+            # Safe migrations for new columns
+            migration_stmts = [
+                "ALTER TABLE smriti_sync_queue ADD COLUMN IF NOT EXISTS packet_id UUID DEFAULT gen_random_uuid()",
+                "ALTER TABLE smriti_sync_queue ADD COLUMN IF NOT EXISTS idempotency_key TEXT",
+                "ALTER TABLE smriti_sync_queue ADD COLUMN IF NOT EXISTS last_error TEXT",
+                "ALTER TABLE smriti_sync_queue ADD COLUMN IF NOT EXISTS error_class TEXT",
+                "ALTER TABLE smriti_sync_queue ADD COLUMN IF NOT EXISTS failed_at TIMESTAMPTZ"
+            ]
+            for stmt in migration_stmts:
+                try:
+                    await conn.execute(text(stmt))
+                except Exception as e:
+                    logger.debug(f"[OfflineSync] Migration note: {e}")
         logger.info("[OfflineSync] Local PG queue initialized.")
 
     # ── Public API ───────────────────────────────────────────
-    async def enqueue(self, table_name: str, operation: str, record: dict, pk_column: str = "id"):
+    async def enqueue(self, table_name: str, operation: str, record: dict, pk_column: str = "id", idempotency_key: Optional[str] = None):
         """
         Call after any local PG write to register it for cloud sync.
 
@@ -124,22 +143,33 @@ class OfflineSyncEngine:
             operation:  INSERT | UPDATE | DELETE
             record:     Full row dict (for DELETE, must include pk_column value).
             pk_column:  Primary key column name for DELETE URL construction.
+            idempotency_key: Optional deterministic key to prevent duplicate processing.
 
         Example:
             await offline_sync.enqueue("smriti_sale_hdr", "INSERT", sale_dict)
-            await offline_sync.enqueue("smriti_item", "DELETE", {"sku": "XYZ"}, pk_column="sku")
         """
+        import uuid
+        packet_id = str(uuid.uuid4())
+        idem_key = idempotency_key or packet_id
+
+        # OPTION A: Inject directly into payload so it syncs to Supabase columns
+        record_copy = dict(record)
+        record_copy["packet_id"] = packet_id
+        record_copy["idempotency_key"] = idem_key
+
         async with self._local_session() as session:
             await session.execute(
                 text("""
-                    INSERT INTO smriti_sync_queue (table_name, operation, record_json, pk_column)
-                    VALUES (:tbl, :op, CAST(:rec AS JSONB), :pk_col)
+                    INSERT INTO smriti_sync_queue (table_name, operation, record_json, pk_column, packet_id, idempotency_key)
+                    VALUES (:tbl, :op, CAST(:rec AS JSONB), :pk_col, CAST(:pkt_id AS UUID), :idem_key)
                 """),
                 {
                     "tbl": table_name,
                     "op": operation,
-                    "rec": json.dumps(record, default=str),
+                    "rec": json.dumps(record_copy, default=str),
                     "pk_col": pk_column,
+                    "pkt_id": packet_id,
+                    "idem_key": idem_key,
                 }
             )
             await session.commit()
@@ -185,10 +215,9 @@ class OfflineSyncEngine:
             # preventing duplicate PK violations on the Supabase upsert.
             result = await session.execute(
                 text("""
-                    SELECT id, table_name, operation, record_json, pk_column
+                    SELECT id, table_name, operation, record_json, pk_column, retry_count
                     FROM smriti_sync_queue
                     WHERE status = 'PENDING'
-                      AND retry_count < 5
                       AND next_retry <= NOW()
                     ORDER BY id
                     LIMIT 100
@@ -214,7 +243,7 @@ class OfflineSyncEngine:
 
         async with httpx.AsyncClient(timeout=15) as client:
             for row in rows:
-                row_id, table, operation, record, pk_column = row
+                row_id, table, operation, record, pk_column, current_retry = row
                 record_dict = record if isinstance(record, dict) else json.loads(record)
 
                 try:
@@ -231,7 +260,7 @@ class OfflineSyncEngine:
                                 f"[OfflineSync] DELETE row {row_id}: pk_column '{pk_column}' "
                                 f"not found in record — skipping to avoid full-table delete."
                             )
-                            await self._set_status(row_id, STATUS_FAILED, current_retry=0)
+                            await self._set_status(row_id, STATUS_FAILED_PERMANENTLY, error=f"Missing PK {pk_column}", error_class="validation_error")
                             continue
                         resp = await client.delete(
                             f"{url}?{pk_column}=eq.{pk_val}",
@@ -239,47 +268,67 @@ class OfflineSyncEngine:
                         )
                     else:
                         logger.warning(f"[OfflineSync] Unknown operation '{operation}' for row {row_id}, skipping.")
-                        await self._set_status(row_id, STATUS_FAILED, current_retry=0)
+                        await self._set_status(row_id, STATUS_FAILED_PERMANENTLY, error=f"Unknown op {operation}", error_class="validation_error")
                         continue
 
                     ok = resp.status_code in (200, 201, 204)
-                    await self._set_status(row_id, STATUS_SYNCED if ok else STATUS_FAILED)
-
+                    
                     if ok:
+                        await self._set_status(row_id, STATUS_SYNCED)
                         logger.debug(f"[OfflineSync] ✓ {operation} → {table} (queue_id={row_id})")
                     else:
+                        error_text = resp.text[:250]
                         logger.warning(
                             f"[OfflineSync] ✗ {operation} → {table} "
-                            f"HTTP {resp.status_code}: {resp.text[:120]}"
+                            f"HTTP {resp.status_code}: {error_text}"
                         )
+                        
+                        if resp.status_code in (400, 422):
+                            await self._set_status(row_id, STATUS_FAILED_PERMANENTLY, error=error_text, error_class="validation_error")
+                        elif resp.status_code in (401, 403):
+                            await self._set_status(row_id, STATUS_FAILED, error=error_text, error_class="auth_error", current_retry=current_retry)
+                        elif resp.status_code == 409:
+                            await self._set_status(row_id, STATUS_FAILED_PERMANENTLY, error=error_text, error_class="conflict_error")
+                        else:
+                            await self._set_status(row_id, STATUS_FAILED, error=error_text, error_class="server_error", current_retry=current_retry)
 
+                except httpx.TimeoutException as e:
+                    logger.error(f"[OfflineSync] Timeout queue_id={row_id}: {e}")
+                    await self._set_status(row_id, STATUS_FAILED, error=str(e), error_class="timeout_error", current_retry=current_retry)
                 except Exception as e:
                     logger.error(f"[OfflineSync] Exception queue_id={row_id}: {e}")
-                    await self._set_status(row_id, STATUS_FAILED)
+                    await self._set_status(row_id, STATUS_FAILED, error=str(e), error_class="transport_error", current_retry=current_retry)
 
-    async def _set_status(self, row_id: int, status: str, current_retry: int = -1):
-        """Update row status with exponential backoff on failure."""
+    async def _set_status(self, row_id: int, status: str, current_retry: int = -1, error: str = None, error_class: str = None):
+        """Update row status with exponential backoff and dead-letter transitions."""
         async with self._local_session() as session:
             if status == STATUS_SYNCED:
                 await session.execute(
                     text("""
                         UPDATE smriti_sync_queue
-                        SET status='SYNCED', synced_at=NOW()
+                        SET status='SYNCED', synced_at=NOW(), last_error=NULL, error_class=NULL
                         WHERE id=:id
                     """),
                     {"id": row_id}
                 )
+            elif status == STATUS_FAILED_PERMANENTLY or current_retry >= 9:
+                await session.execute(
+                    text("""
+                        UPDATE smriti_sync_queue
+                        SET status='FAILED_PERMANENTLY', failed_at=NOW(), last_error=:err, error_class=:err_cls
+                        WHERE id=:id
+                    """),
+                    {"id": row_id, "err": error, "err_cls": error_class}
+                )
             else:
                 # Compute next_retry with exponential backoff
-                backoff_sql = (
-                    "NOW() + INTERVAL '" +
-                    " seconds' * LEAST(retry_count, 4) * 60"
-                )
                 await session.execute(
-                    text(f"""
+                    text("""
                         UPDATE smriti_sync_queue
                         SET status='PENDING',
                             retry_count = retry_count + 1,
+                            last_error = :err,
+                            error_class = :err_cls,
                             next_retry  = CASE
                                 WHEN retry_count = 0 THEN NOW() + INTERVAL '30 seconds'
                                 WHEN retry_count = 1 THEN NOW() + INTERVAL '2 minutes'
@@ -289,7 +338,7 @@ class OfflineSyncEngine:
                             END
                         WHERE id=:id
                     """),
-                    {"id": row_id}
+                    {"id": row_id, "err": error, "err_cls": error_class}
                 )
             await session.commit()
 

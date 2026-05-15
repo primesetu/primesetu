@@ -279,3 +279,15 @@ class SmritiStockMovement(Base):
     moved_at: Mapped[datetime] = mapped_column(DateTime, server_default=_NOW, index=True)
     
     last_sync: Mapped[Optional[datetime]] = mapped_column(DateTime, server_default=_NOW, nullable=True)
+
+class SmritiAuthAttempt(Base):
+    """ Tracks PIN brute-force lockout states locally """
+    __tablename__ = 'smriti_auth_attempts'
+    tenant_id: Mapped[str] = mapped_column(String, default='SYSTEM', index=True)
+    
+    id: Mapped[int] = mapped_column(Integer, primary_key=True, autoincrement=True)
+    username: Mapped[str] = mapped_column(String, index=True)
+    ip_address: Mapped[str] = mapped_column(String, index=True)
+    failed_count: Mapped[int] = mapped_column(Integer, default=0)
+    locked_until: Mapped[Optional[datetime]] = mapped_column(DateTime, nullable=True)
+    last_attempt_at: Mapped[datetime] = mapped_column(DateTime, default=datetime.utcnow)

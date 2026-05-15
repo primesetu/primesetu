@@ -28,7 +28,12 @@ const getBaseUrl = () => {
     return runtimeBackendUrl;
   }
 
-  // 3. [FALLBACK] Local LAN Discovery (Zero Cloud Mode)
+  // 3. [ENV CONFIG] Build-time fallback (Cloud / Tunnel)
+  if (CLOUD_API && !window.location.hostname.includes('localhost') && !window.location.hostname.includes('127.0.0.1')) {
+    return CLOUD_API;
+  }
+
+  // 4. [FALLBACK] Local LAN Discovery (Zero Cloud Mode)
   const hostname = typeof window !== 'undefined' ? window.location.hostname : '127.0.0.1';
   const localUrl = `http://${hostname}:8000`;
   

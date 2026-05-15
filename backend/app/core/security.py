@@ -90,7 +90,7 @@ class CurrentUser:
     user_id: str        # Supabase auth.users.id (UUID) or local user ID
     store_id: str       # From token metadata
     email: str
-    role: str           # cashier | manager | admin
+    role: str           # cashier | manager | admin | warehouse_manager | report_viewer
     tenant_id: str = "SYSTEM"
     full_name: Optional[str] = None
 
@@ -330,9 +330,10 @@ def require_role(*allowed_roles: str):
 
 
 # .. Role aliases (convenience) ................................................
-require_cashier = require_auth                           # any logged-in user
-require_manager = require_role("manager", "admin")
-require_admin   = require_role("admin")
+require_cashier   = require_auth                                                      # any logged-in user
+require_manager   = require_role("manager", "admin")                                  # manager-level ops
+require_warehouse = require_role("warehouse_manager", "manager", "admin")             # warehouse ops
+require_admin     = require_role("admin")
 
 # .. Optional auth (returns None when no token — for public endpoints) ........
 async def optional_auth(

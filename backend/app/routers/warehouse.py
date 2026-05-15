@@ -13,7 +13,7 @@ import uuid
 from datetime import datetime
 
 from app.core.database import get_db
-from app.core.security import require_auth, CurrentUser, require_manager
+from app.core.security import require_auth, CurrentUser, require_manager, require_warehouse
 from app.models import Store
 from app.models.sovereign import SmritiItem as Item, SmritiStock as ItemStock, SmritiAuditLog
 from sqlalchemy import Column, String, Integer, Numeric
@@ -49,7 +49,7 @@ async def list_stores(
 async def stock_transfer(
     payload: StockTransferRequest,
     db: AsyncSession = Depends(get_db),
-    current_user: CurrentUser = Depends(require_manager)
+    current_user: CurrentUser = Depends(require_warehouse)
 ):
     """
     Sovereign Multi-location Stock Transfer.
@@ -122,7 +122,7 @@ async def stock_transfer(
 async def stock_adjustment(
     payload: StockAdjustmentRequest,
     db: AsyncSession = Depends(get_db),
-    current_user: CurrentUser = Depends(require_manager)
+    current_user: CurrentUser = Depends(require_warehouse)
 ):
     """Manual Stock Correction Protocol with mandatory reason."""
     stmt = select(ItemStock).where(

@@ -17,7 +17,7 @@ import uuid
 from pydantic import BaseModel
 from app.core.security import require_auth, CurrentUser, require_manager
 from app.core.database import get_db
-from app.models import SyncPacket, RemoteCommand
+from app.models import RemoteCommand
 from app.schemas.common import PulseRequest, PulseResponse
 
 router = APIRouter(tags=["ho"])
@@ -100,28 +100,23 @@ async def trigger_ho_sync(
     db: AsyncSession = Depends(get_db),
     current_user: CurrentUser = Depends(require_manager)
 ):
-    """Flush pending packets to Head Office."""
-    stmt = select(SyncPacket).where(
-        SyncPacket.store_id == str(current_user.store_id),
-        SyncPacket.status == "PENDING"
-    )
-    result = await db.execute(stmt)
-    pending_packets = result.scalars().all()
+    """
+    On-demand flush: push all PENDING smriti_sync_queue rows to Supabase.
 
-    packet_count = len(pending_packets)
-
-    # Sovereign protocol: Mark as SYNCED once acknowledged by HO
-    for pkt in pending_packets:
-        pkt.status = "SYNCED"
-        pkt.synced_at = datetime.now()
-
-    await db.commit()
+    Uses the real OfflineSyncEngine (not the legacy MOCK path). Returns
+    actual synced/failed counts from the Supabase upsert round-trip.
+    """
+    from app.core.sync import flush_now
+    synced, failed = await flush_now()
 
     return {
         "status": "success",
-        "synced_records": packet_count,
-        "bandwidth_used": f"{(packet_count * 1.2):.1f} KB",
-        "message": f"Successfully synchronized {packet_count} packets with Head Office."
+        "synced_records": synced,
+        "failed_records": failed,
+        "message": (
+            f"Sync complete. {synced} records pushed to Supabase cloud."
+            + (f" {failed} records failed (will retry)." if failed else "")
+        ),
     }
 
 @router.post("/execute-command/{command_id}")

@@ -166,27 +166,47 @@ async def local_login(
     store_id = payload.store_id or "11"
 
     # ── Admin / single-PIN path ───────────────────────────────────────────────
-    if payload.username.lower() in ("admin", "owner"):
-        # Timing-safe PIN comparison
+    # Usernames that map to LOCAL roles (matched case-insensitively)
+    LOCAL_ROLE_MAP = {
+        "admin":   "admin",
+        "owner":   "admin",
+        "manager": "manager",
+        "warehouse": "warehouse_manager",
+        "wh":      "warehouse_manager",
+    }
+    mapped_role = LOCAL_ROLE_MAP.get(payload.username.lower())
+
+    if mapped_role:
         if not secrets.compare_digest(payload.pin.strip(), admin_pin.strip()):
             raise HTTPException(
                 status_code=status.HTTP_401_UNAUTHORIZED,
                 detail="[SMRITI-OS] Invalid PIN. Access denied.",
                 headers={"WWW-Authenticate": "Bearer"},
             )
+        # Use a stable UUID per role so audit logs are consistent
+        ROLE_UUID_MAP = {
+            "admin":             "00000000-0000-0000-0000-000000000001",
+            "manager":           "00000000-0000-0000-0000-000000000002",
+            "warehouse_manager": "00000000-0000-0000-0000-000000000003",
+        }
+        ROLE_NAME_MAP = {
+            "admin":             "Store Administrator",
+            "manager":           "Store Manager",
+            "warehouse_manager": "Warehouse Manager",
+        }
         token = _issue_local_jwt(
-            user_id="00000000-0000-0000-0000-000000000001",
-            email="admin@smriti.local",
-            role="admin",
+            user_id=ROLE_UUID_MAP[mapped_role],
+            email=f"{payload.username.lower()}@smriti.local",
+            role=mapped_role,
             store_id=store_id,
-            full_name="Store Administrator",
+            full_name=ROLE_NAME_MAP[mapped_role],
         )
         return LocalLoginResponse(
             access_token=token,
             expires_in=_TOKEN_EXPIRY_HOURS * 3600,
-            role="admin",
+            role=mapped_role,
             store_id=store_id,
-            user_id="00000000-0000-0000-0000-000000000001",
+            user_id=ROLE_UUID_MAP[mapped_role],
         )
 
     # ── Per-user path: look up User record in local DB ────────────────────────

@@ -7,3 +7,13 @@ __pycache__/
 .vscode/
 .pytest_cache/
 *.log
+venv/
+.DS_Store
+.pi/
+.agents/
+.claude/
+.continue/
+.antigravity/
+.gemini/
+outbox.sqlite3
+installer/

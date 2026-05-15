@@ -22,7 +22,13 @@ const getBaseUrl = () => {
     return preferredBackendUrl;
   }
 
-  // 2. [FALLBACK] Local LAN Discovery (Zero Cloud Mode)
+  // 2. [RUNTIME CONFIG] Deployment contract injected at startup
+  const runtimeBackendUrl = typeof window !== 'undefined' ? window.__RUNTIME_CONFIG__?.BACKEND_URL : '';
+  if (runtimeBackendUrl) {
+    return runtimeBackendUrl;
+  }
+
+  // 3. [FALLBACK] Local LAN Discovery (Zero Cloud Mode)
   const hostname = typeof window !== 'undefined' ? window.location.hostname : '127.0.0.1';
   const localUrl = `http://${hostname}:8000`;
   
@@ -58,31 +64,28 @@ apiClient.interceptors.request.use((config) => {
   return config
 })
 
-// Response interceptor to detect backend connectivity issues
+// Response interceptor: Handles retries, session expiration, and errors.
 apiClient.interceptors.response.use(
-  (response) => {
-    // If request succeeds, ensure backend is marked as available
-    const setBackendAvailable = useSovereignStore.getState().setBackendAvailable;
-    const isBackendAvailable = useSovereignStore.getState().isBackendAvailable;
-    if (!isBackendAvailable) {
-      setBackendAvailable(true);
-    }
-    return response;
-  },
-  (error) => {
-    const setBackendAvailable = useSovereignStore.getState().setBackendAvailable;
+  (response) => response,
+  async (error) => {
+    const { config, response } = error;
 
-    // Check for network errors or timeout (backend down)
-    if (!error.response || error.code === 'ERR_NETWORK' || error.code === 'ECONNABORTED') {
-      console.error('[Sovereign Mode] Backend connection lost:', error.message);
-      setBackendAvailable(false);
+    // [R1-D] 401 Unauthorized → Session expired.
+    if (response?.status === 401) {
+      localStorage.removeItem('smriti_local_token');
+      console.warn('[SMRITI-OS] Session expired (401). Token cleared.');
+      return Promise.reject(error);
     }
 
-    // [R1-D] 401 Unauthorized → token has expired or is invalid.
-    // Clear it from localStorage so LocalAuthGuard triggers the login screen.
-    if (error.response?.status === 401) {
-      localStorage.removeItem('smriti_local_token')
-      console.warn('[SMRITI-OS] Session expired (401). Token cleared — re-authentication required.')
+    // [RETRY LOGIC] Calibrated for unstable retail WiFi/Tethering.
+    // Rule: Retries are ONLY for idempotent requests (GET or carrying an idempotency key).
+    const isIdempotent = config?.method?.toUpperCase() === 'GET' || !!config?.headers?.['x-idempotency-key'];
+    const isNetworkError = !response || error.code === 'ECONNABORTED' || error.code === 'ERR_NETWORK';
+    
+    if (isIdempotent && isNetworkError && !config._retry) {
+      config._retry = true;
+      console.warn(`[SMRITI-OS] Retrying idempotent request: ${config.url}`);
+      return apiClient(config); // Recursive retry (max 1)
     }
 
     return Promise.reject(error);
@@ -357,7 +360,7 @@ export const api = {
   connectivity: {
     healthCheck: async (url: string, signal?: AbortSignal) => {
       try {
-        const response = await fetch(`${url}/api/v1/onboarding/health`, { 
+        const response = await fetch(`${url}/api/v1/health`, { 
           signal,
           headers: { 'Accept': 'application/json' }
         });
@@ -371,7 +374,3 @@ export const api = {
     },
   }
 }
-
-
-
-

@@ -220,281 +220,305 @@ async def finalize_transaction(
     current_user = Depends(require_auth)
 ):
     """
-    Finalize a sales transaction.
-    - Looks up items from Shoper9 Itemmaster (source of truth).
-    - Stores denormalized item data for historical record.
-    - Sovereign Store Isolation via current_user.store_id.
+    [R2] Finalize a sales transaction.
+
+    TRANSACTION ARCHITECTURE (R2):
+      Single db.begin() scope covers:
+        counter resolution, Transaction header, TransactionItem rows,
+        Stktrndtls rows (S9 ledger), Stktrnaddldtls rows (payment settlement),
+        DraftBillItem clear, SmritiIdempotency record.
+      Post-commit (asyncio.create_task):
+        LoyaltyEngine.accrue(), WhatsApp receipt.
+
+    TRANSITIONAL NOTE: asyncio.create_task post-commit tasks are NOT guaranteed
+    to complete if the server exits mid-task. Migration to persistent Celery queue
+    is planned for Phase R4. This risk is acceptable for loyalty and WhatsApp
+    (non-financial eventual consistency).
+
+    Shoper9 operational sequencing preserved exactly.
+    Stktrndtls and Stktrnaddldtls field mappings unchanged.
     """
-    store_id = current_user.store_id
-    
-    # Check StockOutActionInBill policy
-    stock_action = await ConfigService.get_stock_out_action(db, store_id)
-    
-    # 1. Resolve Institutional Control Number & Bill Number
-    try:
-        trn_ctrl_no = await CounterManager.get_next_ctrl_no(db, "2100")
-    except Exception as e:
-        # Fallback logic requested by user: Sync with max(trnctrlno)
-        res = await db.execute(text("SELECT COALESCE(MAX(trnctrlno), 0) + 1 FROM shoper9.stktrnhdr WHERE trntype = 2100"))
-        trn_ctrl_no = res.scalar()
-        # Update genlookup to this new number to prevent future conflicts
-        await db.execute(text("UPDATE shoper9.genlookup SET number = :n WHERE recid = 101 AND code = '2100'"), {"n": trn_ctrl_no})
-
-    new_bill_no = txn_in.bill_no
-    if not new_bill_no:
-        bill_prefix = f"B-{store_id}-"
-        new_bill_no = f"{bill_prefix}{trn_ctrl_no}"
- 
-    # 2. Create Transaction Header
-    new_txn = Transaction(
-        id=uuid.uuid4(),
-        bill_no=new_bill_no,
-        store_id=store_id,
-        type=txn_in.type,
-        status="Finalized",
-        payments={p.mode: {"amount": p.amount, "ref": p.ref_no} for p in (txn_in.payments or [])},
-        customer_id=txn_in.customer_id,
-        cashier_id=current_user.id,
-        till_id=txn_in.till_id,
-        shoper_recid=txn_in.shoper_recid,
-        external_id=str(trn_ctrl_no),
-        notes=f"Salesman: {txn_in.salesman_id}" if txn_in.salesman_id else None
-    )
-    
-    subtotal = 0
-    tax_total = 0
-    disc_total = 0
-    
-    # 3. Process Items
-    for item_in in txn_in.items:
-        # Resolve item details from Shoper9 Itemmaster by stock_no
-        item_name = item_in.descr or "Unknown Item"
-        item_brand = "SMRITI"
-        
-        if item_in.stock_no:
-            legacy_res = await db.execute(
-                select(Itemmaster).where(Itemmaster.stockno == item_in.stock_no)
-            )
-            legacy_item = legacy_res.scalar_one_or_none()
-            if legacy_item:
-                item_name = legacy_item.itemdesc or item_name
-                item_brand = legacy_item.class1cd or item_brand
-                
-                # STOCK CHECKING LOGIC
-                if stock_action in ["Block", "Warn"]:
-                    stock_qty = await db.scalar(
-                        select(func.sum(Stockmaster.curbalqty)).where(Stockmaster.stockno == item_in.stock_no)
-                    )
-                    if (stock_qty or 0) < item_in.qty:
-                        if stock_action == "Block":
-                            raise HTTPException(
-                                status_code=400, 
-                                detail=f"Stock for '{item_in.stock_no}' is insufficient (Available: {stock_qty or 0}). Blocked by policy."
-                            )
-                        # "Warn" can be handled by adding a flag to the response or logging it
-                        # Here we just log it for the sovereign audit trail
-                        print(f"WARNING: Out of stock for {item_in.stock_no} (Store: {store_id})")
-        
-        # ── GST COMPLIANCE INTEGRATION ──
-        # Formula parity with Shoper9 logic (Inclusive vs Exclusive)
-        tax_info = await TaxService.get_item_tax_info(db, item_in.stock_no, txn_in.customer_id)
-        
-        line_gross_paise = int(item_in.qty * item_in.unit_price)
-        line_disc_paise = int(Decimal(str(line_gross_paise * (item_in.discount_per / 100))).quantize(Decimal('1'), rounding=ROUND_HALF_UP))
-        line_base_for_tax = line_gross_paise - line_disc_paise
-        
-        line_tax_paise = 0
-        line_tax_details = {}
-        
-        if "error" not in tax_info:
-            is_inc = tax_info.get("is_inclusive", False)
-            hsn_code = tax_info.get("hsn_code")
-            
-            for component in tax_info.get("tax_rates", []):
-                rate = component["rate"]
-                name = component["name"]
-                
-                # Calculate tax for this component
-                comp_tax = TaxService.calculate_tax(Decimal(line_base_for_tax), rate, is_inc)
-                comp_tax_paise = int(comp_tax.quantize(Decimal('1'), rounding=ROUND_HALF_UP))
-                
-                line_tax_paise += comp_tax_paise
-                line_tax_details[name] = comp_tax_paise
-
-        line_net_paise = line_base_for_tax
-        if not tax_info.get("is_inclusive", False):
-            line_net_paise += line_tax_paise
-        
-        subtotal += line_gross_paise
-        tax_total += line_tax_paise
-        disc_total += line_disc_paise
-        
-        new_item = TransactionItem(
-            transaction_id=new_txn.id,
-            stock_no=item_in.stock_no,
-            item_name=item_name,
-            item_brand=item_brand,
-            qty=item_in.qty,
-            mrp=item_in.unit_price,
-            discount_per=item_in.discount_per,
-            tax_amount=line_tax_paise,
-            net_amount=line_net_paise,
-            hsn_code=tax_info.get("hsn_code"),
-            tax_details=line_tax_details
-        )
-        new_txn.items.append(new_item)
-
-        # ── WRITE Stktrndtls row (S9 parity — sovereign ledger) ──────────────
-        # Captures: MRP snapshot, stock level at time of sale, salesperson, GST comps
-        # entsrlno = item sequence number within the bill (1-based)
-        s9_dtl = Stktrndtls(
-            trntype        = 2100,
-            trnctrlno      = trn_ctrl_no,
-            docnoprefix    = new_bill_no.split("/")[0] if "/" in new_bill_no else new_bill_no,
-            docno          = trn_ctrl_no,
-            entsrlno       = (txn_in.items.index(item_in) + 1),
-            stockno        = item_in.stock_no,
-            docqty         = item_in.qty,
-            docentrate     = float(item_in.unit_price) / 100,   # paise → rupees
-            docentvalue    = float(line_gross_paise) / 100,
-            docenttotdisc  = float(line_disc_paise) / 100,
-            docenttax      = float(line_tax_paise) / 100,
-            docentnetvalue = float(line_net_paise) / 100,
-            itemmrpbilltm  = float(item_in.unit_price) / 100,   # MRP snapshot
-            taxcomp1       = float(line_tax_details.get("CGST", 0)) / 100,
-            taxcomp2       = float(line_tax_details.get("SGST", 0)) / 100,
-            taxcomp3       = float(line_tax_details.get("IGST", 0)) / 100,
-            salespersoncd  = txn_in.salesman_id or None,
-            vauid          = str(current_user.id),
-            vacompcode     = store_id,
-            docentvoidind  = False,
-            tenant_id      = store_id,
-        )
-        db.add(s9_dtl)
-
-    new_txn.subtotal = subtotal
-    new_txn.tax_total = tax_total
-    new_txn.discount_total = disc_total
-    new_txn.net_payable = subtotal - disc_total
-    
-    db.add(new_txn)
-    
-    # 5. Loyalty Points Accrual
-    if txn_in.customer_id:
-        customer = await db.get(Partner, txn_in.customer_id)
-        if customer:
-            multiplier = 1.0
-            if customer.loyalty_tier == "GOLD": multiplier = 1.5
-            elif customer.loyalty_tier == "PLATINUM": multiplier = 2.0
-            
-            accrued_points = int((new_txn.net_payable / 10000) * multiplier)
-            if accrued_points > 0:
-                customer.loyalty_points += accrued_points
-                customer.total_points_earned += accrued_points
-                
-                ledger_entry = LoyaltyLedger(
-                    store_id=store_id,
-                    partner_id=customer.id,
-                    txn_type="earn",
-                    points=accrued_points,
-                    balance=customer.loyalty_points,
-                    sale_id=new_txn.id,
-                    txn_date=func.current_date()
-                )
-                db.add(ledger_entry)
-
-    await db.commit()
-
-    # ── AUTO-CLEAR DRAFT (xtemp drop) ──
-    from sqlalchemy import delete
-    await db.execute(delete(DraftBillItem).where(DraftBillItem.user_id == current_user.id))
-
-    # ── WRITE StkTrnAddlDtls (payment settlement rows — S9 parity) ──────────
-    # Each payment mode in the bill gets its own detail row, exactly as S9 does.
-    # This enables proper day-end cash reconciliation and payment-mode reporting.
-    if txn_in.payments:
-        ent_srl = 1
-        for payment in txn_in.payments:
-            mode_str  = str(payment.mode).upper()
-            paymode_type = 1  # default CASH
-            if any(x in mode_str for x in ["CARD", "DEBIT", "CREDIT"]):
-                paymode_type = 2
-            elif any(x in mode_str for x in ["CHEQUE", "CHQ"]):
-                paymode_type = 3
-            elif any(x in mode_str for x in ["UPI", "QR", "WALLET"]):
-                paymode_type = 4
-            elif "GIFT" in mode_str or "GV" in mode_str:
-                paymode_type = 5
-
-            addl_dtl = Stktrnaddldtls(
-                trntype      = 2100,
-                trnctrlno    = trn_ctrl_no,
-                trndocnoprefix = new_bill_no.split("/")[0] if "/" in new_bill_no else new_bill_no,
-                trndocno     = trn_ctrl_no,
-                entsrlno     = ent_srl,
-                type         = paymode_type,
-                code         = paymode_type,
-                descr        = payment.mode,
-                amount       = payment.amount / 100,       # convert paise→rupees
-                netvalue     = payment.amount / 100,
-                othertext    = payment.ref_no or None,     # AuthCode / UTR No
-                vauid        = str(current_user.id),
-                vacompcode   = store_id,
-            )
-            db.add(addl_dtl)
-            ent_srl += 1
-
-        await db.commit()
-
-    # ── LOYALTY ACCRUAL (post-commit, non-blocking) ──
-    loyalty_summary = {}
-    if txn_in.customer_id and new_txn.net_payable > 0:
-        try:
-            from app.services.loyalty_engine import LoyaltyEngine
-            loyalty_summary = await LoyaltyEngine.accrue(
-                db=db,
-                store_id=store_id,
-                partner_id=txn_in.customer_id,
-                sale_id=new_txn.id,
-                net_amount_paise=new_txn.net_payable,
-            )
-            await db.commit()
-        except Exception as _le:
-            pass  # Never block billing on loyalty failures
-
-    # ── WHATSAPP RECEIPT (fire-and-forget) ──
     import asyncio
-    async def _fire_wa_receipt():
-        try:
-            from app.services.whatsapp_gateway import get_gateway
-            import os
-            gw = get_gateway()
-            mobile = loyalty_summary.get("mobile") or ""
-            if mobile:
-                await gw.send_bill_receipt(
-                    mobile=mobile,
-                    bill_no=new_txn.bill_no or "",
-                    store_name=store_id,
-                    total_rs=float(new_txn.net_payable) / 100,
-                    points_earned=loyalty_summary.get("earned", 0),
-                    points_balance=loyalty_summary.get("balance", 0),
-                )
-                if loyalty_summary.get("tier_upgraded"):
-                    await gw.send_tier_upgrade(
-                        mobile=mobile,
-                        customer_name=loyalty_summary.get("partner_name", ""),
-                        old_tier=loyalty_summary.get("old_tier", ""),
-                        new_tier=loyalty_summary.get("tier", ""),
-                        store_name=store_id,
-                    )
-        except Exception:
-            pass
-    asyncio.create_task(_fire_wa_receipt())
+    from sqlalchemy import delete, text
+    from app.models.idempotency import SmritiIdempotency
 
-    # Return enriched transaction (no joinedload on item — uses denormalized fields)
-    stmt = select(Transaction).where(Transaction.id == new_txn.id).options(selectinload(Transaction.items))
+    store_id = current_user.store_id
+
+    # ── [R2] SINGLE ATOMIC TRANSACTION ─────────────────────────────────────
+    # Pre-flight idempotency check is inside the block.
+    # Replay path exits cleanly (empty commit = no-op in PostgreSQL).
+    async with db.begin():
+
+        # STEP 0: Idempotency pre-flight
+        if txn_in.idempotency_key:
+            idem_res = await db.execute(
+                select(SmritiIdempotency).where(
+                    and_(
+                        SmritiIdempotency.key == txn_in.idempotency_key,
+                        SmritiIdempotency.store_id == store_id,
+                    )
+                )
+            )
+            existing_key = idem_res.scalar_one_or_none()
+            if existing_key:
+                # Replay: return committed transaction without any new writes.
+                replay_stmt = (
+                    select(Transaction)
+                    .where(Transaction.id == existing_key.transaction_id)
+                    .options(selectinload(Transaction.items))
+                )
+                replay_txn = (await db.execute(replay_stmt)).scalar_one_or_none()
+                if replay_txn:
+                    return replay_txn
+                # Data anomaly: key recorded but transaction missing, fall through.
+
+        # STEP 1: Config (read-only inside transaction)
+        stock_action = await ConfigService.get_stock_out_action(db, store_id)
+
+        # STEP 2: Counter resolution (Shoper9 institutional sequencing — unchanged)
+        # SELECT FOR UPDATE ensures atomic counter resolution across concurrent tills
+        try:
+            res = await db.execute(
+                text("SELECT number FROM shoper9.genlookup WHERE recid = 101 AND code = '2100' FOR UPDATE")
+            )
+            current_num = res.scalar()
+            if current_num is None:
+                raise Exception("Counter missing")
+            trn_ctrl_no = current_num + 1
+            await db.execute(
+                text("UPDATE shoper9.genlookup SET number = :n WHERE recid = 101 AND code = '2100'"),
+                {"n": trn_ctrl_no}
+            )
+        except Exception:
+            res = await db.execute(
+                text("SELECT COALESCE(MAX(trnctrlno), 0) + 1 FROM shoper9.stktrnhdr WHERE trntype = 2100")
+            )
+            trn_ctrl_no = res.scalar()
+            await db.execute(
+                text("UPDATE shoper9.genlookup SET number = :n WHERE recid = 101 AND code = '2100'"),
+                {"n": trn_ctrl_no}
+            )
+
+        new_bill_no = txn_in.bill_no
+        if not new_bill_no:
+            new_bill_no = f"B-{store_id}-{trn_ctrl_no}"
+
+        # STEP 3: Transaction header
+        new_txn = Transaction(
+            id=uuid.uuid4(),
+            bill_no=new_bill_no,
+            store_id=store_id,
+            type=txn_in.type,
+            status="Finalized",
+            payments={p.mode: {"amount": p.amount, "ref": p.ref_no} for p in (txn_in.payments or [])},
+            customer_id=txn_in.customer_id,
+            cashier_id=current_user.id,
+            till_id=txn_in.till_id,
+            shoper_recid=txn_in.shoper_recid,
+            external_id=str(trn_ctrl_no),
+            notes=f"Salesman: {txn_in.salesman_id}" if txn_in.salesman_id else None
+        )
+
+        subtotal = 0
+        tax_total = 0
+        disc_total = 0
+
+        # STEP 4-5: Items + Stktrndtls rows
+        for item_in in txn_in.items:
+            item_name = item_in.descr or "Unknown Item"
+            item_brand = "SMRITI"
+
+            if item_in.stock_no:
+                legacy_res = await db.execute(
+                    select(Itemmaster).where(Itemmaster.stockno == item_in.stock_no)
+                )
+                legacy_item = legacy_res.scalar_one_or_none()
+                if legacy_item:
+                    item_name = legacy_item.itemdesc or item_name
+                    item_brand = legacy_item.class1cd or item_brand
+                    if stock_action in ["Block", "Warn"]:
+                        stock_qty = await db.scalar(
+                            select(func.sum(Stockmaster.curbalqty)).where(
+                                Stockmaster.stockno == item_in.stock_no
+                            )
+                        )
+                        if (stock_qty or 0) < item_in.qty:
+                            if stock_action == "Block":
+                                raise HTTPException(
+                                    status_code=400,
+                                    detail=f"Stock for '{item_in.stock_no}' is insufficient "
+                                           f"(Available: {stock_qty or 0}). Blocked by policy."
+                                )
+                            print(f"WARNING: Out of stock for {item_in.stock_no} (Store: {store_id})")
+
+            tax_info = await TaxService.get_item_tax_info(db, item_in.stock_no, txn_in.customer_id)
+
+            line_gross_paise = int(item_in.qty * item_in.unit_price)
+            line_disc_paise  = int(
+                Decimal(str(line_gross_paise * (item_in.discount_per / 100)))
+                .quantize(Decimal('1'), rounding=ROUND_HALF_UP)
+            )
+            line_base_for_tax = line_gross_paise - line_disc_paise
+            line_tax_paise    = 0
+            line_tax_details  = {}
+
+            if "error" not in tax_info:
+                is_inc = tax_info.get("is_inclusive", False)
+                for component in tax_info.get("tax_rates", []):
+                    rate = component["rate"]
+                    name = component["name"]
+                    comp_tax = TaxService.calculate_tax(Decimal(line_base_for_tax), rate, is_inc)
+                    comp_tax_paise = int(comp_tax.quantize(Decimal('1'), rounding=ROUND_HALF_UP))
+                    line_tax_paise += comp_tax_paise
+                    line_tax_details[name] = comp_tax_paise
+
+            line_net_paise = line_base_for_tax
+            if not tax_info.get("is_inclusive", False):
+                line_net_paise += line_tax_paise
+
+            subtotal   += line_gross_paise
+            tax_total  += line_tax_paise
+            disc_total += line_disc_paise
+
+            new_txn.items.append(TransactionItem(
+                transaction_id=new_txn.id,
+                stock_no=item_in.stock_no,
+                item_name=item_name,
+                item_brand=item_brand,
+                qty=item_in.qty,
+                mrp=item_in.unit_price,
+                discount_per=item_in.discount_per,
+                tax_amount=line_tax_paise,
+                net_amount=line_net_paise,
+                hsn_code=tax_info.get("hsn_code"),
+                tax_details=line_tax_details,
+            ))
+
+            # Stktrndtls row (S9 sales ledger — field mapping UNCHANGED from pre-R2)
+            db.add(Stktrndtls(
+                trntype       = 2100,
+                trnctrlno     = trn_ctrl_no,
+                docnoprefix   = new_bill_no.split("/")[0] if "/" in new_bill_no else new_bill_no,
+                docno         = trn_ctrl_no,
+                entsrlno      = (txn_in.items.index(item_in) + 1),
+                stockno       = item_in.stock_no,
+                docqty        = item_in.qty,
+                docentrate    = float(item_in.unit_price) / 100,
+                docentvalue   = float(line_gross_paise) / 100,
+                docenttotdisc = float(line_disc_paise) / 100,
+                docenttax     = float(line_tax_paise) / 100,
+                docentnetvalue= float(line_net_paise) / 100,
+                itemmrpbilltm = float(item_in.unit_price) / 100,
+                taxcomp1      = float(line_tax_details.get("CGST", 0)) / 100,
+                taxcomp2      = float(line_tax_details.get("SGST", 0)) / 100,
+                taxcomp3      = float(line_tax_details.get("IGST", 0)) / 100,
+                salespersoncd = txn_in.salesman_id or None,
+                vauid         = str(current_user.id),
+                vacompcode    = store_id,
+                docentvoidind = False,
+                tenant_id     = store_id,
+            ))
+
+        new_txn.subtotal       = subtotal
+        new_txn.tax_total      = tax_total
+        new_txn.discount_total = disc_total
+        new_txn.net_payable    = subtotal - disc_total
+        db.add(new_txn)
+
+        # STEP 6: Payment settlement rows
+        # [R2] MOVED INSIDE TRANSACTION (was Commit #2 — now atomic with bill)
+        # Stktrnaddldtls field mapping UNCHANGED from pre-R2.
+        if txn_in.payments:
+            ent_srl = 1
+            for payment in txn_in.payments:
+                mode_str = str(payment.mode).upper()
+                paymode_type = 1
+                if any(x in mode_str for x in ["CARD", "DEBIT", "CREDIT"]):
+                    paymode_type = 2
+                elif any(x in mode_str for x in ["CHEQUE", "CHQ"]):
+                    paymode_type = 3
+                elif any(x in mode_str for x in ["UPI", "QR", "WALLET"]):
+                    paymode_type = 4
+                elif "GIFT" in mode_str or "GV" in mode_str:
+                    paymode_type = 5
+
+                db.add(Stktrnaddldtls(
+                    trntype        = 2100,
+                    trnctrlno      = trn_ctrl_no,
+                    trndocnoprefix = new_bill_no.split("/")[0] if "/" in new_bill_no else new_bill_no,
+                    trndocno       = trn_ctrl_no,
+                    entsrlno       = ent_srl,
+                    type           = paymode_type,
+                    code           = paymode_type,
+                    descr          = payment.mode,
+                    amount         = payment.amount / 100,
+                    netvalue       = payment.amount / 100,
+                    othertext      = payment.ref_no or None,
+                    vauid          = str(current_user.id),
+                    vacompcode     = store_id,
+                ))
+                ent_srl += 1
+
+        # STEP 7: Draft clear (atomic with bill — no orphan risk)
+        # [R2] MOVED INSIDE TRANSACTION (was between Commit #1 and Commit #2)
+        await db.execute(
+            delete(DraftBillItem).where(DraftBillItem.user_id == current_user.id)
+        )
+
+        # STEP 8: Idempotency record (inside transaction — rolls back if bill fails)
+        if txn_in.idempotency_key:
+            db.add(SmritiIdempotency(
+                key=txn_in.idempotency_key,
+                store_id=store_id,
+                transaction_id=new_txn.id,
+                bill_no=new_bill_no,
+            ))
+
+    # ── SINGLE COMMIT (auto via async with db.begin()) ──────────────────────
+    # All above writes are now committed atomically.
+
+    # ── POST-COMMIT: Queue Dispatching (Phase R4) ───────────────────────────
+    # [R4] Critical financial tasks are written to q_billing_critical with Outbox Fallback.
+    # [R4] Notifications are written to q_notifications without fallback.
+
+    _txn_id         = new_txn.id
+    _net_payable    = new_txn.net_payable
+    _bill_no        = new_txn.bill_no
+    _customer_id    = txn_in.customer_id
+    _salesman_id    = txn_in.salesman_id
+    _idempotency_key= str(uuid.uuid4()) # Ideally generated client-side, but this is post-commit UUID
+
+    if _customer_id and _net_payable > 0:
+        from app.core.queue_dispatcher import dispatch_task
+        
+        # 1. Dispatch Loyalty Accrual (Critical - uses SQLite Outbox Fallback)
+        dispatch_task(
+            task_name="app.tasks.billing_tasks.accrue_loyalty",
+            queue_name="q_billing_critical",
+            routing_key="billing.loyalty.accrue",
+            payload={
+                "store_id": store_id,
+                "partner_id": _customer_id,
+                "sale_id": _txn_id,
+                "net_amount_paise": _net_payable,
+                "idempotency_key": _idempotency_key,
+                "task_version": "1.0"
+            },
+            use_outbox=True # Critical task
+        )
+        
+        # Note: WhatsApp receipts and tier upgrades are chained and emitted automatically 
+        # by the worker upon successful loyalty accrual to preserve exact R2 behavior.
+
+    # Return enriched transaction
+    stmt = (
+        select(Transaction)
+        .where(Transaction.id == new_txn.id)
+        .options(selectinload(Transaction.items))
+    )
     res = await db.execute(stmt)
     return res.scalar_one()
+
 
 
 @router.get("/day-end/summary")

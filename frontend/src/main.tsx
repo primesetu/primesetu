@@ -77,24 +77,57 @@ const queryClient = new QueryClient({
 import { ConnectivityGuard } from './components/common/ConnectivityGuard'
 import LocalAuthGuard from './components/auth/LocalAuthGuard'
 
-createRoot(document.getElementById('root')!).render(
-  <StrictMode>
-    <BrowserRouter future={{ v7_startTransition: true, v7_relativeSplatPath: true }}>
-      <QueryClientProvider client={queryClient}>
-        <LanguageProvider>
-          <ThemeProvider>
-            <F2SearchProvider>
-              {/* [R1-D] LocalAuthGuard enforces login in LOCAL_POSTGRES mode */}
-              <LocalAuthGuard>
-                <ConnectivityGuard>
-                  <App />
-                </ConnectivityGuard>
-                <GlobalF2SearchOverlay />
-              </LocalAuthGuard>
-            </F2SearchProvider>
-          </ThemeProvider>
-        </LanguageProvider>
-      </QueryClientProvider>
-    </BrowserRouter>
-  </StrictMode>,
-)
+declare global {
+  interface Window {
+    __RUNTIME_CONFIG__: {
+      BACKEND_URL: string;
+      ENVIRONMENT: string;
+      CONFIG_VERSION: number;
+      NODE_ID: string;
+    };
+  }
+}
+
+async function bootstrap() {
+  try {
+    const res = await fetch('/runtime-config.json');
+    if (!res.ok) {
+      throw new Error(`HTTP ${res.status}`);
+    }
+    const config = await res.json();
+    window.__RUNTIME_CONFIG__ = config;
+    console.log('[RuntimeConfig] Loaded successfully', config);
+  } catch (err) {
+    console.warn('[RuntimeConfig] runtime-config.json missing or failed to load. Falling back to LAN discovery.', err);
+    window.__RUNTIME_CONFIG__ = {
+      BACKEND_URL: '',
+      ENVIRONMENT: 'production',
+      CONFIG_VERSION: 1,
+      NODE_ID: ''
+    };
+  }
+
+  createRoot(document.getElementById('root')!).render(
+    <StrictMode>
+      <BrowserRouter future={{ v7_startTransition: true, v7_relativeSplatPath: true }}>
+        <QueryClientProvider client={queryClient}>
+          <LanguageProvider>
+            <ThemeProvider>
+              <F2SearchProvider>
+                {/* [R1-D] LocalAuthGuard enforces login in LOCAL_POSTGRES mode */}
+                <LocalAuthGuard>
+                  <ConnectivityGuard>
+                    <App />
+                  </ConnectivityGuard>
+                  <GlobalF2SearchOverlay />
+                </LocalAuthGuard>
+              </F2SearchProvider>
+            </ThemeProvider>
+          </LanguageProvider>
+        </QueryClientProvider>
+      </BrowserRouter>
+    </StrictMode>,
+  )
+}
+
+bootstrap();

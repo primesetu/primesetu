@@ -26,6 +26,7 @@ class Settings(BaseSettings):
     local_admin_pin: str = ""
     anthropic_api_key: str = ""
     environment: str = "development"
+    node_id: str = "default-node"
 
     # ── HYBRID MODE DNA ──
     # Options:

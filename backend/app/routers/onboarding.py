@@ -94,30 +94,3 @@ async def onboard_store(
         "admin_user_id": auth_user_id
     }
 
-@router.get("/health")
-async def onboarding_health(db: AsyncSession = Depends(get_db)):
-    """
-    Sovereign Capability Negotiation Endpoint.
-    Returns node-specific capabilities for institutional orchestration.
-    """
-    try:
-        await db.execute(select(1))
-        db_status = "connected"
-    except Exception:
-        db_status = "disconnected"
-
-    return {
-        "service": "smriti-os",
-        "status": "online",
-        "version": "1.0.0",
-        "sovereign_phase": "v3.2",
-        "schema_version": "s9",
-        "database": db_status,
-        "storage_mode": settings.storage_mode,
-        "features": [
-            "sovereign-connectivity",
-            "sync-risk-assessment",
-            "audit-logging-v1",
-            "rbac-pin-override"
-        ]
-    }

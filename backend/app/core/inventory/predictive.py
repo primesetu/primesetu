@@ -37,7 +37,6 @@ async def calc_days_of_cover(
     cutoff = datetime.utcnow() - timedelta(days=window_days)
     
     # 1. Calculate Average Daily Sales (ADS)
-    # Filter: movement_type = 10 (SALE)
     ads_stmt = select(func.sum(SmritiStockMovement.qty)).where(
         and_(
             SmritiStockMovement.sku == sku,
@@ -50,7 +49,7 @@ async def calc_days_of_cover(
     ads = float(total_sold) / window_days
     
     if ads <= 0:
-        return None # No sales history to forecast from
+        return None 
 
     # 2. Get Current Stock
     stock_stmt = select(SmritiStock.on_hand).where(
@@ -64,6 +63,74 @@ async def calc_days_of_cover(
     # 3. Final DoC
     doc = float(current_qty) / ads
     return round(doc, 2)
+
+async def get_all_forecasts(
+    db: AsyncSession, 
+    store_id: str, 
+    window_days: int = 30
+) -> List[dict]:
+    """
+    SQL-Optimized DoC Engine.
+    Calculates Days of Cover for ALL items in a single aggregation query.
+    Avoids the O(N) Python loop entirely.
+    """
+    cutoff = datetime.utcnow() - timedelta(days=window_days)
+    
+    # CTE: Aggregate Sales per SKU
+    sales_subquery = (
+        select(
+            SmritiStockMovement.sku,
+            func.sum(SmritiStockMovement.qty).label("total_sold")
+        )
+        .where(
+            and_(
+                SmritiStockMovement.store_id == store_id,
+                SmritiStockMovement.movement_type == 10,
+                SmritiStockMovement.moved_at >= cutoff
+            )
+        )
+        .group_by(SmritiStockMovement.sku)
+        .subquery()
+    )
+
+    # Join with Current Stock
+    stmt = (
+        select(
+            SmritiStock.sku,
+            SmritiStock.on_hand,
+            func.coalesce(sales_subquery.c.total_sold, 0).label("total_sold")
+        )
+        .outerjoin(sales_subquery, SmritiStock.sku == sales_subquery.c.sku)
+        .where(SmritiStock.store_id == store_id)
+    )
+    
+    res = await db.execute(stmt)
+    rows = res.all()
+    
+    forecasts = []
+    reorder_days = await get_reorder_days(db)
+    
+    for r in rows:
+        ads = float(r.total_sold) / window_days
+        doc = float(r.on_hand) / ads if ads > 0 else None
+        
+        tier = "HEALTHY"
+        if doc is not None:
+            if doc < reorder_days:
+                tier = "CRITICAL"
+            elif doc < (reorder_days * 1.5):
+                tier = "WARNING"
+        
+        forecasts.append({
+            "sku": r.sku,
+            "current_qty": float(r.on_hand),
+            "avg_daily": round(ads, 2),
+            "doc": round(doc, 2) if doc is not None else None,
+            "tier": tier,
+            "reorder_at_date": (datetime.utcnow() + timedelta(days=doc)) if doc is not None else None
+        })
+        
+    return forecasts
 
 async def get_stockout_tier(doc: float, reorder_days: int) -> str:
     """Classify risk tier based on DoC and Reorder Window."""

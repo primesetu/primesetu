@@ -84,6 +84,22 @@ export default defineConfig({
   },
   build: {
     sourcemap: true,
+    chunkSizeWarningLimit: 600, // [R6] Governance: Warn if chunks exceed 600KB
+    rollupOptions: {
+      output: {
+        // [R6] Operational Critical Chunk Governance
+        // Prevents excessive micro-chunking while isolating heavy dependencies.
+        manualChunks: {
+          vendor_react: ['react', 'react-dom', 'react-router-dom', 'zustand', '@tanstack/react-query'],
+          vendor_grid: ['ag-grid-community', 'ag-grid-react'],
+          vendor_charts: ['recharts'],
+          vendor_utils: ['xlsx', 'react-to-print', 'axios', 'react-barcode'],
+          vendor_ui: ['framer-motion', 'lucide-react', 'react-hook-form'],
+          vendor_cloud: ['@supabase/supabase-js'],
+          vendor_i18n: ['i18next', 'react-i18next', 'i18next-browser-languagedetector']
+        }
+      }
+    }
   },
   server: {
     port: 5173,

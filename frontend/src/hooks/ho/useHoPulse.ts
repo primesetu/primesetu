@@ -8,68 +8,69 @@
  * © 2026 — All Rights Reserved
  * "Memory, Not Code."
  * ============================================================ */
-import { useEffect, useRef, useState, useCallback } from 'react'
+import { useEffect, useRef, useCallback } from 'react'
 import { api } from '@/api/client'
 import { useSovereignStore } from '@/store/useSovereignStore'
-
-const BASE_INTERVAL = 30000 // 30 seconds
-const MAX_BACKOFF = 300000 // 5 minutes
+import { CONNECTIVITY_CONFIG } from '@/config/connectivity'
 
 export function useHoPulse() {
-  const { setPendingCommands, isBackendAvailable } = useSovereignStore()
-  const [failures, setFailures] = useState(0)
+  const { setPendingCommands, incrementPulseFailure, connectivityState } = useSovereignStore()
   const timerRef = useRef<any>(null)
-  const isPulsing = useRef(false)
+  const pulseInFlight = useRef(false)
 
   const sendPulse = useCallback(async () => {
-    if (isPulsing.current || !isBackendAvailable) return
+    // RETAIL PRINCIPLE: Background telemetry must NEVER block the main thread or stack requests.
+    // Only pulse if we are not already pulsing and the node is at least OFFLINE (to try recovery)
+    if (pulseInFlight.current) return;
     
-    isPulsing.current = true
+    pulseInFlight.current = true;
+    
     try {
       // 1. Fetch Supply Chain Intelligence for HQ Pulse
-      const forecast = await api.inventory.getPredictive()
+      // Note: This is an idempotent GET, will retry once if blip occurs.
+      const forecast = await api.inventory.getPredictive();
       
       const metrics = {
         transaction_count: 0,
         pending_sync_packets: 0,
         last_sync_id: null,
         critical_skus: forecast.stockout_forecast_count,
-        surplus_skus: 0, // [TODO] Implement surplus calc in API
+        surplus_skus: 0,
         total_inventory_value: 0
-      }
+      };
 
-      const response = await api.ho.pulse(metrics)
+      // 2. Transmit to Head Office
+      const response = await api.ho.pulse(metrics);
       
       if (response.commands) {
-        setPendingCommands(response.commands)
+        setPendingCommands(response.commands);
       }
-      setFailures(0)
-      scheduleNextPulse(BASE_INTERVAL)
     } catch (err) {
-      console.warn('[Governance] Pulse failed. Entering backoff...')
-      setFailures(f => {
-        const next = f + 1
-        const backoff = Math.min(BASE_INTERVAL * Math.pow(2, next), MAX_BACKOFF)
-        const jitter = backoff * 0.1 * (Math.random() * 2 - 1)
-        scheduleNextPulse(backoff + jitter)
-        return next
-      })
+      // RETAIL PRINCIPLE: Silent failure for background tasks.
+      // We increment the failure floor for owner dashboard visibility.
+      incrementPulseFailure();
+      console.warn('[Governance] HO Pulse blip (silent):', err instanceof Error ? err.message : 'Unknown error');
     } finally {
-      isPulsing.current = false
+      pulseInFlight.current = false;
+      
+      // Schedule next pulse regardless of outcome (self-healing loop)
+      const delay = connectivityState === 'OFFLINE' 
+        ? CONNECTIVITY_CONFIG.PULSE_INTERVAL * 2 
+        : CONNECTIVITY_CONFIG.PULSE_INTERVAL;
+        
+      if (timerRef.current) clearTimeout(timerRef.current);
+      timerRef.current = setTimeout(sendPulse, delay);
     }
-  }, [isBackendAvailable, setPendingCommands])
-
-  const scheduleNextPulse = (delay: number) => {
-    if (timerRef.current) clearTimeout(timerRef.current)
-    timerRef.current = setTimeout(sendPulse, delay)
-  }
+  }, [connectivityState, setPendingCommands, incrementPulseFailure]);
 
   useEffect(() => {
-    sendPulse()
+    // Initial pulse after mount
+    const initialTimer = setTimeout(sendPulse, 2000);
     return () => {
-      if (timerRef.current) clearTimeout(timerRef.current)
+      clearTimeout(initialTimer);
+      if (timerRef.current) clearTimeout(timerRef.current);
     }
-  }, [sendPulse])
+  }, [sendPulse]);
 
-  return null
+  return null;
 }

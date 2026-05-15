@@ -293,55 +293,15 @@ async def get_inventory_forecast(
     current_user: CurrentUser = Depends(require_auth)
 ):
     """
-    Detailed Stockout Forecast for all items.
-    Tiers: CRITICAL, WARNING, HEALTHY
+    Optimized Stockout Forecast using SQL Aggregation.
     """
+    from app.core.inventory.predictive import get_all_forecasts
+    
     store_id = current_user.store_id
-    reorder_days = await get_reorder_days(db)
+    forecasts = await get_all_forecasts(db, store_id)
     
-    # Fetch all items with stock
-    stmt = select(SmritiStock).where(SmritiStock.store_id == store_id)
-    res = await db.execute(stmt)
-    stocks = res.scalars().all()
-    
-    forecasts = []
-    for s in stocks:
-        doc = await calc_days_of_cover(s.sku, store_id, db)
-        
-        # ADS calculation (re-fetch for reporting)
-        ads_cutoff = datetime.utcnow() - timedelta(days=30)
-        total_sold = await db.scalar(
-            select(func.sum(SmritiStockMovement.qty)).where(
-                and_(
-                    SmritiStockMovement.sku == s.sku,
-                    SmritiStockMovement.store_id == store_id,
-                    SmritiStockMovement.movement_type == 10,
-                    SmritiStockMovement.moved_at >= ads_cutoff
-                )
-            )
-        ) or 0
-        ads = float(total_sold) / 30.0
-        
-        if doc is None:
-            tier_val = "HEALTHY" # No sales signal = No predictable risk
-        else:
-            tier_val = await get_stockout_tier(doc, reorder_days)
-            
-        if tier and tier_val != tier.upper():
-            continue
-            
-        reorder_at = None
-        if doc:
-            reorder_at = datetime.utcnow() + timedelta(days=doc)
-
-        forecasts.append(StockoutForecast(
-            sku=s.sku,
-            current_qty=float(s.on_hand),
-            avg_daily=round(ads, 2),
-            doc=doc,
-            tier=tier_val,
-            reorder_at_date=reorder_at
-        ))
+    if tier:
+        forecasts = [f for f in forecasts if f["tier"] == tier.upper()]
         
     return forecasts
 
@@ -351,16 +311,17 @@ async def get_predictive_insights(
     current_user: CurrentUser = Depends(require_auth)
 ):
     """
-    AI-Governed procurement forecasting using the hardened DoC engine.
+    AI-Governed procurement forecasting using the optimized DoC engine.
     """
     forecasts = await get_inventory_forecast(db=db, current_user=current_user)
     
-    risk_count = sum(1 for f in forecasts if f.tier == "CRITICAL")
-    avg_doc = sum(f.doc for f in forecasts if f.doc) / len([f for f in forecasts if f.doc]) if any(f.doc for f in forecasts) else 0
+    risk_count = sum(1 for f in forecasts if f["tier"] == "CRITICAL")
+    valid_docs = [f["doc"] for f in forecasts if f["doc"] is not None]
+    avg_doc = sum(valid_docs) / len(valid_docs) if valid_docs else 0
     
     return PredictiveStats(
         stockout_forecast_count=risk_count,
-        top_category="N/A", # [TODO] Aggregate by brand
+        top_category="N/A",
         predicted_days=round(avg_doc, 1)
     )
 

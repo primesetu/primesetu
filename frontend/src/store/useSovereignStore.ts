@@ -15,6 +15,8 @@ interface NodeSwitchEvent {
   reason: string;
 }
 
+export type ConnectivityState = 'ONLINE' | 'DEGRADED' | 'OFFLINE' | 'RECOVERING';
+
 interface SovereignState {
   sheets: Record<string, SheetState>;
   activeSheet: string;
@@ -34,7 +36,18 @@ interface SovereignState {
   isBackendAvailable: boolean;
   setBackendAvailable: (available: boolean) => void;
   
-  // [NEW] Connection Configuration
+  // Connectivity Governance
+  connectivityState: ConnectivityState;
+  setConnectivityState: (state: ConnectivityState) => void;
+  
+  // Telemetry Metrics
+  metrics: {
+    ho_pulse_failure_count: number;
+  };
+  incrementPulseFailure: () => void;
+  resetPulseFailure: () => void;
+  
+  // Connection Configuration
   preferredBackendUrl: string | null;
   setPreferredBackendUrl: (url: string | null, reason?: string) => void;
   nodeSwitchHistory: NodeSwitchEvent[];
@@ -47,7 +60,7 @@ interface SovereignState {
   setSysParams: (params: any[]) => void;
   getParam: (code: string) => string | undefined;
 
-  // [NEW] Governance commands
+  // Governance commands
   pendingCommands: any[];
   setPendingCommands: (commands: any[]) => void;
   clearCommand: (id: string) => void;
@@ -63,7 +76,12 @@ export const useSovereignStore = create<SovereignState>()(
       zoomLevel: 100,
       isForcedOffline: false,
       isBackendAvailable: true,
+      connectivityState: 'ONLINE',
       
+      metrics: {
+        ho_pulse_failure_count: 0
+      },
+
       preferredBackendUrl: null,
       nodeSwitchHistory: [],
       
@@ -78,7 +96,15 @@ export const useSovereignStore = create<SovereignState>()(
       toggleForcedOffline: () => set((state) => ({ isForcedOffline: !state.isForcedOffline })),
       
       setBackendAvailable: (available) => set({ isBackendAvailable: available }),
+      setConnectivityState: (state) => set({ connectivityState: state }),
       
+      incrementPulseFailure: () => set((state) => ({ 
+        metrics: { ...state.metrics, ho_pulse_failure_count: state.metrics.ho_pulse_failure_count + 1 } 
+      })),
+      resetPulseFailure: () => set((state) => ({ 
+        metrics: { ...state.metrics, ho_pulse_failure_count: 0 } 
+      })),
+
       setPreferredBackendUrl: (url, reason = "Manual User Switch") => set((state) => {
         const event: NodeSwitchEvent = {
           timestamp: new Date().toISOString(),

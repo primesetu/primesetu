@@ -1,13 +1,16 @@
-import React, { useState } from 'react';
+import React, { useState, Suspense, lazy } from 'react';
 import SmritiShell from './components/layouts/SmritiShell';
-import Dashboard from './pages/Dashboard';
-import ItemMaster from './pages/ItemMaster';
-import CustomerMaster from './pages/CustomerMaster';
 import POS from './pages/POS';
-import Purchase from './pages/Purchase';
-import Reports from './pages/Reports';
-import ThemeManager from './pages/ThemeManager';
-import SystemSettings from './pages/SystemSettings';
+import ConnectionSettings from './pages/ConnectionSettings';
+import CustomerMaster from './pages/CustomerMaster';
+
+// ── [R6] LAZY LOADED NON-CRITICAL ROUTES ─────────────────────────────────────
+const Dashboard = lazy(() => import('./pages/Dashboard'));
+const ItemMaster = lazy(() => import('./pages/ItemMaster'));
+const Purchase = lazy(() => import('./pages/Purchase'));
+const Reports = lazy(() => import('./pages/Reports'));
+const ThemeManager = lazy(() => import('./pages/ThemeManager'));
+const SystemSettings = lazy(() => import('./pages/SystemSettings'));
 
 const PLACEHOLDER = (label: string) => (
   <div className="h-full flex items-center justify-center bg-surface border border-outline-variant border-dashed">
@@ -18,13 +21,14 @@ const PLACEHOLDER = (label: string) => (
   </div>
 );
 
-import ItemClassificationWorkbench from './modules/catalogue/ItemClassificationWorkbench';
-import VendorMaster from './pages/VendorMaster';
-import ItemViewer from './pages/ItemViewer';
-import ObjectLookup from './pages/ObjectLookup';
-import BarcodeStudio from './modules/inventory/BarcodeStudio';
-import BarcodeDesigner from './modules/tools/BarcodeDesigner';
-import ConnectionSettings from './pages/ConnectionSettings';
+const ItemClassificationWorkbench = lazy(() => import('./modules/catalogue/ItemClassificationWorkbench'));
+const VendorMaster = lazy(() => import('./pages/VendorMaster'));
+const ItemViewer = lazy(() => import('./pages/ItemViewer'));
+const ObjectLookup = lazy(() => import('./pages/ObjectLookup'));
+const BarcodeStudio = lazy(() => import('./modules/inventory/BarcodeStudio'));
+const BarcodeDesigner = lazy(() => import('./modules/tools/BarcodeDesigner'));
+
+// ── [R6] SYNCHRONOUS HOOKS & GUARDS ──────────────────────────────────────────
 import { useHoPulse } from './hooks/ho/useHoPulse';
 import GovernanceGuard from './modules/ho/GovernanceGuard';
 
@@ -66,7 +70,9 @@ const App: React.FC = () => {
 
   return (
     <SmritiShell activeTab={activeTab} onTabChange={setActiveTab}>
-      {renderContent()}
+      <Suspense fallback={PLACEHOLDER('Loading Module...')}>
+        {renderContent()}
+      </Suspense>
       <GovernanceGuard />
     </SmritiShell>
   );

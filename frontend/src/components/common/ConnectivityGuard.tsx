@@ -1,6 +1,5 @@
-import React, { useState, useCallback } from 'react';
+import React, { useState, useCallback, useEffect, useRef } from 'react';
 import { useSovereignStore } from '@/store/useSovereignStore';
-import { api } from '@/api/client';
 import { useNodeHealth } from '@/hooks/connectivity/useNodeHealth';
 import { useNodeSwitch } from '@/hooks/connectivity/useNodeSwitch';
 import { ConnectivityStatusView } from '../connectivity/ConnectivityStatusView';
@@ -9,62 +8,112 @@ import { SecurityOverride } from '../connectivity/SecurityOverride';
 import { ConfirmationDialog } from './ConfirmationDialog';
 import { syncEngine } from '@/lib/SyncEngine';
 import { assessSyncRisk, getRiskRecommendation } from '@/domain/connectivity/riskAssessment';
+import { CONNECTIVITY_CONFIG } from '@/config/connectivity';
 
 export const ConnectivityGuard: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-  const isBackendAvailable = useSovereignStore(state => state.isBackendAvailable);
-  const setBackendAvailable = useSovereignStore(state => state.setBackendAvailable);
-  const preferredBackendUrl = useSovereignStore(state => state.preferredBackendUrl);
-  const companyName = useSovereignStore(state => state.companyName);
+  const {
+    isBackendAvailable,
+    setBackendAvailable,
+    connectivityState,
+    setConnectivityState,
+    preferredBackendUrl,
+    companyName
+  } = useSovereignStore();
   
-  // Local UI States
   const [showHub, setShowHub] = useState(false);
-  const [isChecking, setIsChecking] = useState(false);
   const [lastCheck, setLastCheck] = useState<Date | null>(null);
+  const [failureCount, setFailureCount] = useState(0);
+  const [successCount, setSuccessCount] = useState(0);
+
+  const heartbeatTimer = useRef<any>(null);
   
   // Switch Workflow State
   const [pendingNode, setPendingNode] = useState<{ id: string; url: string } | null>(null);
   const [showConfirm, setShowConfirm] = useState(false);
   const [showPin, setShowPin] = useState(false);
 
-  // Custom Hooks
   const { nodeStatus } = useNodeHealth(showHub);
-  const { 
-    state, 
-    error, 
-    context, 
-    initiateSwitch, 
-    verifyPin,
-    cancelSwitch
-  } = useNodeSwitch(() => {
+  const { state, error, context, initiateSwitch, verifyPin, cancelSwitch } = useNodeSwitch(() => {
     setShowHub(false);
     setPendingNode(null);
     setShowPin(false);
   });
 
-  const handleVerifyPin = async (pin: string) => {
-    await verifyPin(pin);
-    return { approved: true, correlationId: context?.correlationId || '' };
-  };
+  const runHeartbeat = useCallback(async () => {
+    const controller = new AbortController();
+    const timeoutId = setTimeout(() => controller.abort(), CONNECTIVITY_CONFIG.HEARTBEAT_TIMEOUT);
 
-  const checkConnection = useCallback(async () => {
-    setIsChecking(true);
     try {
-      await api.offline.getStatus();
-      setBackendAvailable(true);
-      setLastCheck(new Date());
+      const baseUrl = preferredBackendUrl || `http://${window.location.hostname}:8000`;
+      const response = await fetch(`${baseUrl}/api/v1/health`, { 
+        signal: controller.signal,
+        headers: { 'Accept': 'application/json' }
+      });
+
+      clearTimeout(timeoutId);
+
+      if (response.ok) {
+        const data = await response.json();
+        if (data.service === 'smriti-os') {
+          setFailureCount(0);
+          
+          setSuccessCount(prev => {
+            const next = prev + 1;
+            
+            // State Transition: Recovering Logic
+            if (connectivityState === 'OFFLINE' || connectivityState === 'RECOVERING') {
+              if (next >= CONNECTIVITY_CONFIG.SUCCESSES_TO_ONLINE) {
+                setConnectivityState('ONLINE');
+                setBackendAvailable(true);
+              } else {
+                setConnectivityState('RECOVERING');
+              }
+            } else {
+              setConnectivityState('ONLINE');
+              setBackendAvailable(true);
+            }
+            return next;
+          });
+          
+          setLastCheck(new Date());
+        }
+      } else {
+        throw new Error('Health check failed');
+      }
     } catch (err) {
-      setBackendAvailable(false);
+      clearTimeout(timeoutId);
+      setSuccessCount(0);
+      setFailureCount(prev => {
+        const next = prev + 1;
+        
+        if (next >= CONNECTIVITY_CONFIG.FAILURES_BEFORE_OFFLINE) {
+          setConnectivityState('OFFLINE');
+          setBackendAvailable(false);
+        } else {
+          setConnectivityState('DEGRADED');
+        }
+        return next;
+      });
       setLastCheck(new Date());
-    } finally {
-      setIsChecking(false);
     }
-  }, [setBackendAvailable]);
+
+    const delay = (connectivityState === 'OFFLINE') 
+      ? CONNECTIVITY_CONFIG.HEARTBEAT_INTERVAL_OFFLINE 
+      : CONNECTIVITY_CONFIG.HEARTBEAT_INTERVAL_ONLINE;
+      
+    heartbeatTimer.current = setTimeout(runHeartbeat, delay);
+  }, [connectivityState, setBackendAvailable, setConnectivityState, preferredBackendUrl]);
+
+  useEffect(() => {
+    runHeartbeat();
+    return () => {
+      if (heartbeatTimer.current) clearTimeout(heartbeatTimer.current);
+    };
+  }, []); // Only run on mount
 
   const handleApplyNode = (id: string, url: string) => {
     setPendingNode({ id, url });
-    const pendingCount = syncEngine.getPendingCount();
-    
-    if (pendingCount > 0) {
+    if (syncEngine.getPendingCount() > 0) {
       setShowConfirm(true);
     } else {
       setShowPin(true);
@@ -81,69 +130,76 @@ export const ConnectivityGuard: React.FC<{ children: React.ReactNode }> = ({ chi
 
   const syncRisk = assessSyncRisk(syncEngine.getPendingCount());
 
-  if (isBackendAvailable) {
-    return <>{children}</>;
-  }
+  // RETAIL PRINCIPLE: Billing must be possible during DEGRADED/RECOVERING
+  // UI only blocks if state is truly OFFLINE
+  const isUIVisible = connectivityState !== 'OFFLINE';
 
   return (
-    <div className="fixed inset-0 z-[10000] flex items-center justify-center p-6 bg-[#020617]/90 backdrop-blur-xl font-sans">
-      <div className="max-w-md w-full bg-[#0f172a] border border-white/10 shadow-[0_32px_64px_-16px_rgba(0,0,0,0.6)] relative overflow-hidden rounded-3xl">
-        <div className="p-8 relative z-10">
-          {!showHub ? (
-            <ConnectivityStatusView 
-              isChecking={isChecking}
-              onRetry={checkConnection}
-              onOpenHub={() => setShowHub(true)}
-              companyName={companyName}
-              lastCheck={lastCheck}
-            />
-          ) : (
-            <ConnectivityHub 
-              onClose={() => setShowHub(false)}
-              preferredBackendUrl={preferredBackendUrl}
-              nodeStatus={nodeStatus}
-              onApplyNode={handleApplyNode}
-              validationError={error}
-            />
-          )}
-        </div>
-      </div>
-
-      {/* Confirmation for Sync Backlog */}
-      <ConfirmationDialog 
-        isOpen={showConfirm}
-        onClose={() => setShowConfirm(false)}
-        onConfirm={handleConfirmed}
-        variant={syncRisk === 'CRITICAL' ? 'danger' : 'warning'}
-        title="Sync Backlog Detected"
-        message={`${getRiskRecommendation(syncRisk)} (Pending: ${syncEngine.getPendingCount()})`}
-        confirmText="Proceed Anyway"
-      />
-
-      {/* Security Override (PIN) */}
-      <SecurityOverride 
-        isOpen={showPin}
-        onClose={() => {
-          setShowPin(false);
-          cancelSwitch();
-        }}
-        correlationId={context?.correlationId || ''}
-        onVerify={handleVerifyPin}
-        onSuccess={() => {
-           // useNodeSwitch already calls commitSwitch() inside verifyPin
-        }}
-      />
-
-      {/* Switching Overlay */}
-      {state === 'switching' && (
-        <div className="fixed inset-0 z-[13000] bg-black/80 backdrop-blur-md flex flex-col items-center justify-center space-y-4">
-          <div className="w-12 h-12 border-4 border-primary/20 border-t-primary rounded-full animate-spin" />
-          <div className="text-center space-y-1">
-            <h3 className="text-sm font-black uppercase tracking-widest text-white">Switching Sovereign Node</h3>
-            <p className="text-[10px] text-white/40 font-mono">Migrating State Pulse... {context?.correlationId}</p>
-          </div>
+    <>
+      {children}
+      
+      {/* Recovery indicator (Subtle, Non-blocking) */}
+      {connectivityState === 'RECOVERING' && (
+        <div className="fixed bottom-4 right-4 z-[20000] flex items-center space-x-2 bg-blue-600/90 text-white px-3 py-1.5 rounded-full text-[10px] font-bold uppercase tracking-wider shadow-lg animate-pulse">
+          <div className="w-2 h-2 bg-white rounded-full animate-ping" />
+          <span>Reconnecting Node...</span>
         </div>
       )}
-    </div>
+
+      {/* Degraded indicator (Subtle, Non-blocking) */}
+      {connectivityState === 'DEGRADED' && (
+        <div className="fixed bottom-4 right-4 z-[20000] flex items-center space-x-2 bg-amber-600/90 text-white px-3 py-1.5 rounded-full text-[10px] font-bold uppercase tracking-wider shadow-lg">
+          <div className="w-2 h-2 bg-white rounded-full" />
+          <span>Connectivity Unstable</span>
+        </div>
+      )}
+
+      {!isUIVisible && (
+        <div className="fixed inset-0 z-[10000] flex items-center justify-center p-6 bg-[#020617]/90 backdrop-blur-xl font-sans text-white">
+          <div className="max-w-md w-full bg-[#0f172a] border border-white/10 shadow-2xl relative overflow-hidden rounded-3xl">
+            <div className="p-8 relative z-10">
+              {!showHub ? (
+                <ConnectivityStatusView 
+                  isChecking={false}
+                  onRetry={runHeartbeat}
+                  onOpenHub={() => setShowHub(true)}
+                  companyName={companyName}
+                  lastCheck={lastCheck}
+                />
+              ) : (
+                <ConnectivityHub 
+                  onClose={() => setShowHub(false)}
+                  preferredBackendUrl={preferredBackendUrl}
+                  nodeStatus={nodeStatus}
+                  onApplyNode={handleApplyNode}
+                  validationError={error}
+                />
+              )}
+            </div>
+          </div>
+
+          <ConfirmationDialog 
+            isOpen={showConfirm}
+            onClose={() => setShowConfirm(false)}
+            onConfirm={handleConfirmed}
+            variant={syncRisk === 'CRITICAL' ? 'danger' : 'warning'}
+            title="Sync Backlog Detected"
+            message={`${getRiskRecommendation(syncRisk)} (Pending: ${syncEngine.getPendingCount()})`}
+            confirmText="Proceed Anyway"
+          />
+
+          <SecurityOverride 
+            isOpen={showPin}
+            onClose={() => { setShowPin(false); cancelSwitch(); }}
+            correlationId={context?.correlationId || ''}
+            onVerify={async (pin) => {
+              await verifyPin(pin);
+              return { approved: true, correlationId: context?.correlationId || '' };
+            }}
+            onSuccess={() => {}}
+          />
+        </div>
+      )}
+    </>
   );
 };

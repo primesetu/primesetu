@@ -60,3 +60,5 @@ from .security import VaGroup, VaGroupPermission, VaGroupMenu, VaUserGroup
 from .reporting import PrintTemplate, PrintTemplateField, ReportConfig, ReportSchedule
 
 from .barcode import BarcodeTemplate
+
+from .idempotency import SmritiIdempotency  # [R2] Billing idempotency registry

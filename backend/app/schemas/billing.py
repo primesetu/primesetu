@@ -112,3 +112,11 @@ class TransactionCreate(BaseModel):
     bill_discount: Optional[int] = Field(0, description="Additional bill-level discount in paise")
     shoper_recid: Optional[int] = None
     suspended_reason: Optional[str] = None
+    # [R2] Idempotency key — generated once per billing attempt by the client.
+    # Reuse the SAME key on network retry. The server will return the original
+    # committed response without creating a duplicate bill.
+    # UNIQUE constraint is per-store: UNIQUE(store_id, idempotency_key).
+    idempotency_key: Optional[uuid.UUID] = Field(
+        default_factory=uuid.uuid4,
+        description="Per-attempt UUID. Reuse on retry to prevent duplicate bills."
+    )

@@ -24,7 +24,11 @@ from app.schemas.common import DashboardStats
 from app.core.security import CurrentUser, require_auth
 from typing import List
 from datetime import date
+import time
 import uvicorn
+from fastapi import Request
+from asgi_correlation_id import CorrelationIdMiddleware
+from app.core.logging import logger
 
 app = FastAPI(
     title="SMRITI-OS - Sovereign Retail OS",
@@ -47,6 +51,38 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+app.add_middleware(CorrelationIdMiddleware)
+
+@app.middleware("http")
+async def structlog_middleware(request: Request, call_next):
+    start_time = time.perf_counter()
+    
+    # [R5] Prepare context for future auth binding
+    # user_id = getattr(request.state, "user_id", None)
+    # store_id = getattr(request.state, "store_id", None)
+    # if user_id:
+    #     logger.bind(user_id=user_id, store_id=store_id)
+    
+    response = await call_next(request)
+    
+    process_time = time.perf_counter() - start_time
+    duration_ms = process_time * 1000
+    
+    # [R5] Avoid logging body. Keep it fast.
+    log_data = {
+        "method": request.method,
+        "url": str(request.url.path),
+        "status_code": response.status_code,
+        "duration_ms": round(duration_ms, 2)
+    }
+    
+    if duration_ms > 1000:
+        logger.warning("slow_request", **log_data)
+    else:
+        logger.info("request_completed", **log_data)
+        
+    return response
+
 api_prefix = "/api/v1"
 
 from app.routers import (
@@ -59,12 +95,14 @@ from app.routers import (
     flexible_reports, gstr1,
     # Previously built — now wired
     accounts, alerts, catalogue, configuration, integration, price_group, reports, tills,
-    item_classification, catalog_classifications, barcode_templates, lookup
+    item_classification, catalog_classifications, barcode_templates, lookup, health, queue
 )
 from app.routers import schema as schema_router
 from app.routers import auth as auth_router
 
 app.include_router(auth_router.router)         # [R1-B] Local node JWT issuance
+app.include_router(health.router, prefix=api_prefix)
+app.include_router(queue.router, prefix=api_prefix)
 app.include_router(onboarding.router, prefix=api_prefix)
 app.include_router(store.router, prefix=api_prefix)
 app.include_router(users.router)
@@ -130,39 +168,35 @@ import asyncio
 
 @app.on_event("startup")
 async def startup():
-    # DEBUG: Print all registered routes to verify pathing
-    print("[SMRITI-OS] Registered Routes:")
-    for route in app.routes:
-        if hasattr(route, 'path'):
-            print(f"  {route.path} [{','.join(route.methods)}]")
-
+    logger.info("application_startup", storage_mode=settings.storage_mode, admin_pin_set=bool(settings.local_admin_pin))
+    print(f"DEBUG: LOCAL_ADMIN_PIN is '{settings.local_admin_pin}'")
     async with engine.begin() as conn:
         await conn.run_sync(Base.metadata.create_all)
-    print(f"[SMRITI-OS] Database connected. Mode: {settings.storage_mode}")
+    logger.info("database_connected")
 
     # ── LOCAL_POSTGRES: Initialize local PG queue ──
     if settings.storage_mode == "LOCAL_POSTGRES":
         await offline_sync_engine.initialize()
         await offline_sync_engine.start()
-        print("[SMRITI-OS] Local PostgreSQL Sync Engine started.")
+        logger.info("offline_sync_engine_started")
 
     # ── Cloud/Sovereign: Initialize cloud sync engines ──
     else:
         try:
             await SyncEngine.install_sync_schema()
             asyncio.create_task(SyncEngine.run_push_worker())
-            print("[SMRITI-OS] Delta-Sync Engine online.")
+            logger.info("delta_sync_engine_online")
 
             asyncio.create_task(OmnichannelSyncEngine.run_marketplace_worker())
-            print("[SMRITI-OS] Omnichannel Marketplace Engine online.")
+            logger.info("omnichannel_marketplace_engine_online")
         except Exception as e:
-            print(f"[SMRITI-OS] Failed to start Sync Engines: {e}")
+            logger.error("sync_engine_startup_failed", error=str(e))
 
 @app.on_event("shutdown")
 async def shutdown():
     if settings.storage_mode == "LOCAL_POSTGRES":
         await offline_sync_engine.stop()
-        print("[SMRITI-OS] Local PostgreSQL Sync Engine stopped.")
+        logger.info("offline_sync_engine_stopped")
 
 @app.get("/")
 async def read_index():
@@ -171,21 +205,6 @@ async def read_index():
         "version": "1.0.0",
         "phase": 2,
         "architect": "Jawahar R Mallah"
-    }
-
-@app.get("/api/v1/health")
-async def health_check(db: AsyncSession = Depends(get_db)):
-    try:
-        await db.execute(select(1))
-        db_status = "connected"
-    except Exception as e:
-        db_status = f"error: {e}"
-    return {
-        "status": "online",
-        "version": "1.0.0",
-        "phase": 2,
-        "storage_mode": settings.storage_mode,
-        "database": db_status
     }
 
 @app.get("/api/v1/offline/status")

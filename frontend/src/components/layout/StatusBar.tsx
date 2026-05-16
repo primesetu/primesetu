@@ -10,13 +10,13 @@
  * ============================================================ */
 
 import React, { useState, useEffect } from 'react';
-import { useNodeSync } from '@/hooks/useNodeSync';
+import { useNodeSync } from '@/core/hooks/useNodeSync';
 import { cn } from '@/lib/utils';
 import { 
   HelpCircle, Package, BarChart3, Box, Settings, Zap, 
   Calendar, Building2, Terminal, Wifi, WifiOff
 } from 'lucide-react';
-import { useSovereignStore } from '@/store/useSovereignStore';
+import { useSovereignStore } from '@/core/stores/useSovereignStore';
 import SyncManagerModal from './SyncManagerModal';
 import { useTheme } from '@/hooks/useTheme';
 

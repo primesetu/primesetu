@@ -26,23 +26,24 @@ export function cn(...inputs: ClassValue[]) {
  * ============================================================ */
 
 // 1. Button Primitive
-interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
+export interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   variant?: 'primary' | 'secondary' | 'ghost' | 'danger' | 'pri' | 'sec'; // pri/sec for legacy compat
   size?: 'sm' | 'md' | 'lg';
   loading?: boolean;
 }
 
-export const Button = ({ 
+export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(({ 
   variant = 'primary', 
   size = 'md', 
   className, 
   ...props 
-}: ButtonProps) => {
+}, ref) => {
   // Normalize legacy variants
   const normalizedVariant = variant === 'pri' ? 'primary' : variant === 'sec' ? 'secondary' : variant;
   
   return (
     <button 
+      ref={ref}
       className={cn(
         'c-button',
         `c-button--${normalizedVariant}`,
@@ -53,7 +54,7 @@ export const Button = ({
       {...props}
     />
   );
-};
+});
 
 // 2. Input Primitive
 export const Input = React.forwardRef<HTMLInputElement, React.InputHTMLAttributes<HTMLInputElement>>(
@@ -118,6 +119,33 @@ export const CardHeader = ({ className, ...props }: React.HTMLAttributes<HTMLDiv
 
 export const CardTitle = ({ className, ...props }: React.HTMLAttributes<HTMLHeadingElement>) => (
   <h3 className={cn('text-lg font-bold leading-none tracking-tight', className)} {...props} />
+);
+
+export const DialogTitle = ({ className, ...props }: React.HTMLAttributes<HTMLHeadingElement>) => (
+    <h3 className={cn('text-lg font-bold leading-none tracking-tight', className)} {...props} />
+);
+
+// Dialog Primitives (Mocking Radix-like API for Sovereign UI)
+export const Dialog = ({ children, open, onOpenChange }: { children: ReactNode; open?: boolean; onOpenChange?: (open: boolean) => void }) => {
+    if (!open) return null;
+    return (
+        <Portal>
+            <div className="fixed inset-0 z-[var(--z-modal)] flex items-center justify-center p-6 bg-[var(--background)]/60 backdrop-blur-xl">
+                <div className="absolute inset-0" onClick={() => onOpenChange?.(false)} />
+                <Card className="w-full max-w-2xl relative z-[var(--z-modal)] overflow-hidden">
+                    {children}
+                </Card>
+            </div>
+        </Portal>
+    );
+};
+
+export const DialogContent = ({ children, className }: { children: ReactNode; className?: string }) => (
+    <div className={cn("p-10 bg-[var(--background)]/20", className)}>{children}</div>
+);
+
+export const DialogHeader = ({ children, className }: { children: ReactNode; className?: string }) => (
+    <div className={cn("p-8 border-b border-[var(--border-subtle)] bg-[var(--surface-elevated)]/40", className)}>{children}</div>
 );
 
 export const CardDescription = ({ className, ...props }: React.HTMLAttributes<HTMLParagraphElement>) => (

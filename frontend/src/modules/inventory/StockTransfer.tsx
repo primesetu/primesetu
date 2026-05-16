@@ -29,7 +29,7 @@ import {
   useStockTransfer,
   type TransferManifestItem,
   type StockTransferPayload,
-} from '@/hooks/useWarehouse';
+} from '@/modules/inventory/hooks/useWarehouse';
 import { useGridMask } from '@/hooks/useGridMask';
 import { 
   DataTable, 

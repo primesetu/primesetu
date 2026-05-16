@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Lock, X } from 'lucide-react';
 import { cn } from '@/lib/utils';
-import { SecurityOverrideResult } from '@/domain/connectivity/types';
+import { SecurityOverrideResult } from '@/core/connectivity/domain/types';
 
 interface SecurityOverrideProps {
   isOpen: boolean;

@@ -10,7 +10,7 @@ import { cn } from "@/lib/utils";
 // Sovereign Architecture Imports
 import { SovereignShell } from "@/components/sovereign/SovereignShell";
 import { SovereignGrid, GridColumn } from "@/components/sovereign/SovereignGrid";
-import { useSovereignStore } from "@/store/useSovereignStore";
+import { useSovereignStore } from "@/core/stores/useSovereignStore";
 import { useSysParams } from "@/hooks/useSysParams";
 
 export default function ItemClassificationWorkbench({ onBack }: { onBack?: () => void }) {

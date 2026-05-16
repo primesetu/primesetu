@@ -12,7 +12,7 @@
 import React, { useState } from 'react'
 import { apiClient } from '@/api/client'
 import { supabase } from '@/lib/supabase'
-import { storeLocalToken } from '@/hooks/useLocalAuth'
+import { storeLocalToken } from '@/core/hooks/useLocalAuth'
 
 interface LocalLoginScreenProps {
   onSuccess: () => void

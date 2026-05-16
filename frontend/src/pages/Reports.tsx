@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { BarChart3, TrendingUp, Download, Filter, Calendar, ArrowUpRight, ArrowDownRight, Package, Users, ShoppingCart, Truck } from 'lucide-react';
 import { cn } from '@/lib/utils';
-import { useSovereignStore } from '@/store/useSovereignStore';
+import { useSovereignStore } from '@/core/stores/useSovereignStore';
 
 type ReportTab = 'SALES' | 'PURCHASE' | 'STOCK' | 'CUSTOMER';
 

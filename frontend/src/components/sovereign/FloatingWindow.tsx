@@ -1,7 +1,7 @@
 import React from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { X, Minus, Square, Copy, Maximize2, ExternalLink } from 'lucide-react';
-import { useWindowStore } from '@/store/useWindowStore';
+import { useWindowStore } from '@/core/stores/useWindowStore';
 import { cn } from '@/lib/utils';
 
 interface FloatingWindowProps {

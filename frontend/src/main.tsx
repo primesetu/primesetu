@@ -16,6 +16,7 @@ import { F2SearchProvider, GlobalF2SearchOverlay } from './contexts/F2SearchCont
 import { BrowserRouter } from 'react-router-dom'
 import { ThemeProvider } from './hooks/useTheme'
 import App from './App'
+import { useRuntimeConfigStore } from './core/stores/useRuntimeConfigStore'
 import './index.css'
 
 // AG Grid Global Module Registration (Industrial Protocol)
@@ -74,38 +75,12 @@ const queryClient = new QueryClient({
   },
 })
 
-import { ConnectivityGuard } from './components/common/ConnectivityGuard'
+import { ConnectivityGuard } from './core/connectivity/ConnectivityGuard'
 import LocalAuthGuard from './components/auth/LocalAuthGuard'
 
-declare global {
-  interface Window {
-    __RUNTIME_CONFIG__: {
-      BACKEND_URL: string;
-      ENVIRONMENT: string;
-      CONFIG_VERSION: number;
-      NODE_ID: string;
-    };
-  }
-}
-
 async function bootstrap() {
-  try {
-    const res = await fetch('/runtime-config.json');
-    if (!res.ok) {
-      throw new Error(`HTTP ${res.status}`);
-    }
-    const config = await res.json();
-    window.__RUNTIME_CONFIG__ = config;
-    console.log('[RuntimeConfig] Loaded successfully', config);
-  } catch (err) {
-    console.warn('[RuntimeConfig] runtime-config.json missing or failed to load. Falling back to LAN discovery.', err);
-    window.__RUNTIME_CONFIG__ = {
-      BACKEND_URL: '',
-      ENVIRONMENT: 'production',
-      CONFIG_VERSION: 1,
-      NODE_ID: ''
-    };
-  }
+  // Use the centralized config store for initialization
+  await useRuntimeConfigStore.getState().loadConfig();
 
   createRoot(document.getElementById('root')!).render(
     <StrictMode>

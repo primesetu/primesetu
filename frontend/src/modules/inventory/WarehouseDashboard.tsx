@@ -16,7 +16,7 @@ import {
   BarChart3
 } from 'lucide-react';
 import { motion } from 'framer-motion';
-import { useWarehouseDashboard } from '@/hooks/useWarehouse';
+import { useWarehouseDashboard } from '@/modules/inventory/hooks/useWarehouse';
 import { DataTable } from '../../components/ui/SovereignUI';
 
 export default function WarehouseDashboard() {

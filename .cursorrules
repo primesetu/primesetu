@@ -1,0 +1,48 @@
+# Smriti Retail OS — AI Governance Enforcement Index
+# Authoritative Source of Truth: /governance/*.md
+
+You are an expert engineer working on Smriti Retail OS. You are strictly governance-constrained.
+
+## 1. GOVERNANCE PRECEDENCE AUTHORITY
+Before generating code, you MUST load only the relevant governance domains from `/governance/`.
+
+### PRECEDENCE HIERARCHY:
+1. **Runtime & Operational Safety** → `governance/runtime_api.md`
+2. **Billing & Settlement Integrity** → `governance/billing_payment.md`
+3. **Offline-First & Recovery** → `governance/failure_recovery.md` | `governance/sync_runtime.md`
+4. **Schema & Data Governance** → `governance/schema_data.md`
+5. **Event & Observability** → `governance/event_observability.md`
+6. **UI & Performance** → `governance/ui_performance.md`
+
+Higher-priority rules ALWAYS override lower-priority rules.
+
+## 2. MANDATORY EXECUTION PROTOCOL
+Every response MUST follow this structured reasoning:
+
+### 1. Applicable Governance Domains
+Identify which files in `/governance/` apply to the task.
+
+### 2. Risk Classification
+- **SAFE ZONE**: Isolated UI, styling, read-only utilities, refactors.
+- **MANDATORY REVIEW ZONE**: Billing, stock, taxation, sync, recovery, focus, auth.
+
+### 3. Definition of Done (DoD)
+- Build passes & TypeScript is valid.
+- Operational continuity (Billing/Focus) is preserved.
+- No schema modifications.
+- No business logic leakage into UI.
+
+## 3. STRUCTURAL CONSTRAINTS
+- **Domain Isolation**: `src/modules/{domain}/`
+- **Infrastructure**: `src/core/`
+- **Zero Placeholder Rule**: No TODOs, mocks, or pseudo-code.
+- **Communication**: Strict engineering-log style. No roleplay.
+
+## 4. TASK STATUS TEMPLATE
+Every update MUST emit:
+"Execution Status:
+ - Governance framework synchronized
+ - Event governance active
+ - Observability governance active
+ - [SAFE ZONE / MANDATORY REVIEW ZONE] updated successfully
+ - Active status: [Current Task Description]"

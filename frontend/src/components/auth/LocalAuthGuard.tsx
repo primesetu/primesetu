@@ -14,7 +14,7 @@
 import React, { useEffect, useState } from 'react'
 import { apiClient } from '@/api/client'
 import { supabase } from '@/lib/supabase'
-import { isLocalTokenValid } from '@/hooks/useLocalAuth'
+import { isLocalTokenValid } from '@/core/hooks/useLocalAuth'
 import LocalLoginScreen from './LocalLoginScreen'
 
 type GuardState = 'loading' | 'local-login' | 'ready'

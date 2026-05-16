@@ -85,20 +85,21 @@ async def structlog_middleware(request: Request, call_next):
 
 api_prefix = "/api/v1"
 
-from app.routers import (
-    onboarding, barcode,
-    purchase, inventory, billing,
-    users, menu, extensions, finance, schemes, security, reporting,
-    store, inventory_audit, stock_ledger, department,
-    legacy, masks, item_master, customer, ho, settings, master, ecommerce,
-    einvoice, tally, returns, loyalty, whatsapp, warehouse, intelligence,
-    flexible_reports, gstr1,
-    # Previously built — now wired
-    accounts, alerts, catalogue, configuration, integration, price_group, reports, tills,
-    item_classification, catalog_classifications, barcode_templates, lookup, health, queue
+from app.domains.core import (
+    auth as auth_router, health, users, configuration, menu, settings, security, masks, schema as schema_router
 )
-from app.routers import schema as schema_router
-from app.routers import auth as auth_router
+from app.domains.billing import billing, tills, returns
+from app.domains.inventory import inventory, inventory_audit, item_master, warehouse, stock_ledger
+from app.domains.catalogue import catalogue, item_classification, catalog_classifications, department
+from app.domains.customer import customer, loyalty
+from app.domains.ho import ho, integration
+from app.domains.finance import finance, accounts, gstr1, einvoice
+
+from app.routers import (
+    onboarding, barcode, purchase, extensions, schemes, reporting, store, 
+    legacy, master, ecommerce, tally, whatsapp, intelligence, flexible_reports,
+    alerts, price_group, reports, barcode_templates, lookup, queue
+)
 
 app.include_router(auth_router.router)         # [R1-B] Local node JWT issuance
 app.include_router(health.router, prefix=api_prefix)

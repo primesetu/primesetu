@@ -33,7 +33,7 @@ const smritiTheme = themeQuartz.withParams({
   headerHeight: 40,
 });
 
-import { useWindowStore } from '@/store/useWindowStore';
+import { useWindowStore } from '@/core/stores/useWindowStore';
 
 export default function ItemViewer() {
   const { openWindow } = useWindowStore();

@@ -17,3 +17,4 @@ venv/
 .gemini/
 outbox.sqlite3
 installer/
+frontend/public/runtime-config.json

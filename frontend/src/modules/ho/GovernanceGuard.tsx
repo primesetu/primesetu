@@ -9,7 +9,7 @@
  * "Memory, Not Code."
  * ============================================================ */
 import React, { useState } from 'react'
-import { useSovereignStore } from '@/store/useSovereignStore'
+import { useSovereignStore } from '@/core/stores/useSovereignStore'
 import { api } from '@/api/client'
 import { ShieldAlert, Terminal, Loader2, Key, CheckCircle2 } from 'lucide-react'
 import { cn } from '@/lib/utils'

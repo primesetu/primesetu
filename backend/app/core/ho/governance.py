@@ -41,7 +41,7 @@ async def _handle_update_config(command: RemoteCommand, db: AsyncSession) -> Com
         payload_dict = json.loads(command.payload)
         update = ConfigUpdatePayload(**payload_dict)
         
-        from app.routers.configuration import update_sovereign_sysparam
+        from app.domains.core.configuration import update_sovereign_sysparam
         # We need to simulate a request or call the internal logic
         # For now, logging the intent
         logger.info(f"UPDATE_CONFIG: Setting {update.param_code} to {update.value}")

@@ -1,5 +1,5 @@
 import React, { useState, Suspense, lazy } from 'react';
-import SmritiShell from './components/layouts/SmritiShell';
+import SmritiShell from '@/components/layout/SmritiShell';
 import POS from './pages/POS';
 import ConnectionSettings from './pages/ConnectionSettings';
 import CustomerMaster from './pages/CustomerMaster';
@@ -29,7 +29,7 @@ const BarcodeStudio = lazy(() => import('./modules/inventory/BarcodeStudio'));
 const BarcodeDesigner = lazy(() => import('./modules/tools/BarcodeDesigner'));
 
 // ── [R6] SYNCHRONOUS HOOKS & GUARDS ──────────────────────────────────────────
-import { useHoPulse } from './hooks/ho/useHoPulse';
+import { useHoPulse } from '@/modules/ho/useHoPulse';
 import GovernanceGuard from './modules/ho/GovernanceGuard';
 
 const App: React.FC = () => {

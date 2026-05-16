@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { ShoppingCart, Search, Menu, Heart, User, ChevronRight, Star, X, Plus, Minus } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { useCartStore } from '../../store/useCartStore';
-import { apiClient } from '../../api/client';
+import { useCartStore } from '@/modules/billing/stores/useCartStore';
+import { apiClient } from '@/api/client';
 
 interface Product {
   stockno: string;

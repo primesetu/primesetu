@@ -46,40 +46,31 @@ logger = logging.getLogger("smriti.sync")
 
 async def enqueue(table_name: str, operation: str, record: dict, pk_column: str = "id", idempotency_key: str = None) -> None:
     """
-    Enqueue a local write for eventual cloud sync.
-
-    This is a non-blocking, fire-and-forget call. It writes a single row
-    into the local smriti_sync_queue table. The background OfflineSyncEngine
-    will pick it up and push it to Supabase within the next sync interval.
-
-    Args:
-        table_name: Supabase target table (e.g. 'smriti_sale_hdr').
-        operation:  'INSERT', 'UPDATE', or 'DELETE'.
-        record:     Full row dict. For DELETE, must include pk_column key.
-        pk_column:  Primary key column name (default 'id').
-
-    Example:
-        await enqueue("smriti_sale_hdr", "INSERT", {"id": 42, "total": 1500, ...})
-        await enqueue("smriti_item", "UPDATE", {"sku": "ABC", "price": 999}, pk_column="sku")
-        await enqueue("smriti_item", "DELETE", {"sku": "ABC"}, pk_column="sku")
+    [R2] Enqueue a local write for eventual cloud sync.
+    Delegates to QueueManager for authoritative persistence.
     """
-    from app.core.config import settings
-    if settings.storage_mode != "LOCAL_POSTGRES":
-        # In CLOUD or SOVEREIGN mode, data goes directly to Supabase —
-        # no local queue needed.
-        return
-
-    try:
-        from app.services.offline_sync import offline_sync_engine
-        await offline_sync_engine.enqueue(table_name, operation, record, pk_column, idempotency_key)
-        logger.debug(f"[Sync] Enqueued {operation} → {table_name} (pk={pk_column})")
-    except Exception as exc:
-        # CRITICAL: Never let sync failure block the billing write path.
-        # The local PG write already completed — this is just the cloud relay.
-        logger.error(
-            f"[Sync] Failed to enqueue {operation}→{table_name}: {exc}. "
-            "Row is safe locally. Will not retry queue entry."
-        )
+    from app.core.database import get_db
+    from app.core.sync.queue_manager import QueueManager
+    
+    # We use a context manager for the DB session here because enqueue 
+    # is often called from background tasks or outside a request context.
+    from app.core.database import SessionLocal
+    
+    async with SessionLocal() as db:
+        try:
+            await QueueManager.enqueue(
+                db=db,
+                table_name=table_name,
+                operation=operation,
+                record=record,
+                pk_column=pk_column,
+                idempotency_key=idempotency_key
+            )
+            await db.commit()
+        except Exception as exc:
+            # CRITICAL: Never let sync failure block the billing write path.
+            logger.error(f"[Sync] Failed to enqueue {operation}→{table_name}: {exc}")
+            await db.rollback()
 
 
 async def flush_now() -> Tuple[int, int]:

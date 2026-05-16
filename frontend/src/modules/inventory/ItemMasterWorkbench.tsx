@@ -28,7 +28,7 @@ import { useSysParams } from "@/hooks/useSysParams";
 // Sovereign Architecture Imports
 import { SovereignShell } from "@/components/sovereign/SovereignShell";
 import { SovereignGrid, GridColumn } from "@/components/sovereign/SovereignGrid";
-import { useSovereignStore } from "@/store/useSovereignStore";
+import { useSovereignStore } from "@/core/stores/useSovereignStore";
 
 // Dynamic schema generation happens inside the component now
 

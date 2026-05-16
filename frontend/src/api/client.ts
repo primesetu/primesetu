@@ -10,34 +10,32 @@
  * ============================================================ */
 import axios from 'axios'
 import { supabase } from '@/lib/supabase'
+import { useSovereignStore } from '@/core/stores/useSovereignStore'
+import { useRuntimeConfigStore } from '@/core/stores/useRuntimeConfigStore'
 
-const CLOUD_API = import.meta.env.VITE_BACKEND_URL ?? 'https://smriti-api.primesetu.com'
-const LOCAL_API = 'http://127.0.0.1:8000'
+const CLOUD_API_FALLBACK = 'https://smriti-api.primesetu.com'
 
 const getBaseUrl = () => {
   const { preferredBackendUrl } = useSovereignStore.getState();
+  const { config } = useRuntimeConfigStore.getState();
   
-  // 1. [PRIORITY] User's Explicit Override (Manual / Tunnel / Cloud selection)
+  // 1. [PRIORITY] User's Explicit Override (Manual Switch / Troubleshooting)
   if (preferredBackendUrl) {
     return preferredBackendUrl;
   }
 
-  // 2. [RUNTIME CONFIG] Deployment contract injected at startup
-  const runtimeBackendUrl = typeof window !== 'undefined' ? window.__RUNTIME_CONFIG__?.BACKEND_URL : '';
-  if (runtimeBackendUrl) {
-    return runtimeBackendUrl;
+  // 2. [SOURCE OF TRUTH] Config written by Setup Wizard / Bootstrap
+  if (config?.BACKEND_URL) {
+    return config.BACKEND_URL;
   }
 
-  // 3. [ENV CONFIG] Build-time fallback (Cloud / Tunnel)
-  if (CLOUD_API && !window.location.hostname.includes('localhost') && !window.location.hostname.includes('127.0.0.1')) {
-    return CLOUD_API;
+  // 3. [ENV FALLBACK] Cloud fallback for non-local environments
+  if (!window.location.hostname.includes('localhost') && !window.location.hostname.includes('127.0.0.1')) {
+    return CLOUD_API_FALLBACK;
   }
 
-  // 4. [FALLBACK] Local LAN Discovery (Zero Cloud Mode)
-  const hostname = typeof window !== 'undefined' ? window.location.hostname : '127.0.0.1';
-  const localUrl = `http://${hostname}:8000`;
-  
-  return localUrl;
+  // 4. [DEVELOPMENT FALLBACK] Local discovery
+  return `http://${window.location.hostname}:8000`;
 }
 
 // We don't hardcode BASE_URL here anymore because the toggle can change at runtime.
@@ -50,8 +48,6 @@ export const apiClient = axios.create({
     'Content-Type': 'application/json',
   },
 })
-
-import { useSovereignStore } from '@/store/useSovereignStore'
 
 // Inject local JWT into every request + dynamically route based on Offline State
 apiClient.interceptors.request.use((config) => {

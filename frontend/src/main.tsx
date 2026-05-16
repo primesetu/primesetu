@@ -18,6 +18,8 @@ import { ThemeProvider } from './hooks/useTheme'
 import App from './App'
 import { useRuntimeConfigStore } from './core/stores/useRuntimeConfigStore'
 import './index.css'
+// AG Grid: Use theme="legacy" prop on AgGridReact instead of importing CSS files
+// (Removes the v33 error #239: CSS File Themes + Theming API conflict)
 
 // AG Grid Global Module Registration (Industrial Protocol)
 import { ModuleRegistry } from 'ag-grid-community'

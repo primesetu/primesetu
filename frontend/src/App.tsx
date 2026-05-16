@@ -21,12 +21,16 @@ const PLACEHOLDER = (label: string) => (
   </div>
 );
 
-const ItemClassificationWorkbench = lazy(() => import('./modules/catalogue/ItemClassificationWorkbench'));
+const ItemGrouping = lazy(() => import('./modules/catalogue/ItemGrouping'));
 const VendorMaster = lazy(() => import('./pages/VendorMaster'));
 const ItemViewer = lazy(() => import('./pages/ItemViewer'));
 const ObjectLookup = lazy(() => import('./pages/ObjectLookup'));
 const BarcodeStudio = lazy(() => import('./modules/inventory/BarcodeStudio'));
 const BarcodeDesigner = lazy(() => import('./modules/tools/BarcodeDesigner'));
+const BulkItemImport = lazy(() => import('./modules/inventory/BulkItemImport'));
+const BatchBarcodeStudio = lazy(() => import('./modules/inventory/BatchBarcodeStudio'));
+
+
 
 // ── [R6] SYNCHRONOUS HOOKS & GUARDS ──────────────────────────────────────────
 import { useHoPulse } from '@/modules/ho/useHoPulse';
@@ -48,7 +52,7 @@ const App: React.FC = () => {
       case 'item-master':           return <ItemMaster />;
       case 'item-viewer':           return <ItemViewer />;
       case 'customer-master':       return <CustomerMaster />;
-      case 'classification-master': return <ItemClassificationWorkbench />;
+      case 'item-grouping':         return <ItemGrouping />;
       case 'vendor-master':         return <VendorMaster />;
       case 'pos':                   return <POS />;
       case 'purchase':              return <Purchase />;
@@ -59,6 +63,10 @@ const App: React.FC = () => {
       case 'object_lookup':         return <ObjectLookup />;
       case 'barcode':               return <BarcodeStudio />;
       case 'barcode-designer':      return <BarcodeDesigner />;
+      case 'excel-injection':       return <BulkItemImport />;
+      case 'batch-barcode':         return <BatchBarcodeStudio />;
+
+
 
       case 'stock-transfer':  return PLACEHOLDER('Stock Transfer');
       case 'day-end':         return PLACEHOLDER('Day End & Shift Close');

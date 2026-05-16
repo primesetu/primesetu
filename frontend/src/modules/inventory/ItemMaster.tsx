@@ -9,7 +9,8 @@
  * "Memory, Not Code."
  * ============================================================ */
 
-import React, { useState, useRef } from "react";
+import React, { useState, useRef, lazy, Suspense } from "react";
+const BulkItemImport = lazy(() => import('./BulkItemImport'));
 import {
   Plus,
   Search,

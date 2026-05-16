@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, lazy, Suspense } from 'react'
 import { 
   Package, 
   Search, 
@@ -11,12 +11,13 @@ import {
   ScanBarcode,
   History,
   RefreshCw,
-  ChevronRight
+  ChevronRight,
+  FileSpreadsheet,
+  X
 } from 'lucide-react'
 import { useLanguage } from '@/hooks/useLanguage'
 import { api } from '@/api/client'
 import PhysicalStockModule from './PhysicalStockModule'
-import BarcodeStudio from './BarcodeStudio'
 import InwardingModule from './InwardingModule'
 import { PredictiveIntelligence } from './PredictiveIntelligence'
 import { 
@@ -30,6 +31,10 @@ import {
   Label,
   DataTable
 } from '../../components/ui/SovereignUI';
+
+// Lazy-loaded: avoids heavy import until user clicks EXCEL DATA INJECTION
+const BulkItemImport = lazy(() => import('./BulkItemImport'))
+const BatchBarcodeStudio = lazy(() => import('./BatchBarcodeStudio'))
 
 interface InventoryItem {
   id: string
@@ -53,7 +58,7 @@ export default function InventoryModule() {
   const [loading, setLoading] = useState(true)
   const [isTransferring, setIsTransferring] = useState(false)
   const [isImporting, setIsImporting] = useState(false)
-  const [isPrintingBarcodes, setIsPrintingBarcodes] = useState(false)
+  const [isBatchBarcode, setIsBatchBarcode] = useState(false)
   const [isAddingStock, setIsAddingStock] = useState(false)
   const [isAuditing, setIsAuditing] = useState(false)
   const [transferData, setTransferData] = useState({ id: '', qty: 0 })
@@ -124,11 +129,139 @@ export default function InventoryModule() {
 
       {/* Module Components */}
       {/* Bulk import now via ItemMaster Workbench (Start Menu → Masters → Item Master) */}
-      {isPrintingBarcodes && <BarcodeStudio onClose={() => setIsPrintingBarcodes(false)} initialItems={items.slice(0, 5)} />}
       {isAddingStock && <InwardingModule onClose={() => setIsAddingStock(false)} />}
       {isAuditing && <PhysicalStockModule onClose={() => setIsAuditing(false)} />}
 
-      {/* Transfer Modal */}
+      {/* ── Bulk Excel Import Overlay ──────────────────────────────────── */}
+      {isImporting && (
+        <div
+          style={{
+            position: 'fixed',
+            inset: 0,
+            zIndex: 9999,
+            overflowY: 'auto',
+            background: 'linear-gradient(135deg, #0f1117 0%, #1a1d2e 100%)',
+          }}
+          role="dialog"
+          aria-modal="true"
+          aria-label="Bulk Excel Import Pipeline"
+        >
+          {/* Close / back-to-inventory bar */}
+          <div
+            style={{
+              position: 'sticky',
+              top: 0,
+              zIndex: 10000,
+              display: 'flex',
+              alignItems: 'center',
+              gap: '12px',
+              padding: '12px 24px',
+              background: 'rgba(15,17,23,0.92)',
+              backdropFilter: 'blur(16px)',
+              borderBottom: '1px solid rgba(255,255,255,0.06)',
+            }}
+          >
+            <button
+              onClick={() => setIsImporting(false)}
+              style={{
+                display: 'flex',
+                alignItems: 'center',
+                gap: '8px',
+                padding: '8px 16px',
+                borderRadius: '8px',
+                border: '1px solid rgba(255,255,255,0.08)',
+                background: 'rgba(255,255,255,0.04)',
+                color: '#94a3b8',
+                cursor: 'pointer',
+                fontSize: '13px',
+                fontWeight: 600,
+                transition: 'all 0.2s',
+              }}
+              aria-label="Close Bulk Import and return to Inventory Registry"
+            >
+              <X size={14} />
+              Back to Inventory Registry
+            </button>
+            <span style={{ fontSize: '12px', color: '#334155', letterSpacing: '0.5px', textTransform: 'uppercase' }}>
+              Inventory Registry → Bulk Excel Import
+            </span>
+          </div>
+
+          {/* BulkItemImport — full sovereign renderer */}
+          <Suspense
+            fallback={
+              <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '60vh', color: '#475569', fontSize: '14px' }}>
+                ⏳ Loading Bulk Import Pipeline…
+              </div>
+            }
+          >
+            <BulkItemImport />
+          </Suspense>
+        </div>
+      )}
+      {isBatchBarcode && (
+        <div
+          style={{
+            position: 'fixed',
+            inset: 0,
+            zIndex: 9999,
+            overflowY: 'auto',
+            background: 'linear-gradient(135deg, #0f1117 0%, #1a1d2e 100%)',
+          }}
+          role="dialog"
+          aria-modal="true"
+        >
+          <div
+            style={{
+              position: 'sticky',
+              top: 0,
+              zIndex: 10000,
+              display: 'flex',
+              alignItems: 'center',
+              gap: '12px',
+              padding: '12px 24px',
+              background: 'rgba(15,17,23,0.92)',
+              backdropFilter: 'blur(16px)',
+              borderBottom: '1px solid rgba(255,255,255,0.06)',
+            }}
+          >
+            <button
+              onClick={() => setIsBatchBarcode(false)}
+              style={{
+                display: 'flex',
+                alignItems: 'center',
+                gap: '8px',
+                padding: '8px 16px',
+                borderRadius: '8px',
+                border: '1px solid rgba(255,255,255,0.08)',
+                background: 'rgba(255,255,255,0.04)',
+                color: '#94a3b8',
+                cursor: 'pointer',
+                fontSize: '13px',
+                fontWeight: 600,
+                transition: 'all 0.2s',
+              }}
+            >
+              <X size={14} />
+              Back to Inventory Registry
+            </button>
+            <span style={{ fontSize: '12px', color: '#334155', letterSpacing: '0.5px', textTransform: 'uppercase' }}>
+              Inventory Registry → Barcode Injection Studio
+            </span>
+          </div>
+
+          <Suspense
+            fallback={
+              <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '60vh', color: '#475569', fontSize: '14px' }}>
+                ⏳ Initializing Barcode Studio…
+              </div>
+            }
+          >
+            <BatchBarcodeStudio />
+          </Suspense>
+        </div>
+      )}
+
       <Modal
         isOpen={isTransferring}
         onClose={() => setIsTransferring(false)}
@@ -192,16 +325,15 @@ export default function InventoryModule() {
       {/* Quick Actions Card */}
       <Card variant="flat" className="p-4 bg-bg-elevated/40 flex flex-wrap gap-4 items-center">
           <Button variant="sec" onClick={() => setIsImporting(true)} className="flex-1 h-12">
-            <Upload size={16} /> BULK IMPORT
+            <FileSpreadsheet size={16} /> EXCEL DATA INJECTION
           </Button>
-          <Button variant="sec" onClick={() => setIsAddingStock(true)} className="flex-1 h-12 text-status-green border-status-green/10">
+          <Button variant="sec" onClick={() => setIsBatchBarcode(true)} className="flex-1 h-12 text-amber-500 border-amber-500/10">
+            <ScanBarcode size={16} /> BARCODE INJECTION STUDIO
+          </Button>          <Button variant="sec" onClick={() => setIsAddingStock(true)} className="flex-1 h-12 text-status-green border-status-green/10">
             <Plus size={16} /> STOCK INWARD
           </Button>
           <Button variant="sec" onClick={() => setIsTransferring(true)} className="flex-1 h-12 text-accent border-accent/10">
             <ArrowRightLeft size={16} /> STOCK TRANSFER
-          </Button>
-          <Button variant="sec" onClick={() => setIsPrintingBarcodes(true)} className="flex-1 h-12 text-text-tertiary">
-            <ScanBarcode size={16} /> BARCODE STUDIO
           </Button>
       </Card>
 

@@ -291,3 +291,19 @@ class SmritiAuthAttempt(Base):
     failed_count: Mapped[int] = mapped_column(Integer, default=0)
     locked_until: Mapped[Optional[datetime]] = mapped_column(DateTime, nullable=True)
     last_attempt_at: Mapped[datetime] = mapped_column(DateTime, default=datetime.utcnow)
+
+class SmritiBarcodePrintLog(Base):
+    """ Immutable Print Journal for Retail Audits """
+    __tablename__ = 'smriti_barcode_print_log'
+    tenant_id: Mapped[str] = mapped_column(String, default='SYSTEM', index=True)
+    
+    id: Mapped[int] = mapped_column(Integer, primary_key=True, autoincrement=True)
+    print_id: Mapped[str] = mapped_column(String(36), index=True)
+    stock_no: Mapped[str] = mapped_column(String(50), index=True)
+    document_no: Mapped[Optional[str]] = mapped_column(String(50), nullable=True)
+    qty: Mapped[int] = mapped_column(Integer)
+    template_name: Mapped[str] = mapped_column(String(100))
+    operator: Mapped[Optional[str]] = mapped_column(String(100))
+    workstation: Mapped[Optional[str]] = mapped_column(String(100))
+    printed_at: Mapped[datetime] = mapped_column(DateTime, default=datetime.utcnow)
+    zpl_hash: Mapped[Optional[str]] = mapped_column(String(128), nullable=True)

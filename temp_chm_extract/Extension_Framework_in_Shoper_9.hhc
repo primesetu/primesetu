@@ -1,0 +1,92 @@
+<html>
+<!-- Sitemap 1.0 -->
+<object type="text/site properties">
+  <param name="SiteType" value="toc">
+  <param name="Image Width" value="16">
+  <param name="Window Styles" value="0x800407">
+  <param name="ExWindow Styles" value="0x100">
+</object>
+<ul>
+  <li><object type="text/sitemap">
+    <param name="Name" value="Welcome">
+    <param name="Local" value="Welcome.htm">
+  </object>
+  <li><object type="text/sitemap">
+    <param name="Name" value="Extension Framework">
+    <param name="Local" value="Extension_Framework.htm">
+  </object>
+  <li><object type="text/sitemap">
+    <param name="Name" value="Extension Framework Architecture">
+    <param name="Local" value="Extension_Framework_Architecture.htm">
+  </object>
+  <li><object type="text/sitemap">
+    <param name="Name" value="Extension Types">
+  </object>
+  <ul>
+    <li><object type="text/sitemap">
+      <param name="Name" value="About Extension Types">
+      <param name="Local" value="Extensions_Types/Extension_Types.htm">
+    </object>
+    <li><object type="text/sitemap">
+      <param name="Name" value="Pre-update Extensions">
+    </object>
+    <ul>
+      <li><object type="text/sitemap">
+        <param name="Name" value="About Pre-update Extensions">
+        <param name="Local" value="Pre-update_Extensions-Type1/About_Pre-update_Extensions.htm">
+      </object>
+      <li><object type="text/sitemap">
+        <param name="Name" value="Transaction Extensions">
+      </object>
+      <ul>
+        <li><object type="text/sitemap">
+          <param name="Name" value="About Transaction Extensions">
+          <param name="Local" value="Pre-update_Extensions-Type1/Pre-update-Type1.htm">
+        </object>
+        <li><object type="text/sitemap">
+          <param name="Name" value="Procedure">
+          <param name="Local" value="Pre-update_Extensions-Type1/Procedure-type1.htm">
+        </object>
+        <li><object type="text/sitemap">
+          <param name="Name" value="Sample Extensions">
+          <param name="Local" value="Pre-update_Extensions-Type1/Sample_Extensions-type1.htm">
+        </object>
+        </ul>
+      <li><object type="text/sitemap">
+        <param name="Name" value="PDT Extensions">
+      </object>
+      <ul>
+        <li><object type="text/sitemap">
+          <param name="Name" value="About PDT Extensions">
+          <param name="Local" value="Pre-update_Extensions-Type2/Pre-update-Type2.htm">
+        </object>
+        <li><object type="text/sitemap">
+          <param name="Name" value="Procedure">
+          <param name="Local" value="Pre-update_Extensions-Type2/Procedure-type2.htm">
+        </object>
+        </ul>
+      </ul>
+    <li><object type="text/sitemap">
+      <param name="Name" value="Post update Extensions">
+    </object>
+    <ul>
+      <li><object type="text/sitemap">
+        <param name="Name" value="About Post-update Extensions">
+        <param name="Local" value="Post_update_Extensions/About_Post-update_Extensions.htm">
+      </object>
+      <li><object type="text/sitemap">
+        <param name="Name" value="Procedure">
+        <param name="Local" value="Post_update_Extensions/Procedure-type3.htm">
+      </object>
+      </ul>
+    </ul>
+  <li><object type="text/sitemap">
+    <param name="Name" value="FAQs">
+    <param name="Local" value="FAQs/FAQs.htm">
+  </object>
+  <li><object type="text/sitemap">
+    <param name="Name" value="Appendix">
+    <param name="Local" value="Appendix/Appendix.htm">
+  </object>
+</ul>
+</html>

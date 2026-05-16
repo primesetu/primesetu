@@ -72,6 +72,7 @@ STATIC_MENU = [
     {"id": "movement",   "label": "Stock Movement",    "route": "movement",   "module": "movement",   "required_permission": "inventory.view",   "category": "WAREHOUSE",  "icon": "History",         "shortcut": None, "children": []},
     {"id": "transfer",   "label": "Store Transfers",   "route": "transfer",   "module": "transfer",   "required_permission": "inventory.transfer","category":"WAREHOUSE",  "icon": "ArrowLeftRight",  "shortcut": None, "children": []},
     {"id": "reconcile",  "label": "Physical Audit",    "route": "reconcile",  "module": "reconcile",  "required_permission": "inventory.audit",  "category": "WAREHOUSE",  "icon": "History",         "shortcut": None, "children": []},
+    {"id": "excel_injection", "label": "Excel Data Injection", "route": "inventory", "module": "inventory", "required_permission": "dashboard.view", "category": "WAREHOUSE", "icon": "DatabaseZap", "shortcut": None, "children": []},
     {"id": "barcode",    "label": "Barcode Studio",    "route": "barcode",    "module": "barcode",    "required_permission": "catalogue.view",   "category": "CATALOGUE",  "icon": "Package",         "shortcut": None, "children": []},
     
     {"id": "finance",    "label": "Finance Hub",       "route": "finance",    "module": "finance",    "required_permission": "finance.view",     "category": "FINANCE",    "icon": "DollarSign",      "shortcut": None, "children": []},
@@ -166,7 +167,8 @@ async def get_menu(
         for item in source_items:
             # Check permission
             # Check permission (Case-insensitive Admin check)
-            is_admin = current_user.role.upper() in ['ADMIN', 'SUPER_ADMIN', 'OWNER']
+            role_str = getattr(current_user, 'role', '') or ''
+            is_admin = role_str.upper() in ['ADMIN', 'SUPER_ADMIN', 'OWNER']
             if item.required_permission not in user_perms and not is_admin:
                 continue
 

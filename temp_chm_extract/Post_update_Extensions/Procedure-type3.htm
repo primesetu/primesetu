@@ -1,0 +1,208 @@
+<!doctype HTML public "-//W3C//DTD HTML 4.0 Frameset//EN">
+
+<html>
+
+<head>
+<title>Procedure-type3</title>
+<meta http-equiv="content-type" content="text/html; charset=windows-1252">
+<meta name="generator" content="RoboHelp by eHelp Corporation www.ehelp.com">
+<link rel="StyleSheet" href="../MS_Help.css"><style title="hcp" type="text/css">
+<!--
+span.hcp1 { font-weight:bold; }
+p.hcp2 { font-style:italic; font-weight:bold; text-align:justify; }
+p.hcp3 { text-align:justify; }
+tr.hcp4 { x-cell-content-align:top; }
+p.hcp5 { font-weight:bold; text-align:justify; }
+td.hcp6 { border-left-width:1px; border-left-color:#000000; border-left-style:Solid; border-right-width:1px; border-right-color:#000000; border-right-style:Solid; border-bottom-style:Solid; border-bottom-color:#000000; border-bottom-width:1px; padding-right:10px; padding-left:10px; }
+td.hcp7 { border-right-width:1px; border-right-color:#000000; border-right-style:Solid; border-bottom-style:Solid; border-bottom-color:#000000; border-bottom-width:1px; padding-right:10px; padding-left:10px; }
+-->
+</style>
+</head>
+<body>
+<h1 style="text-align: justify;">Post-update Extensions – Procedure</h1>
+
+<h2><span class="hcp1">Procedure to create post-update extensions</span></h2>
+
+<h3><span style="font-style: italic; font-weight: bold;">Creating Custom 
+ DLL and deploying it at POS location</span></h3>
+
+<p class="hcp2"><span style="font-weight: normal;">To 
+ know how to create and deploy Custom DLL, Refer <a href="../Appendix/Appendix.htm" style="font-weight: normal;">Appendix</a></span> 
+ </p>
+
+<p class="hcp3">Mandatory function to be present in a Custom 
+ DLL for Post-update Extensions is:</p>
+
+<p style="margin-left: 40px;
+			font-family: 'Courier New', monospace;
+			color: #0000ff;
+			text-align: justify;">Public Function PostUpdateHook(RSData 
+ As Object)</p>
+
+<p class="hcp3">The arguments to the function PostUpdateHook 
+ is an Object (RsData Object) with the following components.</p>
+
+<table x-use-null-cells
+		style="x-cell-content-align: top;
+				width: 93.502%;
+				border-spacing: 0px;
+				border-spacing: 0px;"
+		cellspacing=0
+		width=93.502%>
+<col style="width: 26.383%;">
+<col style="width: 73.617%;">
+
+<tr valign="top" class="hcp4">
+<td style="width: 26.383%;
+			border-left-width: 1px;
+			border-left-color: #000000;
+			border-left-style: Solid;
+			border-top-style: Solid;
+			border-top-color: #000000;
+			border-top-width: 1px;
+			border-right-width: 1px;
+			border-right-color: #000000;
+			border-right-style: Solid;
+			border-bottom-style: Solid;
+			border-bottom-color: #000000;
+			border-bottom-width: 1px;
+			padding-right: 10px;
+			padding-left: 10px;"
+	width=26.383%>
+<p class="hcp5">Arguments</td>
+<td style="width: 73.617%;
+			border-top-style: Solid;
+			border-top-color: #000000;
+			border-top-width: 1px;
+			border-right-width: 1px;
+			border-right-color: #000000;
+			border-right-style: Solid;
+			border-bottom-style: Solid;
+			border-bottom-color: #000000;
+			border-bottom-width: 1px;
+			padding-right: 10px;
+			padding-left: 10px;"
+	width=73.617%>
+<p class="hcp5">Remarks</td></tr>
+
+<tr valign="top" class="hcp4">
+<td style="width:26.383%;" width="26.383%" class="hcp6">
+<p class="hcp3">TRNType</td>
+<td style="width:73.617%;" width="73.617%" class="hcp7">
+<p class="hcp3">Transaction type</td></tr>
+
+<tr valign="top" class="hcp4">
+<td style="width:26.383%;" width="26.383%" class="hcp6">
+<p class="hcp3">TRNCtrlNo</td>
+<td style="width:73.617%;" width="73.617%" class="hcp7">
+<p class="hcp3">Unique for each transaction</td></tr>
+
+<tr valign="top" class="hcp4">
+<td style="width:26.383%;" width="26.383%" class="hcp6">
+<p class="hcp3">ExeName</td>
+<td style="width:73.617%;" width="73.617%" class="hcp7">
+<p class="hcp3">EXE name</td></tr>
+
+<tr valign="top" class="hcp4">
+<td style="width:26.383%;" width="26.383%" class="hcp6">
+<p class="hcp3">ConnectionString</td>
+<td style="width:73.617%;" width="73.617%" class="hcp7">
+<p class="hcp3">Database connection string</td></tr>
+
+<tr valign="top" class="hcp4">
+<td style="width:26.383%;" width="26.383%" class="hcp6">
+<p class="hcp3">CommandLine</td>
+<td style="width:73.617%;" width="73.617%" class="hcp7">
+<p class="hcp3">Command line arguments to call the main 
+ program</td></tr>
+
+<tr valign="top" class="hcp4">
+<td style="width:26.383%;" width="26.383%" class="hcp6">
+<p class="hcp3">FileName</td>
+<td style="width:73.617%;" width="73.617%" class="hcp7">
+<p class="hcp3">PDT file imported through extension</td></tr>
+
+<tr valign="top" class="hcp4">
+<td style="width:26.383%;" width="26.383%" class="hcp6">
+<p class="hcp3">SrlNo</td>
+<td style="width:73.617%;" width="73.617%" class="hcp7">
+<p class="hcp3">Default is 1 (e.g., if you have some 10 
+ entries, i.e., 10 stock nos, in a purchase transaction, 10 will be passed)</td></tr>
+
+<tr valign="top" class="hcp4">
+<td style="width:26.383%;" width="26.383%" class="hcp6">
+<p class="hcp3">ForwardTRNType</td>
+<td style="width:73.617%;" width="73.617%" class="hcp7">
+<p class="hcp3">For editing a document</td></tr>
+
+<tr valign="top" class="hcp4">
+<td style="width:26.383%;" width="26.383%" class="hcp6">
+<p class="hcp3">ForwardCtrlNo</td>
+<td style="width:73.617%;" width="73.617%" class="hcp7">
+<p class="hcp3">For editing a document</td></tr>
+
+<tr valign="top" class="hcp4">
+<td style="width:26.383%;" width="26.383%" class="hcp6">
+<p class="hcp3">VoidTRNType</td>
+<td style="width:73.617%;" width="73.617%" class="hcp7">
+<p class="hcp3">For deleting a document</td></tr>
+
+<tr valign="top" class="hcp4">
+<td style="width:26.383%;" width="26.383%" class="hcp6">
+<p class="hcp3">VoidCtrlNo</td>
+<td style="width:73.617%;" width="73.617%" class="hcp7">
+<p class="hcp3">For deleting a document</td></tr>
+
+<tr valign="top" class="hcp4">
+<td style="width:26.383%;" width="26.383%" class="hcp6">
+<p class="hcp3">OperationType</td>
+<td style="width:73.617%;" width="73.617%" class="hcp7">
+<p class="hcp3">Retrived from GenLookUp</td></tr>
+
+<tr valign="top" class="hcp4">
+<td style="width:26.383%;" width="26.383%" class="hcp6">
+<p class="hcp3">NoOfRecords</td>
+<td style="width:73.617%;" width="73.617%" class="hcp7">
+<p class="hcp3">Number of records in the transaction</td></tr>
+
+<tr valign="top" class="hcp4">
+<td style="width:26.383%;" width="26.383%" class="hcp6">
+<p class="hcp3">StringIdentifier</td>
+<td style="width:73.617%;" width="73.617%" class="hcp7">
+<p class="hcp3">Currently not used</td></tr>
+
+<tr valign="top" class="hcp4">
+<td style="width:26.383%;" width="26.383%" class="hcp6">
+<p class="hcp3">DocNoPrefix</td>
+<td style="width:73.617%;" width="73.617%" class="hcp7">
+<p class="hcp3">Document prefix</td></tr>
+
+<tr valign="top" class="hcp4">
+<td style="width:26.383%;" width="26.383%" class="hcp6">
+<p class="hcp3">DocNo</td>
+<td style="width:73.617%;" width="73.617%" class="hcp7">
+<p class="hcp3">Document number</td></tr>
+</table>
+
+<p class="hcp2">Records to be inserted in General Lookup 
+ (GenLookUp) table</p>
+
+<p class="hcp3">The Rec Id (Record Id) <span class="hcp1">13000</span> 
+ is maintained in <span class="hcp1">GenLookUp</span> table 
+ for configuring the customised DLL in post-update extensions.</p>
+
+<p class="hcp3">In GenLookUp table, Code is inserted as 
+ a combination of <span class="hcp1">Transaction Type</span>, 
+ <span class="hcp1">Operation Code</span> and <span class="hcp1">EXE 
+ Name</span> each separated by a ‘+’ symbol. For example, if the <span class="hcp1">Transaction Type</span> is <span class="hcp1">1100</span>, 
+ <span class="hcp1">Operation Code</span> is <span class="hcp1">01</span> 
+ and <span class="hcp1">EXE Name</span> is <span class="hcp1">SR127000</span>, 
+ then the corresponding Code is <span class="hcp1">1100+01+SR127000</span>.</p>
+
+<p class="hcp3">Alternatively, you can use <a href="../Tool/ScriptGenerationTool.htm">Extension 
+ Script Generator Tool</a> to generate the corresponding script which contains 
+ the SQL statements to be inserted in GenLookup table for configuring the 
+ required custom DLLs.</p>
+
+</body>
+</html>

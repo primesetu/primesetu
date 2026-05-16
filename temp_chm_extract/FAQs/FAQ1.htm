@@ -1,0 +1,334 @@
+<!doctype HTML public "-//W3C//DTD HTML 4.0 Frameset//EN">
+
+<html>
+
+<head>
+<title>FAQ1</title>
+<meta http-equiv="content-type" content="text/html; charset=windows-1252">
+<meta name="generator" content="RoboHelp by eHelp Corporation www.ehelp.com">
+<link rel="StyleSheet" href="../MS_Help.css"><style title="hcp" type="text/css">
+<!--
+p.hcp1 { font-weight:bold; }
+ol.hcp2 { list-style:decimal; }
+p.hcp3 { margin-left:40px; }
+ol.hcp4 { list-style:disc; }
+ul.hcp5 { list-style:disc; }
+p.hcp6 { margin-left:80px; }
+tr.hcp7 { x-cell-content-align:top; }
+td.hcp8 { border-left-width:1px; border-left-color:#000000; border-left-style:Solid; border-right-width:1px; border-right-color:#000000; border-right-style:Solid; border-bottom-style:Solid; border-bottom-color:#000000; border-bottom-width:1px; padding-right:10px; padding-left:10px; }
+td.hcp9 { border-right-width:1px; border-right-color:#000000; border-right-style:Solid; border-bottom-style:Solid; border-bottom-color:#000000; border-bottom-width:1px; padding-right:10px; padding-left:10px; }
+-->
+</style>
+</head>
+<body>
+<p class="hcp1">FAQs on Extensions</p>
+
+<ol type="1" class="hcp2">
+	
+	<li style="font-weight: bold; /*begin!kadov{{*/ font-weight: bold; /*}}end!kadov*/ "
+		class=kadov-p><p class="hcp1"><a name=faq1>What are 
+ extensions?</a></p></li>
+</ol>
+
+<p class="hcp3">Extensions are any customised add-ons to 
+ the base product (here, Shoper 9 POS). Extensions that can be added in 
+ Shoper 9 POS are used to meet the requirements specific to individual 
+ business scenarios. In general, extensions are used for customisations 
+ of the standard Shoper 9 POS functionalities.</p>
+
+<ol start="2" type="1" class="hcp2">
+	
+	<li style="font-weight: bold; /*begin!kadov{{*/ font-weight: bold; /*}}end!kadov*/ "
+		class=kadov-p><p class="hcp1"><a name=faq2>Where 
+ can I implement extensions?</a></p></li>
+</ol>
+
+<p class="hcp3">Extensions can be implemented in all transactions 
+ and catalogues of Shoper 9 POS.</p>
+
+<ol start="3" type="1" class="hcp2">
+	
+	<li style="/*begin!kadov{{*/ font-weight: bold; /*}}end!kadov*/ "
+		class=kadov-p><p class="hcp1"><a name=faq3>How can 
+ I implement extensions?</a></p></li>
+</ol>
+
+<p class="hcp3">Implementation of extensions can be summarised 
+ in three steps as:</p>
+
+<ol type="disc" class="hcp4">
+	
+	<ul type="disc" class="hcp5">
+		
+		<li class=kadov-p><p>Creating Custom DLL</p></li>
+		
+		<li class=kadov-p><p>Deploying Custom DLL</p></li>
+		
+		<li class=kadov-p><p>Configuring Custom DLL details in GenLookUp 
+ table </p></li>
+	</ul>
+</ol>
+
+<ol start="4" type="1" class="hcp2">
+	
+	<li style="/*begin!kadov{{*/ font-weight: bold; /*}}end!kadov*/ "
+		class=kadov-p><p class="hcp1"><a name=faq4>What can 
+ be done with extensions?</a></p></li>
+</ol>
+
+<ol type="disc" class="hcp4">
+	
+	<ul type="disc" class="hcp5">
+		
+		<li class=kadov-p><p>Extensions can capture additional values and 
+ save the data in Shoper 9 database</p></li>
+		
+		<li class=kadov-p><p>Extensions can decide whether the customised 
+ data is mandatory or not</p></li>
+		
+		<li class=kadov-p><p>Extensions can be displayed before confirming 
+ the transactions</p></li>
+		
+		<li class=kadov-p><p>Multiple extensions can be enabled at any 
+ transaction level</p></li>
+		
+		<li class=kadov-p><p>Customised data can be edited</p></li>
+		
+		<li class=kadov-p><p>Extensions can be set active or inactive</p></li>
+		
+		<li class=kadov-p><p>Customised data can be displayed in the transaction 
+ program</p></li>
+		
+		<li class=kadov-p><p>Validation of the extensions can be handled 
+ in three ways</p></li>
+		
+		<li style="list-style: square;"
+			type=square
+			class=kadov-p><p class="hcp6">No validation</p></li>
+		
+		<li style="list-style: square;"
+			type=square
+			class=kadov-p><p class="hcp6">Validation at Custom 
+ DLL</p></li>
+		
+		<li style="list-style: square;"
+			type=square
+			class=kadov-p><p class="hcp6">Validation at the 
+ transaction program</p></li>
+	</ul>
+</ol>
+
+<ol start="5" type="1" class="hcp2">
+	
+	<li style="/*begin!kadov{{*/ font-weight: bold; /*}}end!kadov*/ "
+		class=kadov-p><p class="hcp1"><a name=faq5>What are 
+ the limitations of extensions?</a></p></li>
+</ol>
+
+<ol type="disc" class="hcp4">
+	
+	<ul type="disc" class="hcp5">
+		
+		<li class=kadov-p><p>Extensions cannot update the standard Shoper 
+ 9 values </p></li>
+		
+		<li class=kadov-p><p>Extensions cannot change the look and feel 
+ of the standard Shoper 9 application UI </p></li>
+		
+		<li class=kadov-p><p>Data cannot be printed</p></li>
+	</ul>
+</ol>
+
+<ol start="6" type="1" class="hcp2">
+	
+	<li style="/*begin!kadov{{*/ font-weight: bold; /*}}end!kadov*/ "
+		class=kadov-p><p class="hcp1"><a name=faq6>Can you 
+ give some examples where extensions can be used?</a></p></li>
+</ol>
+
+<p class="hcp3">Some sample extensions that are supported 
+ in Shoper 9 POS are:</p>
+
+<ol type="disc" class="hcp4">
+	
+	<ul type="disc" class="hcp5">
+		
+		<li class=kadov-p><p>Handling credit card validation</p></li>
+		
+		<li class=kadov-p><p>Updating credit limit</p></li>
+		
+		<li class=kadov-p><p>Updating loyalty points</p></li>
+		
+		<li class=kadov-p><p>Handling gift coupons and Sodexo coupons</p></li>
+		
+		<li class=kadov-p><p>Capturing driver information in transporter 
+ details</p></li>
+		
+		<li class=kadov-p><p>Capturing mobile details (IEMI No, Battery 
+ No, Insurance No)</p></li>
+		
+		<li class=kadov-p><p>Capturing commission value for Sales person</p></li>
+		
+		<li class=kadov-p><p>Displaying information on related accessories 
+ while customer buying an item</p></li>
+	</ul>
+</ol>
+
+<ol start="7" type="1" class="hcp2">
+	
+	<li style="/*begin!kadov{{*/ font-weight: bold; /*}}end!kadov*/ "
+		class=kadov-p><p class="hcp1"><a name=faq7>Where 
+ is the customised data saved?</a></p></li>
+</ol>
+
+<p class="hcp3">Additional fields are provided in the relevant 
+ data tables to store the data captured for extensions. </p>
+
+<p class="hcp3">The details of the additional fields available 
+ for extensions in SaleTrnHdr, StkTrnDtls, StkTrnHdr, PosCashTrn tables 
+ are:</p>
+
+<ol type="disc" class="hcp4">
+	
+	<ul type="disc" class="hcp5">
+		
+		<li class=kadov-p><p>Provision for Eight string values - to capture 
+ string values</p></li>
+		
+		<li class=kadov-p><p>Provision for Four integer values - to capture 
+ integer values</p></li>
+		
+		<li class=kadov-p><p>Provision for Four money values - to capture 
+ money values</p></li>
+		
+		<li class=kadov-p><p>Provision for Four date time values - to capture 
+ date &amp; time details</p></li>
+	</ul>
+</ol>
+
+<p class="hcp3">These values are saved in Shoper database.</p>
+
+<p class="hcp3">Additionally, you can create customised tables 
+ to store extension details, if required. In case you create customised 
+ tables, you need to make sure that the tables contain the following fields 
+ and their values while saving the records.</p>
+
+<table x-use-null-cells
+		style="x-cell-content-align: top;
+				margin-left: 80px;
+				width: 30.757%;
+				border-spacing: 0px;
+				border-spacing: 0px;"
+		cellspacing=0
+		width=30.757%>
+<col style="width: 55.626%;">
+<col style="width: 44.374%;">
+
+<tr valign="top" class="hcp7">
+<td style="width: 55.626%;
+			border-left-width: 1px;
+			border-left-color: #000000;
+			border-left-style: Solid;
+			border-top-style: Solid;
+			border-top-color: #000000;
+			border-top-width: 1px;
+			border-right-width: 1px;
+			border-right-color: #000000;
+			border-right-style: Solid;
+			border-bottom-style: Solid;
+			border-bottom-color: #000000;
+			border-bottom-width: 1px;
+			padding-right: 10px;
+			padding-left: 10px;"
+	width=55.626%>
+<p class="hcp1">Field Name</td>
+<td style="width: 44.374%;
+			border-top-style: Solid;
+			border-top-color: #000000;
+			border-top-width: 1px;
+			border-right-width: 1px;
+			border-right-color: #000000;
+			border-right-style: Solid;
+			border-bottom-style: Solid;
+			border-bottom-color: #000000;
+			border-bottom-width: 1px;
+			padding-right: 10px;
+			padding-left: 10px;"
+	width=44.374%>
+<p class="hcp1">Type</td></tr>
+
+<tr valign="top" class="hcp7">
+<td style="width:55.626%;" width="55.626%" class="hcp8">
+<p>VAUid</td>
+<td style="width:44.374%;" width="44.374%" class="hcp9">
+<p>Varchar </td></tr>
+
+<tr valign="top" class="hcp7">
+<td style="width:55.626%;" width="55.626%" class="hcp8">
+<p>VActr</td>
+<td style="width:44.374%;" width="44.374%" class="hcp9">
+<p>Int</td></tr>
+
+<tr valign="top" class="hcp7">
+<td style="width:55.626%;" width="55.626%" class="hcp8">
+<p>VATermId</td>
+<td style="width:44.374%;" width="44.374%" class="hcp9">
+<p>Varchar</td></tr>
+
+<tr valign="top" class="hcp7">
+<td style="width:55.626%;" width="55.626%" class="hcp8">
+<p>VACompCode</td>
+<td style="width:44.374%;" width="44.374%" class="hcp9">
+<p>Varchar</td></tr>
+</table>
+
+<p class="hcp3">This information is used for synchronisation 
+ purpose in the case of a chain store establishment.</p>
+
+<ol start="8" type="1" class="hcp2">
+	
+	<li style="/*begin!kadov{{*/ font-weight: bold; /*}}end!kadov*/ "
+		class=kadov-p><p class="hcp1"><a name=faq8>What will 
+ happen to extensions when I upgrade Shoper?</a></p></li>
+</ol>
+
+<p class="hcp3">Extensions will continue working unless there 
+ is any change in the Extension Framework. But if there are any changes 
+ in the Extension Framework, the Partner has to make the required changes 
+ in the extensions accordingly.</p>
+
+<ol start="9" type="1" class="hcp2">
+	
+	<li style="/*begin!kadov{{*/ font-weight: bold; /*}}end!kadov*/ "
+		class=kadov-p><p class="hcp1"><a name=faq9>Can extensions 
+ developed for one user is used for other users?</a></p></li>
+</ol>
+
+<p style="margin-left: 40px; font-weight: normal;">Extensions can be accessed 
+ from the Extension Framework only if you are authorised to access the 
+ same, by the Partner. In other words, you can access any extensions only 
+ if your Account ID is authorised by the partner to access the extensions.</p>
+
+<ol start="10" type="1" class="hcp2">
+	
+	<li style="/*begin!kadov{{*/ font-weight: bold; /*}}end!kadov*/ "
+		class=kadov-p><p class="hcp1"><a name=faq10>What 
+ is the difference between extension and customization?</a></p></li>
+</ol>
+
+<p class="hcp3">Extensions are customised add-ons to an exiting 
+ functionality (e.g., Billing, Inwards, etc.) to extend its functionality. 
+ Extensions are controlled by Extension Framework.</p>
+
+<p class="hcp3">Customisations are individual custom programs 
+ to solve customer specific requirements (e.g., New reports in addition 
+ to the standard Shoper 9 reports).</p>
+
+<p class="hcp1">&nbsp;</p>
+
+<p class="hcp3">&nbsp;</p>
+
+<p class="hcp3">&nbsp;</p>
+
+</body>
+</html>

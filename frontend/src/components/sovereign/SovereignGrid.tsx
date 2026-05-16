@@ -34,9 +34,9 @@ export const SovereignGrid = ({
   data,
   schema,
   zoomLevel = 100,
-  modifiedRows,
-  deletedRows,
-  selectedRows,
+  modifiedRows = new Set(),
+  deletedRows = new Set(),
+  selectedRows = new Set(),
   setSelectedRows,
   validationErrors = {},
   onCellChange,
@@ -54,8 +54,6 @@ export const SovereignGrid = ({
         pinned: "left",
         editable: false,
         suppressMovable: true,
-        headerCheckboxSelection: true,
-        checkboxSelection: true,
         cellStyle: {
           color: "var(--text-secondary, rgba(255,255,255,0.4))",
           fontSize: "11px",
@@ -197,7 +195,7 @@ export const SovereignGrid = ({
               if (isAllSelected) {
                 gridRef.current?.api.deselectAll();
               } else {
-                gridRef.current?.api.selectAllFiltered();
+                gridRef.current?.api.selectAll('filtered');
               }
             }}
             className="flex items-center gap-3 text-[9px] font-black uppercase tracking-widest text-white/40 hover:text-blue-400 transition-all"
@@ -221,9 +219,10 @@ export const SovereignGrid = ({
 
       {/* Grid Container */}
       <div 
-        className="flex-1 min-h-0 ag-theme-alpine-dark w-full"
+        className="flex-1 min-h-0 w-full"
         style={{
           zoom: `${zoomLevel}%`,
+          height: "100%",
           "--ag-background-color": "transparent",
           "--ag-header-background-color": "rgba(15, 23, 42, 0.95)",
           "--ag-header-foreground-color": "rgba(255, 255, 255, 0.5)",
@@ -235,6 +234,9 @@ export const SovereignGrid = ({
           "--ag-border-color": "rgba(255, 255, 255, 0.05)",
           "--ag-row-border-color": "rgba(255, 255, 255, 0.02)",
           "--ag-cell-horizontal-border": "none",
+          "--ag-foreground-color": "rgba(255, 255, 255, 0.8)",
+          "--ag-data-color": "rgba(255, 255, 255, 0.8)",
+          "--ag-row-group-indent-size": "0",
         } as React.CSSProperties}
       >
         <AgGridReact
@@ -242,7 +244,13 @@ export const SovereignGrid = ({
           rowData={data}
           columnDefs={colDefs}
           defaultColDef={defaultColDef}
-          rowSelection="multiple"
+          className="ag-theme-alpine-dark"
+          rowSelection={{ 
+            mode: 'multiRow', 
+            checkboxes: true, 
+            headerCheckbox: true,
+            enableClickSelection: true 
+          }}
           onCellValueChanged={onCellValueChanged}
           onSelectionChanged={onSelectionChanged}
           getRowClass={getRowClass}

@@ -204,11 +204,12 @@ export const Badge = ({
 };
 
 // 7.5 Switch & Progress
-export const Switch = ({ checked, onCheckedChange, className }: { checked?: boolean; onCheckedChange?: (val: boolean) => void; className?: string }) => (
+export const Switch = ({ checked, onCheckedChange, disabled, className }: { checked?: boolean; onCheckedChange?: (val: boolean) => void; disabled?: boolean; className?: string }) => (
   <button 
     role="switch"
     aria-checked={checked}
-    onClick={() => onCheckedChange?.(!checked)}
+    onClick={() => !disabled && onCheckedChange?.(!checked)}
+    disabled={disabled}
     className={cn(
       "relative inline-flex h-6 w-11 shrink-0 cursor-pointer items-center rounded-full border-2 border-transparent transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background disabled:cursor-not-allowed disabled:opacity-50",
       checked ? "bg-[var(--primary)]" : "bg-slate-700",

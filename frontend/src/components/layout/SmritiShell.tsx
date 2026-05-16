@@ -5,7 +5,7 @@ import {
   ArrowLeftRight, BarChart3, CalendarCheck, Palette, Layers,
   Menu as MenuIcon, Building2, ChevronLeft, ChevronRight,
   Search, Bell, User, LogOut, Wifi, WifiOff, ExternalLink, Settings,
-  Database
+  Database, Printer
 } from 'lucide-react';
 import { apiClient } from '@/api/client';
 import { useSovereignStore } from '@/core/stores/useSovereignStore';
@@ -20,9 +20,11 @@ import ItemClassificationWorkbench from '@/modules/catalogue/ItemClassificationW
 import VendorMaster from '@/pages/VendorMaster';
 import ItemMaster from '@/pages/ItemMaster';
 import ObjectLookup from '@/pages/ObjectLookup';
-import BarcodeStudio from '@/modules/inventory/BarcodeStudio';
 import BarcodeDesigner from '@/modules/tools/BarcodeDesigner';
 import ConnectionSettings from '@/pages/ConnectionSettings';
+import ItemGrouping from '@/modules/catalogue/ItemGrouping';
+import BatchBarcodeStudio from '@/modules/inventory/BatchBarcodeStudio';
+
 
 interface MenuItem {
   id: string;
@@ -40,10 +42,12 @@ const MENU_ITEMS: MenuItem[] = [
   { id: 'item-master',           label: 'Item Master',            icon: Package,         group: 'MASTERS' },
   { id: 'object_lookup',         label: 'Object Lookup',          icon: Database,        group: 'MASTERS' },
   { id: 'item-viewer',           label: 'Item Viewer (Audit)',    icon: Search,          group: 'MASTERS' },
+  { id: 'excel-injection',       label: 'Excel Data Injection',   icon: Database,        group: 'MASTERS' },
   { id: 'customer-master',       label: 'Customer Master',        icon: Users,           group: 'MASTERS' },
-  { id: 'classification-master', label: 'Classification Manager', icon: Layers,          group: 'MASTERS' },
+  { id: 'item-grouping',         label: 'Item Grouping',          icon: Layers,          group: 'MASTERS' },
   { id: 'vendor-master',         label: 'Vendor Manager',         icon: User,            group: 'MASTERS' },
-  { id: 'barcode',               label: 'Barcode Studio',         icon: Package,         group: 'MASTERS' },
+  { id: 'batch-barcode',         label: 'Batch Barcode Studio',   icon: Printer,         group: 'MASTERS' },
+
 
   { id: 'reports',        label: 'Reports',         icon: BarChart3,       group: 'ANALYTICS' },
   { id: 'day-end',        label: 'Day End',         icon: CalendarCheck,   group: 'ANALYTICS', required_sysparam: 'EnableDayEnd' },
@@ -58,7 +62,7 @@ const MENU_ITEMS: MenuItem[] = [
 const GROUPS = ['OPERATIONS', 'MASTERS', 'ANALYTICS', 'ADMIN'];
 
 // Pages that need full-bleed layout (manage their own padding/scroll)
-const FULL_BLEED_PAGES = ['pos', 'item-master', 'item-viewer', 'customer-master', 'classification-master', 'vendor-master', 'purchase', 'theme-manager', 'system-settings', 'connection-settings', 'object_lookup', 'barcode', 'barcode-designer'];
+const FULL_BLEED_PAGES = ['pos', 'item-master', 'item-viewer', 'customer-master', 'item-grouping', 'vendor-master', 'purchase', 'theme-manager', 'system-settings', 'connection-settings', 'object_lookup', 'barcode-designer', 'batch-barcode'];
 
 interface SmritiShellProps {
   children: React.ReactNode;
@@ -110,8 +114,10 @@ const SmritiShell: React.FC<SmritiShellProps> = ({ children, activeTab, onTabCha
       case 'classification-master': return <ItemClassificationWorkbench />;
       case 'vendor-master':         return <VendorMaster />;
       case 'object_lookup':         return <ObjectLookup />;
-      case 'barcode':               return <BarcodeStudio />;
       case 'barcode-designer':      return <BarcodeDesigner />;
+      case 'item-grouping':         return <ItemGrouping />;
+      case 'batch-barcode':         return <BatchBarcodeStudio />;
+
 
       default: return <div className="p-10 text-center uppercase font-black opacity-20">Module: {type}</div>;
     }

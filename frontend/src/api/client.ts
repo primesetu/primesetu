@@ -44,6 +44,7 @@ const getBaseUrl = () => {
 export const apiClient = axios.create({
   // Initial fallback, will be overwritten by interceptor
   baseURL: `${getBaseUrl().replace(/\/$/, '')}/api/v1`,
+  withCredentials: true, // [GOVERNANCE] Mandatory for hardened CORS with specific origins
   headers: {
     'Content-Type': 'application/json',
   },

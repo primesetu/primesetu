@@ -1,0 +1,14 @@
+^XA
+^FX --- Smriti Retail OS Sovereign Label ---
+^CF0,25
+^FO50,40^FD{{Class1}} / {{Class2}}^FS
+^CF0,22
+^FO50,70^FD{{ItemDesc}}^FS
+^FO50,100^FDMRP: {{MRP}}^FS
+^FO50,130^FDS1: {{SubClass1}} S2: {{SubClass2}}^FS
+^FO50,160^FDSize: {{Size}}^FS
+^FO50,190^FDStock No: {{StockNo}}^FS
+^BY2,3,60
+^FO50,220^BCN,60,Y,N,N
+^FD{{Barcode}}^FS
+^XZ

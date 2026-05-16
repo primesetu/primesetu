@@ -60,24 +60,20 @@ export const ConnectivityGuard: React.FC<{ children: React.ReactNode }> = ({ chi
         const data = await response.json();
         if (data.service === 'smriti-os') {
           setFailureCount(0);
+          setSuccessCount(prev => prev + 1);
           
-          setSuccessCount(prev => {
-            const next = prev + 1;
-            
-            // State Transition: Recovering Logic
-            if (connectivityState === 'OFFLINE' || connectivityState === 'RECOVERING') {
-              if (next >= CONNECTIVITY_CONFIG.SUCCESSES_TO_ONLINE) {
-                setConnectivityState('ONLINE');
-                setBackendAvailable(true);
-              } else {
-                setConnectivityState('RECOVERING');
-              }
-            } else {
+          // Move transition logic to a safe place (here, in the async function)
+          if (connectivityState === 'OFFLINE' || connectivityState === 'RECOVERING') {
+            if (successCount + 1 >= CONNECTIVITY_CONFIG.SUCCESSES_TO_ONLINE) {
               setConnectivityState('ONLINE');
               setBackendAvailable(true);
+            } else {
+              setConnectivityState('RECOVERING');
             }
-            return next;
-          });
+          } else {
+            setConnectivityState('ONLINE');
+            setBackendAvailable(true);
+          }
           
           setLastCheck(new Date());
         }
@@ -87,17 +83,16 @@ export const ConnectivityGuard: React.FC<{ children: React.ReactNode }> = ({ chi
     } catch (err) {
       clearTimeout(timeoutId);
       setSuccessCount(0);
-      setFailureCount(prev => {
-        const next = prev + 1;
-        
-        if (next >= CONNECTIVITY_CONFIG.FAILURES_BEFORE_OFFLINE) {
-          setConnectivityState('OFFLINE');
-          setBackendAvailable(false);
-        } else {
-          setConnectivityState('DEGRADED');
-        }
-        return next;
-      });
+      setFailureCount(prev => prev + 1);
+      
+      const nextFailure = failureCount + 1;
+      if (nextFailure >= CONNECTIVITY_CONFIG.FAILURES_BEFORE_OFFLINE) {
+        setConnectivityState('OFFLINE');
+        setBackendAvailable(false);
+      } else {
+        setConnectivityState('DEGRADED');
+      }
+      
       setLastCheck(new Date());
     }
 

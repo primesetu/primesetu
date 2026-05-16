@@ -15,7 +15,7 @@
 from fastapi import APIRouter, Depends, HTTPException, status, Query
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import select, func, or_, update, and_, text
-from typing import List, Optional
+from typing import List, Optional, Dict, Any
 from decimal import Decimal
 from datetime import datetime, date
 
@@ -30,6 +30,7 @@ from app.models.legacy_s9 import (
     Sizecat,
     Genlookup,
     Itemmasterconfig,
+    Sysparam,
 )
 from app.schemas.item_master import (
     ItemCreate,
@@ -47,6 +48,10 @@ from app.schemas.item_master import (
     GenLookupSyncRequest,
     GenLookupSyncResponse,
     ItemCaptionsResponse,
+)
+from app.domains.inventory.bulk_item_service import (
+    fetch_item_field_config,
+    process_bulk_item_import,
 )
 
 router = APIRouter(prefix="/items", tags=["item-master"])
@@ -1200,3 +1205,194 @@ async def batch_create_items(
         cascade_summary=cascade_counts,
         last_error=last_err,
     )
+
+
+# ────────────────────────────────────────────────────────────
+# BULK PIPELINE ENDPOINTS
+# ────────────────────────────────────────────────────────────
+
+@router.get(
+    "/sysparam/item-config",
+    summary="Fetch Sysparam-driven ItemMaster field configuration",
+    response_model=Dict[str, Any],
+    tags=["item-master"],
+)
+async def get_item_field_config(
+    db: AsyncSession = Depends(get_db),
+    current_user: CurrentUser = Depends(require_auth),
+):
+    """
+    Returns the active field configuration for ItemMaster driven by Sysparam.
+    Frontend uses this to render only enabled columns with correct captions.
+
+    Response shape:
+    {
+      "captions":           {"class1cd": "Product", "class2cd": "Brand", ...},
+      "enabled":            {"subclass1cd": true, "subclass2cd": true, ...},
+      "analcode_recids":    {1: 65, 2: 66, ...},
+      "analcode_captions":  {1: "Fibre", 2: "Finish", ...},
+      "analcode_enabled":   {1: false, 2: false, ...}
+    }
+    """
+    try:
+        config = await fetch_item_field_config(db)
+        return config
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Sysparam config fetch failed: {str(e)}")
+
+
+@router.post(
+    "/bulk-import",
+    summary="High-speed bulk ItemMaster injection (Audit-bypass pipeline)",
+    response_model=Dict[str, Any],
+    tags=["item-master"],
+)
+async def bulk_import_items(
+    payload: List[Dict[str, Any]],
+    db: AsyncSession = Depends(get_db),
+    current_user: CurrentUser = Depends(require_auth),
+):
+    """
+    Atomic 5-step bulk injection pipeline. Bypasses audit log for max throughput.
+
+    Execution sequence:
+      1. Genlookup upsert  (Class1, Class2, SuperClass1/2, AnalCodes, TaxType)
+      2. Class12combo upsert  (Product × Brand matrix with SuperClass links)
+      3. Itemmaster bulk INSERT  (skip existing stocknos)
+      4. Stockmaster auto-init  (Qty = 0 for each new item)
+      5. Atomic commit
+
+    Payload: array of item dicts. Minimum required fields per item:
+      - stockno, class1cd, class2cd, itemdesc, retail_price
+
+    Optional (Sysparam-governed): superclass1, superclass2,
+      subclass1cd, subclass2cd, sizecd, analcode1..32, prodtaxtype, etc.
+    """
+    if not payload:
+        raise HTTPException(status_code=422, detail="Payload is empty. Send at least 1 item.")
+
+    if len(payload) > 5000:
+        raise HTTPException(
+            status_code=422,
+            detail=f"Batch too large: {len(payload)} items. Max 5000 per request."
+        )
+
+    try:
+        result = await process_bulk_item_import(
+            db=db,
+            items=payload,
+            vauid=current_user.user_id or "BULK_IMPORT",
+            vacompcode=current_user.store_id or "0001",
+        )
+        return result
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Bulk import pipeline failed: {str(e)}")
+
+
+@router.get(
+    "/bulk-import/template",
+    summary="Get field mapping reference for bulk import",
+    response_model=Dict[str, Any],
+    tags=["item-master"],
+)
+async def get_bulk_import_template(
+    db: AsyncSession = Depends(get_db),
+    current_user: CurrentUser = Depends(require_auth),
+):
+    """
+    Returns the complete field mapping reference for the bulk import pipeline.
+    Frontend uses this to build the Excel/clipboard column header guide.
+    Combines Sysparam-driven captions with S9 column names and RecId references.
+    """
+    config = await fetch_item_field_config(db)
+
+    template = {
+        "required_fields": [
+            {"column": "stockno",      "caption": "Stock No",          "type": "string",  "max_len": 20},
+            {"column": "itemdesc",     "caption": "Item Description",  "type": "string",  "max_len": 40},
+            {"column": "class1cd",     "caption": config["captions"].get("class1cd", "Product"),
+             "type": "string", "max_len": 16, "genlookup_recid": 1},
+            {"column": "class2cd",     "caption": config["captions"].get("class2cd", "Brand"),
+             "type": "string", "max_len": 16, "genlookup_recid": 2},
+            {"column": "retail_price", "caption": "Retail Price",      "type": "decimal"},
+        ],
+        "optional_fields": [
+            {"column": "dealer_price",   "caption": "Dealer Price",      "type": "decimal"},
+            {"column": "currentcost",    "caption": "Cost Price",        "type": "decimal"},
+            {"column": "lastpurchprice", "caption": "Last Purc. Price",  "type": "decimal"},
+            {"column": "finalmrp",       "caption": "Final MRP",         "type": "decimal"},
+            {"column": "prodtaxtype",    "caption": "Product Tax",       "type": "string",  "genlookup_recid": 54},
+            {"column": "srctaxtype",     "caption": "Source Tax",        "type": "string"},
+            {"column": "leastsalableqty","caption": "L.S.Q",            "type": "decimal"},
+            {"column": "imageid",        "caption": "Image Id",          "type": "string"},
+            {"column": "isinventoryitem","caption": "Inventory (Y/N)",   "type": "boolean"},
+            {"column": "isbillable",     "caption": "Billable (Y/N)",    "type": "boolean"},
+            {"column": "isservice",      "caption": "Service (Y/N)",     "type": "boolean"},
+            {"column": "isrptaxinclusive","caption": "Tax Incl (Y/N)",   "type": "boolean"},
+            {"column": "regularind",     "caption": "Regular Item",      "type": "integer"},
+        ],
+        "classification_fields": [],
+        "analcode_fields": [],
+    }
+
+    # Classification (Sysparam-enabled only)
+    if config["enabled"].get("subclass1cd"):
+        template["classification_fields"].append({
+            "column": "subclass1cd",
+            "caption": config["captions"].get("subclass1cd", "Style"),
+            "type": "string", "max_len": 16,
+        })
+    if config["enabled"].get("subclass2cd"):
+        template["classification_fields"].append({
+            "column": "subclass2cd",
+            "caption": config["captions"].get("subclass2cd", "Shade"),
+            "type": "string", "max_len": 16,
+        })
+    if config["enabled"].get("sizecd"):
+        template["classification_fields"].append({
+            "column": "sizecd",
+            "caption": config["captions"].get("sizecd", "Size"),
+            "type": "string", "max_len": 16,
+        })
+    if config["enabled"].get("superclass1"):
+        template["classification_fields"].append({
+            "column": "superclass1",
+            "caption": config["captions"].get("superclass1", "Department"),
+            "type": "string", "max_len": 16, "genlookup_recid": 51,
+        })
+    if config["enabled"].get("superclass2"):
+        template["classification_fields"].append({
+            "column": "superclass2",
+            "caption": config["captions"].get("superclass2", "Buyer"),
+            "type": "string", "max_len": 16, "genlookup_recid": 52,
+        })
+
+    # AnalCodes (AC1-AC5 from Sysparam; AC6-AC32 always available)
+    for ac_num in range(1, 6):
+        template["analcode_fields"].append({
+            "column":          f"analcode{ac_num}",
+            "caption":         config["analcode_captions"].get(ac_num, f"AC{ac_num}"),
+            "enabled":         config["analcode_enabled"].get(ac_num, False),
+            "genlookup_recid": config["analcode_recids"].get(ac_num, 64 + ac_num),
+            "type":            "string", "max_len": 16,
+        })
+    for ac_num in range(6, 33):
+        template["analcode_fields"].append({
+            "column":  f"analcode{ac_num}",
+            "caption": f"AC{ac_num}" if ac_num < 32 else "HSN Code",
+            "enabled": False,  # Store-configurable; default off
+            "genlookup_recid": 64 + ac_num,
+            "type": "string", "max_len": 16,
+        })
+
+    return {
+        "template": template,
+        "sysparam_config": config,
+        "pipeline_info": {
+            "max_batch_size": 5000,
+            "endpoint":       "/api/v1/items/bulk-import",
+            "method":         "POST",
+            "content_type":   "application/json",
+            "note":           "Audit-bypass mode. All 5 pipeline steps run atomically.",
+        },
+    }

@@ -1,0 +1,86 @@
+<!doctype HTML public "-//W3C//DTD HTML 4.0 Frameset//EN">
+
+<html>
+
+<head>
+<title>Sample1</title>
+<meta http-equiv="content-type" content="text/html; charset=windows-1252">
+<meta name="generator" content="RoboHelp by eHelp Corporation www.ehelp.com">
+<link rel="StyleSheet" href="../MS_Help.css"><style title="hcp" type="text/css">
+<!--
+p.hcp1 { margin-left:40px; }
+span.hcp2 { font-weight:bold; }
+p.hcp3 { font-weight:bold; }
+p.hcp4 { font-size:10pt; font-family:'Courier New'  , monospace; color:#0000ff; margin-left:40px; }
+p.hcp5 { font-weight:normal; }
+-->
+</style>
+</head>
+<body>
+<h1>Sample 1 - Extension at Detail Level of Billing</h1>
+
+<p>In billing, while entering the quantity of an item, display a message 
+ requesting to place an order for the selected stock item, if the balance 
+ quantity of the stock item reaches the reorder level set for the same. 
+ Additionally, display the remaining quantity of the stock item in the 
+ same message.</p>
+
+<p>The details of the extension to be enabled to facilitate the requirement 
+ are given below.</p>
+
+<p class="hcp1">Extension Type: Pre-update extension at the 
+ <span class="hcp2">Detail Level</span> of <span class="hcp2">Billing</span>.</p>
+
+<p class="hcp1">Transaction: Sales</p>
+
+<p class="hcp1">Exe Name: SR130000</p>
+
+<p class="hcp1">Project Name: <span style="font-size: 10pt;">ReorderLevel</span></p>
+
+<p style="font-size: 10pt; margin-left: 40px;">Class Name: clsReorderLevel</p>
+
+<p style="font-size: 10pt;
+			margin-left: 40px;
+			font-family: Verdana, sans-serif;
+			color: #000000;">Function: ShowDllForm1</p>
+
+<p class="hcp1">DLL Name: ReorderLevel.dll</p>
+
+<p class="hcp3">Records to be inserted in General Lookup 
+ (GenLookUp) table</p>
+
+<p>SQL statements to insert records in GenLookUp table are:</p>
+
+<p class="hcp4">Insert Into GenLookUp (Recid,Code,Descr,Flag) 
+ Values (14500,'2100+2+1','ReorderLevel.clsReorderLevel',1)</p>
+
+<p class="hcp4">Insert Into GenLookUp (Recid,Code,Descr,Flag) 
+ Values (14600,'2100+2+1','Y1',1)</p>
+
+<p class="hcp3">Output</p>
+
+<p class="hcp5">The Billing window is displayed.</p>
+
+<p class="hcp5"><span style="font-weight: normal;"><img src="../Extensions_Types/reorder1.gif" x-maintain-ratio="TRUE" style="border: none;
+			width: 900px;
+			height: 308px;
+			float: none;
+			border-style: none;
+			border-style: none;" width="900" height="308" border="0"></span></p>
+
+<p>Here, each time when you select the stock item <span class="hcp2">000002</span> 
+ during billing, if the balance quantity of the item is <span class="hcp2">Equal 
+ to</span> or <span class="hcp2">Less than</span> <span class="hcp2">40 
+ </span><span>(Balance quantity &lt;= 40)</span>, you will be alerted with 
+ this message.</p>
+
+<p>Refer:</p>
+
+<p><a href="../Appendix/Appendix.htm">Creating Custom DLL</a> </p>
+
+<p><a href="../Appendix/Appendix.htm">Deploying Custom DLL</a></p>
+
+<p>&nbsp;</p>
+
+</body>
+</html>

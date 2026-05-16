@@ -9,9 +9,10 @@
 # "Memory, Not Code."
 # ============================================================
 
-from fastapi import FastAPI, Depends, HTTPException
+from fastapi import FastAPI, Depends, HTTPException, Request
 from fastapi.middleware.cors import CORSMiddleware
-from fastapi.responses import FileResponse, Response
+from fastapi.responses import FileResponse, Response, JSONResponse
+from fastapi.exceptions import RequestValidationError
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import select, func, and_
 from app.core.database import engine, Base, get_db
@@ -36,17 +37,20 @@ app = FastAPI(
 )
 
 # .. CORS ......................................................................
-ALLOWED_ORIGIN_REGEX = (
-    r"https?://(localhost|127\.0\.0\.1"
-    r"|(.*\.)?primesetu\.com"
-    r"|(.*\.)?primesetu\.pages\.dev"
-    r"|(.*\.)?SMRITI-OS\.pages\.dev"
-    r"|.*\.github\.io)(:\d+)?"
-)
+# [GOVERNANCE] Restrict origins to trusted local node ports and production domains
+ALLOWED_ORIGINS = [
+    "http://localhost:5173",
+    "http://127.0.0.1:5173",
+    "http://localhost:3000",
+    "http://127.0.0.1:3000",
+    "http://localhost:80",
+    "http://127.0.0.1:80",
+]
+
 app.add_middleware(
     CORSMiddleware,
-    allow_origin_regex=ALLOWED_ORIGIN_REGEX,
-    allow_credentials=True,
+    allow_origins=ALLOWED_ORIGINS,
+    allow_credentials=True, 
     allow_methods=["*"],
     allow_headers=["*"],
 )
@@ -86,10 +90,12 @@ async def structlog_middleware(request: Request, call_next):
 api_prefix = "/api/v1"
 
 from app.domains.core import (
-    auth as auth_router, health, users, configuration, menu, settings, security, masks, schema as schema_router
+    auth as auth_router, health, users, configuration, menu, settings, security, masks, schema as schema_router, sysparam_manager
 )
 from app.domains.billing import billing, tills, returns
 from app.domains.inventory import inventory, inventory_audit, item_master, warehouse, stock_ledger
+from app.domains.inventory.routers import barcode_router as inventory_barcode_router
+
 from app.domains.catalogue import catalogue, item_classification, catalog_classifications, department
 from app.domains.customer import customer, loyalty
 from app.domains.ho import ho, integration
@@ -106,7 +112,7 @@ app.include_router(health.router, prefix=api_prefix)
 app.include_router(queue.router, prefix=api_prefix)
 app.include_router(onboarding.router, prefix=api_prefix)
 app.include_router(store.router, prefix=api_prefix)
-app.include_router(users.router)
+app.include_router(users.router, prefix="/api/v1/users")
 app.include_router(extensions.router, prefix="/api/v1/extensions")
 app.include_router(legacy.router, prefix=api_prefix)
 
@@ -119,6 +125,8 @@ app.include_router(master.router, prefix=api_prefix)
 app.include_router(customer.router, prefix=api_prefix)
 app.include_router(department.router, prefix=api_prefix)
 app.include_router(barcode.router, prefix=api_prefix)
+app.include_router(inventory_barcode_router.router, prefix=api_prefix + "/barcode-batch")
+
 app.include_router(barcode_templates.router, prefix=api_prefix)
 app.include_router(masks.router, prefix=api_prefix)
 app.include_router(lookup.router, prefix=api_prefix)   # GenLookup universal dropdown API
@@ -148,6 +156,7 @@ app.include_router(accounts.router, prefix="/api/v1/accounts",   tags=["accounts
 app.include_router(alerts.router,   prefix="/api/v1/alerts",     tags=["alerts"])
 app.include_router(catalogue.router, prefix="/api/v1/catalogue", tags=["catalogue"])
 app.include_router(configuration.router, prefix="/api/v1",       tags=["configuration"])
+app.include_router(sysparam_manager.router, prefix="/api/v1")
 app.include_router(integration.router, prefix="/api/v1/integration", tags=["integration"])
 app.include_router(price_group.router, prefix="/api/v1",         tags=["price-group"])
 app.include_router(reports.router)                                # has its own /api/v1/reports prefix
@@ -296,6 +305,22 @@ async def get_dashboard_stats(
         low_stock_alerts=int(low_stock or 0),
         revenue_change=0.0,
         sku_change=0
+    )
+
+@app.exception_handler(RequestValidationError)
+async def validation_exception_handler(request: Request, exc: RequestValidationError):
+    logger.error(f"Validation error: {exc.errors()}")
+    return JSONResponse(
+        status_code=400,
+        content={"detail": "Validation Error", "errors": exc.errors()},
+    )
+
+@app.exception_handler(Exception)
+async def global_exception_handler(request: Request, exc: Exception):
+    logger.error(f"Global exception: {str(exc)}", exc_info=True)
+    return JSONResponse(
+        status_code=500,
+        content={"detail": "Internal Server Error", "error": str(exc)},
     )
 
 if __name__ == "__main__":

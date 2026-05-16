@@ -1,0 +1,82 @@
+<!doctype HTML public "-//W3C//DTD HTML 4.0 Frameset//EN">
+
+<html>
+
+<head>
+<title>Sample2</title>
+<meta http-equiv="content-type" content="text/html; charset=windows-1252">
+<meta name="generator" content="RoboHelp by eHelp Corporation www.ehelp.com">
+<link rel="StyleSheet" href="../MS_Help.css"><style title="hcp" type="text/css">
+<!--
+p.hcp1 { margin-left:40px; }
+span.hcp2 { font-weight:bold; }
+p.hcp3 { font-weight:bold; }
+p.hcp4 { font-family:'Courier New'  , monospace; color:#0000ff; margin-left:40px; }
+-->
+</style>
+</head>
+<body>
+<h1>Sample 2 - Extension at Footer Detail Level of Billing</h1>
+
+<p>In billing, while confirming the bill by Cash, give a provision to enter 
+ the denominations of cash given by the customer. Additionally, display 
+ the change due, if any, to the customer.</p>
+
+<p>The details of the extension to be enabled to facilitate the requirement 
+ are given below.</p>
+
+<p class="hcp1">Extension Type: Pre-update extension at the 
+ <span class="hcp2">Footer Detail Level</span> of <span class="hcp2">Billing</span>.</p>
+
+<p class="hcp1">Transaction: Sales</p>
+
+<p class="hcp1">Exe Name: SR130000</p>
+
+<p class="hcp1">Project Name: Project1</p>
+
+<p style="font-size: 10pt; margin-left: 40px;">Class Name: clsDenomination</p>
+
+<p style="font-size: 10pt;
+			margin-left: 40px;
+			font-family: Verdana, sans-serif;">Function: ShowDllForm1</p>
+
+<p class="hcp1">DLL Name: Denominations.dll</p>
+
+<p class="hcp3">Records to be inserted in General Lookup 
+ (GenLookUp) table</p>
+
+<p>SQL statements to insert records in GenLookUp table are:</p>
+
+<p class="hcp4">Insert Into GenLookUp (Recid,Code,Descr,Flag) 
+ Values (14500,'2100+4+1','Project1.clsDenomination',1)</p>
+
+<p class="hcp4">Insert Into GenLookUp (Recid,Code,Descr,Flag) 
+ Values (14600,'2100+4+1','Y1',1)</p>
+
+<p class="hcp3">Output</p>
+
+<p>The Billing window is displayed.</p>
+
+<p><img src="../Extensions_Types/denominations1.gif" x-maintain-ratio="TRUE" style="border: none;
+				float: none;
+				width: 900px;
+				height: 530px;
+				border-style: none;
+				border-style: none;" width="900" height="530" border="0"></p>
+
+<p>Here, Rs. 3840/- is paid by Cash. You need to enter the count under 
+ each denomination. The change due to the customer in this case is 10, 
+ which is displayed in a different colour. </p>
+
+<p>Refer:</p>
+
+<p><a href="../Appendix/Appendix.htm">Creating Custom DLL</a> </p>
+
+<p><a href="../Appendix/Appendix.htm">Deploying Custom DLL</a></p>
+
+<p>&nbsp;</p>
+
+<p>&nbsp;</p>
+
+</body>
+</html>

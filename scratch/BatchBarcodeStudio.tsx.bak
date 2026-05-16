@@ -1,0 +1,482 @@
+import React, { useState, useMemo, useEffect } from "react";
+import { 
+  Printer, Database, Search, Package, Layers, Plus, 
+  Trash2, Play, CheckCircle2, AlertTriangle, Loader2, RefreshCw, Filter, FileText, Layout,
+  History as HistoryIcon
+} from "lucide-react";
+import { motion, AnimatePresence } from "framer-motion";
+import { apiClient } from "@/api/client";
+import { cn } from "@/lib/utils";
+
+// Sovereign Core Components
+import { SovereignShell } from "@/components/sovereign/SovereignShell";
+import { SovereignGrid, GridColumn } from "@/components/sovereign/SovereignGrid";
+import { useRawPrinter } from "./hooks/useRawPrinter";
+import { usePrintQueue } from "./hooks/usePrintQueue";
+
+/**
+ * Sovereign Direct-Hardware Registry Model
+ */
+interface PrintRow {
+  id: string;
+  stock_no: string;
+  class1?: string;
+  class2?: string;
+  item_desc: string;
+  subclass1?: string;
+  subclass2?: string;
+  size_cd?: string;
+  mrp: number;
+  qty: number;
+}
+
+interface PredictiveInputProps {
+  field: string;
+  placeholder: string;
+  value: string;
+  onChange: (val: string) => void;
+  onSelect: (val: string) => void;
+  icon: React.ReactNode;
+  className?: string;
+}
+
+const PredictiveInput = ({ field, placeholder, value, onChange, onSelect, icon, className }: PredictiveInputProps) => {
+  const [suggestions, setSuggestions] = useState<string[]>([]);
+  const [isOpen, setIsOpen] = useState(false);
+
+  useEffect(() => {
+    if (value.length >= 1) {
+      const timer = setTimeout(async () => {
+        try {
+          const res = await apiClient.get(`/barcode-batch/search-metadata?field=${field}&query=${value}`);
+          setSuggestions(res.data || []);
+          setIsOpen(true);
+        } catch (err) {
+          console.error("Search failed", err);
+        }
+      }, 300);
+      return () => clearTimeout(timer);
+    } else {
+      setSuggestions([]);
+      setIsOpen(false);
+    }
+  }, [value, field]);
+
+  return (
+    <div className={cn("relative", className)}>
+      <div className="absolute left-3 top-1/2 -translate-y-1/2 text-white/20">{icon}</div>
+      <input
+        placeholder={placeholder}
+        value={value}
+        onChange={(e) => onChange(e.target.value)}
+        onFocus={() => value.length >= 1 && setIsOpen(true)}
+        onBlur={() => setTimeout(() => setIsOpen(false), 200)}
+        onKeyDown={(e) => {
+          if (e.key === 'Enter') {
+            if (suggestions.length > 0) {
+              onSelect(suggestions[0]);
+              setIsOpen(false);
+            } else {
+              // Trigger a manual search if no suggestions yet
+              onSelect(value);
+            }
+          }
+          if (e.key === 'Escape') setIsOpen(false);
+        }}
+        className="w-full bg-white/5 border border-white/10 rounded-xl py-3 pl-11 pr-4 text-[12px] font-bold text-white outline-none focus:border-amber-500/50 transition-all"
+      />
+      <AnimatePresence>
+        {isOpen && suggestions.length > 0 && (
+          <motion.div
+            initial={{ opacity: 0, y: -10 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -10 }}
+            className="absolute top-full left-0 right-0 mt-2 bg-[#1e293b] border border-white/10 rounded-xl shadow-2xl z-[100] max-h-48 overflow-y-auto"
+          >
+            {suggestions.map((s, i) => (
+              <button
+                key={i}
+                onClick={() => {
+                  onSelect(s);
+                  setIsOpen(false);
+                }}
+                className="w-full text-left px-4 py-2 text-[11px] font-bold text-white/70 hover:bg-white/5 hover:text-white border-b border-white/5 last:border-0 transition-colors"
+              >
+                {s}
+              </button>
+            ))}
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </div>
+  );
+};
+
+export default function BatchBarcodeStudio() {
+  const { sendStreamToPrinter, status: printerStatus, error: usbError, connect } = useRawPrinter();
+  const { saveToQueue, recoverFromQueue, clearQueue } = usePrintQueue();
+  
+  const [mode, setMode] = useState<string>("GRN");
+  const [filters, setFilters] = useState({ 
+    document_no: "", 
+    article_no: "", 
+    color_cd: "",
+    subclass2: "",
+    stock_from: "",
+    stock_to: ""
+  });
+  const [isFetching, setIsFetching] = useState(false);
+  const [isCompiling, setIsCompiling] = useState(false);
+  
+  const [matrix, setMatrix] = useState<PrintRow[]>([]);
+  const [selectedRows, setSelectedRows] = useState<Set<number>>(new Set());
+  const [modifiedRows, setModifiedRows] = useState<Set<number>>(new Set());
+  const [deletedRows, setDeletedRows] = useState<Set<number>>(new Set());
+  const [selectedTemplate, setSelectedTemplate] = useState("standard_label.prn");
+
+  const TEMPLATES = [
+    { id: "standard_label.prn", name: "Standard 50x25mm" },
+    { id: "shelf_label.prn", name: "Shelf Tag 100x30mm" },
+    { id: "jewel_label.prn", name: "Jewelry Tag (Dual)" }
+  ];
+
+  // [RECOVERY] Load from IndexedDB on startup
+  useEffect(() => {
+    recoverFromQueue().then(saved => {
+      if (saved) {
+        setMatrix(saved.matrix);
+        setFilters(saved.filters);
+        setMode(saved.mode);
+      }
+    });
+  }, [recoverFromQueue]);
+
+  // [GOVERNANCE] Persist state on change
+  useEffect(() => {
+    if (matrix.length > 0) {
+      saveToQueue({ matrix, filters, mode });
+    }
+  }, [matrix, filters, mode, saveToQueue]);
+
+  const COLUMNS: GridColumn[] = useMemo(() => [
+    { key: "stock_no", label: "Stock No", width: "110px", readonly: true },
+    { key: "class1", label: "Class 1", width: "90px", readonly: true },
+    { key: "class2", label: "Class 2", width: "90px", readonly: true },
+    { key: "item_desc", label: "Description", width: "180px", readonly: true },
+    { key: "subclass1", label: "SubClass 1", width: "100px", readonly: true },
+    { key: "subclass2", label: "SubClass 2", width: "100px", readonly: true },
+    { key: "size_cd", label: "Size", width: "70px", readonly: true },
+    { key: "mrp", label: "MRP", width: "80px", type: "number", readonly: true },
+    { key: "qty", label: "Print Qty", width: "90px", type: "number", required: true },
+  ], []);
+
+  const fetchMatrix = async (overriddenFilters?: any) => {
+    setIsFetching(true);
+    const targetFilters = overriddenFilters || filters;
+    try {
+      const payload = {
+        mode,
+        article_no: targetFilters.article_no || "",
+        document_no: targetFilters.document_no || "",
+        color_cd: targetFilters.color_cd || "",
+        subclass2: targetFilters.subclass2 || "",
+        stock_from: targetFilters.stock_from || "",
+        stock_to: targetFilters.stock_to || ""
+      };
+      
+      const response = await apiClient.post("/barcode-batch/fetch-print-matrix", payload);
+      
+      const data = (response.data || []).map((r: any, idx: number) => ({
+        ...r,
+        id: r.stock_no || `row-${idx}-${Date.now()}`,
+        stock_no: r.stock_no || "",
+        item_desc: r.item_desc || "No Description",
+        class2: r.class2 || "",
+        size_cd: r.size_cd || "",
+        mrp: r.mrp || 0,
+        qty: r.recd_qty || r.qty || 1
+      }));
+      
+      setMatrix(data);
+      setModifiedRows(new Set());
+    } catch (err) {
+      console.error("Fetch Matrix Failed", err);
+    } finally {
+      setIsFetching(false);
+    }
+  };
+
+  const handlePredictiveSelect = (field: string, val: string) => {
+    const newFilters = { ...filters, [field]: val };
+    setFilters(newFilters);
+    // Auto-populate data on select
+    fetchMatrix(newFilters);
+  };
+
+  const handleCellChange = (rowIndex: number, field: string, val: any) => {
+    const newData = [...matrix];
+    newData[rowIndex] = { ...newData[rowIndex], [field]: val };
+    setMatrix(newData);
+    setModifiedRows(prev => new Set(prev).add(rowIndex));
+  };
+
+  const removeSelected = () => {
+    if (selectedRows.size === 0) return;
+    const newMatrix = matrix.filter((_, idx) => !selectedRows.has(idx));
+    setMatrix(newMatrix);
+    setSelectedRows(new Set());
+    setModifiedRows(new Set());
+    if (newMatrix.length === 0) clearQueue();
+  };
+
+  const executePrint = async () => {
+    setIsCompiling(true);
+    try {
+      const targets = matrix.filter((_, idx) => selectedRows.size === 0 || selectedRows.has(idx));
+      if (targets.length === 0) throw new Error("No active rows selected.");
+
+      // 1. Single Bulk Network Hit (Cascade Prevention)
+      const bulkRes = await apiClient.post("/barcode-batch/compile-bulk-prn", {
+        items: targets.map(t => ({
+          stock_no: t.stock_no,
+          qty: t.qty,
+          document_no: filters.document_no || null
+        })),
+        template_name: selectedTemplate
+      });
+      
+      const finalStream = bulkRes.data.final_stream;
+
+      if (!finalStream) throw new Error("No labels generated from template engine.");
+
+      // 3. Spool to WebUSB
+      await sendStreamToPrinter(finalStream);
+      
+      // Success feedback (Non-blocking)
+      console.log("[SMRITI-OS] Print Batch Spooled Successfully", bulkRes.data.batch_id);
+      
+    } catch (err: any) {
+      console.error("Print Execution Failed", err);
+    } finally {
+      setIsCompiling(false);
+    }
+  };
+
+  const totals = useMemo(() => {
+    const activeRows = matrix.filter((_, idx) => !deletedRows.has(idx));
+    return {
+      items: activeRows.length,
+      labels: activeRows.reduce((acc, curr) => acc + (Number(curr.qty) || 0), 0)
+    };
+  }, [matrix, deletedRows]);
+
+  return (
+    <SovereignShell 
+      title="Hardware-Direct Batch Barcode Studio"
+      icon={<Printer className="text-amber-400" size={24} />}
+      headerActions={(
+        <div className="flex items-center gap-4">
+          <div className="flex flex-col items-end">
+            <span className="text-[9px] font-black text-white/30 uppercase tracking-[0.2em]">Batch Summary</span>
+            <span className="text-[12px] font-black text-white uppercase tracking-tight">
+               {totals.items} Items <span className="text-white/20">/</span> {totals.labels} Labels
+            </span>
+          </div>
+          <button 
+            onClick={() => window.location.search = "?tab=batch-barcode-telemetry"}
+            className="text-[9px] font-black text-white/30 uppercase tracking-widest hover:text-blue-400 transition-colors flex items-center gap-2"
+          >
+            <HistoryIcon size={14} />
+            View Telemetry
+          </button>
+          <div className="h-8 w-[1px] bg-white/10 mx-2" />
+          <button 
+            onClick={executePrint}
+            disabled={isCompiling || matrix.length === 0}
+            className="bg-amber-500 hover:bg-amber-400 text-navy px-8 h-10 font-black text-[10px] uppercase tracking-widest flex items-center gap-3 rounded-lg shadow-[0_0_20px_rgba(245,158,11,0.3)] transition-all disabled:opacity-50"
+          >
+            {isCompiling ? <Loader2 className="animate-spin" size={16} /> : <Play size={16} />}
+            <span>Execute Spooler</span>
+          </button>
+        </div>
+      )}
+    >
+      <div className="flex flex-col h-full bg-[#020617]">
+        {/* Advanced Filter Block */}
+        <div className="p-6 bg-navy/20 border-b border-white/5 flex flex-col gap-6">
+           <div className="flex items-center justify-between">
+              <div className="flex bg-white/5 p-1 rounded-xl border border-white/10">
+                 {["GRN", "SALE", "PO", "ARTICLE"].map(m => (
+                   <button 
+                     key={m}
+                     onClick={() => setMode(m)}
+                     className={cn(
+                       "px-6 py-2 rounded-lg text-[10px] font-black uppercase tracking-widest transition-all",
+                       mode === m ? "bg-amber-500 text-navy shadow-lg" : "text-white/40 hover:text-white"
+                     )}
+                   >
+                     {m}
+                   </button>
+                 ))}
+              </div>
+              
+              <div className="flex items-center gap-4">
+                 <div className="flex items-center gap-2 bg-white/5 px-4 h-10 rounded-xl border border-white/10">
+                    <Layout size={14} className="text-white/20" />
+                    <select 
+                      value={selectedTemplate}
+                      onChange={(e) => setSelectedTemplate(e.target.value)}
+                      className="bg-transparent text-[10px] font-black text-white/70 uppercase outline-none border-none cursor-pointer"
+                    >
+                      {TEMPLATES.map(t => <option key={t.id} value={t.id} className="bg-navy">{t.name}</option>)}
+                    </select>
+                 </div>
+
+                 <div className="h-6 w-[1px] bg-white/10" />
+
+                 <button 
+                   onClick={removeSelected}
+                   disabled={selectedRows.size === 0}
+                   className="text-[9px] font-black text-rose-500 uppercase tracking-widest hover:text-rose-400 transition-colors disabled:opacity-20"
+                 >
+                   Remove Selected ({selectedRows.size})
+                 </button>
+                 <button 
+                   onClick={() => { setMatrix([]); clearQueue(); }}
+                   className="text-[9px] font-black text-white/30 uppercase tracking-widest hover:text-rose-500 transition-colors"
+                 >
+                   Clear Registry
+                 </button>
+              </div>
+           </div>
+
+           <div className="flex items-center gap-4">
+              {mode !== "ARTICLE" ? (
+                <PredictiveInput 
+                  field="document_no"
+                  placeholder={`Enter ${mode} Document No...`}
+                  value={filters.document_no}
+                  onChange={v => setFilters({...filters, document_no: v})}
+                  onSelect={v => handlePredictiveSelect("document_no", v)}
+                  icon={<FileText size={16} />}
+                  className="flex-1"
+                />
+              ) : (
+                <div className="flex gap-4 flex-1">
+                   <PredictiveInput 
+                     field="article"
+                     placeholder="Article No (SubClass1)..."
+                     value={filters.article_no}
+                     onChange={v => setFilters({...filters, article_no: v})}
+                     onSelect={v => handlePredictiveSelect("article_no", v)}
+                     icon={<Layout size={16} />}
+                     className="flex-1"
+                   />
+                   <div className="flex gap-2 w-[400px]">
+                      <PredictiveInput 
+                        field="stock_no"
+                        placeholder="Stock No (From)..."
+                        value={filters.stock_from}
+                        onChange={v => setFilters({...filters, stock_from: v})}
+                        onSelect={v => handlePredictiveSelect("stock_from", v)}
+                        icon={<Database size={14} />}
+                        className="flex-1"
+                      />
+                      <PredictiveInput 
+                        field="stock_no"
+                        placeholder="Stock No (To)..."
+                        value={filters.stock_to}
+                        onChange={v => setFilters({...filters, stock_to: v})}
+                        onSelect={v => handlePredictiveSelect("stock_to", v)}
+                        icon={<Database size={14} />}
+                        className="flex-1"
+                      />
+                   </div>
+                   <PredictiveInput 
+                     field="class2"
+                     placeholder="Color..."
+                     value={filters.color_cd}
+                     onChange={v => setFilters({...filters, color_cd: v})}
+                     onSelect={v => handlePredictiveSelect("color_cd", v)}
+                     icon={<Filter size={16} />}
+                     className="w-48"
+                   />
+                </div>
+              )}
+              
+              <button 
+                onClick={() => fetchMatrix()}
+                disabled={isFetching}
+                className="bg-white/5 hover:bg-white/10 text-white px-8 h-12 rounded-xl border border-white/10 font-black text-[10px] uppercase tracking-widest flex items-center gap-3 transition-all"
+              >
+                {isFetching ? <Loader2 className="animate-spin" size={16} /> : <Search size={16} />}
+                Gather Matrix
+              </button>
+           </div>
+        </div>
+
+        {/* Matrix Grid */}
+        <div className="flex-1 min-h-[400px] relative">
+           <SovereignGrid 
+              title="Print Matrix (Final Spooler Registry)"
+              schema={COLUMNS}
+              data={matrix}
+              modifiedRows={modifiedRows}
+              deletedRows={deletedRows}
+              selectedRows={selectedRows}
+              setSelectedRows={setSelectedRows}
+              onCellChange={handleCellChange}
+           />
+           
+           {matrix.length === 0 && !isFetching && (
+              <div className="absolute inset-0 flex flex-col items-center justify-center text-center opacity-20 pointer-events-none">
+                 <Barcode size={80} strokeWidth={1} className="mb-6 text-amber-500" />
+                 <span className="text-[18px] font-black uppercase tracking-[0.4em] text-white">Registry Empty</span>
+                 <p className="text-[10px] font-bold mt-4 max-w-[300px] leading-relaxed uppercase">
+                    Enter transaction parameters and gather the matrix to begin direct hardware spooling.
+                 </p>
+              </div>
+           )}
+        </div>
+
+        {/* Footer Hardware Status */}
+        <div className="px-8 py-3 bg-[#0a0f1d] border-t border-white/5 flex items-center justify-between">
+           <div className="flex items-center gap-6">
+               <div className="flex items-center gap-2">
+                  <div className={cn(
+                    "w-2 h-2 rounded-full shadow-lg", 
+                    printerStatus === 'READY' ? "bg-emerald-500 animate-pulse" :
+                    printerStatus === 'PRINTING' ? "bg-amber-500 animate-bounce" :
+                    printerStatus === 'ERROR' ? "bg-rose-500" : "bg-white/20"
+                  )} />
+                  <span className="text-[9px] font-black text-white/50 uppercase tracking-widest">
+                     Hardware State: {printerStatus} {usbError && `(${usbError})`}
+                  </span>
+               </div>
+              <div className="h-4 w-[1px] bg-white/10" />
+              <div className="flex items-center gap-2">
+                 <Layers size={14} className="text-white/20" />
+                 <span className="text-[9px] font-black text-white/50 uppercase tracking-widest">Protocol: DB Sovereign v1.0 / ZPL Native</span>
+              </div>
+           </div>
+           
+           <div className="flex items-center gap-3">
+              <span className="text-[9px] font-black text-white/20 uppercase">Hardware Overrides:</span>
+              <button 
+                onClick={connect}
+                className="text-[9px] font-black text-amber-500 uppercase border border-amber-500/20 px-3 py-1 rounded-md hover:bg-amber-500/10 transition-all"
+              >
+                Re-init USB Handshake
+              </button>
+           </div>
+        </div>
+      </div>
+    </SovereignShell>
+  );
+}
+
+const Barcode = ({ size, className, strokeWidth }: any) => (
+  <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={strokeWidth} strokeLinecap="round" strokeLinejoin="round" className={className}>
+    <path d="M3 5v14M8 5v14M12 5v14M17 5v14M21 5v14M3 9h18M3 15h18" />
+  </svg>
+);

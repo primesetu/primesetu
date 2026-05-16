@@ -47,7 +47,8 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
         // Silently ignore when backend is offline (ERR_CONNECTION_REFUSED) or auth errors
         const isNetworkDown = !err.response;
         const isAuthError = err.response?.status === 401 || err.response?.status === 403;
-        if (!isNetworkDown && !isAuthError) {
+        const isNotFoundError = err.response?.status === 404;
+        if (!isNetworkDown && !isAuthError && !isNotFoundError) {
           console.warn('[ThemeEngine] Background sync deferred:', err.message);
         }
       }

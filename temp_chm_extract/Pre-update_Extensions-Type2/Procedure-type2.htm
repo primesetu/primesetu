@@ -1,0 +1,258 @@
+<!doctype HTML public "-//W3C//DTD HTML 4.0 Frameset//EN">
+
+<html>
+
+<head>
+<title>Procedure-type2</title>
+<meta http-equiv="content-type" content="text/html; charset=windows-1252">
+<meta name="generator" content="RoboHelp by eHelp Corporation www.ehelp.com">
+<link rel="StyleSheet" href="../MS_Help.css"><style title="hcp" type="text/css">
+<!--
+ul.hcp1 { list-style:circle; }
+p.hcp2 { font-style:italic; font-weight:bold; }
+table.hcp3 { x-cell-content-align:top; border-spacing:0px; }
+tr.hcp4 { x-cell-content-align:top; }
+td.hcp5 { border-left-width:1px; border-left-color:#000000; border-left-style:Solid; border-top-style:Solid; border-top-color:#000000; border-top-width:1px; border-right-width:1px; border-right-color:#000000; border-right-style:Solid; border-bottom-style:Solid; border-bottom-color:#000000; border-bottom-width:1px; padding-right:10px; padding-left:10px; }
+p.hcp6 { font-weight:bold; }
+td.hcp7 { border-top-style:Solid; border-top-color:#000000; border-top-width:1px; border-right-width:1px; border-right-color:#000000; border-right-style:Solid; border-bottom-style:Solid; border-bottom-color:#000000; border-bottom-width:1px; padding-right:10px; padding-left:10px; }
+td.hcp8 { border-left-width:1px; border-left-color:#000000; border-left-style:Solid; border-right-width:1px; border-right-color:#000000; border-right-style:Solid; border-bottom-style:Solid; border-bottom-color:#000000; border-bottom-width:1px; padding-right:10px; padding-left:10px; }
+td.hcp9 { border-right-width:1px; border-right-color:#000000; border-right-style:Solid; border-bottom-style:Solid; border-bottom-color:#000000; border-bottom-width:1px; padding-right:10px; padding-left:10px; }
+span.hcp10 { font-weight:bold; }
+-->
+</style>
+</head>
+<body>
+<h1>PDT/Import Extensions – Procedure</h1>
+
+<p style="font-weight: bold; color: #000000;">Procedure to Create PDT Extensions</p>
+
+<p>There are three steps to create an extension supported by Extension 
+ Framework in Shoper 9 POS:</p>
+
+<ul type="circle" class="hcp1">
+	
+	<li class=kadov-p><p>Creating Custom DLL</p></li>
+	
+	<li class=kadov-p><p>Deploying Custom DLL</p></li>
+	
+	<li class=kadov-p><p>Configuring Custom DLL details in GenLookUp table</p></li>
+</ul>
+
+<p class="hcp2">Creating Custom DLL and 
+ deploying it at POS location</p>
+
+<p class="hcp2"><span style="font-weight: normal;">To 
+ know how to create and deploy Custom DLL, refer <a href="../Appendix/Appendix.htm" style="font-weight: normal;">Appendix</a></span> 
+ </p>
+
+<p>Mandatory function to be present in a Custom DLL while creating a new 
+ option is:</p>
+
+<p style="margin-left: 40px;
+			font-family: 'Courier New', monospace;
+			color: #0000ff;">Public Function PDTFile(StrExeName As String, 
+ StrConString As String, StrCmdLine As String, StrTrnType As String, StrFileFormat 
+ As String, StrDelim As String, StrExtraParam As String) As String</p>
+
+<p>There are seven arguments in the PDTFile function and are explained 
+ in the following table.</p>
+
+<table x-use-null-cells style="width:78.912%;" cellspacing="0" width="78.912%" class="hcp3">
+<col style="width: 22.241%;">
+<col style="width: 28.963%;">
+<col style="width: 48.796%;">
+
+<tr valign="top" class="hcp4">
+<td style="width:22.241%;" width="22.241%" class="hcp5">
+<p class="hcp6">Argument</td>
+<td style="width:28.963%;" width="28.963%" class="hcp7">
+<p class="hcp6">Value</td>
+<td style="width:48.796%;" width="48.796%" class="hcp7">
+<p class="hcp6">Remarks</td></tr>
+
+<tr valign="top" class="hcp4">
+<td style="width:22.241%;" width="22.241%" class="hcp8">
+<p>StrExeName</td>
+<td style="width:28.963%;" width="28.963%" class="hcp9">
+<p>EXE Name</td>
+<td style="width:48.796%;" width="48.796%" class="hcp9">
+<p>EXE name</td></tr>
+
+<tr valign="top" class="hcp4">
+<td style="width:22.241%;" width="22.241%" class="hcp8">
+<p>StrConString</td>
+<td style="width:28.963%;" width="28.963%" class="hcp9">
+<p>Connection String</td>
+<td style="width:48.796%;" width="48.796%" class="hcp9">
+<p>If you want to link it to the Shoper DB</td></tr>
+
+<tr valign="top" class="hcp4">
+<td style="width:22.241%;" width="22.241%" class="hcp8">
+<p>StrCmdLine</td>
+<td style="width:28.963%;" width="28.963%" class="hcp9">
+<p>Command Line</td>
+<td style="width:48.796%;" width="48.796%" class="hcp9">
+<p>Command line arguments to call the main program</td></tr>
+
+<tr valign="top" class="hcp4">
+<td style="width:22.241%;" width="22.241%" class="hcp8">
+<p>StrTrnType</td>
+<td style="width:28.963%;" width="28.963%" class="hcp9">
+<p>TrnType</td>
+<td style="width:48.796%;" width="48.796%" class="hcp9">
+<p>Transaction type, e.g., 2100 for sales, 1100 for purchase</td></tr>
+
+<tr valign="top" class="hcp4">
+<td style="width:22.241%;" width="22.241%" class="hcp8">
+<p>StrFileFormat</td>
+<td style="width:28.963%;" width="28.963%" class="hcp9">
+<p>File Format</td>
+<td style="width:48.796%;" width="48.796%" class="hcp9">
+<p>GenLookUp Recid = 16000 &nbsp;</p>
+<p>Code = ExtNo+06</td></tr>
+
+<tr valign="top" class="hcp4">
+<td style="width:22.241%;" width="22.241%" class="hcp8">
+<p>StrDelim</td>
+<td style="width:28.963%;" width="28.963%" class="hcp9">
+<p>Delimiter</td>
+<td style="width:48.796%;" width="48.796%" class="hcp9">
+<p>Delimiter </td></tr>
+
+<tr valign="top" class="hcp4">
+<td style="width:22.241%;" width="22.241%" class="hcp8">
+<p>StrExtraParam</td>
+<td style="width:28.963%;" width="28.963%" class="hcp9">
+<p>Parameter</td>
+<td style="width:48.796%;" width="48.796%" class="hcp9">
+<p>GenLookUp Recid = 16000 </p>
+<p>Code = ExtNo+07</td></tr>
+</table>
+
+<p style="font-weight: bold;
+			font-style: italic;
+			color: #000000;">Recording details in General Lookup (GenLookUp)</p>
+
+<p>The Rec Id (Record Id) <span class="hcp10">16000</span> 
+ is maintained in <span class="hcp10">GenLookUp</span> table 
+ for configuring the customised DLL.</p>
+
+<p>There are seven records to be added in <span class="hcp10">GenLookUp</span> 
+ table. Each record consists of <span class="hcp10">Recid 
+ (16000)</span>,<span class="hcp10"> Code</span> and <span class="hcp10">Description</span>. These seven records capture 
+ seven properties of an extension.</p>
+
+<p>The seven properties and their respective descriptions to be captured 
+ are:</p>
+
+<table x-use-null-cells style="width:78.383%;" cellspacing="0" width="78.383%" class="hcp3">
+<col style="width: 23.067%;">
+<col style="width: 30.118%;">
+<col style="width: 46.815%;">
+
+<tr valign="top" class="hcp4">
+<td style="width:23.067%;" width="23.067%" class="hcp5">
+<p class="hcp6">Property Code</td>
+<td style="width:30.118%;" width="30.118%" class="hcp7">
+<p class="hcp6">Description</td>
+<td style="width:46.815%;" width="46.815%" class="hcp7">
+<p class="hcp6">Remarks</td></tr>
+
+<tr valign="top" class="hcp4">
+<td style="width:23.067%;" width="23.067%" class="hcp8">
+<p>01</td>
+<td style="width:30.118%;" width="30.118%" class="hcp9">
+<p>DllName.ClassName</td>
+<td style="width:46.815%;" width="46.815%" class="hcp9">
+<p>Dll name and the Class name</td></tr>
+
+<tr valign="top" class="hcp4">
+<td style="width:23.067%;" width="23.067%" class="hcp8">
+<p>02</td>
+<td style="width:30.118%;" width="30.118%" class="hcp9">
+<p>Caption</td>
+<td style="width:46.815%;" width="46.815%" class="hcp9">
+<p>Extension caption</td></tr>
+
+<tr valign="top" class="hcp4">
+<td style="width:23.067%;" width="23.067%" class="hcp8">
+<p>03</td>
+<td style="width:30.118%;" width="30.118%" class="hcp9">
+<p>N/Y</td>
+<td style="width:46.815%;" width="46.815%" class="hcp9">
+<p>Whether the option is invisible or not</p>
+<p>N -&gt; Visible</p>
+<p>Y -&gt; Not visible (invisible)</td></tr>
+
+<tr valign="top" class="hcp4">
+<td style="width:23.067%;" width="23.067%" class="hcp8">
+<p>04</td>
+<td style="width:30.118%;" width="30.118%" class="hcp9">
+<p>Exe name</td>
+<td style="width:46.815%;" width="46.815%" class="hcp9">
+<p>EXE name of the transaction where the extension is to be enabled</td></tr>
+
+<tr valign="top" class="hcp4">
+<td style="width:23.067%;" width="23.067%" class="hcp8">
+<p>05</td>
+<td style="width:30.118%;" width="30.118%" class="hcp9">
+<p>Int/Ext</td>
+<td style="width:46.815%;" width="46.815%" class="hcp9">
+<p>Whether the extension is in internal functions (e.g., Purchase Order, 
+ PT file loading and PDT loading in Inwards) or in external functions.</p>
+<p>New extensions are always external.</td></tr>
+
+<tr valign="top" class="hcp4">
+<td style="width:23.067%;" width="23.067%" class="hcp8">
+<p>06</td>
+<td style="width:30.118%;" width="30.118%" class="hcp9">
+<p>File format</td>
+<td style="width:46.815%;" width="46.815%" class="hcp9">
+<ol style="list-style: decimal;"
+	type=1>
+	
+	<li style="margin-left: -20px;"
+		class=kadov-p><p>StockNo</p></li>
+	
+	<li style="margin-left: -20px;"
+		class=kadov-p><p>StockNo#ActQty</p></li>
+	
+	<li style="margin-left: -20px;"
+		class=kadov-p><p>StockNo#Rate#ActQty</p></li>
+	
+	<li style="margin-left: -20px;"
+		class=kadov-p><p>StockNo#DocQty#ActQty</p></li>
+	
+	<li style="margin-left: -20px;"
+		class=kadov-p><p>StockNo#Rate#DocQty#ActQty</p></li>
+</ol>
+<p>For example, if the file consists of:</p>
+<ul type="circle" class="hcp1">
+	
+	<li class=kadov-p><p>Stock number and Quantity, then the value is <span class="hcp10">2#;</span></p></li>
+	
+	<li class=kadov-p><p>Stock number, Rate and Quantity, then the value 
+ is <span class="hcp10">3#;</span></p></li>
+</ul></td></tr>
+
+<tr valign="top" class="hcp4">
+<td style="width:23.067%;" width="23.067%" class="hcp8">
+<p>07</td>
+<td style="width:30.118%;" width="30.118%" class="hcp9">
+<p>Parameter value/ NULL</td>
+<td style="width:46.815%;" width="46.815%" class="hcp9">
+<p>Any parameter value to be passed to the custom DLL</td></tr>
+</table>
+
+<p>In GenLookUp table, Code is inserted as a combination of <span class="hcp10">Extension 
+ No.</span> and <span class="hcp10">Property Code</span> separated 
+ by a ‘+’ symbol. For example, if the Extension No. is 1 and the Property 
+ Code is 01, then the corresponding Code is 1+01.</p>
+
+<p>Alternatively, you can use <a href="../Tool/ScriptGenerationTool.htm">Extension 
+ Script Generator Tool</a> to generate the corresponding script which contains 
+ the SQL statements to be inserted in GenLookup table for configuring the 
+ required custom DLLs.</p>
+
+</body>
+</html>

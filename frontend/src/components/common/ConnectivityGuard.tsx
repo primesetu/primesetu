@@ -1,4 +1,5 @@
 import React, { useState, useCallback, useEffect, useRef } from 'react';
+import { Settings2 } from 'lucide-react';
 import { useSovereignStore } from '@/store/useSovereignStore';
 import { useNodeHealth } from '@/hooks/connectivity/useNodeHealth';
 import { useNodeSwitch } from '@/hooks/connectivity/useNodeSwitch';
@@ -17,7 +18,9 @@ export const ConnectivityGuard: React.FC<{ children: React.ReactNode }> = ({ chi
     connectivityState,
     setConnectivityState,
     preferredBackendUrl,
-    companyName
+    companyName,
+    guardBypassUntil,
+    setGuardBypass
   } = useSovereignStore();
   
   const [showHub, setShowHub] = useState(false);
@@ -31,6 +34,7 @@ export const ConnectivityGuard: React.FC<{ children: React.ReactNode }> = ({ chi
   const [pendingNode, setPendingNode] = useState<{ id: string; url: string } | null>(null);
   const [showConfirm, setShowConfirm] = useState(false);
   const [showPin, setShowPin] = useState(false);
+  const [pendingSnooze, setPendingSnooze] = useState<number | null>(null);
 
   const { nodeStatus } = useNodeHealth(showHub);
   const { state, error, context, initiateSwitch, verifyPin, cancelSwitch } = useNodeSwitch(() => {
@@ -127,12 +131,18 @@ export const ConnectivityGuard: React.FC<{ children: React.ReactNode }> = ({ chi
     setShowPin(true);
     initiateSwitch(pendingNode.url, pendingNode.id, 'Forced Switch (Risk Acknowledged)');
   };
+  
+  const handleSnoozeRequest = (hours: number) => {
+    setPendingSnooze(hours);
+    setShowPin(true);
+  };
 
   const syncRisk = assessSyncRisk(syncEngine.getPendingCount());
 
   // RETAIL PRINCIPLE: Billing must be possible during DEGRADED/RECOVERING
-  // UI only blocks if state is truly OFFLINE
-  const isUIVisible = connectivityState !== 'OFFLINE';
+  // UI only blocks if state is truly OFFLINE and no maintenance bypass is active
+  const isBypassed = guardBypassUntil && Date.now() < guardBypassUntil;
+  const isUIVisible = connectivityState !== 'OFFLINE' || isBypassed;
 
   return (
     <>
@@ -143,6 +153,19 @@ export const ConnectivityGuard: React.FC<{ children: React.ReactNode }> = ({ chi
         <div className="fixed bottom-4 right-4 z-[20000] flex items-center space-x-2 bg-blue-600/90 text-white px-3 py-1.5 rounded-full text-[10px] font-bold uppercase tracking-wider shadow-lg animate-pulse">
           <div className="w-2 h-2 bg-white rounded-full animate-ping" />
           <span>Reconnecting Node...</span>
+        </div>
+      )}
+
+      {/* Maintenance Bypass indicator (Visible when guard is bypassed) */}
+      {isBypassed && (
+        <div className="fixed bottom-4 left-4 z-[20000] flex flex-col gap-1">
+          <div className="flex items-center space-x-2 bg-amber-600/90 text-white px-3 py-1.5 rounded-full text-[10px] font-bold uppercase tracking-wider shadow-lg">
+            <Settings2 size={12} className="animate-spin-slow" />
+            <span>Maintenance Bypass Active</span>
+          </div>
+          <p className="text-[8px] text-white/40 font-mono pl-3 uppercase">
+            Ends: {new Date(guardBypassUntil!).toLocaleTimeString()}
+          </p>
         </div>
       )}
 
@@ -165,6 +188,7 @@ export const ConnectivityGuard: React.FC<{ children: React.ReactNode }> = ({ chi
                   onOpenHub={() => setShowHub(true)}
                   companyName={companyName}
                   lastCheck={lastCheck}
+                  onSnooze={handleSnoozeRequest}
                 />
               ) : (
                 <ConnectivityHub 
@@ -194,6 +218,10 @@ export const ConnectivityGuard: React.FC<{ children: React.ReactNode }> = ({ chi
             correlationId={context?.correlationId || ''}
             onVerify={async (pin) => {
               await verifyPin(pin);
+              if (pendingSnooze) {
+                setGuardBypass(pendingSnooze);
+                setPendingSnooze(null);
+              }
               return { approved: true, correlationId: context?.correlationId || '' };
             }}
             onSuccess={() => {}}

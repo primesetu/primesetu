@@ -8,6 +8,7 @@ interface ConnectivityStatusViewProps {
   onOpenHub: () => void;
   companyName: string;
   lastCheck: Date | null;
+  onSnooze?: (hours: number) => void;
 }
 
 export const ConnectivityStatusView: React.FC<ConnectivityStatusViewProps> = ({
@@ -15,7 +16,8 @@ export const ConnectivityStatusView: React.FC<ConnectivityStatusViewProps> = ({
   onRetry,
   onOpenHub,
   companyName,
-  lastCheck
+  lastCheck,
+  onSnooze
 }) => {
   return (
     <div className="flex flex-col items-center text-center space-y-6 animate-in fade-in zoom-in-95 duration-300">
@@ -60,6 +62,32 @@ export const ConnectivityStatusView: React.FC<ConnectivityStatusViewProps> = ({
             <RefreshCw size={16} className={cn(isChecking && "animate-spin")} />
             {isChecking ? "Pinging Node..." : "Retry Local Pulse"}
           </button>
+
+          {onSnooze && (
+            <div className="bg-amber-500/10 border border-amber-500/20 p-4 rounded-2xl space-y-3">
+              <div className="flex items-center gap-2 text-amber-500">
+                <Settings2 size={14} />
+                <span className="text-[10px] font-black uppercase tracking-widest">Maintenance Bypass</span>
+              </div>
+              <div className="flex gap-2">
+                <button
+                  onClick={() => onSnooze(1)}
+                  className="flex-1 h-9 flex items-center justify-center bg-amber-500 text-black font-black uppercase tracking-widest text-[9px] rounded-lg hover:bg-amber-400 active:scale-95 transition-all"
+                >
+                  Snooze 1 Hr
+                </button>
+                <button
+                  onClick={() => onSnooze(2)}
+                  className="flex-1 h-9 flex items-center justify-center bg-amber-500 text-black font-black uppercase tracking-widest text-[9px] rounded-lg hover:bg-amber-400 active:scale-95 transition-all"
+                >
+                  Snooze 2 Hrs
+                </button>
+              </div>
+              <p className="text-[8px] text-amber-500/50 font-mono text-center">
+                * Requires Manager PIN Authorization
+              </p>
+            </div>
+          )}
 
           <div className="flex gap-3">
             <button

@@ -64,6 +64,10 @@ interface SovereignState {
   pendingCommands: any[];
   setPendingCommands: (commands: any[]) => void;
   clearCommand: (id: string) => void;
+
+  // Maintenance Bypass
+  guardBypassUntil: number | null;
+  setGuardBypass: (hours: number | null) => void;
 }
 
 const STORAGE_KEY = "smriti_workbench_persistent_v3";
@@ -89,6 +93,7 @@ export const useSovereignStore = create<SovereignState>()(
       companyAddress: "",
       sysParams: [],
       pendingCommands: [],
+      guardBypassUntil: null,
 
       setActiveSheet: (name) => set({ activeSheet: name }),
       setZoomLevel: (level) => set({ zoomLevel: level }),
@@ -132,6 +137,10 @@ export const useSovereignStore = create<SovereignState>()(
       clearCommand: (id) => set((state) => ({ 
         pendingCommands: state.pendingCommands.filter(c => c.id !== id) 
       })),
+
+      setGuardBypass: (hours) => set({ 
+        guardBypassUntil: hours ? Date.now() + (hours * 60 * 60 * 1000) : null 
+      }),
       
       updateSheet: (name, updates) => set((state) => {
         const existing = state.sheets[name] || {

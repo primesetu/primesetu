@@ -87,6 +87,7 @@ async def main():
     print("\n  [2/4] Applying schema to local PostgreSQL...")
     async with engine.begin() as conn:
         await conn.execute(text("CREATE SCHEMA IF NOT EXISTS shoper9"))
+        await conn.execute(text("CREATE SCHEMA IF NOT EXISTS s9"))
         await conn.run_sync(Base.metadata.create_all)
     print("  [OK] Sovereign tables created.")
 
@@ -104,9 +105,9 @@ async def main():
     async with engine.begin() as conn:
         for param_code, descr, value_txt, category in DEFAULT_PARAMS:
             await conn.execute(text("""
-                INSERT INTO smriti_param (param_code, descr, value_txt, category, value_bool, value_int, last_sync)
-                VALUES (:c, :d, :v, :cat, false, 0, NOW())
-                ON CONFLICT (param_code) DO NOTHING
+                INSERT INTO smriti_param (tenant_id, param_code, descr, value_txt, category, value_bool, value_int, disp_order, last_sync)
+                VALUES ('SYSTEM', :c, :d, :v, :cat, false, 0, 0, NOW())
+                ON CONFLICT (tenant_id, param_code) DO NOTHING
             """), {"c": param_code, "d": descr, "v": value_txt, "cat": category})
     print("  [OK] Default system parameters seeded.")
 

@@ -1,0 +1,533 @@
+﻿2026-05-17 11:45:15.099   Log opened. (Time zone: UTC+05:30)
+2026-05-17 11:45:15.100   Setup version: Inno Setup version 6.7.1
+2026-05-17 11:45:15.100   Original Setup EXE: D:\IMP\GitHub\primesetu\installer\Output\SmritiRetailOS_Setup_v1.exe
+2026-05-17 11:45:15.100   Setup command line: /SL5="$520504,387572252,879104,D:\IMP\GitHub\primesetu\installer\Output\SmritiRetailOS_Setup_v1.exe" /SPAWNWND=$49D0A72 /FIRSTWND=$350DD0 /VERYSILENT /SUPPRESSMSGBBOXES /NORESTART /LOG=install_log.txt 
+2026-05-17 11:45:15.100   Windows version: 10.0.26200
+2026-05-17 11:45:15.100   Windows architecture: x64 (64-bit)
+2026-05-17 11:45:15.100   Machine types supported by system: x86 x64
+2026-05-17 11:45:15.100   User privileges: Administrative
+2026-05-17 11:45:15.103   Administrative install mode: Yes
+2026-05-17 11:45:15.103   Install mode root key: HKEY_LOCAL_MACHINE
+2026-05-17 11:45:15.103   64-bit install mode: Yes
+2026-05-17 11:45:15.103   RedirectionGuard status for current process: Enabled in enforcing mode
+2026-05-17 11:45:15.105   Created protected temporary directory: C:\Users\netma\AppData\Local\Temp\is-6ONVZ39A8O.tmp
+2026-05-17 11:45:15.235   Found 1 files to register with RestartManager.
+2026-05-17 11:45:15.235   Calling RestartManager's RmGetList.
+2026-05-17 11:45:15.291   RmGetList finished successfully.
+2026-05-17 11:45:15.291   RestartManager found an application using one of our files: SmritiRedis
+2026-05-17 11:45:15.291   Can use RestartManager to avoid reboot? Yes (0)
+2026-05-17 11:45:15.301   Starting the installation process.
+2026-05-17 11:45:15.304   Shutting down applications using our files.
+2026-05-17 11:45:17.361   Directory for uninstall files: C:\SmritiOS
+2026-05-17 11:45:17.363   Will append to existing uninstall log: C:\SmritiOS\unins000.dat
+2026-05-17 11:45:17.366   -- File entry --
+2026-05-17 11:45:17.366   Dest filename: C:\SmritiOS\unins000.exe
+2026-05-17 11:45:17.366   Non-default bitness: 32-bit
+2026-05-17 11:45:17.368   Time stamp of our file: 2026-05-17 11:45:14.808
+2026-05-17 11:45:17.368   Dest file exists.
+2026-05-17 11:45:17.368   Time stamp of existing file: 2026-05-17 11:11:22.297
+2026-05-17 11:45:17.368   Version of our file: 51.1054.0.0
+2026-05-17 11:45:17.371   Version of existing file: 51.1054.0.0
+2026-05-17 11:45:17.371   Installing the file.
+2026-05-17 11:45:17.385   Leaving temporary file in place for now.
+2026-05-17 11:45:17.385   -- File entry --
+2026-05-17 11:45:17.386   Dest filename: C:\SmritiOS\assets\smriti.ico
+2026-05-17 11:45:17.386   Time stamp of our file: 2026-05-15 07:07:32.000
+2026-05-17 11:45:17.386   Dest file exists.
+2026-05-17 11:45:17.386   Time stamp of existing file: 2026-05-15 07:07:32.000
+2026-05-17 11:45:17.386   Installing the file.
+2026-05-17 11:45:17.388   Successfully installed the file.
+2026-05-17 11:45:17.388   -- File entry --
+2026-05-17 11:45:17.388   Dest filename: C:\SmritiOS\assets\wizard_banner.bmp
+2026-05-17 11:45:17.388   Time stamp of our file: 2026-05-15 07:07:32.000
+2026-05-17 11:45:17.388   Dest file exists.
+2026-05-17 11:45:17.388   Time stamp of existing file: 2026-05-15 07:07:32.000
+2026-05-17 11:45:17.389   Installing the file.
+2026-05-17 11:45:17.400   Successfully installed the file.
+2026-05-17 11:45:17.400   -- File entry --
+2026-05-17 11:45:17.401   Dest filename: C:\SmritiOS\assets\wizard_small.bmp
+2026-05-17 11:45:17.401   Time stamp of our file: 2026-05-15 07:07:32.000
+2026-05-17 11:45:17.401   Dest file exists.
+2026-05-17 11:45:17.401   Time stamp of existing file: 2026-05-15 07:07:32.000
+2026-05-17 11:45:17.401   Installing the file.
+2026-05-17 11:45:17.403   Successfully installed the file.
+2026-05-17 11:45:17.403   -- File entry --
+2026-05-17 11:45:17.403   Dest filename: C:\SmritiOS\assets\license.txt
+2026-05-17 11:45:17.404   Time stamp of our file: 2026-05-15 05:52:22.000
+2026-05-17 11:45:17.404   Dest file exists.
+2026-05-17 11:45:17.404   Time stamp of existing file: 2026-05-15 05:52:22.000
+2026-05-17 11:45:17.404   Installing the file.
+2026-05-17 11:45:17.405   Successfully installed the file.
+2026-05-17 11:45:17.405   -- File entry --
+2026-05-17 11:45:17.406   Dest filename: C:\SmritiOS\OpenPOS.vbs
+2026-05-17 11:45:17.406   Time stamp of our file: 2026-05-15 06:16:58.000
+2026-05-17 11:45:17.406   Dest file exists.
+2026-05-17 11:45:17.406   Time stamp of existing file: 2026-05-15 06:16:58.000
+2026-05-17 11:45:17.406   Installing the file.
+2026-05-17 11:45:17.414   Successfully installed the file.
+2026-05-17 11:45:17.414   -- File entry --
+2026-05-17 11:45:17.414   Dest filename: C:\SmritiOS\bootstrap.ps1
+2026-05-17 11:45:17.415   Time stamp of our file: 2026-05-17 09:04:20.000
+2026-05-17 11:45:17.415   Dest file exists.
+2026-05-17 11:45:17.415   Time stamp of existing file: 2026-05-17 09:04:20.000
+2026-05-17 11:45:17.415   Installing the file.
+2026-05-17 11:45:17.416   Successfully installed the file.
+2026-05-17 11:45:17.416   -- File entry --
+2026-05-17 11:45:17.417   Dest filename: C:\SmritiOS\bin\python-3.11-embed-amd64.zip
+2026-05-17 11:45:17.417   Time stamp of our file: 2026-05-15 05:56:22.000
+2026-05-17 11:45:17.417   Dest file exists.
+2026-05-17 11:45:17.417   Time stamp of existing file: 2026-05-15 05:56:22.000
+2026-05-17 11:45:17.417   Installing the file.
+2026-05-17 11:45:17.666   Successfully installed the file.
+2026-05-17 11:45:17.666   -- File entry --
+2026-05-17 11:45:17.666   Dest filename: C:\SmritiOS\bin\postgresql-minimal.zip
+2026-05-17 11:45:17.667   Time stamp of our file: 2026-05-15 05:58:06.000
+2026-05-17 11:45:17.667   Dest file exists.
+2026-05-17 11:45:17.667   Time stamp of existing file: 2026-05-15 05:58:06.000
+2026-05-17 11:45:17.667   Installing the file.
+2026-05-17 11:45:31.937   Successfully installed the file.
+2026-05-17 11:45:31.937   -- File entry --
+2026-05-17 11:45:31.937   Dest filename: C:\SmritiOS\bin\redis-windows.zip
+2026-05-17 11:45:31.938   Time stamp of our file: 2026-05-15 05:57:28.000
+2026-05-17 11:45:31.938   Dest file exists.
+2026-05-17 11:45:31.938   Time stamp of existing file: 2026-05-15 05:57:28.000
+2026-05-17 11:45:31.938   Installing the file.
+2026-05-17 11:45:32.297   Successfully installed the file.
+2026-05-17 11:45:32.297   -- File entry --
+2026-05-17 11:45:32.297   Dest filename: C:\SmritiOS\bin\nssm.exe
+2026-05-17 11:45:32.297   Time stamp of our file: 2014-08-31 16:34:30.000
+2026-05-17 11:45:32.297   Dest file exists.
+2026-05-17 11:45:32.297   Time stamp of existing file: 2014-08-31 16:34:30.000
+2026-05-17 11:45:32.297   Installing the file.
+2026-05-17 11:45:32.310   Successfully installed the file.
+2026-05-17 11:45:32.311   -- File entry --
+2026-05-17 11:45:32.311   Dest filename: C:\SmritiOS\bin\caddy.zip
+2026-05-17 11:45:32.312   Time stamp of our file: 2026-05-15 05:57:26.000
+2026-05-17 11:45:32.312   Dest file exists.
+2026-05-17 11:45:32.312   Time stamp of existing file: 2026-05-15 05:57:26.000
+2026-05-17 11:45:32.312   Installing the file.
+2026-05-17 11:45:32.890   Successfully installed the file.
+2026-05-17 11:45:32.890   -- File entry --
+2026-05-17 11:45:32.890   Dest filename: C:\SmritiOS\wheels\aiosqlite-0.22.1-py3-none-any.whl
+2026-05-17 11:45:32.890   Time stamp of our file: 2026-05-17 10:35:58.000
+2026-05-17 11:45:32.890   Dest file exists.
+2026-05-17 11:45:32.890   Time stamp of existing file: 2026-05-17 10:35:58.000
+2026-05-17 11:45:32.890   Installing the file.
+2026-05-17 11:45:32.893   Successfully installed the file.
+2026-05-17 11:45:32.893   -- File entry --
+2026-05-17 11:45:32.893   Dest filename: C:\SmritiOS\wheels\alembic-1.14.0-py3-none-any.whl
+2026-05-17 11:45:32.894   Time stamp of our file: 2026-05-17 10:35:58.000
+2026-05-17 11:45:32.894   Dest file exists.
+2026-05-17 11:45:32.894   Time stamp of existing file: 2026-05-17 10:35:58.000
+2026-05-17 11:45:32.894   Installing the file.
+2026-05-17 11:45:32.904   Successfully installed the file.
+2026-05-17 11:45:32.904   -- File entry --
+2026-05-17 11:45:32.904   Dest filename: C:\SmritiOS\wheels\amqp-5.3.1-py3-none-any.whl
+2026-05-17 11:45:32.904   Time stamp of our file: 2026-05-17 10:35:58.000
+2026-05-17 11:45:32.905   Dest file exists.
+2026-05-17 11:45:32.905   Time stamp of existing file: 2026-05-17 10:35:58.000
+2026-05-17 11:45:32.905   Installing the file.
+2026-05-17 11:45:32.910   Successfully installed the file.
+2026-05-17 11:45:32.910   -- File entry --
+2026-05-17 11:45:32.910   Dest filename: C:\SmritiOS\wheels\annotated_types-0.7.0-py3-none-any.whl
+2026-05-17 11:45:32.910   Time stamp of our file: 2026-05-17 10:35:58.000
+2026-05-17 11:45:32.910   Dest file exists.
+2026-05-17 11:45:32.910   Time stamp of existing file: 2026-05-17 10:35:58.000
+2026-05-17 11:45:32.910   Installing the file.
+2026-05-17 11:45:32.914   Successfully installed the file.
+2026-05-17 11:45:32.914   -- File entry --
+2026-05-17 11:45:32.915   Dest filename: C:\SmritiOS\wheels\anyio-4.13.0-py3-none-any.whl
+2026-05-17 11:45:32.916   Time stamp of our file: 2026-05-17 10:35:58.000
+2026-05-17 11:45:32.916   Dest file exists.
+2026-05-17 11:45:32.916   Time stamp of existing file: 2026-05-17 10:35:58.000
+2026-05-17 11:45:32.916   Installing the file.
+2026-05-17 11:45:32.923   Successfully installed the file.
+2026-05-17 11:45:32.923   -- File entry --
+2026-05-17 11:45:32.923   Dest filename: C:\SmritiOS\wheels\asgi_correlation_id-4.3.4-py3-none-any.whl
+2026-05-17 11:45:32.923   Time stamp of our file: 2026-05-17 10:35:58.000
+2026-05-17 11:45:32.923   Dest file exists.
+2026-05-17 11:45:32.923   Time stamp of existing file: 2026-05-17 10:35:58.000
+2026-05-17 11:45:32.923   Installing the file.
+2026-05-17 11:45:32.926   Successfully installed the file.
+2026-05-17 11:45:32.926   -- File entry --
+2026-05-17 11:45:32.926   Dest filename: C:\SmritiOS\wheels\asyncpg-0.30.0-cp311-cp311-win_amd64.whl
+2026-05-17 11:45:32.926   Time stamp of our file: 2026-05-17 10:35:58.000
+2026-05-17 11:45:32.926   Dest file exists.
+2026-05-17 11:45:32.927   Time stamp of existing file: 2026-05-17 10:35:58.000
+2026-05-17 11:45:32.927   Installing the file.
+2026-05-17 11:45:32.955   Successfully installed the file.
+2026-05-17 11:45:32.955   -- File entry --
+2026-05-17 11:45:32.955   Dest filename: C:\SmritiOS\wheels\billiard-4.2.4-py3-none-any.whl
+2026-05-17 11:45:32.955   Time stamp of our file: 2026-05-17 10:35:58.000
+2026-05-17 11:45:32.955   Dest file exists.
+2026-05-17 11:45:32.955   Time stamp of existing file: 2026-05-17 10:35:58.000
+2026-05-17 11:45:32.955   Installing the file.
+2026-05-17 11:45:32.960   Successfully installed the file.
+2026-05-17 11:45:32.960   -- File entry --
+2026-05-17 11:45:32.960   Dest filename: C:\SmritiOS\wheels\celery-5.6.3-py3-none-any.whl
+2026-05-17 11:45:32.960   Time stamp of our file: 2026-05-17 10:35:58.000
+2026-05-17 11:45:32.960   Dest file exists.
+2026-05-17 11:45:32.960   Time stamp of existing file: 2026-05-17 10:35:58.000
+2026-05-17 11:45:32.960   Installing the file.
+2026-05-17 11:45:32.988   Successfully installed the file.
+2026-05-17 11:45:32.988   -- File entry --
+2026-05-17 11:45:32.988   Dest filename: C:\SmritiOS\wheels\certifi-2026.4.22-py3-none-any.whl
+2026-05-17 11:45:32.989   Time stamp of our file: 2026-05-17 10:35:58.000
+2026-05-17 11:45:32.989   Dest file exists.
+2026-05-17 11:45:32.989   Time stamp of existing file: 2026-05-17 10:35:58.000
+2026-05-17 11:45:32.989   Installing the file.
+2026-05-17 11:45:32.995   Successfully installed the file.
+2026-05-17 11:45:32.995   -- File entry --
+2026-05-17 11:45:32.995   Dest filename: C:\SmritiOS\wheels\click-8.4.0-py3-none-any.whl
+2026-05-17 11:45:32.996   Time stamp of our file: 2026-05-17 10:35:58.000
+2026-05-17 11:45:32.996   Dest file exists.
+2026-05-17 11:45:32.996   Time stamp of existing file: 2026-05-17 10:35:58.000
+2026-05-17 11:45:32.996   Installing the file.
+2026-05-17 11:45:33.004   Successfully installed the file.
+2026-05-17 11:45:33.005   -- File entry --
+2026-05-17 11:45:33.005   Dest filename: C:\SmritiOS\wheels\click_didyoumean-0.3.1-py3-none-any.whl
+2026-05-17 11:45:33.005   Time stamp of our file: 2026-05-17 10:35:58.000
+2026-05-17 11:45:33.005   Dest file exists.
+2026-05-17 11:45:33.005   Time stamp of existing file: 2026-05-17 10:35:58.000
+2026-05-17 11:45:33.005   Installing the file.
+2026-05-17 11:45:33.008   Successfully installed the file.
+2026-05-17 11:45:33.008   -- File entry --
+2026-05-17 11:45:33.008   Dest filename: C:\SmritiOS\wheels\click_plugins-1.1.1.2-py2.py3-none-any.whl
+2026-05-17 11:45:33.008   Time stamp of our file: 2026-05-17 10:35:58.000
+2026-05-17 11:45:33.008   Dest file exists.
+2026-05-17 11:45:33.008   Time stamp of existing file: 2026-05-17 10:35:58.000
+2026-05-17 11:45:33.009   Installing the file.
+2026-05-17 11:45:33.011   Successfully installed the file.
+2026-05-17 11:45:33.011   -- File entry --
+2026-05-17 11:45:33.016   Dest filename: C:\SmritiOS\wheels\click_repl-0.3.0-py3-none-any.whl
+2026-05-17 11:45:33.016   Time stamp of our file: 2026-05-17 10:35:58.000
+2026-05-17 11:45:33.016   Dest file exists.
+2026-05-17 11:45:33.016   Time stamp of existing file: 2026-05-17 10:35:58.000
+2026-05-17 11:45:33.016   Installing the file.
+2026-05-17 11:45:33.301   Successfully installed the file.
+2026-05-17 11:45:33.301   -- File entry --
+2026-05-17 11:45:33.301   Dest filename: C:\SmritiOS\wheels\colorama-0.4.6-py2.py3-none-any.whl
+2026-05-17 11:45:33.301   Time stamp of our file: 2026-05-17 10:35:58.000
+2026-05-17 11:45:33.301   Dest file exists.
+2026-05-17 11:45:33.301   Time stamp of existing file: 2026-05-17 10:35:58.000
+2026-05-17 11:45:33.301   Installing the file.
+2026-05-17 11:45:33.305   Successfully installed the file.
+2026-05-17 11:45:33.305   -- File entry --
+2026-05-17 11:45:33.306   Dest filename: C:\SmritiOS\wheels\dnspython-2.8.0-py3-none-any.whl
+2026-05-17 11:45:33.306   Time stamp of our file: 2026-05-17 10:35:58.000
+2026-05-17 11:45:33.306   Dest file exists.
+2026-05-17 11:45:33.306   Time stamp of existing file: 2026-05-17 10:35:58.000
+2026-05-17 11:45:33.306   Installing the file.
+2026-05-17 11:45:33.320   Successfully installed the file.
+2026-05-17 11:45:33.320   -- File entry --
+2026-05-17 11:45:33.320   Dest filename: C:\SmritiOS\wheels\email_validator-2.3.0-py3-none-any.whl
+2026-05-17 11:45:33.320   Time stamp of our file: 2026-05-17 10:35:58.000
+2026-05-17 11:45:33.320   Dest file exists.
+2026-05-17 11:45:33.320   Time stamp of existing file: 2026-05-17 10:35:58.000
+2026-05-17 11:45:33.321   Installing the file.
+2026-05-17 11:45:33.325   Successfully installed the file.
+2026-05-17 11:45:33.325   -- File entry --
+2026-05-17 11:45:33.325   Dest filename: C:\SmritiOS\wheels\fastapi-0.115.5-py3-none-any.whl
+2026-05-17 11:45:33.326   Time stamp of our file: 2026-05-17 10:35:58.000
+2026-05-17 11:45:33.326   Dest file exists.
+2026-05-17 11:45:33.326   Time stamp of existing file: 2026-05-17 10:35:58.000
+2026-05-17 11:45:33.326   Installing the file.
+2026-05-17 11:45:33.338   Successfully installed the file.
+2026-05-17 11:45:33.338   -- File entry --
+2026-05-17 11:45:33.338   Dest filename: C:\SmritiOS\wheels\greenlet-3.5.0-cp311-cp311-win_amd64.whl
+2026-05-17 11:45:33.338   Time stamp of our file: 2026-05-17 10:35:58.000
+2026-05-17 11:45:33.338   Dest file exists.
+2026-05-17 11:45:33.338   Time stamp of existing file: 2026-05-17 10:35:58.000
+2026-05-17 11:45:33.339   Installing the file.
+2026-05-17 11:45:33.360   Successfully installed the file.
+2026-05-17 11:45:33.363   -- File entry --
+2026-05-17 11:45:33.363   Dest filename: C:\SmritiOS\wheels\h11-0.16.0-py3-none-any.whl
+2026-05-17 11:45:33.364   Time stamp of our file: 2026-05-17 10:35:58.000
+2026-05-17 11:45:33.364   Dest file exists.
+2026-05-17 11:45:33.364   Time stamp of existing file: 2026-05-17 10:35:58.000
+2026-05-17 11:45:33.364   Installing the file.
+2026-05-17 11:45:33.369   Successfully installed the file.
+2026-05-17 11:45:33.369   -- File entry --
+2026-05-17 11:45:33.369   Dest filename: C:\SmritiOS\wheels\httpcore-1.0.9-py3-none-any.whl
+2026-05-17 11:45:33.370   Time stamp of our file: 2026-05-17 10:35:58.000
+2026-05-17 11:45:33.370   Dest file exists.
+2026-05-17 11:45:33.370   Time stamp of existing file: 2026-05-17 10:35:58.000
+2026-05-17 11:45:33.370   Installing the file.
+2026-05-17 11:45:33.378   Successfully installed the file.
+2026-05-17 11:45:33.378   -- File entry --
+2026-05-17 11:45:33.378   Dest filename: C:\SmritiOS\wheels\httptools-0.7.1-cp311-cp311-win_amd64.whl
+2026-05-17 11:45:33.378   Time stamp of our file: 2026-05-17 10:35:58.000
+2026-05-17 11:45:33.378   Dest file exists.
+2026-05-17 11:45:33.378   Time stamp of existing file: 2026-05-17 10:35:58.000
+2026-05-17 11:45:33.379   Installing the file.
+2026-05-17 11:45:33.385   Successfully installed the file.
+2026-05-17 11:45:33.385   -- File entry --
+2026-05-17 11:45:33.385   Dest filename: C:\SmritiOS\wheels\httpx-0.28.0-py3-none-any.whl
+2026-05-17 11:45:33.385   Time stamp of our file: 2026-05-17 10:35:58.000
+2026-05-17 11:45:33.385   Dest file exists.
+2026-05-17 11:45:33.385   Time stamp of existing file: 2026-05-17 10:35:58.000
+2026-05-17 11:45:33.385   Installing the file.
+2026-05-17 11:45:33.392   Successfully installed the file.
+2026-05-17 11:45:33.393   -- File entry --
+2026-05-17 11:45:33.393   Dest filename: C:\SmritiOS\wheels\idna-3.15-py3-none-any.whl
+2026-05-17 11:45:33.393   Time stamp of our file: 2026-05-17 10:35:58.000
+2026-05-17 11:45:33.393   Dest file exists.
+2026-05-17 11:45:33.393   Time stamp of existing file: 2026-05-17 10:35:58.000
+2026-05-17 11:45:33.393   Installing the file.
+2026-05-17 11:45:33.401   Successfully installed the file.
+2026-05-17 11:45:33.401   -- File entry --
+2026-05-17 11:45:33.401   Dest filename: C:\SmritiOS\wheels\kombu-5.6.2-py3-none-any.whl
+2026-05-17 11:45:33.401   Time stamp of our file: 2026-05-17 10:35:58.000
+2026-05-17 11:45:33.401   Dest file exists.
+2026-05-17 11:45:33.401   Time stamp of existing file: 2026-05-17 10:35:58.000
+2026-05-17 11:45:33.401   Installing the file.
+2026-05-17 11:45:33.417   Successfully installed the file.
+2026-05-17 11:45:33.417   -- File entry --
+2026-05-17 11:45:33.418   Dest filename: C:\SmritiOS\wheels\mako-1.3.12-py3-none-any.whl
+2026-05-17 11:45:33.418   Time stamp of our file: 2026-05-17 10:35:58.000
+2026-05-17 11:45:33.418   Dest file exists.
+2026-05-17 11:45:33.418   Time stamp of existing file: 2026-05-17 10:35:58.000
+2026-05-17 11:45:33.419   Installing the file.
+2026-05-17 11:45:33.426   Successfully installed the file.
+2026-05-17 11:45:33.426   -- File entry --
+2026-05-17 11:45:33.428   Dest filename: C:\SmritiOS\wheels\markupsafe-3.0.3-cp311-cp311-win_amd64.whl
+2026-05-17 11:45:33.428   Time stamp of our file: 2026-05-17 10:35:58.000
+2026-05-17 11:45:33.428   Dest file exists.
+2026-05-17 11:45:33.428   Time stamp of existing file: 2026-05-17 10:35:58.000
+2026-05-17 11:45:33.429   Installing the file.
+2026-05-17 11:45:33.433   Successfully installed the file.
+2026-05-17 11:45:33.433   -- File entry --
+2026-05-17 11:45:33.433   Dest filename: C:\SmritiOS\wheels\packaging-26.2-py3-none-any.whl
+2026-05-17 11:45:33.434   Time stamp of our file: 2026-05-17 10:35:58.000
+2026-05-17 11:45:33.434   Dest file exists.
+2026-05-17 11:45:33.434   Time stamp of existing file: 2026-05-17 10:35:58.000
+2026-05-17 11:45:33.434   Installing the file.
+2026-05-17 11:45:33.440   Successfully installed the file.
+2026-05-17 11:45:33.440   -- File entry --
+2026-05-17 11:45:33.440   Dest filename: C:\SmritiOS\wheels\prompt_toolkit-3.0.52-py3-none-any.whl
+2026-05-17 11:45:33.440   Time stamp of our file: 2026-05-17 10:35:58.000
+2026-05-17 11:45:33.440   Dest file exists.
+2026-05-17 11:45:33.440   Time stamp of existing file: 2026-05-17 10:35:58.000
+2026-05-17 11:45:33.440   Installing the file.
+2026-05-17 11:45:33.468   Successfully installed the file.
+2026-05-17 11:45:33.468   -- File entry --
+2026-05-17 11:45:33.470   Dest filename: C:\SmritiOS\wheels\pydantic-2.10.0-py3-none-any.whl
+2026-05-17 11:45:33.470   Time stamp of our file: 2026-05-17 10:35:58.000
+2026-05-17 11:45:33.470   Dest file exists.
+2026-05-17 11:45:33.470   Time stamp of existing file: 2026-05-17 10:35:58.000
+2026-05-17 11:45:33.470   Installing the file.
+2026-05-17 11:45:33.593   Successfully installed the file.
+2026-05-17 11:45:33.593   -- File entry --
+2026-05-17 11:45:33.594   Dest filename: C:\SmritiOS\wheels\pydantic_core-2.27.0-cp311-none-win_amd64.whl
+2026-05-17 11:45:33.594   Time stamp of our file: 2026-05-17 10:35:58.000
+2026-05-17 11:45:33.594   Dest file exists.
+2026-05-17 11:45:33.594   Time stamp of existing file: 2026-05-17 10:35:58.000
+2026-05-17 11:45:33.595   Installing the file.
+2026-05-17 11:45:33.683   Successfully installed the file.
+2026-05-17 11:45:33.683   -- File entry --
+2026-05-17 11:45:33.684   Dest filename: C:\SmritiOS\wheels\pydantic_settings-2.6.1-py3-none-any.whl
+2026-05-17 11:45:33.684   Time stamp of our file: 2026-05-17 10:35:58.000
+2026-05-17 11:45:33.684   Dest file exists.
+2026-05-17 11:45:33.684   Time stamp of existing file: 2026-05-17 10:35:58.000
+2026-05-17 11:45:33.684   Installing the file.
+2026-05-17 11:45:33.688   Successfully installed the file.
+2026-05-17 11:45:33.688   -- File entry --
+2026-05-17 11:45:33.688   Dest filename: C:\SmritiOS\wheels\PyJWT-2.8.0-py3-none-any.whl
+2026-05-17 11:45:33.688   Time stamp of our file: 2026-05-17 10:35:58.000
+2026-05-17 11:45:33.688   Dest file exists.
+2026-05-17 11:45:33.689   Time stamp of existing file: 2026-05-17 10:35:58.000
+2026-05-17 11:45:33.689   Installing the file.
+2026-05-17 11:45:33.691   Successfully installed the file.
+2026-05-17 11:45:33.693   -- File entry --
+2026-05-17 11:45:33.694   Dest filename: C:\SmritiOS\wheels\python_dateutil-2.9.0.post0-py2.py3-none-any.whl
+2026-05-17 11:45:33.695   Time stamp of our file: 2026-05-17 10:35:58.000
+2026-05-17 11:45:33.695   Dest file exists.
+2026-05-17 11:45:33.695   Time stamp of existing file: 2026-05-17 10:35:58.000
+2026-05-17 11:45:33.695   Installing the file.
+2026-05-17 11:45:33.703   Successfully installed the file.
+2026-05-17 11:45:33.703   -- File entry --
+2026-05-17 11:45:33.703   Dest filename: C:\SmritiOS\wheels\python_dotenv-1.0.1-py3-none-any.whl
+2026-05-17 11:45:33.705   Time stamp of our file: 2026-05-17 10:35:58.000
+2026-05-17 11:45:33.705   Dest file exists.
+2026-05-17 11:45:33.705   Time stamp of existing file: 2026-05-17 10:35:58.000
+2026-05-17 11:45:33.705   Installing the file.
+2026-05-17 11:45:33.708   Successfully installed the file.
+2026-05-17 11:45:33.708   -- File entry --
+2026-05-17 11:45:33.708   Dest filename: C:\SmritiOS\wheels\python_multipart-0.0.12-py3-none-any.whl
+2026-05-17 11:45:33.709   Time stamp of our file: 2026-05-17 10:35:58.000
+2026-05-17 11:45:33.709   Dest file exists.
+2026-05-17 11:45:33.709   Time stamp of existing file: 2026-05-17 10:35:58.000
+2026-05-17 11:45:33.709   Installing the file.
+2026-05-17 11:45:33.711   Successfully installed the file.
+2026-05-17 11:45:33.712   -- File entry --
+2026-05-17 11:45:33.712   Dest filename: C:\SmritiOS\wheels\pyyaml-6.0.3-cp311-cp311-win_amd64.whl
+2026-05-17 11:45:33.712   Time stamp of our file: 2026-05-17 10:35:58.000
+2026-05-17 11:45:33.712   Dest file exists.
+2026-05-17 11:45:33.713   Time stamp of existing file: 2026-05-17 10:35:58.000
+2026-05-17 11:45:33.713   Installing the file.
+2026-05-17 11:45:33.726   Successfully installed the file.
+2026-05-17 11:45:33.726   -- File entry --
+2026-05-17 11:45:33.726   Dest filename: C:\SmritiOS\wheels\redis-7.4.0-py3-none-any.whl
+2026-05-17 11:45:33.726   Time stamp of our file: 2026-05-17 10:35:58.000
+2026-05-17 11:45:33.726   Dest file exists.
+2026-05-17 11:45:33.726   Time stamp of existing file: 2026-05-17 10:35:58.000
+2026-05-17 11:45:33.726   Installing the file.
+2026-05-17 11:45:33.747   Successfully installed the file.
+2026-05-17 11:45:33.747   -- File entry --
+2026-05-17 11:45:33.748   Dest filename: C:\SmritiOS\wheels\six-1.17.0-py2.py3-none-any.whl
+2026-05-17 11:45:33.749   Time stamp of our file: 2026-05-17 10:35:58.000
+2026-05-17 11:45:33.749   Dest file exists.
+2026-05-17 11:45:33.749   Time stamp of existing file: 2026-05-17 10:35:58.000
+2026-05-17 11:45:33.749   Installing the file.
+2026-05-17 11:45:33.751   Successfully installed the file.
+2026-05-17 11:45:33.751   -- File entry --
+2026-05-17 11:45:33.753   Dest filename: C:\SmritiOS\wheels\sqlalchemy-2.0.49-cp311-cp311-win_amd64.whl
+2026-05-17 11:45:33.753   Time stamp of our file: 2026-05-17 10:35:58.000
+2026-05-17 11:45:33.753   Dest file exists.
+2026-05-17 11:45:33.753   Time stamp of existing file: 2026-05-17 10:35:58.000
+2026-05-17 11:45:33.753   Installing the file.
+2026-05-17 11:45:33.804   Successfully installed the file.
+2026-05-17 11:45:33.804   -- File entry --
+2026-05-17 11:45:33.804   Dest filename: C:\SmritiOS\wheels\starlette-0.41.3-py3-none-any.whl
+2026-05-17 11:45:33.805   Time stamp of our file: 2026-05-17 10:35:58.000
+2026-05-17 11:45:33.805   Dest file exists.
+2026-05-17 11:45:33.805   Time stamp of existing file: 2026-05-17 10:35:58.000
+2026-05-17 11:45:33.805   Installing the file.
+2026-05-17 11:45:33.813   Successfully installed the file.
+2026-05-17 11:45:33.813   -- File entry --
+2026-05-17 11:45:33.814   Dest filename: C:\SmritiOS\wheels\structlog-25.5.0-py3-none-any.whl
+2026-05-17 11:45:33.814   Time stamp of our file: 2026-05-17 10:35:58.000
+2026-05-17 11:45:33.814   Dest file exists.
+2026-05-17 11:45:33.814   Time stamp of existing file: 2026-05-17 10:35:58.000
+2026-05-17 11:45:33.814   Installing the file.
+2026-05-17 11:45:33.822   Successfully installed the file.
+2026-05-17 11:45:33.823   -- File entry --
+2026-05-17 11:45:33.823   Dest filename: C:\SmritiOS\wheels\typing_extensions-4.15.0-py3-none-any.whl
+2026-05-17 11:45:33.823   Time stamp of our file: 2026-05-17 10:35:58.000
+2026-05-17 11:45:33.823   Dest file exists.
+2026-05-17 11:45:33.824   Time stamp of existing file: 2026-05-17 10:35:58.000
+2026-05-17 11:45:33.824   Installing the file.
+2026-05-17 11:45:33.830   Successfully installed the file.
+2026-05-17 11:45:33.830   -- File entry --
+2026-05-17 11:45:33.830   Dest filename: C:\SmritiOS\wheels\tzdata-2026.2-py2.py3-none-any.whl
+2026-05-17 11:45:33.830   Time stamp of our file: 2026-05-17 10:35:58.000
+2026-05-17 11:45:33.830   Dest file exists.
+2026-05-17 11:45:33.830   Time stamp of existing file: 2026-05-17 10:35:58.000
+2026-05-17 11:45:33.831   Installing the file.
+2026-05-17 11:45:33.853   Successfully installed the file.
+2026-05-17 11:45:33.853   -- File entry --
+2026-05-17 11:45:33.853   Dest filename: C:\SmritiOS\wheels\tzlocal-5.3.1-py3-none-any.whl
+2026-05-17 11:45:33.853   Time stamp of our file: 2026-05-17 10:35:58.000
+2026-05-17 11:45:33.853   Dest file exists.
+2026-05-17 11:45:33.853   Time stamp of existing file: 2026-05-17 10:35:58.000
+2026-05-17 11:45:33.853   Installing the file.
+2026-05-17 11:45:33.857   Successfully installed the file.
+2026-05-17 11:45:33.857   -- File entry --
+2026-05-17 11:45:33.857   Dest filename: C:\SmritiOS\wheels\uvicorn-0.32.1-py3-none-any.whl
+2026-05-17 11:45:33.857   Time stamp of our file: 2026-05-17 10:35:58.000
+2026-05-17 11:45:33.857   Dest file exists.
+2026-05-17 11:45:33.857   Time stamp of existing file: 2026-05-17 10:35:58.000
+2026-05-17 11:45:33.857   Installing the file.
+2026-05-17 11:45:33.864   Successfully installed the file.
+2026-05-17 11:45:33.864   -- File entry --
+2026-05-17 11:45:33.865   Dest filename: C:\SmritiOS\wheels\vine-5.1.0-py3-none-any.whl
+2026-05-17 11:45:33.865   Time stamp of our file: 2026-05-17 10:35:58.000
+2026-05-17 11:45:33.865   Dest file exists.
+2026-05-17 11:45:33.865   Time stamp of existing file: 2026-05-17 10:35:58.000
+2026-05-17 11:45:33.866   Installing the file.
+2026-05-17 11:45:33.871   Successfully installed the file.
+2026-05-17 11:45:33.871   -- File entry --
+2026-05-17 11:45:33.874   Dest filename: C:\SmritiOS\wheels\watchfiles-1.1.1-cp311-cp311-win_amd64.whl
+2026-05-17 11:45:33.874   Time stamp of our file: 2026-05-17 10:35:58.000
+2026-05-17 11:45:33.875   Dest file exists.
+2026-05-17 11:45:33.875   Time stamp of existing file: 2026-05-17 10:35:58.000
+2026-05-17 11:45:33.875   Installing the file.
+2026-05-17 11:45:33.883   Successfully installed the file.
+2026-05-17 11:45:33.883   -- File entry --
+2026-05-17 11:45:33.883   Dest filename: C:\SmritiOS\wheels\wcwidth-0.7.0-py3-none-any.whl
+2026-05-17 11:45:33.883   Time stamp of our file: 2026-05-17 10:35:58.000
+2026-05-17 11:45:33.883   Dest file exists.
+2026-05-17 11:45:33.883   Time stamp of existing file: 2026-05-17 10:35:58.000
+2026-05-17 11:45:33.883   Installing the file.
+2026-05-17 11:45:33.894   Successfully installed the file.
+2026-05-17 11:45:33.894   -- File entry --
+2026-05-17 11:45:33.894   Dest filename: C:\SmritiOS\wheels\websockets-16.0-cp311-cp311-win_amd64.whl
+2026-05-17 11:45:33.894   Time stamp of our file: 2026-05-17 10:35:58.000
+2026-05-17 11:45:33.894   Dest file exists.
+2026-05-17 11:45:33.895   Time stamp of existing file: 2026-05-17 10:35:58.000
+2026-05-17 11:45:33.895   Installing the file.
+2026-05-17 11:45:33.907   Successfully installed the file.
+2026-05-17 11:45:33.907   -- File entry --
+2026-05-17 11:45:33.907   Dest filename: C:\SmritiOS\bin\backend-src.zip
+2026-05-17 11:45:33.907   Time stamp of our file: 2026-05-17 10:35:46.000
+2026-05-17 11:45:33.907   Dest file exists.
+2026-05-17 11:45:33.907   Time stamp of existing file: 2026-05-17 10:35:46.000
+2026-05-17 11:45:33.908   Installing the file.
+2026-05-17 11:45:33.959   Successfully installed the file.
+2026-05-17 11:45:33.959   -- File entry --
+2026-05-17 11:45:33.960   Dest filename: C:\SmritiOS\bin\frontend-dist.zip
+2026-05-17 11:45:33.960   Time stamp of our file: 2026-05-17 10:35:08.000
+2026-05-17 11:45:33.960   Dest file exists.
+2026-05-17 11:45:33.960   Time stamp of existing file: 2026-05-17 10:35:08.000
+2026-05-17 11:45:33.960   Installing the file.
+2026-05-17 11:45:34.108   Successfully installed the file.
+2026-05-17 11:45:34.109   -- Icon entry --
+2026-05-17 11:45:34.109   Dest filename: C:\ProgramData\Microsoft\Windows\Start Menu\Programs\Smriti Retail OS\Smriti POS.lnk
+2026-05-17 11:45:34.113   Creating the icon.
+2026-05-17 11:45:34.175   Successfully created the icon.
+2026-05-17 11:45:34.869   -- Icon entry --
+2026-05-17 11:45:34.869   Dest filename: C:\ProgramData\Microsoft\Windows\Start Menu\Programs\Smriti Retail OS\Uninstall Smriti Retail OS.lnk
+2026-05-17 11:45:34.870   Creating the icon.
+2026-05-17 11:45:34.873   Successfully created the icon.
+2026-05-17 11:45:34.892   -- Icon entry --
+2026-05-17 11:45:34.892   Dest filename: C:\Users\Public\Desktop\Smriti POS.lnk
+2026-05-17 11:45:34.893   Creating the icon.
+2026-05-17 11:45:34.895   Successfully created the icon.
+2026-05-17 11:45:34.937   -- Registry entry --
+2026-05-17 11:45:34.937   Key: HKEY_LOCAL_MACHINE\Software\ERPnBOOK\SmritiOS
+2026-05-17 11:45:34.937   Value name: InstallPath
+2026-05-17 11:45:34.937   Creating or opening the key.
+2026-05-17 11:45:34.937   Successfully created the key.
+2026-05-17 11:45:34.937   -- Registry entry --
+2026-05-17 11:45:34.937   Key: HKEY_LOCAL_MACHINE\Software\ERPnBOOK\SmritiOS
+2026-05-17 11:45:34.937   Value name: Version
+2026-05-17 11:45:34.937   Creating or opening the key.
+2026-05-17 11:45:34.937   Successfully created the key.
+2026-05-17 11:45:34.937   -- Registry entry --
+2026-05-17 11:45:34.937   Key: HKEY_LOCAL_MACHINE\Software\ERPnBOOK\SmritiOS
+2026-05-17 11:45:34.937   Value name: Publisher
+2026-05-17 11:45:34.937   Creating or opening the key.
+2026-05-17 11:45:34.937   Successfully created the key.
+2026-05-17 11:45:34.937   -- Registry entry --
+2026-05-17 11:45:34.937   Key: HKEY_LOCAL_MACHINE\Software\ERPnBOOK\SmritiOS
+2026-05-17 11:45:34.937   Value name: SupportURL
+2026-05-17 11:45:34.937   Creating or opening the key.
+2026-05-17 11:45:34.937   Successfully created the key.
+2026-05-17 11:45:34.937   -- Registry entry --
+2026-05-17 11:45:34.937   Key: HKEY_LOCAL_MACHINE\Software\ERPnBOOK\SmritiOS
+2026-05-17 11:45:34.937   Value name: POS_URL
+2026-05-17 11:45:34.937   Creating or opening the key.
+2026-05-17 11:45:34.937   Successfully created the key.
+2026-05-17 11:45:34.937   -- Registry entry --
+2026-05-17 11:45:34.937   Key: HKEY_LOCAL_MACHINE\Software\ERPnBOOK\SmritiOS
+2026-05-17 11:45:34.937   Value name: Contact
+2026-05-17 11:45:34.937   Creating or opening the key.
+2026-05-17 11:45:34.937   Successfully created the key.
+2026-05-17 11:45:34.938   Saving uninstall information.
+2026-05-17 11:45:34.938   Renaming uninstaller.
+2026-05-17 11:45:34.939   Deleting uninstall key left over from previous administrative 64-bit install.
+2026-05-17 11:45:34.939   Creating new uninstall key: HKEY_LOCAL_MACHINE\Software\Microsoft\Windows\CurrentVersion\Uninstall\Smriti Retail OS_is1
+2026-05-17 11:45:34.940   Writing uninstall key values.
+2026-05-17 11:45:34.941   Detected previous non administrative install? No
+2026-05-17 11:45:34.941   Detected previous administrative 32-bit install? No
+2026-05-17 11:45:37.444   Installation process succeeded.
+2026-05-17 11:45:37.450   -- Run entry --
+2026-05-17 11:45:37.450   Run as: Current user
+2026-05-17 11:45:37.450   Type: Exec
+2026-05-17 11:45:37.450   Filename: powershell.exe
+2026-05-17 11:45:37.450   Parameters: -ExecutionPolicy Bypass -NoProfile -File "C:\SmritiOS\bootstrap.ps1" -InstallDir "C:\SmritiOS"
+2026-05-17 11:53:51.567   Process exit code: 0
+2026-05-17 11:53:51.570   Attempting to restart applications.
+2026-05-17 11:53:51.645   Need to restart Windows? No
+2026-05-17 11:53:51.650   Deinitializing Setup.
+2026-05-17 11:53:51.660   Log closed.

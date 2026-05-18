@@ -194,39 +194,66 @@ const ObjectLookup: React.FC = () => {
   };
 
   const handleAdd = () => {
+    const newId = `${selectedRecId}-NEW-${Math.random()}`;
     const newRow = {
       recid: selectedRecId,
       code: '',
       descr: '',
       flag: '',
       number: 0,
-      id: `${selectedRecId}-NEW-${Math.random()}`
+      id: newId
     };
+    // Mark as modified immediately — enables Sync button without needing Tab/Enter
+    setModified(prev => new Set(prev).add(newId));
     setRows(prev => [newRow, ...prev]);
-    // Focus the new row? AG Grid focus API is complex, we'll skip for now.
+    // Focus first cell of new row
+    setTimeout(() => {
+      if (gridRef.current?.api) {
+        gridRef.current.api.setFocusedCell(0, 'code');
+        gridRef.current.api.startEditingCell({ rowIndex: 0, colKey: 'code' });
+      }
+    }, 50);
   };
 
   const handleSave = async () => {
-    const itemsToSave = rows.filter(r => modified.has(r.id));
-    if (itemsToSave.length === 0) return;
+    // Flush any active cell edit before reading rows
+    if (gridRef.current?.api) {
+      gridRef.current.api.stopEditing();
+    }
 
-    // Validation
-    const invalid = itemsToSave.find(item => !item.code);
+    // Read latest row data from grid (captures edits not yet committed via tab/enter)
+    const allGridRows: any[] = [];
+    gridRef.current?.api?.forEachNode((node: any) => allGridRows.push(node.data));
+    const currentRows = allGridRows.length > 0 ? allGridRows : rows;
+
+    const itemsToSave = currentRows.filter((r: any) => modified.has(r.id));
+    if (itemsToSave.length === 0) {
+      setToast({ msg: 'No changes to save', ok: false });
+      return;
+    }
+
+    // Validation — Code must not be empty
+    const invalid = itemsToSave.find((item: any) => !item.code || !String(item.code).trim());
     if (invalid) {
-      setToast({ msg: "Error: Code is required for all records", ok: false });
+      setToast({ msg: 'Error: Code cannot be empty', ok: false });
       return;
     }
 
     try {
       setLoading(true);
-      // Clean data for backend (remove our temporary frontend ID)
-      const cleaned = itemsToSave.map(({ id, ...rest }) => rest);
-      
-      await api.legacy.bulkUpdate("Genlookup", cleaned);
-      setToast({ msg: `${itemsToSave.length} records synchronized`, ok: true });
+      // Strip frontend-only id field before sending to backend
+      const cleaned = itemsToSave.map(({ id, ...rest }: any) => ({
+        ...rest,
+        code: String(rest.code).trim().toUpperCase(),
+        number: Number(rest.number) || 0,
+      }));
+
+      await api.legacy.bulkUpdate('Genlookup', cleaned);
+      setToast({ msg: `${itemsToSave.length} record(s) synchronized`, ok: true });
       loadData();
     } catch (err: any) {
-      setToast({ msg: "Save failed: " + err.message, ok: false });
+      const detail = err?.response?.data?.detail || err.message || 'Unknown error';
+      setToast({ msg: 'Save failed: ' + detail, ok: false });
     } finally {
       setLoading(false);
     }

@@ -4,10 +4,10 @@
   "description": "SMRITI-OS — Shoper9 Based Retail OS",
   "main": "main.py",
   "scripts": {
-    "dev:backend": "python -m uvicorn app.main:app --reload --port 8000 --app-dir backend",
+    "dev:backend": ".\\\\backend\\\\venv\\\\Scripts\\\\python -m uvicorn app.main:app --reload --port 8000 --app-dir backend",
     "dev:frontend": "npm run dev --prefix frontend",
     "dev": "concurrently \"npm run dev:backend\" \"npm run dev:frontend\"",
-    "start": "python -m uvicorn app.main:app --port 8000 --app-dir backend",
+    "start": ".\\\\backend\\\\venv\\\\Scripts\\\\python -m uvicorn app.main:app --port 8000 --app-dir backend",
     "build": "npm run build --prefix frontend"
   },
   "keywords": [

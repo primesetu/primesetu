@@ -28,7 +28,7 @@ class Genlookup(Base):
     """
     __tablename__ = 'genlookup'
     __table_args__ = {'schema': S9_SCHEMA, 'extend_existing': True}
-    tenant_id: Mapped[str] = mapped_column(String, default='SYSTEM', index=True)
+    tenant_id: Mapped[str] = mapped_column(String, primary_key=True, default='SYSTEM', index=True)
 
     recid: Mapped[Integer] = mapped_column(Integer, primary_key=True, nullable=False)
     code: Mapped[String] = mapped_column(String, primary_key=True, nullable=False)
@@ -49,7 +49,7 @@ class Genlookupextd(Base):
     """
     __tablename__ = 'genlookupextd'
     __table_args__ = {'schema': S9_SCHEMA, 'extend_existing': True}
-    tenant_id: Mapped[str] = mapped_column(String, default='SYSTEM', index=True)
+    tenant_id: Mapped[str] = mapped_column(String, primary_key=True, default='SYSTEM', index=True)
 
     recid: Mapped[Integer] = mapped_column(Integer, primary_key=True, nullable=False)
     category: Mapped[Optional[String]] = mapped_column(String, nullable=True)
@@ -465,7 +465,7 @@ class Chainstores(Base):
 class Class12combo(Base):
     __tablename__ = 'class12combo'
     __table_args__ = {'schema': S9_SCHEMA, 'extend_existing': True}
-    tenant_id: Mapped[str] = mapped_column(String, default='SYSTEM', index=True)
+    tenant_id: Mapped[str] = mapped_column(String, primary_key=True, default='SYSTEM', index=True)
 
     class1cd: Mapped[String] = mapped_column(String, primary_key=True, nullable=False)
     class2cd: Mapped[String] = mapped_column(String, primary_key=True, nullable=False)

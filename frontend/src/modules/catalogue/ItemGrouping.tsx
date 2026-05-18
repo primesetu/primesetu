@@ -5,7 +5,7 @@ import {
   RotateCcw, ChevronLeft, ChevronsLeft, ChevronsRight, ArrowUpDown, ArrowUp, ArrowDown, DownloadCloud
 } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
-import { api, apiClient } from "@/api/client";
+import { api } from "@/api/client";
 import { cn } from "@/lib/utils";
 
 // Sovereign Architecture Imports
@@ -371,14 +371,15 @@ export default function ItemGrouping({ onBack }: { onBack?: () => void }) {
   const fetchData = async () => {
     setIsPulling(true);
     try {
-      const response = await apiClient.get('/catalog/classifications/');
-      setClassifications(response.data.data || []);
+      // [SOVEREIGN] Use api.legacy bridge — tenant_id injected by backend automatically
+      const response = await api.legacy.getData('class12combo', { limit: 2000 });
+      setClassifications(response.data || []);
       setModifiedRows(new Set());
       setDeletedRows(new Set());
       setSelectedRows(new Set());
     } catch (e) {
-      console.error("Failed to fetch Class12Combo data", e);
-      setToast({ message: "Network error: Using offline cache", type: "error" });
+      console.error("[ItemGrouping] Failed to fetch class12combo", e);
+      setToast({ message: "Failed to load Item Grouping data", type: "error" });
     } finally {
       setIsPulling(false);
     }
@@ -391,58 +392,64 @@ export default function ItemGrouping({ onBack }: { onBack?: () => void }) {
   const handleSave = async () => {
     setIsSaving(true);
     try {
-      // 1. Save modified/new rows that aren't deleted
+      // 1. Bulk-upsert modified rows (non-deleted)
       const modifiedArray = Array.from(modifiedRows)
         .map(i => classifications[i as number])
         .filter(row => row && !deletedRows.has(classifications.indexOf(row)));
-        
-      for (const row of modifiedArray) {
-        if (row.class1cd && row.class2cd) {
-            try {
-                await apiClient.post('/catalog/classifications/', row);
-            } catch (err: any) {
-                await apiClient.put(`/catalog/classifications/${row.class1cd}/${row.class2cd}`, row);
-            }
-        }
+
+      if (modifiedArray.length > 0) {
+        const cleaned = modifiedArray.map(({ _isNew, ...rest }: any) => ({
+          ...rest,
+          class1cd: String(rest.class1cd || '').trim().toUpperCase(),
+          class2cd: String(rest.class2cd || '').trim().toUpperCase(),
+          retailmarkup:      Number(rest.retailmarkup)      || 0,
+          dealermarkup:      Number(rest.dealermarkup)      || 0,
+          batchapplicable:   rest.batchapplicable   ? 1 : 0,
+          gradeapplicable:   rest.gradeapplicable   ? 1 : 0,
+          locationapplicable: rest.locationapplicable ? 1 : 0,
+        }));
+        await api.legacy.bulkUpdate('class12combo', cleaned);
       }
-      
+
       // 2. Delete rows marked for deletion
       const deletedArray = Array.from(deletedRows)
         .map(i => classifications[i as number])
-        .filter(Boolean);
+        .filter(row => row && row.class1cd && row.class2cd && !row._isNew);
 
       for (const row of deletedArray) {
-        if (row.class1cd && row.class2cd) {
-          try {
-            await apiClient.delete(`/catalog/classifications/${row.class1cd}/${row.class2cd}`);
-          } catch (err) {
-            console.error("Failed to delete legacy row mapping:", row, err);
-          }
+        try {
+          await api.legacy.deleteRecord('class12combo', JSON.stringify({
+            class1cd: row.class1cd,
+            class2cd: row.class2cd,
+          }));
+        } catch (err) {
+          console.error('[ItemGrouping] Delete failed for row:', row, err);
         }
       }
-      
-      setToast({ message: "Class12Combo Rules Synchronized", type: 'success' });
+
+      setToast({ message: `${modifiedArray.length} Combination(s) Synchronized`, type: 'success' });
       setModifiedRows(new Set());
       setDeletedRows(new Set());
-      setTimeout(() => setToast(null), 3000);
+      setTimeout(() => setToast(null), 3500);
       fetchData();
-    } catch (e) {
-      setToast({ message: "Sovereign Commit Failed", type: 'error' });
+    } catch (e: any) {
+      const detail = e?.response?.data?.detail || e.message || 'Unknown error';
+      setToast({ message: `Commit Failed: ${detail}`, type: 'error' });
     } finally {
       setIsSaving(false);
     }
   };
   
   const addRow = () => {
-      setClassifications([{ class1cd: "", class2cd: "", billable: true, retailmarkup: 0 }, ...classifications]);
-      const shift = (s: Set<number>) => new Set(Array.from(s).map(i => i + 1));
-      setModifiedRows(shift(modifiedRows).add(0));
-      setDeletedRows(shift(deletedRows));
-      
-      // Select the newly added row
-      const nextSelected = new Set<number>();
-      nextSelected.add(0);
-      setSelectedRows(nextSelected);
+    // _isNew flag prevents delete API call for unsaved rows
+    const newRow = { _isNew: true, class1cd: '', class2cd: '', billable: true, retailmarkup: 0, dealermarkup: 0, batchapplicable: false, gradeapplicable: false, locationapplicable: false };
+    setClassifications([newRow, ...classifications]);
+    const shift = (s: Set<number>) => new Set(Array.from(s).map(i => i + 1));
+    setModifiedRows(shift(modifiedRows).add(0));
+    setDeletedRows(shift(deletedRows));
+    const nextSelected = new Set<number>();
+    nextSelected.add(0);
+    setSelectedRows(nextSelected);
   };
 
   // Sync TanStack row selection state to setSelectedRows

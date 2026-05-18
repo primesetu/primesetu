@@ -28,8 +28,24 @@ export const ConnectivityGuard: React.FC<{ children: React.ReactNode }> = ({ chi
   const [failureCount, setFailureCount] = useState(0);
   const [successCount, setSuccessCount] = useState(0);
 
-  const heartbeatTimer = useRef<any>(null);
+  const heartbeatTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
   
+  // Ref to track latest state values and prevent stale closures
+  const stateRef = useRef({
+    connectivityState,
+    successCount,
+    failureCount,
+    preferredBackendUrl,
+  });
+
+  // Always keep the state values fresh on every render
+  stateRef.current = {
+    connectivityState,
+    successCount,
+    failureCount,
+    preferredBackendUrl,
+  };
+
   // Switch Workflow State
   const [pendingNode, setPendingNode] = useState<{ id: string; url: string } | null>(null);
   const [showConfirm, setShowConfirm] = useState(false);
@@ -44,11 +60,26 @@ export const ConnectivityGuard: React.FC<{ children: React.ReactNode }> = ({ chi
   });
 
   const runHeartbeat = useCallback(async () => {
+    // Clear any existing timer to avoid concurrent heartbeat loop leaks
+    if (heartbeatTimer.current) {
+      clearTimeout(heartbeatTimer.current);
+      heartbeatTimer.current = null;
+    }
+
+    const {
+      connectivityState: currentConnState,
+      successCount: currentSuccessCount,
+      failureCount: currentFailureCount,
+      preferredBackendUrl: currentBackendUrl,
+    } = stateRef.current;
+
     const controller = new AbortController();
     const timeoutId = setTimeout(() => controller.abort(), CONNECTIVITY_CONFIG.HEARTBEAT_TIMEOUT);
 
+    let nextState = currentConnState;
+
     try {
-      const baseUrl = preferredBackendUrl || `http://${window.location.hostname}:8000`;
+      const baseUrl = currentBackendUrl || `http://${window.location.hostname}:8000`;
       const response = await fetch(`${baseUrl}/api/v1/health`, { 
         signal: controller.signal,
         headers: { 'Accept': 'application/json' }
@@ -60,55 +91,65 @@ export const ConnectivityGuard: React.FC<{ children: React.ReactNode }> = ({ chi
         const data = await response.json();
         if (data.service === 'smriti-os') {
           setFailureCount(0);
-          setSuccessCount(prev => prev + 1);
           
-          // Move transition logic to a safe place (here, in the async function)
-          if (connectivityState === 'OFFLINE' || connectivityState === 'RECOVERING') {
-            if (successCount + 1 >= CONNECTIVITY_CONFIG.SUCCESSES_TO_ONLINE) {
+          const newSuccess = currentSuccessCount + 1;
+          setSuccessCount(newSuccess);
+          
+          if (currentConnState === 'OFFLINE' || currentConnState === 'RECOVERING') {
+            if (newSuccess >= CONNECTIVITY_CONFIG.SUCCESSES_TO_ONLINE) {
+              nextState = 'ONLINE';
               setConnectivityState('ONLINE');
               setBackendAvailable(true);
             } else {
+              nextState = 'RECOVERING';
               setConnectivityState('RECOVERING');
             }
           } else {
+            nextState = 'ONLINE';
             setConnectivityState('ONLINE');
             setBackendAvailable(true);
           }
           
           setLastCheck(new Date());
+        } else {
+          throw new Error('Invalid service header');
         }
       } else {
-        throw new Error('Health check failed');
+        throw new Error('Health check status not OK');
       }
     } catch (err) {
       clearTimeout(timeoutId);
       setSuccessCount(0);
-      setFailureCount(prev => prev + 1);
       
-      const nextFailure = failureCount + 1;
-      if (nextFailure >= CONNECTIVITY_CONFIG.FAILURES_BEFORE_OFFLINE) {
+      const newFailure = currentFailureCount + 1;
+      setFailureCount(newFailure);
+      
+      if (newFailure >= CONNECTIVITY_CONFIG.FAILURES_BEFORE_OFFLINE) {
+        nextState = 'OFFLINE';
         setConnectivityState('OFFLINE');
         setBackendAvailable(false);
       } else {
+        nextState = 'DEGRADED';
         setConnectivityState('DEGRADED');
       }
       
       setLastCheck(new Date());
     }
 
-    const delay = (connectivityState === 'OFFLINE') 
+    const delay = (nextState === 'OFFLINE') 
       ? CONNECTIVITY_CONFIG.HEARTBEAT_INTERVAL_OFFLINE 
       : CONNECTIVITY_CONFIG.HEARTBEAT_INTERVAL_ONLINE;
       
+    // Schedule the next check safely
     heartbeatTimer.current = setTimeout(runHeartbeat, delay);
-  }, [connectivityState, setBackendAvailable, setConnectivityState, preferredBackendUrl]);
+  }, [setBackendAvailable, setConnectivityState]);
 
   useEffect(() => {
     runHeartbeat();
     return () => {
       if (heartbeatTimer.current) clearTimeout(heartbeatTimer.current);
     };
-  }, []); // Only run on mount
+  }, [runHeartbeat]);
 
   const handleApplyNode = (id: string, url: string) => {
     setPendingNode({ id, url });

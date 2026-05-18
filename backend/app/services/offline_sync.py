@@ -102,6 +102,8 @@ class OfflineSyncEngine:
             echo=False,
             pool_size=5,
             max_overflow=2,
+            pool_pre_ping=True,    # [FIX] Validate connections before use — prevents stale-conn OperationalError
+            pool_recycle=1800,     # [FIX] Recycle connections every 30 min — prevents idle timeout drops
         )
         self._local_session = async_sessionmaker(
             bind=self._local_engine,
@@ -196,10 +198,13 @@ class OfflineSyncEngine:
 
     # ── Background Loop ──────────────────────────────────────
     async def _sync_loop(self):
+        loop = asyncio.get_event_loop()
         while self._running:
             await asyncio.sleep(self.interval)
             try:
-                if _is_online():
+                # [FIX] Run blocking socket probe in a thread — prevents event loop freeze during DNS/TCP check
+                is_up = await loop.run_in_executor(None, _is_online)
+                if is_up:
                     await self._flush_queue()
                 else:
                     logger.debug("[OfflineSync] No internet — queue held in local PG.")
@@ -354,10 +359,14 @@ class OfflineSyncEngine:
             )
             counts = {row[0]: row[1] for row in result.fetchall()}
 
+        # [FIX] Run blocking socket probe in executor — same pattern as _sync_loop
+        loop = asyncio.get_event_loop()
+        is_up = await loop.run_in_executor(None, _is_online)
+
         return {
             "mode": "LOCAL_POSTGRES",
             "local_db": self.local_db_url.split("@")[-1],   # hide credentials
-            "is_online": _is_online(),
+            "is_online": is_up,
             "pending": counts.get(STATUS_PENDING, 0),
             "synced":  counts.get(STATUS_SYNCED, 0),
             "failed":  counts.get(STATUS_FAILED, 0),

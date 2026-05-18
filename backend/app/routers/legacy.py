@@ -13,6 +13,7 @@ import app.models.legacy_sys as sys_models
 import app.models.sovereign as sovereign_models
 from app.core.database import get_db
 from app.core.security import require_auth, optional_auth, CurrentUser
+from app.core.logging import logger
 import os
 import sys
 import asyncio
@@ -256,11 +257,8 @@ async def bulk_update_legacy_data(
     except Exception as e:
         await db.rollback()
         import traceback
-
         error_detail = traceback.format_exc()
-        print(f"\n[CRITICAL ERROR] Legacy Bulk Update Failed!")
-        print(f"Error: {str(e)}")
-        print(f"Traceback: {error_detail}")
+        logger.error("legacy_bulk_update_failed", table=table_name, error=str(e), traceback=error_detail)
         raise HTTPException(status_code=500, detail=f"Database Error: {str(e)}")
 
     return {"status": "success", "count": len(results)}
@@ -337,7 +335,7 @@ async def get_legacy_table_data(
                     else:
                         filter_clauses.append(column_attr == v)
         except Exception as e:
-            print(f"Filter error: {e}")
+            logger.warning("legacy_filter_parse_error", table=table_name, error=str(e))
 
     # 2. Apply Search Logic
     search_filters = []
@@ -395,22 +393,22 @@ async def get_legacy_table_data(
     if search_filters:
         count_query = count_query.where(or_(*search_filters))
     
-    print(f"[DEBUG] Executing Count Query for {table_name}...")
+    logger.debug("legacy_count_query_start", table=table_name)
     total_res = await db.execute(count_query)
     total_count = total_res.scalar()
-    print(f"[DEBUG] Count Query Finished: {total_count} rows (Took {time.time() - start_time:.2f}s)")
+    logger.debug("legacy_count_query_done", table=table_name, count=total_count, elapsed_ms=round((time.time() - start_time)*1000, 2))
 
     # 5. Fetch Data
     fetch_start = time.time()
     query = query.offset(offset).limit(limit)
-    print(f"[DEBUG] Executing Data Query: offset={offset}, limit={limit}")
+    logger.debug("legacy_data_query_start", table=table_name, offset=offset, limit=limit)
     
     try:
         result = await db.execute(query)
         all_rows = result.all()
-        print(f"[DEBUG] Data Query Finished: Found {len(all_rows)} (Took {time.time() - fetch_start:.2f}s)")
+        logger.debug("legacy_data_query_done", table=table_name, returned=len(all_rows), elapsed_ms=round((time.time() - fetch_start)*1000, 2))
     except Exception as e:
-        print(f"[DEBUG] EXECUTION ERROR: {e}")
+        logger.error("legacy_data_query_failed", table=table_name, error=str(e))
         raise HTTPException(status_code=500, detail=f"Query failed: {str(e)}")
 
     data = []

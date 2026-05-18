@@ -411,7 +411,7 @@ async def provision_mssql(
         # 2. Connect to the new DB and apply schema
         log.append(f"⚙️ Connecting to {db_name} to generate schema...")
         target_conn_str = f"mssql+pyodbc:///?odbc_connect=DRIVER={{{settings.mssql_driver}}};SERVER={settings.mssql_server};DATABASE={db_name};UID={settings.mssql_user};PWD={settings.mssql_password};"
-        engine = create_engine(target_conn_str)
+        engine = create_engine(target_conn_str, pool_pre_ping=True, pool_recycle=1800)
         
         log.append(f"⏳ Deploying 579+ Shoper9 tables... (This may take a minute)")
         Base.metadata.create_all(bind=engine)

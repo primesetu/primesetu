@@ -1,9 +1,21 @@
 import json
 import sqlite3
 import os
-from celery.exceptions import CeleryError
-from kombu.exceptions import OperationalError
-from app.core.celery_app import celery_app
+
+# [FIX] Lazy import — Celery/Redis connection is NOT available in LOCAL_POSTGRES mode.
+# Importing celery_app at module level would attempt a Redis connection on every startup,
+# causing startup delays and potential pool exhaustion in offline deployments.
+try:
+    from celery.exceptions import CeleryError
+    from kombu.exceptions import OperationalError
+    from app.core.celery_app import celery_app
+    _CELERY_AVAILABLE = True
+except Exception:
+    _CELERY_AVAILABLE = False
+    celery_app = None
+    CeleryError = Exception
+    OperationalError = Exception
+
 from app.core.logging import logger
 
 OUTBOX_DB_PATH = os.path.join(os.path.dirname(__file__), "..", "..", "outbox.sqlite3")

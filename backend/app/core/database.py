@@ -18,6 +18,8 @@ def _make_async_pg_engine(url: str, pool_size: int = 10, max_overflow: int = 5):
         future=True,
         pool_size=pool_size,
         max_overflow=max_overflow,
+        pool_pre_ping=True,
+        pool_recycle=1800,
     )
 
 # ── DYNAMIC ENGINE CACHE ──
@@ -76,7 +78,14 @@ elif settings.storage_mode == "SOVEREIGN":
         f"PWD={settings.mssql_password};"
     )
     conn_url = f"mssql+pyodbc:///?odbc_connect={params}"
-    engine = create_engine(conn_url, echo=(settings.environment == "development"), pool_size=10, max_overflow=5)
+    engine = create_engine(
+        conn_url, 
+        echo=(settings.environment == "development"), 
+        pool_size=10, 
+        max_overflow=5,
+        pool_pre_ping=True,
+        pool_recycle=1800
+    )
     SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 
     async def get_db(x_company_db: str = Header(default="default")):

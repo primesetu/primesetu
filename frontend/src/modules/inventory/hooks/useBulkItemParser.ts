@@ -175,7 +175,7 @@ function buildCaptionToColumnMap(tmpl: BulkImportTemplate): Record<string, strin
     // Row 1 aliases
     'barcode no':           'stockno',
     'purchase class':       'superclass1',
-    'department':           'superclass2',
+    // 'department' is already mapped above
     'merchandise category': 'class1cd',
     'class':                'class2cd',
     'sub-class':            'subclass1cd',
@@ -187,7 +187,7 @@ function buildCaptionToColumnMap(tmpl: BulkImportTemplate): Record<string, strin
     'vendor code':          'analcode5',
     'product style code':   'subclass2cd',
     'brand name':           'analcode6',
-    'cost price':           'currentcost',
+    // 'cost price' is already mapped above
     'planned mrp':          'retail_price',
     // -----------------------------------------------------------
   };

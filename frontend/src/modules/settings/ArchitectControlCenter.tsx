@@ -88,7 +88,7 @@ const DEPLOY_MODES = [
 
 const MODULES = [
   { id: 'hybrid_storage', icon: CloudLightning, label: 'Hybrid Engine', desc: 'Toggle Cloud vs Sovereign storage', color: 'text-amber-500', bg: 'bg-amber-500/10' },
-  { id: 'table_viewer',  icon: Database,       label: 'DB Explorer',   desc: 'Introspect Shoper9 & Smriti schemas', color: 'text-blue-500',  bg: 'bg-blue-500/10' },
+  { id: 'table_viewer',  icon: Database,       label: 'DB Explorer',   desc: 'Introspect SMRITI & legacy schemas', color: 'text-blue-500',  bg: 'bg-blue-500/10' },
   { id: 'security',      icon: Lock,           label: 'Security Vault', desc: 'Roles, permissions & audit log', color: 'text-emerald-500', bg: 'bg-emerald-500/10' },
   { id: 'settings',      icon: Settings,       label: 'System Config',  desc: 'SysParams & print templates', color: 'text-slate-400', bg: 'bg-slate-500/10' },
 ];
@@ -571,7 +571,7 @@ const ArchitectControlCenter: React.FC = () => {
                   <Badge variant="success"><StatusDot ok /> Connected</Badge>
                 </Flex>
                 <Flex between itemsCenter className="p-3 rounded-lg bg-black/20">
-                  <Flex gap={3}><Server size={14} className="text-amber-500" /><span className="text-xs font-bold">MSSQL / Shoper9 (Local)</span></Flex>
+                  <Flex gap={3}><Server size={14} className="text-amber-500" /><span className="text-xs font-bold">MSSQL / SMRITI (Local)</span></Flex>
                   <Badge variant="success"><StatusDot ok /> Connected</Badge>
                 </Flex>
                 <Flex between itemsCenter className="p-3 rounded-lg bg-black/20">
@@ -660,7 +660,7 @@ const ArchitectControlCenter: React.FC = () => {
               <div>
                 <div className="font-black text-base uppercase italic tracking-tight">Schema Studio</div>
                 <p className="text-xs text-[var(--text-secondary)] opacity-70 mt-1 leading-relaxed">
-                  Introspect every Shoper9 table, preview its PostgreSQL DDL with SmritiSetu enhancements, and provision a complete new client database — <span className="text-violet-400 font-bold">one click</span>.
+                  Introspect every SMRITI table, preview its PostgreSQL DDL with SmritiSetu enhancements, and provision a complete new client database — <span className="text-violet-400 font-bold">one click</span>.
                 </p>
               </div>
             </div>
@@ -670,7 +670,7 @@ const ArchitectControlCenter: React.FC = () => {
               {/* LEFT: Table List */}
               <div className="col-span-4 space-y-3">
                 <Flex between itemsCenter>
-                  <Text variant="xs" className="opacity-50 font-black uppercase tracking-widest">Shoper9 Tables</Text>
+                  <Text variant="xs" className="opacity-50 font-black uppercase tracking-widest">SMRITI Tables</Text>
                   <button
                     onClick={fetchTables}
                     disabled={loadingTables}
@@ -684,7 +684,7 @@ const ArchitectControlCenter: React.FC = () => {
                 {s9Tables.length === 0 ? (
                   <Card className="border-dashed border-[var(--border-subtle)] p-6 text-center">
                     <Database size={32} className="mx-auto opacity-20 mb-3" />
-                    <div className="text-xs opacity-40 font-medium">Click Refresh to load Shoper9 tables</div>
+                    <div className="text-xs opacity-40 font-medium">Click Refresh to load SMRITI tables</div>
                     <button
                       onClick={fetchTables}
                       className="mt-4 text-xs font-black text-[var(--primary)] hover:opacity-70"
@@ -831,7 +831,7 @@ const ArchitectControlCenter: React.FC = () => {
                     <div className="bg-black/30 p-5 rounded-xl border border-[var(--border-subtle)] space-y-4">
                       <div>
                         <div className="font-black text-[11px] text-blue-400 uppercase tracking-widest mb-1">1. SOVEREIGN MODE (MSSQL)</div>
-                        <div className="text-[10px] opacity-60">Creates a full MSSQL database with exactly 579+ Shoper9 tables.</div>
+                        <div className="text-[10px] opacity-60">Creates a full MSSQL database with exactly 579+ SMRITI tables.</div>
                       </div>
                       
                       <div>

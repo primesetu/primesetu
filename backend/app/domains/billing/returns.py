@@ -20,7 +20,8 @@ from decimal import Decimal
 from app.core.database import get_db
 from app.core.security import CurrentUser, require_auth
 from app.models.base import Transaction, TransactionItem, Partner, CreditNote, LoyaltyLedger
-from app.models.legacy_s9 import Stockmaster
+from app.models.legacy_s9 import Stockmaster, Stktrnhdr, Stktrndtls
+from app.domains.billing.services.sequencing_service import SequencingService
 
 router = APIRouter(prefix="/api/v1/returns", tags=["Returns & Exchange"])
 
@@ -133,9 +134,12 @@ async def process_return(
                 detail=f"Return qty {qty} for '{sku}' exceeds sold qty {orig.qty}."
             )
 
-    # Create Return Transaction (negative quantities = Shoper9 convention)
+    # Create Return Transaction (negative quantities = Shoper9 convention for UI)
     return_bill_no = f"RET-{original_bill_no}-{uuid.uuid4().hex[:6].upper()}"
     return_total = 0
+
+    # [R1] Fetch new TrnCtrlNo for the legacy tables
+    trn_ctrl_no = await SequencingService.get_next_trn_ctrl_no(db)
 
     return_txn = Transaction(
         id=uuid.uuid4(),
@@ -169,6 +173,23 @@ async def process_return(
         )
         return_txn.items.append(return_item)
 
+        # [R1] Write to legacy Stktrndtls (TrnType = 1300 Sales Return)
+        db.add(Stktrndtls(
+            trntype       = 1300,
+            trnctrlno     = trn_ctrl_no,
+            docnoprefix   = return_bill_no.split("-")[0],
+            docno         = trn_ctrl_no,
+            entsrlno      = len(return_txn.items),
+            stockno       = sku,
+            docqty        = float(qty),  # In legacy, docqty is positive for returns, trntype dictates direction
+            docentrate    = float(orig.mrp or 0) / 100,
+            docentvalue   = float(line_amount) / 100,
+            docentnetvalue= float(line_amount) / 100,
+            vauid         = str(current_user.id),
+            vacompcode    = current_user.store_id,
+            tenant_id     = current_user.store_id,
+        ))
+
         # Reverse stock deduction
         stock_res = await db.execute(
             select(Stockmaster).where(and_(
@@ -180,10 +201,26 @@ async def process_return(
         if stock:
             stock.curbalqty = (stock.curbalqty or 0) + float(qty)
 
-    return_txn.subtotal = return_total
-    return_txn.net_payable = return_total
+    return_txn.subtotal = -return_total
+    return_txn.net_payable = -return_total
     return_txn.payments = {"REFUND": {"amount": return_total}}
     db.add(return_txn)
+
+    # [R1] Write to legacy Stktrnhdr (TrnType = 1300 Sales Return)
+    db.add(Stktrnhdr(
+        trntype       = 1300,
+        trnctrlno     = trn_ctrl_no,
+        docnoprefix   = return_bill_no.split("-")[0],
+        docno         = trn_ctrl_no,
+        docdt         = datetime.utcnow().date(),
+        doctime       = datetime.utcnow(),
+        totdocvalue   = float(return_total) / 100,
+        netdocvalue   = float(return_total) / 100,
+        vauid         = str(current_user.id),
+        vacompcode    = current_user.store_id,
+        docvoidind    = False,
+        tenant_id     = current_user.store_id,
+    ))
 
     # Issue Credit Note
     import time

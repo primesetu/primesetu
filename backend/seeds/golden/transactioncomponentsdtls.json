@@ -1,0 +1,19 @@
+[
+  { "trntype": 1,  "trnsubtype": 0, "fieldcode": "BASEPRICE",   "srlno": 1, "eventid": "BILLING",  "eventkeycode": 1,  "componentdesc": "Base Price (MRP)",        "orderofexec": 1, "compstatus": "A" },
+  { "trntype": 1,  "trnsubtype": 0, "fieldcode": "DISC",        "srlno": 2, "eventid": "BILLING",  "eventkeycode": 2,  "componentdesc": "Bill-level Discount",     "orderofexec": 2, "compstatus": "A" },
+  { "trntype": 1,  "trnsubtype": 0, "fieldcode": "TAXCGST",     "srlno": 3, "eventid": "BILLING",  "eventkeycode": 3,  "componentdesc": "CGST Component",          "orderofexec": 3, "compstatus": "A" },
+  { "trntype": 1,  "trnsubtype": 0, "fieldcode": "TAXSGST",     "srlno": 4, "eventid": "BILLING",  "eventkeycode": 4,  "componentdesc": "SGST Component",          "orderofexec": 4, "compstatus": "A" },
+  { "trntype": 1,  "trnsubtype": 0, "fieldcode": "TAXIGST",     "srlno": 5, "eventid": "BILLING",  "eventkeycode": 5,  "componentdesc": "IGST Component",          "orderofexec": 5, "compstatus": "A" },
+  { "trntype": 1,  "trnsubtype": 0, "fieldcode": "NETAMT",      "srlno": 6, "eventid": "BILLING",  "eventkeycode": 6,  "componentdesc": "Net Bill Amount",         "orderofexec": 6, "compstatus": "A" },
+  { "trntype": 1,  "trnsubtype": 0, "fieldcode": "RNDOFF",      "srlno": 7, "eventid": "BILLING",  "eventkeycode": 7,  "componentdesc": "Rounding Off",            "orderofexec": 7, "compstatus": "A" },
+  { "trntype": 1,  "trnsubtype": 0, "fieldcode": "PAYAMT",      "srlno": 8, "eventid": "BILLING",  "eventkeycode": 8,  "componentdesc": "Payment Received",        "orderofexec": 8, "compstatus": "A" },
+
+  { "trntype": 2,  "trnsubtype": 0, "fieldcode": "BASEPRICE",   "srlno": 1, "eventid": "RETURN",   "eventkeycode": 1,  "componentdesc": "Return Base Price",       "orderofexec": 1, "compstatus": "A" },
+  { "trntype": 2,  "trnsubtype": 0, "fieldcode": "RETNETAMT",   "srlno": 2, "eventid": "RETURN",   "eventkeycode": 2,  "componentdesc": "Return Net Amount",       "orderofexec": 2, "compstatus": "A" },
+
+  { "trntype": 11, "trnsubtype": 0, "fieldcode": "COSTPRICE",   "srlno": 1, "eventid": "GIR",      "eventkeycode": 1,  "componentdesc": "Cost Price",              "orderofexec": 1, "compstatus": "A" },
+  { "trntype": 11, "trnsubtype": 0, "fieldcode": "TAXCGST",     "srlno": 2, "eventid": "GIR",      "eventkeycode": 2,  "componentdesc": "Purchase CGST",           "orderofexec": 2, "compstatus": "A" },
+  { "trntype": 11, "trnsubtype": 0, "fieldcode": "TAXSGST",     "srlno": 3, "eventid": "GIR",      "eventkeycode": 3,  "componentdesc": "Purchase SGST",           "orderofexec": 3, "compstatus": "A" },
+  { "trntype": 11, "trnsubtype": 0, "fieldcode": "TAXIGST",     "srlno": 4, "eventid": "GIR",      "eventkeycode": 4,  "componentdesc": "Purchase IGST",           "orderofexec": 4, "compstatus": "A" },
+  { "trntype": 11, "trnsubtype": 0, "fieldcode": "NETAMT",      "srlno": 5, "eventid": "GIR",      "eventkeycode": 5,  "componentdesc": "GIR Net Amount",          "orderofexec": 5, "compstatus": "A" }
+]

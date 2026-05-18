@@ -15,7 +15,7 @@ from fastapi.responses import FileResponse, Response, JSONResponse
 from fastapi.exceptions import RequestValidationError
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import select, func, and_
-from app.core.database import engine, Base, get_db
+from app.core.database import Base, get_db, _engines, get_engine_for_db
 from app.models import (
     Till, Transaction, Store, Alert
 )
@@ -95,6 +95,7 @@ from app.domains.core import (
 from app.domains.billing import billing, tills, returns
 from app.domains.inventory import inventory, inventory_audit, item_master, warehouse, stock_ledger
 from app.domains.inventory.routers import barcode_router as inventory_barcode_router
+from app.api import company as api_company
 
 from app.domains.catalogue import catalogue, item_classification, catalog_classifications, department
 from app.domains.customer import customer, loyalty
@@ -104,7 +105,8 @@ from app.domains.finance import finance, accounts, gstr1, einvoice
 from app.routers import (
     onboarding, barcode, purchase, extensions, schemes, reporting, store, 
     legacy, master, ecommerce, tally, whatsapp, intelligence, flexible_reports,
-    alerts, price_group, reports, barcode_templates, lookup, queue
+    alerts, price_group, reports, barcode_templates, lookup, queue, company,
+    config_sysparam
 )
 
 app.include_router(auth_router.router)         # [R1-B] Local node JWT issuance
@@ -112,6 +114,9 @@ app.include_router(health.router, prefix=api_prefix)
 app.include_router(queue.router, prefix=api_prefix)
 app.include_router(onboarding.router, prefix=api_prefix)
 app.include_router(store.router, prefix=api_prefix)
+app.include_router(company.router, prefix=api_prefix)
+app.include_router(api_company.router, prefix=api_prefix)
+app.include_router(config_sysparam.router, prefix=api_prefix)  # System Parameter Hub — /config/sysparam
 app.include_router(users.router, prefix="/api/v1/users")
 app.include_router(extensions.router, prefix="/api/v1/extensions")
 app.include_router(legacy.router, prefix=api_prefix)
@@ -180,7 +185,15 @@ import asyncio
 async def startup():
     logger.info("application_startup", storage_mode=settings.storage_mode, admin_pin_set=bool(settings.local_admin_pin))
     print(f"DEBUG: LOCAL_ADMIN_PIN is '{settings.local_admin_pin}'")
-    async with engine.begin() as conn:
+    
+    # Initialize the default database schema (smriti_local)
+    default_db = settings.local_database_url.split("/")[-1]
+    get_engine_for_db(default_db, settings.local_database_url)
+    default_engine = _engines[default_db]
+    
+    from sqlalchemy import text
+    async with default_engine.begin() as conn:
+        await conn.execute(text('CREATE EXTENSION IF NOT EXISTS "uuid-ossp"'))
         await conn.run_sync(Base.metadata.create_all)
     logger.info("database_connected")
 

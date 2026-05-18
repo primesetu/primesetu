@@ -29,6 +29,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import BarcodePrintPreview from '../tools/BarcodePrintPreview';
 import { useSysParams } from '@/hooks/useSysParams';
 import { useCaptions, usePayFields, TrnTypes } from '@/hooks/useScreenSchema';
+import PurchaseMatrixModal from './PurchaseMatrixModal';
 
 // ── TYPES ──────────────────────────────────────────────────────────────────
 
@@ -63,6 +64,9 @@ export default function PurchaseWorkbench({ onBack }: PurchaseWorkbenchProps) {
   const [quickEntry, setQuickEntry] = useState({ sku: '', qty: 1 });
   const [isSearching, setIsSearching] = useState(false);
   const [searchMatches, setSearchMatches] = useState<any[]>([]);
+
+  // Matrix State
+  const [showMatrixGen, setShowMatrixGen] = useState(false);
 
   // System Parameters
   const { getParam } = useSysParams();
@@ -168,6 +172,31 @@ export default function PurchaseWorkbench({ onBack }: PurchaseWorkbenchProps) {
     setTimeout(() => gridEndRef.current?.scrollIntoView({ behavior: 'smooth' }), 50);
   };
 
+  const handleMatrixApply = (items: any[]) => {
+    const newLines: LineItem[] = items.map(item => {
+      const rate = item.cost_price || 0;
+      const taxRate = item.tax_rate || 18;
+      const qty = item.qty || 1;
+      const basic = rate * qty;
+      const total = basic + (basic * (taxRate / 100));
+
+      return {
+        id: crypto.randomUUID(),
+        stockNo: item.stockno || item.sku || '—',
+        description: item.itemdesc || item.name || 'Unknown Item',
+        qty,
+        rate,
+        mrp: item.retail_price || 0,
+        taxRate,
+        hsn: item.hsn_code || '—',
+        total
+      };
+    });
+
+    setLines(prev => [...prev, ...newLines]);
+    setTimeout(() => gridEndRef.current?.scrollIntoView({ behavior: 'smooth' }), 50);
+  };
+
   const handlePost = async () => {
     if (!vendor || !invoiceNo || lines.length === 0) {
       alert("Missing Vendor, Invoice No, or Items.");
@@ -236,6 +265,12 @@ export default function PurchaseWorkbench({ onBack }: PurchaseWorkbenchProps) {
           </RibbonGroup>
 
           <RibbonGroup label="Document">
+            <RibbonButton 
+              icon={PackagePlus} 
+              label="Matrix Gen" 
+              onClick={() => setShowMatrixGen(true)} 
+              shortcut="F4"
+            />
             <RibbonButton icon={Search} label="S9 History" onClick={() => {}} />
             <RibbonButton icon={FileSpreadsheet} label="Import" onClick={() => {}} shortcut="Alt+I" />
             {enableBarcodePrinting && (
@@ -466,6 +501,13 @@ export default function PurchaseWorkbench({ onBack }: PurchaseWorkbenchProps) {
             onClose={() => setShowPrintModal(false)}
           />
         </div>
+      )}
+
+      {showMatrixGen && (
+        <PurchaseMatrixModal 
+          onClose={() => setShowMatrixGen(false)} 
+          onApply={handleMatrixApply} 
+        />
       )}
 
     </div>

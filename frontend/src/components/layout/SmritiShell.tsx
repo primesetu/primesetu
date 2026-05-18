@@ -72,6 +72,7 @@ interface SmritiShellProps {
 
 
 const SmritiShell: React.FC<SmritiShellProps> = ({ children, activeTab, onTabChange }) => {
+  const [companyCode, setCompanyCode] = useState('X01');
   const [isCollapsed, setIsCollapsed] = useState(false);
   const isFullBleed = FULL_BLEED_PAGES.includes(activeTab);
   const liveDate = new Date().toLocaleDateString('en-IN', { day: '2-digit', month: 'short', year: 'numeric' }).toUpperCase();
@@ -86,12 +87,16 @@ const SmritiShell: React.FC<SmritiShellProps> = ({ children, activeTab, onTabCha
         const params = response.data;
         const nameParam = params.find((p: any) => p.param_code === 'CompanyName');
         const addrParam = params.find((p: any) => p.param_code === 'CompanyAddr1');
+        const codeParam = params.find((p: any) => p.param_code === 'STORE_CODE') || params.find((p: any) => p.param_code === 'CompanyCode');
         
         if (nameParam?.value_txt) {
           setCompanyName(nameParam.value_txt.toUpperCase());
         }
         if (addrParam?.value_txt) {
           setCompanyAddress(addrParam.value_txt);
+        }
+        if (codeParam?.value_txt) {
+          setCompanyCode(codeParam.value_txt.toUpperCase());
         }
         setSysParams(params);
       } catch (err) {
@@ -214,17 +219,41 @@ const SmritiShell: React.FC<SmritiShellProps> = ({ children, activeTab, onTabCha
         {/* User Footer */}
         <div className={cn("border-t border-outline-variant flex-shrink-0", isCollapsed ? "p-2" : "p-3")}>
           <div className={cn("flex items-center", isCollapsed ? "justify-center" : "gap-3")}>
-            <div className="w-8 h-8 bg-primary flex items-center justify-center text-white flex-shrink-0">
-              <User size={16} />
+            <div 
+              className="w-8 h-8 bg-primary/10 border border-primary/20 hover:bg-primary/20 flex items-center justify-center text-primary flex-shrink-0 cursor-pointer transition-all"
+              onClick={() => {
+                localStorage.removeItem('X-Company-Db');
+                window.location.reload();
+              }}
+              title="Switch Company Catalog"
+            >
+              <Building2 size={15} />
             </div>
             {!isCollapsed && (
-              <div className="flex-1 min-w-0">
-                <div className="text-[11px] font-black truncate">SYSTEM ADMIN</div>
-                <div className="text-[9px] text-on-surface-variant truncate">X01 · {companyName}</div>
+              <div 
+                className="flex-1 min-w-0 cursor-pointer hover:opacity-85 transition-all group/footer"
+                onClick={() => {
+                  localStorage.removeItem('X-Company-Db');
+                  window.location.reload();
+                }}
+                title="Switch Company Catalog"
+              >
+                <div className="text-[11px] font-black truncate flex items-center gap-1.5 text-on-surface">
+                  SYSTEM ADMIN 
+                  <span className="text-[8px] text-primary font-black px-1 py-0.5 rounded bg-primary/10 group-hover/footer:bg-primary group-hover/footer:text-white transition-all uppercase tracking-wider">Switch</span>
+                </div>
+                <div className="text-[9px] text-on-surface-variant truncate font-medium">{companyCode} · {companyName}</div>
               </div>
             )}
             {!isCollapsed && (
-              <button className="text-outline/30 hover:text-red-500 transition-colors">
+              <button 
+                onClick={() => {
+                  localStorage.removeItem('X-Company-Db');
+                  window.location.reload();
+                }}
+                title="Switch Company / Log Out"
+                className="text-outline-variant hover:text-red-500 transition-colors cursor-pointer"
+              >
                 <LogOut size={14} />
               </button>
             )}
@@ -257,6 +286,19 @@ const SmritiShell: React.FC<SmritiShellProps> = ({ children, activeTab, onTabCha
                   className="h-9 pl-9 pr-4 bg-surface-container border border-outline-variant text-xs w-52 focus:outline-none focus:border-primary transition-colors"
                 />
               </div>
+
+              <button
+                onClick={() => {
+                  localStorage.removeItem('X-Company-Db');
+                  window.location.reload();
+                }}
+                className="flex items-center gap-2 h-9 px-3 border border-outline-variant bg-surface-container hover:bg-surface-container-high text-primary transition-all text-[10px] font-black uppercase tracking-wider"
+                title="Switch Company Catalog"
+              >
+                <Building2 size={13} className="text-primary" />
+                <span className="hidden lg:inline">{companyCode} · {companyName}</span>
+                <span className="text-[8px] bg-primary/10 border border-primary/20 text-primary px-1.5 py-0.5 rounded font-black tracking-normal ml-1">SWITCH</span>
+              </button>
 
               <button
                 onClick={toggleForcedOffline}
@@ -328,7 +370,7 @@ const SmritiShell: React.FC<SmritiShellProps> = ({ children, activeTab, onTabCha
               <div className={cn("w-1.5 h-1.5", isForcedOffline ? "bg-red-500" : "bg-emerald-500 animate-pulse")} />
               {isForcedOffline ? 'Sync: FORCED OFFLINE' : 'Sync: Online'}
             </span>
-            <span>Node: X01-{companyName}</span>
+            <span>Node: {companyCode}-{companyName}</span>
           </div>
           <div className="flex gap-4 hidden sm:flex">
             <span>F1: Help</span><span>F2: Lookup</span><span>F10: Save</span><span>Alt+D: Layout</span>

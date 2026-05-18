@@ -49,7 +49,6 @@ CREATE TABLE IF NOT EXISTS smriti_sync_queue (
     failed_at    TIMESTAMPTZ,
     synced_at    TIMESTAMPTZ
 );
-CREATE INDEX IF NOT EXISTS idx_sync_queue_status ON smriti_sync_queue (status, next_retry, id);
 """
 
 # Exponential backoff delays per retry attempt (seconds)
@@ -124,13 +123,18 @@ class OfflineSyncEngine:
                 "ALTER TABLE smriti_sync_queue ADD COLUMN IF NOT EXISTS idempotency_key TEXT",
                 "ALTER TABLE smriti_sync_queue ADD COLUMN IF NOT EXISTS last_error TEXT",
                 "ALTER TABLE smriti_sync_queue ADD COLUMN IF NOT EXISTS error_class TEXT",
-                "ALTER TABLE smriti_sync_queue ADD COLUMN IF NOT EXISTS failed_at TIMESTAMPTZ"
+                "ALTER TABLE smriti_sync_queue ADD COLUMN IF NOT EXISTS failed_at TIMESTAMPTZ",
+                "ALTER TABLE smriti_sync_queue ADD COLUMN IF NOT EXISTS next_retry TIMESTAMPTZ NOT NULL DEFAULT NOW()"
             ]
             for stmt in migration_stmts:
                 try:
                     await conn.execute(text(stmt))
                 except Exception as e:
                     logger.debug(f"[OfflineSync] Migration note: {e}")
+            
+            # Create index after columns are ensured
+            await conn.execute(text("CREATE INDEX IF NOT EXISTS idx_sync_queue_status ON smriti_sync_queue (status, next_retry, id);"))
+            
         logger.info("[OfflineSync] Local PG queue initialized.")
 
     # ── Public API ───────────────────────────────────────────

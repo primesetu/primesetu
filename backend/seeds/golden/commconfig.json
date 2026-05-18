@@ -1,0 +1,5 @@
+[
+  { "synctype": "HO",  "mode": "NONE",  "active": 0, "configxml": "" },
+  { "synctype": "POS", "mode": "LOCAL", "active": 1, "configxml": "" },
+  { "synctype": "CRM", "mode": "NONE",  "active": 0, "configxml": "" }
+]

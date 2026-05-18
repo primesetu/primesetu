@@ -1,0 +1,7 @@
+[
+  { "agencyid": "VISA",   "agencynm": "Visa",            "onlineauthpresent": false, "allowcrdtcard": true,  "allowgiftcpn": false },
+  { "agencyid": "MASTER", "agencynm": "MasterCard",      "onlineauthpresent": false, "allowcrdtcard": true,  "allowgiftcpn": false },
+  { "agencyid": "RUPAY",  "agencynm": "RuPay",           "onlineauthpresent": false, "allowcrdtcard": true,  "allowgiftcpn": false },
+  { "agencyid": "AMEX",   "agencynm": "American Express", "onlineauthpresent": false, "allowcrdtcard": true,  "allowgiftcpn": false },
+  { "agencyid": "NONE",   "agencynm": "None/General",    "onlineauthpresent": false, "allowcrdtcard": false, "allowgiftcpn": false }
+]

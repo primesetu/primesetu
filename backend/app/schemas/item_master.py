@@ -154,7 +154,7 @@ class ItemCreate(BaseModel):
     """
     # ── Identity (Required) ──────────────────────────────────
     stockno: str = Field(..., max_length=20, description="StockNo – primary key")
-    batchsrlno: int = Field(default=0, description="Batch serial no. 0=new item sentinel")
+    batchsrlno: str = Field(default="0", description="Batch serial no. 0=new item sentinel")
     itemdesc: str = Field(..., max_length=40, description="Item description")
 
     # ── Classification (FK → GenLookup) ──────────────────────
@@ -295,9 +295,34 @@ class ItemCreate(BaseModel):
         return v
 
 
+class ItemUpdate(BaseModel):
+    """Partial update schema for ItemMaster attributes."""
+    itemdesc: Optional[str] = Field(None, max_length=40)
+    class1cd: Optional[str] = Field(None, max_length=16)
+    class2cd: Optional[str] = Field(None, max_length=16)
+    subclass1cd: Optional[str] = Field(None, max_length=16)
+    subclass2cd: Optional[str] = Field(None, max_length=16)
+    sizecd: Optional[str] = Field(None, max_length=16)
+    prodtaxtype: Optional[str] = Field(None, max_length=16)
+    srctaxtype: Optional[str] = Field(None, max_length=16)
+    isrptaxinclusive: Optional[bool] = None
+    isinventoryitem: Optional[bool] = None
+    isbillable: Optional[bool] = None
+    isservice: Optional[bool] = None
+    regularind: Optional[int] = None
+    gradecd: Optional[str] = Field(None, max_length=16)
+    imageid: Optional[str] = Field(None, max_length=50)
+    sfield1: Optional[str] = Field(None, max_length=50)
+    analcode1: Optional[str] = Field(None, max_length=16)
+    analcode2: Optional[str] = Field(None, max_length=16)
+    analcode3: Optional[str] = Field(None, max_length=16)
+    analcode4: Optional[str] = Field(None, max_length=16)
+    analcode5: Optional[str] = Field(None, max_length=16)
+    analcode32: Optional[str] = Field(None, max_length=16) # HSN Code
+
 class ItemResponse(BaseModel):
     stockno: str
-    batchsrlno: int
+    batchsrlno: str
     itemdesc: str
     class1cd: str
     class2cd: str
@@ -308,7 +333,8 @@ class ItemResponse(BaseModel):
     dealer_price: Optional[Decimal] = None
     currentcost: Optional[Decimal] = None
     prodtaxtype: Optional[str] = None
-    analcode32: Optional[str] = None  # HSN Code
+    analcode32: Optional[str] = None  # Raw HSN Code
+    hsn_code: Optional[str] = None    # Friendly Alias
     sfield1: Optional[str] = None     # Barcode
     isinventoryitem: Optional[bool] = None
     isbillable: Optional[bool] = None
@@ -381,7 +407,7 @@ class PriceLevelUpdate(BaseModel):
 
 class StockMatrixEntry(BaseModel):
     locnid: int = Field(default=0)
-    batchsrlno: int = Field(default=0)
+    batchsrlno: str = Field(default="0")
     curbalqty: Decimal = Field(default=Decimal("0"))
     curbalval: Decimal = Field(default=Decimal("0"))
 

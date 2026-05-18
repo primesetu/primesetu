@@ -1,0 +1,51 @@
+[
+  {
+    "desttaxtype": "LOCAL", "prodtaxtype": "GST0",  "srctaxtype": "LOCAL",
+    "taxdesc": "GST 0% (Nil Rated)", "compcnt": 0,
+    "t1name": null, "t1descr": null, "t1type": null, "t1rate": 0, "t1taxinclusive": true, "t1taxprintbill": false
+  },
+  {
+    "desttaxtype": "LOCAL", "prodtaxtype": "GST5",  "srctaxtype": "LOCAL",
+    "taxdesc": "GST 5% (CGST 2.5% + SGST 2.5%)", "compcnt": 2,
+    "t1name": "CGST", "t1descr": "Central GST", "t1type": "P", "t1derivedformula": "MRP*2.5/102.5", "t1compon": "MRP", "t1rate": 2.5, "t1taxinclusive": true, "t1taxprintbill": true,
+    "t2name": "SGST", "t2descr": "State GST",   "t2type": "P", "t2derivedformula": "MRP*2.5/102.5", "t2compon": "MRP", "t2rate": 2.5, "t2taxinclusive": true, "t2taxprintbill": true
+  },
+  {
+    "desttaxtype": "LOCAL", "prodtaxtype": "GST12", "srctaxtype": "LOCAL",
+    "taxdesc": "GST 12% (CGST 6% + SGST 6%)", "compcnt": 2,
+    "t1name": "CGST", "t1descr": "Central GST", "t1type": "P", "t1derivedformula": "MRP*6/112", "t1compon": "MRP", "t1rate": 6.0, "t1taxinclusive": true, "t1taxprintbill": true,
+    "t2name": "SGST", "t2descr": "State GST",   "t2type": "P", "t2derivedformula": "MRP*6/112", "t2compon": "MRP", "t2rate": 6.0, "t2taxinclusive": true, "t2taxprintbill": true
+  },
+  {
+    "desttaxtype": "LOCAL", "prodtaxtype": "GST18", "srctaxtype": "LOCAL",
+    "taxdesc": "GST 18% (CGST 9% + SGST 9%)", "compcnt": 2,
+    "t1name": "CGST", "t1descr": "Central GST", "t1type": "P", "t1derivedformula": "MRP*9/118", "t1compon": "MRP", "t1rate": 9.0, "t1taxinclusive": true, "t1taxprintbill": true,
+    "t2name": "SGST", "t2descr": "State GST",   "t2type": "P", "t2derivedformula": "MRP*9/118", "t2compon": "MRP", "t2rate": 9.0, "t2taxinclusive": true, "t2taxprintbill": true
+  },
+  {
+    "desttaxtype": "LOCAL", "prodtaxtype": "GST28", "srctaxtype": "LOCAL",
+    "taxdesc": "GST 28% (CGST 14% + SGST 14%)", "compcnt": 2,
+    "t1name": "CGST", "t1descr": "Central GST", "t1type": "P", "t1derivedformula": "MRP*14/128", "t1compon": "MRP", "t1rate": 14.0, "t1taxinclusive": true, "t1taxprintbill": true,
+    "t2name": "SGST", "t2descr": "State GST",   "t2type": "P", "t2derivedformula": "MRP*14/128", "t2compon": "MRP", "t2rate": 14.0, "t2taxinclusive": true, "t2taxprintbill": true
+  },
+  {
+    "desttaxtype": "INTER",  "prodtaxtype": "GST5",  "srctaxtype": "INTER",
+    "taxdesc": "IGST 5% (Inter-state)", "compcnt": 1,
+    "t1name": "IGST", "t1descr": "Integrated GST", "t1type": "P", "t1derivedformula": "MRP*5/105", "t1compon": "MRP", "t1rate": 5.0, "t1taxinclusive": true, "t1taxprintbill": true
+  },
+  {
+    "desttaxtype": "INTER",  "prodtaxtype": "GST12", "srctaxtype": "INTER",
+    "taxdesc": "IGST 12% (Inter-state)", "compcnt": 1,
+    "t1name": "IGST", "t1descr": "Integrated GST", "t1type": "P", "t1derivedformula": "MRP*12/112", "t1compon": "MRP", "t1rate": 12.0, "t1taxinclusive": true, "t1taxprintbill": true
+  },
+  {
+    "desttaxtype": "INTER",  "prodtaxtype": "GST18", "srctaxtype": "INTER",
+    "taxdesc": "IGST 18% (Inter-state)", "compcnt": 1,
+    "t1name": "IGST", "t1descr": "Integrated GST", "t1type": "P", "t1derivedformula": "MRP*18/118", "t1compon": "MRP", "t1rate": 18.0, "t1taxinclusive": true, "t1taxprintbill": true
+  },
+  {
+    "desttaxtype": "INTER",  "prodtaxtype": "GST28", "srctaxtype": "INTER",
+    "taxdesc": "IGST 28% (Inter-state)", "compcnt": 1,
+    "t1name": "IGST", "t1descr": "Integrated GST", "t1type": "P", "t1derivedformula": "MRP*28/128", "t1compon": "MRP", "t1rate": 28.0, "t1taxinclusive": true, "t1taxprintbill": true
+  }
+]

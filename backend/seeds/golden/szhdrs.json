@@ -1,0 +1,7 @@
+[
+  { "sizegroup": "APPAREL", "sizedesc": "Standard Apparel Sizes (XS-XXXL)", "activeflag": true },
+  { "sizegroup": "BOTTOM",  "sizedesc": "Bottom/Trouser Sizes (28-44)",     "activeflag": true },
+  { "sizegroup": "SHOE",    "sizedesc": "Footwear Sizes (5-12)",             "activeflag": true },
+  { "sizegroup": "FREE",    "sizedesc": "Free Size / One Size",              "activeflag": true },
+  { "sizegroup": "KID",     "sizedesc": "Kids Apparel Sizes (2Y-14Y)",       "activeflag": true }
+]

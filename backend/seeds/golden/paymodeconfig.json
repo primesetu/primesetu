@@ -1,0 +1,12 @@
+[
+  {"paymodetype": 1, "paymodetypedesc": "Cash",             "billingcomponent": 1, "submissioncomponent": 1, "realisationcomponent": 1, "activeflag": 1, "typeofpaymode": "C", "userdefined": 0},
+  {"paymodetype": 2, "paymodetypedesc": "Credit Card",      "billingcomponent": 1, "submissioncomponent": 1, "realisationcomponent": 1, "activeflag": 1, "typeofpaymode": "K", "userdefined": 0},
+  {"paymodetype": 3, "paymodetypedesc": "Debit Card",       "billingcomponent": 1, "submissioncomponent": 1, "realisationcomponent": 1, "activeflag": 1, "typeofpaymode": "K", "userdefined": 0},
+  {"paymodetype": 4, "paymodetypedesc": "Cheque",           "billingcomponent": 1, "submissioncomponent": 1, "realisationcomponent": 0, "activeflag": 1, "typeofpaymode": "H", "userdefined": 0},
+  {"paymodetype": 5, "paymodetypedesc": "Gift Voucher",     "billingcomponent": 1, "submissioncomponent": 1, "realisationcomponent": 1, "activeflag": 1, "typeofpaymode": "G", "userdefined": 0},
+  {"paymodetype": 6, "paymodetypedesc": "Loyalty Points",   "billingcomponent": 1, "submissioncomponent": 1, "realisationcomponent": 1, "activeflag": 1, "typeofpaymode": "L", "userdefined": 0},
+  {"paymodetype": 7, "paymodetypedesc": "UPI",              "billingcomponent": 1, "submissioncomponent": 1, "realisationcomponent": 1, "activeflag": 1, "typeofpaymode": "U", "userdefined": 0},
+  {"paymodetype": 8, "paymodetypedesc": "Net Banking",      "billingcomponent": 1, "submissioncomponent": 1, "realisationcomponent": 1, "activeflag": 1, "typeofpaymode": "N", "userdefined": 0},
+  {"paymodetype": 9, "paymodetypedesc": "Meal Voucher",     "billingcomponent": 1, "submissioncomponent": 1, "realisationcomponent": 1, "activeflag": 1, "typeofpaymode": "M", "userdefined": 1},
+  {"paymodetype": 10,"paymodetypedesc": "Demand Draft",     "billingcomponent": 1, "submissioncomponent": 1, "realisationcomponent": 0, "activeflag": 1, "typeofpaymode": "D", "userdefined": 0}
+]

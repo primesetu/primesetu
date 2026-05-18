@@ -1,0 +1,10 @@
+[
+  { "tilltrntype": 1, "tillindex": 1, "acptcap": "Cash in Drawer",       "dispcap": "Cash",        "acptvisible": true, "dispvisible": true, "acptpos": 1, "disppos": 1, "acptdatatype": 6, "dispdatatype": 6, "acptwidth": 80.0, "dispwidth": 80.0, "acptalign": 1, "dispalign": 1 },
+  { "tilltrntype": 1, "tillindex": 2, "acptcap": "Opening Float",         "dispcap": "Float",       "acptvisible": true, "dispvisible": true, "acptpos": 2, "disppos": 2, "acptdatatype": 6, "dispdatatype": 6, "acptwidth": 80.0, "dispwidth": 80.0, "acptalign": 1, "dispalign": 1 },
+  { "tilltrntype": 1, "tillindex": 3, "acptcap": "Remarks",               "dispcap": "Remarks",     "acptvisible": true, "dispvisible": true, "acptpos": 3, "disppos": 3, "acptdatatype": 2, "dispdatatype": 2, "acptwidth": 120.0, "dispwidth": 120.0, "acptalign": 0, "dispalign": 0 },
+
+  { "tilltrntype": 2, "tillindex": 1, "acptcap": "Cash Counted",          "dispcap": "Cash",        "acptvisible": true, "dispvisible": true, "acptpos": 1, "disppos": 1, "acptdatatype": 6, "dispdatatype": 6, "acptwidth": 80.0, "dispwidth": 80.0, "acptalign": 1, "dispalign": 1 },
+  { "tilltrntype": 2, "tillindex": 2, "acptcap": "Card Amount",           "dispcap": "Card",        "acptvisible": true, "dispvisible": true, "acptpos": 2, "disppos": 2, "acptdatatype": 6, "dispdatatype": 6, "acptwidth": 80.0, "dispwidth": 80.0, "acptalign": 1, "dispalign": 1 },
+  { "tilltrntype": 2, "tillindex": 3, "acptcap": "UPI Amount",            "dispcap": "UPI",         "acptvisible": true, "dispvisible": true, "acptpos": 3, "disppos": 3, "acptdatatype": 6, "dispdatatype": 6, "acptwidth": 80.0, "dispwidth": 80.0, "acptalign": 1, "dispalign": 1 },
+  { "tilltrntype": 2, "tillindex": 4, "acptcap": "Closing Remarks",       "dispcap": "Remarks",     "acptvisible": true, "dispvisible": true, "acptpos": 4, "disppos": 4, "acptdatatype": 2, "dispdatatype": 2, "acptwidth": 120.0, "dispwidth": 120.0, "acptalign": 0, "dispalign": 0 }
+]

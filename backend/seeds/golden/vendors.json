@@ -1,0 +1,8 @@
+[
+  {
+    "code": "HO",      "nm": "Head Office (HO)", "srctaxtype": "LOCAL", "allowpartposupply": true, "vendortype": "C", "commissionpercent": 0, "poapplicable": 1, "ptfileapplicable": 0
+  },
+  {
+    "code": "RAYMOND", "nm": "Raymond Limited",   "srctaxtype": "INTER", "allowpartposupply": true, "vendortype": "C", "commissionpercent": 0, "poapplicable": 1, "ptfileapplicable": 1, "ptfilesuffix": "RBL"
+  }
+]

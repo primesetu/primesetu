@@ -1,0 +1,11 @@
+[
+  { "paymodecode": "VISA",     "schemecode": "NONE", "addnlchrgcd": "NONE", "applicable": 0, "percentoramt": 1, "addnlchrgvalue": 0.0 },
+  { "paymodecode": "MASTERCD", "schemecode": "NONE", "addnlchrgcd": "NONE", "applicable": 0, "percentoramt": 1, "addnlchrgvalue": 0.0 },
+  { "paymodecode": "RUPAY",    "schemecode": "NONE", "addnlchrgcd": "NONE", "applicable": 0, "percentoramt": 1, "addnlchrgvalue": 0.0 },
+  { "paymodecode": "DEBIT",    "schemecode": "NONE", "addnlchrgcd": "NONE", "applicable": 0, "percentoramt": 1, "addnlchrgvalue": 0.0 },
+  { "paymodecode": "AMEX",     "schemecode": "NONE", "addnlchrgcd": "NONE", "applicable": 0, "percentoramt": 1, "addnlchrgvalue": 0.0 },
+  { "paymodecode": "GPAY",     "schemecode": "NONE", "addnlchrgcd": "NONE", "applicable": 0, "percentoramt": 1, "addnlchrgvalue": 0.0 },
+  { "paymodecode": "PHONEPE",  "schemecode": "NONE", "addnlchrgcd": "NONE", "applicable": 0, "percentoramt": 1, "addnlchrgvalue": 0.0 },
+  { "paymodecode": "PAYTM",    "schemecode": "NONE", "addnlchrgcd": "NONE", "applicable": 0, "percentoramt": 1, "addnlchrgvalue": 0.0 },
+  { "paymodecode": "CHQ",      "schemecode": "NONE", "addnlchrgcd": "NONE", "applicable": 0, "percentoramt": 1, "addnlchrgvalue": 0.0 }
+]

@@ -65,7 +65,7 @@ export default function SchemesModule() {
            </div>
            <h1 className="module-title text-5xl tracking-tighter">Promotions Cockpit</h1>
            <p className="text-xs text-navy/40 font-bold uppercase tracking-widest mt-4 flex items-center gap-2">
-             <Trophy className="w-3.5 h-3.5" /> Shoper 9 Compatible Scheme Engine Active
+             <Trophy className="w-3.5 h-3.5" /> SMRITI Compatible Scheme Engine Active
            </p>
         </div>
 

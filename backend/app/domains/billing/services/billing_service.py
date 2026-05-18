@@ -16,7 +16,7 @@ from sqlalchemy.orm import selectinload
 from fastapi import HTTPException
 
 from app.models.base import Transaction, TransactionItem, DraftBillItem
-from app.models.legacy_s9 import Itemmaster, Stockmaster, Stktrndtls, Stktrnaddldtls
+from app.models.legacy_s9 import Itemmaster, Stockmaster, Stktrndtls, Stktrnaddldtls, Stktrnhdr
 from app.models.idempotency import SmritiIdempotency
 from app.schemas.billing import TransactionCreate
 from app.services.config import ConfigService
@@ -190,6 +190,15 @@ class BillingService:
                 tenant_id     = store_id,
             ))
 
+            # [R1.5] Deduct from Stockmaster
+            if legacy_item and item_in.stock_no:
+                # Deduct from Stockmaster (we could execute an UPDATE statement)
+                stmt = text(
+                    "UPDATE smriti_local.stockmaster SET curbalqty = curbalqty - :qty WHERE stockno = :stock_no AND vacompcode = :store_id"
+                )
+                await db.execute(stmt, {"qty": item_in.qty, "stock_no": item_in.stock_no, "store_id": store_id})
+
+
             # [R2] Preserve field lineage for Event Payload
             event_items.append({
                 "StockNo": item_in.stock_no,
@@ -206,6 +215,24 @@ class BillingService:
         new_txn.discount_total = disc_total
         new_txn.net_payable    = subtotal - disc_total
         db.add(new_txn)
+
+        # [R1] Shoper9 Header Ledger (legacy.Stktrnhdr)
+        db.add(Stktrnhdr(
+            trntype       = 2100,
+            trnctrlno     = trn_ctrl_no,
+            docnoprefix   = new_bill_no.split("/")[0] if "/" in new_bill_no else new_bill_no,
+            docno         = trn_ctrl_no,
+            docdt         = datetime.utcnow().date(),
+            doctime       = datetime.utcnow(),
+            totdocvalue   = float(subtotal) / 100,
+            totdocdisc    = float(disc_total) / 100,
+            totdoctax     = float(tax_total) / 100,
+            netdocvalue   = float(new_txn.net_payable) / 100,
+            vauid         = str(current_user_id),
+            vacompcode    = store_id,
+            docvoidind    = False,
+            tenant_id     = store_id,
+        ))
 
         # STEP 5: Payment settlement (legacy.Stktrnaddldtls)
         event_payments = []

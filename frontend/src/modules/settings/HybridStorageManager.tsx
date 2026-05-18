@@ -106,7 +106,7 @@ const HybridStorageManager: React.FC = () => {
               </div>
               <div className="flex-1 text-right">
                 <div className="text-[10px] font-bold uppercase text-[var(--text-secondary)]">Database</div>
-                <div className="font-mono text-sm">Shoper9X01</div>
+                <div className="font-mono text-sm">SMRITIX01</div>
               </div>
             </div>
             {mode === 'SOVEREIGN' && (

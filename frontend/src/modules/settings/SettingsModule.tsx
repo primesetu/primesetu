@@ -125,7 +125,7 @@ export default function SettingsModule() {
           {activeTab !== 'store' && activeTab !== 'terminal' && activeTab !== 'personalization' && activeTab !== 'sysparam' && (
             <div className="py-20 text-center space-y-4">
               <div className="text-4xl grayscale opacity-20">⚙️</div>
-              <p className="font-serif italic text-muted text-lg">"{activeTab}" configurations are managed via Shoper9 Bridge.</p>
+              <p className="font-serif italic text-muted text-lg">"{activeTab}" configurations are managed via SMRITI Bridge.</p>
               <p className="text-[10px] uppercase font-black tracking-[2px] text-saffron">Phase 3 Integration Required</p>
             </div>
           )}

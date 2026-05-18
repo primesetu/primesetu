@@ -1,0 +1,11 @@
+[
+  { "linkrefid": "REF001", "terminalid": "T001", "trntype": 1,  "templatename": "SALE_BILL",     "templatetype": "B", "showprintpreview": 0 },
+  { "linkrefid": "REF002", "terminalid": "T001", "trntype": 2,  "templatename": "SALE_RETURN",   "templatetype": "B", "showprintpreview": 0 },
+  { "linkrefid": "REF003", "terminalid": "T001", "trntype": 11, "templatename": "GIR_RECEIPT",   "templatetype": "B", "showprintpreview": 0 },
+  { "linkrefid": "REF004", "terminalid": "T001", "trntype": 12, "templatename": "GIR_RETURN",    "templatetype": "B", "showprintpreview": 0 },
+  { "linkrefid": "REF005", "terminalid": "T001", "trntype": 21, "templatename": "STK_XFER_OUT",  "templatetype": "B", "showprintpreview": 0 },
+  { "linkrefid": "REF006", "terminalid": "T001", "trntype": 22, "templatename": "STK_XFER_IN",   "templatetype": "B", "showprintpreview": 0 },
+  { "linkrefid": "REF007", "terminalid": "T001", "trntype": 31, "templatename": "PHY_STOCK",     "templatetype": "B", "showprintpreview": 0 },
+  { "linkrefid": "REF008", "terminalid": "T001", "trntype": 41, "templatename": "TILL_OPEN",     "templatetype": "B", "showprintpreview": 0 },
+  { "linkrefid": "REF009", "terminalid": "T001", "trntype": 42, "templatename": "TILL_CLOSE",    "templatetype": "B", "showprintpreview": 1 }
+]

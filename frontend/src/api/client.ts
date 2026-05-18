@@ -63,6 +63,11 @@ apiClient.interceptors.request.use((config) => {
     config.headers['Authorization'] = `Bearer ${token}`
   }
 
+  const dbName = localStorage.getItem('X-Company-Db')
+  if (dbName) {
+    config.headers['X-Company-Db'] = dbName
+  }
+
   return config
 })
 

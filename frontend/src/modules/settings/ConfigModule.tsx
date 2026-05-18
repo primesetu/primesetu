@@ -394,7 +394,7 @@ export default function ConfigModule() {
                 "text-2xl font-serif font-black",
                 isInstitutional ? "text-[var(--text-primary)]" : "text-[var(--text-primary)]"
               )}>Label Management</h3>
-              <p className="text-[10px] text-[var(--text-tertiary)] font-bold uppercase tracking-widest mt-1">Override Institutional Shoper 9 Defaults</p>
+              <p className="text-[10px] text-[var(--text-tertiary)] font-bold uppercase tracking-widest mt-1">Override Institutional SMRITI Defaults</p>
             </div>
           </div>
 

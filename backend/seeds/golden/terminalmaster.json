@@ -1,0 +1,15 @@
+[
+  {
+    "terminalid":        "T001",
+    "terminaldesc":      "Main POS Terminal",
+    "terminalgroupid":   "GRP01",
+    "terminaltype":      1,
+    "activeflag":        true,
+    "isdefault":         true,
+    "printreceiptflag":  true,
+    "nodeid":            "NODE001",
+    "terminalipaddress": "127.0.0.1",
+    "printerport":       "LPT1",
+    "cashdrawerport":    "COM1"
+  }
+]

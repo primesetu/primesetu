@@ -1,0 +1,5 @@
+[
+  { "schemecode": "NONE",   "schemedescr": "No Scheme",         "schemeon": "B", "iscommonforall": 1, "schemestatus": 1 },
+  { "schemecode": "EMP10",  "schemedescr": "Employee 10% Disc", "schemeon": "B", "iscommonforall": 0, "schemestatus": 1 },
+  { "schemecode": "LOYALTY","schemedescr": "Loyalty Points",    "schemeon": "B", "iscommonforall": 1, "schemestatus": 1 }
+]

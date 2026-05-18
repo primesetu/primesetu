@@ -1,0 +1,4 @@
+[
+  { "schemecode": "EMP10", "srlno": 1, "groupsrlno": 1, "intermsof": "PERCENT", "schemevalue": 10.0, "basedon": "MRP", "slabfrom": 0.0, "slabto": 999999.0, "attributelevel": "ALL" },
+  { "schemecode": "LOYALTY", "srlno": 1, "groupsrlno": 1, "intermsof": "POINTS", "schemevalue": 1.0, "basedon": "MRP", "slabfrom": 0.0, "slabto": 999999.0, "attributelevel": "ALL" }
+]

@@ -59,7 +59,7 @@ export default function CatalogueDNA() {
             <Dna className="w-8 h-8 text-emerald-400" />
             Catalogue DNA (AnalCodes)
           </h2>
-          <p className="text-[10px] text-slate-500 font-bold uppercase tracking-widest mt-2">Parity with Shoper 9 CatalogSettings</p>
+          <p className="text-[10px] text-slate-500 font-bold uppercase tracking-widest mt-2">Parity with SMRITI CatalogSettings</p>
         </div>
         
         <div className="px-6 py-3 bg-emerald-500/10 text-emerald-400 rounded-2xl border border-emerald-500/20 flex items-center gap-3">
@@ -85,7 +85,7 @@ export default function CatalogueDNA() {
                   #{alias.code_index}
                 </div>
                 <div>
-                  <div className="text-[10px] font-black text-slate-500 uppercase tracking-widest">Shoper Identifier</div>
+                  <div className="text-[10px] font-black text-slate-500 uppercase tracking-widest">SMRITI Identifier</div>
                   <div className="text-xs font-bold text-white uppercase">{alias.code_type} {alias.code_index}</div>
                 </div>
               </div>

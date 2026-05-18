@@ -1,0 +1,31 @@
+[
+  { "appname": "POS",   "formname": "ITEMMASTER",   "fldname": "StockNo",      "shoperenvtype": 1, "pgmoption": 1, "userid": "*", "fldcaption": "Stock No",        "fldtype": "S", "fldenabled": 1, "displayflag": 1, "activeflag": 1 },
+  { "appname": "POS",   "formname": "ITEMMASTER",   "fldname": "ItemDesc",     "shoperenvtype": 1, "pgmoption": 1, "userid": "*", "fldcaption": "Description",     "fldtype": "S", "fldenabled": 1, "displayflag": 1, "activeflag": 1 },
+  { "appname": "POS",   "formname": "ITEMMASTER",   "fldname": "Class1Cd",     "shoperenvtype": 1, "pgmoption": 1, "userid": "*", "fldcaption": "Brand",           "fldtype": "S", "fldenabled": 1, "displayflag": 1, "activeflag": 1 },
+  { "appname": "POS",   "formname": "ITEMMASTER",   "fldname": "Class2Cd",     "shoperenvtype": 1, "pgmoption": 1, "userid": "*", "fldcaption": "Category",        "fldtype": "S", "fldenabled": 1, "displayflag": 1, "activeflag": 1 },
+  { "appname": "POS",   "formname": "ITEMMASTER",   "fldname": "SeasonsName",  "shoperenvtype": 1, "pgmoption": 1, "userid": "*", "fldcaption": "Season",          "fldtype": "S", "fldenabled": 1, "displayflag": 1, "activeflag": 1 },
+  { "appname": "POS",   "formname": "ITEMMASTER",   "fldname": "SizeCd",       "shoperenvtype": 1, "pgmoption": 1, "userid": "*", "fldcaption": "Size",            "fldtype": "S", "fldenabled": 1, "displayflag": 1, "activeflag": 1 },
+  { "appname": "POS",   "formname": "ITEMMASTER",   "fldname": "MRP",          "shoperenvtype": 1, "pgmoption": 1, "userid": "*", "fldcaption": "MRP",             "fldtype": "N", "fldenabled": 1, "displayflag": 1, "activeflag": 1 },
+  { "appname": "POS",   "formname": "ITEMMASTER",   "fldname": "CostPrice",    "shoperenvtype": 1, "pgmoption": 1, "userid": "*", "fldcaption": "Cost Price",      "fldtype": "N", "fldenabled": 0, "displayflag": 0, "activeflag": 1 },
+  { "appname": "POS",   "formname": "ITEMMASTER",   "fldname": "Barcode",      "shoperenvtype": 1, "pgmoption": 1, "userid": "*", "fldcaption": "Barcode",         "fldtype": "S", "fldenabled": 1, "displayflag": 1, "activeflag": 1 },
+  { "appname": "POS",   "formname": "ITEMMASTER",   "fldname": "ProdTaxType",  "shoperenvtype": 1, "pgmoption": 1, "userid": "*", "fldcaption": "GST Category",    "fldtype": "S", "fldenabled": 1, "displayflag": 1, "activeflag": 1 },
+  { "appname": "POS",   "formname": "ITEMMASTER",   "fldname": "SubClass1Cd",  "shoperenvtype": 1, "pgmoption": 1, "userid": "*", "fldcaption": "Sub-Cat 1",       "fldtype": "S", "fldenabled": 0, "displayflag": 0, "activeflag": 1 },
+  { "appname": "POS",   "formname": "ITEMMASTER",   "fldname": "SubClass2Cd",  "shoperenvtype": 1, "pgmoption": 1, "userid": "*", "fldcaption": "Sub-Cat 2",       "fldtype": "S", "fldenabled": 0, "displayflag": 0, "activeflag": 1 },
+
+  { "appname": "POS",   "formname": "SALEBILL",     "fldname": "Salesperson",  "shoperenvtype": 1, "pgmoption": 1, "userid": "*", "fldcaption": "Salesperson",     "fldtype": "S", "fldenabled": 1, "displayflag": 1, "activeflag": 1 },
+  { "appname": "POS",   "formname": "SALEBILL",     "fldname": "Remarks",      "shoperenvtype": 1, "pgmoption": 1, "userid": "*", "fldcaption": "Remarks",         "fldtype": "S", "fldenabled": 1, "displayflag": 1, "activeflag": 1 },
+  { "appname": "POS",   "formname": "SALEBILL",     "fldname": "CustCode",     "shoperenvtype": 1, "pgmoption": 1, "userid": "*", "fldcaption": "Customer",        "fldtype": "S", "fldenabled": 1, "displayflag": 1, "activeflag": 1 },
+  { "appname": "POS",   "formname": "SALEBILL",     "fldname": "LoyaltyAmt",   "shoperenvtype": 1, "pgmoption": 1, "userid": "*", "fldcaption": "Loyalty Points",  "fldtype": "N", "fldenabled": 1, "displayflag": 1, "activeflag": 1 },
+  { "appname": "POS",   "formname": "SALEBILL",     "fldname": "BillDisc",     "shoperenvtype": 1, "pgmoption": 1, "userid": "*", "fldcaption": "Bill Discount %", "fldtype": "N", "fldenabled": 1, "displayflag": 1, "activeflag": 1 },
+
+  { "appname": "INWARD","formname": "GIRENTRY",     "fldname": "SuppCode",     "shoperenvtype": 1, "pgmoption": 1, "userid": "*", "fldcaption": "Supplier",        "fldtype": "S", "fldenabled": 1, "displayflag": 1, "activeflag": 1 },
+  { "appname": "INWARD","formname": "GIRENTRY",     "fldname": "InvNo",        "shoperenvtype": 1, "pgmoption": 1, "userid": "*", "fldcaption": "Invoice No",      "fldtype": "S", "fldenabled": 1, "displayflag": 1, "activeflag": 1 },
+  { "appname": "INWARD","formname": "GIRENTRY",     "fldname": "InvDate",      "shoperenvtype": 1, "pgmoption": 1, "userid": "*", "fldcaption": "Invoice Date",    "fldtype": "D", "fldenabled": 1, "displayflag": 1, "activeflag": 1 },
+  { "appname": "INWARD","formname": "GIRENTRY",     "fldname": "SrcTaxType",   "shoperenvtype": 1, "pgmoption": 1, "userid": "*", "fldcaption": "Tax Type",        "fldtype": "S", "fldenabled": 1, "displayflag": 1, "activeflag": 1 },
+
+  { "appname": "POS",   "formname": "VENDORMASTER", "fldname": "VendCode",     "shoperenvtype": 1, "pgmoption": 1, "userid": "*", "fldcaption": "Supplier Code",   "fldtype": "S", "fldenabled": 1, "displayflag": 1, "activeflag": 1 },
+  { "appname": "POS",   "formname": "VENDORMASTER", "fldname": "VendName",     "shoperenvtype": 1, "pgmoption": 1, "userid": "*", "fldcaption": "Supplier Name",   "fldtype": "S", "fldenabled": 1, "displayflag": 1, "activeflag": 1 },
+  { "appname": "POS",   "formname": "VENDORMASTER", "fldname": "GSTIN",        "shoperenvtype": 1, "pgmoption": 1, "userid": "*", "fldcaption": "GSTIN",           "fldtype": "S", "fldenabled": 1, "displayflag": 1, "activeflag": 1 },
+  { "appname": "POS",   "formname": "VENDORMASTER", "fldname": "Mobile",       "shoperenvtype": 1, "pgmoption": 1, "userid": "*", "fldcaption": "Mobile",          "fldtype": "S", "fldenabled": 1, "displayflag": 1, "activeflag": 1 },
+  { "appname": "POS",   "formname": "VENDORMASTER", "fldname": "SrcTaxType",   "shoperenvtype": 1, "pgmoption": 1, "userid": "*", "fldcaption": "Tax Category",    "fldtype": "S", "fldenabled": 1, "displayflag": 1, "activeflag": 1 }
+]

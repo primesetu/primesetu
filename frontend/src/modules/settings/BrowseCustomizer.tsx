@@ -80,7 +80,7 @@ export default function BrowseCustomizer() {
       accessor: (row: any) => (
         <div className="flex flex-col py-2">
           <span className="font-black text-white uppercase text-xs tracking-tight">{row.field_name}</span>
-          <span className="text-[9px] text-slate-500 font-black uppercase tracking-widest mt-1">SHOPER_RECID: {row.shoper_recid || 'DYNAMIC'}</span>
+          <span className="text-[9px] text-slate-500 font-black uppercase tracking-widest mt-1">SMRITI_RECID: {row.shoper_recid || 'DYNAMIC'}</span>
         </div>
       ),
       flex: 1.5,
@@ -185,7 +185,7 @@ export default function BrowseCustomizer() {
            </div>
            <div>
              <Text variant="h1" className="font-serif font-black text-white uppercase tracking-tighter leading-none">Browse Customizer</Text>
-             <Text variant="xs" className="text-slate-500 font-black uppercase tracking-[0.4em] mt-3">Parity with Shoper 9 BrowseSettings · Sovereign UI Sync</Text>
+             <Text variant="xs" className="text-slate-500 font-black uppercase tracking-[0.4em] mt-3">Parity with SMRITI BrowseSettings · Sovereign UI Sync</Text>
            </div>
         </div>
         

@@ -88,6 +88,7 @@ const SystemSettings: React.FC = () => {
   const [search, setSearch] = useState('');
   const [toast, setToast] = useState<{ msg: string; ok: boolean } | null>(null);
   const [showHidden, setShowHidden] = useState(false);
+  const [oneTimeUpdated, setOneTimeUpdated] = useState<string[]>([]);
 
   const showToast = (msg: string, ok = true) => {
     setToast({ msg, ok });
@@ -125,7 +126,7 @@ const SystemSettings: React.FC = () => {
 
   /* ── Seed Handler ───────────────────────────────────────── */
   const handleSeed = async (profile: 'retail' | 'distributor') => {
-    if (!window.confirm(`This will load all 828 Shoper9 default parameters for the "${profile.toUpperCase()}" profile.\n\nExisting parameters will NOT be overwritten. Continue?`)) return;
+    if (!window.confirm(`This will load all 828 SMRITI default parameters for the "${profile.toUpperCase()}" profile.\n\nExisting parameters will NOT be overwritten. Continue?`)) return;
     setSeeding(profile);
     try {
       const res = await apiClient.post(`/config/sysparam/import-legacy?profile=${profile}`);
@@ -142,10 +143,22 @@ const SystemSettings: React.FC = () => {
 
   /* ── Save Handler ───────────────────────────────────────── */
   const handleUpdate = async (param: SysParam, updates: Record<string, any>) => {
+    if (param.fixed_type === 'One Time') {
+      const confirmChange = window.confirm(
+        `⚠️ Warning: "${param.param_code}" is a ONE-TIME configuration parameter.\n\nOnce set, it CANNOT be modified again during this active session. Do you want to proceed?`
+      );
+      if (!confirmChange) return;
+    }
+
     setSaving(param.param_code);
     try {
       await apiClient.patch(`/config/sysparam/${param.param_code}`, updates);
       setParams(prev => prev.map(p => p.param_code === param.param_code ? { ...p, ...updates } : p));
+      
+      if (param.fixed_type === 'One Time') {
+        setOneTimeUpdated(prev => [...prev, param.param_code]);
+      }
+      
       showToast(`Saved: ${param.param_code}`);
     } catch {
       showToast(`Failed to save: ${param.param_code}`, false);
@@ -189,7 +202,7 @@ const SystemSettings: React.FC = () => {
           <div>
             <h1 className="text-xl font-black uppercase tracking-tighter">System Parameters</h1>
             <p className="text-[10px] font-bold text-outline uppercase tracking-widest">
-              Shoper9-Parity · 828 Configuration Points · Sovereign Control
+              SMRITI-Parity · 828 Configuration Points · Sovereign Control
             </p>
           </div>
         </div>
@@ -324,8 +337,8 @@ const SystemSettings: React.FC = () => {
             <div className="grid grid-cols-1 xl:grid-cols-2 gap-3">
               {filtered.map(param => {
                 const opt = param.opt_type?.toUpperCase() ?? 'T';
-                const isLocked = param.fixed_type === 'Hidden' || param.fixed_type === 'Installation';
                 const isOneTime = param.fixed_type === 'One Time';
+                const isLocked = param.fixed_type === 'Hidden' || param.fixed_type === 'Installation' || (isOneTime && oneTimeUpdated.includes(param.param_code));
                 const isSaving = saving === param.param_code;
 
                 return (

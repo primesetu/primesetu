@@ -342,7 +342,7 @@ export default function ItemViewer() {
           </div>
         </div>
         <div className="flex items-center gap-4">
-          <span>Schema: Shoper9.ItemMaster</span>
+          <span>Schema: SMRITI.ItemMaster</span>
           <span>|</span>
           <div className="flex items-center gap-1">
             <Database className="w-3 h-3" />

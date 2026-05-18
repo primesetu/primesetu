@@ -1,4 +1,10 @@
 import asyncio
+import os
+import sys
+
+# Ensure 'backend/' is on the path so 'app.*' resolves from any CWD
+sys.path.insert(0, os.path.join(os.path.dirname(os.path.abspath(__file__)), ".."))
+
 from app.core.database import get_db_session
 from app.models.sovereign import SmritiSaleHdr, SmritiSaleDtl, SmritiItem, SmritiAuditLog
 from app.models.base import Partner, Transaction, LoyaltyLedger, Store, Customer
@@ -104,7 +110,4 @@ async def test_e2e_flow():
         print("[E2E] Validation completed successfully!")
 
 if __name__ == "__main__":
-    import os
-    import sys
-    sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
     asyncio.run(test_e2e_flow())

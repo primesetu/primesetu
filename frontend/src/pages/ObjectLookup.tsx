@@ -18,24 +18,51 @@ import { AllCommunityModule, ModuleRegistry, ColDef } from 'ag-grid-community';
 ModuleRegistry.registerModules([AllCommunityModule]);
 
 // S9 GenLookup Categories (Common RecIds)
+/**
+ * RECID_MAP — Maps Genlookup RecId → human-readable label.
+ * Derived from live GKP store SysParam (Retail_tmp.txt — 829 rows).
+ * RecIds 1-2: Item Classification (Class1/Class2)
+ * RecIds 51-54: Super-Classification, Size Group, Tax Type
+ * RecIds 55-64: Customer Classifications 1-5 + Customer Profiles 1-5
+ * RecIds 65-69: Item Analysis Codes 1-5 (Fibre, Finish, ColourBase, Styling, Usage)
+ * RecIds 7000+: Extended analysis codes, Grade, Location, HSN, Vendor
+ */
 const RECID_MAP: Record<number, string> = {
+  // ── Item Classification ──────────────────────────────────────────
   1: 'Product (Class1)',
   2: 'Brand (Class2)',
+  // ── Super Classification ─────────────────────────────────────────
   51: 'Department (SuperClass1)',
   52: 'Buyer (SuperClass2)',
+  // ── Size & Tax ───────────────────────────────────────────────────
   53: 'Size Group',
-  54: 'Tax Type',
-  65: 'Fibre',
-  66: 'Finish',
-  67: 'Colour Base',
-  68: 'Styling',
-  69: 'Usage',
-  7026: 'HSN (AnalCode32)',
+  54: 'Product Tax Type',
+  // ── Customer Classifications (CustClass1RecId=55..CustClass5RecId=59) ──
+  55: 'Religion (CustClass1)',
+  56: 'Ethnicity (CustClass2)',
+  57: 'Age Group (CustClass3)',
+  58: 'Profession (CustClass4)',
+  59: 'Type (CustClass5)',
+  // ── Customer Profiles (CustProfile1RecId=60..CustProfile5RecId=64) ──
+  60: 'Customer Profile 1',
+  61: 'Customer Profile 2',
+  62: 'Customer Profile 3',
+  63: 'Customer Profile 4',
+  64: 'Customer Profile 5',
+  // ── Item Analysis Codes (ItemAnaCd1RecId=65..ItemAnaCd5RecId=69) ─
+  65: 'Fibre (AC1)',
+  66: 'Finish (AC2)',
+  67: 'Colour Base (AC3)',
+  68: 'Styling (AC4)',
+  69: 'Usage (AC5)',
+  // ── Extended Analysis Codes (7000+) ──────────────────────────────
+  7026: 'HSN Code (AC32)',
   7030: 'Grade',
   7031: 'Location',
   7034: 'Vendor Group',
+  // ── POS / Payment ────────────────────────────────────────────────
   11: 'Pay Mode Category',
-  12: 'Tender Type'
+  12: 'Tender Type',
 };
 
 const ObjectLookup: React.FC = () => {
@@ -218,7 +245,7 @@ const ObjectLookup: React.FC = () => {
               Object Lookup
             </h1>
             <p className="text-[10px] text-[var(--text-tertiary)] font-mono tracking-widest u-uppercase">
-              Shoper9 Master Dictionary • RecId: {selectedRecId}
+              SMRITI Master Dictionary • RecId: {selectedRecId}
             </p>
           </div>
         </div>
@@ -312,14 +339,14 @@ const ObjectLookup: React.FC = () => {
             filter: true,
             resizable: true
           }}
-          overlayLoadingTemplate={'<span class="ag-overlay-loading-center">Accessing Shoper9 Vault...</span>'}
+          overlayLoadingTemplate={'<span class="ag-overlay-loading-center">Accessing SMRITI Vault...</span>'}
         />
       </div>
 
       {/* ── Footer ── */}
       <div className="p-3 bg-[var(--surface)] border-t border-[var(--border-subtle)] flex items-center justify-between text-[10px]">
         <div className="flex items-center gap-4 text-[var(--text-tertiary)] font-mono">
-          <span>TABLE: shoper9.genlookup</span>
+          <span>TABLE: SMRITI.genlookup</span>
           <span>SCHEMA: v3.0-SOVEREIGN</span>
         </div>
         <div className="flex items-center gap-2">

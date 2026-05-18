@@ -552,8 +552,8 @@ async def upsert_master(
         "vendors": ["code", "tenant_id"],
         "class12combo": ["class1cd", "class2cd", "tenant_id"],
         "genlookup": ["recid", "code", "tenant_id"],
-        "subclass1cat": ["subclass1cd", "tenant_id"],
-        "subclass2cat": ["subclass2cd", "tenant_id"]
+        "subclass1cat": ["class1cd", "class2cd", "subclass1cd", "tenant_id"],
+        "subclass2cat": ["class1cd", "class2cd", "subclass2cd", "tenant_id"]
     }
     
     pks = pk_map.get(table_name, ["id"])

@@ -1,0 +1,12 @@
+[
+  { "type": "L", "code": "CASH",   "nm": "Cash Account",          "yropbaldb": 0.0, "yropbalcr": 0.0, "curbaldb": 0.0, "curbalcr": 0.0 },
+  { "type": "L", "code": "SALES",  "nm": "Sales Account",         "yropbaldb": 0.0, "yropbalcr": 0.0, "curbaldb": 0.0, "curbalcr": 0.0 },
+  { "type": "L", "code": "PURCH",  "nm": "Purchase Account",      "yropbaldb": 0.0, "yropbalcr": 0.0, "curbaldb": 0.0, "curbalcr": 0.0 },
+  { "type": "L", "code": "CGST",   "nm": "CGST Payable",          "yropbaldb": 0.0, "yropbalcr": 0.0, "curbaldb": 0.0, "curbalcr": 0.0 },
+  { "type": "L", "code": "SGST",   "nm": "SGST Payable",          "yropbaldb": 0.0, "yropbalcr": 0.0, "curbaldb": 0.0, "curbalcr": 0.0 },
+  { "type": "L", "code": "IGST",   "nm": "IGST Payable",          "yropbaldb": 0.0, "yropbalcr": 0.0, "curbaldb": 0.0, "curbalcr": 0.0 },
+  { "type": "L", "code": "DISC",   "nm": "Discount Allowed",      "yropbaldb": 0.0, "yropbalcr": 0.0, "curbaldb": 0.0, "curbalcr": 0.0 },
+  { "type": "L", "code": "CARD",   "nm": "Card Receipts",         "yropbaldb": 0.0, "yropbalcr": 0.0, "curbaldb": 0.0, "curbalcr": 0.0 },
+  { "type": "L", "code": "UPI",    "nm": "UPI Receipts",          "yropbaldb": 0.0, "yropbalcr": 0.0, "curbaldb": 0.0, "curbalcr": 0.0 },
+  { "type": "L", "code": "RTNADJ", "nm": "Sales Return Adj",      "yropbaldb": 0.0, "yropbalcr": 0.0, "curbaldb": 0.0, "curbalcr": 0.0 }
+]

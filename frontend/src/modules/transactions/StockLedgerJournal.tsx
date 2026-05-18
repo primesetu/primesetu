@@ -141,7 +141,7 @@ const StockLedgerJournal: React.FC = () => {
           </div>
           <div>
             <h1 className="text-2xl font-black text-navy uppercase tracking-tight">Stock Ledger</h1>
-            <p className="text-[10px] text-muted font-bold uppercase tracking-widest">Sovereign Stock Movement Protocol • High Fidelity Shoper 9 Parity</p>
+            <p className="text-[10px] text-muted font-bold uppercase tracking-widest">Sovereign Stock Movement Protocol • High Fidelity SMRITI Parity</p>
           </div>
         </div>
 

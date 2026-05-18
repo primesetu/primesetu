@@ -3,6 +3,7 @@ import SmritiShell from '@/components/layout/SmritiShell';
 import POS from './pages/POS';
 import ConnectionSettings from './pages/ConnectionSettings';
 import CustomerMaster from './pages/CustomerMaster';
+import CompanySelector from './pages/CompanySelector'; // <== Imported CompanySelector
 
 // ── [R6] LAZY LOADED NON-CRITICAL ROUTES ─────────────────────────────────────
 const Dashboard = lazy(() => import('./pages/Dashboard'));
@@ -30,8 +31,6 @@ const BarcodeDesigner = lazy(() => import('./modules/tools/BarcodeDesigner'));
 const BulkItemImport = lazy(() => import('./modules/inventory/BulkItemImport'));
 const BatchBarcodeStudio = lazy(() => import('./modules/inventory/BatchBarcodeStudio'));
 
-
-
 // ── [R6] SYNCHRONOUS HOOKS & GUARDS ──────────────────────────────────────────
 import { useHoPulse } from '@/modules/ho/useHoPulse';
 import GovernanceGuard from './modules/ho/GovernanceGuard';
@@ -45,6 +44,17 @@ const App: React.FC = () => {
     const params = new URLSearchParams(window.location.search);
     return params.get('tab') || 'dashboard';
   });
+
+  const selectedCompany = localStorage.getItem('X-Company-Db');
+
+  // If no company is selected, render the CompanySelector exclusively.
+  if (!selectedCompany) {
+    return (
+      <Suspense fallback={PLACEHOLDER('Loading Data Providers...')}>
+        <CompanySelector />
+      </Suspense>
+    );
+  }
 
   const renderContent = () => {
     switch (activeTab) {
@@ -65,8 +75,6 @@ const App: React.FC = () => {
       case 'barcode-designer':      return <BarcodeDesigner />;
       case 'excel-injection':       return <BulkItemImport />;
       case 'batch-barcode':         return <BatchBarcodeStudio />;
-
-
 
       case 'stock-transfer':  return PLACEHOLDER('Stock Transfer');
       case 'day-end':         return PLACEHOLDER('Day End & Shift Close');

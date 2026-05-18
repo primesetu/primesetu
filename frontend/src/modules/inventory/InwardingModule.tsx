@@ -140,7 +140,7 @@ export default function InwardingModule({ onClose }: { onClose: () => void }) {
             </div>
             <div>
               <h2 className="text-3xl font-serif font-black">Goods Inwards (Sizewise GI)</h2>
-              <p className="text-[10px] text-white/40 uppercase tracking-[0.2em] font-bold">Node: WH1 | Mode: Shoper9 High-Fidelity Entry</p>
+              <p className="text-[10px] text-white/40 uppercase tracking-[0.2em] font-bold">Node: WH1 | Mode: SMRITI High-Fidelity Entry</p>
             </div>
           </div>
           <div className="flex items-center gap-4">

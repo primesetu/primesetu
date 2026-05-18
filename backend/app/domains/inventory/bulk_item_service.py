@@ -146,6 +146,7 @@ async def fetch_item_field_config(db: AsyncSession) -> Dict[str, Any]:
 async def upsert_genlookup_batch(
     db: AsyncSession,
     lookup_values: List[Dict[str, Any]],
+    tenant_id: str,
 ) -> Dict[str, int]:
     """
     Bulk-upserts values into Genlookup.
@@ -175,7 +176,7 @@ async def upsert_genlookup_batch(
             descr=entry.get("descr", entry["code"])[:40],
             flag=entry.get("flag", ""),
             number=entry.get("number", 0),
-            tenant_id="SYSTEM",
+            tenant_id=tenant_id,
         ).on_conflict_do_nothing(index_elements=["recid", "code"])
 
         result = await db.execute(stmt)
@@ -195,6 +196,7 @@ async def upsert_genlookup_batch(
 async def upsert_class12combo_batch(
     db: AsyncSession,
     combos: List[Dict[str, Any]],
+    tenant_id: str,
 ) -> Dict[str, int]:
     """
     Bulk upserts Class1+Class2 combinations into Class12combo.
@@ -228,7 +230,7 @@ async def upsert_class12combo_batch(
             "billable":        combo.get("billable", 1),
             "isservicecombo":  combo.get("isservicecombo", 0),
             "isconsignmentitem": combo.get("isconsignmentitem", False),
-            "tenant_id":       "SYSTEM",
+            "tenant_id":       tenant_id,
         }
 
         stmt = pg_insert(Class12combo).values(**values).on_conflict_do_nothing(
@@ -248,7 +250,7 @@ async def upsert_class12combo_batch(
 # STEP 4 — Core Itemmaster Bulk INSERT (Audit-Bypass Mode)
 # ──────────────────────────────────────────────────────────────────────
 
-def _build_item_row(item: Dict[str, Any], vauid: str, vacompcode: str) -> Dict[str, Any]:
+def _build_item_row(item: Dict[str, Any], vauid: str, vacompcode: str, tenant_id: str) -> Dict[str, Any]:
     """
     Builds a full Itemmaster column dict from raw payload.
     Applies all S9 null-safe defaults. No ORM, raw dict for bulk exec.
@@ -335,7 +337,7 @@ def _build_item_row(item: Dict[str, Any], vauid: str, vacompcode: str) -> Dict[s
         "vacompcode": vacompcode,
         "dateinsert":     now,
         "lastupdateddate": now,
-        "tenant_id": "SYSTEM",
+        "tenant_id": tenant_id,
 
         # ── Jewellery defaults (0 for non-jwl) ──
         "usejwlpricing": 0,
@@ -357,6 +359,7 @@ async def bulk_insert_itemmaster(
     items: List[Dict[str, Any]],
     vauid: str,
     vacompcode: str,
+    tenant_id: str,
 ) -> Dict[str, Any]:
     """
     High-speed bulk INSERT into Itemmaster. Skips existing stocknos.
@@ -382,7 +385,7 @@ async def bulk_insert_itemmaster(
             skipped.append(sno)
             continue
         try:
-            row = _build_item_row(item, vauid, vacompcode)
+            row = _build_item_row(item, vauid, vacompcode, tenant_id)
             to_insert.append(row)
         except Exception as e:
             errors.append({"stockno": sno, "error": str(e)})
@@ -413,6 +416,7 @@ async def init_stockmaster_batch(
     stocknos: List[str],
     vauid: str,
     vacompcode: str,
+    tenant_id: str,
 ) -> int:
     """
     Creates Stockmaster init row for each new item.
@@ -444,7 +448,7 @@ async def init_stockmaster_batch(
             "vauid":       vauid,
             "vatermid":    ".",
             "vacompcode":  vacompcode,
-            "tenant_id":   "SYSTEM",
+            "tenant_id":   tenant_id,
         }
         for sno in to_init
     ]
@@ -462,6 +466,7 @@ async def process_bulk_item_import(
     items: List[Dict[str, Any]],
     vauid: str,
     vacompcode: str,
+    tenant_id: str,
 ) -> Dict[str, Any]:
     """
     Full atomic bulk injection pipeline:
@@ -504,7 +509,7 @@ async def process_bulk_item_import(
                     recid = _AC_RECID_DEFAULTS.get(ac_num, 64 + ac_num)
                     lookup_values.append({"recid": recid, "code": val, "descr": val})
 
-        genlookup_result = await upsert_genlookup_batch(db, lookup_values)
+        genlookup_result = await upsert_genlookup_batch(db, lookup_values, tenant_id)
 
         # ── STEP 2: Build Class12combo payload ──
         combos = []
@@ -529,10 +534,10 @@ async def process_bulk_item_import(
                 "billable":     1,
             })
 
-        combo_result = await upsert_class12combo_batch(db, combos)
+        combo_result = await upsert_class12combo_batch(db, combos, tenant_id)
 
         # ── STEP 3: Itemmaster bulk INSERT ──
-        item_result = await bulk_insert_itemmaster(db, items, vauid, vacompcode)
+        item_result = await bulk_insert_itemmaster(db, items, vauid, vacompcode, tenant_id)
 
         # ── STEP 4: Stockmaster init ──
         inserted_stocknos = [
@@ -540,7 +545,7 @@ async def process_bulk_item_import(
             for item in items
             if str(item.get("stockno", "")).strip() not in item_result.get("skipped_codes", [])
         ]
-        stock_count = await init_stockmaster_batch(db, inserted_stocknos, vauid, vacompcode)
+        stock_count = await init_stockmaster_batch(db, inserted_stocknos, vauid, vacompcode, tenant_id)
 
         await db.commit()
 

@@ -49,7 +49,7 @@ export default function TaxMaster({ onClose }: { onClose: () => void }) {
       isOpen={true}
       onClose={onClose}
       title="Tax Master"
-      subtitle="GST Slab Configuration · Shoper 9 Compliance"
+      subtitle="GST Slab Configuration · SMRITI Compliance"
       icon={<Scale size={24} />}
       footer={
         <>

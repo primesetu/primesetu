@@ -1,5 +1,6 @@
 from typing import Optional
 from datetime import datetime
+from decimal import Decimal
 from sqlalchemy import String, Integer, Boolean, DateTime, Numeric, Float, BigInteger, text
 from sqlalchemy.orm import Mapped, mapped_column
 from .base import Base
@@ -27,15 +28,18 @@ class Genlookup(Base):
     """
     __tablename__ = 'genlookup'
     __table_args__ = {'schema': S9_SCHEMA, 'extend_existing': True}
+    tenant_id: Mapped[str] = mapped_column(String, default='SYSTEM', index=True)
 
     recid: Mapped[Integer] = mapped_column(Integer, primary_key=True, nullable=False)
     code: Mapped[String] = mapped_column(String, primary_key=True, nullable=False)
     descr: Mapped[Optional[String]] = mapped_column(String, nullable=True)
+    flag: Mapped[Optional[String]] = mapped_column(String, nullable=True)
     number: Mapped[Optional[Integer]] = mapped_column(Integer, nullable=True)
     vauid: Mapped[Optional[String]] = mapped_column(String, nullable=True)
     vactr: Mapped[Optional[Integer]] = mapped_column(Integer, nullable=True)
     vatermid: Mapped[Optional[String]] = mapped_column(String, nullable=True)
     vacompcode: Mapped[Optional[String]] = mapped_column(String, nullable=True)
+    rectype: Mapped[Optional[String]] = mapped_column(String, nullable=True)
 
 
 class Genlookupextd(Base):
@@ -45,15 +49,23 @@ class Genlookupextd(Base):
     """
     __tablename__ = 'genlookupextd'
     __table_args__ = {'schema': S9_SCHEMA, 'extend_existing': True}
+    tenant_id: Mapped[str] = mapped_column(String, default='SYSTEM', index=True)
 
     recid: Mapped[Integer] = mapped_column(Integer, primary_key=True, nullable=False)
-    code: Mapped[String] = mapped_column(String, primary_key=True, nullable=False)
-    extdcode1: Mapped[Optional[String]] = mapped_column(String, nullable=True)
-    extddescr1: Mapped[Optional[String]] = mapped_column(String, nullable=True)
-    extdcode2: Mapped[Optional[String]] = mapped_column(String, nullable=True)
-    extddescr2: Mapped[Optional[String]] = mapped_column(String, nullable=True)
+    category: Mapped[Optional[String]] = mapped_column(String, nullable=True)
+    iseditable: Mapped[Optional[Integer]] = mapped_column(Integer, nullable=True)
+    rectype: Mapped[Optional[String]] = mapped_column(String, nullable=True)
+    operations: Mapped[Optional[String]] = mapped_column(String, nullable=True)
+    addrules: Mapped[Optional[String]] = mapped_column(String, nullable=True)
+    editrules: Mapped[Optional[String]] = mapped_column(String, nullable=True)
+    deleterules: Mapped[Optional[String]] = mapped_column(String, nullable=True)
+    additional1: Mapped[Optional[String]] = mapped_column(String, nullable=True)
+    additional2: Mapped[Optional[String]] = mapped_column(String, nullable=True)
+    description: Mapped[Optional[String]] = mapped_column(String, nullable=True)
     vauid: Mapped[Optional[String]] = mapped_column(String, nullable=True)
     vactr: Mapped[Optional[Integer]] = mapped_column(Integer, nullable=True)
+    vatermid: Mapped[Optional[String]] = mapped_column(String, nullable=True)
+    vacompcode: Mapped[Optional[String]] = mapped_column(String, nullable=True)
 
 
 class Acceptdisplaydtls(Base):
@@ -2330,42 +2342,9 @@ class Franmismatchlog(Base):
     vatermid: Mapped[Optional[String]] = mapped_column(String, nullable=True)
     vacompcode: Mapped[Optional[String]] = mapped_column(String, nullable=True)
 
-class Genlookup(Base):
-    __tablename__ = 'genlookup'
-    __table_args__ = {'schema': S9_SCHEMA, 'extend_existing': True}
-    tenant_id: Mapped[str] = mapped_column(String, default='SYSTEM', index=True)
-
-    recid: Mapped[Integer] = mapped_column(Integer, primary_key=True, nullable=False)
-    code: Mapped[String] = mapped_column(String, primary_key=True, nullable=False)
-    descr: Mapped[Optional[String]] = mapped_column(String, nullable=True)
-    flag: Mapped[Optional[String]] = mapped_column(String, nullable=True)
-    number: Mapped[Optional[Integer]] = mapped_column(Integer, nullable=True)
-    vauid: Mapped[Optional[String]] = mapped_column(String, nullable=True)
-    vactr: Mapped[Optional[Integer]] = mapped_column(Integer, nullable=True)
-    vatermid: Mapped[Optional[String]] = mapped_column(String, nullable=True)
-    vacompcode: Mapped[Optional[String]] = mapped_column(String, nullable=True)
-    rectype: Mapped[Optional[String]] = mapped_column(String, nullable=True)
-
-class Genlookupextd(Base):
-    __tablename__ = 'genlookupextd'
-    __table_args__ = {'schema': S9_SCHEMA, 'extend_existing': True}
-    tenant_id: Mapped[str] = mapped_column(String, default='SYSTEM', index=True)
-
-    recid: Mapped[Integer] = mapped_column(Integer, primary_key=True, nullable=False)
-    category: Mapped[Optional[String]] = mapped_column(String, nullable=True)
-    iseditable: Mapped[Optional[Integer]] = mapped_column(Integer, nullable=True)
-    rectype: Mapped[Optional[String]] = mapped_column(String, nullable=True)
-    operations: Mapped[Optional[String]] = mapped_column(String, nullable=True)
-    addrules: Mapped[Optional[String]] = mapped_column(String, nullable=True)
-    editrules: Mapped[Optional[String]] = mapped_column(String, nullable=True)
-    deleterules: Mapped[Optional[String]] = mapped_column(String, nullable=True)
-    additional1: Mapped[Optional[String]] = mapped_column(String, nullable=True)
-    additional2: Mapped[Optional[String]] = mapped_column(String, nullable=True)
-    description: Mapped[Optional[String]] = mapped_column(String, nullable=True)
-    vauid: Mapped[Optional[String]] = mapped_column(String, nullable=True)
-    vactr: Mapped[Optional[Integer]] = mapped_column(Integer, nullable=True)
-    vatermid: Mapped[Optional[String]] = mapped_column(String, nullable=True)
-    vacompcode: Mapped[Optional[String]] = mapped_column(String, nullable=True)
+# NOTE: Genlookup and Genlookupextd are defined at the top of this file (lines 20-69).
+# The complete authoritative definitions with tenant_id, flag, rectype etc. are there.
+# Do NOT re-define them here to avoid SQLAlchemy SAWarning and string-lookup conflicts.
 
 class Gs1dtls(Base):
     __tablename__ = 'gs1dtls'
@@ -8291,6 +8270,21 @@ class Subclass2cat(Base):
     lastupdateddate: Mapped[Optional[DateTime]] = mapped_column(DateTime, nullable=True)
 
 class Sysparam(Base):
+    """
+    Universal system parameter store for all Shoper9 configuration.
+    829 live rows from GKP store cover: Item Classification, Billing, Tax,
+    Print, Browse, Reports, POS Device, Data Sync, Franchisee, and more.
+
+    Key columns used in Smriti:
+      - paramcode: The lookup key used in application logic
+      - boolean/intg/txt/dt/sng/cur: Typed value fields (use 'opt' to know which)
+      - opt: 'B'=Boolean, 'I'=Integer, 'T'=Text, 'D'=Date, 'S'=Single, 'C'=Currency
+      - fixed: 'Variable'|'One Time'|'Hidden'|'Fixed'|'Installation' — editability class
+      - changed: Version/change counter (incremented on update for sync)
+      - category/catdescr: Parameter group (e.g. '03. Item Classification')
+      - disporder: Display order within category
+      - wz/wztype/wzorder: Wizard configuration for parameter entry UI
+    """
     __tablename__ = 'sysparam'
     __table_args__ = {'schema': S9_SCHEMA, 'extend_existing': True}
     tenant_id: Mapped[str] = mapped_column(String, default='SYSTEM', index=True)
@@ -8309,9 +8303,15 @@ class Sysparam(Base):
     vactr: Mapped[Optional[Integer]] = mapped_column(Integer, nullable=True)
     vatermid: Mapped[Optional[String]] = mapped_column(String, nullable=True)
     vacompcode: Mapped[Optional[String]] = mapped_column(String, nullable=True)
-    category: Mapped[Optional[String]] = mapped_column(String, nullable=True)
-    catdescr: Mapped[Optional[String]] = mapped_column(String, nullable=True)
-    disporder: Mapped[Optional[Integer]] = mapped_column(Integer, nullable=True)
+    # --- Extended metadata columns (present in all 829 GKP SysParam rows) ---
+    fixed: Mapped[Optional[String]] = mapped_column(String, nullable=True)     # Editability: Variable/One Time/Hidden/Fixed/Installation
+    changed: Mapped[Optional[Integer]] = mapped_column(Integer, nullable=True) # Change counter for sync/versioning
+    category: Mapped[Optional[String]] = mapped_column(String, nullable=True)  # e.g. '03. Item Classification'
+    catdescr: Mapped[Optional[String]] = mapped_column(String, nullable=True)  # Category description
+    disporder: Mapped[Optional[Integer]] = mapped_column(Integer, nullable=True) # Display order in UI
+    wz: Mapped[Optional[Integer]] = mapped_column(Integer, nullable=True)       # Wizard group
+    wztype: Mapped[Optional[String]] = mapped_column(String, nullable=True)     # Wizard type label
+    wzorder: Mapped[Optional[Integer]] = mapped_column(Integer, nullable=True)  # Wizard display order
 
 class Sysparamextd(Base):
     __tablename__ = 'sysparamextd'
@@ -9167,3 +9167,245 @@ class Walkin(Base):
     shoperdbver: Mapped[Optional[Integer]] = mapped_column(Integer, nullable=True)
     walkoutcount: Mapped[Optional[Integer]] = mapped_column(Integer, nullable=True)
     adjustfactorapplicable: Mapped[Optional[String]] = mapped_column(String, nullable=True)
+
+
+# ─────────────────────────────────────────────────────────────────────────────
+#  GOLDEN SEED — Phase 1 models (missing from auto-generated file)
+#  Added manually to ensure Base.metadata.create_all() creates these tables.
+# ─────────────────────────────────────────────────────────────────────────────
+
+class SzHdrs(Base):
+    """
+    Size Group Headers — defines apparel/footwear size families.
+    e.g.: APPAREL (XS→XXXL), BOTTOM (28→44), SHOE (UK 5→12), KIDS, FREE SIZE.
+    Each group links to SzCatDtls for the individual size codes.
+    """
+    __tablename__ = 'szhdrs'
+    __table_args__ = {'schema': S9_SCHEMA, 'extend_existing': True}
+
+    tenant_id:    Mapped[str]            = mapped_column(String, default='SYSTEM', index=True)
+    szgrpcd:      Mapped[str]            = mapped_column(String, primary_key=True)
+    szgrpdescr:   Mapped[Optional[str]]  = mapped_column(String, nullable=True)
+    noofszs:      Mapped[Optional[int]]  = mapped_column(Integer, nullable=True)
+    activeflag:   Mapped[Optional[int]]  = mapped_column(Integer, nullable=True)
+    vauid:        Mapped[Optional[str]]  = mapped_column(String, nullable=True)
+    vactr:        Mapped[Optional[int]]  = mapped_column(Integer, nullable=True)
+    vatermid:     Mapped[Optional[str]]  = mapped_column(String, nullable=True)
+    vacompcode:   Mapped[Optional[str]]  = mapped_column(String, nullable=True)
+    shoperdbver:  Mapped[Optional[int]]  = mapped_column(Integer, nullable=True)
+
+
+class SzCatDtls(Base):
+    """
+    Size Category Details — individual size codes within each size group.
+    FK: szgrpcd → szhdrs.szgrpcd
+    e.g.: APPAREL / XS, S, M, L, XL, XXL, XXXL
+    """
+    __tablename__ = 'szcatdtls'
+    __table_args__ = {'schema': S9_SCHEMA, 'extend_existing': True}
+
+    tenant_id:    Mapped[str]            = mapped_column(String, default='SYSTEM', index=True)
+    szgrpcd:      Mapped[str]            = mapped_column(String, primary_key=True)
+    szcd:         Mapped[str]            = mapped_column(String, primary_key=True)
+    szdescr:      Mapped[Optional[str]]  = mapped_column(String, nullable=True)
+    szsrlno:      Mapped[Optional[int]]  = mapped_column(Integer, nullable=True)
+    activeflag:   Mapped[Optional[int]]  = mapped_column(Integer, nullable=True)
+    vauid:        Mapped[Optional[str]]  = mapped_column(String, nullable=True)
+    vactr:        Mapped[Optional[int]]  = mapped_column(Integer, nullable=True)
+    vatermid:     Mapped[Optional[str]]  = mapped_column(String, nullable=True)
+    vacompcode:   Mapped[Optional[str]]  = mapped_column(String, nullable=True)
+    shoperdbver:  Mapped[Optional[int]]  = mapped_column(Integer, nullable=True)
+
+
+class TerminalMaster(Base):
+    """
+    POS Terminal Registration — one row per billing workstation.
+    terminalid (e.g. T001) is the session key used by Till Open/Close.
+    terminaltype: 1=POS, 2=BackOffice, 3=Mobile.
+    """
+    __tablename__ = 'terminalmaster'
+    __table_args__ = {'schema': S9_SCHEMA, 'extend_existing': True}
+
+    tenant_id:          Mapped[str]            = mapped_column(String, default='SYSTEM', index=True)
+    terminalid:         Mapped[str]            = mapped_column(String, primary_key=True)
+    terminaldesc:       Mapped[Optional[str]]  = mapped_column(String, nullable=True)
+    terminalgroupid:    Mapped[Optional[str]]  = mapped_column(String, nullable=True)
+    terminaltype:       Mapped[Optional[int]]  = mapped_column(Integer, nullable=True)
+    activeflag:         Mapped[Optional[int]]  = mapped_column(Integer, nullable=True)
+    isdefault:          Mapped[Optional[int]]  = mapped_column(Integer, nullable=True)
+    printreceiptflag:   Mapped[Optional[int]]  = mapped_column(Integer, nullable=True)
+    nodeid:             Mapped[Optional[str]]  = mapped_column(String, nullable=True)
+    terminalipaddress:  Mapped[Optional[str]]  = mapped_column(String, nullable=True)
+    printerport:        Mapped[Optional[str]]  = mapped_column(String, nullable=True)
+    cashdrawerport:     Mapped[Optional[str]]  = mapped_column(String, nullable=True)
+    vauid:              Mapped[Optional[str]]  = mapped_column(String, nullable=True)
+    vactr:              Mapped[Optional[int]]  = mapped_column(Integer, nullable=True)
+    vatermid:           Mapped[Optional[str]]  = mapped_column(String, nullable=True)
+    vacompcode:         Mapped[Optional[str]]  = mapped_column(String, nullable=True)
+    shoperdbver:        Mapped[Optional[int]]  = mapped_column(Integer, nullable=True)
+
+# =========================================================================
+# Purchase Order Tables (Added for Smriti Purchase Protocol v2.0)
+# =========================================================================
+
+class Purchordconfig(Base):
+    __tablename__ = 'purchordconfig'
+    classification: Mapped[str] = mapped_column(String(32), primary_key=True)
+    selected: Mapped[bool] = mapped_column(Boolean, default=False)
+    mandatory: Mapped[Optional[bool]] = mapped_column(Boolean)
+    disporder: Mapped[Optional[int]] = mapped_column(Integer)
+    vauid: Mapped[Optional[str]] = mapped_column(String(32))
+    vactr: Mapped[Optional[int]] = mapped_column(Integer)
+    vatermid: Mapped[Optional[str]] = mapped_column(String(32))
+    vacompcode: Mapped[Optional[str]] = mapped_column(String(16))
+    tenant_id: Mapped[str] = mapped_column(String, index=True, default="SYSTEM")
+
+class Purchordhdr(Base):
+    __tablename__ = 'purchordhdr'
+    potype: Mapped[int] = mapped_column(Integer, primary_key=True, default=0)
+    ponoprefix: Mapped[str] = mapped_column(String(8), primary_key=True)
+    poctrlno: Mapped[int] = mapped_column(Integer, primary_key=True)
+    supptype: Mapped[Optional[str]] = mapped_column(String(2))
+    suppid: Mapped[Optional[str]] = mapped_column(String(16))
+    podate: Mapped[Optional[datetime]] = mapped_column(DateTime)
+    ordcurrency: Mapped[Optional[str]] = mapped_column(String(16))
+    ordcurrencyval: Mapped[Optional[Decimal]] = mapped_column(Numeric(19, 4), default=0)
+    convrate: Mapped[Optional[Decimal]] = mapped_column(Numeric(19, 4), default=0)
+    loccurrencyval: Mapped[Optional[Decimal]] = mapped_column(Numeric(19, 4), default=0)
+    deldate: Mapped[Optional[datetime]] = mapped_column(DateTime)
+    shiptype: Mapped[Optional[str]] = mapped_column(String(16))
+    transmode: Mapped[Optional[str]] = mapped_column(String(16))
+    advanceper: Mapped[Optional[int]] = mapped_column(Integer, default=0)
+    ordcurrencyadvval: Mapped[Optional[Decimal]] = mapped_column(Numeric(19, 4), default=0)
+    loccurrencyadvval: Mapped[Optional[Decimal]] = mapped_column(Numeric(19, 4), default=0)
+    creditdays: Mapped[Optional[int]] = mapped_column(Integer, default=0)
+    isposizewise: Mapped[Optional[bool]] = mapped_column(Boolean, default=False)
+    vauid: Mapped[Optional[str]] = mapped_column(String(32))
+    vactr: Mapped[Optional[int]] = mapped_column(Integer, default=0)
+    vatermid: Mapped[Optional[str]] = mapped_column(String(32))
+    vacompcode: Mapped[Optional[str]] = mapped_column(String(16))
+    shipmentaddr: Mapped[Optional[str]] = mapped_column(String(250))
+    docremarks: Mapped[Optional[str]] = mapped_column(String(512))
+    delperiodindays: Mapped[Optional[int]] = mapped_column(Integer)
+    isconsignmentitemspo: Mapped[Optional[bool]] = mapped_column(Boolean)
+    buyercode: Mapped[Optional[float]] = mapped_column(Float)
+    sourcecompcd: Mapped[Optional[str]] = mapped_column(String(16))
+    posource: Mapped[Optional[int]] = mapped_column(Integer)
+    povendertype: Mapped[Optional[str]] = mapped_column(String(2))
+    povendorid: Mapped[Optional[str]] = mapped_column(String(16))
+    pobilltovendertype: Mapped[Optional[str]] = mapped_column(String(2))
+    pobilltovendorid: Mapped[Optional[str]] = mapped_column(String(16))
+    addonbeftaxhdrper: Mapped[Optional[Decimal]] = mapped_column(Numeric(19, 4))
+    addonafttaxhdrper: Mapped[Optional[Decimal]] = mapped_column(Numeric(19, 4))
+    deductbeftaxhdrper: Mapped[Optional[Decimal]] = mapped_column(Numeric(19, 4))
+    deductafttaxhdrper: Mapped[Optional[Decimal]] = mapped_column(Numeric(19, 4))
+    discountbeftaxhdrper: Mapped[Optional[Decimal]] = mapped_column(Numeric(19, 4))
+    discountafttaxhdrper: Mapped[Optional[Decimal]] = mapped_column(Numeric(19, 4))
+    dateinsert: Mapped[Optional[datetime]] = mapped_column(DateTime)
+    lastmodifieddt: Mapped[Optional[datetime]] = mapped_column(DateTime)
+    closuredate: Mapped[Optional[datetime]] = mapped_column(DateTime)
+    closureremarks: Mapped[Optional[str]] = mapped_column(String(256))
+    reopendatetime: Mapped[Optional[datetime]] = mapped_column(DateTime)
+    reopenremarks: Mapped[Optional[str]] = mapped_column(String(256))
+    shoperdbver: Mapped[Optional[int]] = mapped_column(Integer, default=730)
+    tenant_id: Mapped[str] = mapped_column(String, index=True, default="SYSTEM")
+
+class Purchorddtl(Base):
+    __tablename__ = 'purchorddtl'
+    potype: Mapped[int] = mapped_column(Integer, primary_key=True, default=0)
+    ponoprefix: Mapped[str] = mapped_column(String(8), primary_key=True)
+    poctrlno: Mapped[int] = mapped_column(Integer, primary_key=True)
+    deliverylocation: Mapped[str] = mapped_column(String(16), primary_key=True, default='NA')
+    entrysrlno: Mapped[int] = mapped_column(Integer, primary_key=True)
+    entrysubsrlno: Mapped[int] = mapped_column(Integer, primary_key=True)
+    podate: Mapped[Optional[datetime]] = mapped_column(DateTime)
+    itemclass1: Mapped[Optional[str]] = mapped_column(String(50))
+    itemclass2: Mapped[Optional[str]] = mapped_column(String(50))
+    itemsubclass1: Mapped[Optional[str]] = mapped_column(String(50))
+    itemsubclass2: Mapped[Optional[str]] = mapped_column(String(50))
+    itemsize: Mapped[Optional[str]] = mapped_column(String(50))
+    stockno: Mapped[Optional[str]] = mapped_column(String(32))
+    descr: Mapped[Optional[str]] = mapped_column(String(256))
+    purchordqty: Mapped[Optional[float]] = mapped_column(Float, default=0)
+    purchordrate: Mapped[Optional[Decimal]] = mapped_column(Numeric(19, 4), default=0)
+    pocurrency: Mapped[Optional[str]] = mapped_column(String(16))
+    convrate: Mapped[Optional[Decimal]] = mapped_column(Numeric(19, 4), default=0)
+    deldate: Mapped[Optional[datetime]] = mapped_column(DateTime)
+    rcvdqty: Mapped[Optional[Decimal]] = mapped_column(Numeric(19, 4), default=0)
+    planadhocind: Mapped[Optional[str]] = mapped_column(String(16))
+    poorgqty: Mapped[Optional[Decimal]] = mapped_column(Numeric(19, 4), default=0)
+    poind: Mapped[Optional[str]] = mapped_column(String(1))
+    vauid: Mapped[Optional[str]] = mapped_column(String(32))
+    vactr: Mapped[Optional[int]] = mapped_column(Integer, default=0)
+    vatermid: Mapped[Optional[str]] = mapped_column(String(32))
+    vacompcode: Mapped[Optional[str]] = mapped_column(String(16))
+    orderedmtrs: Mapped[Optional[Decimal]] = mapped_column(Numeric(19, 4))
+    cancelqty: Mapped[Optional[Decimal]] = mapped_column(Numeric(19, 4))
+    holdqty: Mapped[Optional[Decimal]] = mapped_column(Numeric(19, 4))
+    buyercode: Mapped[Optional[float]] = mapped_column(Float)
+    posource: Mapped[Optional[int]] = mapped_column(Integer)
+    sourcecompcd: Mapped[Optional[str]] = mapped_column(String(16))
+    poattributelevel: Mapped[Optional[str]] = mapped_column(String(64))
+    poappanlcount: Mapped[Optional[int]] = mapped_column(Integer)
+    line_remarks: Mapped[Optional[str]] = mapped_column("lineremarks", String(64))
+    doclinegrossvalue: Mapped[Optional[Decimal]] = mapped_column(Numeric(19, 4))
+    salestaxper: Mapped[Optional[Decimal]] = mapped_column(Numeric(19, 4))
+    salestaxamt: Mapped[Optional[Decimal]] = mapped_column(Numeric(19, 4))
+    doclinenetvalue: Mapped[Optional[Decimal]] = mapped_column(Numeric(19, 4))
+    poclosureflag: Mapped[Optional[int]] = mapped_column(Integer)
+    poconsolflag: Mapped[Optional[int]] = mapped_column(Integer)
+    dateinsert: Mapped[Optional[datetime]] = mapped_column(DateTime)
+    lastmodifieddt: Mapped[Optional[datetime]] = mapped_column(DateTime)
+    tenant_id: Mapped[str] = mapped_column(String, index=True, default="SYSTEM")
+
+class Purchordtrl(Base):
+    __tablename__ = 'purchordtrl'
+    ponoprefix: Mapped[str] = mapped_column(String(8), primary_key=True)
+    poctrlno: Mapped[int] = mapped_column(Integer, primary_key=True)
+    entrysrlno: Mapped[int] = mapped_column(Integer, primary_key=True)
+    entrytype: Mapped[Optional[str]] = mapped_column(String(2))
+    entryid: Mapped[Optional[str]] = mapped_column(String(16))
+    entryapponfrom: Mapped[Optional[int]] = mapped_column(Integer, default=0)
+    entryapponto: Mapped[Optional[int]] = mapped_column(Integer, default=0)
+    entrydesc: Mapped[Optional[str]] = mapped_column(String(50))
+    entryper: Mapped[Optional[float]] = mapped_column(Float, default=0)
+    ordcurrencyamt: Mapped[Optional[Decimal]] = mapped_column(Numeric(19, 4), default=0)
+    convrate: Mapped[Optional[Decimal]] = mapped_column(Numeric(19, 4), default=0)
+    loccurrencyamt: Mapped[Optional[Decimal]] = mapped_column(Numeric(19, 4), default=0)
+    vauid: Mapped[Optional[str]] = mapped_column(String(32))
+    vactr: Mapped[Optional[int]] = mapped_column(Integer, default=0)
+    vatermid: Mapped[Optional[str]] = mapped_column(String(32))
+    vacompcode: Mapped[Optional[str]] = mapped_column(String(16))
+    tenant_id: Mapped[str] = mapped_column(String, index=True, default="SYSTEM")
+
+class Purchplan(Base):
+    __tablename__ = 'purchplan'
+    deptsrlno: Mapped[int] = mapped_column(Integer, primary_key=True, default=0)
+    merchsrlno: Mapped[int] = mapped_column(Integer, primary_key=True, default=0)
+    entrysrlno: Mapped[int] = mapped_column(Integer, primary_key=True, default=0)
+    startdt: Mapped[Optional[datetime]] = mapped_column(DateTime)
+    enddt: Mapped[Optional[datetime]] = mapped_column(DateTime)
+    planby: Mapped[Optional[str]] = mapped_column(String(16))
+    planref: Mapped[Optional[str]] = mapped_column(String(50))
+    deptname: Mapped[Optional[str]] = mapped_column(String(50))
+    merchname: Mapped[Optional[str]] = mapped_column(String(50))
+    storatio: Mapped[Optional[float]] = mapped_column(Float, default=0)
+    superclass1: Mapped[Optional[str]] = mapped_column(String(16))
+    superclass2: Mapped[Optional[str]] = mapped_column(String(16))
+    itemclass1: Mapped[Optional[str]] = mapped_column(String(16))
+    itemclass2: Mapped[Optional[str]] = mapped_column(String(16))
+    regularind: Mapped[Optional[str]] = mapped_column(String(2))
+    opstkqty: Mapped[Optional[float]] = mapped_column(Float, default=0)
+    opstkval: Mapped[Optional[Decimal]] = mapped_column(Numeric(19, 4), default=0)
+    purchqty: Mapped[Optional[float]] = mapped_column(Float, default=0)
+    purchval: Mapped[Optional[Decimal]] = mapped_column(Numeric(19, 4), default=0)
+    saleqty: Mapped[Optional[float]] = mapped_column(Float, default=0)
+    salecost: Mapped[Optional[Decimal]] = mapped_column(Numeric(19, 4), default=0)
+    clstkqty: Mapped[Optional[float]] = mapped_column(Float, default=0)
+    clstkval: Mapped[Optional[Decimal]] = mapped_column(Numeric(19, 4), default=0)
+    saleval: Mapped[Optional[Decimal]] = mapped_column(Numeric(19, 4), default=0)
+    vauid: Mapped[Optional[str]] = mapped_column(String(32))
+    vactr: Mapped[Optional[int]] = mapped_column(Integer, default=0)
+    vatermid: Mapped[Optional[str]] = mapped_column(String(32))
+    vacompcode: Mapped[Optional[str]] = mapped_column(String(16))
+    tenant_id: Mapped[str] = mapped_column(String, index=True, default="SYSTEM")

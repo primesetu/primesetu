@@ -131,7 +131,7 @@ export default function ItemDetailsModal({ isOpen, onClose, item }: ItemDetailsM
         <div className="flex px-8 border-b border-[var(--border-subtle)] bg-[var(--background)]/20">
            {[
              { id: 'details', label: 'Item Details', icon: Info },
-             { id: 'legacy', label: 'Shoper 9 Raw Data', icon: Database },
+             { id: 'legacy', label: 'SMRITI Raw Data', icon: Database },
              { id: 'related', label: 'Combo Mappings (Class12)', icon: Layers }
            ].map(tab => (
              <button
@@ -258,7 +258,7 @@ export default function ItemDetailsModal({ isOpen, onClose, item }: ItemDetailsM
                 <div className="flex items-center justify-between">
                    <div className="flex items-center gap-2">
                       <Database size={16} className="text-[var(--accent)]" />
-                      <span className="text-xs font-black uppercase tracking-widest">Shoper 9 Raw Record Explorer</span>
+                      <span className="text-xs font-black uppercase tracking-widest">SMRITI Raw Record Explorer</span>
                    </div>
                    <Badge variant="muted">Table: itemmaster</Badge>
                 </div>
@@ -304,7 +304,7 @@ export default function ItemDetailsModal({ isOpen, onClose, item }: ItemDetailsM
                 ) : (
                   <div className="flex flex-col items-center justify-center p-20 text-center space-y-4">
                      <Layers size={48} className="text-[var(--text-tertiary)]/20" />
-                     <p className="text-xs font-bold text-[var(--text-tertiary)] uppercase tracking-widest">No combo mapping found for this combination in Shoper 9.</p>
+                     <p className="text-xs font-bold text-[var(--text-tertiary)] uppercase tracking-widest">No combo mapping found for this combination in SMRITI.</p>
                   </div>
                 )}
              </div>

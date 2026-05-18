@@ -96,7 +96,7 @@ export const SysparamManager: React.FC = () => {
             <Settings2 size={24} />
             <Text variant="h3">Sysparam Matrix</Text>
           </div>
-          <Text variant="xs" className="text-text-tertiary">Shoper 9 Core Configuration Engine</Text>
+          <Text variant="xs" className="text-text-tertiary">SMRITI Core Configuration Engine</Text>
         </div>
         <div className="flex-1 overflow-y-auto p-4 space-y-1 custom-scrollbar">
           {categories.map(cat => (

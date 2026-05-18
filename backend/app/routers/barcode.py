@@ -247,7 +247,7 @@ async def print_barcode(
                     "barcode": item.stockno,
                     "size": getattr(item, "sizecd", "") or "",
                     "colour": getattr(item, "subclass2cd", "") or "",
-                    "hsn_code": getattr(item, "hsncd", "") or "",
+                    "hsn_code": getattr(item, "analcode32", "") or "",
                     "store_name": store.name if store else "",
                 }
                 success = print_from_template(
@@ -268,7 +268,7 @@ async def print_barcode(
             mrp_paise=mrp_paise,
             size=getattr(item, "sizecd", "") or "",
             colour=getattr(item, "subclass2cd", "") or "",
-            hsn_code=getattr(item, "hsncd", "") or "",
+            hsn_code=getattr(item, "analcode32", "") or "",
             store_name=store.name if store else "",
             printer_ip=printer_ip,
             copies=copies,
@@ -346,7 +346,7 @@ async def print_barcode_batch(
                     "BARCODE": item.stockno,
                     "SIZE": getattr(item, "sizecd", "") or "",
                     "COLOUR": getattr(item, "subclass2cd", "") or "",
-                    "HSN": getattr(item, "hsncd", "") or "",
+                    "HSN": getattr(item, "analcode32", "") or "",
                     "STORE": store.name if store else "",
                 }
                 # PRN files use dynamic injection, so we duplicate it per copy
@@ -365,7 +365,7 @@ async def print_barcode_batch(
                     "barcode": item.stockno,
                     "size": getattr(item, "sizecd", "") or "",
                     "colour": getattr(item, "subclass2cd", "") or "",
-                    "hsn_code": getattr(item, "hsncd", "") or "",
+                    "hsn_code": getattr(item, "analcode32", "") or "",
                     "store_name": store.name if store else "",
                 }
                 zpl = build_zpl_from_layout(
@@ -385,7 +385,7 @@ async def print_barcode_batch(
                     mrp_rupees=mrp_paise / 100.0,
                     size=getattr(item, "sizecd", "") or "",
                     colour=getattr(item, "subclass2cd", "") or "",
-                    hsn_code=getattr(item, "hsncd", "") or "",
+                    hsn_code=getattr(item, "analcode32", "") or "",
                     store_name=store.name if store else "",
                     width_mm=req.width_mm,
                     height_mm=req.height_mm,

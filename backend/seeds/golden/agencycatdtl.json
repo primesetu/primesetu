@@ -1,0 +1,10 @@
+[
+  { "agencycode": "VISA",   "paymodetype": 2, "paymodecode": "VISA",      "issuedbyagency": true,  "cansubmittoagency": false, "agencycommrate": 0.0, "onlinesubreal": false },
+  { "agencycode": "VISA",   "paymodetype": 2, "paymodecode": "DEBIT",     "issuedbyagency": true,  "cansubmittoagency": false, "agencycommrate": 0.0, "onlinesubreal": false },
+  { "agencycode": "MASTER", "paymodetype": 2, "paymodecode": "MASTERCD",  "issuedbyagency": true,  "cansubmittoagency": false, "agencycommrate": 0.0, "onlinesubreal": false },
+  { "agencycode": "RUPAY",  "paymodetype": 2, "paymodecode": "RUPAY",     "issuedbyagency": true,  "cansubmittoagency": false, "agencycommrate": 0.0, "onlinesubreal": false },
+  { "agencycode": "AMEX",   "paymodetype": 2, "paymodecode": "AMEX",      "issuedbyagency": true,  "cansubmittoagency": false, "agencycommrate": 0.0, "onlinesubreal": false },
+  { "agencycode": "NONE",   "paymodetype": 3, "paymodecode": "GPAY",      "issuedbyagency": false, "cansubmittoagency": false, "agencycommrate": 0.0, "onlinesubreal": false },
+  { "agencycode": "NONE",   "paymodetype": 3, "paymodecode": "PHONEPE",   "issuedbyagency": false, "cansubmittoagency": false, "agencycommrate": 0.0, "onlinesubreal": false },
+  { "agencycode": "NONE",   "paymodetype": 3, "paymodecode": "PAYTM",     "issuedbyagency": false, "cansubmittoagency": false, "agencycommrate": 0.0, "onlinesubreal": false }
+]

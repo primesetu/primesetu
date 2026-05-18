@@ -81,6 +81,8 @@ import { ConnectivityGuard } from './core/connectivity/ConnectivityGuard'
 import LocalAuthGuard from './components/auth/LocalAuthGuard'
 
 async function bootstrap() {
+  // Centered runtime configuration loaded from local store
+  
   // Use the centralized config store for initialization
   await useRuntimeConfigStore.getState().loadConfig();
 

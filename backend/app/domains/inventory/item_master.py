@@ -38,6 +38,7 @@ from app.schemas.item_master import (
     ItemBatchCreate,
     BatchCreateResponse,
     PriceLevelUpdate,
+    ItemUpdate,
     StockMatrixEntry,
     StockMatrixResponse,
     Class12ComboCreate,
@@ -865,6 +866,7 @@ async def create_item(
 
     return ItemResponse(
         **{k: getattr(new_item, k, None) for k in ItemResponse.model_fields},
+        hsn_code=getattr(new_item, "analcode32", None),
         total_stock=0,
     )
 
@@ -935,6 +937,7 @@ async def list_items(
             currentcost=item.currentcost,
             prodtaxtype=item.prodtaxtype,
             analcode32=item.analcode32,
+            hsn_code=item.analcode32,
             sfield1=item.sfield1,
             isinventoryitem=item.isinventoryitem,
             isbillable=item.isbillable,
@@ -1044,6 +1047,49 @@ async def update_price(
         updates["lastpurchprice"] = payload.currentcost  # S9 rule
     if payload.finalmrp is not None:
         updates["finalmrp"] = payload.finalmrp
+    updates["lastupdateddate"] = datetime.now()
+
+    await db.execute(
+        update(Itemmaster)
+        .where(
+            and_(
+                Itemmaster.stockno == stockno,
+                Itemmaster.tenant_id == current_user.tenant_id,
+            )
+        )
+        .values(**updates)
+    )
+    await db.commit()
+    return {
+        "status": "success",
+        "stockno": stockno,
+        "updated_fields": list(updates.keys()),
+    }
+
+
+@router.patch("/{stockno}", status_code=status.HTTP_200_OK)
+async def update_item(
+    stockno: str,
+    payload: ItemUpdate,
+    current_user: CurrentUser = Depends(require_auth),
+    db: AsyncSession = Depends(get_db),
+):
+    """Update general item attributes (classification, tags, desc)."""
+    item = await db.scalar(
+        select(Itemmaster).where(
+            and_(
+                Itemmaster.stockno == stockno,
+                Itemmaster.tenant_id == current_user.tenant_id,
+            )
+        )
+    )
+    if not item:
+        raise HTTPException(status_code=404, detail=f"StockNo '{stockno}' not found.")
+
+    updates = {k: v for k, v in payload.model_dump(exclude_unset=True).items()}
+    if not updates:
+        return {"status": "no_changes"}
+
     updates["lastupdateddate"] = datetime.now()
 
     await db.execute(
@@ -1283,6 +1329,7 @@ async def bulk_import_items(
             items=payload,
             vauid=current_user.user_id or "BULK_IMPORT",
             vacompcode=current_user.store_id or "0001",
+            tenant_id=current_user.tenant_id or "SYSTEM",
         )
         return result
     except Exception as e:

@@ -1,0 +1,10 @@
+[
+  {"trntype": "SL",  "actualprefix": "B",   "docnumber": 0, "isactive": 1},
+  {"trntype": "SR",  "actualprefix": "SR",  "docnumber": 0, "isactive": 1},
+  {"trntype": "PT",  "actualprefix": "GIR", "docnumber": 0, "isactive": 1},
+  {"trntype": "GOR", "actualprefix": "GOR", "docnumber": 0, "isactive": 1},
+  {"trntype": "PO",  "actualprefix": "PO",  "docnumber": 0, "isactive": 1},
+  {"trntype": "AD",  "actualprefix": "AD",  "docnumber": 0, "isactive": 1},
+  {"trntype": "PS",  "actualprefix": "PS",  "docnumber": 0, "isactive": 1},
+  {"trntype": "ST",  "actualprefix": "ST",  "docnumber": 0, "isactive": 1}
+]

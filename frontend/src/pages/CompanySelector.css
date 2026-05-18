@@ -1,0 +1,171 @@
+/* Custom Styling for TanStack Table Integration */
+.company-selector-bg {
+    background-color: #0f172a;
+    background-image: radial-gradient(circle at 50% -20%, #1e293b, #0f172a);
+}
+
+.company-selector-card {
+    background: rgba(30, 41, 59, 0.4);
+    backdrop-filter: blur(16px);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.tanstack-table-container {
+    background: rgba(15, 23, 42, 0.4);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    border-radius: 12px;
+    padding: 16px;
+}
+
+.table-search-wrapper {
+    margin-bottom: 16px;
+}
+
+.table-search-input {
+    width: 100%;
+    background: rgba(15, 23, 42, 0.6);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    border-radius: 8px;
+    padding: 12px 16px;
+    color: #ffffff;
+    font-size: 14px;
+    outline: none;
+    transition: all 0.3s ease;
+}
+
+.table-search-input:focus {
+    border-color: #06b6d4; /* Vibrant Cyan border */
+    box-shadow: 0 0 10px rgba(6, 182, 212, 0.3);
+}
+
+.custom-premium-table {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0;
+    text-align: left;
+}
+
+.table-header-cell {
+    background: rgba(15, 23, 42, 0.8);
+    color: #94a3b8;
+    padding: 14px 16px;
+    font-size: 13px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    cursor: pointer;
+    user-select: none;
+    border-bottom: 2px solid rgba(255, 255, 255, 0.1);
+    transition: background-color 0.2s ease;
+}
+
+.table-header-cell:first-child {
+    border-top-left-radius: 8px;
+}
+
+.table-header-cell:last-child {
+    border-top-right-radius: 8px;
+}
+
+.table-header-cell:hover {
+    background: rgba(15, 23, 42, 0.95);
+    color: #ffffff;
+}
+
+.header-cell-content {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.sort-icon-indicator {
+    font-size: 10px;
+    opacity: 0.6;
+}
+
+.table-body-row {
+    background: transparent;
+    transition: all 0.2s ease;
+}
+
+.table-body-row:hover {
+    background: rgba(255, 255, 255, 0.03);
+}
+
+.table-body-cell {
+    padding: 14px 16px;
+    font-size: 14px;
+    color: #e2e8f0;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    vertical-align: middle;
+}
+
+/* Custom Column Sub-styles */
+.company-info-cell {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.company-name-txt {
+    font-weight: 600;
+    color: #ffffff;
+    font-size: 15px;
+}
+
+.company-id-sub {
+    font-size: 12px;
+    color: #64748b;
+    font-family: monospace;
+}
+
+.db-code-badge {
+    background: rgba(6, 182, 212, 0.1);
+    color: #22d3ee;
+    padding: 4px 8px;
+    border-radius: 4px;
+    font-family: 'Courier New', Courier, monospace;
+    font-size: 12px;
+}
+
+.status-pill {
+    padding: 4px 10px;
+    border-radius: 9999px;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.05em;
+    display: inline-block;
+}
+
+.status-active {
+    background: rgba(34, 197, 94, 0.1);
+    color: #4ade80;
+    border: 1px solid rgba(34, 197, 94, 0.2);
+}
+
+.status-offline {
+    background: rgba(239, 68, 68, 0.1);
+    color: #f87171;
+    border: 1px solid rgba(239, 68, 68, 0.2);
+}
+
+.action-btn-primary {
+    background: linear-gradient(135deg, #06b6d4 0%, #3b82f6 100%);
+    color: #ffffff;
+    font-weight: 600;
+    font-size: 13px;
+    padding: 8px 16px;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.action-btn-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 15px rgba(6, 182, 212, 0.4);
+}
+
+.action-btn-primary:active {
+    transform: translateY(0);
+}

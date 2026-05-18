@@ -111,6 +111,27 @@ async def main():
             """), {"c": param_code, "d": descr, "v": value_txt, "cat": category})
     print("  [OK] Default system parameters seeded.")
 
+    # 5. Seed Golden legacy Shoper9 SysParam (828 params from sysparam_golden.csv)
+    print("\n  [5/5] Seeding legacy Shoper9 SysParam golden defaults...")
+    try:
+        import sys, pathlib
+        seeds_dir = pathlib.Path(__file__).parent.parent / "seeds"
+        if str(seeds_dir) not in sys.path:
+            sys.path.insert(0, str(seeds_dir.parent))
+        from seeds import sysparam_loader
+        async with engine.begin() as conn:
+            await sysparam_loader.seed_sysparam(conn, "SYSTEM")
+        print("  [OK] Legacy SysParam golden defaults seeded (828+ params).")
+        
+        print("\n  [6/6] Seeding Extended Legacy Tables (GenLookUp, GenLookUpExtd, AcceptDisplayDtls)...")
+        from seeds import extended_loader
+        async with engine.begin() as conn:
+            await extended_loader.seed_extended_tables(conn, "SYSTEM")
+        print("  [OK] Extended legacy tables seeded successfully.")
+    except Exception as e:
+        print(f"  [WARN] Could not seed golden tables: {e}")
+        print("         Run: python scripts/init_local_db.py after ensuring seeds/*.json exists.")
+
     await engine.dispose()
 
     print(f"\n{'='*60}")

@@ -1,0 +1,8479 @@
+[
+  {
+    "Recid": 0,
+    "Code": "0001",
+    "Descr": "Product",
+    "Number": 0,
+    "Flag": "N"
+  },
+  {
+    "Recid": 0,
+    "Code": "0002",
+    "Descr": "Brand",
+    "Number": 0,
+    "Flag": "N"
+  },
+  {
+    "Recid": 0,
+    "Code": "0007",
+    "Descr": "List of Banks",
+    "Number": 0,
+    "Flag": "N"
+  },
+  {
+    "Recid": 0,
+    "Code": "0008",
+    "Descr": "Personnel Types",
+    "Number": 0,
+    "Flag": "N"
+  },
+  {
+    "Recid": 0,
+    "Code": "0013",
+    "Descr": "Types of Shipments (FOB,C&F)",
+    "Number": 0,
+    "Flag": "N"
+  },
+  {
+    "Recid": 0,
+    "Code": "0016",
+    "Descr": "Reasons for Misc Receipts",
+    "Number": 0,
+    "Flag": "N"
+  },
+  {
+    "Recid": 0,
+    "Code": "0017",
+    "Descr": "Reasons for Misc Issues",
+    "Number": 0,
+    "Flag": "N"
+  },
+  {
+    "Recid": 0,
+    "Code": "0018",
+    "Descr": "Reasons for Cash Receipt",
+    "Number": 0,
+    "Flag": "N"
+  },
+  {
+    "Recid": 0,
+    "Code": "0019",
+    "Descr": "Reasons for Cash Pay-out",
+    "Number": 0,
+    "Flag": "N"
+  },
+  {
+    "Recid": 0,
+    "Code": "0020",
+    "Descr": "Reasons for Sales Return",
+    "Number": 0,
+    "Flag": "N"
+  },
+  {
+    "Recid": 0,
+    "Code": "0031",
+    "Descr": "Vendor Types",
+    "Number": 0,
+    "Flag": "N"
+  },
+  {
+    "Recid": 0,
+    "Code": "0051",
+    "Descr": "Department",
+    "Number": 0,
+    "Flag": "N"
+  },
+  {
+    "Recid": 0,
+    "Code": "0052",
+    "Descr": "Buyer",
+    "Number": 0,
+    "Flag": "N"
+  },
+  {
+    "Recid": 0,
+    "Code": "0053",
+    "Descr": "Size Groups Used In Item Classification",
+    "Number": 0,
+    "Flag": "N"
+  },
+  {
+    "Recid": 0,
+    "Code": "0054",
+    "Descr": "Product-wise Sales Tax Group",
+    "Number": 0,
+    "Flag": "N"
+  },
+  {
+    "Recid": 0,
+    "Code": "0055",
+    "Descr": "Religion",
+    "Number": 0,
+    "Flag": "N"
+  },
+  {
+    "Recid": 0,
+    "Code": "0056",
+    "Descr": "Ethnicity",
+    "Number": 0,
+    "Flag": "N"
+  },
+  {
+    "Recid": 0,
+    "Code": "0057",
+    "Descr": "Age Group",
+    "Number": 0,
+    "Flag": "N"
+  },
+  {
+    "Recid": 0,
+    "Code": "0058",
+    "Descr": "Profession",
+    "Number": 0,
+    "Flag": "N"
+  },
+  {
+    "Recid": 0,
+    "Code": "0059",
+    "Descr": "Type",
+    "Number": 0,
+    "Flag": "N"
+  },
+  {
+    "Recid": 0,
+    "Code": "0060",
+    "Descr": "CP1",
+    "Number": 0,
+    "Flag": "N"
+  },
+  {
+    "Recid": 0,
+    "Code": "0061",
+    "Descr": "CP2",
+    "Number": 0,
+    "Flag": "N"
+  },
+  {
+    "Recid": 0,
+    "Code": "0062",
+    "Descr": "CP3",
+    "Number": 0,
+    "Flag": "N"
+  },
+  {
+    "Recid": 0,
+    "Code": "0063",
+    "Descr": "CP4",
+    "Number": 0,
+    "Flag": "N"
+  },
+  {
+    "Recid": 0,
+    "Code": "0064",
+    "Descr": "CP5",
+    "Number": 0,
+    "Flag": "N"
+  },
+  {
+    "Recid": 0,
+    "Code": "0065",
+    "Descr": "Fibre",
+    "Number": 0,
+    "Flag": "N"
+  },
+  {
+    "Recid": 0,
+    "Code": "0066",
+    "Descr": "Finish",
+    "Number": 0,
+    "Flag": "N"
+  },
+  {
+    "Recid": 0,
+    "Code": "0067",
+    "Descr": "Colour Base",
+    "Number": 0,
+    "Flag": "N"
+  },
+  {
+    "Recid": 0,
+    "Code": "0068",
+    "Descr": "Styling",
+    "Number": 0,
+    "Flag": "N"
+  },
+  {
+    "Recid": 0,
+    "Code": "0069",
+    "Descr": "Usage",
+    "Number": 0,
+    "Flag": "N"
+  },
+  {
+    "Recid": 0,
+    "Code": "0070",
+    "Descr": "Source-wise Sales Tax Group",
+    "Number": 0,
+    "Flag": "N"
+  },
+  {
+    "Recid": 0,
+    "Code": "0071",
+    "Descr": "Destination-wise Sales Tax Group",
+    "Number": 0,
+    "Flag": "N"
+  },
+  {
+    "Recid": 0,
+    "Code": "0144",
+    "Descr": "Recipients E-Mail Id",
+    "Number": 0,
+    "Flag": "N"
+  },
+  {
+    "Recid": 0,
+    "Code": "0355",
+    "Descr": "Reasons Used For Discount In Billing",
+    "Number": 0,
+    "Flag": "N"
+  },
+  {
+    "Recid": 0,
+    "Code": "0369",
+    "Descr": "Delivery Status",
+    "Number": 0,
+    "Flag": "1"
+  },
+  {
+    "Recid": 0,
+    "Code": "0904",
+    "Descr": "Reasons Used For Cancellation of Advice Slip",
+    "Number": 0,
+    "Flag": "N"
+  },
+  {
+    "Recid": 0,
+    "Code": "0905",
+    "Descr": "Service Person Code",
+    "Number": 0,
+    "Flag": "N"
+  },
+  {
+    "Recid": 0,
+    "Code": "11000",
+    "Descr": "HSN Code",
+    "Number": 0,
+    "Flag": "N"
+  },
+  {
+    "Recid": 0,
+    "Code": "13100",
+    "Descr": "Stock Take Mode",
+    "Number": null,
+    "Flag": "N"
+  },
+  {
+    "Recid": 0,
+    "Code": "15500",
+    "Descr": "Type of Address",
+    "Number": 0,
+    "Flag": "N"
+  },
+  {
+    "Recid": 0,
+    "Code": "18100",
+    "Descr": "Tolerance Factor for Stock check",
+    "Number": 0,
+    "Flag": "N"
+  },
+  {
+    "Recid": 0,
+    "Code": "18200",
+    "Descr": "Applying the Current balance Quanity instead of LSQ",
+    "Number": 0,
+    "Flag": "N"
+  },
+  {
+    "Recid": 0,
+    "Code": "21100",
+    "Descr": "Reasons for Purchase",
+    "Number": 0,
+    "Flag": "N"
+  },
+  {
+    "Recid": 0,
+    "Code": "21200",
+    "Descr": "Reasons for Transfer In",
+    "Number": 0,
+    "Flag": "N"
+  },
+  {
+    "Recid": 0,
+    "Code": "21400",
+    "Descr": "Reasons for Approval Return",
+    "Number": 0,
+    "Flag": "N"
+  },
+  {
+    "Recid": 0,
+    "Code": "22200",
+    "Descr": "Reasons for Transfer Out",
+    "Number": 0,
+    "Flag": "N"
+  },
+  {
+    "Recid": 0,
+    "Code": "22300",
+    "Descr": "Reasons for Purchase Return",
+    "Number": 0,
+    "Flag": "N"
+  },
+  {
+    "Recid": 0,
+    "Code": "22400",
+    "Descr": "Reasons for Approval Issue",
+    "Number": 0,
+    "Flag": "N"
+  },
+  {
+    "Recid": 0,
+    "Code": "25000",
+    "Descr": "Excise Book No.",
+    "Number": 0,
+    "Flag": null
+  },
+  {
+    "Recid": 0,
+    "Code": "28500",
+    "Descr": "Reasons For Item Identification Document Void",
+    "Number": 0,
+    "Flag": null
+  },
+  {
+    "Recid": 0,
+    "Code": "31000",
+    "Descr": "Dashboard Reports",
+    "Number": 0,
+    "Flag": "N"
+  },
+  {
+    "Recid": 0,
+    "Code": "31500",
+    "Descr": "Additional Dashboard Summary Dtls",
+    "Number": 0,
+    "Flag": "N"
+  },
+  {
+    "Recid": 0,
+    "Code": "700",
+    "Descr": "Finance Schemes",
+    "Number": 0,
+    "Flag": ""
+  },
+  {
+    "Recid": 0,
+    "Code": "7000",
+    "Descr": "AC6",
+    "Number": 0,
+    "Flag": "N"
+  },
+  {
+    "Recid": 0,
+    "Code": "7001",
+    "Descr": "AC7",
+    "Number": 0,
+    "Flag": "N"
+  },
+  {
+    "Recid": 0,
+    "Code": "7002",
+    "Descr": "AC8",
+    "Number": 0,
+    "Flag": "N"
+  },
+  {
+    "Recid": 0,
+    "Code": "7003",
+    "Descr": "AC9",
+    "Number": 0,
+    "Flag": "N"
+  },
+  {
+    "Recid": 0,
+    "Code": "7004",
+    "Descr": "AC10",
+    "Number": 0,
+    "Flag": "N"
+  },
+  {
+    "Recid": 0,
+    "Code": "7005",
+    "Descr": "AC11",
+    "Number": 0,
+    "Flag": "N"
+  },
+  {
+    "Recid": 0,
+    "Code": "7006",
+    "Descr": "AC12",
+    "Number": 0,
+    "Flag": "N"
+  },
+  {
+    "Recid": 0,
+    "Code": "7007",
+    "Descr": "AC13",
+    "Number": 0,
+    "Flag": "N"
+  },
+  {
+    "Recid": 0,
+    "Code": "7008",
+    "Descr": "AC14",
+    "Number": 0,
+    "Flag": "N"
+  },
+  {
+    "Recid": 0,
+    "Code": "7009",
+    "Descr": "AC15",
+    "Number": 0,
+    "Flag": "N"
+  },
+  {
+    "Recid": 0,
+    "Code": "7010",
+    "Descr": "AC16",
+    "Number": 0,
+    "Flag": "N"
+  },
+  {
+    "Recid": 0,
+    "Code": "7011",
+    "Descr": "AC17",
+    "Number": 0,
+    "Flag": "N"
+  },
+  {
+    "Recid": 0,
+    "Code": "7012",
+    "Descr": "AC18",
+    "Number": 0,
+    "Flag": "N"
+  },
+  {
+    "Recid": 0,
+    "Code": "7013",
+    "Descr": "AC19",
+    "Number": 0,
+    "Flag": "N"
+  },
+  {
+    "Recid": 0,
+    "Code": "7014",
+    "Descr": "AC20",
+    "Number": 0,
+    "Flag": "N"
+  },
+  {
+    "Recid": 0,
+    "Code": "7015",
+    "Descr": "AC21",
+    "Number": 0,
+    "Flag": "N"
+  },
+  {
+    "Recid": 0,
+    "Code": "7016",
+    "Descr": "AC22",
+    "Number": 0,
+    "Flag": "N"
+  },
+  {
+    "Recid": 0,
+    "Code": "7017",
+    "Descr": "AC23",
+    "Number": 0,
+    "Flag": "N"
+  },
+  {
+    "Recid": 0,
+    "Code": "7018",
+    "Descr": "AC24",
+    "Number": 0,
+    "Flag": "N"
+  },
+  {
+    "Recid": 0,
+    "Code": "7019",
+    "Descr": "AC25",
+    "Number": 0,
+    "Flag": "N"
+  },
+  {
+    "Recid": 0,
+    "Code": "7020",
+    "Descr": "AC26",
+    "Number": 0,
+    "Flag": "N"
+  },
+  {
+    "Recid": 0,
+    "Code": "7021",
+    "Descr": "AC27",
+    "Number": 0,
+    "Flag": "N"
+  },
+  {
+    "Recid": 0,
+    "Code": "7022",
+    "Descr": "AC28",
+    "Number": 0,
+    "Flag": "N"
+  },
+  {
+    "Recid": 0,
+    "Code": "7023",
+    "Descr": "AC29",
+    "Number": 0,
+    "Flag": "N"
+  },
+  {
+    "Recid": 0,
+    "Code": "7024",
+    "Descr": "AC30",
+    "Number": 0,
+    "Flag": "N"
+  },
+  {
+    "Recid": 0,
+    "Code": "7025",
+    "Descr": "AC31",
+    "Number": 0,
+    "Flag": "N"
+  },
+  {
+    "Recid": 0,
+    "Code": "7026",
+    "Descr": "HSN Code",
+    "Number": 0,
+    "Flag": "N"
+  },
+  {
+    "Recid": 0,
+    "Code": "7030",
+    "Descr": "Grade/Quality Details",
+    "Number": 0,
+    "Flag": "N"
+  },
+  {
+    "Recid": 0,
+    "Code": "7031",
+    "Descr": "Location/Godown Details",
+    "Number": 0,
+    "Flag": "N"
+  },
+  {
+    "Recid": 0,
+    "Code": "7050",
+    "Descr": "Item Tag 2",
+    "Number": 0,
+    "Flag": "N"
+  },
+  {
+    "Recid": 0,
+    "Code": "7051",
+    "Descr": "Item Tag 3",
+    "Number": 0,
+    "Flag": "N"
+  },
+  {
+    "Recid": 0,
+    "Code": "7052",
+    "Descr": "Item Tag 4",
+    "Number": 0,
+    "Flag": "N"
+  },
+  {
+    "Recid": 0,
+    "Code": "7053",
+    "Descr": "Item Tag 5",
+    "Number": 0,
+    "Flag": "N"
+  },
+  {
+    "Recid": 1,
+    "Code": "Bag",
+    "Descr": "Hand Bag",
+    "Number": null,
+    "Flag": null
+  },
+  {
+    "Recid": 1,
+    "Code": "Belt",
+    "Descr": "Belt",
+    "Number": null,
+    "Flag": null
+  },
+  {
+    "Recid": 1,
+    "Code": "Shirt",
+    "Descr": "Formal Shirt",
+    "Number": null,
+    "Flag": null
+  },
+  {
+    "Recid": 1,
+    "Code": "Shoes",
+    "Descr": "Shoes For Office use",
+    "Number": null,
+    "Flag": null
+  },
+  {
+    "Recid": 2,
+    "Code": "Adidas",
+    "Descr": "Adidas",
+    "Number": null,
+    "Flag": null
+  },
+  {
+    "Recid": 2,
+    "Code": "American Tourist",
+    "Descr": "American Touristor",
+    "Number": null,
+    "Flag": null
+  },
+  {
+    "Recid": 2,
+    "Code": "Nike",
+    "Descr": "Nike",
+    "Number": null,
+    "Flag": null
+  },
+  {
+    "Recid": 2,
+    "Code": "Skybag",
+    "Descr": "Skybag",
+    "Number": null,
+    "Flag": null
+  },
+  {
+    "Recid": 2,
+    "Code": "Woodland",
+    "Descr": "Woodland",
+    "Number": null,
+    "Flag": null
+  },
+  {
+    "Recid": 5,
+    "Code": "By-Hand",
+    "Descr": "By-Hand",
+    "Number": 0,
+    "Flag": ""
+  },
+  {
+    "Recid": 5,
+    "Code": "By-Road",
+    "Descr": "By-Road",
+    "Number": 0,
+    "Flag": ""
+  },
+  {
+    "Recid": 6,
+    "Code": "KPN",
+    "Descr": "K.P.N",
+    "Number": 0,
+    "Flag": ""
+  },
+  {
+    "Recid": 6,
+    "Code": "KSRTC",
+    "Descr": "KSRTC",
+    "Number": 0,
+    "Flag": ""
+  },
+  {
+    "Recid": 6,
+    "Code": "NA",
+    "Descr": "NA",
+    "Number": 0,
+    "Flag": ""
+  },
+  {
+    "Recid": 6,
+    "Code": "OASIS",
+    "Descr": "OASIS",
+    "Number": 0,
+    "Flag": ""
+  },
+  {
+    "Recid": 6,
+    "Code": "SHARMA",
+    "Descr": "SHARMA",
+    "Number": 0,
+    "Flag": ""
+  },
+  {
+    "Recid": 6,
+    "Code": "SRMT",
+    "Descr": "SRMT",
+    "Number": 0,
+    "Flag": ""
+  },
+  {
+    "Recid": 6,
+    "Code": "VRL",
+    "Descr": "VRL",
+    "Number": 0,
+    "Flag": ""
+  },
+  {
+    "Recid": 7,
+    "Code": "CITI",
+    "Descr": "CITI",
+    "Number": 0,
+    "Flag": ""
+  },
+  {
+    "Recid": 7,
+    "Code": "HDFC",
+    "Descr": "HDFC",
+    "Number": 0,
+    "Flag": ""
+  },
+  {
+    "Recid": 7,
+    "Code": "HSBC",
+    "Descr": "HSBC",
+    "Number": 0,
+    "Flag": ""
+  },
+  {
+    "Recid": 7,
+    "Code": "IB",
+    "Descr": "INDIAN BANK",
+    "Number": 0,
+    "Flag": ""
+  },
+  {
+    "Recid": 7,
+    "Code": "ICICI",
+    "Descr": "ICICI",
+    "Number": 0,
+    "Flag": ""
+  },
+  {
+    "Recid": 7,
+    "Code": "IOB",
+    "Descr": "INDIAN OVERSEAS BANK",
+    "Number": 0,
+    "Flag": ""
+  },
+  {
+    "Recid": 7,
+    "Code": "SBI",
+    "Descr": "SBI",
+    "Number": 0,
+    "Flag": ""
+  },
+  {
+    "Recid": 8,
+    "Code": "Cahier",
+    "Descr": "Cashier",
+    "Number": null,
+    "Flag": null
+  },
+  {
+    "Recid": 8,
+    "Code": "PIC",
+    "Descr": "Person In Charge Types",
+    "Number": 0,
+    "Flag": ""
+  },
+  {
+    "Recid": 8,
+    "Code": "SalesStaff",
+    "Descr": "Sales Staff",
+    "Number": null,
+    "Flag": null
+  },
+  {
+    "Recid": 8,
+    "Code": "SM",
+    "Descr": "Sales Men Types",
+    "Number": 1,
+    "Flag": ""
+  },
+  {
+    "Recid": 13,
+    "Code": "C&F",
+    "Descr": "Carriage & Freight",
+    "Number": 0,
+    "Flag": ""
+  },
+  {
+    "Recid": 13,
+    "Code": "CIF",
+    "Descr": "Carriage Insurance Freight",
+    "Number": 0,
+    "Flag": ""
+  },
+  {
+    "Recid": 13,
+    "Code": "FOB",
+    "Descr": "Freight On Board",
+    "Number": 0,
+    "Flag": ""
+  },
+  {
+    "Recid": 15,
+    "Code": "AMEX",
+    "Descr": "AMEX CARDS",
+    "Number": 0,
+    "Flag": ""
+  },
+  {
+    "Recid": 15,
+    "Code": "CANCARD",
+    "Descr": "CAN CARD",
+    "Number": 0,
+    "Flag": ""
+  },
+  {
+    "Recid": 15,
+    "Code": "CITIMASTER",
+    "Descr": "CITI BANK MASTERS",
+    "Number": 0,
+    "Flag": ""
+  },
+  {
+    "Recid": 15,
+    "Code": "CITIVISA",
+    "Descr": "CITI BANK VISA",
+    "Number": 0,
+    "Flag": ""
+  },
+  {
+    "Recid": 15,
+    "Code": "OTHERMASTER",
+    "Descr": "OTHER MASTER CARDS",
+    "Number": 0,
+    "Flag": ""
+  },
+  {
+    "Recid": 15,
+    "Code": "OTHERVISA",
+    "Descr": "OTHER VISA CARDS",
+    "Number": 0,
+    "Flag": ""
+  },
+  {
+    "Recid": 15,
+    "Code": "SCMASTER",
+    "Descr": "STANDARD CHARTERED MASTER",
+    "Number": 0,
+    "Flag": ""
+  },
+  {
+    "Recid": 15,
+    "Code": "SCVISA",
+    "Descr": "STANDARD CHARTERED VISA",
+    "Number": 0,
+    "Flag": ""
+  },
+  {
+    "Recid": 16,
+    "Code": "Loan",
+    "Descr": "Loan",
+    "Number": 0,
+    "Flag": ""
+  },
+  {
+    "Recid": 16,
+    "Code": "Others",
+    "Descr": "Others",
+    "Number": 0,
+    "Flag": ""
+  },
+  {
+    "Recid": 16,
+    "Code": "Shifting",
+    "Descr": "Shifting",
+    "Number": 0,
+    "Flag": ""
+  },
+  {
+    "Recid": 16,
+    "Code": "TFR",
+    "Descr": "Transfer",
+    "Number": 0,
+    "Flag": ""
+  },
+  {
+    "Recid": 17,
+    "Code": "Loan",
+    "Descr": "Loan",
+    "Number": 0,
+    "Flag": ""
+  },
+  {
+    "Recid": 17,
+    "Code": "Others",
+    "Descr": "Others",
+    "Number": 0,
+    "Flag": ""
+  },
+  {
+    "Recid": 17,
+    "Code": "TFR",
+    "Descr": "Transfer",
+    "Number": 0,
+    "Flag": ""
+  },
+  {
+    "Recid": 18,
+    "Code": "ADV-RCPT",
+    "Descr": "Advance Receipt",
+    "Number": 0,
+    "Flag": ""
+  },
+  {
+    "Recid": 18,
+    "Code": "GEN",
+    "Descr": "General",
+    "Number": 0,
+    "Flag": ""
+  },
+  {
+    "Recid": 19,
+    "Code": "ADV-RCPT",
+    "Descr": "Advance Receipt",
+    "Number": 0,
+    "Flag": ""
+  },
+  {
+    "Recid": 19,
+    "Code": "CREDITNOTE",
+    "Descr": "Credit Note",
+    "Number": 0,
+    "Flag": ""
+  },
+  {
+    "Recid": 19,
+    "Code": "GEN",
+    "Descr": "General",
+    "Number": 0,
+    "Flag": ""
+  },
+  {
+    "Recid": 20,
+    "Code": "Color",
+    "Descr": "Color Change",
+    "Number": 0,
+    "Flag": ""
+  },
+  {
+    "Recid": 20,
+    "Code": "Damage",
+    "Descr": "Damage",
+    "Number": 0,
+    "Flag": ""
+  },
+  {
+    "Recid": 20,
+    "Code": "Defect",
+    "Descr": "Defect",
+    "Number": 0,
+    "Flag": ""
+  },
+  {
+    "Recid": 20,
+    "Code": "Others",
+    "Descr": "Others",
+    "Number": 0,
+    "Flag": ""
+  },
+  {
+    "Recid": 20,
+    "Code": "Size",
+    "Descr": "Size Diff",
+    "Number": 0,
+    "Flag": ""
+  },
+  {
+    "Recid": 31,
+    "Code": "Local",
+    "Descr": "Local",
+    "Number": 0,
+    "Flag": ""
+  },
+  {
+    "Recid": 31,
+    "Code": "OutStation",
+    "Descr": "Out Station",
+    "Number": 0,
+    "Flag": ""
+  },
+  {
+    "Recid": 51,
+    "Code": "AV",
+    "Descr": "Audio/Video",
+    "Number": 0,
+    "Flag": ""
+  },
+  {
+    "Recid": 51,
+    "Code": "Child",
+    "Descr": "Childrens Wear",
+    "Number": 0,
+    "Flag": ""
+  },
+  {
+    "Recid": 51,
+    "Code": "Gifts",
+    "Descr": "Gifts",
+    "Number": 0,
+    "Flag": ""
+  },
+  {
+    "Recid": 51,
+    "Code": "HN",
+    "Descr": "Home Needs",
+    "Number": 0,
+    "Flag": ""
+  },
+  {
+    "Recid": 51,
+    "Code": "Men",
+    "Descr": "Mens Wear",
+    "Number": 0,
+    "Flag": ""
+  },
+  {
+    "Recid": 51,
+    "Code": "Women",
+    "Descr": "Womens Wear",
+    "Number": 0,
+    "Flag": ""
+  },
+  {
+    "Recid": 52,
+    "Code": "Buyer1",
+    "Descr": "Buyer1",
+    "Number": 0,
+    "Flag": ""
+  },
+  {
+    "Recid": 52,
+    "Code": "Buyer2",
+    "Descr": "Buyer2",
+    "Number": 0,
+    "Flag": ""
+  },
+  {
+    "Recid": 53,
+    "Code": "FW",
+    "Descr": "Foot Wear",
+    "Number": 0,
+    "Flag": ""
+  },
+  {
+    "Recid": 53,
+    "Code": "MB",
+    "Descr": "Mobiles",
+    "Number": 1,
+    "Flag": ""
+  },
+  {
+    "Recid": 53,
+    "Code": "MC",
+    "Descr": "Mens Blazers",
+    "Number": 0,
+    "Flag": ""
+  },
+  {
+    "Recid": 53,
+    "Code": "MS",
+    "Descr": "Mens Shirts",
+    "Number": 0,
+    "Flag": ""
+  },
+  {
+    "Recid": 53,
+    "Code": "MT",
+    "Descr": "Mens Trousers",
+    "Number": 0,
+    "Flag": ""
+  },
+  {
+    "Recid": 53,
+    "Code": "OT",
+    "Descr": "Others",
+    "Number": 0,
+    "Flag": ""
+  },
+  {
+    "Recid": 53,
+    "Code": "TS",
+    "Descr": "T-Shirt Group",
+    "Number": 0,
+    "Flag": ""
+  },
+  {
+    "Recid": 53,
+    "Code": "TV",
+    "Descr": "TELEVISION",
+    "Number": 1,
+    "Flag": ""
+  },
+  {
+    "Recid": 54,
+    "Code": "01",
+    "Descr": "Readymade Garments",
+    "Number": 0,
+    "Flag": ""
+  },
+  {
+    "Recid": 54,
+    "Code": "02",
+    "Descr": "Fabrics",
+    "Number": 0,
+    "Flag": ""
+  },
+  {
+    "Recid": 54,
+    "Code": "03",
+    "Descr": "Blankets/Shawls",
+    "Number": 0,
+    "Flag": ""
+  },
+  {
+    "Recid": 54,
+    "Code": "04",
+    "Descr": "Leather Items",
+    "Number": 0,
+    "Flag": ""
+  },
+  {
+    "Recid": 54,
+    "Code": "05",
+    "Descr": "Toiletaries/Cosmetics",
+    "Number": 0,
+    "Flag": ""
+  },
+  {
+    "Recid": 54,
+    "Code": "06",
+    "Descr": "Groceries",
+    "Number": 0,
+    "Flag": ""
+  },
+  {
+    "Recid": 54,
+    "Code": "07",
+    "Descr": "Mobiles and Tablets",
+    "Number": 1,
+    "Flag": ""
+  },
+  {
+    "Recid": 54,
+    "Code": "08",
+    "Descr": "Consumer Electronics",
+    "Number": 1,
+    "Flag": ""
+  },
+  {
+    "Recid": 54,
+    "Code": "18%GST",
+    "Descr": "18%GST",
+    "Number": null,
+    "Flag": null
+  },
+  {
+    "Recid": 54,
+    "Code": "5%GST",
+    "Descr": "5%GST",
+    "Number": null,
+    "Flag": null
+  },
+  {
+    "Recid": 54,
+    "Code": "Taxfree",
+    "Descr": "Taxfree",
+    "Number": null,
+    "Flag": null
+  },
+  {
+    "Recid": 55,
+    "Code": "01",
+    "Descr": "Hindu",
+    "Number": 0,
+    "Flag": ""
+  },
+  {
+    "Recid": 55,
+    "Code": "02",
+    "Descr": "Muslim",
+    "Number": 0,
+    "Flag": ""
+  },
+  {
+    "Recid": 55,
+    "Code": "03",
+    "Descr": "Christian",
+    "Number": 0,
+    "Flag": ""
+  },
+  {
+    "Recid": 55,
+    "Code": "04",
+    "Descr": "Sikh",
+    "Number": 0,
+    "Flag": ""
+  },
+  {
+    "Recid": 55,
+    "Code": "05",
+    "Descr": "NA",
+    "Number": 0,
+    "Flag": ""
+  },
+  {
+    "Recid": 56,
+    "Code": "01",
+    "Descr": "Asian",
+    "Number": 0,
+    "Flag": ""
+  },
+  {
+    "Recid": 56,
+    "Code": "02",
+    "Descr": "Arab",
+    "Number": 0,
+    "Flag": ""
+  },
+  {
+    "Recid": 56,
+    "Code": "03",
+    "Descr": "American",
+    "Number": 0,
+    "Flag": ""
+  },
+  {
+    "Recid": 56,
+    "Code": "04",
+    "Descr": "European",
+    "Number": 0,
+    "Flag": ""
+  },
+  {
+    "Recid": 56,
+    "Code": "05",
+    "Descr": "Australian",
+    "Number": 0,
+    "Flag": ""
+  },
+  {
+    "Recid": 56,
+    "Code": "06",
+    "Descr": "Oriental",
+    "Number": 0,
+    "Flag": ""
+  },
+  {
+    "Recid": 56,
+    "Code": "07",
+    "Descr": "Chinese",
+    "Number": 0,
+    "Flag": ""
+  },
+  {
+    "Recid": 56,
+    "Code": "08",
+    "Descr": "Latin American",
+    "Number": 0,
+    "Flag": ""
+  },
+  {
+    "Recid": 56,
+    "Code": "09",
+    "Descr": "Mexican",
+    "Number": 0,
+    "Flag": ""
+  },
+  {
+    "Recid": 56,
+    "Code": "10",
+    "Descr": "Bedouin",
+    "Number": 0,
+    "Flag": ""
+  },
+  {
+    "Recid": 56,
+    "Code": "11",
+    "Descr": "NA",
+    "Number": 0,
+    "Flag": ""
+  },
+  {
+    "Recid": 57,
+    "Code": "01",
+    "Descr": "<25",
+    "Number": 0,
+    "Flag": ""
+  },
+  {
+    "Recid": 57,
+    "Code": "02",
+    "Descr": ">=25 - <35",
+    "Number": 0,
+    "Flag": ""
+  },
+  {
+    "Recid": 57,
+    "Code": "03",
+    "Descr": ">=35 - <45",
+    "Number": 0,
+    "Flag": ""
+  },
+  {
+    "Recid": 57,
+    "Code": "04",
+    "Descr": ">=45",
+    "Number": 0,
+    "Flag": ""
+  },
+  {
+    "Recid": 57,
+    "Code": "05",
+    "Descr": "NA",
+    "Number": 0,
+    "Flag": ""
+  },
+  {
+    "Recid": 58,
+    "Code": "01",
+    "Descr": "Engineer",
+    "Number": 0,
+    "Flag": ""
+  },
+  {
+    "Recid": 58,
+    "Code": "02",
+    "Descr": "Doctor",
+    "Number": 0,
+    "Flag": ""
+  },
+  {
+    "Recid": 58,
+    "Code": "03",
+    "Descr": "Others",
+    "Number": 0,
+    "Flag": ""
+  },
+  {
+    "Recid": 58,
+    "Code": "04",
+    "Descr": "NA",
+    "Number": 0,
+    "Flag": ""
+  },
+  {
+    "Recid": 59,
+    "Code": "01",
+    "Descr": "NA",
+    "Number": 0,
+    "Flag": ""
+  },
+  {
+    "Recid": 60,
+    "Code": "01",
+    "Descr": "NA",
+    "Number": 0,
+    "Flag": ""
+  },
+  {
+    "Recid": 61,
+    "Code": "01",
+    "Descr": "NA",
+    "Number": 0,
+    "Flag": ""
+  },
+  {
+    "Recid": 62,
+    "Code": "01",
+    "Descr": "NA",
+    "Number": 0,
+    "Flag": ""
+  },
+  {
+    "Recid": 63,
+    "Code": "01",
+    "Descr": "NA",
+    "Number": 0,
+    "Flag": ""
+  },
+  {
+    "Recid": 64,
+    "Code": "01",
+    "Descr": "NA",
+    "Number": 0,
+    "Flag": ""
+  },
+  {
+    "Recid": 65,
+    "Code": "Cotton",
+    "Descr": "Cotton",
+    "Number": 0,
+    "Flag": ""
+  },
+  {
+    "Recid": 65,
+    "Code": "PolySilk",
+    "Descr": "Poly Silk",
+    "Number": 0,
+    "Flag": ""
+  },
+  {
+    "Recid": 65,
+    "Code": "Silk",
+    "Descr": "Silk",
+    "Number": 0,
+    "Flag": ""
+  },
+  {
+    "Recid": 65,
+    "Code": "TeriCotton",
+    "Descr": "Teri Cotton",
+    "Number": 0,
+    "Flag": ""
+  },
+  {
+    "Recid": 65,
+    "Code": "Teriwool",
+    "Descr": "Teri Wool",
+    "Number": 0,
+    "Flag": ""
+  },
+  {
+    "Recid": 65,
+    "Code": "Wool",
+    "Descr": "Wool",
+    "Number": 0,
+    "Flag": ""
+  },
+  {
+    "Recid": 66,
+    "Code": "Check",
+    "Descr": "Check",
+    "Number": 0,
+    "Flag": ""
+  },
+  {
+    "Recid": 66,
+    "Code": "Plain",
+    "Descr": "Plain",
+    "Number": 0,
+    "Flag": ""
+  },
+  {
+    "Recid": 66,
+    "Code": "Stripes",
+    "Descr": "Stripes",
+    "Number": 0,
+    "Flag": ""
+  },
+  {
+    "Recid": 67,
+    "Code": "Blue",
+    "Descr": "Blue",
+    "Number": 0,
+    "Flag": ""
+  },
+  {
+    "Recid": 67,
+    "Code": "Green",
+    "Descr": "Green",
+    "Number": 0,
+    "Flag": ""
+  },
+  {
+    "Recid": 67,
+    "Code": "Grey",
+    "Descr": "Grey",
+    "Number": 0,
+    "Flag": ""
+  },
+  {
+    "Recid": 67,
+    "Code": "Pink",
+    "Descr": "Pink",
+    "Number": 0,
+    "Flag": ""
+  },
+  {
+    "Recid": 67,
+    "Code": "White",
+    "Descr": "White",
+    "Number": 0,
+    "Flag": ""
+  },
+  {
+    "Recid": 67,
+    "Code": "Yellow",
+    "Descr": "Yellow",
+    "Number": 0,
+    "Flag": ""
+  },
+  {
+    "Recid": 68,
+    "Code": "BootCut",
+    "Descr": "Boot Cut",
+    "Number": 0,
+    "Flag": ""
+  },
+  {
+    "Recid": 68,
+    "Code": "ButtonDown",
+    "Descr": "Button Down",
+    "Number": 0,
+    "Flag": ""
+  },
+  {
+    "Recid": 68,
+    "Code": "CollarCut",
+    "Descr": "Collar Cut",
+    "Number": 0,
+    "Flag": ""
+  },
+  {
+    "Recid": 68,
+    "Code": "FlatFront",
+    "Descr": "Flat Front",
+    "Number": 0,
+    "Flag": ""
+  },
+  {
+    "Recid": 68,
+    "Code": "Regular",
+    "Descr": "Regular",
+    "Number": 0,
+    "Flag": ""
+  },
+  {
+    "Recid": 69,
+    "Code": "Casual",
+    "Descr": "Casual",
+    "Number": 0,
+    "Flag": ""
+  },
+  {
+    "Recid": 69,
+    "Code": "Formal",
+    "Descr": "Formal",
+    "Number": 0,
+    "Flag": ""
+  },
+  {
+    "Recid": 69,
+    "Code": "PartyWear",
+    "Descr": "Party Wear",
+    "Number": 0,
+    "Flag": ""
+  },
+  {
+    "Recid": 70,
+    "Code": "0",
+    "Descr": "Local",
+    "Number": 0,
+    "Flag": "0"
+  },
+  {
+    "Recid": 70,
+    "Code": "1",
+    "Descr": "Outstation",
+    "Number": 0,
+    "Flag": "1"
+  },
+  {
+    "Recid": 70,
+    "Code": "2",
+    "Descr": "Unregistered Dealer",
+    "Number": 0,
+    "Flag": "2"
+  },
+  {
+    "Recid": 70,
+    "Code": "3",
+    "Descr": "Imports",
+    "Number": 0,
+    "Flag": "3"
+  },
+  {
+    "Recid": 70,
+    "Code": "99",
+    "Descr": "Local -Chain Stores",
+    "Number": 0,
+    "Flag": "4"
+  },
+  {
+    "Recid": 71,
+    "Code": "0",
+    "Descr": "Local",
+    "Number": 0,
+    "Flag": "0"
+  },
+  {
+    "Recid": 71,
+    "Code": "1",
+    "Descr": "Outstation",
+    "Number": 0,
+    "Flag": "1"
+  },
+  {
+    "Recid": 92,
+    "Code": "01",
+    "Descr": "Jammu & Kashmir",
+    "Number": 1,
+    "Flag": null
+  },
+  {
+    "Recid": 92,
+    "Code": "02",
+    "Descr": "HIMACHAL PRADESH",
+    "Number": 2,
+    "Flag": null
+  },
+  {
+    "Recid": 92,
+    "Code": "03",
+    "Descr": "PUNJAB",
+    "Number": 3,
+    "Flag": null
+  },
+  {
+    "Recid": 92,
+    "Code": "04",
+    "Descr": "CHANDIGARH",
+    "Number": 4,
+    "Flag": null
+  },
+  {
+    "Recid": 92,
+    "Code": "05",
+    "Descr": "UTTARAKHAND",
+    "Number": 5,
+    "Flag": null
+  },
+  {
+    "Recid": 92,
+    "Code": "06",
+    "Descr": "HARYANA",
+    "Number": 6,
+    "Flag": null
+  },
+  {
+    "Recid": 92,
+    "Code": "07",
+    "Descr": "DELHI",
+    "Number": 7,
+    "Flag": null
+  },
+  {
+    "Recid": 92,
+    "Code": "08",
+    "Descr": "RAJASTHAN",
+    "Number": 8,
+    "Flag": null
+  },
+  {
+    "Recid": 92,
+    "Code": "09",
+    "Descr": "UTTAR PRADESH",
+    "Number": 9,
+    "Flag": null
+  },
+  {
+    "Recid": 92,
+    "Code": "10",
+    "Descr": "BIHAR",
+    "Number": 10,
+    "Flag": null
+  },
+  {
+    "Recid": 92,
+    "Code": "11",
+    "Descr": "SIKKIM",
+    "Number": 11,
+    "Flag": null
+  },
+  {
+    "Recid": 92,
+    "Code": "12",
+    "Descr": "ARUNACHAL PRADESH",
+    "Number": 12,
+    "Flag": null
+  },
+  {
+    "Recid": 92,
+    "Code": "13",
+    "Descr": "NAGALAND",
+    "Number": 13,
+    "Flag": null
+  },
+  {
+    "Recid": 92,
+    "Code": "14",
+    "Descr": "MANIPUR",
+    "Number": 14,
+    "Flag": null
+  },
+  {
+    "Recid": 92,
+    "Code": "15",
+    "Descr": "MIZORAM",
+    "Number": 15,
+    "Flag": null
+  },
+  {
+    "Recid": 92,
+    "Code": "16",
+    "Descr": "TRIPURA",
+    "Number": 16,
+    "Flag": null
+  },
+  {
+    "Recid": 92,
+    "Code": "17",
+    "Descr": "MEGHALAYA",
+    "Number": 17,
+    "Flag": null
+  },
+  {
+    "Recid": 92,
+    "Code": "18",
+    "Descr": "ASSAM",
+    "Number": 18,
+    "Flag": null
+  },
+  {
+    "Recid": 92,
+    "Code": "19",
+    "Descr": "WEST BENGAL",
+    "Number": 19,
+    "Flag": null
+  },
+  {
+    "Recid": 92,
+    "Code": "20",
+    "Descr": "JHARKHAND",
+    "Number": 20,
+    "Flag": null
+  },
+  {
+    "Recid": 92,
+    "Code": "21",
+    "Descr": "Odisha",
+    "Number": 21,
+    "Flag": null
+  },
+  {
+    "Recid": 92,
+    "Code": "22",
+    "Descr": "CHHATTISGARH",
+    "Number": 22,
+    "Flag": null
+  },
+  {
+    "Recid": 92,
+    "Code": "23",
+    "Descr": "MADHYA PRADESH",
+    "Number": 23,
+    "Flag": null
+  },
+  {
+    "Recid": 92,
+    "Code": "24",
+    "Descr": "GUJARAT",
+    "Number": 24,
+    "Flag": null
+  },
+  {
+    "Recid": 92,
+    "Code": "25",
+    "Descr": "Daman & Diu",
+    "Number": 25,
+    "Flag": null
+  },
+  {
+    "Recid": 92,
+    "Code": "26",
+    "Descr": "Dadra & Nagar Haveli",
+    "Number": 26,
+    "Flag": null
+  },
+  {
+    "Recid": 92,
+    "Code": "27",
+    "Descr": "MAHARASHTRA",
+    "Number": 27,
+    "Flag": null
+  },
+  {
+    "Recid": 92,
+    "Code": "29",
+    "Descr": "KARNATAKA",
+    "Number": 29,
+    "Flag": null
+  },
+  {
+    "Recid": 92,
+    "Code": "30",
+    "Descr": "GOA",
+    "Number": 30,
+    "Flag": null
+  },
+  {
+    "Recid": 92,
+    "Code": "31",
+    "Descr": "Lakshdweep",
+    "Number": 31,
+    "Flag": null
+  },
+  {
+    "Recid": 92,
+    "Code": "32",
+    "Descr": "KERALA",
+    "Number": 32,
+    "Flag": null
+  },
+  {
+    "Recid": 92,
+    "Code": "33",
+    "Descr": "TAMIL NADU",
+    "Number": 33,
+    "Flag": null
+  },
+  {
+    "Recid": 92,
+    "Code": "34",
+    "Descr": "Pondicherry",
+    "Number": 34,
+    "Flag": null
+  },
+  {
+    "Recid": 92,
+    "Code": "35",
+    "Descr": "Andaman & Nicobar Islands",
+    "Number": 35,
+    "Flag": null
+  },
+  {
+    "Recid": 92,
+    "Code": "36",
+    "Descr": "Telengana",
+    "Number": 364,
+    "Flag": null
+  },
+  {
+    "Recid": 92,
+    "Code": "37",
+    "Descr": "Andhra Pradesh",
+    "Number": 37,
+    "Flag": null
+  },
+  {
+    "Recid": 92,
+    "Code": "97",
+    "Descr": "Other Territory",
+    "Number": 0,
+    "Flag": null
+  },
+  {
+    "Recid": 101,
+    "Code": "1100",
+    "Descr": "Purchase",
+    "Number": 1,
+    "Flag": ""
+  },
+  {
+    "Recid": 101,
+    "Code": "1101",
+    "Descr": "Physical Verification-Purchase",
+    "Number": 1,
+    "Flag": ""
+  },
+  {
+    "Recid": 101,
+    "Code": "1200",
+    "Descr": "Transfer In",
+    "Number": 1,
+    "Flag": ""
+  },
+  {
+    "Recid": 101,
+    "Code": "12000",
+    "Descr": "POS Activity Log Transaction Control Number",
+    "Number": 1,
+    "Flag": ""
+  },
+  {
+    "Recid": 101,
+    "Code": "1201",
+    "Descr": "Physical Verification-Transfer In",
+    "Number": 1,
+    "Flag": ""
+  },
+  {
+    "Recid": 101,
+    "Code": "1300",
+    "Descr": "Sales Return",
+    "Number": 1,
+    "Flag": ""
+  },
+  {
+    "Recid": 101,
+    "Code": "1400",
+    "Descr": "Approval Return",
+    "Number": 1,
+    "Flag": ""
+  },
+  {
+    "Recid": 101,
+    "Code": "1500",
+    "Descr": "Misc. Reciept",
+    "Number": 1,
+    "Flag": ""
+  },
+  {
+    "Recid": 101,
+    "Code": "1501",
+    "Descr": "Physical Verification-Misc. Reciept",
+    "Number": 1,
+    "Flag": ""
+  },
+  {
+    "Recid": 101,
+    "Code": "1600",
+    "Descr": "Void Sales",
+    "Number": 1,
+    "Flag": ""
+  },
+  {
+    "Recid": 101,
+    "Code": "1710",
+    "Descr": "Void Purchase Return",
+    "Number": 1,
+    "Flag": ""
+  },
+  {
+    "Recid": 101,
+    "Code": "1720",
+    "Descr": "Void Transfer Out",
+    "Number": 1,
+    "Flag": ""
+  },
+  {
+    "Recid": 101,
+    "Code": "1730",
+    "Descr": "Void Approval Issue",
+    "Number": 1,
+    "Flag": ""
+  },
+  {
+    "Recid": 101,
+    "Code": "1740",
+    "Descr": "Void Misc. Issue",
+    "Number": 1,
+    "Flag": ""
+  },
+  {
+    "Recid": 101,
+    "Code": "2100",
+    "Descr": "Sales",
+    "Number": 1,
+    "Flag": ""
+  },
+  {
+    "Recid": 101,
+    "Code": "2200",
+    "Descr": "Transfer out",
+    "Number": 1,
+    "Flag": ""
+  },
+  {
+    "Recid": 101,
+    "Code": "2300",
+    "Descr": "Purchase Return",
+    "Number": 1,
+    "Flag": ""
+  },
+  {
+    "Recid": 101,
+    "Code": "2400",
+    "Descr": "Approval Issue",
+    "Number": 1,
+    "Flag": ""
+  },
+  {
+    "Recid": 101,
+    "Code": "2500",
+    "Descr": "Misc. Issue",
+    "Number": 1,
+    "Flag": ""
+  },
+  {
+    "Recid": 101,
+    "Code": "2600",
+    "Descr": "Void Sales Return",
+    "Number": 1,
+    "Flag": ""
+  },
+  {
+    "Recid": 101,
+    "Code": "2710",
+    "Descr": "Void Purchase",
+    "Number": 1,
+    "Flag": ""
+  },
+  {
+    "Recid": 101,
+    "Code": "2720",
+    "Descr": "Void TransferIn",
+    "Number": 1,
+    "Flag": ""
+  },
+  {
+    "Recid": 101,
+    "Code": "2730",
+    "Descr": "Void Approval Returns",
+    "Number": 1,
+    "Flag": ""
+  },
+  {
+    "Recid": 101,
+    "Code": "2740",
+    "Descr": "Void Misc Receipts",
+    "Number": 1,
+    "Flag": ""
+  },
+  {
+    "Recid": 101,
+    "Code": "3100",
+    "Descr": "Open Stock Loading",
+    "Number": 0,
+    "Flag": ""
+  },
+  {
+    "Recid": 101,
+    "Code": "3200",
+    "Descr": "Discrepancy Updation",
+    "Number": 1,
+    "Flag": ""
+  },
+  {
+    "Recid": 101,
+    "Code": "4000",
+    "Descr": "Pos Cash",
+    "Number": 1,
+    "Flag": ""
+  },
+  {
+    "Recid": 101,
+    "Code": "4001",
+    "Descr": "Physical Stock",
+    "Number": 1,
+    "Flag": ""
+  },
+  {
+    "Recid": 101,
+    "Code": "5000",
+    "Descr": "Franchisee Cash Transaction Control No",
+    "Number": 1,
+    "Flag": ""
+  },
+  {
+    "Recid": 101,
+    "Code": "5100",
+    "Descr": "Franchisee Credit Card Transaction Control No",
+    "Number": 1,
+    "Flag": ""
+  },
+  {
+    "Recid": 101,
+    "Code": "6000",
+    "Descr": "Price Revision Transaction Control No",
+    "Number": 1,
+    "Flag": ""
+  },
+  {
+    "Recid": 101,
+    "Code": "6200",
+    "Descr": "MultiplePrices",
+    "Number": 1,
+    "Flag": "0"
+  },
+  {
+    "Recid": 101,
+    "Code": "6300",
+    "Descr": "IncentiveDef",
+    "Number": 0,
+    "Flag": null
+  },
+  {
+    "Recid": 101,
+    "Code": "8100",
+    "Descr": "Packing Slip",
+    "Number": 1,
+    "Flag": "1"
+  },
+  {
+    "Recid": 101,
+    "Code": "8200",
+    "Descr": "Pallet Slip",
+    "Number": 1,
+    "Flag": "1"
+  },
+  {
+    "Recid": 101,
+    "Code": "9100",
+    "Descr": "Suspension",
+    "Number": 1,
+    "Flag": "1"
+  },
+  {
+    "Recid": 101,
+    "Code": "9200",
+    "Descr": "Sales Advice Slip",
+    "Number": 1,
+    "Flag": "1"
+  },
+  {
+    "Recid": 101,
+    "Code": "9300",
+    "Descr": "Service Order",
+    "Number": 1,
+    "Flag": "1"
+  },
+  {
+    "Recid": 101,
+    "Code": "9400",
+    "Descr": "Bridal Registry",
+    "Number": 1,
+    "Flag": "0"
+  },
+  {
+    "Recid": 101,
+    "Code": "9500",
+    "Descr": "Approval Issues",
+    "Number": 1,
+    "Flag": "0"
+  },
+  {
+    "Recid": 101,
+    "Code": "9600",
+    "Descr": "Approval Receipts",
+    "Number": 1,
+    "Flag": "0"
+  },
+  {
+    "Recid": 101,
+    "Code": "9700",
+    "Descr": "Sales Order",
+    "Number": 1,
+    "Flag": "1"
+  },
+  {
+    "Recid": 101,
+    "Code": "9800",
+    "Descr": "Sales DC",
+    "Number": 1,
+    "Flag": "1"
+  },
+  {
+    "Recid": 101,
+    "Code": "9900",
+    "Descr": "Approval Issue DC",
+    "Number": 1,
+    "Flag": "1"
+  },
+  {
+    "Recid": 101,
+    "Code": "9950",
+    "Descr": "Dispatch advice",
+    "Number": 1,
+    "Flag": "1"
+  },
+  {
+    "Recid": 101,
+    "Code": "MAILNO",
+    "Descr": "Mailing List Serial Number",
+    "Number": 5000001,
+    "Flag": "0"
+  },
+  {
+    "Recid": 101,
+    "Code": "SHPR",
+    "Descr": "Price Revision File Number controler",
+    "Number": 1,
+    "Flag": ""
+  },
+  {
+    "Recid": 102,
+    "Code": "1100+P9",
+    "Descr": "P#Purchase",
+    "Number": 1,
+    "Flag": ""
+  },
+  {
+    "Recid": 102,
+    "Code": "1200+TI9",
+    "Descr": "TI#Transfer In",
+    "Number": 1,
+    "Flag": ""
+  },
+  {
+    "Recid": 102,
+    "Code": "1400+AR9",
+    "Descr": "AR#Approval Return",
+    "Number": 1,
+    "Flag": ""
+  },
+  {
+    "Recid": 102,
+    "Code": "1500+MR9",
+    "Descr": "MR#Misc. Reciept",
+    "Number": 1,
+    "Flag": ""
+  },
+  {
+    "Recid": 102,
+    "Code": "1710+VP9",
+    "Descr": "VP#Void Purchase Return",
+    "Number": 1,
+    "Flag": ""
+  },
+  {
+    "Recid": 102,
+    "Code": "1720+VT9",
+    "Descr": "VT#Void Transfer Out",
+    "Number": 1,
+    "Flag": ""
+  },
+  {
+    "Recid": 102,
+    "Code": "1730+VA9",
+    "Descr": "VA#Void Approval Issue",
+    "Number": 1,
+    "Flag": ""
+  },
+  {
+    "Recid": 102,
+    "Code": "1740+VMI9",
+    "Descr": "VMI#Void Misc. Issue",
+    "Number": 1,
+    "Flag": ""
+  },
+  {
+    "Recid": 102,
+    "Code": "2200+TO9",
+    "Descr": "TO#Transfer out",
+    "Number": 1,
+    "Flag": ""
+  },
+  {
+    "Recid": 102,
+    "Code": "2300+PR9",
+    "Descr": "PR#Purchase Return",
+    "Number": 1,
+    "Flag": ""
+  },
+  {
+    "Recid": 102,
+    "Code": "2400+AR9",
+    "Descr": "AR#Approval Issue",
+    "Number": 1,
+    "Flag": ""
+  },
+  {
+    "Recid": 102,
+    "Code": "2500+MI9",
+    "Descr": "MI#Misc. Issue",
+    "Number": 1,
+    "Flag": ""
+  },
+  {
+    "Recid": 102,
+    "Code": "2710+VP9",
+    "Descr": "VP#Void Purchase",
+    "Number": 1,
+    "Flag": ""
+  },
+  {
+    "Recid": 102,
+    "Code": "2720+VTI9",
+    "Descr": "VTI#Void TransferIn",
+    "Number": 1,
+    "Flag": ""
+  },
+  {
+    "Recid": 102,
+    "Code": "2730+VAR9",
+    "Descr": "VAR#Void Approval Returns",
+    "Number": 1,
+    "Flag": ""
+  },
+  {
+    "Recid": 102,
+    "Code": "2740+VMR9",
+    "Descr": "VMR#Void Misc Receipts",
+    "Number": 1,
+    "Flag": ""
+  },
+  {
+    "Recid": 102,
+    "Code": "4000+13+CR9",
+    "Descr": "CR#Pos Cash-Cash Receipts",
+    "Number": 1,
+    "Flag": ""
+  },
+  {
+    "Recid": 102,
+    "Code": "4000+14+",
+    "Descr": "Pos Cash-Void of Sales Return",
+    "Number": 1,
+    "Flag": ""
+  },
+  {
+    "Recid": 102,
+    "Code": "4000+15+VP9",
+    "Descr": "VP#Pos Cash-Void Cash Payouts",
+    "Number": 1,
+    "Flag": ""
+  },
+  {
+    "Recid": 102,
+    "Code": "4000+23+CP9",
+    "Descr": "CP#Pos Cash-Cash Payouts",
+    "Number": 1,
+    "Flag": ""
+  },
+  {
+    "Recid": 102,
+    "Code": "4000+25+VR9",
+    "Descr": "VR#Pos Cash-Void Cash Receipts",
+    "Number": 1,
+    "Flag": ""
+  },
+  {
+    "Recid": 102,
+    "Code": "4000+31+",
+    "Descr": "Pos Cash-Credit Note",
+    "Number": 1,
+    "Flag": ""
+  },
+  {
+    "Recid": 102,
+    "Code": "5000+",
+    "Descr": "Sales Promotion Catalogue - Default Blank Prefix",
+    "Number": 1,
+    "Flag": "1"
+  },
+  {
+    "Recid": 102,
+    "Code": "Card Payin Slip Number",
+    "Descr": "Card Payin Slip Number",
+    "Number": 1,
+    "Flag": ""
+  },
+  {
+    "Recid": 102,
+    "Code": "Cash PayIn Slip Number",
+    "Descr": "Cash PayIn Slip Number",
+    "Number": 1,
+    "Flag": ""
+  },
+  {
+    "Recid": 102,
+    "Code": "IND+IND9",
+    "Descr": "IND#Indent",
+    "Number": 1,
+    "Flag": ""
+  },
+  {
+    "Recid": 102,
+    "Code": "PIND+PIND9",
+    "Descr": "PIND#Pre Approved Indent",
+    "Number": 1,
+    "Flag": ""
+  },
+  {
+    "Recid": 102,
+    "Code": "PO+PO9",
+    "Descr": "PO#Purchase Order",
+    "Number": 1,
+    "Flag": ""
+  },
+  {
+    "Recid": 102,
+    "Code": "PPO+PPO9",
+    "Descr": "PPO#Pre Approved Purchase Order",
+    "Number": 1,
+    "Flag": ""
+  },
+  {
+    "Recid": 140,
+    "Code": "AUTOEXP",
+    "Descr": "4#AR301500.EXE##1#xxx#Data Replication-AutoExport(VSP)",
+    "Number": 3,
+    "Flag": "1"
+  },
+  {
+    "Recid": 140,
+    "Code": "BT-GUI",
+    "Descr": "3#SR309800.EXE##0#xxx#BT flat file creation",
+    "Number": 0,
+    "Flag": "0"
+  },
+  {
+    "Recid": 140,
+    "Code": "CT-GUI",
+    "Descr": "3#SR311200.EXE##0#xxx#CT flat file creation",
+    "Number": 0,
+    "Flag": "0"
+  },
+  {
+    "Recid": 140,
+    "Code": "DayEnd",
+    "Descr": "2#AR301400.EXE#,#1#xxx#Data Replication-DayEnd(VSP)",
+    "Number": 4,
+    "Flag": "2"
+  },
+  {
+    "Recid": 140,
+    "Code": "FD-GUI",
+    "Descr": "3#SR314400.EXE##0#xxx#FB Flat File creation",
+    "Number": 0,
+    "Flag": "0"
+  },
+  {
+    "Recid": 140,
+    "Code": "GT-GUI",
+    "Descr": "3#SR314500.EXE##0#xxx#GT flat file creation",
+    "Number": 0,
+    "Flag": "0"
+  },
+  {
+    "Recid": 140,
+    "Code": "ID-GUI",
+    "Descr": "3#SR309700.EXE#;#0#xxx#ID flat file creation",
+    "Number": 1,
+    "Flag": "1"
+  },
+  {
+    "Recid": 140,
+    "Code": "IM-GUI",
+    "Descr": "3#SR309700.EXE#;#0#xxx#IM flat file creation",
+    "Number": 2,
+    "Flag": "1"
+  },
+  {
+    "Recid": 140,
+    "Code": "KPI-GUI",
+    "Descr": "3#B6300300.EXE#;#0#xxx#KPI flat file creation",
+    "Number": 0,
+    "Flag": "0"
+  },
+  {
+    "Recid": 140,
+    "Code": "PS-GUI",
+    "Descr": "3#SR314600.EXE##0#xxx#PS flat file creation",
+    "Number": 0,
+    "Flag": "0"
+  },
+  {
+    "Recid": 141,
+    "Code": "AUTOEXP",
+    "Descr": "*1S#?3ccc0103#?2mm0102#?2dd0102#*4.VSP",
+    "Number": 3,
+    "Flag": ""
+  },
+  {
+    "Recid": 141,
+    "Code": "BT-GUI",
+    "Descr": "*2BT#?3ccc0102#?2mm0102#?2dd0102#*4.SEQ",
+    "Number": 0,
+    "Flag": ""
+  },
+  {
+    "Recid": 141,
+    "Code": "CT-GUI",
+    "Descr": "*2CT#?3ccc0102#?2mm0102#?2dd0102#*4.SEQ",
+    "Number": 0,
+    "Flag": ""
+  },
+  {
+    "Recid": 141,
+    "Code": "DataArch",
+    "Descr": "*2DA#?3CCC0103#?2MM0102#?2YY0104#*4.ZIP",
+    "Number": 0,
+    "Flag": ""
+  },
+  {
+    "Recid": 141,
+    "Code": "DayEnd",
+    "Descr": "*1S#?3ccc0103#?2mm0102#?2dd0102#*4.VSP",
+    "Number": 4,
+    "Flag": ""
+  },
+  {
+    "Recid": 141,
+    "Code": "FD-GUI",
+    "Descr": "*2FB#?3ccc0102#?2mm0102#?2dd0102#*4.SEQ",
+    "Number": 0,
+    "Flag": ""
+  },
+  {
+    "Recid": 141,
+    "Code": "GT-GUI",
+    "Descr": "*2GT#?3ccc0102#?2mm0102#?2dd0102#*4.SEQ",
+    "Number": 0,
+    "Flag": ""
+  },
+  {
+    "Recid": 141,
+    "Code": "ID-GUI",
+    "Descr": "*2ID#?3ccc0103#?2mm0102#?2dd0102#*4.SEQ",
+    "Number": 1,
+    "Flag": ""
+  },
+  {
+    "Recid": 141,
+    "Code": "IM-GUI",
+    "Descr": "*2IM#?3ccc0103#?2mm0102#?2yy0302#*4.SEQ",
+    "Number": 2,
+    "Flag": ""
+  },
+  {
+    "Recid": 141,
+    "Code": "KPI-GUI",
+    "Descr": "*2KPI#?3ccc0103#?2mm0102#?2dd0102#*4.SEQ",
+    "Number": 0,
+    "Flag": ""
+  },
+  {
+    "Recid": 141,
+    "Code": "PS-GUI",
+    "Descr": "*2PS#?3ccc0102#?2mm0102#?2dd0102#*4.SEQ",
+    "Number": 0,
+    "Flag": ""
+  },
+  {
+    "Recid": 141,
+    "Code": "RECREATEFILES",
+    "Descr": "*1R#?3ccc0103#?2mm0102#?2dd0102#*4.ZIP",
+    "Number": 0,
+    "Flag": ""
+  },
+  {
+    "Recid": 141,
+    "Code": "T2100",
+    "Descr": "*2PT#?2mm0102#?2dd0102#?3ccc0103#*1.#?3sss0103",
+    "Number": 0,
+    "Flag": ""
+  },
+  {
+    "Recid": 141,
+    "Code": "T2200",
+    "Descr": "*2TT#?2mm0102#?2dd0102#?3ccc0103#*1.#?3sss0103",
+    "Number": 0,
+    "Flag": ""
+  },
+  {
+    "Recid": 141,
+    "Code": "T2300",
+    "Descr": "*2RT#?2mm0102#?2dd0102#?3ccc0103#*1.#?3sss0103",
+    "Number": 0,
+    "Flag": ""
+  },
+  {
+    "Recid": 141,
+    "Code": "T2400",
+    "Descr": "*2AT#?2mm0102#?2dd0102#?3ccc0103#*1.#?3sss0103",
+    "Number": 0,
+    "Flag": ""
+  },
+  {
+    "Recid": 141,
+    "Code": "T2500",
+    "Descr": "*2MT#?2mm0102#?2dd0102#?3ccc0103#*1.#?3sss0103",
+    "Number": 0,
+    "Flag": ""
+  },
+  {
+    "Recid": 141,
+    "Code": "T9800",
+    "Descr": "*2PT#?2mm0102#?2dd0102#?3ccc0103#*1.#?3sss0103",
+    "Number": 0,
+    "Flag": ""
+  },
+  {
+    "Recid": 141,
+    "Code": "T9900",
+    "Descr": "*2PT#?2mm0102#?2dd0102#?3ccc0103#*1.#?3sss0103",
+    "Number": 0,
+    "Flag": ""
+  },
+  {
+    "Recid": 141,
+    "Code": "TZip",
+    "Descr": "?3ccc0103#*2PT#?3sss0103#?2mm0102#?2dd0102#*4.ZIP",
+    "Number": 0,
+    "Flag": null
+  },
+  {
+    "Recid": 141,
+    "Code": "ZIPFILENAME",
+    "Descr": "*1D#?3ccc0103#?2mm0102#?2dd0102#*4.ZIP",
+    "Number": 0,
+    "Flag": ""
+  },
+  {
+    "Recid": 142,
+    "Code": "GT-GUI-1",
+    "Descr": "1100;1200;1400;1500;1710;1720;1730;1740;",
+    "Number": 1,
+    "Flag": ""
+  },
+  {
+    "Recid": 142,
+    "Code": "GT-GUI-2",
+    "Descr": "2200;2300;2400;2500;2710;2720;2730;2740;",
+    "Number": 1,
+    "Flag": ""
+  },
+  {
+    "Recid": 144,
+    "Code": "1",
+    "Descr": "Mail Id 1",
+    "Number": 1,
+    "Flag": ""
+  },
+  {
+    "Recid": 144,
+    "Code": "Jawahar",
+    "Descr": "jawahar.mallah@aitdl.com",
+    "Number": 1,
+    "Flag": null
+  },
+  {
+    "Recid": 299,
+    "Code": "P901128",
+    "Descr": "SMRITI Update Version No:9.0.1.9128 ;system date:03-05-2026 ;smriti date:03-05-2026",
+    "Number": 0,
+    "Flag": ""
+  },
+  {
+    "Recid": 299,
+    "Code": "P901130",
+    "Descr": "SMRITI Update Version No:9.0.1.9131 ;system date:03-05-2026 ;smriti date:03-05-2026",
+    "Number": 0,
+    "Flag": null
+  },
+  {
+    "Recid": 299,
+    "Code": "P901131",
+    "Descr": "SMRITI Update Version No:",
+    "Number": 0,
+    "Flag": null
+  },
+  {
+    "Recid": 299,
+    "Code": "P901132",
+    "Descr": "SMRITI Update Version No:9.0.1.9132 ;system date:03-05-2026 ;smriti date:03-05-2026",
+    "Number": 0,
+    "Flag": null
+  },
+  {
+    "Recid": 299,
+    "Code": "P901143",
+    "Descr": "SMRITI Update Version No:9.0.1.9143 ;system date:03-05-2026 ;smriti date:03-05-2026",
+    "Number": 0,
+    "Flag": null
+  },
+  {
+    "Recid": 299,
+    "Code": "P901179",
+    "Descr": "SMRITI Update Version No:9.0.1.9179 ;system date:03-05-2026 ;smriti date:03-05-2026",
+    "Number": 0,
+    "Flag": null
+  },
+  {
+    "Recid": 299,
+    "Code": "P901193",
+    "Descr": "SMRITI Update Version No:9.0.1.9193 ;system date:03-05-2026 ;smriti date:03-05-2026",
+    "Number": 0,
+    "Flag": null
+  },
+  {
+    "Recid": 299,
+    "Code": "P901199",
+    "Descr": "SMRITI Update Version No:9.0.1.9199 ;system date:03-05-2026 ;smriti date:03-05-2026",
+    "Number": 0,
+    "Flag": null
+  },
+  {
+    "Recid": 299,
+    "Code": "P901201",
+    "Descr": "SMRITI Update Version No:9.0.1.9201 ;system date:03-05-2026 ;smriti date:03-05-2026",
+    "Number": 0,
+    "Flag": null
+  },
+  {
+    "Recid": 299,
+    "Code": "P901231",
+    "Descr": "SMRITI Update Version No:9.0.1.9231 ;system date:03-05-2026 ;smriti date:03-05-2026",
+    "Number": 0,
+    "Flag": null
+  },
+  {
+    "Recid": 299,
+    "Code": "P901240",
+    "Descr": "SMRITI Update Version No:9.0.1.9240 ;system date:03-05-2026 ;smriti date:03-05-2026",
+    "Number": 0,
+    "Flag": null
+  },
+  {
+    "Recid": 299,
+    "Code": "P901260",
+    "Descr": "SMRITI Update Version No:9.0.1.9260 ;system date:03-05-2026 ;smriti date:03-05-2026",
+    "Number": 0,
+    "Flag": null
+  },
+  {
+    "Recid": 299,
+    "Code": "P901275",
+    "Descr": "SMRITI Update Version No:9.0.1.9275 ;system date:03-05-2026 ;smriti date:03-05-2026",
+    "Number": 0,
+    "Flag": null
+  },
+  {
+    "Recid": 299,
+    "Code": "P901383",
+    "Descr": "SMRITI Update Version No:9.0.1.9383 ;system date:03-05-2026 ;smriti date:03-05-2026",
+    "Number": 0,
+    "Flag": null
+  },
+  {
+    "Recid": 299,
+    "Code": "P901425",
+    "Descr": "SMRITI Update Version No:9.0.1.9425 ;system date:03-05-2026 ;smriti date:03-05-2026",
+    "Number": 0,
+    "Flag": null
+  },
+  {
+    "Recid": 299,
+    "Code": "P901435",
+    "Descr": "SMRITI Update Version No:9.0.1.9435 ;system date:03-05-2026 ;smriti date:03-05-2026",
+    "Number": 0,
+    "Flag": null
+  },
+  {
+    "Recid": 299,
+    "Code": "P901436",
+    "Descr": "SMRITI Update Version No:9.0.1.9436 ;system date:03-05-2026 ;smriti date:03-05-2026",
+    "Number": 0,
+    "Flag": null
+  },
+  {
+    "Recid": 299,
+    "Code": "P901495",
+    "Descr": "SMRITI Update Version No:9.0.1.9495 ;system date:03-05-2026 ;smriti date:03-05-2026",
+    "Number": 0,
+    "Flag": null
+  },
+  {
+    "Recid": 299,
+    "Code": "P901499",
+    "Descr": "SMRITI Update Version No:9.0.1.9499 ;system date:03-05-2026 ;smriti date:03-05-2026",
+    "Number": 0,
+    "Flag": null
+  },
+  {
+    "Recid": 299,
+    "Code": "P901502",
+    "Descr": "SMRITI Update Version No:9.0.1.9502 ;system date:03-05-2026 ;smriti date:03-05-2026",
+    "Number": 0,
+    "Flag": null
+  },
+  {
+    "Recid": 299,
+    "Code": "P901570",
+    "Descr": "SMRITI Update Version No:9.0.1.9570 ;system date:03-05-2026 ;smriti date:03-05-2026",
+    "Number": 0,
+    "Flag": null
+  },
+  {
+    "Recid": 299,
+    "Code": "P901571",
+    "Descr": "SMRITI Update Version No:9.0.1.9571 ;system date:03-05-2026 ;smriti date:03-05-2026",
+    "Number": 0,
+    "Flag": null
+  },
+  {
+    "Recid": 299,
+    "Code": "P901574",
+    "Descr": "SMRITI Update Version No:9.0.1.9574 ;system date:03-05-2026 ;smriti date:03-05-2026",
+    "Number": 0,
+    "Flag": null
+  },
+  {
+    "Recid": 299,
+    "Code": "P901675",
+    "Descr": "SMRITI Update Version No:9.0.1.9675 ;system date:03-05-2026 ;smriti date:03-05-2026",
+    "Number": 0,
+    "Flag": null
+  },
+  {
+    "Recid": 299,
+    "Code": "P901697",
+    "Descr": "SMRITI Update Version No:9.0.1.9697 ;system date:03-05-2026 ;smriti date:03-05-2026",
+    "Number": 0,
+    "Flag": null
+  },
+  {
+    "Recid": 299,
+    "Code": "P901701",
+    "Descr": "SMRITI Update Version No:9.0.1.9701 ;system date:03-05-2026 ;smriti date:03-05-2026",
+    "Number": 0,
+    "Flag": null
+  },
+  {
+    "Recid": 299,
+    "Code": "P901710",
+    "Descr": "SMRITI Update Version No:9.0.1.9710 ;system date:03-05-2026 ;smriti date:03-05-2026",
+    "Number": 0,
+    "Flag": null
+  },
+  {
+    "Recid": 299,
+    "Code": "P901792",
+    "Descr": "SMRITI Update Version No:9.0.1.9792 ;system date:03-05-2026 ;smriti date:03-05-2026",
+    "Number": 0,
+    "Flag": null
+  },
+  {
+    "Recid": 299,
+    "Code": "VER72",
+    "Descr": "VER72 Data Conversion Completed",
+    "Number": 0,
+    "Flag": "S"
+  },
+  {
+    "Recid": 299,
+    "Code": "VER9_REL1",
+    "Descr": "Version 9 Release 1.0",
+    "Number": 0,
+    "Flag": "Y"
+  },
+  {
+    "Recid": 299,
+    "Code": "VER9_REL1.2",
+    "Descr": "Version 9 Release 1.2",
+    "Number": 0,
+    "Flag": "Y"
+  },
+  {
+    "Recid": 299,
+    "Code": "VER9_REL1.3",
+    "Descr": "Version 9 Release 1.3",
+    "Number": 0,
+    "Flag": "Y"
+  },
+  {
+    "Recid": 299,
+    "Code": "VER9_REL1.4",
+    "Descr": "Version 9 Release 1.4",
+    "Number": 0,
+    "Flag": "Y"
+  },
+  {
+    "Recid": 299,
+    "Code": "VER9_REL1.5",
+    "Descr": "Version 9 Release 1.5",
+    "Number": 0,
+    "Flag": "Y"
+  },
+  {
+    "Recid": 299,
+    "Code": "VER9_REL1.7",
+    "Descr": "Version 9 Release 1.7",
+    "Number": 0,
+    "Flag": "Y"
+  },
+  {
+    "Recid": 299,
+    "Code": "VER9_REL1.8",
+    "Descr": "Version 9 Release 1.8",
+    "Number": 0,
+    "Flag": "Y"
+  },
+  {
+    "Recid": 299,
+    "Code": "VER9_REL2.0",
+    "Descr": "Version 9 Release 2.0",
+    "Number": 0,
+    "Flag": "Y"
+  },
+  {
+    "Recid": 299,
+    "Code": "VER9_REL2.1",
+    "Descr": "Version 9 Release 2.1",
+    "Number": 0,
+    "Flag": "Y"
+  },
+  {
+    "Recid": 299,
+    "Code": "VER9_REL2.7",
+    "Descr": "Version 9 Release 2.7",
+    "Number": 0,
+    "Flag": "Y"
+  },
+  {
+    "Recid": 311,
+    "Code": "01",
+    "Descr": "Asian",
+    "Number": 0,
+    "Flag": ""
+  },
+  {
+    "Recid": 311,
+    "Code": "02",
+    "Descr": "Arab",
+    "Number": 0,
+    "Flag": ""
+  },
+  {
+    "Recid": 311,
+    "Code": "03",
+    "Descr": "American",
+    "Number": 0,
+    "Flag": ""
+  },
+  {
+    "Recid": 311,
+    "Code": "04",
+    "Descr": "European",
+    "Number": 0,
+    "Flag": ""
+  },
+  {
+    "Recid": 311,
+    "Code": "05",
+    "Descr": "Australian",
+    "Number": 0,
+    "Flag": ""
+  },
+  {
+    "Recid": 311,
+    "Code": "06",
+    "Descr": "Oriental",
+    "Number": 0,
+    "Flag": ""
+  },
+  {
+    "Recid": 311,
+    "Code": "07",
+    "Descr": "Chinese",
+    "Number": 0,
+    "Flag": ""
+  },
+  {
+    "Recid": 311,
+    "Code": "08",
+    "Descr": "Latin American",
+    "Number": 0,
+    "Flag": ""
+  },
+  {
+    "Recid": 311,
+    "Code": "09",
+    "Descr": "Mexican",
+    "Number": 0,
+    "Flag": ""
+  },
+  {
+    "Recid": 311,
+    "Code": "10",
+    "Descr": "Bedouin",
+    "Number": 0,
+    "Flag": ""
+  },
+  {
+    "Recid": 311,
+    "Code": "11",
+    "Descr": "NA",
+    "Number": 0,
+    "Flag": ""
+  },
+  {
+    "Recid": 312,
+    "Code": "01",
+    "Descr": "Hindu",
+    "Number": 0,
+    "Flag": ""
+  },
+  {
+    "Recid": 312,
+    "Code": "02",
+    "Descr": "Muslim",
+    "Number": 0,
+    "Flag": ""
+  },
+  {
+    "Recid": 312,
+    "Code": "03",
+    "Descr": "Christian",
+    "Number": 0,
+    "Flag": ""
+  },
+  {
+    "Recid": 312,
+    "Code": "04",
+    "Descr": "Jew",
+    "Number": 0,
+    "Flag": ""
+  },
+  {
+    "Recid": 320,
+    "Code": "1+01",
+    "Descr": "1+01",
+    "Number": 0,
+    "Flag": ""
+  },
+  {
+    "Recid": 320,
+    "Code": "1+02",
+    "Descr": "1+02",
+    "Number": 0,
+    "Flag": ""
+  },
+  {
+    "Recid": 320,
+    "Code": "1+03",
+    "Descr": "1+03",
+    "Number": 0,
+    "Flag": ""
+  },
+  {
+    "Recid": 320,
+    "Code": "1+04",
+    "Descr": "Y#35 Col Online",
+    "Number": 0,
+    "Flag": ""
+  },
+  {
+    "Recid": 320,
+    "Code": "10+01",
+    "Descr": "SD500300.ClsInvoicePrint",
+    "Number": 0,
+    "Flag": ""
+  },
+  {
+    "Recid": 320,
+    "Code": "10+02",
+    "Descr": "99",
+    "Number": 0,
+    "Flag": ""
+  },
+  {
+    "Recid": 320,
+    "Code": "10+03",
+    "Descr": "N",
+    "Number": 0,
+    "Flag": ""
+  },
+  {
+    "Recid": 320,
+    "Code": "10+04",
+    "Descr": "Y#Invoice Printing",
+    "Number": 0,
+    "Flag": ""
+  },
+  {
+    "Recid": 320,
+    "Code": "11+01",
+    "Descr": "SD500600.ClsInkJetInvoice",
+    "Number": 0,
+    "Flag": ""
+  },
+  {
+    "Recid": 320,
+    "Code": "11+02",
+    "Descr": "99",
+    "Number": 0,
+    "Flag": ""
+  },
+  {
+    "Recid": 320,
+    "Code": "11+03",
+    "Descr": "N",
+    "Number": 0,
+    "Flag": ""
+  },
+  {
+    "Recid": 320,
+    "Code": "11+04",
+    "Descr": "Y#GUI-Invoice Printing",
+    "Number": 0,
+    "Flag": ""
+  },
+  {
+    "Recid": 320,
+    "Code": "2+01",
+    "Descr": "SR516500.Printer40Col",
+    "Number": 0,
+    "Flag": ""
+  },
+  {
+    "Recid": 320,
+    "Code": "2+02",
+    "Descr": "99",
+    "Number": 0,
+    "Flag": ""
+  },
+  {
+    "Recid": 320,
+    "Code": "2+03",
+    "Descr": "N",
+    "Number": 0,
+    "Flag": ""
+  },
+  {
+    "Recid": 320,
+    "Code": "2+04",
+    "Descr": "Y#40 Col Single Spread",
+    "Number": 0,
+    "Flag": ""
+  },
+  {
+    "Recid": 320,
+    "Code": "21+01",
+    "Descr": "SR525700.GeneralPrinting",
+    "Number": 1,
+    "Flag": ""
+  },
+  {
+    "Recid": 320,
+    "Code": "21+02",
+    "Descr": "99",
+    "Number": 1,
+    "Flag": ""
+  },
+  {
+    "Recid": 320,
+    "Code": "21+03",
+    "Descr": "N",
+    "Number": 1,
+    "Flag": ""
+  },
+  {
+    "Recid": 320,
+    "Code": "21+04",
+    "Descr": "Y#Generalised Printing",
+    "Number": 1,
+    "Flag": ""
+  },
+  {
+    "Recid": 320,
+    "Code": "3+01",
+    "Descr": "SR516500.Printer40Col",
+    "Number": 0,
+    "Flag": ""
+  },
+  {
+    "Recid": 320,
+    "Code": "3+02",
+    "Descr": "99",
+    "Number": 0,
+    "Flag": ""
+  },
+  {
+    "Recid": 320,
+    "Code": "3+03",
+    "Descr": "N",
+    "Number": 0,
+    "Flag": ""
+  },
+  {
+    "Recid": 320,
+    "Code": "3+04",
+    "Descr": "Y#40 Col Double Spread",
+    "Number": 0,
+    "Flag": ""
+  },
+  {
+    "Recid": 320,
+    "Code": "4+01",
+    "Descr": "SR516400.Printer80Col",
+    "Number": 0,
+    "Flag": ""
+  },
+  {
+    "Recid": 320,
+    "Code": "4+02",
+    "Descr": "99",
+    "Number": 0,
+    "Flag": ""
+  },
+  {
+    "Recid": 320,
+    "Code": "4+03",
+    "Descr": "N",
+    "Number": 0,
+    "Flag": ""
+  },
+  {
+    "Recid": 320,
+    "Code": "4+04",
+    "Descr": "Y#80 Col Plain Stationery",
+    "Number": 0,
+    "Flag": ""
+  },
+  {
+    "Recid": 320,
+    "Code": "5+01",
+    "Descr": "SR516700.PrinterInkJet",
+    "Number": 0,
+    "Flag": ""
+  },
+  {
+    "Recid": 320,
+    "Code": "5+02",
+    "Descr": "99",
+    "Number": 0,
+    "Flag": ""
+  },
+  {
+    "Recid": 320,
+    "Code": "5+03",
+    "Descr": "N",
+    "Number": 0,
+    "Flag": ""
+  },
+  {
+    "Recid": 320,
+    "Code": "5+04",
+    "Descr": "Y#80 Col Ink Jet",
+    "Number": 0,
+    "Flag": ""
+  },
+  {
+    "Recid": 320,
+    "Code": "50+01",
+    "Descr": "SR535300.ClsPrintingInterface",
+    "Number": 0,
+    "Flag": null
+  },
+  {
+    "Recid": 320,
+    "Code": "50+02",
+    "Descr": "99",
+    "Number": 0,
+    "Flag": null
+  },
+  {
+    "Recid": 320,
+    "Code": "50+03",
+    "Descr": "N",
+    "Number": 0,
+    "Flag": null
+  },
+  {
+    "Recid": 320,
+    "Code": "50+04",
+    "Descr": "Y#PrintEngine-Sales",
+    "Number": 0,
+    "Flag": null
+  },
+  {
+    "Recid": 320,
+    "Code": "6+01",
+    "Descr": "SR516600.PrinterPos40Col",
+    "Number": 0,
+    "Flag": ""
+  },
+  {
+    "Recid": 320,
+    "Code": "6+02",
+    "Descr": "99",
+    "Number": 0,
+    "Flag": ""
+  },
+  {
+    "Recid": 320,
+    "Code": "6+03",
+    "Descr": "N",
+    "Number": 0,
+    "Flag": ""
+  },
+  {
+    "Recid": 320,
+    "Code": "6+04",
+    "Descr": "Y#40 Col (Pos)",
+    "Number": 0,
+    "Flag": ""
+  },
+  {
+    "Recid": 320,
+    "Code": "7+01",
+    "Descr": "SR518400.PrinterArvind",
+    "Number": 0,
+    "Flag": ""
+  },
+  {
+    "Recid": 320,
+    "Code": "7+02",
+    "Descr": "99",
+    "Number": 0,
+    "Flag": ""
+  },
+  {
+    "Recid": 320,
+    "Code": "7+03",
+    "Descr": "N",
+    "Number": 0,
+    "Flag": ""
+  },
+  {
+    "Recid": 320,
+    "Code": "7+04",
+    "Descr": "Y#Arvind Stationery",
+    "Number": 0,
+    "Flag": ""
+  },
+  {
+    "Recid": 320,
+    "Code": "8+01",
+    "Descr": "B6500400.PrinterRaymond",
+    "Number": 0,
+    "Flag": ""
+  },
+  {
+    "Recid": 320,
+    "Code": "8+02",
+    "Descr": "99",
+    "Number": 0,
+    "Flag": ""
+  },
+  {
+    "Recid": 320,
+    "Code": "8+03",
+    "Descr": "N",
+    "Number": 0,
+    "Flag": ""
+  },
+  {
+    "Recid": 320,
+    "Code": "8+04",
+    "Descr": "Y#Raymond Stationery",
+    "Number": 0,
+    "Flag": ""
+  },
+  {
+    "Recid": 320,
+    "Code": "9+01",
+    "Descr": "B6500400.PrinterRaymond",
+    "Number": 0,
+    "Flag": ""
+  },
+  {
+    "Recid": 320,
+    "Code": "9+02",
+    "Descr": "99",
+    "Number": 0,
+    "Flag": ""
+  },
+  {
+    "Recid": 320,
+    "Code": "9+03",
+    "Descr": "N",
+    "Number": 0,
+    "Flag": ""
+  },
+  {
+    "Recid": 320,
+    "Code": "9+04",
+    "Descr": "Y#Marico  Stationery",
+    "Number": 0,
+    "Flag": ""
+  },
+  {
+    "Recid": 321,
+    "Code": "1+01",
+    "Descr": "SD500400.ClsDcPrint",
+    "Number": 0,
+    "Flag": ""
+  },
+  {
+    "Recid": 321,
+    "Code": "1+02",
+    "Descr": "99",
+    "Number": 0,
+    "Flag": ""
+  },
+  {
+    "Recid": 321,
+    "Code": "1+03",
+    "Descr": "N",
+    "Number": 0,
+    "Flag": ""
+  },
+  {
+    "Recid": 321,
+    "Code": "1+04",
+    "Descr": "Y#Dc Printing",
+    "Number": 0,
+    "Flag": ""
+  },
+  {
+    "Recid": 321,
+    "Code": "2+01",
+    "Descr": "SD500700.ClsInkJetDC",
+    "Number": 0,
+    "Flag": ""
+  },
+  {
+    "Recid": 321,
+    "Code": "2+02",
+    "Descr": "99",
+    "Number": 0,
+    "Flag": ""
+  },
+  {
+    "Recid": 321,
+    "Code": "2+03",
+    "Descr": "N",
+    "Number": 0,
+    "Flag": ""
+  },
+  {
+    "Recid": 321,
+    "Code": "2+04",
+    "Descr": "Y#GUI-Dc Printing",
+    "Number": 0,
+    "Flag": ""
+  },
+  {
+    "Recid": 322,
+    "Code": "1+01",
+    "Descr": "SR519800.CustomerDisplay",
+    "Number": 0,
+    "Flag": "2"
+  },
+  {
+    "Recid": 322,
+    "Code": "1+02",
+    "Descr": "2",
+    "Number": 0,
+    "Flag": "0"
+  },
+  {
+    "Recid": 322,
+    "Code": "1+03",
+    "Descr": "N",
+    "Number": 0,
+    "Flag": "0"
+  },
+  {
+    "Recid": 322,
+    "Code": "1+04",
+    "Descr": "COM2",
+    "Number": 0,
+    "Flag": "1"
+  },
+  {
+    "Recid": 322,
+    "Code": "1+05",
+    "Descr": "9600,n,8,1",
+    "Number": 0,
+    "Flag": "0"
+  },
+  {
+    "Recid": 322,
+    "Code": "1+06",
+    "Descr": "27#64#",
+    "Number": 0,
+    "Flag": "1"
+  },
+  {
+    "Recid": 322,
+    "Code": "1+07",
+    "Descr": "NA- Initialize String",
+    "Number": 0,
+    "Flag": "0"
+  },
+  {
+    "Recid": 322,
+    "Code": "2+01",
+    "Descr": "SR519800.CustomerDisplay",
+    "Number": 0,
+    "Flag": "2"
+  },
+  {
+    "Recid": 322,
+    "Code": "2+02",
+    "Descr": "4",
+    "Number": 0,
+    "Flag": "0"
+  },
+  {
+    "Recid": 322,
+    "Code": "2+03",
+    "Descr": "N",
+    "Number": 0,
+    "Flag": "0"
+  },
+  {
+    "Recid": 322,
+    "Code": "2+04",
+    "Descr": "COM4",
+    "Number": 0,
+    "Flag": "1"
+  },
+  {
+    "Recid": 322,
+    "Code": "2+05",
+    "Descr": "9600,n,8,1",
+    "Number": 0,
+    "Flag": "0"
+  },
+  {
+    "Recid": 322,
+    "Code": "2+06",
+    "Descr": "&H11#&H10#0#SPACE40#&H10#0#",
+    "Number": 0,
+    "Flag": "1"
+  },
+  {
+    "Recid": 322,
+    "Code": "2+07",
+    "Descr": "NA- Initialize String",
+    "Number": 0,
+    "Flag": "0"
+  },
+  {
+    "Recid": 322,
+    "Code": "3+01",
+    "Descr": "SR519800.CustomerDisplay",
+    "Number": 0,
+    "Flag": "2"
+  },
+  {
+    "Recid": 322,
+    "Code": "3+02",
+    "Descr": "4",
+    "Number": 0,
+    "Flag": "0"
+  },
+  {
+    "Recid": 322,
+    "Code": "3+03",
+    "Descr": "N",
+    "Number": 0,
+    "Flag": "0"
+  },
+  {
+    "Recid": 322,
+    "Code": "3+04",
+    "Descr": "COM4",
+    "Number": 0,
+    "Flag": "1"
+  },
+  {
+    "Recid": 322,
+    "Code": "3+05",
+    "Descr": "9600,n,8,1",
+    "Number": 0,
+    "Flag": "0"
+  },
+  {
+    "Recid": 322,
+    "Code": "3+06",
+    "Descr": "&H11#&H10#0#SPACE40#&H10#0#",
+    "Number": 0,
+    "Flag": "1"
+  },
+  {
+    "Recid": 322,
+    "Code": "3+07",
+    "Descr": "NA- Initialize String",
+    "Number": 0,
+    "Flag": "0"
+  },
+  {
+    "Recid": 323,
+    "Code": "1+01",
+    "Descr": "SR519900.OpenCashDraw",
+    "Number": 0,
+    "Flag": "2"
+  },
+  {
+    "Recid": 323,
+    "Code": "1+02",
+    "Descr": "1+02",
+    "Number": 0,
+    "Flag": "0"
+  },
+  {
+    "Recid": 323,
+    "Code": "1+03",
+    "Descr": "N",
+    "Number": 0,
+    "Flag": "0"
+  },
+  {
+    "Recid": 323,
+    "Code": "1+04",
+    "Descr": "c:\\prn",
+    "Number": 0,
+    "Flag": "1"
+  },
+  {
+    "Recid": 323,
+    "Code": "1+05",
+    "Descr": "1+05",
+    "Number": 0,
+    "Flag": "0"
+  },
+  {
+    "Recid": 323,
+    "Code": "1+06",
+    "Descr": "27#112#0#",
+    "Number": 0,
+    "Flag": "1"
+  },
+  {
+    "Recid": 323,
+    "Code": "1+07",
+    "Descr": "NA- Initialize String",
+    "Number": 0,
+    "Flag": "0"
+  },
+  {
+    "Recid": 323,
+    "Code": "2+01",
+    "Descr": "SR519900.OpenCashDraw",
+    "Number": 0,
+    "Flag": "2"
+  },
+  {
+    "Recid": 323,
+    "Code": "2+02",
+    "Descr": "2+02",
+    "Number": 0,
+    "Flag": "0"
+  },
+  {
+    "Recid": 323,
+    "Code": "2+03",
+    "Descr": "N",
+    "Number": 0,
+    "Flag": "0"
+  },
+  {
+    "Recid": 323,
+    "Code": "2+04",
+    "Descr": "COM3",
+    "Number": 0,
+    "Flag": "1"
+  },
+  {
+    "Recid": 323,
+    "Code": "2+05",
+    "Descr": "2+05",
+    "Number": 0,
+    "Flag": "0"
+  },
+  {
+    "Recid": 323,
+    "Code": "2+06",
+    "Descr": "7#",
+    "Number": 0,
+    "Flag": "1"
+  },
+  {
+    "Recid": 323,
+    "Code": "2+07",
+    "Descr": "NA- Initialize String",
+    "Number": 0,
+    "Flag": "0"
+  },
+  {
+    "Recid": 323,
+    "Code": "3+01",
+    "Descr": "SR519900.OpenCashDraw",
+    "Number": 0,
+    "Flag": "2"
+  },
+  {
+    "Recid": 323,
+    "Code": "3+02",
+    "Descr": "4",
+    "Number": 0,
+    "Flag": "0"
+  },
+  {
+    "Recid": 323,
+    "Code": "3+03",
+    "Descr": "N",
+    "Number": 0,
+    "Flag": "0"
+  },
+  {
+    "Recid": 323,
+    "Code": "3+04",
+    "Descr": "COM4",
+    "Number": 0,
+    "Flag": "1"
+  },
+  {
+    "Recid": 323,
+    "Code": "3+05",
+    "Descr": "9600,n,8,1",
+    "Number": 0,
+    "Flag": "0"
+  },
+  {
+    "Recid": 323,
+    "Code": "3+06",
+    "Descr": "7#",
+    "Number": 0,
+    "Flag": "1"
+  },
+  {
+    "Recid": 323,
+    "Code": "3+07",
+    "Descr": "NA- Initialize String",
+    "Number": 0,
+    "Flag": "0"
+  },
+  {
+    "Recid": 323,
+    "Code": "4+01",
+    "Descr": "SR535000.OpenCashDrawerUSB",
+    "Number": 0,
+    "Flag": "1"
+  },
+  {
+    "Recid": 323,
+    "Code": "4+02",
+    "Descr": "NA",
+    "Number": 0,
+    "Flag": "0"
+  },
+  {
+    "Recid": 323,
+    "Code": "4+03",
+    "Descr": "NA",
+    "Number": 0,
+    "Flag": "0"
+  },
+  {
+    "Recid": 323,
+    "Code": "4+04",
+    "Descr": "NA",
+    "Number": 0,
+    "Flag": "1"
+  },
+  {
+    "Recid": 323,
+    "Code": "4+05",
+    "Descr": "NA",
+    "Number": 0,
+    "Flag": "0"
+  },
+  {
+    "Recid": 323,
+    "Code": "4+06",
+    "Descr": "7#",
+    "Number": 0,
+    "Flag": "1"
+  },
+  {
+    "Recid": 323,
+    "Code": "4+07",
+    "Descr": "NA-Initialize string",
+    "Number": 0,
+    "Flag": "0"
+  },
+  {
+    "Recid": 353,
+    "Code": "0",
+    "Descr": "Default",
+    "Number": 0,
+    "Flag": ""
+  },
+  {
+    "Recid": 353,
+    "Code": "1",
+    "Descr": "First Grade",
+    "Number": 0,
+    "Flag": ""
+  },
+  {
+    "Recid": 353,
+    "Code": "2",
+    "Descr": "Second Grade",
+    "Number": 0,
+    "Flag": ""
+  },
+  {
+    "Recid": 353,
+    "Code": "3",
+    "Descr": "Third Grade",
+    "Number": 0,
+    "Flag": ""
+  },
+  {
+    "Recid": 355,
+    "Code": "01",
+    "Descr": "Generally Allowed Discount",
+    "Number": 0,
+    "Flag": ""
+  },
+  {
+    "Recid": 355,
+    "Code": "02",
+    "Descr": "Festival Discount",
+    "Number": 0,
+    "Flag": ""
+  },
+  {
+    "Recid": 355,
+    "Code": "03",
+    "Descr": "Stock Clearance Discount",
+    "Number": 0,
+    "Flag": ""
+  },
+  {
+    "Recid": 355,
+    "Code": "NewLaunch",
+    "Descr": "NewLaunch",
+    "Number": null,
+    "Flag": null
+  },
+  {
+    "Recid": 355,
+    "Code": "StoreDiscout",
+    "Descr": "Store Discount",
+    "Number": null,
+    "Flag": null
+  },
+  {
+    "Recid": 357,
+    "Code": "A+01",
+    "Descr": "11#105",
+    "Number": 0,
+    "Flag": "*+01"
+  },
+  {
+    "Recid": 357,
+    "Code": "A+02",
+    "Descr": "11#110",
+    "Number": 0,
+    "Flag": "#+02"
+  },
+  {
+    "Recid": 357,
+    "Code": "A+03",
+    "Descr": "11#111",
+    "Number": 0,
+    "Flag": "*+01"
+  },
+  {
+    "Recid": 358,
+    "Code": "B+01",
+    "Descr": "Only Dry Wash",
+    "Number": 0,
+    "Flag": ""
+  },
+  {
+    "Recid": 358,
+    "Code": "B+02",
+    "Descr": "No Dry Wash",
+    "Number": 0,
+    "Flag": ""
+  },
+  {
+    "Recid": 369,
+    "Code": "0",
+    "Descr": "Pending",
+    "Number": 0,
+    "Flag": "1"
+  },
+  {
+    "Recid": 369,
+    "Code": "1",
+    "Descr": "Delivered",
+    "Number": 0,
+    "Flag": "1"
+  },
+  {
+    "Recid": 369,
+    "Code": "2",
+    "Descr": "Rejected",
+    "Number": 0,
+    "Flag": "1"
+  },
+  {
+    "Recid": 369,
+    "Code": "3",
+    "Descr": "Rescheduled",
+    "Number": 0,
+    "Flag": "1"
+  },
+  {
+    "Recid": 382,
+    "Code": "01+11A",
+    "Descr": "11A#3",
+    "Number": 0,
+    "Flag": "1"
+  },
+  {
+    "Recid": 382,
+    "Code": "01+11B",
+    "Descr": "11B#3",
+    "Number": 0,
+    "Flag": "2"
+  },
+  {
+    "Recid": 382,
+    "Code": "01+15A",
+    "Descr": "15A#3",
+    "Number": 0,
+    "Flag": "1"
+  },
+  {
+    "Recid": 382,
+    "Code": "01+15B",
+    "Descr": "15B#3",
+    "Number": 0,
+    "Flag": "2"
+  },
+  {
+    "Recid": 382,
+    "Code": "02+11A",
+    "Descr": "11A#3",
+    "Number": 0,
+    "Flag": "3"
+  },
+  {
+    "Recid": 382,
+    "Code": "02+11B",
+    "Descr": "11B#3",
+    "Number": 0,
+    "Flag": "3"
+  },
+  {
+    "Recid": 382,
+    "Code": "02+15A",
+    "Descr": "15A#3",
+    "Number": 0,
+    "Flag": "3"
+  },
+  {
+    "Recid": 382,
+    "Code": "02+15B",
+    "Descr": "15B#3",
+    "Number": 0,
+    "Flag": "3"
+  },
+  {
+    "Recid": 401,
+    "Code": "1",
+    "Descr": "CurrentCost",
+    "Number": 0,
+    "Flag": "0"
+  },
+  {
+    "Recid": 401,
+    "Code": "2",
+    "Descr": "LastPurchPrice",
+    "Number": 0,
+    "Flag": "0"
+  },
+  {
+    "Recid": 401,
+    "Code": "3",
+    "Descr": "SrcTaxType",
+    "Number": 0,
+    "Flag": "0"
+  },
+  {
+    "Recid": 700,
+    "Code": "Bajaj Finance",
+    "Descr": "Bajaj Finance",
+    "Number": null,
+    "Flag": null
+  },
+  {
+    "Recid": 700,
+    "Code": "Store Finance",
+    "Descr": "Store Finance",
+    "Number": null,
+    "Flag": null
+  },
+  {
+    "Recid": 901,
+    "Code": "Color",
+    "Descr": "Color",
+    "Number": 0,
+    "Flag": ""
+  },
+  {
+    "Recid": 901,
+    "Code": "Damage",
+    "Descr": "Damage",
+    "Number": 0,
+    "Flag": ""
+  },
+  {
+    "Recid": 901,
+    "Code": "Defect",
+    "Descr": "Defect",
+    "Number": 0,
+    "Flag": ""
+  },
+  {
+    "Recid": 903,
+    "Code": "Blazer",
+    "Descr": "Blazer",
+    "Number": 0,
+    "Flag": ""
+  },
+  {
+    "Recid": 903,
+    "Code": "NA",
+    "Descr": "NA",
+    "Number": 0,
+    "Flag": ""
+  },
+  {
+    "Recid": 903,
+    "Code": "Others",
+    "Descr": "Others",
+    "Number": 0,
+    "Flag": ""
+  },
+  {
+    "Recid": 903,
+    "Code": "Safari",
+    "Descr": "Safari",
+    "Number": 0,
+    "Flag": ""
+  },
+  {
+    "Recid": 903,
+    "Code": "Shirt",
+    "Descr": "Shirt",
+    "Number": 0,
+    "Flag": ""
+  },
+  {
+    "Recid": 903,
+    "Code": "Suits",
+    "Descr": "Suits",
+    "Number": 0,
+    "Flag": ""
+  },
+  {
+    "Recid": 903,
+    "Code": "Trouser",
+    "Descr": "Trouser",
+    "Number": 0,
+    "Flag": ""
+  },
+  {
+    "Recid": 904,
+    "Code": "CR",
+    "Descr": "Customer Request",
+    "Number": 0,
+    "Flag": ""
+  },
+  {
+    "Recid": 904,
+    "Code": "CWO",
+    "Descr": "Customer Walked Out",
+    "Number": 0,
+    "Flag": ""
+  },
+  {
+    "Recid": 904,
+    "Code": "WE",
+    "Descr": "Wrong Entry",
+    "Number": 0,
+    "Flag": ""
+  },
+  {
+    "Recid": 905,
+    "Code": "JW",
+    "Descr": "Job Workers",
+    "Number": 0,
+    "Flag": ""
+  },
+  {
+    "Recid": 906,
+    "Code": "11+$",
+    "Descr": "150110@0.00=0.45#140110@0.46=1.05M",
+    "Number": 0,
+    "Flag": "Suiting"
+  },
+  {
+    "Recid": 906,
+    "Code": "15+$",
+    "Descr": "160006@0.00=0.65#160005@0.66=1.85",
+    "Number": 0,
+    "Flag": "Shirting"
+  },
+  {
+    "Recid": 907,
+    "Code": "140110",
+    "Descr": "14#RL#140110#01#0#14#1#170#170",
+    "Number": 0,
+    "Flag": "0"
+  },
+  {
+    "Recid": 907,
+    "Code": "150110",
+    "Descr": "15#RL#140110#01#0#15#1#85#85",
+    "Number": 0,
+    "Flag": "0"
+  },
+  {
+    "Recid": 907,
+    "Code": "160005",
+    "Descr": "16#RL#160005#01#0#16#1#130#130",
+    "Number": 0,
+    "Flag": "0"
+  },
+  {
+    "Recid": 907,
+    "Code": "160006",
+    "Descr": "16#RL#160006#01#0#16#1#70#70",
+    "Number": 0,
+    "Flag": "0"
+  },
+  {
+    "Recid": 908,
+    "Code": "CASH",
+    "Descr": "CASH",
+    "Number": 0,
+    "Flag": ""
+  },
+  {
+    "Recid": 908,
+    "Code": "ON-ACC",
+    "Descr": "ON-ACC",
+    "Number": 0,
+    "Flag": ""
+  },
+  {
+    "Recid": 909,
+    "Code": "P1",
+    "Descr": "Value After Discount",
+    "Number": 0,
+    "Flag": "01-02-06"
+  },
+  {
+    "Recid": 909,
+    "Code": "P2",
+    "Descr": "Value After Tax And Discount",
+    "Number": 0,
+    "Flag": "01+03-02"
+  },
+  {
+    "Recid": 909,
+    "Code": "P3",
+    "Descr": "Margin Tax",
+    "Number": 0,
+    "Flag": "09-07-02-06"
+  },
+  {
+    "Recid": 909,
+    "Code": "P4",
+    "Descr": "Sale Value or Tax Exclusive",
+    "Number": 0,
+    "Flag": "01"
+  },
+  {
+    "Recid": 909,
+    "Code": "P5",
+    "Descr": "MRP (Tax Inclusive)",
+    "Number": 0,
+    "Flag": "01+03"
+  },
+  {
+    "Recid": 909,
+    "Code": "P6",
+    "Descr": "Value After Discount & Deductions",
+    "Number": 0,
+    "Flag": "01-02-06"
+  },
+  {
+    "Recid": 909,
+    "Code": "P7",
+    "Descr": "Item Quantity",
+    "Number": null,
+    "Flag": "11"
+  },
+  {
+    "Recid": 920,
+    "Code": "1+01",
+    "Descr": "SR507700.GoodsOutAudit",
+    "Number": 0,
+    "Flag": ""
+  },
+  {
+    "Recid": 920,
+    "Code": "1+02",
+    "Descr": "99",
+    "Number": 0,
+    "Flag": ""
+  },
+  {
+    "Recid": 920,
+    "Code": "1+03",
+    "Descr": "N",
+    "Number": 0,
+    "Flag": ""
+  },
+  {
+    "Recid": 920,
+    "Code": "2+01",
+    "Descr": "SR525200.ClsGORInkJetPrint",
+    "Number": 0,
+    "Flag": ""
+  },
+  {
+    "Recid": 920,
+    "Code": "2+02",
+    "Descr": "99",
+    "Number": 0,
+    "Flag": ""
+  },
+  {
+    "Recid": 920,
+    "Code": "2+03",
+    "Descr": "N",
+    "Number": 0,
+    "Flag": ""
+  },
+  {
+    "Recid": 920,
+    "Code": "50+01",
+    "Descr": "SR535300.ClsPrintingInterface",
+    "Number": 0,
+    "Flag": null
+  },
+  {
+    "Recid": 920,
+    "Code": "50+02",
+    "Descr": "99",
+    "Number": 0,
+    "Flag": null
+  },
+  {
+    "Recid": 920,
+    "Code": "50+03",
+    "Descr": "N",
+    "Number": 0,
+    "Flag": null
+  },
+  {
+    "Recid": 920,
+    "Code": "50+04",
+    "Descr": "Y#PrintEngine-GOR",
+    "Number": 0,
+    "Flag": null
+  },
+  {
+    "Recid": 930,
+    "Code": "1+01",
+    "Descr": "PrintGIR.GoodsAudit",
+    "Number": 0,
+    "Flag": ""
+  },
+  {
+    "Recid": 930,
+    "Code": "1+02",
+    "Descr": "99",
+    "Number": 0,
+    "Flag": ""
+  },
+  {
+    "Recid": 930,
+    "Code": "1+03",
+    "Descr": "N",
+    "Number": 0,
+    "Flag": ""
+  },
+  {
+    "Recid": 930,
+    "Code": "2+01",
+    "Descr": "SR525200.ClsGORInkJetPrint",
+    "Number": 0,
+    "Flag": ""
+  },
+  {
+    "Recid": 930,
+    "Code": "2+02",
+    "Descr": "99",
+    "Number": 0,
+    "Flag": ""
+  },
+  {
+    "Recid": 930,
+    "Code": "2+03",
+    "Descr": "N",
+    "Number": 0,
+    "Flag": ""
+  },
+  {
+    "Recid": 930,
+    "Code": "50+01",
+    "Descr": "SR535300.ClsPrintingInterface",
+    "Number": 0,
+    "Flag": null
+  },
+  {
+    "Recid": 930,
+    "Code": "50+02",
+    "Descr": "99",
+    "Number": 0,
+    "Flag": null
+  },
+  {
+    "Recid": 930,
+    "Code": "50+03",
+    "Descr": "N",
+    "Number": 0,
+    "Flag": null
+  },
+  {
+    "Recid": 930,
+    "Code": "50+04",
+    "Descr": "Y#PrintEngine-GIR",
+    "Number": 0,
+    "Flag": null
+  },
+  {
+    "Recid": 940,
+    "Code": "1+01",
+    "Descr": "SR535800.ClsPayinslipPrint",
+    "Number": 0,
+    "Flag": ""
+  },
+  {
+    "Recid": 940,
+    "Code": "1+02",
+    "Descr": "99",
+    "Number": 0,
+    "Flag": ""
+  },
+  {
+    "Recid": 940,
+    "Code": "1+03",
+    "Descr": "N",
+    "Number": 0,
+    "Flag": ""
+  },
+  {
+    "Recid": 940,
+    "Code": "2+01",
+    "Descr": "SR535900.ClsPayinslipPrint",
+    "Number": 0,
+    "Flag": ""
+  },
+  {
+    "Recid": 940,
+    "Code": "2+02",
+    "Descr": "99",
+    "Number": 0,
+    "Flag": ""
+  },
+  {
+    "Recid": 940,
+    "Code": "2+03",
+    "Descr": "N",
+    "Number": 0,
+    "Flag": ""
+  },
+  {
+    "Recid": 940,
+    "Code": "50+01",
+    "Descr": "SR535300.ClsPrintingInterface",
+    "Number": 0,
+    "Flag": null
+  },
+  {
+    "Recid": 940,
+    "Code": "50+02",
+    "Descr": "99",
+    "Number": 0,
+    "Flag": null
+  },
+  {
+    "Recid": 940,
+    "Code": "50+03",
+    "Descr": "N",
+    "Number": 0,
+    "Flag": null
+  },
+  {
+    "Recid": 940,
+    "Code": "50+04",
+    "Descr": "Y#PrintEngine-Payin",
+    "Number": 0,
+    "Flag": null
+  },
+  {
+    "Recid": 950,
+    "Code": "01",
+    "Descr": "StockNo~#",
+    "Number": 0,
+    "Flag": "N"
+  },
+  {
+    "Recid": 950,
+    "Code": "02",
+    "Descr": "StockNo~Qty~Rate~#",
+    "Number": 0,
+    "Flag": "N"
+  },
+  {
+    "Recid": 950,
+    "Code": "03",
+    "Descr": "StockNo~Rate~Qty~#",
+    "Number": 0,
+    "Flag": "N"
+  },
+  {
+    "Recid": 950,
+    "Code": "05",
+    "Descr": "StockNo~Qty~#",
+    "Number": 0,
+    "Flag": "N"
+  },
+  {
+    "Recid": 950,
+    "Code": "06",
+    "Descr": "StockNo~BatchNo",
+    "Number": -1,
+    "Flag": "SKIP"
+  },
+  {
+    "Recid": 950,
+    "Code": "07",
+    "Descr": "StockNo~BatchNo~Qty",
+    "Number": -1,
+    "Flag": "SKIP"
+  },
+  {
+    "Recid": 950,
+    "Code": "08",
+    "Descr": "StockNo~BatchNo~Rate~QTY",
+    "Number": -1,
+    "Flag": "SKIP"
+  },
+  {
+    "Recid": 950,
+    "Code": "09",
+    "Descr": "StockNo~GradeCd",
+    "Number": -1,
+    "Flag": "SKIP"
+  },
+  {
+    "Recid": 950,
+    "Code": "10",
+    "Descr": "StockNo~GradeCd~QTY",
+    "Number": -1,
+    "Flag": "SKIP"
+  },
+  {
+    "Recid": 950,
+    "Code": "11",
+    "Descr": "StockNo~GradeCd~Rate~QTY",
+    "Number": -1,
+    "Flag": "SKIP"
+  },
+  {
+    "Recid": 950,
+    "Code": "12",
+    "Descr": "StockNo~LocationCd",
+    "Number": -1,
+    "Flag": "SKIP"
+  },
+  {
+    "Recid": 950,
+    "Code": "13",
+    "Descr": "StockNo~LocationCd~Qty",
+    "Number": -1,
+    "Flag": "SKIP"
+  },
+  {
+    "Recid": 950,
+    "Code": "14",
+    "Descr": "StockNo~LocationCd~Rate~Qty",
+    "Number": -1,
+    "Flag": "SKIP"
+  },
+  {
+    "Recid": 950,
+    "Code": "15",
+    "Descr": "StockNo~BatchNo~GradeCd~LocationCd",
+    "Number": -1,
+    "Flag": "SKIP"
+  },
+  {
+    "Recid": 950,
+    "Code": "16",
+    "Descr": "StockNo~BatchNo~GradeCd~LocationCd~Qty",
+    "Number": -1,
+    "Flag": "SKIP"
+  },
+  {
+    "Recid": 950,
+    "Code": "17",
+    "Descr": "StockNo~BatchNo~GradeCd~LocationCd~Rate~Qty",
+    "Number": -1,
+    "Flag": "SKIP"
+  },
+  {
+    "Recid": 950,
+    "Code": "18",
+    "Descr": "StockNo~serialnumber~#",
+    "Number": 0,
+    "Flag": "N"
+  },
+  {
+    "Recid": 950,
+    "Code": "19",
+    "Descr": "StockNo~serialnumber~Rate~#",
+    "Number": 0,
+    "Flag": "N"
+  },
+  {
+    "Recid": 960,
+    "Code": "0",
+    "Descr": "BatchSrlNoForItemCreation",
+    "Number": 0,
+    "Flag": ""
+  },
+  {
+    "Recid": 961,
+    "Code": "0",
+    "Descr": "Non-Regular Item",
+    "Number": 0,
+    "Flag": ""
+  },
+  {
+    "Recid": 961,
+    "Code": "1",
+    "Descr": "Regular Item",
+    "Number": 0,
+    "Flag": ""
+  },
+  {
+    "Recid": 970,
+    "Code": "1+01",
+    "Descr": "SR536400.ClsSlipsPrinting",
+    "Number": 0,
+    "Flag": ""
+  },
+  {
+    "Recid": 970,
+    "Code": "1+02",
+    "Descr": "99",
+    "Number": 0,
+    "Flag": ""
+  },
+  {
+    "Recid": 970,
+    "Code": "1+03",
+    "Descr": "N",
+    "Number": 0,
+    "Flag": ""
+  },
+  {
+    "Recid": 970,
+    "Code": "1+04",
+    "Descr": "Y#Slips Printing",
+    "Number": 0,
+    "Flag": ""
+  },
+  {
+    "Recid": 970,
+    "Code": "50+01",
+    "Descr": "SR535300.ClsPrintingInterface",
+    "Number": 0,
+    "Flag": null
+  },
+  {
+    "Recid": 970,
+    "Code": "50+02",
+    "Descr": "99",
+    "Number": 0,
+    "Flag": null
+  },
+  {
+    "Recid": 970,
+    "Code": "50+03",
+    "Descr": "N",
+    "Number": 0,
+    "Flag": null
+  },
+  {
+    "Recid": 970,
+    "Code": "50+04",
+    "Descr": "Y#PrintEngine-Slips",
+    "Number": 0,
+    "Flag": null
+  },
+  {
+    "Recid": 980,
+    "Code": "1+01",
+    "Descr": "SR516800.PrnCashPayRcpt",
+    "Number": 0,
+    "Flag": ""
+  },
+  {
+    "Recid": 980,
+    "Code": "1+02",
+    "Descr": "99",
+    "Number": 0,
+    "Flag": ""
+  },
+  {
+    "Recid": 980,
+    "Code": "1+03",
+    "Descr": "N",
+    "Number": 0,
+    "Flag": ""
+  },
+  {
+    "Recid": 980,
+    "Code": "1+04",
+    "Descr": "Y#CashRecipt CashPayout Printing",
+    "Number": 0,
+    "Flag": ""
+  },
+  {
+    "Recid": 980,
+    "Code": "2+01",
+    "Descr": "SR516800.PrnCashPayRcpt",
+    "Number": 0,
+    "Flag": null
+  },
+  {
+    "Recid": 980,
+    "Code": "2+02",
+    "Descr": "99",
+    "Number": 0,
+    "Flag": null
+  },
+  {
+    "Recid": 980,
+    "Code": "2+03",
+    "Descr": "N",
+    "Number": 0,
+    "Flag": null
+  },
+  {
+    "Recid": 980,
+    "Code": "2+04",
+    "Descr": "Y#CashReciptPayout Printing-40Col SingleSpread",
+    "Number": 0,
+    "Flag": null
+  },
+  {
+    "Recid": 980,
+    "Code": "3+01",
+    "Descr": "SR516800.PrnCashPayRcpt",
+    "Number": 0,
+    "Flag": null
+  },
+  {
+    "Recid": 980,
+    "Code": "3+02",
+    "Descr": "99",
+    "Number": 0,
+    "Flag": null
+  },
+  {
+    "Recid": 980,
+    "Code": "3+03",
+    "Descr": "N",
+    "Number": 0,
+    "Flag": null
+  },
+  {
+    "Recid": 980,
+    "Code": "3+04",
+    "Descr": "Y#CashReciptPayout Printing-40Col DoubleSpread",
+    "Number": 0,
+    "Flag": null
+  },
+  {
+    "Recid": 980,
+    "Code": "4+01",
+    "Descr": "SR516800.PrnCashPayRcpt",
+    "Number": 0,
+    "Flag": null
+  },
+  {
+    "Recid": 980,
+    "Code": "4+02",
+    "Descr": "99",
+    "Number": 0,
+    "Flag": null
+  },
+  {
+    "Recid": 980,
+    "Code": "4+03",
+    "Descr": "N",
+    "Number": 0,
+    "Flag": null
+  },
+  {
+    "Recid": 980,
+    "Code": "4+04",
+    "Descr": "Y#CashReciptPayout Printing-80Col",
+    "Number": 0,
+    "Flag": null
+  },
+  {
+    "Recid": 980,
+    "Code": "5+01",
+    "Descr": "SR516800.PrnCashPayRcpt",
+    "Number": 0,
+    "Flag": null
+  },
+  {
+    "Recid": 980,
+    "Code": "5+02",
+    "Descr": "99",
+    "Number": 0,
+    "Flag": null
+  },
+  {
+    "Recid": 980,
+    "Code": "5+03",
+    "Descr": "N",
+    "Number": 0,
+    "Flag": null
+  },
+  {
+    "Recid": 980,
+    "Code": "5+04",
+    "Descr": "Y#CashReciptPayout Printing-GUI",
+    "Number": 0,
+    "Flag": null
+  },
+  {
+    "Recid": 980,
+    "Code": "50+01",
+    "Descr": "SR535300.ClsPrintingInterface",
+    "Number": 0,
+    "Flag": null
+  },
+  {
+    "Recid": 980,
+    "Code": "50+02",
+    "Descr": "99",
+    "Number": 0,
+    "Flag": null
+  },
+  {
+    "Recid": 980,
+    "Code": "50+03",
+    "Descr": "N",
+    "Number": 0,
+    "Flag": null
+  },
+  {
+    "Recid": 980,
+    "Code": "50+04",
+    "Descr": "Y#PrintEngine-CashRcptPayout",
+    "Number": 0,
+    "Flag": null
+  },
+  {
+    "Recid": 980,
+    "Code": "6+01",
+    "Descr": "SR516800.PrnCashPayRcpt",
+    "Number": 0,
+    "Flag": null
+  },
+  {
+    "Recid": 980,
+    "Code": "6+02",
+    "Descr": "99",
+    "Number": 0,
+    "Flag": null
+  },
+  {
+    "Recid": 980,
+    "Code": "6+03",
+    "Descr": "N",
+    "Number": 0,
+    "Flag": null
+  },
+  {
+    "Recid": 980,
+    "Code": "6+04",
+    "Descr": "Y#CashReciptPayout Printing-40ColPOS",
+    "Number": 0,
+    "Flag": null
+  },
+  {
+    "Recid": 999,
+    "Code": "1",
+    "Descr": "StockNo",
+    "Number": 1,
+    "Flag": "1"
+  },
+  {
+    "Recid": 999,
+    "Code": "10",
+    "Descr": "StockNo#GradeCd#ActQty",
+    "Number": -1,
+    "Flag": "1#1#2"
+  },
+  {
+    "Recid": 999,
+    "Code": "11",
+    "Descr": "StockNo#GradeCd#Rate#ActQty",
+    "Number": -1,
+    "Flag": "1#1#2#2"
+  },
+  {
+    "Recid": 999,
+    "Code": "12",
+    "Descr": "StockNo#LocationCd#ActQty",
+    "Number": -1,
+    "Flag": "1#1#2"
+  },
+  {
+    "Recid": 999,
+    "Code": "13",
+    "Descr": "StockNo#BatchNo#GradeCd#LocationCd",
+    "Number": -1,
+    "Flag": "1#1#1#1"
+  },
+  {
+    "Recid": 999,
+    "Code": "14",
+    "Descr": "StockNo#SerialNo",
+    "Number": -1,
+    "Flag": "1#1"
+  },
+  {
+    "Recid": 999,
+    "Code": "15",
+    "Descr": "StockNo#SerialNo#Rate",
+    "Number": -1,
+    "Flag": "1#1#2"
+  },
+  {
+    "Recid": 999,
+    "Code": "2",
+    "Descr": "StockNo#ActQty",
+    "Number": 1,
+    "Flag": "1#2"
+  },
+  {
+    "Recid": 999,
+    "Code": "3",
+    "Descr": "StockNo#Rate#ActQty",
+    "Number": 1,
+    "Flag": "1#2#2"
+  },
+  {
+    "Recid": 999,
+    "Code": "4",
+    "Descr": "StockNo#DocQty#ActQty",
+    "Number": 1,
+    "Flag": "1#2#2"
+  },
+  {
+    "Recid": 999,
+    "Code": "5",
+    "Descr": "StockNo#Rate#DocQty#ActQty",
+    "Number": 1,
+    "Flag": "1#2#2#2"
+  },
+  {
+    "Recid": 999,
+    "Code": "6",
+    "Descr": "StockNo#BatchNo#ActQty",
+    "Number": -1,
+    "Flag": "1#1#2"
+  },
+  {
+    "Recid": 999,
+    "Code": "7",
+    "Descr": "StockNo#BatchNo#Rate#ActQty",
+    "Number": -1,
+    "Flag": "1#1#2#2"
+  },
+  {
+    "Recid": 999,
+    "Code": "8",
+    "Descr": "StockNo#BatchNo#GradeCd#ActQty",
+    "Number": -1,
+    "Flag": "1#1#1#2"
+  },
+  {
+    "Recid": 999,
+    "Code": "9",
+    "Descr": "StockNo#BatchNo#GradeCd#LocationCd#ActQty",
+    "Number": -1,
+    "Flag": "1#1#1#1#2"
+  },
+  {
+    "Recid": 1010,
+    "Code": "D2100",
+    "Descr": "01:01#02:02#03:03#04:04#05:05",
+    "Number": 0,
+    "Flag": ""
+  },
+  {
+    "Recid": 1010,
+    "Code": "D2200",
+    "Descr": "01:01#02:02#03:03#04:04#05:05",
+    "Number": 0,
+    "Flag": ""
+  },
+  {
+    "Recid": 1010,
+    "Code": "D2300",
+    "Descr": "01:01#02:02#03:03#04:04#05:05",
+    "Number": 0,
+    "Flag": ""
+  },
+  {
+    "Recid": 1010,
+    "Code": "D2400",
+    "Descr": "01:01#02:02#03:03#04:04#05:05",
+    "Number": 0,
+    "Flag": ""
+  },
+  {
+    "Recid": 1010,
+    "Code": "D2500",
+    "Descr": "01:01#02:02#03:03#04:04#05:05",
+    "Number": 0,
+    "Flag": ""
+  },
+  {
+    "Recid": 1010,
+    "Code": "D9800",
+    "Descr": "01:01#02:02#03:03#04:04#05:05",
+    "Number": 0,
+    "Flag": ""
+  },
+  {
+    "Recid": 1010,
+    "Code": "D9900",
+    "Descr": "01:01#02:02#03:03#04:04#05:05",
+    "Number": 0,
+    "Flag": ""
+  },
+  {
+    "Recid": 1010,
+    "Code": "R2100",
+    "Descr": "01:01#02:02#03:03#04:04#05:05",
+    "Number": 0,
+    "Flag": ""
+  },
+  {
+    "Recid": 1010,
+    "Code": "R2200",
+    "Descr": "01:01#02:02#03:03#04:04#05:05",
+    "Number": 0,
+    "Flag": ""
+  },
+  {
+    "Recid": 1010,
+    "Code": "R2300",
+    "Descr": "01:01#02:02#03:03#04:04#05:05",
+    "Number": 0,
+    "Flag": ""
+  },
+  {
+    "Recid": 1010,
+    "Code": "R2400",
+    "Descr": "01:01#02:02#03:03#04:04#05:05",
+    "Number": 0,
+    "Flag": ""
+  },
+  {
+    "Recid": 1010,
+    "Code": "R2500",
+    "Descr": "01:01#02:02#03:03#04:04#05:05",
+    "Number": 0,
+    "Flag": ""
+  },
+  {
+    "Recid": 1010,
+    "Code": "R9800",
+    "Descr": "01:01#02:02#03:03#04:04#05:05",
+    "Number": 0,
+    "Flag": ""
+  },
+  {
+    "Recid": 1010,
+    "Code": "R9900",
+    "Descr": "01:01#02:02#03:03#04:04#05:05",
+    "Number": 0,
+    "Flag": ""
+  },
+  {
+    "Recid": 1050,
+    "Code": "FLCom533",
+    "Descr": "Customer Price Group Name",
+    "Number": 0,
+    "Flag": ""
+  },
+  {
+    "Recid": 1050,
+    "Code": "FLCom534",
+    "Descr": "Destination Tax Type Code",
+    "Number": 0,
+    "Flag": ""
+  },
+  {
+    "Recid": 1050,
+    "Code": "FLCom535",
+    "Descr": "Destination Tax Type Description",
+    "Number": 0,
+    "Flag": ""
+  },
+  {
+    "Recid": 1050,
+    "Code": "FLCom536",
+    "Descr": "N/A",
+    "Number": 0,
+    "Flag": ""
+  },
+  {
+    "Recid": 1050,
+    "Code": "FLCom537",
+    "Descr": "N/A",
+    "Number": 0,
+    "Flag": ""
+  },
+  {
+    "Recid": 1050,
+    "Code": "FLCom538",
+    "Descr": "N/A",
+    "Number": 0,
+    "Flag": ""
+  },
+  {
+    "Recid": 1050,
+    "Code": "FLCom539",
+    "Descr": "N/A",
+    "Number": 0,
+    "Flag": ""
+  },
+  {
+    "Recid": 1050,
+    "Code": "FLCom540",
+    "Descr": "N/A",
+    "Number": 0,
+    "Flag": ""
+  },
+  {
+    "Recid": 1050,
+    "Code": "FLCom541",
+    "Descr": "N/A",
+    "Number": 0,
+    "Flag": ""
+  },
+  {
+    "Recid": 1050,
+    "Code": "FLCom542",
+    "Descr": "N/A",
+    "Number": 0,
+    "Flag": ""
+  },
+  {
+    "Recid": 1050,
+    "Code": "FLCom543",
+    "Descr": "N/A",
+    "Number": 0,
+    "Flag": ""
+  },
+  {
+    "Recid": 1050,
+    "Code": "FLCom544",
+    "Descr": "N/A",
+    "Number": 0,
+    "Flag": ""
+  },
+  {
+    "Recid": 1050,
+    "Code": "FLCom545",
+    "Descr": "N/A",
+    "Number": 0,
+    "Flag": ""
+  },
+  {
+    "Recid": 1060,
+    "Code": "F01",
+    "Descr": "Customer Level Filter",
+    "Number": 1,
+    "Flag": "0"
+  },
+  {
+    "Recid": 1060,
+    "Code": "F02",
+    "Descr": "Product Level Filter",
+    "Number": 0,
+    "Flag": "0"
+  },
+  {
+    "Recid": 1060,
+    "Code": "F03",
+    "Descr": "Sales Promo Filter",
+    "Number": 0,
+    "Flag": "0"
+  },
+  {
+    "Recid": 1070,
+    "Code": "S01",
+    "Descr": "Equal To",
+    "Number": 1,
+    "Flag": "0"
+  },
+  {
+    "Recid": 1070,
+    "Code": "S02",
+    "Descr": "Not equal To",
+    "Number": 1,
+    "Flag": "0"
+  },
+  {
+    "Recid": 1070,
+    "Code": "S03",
+    "Descr": "Greater Than",
+    "Number": 1,
+    "Flag": "0"
+  },
+  {
+    "Recid": 1070,
+    "Code": "S04",
+    "Descr": "Greater than and Equal To",
+    "Number": 1,
+    "Flag": "0"
+  },
+  {
+    "Recid": 1070,
+    "Code": "S05",
+    "Descr": "Less than",
+    "Number": 1,
+    "Flag": "0"
+  },
+  {
+    "Recid": 1070,
+    "Code": "S06",
+    "Descr": "Less than and Equal to",
+    "Number": 1,
+    "Flag": "0"
+  },
+  {
+    "Recid": 1070,
+    "Code": "S07",
+    "Descr": "Between",
+    "Number": 1,
+    "Flag": "0"
+  },
+  {
+    "Recid": 1070,
+    "Code": "S08",
+    "Descr": "In",
+    "Number": 1,
+    "Flag": "1"
+  },
+  {
+    "Recid": 1070,
+    "Code": "S09",
+    "Descr": "Is",
+    "Number": 1,
+    "Flag": "1"
+  },
+  {
+    "Recid": 1070,
+    "Code": "S10",
+    "Descr": "Contains",
+    "Number": 1,
+    "Flag": "1"
+  },
+  {
+    "Recid": 1070,
+    "Code": "S11",
+    "Descr": "Starts with",
+    "Number": 1,
+    "Flag": "1"
+  },
+  {
+    "Recid": 1070,
+    "Code": "S12",
+    "Descr": "Ends with",
+    "Number": 1,
+    "Flag": "1"
+  },
+  {
+    "Recid": 1080,
+    "Code": "T01",
+    "Descr": "And ",
+    "Number": 1,
+    "Flag": "0"
+  },
+  {
+    "Recid": 1080,
+    "Code": "T02",
+    "Descr": "Or",
+    "Number": 1,
+    "Flag": "0"
+  },
+  {
+    "Recid": 1080,
+    "Code": "T03",
+    "Descr": "Blank",
+    "Number": 0,
+    "Flag": "0"
+  },
+  {
+    "Recid": 1200,
+    "Code": "Code128",
+    "Descr": "IDAutomationC128XL",
+    "Number": 0,
+    "Flag": "0"
+  },
+  {
+    "Recid": 1200,
+    "Code": "Code128(Narrow)",
+    "Descr": "IDAutomationC128S",
+    "Number": 0,
+    "Flag": "0"
+  },
+  {
+    "Recid": 1200,
+    "Code": "Code39",
+    "Descr": "IDAutomationC39XL",
+    "Number": 0,
+    "Flag": "0"
+  },
+  {
+    "Recid": 1200,
+    "Code": "Code39(Narrow)",
+    "Descr": "IDAutomationC39S",
+    "Number": 0,
+    "Flag": "0"
+  },
+  {
+    "Recid": 1200,
+    "Code": "Code39-H",
+    "Descr": "IDAutomationHC39XL",
+    "Number": 0,
+    "Flag": "0"
+  },
+  {
+    "Recid": 1200,
+    "Code": "Code39-H(Narrow)",
+    "Descr": "IDAutomationHC39S",
+    "Number": 0,
+    "Flag": "0"
+  },
+  {
+    "Recid": 1200,
+    "Code": "I2O5",
+    "Descr": "IDAutomationI25XL",
+    "Number": 0,
+    "Flag": "0"
+  },
+  {
+    "Recid": 1200,
+    "Code": "I2O5(Narrow)",
+    "Descr": "IDAutomationI25M",
+    "Number": 0,
+    "Flag": "0"
+  },
+  {
+    "Recid": 1200,
+    "Code": "I2O5-H",
+    "Descr": "IDAutomationHI25XL",
+    "Number": 0,
+    "Flag": "0"
+  },
+  {
+    "Recid": 1200,
+    "Code": "I2O5-H(Narrow)",
+    "Descr": "IDAutomationHI25M",
+    "Number": 0,
+    "Flag": "0"
+  },
+  {
+    "Recid": 1200,
+    "Code": "UPCEAN",
+    "Descr": "IDAutomationUPCEANXXS",
+    "Number": 0,
+    "Flag": "0"
+  },
+  {
+    "Recid": 1200,
+    "Code": "UPCEAN(Narrow)",
+    "Descr": "IDAutomationUPCEANS",
+    "Number": 0,
+    "Flag": "0"
+  },
+  {
+    "Recid": 5000,
+    "Code": "1",
+    "Descr": "SR580200.ClassItemBrowse",
+    "Number": 0,
+    "Flag": ""
+  },
+  {
+    "Recid": 5000,
+    "Code": "2",
+    "Descr": "SR580200.ClassCustomerBrowse",
+    "Number": 0,
+    "Flag": ""
+  },
+  {
+    "Recid": 5000,
+    "Code": "3",
+    "Descr": "SR580200.ClassTransBrowse",
+    "Number": 0,
+    "Flag": ""
+  },
+  {
+    "Recid": 5000,
+    "Code": "4",
+    "Descr": "SR580200.ClassExtendedBrowse",
+    "Number": 0,
+    "Flag": ""
+  },
+  {
+    "Recid": 5000,
+    "Code": "5",
+    "Descr": "SR580200.ClassBatchBrowse",
+    "Number": 0,
+    "Flag": ""
+  },
+  {
+    "Recid": 5000,
+    "Code": "6",
+    "Descr": "SR580200.ClassWebBrowse",
+    "Number": 0,
+    "Flag": ""
+  },
+  {
+    "Recid": 5152,
+    "Code": "CP",
+    "Descr": "SN502900.clsResyncExport",
+    "Number": 1,
+    "Flag": "Collect Payment"
+  },
+  {
+    "Recid": 5152,
+    "Code": "DA",
+    "Descr": "SR548000.ResendFile",
+    "Number": 1,
+    "Flag": "Delivery Instructions"
+  },
+  {
+    "Recid": 5152,
+    "Code": "DN",
+    "Descr": "SR548000.ResendFile",
+    "Number": 1,
+    "Flag": "Delivery Note"
+  },
+  {
+    "Recid": 5152,
+    "Code": "DS",
+    "Descr": "SR548000.ResendFile",
+    "Number": 1,
+    "Flag": "Delivery Status"
+  },
+  {
+    "Recid": 5152,
+    "Code": "INV",
+    "Descr": "SN500200.ClsResendXmlPrintFile",
+    "Number": 1,
+    "Flag": "Invoice Printing to XML File"
+  },
+  {
+    "Recid": 5152,
+    "Code": "RU",
+    "Descr": "SR542200.ClsRemoteUpdation",
+    "Number": 1,
+    "Flag": "Sales Return Status Updation"
+  },
+  {
+    "Recid": 5152,
+    "Code": "VS",
+    "Descr": "SR542200.ClsRemoteUpdation",
+    "Number": 1,
+    "Flag": "Void Status Updation"
+  },
+  {
+    "Recid": 6300,
+    "Code": "50",
+    "Descr": "SR535300.ClsPrintingInterface",
+    "Number": 0,
+    "Flag": null
+  },
+  {
+    "Recid": 6400,
+    "Code": "50",
+    "Descr": "SR535300.ClsPrintingInterface",
+    "Number": 0,
+    "Flag": null
+  },
+  {
+    "Recid": 7000,
+    "Code": "NA",
+    "Descr": "NA",
+    "Number": 0,
+    "Flag": ""
+  },
+  {
+    "Recid": 7001,
+    "Code": "NA",
+    "Descr": "NA",
+    "Number": 0,
+    "Flag": ""
+  },
+  {
+    "Recid": 7002,
+    "Code": "NA",
+    "Descr": "NA",
+    "Number": 0,
+    "Flag": ""
+  },
+  {
+    "Recid": 7003,
+    "Code": "NA",
+    "Descr": "NA",
+    "Number": 0,
+    "Flag": ""
+  },
+  {
+    "Recid": 7004,
+    "Code": "NA",
+    "Descr": "NA",
+    "Number": 0,
+    "Flag": ""
+  },
+  {
+    "Recid": 7005,
+    "Code": "NA",
+    "Descr": "NA",
+    "Number": 0,
+    "Flag": ""
+  },
+  {
+    "Recid": 7006,
+    "Code": "NA",
+    "Descr": "NA",
+    "Number": 0,
+    "Flag": ""
+  },
+  {
+    "Recid": 7007,
+    "Code": "NA",
+    "Descr": "NA",
+    "Number": 0,
+    "Flag": ""
+  },
+  {
+    "Recid": 7008,
+    "Code": "NA",
+    "Descr": "NA",
+    "Number": 0,
+    "Flag": ""
+  },
+  {
+    "Recid": 7009,
+    "Code": "NA",
+    "Descr": "NA",
+    "Number": 0,
+    "Flag": ""
+  },
+  {
+    "Recid": 7010,
+    "Code": "NA",
+    "Descr": "NA",
+    "Number": 0,
+    "Flag": ""
+  },
+  {
+    "Recid": 7011,
+    "Code": "NA",
+    "Descr": "NA",
+    "Number": 0,
+    "Flag": ""
+  },
+  {
+    "Recid": 7012,
+    "Code": "NA",
+    "Descr": "NA",
+    "Number": 0,
+    "Flag": ""
+  },
+  {
+    "Recid": 7013,
+    "Code": "NA",
+    "Descr": "NA",
+    "Number": 0,
+    "Flag": ""
+  },
+  {
+    "Recid": 7014,
+    "Code": "NA",
+    "Descr": "NA",
+    "Number": 0,
+    "Flag": ""
+  },
+  {
+    "Recid": 7015,
+    "Code": "NA",
+    "Descr": "NA",
+    "Number": 0,
+    "Flag": ""
+  },
+  {
+    "Recid": 7016,
+    "Code": "NA",
+    "Descr": "NA",
+    "Number": 0,
+    "Flag": ""
+  },
+  {
+    "Recid": 7017,
+    "Code": "NA",
+    "Descr": "NA",
+    "Number": 0,
+    "Flag": ""
+  },
+  {
+    "Recid": 7018,
+    "Code": "NA",
+    "Descr": "NA",
+    "Number": 0,
+    "Flag": ""
+  },
+  {
+    "Recid": 7019,
+    "Code": "NA",
+    "Descr": "NA",
+    "Number": 0,
+    "Flag": ""
+  },
+  {
+    "Recid": 7020,
+    "Code": "NA",
+    "Descr": "NA",
+    "Number": 0,
+    "Flag": ""
+  },
+  {
+    "Recid": 7021,
+    "Code": "NA",
+    "Descr": "NA",
+    "Number": 0,
+    "Flag": ""
+  },
+  {
+    "Recid": 7022,
+    "Code": "NA",
+    "Descr": "NA",
+    "Number": 0,
+    "Flag": ""
+  },
+  {
+    "Recid": 7023,
+    "Code": "NA",
+    "Descr": "NA",
+    "Number": 0,
+    "Flag": ""
+  },
+  {
+    "Recid": 7024,
+    "Code": "NA",
+    "Descr": "NA",
+    "Number": 0,
+    "Flag": ""
+  },
+  {
+    "Recid": 7025,
+    "Code": "NA",
+    "Descr": "NA",
+    "Number": 0,
+    "Flag": ""
+  },
+  {
+    "Recid": 7026,
+    "Code": "NA",
+    "Descr": "NA",
+    "Number": 0,
+    "Flag": ""
+  },
+  {
+    "Recid": 7030,
+    "Code": "Default Grade",
+    "Descr": "Default Grade",
+    "Number": 0,
+    "Flag": "N"
+  },
+  {
+    "Recid": 7030,
+    "Code": "Not Applicable",
+    "Descr": "Not Applicable",
+    "Number": 0,
+    "Flag": "N"
+  },
+  {
+    "Recid": 7031,
+    "Code": "Default Location",
+    "Descr": "Default Location",
+    "Number": 0,
+    "Flag": "N"
+  },
+  {
+    "Recid": 7031,
+    "Code": "Not Applicable",
+    "Descr": "Not Applicable",
+    "Number": 0,
+    "Flag": "N"
+  },
+  {
+    "Recid": 7032,
+    "Code": "8100",
+    "Descr": "Packing Slip",
+    "Number": 0,
+    "Flag": "0"
+  },
+  {
+    "Recid": 7032,
+    "Code": "8200",
+    "Descr": "Pallet Slip",
+    "Number": 0,
+    "Flag": "0"
+  },
+  {
+    "Recid": 7032,
+    "Code": "9700",
+    "Descr": "Sale Order",
+    "Number": 0,
+    "Flag": "0"
+  },
+  {
+    "Recid": 7033,
+    "Code": "8100",
+    "Descr": "Packing Slip",
+    "Number": 0,
+    "Flag": "0"
+  },
+  {
+    "Recid": 7033,
+    "Code": "8200",
+    "Descr": "Pallet Slip",
+    "Number": 0,
+    "Flag": "0"
+  },
+  {
+    "Recid": 7033,
+    "Code": "9700",
+    "Descr": "Sale Order",
+    "Number": 0,
+    "Flag": "0"
+  },
+  {
+    "Recid": 7034,
+    "Code": "8100",
+    "Descr": "Packing Slip",
+    "Number": 0,
+    "Flag": "0"
+  },
+  {
+    "Recid": 7034,
+    "Code": "8200",
+    "Descr": "Pallet Slip",
+    "Number": 0,
+    "Flag": "0"
+  },
+  {
+    "Recid": 7034,
+    "Code": "9700",
+    "Descr": "Sale Order",
+    "Number": 0,
+    "Flag": "0"
+  },
+  {
+    "Recid": 7035,
+    "Code": "2100",
+    "Descr": "Sales",
+    "Number": 0,
+    "Flag": "0"
+  },
+  {
+    "Recid": 7035,
+    "Code": "2200",
+    "Descr": "Transfer Out",
+    "Number": 0,
+    "Flag": "0"
+  },
+  {
+    "Recid": 7035,
+    "Code": "2300",
+    "Descr": "Pur Rtn",
+    "Number": 0,
+    "Flag": "0"
+  },
+  {
+    "Recid": 7035,
+    "Code": "2500",
+    "Descr": "Misc Issue",
+    "Number": 0,
+    "Flag": "0"
+  },
+  {
+    "Recid": 7040,
+    "Code": "1100",
+    "Descr": "Purchase",
+    "Number": 0,
+    "Flag": null
+  },
+  {
+    "Recid": 7040,
+    "Code": "1200",
+    "Descr": "Transfer In",
+    "Number": 0,
+    "Flag": null
+  },
+  {
+    "Recid": 7040,
+    "Code": "1300",
+    "Descr": "Sales Return",
+    "Number": 0,
+    "Flag": null
+  },
+  {
+    "Recid": 7040,
+    "Code": "1500",
+    "Descr": "Misc. Reciept",
+    "Number": 0,
+    "Flag": null
+  },
+  {
+    "Recid": 7040,
+    "Code": "1600",
+    "Descr": "Void Sales",
+    "Number": 0,
+    "Flag": null
+  },
+  {
+    "Recid": 7040,
+    "Code": "2100",
+    "Descr": "Sales",
+    "Number": 0,
+    "Flag": null
+  },
+  {
+    "Recid": 7040,
+    "Code": "2200",
+    "Descr": "Transfer out",
+    "Number": 0,
+    "Flag": null
+  },
+  {
+    "Recid": 7040,
+    "Code": "2300",
+    "Descr": "Purchase Return",
+    "Number": 0,
+    "Flag": null
+  },
+  {
+    "Recid": 7040,
+    "Code": "2500",
+    "Descr": "Misc. Issue",
+    "Number": 0,
+    "Flag": null
+  },
+  {
+    "Recid": 7040,
+    "Code": "3100",
+    "Descr": "Opening Stock Loading",
+    "Number": 0,
+    "Flag": null
+  },
+  {
+    "Recid": 7040,
+    "Code": "3200",
+    "Descr": "Discrepancy Updation",
+    "Number": 0,
+    "Flag": null
+  },
+  {
+    "Recid": 7050,
+    "Code": "NA",
+    "Descr": "NA",
+    "Number": 0,
+    "Flag": "N"
+  },
+  {
+    "Recid": 7051,
+    "Code": "NA",
+    "Descr": "NA",
+    "Number": 0,
+    "Flag": "N"
+  },
+  {
+    "Recid": 7052,
+    "Code": "NA",
+    "Descr": "NA",
+    "Number": 0,
+    "Flag": "N"
+  },
+  {
+    "Recid": 7053,
+    "Code": "NA",
+    "Descr": "NA",
+    "Number": 0,
+    "Flag": "N"
+  },
+  {
+    "Recid": 7060,
+    "Code": "1",
+    "Descr": "Purchase",
+    "Number": 0,
+    "Flag": "1100,2710"
+  },
+  {
+    "Recid": 7060,
+    "Code": "2",
+    "Descr": "Transfer In",
+    "Number": 0,
+    "Flag": "1200,2720"
+  },
+  {
+    "Recid": 7060,
+    "Code": "3",
+    "Descr": "Misc. Receipt",
+    "Number": 0,
+    "Flag": "1500,2740"
+  },
+  {
+    "Recid": 7060,
+    "Code": "4",
+    "Descr": "Sales",
+    "Number": 0,
+    "Flag": "2100,1300,1600,2600"
+  },
+  {
+    "Recid": 7060,
+    "Code": "5",
+    "Descr": "Transfer Out",
+    "Number": 0,
+    "Flag": "2200,1720"
+  },
+  {
+    "Recid": 7060,
+    "Code": "6",
+    "Descr": "Purchase Return",
+    "Number": 0,
+    "Flag": "2300,1710"
+  },
+  {
+    "Recid": 7060,
+    "Code": "7",
+    "Descr": "Misc. Issue",
+    "Number": 0,
+    "Flag": "2500,1740"
+  },
+  {
+    "Recid": 7060,
+    "Code": "8",
+    "Descr": "Open Stock Loading",
+    "Number": 0,
+    "Flag": "3100"
+  },
+  {
+    "Recid": 7060,
+    "Code": "9",
+    "Descr": "Discrepancy Update",
+    "Number": 0,
+    "Flag": "3200"
+  },
+  {
+    "Recid": 8300,
+    "Code": "VendorCode",
+    "Descr": "0",
+    "Number": 0,
+    "Flag": ""
+  },
+  {
+    "Recid": 8400,
+    "Code": "FieldName",
+    "Descr": "Field Description",
+    "Number": 0,
+    "Flag": "N"
+  },
+  {
+    "Recid": 8500,
+    "Code": "1",
+    "Descr": "SE500300.clspoprint",
+    "Number": 0,
+    "Flag": "0"
+  },
+  {
+    "Recid": 8500,
+    "Code": "50",
+    "Descr": "SR535300.ClsPrintingInterface",
+    "Number": 0,
+    "Flag": null
+  },
+  {
+    "Recid": 8600,
+    "Code": "5",
+    "Descr": "DOS Format",
+    "Number": 0,
+    "Flag": "N"
+  },
+  {
+    "Recid": 8600,
+    "Code": "6",
+    "Descr": "GUI Format",
+    "Number": 0,
+    "Flag": "N"
+  },
+  {
+    "Recid": 8600,
+    "Code": "7",
+    "Descr": "GUI with Delimiter Format",
+    "Number": 0,
+    "Flag": "N"
+  },
+  {
+    "Recid": 8600,
+    "Code": "73",
+    "Descr": "GUI with Delimiter New Format",
+    "Number": 0,
+    "Flag": "N"
+  },
+  {
+    "Recid": 8700,
+    "Code": "SHFM02",
+    "Descr": "PriceMasterExport Last Generated File Number",
+    "Number": 1,
+    "Flag": "N"
+  },
+  {
+    "Recid": 8800,
+    "Code": "StockNo",
+    "Descr": "StockNo Generation",
+    "Number": 0,
+    "Flag": "N"
+  },
+  {
+    "Recid": 9000,
+    "Code": "1",
+    "Descr": "Caption For -> Catalogue Name",
+    "Number": 1,
+    "Flag": "Sales Promotion Catalogue"
+  },
+  {
+    "Recid": 9000,
+    "Code": "10",
+    "Descr": "Frame Cap For -> Item Level - Discount - Applicable Conditions",
+    "Number": 1,
+    "Flag": "Item Level - Discount - applicable conditions"
+  },
+  {
+    "Recid": 9000,
+    "Code": "11",
+    "Descr": "Frame Cap For -> Item Level - Offer - Applicable Conditions",
+    "Number": 1,
+    "Flag": "Item Level - Offer - applicable conditions"
+  },
+  {
+    "Recid": 9000,
+    "Code": "12",
+    "Descr": "Frame Cap For -> Bill Level - Discount - Applicable Conditions",
+    "Number": 1,
+    "Flag": "Bill Level - Discount - applicable conditions"
+  },
+  {
+    "Recid": 9000,
+    "Code": "13",
+    "Descr": "Frame Cap For -> Bill Level - Offer - Applicable Conditions",
+    "Number": 1,
+    "Flag": "Bill Level - Offer - applicable conditions"
+  },
+  {
+    "Recid": 9000,
+    "Code": "14",
+    "Descr": "Caption For -> Discount Varies Based On Item Rate/Value",
+    "Number": 1,
+    "Flag": "Discount based on item rate/value"
+  },
+  {
+    "Recid": 9000,
+    "Code": "15",
+    "Descr": "Caption For -> Discount Varies Based On Item Quantity",
+    "Number": 1,
+    "Flag": "Discount based on item quantity"
+  },
+  {
+    "Recid": 9000,
+    "Code": "16",
+    "Descr": "Caption For -> Offer Varies Based On Item Rate/Value",
+    "Number": 1,
+    "Flag": "Offer based on item rate/value"
+  },
+  {
+    "Recid": 9000,
+    "Code": "17",
+    "Descr": "Caption For -> Offer Varies Based On Item Quantity",
+    "Number": 1,
+    "Flag": "Offer based on item quantity"
+  },
+  {
+    "Recid": 9000,
+    "Code": "18",
+    "Descr": "Caption For -> Discount Varies Based On Bill Value Range",
+    "Number": 1,
+    "Flag": "Discount based on bill value range"
+  },
+  {
+    "Recid": 9000,
+    "Code": "19",
+    "Descr": "Caption For -> Discount Varies Based On Bill Quantity Range",
+    "Number": 1,
+    "Flag": "Discount based on bill quantity Range"
+  },
+  {
+    "Recid": 9000,
+    "Code": "2",
+    "Descr": "Caption For -> Tab 1 - Showroom Details ",
+    "Number": 1,
+    "Flag": "Showroom details"
+  },
+  {
+    "Recid": 9000,
+    "Code": "20",
+    "Descr": "Caption For -> Offer Varies Based On Bill Value Range",
+    "Number": 1,
+    "Flag": "Offer based on bill value range"
+  },
+  {
+    "Recid": 9000,
+    "Code": "21",
+    "Descr": "Caption For -> Offer Varies Based On Bill Quantity Range",
+    "Number": 1,
+    "Flag": "Offer based on bill quantity range"
+  },
+  {
+    "Recid": 9000,
+    "Code": "22",
+    "Descr": "Caption For -> Selling/Billed/Buying",
+    "Number": 1,
+    "Flag": "Buy"
+  },
+  {
+    "Recid": 9000,
+    "Code": "23",
+    "Descr": "Caption For -> Free/Get",
+    "Number": 1,
+    "Flag": "Get Free"
+  },
+  {
+    "Recid": 9000,
+    "Code": "3",
+    "Descr": "Caption For -> Tab 2 - Header Details ",
+    "Number": 1,
+    "Flag": "Promotional schemes"
+  },
+  {
+    "Recid": 9000,
+    "Code": "4",
+    "Descr": "Caption For -> Tab 3 - Item Details ",
+    "Number": 1,
+    "Flag": "Item details"
+  },
+  {
+    "Recid": 9000,
+    "Code": "5",
+    "Descr": "Caption For -> Tab 4 - Discount Details ",
+    "Number": 1,
+    "Flag": "Discount details"
+  },
+  {
+    "Recid": 9000,
+    "Code": "6",
+    "Descr": "Caption For -> Tab 5 - View Details ",
+    "Number": 1,
+    "Flag": "View/Manage"
+  },
+  {
+    "Recid": 9000,
+    "Code": "7",
+    "Descr": "Caption For -> SP Code ",
+    "Number": 1,
+    "Flag": "Code"
+  },
+  {
+    "Recid": 9000,
+    "Code": "8",
+    "Descr": "Caption For -> SP Description ",
+    "Number": 1,
+    "Flag": "Description"
+  },
+  {
+    "Recid": 9000,
+    "Code": "9",
+    "Descr": "Caption For -> Happy Hours ",
+    "Number": 1,
+    "Flag": "Happy hours"
+  },
+  {
+    "Recid": 9010,
+    "Code": "1",
+    "Descr": "StockNo",
+    "Number": 1,
+    "Flag": "1"
+  },
+  {
+    "Recid": 9010,
+    "Code": "10",
+    "Descr": "AnalCode2",
+    "Number": 10,
+    "Flag": "0"
+  },
+  {
+    "Recid": 9010,
+    "Code": "11",
+    "Descr": "AnalCode3",
+    "Number": 11,
+    "Flag": "0"
+  },
+  {
+    "Recid": 9010,
+    "Code": "12",
+    "Descr": "AnalCode4",
+    "Number": 12,
+    "Flag": "0"
+  },
+  {
+    "Recid": 9010,
+    "Code": "13",
+    "Descr": "AnalCode5",
+    "Number": 13,
+    "Flag": "0"
+  },
+  {
+    "Recid": 9010,
+    "Code": "14",
+    "Descr": "AnalCode6",
+    "Number": 14,
+    "Flag": "0"
+  },
+  {
+    "Recid": 9010,
+    "Code": "15",
+    "Descr": "AnalCode7",
+    "Number": 15,
+    "Flag": "0"
+  },
+  {
+    "Recid": 9010,
+    "Code": "16",
+    "Descr": "AnalCode8",
+    "Number": 16,
+    "Flag": "0"
+  },
+  {
+    "Recid": 9010,
+    "Code": "17",
+    "Descr": "AnalCode9",
+    "Number": 17,
+    "Flag": "0"
+  },
+  {
+    "Recid": 9010,
+    "Code": "18",
+    "Descr": "AnalCode10",
+    "Number": 18,
+    "Flag": "0"
+  },
+  {
+    "Recid": 9010,
+    "Code": "19",
+    "Descr": "AnalCode11",
+    "Number": 19,
+    "Flag": "0"
+  },
+  {
+    "Recid": 9010,
+    "Code": "2",
+    "Descr": "SuperClass1",
+    "Number": 2,
+    "Flag": "0"
+  },
+  {
+    "Recid": 9010,
+    "Code": "20",
+    "Descr": "AnalCode12",
+    "Number": 20,
+    "Flag": "0"
+  },
+  {
+    "Recid": 9010,
+    "Code": "21",
+    "Descr": "AnalCode13",
+    "Number": 21,
+    "Flag": "0"
+  },
+  {
+    "Recid": 9010,
+    "Code": "22",
+    "Descr": "AnalCode14",
+    "Number": 22,
+    "Flag": "0"
+  },
+  {
+    "Recid": 9010,
+    "Code": "23",
+    "Descr": "AnalCode15",
+    "Number": 23,
+    "Flag": "0"
+  },
+  {
+    "Recid": 9010,
+    "Code": "24",
+    "Descr": "AnalCode16",
+    "Number": 24,
+    "Flag": "0"
+  },
+  {
+    "Recid": 9010,
+    "Code": "25",
+    "Descr": "AnalCode17",
+    "Number": 25,
+    "Flag": "0"
+  },
+  {
+    "Recid": 9010,
+    "Code": "26",
+    "Descr": "AnalCode18",
+    "Number": 26,
+    "Flag": "0"
+  },
+  {
+    "Recid": 9010,
+    "Code": "27",
+    "Descr": "AnalCode19",
+    "Number": 27,
+    "Flag": "0"
+  },
+  {
+    "Recid": 9010,
+    "Code": "28",
+    "Descr": "AnalCode20",
+    "Number": 28,
+    "Flag": "0"
+  },
+  {
+    "Recid": 9010,
+    "Code": "29",
+    "Descr": "AnalCode21",
+    "Number": 29,
+    "Flag": "0"
+  },
+  {
+    "Recid": 9010,
+    "Code": "3",
+    "Descr": "SuperClass2",
+    "Number": 3,
+    "Flag": "0"
+  },
+  {
+    "Recid": 9010,
+    "Code": "30",
+    "Descr": "AnalCode22",
+    "Number": 30,
+    "Flag": "0"
+  },
+  {
+    "Recid": 9010,
+    "Code": "31",
+    "Descr": "AnalCode23",
+    "Number": 31,
+    "Flag": "0"
+  },
+  {
+    "Recid": 9010,
+    "Code": "32",
+    "Descr": "AnalCode24",
+    "Number": 32,
+    "Flag": "0"
+  },
+  {
+    "Recid": 9010,
+    "Code": "33",
+    "Descr": "AnalCode25",
+    "Number": 33,
+    "Flag": "0"
+  },
+  {
+    "Recid": 9010,
+    "Code": "34",
+    "Descr": "AnalCode26",
+    "Number": 34,
+    "Flag": "0"
+  },
+  {
+    "Recid": 9010,
+    "Code": "35",
+    "Descr": "AnalCode27",
+    "Number": 35,
+    "Flag": "0"
+  },
+  {
+    "Recid": 9010,
+    "Code": "36",
+    "Descr": "AnalCode28",
+    "Number": 36,
+    "Flag": "0"
+  },
+  {
+    "Recid": 9010,
+    "Code": "37",
+    "Descr": "AnalCode29",
+    "Number": 37,
+    "Flag": "0"
+  },
+  {
+    "Recid": 9010,
+    "Code": "38",
+    "Descr": "AnalCode30",
+    "Number": 38,
+    "Flag": "0"
+  },
+  {
+    "Recid": 9010,
+    "Code": "39",
+    "Descr": "AnalCode31",
+    "Number": 39,
+    "Flag": "0"
+  },
+  {
+    "Recid": 9010,
+    "Code": "4",
+    "Descr": "Class1Cd",
+    "Number": 4,
+    "Flag": "1"
+  },
+  {
+    "Recid": 9010,
+    "Code": "40",
+    "Descr": "AnalCode32",
+    "Number": 40,
+    "Flag": "0"
+  },
+  {
+    "Recid": 9010,
+    "Code": "41",
+    "Descr": "SellingPriceOp",
+    "Number": 41,
+    "Flag": "0"
+  },
+  {
+    "Recid": 9010,
+    "Code": "42",
+    "Descr": "CurStockQty",
+    "Number": 42,
+    "Flag": "0"
+  },
+  {
+    "Recid": 9010,
+    "Code": "43",
+    "Descr": "CurStockVal",
+    "Number": 43,
+    "Flag": "0"
+  },
+  {
+    "Recid": 9010,
+    "Code": "44",
+    "Descr": "BatchSrlNo",
+    "Number": 44,
+    "Flag": "0"
+  },
+  {
+    "Recid": 9010,
+    "Code": "45",
+    "Descr": "GradeCode",
+    "Number": 45,
+    "Flag": "0"
+  },
+  {
+    "Recid": 9010,
+    "Code": "46",
+    "Descr": "RegularIndicator",
+    "Number": 46,
+    "Flag": "0"
+  },
+  {
+    "Recid": 9010,
+    "Code": "47",
+    "Descr": "LSQOfTheItem",
+    "Number": 47,
+    "Flag": "0"
+  },
+  {
+    "Recid": 9010,
+    "Code": "48",
+    "Descr": "MOQOfTheItem",
+    "Number": 48,
+    "Flag": "0"
+  },
+  {
+    "Recid": 9010,
+    "Code": "49",
+    "Descr": "EOQOfTheItem",
+    "Number": 49,
+    "Flag": "0"
+  },
+  {
+    "Recid": 9010,
+    "Code": "5",
+    "Descr": "Class2Cd",
+    "Number": 5,
+    "Flag": "1"
+  },
+  {
+    "Recid": 9010,
+    "Code": "50",
+    "Descr": "ReOrderLevelOfItem",
+    "Number": 50,
+    "Flag": "0"
+  },
+  {
+    "Recid": 9010,
+    "Code": "51",
+    "Descr": "ProductTaxCode",
+    "Number": 51,
+    "Flag": "0"
+  },
+  {
+    "Recid": 9010,
+    "Code": "52",
+    "Descr": "SourceTaxCode",
+    "Number": 52,
+    "Flag": "0"
+  },
+  {
+    "Recid": 9010,
+    "Code": "53",
+    "Descr": "TaxIncOrEx",
+    "Number": 53,
+    "Flag": "0"
+  },
+  {
+    "Recid": 9010,
+    "Code": "54",
+    "Descr": "MfgDate",
+    "Number": 54,
+    "Flag": "0"
+  },
+  {
+    "Recid": 9010,
+    "Code": "55",
+    "Descr": "ExpDate",
+    "Number": 55,
+    "Flag": "0"
+  },
+  {
+    "Recid": 9010,
+    "Code": "56",
+    "Descr": "LocationId",
+    "Number": 56,
+    "Flag": "0"
+  },
+  {
+    "Recid": 9010,
+    "Code": "57",
+    "Descr": "AgeOfTheItem",
+    "Number": 57,
+    "Flag": "0"
+  },
+  {
+    "Recid": 9010,
+    "Code": "58",
+    "Descr": "LastPurPrice",
+    "Number": 58,
+    "Flag": "0"
+  },
+  {
+    "Recid": 9010,
+    "Code": "59",
+    "Descr": "CurrentCost",
+    "Number": 59,
+    "Flag": "0"
+  },
+  {
+    "Recid": 9010,
+    "Code": "6",
+    "Descr": "SubClass1Cd",
+    "Number": 6,
+    "Flag": "1"
+  },
+  {
+    "Recid": 9010,
+    "Code": "60",
+    "Descr": "ShelfLife",
+    "Number": 60,
+    "Flag": "0"
+  },
+  {
+    "Recid": 9010,
+    "Code": "61",
+    "Descr": "MerchId",
+    "Number": 61,
+    "Flag": "0"
+  },
+  {
+    "Recid": 9010,
+    "Code": "62",
+    "Descr": "IsConsignmentItem",
+    "Number": 62,
+    "Flag": "0"
+  },
+  {
+    "Recid": 9010,
+    "Code": "7",
+    "Descr": "SubClass2Cd",
+    "Number": 7,
+    "Flag": "1"
+  },
+  {
+    "Recid": 9010,
+    "Code": "8",
+    "Descr": "Size",
+    "Number": 8,
+    "Flag": "1"
+  },
+  {
+    "Recid": 9010,
+    "Code": "9",
+    "Descr": "AnalCode1",
+    "Number": 9,
+    "Flag": "0"
+  },
+  {
+    "Recid": 9020,
+    "Code": "1",
+    "Descr": "StockNo",
+    "Number": 1,
+    "Flag": "1"
+  },
+  {
+    "Recid": 9020,
+    "Code": "10",
+    "Descr": "AnalCode2",
+    "Number": 10,
+    "Flag": "0"
+  },
+  {
+    "Recid": 9020,
+    "Code": "11",
+    "Descr": "AnalCode3",
+    "Number": 11,
+    "Flag": "0"
+  },
+  {
+    "Recid": 9020,
+    "Code": "12",
+    "Descr": "AnalCode4",
+    "Number": 12,
+    "Flag": "0"
+  },
+  {
+    "Recid": 9020,
+    "Code": "13",
+    "Descr": "AnalCode5",
+    "Number": 13,
+    "Flag": "0"
+  },
+  {
+    "Recid": 9020,
+    "Code": "14",
+    "Descr": "AnalCode6",
+    "Number": 14,
+    "Flag": "0"
+  },
+  {
+    "Recid": 9020,
+    "Code": "15",
+    "Descr": "AnalCode7",
+    "Number": 15,
+    "Flag": "0"
+  },
+  {
+    "Recid": 9020,
+    "Code": "16",
+    "Descr": "AnalCode8",
+    "Number": 16,
+    "Flag": "0"
+  },
+  {
+    "Recid": 9020,
+    "Code": "17",
+    "Descr": "AnalCode9",
+    "Number": 17,
+    "Flag": "0"
+  },
+  {
+    "Recid": 9020,
+    "Code": "18",
+    "Descr": "AnalCode10",
+    "Number": 18,
+    "Flag": "0"
+  },
+  {
+    "Recid": 9020,
+    "Code": "19",
+    "Descr": "AnalCode11",
+    "Number": 19,
+    "Flag": "0"
+  },
+  {
+    "Recid": 9020,
+    "Code": "2",
+    "Descr": "SuperClass1",
+    "Number": 2,
+    "Flag": "0"
+  },
+  {
+    "Recid": 9020,
+    "Code": "20",
+    "Descr": "AnalCode12",
+    "Number": 20,
+    "Flag": "0"
+  },
+  {
+    "Recid": 9020,
+    "Code": "21",
+    "Descr": "AnalCode13",
+    "Number": 21,
+    "Flag": "0"
+  },
+  {
+    "Recid": 9020,
+    "Code": "22",
+    "Descr": "AnalCode14",
+    "Number": 22,
+    "Flag": "0"
+  },
+  {
+    "Recid": 9020,
+    "Code": "23",
+    "Descr": "AnalCode15",
+    "Number": 23,
+    "Flag": "0"
+  },
+  {
+    "Recid": 9020,
+    "Code": "24",
+    "Descr": "AnalCode16",
+    "Number": 24,
+    "Flag": "0"
+  },
+  {
+    "Recid": 9020,
+    "Code": "25",
+    "Descr": "AnalCode17",
+    "Number": 25,
+    "Flag": "0"
+  },
+  {
+    "Recid": 9020,
+    "Code": "26",
+    "Descr": "AnalCode18",
+    "Number": 26,
+    "Flag": "0"
+  },
+  {
+    "Recid": 9020,
+    "Code": "27",
+    "Descr": "AnalCode19",
+    "Number": 27,
+    "Flag": "0"
+  },
+  {
+    "Recid": 9020,
+    "Code": "28",
+    "Descr": "AnalCode20",
+    "Number": 28,
+    "Flag": "0"
+  },
+  {
+    "Recid": 9020,
+    "Code": "29",
+    "Descr": "AnalCode21",
+    "Number": 29,
+    "Flag": "0"
+  },
+  {
+    "Recid": 9020,
+    "Code": "3",
+    "Descr": "SuperClass2",
+    "Number": 3,
+    "Flag": "0"
+  },
+  {
+    "Recid": 9020,
+    "Code": "30",
+    "Descr": "AnalCode22",
+    "Number": 30,
+    "Flag": "0"
+  },
+  {
+    "Recid": 9020,
+    "Code": "31",
+    "Descr": "AnalCode23",
+    "Number": 31,
+    "Flag": "0"
+  },
+  {
+    "Recid": 9020,
+    "Code": "32",
+    "Descr": "AnalCode24",
+    "Number": 32,
+    "Flag": "0"
+  },
+  {
+    "Recid": 9020,
+    "Code": "33",
+    "Descr": "AnalCode25",
+    "Number": 33,
+    "Flag": "0"
+  },
+  {
+    "Recid": 9020,
+    "Code": "34",
+    "Descr": "AnalCode26",
+    "Number": 34,
+    "Flag": "0"
+  },
+  {
+    "Recid": 9020,
+    "Code": "35",
+    "Descr": "AnalCode27",
+    "Number": 35,
+    "Flag": "0"
+  },
+  {
+    "Recid": 9020,
+    "Code": "36",
+    "Descr": "AnalCode28",
+    "Number": 36,
+    "Flag": "0"
+  },
+  {
+    "Recid": 9020,
+    "Code": "37",
+    "Descr": "AnalCode29",
+    "Number": 37,
+    "Flag": "0"
+  },
+  {
+    "Recid": 9020,
+    "Code": "38",
+    "Descr": "AnalCode30",
+    "Number": 38,
+    "Flag": "0"
+  },
+  {
+    "Recid": 9020,
+    "Code": "39",
+    "Descr": "AnalCode31",
+    "Number": 39,
+    "Flag": "0"
+  },
+  {
+    "Recid": 9020,
+    "Code": "4",
+    "Descr": "Class1Cd",
+    "Number": 4,
+    "Flag": "1"
+  },
+  {
+    "Recid": 9020,
+    "Code": "40",
+    "Descr": "AnalCode32",
+    "Number": 40,
+    "Flag": "0"
+  },
+  {
+    "Recid": 9020,
+    "Code": "41",
+    "Descr": "SellingPriceOp",
+    "Number": 41,
+    "Flag": "0"
+  },
+  {
+    "Recid": 9020,
+    "Code": "42",
+    "Descr": "CurStockQty",
+    "Number": 42,
+    "Flag": "0"
+  },
+  {
+    "Recid": 9020,
+    "Code": "43",
+    "Descr": "CurStockVal",
+    "Number": 43,
+    "Flag": "0"
+  },
+  {
+    "Recid": 9020,
+    "Code": "44",
+    "Descr": "BatchSrlNo",
+    "Number": 44,
+    "Flag": "0"
+  },
+  {
+    "Recid": 9020,
+    "Code": "45",
+    "Descr": "GradeCode",
+    "Number": 45,
+    "Flag": "0"
+  },
+  {
+    "Recid": 9020,
+    "Code": "46",
+    "Descr": "RegularIndicator",
+    "Number": 46,
+    "Flag": "0"
+  },
+  {
+    "Recid": 9020,
+    "Code": "47",
+    "Descr": "LSQOfTheItem",
+    "Number": 47,
+    "Flag": "0"
+  },
+  {
+    "Recid": 9020,
+    "Code": "48",
+    "Descr": "MOQOfTheItem",
+    "Number": 48,
+    "Flag": "0"
+  },
+  {
+    "Recid": 9020,
+    "Code": "49",
+    "Descr": "EOQOfTheItem",
+    "Number": 49,
+    "Flag": "0"
+  },
+  {
+    "Recid": 9020,
+    "Code": "5",
+    "Descr": "Class2Cd",
+    "Number": 5,
+    "Flag": "1"
+  },
+  {
+    "Recid": 9020,
+    "Code": "50",
+    "Descr": "ReOrderLevelOfItem",
+    "Number": 50,
+    "Flag": "0"
+  },
+  {
+    "Recid": 9020,
+    "Code": "51",
+    "Descr": "ProductTaxCode",
+    "Number": 51,
+    "Flag": "0"
+  },
+  {
+    "Recid": 9020,
+    "Code": "52",
+    "Descr": "SourceTaxCode",
+    "Number": 52,
+    "Flag": "0"
+  },
+  {
+    "Recid": 9020,
+    "Code": "53",
+    "Descr": "TaxIncOrEx",
+    "Number": 53,
+    "Flag": "0"
+  },
+  {
+    "Recid": 9020,
+    "Code": "54",
+    "Descr": "MfgDate",
+    "Number": 54,
+    "Flag": "0"
+  },
+  {
+    "Recid": 9020,
+    "Code": "55",
+    "Descr": "ExpDate",
+    "Number": 55,
+    "Flag": "0"
+  },
+  {
+    "Recid": 9020,
+    "Code": "56",
+    "Descr": "LocationId",
+    "Number": 56,
+    "Flag": "0"
+  },
+  {
+    "Recid": 9020,
+    "Code": "57",
+    "Descr": "AgeOfTheItem",
+    "Number": 57,
+    "Flag": "0"
+  },
+  {
+    "Recid": 9020,
+    "Code": "58",
+    "Descr": "LastPurPrice",
+    "Number": 58,
+    "Flag": "0"
+  },
+  {
+    "Recid": 9020,
+    "Code": "59",
+    "Descr": "CurrentCost",
+    "Number": 59,
+    "Flag": "0"
+  },
+  {
+    "Recid": 9020,
+    "Code": "6",
+    "Descr": "SubClass1Cd",
+    "Number": 6,
+    "Flag": "1"
+  },
+  {
+    "Recid": 9020,
+    "Code": "60",
+    "Descr": "ShelfLife",
+    "Number": 60,
+    "Flag": "0"
+  },
+  {
+    "Recid": 9020,
+    "Code": "61",
+    "Descr": "MerchId",
+    "Number": 61,
+    "Flag": "0"
+  },
+  {
+    "Recid": 9020,
+    "Code": "62",
+    "Descr": "IsConsignmentItem",
+    "Number": 62,
+    "Flag": "0"
+  },
+  {
+    "Recid": 9020,
+    "Code": "7",
+    "Descr": "SubClass2Cd",
+    "Number": 7,
+    "Flag": "1"
+  },
+  {
+    "Recid": 9020,
+    "Code": "8",
+    "Descr": "Size",
+    "Number": 8,
+    "Flag": "1"
+  },
+  {
+    "Recid": 9020,
+    "Code": "9",
+    "Descr": "AnalCode1",
+    "Number": 9,
+    "Flag": "0"
+  },
+  {
+    "Recid": 9030,
+    "Code": "1",
+    "Descr": "All Customers",
+    "Number": 1,
+    "Flag": "1"
+  },
+  {
+    "Recid": 9030,
+    "Code": "2",
+    "Descr": "Customer Price Group",
+    "Number": 2,
+    "Flag": "1"
+  },
+  {
+    "Recid": 9030,
+    "Code": "3",
+    "Descr": "Customer Code",
+    "Number": 3,
+    "Flag": "1"
+  },
+  {
+    "Recid": 9030,
+    "Code": "4",
+    "Descr": "Customer Classification",
+    "Number": 4,
+    "Flag": "1"
+  },
+  {
+    "Recid": 9030,
+    "Code": "5",
+    "Descr": "Customer Profile",
+    "Number": 5,
+    "Flag": "0"
+  },
+  {
+    "Recid": 9030,
+    "Code": "6",
+    "Descr": "Customer Loyalty ID",
+    "Number": 6,
+    "Flag": "0"
+  },
+  {
+    "Recid": 9040,
+    "Code": "1",
+    "Descr": "Discount",
+    "Number": 1,
+    "Flag": "1"
+  },
+  {
+    "Recid": 9040,
+    "Code": "2",
+    "Descr": "Offer",
+    "Number": 2,
+    "Flag": "1"
+  },
+  {
+    "Recid": 9050,
+    "Code": "1",
+    "Descr": "Percentage/Amount (Fixed)",
+    "Number": 1,
+    "Flag": "1"
+  },
+  {
+    "Recid": 9050,
+    "Code": "10",
+    "Descr": "Bundle Offer",
+    "Number": 10,
+    "Flag": "1"
+  },
+  {
+    "Recid": 9050,
+    "Code": "11",
+    "Descr": "Percentage/Amount (Fixed)",
+    "Number": 11,
+    "Flag": "1"
+  },
+  {
+    "Recid": 9050,
+    "Code": "12",
+    "Descr": "Percentage/Amount (Variable)",
+    "Number": 12,
+    "Flag": "1"
+  },
+  {
+    "Recid": 9050,
+    "Code": "13",
+    "Descr": "Free Item",
+    "Number": 13,
+    "Flag": "1"
+  },
+  {
+    "Recid": 9050,
+    "Code": "2",
+    "Descr": "Percentage/Amount (Variable)",
+    "Number": 2,
+    "Flag": "1"
+  },
+  {
+    "Recid": 9050,
+    "Code": "3",
+    "Descr": "Discounted Rate",
+    "Number": 3,
+    "Flag": "1"
+  },
+  {
+    "Recid": 9050,
+    "Code": "4",
+    "Descr": "Fixed Value",
+    "Number": 4,
+    "Flag": "1"
+  },
+  {
+    "Recid": 9050,
+    "Code": "5",
+    "Descr": "On Additional Item",
+    "Number": 5,
+    "Flag": "1"
+  },
+  {
+    "Recid": 9050,
+    "Code": "6",
+    "Descr": "On Last Piece",
+    "Number": 6,
+    "Flag": "1"
+  },
+  {
+    "Recid": 9050,
+    "Code": "7",
+    "Descr": "Bundle Discount",
+    "Number": 7,
+    "Flag": "1"
+  },
+  {
+    "Recid": 9050,
+    "Code": "8",
+    "Descr": "Same Item",
+    "Number": 8,
+    "Flag": "1"
+  },
+  {
+    "Recid": 9050,
+    "Code": "9",
+    "Descr": "Different Item",
+    "Number": 9,
+    "Flag": "1"
+  },
+  {
+    "Recid": 9060,
+    "Code": "1",
+    "Descr": "Percentage/Amount",
+    "Number": 1,
+    "Flag": "1"
+  },
+  {
+    "Recid": 9060,
+    "Code": "2",
+    "Descr": "Last Piece Discount",
+    "Number": 2,
+    "Flag": "1"
+  },
+  {
+    "Recid": 9070,
+    "Code": "1",
+    "Descr": "Buy X Get Y Free",
+    "Number": 1,
+    "Flag": "1"
+  },
+  {
+    "Recid": 9080,
+    "Code": "1",
+    "Descr": "Rate Equal To",
+    "Number": 1,
+    "Flag": "1"
+  },
+  {
+    "Recid": 9080,
+    "Code": "2",
+    "Descr": "Rate Above (>)",
+    "Number": 2,
+    "Flag": "1"
+  },
+  {
+    "Recid": 9080,
+    "Code": "3",
+    "Descr": "Rate Upto (<)",
+    "Number": 3,
+    "Flag": "1"
+  },
+  {
+    "Recid": 9080,
+    "Code": "4",
+    "Descr": "Rate Range",
+    "Number": 4,
+    "Flag": "1"
+  },
+  {
+    "Recid": 9080,
+    "Code": "5",
+    "Descr": "Value Equal To",
+    "Number": 5,
+    "Flag": "1"
+  },
+  {
+    "Recid": 9080,
+    "Code": "6",
+    "Descr": "Value Above (>)",
+    "Number": 6,
+    "Flag": "1"
+  },
+  {
+    "Recid": 9080,
+    "Code": "7",
+    "Descr": "Value Upto (<)",
+    "Number": 7,
+    "Flag": "1"
+  },
+  {
+    "Recid": 9080,
+    "Code": "8",
+    "Descr": "Value Range",
+    "Number": 8,
+    "Flag": "1"
+  },
+  {
+    "Recid": 9090,
+    "Code": "1",
+    "Descr": "Percentage/Amount",
+    "Number": 1,
+    "Flag": "1"
+  },
+  {
+    "Recid": 9101,
+    "Code": "50",
+    "Descr": "SR535300.ClsPrintingInterface",
+    "Number": 0,
+    "Flag": null
+  },
+  {
+    "Recid": 9110,
+    "Code": "1",
+    "Descr": "Percentage/Amount",
+    "Number": 1,
+    "Flag": "1"
+  },
+  {
+    "Recid": 9120,
+    "Code": "1",
+    "Descr": "Only Free Item(s)",
+    "Number": 1,
+    "Flag": "1"
+  },
+  {
+    "Recid": 9120,
+    "Code": "2",
+    "Descr": "Free Item(s) + Certain % Discount",
+    "Number": 2,
+    "Flag": "1"
+  },
+  {
+    "Recid": 9130,
+    "Code": "1",
+    "Descr": "Bill Value Range",
+    "Number": 1,
+    "Flag": "1"
+  },
+  {
+    "Recid": 9130,
+    "Code": "2",
+    "Descr": "Bill Quantity Range",
+    "Number": 2,
+    "Flag": "1"
+  },
+  {
+    "Recid": 9140,
+    "Code": "1",
+    "Descr": "Activate Sales Promotion(s)",
+    "Number": 1,
+    "Flag": "1"
+  },
+  {
+    "Recid": 9140,
+    "Code": "2",
+    "Descr": "De-Activate Sales Promotion(s)",
+    "Number": 2,
+    "Flag": "1"
+  },
+  {
+    "Recid": 9140,
+    "Code": "3",
+    "Descr": "Change Applicable Period For Sales Promotion(s) ",
+    "Number": 3,
+    "Flag": "1"
+  },
+  {
+    "Recid": 9140,
+    "Code": "4",
+    "Descr": "Archive Sales Promotion(s)",
+    "Number": 4,
+    "Flag": "1"
+  },
+  {
+    "Recid": 9140,
+    "Code": "5",
+    "Descr": "Change Priority For Sales Promotion(s)",
+    "Number": 5,
+    "Flag": "1"
+  },
+  {
+    "Recid": 9150,
+    "Code": "5000+",
+    "Descr": "Sales Promotion Cat - Prefix(Default ->Blank",
+    "Number": 2,
+    "Flag": "1"
+  },
+  {
+    "Recid": 9160,
+    "Code": "1",
+    "Descr": "Season",
+    "Number": 0,
+    "Flag": "1"
+  },
+  {
+    "Recid": 9160,
+    "Code": "2",
+    "Descr": "Week",
+    "Number": 0,
+    "Flag": "1"
+  },
+  {
+    "Recid": 9160,
+    "Code": "3",
+    "Descr": "Month",
+    "Number": 0,
+    "Flag": "1"
+  },
+  {
+    "Recid": 9160,
+    "Code": "4",
+    "Descr": "Date",
+    "Number": 0,
+    "Flag": "1"
+  },
+  {
+    "Recid": 9160,
+    "Code": "5",
+    "Descr": "Year",
+    "Number": 0,
+    "Flag": "1"
+  },
+  {
+    "Recid": 9500,
+    "Code": "50",
+    "Descr": "SR535300.ClsPrintingInterface",
+    "Number": 0,
+    "Flag": ""
+  },
+  {
+    "Recid": 9996,
+    "Code": "ReceivableCtrl",
+    "Descr": "SR542600.clsstartup",
+    "Number": 0,
+    "Flag": null
+  },
+  {
+    "Recid": 9997,
+    "Code": "ShiftCd",
+    "Descr": "YYYYMMDD-NODEID-NN",
+    "Number": 0,
+    "Flag": null
+  },
+  {
+    "Recid": 9997,
+    "Code": "TillCtrl",
+    "Descr": "SR539000.ClsStartup",
+    "Number": 0,
+    "Flag": null
+  },
+  {
+    "Recid": 9998,
+    "Code": "1",
+    "Descr": "Limit Reached",
+    "Number": 0,
+    "Flag": null
+  },
+  {
+    "Recid": 9998,
+    "Code": "2",
+    "Descr": "Counter Close",
+    "Number": 0,
+    "Flag": null
+  },
+  {
+    "Recid": 9998,
+    "Code": "3",
+    "Descr": "Internal Transfer",
+    "Number": 0,
+    "Flag": null
+  },
+  {
+    "Recid": 13000,
+    "Code": "1100+01+SR127000+1",
+    "Descr": "1#SR544500.clsPrintBarcodeLbls",
+    "Number": 0,
+    "Flag": "1"
+  },
+  {
+    "Recid": 13000,
+    "Code": "1100+02+SR127000+1",
+    "Descr": "1#SR544500.clsPrintBarcodeLbls",
+    "Number": 0,
+    "Flag": "1"
+  },
+  {
+    "Recid": 13000,
+    "Code": "2200+01+SR100700+-1",
+    "Descr": "1#SMRITIGst.ClsPostUpdater",
+    "Number": 0,
+    "Flag": "1"
+  },
+  {
+    "Recid": 13000,
+    "Code": "2300+01+SR100700+-1",
+    "Descr": "1#SMRITIGst.ClsPostUpdater",
+    "Number": 0,
+    "Flag": "1"
+  },
+  {
+    "Recid": 13000,
+    "Code": "2500+01+SR100700+-1",
+    "Descr": "1#SMRITIGst.ClsPostUpdater",
+    "Number": 0,
+    "Flag": "1"
+  },
+  {
+    "Recid": 13100,
+    "Code": "1",
+    "Descr": "Annual Stock Take",
+    "Number": null,
+    "Flag": "N"
+  },
+  {
+    "Recid": 13100,
+    "Code": "2",
+    "Descr": "Half Yearly Stock Take",
+    "Number": null,
+    "Flag": "N"
+  },
+  {
+    "Recid": 13100,
+    "Code": "3",
+    "Descr": "Quarterly Stock Take",
+    "Number": null,
+    "Flag": "N"
+  },
+  {
+    "Recid": 13100,
+    "Code": "4",
+    "Descr": "Monthly Stock Take",
+    "Number": null,
+    "Flag": "N"
+  },
+  {
+    "Recid": 14100,
+    "Code": "DEFAULT",
+    "Descr": "SHPRFW02.ClsStartup",
+    "Number": 0,
+    "Flag": "1"
+  },
+  {
+    "Recid": 14200,
+    "Code": "DEFAULT",
+    "Descr": "SR534700.UpdateHook",
+    "Number": 0,
+    "Flag": "1"
+  },
+  {
+    "Recid": 14300,
+    "Code": "ASTIMPORT+PROGRAMEND+1",
+    "Descr": "SR539500.clsItemReClassApply",
+    "Number": 0,
+    "Flag": "1"
+  },
+  {
+    "Recid": 14300,
+    "Code": "IRCRUNINMENU+POS+1",
+    "Descr": "SR539500.clsItemReClassApply",
+    "Number": 0,
+    "Flag": "1"
+  },
+  {
+    "Recid": 14300,
+    "Code": "ITEMRECLASSPOS+POS+1",
+    "Descr": "SR539500.clsItemReClassApply",
+    "Number": 0,
+    "Flag": "1"
+  },
+  {
+    "Recid": 14300,
+    "Code": "RUNINDAYBEGIN+POS+1",
+    "Descr": "SR539500.clsItemReClassApply",
+    "Number": 0,
+    "Flag": "1"
+  },
+  {
+    "Recid": 14300,
+    "Code": "SE900310+PROGRAMSTART+1",
+    "Descr": "shprfw03.ClsUserAuthorise",
+    "Number": 0,
+    "Flag": "1"
+  },
+  {
+    "Recid": 14300,
+    "Code": "SR130000+PROGRAMSTART+1",
+    "Descr": "shprfw03.ClsUserAuthorise",
+    "Number": 0,
+    "Flag": "1"
+  },
+  {
+    "Recid": 14300,
+    "Code": "SR309000+PROGRAMSTART+1",
+    "Descr": "shprfw03.ClsUserAuthorise",
+    "Number": 0,
+    "Flag": "1"
+  },
+  {
+    "Recid": 14300,
+    "Code": "SR311900+PROGRAMSTART+1",
+    "Descr": "shprfw03.ClsUserAuthorise",
+    "Number": 0,
+    "Flag": "1"
+  },
+  {
+    "Recid": 14300,
+    "Code": "SR320800+PROGRAMSTART+1",
+    "Descr": "shprfw03.ClsUserAuthorise",
+    "Number": 0,
+    "Flag": "1"
+  },
+  {
+    "Recid": 14300,
+    "Code": "SR406500+PROGRAMSTART+1",
+    "Descr": "shprfw03.ClsUserAuthorise",
+    "Number": 0,
+    "Flag": "1"
+  },
+  {
+    "Recid": 14300,
+    "Code": "SR413400+PROGRAMSTART+1",
+    "Descr": "shprfw03.ClsUserAuthorise",
+    "Number": 0,
+    "Flag": "1"
+  },
+  {
+    "Recid": 14300,
+    "Code": "SR432000+PROGRAMSTART+1",
+    "Descr": "shprfw03.ClsUserAuthorise",
+    "Number": 0,
+    "Flag": "1"
+  },
+  {
+    "Recid": 14300,
+    "Code": "SR436900+PROGRAMSTART+1",
+    "Descr": "shprfw03.ClsUserAuthorise",
+    "Number": 0,
+    "Flag": "1"
+  },
+  {
+    "Recid": 14300,
+    "Code": "SR730000+PROGRAMSTART+1",
+    "Descr": "shprfw03.ClsUserAuthorise",
+    "Number": 0,
+    "Flag": "1"
+  },
+  {
+    "Recid": 14400,
+    "Code": "DayEnd+StartClick+-1",
+    "Descr": "SMRITIGst.ClsEventDayEnd",
+    "Number": 0,
+    "Flag": "1"
+  },
+  {
+    "Recid": 14400,
+    "Code": "DayEnd+StartClick+1",
+    "Descr": "SR548200.ClsFixDayClose",
+    "Number": 0,
+    "Flag": "1"
+  },
+  {
+    "Recid": 14400,
+    "Code": "SD400800+CmdTransDtl_Click+1",
+    "Descr": "SR541000.ClsTransporterdtls",
+    "Number": 0,
+    "Flag": "1"
+  },
+  {
+    "Recid": 14400,
+    "Code": "SE301400+PROMOIMPORT+1",
+    "Descr": "AlertInterface.ImportAlerts",
+    "Number": 0,
+    "Flag": "1"
+  },
+  {
+    "Recid": 14400,
+    "Code": "SR100200+VALIDATETILLLIMIT+1",
+    "Descr": "SR539700.ClsValidateLimit",
+    "Number": 0,
+    "Flag": "1"
+  },
+  {
+    "Recid": 14400,
+    "Code": "SR100700+CmdTransDtl_Click+1",
+    "Descr": "SR541000.ClsTransporterdtls",
+    "Number": 0,
+    "Flag": "1"
+  },
+  {
+    "Recid": 14400,
+    "Code": "SR127000+BeforeTransactionSave+-1",
+    "Descr": "SMRITIGst.ClsEventExtn",
+    "Number": 0,
+    "Flag": "1"
+  },
+  {
+    "Recid": 14400,
+    "Code": "SR127000+CmdTransDtl_Click+1",
+    "Descr": "SR541000.ClsTransporterdtls",
+    "Number": 0,
+    "Flag": "1"
+  },
+  {
+    "Recid": 14400,
+    "Code": "SR127000+FormLoadCompleted+1",
+    "Descr": "SR544600.ClsSelfHealingInward",
+    "Number": 0,
+    "Flag": "1"
+  },
+  {
+    "Recid": 14400,
+    "Code": "SR127000+InternalToCaptureAddonDedn+1",
+    "Descr": "SR543600.ClsAddonDedn",
+    "Number": 0,
+    "Flag": "1"
+  },
+  {
+    "Recid": 14400,
+    "Code": "SR127000:1100+InUpdate+271",
+    "Descr": "SR551000.TrnAudit27",
+    "Number": 0,
+    "Flag": "1"
+  },
+  {
+    "Recid": 14400,
+    "Code": "SR127000:1100+PartyCdLostFocus+-1",
+    "Descr": "SMRITIGst.ClsEventExtn",
+    "Number": 0,
+    "Flag": "1"
+  },
+  {
+    "Recid": 14400,
+    "Code": "SR127000:1200+InUpdate+271",
+    "Descr": "SR551000.TrnAudit27",
+    "Number": 0,
+    "Flag": "1"
+  },
+  {
+    "Recid": 14400,
+    "Code": "SR127000:1200+PartyCdLostFocus+-1",
+    "Descr": "SMRITIGst.ClsEventExtn",
+    "Number": 0,
+    "Flag": "1"
+  },
+  {
+    "Recid": 14400,
+    "Code": "SR127000:1200+StockNoPostLostFocus+-1",
+    "Descr": "SMRITIGst.ClsEventExtn",
+    "Number": 0,
+    "Flag": "1"
+  },
+  {
+    "Recid": 14400,
+    "Code": "SR127000:1400+InUpdate+271",
+    "Descr": "SR551000.TrnAudit27",
+    "Number": 0,
+    "Flag": "1"
+  },
+  {
+    "Recid": 14400,
+    "Code": "SR127000:1500+InUpdate+271",
+    "Descr": "SR551000.TrnAudit27",
+    "Number": 0,
+    "Flag": "1"
+  },
+  {
+    "Recid": 14400,
+    "Code": "SR129500+CmdTransDtl_Click+1",
+    "Descr": "SR541000.ClsTransporterdtls",
+    "Number": 0,
+    "Flag": "1"
+  },
+  {
+    "Recid": 14400,
+    "Code": "SR130000+PROGRAMSTART+1",
+    "Descr": "shprfw03.ClsUserAuthorise",
+    "Number": 0,
+    "Flag": "1"
+  },
+  {
+    "Recid": 14400,
+    "Code": "SR130000+VALIDATETILLLIMIT+1",
+    "Descr": "SR539700.ClsValidateLimit",
+    "Number": 0,
+    "Flag": "1"
+  },
+  {
+    "Recid": 14400,
+    "Code": "SR130000:1300+BeforeTransactionSave+-1",
+    "Descr": "SMRITIGst.ClsEventBilling",
+    "Number": 0,
+    "Flag": "1"
+  },
+  {
+    "Recid": 14400,
+    "Code": "SR130000:1300+InUpdate+271",
+    "Descr": "SR551000.TrnAudit27",
+    "Number": 0,
+    "Flag": "1"
+  },
+  {
+    "Recid": 14400,
+    "Code": "SR130000:1600+InUpdate+271",
+    "Descr": "SR551000.TrnAudit27",
+    "Number": 0,
+    "Flag": "1"
+  },
+  {
+    "Recid": 14400,
+    "Code": "SR130000:2100+BeforeTransactionSave+-1",
+    "Descr": "SMRITIGst.ClsEventBilling",
+    "Number": 0,
+    "Flag": "1"
+  },
+  {
+    "Recid": 14400,
+    "Code": "SR130000:2100+CustomerCdPreLostFocus+-1",
+    "Descr": "SMRITIGst.ClsEventBilling",
+    "Number": 0,
+    "Flag": "1"
+  },
+  {
+    "Recid": 14400,
+    "Code": "SR130000:2100+InUpdate+1",
+    "Descr": "SR548000.ValidateConFinance",
+    "Number": 0,
+    "Flag": "1"
+  },
+  {
+    "Recid": 14400,
+    "Code": "SR130000:2100+InUpdate+272",
+    "Descr": "SR551000.TrnAudit27",
+    "Number": 0,
+    "Flag": "1"
+  },
+  {
+    "Recid": 14400,
+    "Code": "SR144100+BeforeTransactionSave+-1",
+    "Descr": "SMRITIGst.ClsEventGOR",
+    "Number": 0,
+    "Flag": "1"
+  },
+  {
+    "Recid": 14400,
+    "Code": "SR144100+FormLoadCompleted+1",
+    "Descr": "SR544600.ClsSelfHealingInward",
+    "Number": 0,
+    "Flag": "1"
+  },
+  {
+    "Recid": 14400,
+    "Code": "SR144100:2200+ActQtyPostLostFocus+-1",
+    "Descr": "SMRITIGst.ClsEventGOR",
+    "Number": 0,
+    "Flag": "1"
+  },
+  {
+    "Recid": 14400,
+    "Code": "SR144100:2200+InUpdate+1",
+    "Descr": "SR549100.ClsTOutDN_EventExtn",
+    "Number": 0,
+    "Flag": "1"
+  },
+  {
+    "Recid": 14400,
+    "Code": "SR144100:2200+InUpdate+272",
+    "Descr": "SR551000.TrnAudit27",
+    "Number": 0,
+    "Flag": "1"
+  },
+  {
+    "Recid": 14400,
+    "Code": "SR144100:2200+PartyCdLostFocus+-1",
+    "Descr": "SMRITIGst.ClsEventExtn",
+    "Number": 0,
+    "Flag": "1"
+  },
+  {
+    "Recid": 14400,
+    "Code": "SR144100:2200+StockNoPostLostFocus+-1",
+    "Descr": "SMRITIGst.ClsEventGOR",
+    "Number": 0,
+    "Flag": "1"
+  },
+  {
+    "Recid": 14400,
+    "Code": "SR144100:2300+InUpdate+271",
+    "Descr": "SR551000.TrnAudit27",
+    "Number": 0,
+    "Flag": "1"
+  },
+  {
+    "Recid": 14400,
+    "Code": "SR144100:2300+PartyCdLostFocus+-1",
+    "Descr": "SMRITIGst.ClsEventExtn",
+    "Number": 0,
+    "Flag": "1"
+  },
+  {
+    "Recid": 14400,
+    "Code": "SR144100:2400+InUpdate+271",
+    "Descr": "SR551000.TrnAudit27",
+    "Number": 0,
+    "Flag": "1"
+  },
+  {
+    "Recid": 14400,
+    "Code": "SR144100:2500+ActQtyPostLostFocus+-1",
+    "Descr": "SMRITIGst.ClsEventGOR",
+    "Number": 0,
+    "Flag": "1"
+  },
+  {
+    "Recid": 14400,
+    "Code": "SR144100:2500+InUpdate+271",
+    "Descr": "SR551000.TrnAudit27",
+    "Number": 0,
+    "Flag": "1"
+  },
+  {
+    "Recid": 14400,
+    "Code": "SR144100:2500+StockNoPostLostFocus+-1",
+    "Descr": "SMRITIGst.ClsEventGOR",
+    "Number": 0,
+    "Flag": "1"
+  },
+  {
+    "Recid": 14400,
+    "Code": "SR323400+CommenceStart+1",
+    "Descr": "SR548200.ClsFixDayClose",
+    "Number": 0,
+    "Flag": "1"
+  },
+  {
+    "Recid": 14400,
+    "Code": "SR323400+InUpdate+271",
+    "Descr": "SR551000.TrnAudit27",
+    "Number": 0,
+    "Flag": "1"
+  },
+  {
+    "Recid": 14400,
+    "Code": "SR330700+PRICEREVISIONIMPORT+1",
+    "Descr": "AlertInterface.ImportAlerts",
+    "Number": 0,
+    "Flag": "1"
+  },
+  {
+    "Recid": 14400,
+    "Code": "SR426400+BATCH+1",
+    "Descr": "sysparam.clsExtnSysparam",
+    "Number": 0,
+    "Flag": "1"
+  },
+  {
+    "Recid": 14400,
+    "Code": "SR426400+WHFUNCTION+1",
+    "Descr": "sysparam.clsExtnSysparam",
+    "Number": 0,
+    "Flag": "1"
+  },
+  {
+    "Recid": 14400,
+    "Code": "SR526500+PostFlatFileCreation+-1",
+    "Descr": "SMRITIGst.ClsEventPtFile",
+    "Number": 0,
+    "Flag": "1"
+  },
+  {
+    "Recid": 14400,
+    "Code": "SR526500+PostInternalSISComponents+1",
+    "Descr": "SR543100.ClsSISComponent",
+    "Number": 0,
+    "Flag": "0"
+  },
+  {
+    "Recid": 14400,
+    "Code": "SR526500+PostInternalZipComponents+1",
+    "Descr": "SR543100.ClsZipComponent",
+    "Number": 0,
+    "Flag": "0"
+  },
+  {
+    "Recid": 14400,
+    "Code": "SR535500+SMRITILoginMessageCentreTrigger+1",
+    "Descr": "SR547200.clsReport02",
+    "Number": 0,
+    "Flag": "1"
+  },
+  {
+    "Recid": 14400,
+    "Code": "SR535500+SMRITILoginOkClick+1",
+    "Descr": "SR547400.ClsVersionCheck",
+    "Number": 0,
+    "Flag": "1"
+  },
+  {
+    "Recid": 14400,
+    "Code": "SR535500+SMRITIMenuClick+-1",
+    "Descr": "SMRITIGSTPatch.clsSMRITIGSTPatchInfo",
+    "Number": 0,
+    "Flag": "0"
+  },
+  {
+    "Recid": 14400,
+    "Code": "SR535500+SMRITIMenuMessageCentreClick+1",
+    "Descr": "SR547200.clsReport02",
+    "Number": 0,
+    "Flag": "1"
+  },
+  {
+    "Recid": 14400,
+    "Code": "SR535500+SMRITIRefreshMessageCentre+1",
+    "Descr": "SR547200.clsMsgCentre01",
+    "Number": 0,
+    "Flag": "1"
+  },
+  {
+    "Recid": 14400,
+    "Code": "SR535500+SMRITIScreenReportTrigger+1",
+    "Descr": "SR547200.clsReport01",
+    "Number": 0,
+    "Flag": "1"
+  },
+  {
+    "Recid": 14400,
+    "Code": "SR537800+PRICEREVISIONUPDATED+1",
+    "Descr": "AlertInterface.ClsPRUpdate",
+    "Number": 0,
+    "Flag": "1"
+  },
+  {
+    "Recid": 15500,
+    "Code": "1",
+    "Descr": "Billing Address",
+    "Number": 0,
+    "Flag": ""
+  },
+  {
+    "Recid": 15500,
+    "Code": "2",
+    "Descr": "Home Address",
+    "Number": null,
+    "Flag": null
+  },
+  {
+    "Recid": 15500,
+    "Code": "3",
+    "Descr": "Friends Address",
+    "Number": null,
+    "Flag": null
+  },
+  {
+    "Recid": 19000,
+    "Code": "1",
+    "Descr": "prjStkGenFw.clsDllHandler",
+    "Number": 0,
+    "Flag": "Y"
+  },
+  {
+    "Recid": 19100,
+    "Code": "1",
+    "Descr": "prjGenStockNo.clsGenStockNo",
+    "Number": 0,
+    "Flag": "Y"
+  },
+  {
+    "Recid": 19100,
+    "Code": "2",
+    "Descr": "prjGenEAN13.clsGenEAN",
+    "Number": 0,
+    "Flag": "Y"
+  },
+  {
+    "Recid": 19502,
+    "Code": "CP",
+    "Descr": "SN502900.clsWGimport.startprocess",
+    "Number": 0,
+    "Flag": "1"
+  },
+  {
+    "Recid": 19502,
+    "Code": "DA",
+    "Descr": "SN502900.clsDAFileImport.startprocess",
+    "Number": 0,
+    "Flag": "1"
+  },
+  {
+    "Recid": 19502,
+    "Code": "DN",
+    "Descr": "SN502900.clsDNFileImport.startprocess",
+    "Number": 0,
+    "Flag": "1"
+  },
+  {
+    "Recid": 19502,
+    "Code": "DS",
+    "Descr": "SN502900.clsDSFileImport.startprocess",
+    "Number": 0,
+    "Flag": "1"
+  },
+  {
+    "Recid": 19502,
+    "Code": "LP",
+    "Descr": "SISWrap.HelperMethods.LPHandler",
+    "Number": 0,
+    "Flag": "1"
+  },
+  {
+    "Recid": 19502,
+    "Code": "RS",
+    "Descr": "SN502900.clsRemoteStatus.startprocess",
+    "Number": 0,
+    "Flag": "1"
+  },
+  {
+    "Recid": 19502,
+    "Code": "RU",
+    "Descr": "SN502900.clsremoteSRupdate.startprocess",
+    "Number": 0,
+    "Flag": "1"
+  },
+  {
+    "Recid": 19502,
+    "Code": "SI",
+    "Descr": "SN503100.SIHandler.Process",
+    "Number": 0,
+    "Flag": "1"
+  },
+  {
+    "Recid": 19502,
+    "Code": "SR",
+    "Descr": "SN502900.clsremoteSRstaus.startprocess",
+    "Number": 0,
+    "Flag": "1"
+  },
+  {
+    "Recid": 19502,
+    "Code": "VS",
+    "Descr": "SN502900.clsRemoteVoidStatusUpdate.startprocess",
+    "Number": 0,
+    "Flag": "1"
+  },
+  {
+    "Recid": 20000,
+    "Code": "1",
+    "Descr": "GTIN-13",
+    "Number": 1,
+    "Flag": "Y"
+  },
+  {
+    "Recid": 20000,
+    "Code": "2",
+    "Descr": "GTIN-14",
+    "Number": 2,
+    "Flag": "Y"
+  },
+  {
+    "Recid": 20000,
+    "Code": "3",
+    "Descr": "GTIN-12",
+    "Number": 3,
+    "Flag": "Y"
+  },
+  {
+    "Recid": 20000,
+    "Code": "4",
+    "Descr": "GTIN-8",
+    "Number": 4,
+    "Flag": "Y"
+  },
+  {
+    "Recid": 20100,
+    "Code": "10002",
+    "Descr": "Opening Balance",
+    "Number": 6,
+    "Flag": "1"
+  },
+  {
+    "Recid": 20100,
+    "Code": "10003",
+    "Descr": "Cash Lift",
+    "Number": 5,
+    "Flag": "1"
+  },
+  {
+    "Recid": 20100,
+    "Code": "10005",
+    "Descr": "Till Reconciliation",
+    "Number": 7,
+    "Flag": "1"
+  },
+  {
+    "Recid": 20100,
+    "Code": "13",
+    "Descr": "Cash Receipt",
+    "Number": 4,
+    "Flag": "0"
+  },
+  {
+    "Recid": 20100,
+    "Code": "1300",
+    "Descr": "Sales Return",
+    "Number": 2,
+    "Flag": "0"
+  },
+  {
+    "Recid": 20100,
+    "Code": "2100",
+    "Descr": "Sale",
+    "Number": 1,
+    "Flag": "0"
+  },
+  {
+    "Recid": 20100,
+    "Code": "23",
+    "Descr": "Cash Payout",
+    "Number": 3,
+    "Flag": "0"
+  },
+  {
+    "Recid": 21050,
+    "Code": "1+01",
+    "Descr": "SR541200.ClsCartonPrint",
+    "Number": 0,
+    "Flag": ""
+  },
+  {
+    "Recid": 21050,
+    "Code": "1+02",
+    "Descr": "99",
+    "Number": 0,
+    "Flag": ""
+  },
+  {
+    "Recid": 21050,
+    "Code": "1+03",
+    "Descr": "N",
+    "Number": 0,
+    "Flag": ""
+  },
+  {
+    "Recid": 21050,
+    "Code": "50+01",
+    "Descr": "SR535300.ClsPrintingInterface",
+    "Number": 0,
+    "Flag": ""
+  },
+  {
+    "Recid": 21050,
+    "Code": "50+02",
+    "Descr": "99",
+    "Number": 0,
+    "Flag": ""
+  },
+  {
+    "Recid": 21050,
+    "Code": "50+03",
+    "Descr": "N",
+    "Number": 0,
+    "Flag": ""
+  },
+  {
+    "Recid": 21050,
+    "Code": "50+04",
+    "Descr": "Y#PrintEngine-GOR",
+    "Number": 0,
+    "Flag": ""
+  },
+  {
+    "Recid": 24500,
+    "Code": "50+01",
+    "Descr": "SR535300.ClsPrintingInterface",
+    "Number": 0,
+    "Flag": null
+  },
+  {
+    "Recid": 24600,
+    "Code": "50+01",
+    "Descr": "SR535300.ClsPrintingInterface",
+    "Number": 0,
+    "Flag": null
+  },
+  {
+    "Recid": 24700,
+    "Code": "50+01",
+    "Descr": "SR535300.ClsPrintingInterface",
+    "Number": 0,
+    "Flag": null
+  },
+  {
+    "Recid": 28500,
+    "Code": "Damage",
+    "Descr": "Damage",
+    "Number": 0,
+    "Flag": null
+  },
+  {
+    "Recid": 28500,
+    "Code": "Defect",
+    "Descr": "Defect",
+    "Number": 0,
+    "Flag": null
+  },
+  {
+    "Recid": 28500,
+    "Code": "Others",
+    "Descr": "Others",
+    "Number": 0,
+    "Flag": null
+  },
+  {
+    "Recid": 28500,
+    "Code": "Sales Return",
+    "Descr": "Sales Return",
+    "Number": 0,
+    "Flag": null
+  },
+  {
+    "Recid": 31000,
+    "Code": "CHART0",
+    "Descr": "None",
+    "Number": 1,
+    "Flag": ""
+  },
+  {
+    "Recid": 31000,
+    "Code": "CHART1",
+    "Descr": "Last 7 Days Sales",
+    "Number": 2,
+    "Flag": "GenerateGraphPOS"
+  },
+  {
+    "Recid": 31000,
+    "Code": "CHART10",
+    "Descr": "Hourly Sales (Today & Yesterday)",
+    "Number": 11,
+    "Flag": "GenerateGraphPOS"
+  },
+  {
+    "Recid": 31000,
+    "Code": "CHART11",
+    "Descr": "Top 10 <<Class1Cd>>s",
+    "Number": 12,
+    "Flag": "GenerateGraphPOS"
+  },
+  {
+    "Recid": 31000,
+    "Code": "CHART12",
+    "Descr": "Top 10 <<Class2Cd>>s",
+    "Number": 13,
+    "Flag": "GenerateGraphPOS"
+  },
+  {
+    "Recid": 31000,
+    "Code": "CHART13",
+    "Descr": "Top 10 <<SubClass1Cd>>s",
+    "Number": 14,
+    "Flag": "GenerateGraphPOS"
+  },
+  {
+    "Recid": 31000,
+    "Code": "CHART14",
+    "Descr": "10 Least Selling <<Class1Cd>>s",
+    "Number": 15,
+    "Flag": "GenerateGraphPOS"
+  },
+  {
+    "Recid": 31000,
+    "Code": "CHART15",
+    "Descr": "10 Least Selling <<Class2Cd>>s",
+    "Number": 16,
+    "Flag": "GenerateGraphPOS"
+  },
+  {
+    "Recid": 31000,
+    "Code": "CHART16",
+    "Descr": "10 Least Selling <<SubClass1Cd>>s",
+    "Number": 17,
+    "Flag": "GenerateGraphPOS"
+  },
+  {
+    "Recid": 31000,
+    "Code": "CHART17",
+    "Descr": "Sales Person wise Comparison",
+    "Number": 18,
+    "Flag": "GenerateGraphPOS"
+  },
+  {
+    "Recid": 31000,
+    "Code": "CHART18",
+    "Descr": "Payment Mode wise Comparison",
+    "Number": 19,
+    "Flag": "GenerateGraphPOS"
+  },
+  {
+    "Recid": 31000,
+    "Code": "CHART19",
+    "Descr": "Transaction Wise Comparison",
+    "Number": 20,
+    "Flag": "GenerateGraphPOS"
+  },
+  {
+    "Recid": 31000,
+    "Code": "CHART2",
+    "Descr": "Last 15 Days Sales",
+    "Number": 3,
+    "Flag": "GenerateGraphPOS"
+  },
+  {
+    "Recid": 31000,
+    "Code": "CHART20",
+    "Descr": "Gross Margin Monthly",
+    "Number": 21,
+    "Flag": "GenerateGraphPOS"
+  },
+  {
+    "Recid": 31000,
+    "Code": "CHART21",
+    "Descr": "Gross Margin Yearly",
+    "Number": 22,
+    "Flag": "GenerateGraphPOS"
+  },
+  {
+    "Recid": 31000,
+    "Code": "CHART22",
+    "Descr": "Discount Details (Top 20)",
+    "Number": 23,
+    "Flag": "GenerateGraphPOS"
+  },
+  {
+    "Recid": 31000,
+    "Code": "CHART23",
+    "Descr": "Year Wise Sales",
+    "Number": 24,
+    "Flag": "GenerateGraphPOS"
+  },
+  {
+    "Recid": 31000,
+    "Code": "CHART24",
+    "Descr": "Monthly Comparision (Financial Year)",
+    "Number": 25,
+    "Flag": "GenerateGraphPOS"
+  },
+  {
+    "Recid": 31000,
+    "Code": "CHART3",
+    "Descr": "Last Month Sales",
+    "Number": 4,
+    "Flag": "GenerateGraphPOS"
+  },
+  {
+    "Recid": 31000,
+    "Code": "CHART4",
+    "Descr": "This Month Sales",
+    "Number": 5,
+    "Flag": "GenerateGraphPOS"
+  },
+  {
+    "Recid": 31000,
+    "Code": "CHART5",
+    "Descr": "Current Financial Year Sales",
+    "Number": 6,
+    "Flag": "GenerateGraphPOS"
+  },
+  {
+    "Recid": 31000,
+    "Code": "CHART6",
+    "Descr": "Last Financial Year Sales",
+    "Number": 7,
+    "Flag": "GenerateGraphPOS"
+  },
+  {
+    "Recid": 31000,
+    "Code": "CHART7",
+    "Descr": "Current Quarter",
+    "Number": 8,
+    "Flag": "GenerateGraphPOS"
+  },
+  {
+    "Recid": 31000,
+    "Code": "CHART8",
+    "Descr": "Last Quarter",
+    "Number": 9,
+    "Flag": "GenerateGraphPOS"
+  },
+  {
+    "Recid": 31000,
+    "Code": "CHART9",
+    "Descr": "Quarter Wise Comparision",
+    "Number": 10,
+    "Flag": "GenerateGraphPOS"
+  },
+  {
+    "Recid": 32000,
+    "Code": "1",
+    "Descr": "Line",
+    "Number": null,
+    "Flag": "N"
+  },
+  {
+    "Recid": 32000,
+    "Code": "2",
+    "Descr": "Bar",
+    "Number": null,
+    "Flag": "N"
+  },
+  {
+    "Recid": 32000,
+    "Code": "3",
+    "Descr": "Column",
+    "Number": null,
+    "Flag": "N"
+  },
+  {
+    "Recid": 32000,
+    "Code": "4",
+    "Descr": "Pie",
+    "Number": null,
+    "Flag": "N"
+  },
+  {
+    "Recid": 32000,
+    "Code": "5",
+    "Descr": "StackedColumn",
+    "Number": null,
+    "Flag": "N"
+  }
+]

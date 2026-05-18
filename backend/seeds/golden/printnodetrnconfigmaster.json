@@ -1,0 +1,11 @@
+[
+  { "nodeid": "NODE001", "trntypeidentifier": 1,  "trntypeidcaption": "Sales Bill",         "trntypegroup": "SALE",    "displayorder": 1,  "linkedrefid": "REF001", "trnlinkedrefexecutionorder": 1, "printpreference": 1, "isactive": 1 },
+  { "nodeid": "NODE001", "trntypeidentifier": 2,  "trntypeidcaption": "Sales Return",       "trntypegroup": "RETURN",  "displayorder": 2,  "linkedrefid": "REF002", "trnlinkedrefexecutionorder": 1, "printpreference": 1, "isactive": 1 },
+  { "nodeid": "NODE001", "trntypeidentifier": 11, "trntypeidcaption": "GIR/Stock Receipt",  "trntypegroup": "INWARD",  "displayorder": 3,  "linkedrefid": "REF003", "trnlinkedrefexecutionorder": 1, "printpreference": 1, "isactive": 1 },
+  { "nodeid": "NODE001", "trntypeidentifier": 12, "trntypeidcaption": "GIR Return",         "trntypegroup": "INWARD",  "displayorder": 4,  "linkedrefid": "REF004", "trnlinkedrefexecutionorder": 1, "printpreference": 1, "isactive": 1 },
+  { "nodeid": "NODE001", "trntypeidentifier": 21, "trntypeidcaption": "Stock Transfer Out",  "trntypegroup": "TRANSFER","displayorder": 5,  "linkedrefid": "REF005", "trnlinkedrefexecutionorder": 1, "printpreference": 1, "isactive": 1 },
+  { "nodeid": "NODE001", "trntypeidentifier": 22, "trntypeidcaption": "Stock Transfer In",   "trntypegroup": "TRANSFER","displayorder": 6,  "linkedrefid": "REF006", "trnlinkedrefexecutionorder": 1, "printpreference": 1, "isactive": 1 },
+  { "nodeid": "NODE001", "trntypeidentifier": 31, "trntypeidcaption": "Physical Stock",       "trntypegroup": "ADJUST",  "displayorder": 7,  "linkedrefid": "REF007", "trnlinkedrefexecutionorder": 1, "printpreference": 0, "isactive": 1 },
+  { "nodeid": "NODE001", "trntypeidentifier": 41, "trntypeidcaption": "Till Open",            "trntypegroup": "TILL",    "displayorder": 8,  "linkedrefid": "REF008", "trnlinkedrefexecutionorder": 1, "printpreference": 0, "isactive": 1 },
+  { "nodeid": "NODE001", "trntypeidentifier": 42, "trntypeidcaption": "Till Close",           "trntypegroup": "TILL",    "displayorder": 9,  "linkedrefid": "REF009", "trnlinkedrefexecutionorder": 1, "printpreference": 1, "isactive": 1 }
+]

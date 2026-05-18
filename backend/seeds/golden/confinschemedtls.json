@@ -1,0 +1,10 @@
+[
+  { "paymodetype": 2, "paymodecode": "VISA",     "schemecode": "NONE", "schemename": "No Scheme", "activeflag": 1, "noofinstallments": 0, "downpayment": 0 },
+  { "paymodetype": 2, "paymodecode": "MASTERCD",  "schemecode": "NONE", "schemename": "No Scheme", "activeflag": 1, "noofinstallments": 0, "downpayment": 0 },
+  { "paymodetype": 2, "paymodecode": "RUPAY",     "schemecode": "NONE", "schemename": "No Scheme", "activeflag": 1, "noofinstallments": 0, "downpayment": 0 },
+  { "paymodetype": 2, "paymodecode": "DEBIT",     "schemecode": "NONE", "schemename": "No Scheme", "activeflag": 1, "noofinstallments": 0, "downpayment": 0 },
+  { "paymodetype": 2, "paymodecode": "AMEX",      "schemecode": "NONE", "schemename": "No Scheme", "activeflag": 1, "noofinstallments": 0, "downpayment": 0 },
+  { "paymodetype": 3, "paymodecode": "GPAY",      "schemecode": "NONE", "schemename": "No Scheme", "activeflag": 1, "noofinstallments": 0, "downpayment": 0 },
+  { "paymodetype": 3, "paymodecode": "PHONEPE",   "schemecode": "NONE", "schemename": "No Scheme", "activeflag": 1, "noofinstallments": 0, "downpayment": 0 },
+  { "paymodetype": 3, "paymodecode": "PAYTM",     "schemecode": "NONE", "schemename": "No Scheme", "activeflag": 1, "noofinstallments": 0, "downpayment": 0 }
+]

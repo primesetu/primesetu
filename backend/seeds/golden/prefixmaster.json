@@ -1,0 +1,10 @@
+[
+  {"trntype": "SL",  "opid": "*", "terminalgroupid": "*", "srlno": 1, "prefix": "B",   "baseprefix": "B",   "suffix": "", "isactive": 1, "resetrequired": 1, "resettype": "Y"},
+  {"trntype": "SR",  "opid": "*", "terminalgroupid": "*", "srlno": 1, "prefix": "SR",  "baseprefix": "SR",  "suffix": "", "isactive": 1, "resetrequired": 1, "resettype": "Y"},
+  {"trntype": "PT",  "opid": "*", "terminalgroupid": "*", "srlno": 1, "prefix": "GIR", "baseprefix": "GIR", "suffix": "", "isactive": 1, "resetrequired": 1, "resettype": "Y"},
+  {"trntype": "GOR", "opid": "*", "terminalgroupid": "*", "srlno": 1, "prefix": "GOR", "baseprefix": "GOR", "suffix": "", "isactive": 1, "resetrequired": 1, "resettype": "Y"},
+  {"trntype": "PO",  "opid": "*", "terminalgroupid": "*", "srlno": 1, "prefix": "PO",  "baseprefix": "PO",  "suffix": "", "isactive": 1, "resetrequired": 0, "resettype": "N"},
+  {"trntype": "AD",  "opid": "*", "terminalgroupid": "*", "srlno": 1, "prefix": "AD",  "baseprefix": "AD",  "suffix": "", "isactive": 1, "resetrequired": 1, "resettype": "Y"},
+  {"trntype": "PS",  "opid": "*", "terminalgroupid": "*", "srlno": 1, "prefix": "PS",  "baseprefix": "PS",  "suffix": "", "isactive": 1, "resetrequired": 1, "resettype": "Y"},
+  {"trntype": "ST",  "opid": "*", "terminalgroupid": "*", "srlno": 1, "prefix": "ST",  "baseprefix": "ST",  "suffix": "", "isactive": 1, "resetrequired": 1, "resettype": "Y"}
+]

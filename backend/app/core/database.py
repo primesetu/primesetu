@@ -7,8 +7,8 @@
 # ============================================================
 from sqlalchemy.ext.asyncio import create_async_engine, AsyncSession, async_sessionmaker
 from sqlalchemy.orm import DeclarativeBase
+from fastapi import Header
 from app.core.config import settings
-
 
 def _make_async_pg_engine(url: str, pool_size: int = 10, max_overflow: int = 5):
     """Factory: create an async PostgreSQL engine (asyncpg driver)."""
@@ -20,16 +20,33 @@ def _make_async_pg_engine(url: str, pool_size: int = 10, max_overflow: int = 5):
         max_overflow=max_overflow,
     )
 
+# ── DYNAMIC ENGINE CACHE ──
+_engines = {}
+_session_makers = {}
+
+def get_engine_for_db(db_name: str, base_url: str):
+    """Dynamically creates or retrieves a connection pool for the target database."""
+    # Safety: ensure db_name contains only alphanumeric/underscores
+    safe_db_name = "".join(c for c in db_name if c.isalnum() or c == "_")
+    
+    if safe_db_name not in _engines:
+        from urllib.parse import urlparse
+        parsed = urlparse(base_url)
+        new_url = parsed._replace(path=f"/{safe_db_name}").geturl()
+        _engines[safe_db_name] = _make_async_pg_engine(new_url, pool_size=10, max_overflow=5)
+        _session_makers[safe_db_name] = async_sessionmaker(
+            bind=_engines[safe_db_name], class_=AsyncSession, expire_on_commit=False
+        )
+    return _session_makers[safe_db_name]
 
 # ── LOCAL POSTGRES ENGINE (offline / LAN mode) ───────────────────────────────
-# Uses a locally installed PostgreSQL instance.
-# Identical engine to cloud (asyncpg) → zero SQL dialect friction on sync.
 if settings.storage_mode == "LOCAL_POSTGRES":
-    engine = _make_async_pg_engine(settings.local_database_url, pool_size=10, max_overflow=5)
-    AsyncSessionLocal = async_sessionmaker(bind=engine, class_=AsyncSession, expire_on_commit=False)
+    # default local DB from the config URL
+    default_db_name = settings.local_database_url.split("/")[-1]
 
-    async def get_db():
-        async with AsyncSessionLocal() as session:
+    async def get_db(x_company_db: str = Header(default=default_db_name, alias="X-Company-Db")):
+        session_maker = get_engine_for_db(x_company_db, settings.local_database_url)
+        async with session_maker() as session:
             try:
                 yield session
                 await session.commit()
@@ -41,8 +58,9 @@ if settings.storage_mode == "LOCAL_POSTGRES":
 
     from contextlib import asynccontextmanager
     @asynccontextmanager
-    async def get_db_session():
-        async with AsyncSessionLocal() as session:
+    async def get_db_session(db_name: str = default_db_name):
+        session_maker = get_engine_for_db(db_name, settings.local_database_url)
+        async with session_maker() as session:
             yield session
 
 # ── SOVEREIGN ENGINE (Local MSSQL on Windows) ────────────────────────────────
@@ -61,7 +79,8 @@ elif settings.storage_mode == "SOVEREIGN":
     engine = create_engine(conn_url, echo=(settings.environment == "development"), pool_size=10, max_overflow=5)
     SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 
-    async def get_db():
+    async def get_db(x_company_db: str = Header(default="default")):
+        # MSSQL multi-tenant can be handled here later
         db = SessionLocal()
         try:
             yield db
@@ -74,7 +93,7 @@ elif settings.storage_mode == "SOVEREIGN":
 
     from contextlib import asynccontextmanager
     @asynccontextmanager
-    async def get_db_session():
+    async def get_db_session(db_name: str = "default"):
         db = SessionLocal()
         try:
             yield db
@@ -87,11 +106,11 @@ elif settings.storage_mode == "SOVEREIGN":
 
 # ── CLOUD ENGINE (Supabase / PostgreSQL — default) ────────────────────────────
 else:
-    engine = _make_async_pg_engine(settings.database_url, pool_size=20, max_overflow=10)
-    AsyncSessionLocal = async_sessionmaker(bind=engine, class_=AsyncSession, expire_on_commit=False)
+    default_cloud_db_name = settings.database_url.split("/")[-1]
 
-    async def get_db():
-        async with AsyncSessionLocal() as session:
+    async def get_db(x_company_db: str = Header(default=default_cloud_db_name, alias="X-Company-Db")):
+        session_maker = get_engine_for_db(x_company_db, settings.database_url)
+        async with session_maker() as session:
             try:
                 yield session
                 await session.commit()
@@ -103,8 +122,9 @@ else:
 
     from contextlib import asynccontextmanager
     @asynccontextmanager
-    async def get_db_session():
-        async with AsyncSessionLocal() as session:
+    async def get_db_session(db_name: str = default_cloud_db_name):
+        session_maker = get_engine_for_db(db_name, settings.database_url)
+        async with session_maker() as session:
             yield session
 
 

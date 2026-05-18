@@ -1,8 +1,8 @@
 "Id","Descr","ParamCode","Boolean","Intg","Txt","Dt","Sng","Cur","Opt","VAUid","VActr","VATermId","VACompCode","Fixed","Changed","Category","CatDescr","DispOrder","WZ","WZType","WZOrder"
 "000008","Allow Blank Size","AllowBlankSize",0,0,,,0.00,$0.00,"B","Super",1,".",,"Hidden","7","03. Item Classification","This Gives Item Classification Parameters",17,0,"03. Item Classification",0
 "000011","Extended Item Description applicable","ExtItemDescPresent",1,0,,,0.00,$0.00,"B","Super",1,".",,"Hidden","7","03. Item Classification","This Gives Item Classification Parameters",19,0,"03. Item Classification",0
-"000014","Shoper Opening Date","SHOPERSysDt",0,0,,1/1/2008 00:00:00,0.00,$0.00,"D","Super",1,".",,"Installation","7","01. Setup","This Gives Setup Parameters",1,0,"01. Setup",0
-"000015","Shoper System Status","SHOPERSysStat",0,0,"Open",,0.00,$0.00,"T","Super",1,".",,"Fixed","7","01. Setup","This Gives Setup Parameters",1,0,"01. Setup",0
+"000014","SMRITI Opening Date","SMRITISysDt",0,0,,1/1/2008 00:00:00,0.00,$0.00,"D","Super",1,".",,"Installation","7","01. Setup","This Gives Setup Parameters",1,0,"01. Setup",0
+"000015","SMRITI System Status","SMRITISysStat",0,0,"Open",,0.00,$0.00,"T","Super",1,".",,"Fixed","7","01. Setup","This Gives Setup Parameters",1,0,"01. Setup",0
 "00001A","Item Classification1 Caption","ItemClass1Cap",0,0,"Product",,0.00,$0.00,"T","Super",1,".",,"One Time","7","03. Item Classification","This Gives Item Classification Parameters",5,0,"03. Item Classification",0
 "00001B","Item Classification1 Code is Generated","ItemClass1CdGen",0,0,,,0.00,$0.00,"B","Super",1,".",,"Hidden","7","03. Item Classification","This Gives Item Classification Parameters",6,0,"03. Item Classification",0
 "00002A","Item Classification2 Caption","ItemClass2Cap",0,0,"Brand",,0.00,$0.00,"T","Super",1,".",,"One Time","7","03. Item Classification","This Gives Item Classification Parameters",6,0,"03. Item Classification",0
@@ -34,12 +34,12 @@
 "00009C","Retail Price is Tax Inclusive","IsRetailPriceTaxInc",1,0,,,0.00,$0.00,"B","Super",1,".",,"Hidden","7","11. Billing","This Gives Billing Parameters",58,0,"11. Billing",0
 "00010A","Dealer Price Applicable Y/N","DlrPricePresent",1,0,,,0.00,$0.00,"B","Super",1,".",,"Hidden","7","11. Billing","This Gives Billing Parameters",61,0,"11. Billing",0
 "00010B","Allow Billing at Dealer Price Y/N","AllowWSBilling",0,0,,,0.00,$0.00,"B","Super",1,".",,"Hidden","7","11. Billing","This Gives Billing Parameters",62,0,"11. Billing",0
-"00012A","Shoper Company Code","CompanyCode",0,0,,,0.00,$0.00,"T","Super",1,".",,"Fixed","7","01. Setup","This Gives Setup Parameters",2,0,"01. Setup",0
-"00012B","Shoper Company Name","CompanyName",0,0,,,0.00,$0.00,"T","Super",1,".",,"Fixed","7","01. Setup","This Gives Setup Parameters",3,0,"01. Setup",0
+"00012A","SMRITI Company Code","CompanyCode",0,0,,,0.00,$0.00,"T","Super",1,".",,"Fixed","7","01. Setup","This Gives Setup Parameters",2,0,"01. Setup",0
+"00012B","SMRITI Company Name","CompanyName",0,0,,,0.00,$0.00,"T","Super",1,".",,"Fixed","7","01. Setup","This Gives Setup Parameters",3,0,"01. Setup",0
 "00012C","State (Local) Sales Tax Registration Number","LocalSTaxRegnNo",0,0,,,0.00,$0.00,"T","Super",1,".",,"Variable","7","01. Setup","This Gives Setup Parameters",2,0,"01. Setup",0
 "00012D","Central (Federal) Sales Tax Registration Number","CentralSTaxRegnNo",0,0,,,0.00,$0.00,"T","Super",1,".",,"Variable","7","01. Setup","This Gives Setup Parameters",1,0,"01. Setup",0
-"00013A","Shoper IN Files Path","InFilesPath",0,0,,,0.00,$0.00,"T","Super",1,".",,"Variable","0","01. Setup","This Gives Setup Parameters",4,0,"01. Setup",0
-"00013B","Shoper Profile Files Path","ProfileFilesPath",0,0,,,0.00,$0.00,"T","Super",1,".",,"Variable","0","01. Setup","This Gives Setup Parameters",3,0,"01. Setup",0
+"00013A","SMRITI IN Files Path","InFilesPath",0,0,,,0.00,$0.00,"T","Super",1,".",,"Variable","0","01. Setup","This Gives Setup Parameters",4,0,"01. Setup",0
+"00013B","SMRITI Profile Files Path","ProfileFilesPath",0,0,,,0.00,$0.00,"T","Super",1,".",,"Variable","0","01. Setup","This Gives Setup Parameters",3,0,"01. Setup",0
 "000150","Billing Stationery Type","BillFormType",0,21,,,0.00,$0.00,"I","Super",1,".",,"Hidden","7","14. Bill - Printing","This Gives Bill - Printing Parameters",1,0,"14. Bill - Printing",0
 "00016A","Size Groups Applicable","SizeGroupsPresent",1,0,,,0.00,$0.00,"B","Super",1,".",,"Hidden","7","03. Item Classification","This Gives Item Classification Parameters",26,0,"03. Item Classification",0
 "00016B","Size Group Look-Up Rec Id","SizeGroupRecId",0,53,,,0.00,$0.00,"I","Super",1,".",,"Hidden","7","03. Item Classification","This Gives Item Classification Parameters",4,0,"03. Item Classification",0
@@ -62,9 +62,9 @@
 "00023A","Customer Classification5 Applicable","CustClass5Present",1,0,,,0.00,$0.00,"B","Super",1,".",,"Hidden","7","05. Customer","This Gives Customer Parameters",15,0,"05. Customer",0
 "00023B","Customer Classification5 Caption","CustClass5Cap",0,0,"Type",,0.00,$0.00,"T","Super",1,".",,"One Time","7","05. Customer","This Gives Customer Parameters",6,0,"05. Customer",0
 "00023C","Customer Classification5 Look-up Rec-Id","CustClass5RecId",0,59,,,0.00,$0.00,"I","Super",1,".",,"Hidden","7","05. Customer","This Gives Customer Parameters",4,0,"05. Customer",0
-"00024A","Shoper Application Segment","SHOPERAppSeg",0,0,"Apparel",,0.00,$0.00,"T","Super",1,".",,"Hidden","7","01. Setup","This Gives Setup Parameters",1,0,"01. Setup",0
+"00024A","SMRITI Application Segment","SMRITIAppSeg",0,0,"Apparel",,0.00,$0.00,"T","Super",1,".",,"Hidden","7","01. Setup","This Gives Setup Parameters",1,0,"01. Setup",0
 "00024B","Jewellry Segment","IsJewellrySeg",0,0,,,0.00,$0.00,"B","Super",1,".",,"Hidden","7","01. Setup","This Gives Setup Parameters",2,0,"01. Setup",0
-"00026A","SHOPER Environment","SHOPEREnv",0,0,"D",,0.00,$0.00,"T","Super",1,".",,"Hidden","7","01. Setup","This Gives Setup Parameters",3,0,"01. Setup",0
+"00026A","SMRITI Environment","SMRITIEnv",0,0,"D",,0.00,$0.00,"T","Super",1,".",,"Hidden","7","01. Setup","This Gives Setup Parameters",3,0,"01. Setup",0
 "00026R","Retail Environment True","IsRetailEnv",0,0,,,0.00,$0.00,"B","Super",1,".",,"Hidden","7","11. Billing","This Gives Billing Parameters",54,0,"11. Billing",0
 "00026W","Wholesale Environment True","IsWholeSaleEnv",1,0,,,0.00,$0.00,"B","Super",1,".",,"Hidden","7","11. Billing","This Gives Billing Parameters",66,0,"11. Billing",0
 "00028A","Stock Module Present","StockModulePresent",1,0,,,0.00,$0.00,"B","Super",1,".",,"Hidden","7","01. Setup","This Gives Setup Parameters",4,0,"01. Setup",0
@@ -199,7 +199,7 @@
 "00165C","Default Entry Mode For Transactions","DefaultTrnEntryMode",0,0,".",,0.00,$0.00,"I","Super",1,".",,"Hidden","7","11. Billing","This Gives Billing Parameters",51,0,"11. Billing",0
 "00165D","Item Details Printed in Audit Trial","ItemDetailsInAuditTrial",0,0,"Y,N,N,N,N,Y,N,Y,N,Y",,0.00,$0.00,"T","Super",1,".",,"Hidden","7","09. Inwards","This Gives Inwards Parameters",19,0,"09. Inwards",0
 "00165E","System Counter Number","VaSysCounter",0,1,,,0.00,$0.00,"I","Super",1,".",,"Hidden","7","17. House Keeping","This Gives House Keeping Parameters",12,0,"17. House Keeping",0
-"00165F","Shoper-Care Client Installed","VaCareClientInstalled",0,0,,,0.00,$0.00,"B","Super",1,".",,"Hidden","7","11. Billing","This Gives Billing Parameters",50,0,"11. Billing",0
+"00165F","SMRITI-Care Client Installed","VaCareClientInstalled",0,0,,,0.00,$0.00,"B","Super",1,".",,"Hidden","7","11. Billing","This Gives Billing Parameters",50,0,"11. Billing",0
 "00165G","ReUse Same Credit Note Or Issue New Credit Note for balance value in Old Credit Note","ReUseCreditNote",1,0,,,0.00,$0.00,"B","Super",1,".",,"Hidden","7","11. Billing","This Gives Billing Parameters",3,0,"11. Billing",0
 "00166A","Allow customer classfications if customer code is not chosen","AcceptDemography",0,0,,,0.00,$0.00,"B","Super",1,".",,"One Time","7","11. Billing","This Gives Billing Parameters",1,0,"11. Billing",0
 "00167A","Customer Demography#1 Present","Demography1Present",1,0,,,0.00,$0.00,"B","Super",1,".",,"Hidden","7","11. Billing","This Gives Billing Parameters",13,0,"11. Billing",0
@@ -263,8 +263,8 @@
 "00419A","Display PT File Information Details Using Browse","DisplayPTFileDetails",0,0,,,0.00,$0.00,"B","Super",1,".",,"Hidden","7","09. Inwards","This Gives Inwards Parameters",30,0,"09. Inwards",0
 "00420A","StockNo Creation during PT File Loading","GIRStknoGeneration",0,0,,,0.00,$0.00,"I","Super",1,".",,"Hidden","7","09. Inwards","This Gives Inwards Parameters",12,0,"09. Inwards",0
 "00421A","Grade Applicable for Stock No.","GradeApplicableForStkNo",0,1,,,0.00,$0.00,"I","Super",1,".",,"Hidden","7","03. Item Classification","This Gives Item Classification Parameters",82,0,"03. Item Classification",0
-"00421B","Company PT(XT) File In Path","CompXTFileInPath",0,0,"D:\SHOPER7\COMPXTFL",,0.00,$0.00,"T","Super",1,".",,"Hidden","0","09. Inwards","This Gives Inwards Parameters",21,0,"09. Inwards",0
-"00421C","Company PT(XT) File Out Path","CompPTFileOutPath",0,0,"D:\SHOPER7\COMPPTFL",,0.00,$0.00,"T","Super",1,".",,"Hidden","0","09. Inwards","This Gives Inwards Parameters",9,0,"09. Inwards",0
+"00421B","Company PT(XT) File In Path","CompXTFileInPath",0,0,"D:\SMRITI7\COMPXTFL",,0.00,$0.00,"T","Super",1,".",,"Hidden","0","09. Inwards","This Gives Inwards Parameters",21,0,"09. Inwards",0
+"00421C","Company PT(XT) File Out Path","CompPTFileOutPath",0,0,"D:\SMRITI7\COMPPTFL",,0.00,$0.00,"T","Super",1,".",,"Hidden","0","09. Inwards","This Gives Inwards Parameters",9,0,"09. Inwards",0
 "00421D","PT File Creation - Overwrite/ Append to File","PTFileToOverwriteOrAppend",0,0,,,0.00,$0.00,"I","Super",1,".",,"Variable","7","10. Outwards","This Gives Outwards Parameters",16,0,"10. Outwards",0
 "00421E","LSQ Applicable on Mutiples","ApplicableLSQMutiple",1,0,,,0.00,$0.00,"B","Super",1,".",,"Hidden","7","09. Inwards","This Gives Inwards Parameters",8,0,"09. Inwards",0
 "00421F","Whether to Display Bale Details","BaleDtlsTobeDisplay",0,0,,,0.00,$0.00,"I","Super",1,".",,"Hidden","7","09. Inwards","This Gives Inwards Parameters",7,0,"09. Inwards",0
@@ -417,7 +417,7 @@
 "800013","Default Setting for Sales Man Selection in Billing","ActivateItemwiseSalesman",0,0,,,0.00,$0.00,"I","Super",1,".",,"Variable","7","11. Billing","This Gives Billing Parameters",4,0,"11. Billing",0
 "800014","ID/IM File - SKU Formation","IDIMSkuFormation",0,0,"0",,0.00,$0.00,"T","Super",1,".",,"Hidden","7","17. House Keeping","This Gives House Keeping Parameters",14,0,"17. House Keeping",0
 "800015A","WEB Server Settings","WebServerSettings1",0,0,,,0.00,$0.00,"T","Super",1,".",,"Variable","7","17. House Keeping","This Gives House Keeping Parameters",15,0,"17. House Keeping",0
-"800015B","Web Server Settings for Download File","WebServerSettings2",0,0,"c:\shoper7\in#c:\shoper7\in",,0.00,$0.00,"T","Super",1,".",,"Variable","7","17. House Keeping","This Gives House Keeping Parameters",16,0,"17. House Keeping",0
+"800015B","Web Server Settings for Download File","WebServerSettings2",0,0,"c:\smriti7\in#c:\smriti7\in",,0.00,$0.00,"T","Super",1,".",,"Variable","7","17. House Keeping","This Gives House Keeping Parameters",16,0,"17. House Keeping",0
 "800016A","Number of Report Header Lines to be Printed","RPTPgHdrPrintLines",0,0,"111100",,0.00,$0.00,"T","Super",1,".",,"Variable","7","15. Reports","This Gives Reports Parameters",15,0,"15. Reports",0
 "800017A","Report Header Line#1","RPTPgHdr1",0,0,".",,0.00,$0.00,"T","Super",1,".",,"Variable","7","15. Reports","This Gives Reports Parameters",1,0,"15. Reports",0
 "800017B","Report Header Line#2","RPTPgHdr2",0,0,".",,0.00,$0.00,"T","Super",1,".",,"Variable","7","15. Reports","This Gives Reports Parameters",2,0,"15. Reports",0
@@ -432,7 +432,7 @@
 "800018E","Font Details of Report Header Line#5","RPTPgHdr5Font",0,0,"Arial#11#0000#x",,0.00,$0.00,"T","Super",1,".",,"Variable","7","15. Reports","This Gives Reports Parameters",11,0,"15. Reports",0
 "800018F","Font Details of Report Header Line#6","RPTPgHdr6Font",0,0,"Arial#11#0000#x",,0.00,$0.00,"T","Super",1,".",,"Variable","7","15. Reports","This Gives Reports Parameters",12,0,"15. Reports",0
 "800019A","Font Details of Report Header Line#7","RPTPgHdr7Font",0,0,"Arial#10#0000#x",,0.00,$0.00,"T","Super",1,".",,"Hidden","7","15. Reports","This Gives Reports Parameters",13,0,"15. Reports",0
-"800019B","Font Details of PageNo,PrintDate,ShoperDate","RPTPgHdr8Font",0,0,"Arial#10#0000#x",,0.00,$0.00,"T","Super",1,".",,"Variable","7","15. Reports","This Gives Reports Parameters",14,0,"15. Reports",0
+"800019B","Font Details of PageNo,PrintDate,SMRITIDate","RPTPgHdr8Font",0,0,"Arial#10#0000#x",,0.00,$0.00,"T","Super",1,".",,"Variable","7","15. Reports","This Gives Reports Parameters",14,0,"15. Reports",0
 "800020A","Print Report Generation Date","RPTPrintDates",0,0,"11",,0.00,$0.00,"T","Super",1,".",,"Variable","7","15. Reports","This Gives Reports Parameters",16,0,"15. Reports",0
 "800021","General Discount Reason Configuration in Billing","GenDiscReasonOpt",0,3,".",,0.00,$0.00,"I","Super",1,".",,"Variable","7","11. Billing","This Gives Billing Parameters",11,0,"11. Billing",0
 "800022","General Discount Activation Option(s) And  Value Type(s) In Billing","GenDiscActOptAndValType",0,0,"00000",,0.00,$0.00,"T","Super",1,".",,"Hidden","7","11. Billing","This Gives Billing Parameters",6,0,"11. Billing",0
@@ -488,10 +488,10 @@
 "SR1-0603-0000115","Caption to Print in Distributor","CaptionPrintDistributor",0,0,"I n v o i c e#Sales Return Credit Note#Void Invoice#Void Sale Return",,0.00,$0.00,"T","Super",1,".",,"Hidden","7","14. Bill - Printing","This Gives Bill - Printing Parameters",5,0,"14. Bill - Printing",0
 "SR1-0603-0000118","Component Caption to Print in Distributor","CompCaptionPrintDistributor",0,0,"Discount#Tax#Addons#Deductions",,0.00,$0.00,"T","Super",1,".",,"Hidden","7","14. Bill - Printing","This Gives Bill - Printing Parameters",6,0,"14. Bill - Printing",0
 "SR1-0700-0000123","Print Customer Address Remarks and Discount in Bill","PrintDiscCustAddrRmksInPOS",0,0,"000",,0.00,$0.00,"T","Super",1,".",,"Variable","7","14. Bill - Printing","This Gives Bill - Printing Parameters",28,0,"14. Bill - Printing",0
-"SR1-0701-0000125","Printing Template Folder","PrintingTemplateFolder",0,0,"C:\shoper7\BillTemplates",,0.00,$0.00,"T","Super",1,".",,"Hidden","0","14. Bill - Printing","This Gives Bill - Printing Parameters",18,0,"14. Bill - Printing",0
-"SR1-0701-0000126","Default Printing Template File Path","PrintingTemplateDefault",0,0,"C:\shoper7\BillTemplates\shoper40col.TPL",,0.00,$0.00,"T","Super",1,".",,"Hidden","7","14. Bill - Printing","This Gives Bill - Printing Parameters",22,0,"14. Bill - Printing",0
-"SR1-0701-0000127","Default Printing Control File Path","PrintingTemplateControl",0,0,"C:\shoper7\BillTemplates\ShoperControl.IPL",,0.00,$0.00,"T","Super",1,".",,"Hidden","7","14. Bill - Printing","This Gives Bill - Printing Parameters",21,0,"14. Bill - Printing",0
-"SR1-0701-0000128","Default Printing Conditional File Path","PrintingTemplateCondition",0,0,"C:\shoper7\BillTemplates\ShoperControl.VPL",,0.00,$0.00,"T","Super",1,".",,"Hidden","7","14. Bill - Printing","This Gives Bill - Printing Parameters",20,0,"14. Bill - Printing",0
+"SR1-0701-0000125","Printing Template Folder","PrintingTemplateFolder",0,0,"C:\smriti7\BillTemplates",,0.00,$0.00,"T","Super",1,".",,"Hidden","0","14. Bill - Printing","This Gives Bill - Printing Parameters",18,0,"14. Bill - Printing",0
+"SR1-0701-0000126","Default Printing Template File Path","PrintingTemplateDefault",0,0,"C:\smriti7\BillTemplates\smriti40col.TPL",,0.00,$0.00,"T","Super",1,".",,"Hidden","7","14. Bill - Printing","This Gives Bill - Printing Parameters",22,0,"14. Bill - Printing",0
+"SR1-0701-0000127","Default Printing Control File Path","PrintingTemplateControl",0,0,"C:\smriti7\BillTemplates\SMRITIControl.IPL",,0.00,$0.00,"T","Super",1,".",,"Hidden","7","14. Bill - Printing","This Gives Bill - Printing Parameters",21,0,"14. Bill - Printing",0
+"SR1-0701-0000128","Default Printing Conditional File Path","PrintingTemplateCondition",0,0,"C:\smriti7\BillTemplates\SMRITIControl.VPL",,0.00,$0.00,"T","Super",1,".",,"Hidden","7","14. Bill - Printing","This Gives Bill - Printing Parameters",20,0,"14. Bill - Printing",0
 "SR1-0701-0000129","Multiple Printing templates Active","PrintingMultipleTemplateActive",0,0,"0",,0.00,$0.00,"T","Super",1,".",,"Hidden","7","14. Bill - Printing","This Gives Bill - Printing Parameters",11,0,"14. Bill - Printing",0
 "SR1-0701-0000130","Temporary folder to write all temp files during generalized printing","GetTmpFilePath",0,0,"C:",,0.00,$0.00,"T","Super",1,".",,"Hidden","0","14. Bill - Printing","This Gives Bill - Printing Parameters",19,0,"14. Bill - Printing",0
 "SR1-0701-0000131","No of Copies to be Printed","NoOfCopies",0,0,"N#1",,0.00,$0.00,"T","Super",1,".",,"Variable","7","14. Bill - Printing","This Gives Bill - Printing Parameters",12,0,"14. Bill - Printing",0
@@ -522,7 +522,7 @@
 "SR2-0700-0000124","Whether Create TT File For Distributor Or Retail","WhetherCreateTTFileDistributorOrRetail",0,0,,,0.00,$0.00,"I","Super",1,".",,"Hidden","7","10. Outwards","This Gives Outwards Parameters",7,0,"10. Outwards",0
 "SR2-0702-0000152","List of Payment Mode Including Franchise Transactions","ListPaymentModeIncludingFranchiseTransaction",0,0,"0#5",,0.00,$0.00,"T","Super",1,".",,"Variable","7","15. Reports","This Gives Reports Parameters",27,0,"15. Reports",0
 "SR3-0600-0000020","Caption for Add-ons/ Deductions","CaptionForAddonsDedns",0,0,"Addon#Deduction",,0.00,$0.00,"T","Super",1,".",,"Variable","7","09. Inwards","This Gives Inwards Parameters",14,0,"09. Inwards",0
-"SR3-0600-0000029","PT File Loading From Shoper In-Path","PTFileLoadingFromShoperINPath",0,1,,,0.00,$0.00,"I","Super",1,".",,"Hidden","7","09. Inwards","This Gives Inwards Parameters",14,0,"09. Inwards",0
+"SR3-0600-0000029","PT File Loading From SMRITI In-Path","PTFileLoadingFromSMRITIINPath",0,1,,,0.00,$0.00,"I","Super",1,".",,"Hidden","7","09. Inwards","This Gives Inwards Parameters",14,0,"09. Inwards",0
 "SR3-0602-0000046","Whether PT File With Delimeter or Not","WhetherPTFileWithDelimeterorNot",0,2,,,0.00,$0.00,"I","Super",1,".",,"Hidden","7","09. Inwards","This Gives Inwards Parameters",10,0,"09. Inwards",0
 "SR3-0602-0000047","Display PT File Delimeter","DisplayPTFileDelimeter",0,0,";",,0.00,$0.00,"T","Super",1,".",,"Hidden","7","09. Inwards","This Gives Inwards Parameters",11,0,"09. Inwards",0
 "SR3-0602-0000048","Whether PT File Details Taken From Browse or Not","WhetherPTFileDetailsFromBrowseorNot",0,0,,,0.00,$0.00,"B","Super",1,".",,"Hidden","7","09. Inwards","This Gives Inwards Parameters",32,0,"09. Inwards",0
@@ -622,9 +622,9 @@
 "SR5-0701-0000137","PM Import and GIR - Update TAX automatically","DefaultTaxInclusiveUpdateInPMGIR",0,0,"0N",,0.00,$0.00,"T","Super",1,".",,"Hidden","7","09. Inwards","This Gives Inwards Parameters",25,0,"09. Inwards",0
 "SR5-0701-0000139","Tolerance Factor In Day Begin for Qty And Value","ToleranceFactorDayBeginQtyValue",0,0,"0.10#0.10",,0.00,$0.00,"T","Super",1,".",,"Hidden","7","17. House Keeping","This Gives House Keeping Parameters",26,0,"17. House Keeping",0
 "SR5-0701-0000140","Enable Common PT File Creation","CommonPTFileCreationEnabled",0,0,"2100:N#2200:N#2300:N#2400:N#2500:N#9800:N#9900:N",,0.00,$0.00,"T","Super",1,".",,"Variable","7","09. Inwards","This Gives Inwards Parameters",15,0,"09. Inwards",0
-"SR5-0702-0000145","AST Export Path","ASTExportPath",0,0,"C:\Shoper72\AstOut",,0.00,$0.00,"T","Super",1,".",,"Hidden","0","17. House Keeping","This Gives House Keeping Parameters",27,0,"17. House Keeping",0
-"SR5-0702-0000146","AST Import Path","ASTImportPath",0,0,"C:\Shoper72\AstOut",,0.00,$0.00,"T","Super",1,".",,"Hidden","0","17. House Keeping","This Gives House Keeping Parameters",28,0,"17. House Keeping",0
-"SR5-0702-0000147","AST BackUp Path","ASTBackUpPath",0,0,"C:\Shoper72\AstOut",,0.00,$0.00,"T","Super",1,".",,"Hidden","0","17. House Keeping","This Gives House Keeping Parameters",29,0,"17. House Keeping",0
+"SR5-0702-0000145","AST Export Path","ASTExportPath",0,0,"C:\SMRITI72\AstOut",,0.00,$0.00,"T","Super",1,".",,"Hidden","0","17. House Keeping","This Gives House Keeping Parameters",27,0,"17. House Keeping",0
+"SR5-0702-0000146","AST Import Path","ASTImportPath",0,0,"C:\SMRITI72\AstOut",,0.00,$0.00,"T","Super",1,".",,"Hidden","0","17. House Keeping","This Gives House Keeping Parameters",28,0,"17. House Keeping",0
+"SR5-0702-0000147","AST BackUp Path","ASTBackUpPath",0,0,"C:\SMRITI72\AstOut",,0.00,$0.00,"T","Super",1,".",,"Hidden","0","17. House Keeping","This Gives House Keeping Parameters",29,0,"17. House Keeping",0
 "SR5-0702-0000148","AST DSN Name","ASTDSNName",0,0,"ASTTEST",,0.00,$0.00,"T","Super",1,".",,"Hidden","7","17. House Keeping","This Gives House Keeping Parameters",30,0,"17. House Keeping",0
 "SR5-0702-0000149","Tables to be excluded during export to replication1","TempTableToSkipFromAST1",0,0,"BAK#TMP#XTMP#MSYS#TEMP#AST#PASTE#RST#SDR#DTP#SYS#DCREF#PTHDR#PTDTL#RST#SDR#COPY#PASTE#DCREF#GLOBAL#PHYTMP#REP#AST#LOG#LST#RPT#TALLY#XSP",,0.00,$0.00,"T","Super",1,".",,"Hidden","7","17. House Keeping","This Gives House Keeping Parameters",38,0,"17. House Keeping",0
 "SR5-0702-0000150","Tables to be excluded during export to replication2","TempTableToSkipFromAST2",0,0,"SYSPARAMEXTD#SYSPARAMLOOKUP#GENLOOKUPEXTD#ITEMTRNSUMMARY#PTHeadView#information.schema#PromoMnIntermediate#Franchiselstloadeddtls#Poslstloadeddtls#Information_schema",,0.00,$0.00,"T","Super",1,".",,"Hidden","7","17. House Keeping","This Gives House Keeping Parameters",6,0,"17. House Keeping",0
@@ -639,7 +639,7 @@
 "SR5-0702-0000168","Export Entire Stock Transaction Summary in Day End Process","ExportEntireStkTrnSummaryForDayEnd",0,0,"0",,0.00,$0.00,"T","Super",1,".",,"Variable","7","17. House Keeping","This Gives House Keeping Parameters",6,0,"17. House Keeping",0
 "SR5-0702-0000170","No. of Days Backup to be Preserved","NoOfDaysBackupToBePreserved",0,7,,,0.00,$0.00,"I","Super",1,".",,"Variable","7","17. House Keeping","This Gives House Keeping Parameters",13,0,"17. House Keeping",0
 "SR5-0730-0000188","Print To Address in GIR","PrintToAddressGIR",0,0,"1111",,0.00,$0.00,"T","Super",1,".",,"Variable","7","17. House Keeping","This Gives House Keeping Parameters",12,0,"17. House Keeping",0
-"SR5-0730-0000189","Loading / Storing Path for Barcode Design Templates","PathBarcodeDesignTemplates",0,0,"C:\Shoper72\Barcode",,0.00,$0.00,"T","Super",1,".",,"Variable","0","17. House Keeping","This Gives House Keeping Parameters",11,0,"17. House Keeping",0
+"SR5-0730-0000189","Loading / Storing Path for Barcode Design Templates","PathBarcodeDesignTemplates",0,0,"C:\SMRITI72\Barcode",,0.00,$0.00,"T","Super",1,".",,"Variable","0","17. House Keeping","This Gives House Keeping Parameters",11,0,"17. House Keeping",0
 "SR5-0730-0000190","Display Actual Quantity and Doc Quantity for PO Pre-fill","DispActQtyDocQtyForPOPrefill",0,0,"0#0",,0.00,$0.00,"T","Super",1,".",,"Variable","7","09. Inwards","This Gives Inwards Parameters",25,0,"09. Inwards",0
 "SR5-0730-0000191","Split Quantity If Actual Qty is More than PO Qty","SplitActQtyIfMoreThanPOQty",0,0,,,0.00,$0.00,"I","Super",1,".",,"Variable","7","09. Inwards","This Gives Inwards Parameters",22,0,"09. Inwards",0
 "SR5-0730-0000192","Auto Pre-fill PO details in Goods Inwards (Only for POs based on stock number)","PrefillPODetailsInGIR",0,0,,,0.00,$0.00,"I","Super",1,".",,"Variable","7","09. Inwards","This Gives Inwards Parameters",27,0,"09. Inwards",0
@@ -682,7 +682,7 @@
 "SR5-0730-0000260","File Type for POS","FFileTypePOS",0,0,"*.seq,*.vsp",,0.00,$0.00,"T","Super",1,".",,"Hidden","7","17. House Keeping","This Gives House Keeping Parameters",20,0,"17. House Keeping",0
 "SR5-0730-0000261","Subject for Resync Request From HO","FFileMailResyncSubjectHO",0,0,"Data Resynch",,0.00,$0.00,"T","Super",1,".",,"Hidden","7","21. Data Sync.","This Gives Data Sync. Parameters",11,0,"21. Data Sync.",0
 "SR5-0730-0000262","Message for Resync Request From HO","FFileMessageResyncHO",0,0,"Data Resynch from HO",,0.00,$0.00,"T","Super",1,".",,"Hidden","7","21. Data Sync.","This Gives Data Sync. Parameters",12,0,"21. Data Sync.",0
-"SR5-0730-0000263","Shoper Temporary Backup Path","BackupPath",0,0,"C:\Shop723\Backup",,0.00,$0.00,"T","Super",1,".",,"Variable","0","17. House Keeping","This Gives House Keeping Parameters",17,0,"17. House Keeping",0
+"SR5-0730-0000263","SMRITI Temporary Backup Path","BackupPath",0,0,"C:\Shop723\Backup",,0.00,$0.00,"T","Super",1,".",,"Variable","0","17. House Keeping","This Gives House Keeping Parameters",17,0,"17. House Keeping",0
 "SR5-0730-0000264","Default Size Group Id","DefaultSizeGroupId",0,0,"OT",,0.00,$0.00,"T","Super",1,".",,"Hidden","7","09. Inwards","This Gives Inwards Parameters",36,0,"09. Inwards",0
 "SR5-0730-0000265","Free Items Mandatory in Billing","ValidateFreeItemsInBill",0,0,,,0.00,$0.00,"I","Super",1,".",,"Variable","7","11. Billing","This Gives Billing Parameters",21,0,"11. Billing",0
 "SR5-0730-0000266","Free Items Billed at Value","FreeItemsBillAt",0,0,"A#value",,0.00,$0.00,"T","Super",1,".",,"Variable","7","11. Billing","This Gives Billing Parameters",22,0,"11. Billing",0
@@ -698,7 +698,7 @@
 "SR5-0730-0000280","Apply PO Rate with PO Reference in Inwards","ApplyPORateWithPORefInGIR",0,0,,,0.00,$0.00,"I","Super",1,".",,"Variable","7","09. Inwards","This Gives Inwards Parameters",27,0,"09. Inwards",0
 "SR5-0730-0000282","Extraction Zip file split size specification in KB","Extractzipsplitsize",0,0,,,0.00,$0.00,"I","Super",1,".",,"Hidden","7","21. Data Sync.","This Gives Data Sync. Parameters",26,0,"21. Data Sync.",0
 "SR5-0730-0000285","DBVersion to be updated for POS Transactions","DBVersionUpdtInPOS",0,730,,,0.00,$0.00,"I","Super",1,".",,"Hidden","7","17. House Keeping","This Gives House Keeping Parameters",45,0,"17. House Keeping",0
-"SR5-0730-0000291","Shoper Live Update Backup Parameter","LUBackupParam",0,0,"Y",,0.00,$0.00,"T","Super",1,".",,"Variable","7","17. House Keeping","This Gives House Keeping Parameters",23,0,"17. House Keeping",0
+"SR5-0730-0000291","SMRITI Live Update Backup Parameter","LUBackupParam",0,0,"Y",,0.00,$0.00,"T","Super",1,".",,"Variable","7","17. House Keeping","This Gives House Keeping Parameters",23,0,"17. House Keeping",0
 "SR5-0901-0000298","Path to move file after processing","ProcessedFilePath",0,0,".Processed",,0.00,$0.00,"T","Super",1,".",,"Hidden","7","17. House Keeping","This Gives House Keeping Parameters",46,0,"17. House Keeping",0
 "SR5-0901-0000302","Post Cost Center information to tally","PostCCToTally",0,0,,,0.00,$0.00,"B","Super",1,".",,"Variable","7","17. House Keeping","This Gives House Keeping Parameters",2,0,"17. House Keeping",0
 "SR5-0901-0000310","Create detailed log file in tally mapping","TallyLogType",0,0,,,0.00,$0.00,"B","Super",1,".",,"Variable","7","17. House Keeping","This Gives House Keeping Parameters",24,0,"17. House Keeping",0
@@ -718,7 +718,7 @@
 "SR6-0702-0000144","Accept Quantity in Item Master Entry","AcceptQtyInItemMasterEntry",0,0,,,0.00,$0.00,"B","Super",1,".",,"Variable","7","03. Item Classification","This Gives Item Classification Parameters",1,0,"03. Item Classification",0
 "SR6-0702-0000151","Sales Factor Rec. Id Auto Generation","SalesFactorRecIdAutoGen",0,0,,,0.00,$0.00,"B","Super",1,".",,"Hidden","7","11. Billing","This Gives Billing Parameters",1,0,"11. Billing",0
 "SR6-0702-0000162","Image ID Applicable in Item Master","ImageIDPresentInItemmaster",0,0,,,0.00,$0.00,"B","Super",1,".",,"Variable","7","04. Item Master","This Gives Item Master Parameters",1,0,"04. Item Master",0
-"SR6-0702-0000165","Shoper Image File Path","ShoperImageFilePath",0,0,"C:\Shoper72\Images",,0.00,$0.00,"T","Super",1,".",,"Variable","0","04. Item Master","This Gives Item Master Parameters",4,0,"04. Item Master",0
+"SR6-0702-0000165","SMRITI Image File Path","SMRITIImageFilePath",0,0,"C:\SMRITI72\Images",,0.00,$0.00,"T","Super",1,".",,"Variable","0","04. Item Master","This Gives Item Master Parameters",4,0,"04. Item Master",0
 "SR6-0702-000143A","Batch SrlNo For Item Master Entry","BatchSrlNoA",1,0,".",,0.00,$0.00,"B","Super",1,".",,"Hidden","7","04. Item Master","This Gives Item Master Parameters",2,0,"04. Item Master",0
 "SR6-0702-000143B","Batch SrlNo Rec-Id For Item Master Entry","BatchSrlNoB",0,960,".",,0.00,$0.00,"I","Super",1,".",,"Hidden","7","04. Item Master","This Gives Item Master Parameters",1,0,"04. Item Master",0
 "SR6-0702-000144A","Regular Indicator for ItemMaster Entry","RegIndA",1,0,,,0.00,$0.00,"B","Super",1,".",,"Hidden","7","03. Item Classification","This Gives Item Classification Parameters",29,0,"03. Item Classification",0
@@ -821,7 +821,7 @@
 "SR7-0730-0000180","Cash/ Credit Payment to HO Configuration","PaymentHOByCashAndCredit",0,0,"11",,0.00,$0.00,"T","Super",1,".",,"Variable","7","02. Franchisee","This Gives Franchisee Parameters",5,0,"02. Franchisee",0
 "SR1-0901-0000315","Expected Transaction-Slip Printing Type","ExpTrnSlipPrintingType",,1,,,,,"I","Super",1,".",,"Variable","7","12. Slips","This Gives Slips Parameters",16,0,"12. Slips",0
 "SR7-0913-0000313","PAY MODES CONSIDERED UNDER CASH SALES","PAYMODESCONSIDEREDUNDERCASHSALES",0,0,"1#1#0#1",,0.00,0,"T","Super",1,".",,"Variable","7","02. Franchisee","This Gives Franchisee Parameters",23,0,"02. Franchisee",0
-"SR4-9111-0000333","Catalogue – For Item Level Fixed Discounts/Offers – Default behaviour for Lowest/Highest Priced Item","LowestHighestPricedItem",,1,,,,,"I",,,,,"Variable","0","11. Billing","This Gives Billing Parameters",28,0,,0
+"SR4-9111-0000333","Catalogue â€“ For Item Level Fixed Discounts/Offers â€“ Default behaviour for Lowest/Highest Priced Item","LowestHighestPricedItem",,1,,,,,"I",,,,,"Variable","0","11. Billing","This Gives Billing Parameters",28,0,,0
 "SR5-0901-0000300","DISPLAY NET AVALIABLE QUANTITY IN ITEM BROWSE FOR BILLING","DISPLAYNETQTYINBROWSE",0,0,,,0.00,0,"B","Super",1,".",,"Hidden","0","16. Browse","This Gives Browse Parameters","8","0","16. Browse",0
 "SR7-0901-0000313","Pay Slip Printing Type","PaySlipPrintingType",,1,,,,,"I",,,,,"Variable","0","02. Franchisee","This Gives Franchisee Parameters",7,0,,0
 "SR3-0901-0000314","Print Audit Trail Title  in Goods Inwards","PrnAuditTrailTitleInGIR",,,"0#Purchase|Transfer In|Approval Returns|Miscellaneous Receipts",,,,"T",,,,,"Variable","0","09. Inwards","This Gives Inwards Parameters",30,,,

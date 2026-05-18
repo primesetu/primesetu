@@ -1,0 +1,17 @@
+[
+  {
+    "code": "ADMIN",   "nm": "Store Manager", "type": "M", "isuser": true,  "loginid": "admin",   "loginpwd": "", "userwt": 99, "activeflag": 1, "allowinbilling": 1, "isdefinedatho": 0
+  },
+  {
+    "code": "SM01",    "nm": "Sales Executive 1", "type": "S", "isuser": false, "loginid": null, "loginpwd": null, "userwt": 1, "activeflag": 1, "allowinbilling": 1, "isdefinedatho": 0
+  },
+  {
+    "code": "SM02",    "nm": "Sales Executive 2", "type": "S", "isuser": false, "loginid": null, "loginpwd": null, "userwt": 2, "activeflag": 1, "allowinbilling": 1, "isdefinedatho": 0
+  },
+  {
+    "code": "SM03",    "nm": "Sales Executive 3", "type": "S", "isuser": false, "loginid": null, "loginpwd": null, "userwt": 3, "activeflag": 1, "allowinbilling": 1, "isdefinedatho": 0
+  },
+  {
+    "code": "CASHIER", "nm": "Cashier",           "type": "C", "isuser": true,  "loginid": "cashier", "loginpwd": "", "userwt": 10, "activeflag": 1, "allowinbilling": 1, "isdefinedatho": 0
+  }
+]

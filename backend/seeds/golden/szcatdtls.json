@@ -1,0 +1,38 @@
+[
+  { "sizegroup": "APPAREL", "sizecd": "XS",   "sizedescr": "Extra Small",    "sizeorder": 1,  "activeflag": true },
+  { "sizegroup": "APPAREL", "sizecd": "S",    "sizedescr": "Small",           "sizeorder": 2,  "activeflag": true },
+  { "sizegroup": "APPAREL", "sizecd": "M",    "sizedescr": "Medium",          "sizeorder": 3,  "activeflag": true },
+  { "sizegroup": "APPAREL", "sizecd": "L",    "sizedescr": "Large",           "sizeorder": 4,  "activeflag": true },
+  { "sizegroup": "APPAREL", "sizecd": "XL",   "sizedescr": "Extra Large",     "sizeorder": 5,  "activeflag": true },
+  { "sizegroup": "APPAREL", "sizecd": "XXL",  "sizedescr": "Double XL",       "sizeorder": 6,  "activeflag": true },
+  { "sizegroup": "APPAREL", "sizecd": "XXXL", "sizedescr": "Triple XL",       "sizeorder": 7,  "activeflag": true },
+
+  { "sizegroup": "BOTTOM",  "sizecd": "28",   "sizedescr": "Waist 28",        "sizeorder": 1,  "activeflag": true },
+  { "sizegroup": "BOTTOM",  "sizecd": "30",   "sizedescr": "Waist 30",        "sizeorder": 2,  "activeflag": true },
+  { "sizegroup": "BOTTOM",  "sizecd": "32",   "sizedescr": "Waist 32",        "sizeorder": 3,  "activeflag": true },
+  { "sizegroup": "BOTTOM",  "sizecd": "34",   "sizedescr": "Waist 34",        "sizeorder": 4,  "activeflag": true },
+  { "sizegroup": "BOTTOM",  "sizecd": "36",   "sizedescr": "Waist 36",        "sizeorder": 5,  "activeflag": true },
+  { "sizegroup": "BOTTOM",  "sizecd": "38",   "sizedescr": "Waist 38",        "sizeorder": 6,  "activeflag": true },
+  { "sizegroup": "BOTTOM",  "sizecd": "40",   "sizedescr": "Waist 40",        "sizeorder": 7,  "activeflag": true },
+  { "sizegroup": "BOTTOM",  "sizecd": "42",   "sizedescr": "Waist 42",        "sizeorder": 8,  "activeflag": true },
+  { "sizegroup": "BOTTOM",  "sizecd": "44",   "sizedescr": "Waist 44",        "sizeorder": 9,  "activeflag": true },
+
+  { "sizegroup": "SHOE",    "sizecd": "5",    "sizedescr": "UK 5",            "sizeorder": 1,  "activeflag": true },
+  { "sizegroup": "SHOE",    "sizecd": "6",    "sizedescr": "UK 6",            "sizeorder": 2,  "activeflag": true },
+  { "sizegroup": "SHOE",    "sizecd": "7",    "sizedescr": "UK 7",            "sizeorder": 3,  "activeflag": true },
+  { "sizegroup": "SHOE",    "sizecd": "8",    "sizedescr": "UK 8",            "sizeorder": 4,  "activeflag": true },
+  { "sizegroup": "SHOE",    "sizecd": "9",    "sizedescr": "UK 9",            "sizeorder": 5,  "activeflag": true },
+  { "sizegroup": "SHOE",    "sizecd": "10",   "sizedescr": "UK 10",           "sizeorder": 6,  "activeflag": true },
+  { "sizegroup": "SHOE",    "sizecd": "11",   "sizedescr": "UK 11",           "sizeorder": 7,  "activeflag": true },
+  { "sizegroup": "SHOE",    "sizecd": "12",   "sizedescr": "UK 12",           "sizeorder": 8,  "activeflag": true },
+
+  { "sizegroup": "FREE",    "sizecd": "FREE", "sizedescr": "Free Size",       "sizeorder": 1,  "activeflag": true },
+
+  { "sizegroup": "KID",     "sizecd": "2Y",   "sizedescr": "2 Years",         "sizeorder": 1,  "activeflag": true },
+  { "sizegroup": "KID",     "sizecd": "4Y",   "sizedescr": "4 Years",         "sizeorder": 2,  "activeflag": true },
+  { "sizegroup": "KID",     "sizecd": "6Y",   "sizedescr": "6 Years",         "sizeorder": 3,  "activeflag": true },
+  { "sizegroup": "KID",     "sizecd": "8Y",   "sizedescr": "8 Years",         "sizeorder": 4,  "activeflag": true },
+  { "sizegroup": "KID",     "sizecd": "10Y",  "sizedescr": "10 Years",        "sizeorder": 5,  "activeflag": true },
+  { "sizegroup": "KID",     "sizecd": "12Y",  "sizedescr": "12 Years",        "sizeorder": 6,  "activeflag": true },
+  { "sizegroup": "KID",     "sizecd": "14Y",  "sizedescr": "14 Years",        "sizeorder": 7,  "activeflag": true }
+]

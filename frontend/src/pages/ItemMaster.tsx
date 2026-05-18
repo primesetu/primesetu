@@ -1076,21 +1076,83 @@ export default function ItemMaster() {
                     )}
                   </div>
                   ) : (
-                    <div className="h-52 bg-surface-container/40 border-2 border-outline-variant rounded-xl p-5 flex flex-col gap-4">
-                      <div className="space-y-2 flex-1">
-                        <label className="text-[10px] font-black uppercase tracking-widest text-primary flex justify-between">
-                          <span>Sizes Array</span>
-                          <span className="text-outline/40">Comma Separated</span>
-                        </label>
-                        <textarea value={fastSizes} onChange={e=>setFastSizes(e.target.value)} className="w-full h-12 bg-surface border-2 border-outline-variant focus:border-primary text-xs font-bold p-3 rounded-xl outline-none" placeholder="e.g. 36, 37, 38, 39, 40" />
+                    <div className="bg-surface-container/40 border-2 border-outline-variant rounded-xl p-4 space-y-3">
+                      {/* ── Ad-Hoc Multiplier Inputs ── */}
+                      <div className="grid grid-cols-2 gap-4">
+                        <div className="space-y-1.5">
+                          <label className="text-[9px] font-black uppercase tracking-widest text-primary flex justify-between">
+                            <span>Sizes (Axis X)</span>
+                            <span className="text-outline/40 font-normal">Comma separated</span>
+                          </label>
+                          <input
+                            value={fastSizes}
+                            onChange={e => setFastSizes(e.target.value)}
+                            className="w-full h-9 bg-surface border-2 border-outline-variant focus:border-primary text-xs font-bold px-3 rounded-lg outline-none text-outline"
+                            placeholder="e.g. 36, 37, 38, 39, 40"
+                          />
+                        </div>
+                        <div className="space-y-1.5">
+                          <label className="text-[9px] font-black uppercase tracking-widest text-primary flex justify-between">
+                            <span>Colors (Axis Y)</span>
+                            <span className="text-outline/40 font-normal">Comma separated</span>
+                          </label>
+                          <input
+                            value={fastColors}
+                            onChange={e => setFastColors(e.target.value)}
+                            className="w-full h-9 bg-surface border-2 border-outline-variant focus:border-primary text-xs font-bold px-3 rounded-lg outline-none text-outline"
+                            placeholder="e.g. Red, Blue, Black"
+                          />
+                        </div>
                       </div>
-                      <div className="space-y-2 flex-1">
-                        <label className="text-[10px] font-black uppercase tracking-widest text-primary flex justify-between">
-                          <span>Colors Array (Analcode 1)</span>
-                          <span className="text-outline/40">Comma Separated</span>
-                        </label>
-                        <textarea value={fastColors} onChange={e=>setFastColors(e.target.value)} className="w-full h-12 bg-surface border-2 border-outline-variant focus:border-primary text-xs font-bold p-3 rounded-xl outline-none" placeholder="e.g. Red, Blue, Black" />
-                      </div>
+
+                      {/* ── Live 2D Matrix Preview Grid ── */}
+                      {(() => {
+                        const parsedSizes  = fastSizes  ? fastSizes.split(',').map(s => s.trim()).filter(Boolean) : [];
+                        const parsedColors = fastColors ? fastColors.split(',').map(s => s.trim()).filter(Boolean) : [];
+                        const totalVariants = Math.max(parsedSizes.length * parsedColors.length, Math.max(parsedSizes.length, parsedColors.length));
+                        if (parsedSizes.length === 0 && parsedColors.length === 0) return (
+                          <div className="py-4 text-center text-[9px] font-black uppercase text-outline/30 tracking-widest">
+                            Enter sizes and/or colors above to see live matrix preview
+                          </div>
+                        );
+                        const rows = parsedColors.length > 0 ? parsedColors : ['(no color)'];
+                        const cols = parsedSizes.length  > 0 ? parsedSizes  : ['(no size)'];
+                        return (
+                          <div>
+                            <div className="flex items-center justify-between mb-1.5">
+                              <span className="text-[9px] font-black uppercase text-outline/50 tracking-widest">Live Preview</span>
+                              <span className="text-[10px] font-black text-primary">{totalVariants} SKUs will be generated</span>
+                            </div>
+                            <div className="overflow-x-auto max-h-36 rounded-lg border border-outline-variant">
+                              <table className="w-full border-collapse text-[9px]">
+                                <thead>
+                                  <tr>
+                                    <th className="bg-surface-container p-1.5 border-b border-r border-outline-variant text-outline/50 font-black uppercase text-left min-w-[80px]">Color \ Size</th>
+                                    {cols.map(c => (
+                                      <th key={c} className="bg-surface-container p-1.5 border-b border-r border-outline-variant text-center font-black text-outline uppercase min-w-[54px]">{c}</th>
+                                    ))}
+                                  </tr>
+                                </thead>
+                                <tbody>
+                                  {rows.map((r, ri) => (
+                                    <tr key={r} className={ri % 2 === 0 ? 'bg-surface' : 'bg-surface-container/20'}>
+                                      <td className="p-1.5 border-b border-r border-outline-variant font-black text-outline uppercase">{r}</td>
+                                      {cols.map(c => {
+                                        const stockno = matrixBase ? `${matrixBase}-${r !== '(no color)' ? r : ''}-${c !== '(no size)' ? c : ''}`.replace(/^-|-$/g,'').replace('--','-') : `${r}-${c}`.replace(/^-|-$/g,'').replace('--','-');
+                                        return (
+                                          <td key={c} className="p-1.5 border-b border-r border-outline-variant text-center">
+                                            <span className="text-[8px] font-black font-mono text-primary/80 truncate block max-w-[80px]" title={stockno}>{stockno}</span>
+                                          </td>
+                                        );
+                                      })}
+                                    </tr>
+                                  ))}
+                                </tbody>
+                              </table>
+                            </div>
+                          </div>
+                        );
+                      })()}
                     </div>
                   )}
                 </div>
@@ -1207,7 +1269,15 @@ export default function ItemMaster() {
                 className="flex-1 h-12 bg-primary text-white text-[11px] font-black uppercase tracking-[0.2em] shadow-2xl active:scale-95 transition-all flex items-center justify-center gap-3 rounded-xl"
               >
                 <Zap size={18} fill="currentColor" />
-                Generate {selectedCombos.size > 0 ? selectedCombos.size : ''} Atomic SKUs
+                {matrixGenMode === 'fast'
+                  ? (() => {
+                      const s = fastSizes  ? fastSizes.split(',').filter(Boolean) : [];
+                      const c = fastColors ? fastColors.split(',').filter(Boolean) : [];
+                      const n = Math.max(s.length * c.length, Math.max(s.length, c.length));
+                      return `Generate ${n > 0 ? n : ''} Atomic SKUs`;
+                    })()
+                  : `Generate ${selectedCombos.size > 0 ? selectedCombos.size : ''} Atomic SKUs`
+                }
               </button>
               <button onClick={() => setIsMatrixOpen(false)}
                 className="px-8 h-12 border-2 border-outline-variant text-[11px] font-black uppercase tracking-[0.1em] hover:bg-surface-container transition-all rounded-xl text-outline">

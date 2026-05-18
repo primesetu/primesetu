@@ -1,0 +1,24 @@
+[
+  { "paymode": 1, "index": 1, "paycode": "CASH",     "acptcap": "Amount Tendered", "dispcap": "Amount Tendered", "acptvisible": 1, "dispvisible": 1, "acptpos": 1, "disppos": 1, "acptdatatype": 6, "dispdatatype": 6, "acptwidth": 80.0, "dispwidth": 80.0, "acptalign": 1, "dispalign": 1 },
+
+  { "paymode": 2, "index": 1, "paycode": "VISA",     "acptcap": "Card Number (Last 4)", "dispcap": "Card No",     "acptvisible": 1, "dispvisible": 1, "acptpos": 1, "disppos": 1, "acptdatatype": 2, "dispdatatype": 2, "acptwidth": 80.0, "dispwidth": 80.0, "acptalign": 0, "dispalign": 0 },
+  { "paymode": 2, "index": 2, "paycode": "VISA",     "acptcap": "Approval Code",       "dispcap": "Approval",    "acptvisible": 1, "dispvisible": 1, "acptpos": 2, "disppos": 2, "acptdatatype": 2, "dispdatatype": 2, "acptwidth": 80.0, "dispwidth": 80.0, "acptalign": 0, "dispalign": 0 },
+  { "paymode": 2, "index": 3, "paycode": "VISA",     "acptcap": "Bank Name",           "dispcap": "Bank",        "acptvisible": 1, "dispvisible": 1, "acptpos": 3, "disppos": 3, "acptdatatype": 2, "dispdatatype": 2, "acptwidth": 80.0, "dispwidth": 80.0, "acptalign": 0, "dispalign": 0 },
+
+  { "paymode": 2, "index": 1, "paycode": "MASTERCD", "acptcap": "Card Number (Last 4)", "dispcap": "Card No",     "acptvisible": 1, "dispvisible": 1, "acptpos": 1, "disppos": 1, "acptdatatype": 2, "dispdatatype": 2, "acptwidth": 80.0, "dispwidth": 80.0, "acptalign": 0, "dispalign": 0 },
+  { "paymode": 2, "index": 2, "paycode": "MASTERCD", "acptcap": "Approval Code",       "dispcap": "Approval",    "acptvisible": 1, "dispvisible": 1, "acptpos": 2, "disppos": 2, "acptdatatype": 2, "dispdatatype": 2, "acptwidth": 80.0, "dispwidth": 80.0, "acptalign": 0, "dispalign": 0 },
+
+  { "paymode": 2, "index": 1, "paycode": "RUPAY",    "acptcap": "Card Number (Last 4)", "dispcap": "Card No",     "acptvisible": 1, "dispvisible": 1, "acptpos": 1, "disppos": 1, "acptdatatype": 2, "dispdatatype": 2, "acptwidth": 80.0, "dispwidth": 80.0, "acptalign": 0, "dispalign": 0 },
+  { "paymode": 2, "index": 2, "paycode": "RUPAY",    "acptcap": "Approval Code",       "dispcap": "Approval",    "acptvisible": 1, "dispvisible": 1, "acptpos": 2, "disppos": 2, "acptdatatype": 2, "dispdatatype": 2, "acptwidth": 80.0, "dispwidth": 80.0, "acptalign": 0, "dispalign": 0 },
+
+  { "paymode": 2, "index": 1, "paycode": "DEBIT",    "acptcap": "Card Number (Last 4)", "dispcap": "Card No",     "acptvisible": 1, "dispvisible": 1, "acptpos": 1, "disppos": 1, "acptdatatype": 2, "dispdatatype": 2, "acptwidth": 80.0, "dispwidth": 80.0, "acptalign": 0, "dispalign": 0 },
+  { "paymode": 2, "index": 2, "paycode": "DEBIT",    "acptcap": "Approval Code",       "dispcap": "Approval",    "acptvisible": 1, "dispvisible": 1, "acptpos": 2, "disppos": 2, "acptdatatype": 2, "dispdatatype": 2, "acptwidth": 80.0, "dispwidth": 80.0, "acptalign": 0, "dispalign": 0 },
+
+  { "paymode": 3, "index": 1, "paycode": "GPAY",     "acptcap": "UPI Ref / Transaction ID", "dispcap": "UTR No", "acptvisible": 1, "dispvisible": 1, "acptpos": 1, "disppos": 1, "acptdatatype": 2, "dispdatatype": 2, "acptwidth": 100.0, "dispwidth": 100.0, "acptalign": 0, "dispalign": 0 },
+  { "paymode": 3, "index": 1, "paycode": "PHONEPE",  "acptcap": "UPI Ref / Transaction ID", "dispcap": "UTR No", "acptvisible": 1, "dispvisible": 1, "acptpos": 1, "disppos": 1, "acptdatatype": 2, "dispdatatype": 2, "acptwidth": 100.0, "dispwidth": 100.0, "acptalign": 0, "dispalign": 0 },
+  { "paymode": 3, "index": 1, "paycode": "PAYTM",    "acptcap": "UPI Ref / Transaction ID", "dispcap": "UTR No", "acptvisible": 1, "dispvisible": 1, "acptpos": 1, "disppos": 1, "acptdatatype": 2, "dispdatatype": 2, "acptwidth": 100.0, "dispwidth": 100.0, "acptalign": 0, "dispalign": 0 },
+
+  { "paymode": 5, "index": 1, "paycode": "CHQ",      "acptcap": "Cheque Number",  "dispcap": "Cheque No",  "acptvisible": 1, "dispvisible": 1, "acptpos": 1, "disppos": 1, "acptdatatype": 2, "dispdatatype": 2, "acptwidth": 80.0, "dispwidth": 80.0, "acptalign": 0, "dispalign": 0 },
+  { "paymode": 5, "index": 2, "paycode": "CHQ",      "acptcap": "Bank Name",      "dispcap": "Bank",       "acptvisible": 1, "dispvisible": 1, "acptpos": 2, "disppos": 2, "acptdatatype": 2, "dispdatatype": 2, "acptwidth": 80.0, "dispwidth": 80.0, "acptalign": 0, "dispalign": 0 },
+  { "paymode": 5, "index": 3, "paycode": "CHQ",      "acptcap": "Cheque Date",    "dispcap": "Chq Date",   "acptvisible": 1, "dispvisible": 1, "acptpos": 3, "disppos": 3, "acptdatatype": 3, "dispdatatype": 3, "acptwidth": 80.0, "dispwidth": 80.0, "acptalign": 0, "dispalign": 0 }
+]

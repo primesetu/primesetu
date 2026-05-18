@@ -157,7 +157,7 @@ const EcommerceStorefront: React.FC = () => {
             className="max-w-xl"
           >
             <h1 className="text-5xl font-black mb-4 leading-tight tracking-tight">The Big <br/><span className="text-transparent bg-clip-text bg-gradient-to-r from-teal-400 to-emerald-200">Sovereign Sale</span></h1>
-            <p className="text-lg text-teal-100 mb-8 font-light">Experience retail parity directly connected to SMRITI-OS Shoper9 cores. 50-80% Off on top brands.</p>
+            <p className="text-lg text-teal-100 mb-8 font-light">Experience retail parity directly connected to SMRITI-OS SMRITI cores. 50-80% Off on top brands.</p>
             <button className="bg-white text-teal-900 px-8 py-4 rounded-full font-bold shadow-xl hover:shadow-2xl hover:bg-gray-50 transition-all flex items-center gap-2 group">
               Shop Now 
               <ChevronRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
@@ -274,7 +274,7 @@ const EcommerceStorefront: React.FC = () => {
               <div className="w-6 h-6 rounded-md bg-teal-600 flex items-center justify-center text-xs">S</div>
               <span>SMRITI<span className="font-light text-slate-500">STORE</span></span>
             </div>
-            <p className="text-sm">Powered by SMRITI-OS. The sovereign retail operating system connected natively to Shoper9 backend cores.</p>
+            <p className="text-sm">Powered by SMRITI-OS. The sovereign retail operating system connected natively to SMRITI backend cores.</p>
           </div>
           <div>
             <h4 className="text-white font-bold mb-4">Categories</h4>

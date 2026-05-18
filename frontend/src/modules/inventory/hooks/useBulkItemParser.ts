@@ -151,6 +151,45 @@ function buildCaptionToColumnMap(tmpl: BulkImportTemplate): Record<string, strin
     'shade':           'subclass2cd',
     'color':           'subclass2cd',
     'size':            'sizecd',
+
+    // --- Custom Excel Template Aliases (ITEM MASTER TT NEW) ---
+    // Row 0 aliases
+    'superclass1.1':   'superclass2',
+    'class1':          'class1cd',
+    'class2':          'class2cd',
+    'subclass1':       'subclass1cd',
+    'decr':            'itemdesc',
+    'ac1':             'analcode1',
+    'ac2':             'analcode2',
+    'ac3':             'analcode3',
+    'ac4':             'analcode4',
+    'ac5':             'analcode5',
+    'subclass2':       'subclass2cd',
+    'ac6':             'analcode6',
+    'ac7':             'analcode7',
+    'costprice':       'currentcost',
+    'retailprice':     'retail_price',
+    'producttax':      'prodtaxtype',
+    'ac31':            'analcode31', // Sometimes HSN is mapped here
+    
+    // Row 1 aliases
+    'barcode no':           'stockno',
+    'purchase class':       'superclass1',
+    'department':           'superclass2',
+    'merchandise category': 'class1cd',
+    'class':                'class2cd',
+    'sub-class':            'subclass1cd',
+    'item - discription':   'itemdesc',
+    'heels':                'analcode1',
+    'gender':               'analcode2',
+    'uppper material':      'analcode3',
+    'outsole':              'analcode4',
+    'vendor code':          'analcode5',
+    'product style code':   'subclass2cd',
+    'brand name':           'analcode6',
+    'cost price':           'currentcost',
+    'planned mrp':          'retail_price',
+    // -----------------------------------------------------------
   };
   Object.assign(map, staticAliases);
 
